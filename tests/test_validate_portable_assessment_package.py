@@ -5,13 +5,59 @@ import unittest
 from scripts.validate_portable_assessment_package import validate_package
 
 
+def question(qid: str, section: str, number: int) -> dict:
+    return {
+        "id": qid,
+        "source_question_number": number,
+        "source_location": {"pdf_page": number, "printed_page": number, "source_language_page": number + 1},
+        "section_code": section,
+        "section_result_policy": "SCORED",
+        "question_type": "MCQ",
+        "prompt": "Which data structure follows FIFO?",
+        "prompt_i18n": {
+            "en": "Which data structure follows FIFO?",
+            "hi": "कौन-सी डेटा संरचना FIFO का पालन करती है?"
+        },
+        "options": [
+            {
+                "key": "A",
+                "text": "Stack",
+                "text_i18n": {"en": "Stack", "hi": "स्टैक"}
+            },
+            {
+                "key": "B",
+                "text": "Queue",
+                "text_i18n": {"en": "Queue", "hi": "क्यू"}
+            }
+        ],
+        "topic_tags": ["data-structures", "queue"],
+        "secondary_topic_tags": [],
+        "marks": 1,
+        "proposed_answer": {
+            "option_key": "B",
+            "confidence": "HIGH",
+            "explanation": "A queue removes items in the order they were inserted.",
+            "explanation_i18n": {
+                "en": "A queue removes items in the order they were inserted.",
+                "hi": "क्यू में पहले डाला गया तत्व पहले निकाला जाता है।"
+            },
+            "answer_source": "INDEPENDENTLY_SOLVED",
+            "answer_reference_url": None,
+            "review_status": "PENDING_HUMAN_REVIEW",
+            "reviewer_notes": ""
+        },
+        "question_review_status": "PENDING_HUMAN_REVIEW",
+        "source_notes": "Fictional test fixture; not from an actual TRE paper."
+    }
+
+
 def sample_package() -> dict:
     return {
         "schema": "quantaedge.portable-assessment-package.v1",
         "package_id": "sample-tre-test",
         "title": "TRE sample previous-year paper",
         "assessment_type": "PREVIOUS_YEAR_PAPER",
-        "subject": {"name": "Computer Science", "domain_code": "computer-science", "language": "en"},
+        "subject": {"name": "Computer Science", "domain_code": "computer-science", "language": "mixed"},
         "source": {
             "issuer": "BPSC",
             "exam_name": "Teacher Recruitment Examination",
@@ -22,40 +68,34 @@ def sample_package() -> dict:
             "source_file_sha256": None,
             "repository_distribution_rights": "UNCONFIRMED",
             "rights_evidence_url": None,
+            "available_languages": ["en", "hi"],
             "notes": "Draft test fixture only."
         },
         "configuration": {
-            "duration_minutes": 80,
+            "duration_minutes": 120,
             "marks_per_question": 1,
-            "negative_marking_per_wrong_answer": None,
+            "negative_marking_fraction": 0.25,
             "unanswered_mark": 0,
-            "presentation_hints": ["Practice test"]
+            "presentation_hints": ["Full-paper practice"]
         },
-        "questions": [{
-            "id": "sample-q1",
-            "source_question_number": 41,
-            "source_location": {"pdf_page": 14, "printed_page": 14, "booklet_series": "A"},
-            "question_type": "MCQ",
-            "prompt": "Which data structure follows FIFO?",
-            "options": [
-                {"key": "A", "text": "Stack"},
-                {"key": "B", "text": "Queue"}
-            ],
-            "topic_tags": ["data-structures", "queue"],
-            "secondary_topic_tags": [],
-            "marks": 1,
-            "proposed_answer": {
-                "option_key": "B",
-                "confidence": "HIGH",
-                "explanation": "A queue removes items in the order they were inserted.",
-                "answer_source": "INDEPENDENTLY_SOLVED",
-                "answer_reference_url": None,
-                "review_status": "PENDING_HUMAN_REVIEW",
-                "reviewer_notes": ""
+        "sections": [
+            {
+                "code": "GENERAL_STUDIES",
+                "name_i18n": {"en": "General Studies", "hi": "सामान्य अध्ययन"},
+                "question_count": 1,
+                "result_policy": "SCORED"
             },
-            "question_review_status": "PENDING_HUMAN_REVIEW",
-            "source_notes": "Fictional test fixture; not from an actual TRE paper."
-        }],
+            {
+                "code": "COMPUTER_SCIENCE",
+                "name_i18n": {"en": "Computer Science", "hi": "कंप्यूटर विज्ञान"},
+                "question_count": 1,
+                "result_policy": "SCORED"
+            }
+        ],
+        "questions": [
+            question("sample-gs-q1", "GENERAL_STUDIES", 1),
+            question("sample-cs-q1", "COMPUTER_SCIENCE", 41)
+        ],
         "editorial": {
             "status": "DRAFT",
             "student_delivery_allowed": False,
@@ -68,7 +108,7 @@ def sample_package() -> dict:
 
 
 class PortableAssessmentPackageTests(unittest.TestCase):
-    def test_accepts_class_neutral_draft_package(self):
+    def test_accepts_class_neutral_bilingual_sectioned_draft(self):
         self.assertEqual(validate_package(sample_package()), [])
 
     def test_rejects_hard_coded_school_class_fields(self):
@@ -83,19 +123,44 @@ class PortableAssessmentPackageTests(unittest.TestCase):
 
     def test_rejects_duplicate_question_ids(self):
         package = sample_package()
-        package["questions"].append(package["questions"][0].copy())
-        self.assertTrue(any("duplicated" in err for err in validate_package(package)))
+        package["questions"].append(question("sample-gs-q1", "GENERAL_STUDIES", 2))
+        package["sections"][0]["question_count"] = 2
+        package["sections"][1]["question_count"] = 1
+        self.assertTrue(any("id is duplicated" in err for err in validate_package(package)))
 
     def test_rejects_answer_key_outside_the_options(self):
         package = sample_package()
         package["questions"][0]["proposed_answer"]["option_key"] = "Z"
         self.assertTrue(any("must match an option key" in err for err in validate_package(package)))
 
+    def test_rejects_missing_hindi_source_variant_for_scored_computer_science(self):
+        package = sample_package()
+        del package["questions"][1]["prompt_i18n"]["hi"]
+        errors = validate_package(package)
+        self.assertTrue(any("prompt_i18n is missing required source-language variants: hi" in err for err in errors))
+
+    def test_rejects_missing_hindi_option_text_for_scored_section(self):
+        package = sample_package()
+        del package["questions"][0]["options"][0]["text_i18n"]["hi"]
+        errors = validate_package(package)
+        self.assertTrue(any("text_i18n is missing required source-language variants: hi" in err for err in errors))
+
+    def test_rejects_incorrect_declared_section_count(self):
+        package = sample_package()
+        package["sections"][1]["question_count"] = 80
+        errors = validate_package(package)
+        self.assertTrue(any("declares 80 questions but contains 1" in err for err in errors))
+
+    def test_rejects_out_of_range_negative_marking_fraction(self):
+        package = sample_package()
+        package["configuration"]["negative_marking_fraction"] = 1.25
+        self.assertTrue(any("must be between 0 and 1" in err for err in validate_package(package)))
+
     def test_answer_completeness_is_an_explicit_later_gate(self):
         package = sample_package()
         package["questions"][0]["proposed_answer"]["option_key"] = None
         errors = validate_package(package)
-        self.assertFalse(any("no proposed answer" in err for err in errors))
+        self.assertFalse(any("has no proposed answer" in err for err in errors))
         errors = validate_package(package, require_complete_answers=True)
         self.assertTrue(any("has no proposed answer" in err for err in errors))
 
