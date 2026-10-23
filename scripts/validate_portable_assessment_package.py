@@ -187,7 +187,7 @@ def main() -> int:
     except (OSError, json.JSONDecodeError) as exc:
         print(f"ERROR: cannot read a valid UTF-8 JSON package: {exc}", file=sys.stderr)
         return 2
-    errors = validate_package(package, args.package.resolve().parent, args.check_complete_answers,
+    errors = validate_package(package, Path.cwd().resolve(), args.check_complete_answers,
                               args.check_public_repository)
     if errors:
         for error in errors:
