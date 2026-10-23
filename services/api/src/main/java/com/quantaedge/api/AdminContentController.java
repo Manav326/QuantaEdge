@@ -2123,6 +2123,19 @@ public class AdminContentController {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN,
           "Only the source institution may edit this course. Shared courses are read-only in Education Admin.");
     }
+    Boolean alreadyReleased=jdbc.queryForObject("""
+      select
+        exists(select 1 from institution_course_release r
+          where r.program_id=? and r.source_institution_id=?
+            and r.release_state in ('IN_QUALITY_REVIEW','QUALITY_APPROVED','SHAREABLE','LEGACY_MIGRATED','WITHDRAWN'))
+        or exists(select 1 from institution_marketplace_offer o
+          where o.course_id=?
+            and (o.status='PUBLISHED' or o.hrms_published_by_staff_id is not null))
+      """,Boolean.class,courseId,institutionId,courseId);
+    if(Boolean.TRUE.equals(alreadyReleased)) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "This course version has entered the release or Marketplace workflow and is immutable. Create a draft version first; edits here must never change a published release.");
+    }
   }
 
   private void requireAssignedCourse(long courseId,long institutionId) {
