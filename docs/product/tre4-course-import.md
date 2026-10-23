@@ -56,7 +56,7 @@ Even after assignment to another institution, imported tests remain draft and in
 ## Validation
 
 ```powershell
-python -m unittest tests.test_import_tre4_course
+python -m unittest discover -s tests -p test_import_tre4_course.py
 ```
 
 This test suite is offline and does not connect to PostgreSQL. The dry-run additionally verifies source PDF hashes and exact extracted question counts. After import, check the API/HRMS course-release review queue, confirm the course has one subject and the three draft paper assessments, then complete the quality-review and origin-approval steps.
