@@ -123,6 +123,85 @@ class ApplicationStartupSmokeTest {
   }
 
   @Test
+  void tre4ComputerScienceBootstrapIsInstitutionBoundAndNotPublishedOrEnrolled() {
+    Long institutionId = jdbc.queryForObject("""
+      select id from institution_tenant where tenant_code='QUANTA-EDGE'
+      """, Long.class);
+    Long courseId = jdbc.queryForObject("""
+      select p.id
+      from curriculum_program p
+      join curriculum_class c on c.id=p.class_id and c.code='TRE4'
+      where p.display_name='TRE-4 · Computer Science'
+        and p.curriculum_version='TRE4-2026' and p.status='ACTIVE'
+      """, Long.class);
+
+    assertEquals("EXAM_SCOPE", jdbc.queryForObject("""
+      select scope_type from curriculum_class where code='TRE4'
+      """, String.class), "TRE-4 is an exam scope, not a school grade.");
+
+    assertTrue(new CurriculumController(jdbc).curriculum().stream()
+        .noneMatch(row -> "TRE4".equals(String.valueOf(row.get("class_code")))),
+        "The general student curriculum selector must not expose exam scopes as school grades.");
+
+    assertTrue(jdbc.queryForObject("""
+      select exists(
+        select 1 from public_identity_registry pir
+        join curriculum_program p on p.public_id=pir.public_id
+        where p.id=? and pir.prefix='INS' and pir.entity_type='PROGRAM'
+      )
+      """, Boolean.class, courseId), "TRE-4 must use the existing registered course public-ID scheme.");
+    assertEquals(1, jdbc.queryForObject("""
+      select count(*) from curriculum_program_subject ps
+      join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
+      where ps.program_id=? and ps.class_id=(select class_id from curriculum_program where id=?)
+        and s.program_id=? and s.code='computer-science' and s.active=true
+      """, Integer.class, courseId, courseId, courseId));
+    assertEquals(1, jdbc.queryForObject("""
+      select count(*) from curriculum_chapter ch
+      join curriculum_subject s on s.id=ch.subject_id
+      where s.program_id=? and s.code='computer-science'
+        and ch.code='prev-years' and ch.display_name='Previous-Year Papers (PYQ)'
+        and ch.active=true and ch.content_status='DRAFT'
+      """, Integer.class, courseId));
+
+    assertTrue(jdbc.queryForObject("""
+      select exists(
+        select 1 from institution_course_entitlement e
+        where e.institution_id=? and e.program_id=? and e.status='ACTIVE'
+          and e.valid_from<=now() and (e.valid_until is null or e.valid_until>now())
+      )
+      """, Boolean.class, institutionId, courseId),
+      "The QuantaEdge institution must have an active institution-level course grant.");
+    assertTrue(jdbc.queryForObject("""
+      select exists(
+        select 1 from institution_course_release r
+        join institution_course_assignment a on a.course_release_id=r.id
+          and a.institution_id=? and a.status='ASSIGNED'
+        where r.program_id=? and r.source_institution_id=?
+          and r.release_state='DRAFT' and a.assignment_source='ORIGIN'
+      )
+      """, Boolean.class, institutionId, courseId, institutionId),
+      "The owning institution must have an assigned draft release.");
+
+    assertEquals(0, jdbc.queryForObject("""
+      select count(*) from institution_marketplace_offer where institution_id=? and course_id=?
+      """, Integer.class, institutionId, courseId),
+      "Bootstrapping must not invent a price or publish a marketplace offer.");
+    assertEquals(0, jdbc.queryForObject("""
+      select count(*) from student_program_enrollment where program_id=?
+      """, Integer.class, courseId),
+      "Bootstrapping must not silently enroll learners.");
+    assertEquals(0, jdbc.queryForObject("""
+      select count(*) from course_entitlement where course_id=?
+      """, Integer.class, courseId),
+      "Learner ownership is distinct from the institution's course grant.");
+    assertEquals(0, jdbc.queryForObject("""
+      select count(*) from assessment where course_id=?
+      """, Integer.class, courseId),
+      "No unreviewed question package may be converted into a student assessment automatically.");
+  }
+
+  @Test
   void studentProgramsCatalogueSqlExecutesAgainstMigratedTenantSchema() {
     Long institutionId = jdbc.queryForObject("""
       select id from institution_tenant

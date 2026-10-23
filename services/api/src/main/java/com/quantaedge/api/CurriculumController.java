@@ -26,7 +26,7 @@ public class CurriculumController {
       from curriculum_class c
       join curriculum_subject s on s.class_id = c.id and s.active = true
       left join curriculum_chapter ch on ch.subject_id = s.id and ch.active = true
-      where c.active = true
+      where c.active = true and c.scope_type = 'SCHOOL_CLASS'
       order by c.sort_order, s.sort_order, coalesce(ch.teaching_order,ch.sort_order), ch.id
       """);
   }

@@ -41,7 +41,7 @@ public class HrTeachingAssignmentController {
       select s.id subject_id,s.code subject_code,s.display_name subject_name,
         c.id class_id,c.code class_code,c.display_name class_name,s.sort_order
       from curriculum_subject s join curriculum_class c on c.id=s.class_id
-      where s.active=true and c.active=true
+      where s.active=true and c.active=true and c.scope_type='SCHOOL_CLASS'
       order by c.sort_order,s.sort_order,s.display_name
       """);
   }

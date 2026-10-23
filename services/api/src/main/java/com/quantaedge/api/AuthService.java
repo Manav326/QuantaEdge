@@ -984,7 +984,7 @@ public class AuthService {
       throw new IllegalArgumentException("Student access PIN must be 4-8 digits");
     String board;
     try {
-      board=jdbc.queryForObject("select board from curriculum_class where code=? and active=true",String.class,classCode);
+      board=jdbc.queryForObject("select board from curriculum_class where code=? and active=true and scope_type='SCHOOL_CLASS'",String.class,classCode);
     } catch(Exception ex) {
       throw new IllegalArgumentException("Invalid class selection");
     }
@@ -1039,7 +1039,7 @@ public class AuthService {
     Map<String,Object> targetClass;
     try {
       targetClass=jdbc.queryForMap(
-          "select code,board from curriculum_class where code=? and active=true",nextClass);
+          "select code,board from curriculum_class where code=? and active=true and scope_type='SCHOOL_CLASS'",nextClass);
     } catch(EmptyResultDataAccessException ex) {
       throw new IllegalArgumentException("This class is not currently available.");
     }
@@ -1131,7 +1131,7 @@ public class AuthService {
         : requested.stream().map(v->v==null?"":v.trim().toLowerCase(java.util.Locale.ROOT)).distinct().toList();
     if(selected.isEmpty() || selected.size()>2 || selected.stream().anyMatch(v->!List.of("maths","science").contains(v)))
       throw new IllegalArgumentException("Choose one or two valid subjects: Maths and/or Science");
-    Long classExists=jdbc.queryForObject("select count(*) from curriculum_class where code=? and active=true",Long.class,classCode);
+    Long classExists=jdbc.queryForObject("select count(*) from curriculum_class where code=? and active=true and scope_type='SCHOOL_CLASS'",Long.class,classCode);
     if(classExists==null || classExists==0) throw new IllegalArgumentException("Invalid class selection");
     jdbc.update("""
       update student_track_enrollment set status='ENDED',updated_at=now()
@@ -1140,7 +1140,7 @@ public class AuthService {
     for(String code:selected) {
       List<Long> subjects=jdbc.queryForList("""
         select s.id from curriculum_subject s join curriculum_class c on c.id=s.class_id
-        where c.code=? and c.active=true and s.code=? and s.active=true
+        where c.code=? and c.active=true and c.scope_type='SCHOOL_CLASS' and s.code=? and s.active=true
         """,Long.class,classCode,code);
       if(subjects.isEmpty()) throw new IllegalArgumentException("The "+code+" track is not available for class "+classCode);
       long subjectId=subjects.getFirst();
