@@ -28,6 +28,7 @@ type AttemptQuestion = {
   stimulus_code_line_indices?:number[];stimulus_math_line_indices?:number[];
   stimulus_source_languages?:Record<string,string>;native_language_only?:boolean;
   native_source_language?:'en'|'hi'|'ur'|'bn';content_language_policy?:'NATIVE_SOURCE_ONLY'|'BILINGUAL_SOURCE_VARIANTS';
+  question_set_id?:string|null;question_set_type?:'PASSAGE';incorrect_marks?:number|string|null;
   options:Array<{key:string;label:string;content_kind?:'PROSE'|'CODE'|'MATHEMATICAL'|'MIXED';code_line_indices?:number[];math_line_indices?:number[]}>;
   answer:any;answerStatus:string;maxMarks:number|string;
   section_code?:string;section_result_policy?:'SCORED'|'QUALIFYING_ONLY'|'PRACTICE_ONLY';
@@ -223,6 +224,97 @@ function QuestionContent({question,response,review=false,disabled=false,onAnswer
     </div>}
   </>;
 }
+function finiteMarkValue(value:any):number|null{
+  if(value===null||value===undefined||String(value).trim()==='')return null;
+  const number=Number(value);
+  return Number.isFinite(number)?number:null;
+}
+function formatMarkAmount(value:number):string{
+  const rounded=Math.round(value*1000)/1000;
+  if(Math.abs(rounded)<0.0005)return '0';
+  const amount=String(Math.abs(rounded));
+  return (rounded<0?'−':'+')+amount;
+}
+function questionTypeLabel(questionType:string,locale:string):string{
+  const labels:Record<string,[string,string]>={
+    MCQ:['MCQ','बहुविकल्पीय'],TRUE_FALSE:['True/false','सही/गलत'],
+    INFERENCE:['Inference','अनुमान'],INPUT:['Input','लिखित उत्तर'],NUMERICAL:['Numerical','संख्यात्मक'],
+    SHORT_ANSWER:['Short answer','लघु उत्तरीय'],LONG_ANSWER:['Long answer','दीर्घ उत्तरीय'],
+    CASE_BASED:['Case-based','केस आधारित'],SOURCE_BASED:['Source-based','स्रोत आधारित'],
+    DIAGRAM:['Diagram','आरेख'],MAP:['Map','मानचित्र'],ASSERTION_REASON:['Assertion/reason','कथन-कारण'],
+    MATCH:['Match the following','मिलान'],ORDER:['Ordering','क्रम निर्धारण']
+  };
+  const key=String(questionType||'').toUpperCase();
+  const value=labels[key];
+  return value?(locale==='english'?value[0]:value[1]):String(questionType||'Question').replace(/_/g,' ').toLowerCase();
+}
+function questionMarkMetadata(question:AttemptQuestion,attempt:Attempt,locale:string){
+  const correct=finiteMarkValue(question.maxMarks)??0;
+  let incorrect=finiteMarkValue(question.incorrect_marks);
+  if(incorrect===null){
+    const fraction=finiteMarkValue(attempt.negative_marking_fraction);
+    if(fraction!==null&&fraction>=0)incorrect=-correct*fraction;
+  }
+  const plural=(value:number)=>Math.abs(value)===1?'mark':'marks';
+  const correctText=locale==='english'
+    ?'Correct '+formatMarkAmount(correct)+' '+plural(correct)
+    :'सही उत्तर '+formatMarkAmount(correct)+' '+(Math.abs(correct)===1?'अंक':'अंक');
+  const incorrectText=incorrect===null
+    ?(locale==='english'?'Incorrect: not specified':'गलत उत्तर: निर्दिष्ट नहीं')
+    :(locale==='english'
+      ?'Incorrect '+formatMarkAmount(incorrect)+' '+plural(incorrect)
+      :'गलत उत्तर '+formatMarkAmount(incorrect)+' '+(Math.abs(incorrect)===1?'अंक':'अंक'));
+  return {correctText,incorrectText};
+}
+type QuestionSetItem={question:AttemptQuestion;number:number};
+function QuestionSetView({items,activeQuestionId,attempt,responses,disabled,review=false,onAnswer}:{
+  items:QuestionSetItem[];activeQuestionId?:number;attempt:Attempt;responses:Record<number,any>;
+  disabled:boolean;review?:boolean;onAnswer?:(question:AttemptQuestion,value:any)=>void;
+}){
+  const {locale}=useLocale();
+  if(items.length<2)return null;
+  const first=items[0].question;
+  return <section className={styles.questionSet} aria-label={locale==='english'?'Question Set':'प्रश्न समूह'}>
+    <header className={styles.questionSetHeader}>
+      <div><span className={styles.questionSetEyebrow}>{locale==='english'?'QUESTION SET':'प्रश्न समूह'}</span>
+        <h3>{locale==='english'?'Question Set':'प्रश्न समूह'}</h3>
+        <p>{locale==='english'?'One shared passage · group type:':'एक साझा गद्यांश · समूह प्रकार:'} <strong>PASSAGE</strong></p>
+      </div>
+      <span className={styles.questionSetRelationship}>{locale==='english'?'One-to-many relationship':'एक से अनेक प्रश्न'}<b>1 {locale==='english'?'passage':'गद्यांश'} → {items.length} {locale==='english'?'questions':'प्रश्न'}</b></span>
+    </header>
+    <StimulusContent question={first}/>
+    <div className={styles.questionSetChildren}>
+      {items.map(({question,number})=>{
+        const marks=questionMarkMetadata(question,attempt,locale);
+        const active=question.attemptQuestionId===activeQuestionId;
+        const outcome=question.isCorrect===true?'correct':question.isCorrect===false?'incorrect':'ungraded';
+        return <article id={'qe-question-'+question.attemptQuestionId} className={[styles.questionSetChild,active?styles.questionSetChildActive:''].filter(Boolean).join(' ')} key={question.attemptQuestionId}>
+          <header className={styles.questionSetChildHeader}>
+            <strong>{locale==='english'?'Question':'प्रश्न'} {number}</strong>
+            <div className={styles.questionSetMarks}>
+              <span className={styles.questionSetType}>{questionTypeLabel(question.question_type,locale)}</span>
+              <span>{marks.correctText}</span>
+              <span>{marks.incorrectText}</span>
+              {review&&<span className={outcome==='correct'?styles.questionSetResultCorrect:outcome==='incorrect'?styles.questionSetResultIncorrect:styles.questionSetResultNeutral}>
+                {outcome==='correct'?(locale==='english'?'Correct':'सही'):outcome==='incorrect'?(locale==='english'?'Incorrect':'गलत'):(locale==='english'?'Reviewed':'समीक्षित')} · {Number(question.awardedMarks??0)} / {Number(question.maxMarks??0)} {locale==='english'?'marks':'अंक'}
+              </span>}
+            </div>
+          </header>
+          <QuestionContent question={question} response={responses[question.attemptQuestionId]??question.answer??''} disabled={disabled} review={review}
+            onAnswer={value=>onAnswer?.(question,value)}/>
+          {review&&<AnswerFeedback
+            outcome={outcome}
+            title={question.isCorrect===true?'✓ '+(locale==='english'?'Correct':'सही'):question.isCorrect===false?'✕ '+(locale==='english'?'Incorrect':'गलत'):(locale==='english'?'Answer reviewed':'उत्तर की समीक्षा हुई')}
+            message={<>{locale==='english'?'Marks':'अंक'}: {question.awardedMarks??0} / {question.maxMarks}{question.teacherFeedback?<> · {question.teacherFeedback}</>:null}</>}
+            explanation={question.explanation||undefined}
+            explanationLabel={locale==='english'?'Explanation':'व्याख्या'}
+          />}
+        </article>;
+      })}
+    </div>
+  </section>;
+}
+
 export default function TestsClient(){
   const router=useRouter();
   const searchParams=useSearchParams();
@@ -373,6 +465,15 @@ export default function TestsClient(){
   const filteredTests=tests.filter(t=>subjectFilter==='ALL'||t.subject_code===subjectFilter);
   const current=attempt?.questions?.[index];
   const currentResponse=current?responses[current.attemptQuestionId]??'':'';
+  const currentQuestionSetId=current?(current.question_set_id||current.stimulus_id):null;
+  const currentQuestionSetItems:QuestionSetItem[]=currentQuestionSetId&&attempt
+    ?attempt.questions.flatMap((question,questionIndex)=>{
+      const setId=question.question_set_id||question.stimulus_id;
+      return setId===currentQuestionSetId&&question.stimulus
+        ?[{question,number:questionIndex+1}]
+        :[];
+    }):[];
+  const showingQuestionSet=currentQuestionSetItems.length>1;
   const released=attempt?.status==='RELEASED';
   const submitted=Boolean(attempt&&attempt.status!=='IN_PROGRESS');
   const answeredCount=attempt?.questions?.filter(q=>!isEmpty(responses[q.attemptQuestionId]??q.answer)).length||0;
@@ -829,14 +930,19 @@ export default function TestsClient(){
         :attempt.status!=='IN_PROGRESS'||!current?<div className={styles.pendingResult}><h2>{translateUi(locale, 'legacy.web.this.attempt.is.closed.3b00ff63')}</h2><p>{translateUi(locale, 'legacy.web.you.cannot.return.to.the.question.navi.83bf6290')}</p><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{translateUi(locale, 'legacy.web.back.to.tests.and.results.29805d19')}</button></div>
         :<div className={styles.examLayout}>
           <aside className={styles.questionRail}><div><b>{translateUi(locale, 'legacy.web.questions.b5a33268')}</b><small>{answeredCount}/{attempt.questions.length} {translateUi(locale, 'legacy.web.answered.f3b8dd02')}</small></div><div className={styles.questionNumbers}>{attempt.questions.map((q,i)=><button type="button" key={q.attemptQuestionId} className={[i===index?styles.currentNumber:'',!isEmpty(responses[q.attemptQuestionId]??q.answer)?styles.answeredNumber:''].filter(Boolean).join(' ')} onClick={()=>setIndex(i)} aria-label={translateUi(locale, 'legacy.web.question.85099273')+(i+1)}>{i+1}</button>)}</div><div className={styles.railLegend}><span><i className={styles.legendCurrent}/>{translateUi(locale, 'legacy.web.current.e19e8a40')}</span><span><i className={styles.legendAnswered}/>{translateUi(locale, 'legacy.web.answered.5531e37e')}</span></div></aside>
-          <section className={styles.questionPanel}><div className={styles.questionPanelTop}><span>{translateUi(locale, 'legacy.web.question.3b02187f')} {index+1} {translateUi(locale, 'legacy.web.of.205487ae')} {attempt.questions.length}</span><b>{current.maxMarks} {translateUi(locale, 'legacy.web.mark.s.a8fb7e84')}</b></div><div className={styles.questionProgress}><i style={{width:((index+1)/attempt.questions.length*100)+'%'}}/></div><StimulusContent question={current}/><QuestionContent question={current} response={currentResponse} disabled={submitted} onAnswer={value=>updateResponse(current,value)}/>
-            {released&&<AnswerFeedback
-              outcome={current.isCorrect===true?'correct':current.isCorrect===false?'incorrect':'ungraded'}
-              title={current.isCorrect===true?'✓ Correct':current.isCorrect===false?'✕ Incorrect':'Teacher checked'}
-              message={<>Marks: {current.awardedMarks??0} / {current.maxMarks}{current.teacherFeedback?<> · {current.teacherFeedback}</>:null}</>}
-              explanation={current.explanation||undefined}
-              explanationLabel={translateUi(locale, 'legacy.web.explanation.f09ea03b')}
-            />}
+          <section className={styles.questionPanel}><div className={styles.questionPanelTop}><span>{showingQuestionSet?(locale==='english'?'Question Set':'प्रश्न समूह'):<>{translateUi(locale, 'legacy.web.question.3b02187f')} {index+1} {translateUi(locale, 'legacy.web.of.205487ae')} {attempt.questions.length}</>}</span><b>{showingQuestionSet?currentQuestionSetItems.length+' questions':current.maxMarks+' '+translateUi(locale, 'legacy.web.mark.s.a8fb7e84')}</b></div><div className={styles.questionProgress}><i style={{width:((index+1)/attempt.questions.length*100)+'%'}}/></div>
+            {showingQuestionSet
+              ?<QuestionSetView items={currentQuestionSetItems} activeQuestionId={current.attemptQuestionId} attempt={attempt}
+                  responses={responses} disabled={submitted} onAnswer={updateResponse}/>
+              :<><StimulusContent question={current}/><QuestionContent question={current} response={currentResponse} disabled={submitted} onAnswer={value=>updateResponse(current,value)}/>
+                {released&&<AnswerFeedback
+                  outcome={current.isCorrect===true?'correct':current.isCorrect===false?'incorrect':'ungraded'}
+                  title={current.isCorrect===true?'✓ Correct':current.isCorrect===false?'✕ Incorrect':'Teacher checked'}
+                  message={<>Marks: {current.awardedMarks??0} / {current.maxMarks}{current.teacherFeedback?<> · {current.teacherFeedback}</>:null}</>}
+                  explanation={current.explanation||undefined}
+                  explanationLabel={translateUi(locale, 'legacy.web.explanation.f09ea03b')}
+                />}
+              </>}
             <div className={styles.questionFooter}><span>{saving?translateUi(locale, 'legacy.web.saving.0f10a0df'):Object.keys(dirtyAnswers).length?translateUi(locale, 'legacy.web.save.pending.0d2fabc1'):translateUi(locale, 'legacy.web.saved.answers.are.preserved.689797b2')}</span><div><button type="button" className={styles.secondaryButton} disabled={index===0} onClick={()=>setIndex(i=>Math.max(0,i-1))}>← {translateUi(locale, 'legacy.web.previous.9320332c')}</button>{index<attempt.questions.length-1?<button type="button" className={styles.primaryButton} onClick={()=>setIndex(i=>Math.min(attempt.questions.length-1,i+1))}>{translateUi(locale, 'legacy.web.next.question.e339ba3c')}</button>:attempt.status==='IN_PROGRESS'?<button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>setShowSubmit(true)}>{translateUi(locale, 'legacy.web.review.submit.e856cb00')}</button>:null}</div></div>
           </section>
         </div>}

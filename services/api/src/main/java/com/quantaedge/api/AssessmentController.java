@@ -1859,7 +1859,8 @@ public class AssessmentController {
         "exam_format","topic","subtopic","skill","section_code","section_result_policy","topic_tags","subtopic_tags",
         "prompt_content_kind","code_line_indices","math_line_indices","source_code_preservation_notes",
         "stimulus_id","stimulus","stimulus_content_kind","stimulus_code_line_indices","stimulus_math_line_indices",
-        "stimulus_source_languages","native_language_only","native_source_language","content_language_policy")) {
+        "stimulus_source_languages","native_language_only","native_source_language","content_language_policy",
+        "question_set_id","question_set_type","incorrect_marks")) {
       if (snapshot.containsKey(key)) result.put(key, snapshot.get(key));
     }
     boolean nativeSourceOnly=Boolean.TRUE.equals(snapshot.get("native_language_only"));
