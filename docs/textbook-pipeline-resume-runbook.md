@@ -166,3 +166,8 @@ Restart this class from its matching source-bound Git/GHCR checkpoint using the 
 ### Class 7 productive-batch resume
 
 Restart this class from its matching source-bound Git/GHCR checkpoint using the corrected budget rule: only productive five-asset analyzer batches count toward the eight-batch run limit. Already-complete books are checked without consuming the budget. [resume-visual-layers-4-5-class-7]
+
+
+### Class 6 productive-batch resume
+
+Restart Class 6 from its matching source-bound Git/GHCR checkpoint using the corrected budget rule: only productive five-asset analyzer batches count toward the eight-batch run limit. Already-complete books are checked without consuming the budget. [resume-visual-layers-4-5-class-6]
