@@ -32,7 +32,7 @@ $env:TRE4_DATABASE_URL = "postgresql://quantaedge:YOUR_LOCAL_DB_PASSWORD@localho
 python scripts/import_tre4_course.py --archive data/TRE-4_PYQ.zip --apply --submit-for-review
 ```
 
-The importer also accepts the existing `SPRING_DATASOURCE_URL` (including the `jdbc:postgresql://` prefix). Never commit the password or put it in this document. The DB must already have Flyway V168 applied; the importer deliberately refuses to proceed against an older schema.
+The importer also accepts the existing `SPRING_DATASOURCE_URL` (including the `jdbc:postgresql://` prefix). Never commit the password or put it in this document. The DB must have Flyway V170 applied (including V168/V169); the importer refuses to proceed unless the assessment-only readiness gate expects 150 TRE 3.0 questions.
 
 ## What the script writes
 
@@ -40,7 +40,7 @@ The import is one PostgreSQL transaction. It idempotently creates/reuses the Qua
 
 - TRE 1.0: 120 questions; paper-specific 0.25 negative-marking fraction.
 - TRE 2.0: 150 questions, including the qualifying language section.
-- TRE 3.0: 148 questions; the absent E-1/E-6 items are not fabricated.
+- TRE 3.0: 150 questions (30 qualifying-language + 40 General Studies + 80 Computer Science), with the language IDs E-1 through E-8 and H-9 through H-30 preserved.
 - General Studies and Computer Science count toward the scored total; qualifying-language questions are stored but excluded from that aggregate score.
 - Shared passages/stimuli remain on each child question snapshot with a shared stable group ID.
 - No answer key or explanation is guessed. Answer payloads are `UNRESOLVED`, review status is `PENDING_HUMAN_REVIEW`, and assessment status remains `DRAFT`.
@@ -49,7 +49,7 @@ The import is one PostgreSQL transaction. It idempotently creates/reuses the Qua
 
 `--submit-for-review` submits a structurally complete assessment-only release into `IN_QUALITY_REVIEW`. It does **not** approve, make it shareable, or publish any assessment. HRMS must approve the release, and a QuantaEdge institution administrator must then approve the origin release. Only then does the release appear in HRMS's shareable-course assignment catalog. This retains the current two-party approval policy.
 
-V168 makes assessment-only readiness explicit: exactly the three expected source-paper packages, correct paper-specific question counts, valid hashes, and the correct Prev years/Computer Science mapping must be present. The canonical fingerprint includes the assessment rows and question snapshots for assessment-only courses; ordinary lesson courses retain the previous fingerprint inputs so existing releases are not invalidated.
+V168 establishes assessment-only readiness and V170 aligns its TRE 3.0 count with the extracted 150-question source inventory. Exactly the three expected source-paper packages, correct question counts, valid hashes, and the correct Prev years/Computer Science mapping must be present. The canonical fingerprint includes the assessment rows and question snapshots for assessment-only courses; ordinary lesson courses retain the previous fingerprint inputs so existing releases are not invalidated.
 
 Even after assignment to another institution, imported tests remain draft and invisible to students. The student-facing publish transition rejects portable paper assessments while a question's human-review status is pending or its answer key is unresolved. Review source wording, Hindi glyph fidelity, question/options, topic metadata, official key (where available), and explanations, then import/approve a reviewed version through the supported editorial flow before student delivery. This initial importer is for creating the course and queuing it for institutional assignment, not for certifying exam content.
 
