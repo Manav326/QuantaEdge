@@ -14,14 +14,14 @@
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "d2bb3e6a771b57392e82c877",
-      "ab0af6757186130b77128ff6"
+      "ae6e360c75544c32a2ffc6cb",
+      "daeae54a0a8c53512b7acecc"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1180,
-    "assets_remaining": 1111,
+    "assets_analyzed": 1181,
+    "assets_remaining": 1110,
     "assets_completion_percent": 51.5,
-    "assets_failed": 10,
+    "assets_failed": 11,
     "assets_skipped_from_checkpoint": 1180,
     "batch_limit": 5,
     "publication_allowed": false
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39937902376",
-      "checkpointed_at": "2026-10-23T11:31:09Z"
+      "checkpointed_at": "2026-10-23T11:44:22Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39937902376",
-      "checkpointed_at": "2026-10-23T11:31:49Z"
+      "checkpointed_at": "2026-10-23T11:45:03Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38429,7 +38429,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39937902376",
-      "checkpointed_at": "2026-10-23T11:32:38Z"
+      "checkpointed_at": "2026-10-23T11:45:52Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -38631,6 +38631,60 @@
       "run_id": "39937902376",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "ae6e360c75544c32a2ffc6cb",
+      "asset_sha256": "87e439464b6033095e69b85b9b8e7e1df30c97e062a4ba7e7663ae9a8f43f927",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/87e439464b6033095e69b85b9b8e7e1df30c97e062a4ba7e7663ae9a8f43f927.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1cfa6eb0856e050215e8288a0fc8cddd57b40724cfc835f71887ac1d9a45e10b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a block sliding on a surface with a force acting against it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "On pushing, the object stops after sliding a certain distance. This must be due to a force acting between the surfaces of the sliding object and the table or floor which are in contact. This force must be acting on the object in a direction opposite to its direction of motion. This force is what bri",
+          "The force that comes into play when an object moves or tries to move over another",
+          "object is called friction."
+        ],
+        "concepts": [
+          "Friction",
+          "Force",
+          "Motion",
+          "Contact surfaces"
+        ],
+        "context_relation": "The image illustrates the concept of friction as a force that opposes the motion of an object.",
+        "limitations": [
+          "The image does not provide specific details about the types of friction or the forces involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39937902376",
+      "checkpointed_at": "2026-10-23T11:47:37Z"
+    },
+    {
+      "asset_id": "daeae54a0a8c53512b7acecc",
+      "asset_sha256": "fabc47b6ae3b2f867bbbde1dddcda33cd2f4bb2b5724fa0177411f12f27ad9c4",
+      "page_text_context_sha256": "1cfa6eb0856e050215e8288a0fc8cddd57b40724cfc835f71887ac1d9a45e10b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/fabc47b6ae3b2f867bbbde1dddcda33cd2f4bb2b5724fa0177411f12f27ad9c4.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39937902376",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     }
