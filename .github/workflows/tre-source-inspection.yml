@@ -51,7 +51,7 @@ jobs:
       - name: Extract bilingual question inventory with page provenance
         run: |
           python scripts/extract_tre_source_questions.py \
-            --archive data/TRE-4_PYQ.zip \
+            --archive "$GITHUB_WORKSPACE/source-data/data/TRE-4_PYQ.zip" \
             --output-dir "$RUNNER_TEMP/tre-question-inventory" \
             --repo-root "$GITHUB_WORKSPACE"
 
