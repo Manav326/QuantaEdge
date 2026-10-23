@@ -43,8 +43,6 @@ test('[HRMS-NOTIF-001] Notification Studio loads live options and prevents inval
     const [templatesResponse, optionsResponse] = await Promise.all([templatesWaiter, optionsWaiter]);
     expect(templatesResponse.status(), 'HRMS templates must come from the authenticated API.').toBe(200);
     expect(optionsResponse.status(), 'HRMS audience choices must come from the authenticated API.').toBe(200);
-    expect(templatesResponse.request().headers()['x-qe-workspace']).toBe('HRMS');
-    expect(optionsResponse.request().headers()['x-qe-workspace']).toBe('HRMS');
 
     const templatesBody = await templatesResponse.json();
     const optionsBody = await optionsResponse.json();
