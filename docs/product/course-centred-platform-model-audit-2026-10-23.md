@@ -99,3 +99,8 @@ The canonical reference is `schemas/course-package.schema.json`. Its v1 importer
 Imports are a single transaction and keyed by institution + package ID + package version. Replaying the same package/version/content returns the original course/release; reusing that package/version for changed content is rejected. The server generates course and child database IDs. Imported chapters, lessons and blocks remain drafts; source mappings remain unverified; no student delivery or Marketplace publication is enabled by import. HRMS's existing release-quality and Marketplace workflow remains the only distribution path.
 
 **Explicitly not implemented by this v1 importer:** the separate Competitive sections/topics/question-bank hierarchy and standalone Assessment test-pack hierarchy. Those course types are rejected by this endpoint with a clear validation error instead of being forced into K12 subject/chapter tables. Their registry entries are not evidence that the course hierarchy importer exists.
+
+
+## HRMS source-rights decision path
+
+Imported package rights are reviewed in the existing HRMS institution Marketplace launch stepper. A decision requires reviewer notes and, for either clearance state, an HTTPS evidence URL. HRMS stores the reviewer identity, timestamp, notes, evidence and lifecycle audit event. The decision follows the stable source-course identity across later draft versions; review alone does not publish the course. `DO_NOT_REDISTRIBUTE` remains a blocking state.

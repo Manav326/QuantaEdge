@@ -192,6 +192,42 @@
   background: var(--qe-color-surface, #fff);
 }
 
+.rightsPanel {
+  overflow: hidden;
+  border: 1px solid var(--qe-color-border-subtle, #dfe5ed);
+  border-radius: 16px;
+  background: var(--qe-color-surface, #fff);
+}
+.rightsCount {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 5px 9px;
+  color: var(--qe-color-accent-text, #9a3412);
+  background: var(--qe-color-primary-container, #fff0e5);
+  font-size: 10px;
+  font-weight: 850;
+}
+.rightsList { display:flex; flex-direction:column; }
+.rightsRow { display:flex; align-items:flex-start; gap:12px; padding:15px 18px; }
+.rightsRow + .rightsRow { border-top:1px solid var(--qe-color-border-subtle, #edf0f4); }
+.rightsCopy { flex:1; min-width:0; display:grid; gap:9px; }
+.rightsCopy > strong { color:var(--qe-color-text, #202a3e); font-size:14px; }
+.rightsCopy > small { color:var(--qe-color-text-muted, #687489); font-size:10px; line-height:1.5; }
+.rightsStatusLine { display:flex; gap:8px; flex-wrap:wrap; color:var(--qe-color-text-muted, #687489); font-size:10px; }
+.rightsFields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.rightsCopy .reviewNote input, .rightsCopy .reviewNote select {
+  width:100%; min-height:39px; border:1px solid var(--qe-color-border-subtle, #dfe5ed);
+  border-radius:10px; padding:9px 11px; background:var(--qe-color-surface, #fff);
+  color:var(--qe-color-text, #202a3e); font:inherit; font-size:12px;
+}
+.rightsActions { display:flex; justify-content:flex-end; }
+@media (max-width:760px) {
+  .rightsRow { padding:13px; }
+  .rightsFields { grid-template-columns:minmax(0,1fr); }
+  .rightsActions .primaryButton { width:100%; }
+}
+
+
 .qualityCount {
   flex: 0 0 auto;
   border-radius: 999px;
