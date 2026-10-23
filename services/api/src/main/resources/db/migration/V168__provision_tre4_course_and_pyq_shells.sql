@@ -49,7 +49,7 @@ JOIN curriculum_program p ON p.code='TRE4_CS'
   AND p.curriculum_version='TRE4-2026' AND p.class_id IS NULL
 WHERE c.code='12'
 ON CONFLICT (program_id,code) WHERE program_id IS NOT NULL
-DO UPDATE SET display_name=EXCLUDED.display_name,active=true,updated_at=now();
+DO UPDATE SET display_name=EXCLUDED.display_name,active=true;
 
 INSERT INTO curriculum_program_subject(program_id,class_id,subject_id,is_required,sort_order)
 SELECT p.id,s.class_id,s.id,true,1
