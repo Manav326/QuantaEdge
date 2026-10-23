@@ -19,7 +19,6 @@ CREATE TABLE account_deletion_request (
   reviewed_at timestamptz,
   cancelled_at timestamptz,
   completed_at timestamptz,
-  CHECK (subject_user_id IS NOT NULL OR subject_student_id IS NOT NULL),
   CHECK ((status='CANCELLED') = (cancelled_at IS NOT NULL)),
   CHECK ((status='COMPLETED') = (completed_at IS NOT NULL))
 );
