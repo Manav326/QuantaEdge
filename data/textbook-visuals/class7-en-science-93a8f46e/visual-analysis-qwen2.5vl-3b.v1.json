@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2194,
+    "assets_selected": 2196,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "b626a9b20f023fe97a31656b",
-      "376be79fe47118e8d9fd366f",
-      "3cf47c1265763484567c53e7",
-      "19d9d55387b8e5ae93554a91",
-      "6dde8a230a57eb95c08cc790"
+      "71413380368b7943df5ed9ff",
+      "dc1b279c5072418dd6114e13",
+      "f59e5c8237cb124005179340",
+      "8408c8e381d2164d436f3ddd",
+      "de0652d45938c605e429daa0"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2191,
-    "assets_remaining": 5297,
+    "assets_analyzed": 2192,
+    "assets_remaining": 5296,
     "assets_completion_percent": 29.3,
-    "assets_failed": 84,
-    "assets_skipped_from_checkpoint": 2189,
+    "assets_failed": 83,
+    "assets_skipped_from_checkpoint": 2191,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -69622,7 +69622,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "39924752150",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -69639,7 +69639,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "39924752150",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -69940,7 +69940,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "39924752150",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -70077,19 +70077,43 @@
     {
       "asset_id": "8408c8e381d2164d436f3ddd",
       "asset_sha256": "b9783e33a7b37ae18225df72954017bb48490ae90115005261a4079fe0b81229",
-      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 61,
       "asset_path": "assets/b9783e33a7b37ae18225df72954017bb48490ae90115005261a4079fe0b81229.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A conversation between Yashwant, Anandi, and Sudarshan about making items of daily use.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "The World of Metals",
+          "4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use",
+          "items",
+          "conversation"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about craftspersons who work with metals.",
+        "limitations": [
+          "The image does not show any visual representation of the conversation.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39924752150",
+      "checkpointed_at": "2026-10-23T10:40:18Z"
     },
     {
       "asset_id": "de0652d45938c605e429daa0",
@@ -70102,7 +70126,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "39924752150",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
