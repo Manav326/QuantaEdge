@@ -71,6 +71,25 @@ class Tre4ImporterTests(unittest.TestCase):
                 "TRE 1.0", "source.pdf", "c" * 64
             )
 
+    def test_normalizer_preserves_code_indentation_and_internal_newlines(self):
+        raw = "    SELECT *\r\n    FROM question\r\n"
+        self.assertEqual(import_tre4_course.norm_text(raw), "    SELECT *\n    FROM question")
+
+    def test_exact_tre3_identity_set_does_not_invent_missing_e1_or_e6(self):
+        expected = import_tre4_course.EXPECTED_SOURCE_IDENTITIES["TRE 3.0"]["LANGUAGE_QUALIFYING"]
+        self.assertIn("E-2", expected)
+        self.assertIn("E-8", expected)
+        self.assertNotIn("E-1", expected)
+        self.assertNotIn("E-6", expected)
+
+    def test_inventory_validator_rejects_duplicate_identity(self):
+        valid = [
+            {"question_id": "q-1", "source_question_number": 1, "section_code": "GENERAL_STUDIES"},
+            {"question_id": "q-1-dup", "source_question_number": 1, "section_code": "GENERAL_STUDIES"},
+        ]
+        with self.assertRaises(import_tre4_course.ImportErrorSafe):
+            import_tre4_course.validate_question_inventory("TRE 1.0", valid)
+
     def test_hash_is_stable_for_dictionary_key_order(self):
         first = {"b": 2, "a": 1}
         second = {"a": 1, "b": 2}

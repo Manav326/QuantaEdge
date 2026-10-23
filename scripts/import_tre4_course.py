@@ -32,6 +32,23 @@ CHAPTER_CODE = "prev-years"
 CHAPTER_TITLE = "Prev years"
 PACKAGE_VERSION = "1.0.0"
 EXPECTED_QUESTIONS = {"TRE 1.0": 120, "TRE 2.0": 150, "TRE 3.0": 148}
+EXPECTED_SOURCE_IDENTITIES = {
+    "TRE 1.0": {
+        "GENERAL_STUDIES": {str(n) for n in range(1, 41)},
+        "COMPUTER_SCIENCE": {str(n) for n in range(41, 121)},
+    },
+    "TRE 2.0": {
+        "LANGUAGE_QUALIFYING": {str(n) for n in range(1, 31)},
+        "GENERAL_STUDIES": {str(n) for n in range(31, 71)},
+        "COMPUTER_SCIENCE": {str(n) for n in range(71, 151)},
+    },
+    "TRE 3.0": {
+        # The supplied booklet omits E-1 and E-6; never synthesize them.
+        "LANGUAGE_QUALIFYING": {f"E-{n}" for n in (2, 3, 4, 5, 7, 8)} | {f"H-{n}" for n in range(9, 31)},
+        "GENERAL_STUDIES": {str(n) for n in range(31, 71)},
+        "COMPUTER_SCIENCE": {str(n) for n in range(71, 151)},
+    },
+}
 PACKAGE_IDS = {
     "TRE 1.0": "tre4-bpsc-tre-1-0-computer-science",
     "TRE 2.0": "tre4-bpsc-tre-2-0-computer-science",
@@ -54,7 +71,52 @@ def sha256_json(value: Any) -> str:
 
 
 def norm_text(value: Any) -> str:
-    return str(value or "").replace("\r\n", "\n").replace("\r", "\n").strip()
+    """Trim only empty boundary lines, preserving code/formula indentation inside source text."""
+    text = str(value or "").replace("\r\n", "\n").replace("\r", "\n")
+    lines = text.split("\n")
+    while lines and not lines[0].strip():
+        lines.pop(0)
+    while lines and not lines[-1].strip():
+        lines.pop()
+    return "\n".join(line.rstrip() for line in lines)
+
+
+def validate_question_inventory(cycle: str, questions: list[dict[str, Any]]) -> None:
+    expected = EXPECTED_SOURCE_IDENTITIES[cycle]
+    actual: dict[str, set[str]] = {}
+    seen_questions: set[str] = set()
+    seen_keys: set[tuple[str, str]] = set()
+    for index, question in enumerate(questions, 1):
+        if not isinstance(question, dict):
+            raise ImportErrorSafe(f"{cycle} source question {index} is not an object.")
+        section = str(question.get("section_code") or "").strip().upper()
+        source_number = str(question.get("source_question_number") or "").strip()
+        if not section or not source_number:
+            raise ImportErrorSafe(f"{cycle} source question {index} is missing section_code/source_question_number.")
+        qid = str(question.get("question_id") or "").strip()
+        if qid:
+            if qid in seen_questions:
+                raise ImportErrorSafe(f"{cycle} contains duplicate question_id {qid!r}.")
+            seen_questions.add(qid)
+        key = (section, source_number)
+        if key in seen_keys:
+            raise ImportErrorSafe(f"{cycle} contains duplicate source identity {section}/{source_number}.")
+        seen_keys.add(key)
+        actual.setdefault(section, set()).add(source_number)
+
+    if set(actual) != set(expected):
+        raise ImportErrorSafe(
+            f"{cycle} section inventory differs from the source contract; "
+            f"expected sections={sorted(expected)}, actual={sorted(actual)}."
+        )
+    for section, expected_ids in expected.items():
+        actual_ids = actual.get(section, set())
+        if actual_ids != expected_ids:
+            missing = sorted(expected_ids - actual_ids)
+            extra = sorted(actual_ids - expected_ids)
+            raise ImportErrorSafe(
+                f"{cycle}/{section} source identities do not reconcile; missing={missing[:12]}, extra={extra[:12]}."
+            )
 
 
 def expected_question_count(cycle: str) -> int:
@@ -222,15 +284,26 @@ def build_paper_plan(cycle: str, record: dict[str, Any], register: dict[str, Any
         raise ImportErrorSafe(
             f"{cycle} must have exactly {expected} unique source questions; extraction returned {actual}. No DB rows were written."
         )
+    validate_question_inventory(cycle, questions)
     source_meta = next((item for item in register.get("sources", []) if item.get("cycle") == cycle), None)
     if not isinstance(source_meta, dict):
         raise ImportErrorSafe(f"Source register is missing {cycle}.")
+    if source_meta.get("source_status") != "VERIFIED_SOURCE_FILE":
+        raise ImportErrorSafe(f"{cycle} source is not registered as a verified source file.")
     if source_meta.get("repository_distribution_rights") != "CLEARED_FOR_PUBLIC_REPOSITORY":
         raise ImportErrorSafe(f"{cycle} source is not cleared for repository distribution.")
-    pdf_path = str(source_meta.get("binary_path") or "")
+    pdf_path = str(source_meta.get("binary_path") or "").strip()
+    if not pdf_path:
+        raise ImportErrorSafe(f"{cycle} source register is missing the repository PDF path.")
+    root = REPO_ROOT.resolve()
+    source_pdf = (REPO_ROOT / pdf_path).resolve()
+    if root not in source_pdf.parents or not source_pdf.is_file():
+        raise ImportErrorSafe(f"{cycle} source PDF is missing or outside the repository: {pdf_path}.")
     source_hash = str(source_meta.get("sha256") or "").lower()
     if not re.fullmatch(r"[0-9a-f]{64}", source_hash):
         raise ImportErrorSafe(f"{cycle} has no verified SHA-256 in the source register.")
+    if hashlib.sha256(source_pdf.read_bytes()).hexdigest() != source_hash:
+        raise ImportErrorSafe(f"{cycle} repository PDF SHA-256 differs from source-register.json.")
     if record.get("source_file", {}).get("sha256", "").lower() != source_hash:
         raise ImportErrorSafe(f"{cycle} source PDF SHA-256 differs from source-register.json.")
     url = source_pdf_url(register, cycle)
