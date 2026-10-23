@@ -2,6 +2,8 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useTenantBranding } from './TenantBrandingProvider';
+import { useLocale } from './LanguageProvider';
+import { translateUi } from '../i18n/catalog';
 
 export type AppearanceMode = 'institution' | 'system' | 'light' | 'dark';
 type ConfiguredAppearanceMode = Exclude<AppearanceMode, 'institution'>;
@@ -216,23 +218,25 @@ export function ColorThemeProvider({ children }: { children: ReactNode }) {
 export function AppearanceModeButton() {
   const { mode, setMode } = useContext(ColorThemeContext);
   const { brand } = useTenantBranding();
+  const { locale } = useLocale();
   const nextMode: AppearanceMode =
     mode === 'institution' ? 'system' : mode === 'system' ? 'dark' : mode === 'dark' ? 'light' : 'institution';
-  const defaultModeLabel = brand?.displayName || 'Default';
+  const defaultModeLabel = brand?.displayName || translateUi(locale, 'public.appearance.default');
   const modeName: Record<AppearanceMode, string> = {
-    institution: defaultModeLabel, system: 'System', dark: 'Dark', light: 'Light',
+    institution: defaultModeLabel,
+    system: translateUi(locale, 'public.appearance.system'),
+    dark: translateUi(locale, 'public.appearance.dark'),
+    light: translateUi(locale, 'public.appearance.light'),
   };
-  const label = mode === 'institution'
-    ? defaultModeLabel + ' appearance setting'
-    : modeName[mode] + ' appearance';
+  const label = translateUi(locale, 'public.appearance.label') + ': ' + modeName[mode];
   const icon = mode === 'institution' ? '⌂' : mode === 'system' ? '◐' : mode === 'dark' ? '☾' : '☀';
   return (
     <button
       type="button"
       className="qe-appearance-toggle"
       onClick={() => setMode(nextMode)}
-      aria-label={label + '. Activate to switch to ' + modeName[nextMode] + ' appearance.'}
-      title={label + ' · next: ' + modeName[nextMode]}
+      aria-label={label + '. ' + modeName[nextMode]}
+      title={label + ' · ' + modeName[nextMode]}
       aria-live="polite"
     >
       <span aria-hidden="true">{icon}</span>
