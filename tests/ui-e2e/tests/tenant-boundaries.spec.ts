@@ -98,6 +98,60 @@ test('[FAM-003][TEN-002] parent and child API sessions cannot cross guardian bou
   }
 });
 
+test('[CAT-002][TEN-002][TEN-003][LRN-006] learner course lists and subjects follow explicit institution assignment', async ({ browser }) => {
+  const fixture = await readPrivateJson<QaFixture>('qa-fixture.json');
+  const childA = await contextPage(browser, join(privateDir(), 'child-a.json'), WEB + '/student');
+  const childB = await contextPage(browser, join(privateDir(), 'child-b.json'), WEB + '/student');
+  const adultC = await contextPage(browser, join(privateDir(), 'adult-c.json'), WEB + '/student');
+
+  try {
+    const [coursesA, coursesB, coursesC] = await Promise.all([
+      api(childA.page, '/api/v1/students/me/programs', 'STUDENT', fixture.credentials.childA.institutionCode),
+      api(childB.page, '/api/v1/students/me/programs', 'STUDENT', fixture.credentials.childB.institutionCode),
+      api(adultC.page, '/api/v1/students/me/programs', 'STUDENT', fixture.credentials.independentLearner.institutionCode)
+    ]);
+
+    expect(coursesA.status, 'Child A course catalogue must load with the institution selected at sign-in.').toBe(200);
+    expect(coursesB.status, 'Child B course catalogue must load with the institution selected at sign-in.').toBe(200);
+    expect(coursesC.status, 'Adult learner course catalogue must load with its own institution.').toBe(200);
+    for (const result of [coursesA, coursesB, coursesC]) {
+      expect(Array.isArray(result.body)).toBe(true);
+      expect(result.body.length).toBeGreaterThan(0);
+      for (const course of result.body) {
+        expect(course.has_access).toBe(true);
+        expect(course.is_enrolled).toBe(true);
+        expect(Array.isArray(course.subjects)).toBe(true);
+      }
+    }
+
+    expect(coursesA.body.map((course: any) => course.code)).toEqual(['CLASS_7']);
+    expect(coursesB.body.map((course: any) => course.code)).toEqual(['CLASS_7']);
+    expect(coursesC.body.map((course: any) => course.code)).toEqual(['CLASS_6']);
+    expect(coursesA.body[0].subjects.length).toBeGreaterThan(0);
+    expect(coursesB.body[0].subjects.length).toBeGreaterThan(0);
+    expect(coursesC.body[0].subjects.length).toBeGreaterThan(0);
+
+    // An attacker-controlled tenant header must not transfer access. Depending on the
+    // authorization guard, a wrong-tenant request may be denied or safely return no rows.
+    const forgedTenant = await api(
+      childA.page,
+      '/api/v1/students/me/programs',
+      'STUDENT',
+      fixture.credentials.parentB.institutionCode
+    );
+    if (forgedTenant.status === 200) {
+      expect(Array.isArray(forgedTenant.body)).toBe(true);
+      expect(forgedTenant.body, 'A foreign institution selector must never expose another tenant\'s course access.').toHaveLength(0);
+    } else {
+      expect([401, 403, 404]).toContain(forgedTenant.status);
+    }
+  } finally {
+    await childA.context.close();
+    await childB.context.close();
+    await adultC.context.close();
+  }
+});
+
 test('[HR-002] HRMS QA Center requires the platform-owner permission, not just an authenticated session', async ({ browser }) => {
   const ownerPath = await readPrivateJson<{ statePath: string }>('hrms-owner-state-path.json');
   const adminPath = await readPrivateJson<{ statePath: string }>('education-admin-state-path.json');
