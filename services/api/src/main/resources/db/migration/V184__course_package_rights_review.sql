@@ -1,6 +1,6 @@
 -- V184: persist HRMS source-rights review attribution and evidence-backed decision notes.
 ALTER TABLE institution_course_package_import
-  ADD COLUMN rights_reviewed_by_staff_id bigint REFERENCES staff_account(id) ON DELETE SET NULL,
+  ADD COLUMN rights_reviewed_by_staff_id bigint REFERENCES staff_account(id) ON DELETE RESTRICT,
   ADD COLUMN rights_reviewed_at timestamptz,
   ADD COLUMN rights_review_notes varchar(1000);
 

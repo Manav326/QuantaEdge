@@ -219,11 +219,12 @@ public class CourseMarketplaceLaunchController {
         """,status,evidence.isBlank()?null:evidence,notes,context.staffId(),notes,importId);
     if(updated!=1) throw conflict("The imported package changed during rights review. Refresh the checklist and retry.");
 
-    Long sourceAssignmentId=jdbc.queryForObject("""
+    List<Long> sourceAssignments=jdbc.queryForList("""
         select id from institution_course_assignment
         where institution_id=? and course_release_id=?
         order by id desc limit 1
         """,Long.class,number(imported.get("source_institution_id")),number(imported.get("release_id")));
+    Long sourceAssignmentId=sourceAssignments.isEmpty()?null:sourceAssignments.getFirst();
     record(number(imported.get("source_institution_id")),number(imported.get("release_id")),
         sourceAssignmentId,null,"COURSE_PACKAGE_RIGHTS_REVIEWED",context.staffId(),
         Map.of("packageImportId",importId,"packageId",text(imported.get("package_id")),
