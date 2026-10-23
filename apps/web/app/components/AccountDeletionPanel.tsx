@@ -7,12 +7,23 @@ import GoogleSignInButton from './GoogleSignInButton';
 import { useLocale } from './LanguageProvider';
 import { translateUi } from '../i18n/catalog';
 
+type LinkedChild = {
+  publicUserId: string;
+  displayName?: string;
+  adultVerified: boolean;
+  adultVerificationStatus: string;
+  deletionRequestStatus?: string | null;
+};
 type DeletionRequest = {
   hasRequest: boolean;
   requestId?: string;
   status?: string;
   linkedChildrenCount?: number;
   includesLinkedChildren?: boolean;
+  linkedChildren?: LinkedChild[];
+  requiresChildResolution?: boolean;
+  reasonCategory?: string;
+  reasonDetails?: string;
   requestedAt?: string;
   updatedAt?: string;
 };

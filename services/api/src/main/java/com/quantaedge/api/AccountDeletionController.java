@@ -424,13 +424,34 @@ public class AccountDeletionController {
       @RequestAttribute(value="authContext", required=false) AuthContext context) {
     context = requireReviewer(context);
     List<Map<String,Object>> pendingRows = jdbc.queryForList("""
-      select subject_user_id,requested_by_user_id from account_deletion_request
-      where request_id=? and status='REQUESTED'
+      select subject_user_id,subject_student_id,requested_by_user_id
+      from account_deletion_request where request_id=? and status='REQUESTED'
       """, requestId);
     if (pendingRows.isEmpty()) throw new IllegalStateException("Only a newly requested deletion can enter review.");
     Object subjectUser = pendingRows.getFirst().get("subject_user_id");
+    Object subjectStudent = pendingRows.getFirst().get("subject_student_id");
     Object requesterUser = pendingRows.getFirst().get("requested_by_user_id");
-    if (subjectUser instanceof Number subjectNumber
+    if (subjectUser == null && subjectStudent instanceof Number studentNumber
+        && requesterUser instanceof Number requesterNumber) {
+      List<Map<String,Object>> reviewedMinor = jdbc.queryForList("""
+        select st.id from student st
+        join student_adult_verification av on av.student_id=st.id and av.status='REJECTED'
+        where st.id=? and st.active=true and st.user_account_id is null
+          and (
+            exists (select 1 from guardian_student gs
+              where gs.guardian_user_id=? and gs.student_id=st.id
+                and gs.active=true and gs.consent_status<>'REVOKED')
+            or exists (select 1 from student_login_credential slc
+              where slc.guardian_user_id=? and slc.student_id=st.id and slc.active=true)
+          )
+        for update of st
+        """, studentNumber.longValue(), requesterNumber.longValue(), requesterNumber.longValue());
+      if (reviewedMinor.isEmpty()) {
+        throw new IllegalStateException("Guardian-requested child deletion can enter review only when the child remains linked and an authorized reviewer has confirmed under-18 status.");
+      }
+    }
+    if (subjectUser instanceof Number subjectNumber && requesterUser instanceof Number requesterNumber
+        && subjectNumber.longValue() == requesterNumber.longValue()
         && !linkedChildren(subjectNumber.longValue()).isEmpty()) {
       throw new IllegalStateException("This parent account still has linked children. Resolve every child account before beginning review.");
     }
