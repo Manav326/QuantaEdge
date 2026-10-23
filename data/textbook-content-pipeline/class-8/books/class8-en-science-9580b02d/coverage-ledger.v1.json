@@ -36692,43 +36692,9 @@
       "asset_path": "page-0056.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
-      "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing non-communicable diseases, including diabetes, obesity, and high blood pressure, and their symptoms and suggested lifestyle changes.",
-        "visual_type": "uncertain",
-        "visible_text": [
-          "What will happen if I\n take excess amount of\n any of the minerals or\n vitamins?",
-          "which are caused by a lack of specific nutrients\n in the diet. These are called deficiency diseases\n and are also non-communicable.",
-          "Diseases such as cancer, diabetes, and asthma may often persist\n for a long time (more than 3 months) and are referred to as\n chronic diseases.",
-          "Diabetes is a common disease which is becoming more\n prevalent in adults as well as children. In fact, India now has\n one of the highest numbers of people with diabetes in the world.\n It often develops due to a combination of hormonal imbalances,\n unhealthy eating habits, lack of physical activity, ",
-          "Let us learn more about the causes of non-communicable\n diseases and their prevention.",
-          "Activity 3.5: Let us survey",
-          "- Find out the three most common lifestyle-related diseases in\n your neighbourhood",
-          "- Talk to a doctor, nurse, health worker or even a family\n member who knows about health and what kind of lifestyle\n changes can help prevent or manage these diseases.",
-          "- You can also consult trusted health websites, books, teachers\n and doctors.",
-          "- Fill in Table 3.2 and learn more about lifestyle-related diseases.",
-          "Table 3.2: Non-communicable diseases",
-          "S. No. | Name of common\n lifestyle-related diseases | Signs and\n symptoms | Suggested\n lifestyle change(s)",
-          "1. | Obesity | Eating a balanced\n diet and exercising\n regularly",
-          "2. | Diabetes | - Frequent\n urination\n - Excessive thirst\n - Weight loss\n - Tiredness\n - Slow healing",
-          "3. | High blood pressure",
-          "4. | ...",
-          "Curiosity — Textbook of Science for Grade 8\n Reprint 2026-27"
-        ],
-        "concepts": [
-          "non-communicable diseases",
-          "diabetes",
-          "obesity",
-          "high blood pressure",
-          "lifestyle-related diseases"
-        ],
-        "context_relation": "The page discusses the causes and prevention of non-communicable diseases, including diabetes, obesity, and high blood pressure.",
-        "limitations": [
-          "The page does not provide specific solutions or interventions for managing these diseases.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
-        ]
-      },
+      "effective_analysis": null,
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -38015,9 +37981,21 @@
       "asset_path": "assets/7ad2528ee99044f95599f08644032e490d9b7bcabdd405d5da6264a9246ff4ec.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of bacteria with crosses over them.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "antibiotic resistance",
+          "bacteria"
+        ],
+        "context_relation": "The image is related to the discussion of antibiotic resistance in bacteria.",
+        "limitations": [
+          "The image does not provide specific details about the bacteria or the crosses over them."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

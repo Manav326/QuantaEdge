@@ -15,12 +15,12 @@
       "ba83653c420b9101e5290dee",
       "35f32b476dc5977bc161e8e8",
       "aa8a149fa698d13f05cfdb3e",
-      "9c98ea470aafbf3dbbeffd67"
+      "dca29588e457e762592b2148"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1167,
-    "assets_remaining": 1124,
-    "assets_completion_percent": 50.9,
+    "assets_analyzed": 1168,
+    "assets_remaining": 1123,
+    "assets_completion_percent": 51.0,
     "assets_failed": 13,
     "assets_skipped_from_checkpoint": 1167,
     "batch_limit": 5,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39909545638",
-      "checkpointed_at": "2026-10-23T07:26:22Z"
+      "checkpointed_at": "2026-10-23T07:38:32Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1772,7 +1772,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39909545638",
-      "checkpointed_at": "2026-10-23T07:27:16Z"
+      "checkpointed_at": "2026-10-23T07:39:25Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -20177,7 +20177,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39909545638",
-      "checkpointed_at": "2026-10-23T07:27:56Z"
+      "checkpointed_at": "2026-10-23T07:40:05Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -30114,55 +30114,19 @@
     {
       "asset_id": "aa8a149fa698d13f05cfdb3e",
       "asset_sha256": "a8bff6a187b2efe41cc2a610ef3c9f60213b5cb423e2f45f3be634949b0a5c30",
+      "page_text_context_sha256": "213175e04b179deec928148e10c9927eab34f0b8901d651f9fe4a064ff5eef0b",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 56,
       "asset_path": "page-0056.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "213175e04b179deec928148e10c9927eab34f0b8901d651f9fe4a064ff5eef0b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A page from a textbook discussing non-communicable diseases, including diabetes, obesity, and high blood pressure, and their symptoms and suggested lifestyle changes.",
-        "visual_type": "uncertain",
-        "visible_text": [
-          "What will happen if I\n take excess amount of\n any of the minerals or\n vitamins?",
-          "which are caused by a lack of specific nutrients\n in the diet. These are called deficiency diseases\n and are also non-communicable.",
-          "Diseases such as cancer, diabetes, and asthma may often persist\n for a long time (more than 3 months) and are referred to as\n chronic diseases.",
-          "Diabetes is a common disease which is becoming more\n prevalent in adults as well as children. In fact, India now has\n one of the highest numbers of people with diabetes in the world.\n It often develops due to a combination of hormonal imbalances,\n unhealthy eating habits, lack of physical activity, ",
-          "Let us learn more about the causes of non-communicable\n diseases and their prevention.",
-          "Activity 3.5: Let us survey",
-          "- Find out the three most common lifestyle-related diseases in\n your neighbourhood",
-          "- Talk to a doctor, nurse, health worker or even a family\n member who knows about health and what kind of lifestyle\n changes can help prevent or manage these diseases.",
-          "- You can also consult trusted health websites, books, teachers\n and doctors.",
-          "- Fill in Table 3.2 and learn more about lifestyle-related diseases.",
-          "Table 3.2: Non-communicable diseases",
-          "S. No. | Name of common\n lifestyle-related diseases | Signs and\n symptoms | Suggested\n lifestyle change(s)",
-          "1. | Obesity | Eating a balanced\n diet and exercising\n regularly",
-          "2. | Diabetes | - Frequent\n urination\n - Excessive thirst\n - Weight loss\n - Tiredness\n - Slow healing",
-          "3. | High blood pressure",
-          "4. | ...",
-          "Curiosity — Textbook of Science for Grade 8\n Reprint 2026-27"
-        ],
-        "concepts": [
-          "non-communicable diseases",
-          "diabetes",
-          "obesity",
-          "high blood pressure",
-          "lifestyle-related diseases"
-        ],
-        "context_relation": "The page discusses the causes and prevention of non-communicable diseases, including diabetes, obesity, and high blood pressure.",
-        "limitations": [
-          "The page does not provide specific solutions or interventions for managing these diseases.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39909545638",
-      "checkpointed_at": "2026-10-23T07:32:25Z"
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
     },
     {
       "asset_id": "a948186878e29a2b89dab845",
@@ -31475,19 +31439,33 @@
     {
       "asset_id": "dca29588e457e762592b2148",
       "asset_sha256": "7ad2528ee99044f95599f08644032e490d9b7bcabdd405d5da6264a9246ff4ec",
-      "page_text_context_sha256": "36b580be4bfbd33d42bbfb00c92d71da2611a8e9b85795b9c32efeaf117e1615",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 61,
       "asset_path": "assets/7ad2528ee99044f95599f08644032e490d9b7bcabdd405d5da6264a9246ff4ec.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "36b580be4bfbd33d42bbfb00c92d71da2611a8e9b85795b9c32efeaf117e1615",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of bacteria with crosses over them.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "antibiotic resistance",
+          "bacteria"
+        ],
+        "context_relation": "The image is related to the discussion of antibiotic resistance in bacteria.",
+        "limitations": [
+          "The image does not provide specific details about the bacteria or the crosses over them."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39909545638",
+      "checkpointed_at": "2026-10-23T07:43:25Z"
     },
     {
       "asset_id": "8c3fcfdac425af34825be2a1",
