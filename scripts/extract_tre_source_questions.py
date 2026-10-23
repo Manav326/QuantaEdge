@@ -483,21 +483,39 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                     )
                 if hi:
                     converted_prompt, status = convert_hindi_text(hi.get("prompt_raw", ""), english_reference)
-                    hi["prompt_i18n"] = converted_prompt
+                    hi["prompt_i18n"] = preserve_layout(converted_prompt)
                     hi["conversion_status"] = status
+                    hi["prompt_content_kind"] = classify_content(hi["prompt_i18n"])
+                    hi["code_line_indices"] = detected_code_line_indices(hi["prompt_i18n"])
+                    hi["math_line_indices"] = detected_math_line_indices(hi["prompt_i18n"])
+                    hi["source_code_preservation_notes"] = "Original line breaks and indentation preserved; code-looking lines and operators bypass legacy-Hindi glyph substitution."
                     for option in hi.get("options", []):
                         # The exam's standard D/E options are fixed phrases and should be exact.
                         if option["key"] in STANDARD_HI_OPTIONS:
                             option["text_i18n"] = STANDARD_HI_OPTIONS[option["key"]]
                         else:
                             option["text_i18n"], _ = convert_hindi_text(option.get("raw_text", ""), english_reference)
+                        option["text_i18n"] = preserve_layout(option["text_i18n"])
+                        option["content_kind"] = classify_content(option["text_i18n"])
+                        option["code_line_indices"] = detected_code_line_indices(option["text_i18n"])
+                        option["math_line_indices"] = detected_math_line_indices(option["text_i18n"])
+                        option["source_code_preservation_notes"] = "Preserve code/formula glyphs and indentation; compare against the source page."
                 if en:
-                    en["prompt_i18n"] = en.get("prompt_raw", "")
+                    en["prompt_i18n"] = preserve_layout(en.get("prompt_raw", ""))
+                    en["prompt_content_kind"] = classify_content(en["prompt_i18n"])
+                    en["code_line_indices"] = detected_code_line_indices(en["prompt_i18n"])
+                    en["math_line_indices"] = detected_math_line_indices(en["prompt_i18n"])
+                    en["source_code_preservation_notes"] = "Original English source, line breaks and indentation preserved."
                     for option in en.get("options", []):
                         if option["key"] in STANDARD_EN_OPTIONS:
                             option["text_i18n"] = STANDARD_EN_OPTIONS[option["key"]]
                         else:
-                            option["text_i18n"] = option.get("raw_text", "")
+                            option["text_i18n"] = preserve_layout(option.get("raw_text", ""))
+                        option["text_i18n"] = preserve_layout(option["text_i18n"])
+                        option["content_kind"] = classify_content(option["text_i18n"])
+                        option["code_line_indices"] = detected_code_line_indices(option["text_i18n"])
+                        option["math_line_indices"] = detected_math_line_indices(option["text_i18n"])
+                        option["source_code_preservation_notes"] = "Original English source, line breaks and indentation preserved."
 
                 if entry["section_code"] in {"GENERAL_STUDIES", "COMPUTER_SCIENCE"}:
                     if not en:
