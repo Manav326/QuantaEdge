@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import AdminSidebar from '../components/AdminSidebar';
 import { useCallback, useEffect, useState } from 'react';
 import styles from './Marketplace.module.css';
