@@ -73,10 +73,10 @@ class TreSourceCodePreservationTests(unittest.TestCase):
     def test_split_questions_after_a_shared_passage(self):
         source = (
             "Kerala is known for its variety of scenery and food. "
-            "Visitors can enjoy forests, beaches and hills.\\n"
-            "E-1. Why is Kerala just the place for you if you love variety ?\\n"
-            "(A) There is something here to please everyone\\n"
-            "E-2. Why should you take a trip to the spice gardens in the hills ?\\n"
+            "Visitors can enjoy forests, beaches and hills.\n"
+            "E-1. Why is Kerala just the place for you if you love variety ?\n"
+            "(A) There is something here to please everyone\n"
+            "E-2. Why should you take a trip to the spice gardens in the hills ?\n"
             "(A) To see spices growing in the hills"
         )
         preamble, questions = _split_block_questions(source, "TRE 3.0")
