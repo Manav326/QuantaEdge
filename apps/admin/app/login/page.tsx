@@ -148,7 +148,7 @@ export default function AdminLogin() {
           <QuantaEdgeBrand href="/" variant="compact" className="qe-admin-login-brand-lockup" />
         </div>
         <div className="qe-login-card">
-          <div className="qe-admin-login-controls" aria-label={t('admin.language.choose')}>
+          <div className="qe-admin-login-controls">
           <AdminAppearanceModeButton />
           <label className="qe-admin-language-switcher qe-admin-login-language-switcher">
             <span aria-hidden="true">文</span>
