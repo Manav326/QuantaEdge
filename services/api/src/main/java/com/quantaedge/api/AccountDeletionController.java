@@ -82,7 +82,7 @@ public class AccountDeletionController {
     DeletionSubject subject = subjectFor(context);
     List<Map<String,Object>> rows = jdbc.queryForList("""
       select request_id,status,request_source,includes_linked_children,linked_children_count,
-        requested_at,updated_at,cancelled_at,completed_at
+        identity_verification_method,identity_verified_at,requested_at,updated_at,cancelled_at,completed_at
       from account_deletion_request
       where subject_user_id=?
       order by requested_at desc limit 1
@@ -127,29 +127,41 @@ public class AccountDeletionController {
           "linkedChildrenCount", children.size());
     }
 
-    String verificationValue = String.valueOf(body.getOrDefault("verificationId", "")).trim();
-    UUID verificationId;
-    try {
-      verificationId = UUID.fromString(verificationValue);
-    } catch (IllegalArgumentException ex) {
-      throw new SecurityException("Verify your identity again before submitting the deletion request.");
-    }
-    List<Map<String,Object>> proofs = jdbc.queryForList("""
-      select verification_id,method,verified_at
-      from account_deletion_verification
-      where verification_id=? and user_account_id=? and consumed_at is null and expires_at>now()
-      for update
-      """, verificationId, subject.userId());
-    if (proofs.isEmpty()) {
-      throw new SecurityException("Your identity verification has expired or was already used. Verify again.");
-    }
-    Map<String,Object> proof = proofs.getFirst();
-    int proofConsumed = jdbc.update("""
-      update account_deletion_verification set consumed_at=now()
-      where verification_id=? and user_account_id=? and consumed_at is null and expires_at>now()
-      """, verificationId, subject.userId());
-    if (proofConsumed != 1) {
-      throw new SecurityException("Your identity verification has expired or was already used. Verify again.");
+    Map<String,Object> proof = null;
+    String verificationMethod;
+    Object verifiedAt;
+    boolean manualIdentityReview = Boolean.TRUE.equals(body.get("manualIdentityReview"));
+    if (manualIdentityReview) {
+      // This records a review requirement; it does not verify identity or authorize erasure.
+      verificationMethod = "MANUAL_REVIEW_REQUIRED";
+      verifiedAt = null;
+    } else {
+      String verificationValue = String.valueOf(body.getOrDefault("verificationId", "")).trim();
+      UUID verificationId;
+      try {
+        verificationId = UUID.fromString(verificationValue);
+      } catch (IllegalArgumentException ex) {
+        throw new SecurityException("Verify your identity again before submitting the deletion request.");
+      }
+      List<Map<String,Object>> proofs = jdbc.queryForList("""
+        select verification_id,method,verified_at
+        from account_deletion_verification
+        where verification_id=? and user_account_id=? and consumed_at is null and expires_at>now()
+        for update
+        """, verificationId, subject.userId());
+      if (proofs.isEmpty()) {
+        throw new SecurityException("Your identity verification has expired or was already used. Verify again.");
+      }
+      proof = proofs.getFirst();
+      int proofConsumed = jdbc.update("""
+        update account_deletion_verification set consumed_at=now()
+        where verification_id=? and user_account_id=? and consumed_at is null and expires_at>now()
+        """, verificationId, subject.userId());
+      if (proofConsumed != 1) {
+        throw new SecurityException("Your identity verification has expired or was already used. Verify again.");
+      }
+      verificationMethod = String.valueOf(proof.get("method"));
+      verifiedAt = proof.get("verified_at");
     }
 
     UUID requestId = UUID.randomUUID();
@@ -161,7 +173,7 @@ public class AccountDeletionController {
       values (?,?,?,?,?,?,'REQUESTED',?,?,?,?,now(),now())
       """, requestId, subject.userId(), subject.publicUserId(), subject.studentId(),
         subject.publicStudentPublicUserId(), source, includeLinkedChildren, children.size(),
-        proof.get("method"), proof.get("verified_at"));
+        verificationMethod, verifiedAt);
 
     if (includeLinkedChildren) {
       for (Map<String,Object> child : children) {
@@ -179,7 +191,7 @@ public class AccountDeletionController {
         jsonb_build_object('requestId',?,'source',?,'linkedChildrenCount',?,'includesLinkedChildren',?,
           'identityVerificationMethod',?))
       """, subject.userId(), subject.studentId(), requestId.toString(), source, children.size(),
-        includeLinkedChildren, String.valueOf(proof.get("method")));
+        includeLinkedChildren, verificationMethod);
 
     Map<String,Object> result = new LinkedHashMap<>();
     result.put("accepted", true);
@@ -189,6 +201,8 @@ public class AccountDeletionController {
     result.put("requestedAt", java.time.Instant.now().toString());
     result.put("linkedChildrenCount", children.size());
     result.put("includesLinkedChildren", includeLinkedChildren);
+    result.put("identityVerificationMethod", verificationMethod);
+    result.put("identityVerified", verifiedAt != null);
     return result;
   }
 
@@ -231,6 +245,7 @@ public class AccountDeletionController {
     List<Map<String,Object>> rows = jdbc.queryForList("""
       select request_id,subject_user_public_id,subject_student_public_user_id,
         request_source,status,includes_linked_children,linked_children_count,
+        identity_verification_method,identity_verified_at,
         requested_at,updated_at,reviewed_at,cancelled_at,completed_at
       from account_deletion_request
       where status=?
@@ -247,6 +262,7 @@ public class AccountDeletionController {
     List<Map<String,Object>> rows = jdbc.queryForList("""
       select request_id,subject_user_public_id,subject_student_public_user_id,
         request_source,status,includes_linked_children,linked_children_count,
+        identity_verification_method,identity_verified_at,
         requested_at,updated_at,reviewed_by_staff_id,reviewed_at,cancelled_at,completed_at
       from account_deletion_request where request_id=?
       """, requestId);
