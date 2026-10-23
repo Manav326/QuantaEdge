@@ -31,7 +31,7 @@ SUBJECT_TITLE = "Computer Science"
 CHAPTER_CODE = "prev-years"
 CHAPTER_TITLE = "Prev years"
 PACKAGE_VERSION = "1.0.0"
-EXPECTED_QUESTIONS = {"TRE 1.0": 120, "TRE 2.0": 150, "TRE 3.0": 148}
+EXPECTED_QUESTIONS = {"TRE 1.0": 120, "TRE 2.0": 150, "TRE 3.0": 150}
 EXPECTED_SOURCE_IDENTITIES = {
     "TRE 1.0": {
         "GENERAL_STUDIES": {str(n) for n in range(1, 41)},
@@ -43,8 +43,8 @@ EXPECTED_SOURCE_IDENTITIES = {
         "COMPUTER_SCIENCE": {str(n) for n in range(71, 151)},
     },
     "TRE 3.0": {
-        # The supplied booklet omits E-1 and E-6; never synthesize them.
-        "LANGUAGE_QUALIFYING": {f"E-{n}" for n in (2, 3, 4, 5, 7, 8)} | {f"H-{n}" for n in range(9, 31)},
+        # Preserve all 30 qualifying-language items present in the extracted TRE 3.0 booklet.
+        "LANGUAGE_QUALIFYING": {f"E-{n}" for n in range(1, 9)} | {f"H-{n}" for n in range(9, 31)},
         "GENERAL_STUDIES": {str(n) for n in range(31, 71)},
         "COMPUTER_SCIENCE": {str(n) for n in range(71, 151)},
     },
@@ -407,12 +407,20 @@ def ensure_schema(cursor: Any) -> None:
     cursor.execute("""
         SELECT to_regclass('public.curriculum_program_delivery_mode'),
                to_regprocedure('public.course_content_fingerprint(bigint)'),
-               to_regprocedure('public.assessment_only_course_ready(bigint)')
+               to_regprocedure('public.assessment_only_course_ready(bigint)'),
+               pg_get_functiondef(to_regprocedure('public.assessment_only_course_ready(bigint)'))
     """)
     row = cursor.fetchone()
     if not row or any(value is None for value in row):
         raise ImportErrorSafe(
             "Flyway V168 is not applied. Start the API against this database and verify that V168 completes before importing."
+        )
+    if not re.search(
+        r"'TRE 3\.0'::varchar,\s*'tre4-bpsc-tre-3-0-computer-science'::varchar,\s*150",
+        str(row[3] or ""),
+    ):
+        raise ImportErrorSafe(
+            "Flyway V170 is required: TRE 3.0 must be configured for 150 source questions before importing."
         )
 
 
