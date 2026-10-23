@@ -192,8 +192,9 @@ public class AssessmentController {
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     String courseFilter="a.course_id=?";
     String fromJoins="""
-      from assessment a join curriculum_subject s on s.id=a.subject_id
-      join curriculum_class c on c.id=s.class_id
+      from assessment a
+      left join curriculum_subject s on s.id=a.subject_id
+      left join curriculum_class c on c.id=s.class_id
       left join curriculum_program p on p.id=a.course_id
       left join curriculum_chapter ch on ch.id=a.chapter_id
       """;
@@ -930,8 +931,9 @@ public class AssessmentController {
       select a.id,a.title,a.status,a.is_generated,a.subject_id,a.chapter_id,a.source_package_id,
              s.code as subject_code,c.code as class_code,
              count(aq.id) as question_count
-      from assessment a join curriculum_subject s on s.id=a.subject_id
-      join curriculum_class c on c.id=s.class_id
+      from assessment a
+      left join curriculum_subject s on s.id=a.subject_id
+      left join curriculum_class c on c.id=s.class_id
       left join assessment_question aq on aq.assessment_id=a.id
       where a.id=? and a.course_id=? group by a.id,s.code,c.code
       """, assessmentId,courseId);
@@ -946,12 +948,32 @@ public class AssessmentController {
           select count(*) from assessment_question aq
           where aq.assessment_id=? and (
             coalesce(aq.question_snapshot->>'question_review_status','PENDING_HUMAN_REVIEW') <> 'APPROVED'
-            or coalesce((aq.question_snapshot->'answer_payload')->>'kind','UNRESOLVED')='UNRESOLVED'
-            or coalesce((aq.question_snapshot->'answer_payload')->>'value','')=''
-            or not exists (
-              select 1 from jsonb_array_elements(coalesce(aq.question_snapshot->'options','[]'::jsonb)) option_row
-              where coalesce(option_row->>'key',option_row->>'option_key') =
-                (aq.question_snapshot->'answer_payload')->>'value'
+            or coalesce((aq.question_snapshot->'answer_payload')->>'kind','UNRESOLVED') in ('','UNRESOLVED')
+            or aq.question_snapshot->'answer_payload' is null
+            or aq.question_snapshot->'answer_payload'->'value' is null
+            or (jsonb_typeof(aq.question_snapshot->'answer_payload'->'value')='string'
+                and btrim(aq.question_snapshot->'answer_payload'->>'value')='')
+            or (
+              coalesce(aq.question_snapshot->'answer_payload'->>'kind','')='OPTION'
+              and not exists (
+                select 1 from jsonb_array_elements(coalesce(aq.question_snapshot->'options','[]'::jsonb)) option_row
+                where coalesce(option_row->>'key',option_row->>'option_key') =
+                  aq.question_snapshot->'answer_payload'->>'value'
+              )
+            )
+            or (
+              coalesce(aq.question_snapshot->'answer_payload'->>'kind','')='MULTI_OPTION'
+              and (
+                jsonb_typeof(aq.question_snapshot->'answer_payload'->'value') <> 'array'
+                or exists (
+                  select 1
+                  from jsonb_array_elements(aq.question_snapshot->'answer_payload'->'value') selected_key
+                  where not exists (
+                    select 1 from jsonb_array_elements(coalesce(aq.question_snapshot->'options','[]'::jsonb)) option_row
+                    where coalesce(option_row->>'key',option_row->>'option_key')=selected_key #>> '{}'
+                  )
+                )
+              )
             )
           )
           """,Long.class,assessmentId);
@@ -2432,8 +2454,9 @@ public class AssessmentController {
              a.offline_enabled,a.negative_marking_fraction,a.source_package_id,a.source_package_version,a.source_package_sha256,
              a.source_exam_cycle,a.source_url,a.created_at,a.published_at,s.code as subject_code,s.display_name as subject_name,
              c.code as class_code,ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name
-      from assessment a join curriculum_subject s on s.id=a.subject_id
-      join curriculum_class c on c.id=s.class_id
+      from assessment a
+      left join curriculum_subject s on s.id=a.subject_id
+      left join curriculum_class c on c.id=s.class_id
       left join curriculum_chapter ch on ch.id=a.chapter_id
       where a.id=?
       """, id);
