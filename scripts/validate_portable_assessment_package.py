@@ -19,6 +19,11 @@ PACKAGE_SCHEMA = "quantaedge.portable-assessment-package.v1"
 RIGHTS_CLEARED_FOR_PUBLIC_REPO = "CLEARED_FOR_PUBLIC_REPOSITORY"
 VALID_RIGHTS = {"UNCONFIRMED", "CLEARED_FOR_INTERNAL_USE", RIGHTS_CLEARED_FOR_PUBLIC_REPO, "DO_NOT_REDISTRIBUTE"}
 VALID_POLICIES = {"SCORED", "QUALIFYING_ONLY", "PRACTICE_ONLY"}
+VALID_QUESTION_TYPES = {
+    "MCQ", "TRUE_FALSE", "INFERENCE", "INPUT", "NUMERICAL", "SHORT_ANSWER",
+    "LONG_ANSWER", "CASE_BASED", "SOURCE_BASED", "DIAGRAM", "MAP",
+    "ASSERTION_REASON", "MATCH", "ORDER",
+}
 LANGUAGE_KEY = re.compile(r"^[a-z]{2,3}(?:-[A-Za-z0-9]{2,8})?$")
 
 
@@ -185,6 +190,7 @@ def validate_package(package: Any, repo_root: Path | None = None,
     ids: set[str] = set()
     source_numbers: set[tuple[str, str]] = set()
     stimulus_groups: dict[str, str] = {}
+    question_set_sizes: dict[str, int] = {}
     actual_section_counts: dict[str, int] = {}
     for index, q in enumerate(questions, 1):
         where = f"questions[{index}]"
@@ -227,6 +233,31 @@ def validate_package(package: Any, repo_root: Path | None = None,
                     errors.append(f"{where}.stimulus_i18n conflicts with other questions using shared stimulus ID {stimulus_id!r}.")
                 else:
                     stimulus_groups[stimulus_id] = stimulus_signature
+        question_set_id = q.get("question_set_id")
+        question_set_type = q.get("question_set_type")
+        if question_set_id is not None and (
+            not isinstance(question_set_id, str)
+            or not re.fullmatch(r"[a-z0-9][a-z0-9._-]{1,119}", question_set_id)
+        ):
+            errors.append(f"{where}.question_set_id must be a stable lowercase slug when provided.")
+        if question_set_type is not None and question_set_type != "PASSAGE":
+            errors.append(f"{where}.question_set_type must be PASSAGE when provided.")
+        if question_set_type == "PASSAGE":
+            if not question_set_id or question_set_id != stimulus_id:
+                errors.append(f"{where}.question_set_id must match stimulus_id for a PASSAGE question set.")
+            if not isinstance(stimulus_i18n, dict) or not stimulus_i18n:
+                errors.append(f"{where}.question_set_type PASSAGE requires shared stimulus_i18n text.")
+            if question_set_id:
+                question_set_sizes[question_set_id] = question_set_sizes.get(question_set_id, 0) + 1
+        elif question_set_id is not None:
+            errors.append(f"{where}.question_set_id requires question_set_type PASSAGE.")
+        incorrect_marks = q.get("incorrect_marks")
+        if incorrect_marks is not None and (
+            isinstance(incorrect_marks, bool)
+            or not isinstance(incorrect_marks, (int, float))
+            or not -1000 <= incorrect_marks <= 0
+        ):
+            errors.append(f"{where}.incorrect_marks must be a number from -1000 to 0, or null.")
         native_only = q.get("native_language_only", False)
         native_language = q.get("native_source_language")
         if "native_language_only" in q and not isinstance(native_only, bool):
@@ -246,8 +277,8 @@ def validate_package(package: Any, repo_root: Path | None = None,
                     errors.append(f"{where}.stimulus_i18n must contain only the native source language {native_language!r}.")
         if not isinstance(q.get("prompt"), str) or not q["prompt"].strip():
             errors.append(f"{where}.prompt is required as a display fallback.")
-        if q.get("question_type") not in {"MCQ", "TRUE_FALSE"}:
-            errors.append(f"{where}.question_type must be MCQ or TRUE_FALSE.")
+        if q.get("question_type") not in VALID_QUESTION_TYPES:
+            errors.append(f"{where}.question_type must be one of {', '.join(sorted(VALID_QUESTION_TYPES))}.")
         loc = q.get("source_location")
         if not isinstance(loc, dict) or not isinstance(loc.get("pdf_page"), int) or loc.get("pdf_page", 0) < 1:
             errors.append(f"{where}.source_location.pdf_page must be a 1-based positive page number.")
@@ -340,6 +371,10 @@ def validate_package(package: Any, repo_root: Path | None = None,
     for code in actual_section_counts:
         if code not in section_by_code:
             errors.append(f"Questions use undeclared section {code}.")
+    for set_id, member_count in question_set_sizes.items():
+        if member_count < 2:
+            errors.append(f"PASSAGE question set {set_id!r} must contain at least two child questions.")
+
     expected_total = sum(
         section.get("question_count", 0) for section in section_by_code.values()
         if isinstance(section.get("question_count"), int)

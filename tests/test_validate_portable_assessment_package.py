@@ -131,6 +131,11 @@ def native_language_package() -> dict:
         q["stimulus_id"] = "tre-3.0-stimulus-e-1-5"
         q["stimulus_i18n"] = {"en": "An unchanged passage from the original paper."}
         q["stimulus_content_kind"] = "PROSE"
+        q["question_set_id"] = q["stimulus_id"]
+        q["question_set_type"] = "PASSAGE"
+        q["incorrect_marks"] = -0.25
+        if number == 102:
+            q["question_type"] = "INFERENCE"
         package["questions"].append(q)
     return package
 
@@ -141,6 +146,28 @@ class PortableAssessmentPackageTests(unittest.TestCase):
 
     def test_accepts_native_source_only_questions_sharing_one_passage(self):
         self.assertEqual(validate_package(native_language_package()), [])
+
+    def test_passage_set_is_explicit_one_to_many_and_supports_inference_children(self):
+        package = native_language_package()
+        first, second = package["questions"][-2:]
+        self.assertEqual(first["question_set_type"], "PASSAGE")
+        self.assertEqual(first["question_set_id"], second["question_set_id"])
+        self.assertEqual(second["question_type"], "INFERENCE")
+        self.assertEqual(first["incorrect_marks"], -0.25)
+        self.assertEqual(validate_package(package), [])
+
+    def test_rejects_passage_question_set_with_only_one_child(self):
+        package = native_language_package()
+        package["questions"].pop()
+        package["sections"][-1]["question_count"] = 1
+        errors = validate_package(package)
+        self.assertTrue(any("must contain at least two child questions" in error for error in errors))
+
+    def test_rejects_unconfirmed_or_positive_incorrect_marks(self):
+        package = native_language_package()
+        package["questions"][-1]["incorrect_marks"] = 0.25
+        errors = validate_package(package)
+        self.assertTrue(any("incorrect_marks must be a number from -1000 to 0" in error for error in errors))
 
     def test_rejects_translated_fallback_for_native_language_only_question(self):
         package = native_language_package()
