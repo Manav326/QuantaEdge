@@ -69,6 +69,7 @@ The source page is `https://csestudy247.com/download-bpsc-tre-1-tre-2-tre-3-comp
 - Use `solution_mode: STEPWISE` for calculation, formula substitution, algorithm tracing, or code output. Store 2–8 short ordered steps first, with localized steps for each source language where applicable. Do not jump directly to a final number or output.
 - Each numerical/code explanation must be checked against the displayed source formula, symbols, values and options. A question with an ambiguous source expression, incomplete option set, or uncertain Hindi reconstruction remains blocked from release.
 - The result view shows General Studies and Computer Science scored separately. A qualifying-language section is kept separate and excluded from the 120-mark scored total.
+- The supplied TRE 3.0 booklet has **148 questions total**: 28 qualifying-language items, 40 General Studies and 80 Computer Science. Its pre-start instruction must state the 148-question count before creating an attempt. E-1 and E-6 are absent in this source and must not be fabricated.
 - Paper-specific penalty is part of the immutable attempt snapshot. TRE 1.0 specifies a one-fourth penalty in its instructions; do not carry that value over to another cycle unless that paper itself states it.
 
 ## Current implementation boundary
