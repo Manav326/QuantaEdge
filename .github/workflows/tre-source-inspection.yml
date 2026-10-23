@@ -22,9 +22,9 @@ jobs:
       - name: Check out the same-repository working branch
         uses: actions/checkout@v4
         with:
-          repository: \${{ github.event.pull_request.head.repo.full_name || github.repository }}
-          ref: \${{ github.event.pull_request.head.ref || github.ref_name }}
-          token: \${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -50,14 +50,14 @@ jobs:
       - name: Commit original PDFs under data/TRE-Papres
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
         env:
-          BRANCH_NAME: \${{ github.event.pull_request.head.ref }}
+          BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
         run: |
           git add data/TRE-Papres/sources data/TRE-Papres/source-register.json
           if ! git diff --cached --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git commit -m "Store exact TRE source PDFs with checksums"
-            git push origin "HEAD:\${BRANCH_NAME}"
+            git push origin "HEAD:${BRANCH_NAME}"
           fi
 
       - name: Upload temporary inventory for question and answer review
@@ -65,7 +65,7 @@ jobs:
         with:
           name: tre-source-review-inventory
           path: |
-            \${{ runner.temp }}/tre-source-inspection/
-            \${{ runner.temp }}/tre-question-inventory/
+            ${{ runner.temp }}/tre-source-inspection/
+            ${{ runner.temp }}/tre-question-inventory/
           if-no-files-found: error
           retention-days: 3
