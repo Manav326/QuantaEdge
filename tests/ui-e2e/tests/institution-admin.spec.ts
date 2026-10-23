@@ -209,7 +209,12 @@ test('[TEN-004][TEN-007] institution admin first-login password rotation, sessio
       await pool.end();
     }
 
+    const logoutWaiter = page.waitForResponse(response =>
+      response.request().method() === 'POST' &&
+      new URL(response.url()).pathname === '/api/v1/institution/auth/logout');
     await page.getByRole('button', { name: 'Sign out' }).click();
+    const logoutResponse = await logoutWaiter;
+    expect(logoutResponse.status()).toBe(200);
     const signedOut = await apiJson(page, '/api/v1/institution/auth/me', adminA.institutionCode);
     expect([401, 403]).toContain(signedOut.status);
     expect(authResponses.some(x => x.path === '/api/v1/institution/auth/change-password' && x.status === 200)).toBe(true);
