@@ -641,6 +641,87 @@ test('[CAT-001][CAT-002][TEN-002][TEN-003][CNT-002][LRN-001] learner course list
   }
 });
 
+test('[CNT-002] direct lesson URL refuses a course not enrolled in the learner institution', async ({ browser }) => {
+  const fixture = await readPrivateJson<QaFixture>('qa-fixture.json');
+  const childA = await contextPage(browser, join(privateDir(), 'child-a.json'), WEB + '/student');
+  const adultC = await contextPage(browser, join(privateDir(), 'adult-c.json'), WEB + '/student');
+  const pool = await openQaDatabase();
+
+  try {
+    const [coursesA, coursesC, childSession] = await Promise.all([
+      api(childA.page, '/api/v1/students/me/programs', 'STUDENT', fixture.credentials.childA.institutionCode),
+      api(adultC.page, '/api/v1/students/me/programs', 'STUDENT', fixture.credentials.independentLearner.institutionCode),
+      api(childA.page, '/api/v1/auth/me', 'STUDENT', fixture.credentials.childA.institutionCode)
+    ]);
+    expect(coursesA.status).toBe(200);
+    expect(coursesC.status).toBe(200);
+    expect(childSession.status).toBe(200);
+    const childCourseIds = (coursesA.body as any[]).map(course => Number(course.id || course.course_id));
+    const foreignClass6 = (coursesC.body as any[]).find(course => course.code === 'CLASS_6');
+    expect(foreignClass6, 'The independent learner fixture must own the Class 6 course in its own institution.').toBeTruthy();
+    const foreignCourseId = Number(foreignClass6.id || foreignClass6.course_id);
+    expect(childCourseIds).not.toContain(foreignCourseId);
+
+    const foreignLesson = await pool.query(
+      `select l.id::int as lesson_id, l.title
+       from lesson l
+       join curriculum_chapter ch on ch.id=l.chapter_id
+         and ch.qa_test_run_id=$1 and ch.content_status='PUBLISHED'
+       join curriculum_subject s on s.id=ch.subject_id and s.active=true
+       join curriculum_program_subject mapped
+         on mapped.program_id=$2 and mapped.subject_id=s.id and mapped.class_id=s.class_id
+       where l.qa_test_run_id=$1 and l.active=true and l.status='PUBLISHED'
+       order by l.id limit 1`,
+      [fixture.runId, foreignCourseId]
+    );
+    expect(foreignLesson.rowCount, 'The QA run must own published content in the foreign course for a direct-link denial probe.').toBe(1);
+    const lessonId = Number(foreignLesson.rows[0].lesson_id);
+    const foreignLessonTitle = String(foreignLesson.rows[0].title);
+
+    const institution = await pool.query(
+      "select id from institution_tenant where tenant_code=$1 and status='ACTIVE'",
+      [fixture.credentials.childA.institutionCode]
+    );
+    expect(institution.rowCount).toBe(1);
+    const institutionId = Number(institution.rows[0].id);
+    const studentId = Number(childSession.body.studentId);
+
+    await childA.page.goto(
+      WEB + '/student/learn?courseId=' + encodeURIComponent(String(foreignCourseId)) +
+        '&lessonId=' + encodeURIComponent(String(lessonId)),
+      { waitUntil: 'domcontentloaded' }
+    );
+    await expect(childA.page.locator('.auth-card')).toContainText(
+      'This course is not enrolled in your current institution account.',
+      { timeout: 25_000 }
+    );
+    await expect(
+      childA.page.getByRole('heading', { name: foreignLessonTitle, exact: true })
+    ).toHaveCount(0);
+
+    const directApiRead = await api(
+      childA.page,
+      '/api/v1/learning/lessons/' + encodeURIComponent(String(lessonId)) +
+        '?courseId=' + encodeURIComponent(String(foreignCourseId)) + '&language=en',
+      'STUDENT',
+      fixture.credentials.childA.institutionCode
+    );
+    expect([400, 403, 404], 'The API must independently deny the same foreign-course deep link.').toContain(directApiRead.status);
+
+    const noProgress = await pool.query(
+      `select count(*)::int as total
+       from student_lesson_progress
+       where student_id=$1 and institution_id=$2 and course_id=$3 and lesson_id=$4`,
+      [studentId, institutionId, foreignCourseId, lessonId]
+    );
+    expect(Number(noProgress.rows[0].total), 'A denied deep link must not create progress outside the learner institution.').toBe(0);
+  } finally {
+    await pool.end();
+    await childA.context.close();
+    await adultC.context.close();
+  }
+});
+
 test('[HR-002] HRMS QA Center requires the platform-owner permission, not just an authenticated session', async ({ browser }) => {
   const ownerPath = await readPrivateJson<{ statePath: string }>('hrms-owner-state-path.json');
   const adminPath = await readPrivateJson<{ statePath: string }>('education-admin-state-path.json');
