@@ -615,11 +615,20 @@ public class CourseMarketplaceLaunchReadinessService {
    */
   private void addPackageRightsCheck(List<Map<String,Object>> checks,long courseId) {
     List<Map<String,Object>> rows=jdbc.queryForList("""
-      select package_id,package_version,
-        coalesce(editorial_metadata->>'source_rights_status','UNCONFIRMED') as source_rights_status
-      from institution_course_package_import
-      where course_id=? and state='IMPORTED'
-      order by imported_at desc,id desc
+      select imported_package.package_id,imported_package.package_version,
+        coalesce(imported_package.editorial_metadata->>'source_rights_status','UNCONFIRMED') as source_rights_status
+      from institution_course_package_import imported_package
+      join curriculum_program source_program on source_program.id=imported_package.course_id
+      where imported_package.state='IMPORTED'
+        and exists(
+          select 1 from curriculum_program current_program
+          where current_program.id=? and (
+            current_program.id=imported_package.course_id
+            or (current_program.course_identity_id is not null
+              and current_program.course_identity_id=source_program.course_identity_id)
+          )
+        )
+      order by imported_package.imported_at desc,imported_package.id desc
       limit 1
       """,courseId);
     if(rows.isEmpty())return;

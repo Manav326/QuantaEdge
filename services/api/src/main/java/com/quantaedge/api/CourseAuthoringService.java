@@ -373,8 +373,8 @@ public class CourseAuthoringService {
     List<String> errors=new ArrayList<>();
     validateKeys(body,Set.of("schema","package_id","package_version","course","subjects","editorial"),"root",errors);
     if(body==null) return List.of("The package root must be a JSON object.");
-    if(canonicalJson(body).length()>10_000_000)
-      return List.of("The course package exceeds the 10 MB validation limit.");
+    if(canonicalJson(body).getBytes(java.nio.charset.StandardCharsets.UTF_8).length>10_485_760)
+      return List.of("The course package exceeds the 10 MiB validation limit.");
     if(!"quantaedge.course-package.v1".equals(body.get("schema"))) errors.add("schema must be quantaedge.course-package.v1.");
     if(!matches(body.get("package_id"),"^[a-z0-9][a-z0-9._-]{2,119}$")) errors.add("package_id must be a stable lowercase slug of 3–120 characters.");
     if(!matches(body.get("package_version"),"^[A-Za-z0-9][A-Za-z0-9._+-]{0,39}$")) errors.add("package_version must be a valid 1–40 character version label.");
@@ -467,9 +467,9 @@ public class CourseAuthoringService {
         }
       }
     }
-    Object editorialRaw=body.get("editorial");
-    if(editorialRaw!=null) {
-      if(!(editorialRaw instanceof Map<?,?> editorial)){errors.add("editorial must be an object.");}
+    if(body.containsKey("editorial")) {
+      Object editorialRaw=body.get("editorial");
+      if(!(editorialRaw instanceof Map<?,?> editorial)){errors.add("editorial must be an object when supplied.");}
       else {
         Map<String,Object> e=stringMap(editorial);
         validateKeys(e,Set.of("notes","source_rights_status"),"editorial",errors);
