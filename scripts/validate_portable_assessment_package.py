@@ -55,6 +55,9 @@ def validate_package(package: Any, repo_root: Path | None = None,
     package_id = package.get("package_id")
     if not isinstance(package_id, str) or not re.fullmatch(r"[a-z0-9][a-z0-9._-]{2,119}", package_id):
         errors.append("package_id must be a stable lowercase slug of 3–120 characters.")
+    package_version=package.get("package_version")
+    if not isinstance(package_version,str) or not package_version.strip() or len(package_version)>40 or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._+-]*",package_version):
+        errors.append("package_version must be a stable version label of at most 40 characters.")
     if not isinstance(package.get("title"), str) or not package["title"].strip() or len(package["title"]) > 240:
         errors.append("title must be non-empty text of at most 240 characters.")
     if package.get("assessment_type") not in {"PREVIOUS_YEAR_PAPER", "MOCK_EXAM", "DIAGNOSTIC", "PRACTICE_SET"}:
