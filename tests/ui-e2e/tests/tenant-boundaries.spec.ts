@@ -295,12 +295,35 @@ test('[FAM-003][FAM-005][CERT-003][TEN-002] parent and child API sessions cannot
   }
 });
 
-test('[AUTH-006][AUTH-007] logout revokes the current parent session and protected reads reject it', async ({ browser }) => {
+test('[AUTH-006][AUTH-007] logout revokes only its fresh parent session and protected reads reject it', async ({ browser }) => {
   const fixture = await readPrivateJson<QaFixture>('qa-fixture.json');
   const institutionCode = fixture.credentials.parentA.institutionCode;
-  const parent = await contextPage(browser, join(privateDir(), 'parent-a.json'), WEB + '/parent');
+
+  // Never log out using parent-a.json: the responsive-surface test intentionally reuses
+  // that saved fixture session later in this run. Create a distinct server session so
+  // logout validates revocation without invalidating another test's persisted credentials.
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const parent = { context, page };
 
   try {
+    await page.goto(WEB + '/login?institutionCode=' + encodeURIComponent(institutionCode));
+    await expect.poll(
+      () => page.evaluate(() => window.sessionStorage.getItem('qe.institution.brand-code.v1')),
+      { timeout: 20_000 }
+    ).toBe(institutionCode);
+    await page.getByRole('tab').nth(1).click();
+    await page.locator('input[autocomplete="username"]').fill(fixture.credentials.parentA.username);
+    await page.locator('input[autocomplete="current-password"]').fill(fixture.credentials.parentA.password);
+    const loginWaiter = page.waitForResponse(response =>
+      response.request().method() === 'POST' &&
+      response.url().includes('/api/v1/auth/account-login'));
+    await page.locator('form button[type="submit"]').click();
+    const loginResponse = await loginWaiter;
+    expect(loginResponse.status(), 'The isolated parent session must be created through the UI login flow.').toBe(200);
+    expect(loginResponse.request().headers()['x-qe-institution-code']).toBe(institutionCode);
+    await page.waitForURL(url => url.origin === WEB && url.pathname === '/parent');
+
     const before = await api(parent.page, '/api/v1/auth/me', undefined, institutionCode);
     expect(before.status, 'Parent must have an authenticated session before logout.').toBe(200);
     expect(before.body.role).toBe('PARENT');
