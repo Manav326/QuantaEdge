@@ -133,3 +133,8 @@ The Class 6 resume run exposed a format mismatch in the Layer 1 inventory restor
 Each candidate-worker invocation processes at most 20 five-asset analyzer batches before it safely yields. The final processed batch and Layer 5 ledger are committed before the yield; the successful yield is not recorded as class completion. The workflow-run coordinator continues from those checkpoints. The analyzer now normalizes legacy per-asset source metadata to the verified whole-book identity, and a no-progress guard stops a worker if it analyzes the same previously successful asset IDs without increasing the durable analyzed/failed counts.
 
 When a stale all-class push run must be stopped before single-class recovery, pair the joint resume marker `[resume-visual-layers-4-5-classes-6-8]` with `[cancel-layer45-matrix]` in a commit that changes a file covered by the candidate workflow's push paths. That run is intentionally skipped after it replaces the in-flight all-class run. Then use a separate class marker for each class that needs to resume: `[resume-visual-layers-4-5-class-6]`, `[resume-visual-layers-4-5-class-7]`, or `[resume-visual-layers-4-5-class-8]`. These single-class push markers replace older in-flight runners for that same class. All paths still use existing source-bound Git/GHCR checkpoints; no checkpoint is discarded or rebuilt merely to resume.
+
+
+## Per-class resume markers
+
+Use exactly one class marker per push commit, and ensure the commit changes a file covered by this workflow's push paths. These markers start `resume_layers_4_5` on the existing durable source-bound checkpoints; class resume does not authorize publication.
