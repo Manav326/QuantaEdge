@@ -433,14 +433,22 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                     number=int(qnum)
                     return (0,number)
                 return (1 if code=="GENERAL_STUDIES" else 2,int(qnum))
-            cycle_records.sort(key=sequence_key)
-            for sequence, record in enumerate(cycle_records,1):
+            all_source_records=cycle_records
+            language_records=[r for r in all_source_records if r["section_code"]=="LANGUAGE_QUALIFYING"]
+            # Course delivery follows the requested TRE-4 scope: all 40 GS + 80 CS items.
+            # The extra language-qualifying items in TRE 2.0/3.0 remain in source audit data,
+            # but are not mixed into this 120-question GS/Computer Science practice test.
+            course_records=[r for r in all_source_records if r["section_code"] in {"GENERAL_STUDIES","COMPUTER_SCIENCE"}]
+            course_records.sort(key=sequence_key)
+            for sequence, record in enumerate(course_records,1):
                 record["sequence_no"]=sequence
-            # Count all needed source pairs; counts reflect extracted native text blocks.
+            for sequence, record in enumerate(sorted(language_records,key=sequence_key),1):
+                record["source_inventory_sequence_no"]=sequence
+            # Count source pairs for the actual 120-question course assessment.
             paired_sections={}
             for section,(low,high) in meta["expected"].items():
                 keys={str(q) for q in range(low,high+1)}
-                rows=[r for r in cycle_records if r["section_code"]==section]
+                rows=[r for r in course_records if r["section_code"]==section]
                 paired_sections[section]={
                     "expected_questions":high-low+1,
                     "extracted_questions":len(rows),
@@ -449,7 +457,6 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                     "questions_missing_hindi":sum("MISSING_HINDI_VARIANT" in r["review_flags"] for r in rows),
                     "questions_needing_visual_or_text_review":sum(bool(r["review_flags"]) for r in rows),
                 }
-            language_records=[r for r in cycle_records if r["section_code"]=="LANGUAGE_QUALIFYING"]
             expected_language=len(expected_language_keys(cycle))
             language_check={
                 "expected_default_track_questions":expected_language if cycle!="TRE 1.0" else 0,
@@ -457,8 +464,26 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 "missing_language_question_keys":sorted(
                     expected_language_keys(cycle)-{str(r["source_question_number"]) for r in language_records}
                 ) if cycle!="TRE 1.0" else [],
-                "note":"For TRE 3.0, the default qualifying track uses E1–E8 and H9–H30; source variants for Urdu/Bengali are not mixed into this Hindi-track attempt."
+                "included_in_tre4_practice_test":False,
+                "note":"TRE 2.0/3.0 source booklets contain a separate qualifying-language section. TRE-4 practice tests follow the requested 120-question scope (40 GS + 80 CS); language questions remain in the source audit inventory only."
             }
+            # Also retain alternative Urdu/Bengali source-track availability without adding those
+            # questions to the TRE-4 CS/GS test.
+            alternate_language_tracks={}
+            for track in ("ur","bn"):
+                matching=[r for r in raw_questions if r["language"]==track and r["section_code"]=="LANGUAGE_QUALIFYING"]
+                if matching:
+                    alternate_language_tracks[track]={
+                        "question_count":len(matching),
+                        "source_questions":[
+                            {
+                                "source_question_number":r["question_identity"],
+                                "pdf_page":r["pdf_page"],
+                                "raw_text":r["raw_text"],
+                                "conversion_status":"RAW_SOURCE_LANGUAGE_PRESERVED_REQUIRES_NATIVE_LANGUAGE_REVIEW"
+                            } for r in matching
+                        ]
+                    }
             records[cycle]={
                 "title":f"BPSC {cycle} — Computer Science Previous-Year Paper",
                 "cycle":cycle,
@@ -482,16 +507,21 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 },
                 "extraction_summary":{
                     "raw_question_blocks_detected":len(raw_questions),
-                    "question_inventory_count":len(cycle_records),
-                    "section_counts":dict(Counter(r["section_code"] for r in cycle_records)),
+                    "course_test_question_count":len(course_records),
+                    "source_inventory_question_count":len(all_source_records),
+                    "excluded_qualifying_language_question_count":len(language_records),
+                    "section_counts":dict(Counter(r["section_code"] for r in course_records)),
                     "section_pair_audit":paired_sections,
                     "language_section_audit":language_check,
-                    "question_flags":sum(len(r["review_flags"]) for r in cycle_records),
+                    "question_flags":sum(len(r["review_flags"]) for r in course_records),
                 },
-                "questions":cycle_records,
+                "questions":course_records,
+                "source_language_qualifying_questions":language_records,
+                "alternate_language_tracks":alternate_language_tracks,
                 "source_notes":[
                     "Original PDF bytes are preserved exactly; SHA-256 is recorded.",
                     "Hindi values contain a Unicode conversion of the source's legacy Hindi encoding; raw text is retained beside it.",
+                    "TRE 2.0/3.0 have 150 total booklet items because 30 are a separate qualifying-language section. This TRE-4 course test intentionally includes only the requested 40 General Studies + 80 Computer Science items; the language section is retained separately for audit.",
                     "Do not release until question/option pair completeness, Hindi rendering, answers, concise explanations, paper rules and any mathematical/code expressions have been reviewed.",
                 ],
             }
