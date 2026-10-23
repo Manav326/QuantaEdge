@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1183,
+    "assets_selected": 1184,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
-      "9c98ea470aafbf3dbbeffd67",
-      "e8da3c2edc6beba380b12468",
-      "acfb58f02fadc0623057c038"
+      "7bceb11bef609f2404522955",
+      "f492c50e9c7d7ef8d140ae06",
+      "0552ac2143b804a2f7a66bff"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1179,
-    "assets_remaining": 1112,
+    "assets_analyzed": 1180,
+    "assets_remaining": 1111,
     "assets_completion_percent": 51.5,
     "assets_failed": 8,
-    "assets_skipped_from_checkpoint": 1178,
+    "assets_skipped_from_checkpoint": 1179,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39937902376",
-      "checkpointed_at": "2026-10-23T11:05:11Z"
+      "checkpointed_at": "2026-10-23T11:19:51Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39937902376",
-      "checkpointed_at": "2026-10-23T11:05:51Z"
+      "checkpointed_at": "2026-10-23T11:20:32Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38096,9 +38096,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39920783405",
+      "run_id": "39937902376",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -38402,8 +38402,8 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "diagram",
+        "visual_summary": "A page from a textbook discussing different types of forces, specifically contact forces and muscular force.",
+        "visual_type": "uncertain",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -38419,16 +38419,17 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
+        "context_relation": "The page discusses different types of forces, specifically contact forces and muscular force, and provides examples of how these forces are used by living beings.",
         "limitations": [
-          "The image does not provide specific details about the types of forces or the physical properties of the objects."
+          "The page does not provide specific examples of contact forces or muscular force.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39920783405",
-      "checkpointed_at": "2026-10-23T09:18:27Z"
+      "run_id": "39937902376",
+      "checkpointed_at": "2026-10-23T11:29:46Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -38570,6 +38571,34 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39920783405",
       "checkpointed_at": "2026-10-23T09:20:57Z"
+    },
+    {
+      "asset_id": "0552ac2143b804a2f7a66bff",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4ced2a91f1ad4add1f52a0f90bfa067845579b06c0365565cf231ef29c8dfe09",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39937902376",
+      "checkpointed_at": "2026-10-23T11:30:03Z"
     }
   ]
 }
