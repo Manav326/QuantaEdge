@@ -471,8 +471,7 @@ export default function ContentStudio(){
  const activeRejectedQuestions=activeQuestionCount(['REJECTED']);
  const active=activeBlock>=0&&activeBlock<blocks.length?blocks[activeBlock]:null;
  const permissions=Array.isArray(identity?.permissions)?identity.permissions:[];
- const isAdmin=identity?.role==='ADMIN';
- const hasPermission=(permission:string)=>isAdmin||permissions.includes(permission);
+ const hasPermission=(permission:string)=>permissions.includes(permission);
  const activeProgram=programs.find((p:any)=>String(p.id||p.course_id)===String(programFilter));
  const isSourcedCourse=activeProgram?.course_relationship==='SOURCED';
  const releaseState=String(activeProgram?.release_state||'DRAFT').toUpperCase();
