@@ -2069,3 +2069,22 @@ html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot .qe-question-revie
   color: var(--qe-color-text, var(--admin-text)) !important;
   border-color: var(--qe-color-border-subtle, var(--admin-border)) !important;
 }
+
+/* Theme and language are available on the first Admin screen, before credentials. */
+.qe-admin-login-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.qe-admin-login-controls .qe-appearance-toggle { flex: 0 1 auto; }
+.qe-admin-login-controls .qe-admin-login-language-switcher {
+  max-width: 100%;
+  margin: 0;
+}
+@media (max-width: 390px) {
+  .qe-admin-login-controls { gap: 6px; }
+  .qe-admin-login-controls .qe-appearance-toggle { padding: 7px 8px; font-size: 10px; }
+}
