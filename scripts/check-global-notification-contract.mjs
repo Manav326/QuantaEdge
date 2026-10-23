@@ -20,12 +20,29 @@ const clientPaths = [
   'apps/people/app/components/apiClient.ts',
 ];
 const clients = clientPaths.map(path => readFileSync(path, 'utf8'));
-assert.ok(clients.every(source => source === clients[0]), 'Applications must share the same API notification policy');
+
+// The request-context adapters are intentionally app/tenant-aware and need not be byte-identical.
+// Compare the shared response-notification policy itself, which ends before each application's
+// institution/workspace adapter, so tenant-specific security logic can evolve without causing a
+// false failure or being removed to satisfy this contract.
+const notificationPolicy = clients.map(source => {
+  const start = source.indexOf("type Tone = 'info' | 'success' | 'warning' | 'error'");
+  const end = source.indexOf('const INSTITUTION_CODE_PATTERN', start);
+  assert.ok(start >= 0 && end > start, 'Each API client must expose the shared notification-policy section');
+  return source.slice(start, end);
+});
+assert.ok(notificationPolicy.every(source => source === notificationPolicy[0]),
+  'Web, Admin and People must share identical API notification parsing and delivery policy');
+for (const [index, source] of clients.entries()) {
+  assert.ok(source.includes('export async function apiFetch('), clientPaths[index] + ' must export central apiFetch');
+  assert.ok(source.includes('response.clone().text()') && source.includes('if (!response.ok) {'),
+    clientPaths[index] + ' must inspect errors without consuming caller bodies');
+  assert.ok(source.includes('record.warning') && source.includes("'warning'"),
+    clientPaths[index] + ' must deliver explicit API warnings');
+  assert.ok(source.includes("notifyUser(networkErrorMessage(), 'error')"),
+    clientPaths[index] + ' must deliver network failures');
+}
 const client = clients[0];
-assert.ok(client.includes('export async function apiFetch('), 'Central apiFetch helper is required');
-assert.ok(client.includes('response.clone().text()') && client.includes('if (!response.ok) {'), 'Responses must be inspected without consuming caller bodies');
-assert.ok(client.includes('record.warning') && client.includes("'warning'"), 'Explicit API warnings must reach the notification host');
-assert.ok(client.includes("notifyUser(networkErrorMessage(), 'error')"), 'Network failures must reach the notification host');
 
 for (const path of ['apps/web/app/layout.tsx','apps/admin/app/layout.tsx','apps/people/app/layout.tsx']) {
   assert.ok(readFileSync(path, 'utf8').includes('GlobalNotificationHost'), path + ' must mount the notification host');
