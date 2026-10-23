@@ -101,6 +101,72 @@ async function authoritativeReportMetrics(studentId: number, institutionCode: st
   }
 }
 
+
+test('[FAM-002] child credentials cannot be used with a different guardian', async ({ browser }) => {
+  const fixture = await readPrivateJson<QaFixture>('qa-fixture.json');
+  const context = await browser.newContext();
+  const page = await context.newPage();
+
+  try {
+    // Parent B's valid mobile must not authenticate Child A in Institution A.
+    // This exercises a negative login path and must not mutate fixture ownership.
+    await page.goto(WEB + '/login/student?institutionCode=' + encodeURIComponent(fixture.credentials.childA.institutionCode));
+    await expect.poll(
+      () => page.evaluate(() => window.sessionStorage.getItem('qe.institution.brand-code.v1')),
+      { timeout: 20_000 }
+    ).toBe(fixture.credentials.childA.institutionCode);
+
+    const identifiers = page.locator('input[autocomplete="username"]');
+    await identifiers.nth(0).fill(fixture.credentials.parentB.mobile);
+    await identifiers.nth(1).fill(fixture.credentials.childA.username);
+    await page.locator('input[autocomplete="current-password"]').fill(fixture.credentials.childA.password);
+
+    const before = await openQaDatabase();
+    let credentialCountBefore = 0;
+    try {
+      const count = await before.query(
+        'select count(*)::int as count from student_login_credential where qa_test_run_id=$1',
+        [fixture.runId]
+      );
+      credentialCountBefore = Number(count.rows[0]?.count ?? 0);
+      expect(credentialCountBefore).toBe(2);
+    } finally {
+      await before.end();
+    }
+
+    const loginWaiter = page.waitForResponse(response =>
+      response.request().method() === 'POST' &&
+      response.url().includes('/api/v1/auth/student-login'));
+    await page.locator('form button').click();
+    const loginResponse = await loginWaiter;
+    expect([400, 401, 403, 404], 'A child credential must not authenticate when paired with a different guardian mobile.').toContain(loginResponse.status());
+    await expect(page).toHaveURL(/\/login\/student(?:\?.*)?$/);
+
+    const sessionResponse = await page.evaluate(async (institutionCode) => {
+      const response = await fetch('/api/v1/auth/me', {
+        credentials: 'same-origin',
+        cache: 'no-store',
+        headers: { 'X-QE-Workspace': 'STUDENT', 'X-QE-Institution-Code': institutionCode }
+      });
+      return { status: response.status };
+    }, fixture.credentials.childA.institutionCode);
+    expect([401, 403], 'Failed child login must not establish a student session.').toContain(sessionResponse.status);
+
+    const after = await openQaDatabase();
+    try {
+      const count = await after.query(
+        'select count(*)::int as count from student_login_credential where qa_test_run_id=$1',
+        [fixture.runId]
+      );
+      expect(Number(count.rows[0]?.count ?? 0), 'Invalid login must not create/change child credentials.').toBe(credentialCountBefore);
+    } finally {
+      await after.end();
+    }
+  } finally {
+    await context.close();
+  }
+});
+
 test('[FAM-003][FAM-005][CERT-003][TEN-002] parent and child API sessions cannot cross guardian boundaries', async ({ browser }) => {
   const fixture = await readPrivateJson<QaFixture>('qa-fixture.json');
   const parentA = await contextPage(browser, join(privateDir(), 'parent-a.json'), WEB + '/parent');
