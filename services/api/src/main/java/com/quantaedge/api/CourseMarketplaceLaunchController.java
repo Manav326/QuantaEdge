@@ -184,6 +184,8 @@ public class CourseMarketplaceLaunchController {
             title_override=?,description=?,price_paise=?,currency=?,
             status='DRAFT',submitted_by_admin_id=null,submitted_at=null,
             approved_by_admin_id=null,approved_at=null,published_by_admin_id=null,published_at=null,
+            hrms_approved_by_staff_id=null,hrms_approved_at=null,
+            hrms_published_by_staff_id=null,hrms_published_at=null,
             rejected_by_admin_id=null,rejected_at=null,rejection_reason=null,
             updated_by_admin_id=null,updated_at=now()
           where id=? and institution_id=? and assignment_id=?
@@ -268,6 +270,8 @@ public class CourseMarketplaceLaunchController {
         jdbc.update("""
             update institution_marketplace_offer set status='IN_REVIEW',
               submitted_by_admin_id=null,submitted_at=now(),approved_by_admin_id=null,approved_at=null,
+              hrms_approved_by_staff_id=null,hrms_approved_at=null,
+              hrms_published_by_staff_id=null,hrms_published_at=null,
               rejected_by_admin_id=null,rejected_at=null,rejection_reason=null,
               updated_by_admin_id=null,updated_at=now()
             where id=? and institution_id=? and status=?
@@ -279,9 +283,12 @@ public class CourseMarketplaceLaunchController {
         readiness.requireReady(offerId,institutionId);
         jdbc.update("""
             update institution_marketplace_offer set status='APPROVED',
-              approved_by_admin_id=null,approved_at=now(),updated_by_admin_id=null,updated_at=now()
+              approved_by_admin_id=null,approved_at=now(),
+              hrms_approved_by_staff_id=?,hrms_approved_at=now(),
+              hrms_published_by_staff_id=null,hrms_published_at=null,
+              updated_by_admin_id=null,updated_at=now()
             where id=? and institution_id=? and status='IN_REVIEW'
-            """,offerId,institutionId);
+            """,context.staffId(),offerId,institutionId);
         next="APPROVED";
       }
       case "PUBLISH" -> {
@@ -289,9 +296,11 @@ public class CourseMarketplaceLaunchController {
         readiness.requireReady(offerId,institutionId);
         jdbc.update("""
             update institution_marketplace_offer set status='PUBLISHED',
-              published_by_admin_id=null,published_at=now(),updated_by_admin_id=null,updated_at=now()
+              published_by_admin_id=null,published_at=now(),
+              hrms_published_by_staff_id=?,hrms_published_at=now(),
+              updated_by_admin_id=null,updated_at=now()
             where id=? and institution_id=? and status='APPROVED'
-            """,offerId,institutionId);
+            """,context.staffId(),offerId,institutionId);
         next="PUBLISHED";
       }
       case "RETURN_TO_DRAFT" -> {
@@ -300,8 +309,11 @@ public class CourseMarketplaceLaunchController {
         jdbc.update("""
             update institution_marketplace_offer set status='DRAFT',
               submitted_by_admin_id=null,submitted_at=null,approved_by_admin_id=null,approved_at=null,
-              published_by_admin_id=null,published_at=null,rejected_by_admin_id=null,rejected_at=null,
-              rejection_reason=null,updated_by_admin_id=null,updated_at=now()
+              published_by_admin_id=null,published_at=null,
+              hrms_approved_by_staff_id=null,hrms_approved_at=null,
+              hrms_published_by_staff_id=null,hrms_published_at=null,
+              rejected_by_admin_id=null,rejected_at=null,rejection_reason=null,
+              updated_by_admin_id=null,updated_at=now()
             where id=? and institution_id=? and status=?
             """,offerId,institutionId,oldStatus);
         next="DRAFT";
