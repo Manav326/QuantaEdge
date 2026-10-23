@@ -32,14 +32,32 @@ test('[HRMS-NOTIF-001] Notification Studio loads live options and prevents inval
   };
 
   try {
+    // Confirm that this persisted HRMS owner session is still valid before navigating
+    // to Notification Studio. Follow the actual sidebar link so route/session guards run
+    // exactly as they do for an operator clicking through HRMS.
+    const sessionWaiter = page.waitForResponse(response =>
+      response.request().method() === 'GET' &&
+      response.url().includes('/api/v1/auth/me'));
+    await page.goto(HRMS + '/qa', { waitUntil: 'domcontentloaded' });
+    const sessionResponse = await sessionWaiter;
+    expect(sessionResponse.status(), 'The saved HRMS owner session must still be valid before opening Notification Studio.').toBe(200);
+    const sessionBody = await sessionResponse.json();
+    expect(sessionBody.workspace).toBe('HRMS');
+    expect(Number(sessionBody.staffId)).toBeGreaterThan(0);
+    await page.waitForLoadState('networkidle', { timeout: 15_000 });
+    await expect(page).toHaveURL(url => url.pathname === '/qa');
+
+    const notificationLink = page.locator('a[href="/notifications"]').first();
+    await expect(notificationLink, 'The QE platform owner should be offered the Notification Studio route in HRMS navigation.').toBeVisible();
     const templatesWaiter = page.waitForResponse(response =>
       response.request().method() === 'GET' &&
       response.url().includes('/api/v1/hrms/notifications/templates'));
     const optionsWaiter = page.waitForResponse(response =>
       response.request().method() === 'GET' &&
       response.url().includes('/api/v1/hrms/notifications/options'));
-
-    await page.goto(HRMS + '/notifications', { waitUntil: 'domcontentloaded' });
+    await notificationLink.click();
+    await page.waitForLoadState('networkidle', { timeout: 15_000 });
+    await expect(page).toHaveURL(url => url.pathname === '/notifications');
     const [templatesResponse, optionsResponse] = await Promise.all([templatesWaiter, optionsWaiter]);
     expect(templatesResponse.status(), 'HRMS templates must come from the authenticated API.').toBe(200);
     expect(optionsResponse.status(), 'HRMS audience choices must come from the authenticated API.').toBe(200);

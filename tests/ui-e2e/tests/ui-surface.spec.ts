@@ -30,13 +30,30 @@ async function checkSurfaceAtViewports(browser: Browser, surface: Surface) {
       const base = surface.app === 'web' ? WEB : surface.app === 'admin' ? ADMIN : HRMS;
       await page.goto(base + surface.path, { waitUntil: 'domcontentloaded' });
       await expect(page.locator('main').first(), surface.app + surface.path + ' should render a main landmark at ' + viewport.width + 'px').toBeVisible();
-      expect(new URL(page.url()).pathname, 'Authenticated route should remain reachable at ' + viewport.width + 'px.').toBe(surface.path);
+      // Authenticated shells finish their session/workspace check after the first HTML
+      // paint. Wait until API/navigation traffic settles before measuring the document.
+      await page.waitForLoadState('networkidle', { timeout: 15_000 });
+      expect(new URL(page.url()).pathname, 'Authenticated route should remain reachable after session checks at ' + viewport.width + 'px.').toBe(surface.path);
 
-      const dimensions = await page.evaluate(() => ({
-        viewport: window.innerWidth,
-        document: document.documentElement.scrollWidth,
-        body: document.body.scrollWidth
-      }));
+      let dimensions: { viewport: number; document: number; body: number } | null = null;
+      for (let attempt = 0; attempt < 3; attempt += 1) {
+        try {
+          dimensions = await page.evaluate(() => ({
+            viewport: window.innerWidth,
+            document: document.documentElement.scrollWidth,
+            body: document.body.scrollWidth
+          }));
+          break;
+        } catch (error) {
+          const message = error instanceof Error ? error.message : String(error);
+          if (attempt === 2 || !/execution context was destroyed|context was destroyed/i.test(message)) throw error;
+          await page.waitForLoadState('domcontentloaded', { timeout: 10_000 }).catch(() => undefined);
+          await page.waitForLoadState('networkidle', { timeout: 15_000 });
+          expect(new URL(page.url()).pathname, 'Session/workspace routing must settle back on the requested route.').toBe(surface.path);
+          await expect(page.locator('main').first()).toBeVisible();
+        }
+      }
+      if (!dimensions) throw new Error(surface.app + surface.path + ' dimensions could not be measured after route settling.');
       expect(
         Math.max(dimensions.document, dimensions.body),
         surface.app + surface.path + ' must not cause page-level horizontal overflow at ' + viewport.width + 'px.'

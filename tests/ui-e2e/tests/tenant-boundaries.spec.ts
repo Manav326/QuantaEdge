@@ -137,7 +137,7 @@ test('[FAM-002] child credentials cannot be used with a different guardian', asy
     const loginWaiter = page.waitForResponse(response =>
       response.request().method() === 'POST' &&
       response.url().includes('/api/v1/auth/student-login'));
-    await page.locator('form button').click();
+    await page.locator('form button[type="submit"]').click();
     const loginResponse = await loginWaiter;
     expect([400, 401, 403, 404], 'A child credential must not authenticate when paired with a different guardian mobile.').toContain(loginResponse.status());
     await expect(page).toHaveURL(/\/login\/student(?:\?.*)?$/);
