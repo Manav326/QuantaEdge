@@ -679,6 +679,7 @@ public class QaTestPackService {
       case "COURSE_RELEASE" -> "select exists(select 1 from institution_course_release where id=? and qa_test_run_id=?)";
       case "INSTITUTION_ADMIN_ACCOUNT" -> "select exists(select 1 from institution_admin_account where id=? and qa_test_run_id=?)";
       case "STAFF_ACCOUNT" -> "select exists(select 1 from staff_account where id=? and qa_test_run_id=?)";
+      case "COURSE_CHAPTER" -> "select exists(select 1 from curriculum_chapter where id=? and qa_test_run_id=?)";
       case "LESSON" -> "select exists(select 1 from lesson where id=? and qa_test_run_id=?)";
       case "QUESTION" -> "select exists(select 1 from question where id=? and qa_test_run_id=?)";
       case "QUESTION_OPTION" -> "select exists(select 1 from question_option where id=? and qa_test_run_id=?)";
@@ -1158,29 +1159,42 @@ public class QaTestPackService {
     String questionKey = "qa-question-" + slug;
     String optionAKey = "qa-question-option-a-" + slug;
     String optionBKey = "qa-question-option-b-" + slug;
-    List<Long> chapters = jdbc.queryForList("""
-      select ch.id
+    List<Long> subjects = jdbc.queryForList("""
+      select s.id
       from curriculum_program p
       join curriculum_class c on c.id=p.class_id and c.code=?
       join curriculum_program_subject ps on ps.program_id=p.id and ps.class_id=c.id
       join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
         and (s.program_id=ps.program_id or s.program_id is null)
-      join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true
-        and ch.content_status='PUBLISHED'
       where p.id=? and p.status='ACTIVE' and s.code='maths'
-      order by ch.id limit 1
+      order by s.id limit 1
       """, Long.class, classCode, programId);
-    if (chapters.isEmpty()) {
-      throw new IllegalStateException("QuantaEdge Class " + classCode + " has no active Maths chapter for its isolated QA fixture.");
+    if (subjects.isEmpty()) {
+      throw new IllegalStateException("QuantaEdge Class " + classCode + " has no active Maths subject mapped to its course for the isolated QA fixture.");
     }
+
+    // A fresh CI database intentionally leaves the real curriculum in DRAFT until its
+    // source/governance checks are complete. Never flip a shared chapter to PUBLISHED for
+    // tests. Instead create a clearly synthetic, run-owned chapter with the exact published
+    // shape the learner API expects, then remove it after its test-owned lesson and questions.
+    String chapterKey = "qa-chapter-" + slug;
+    Long chapterId = jdbc.queryForObject("""
+      insert into curriculum_chapter(
+        subject_id,code,display_name,description,sort_order,active,
+        curriculum_source,curriculum_source_verified,content_status,qa_test_run_id
+      ) values (?,?,?,?,999,true,'QUANTAEDGE_SYNTHETIC_QA',false,'PUBLISHED',?) returning id
+      """, Long.class, subjects.getFirst(), "qa-lifecycle-" + slug,
+      "Synthetic QA-only Class " + classCode + " chapter " + uuidSlug,
+      "Run-owned synthetic fixture; not NCERT or Bihar Board teaching content.", runId);
+    addResource(runId, chapterKey, "COURSE_CHAPTER", chapterId, 28, List.of(), "curriculum_chapter");
 
     Long lessonId = jdbc.queryForObject("""
       insert into lesson(chapter_id,code,title,summary,estimated_minutes,status,sort_order,active,qa_test_run_id)
       values (?,?,?,?,5,'PUBLISHED',999,true,?) returning id
-      """, Long.class, chapters.getFirst(), "qa-lifecycle-" + slug,
+      """, Long.class, chapterId, "qa-lifecycle-" + slug,
       "QA-only synthetic Class " + classCode + " lesson " + uuidSlug,
       "Run-owned synthetic fixture for institution-scoped QA; not production teaching content.", runId);
-    addResource(runId, lessonKey, "LESSON", lessonId, 26, List.of(), "lesson");
+    addResource(runId, lessonKey, "LESSON", lessonId, 26, List.of(chapterKey), "lesson");
 
     Long questionId = jdbc.queryForObject("""
       insert into question(
@@ -1318,6 +1332,9 @@ public class QaTestPackService {
       case "STAFF_ACCOUNT" -> new DeleteSpec(
           "delete from staff_account where id=? and qa_test_run_id=?",
           "select qa_test_run_id from staff_account where id=?");
+      case "COURSE_CHAPTER" -> new DeleteSpec(
+          "delete from curriculum_chapter where id=? and qa_test_run_id=?",
+          "select qa_test_run_id from curriculum_chapter where id=?");
       case "QUESTION_OPTION" -> new DeleteSpec(
           "delete from question_option where id=? and qa_test_run_id=?",
           "select qa_test_run_id from question_option where id=?");
