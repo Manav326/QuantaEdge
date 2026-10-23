@@ -230,7 +230,7 @@ function finiteMarkValue(value:any):number|null{
   return Number.isFinite(number)?number:null;
 }
 function formatMarkAmount(value:number):string{
-  const rounded=Math.round(value*1000)/1000;
+  const rounded=Math.round(value*100)/100;
   if(Math.abs(rounded)<0.0005)return '0';
   const amount=String(Math.abs(rounded));
   return (rounded<0?'−':'+')+amount;
@@ -253,7 +253,7 @@ function questionMarkMetadata(question:AttemptQuestion,attempt:Attempt,locale:st
   let incorrect=finiteMarkValue(question.incorrect_marks);
   if(incorrect===null){
     const fraction=finiteMarkValue(attempt.negative_marking_fraction);
-    if(fraction!==null&&fraction>=0)incorrect=-correct*fraction;
+    if(fraction!==null&&fraction>=0)incorrect=Math.round(-correct*fraction*100)/100;
   }
   const plural=(value:number)=>Math.abs(value)===1?'mark':'marks';
   const correctText=locale==='english'

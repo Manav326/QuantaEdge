@@ -73,6 +73,25 @@ public class AssessmentController {
     return questionType != null && AUTO_GRADED_TYPES.contains(questionType.trim().toUpperCase(Locale.ROOT));
   }
 
+  private static BigDecimal penaltyForIncorrectAnswer(
+      Map<String, Object> questionSnapshot, BigDecimal maxMarks, BigDecimal configuredFraction) {
+    Object configuredMarks = questionSnapshot.get("incorrect_marks");
+    if (configuredMarks != null && !String.valueOf(configuredMarks).isBlank()) {
+      final BigDecimal signedMarks;
+      try {
+        signedMarks = configuredMarks instanceof BigDecimal decimal
+            ? decimal : new BigDecimal(String.valueOf(configuredMarks));
+      } catch (RuntimeException ex) {
+        throw new IllegalStateException("Stored per-question incorrect-mark policy is invalid.", ex);
+      }
+      if (signedMarks.signum() > 0 || signedMarks.abs().compareTo(new BigDecimal("1000")) > 0) {
+        throw new IllegalStateException("Stored incorrect_marks must be between -1,000 and 0.");
+      }
+      return signedMarks.abs().setScale(2, RoundingMode.HALF_UP);
+    }
+    return maxMarks.multiply(configuredFraction).setScale(2, RoundingMode.HALF_UP);
+  }
+
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
   private final QuestionHistoryService questionHistory;
@@ -1440,7 +1459,7 @@ public class AssessmentController {
             if(Boolean.TRUE.equals(correct)) {
               autoScore = autoScore.add(awarded);
             } else if(Boolean.FALSE.equals(correct)) {
-              questionPenalty=maxMarks.multiply(negativeFraction).setScale(2,RoundingMode.HALF_UP);
+              questionPenalty=penaltyForIncorrectAnswer(snapshot,maxMarks,negativeFraction);
               penaltyScore=penaltyScore.add(questionPenalty);
             }
           }
