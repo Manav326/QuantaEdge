@@ -349,6 +349,568 @@ public class AssessmentController {
     return result;
   }
 
+  /**
+   * Validates the portable assessment package against the selected source-owned course.
+   * The target course binding is deliberately outside the JSON package so a file cannot choose
+   * its tenant, course, release, approval state, or publication status.
+   */
+  @PostMapping("/admin/assessments/validate-package")
+  public Map<String,Object> validatePortableAssessmentPackage(
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    context=authorization.requirePermission(context,"CONTENT_CREATE");
+    long courseId=longValue(body==null?null:body.get("courseId"),"Course ID");
+    requireAssignedCourse(courseId,tenant);
+    requireEditableCourse(courseId,tenant);
+    Map<String,Object> target=resolvePortableAssessmentTarget(body,courseId);
+    List<String> issues=new ArrayList<>((List<String>)target.get("issues"));
+    Map<String,Object> pkg=stringMap(body.get("package"));
+    issues.addAll(validatePortablePackage(pkg));
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("valid",issues.isEmpty());
+    result.put("issues",issues);
+    result.put("courseId",courseId);
+    result.put("courseType",target.get("courseType"));
+    result.put("subjectId",target.get("subjectId"));
+    result.put("subjectCode",target.get("subjectCode"));
+    result.put("chapterId",target.get("chapterId"));
+    result.put("questionCount",pkg!=null&&pkg.get("questions") instanceof List<?> qs?qs.size():0);
+    result.put("sectionCount",pkg!=null&&pkg.get("sections") instanceof List<?> ss?ss.size():0);
+    result.put("title",pkg==null?"":String.valueOf(pkg.getOrDefault("title","")));
+    result.put("assessmentType",pkg==null?"":String.valueOf(pkg.getOrDefault("assessment_type","")));
+    Map<String,Object> config=pkg==null?Map.of():stringMapOrEmpty(pkg.get("configuration"));
+    result.put("durationMinutes",config.getOrDefault("duration_minutes",0));
+    result.put("maxAttempts",config.getOrDefault("max_attempts",1));
+    result.put("willCreateAs","DRAFT");
+    result.put("publishesAutomatically",false);
+    return result;
+  }
+
+  /**
+   * Imports one portable package as one assessment in one versioned test pack.
+   * The complete operation (assessment, question snapshots, pack and pack item) is one DB
+   * transaction. Re-upload of the same course/package/version/hash is an idempotent no-op;
+   * different content under the same version is a conflict rather than an in-place mutation.
+   */
+  @PostMapping("/admin/assessments/import-package")
+  @Transactional
+  public Map<String,Object> importPortableAssessmentPackage(
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    context=authorization.requirePermission(context,"CONTENT_CREATE");
+    authorization.requirePermission(context,"CONTENT_EDIT");
+    long courseId=longValue(body==null?null:body.get("courseId"),"Course ID");
+    requireAssignedCourse(courseId,tenant);
+    requireEditableCourse(courseId,tenant);
+    Map<String,Object> target=resolvePortableAssessmentTarget(body,courseId);
+    Map<String,Object> pkg=stringMap(body.get("package"));
+    List<String> issues=new ArrayList<>((List<String>)target.get("issues"));
+    issues.addAll(validatePortablePackage(pkg));
+    if(!issues.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          "Assessment package validation failed: "+String.join(" | ",issues.stream().limit(30).toList()));
+    }
+
+    String packageId=String.valueOf(pkg.get("package_id"));
+    String packageVersion=String.valueOf(pkg.get("package_version"));
+    String title=String.valueOf(pkg.get("title")).trim();
+    String description=pkg.get("description")==null?"":String.valueOf(pkg.get("description")).trim();
+    String assessmentType=String.valueOf(pkg.get("assessment_type")).trim().toUpperCase(Locale.ROOT);
+    Map<String,Object> source=stringMapOrEmpty(pkg.get("source"));
+    Map<String,Object> config=stringMapOrEmpty(pkg.get("configuration"));
+    int duration=integer(config.get("duration_minutes"),"Duration",1,240);
+    int maxAttempts=integer(config.getOrDefault("max_attempts",1),"Attempt limit",1,10);
+    BigDecimal negativeMarking=decimal(config.getOrDefault("negative_marking_fraction",BigDecimal.ZERO),"Negative-marking fraction");
+    if(negativeMarking.signum()<0||negativeMarking.compareTo(BigDecimal.ONE)>0) {
+      throw badRequest("Negative-marking fraction must be between 0 and 1.");
+    }
+    BigDecimal defaultMarks=decimal(config.get("marks_per_question"),"Default question marks");
+    BigDecimal unansweredMark=decimal(config.getOrDefault("unanswered_mark",BigDecimal.ZERO),"Unanswered mark");
+    final String canonicalPackage;
+    final String digest;
+    try {
+      canonicalPackage=mapper.writeValueAsString(pkg);
+      digest=java.util.HexFormat.of().formatHex(
+          MessageDigest.getInstance("SHA-256").digest(canonicalPackage.getBytes(StandardCharsets.UTF_8)));
+    } catch(Exception ex) {
+      throw new IllegalStateException("Could not create a stable checksum for the assessment package.",ex);
+    }
+
+    Long existingPack=jdbc.query("""
+      select p.id
+      from course_assessment_pack p
+      where p.course_id=? and p.pack_code=? and p.pack_version=?
+      for update
+      """,rs->rs.next()?rs.getLong(1):null,courseId,packageId,packageVersion);
+    if(existingPack!=null) {
+      List<Map<String,Object>> existing=jdbc.queryForList("""
+        select p.content_sha256,p.status,i.assessment_id,a.title,a.status as assessment_status,
+          (select count(*) from assessment_question aq where aq.assessment_id=a.id) as question_count
+        from course_assessment_pack p
+        join course_assessment_pack_item i on i.pack_id=p.id
+        join assessment a on a.id=i.assessment_id
+        where p.id=? order by i.sequence_no limit 1
+        """,existingPack);
+      if(existing.isEmpty()) throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "A test pack with this package identity exists but its assessment item is missing. Review the pack history; no records were overwritten.");
+      Map<String,Object> prior=existing.getFirst();
+      if(!digest.equalsIgnoreCase(String.valueOf(prior.get("content_sha256")))) {
+        throw new ResponseStatusException(HttpStatus.CONFLICT,
+            "This package ID and version already exist with different content. Increase package_version to import a revised draft.");
+      }
+      long assessmentId=((Number)prior.get("assessment_id")).longValue();
+      Map<String,Object> result=new LinkedHashMap<>(assessmentDetails(assessmentId,true));
+      result.put("imported",false);
+      result.put("idempotent",true);
+      result.put("packId",existingPack);
+      result.put("packageId",packageId);
+      result.put("packageVersion",packageVersion);
+      result.put("message","The identical package version is already imported; the existing records were not changed.");
+      return result;
+    }
+
+    Long assessmentId=jdbc.queryForObject("""
+      insert into assessment(
+        course_id,title,description,subject_id,chapter_id,duration_minutes,max_attempts,
+        negative_marking_fraction,status,assessment_type,is_generated,source_package_id,
+        source_package_version,source_package_sha256,source_exam_cycle,source_url,portable_assessment_type
+      ) values(?,?,?,?,?,?,?,?,'DRAFT','PREVIOUS_YEAR_PAPER',false,?,?,?,?,?,?)
+      returning id
+      """,Long.class,courseId,title,description.isBlank()?null:description,target.get("subjectId"),
+      target.get("chapterId"),duration,maxAttempts,negativeMarking,packageId,packageVersion,digest,
+      source.get("cycle")==null?null:String.valueOf(source.get("cycle")),
+      source.get("source_url")==null?null:String.valueOf(source.get("source_url")),assessmentType);
+    if(assessmentId==null) throw new IllegalStateException("The assessment draft could not be created.");
+
+    List<?> questions=(List<?>)pkg.get("questions");
+    Map<String,Object> sectionsByCode=new LinkedHashMap<>();
+    for(Object raw:((List<?>)pkg.get("sections"))) {
+      Map<String,Object> section=stringMap(raw);
+      sectionsByCode.put(String.valueOf(section.get("code")),section);
+    }
+    int sequence=0;
+    BigDecimal maxScore=BigDecimal.ZERO;
+    for(Object raw:questions) {
+      sequence++;
+      Map<String,Object> q=stringMap(raw);
+      Map<String,Object> proposed=stringMapOrEmpty(q.get("proposed_answer"));
+      Map<String,Object> explicitAnswer=stringMap(q.get("answer_payload"));
+      List<?> rawOptions=q.get("options") instanceof List<?> optionList?optionList:List.of();
+      List<Map<String,Object>> options=new ArrayList<>();
+      for(Object optionRaw:rawOptions) {
+        Map<String,Object> option=stringMap(optionRaw);
+        Map<String,Object> mapped=new LinkedHashMap<>();
+        String key=String.valueOf(option.get("key"));
+        Object label=option.get("text");
+        mapped.put("key",key);mapped.put("option_key",key);mapped.put("label",label);mapped.put("text",label);
+        mapped.put("text_i18n",option.getOrDefault("text_i18n",Map.of()));
+        boolean correct=answerContains(explicitAnswer,proposed,key);
+        mapped.put("is_correct",correct);
+        mapped.put("sort_order",options.size()+1);
+        for(String metadata:List.of("content_kind","code_line_indices","math_line_indices","source_code_preservation_notes")) {
+          if(option.containsKey(metadata)) mapped.put(metadata,option.get(metadata));
+        }
+        options.add(mapped);
+      }
+      Map<String,Object> answer=normalizePortableAnswer(explicitAnswer,proposed,options);
+      Map<String,Object> section=sectionsByCode.get(String.valueOf(q.get("section_code")));
+      String sectionCode=String.valueOf(q.get("section_code"));
+      String sectionPolicy=String.valueOf(section.get("result_policy"));
+      Object rawMarks=q.get("marks")==null?defaultMarks:q.get("marks");
+      BigDecimal marks=decimal(rawMarks,"Question marks");
+      BigDecimal incorrectMark=q.get("incorrect_mark")==null?null:decimal(q.get("incorrect_mark"),"Incorrect-answer marks");
+      Map<String,Object> snapshot=new LinkedHashMap<>();
+      snapshot.put("question_type",String.valueOf(q.get("question_type")).toUpperCase(Locale.ROOT));
+      snapshot.put("prompt",q.get("prompt"));
+      snapshot.put("prompt_i18n",q.getOrDefault("prompt_i18n",Map.of()));
+      snapshot.put("options",options);
+      snapshot.put("answer_payload",answer);
+      snapshot.put("explanation",proposed.get("explanation"));
+      snapshot.put("explanation_i18n",proposed.getOrDefault("explanation_i18n",Map.of()));
+      snapshot.put("question_review_status","PENDING_HUMAN_REVIEW");
+      snapshot.put("review_notes",proposed.getOrDefault("reviewer_notes",""));
+      snapshot.put("answer_source",proposed.getOrDefault("answer_source","UNRESOLVED"));
+      snapshot.put("answer_confidence",proposed.getOrDefault("confidence","UNRESOLVED"));
+      snapshot.put("question_id",q.get("id"));
+      snapshot.put("source_question_number",q.get("source_question_number"));
+      snapshot.put("source_location",q.getOrDefault("source_location",Map.of()));
+      snapshot.put("source_note",q.getOrDefault("source_note",""));
+      snapshot.put("section_code",sectionCode);
+      snapshot.put("section_name_i18n",section.getOrDefault("name_i18n",Map.of()));
+      snapshot.put("section_result_policy",sectionPolicy);
+      snapshot.put("marks",marks);
+      snapshot.put("unanswered_mark",unansweredMark);
+      snapshot.put("topic_tags",q.getOrDefault("topic_tags",List.of()));
+      snapshot.put("subtopic_tags",q.getOrDefault("secondary_topic_tags",List.of()));
+      snapshot.put("topic",firstTag(q.get("topic_tags")));
+      snapshot.put("difficulty",q.getOrDefault("difficulty","CORE"));
+      snapshot.put("exam_format",pkg.get("assessment_type"));
+      snapshot.put("source_kind","PORTABLE_PACKAGE");
+      snapshot.put("source_title",source.getOrDefault("paper_title",source.getOrDefault("exam_name","")));
+      snapshot.put("source_ref",source.getOrDefault("source_url",""));
+      snapshot.put("source_year",source.getOrDefault("cycle",""));
+      snapshot.put("source_id",packageId);
+      snapshot.put("board",source.getOrDefault("issuer",""));
+      snapshot.put("native_language_only",Boolean.TRUE.equals(q.get("native_language_only")));
+      if(q.containsKey("native_source_language"))snapshot.put("native_source_language",q.get("native_source_language"));
+      if(q.containsKey("stimulus_i18n"))snapshot.put("stimulus_i18n",q.get("stimulus_i18n"));
+      if(q.containsKey("stimulus_content_kind"))snapshot.put("stimulus_content_kind",q.get("stimulus_content_kind"));
+      if(q.containsKey("stimulus"))snapshot.put("stimulus",q.get("stimulus"));
+      if(q.containsKey("content_language_policy"))snapshot.put("content_language_policy",q.get("content_language_policy"));
+      if(incorrectMark!=null)snapshot.put("incorrect_marks",incorrectMark);
+      if(q.containsKey("prompt_content_kind"))snapshot.put("prompt_content_kind",q.get("prompt_content_kind"));
+      for(String metadata:List.of("code_line_indices","math_line_indices","source_code_preservation_notes")) {
+        if(q.containsKey(metadata))snapshot.put(metadata,q.get(metadata));
+      }
+      for(String metadata:List.of("stimulus_code_line_indices","stimulus_math_line_indices","stimulus_source_languages")) {
+        if(q.containsKey(metadata))snapshot.put(metadata,q.get(metadata));
+      }
+      String snapshotJson;
+      try { snapshotJson=mapper.writeValueAsString(snapshot); }
+      catch(JacksonException ex) { throw new IllegalStateException("Could not serialize imported question "+sequence+".",ex); }
+      jdbc.update("""
+        insert into assessment_question(assessment_id,source_question_id,sequence_no,max_marks,question_snapshot)
+        values(?,null,?,?,?::jsonb)
+        """,assessmentId,sequence,marks,snapshotJson);
+      maxScore=maxScore.add("SCORED".equals(sectionPolicy)?marks:BigDecimal.ZERO);
+    }
+
+    Long packId=jdbc.queryForObject("""
+      insert into course_assessment_pack(
+        course_id,source_institution_id,pack_code,pack_version,title,description,status,content_sha256,
+        open_book_enabled,resource_policy,created_by_staff_id
+      ) values(?,?,?,?,?,?,'DRAFT',?,false,'{"mode":"CLOSED_BOOK","resources":[]}'::jsonb,?)
+      returning id
+      """,Long.class,courseId,tenant.institutionId(),packageId,packageVersion,title,
+      description.isBlank()?null:description,digest,context.staffId());
+    if(packId==null) throw new IllegalStateException("The draft test pack could not be created.");
+    jdbc.update("""
+      insert into course_assessment_pack_item(pack_id,assessment_id,sequence_no,test_kind)
+      values(?,?,1,?)
+      """,packId,assessmentId,assessmentType);
+    audit(assessmentId,null,context,null,null,"ASSESSMENT_IMPORTED",null,"DRAFT",
+        "Imported portable package "+packageId+" version "+packageVersion+" with "+questions.size()
+          +" immutable question snapshots. Human review is still required.");
+    staffAudit.recordAction(context,"/api/v1/admin/assessments/import-package",
+        "Imported package "+packageId+" version "+packageVersion+" into course #"+courseId
+          +" as draft assessment #"+assessmentId+" with "+questions.size()+" questions.");
+    Map<String,Object> result=new LinkedHashMap<>(assessmentDetails(assessmentId,true));
+    result.put("imported",true);result.put("idempotent",false);
+    result.put("packId",packId);result.put("packageId",packageId);result.put("packageVersion",packageVersion);
+    result.put("max_score_calculated",maxScore);
+    result.put("questionCount",questions.size());
+    result.put("status","DRAFT");
+    result.put("message","Package imported atomically as a draft. Review every answer and explanation before publishing.");
+    return result;
+  }
+
+  @PatchMapping("/admin/assessments/{assessmentId}/package-questions/{sequenceNo}/review")
+  @Transactional
+  public Map<String,Object> reviewImportedPackageQuestion(
+      @PathVariable long assessmentId,@PathVariable int sequenceNo,@RequestParam Long courseId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    context=authorization.requirePermission(context,"CONTENT_REVIEW");
+    requireAssessmentInCourse(assessmentId,courseId,tenant);
+    requireEditableCourse(courseId,tenant);
+    String reviewStatus=requiredText(body==null?null:body.get("reviewStatus"),"Review status",20).toUpperCase(Locale.ROOT);
+    if(!Set.of("APPROVED","REJECTED","PENDING_HUMAN_REVIEW").contains(reviewStatus))
+      throw badRequest("Review status must be APPROVED, REJECTED, or PENDING_HUMAN_REVIEW.");
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select aq.id,aq.question_snapshot::text as question_snapshot,a.source_package_id
+      from assessment_question aq join assessment a on a.id=aq.assessment_id
+      where aq.assessment_id=? and aq.sequence_no=? and a.course_id=?
+      """,assessmentId,sequenceNo,courseId);
+    if(rows.isEmpty())throw notFound("Imported assessment question",sequenceNo);
+    if(rows.getFirst().get("source_package_id")==null)
+      throw badRequest("This review endpoint is only for questions imported from a portable package.");
+    long questionId=((Number)rows.getFirst().get("id")).longValue();
+    Map<String,Object> snapshot=parseObject(String.valueOf(rows.getFirst().get("question_snapshot")));
+    if("APPROVED".equals(reviewStatus)) {
+      Map<String,Object> answer=stringMap(snapshot.get("answer_payload"));
+      if(answer==null||answer.get("kind")==null||answer.get("value")==null||String.valueOf(answer.get("value")).isBlank())
+        throw badRequest("Add a supported answer key to the portable package and import a new version before approving this question.");
+      if("OPTION".equals(String.valueOf(answer.get("kind"))) && !answerContains(snapshot.get("options"),String.valueOf(answer.get("value"))))
+        throw badRequest("The proposed answer key is not present in this question's options.");
+    }
+    jdbc.update("""
+      update assessment_question
+      set question_snapshot=jsonb_set(
+        jsonb_set(question_snapshot,'{question_review_status}',to_jsonb(?::text),true),
+        '{proposed_answer,review_status}',to_jsonb(?::text),true)
+      where id=?
+      """,reviewStatus,reviewStatus,questionId);
+    audit(assessmentId,null,context,null,null,"IMPORTED_QUESTION_REVIEWED",
+        "PENDING_HUMAN_REVIEW",reviewStatus,"Reviewed imported question #"+sequenceNo+".");
+    staffAudit.recordAction(context,"/api/v1/admin/assessments/"+assessmentId+"/package-questions/"+sequenceNo+"/review",
+        "Marked imported question #"+sequenceNo+" "+reviewStatus+".");
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("assessmentId",assessmentId);result.put("sequenceNo",sequenceNo);
+    result.put("reviewStatus",reviewStatus);
+    result.put("approvedQuestionCount",jdbc.queryForObject("""
+      select count(*) from assessment_question
+      where assessment_id=? and question_snapshot->>'question_review_status'='APPROVED'
+      """,Integer.class,assessmentId));
+    result.put("questionCount",jdbc.queryForObject("select count(*) from assessment_question where assessment_id=?",Integer.class,assessmentId));
+    return result;
+  }
+
+  private Map<String,Object> resolvePortableAssessmentTarget(Map<String,Object> body,long courseId) {
+    List<String> issues=new ArrayList<>();
+    List<Map<String,Object>> programs=jdbc.queryForList("""
+      select id,code,display_name,course_type_code
+      from curriculum_program where id=? and status='ACTIVE' and code<>'GENERAL'
+      """,courseId);
+    if(programs.isEmpty())throw badRequest("Choose an active course.");
+    Map<String,Object> program=programs.getFirst();
+    String courseType=String.valueOf(program.get("course_type_code"));
+    List<Map<String,Object>> subjects=jdbc.queryForList("""
+      select s.id,s.code,s.display_name,c.code as class_code
+      from curriculum_program_subject ps
+      join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+      left join curriculum_class c on c.id=s.class_id
+      where ps.program_id=? and (s.program_id=ps.program_id or s.program_id is null)
+      order by s.sort_order,s.id
+      """,courseId);
+    String requestedSubject=body.get("subjectCode")==null?"":String.valueOf(body.get("subjectCode")).trim();
+    Map<String,Object> selected=null;
+    if(!requestedSubject.isBlank()) {
+      for(Map<String,Object> subject:subjects) if(requestedSubject.equalsIgnoreCase(String.valueOf(subject.get("code"))))selected=subject;
+      if(selected==null)issues.add("$.subjectCode must select a subject mapped to the chosen course.");
+    } else if(subjects.size()==1) {
+      selected=subjects.getFirst();
+    } else if("K12".equals(courseType)) {
+      issues.add("$.subjectCode is required when a K–12 course has multiple mapped subjects.");
+    }
+    Long subjectId=selected==null?null:((Number)selected.get("id")).longValue();
+    String subjectCode=selected==null?null:String.valueOf(selected.get("code"));
+    Long chapterId=optionalLong(body.get("chapterId"),"Chapter ID");
+    if(chapterId!=null) {
+      if(subjectId==null)issues.add("$.chapterId requires a mapped subject.");
+      else {
+        Boolean belongs=jdbc.queryForObject("""
+          select exists(
+            select 1 from curriculum_chapter ch
+            join curriculum_program_subject ps on ps.subject_id=ch.subject_id and ps.program_id=?
+            where ch.id=? and ch.active=true
+          )
+          """,Boolean.class,courseId,chapterId);
+        if(!Boolean.TRUE.equals(belongs))issues.add("$.chapterId must identify an active chapter mapped to the selected course and subject.");
+      }
+    }
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("issues",issues);result.put("courseType",courseType);result.put("subjectId",subjectId);
+    result.put("subjectCode",subjectCode);result.put("chapterId",chapterId);
+    return result;
+  }
+
+  private List<String> validatePortablePackage(Map<String,Object> pkg) {
+    List<String> issues=new ArrayList<>();
+    if(pkg==null) return List.of("$.package must be a JSON object.");
+    if(!"quantaedge.portable-assessment-package.v1".equals(pkg.get("schema")))issues.add("$.package.schema must be quantaedge.portable-assessment-package.v1.");
+    if(pkg.containsKey("course_binding"))issues.add("$.package.course_binding is forbidden; bind the package to a course through the authenticated import form.");
+    packageText(pkg,"package_id",3,120,issues);
+    packageText(pkg,"package_version",1,40,issues);
+    packageText(pkg,"title",1,240,issues);
+    if(!Set.of("PREVIOUS_YEAR_PAPER","MOCK_EXAM","DIAGNOSTIC","PRACTICE_SET").contains(String.valueOf(pkg.get("assessment_type"))))
+      issues.add("$.package.assessment_type must be PREVIOUS_YEAR_PAPER, MOCK_EXAM, DIAGNOSTIC, or PRACTICE_SET.");
+    Map<String,Object> source=stringMap(pkg.get("source"));
+    if(source==null)issues.add("$.package.source must be an object.");
+    else {
+      for(String field:List.of("issuer","exam_name","cycle","source_url"))packageText(source,field,1,2000,issues,"$.package.source");
+      String rights=String.valueOf(source.get("repository_distribution_rights"));
+      if(!Set.of("UNCONFIRMED","CLEARED_FOR_INTERNAL_USE","CLEARED_FOR_PUBLIC_REPOSITORY","DO_NOT_REDISTRIBUTE").contains(rights))
+        issues.add("$.package.source.repository_distribution_rights must state the source rights decision.");
+    }
+    Map<String,Object> config=stringMap(pkg.get("configuration"));
+    if(config==null)issues.add("$.package.configuration must be an object.");
+    else {
+      packageNumberRange(config.get("duration_minutes"),1,240,"$.package.configuration.duration_minutes",issues,true);
+      packageNumberRange(config.get("marks_per_question"),0,1000,"$.package.configuration.marks_per_question",issues,false);
+      packageNumberRange(config.get("unanswered_mark"),0,1000,"$.package.configuration.unanswered_mark",issues,true);
+      Object penalty=config.get("negative_marking_fraction");
+      try {
+        BigDecimal val=new BigDecimal(String.valueOf(penalty));
+        if(val.signum()<0||val.compareTo(BigDecimal.ONE)>0)throw new NumberFormatException();
+      } catch(Exception ex) { issues.add("$.package.configuration.negative_marking_fraction must be between 0 and 1."); }
+      if(config.containsKey("max_attempts"))packageNumberRange(config.get("max_attempts"),1,10,"$.package.configuration.max_attempts",issues,true);
+    }
+    Map<String,Object> editorial=stringMap(pkg.get("editorial"));
+    if(editorial==null||!"DRAFT".equals(editorial.get("status"))
+        ||!Boolean.FALSE.equals(editorial.get("student_delivery_allowed"))
+        ||!"PENDING_HUMAN_REVIEW".equals(editorial.get("review_status"))) {
+      issues.add("$.package.editorial must remain DRAFT, require human review, and forbid student delivery.");
+    }
+    List<?> sections=pkg.get("sections") instanceof List<?> sl?sl:null;
+    if(sections==null||sections.isEmpty()||sections.size()>20)issues.add("$.package.sections must contain 1–20 sections.");
+    Map<String,Map<String,Object>> sectionByCode=new LinkedHashMap<>();
+    if(sections!=null)for(int i=0;i<sections.size();i++) {
+      String at="$.package.sections["+i+"]";
+      Map<String,Object> section=stringMap(sections.get(i));
+      if(section==null){issues.add(at+" must be an object.");continue;}
+      String code=String.valueOf(section.get("code"));
+      if(!code.matches("^[A-Z][A-Z0-9_]{1,49}$"))issues.add(at+".code is invalid.");
+      else if(sectionByCode.putIfAbsent(code,section)!=null)issues.add(at+".code is duplicated.");
+      packageNumberRange(section.get("question_count"),1,250,at+".question_count",issues,true);
+      if(!(section.get("name_i18n") instanceof Map<?,?> names)||names.isEmpty())issues.add(at+".name_i18n must contain a section name.");
+      if(!Set.of("SCORED","QUALIFYING_ONLY","PRACTICE_ONLY").contains(String.valueOf(section.get("result_policy"))))
+        issues.add(at+".result_policy must be SCORED, QUALIFYING_ONLY, or PRACTICE_ONLY.");
+    }
+    List<?> questions=pkg.get("questions") instanceof List<?> ql?ql:null;
+    if(questions==null||questions.isEmpty()||questions.size()>250)issues.add("$.package.questions must contain 1–250 questions.");
+    Map<String,Integer> counts=new LinkedHashMap<>();
+    Set<String> questionIds=new java.util.LinkedHashSet<>();
+    if(questions!=null)for(int i=0;i<questions.size();i++) {
+      String at="$.package.questions["+i+"]";
+      Map<String,Object> question=stringMap(questions.get(i));
+      if(question==null){issues.add(at+" must be an object.");continue;}
+      String id=String.valueOf(question.get("id"));
+      if(!id.matches("^[a-z0-9][a-z0-9._-]{1,119}$"))issues.add(at+".id is invalid.");
+      else if(!questionIds.add(id))issues.add(at+".id is duplicated.");
+      String type=String.valueOf(question.get("question_type"));
+      if(!Set.of("MCQ","TRUE_FALSE","INFERENCE","INPUT","NUMERICAL","SHORT_ANSWER","LONG_ANSWER","CASE_BASED","SOURCE_BASED","DIAGRAM","MAP","ASSERTION_REASON","MATCH","ORDER").contains(type))
+        issues.add(at+".question_type is not supported.");
+      packageText(question,"prompt",1,4000,issues,at);
+      Object promptLocales=question.get("prompt_i18n");
+      if(!(promptLocales instanceof Map<?,?> localed)||localed.isEmpty())issues.add(at+".prompt_i18n must contain at least one language.");
+      List<?> options=question.get("options") instanceof List<?> ol?ol:List.of();
+      if(options.size()>5)issues.add(at+".options supports no more than five options.");
+      if(Set.of("MCQ","TRUE_FALSE").contains(type)&&options.size()<2)issues.add(at+".options must contain at least two options for "+type+".");
+      Set<String> optionKeys=new java.util.LinkedHashSet<>();
+      for(int oi=0;oi<options.size();oi++) {
+        String opAt=at+".options["+oi+"]";
+        Map<String,Object> option=stringMap(options.get(oi));
+        if(option==null){issues.add(opAt+" must be an object.");continue;}
+        String key=String.valueOf(option.get("key"));
+        if(key.isBlank()||key.length()>20)issues.add(opAt+".key is required and must be at most 20 characters.");
+        else if(!optionKeys.add(key))issues.add(opAt+".key is duplicated.");
+        packageText(option,"text",1,4000,issues,opAt);
+      }
+      packageNumberRange(question.get("marks"),0,1000,at+".marks",issues,false);
+      String sectionCode=String.valueOf(question.get("section_code"));
+      counts.merge(sectionCode,1,Integer::sum);
+      Map<String,Object> section=sectionByCode.get(sectionCode);
+      if(section==null)issues.add(at+".section_code must match a declared section.");
+      else if(question.get("section_result_policy")!=null
+          && !String.valueOf(section.get("result_policy")).equals(String.valueOf(question.get("section_result_policy"))))
+        issues.add(at+".section_result_policy must match its section's result_policy.");
+      Map<String,Object> proposed=stringMap(question.get("proposed_answer"));
+      if(proposed==null)issues.add(at+".proposed_answer must be an object.");
+      else {
+        packageText(proposed,"explanation",1,700,issues,at+".proposed_answer");
+        if(!"PENDING_HUMAN_REVIEW".equals(proposed.get("review_status")))issues.add(at+".proposed_answer.review_status must be PENDING_HUMAN_REVIEW.");
+        String key=proposed.get("option_key")==null?"":String.valueOf(proposed.get("option_key"));
+        Map<String,Object> answer=stringMap(question.get("answer_payload"));
+        if(answer==null&& !key.isBlank()) {
+          if(!optionKeys.contains(key))issues.add(at+".proposed_answer.option_key must reference an option key.");
+        } else if(answer==null) {
+          issues.add(at+".proposed_answer.option_key or answer_payload must define a proposed answer.");
+        } else {
+          String kind=String.valueOf(answer.get("kind"));
+          Object value=answer.get("value");
+          if(!Set.of("OPTION","MULTI_OPTION","TEXT","NUMERIC","ORDER","MATCH").contains(kind))
+            issues.add(at+".answer_payload.kind is not supported.");
+          if(value==null||(value instanceof String str&&str.isBlank())||(value instanceof List<?> arr&&arr.isEmpty()))
+            issues.add(at+".answer_payload.value must define a proposed answer.");
+          if("OPTION".equals(kind)&&value!=null&&!optionKeys.contains(String.valueOf(value)))
+            issues.add(at+".answer_payload.value must match one of the option keys.");
+          if("NUMERIC".equals(kind)) {
+            try { new BigDecimal(String.valueOf(value)); } catch(Exception ex) { issues.add(at+".answer_payload.value must be numeric for NUMERIC answers."); }
+          }
+          if("MULTI_OPTION".equals(kind)&&value instanceof List<?> values
+              &&values.stream().anyMatch(v->!optionKeys.contains(String.valueOf(v))))
+            issues.add(at+".answer_payload.value contains an unknown option key.");
+        }
+      }
+    }
+    for(Map.Entry<String,Map<String,Object>> section:sectionByCode.entrySet()) {
+      Object expected=section.getValue().get("question_count");
+      try {
+        int n=Integer.parseInt(String.valueOf(expected));
+        if(counts.getOrDefault(section.getKey(),0)!=n)
+          issues.add("$.package.sections."+section.getKey()+".question_count does not match the questions assigned to that section.");
+      } catch(Exception ex) { issues.add("$.package.sections."+section.getKey()+".question_count must be an integer."); }
+    }
+    if(pkg.containsKey("source_register")&&!(pkg.get("source_register") instanceof Map<?,?>))
+      issues.add("$.package.source_register must be an object when supplied.");
+    return issues;
+  }
+
+  private Map<String,Object> stringMap(Object raw) {
+    if(!(raw instanceof Map<?,?> input))return null;
+    Map<String,Object> out=new LinkedHashMap<>();
+    for(Map.Entry<?,?> entry:input.entrySet())if(entry.getKey() instanceof String key)out.put(key,entry.getValue());
+    return out;
+  }
+
+  private Map<String,Object> stringMapOrEmpty(Object raw) {
+    Map<String,Object> out=stringMap(raw);
+    return out==null?new LinkedHashMap<>():out;
+  }
+
+  private void packageText(Map<String,Object> object,String key,int min,int max,List<String> issues) {
+    packageText(object,key,min,max,issues,"$.package");
+  }
+
+  private void packageText(Map<String,Object> object,String key,int min,int max,List<String> issues,String prefix) {
+    Object raw=object.get(key);
+    String value=raw==null?"":String.valueOf(raw).trim();
+    if(value.length()<min||value.length()>max)issues.add(prefix+"."+key+" must contain "+min+"–"+max+" characters.");
+  }
+
+  private void packageNumberRange(Object raw, int min, int max, String path,List<String> issues,boolean integerOnly) {
+    try {
+      BigDecimal value=new BigDecimal(String.valueOf(raw));
+      if(integerOnly&&value.stripTrailingZeros().scale()>0)throw new NumberFormatException();
+      if(value.compareTo(BigDecimal.valueOf(min))<0||value.compareTo(BigDecimal.valueOf(max))>0)
+        throw new NumberFormatException();
+    } catch(Exception ex) {
+      issues.add(path+" must be "+(integerOnly?"an integer":"a number")+" between "+min+" and "+max+".");
+    }
+  }
+
+  private Map<String,Object> normalizePortableAnswer(
+      Map<String,Object> explicit,Map<String,Object> proposed,List<Map<String,Object>> options) {
+    if(explicit!=null) {
+      Map<String,Object> answer=new LinkedHashMap<>(explicit);
+      if(answer.get("tolerance")!=null)answer.put("tolerance",new BigDecimal(String.valueOf(answer.get("tolerance"))));
+      return answer;
+    }
+    String optionKey=proposed.get("option_key")==null?"":String.valueOf(proposed.get("option_key"));
+    if(!optionKey.isBlank()) return new LinkedHashMap<>(Map.of("kind","OPTION","value",optionKey));
+    return new LinkedHashMap<>(Map.of("kind","UNRESOLVED","value",""));
+  }
+
+  private boolean answerContains(Map<String,Object> explicit,Map<String,Object> proposed,String key) {
+    if(explicit!=null) {
+      Object value=explicit.get("value");
+      String kind=String.valueOf(explicit.get("kind"));
+      if("OPTION".equals(kind))return key.equals(String.valueOf(value));
+      return "MULTI_OPTION".equals(kind)&&value instanceof List<?> values&&values.stream().anyMatch(v->key.equals(String.valueOf(v)));
+    }
+    return proposed.get("option_key")!=null&&key.equals(String.valueOf(proposed.get("option_key")));
+  }
+
+  private boolean answerContains(Object rawOptions,String answer) {
+    if(!(rawOptions instanceof List<?> options))return false;
+    for(Object raw:options) {
+      Map<String,Object> option=stringMap(raw);
+      if(option!=null&&(answer.equals(String.valueOf(option.get("key")))||answer.equals(String.valueOf(option.get("option_key")))))return true;
+    }
+    return false;
+  }
+
+  private String firstTag(Object raw) {
+    if(raw instanceof List<?> values&&!values.isEmpty())return String.valueOf(values.getFirst());
+    return "";
+  }
+
   @PatchMapping("/admin/assessments/{assessmentId}/status")
   @Transactional
   public Map<String, Object> changeAssessmentStatus(
