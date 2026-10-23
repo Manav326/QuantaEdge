@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1191,
+    "assets_selected": 1193,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "874a3d70fe152372eb8414de",
-      "7fda6d789160e4d02a0aabec"
+      "a7efa51402012691c3ec230c",
+      "b3911c94b06e31fea1f56740"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1188,
-    "assets_remaining": 1103,
+    "assets_analyzed": 1189,
+    "assets_remaining": 1102,
     "assets_completion_percent": 51.9,
-    "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 1186,
+    "assets_failed": 12,
+    "assets_skipped_from_checkpoint": 1188,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39975507646",
-      "checkpointed_at": "2026-10-23T16:38:15Z"
+      "checkpointed_at": "2026-10-23T16:44:21Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39975507646",
-      "checkpointed_at": "2026-10-23T16:38:58Z"
+      "checkpointed_at": "2026-10-23T16:45:04Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38429,7 +38429,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39975507646",
-      "checkpointed_at": "2026-10-23T16:39:54Z"
+      "checkpointed_at": "2026-10-23T16:45:54Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -38918,6 +38918,51 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39975507646",
       "checkpointed_at": "2026-10-23T16:43:11Z"
+    },
+    {
+      "asset_id": "a7efa51402012691c3ec230c",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "0172a5b6e6ae1e07aa7f4dc4b845bb40a12e216788b5e705cc16e254655a091e",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 89,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39975507646",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "b3911c94b06e31fea1f56740",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 89,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0172a5b6e6ae1e07aa7f4dc4b845bb40a12e216788b5e705cc16e254655a091e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An image of a black page with no visible text or graphics.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "The page is completely black and there are no visible elements to analyze."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39975507646",
+      "checkpointed_at": "2026-10-23T16:48:29Z"
     }
   ]
 }
