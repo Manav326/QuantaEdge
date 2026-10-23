@@ -299,8 +299,13 @@ def validate_package(package: Any, repo_root: Path | None = None,
 
         options = q.get("options")
         option_keys: list[str] = []
-        if not isinstance(options, list) or not 2 <= len(options) <= 5:
-            errors.append(f"{where}.options must contain 2–5 options.")
+        requires_options = q.get("question_type") in {"MCQ", "TRUE_FALSE"}
+        if (not isinstance(options, list) or len(options) > 5
+                or (requires_options and not 2 <= len(options) <= 5)):
+            if requires_options:
+                errors.append(f"{where}.options must contain 2–5 options for MCQ/TRUE_FALSE questions.")
+            else:
+                errors.append(f"{where}.options must be an array of 0–5 options for written-response question types.")
             options = []
         for opt in options:
             if not isinstance(opt, dict) or not isinstance(opt.get("key"), str) or not opt["key"].strip() or not isinstance(opt.get("text"), str) or not opt["text"].strip():

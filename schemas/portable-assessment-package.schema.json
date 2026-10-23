@@ -311,7 +311,7 @@
           },
           "options": {
             "type": "array",
-            "minItems": 2,
+            "minItems": 0,
             "maxItems": 5,
             "items": {
               "type": "object",
@@ -675,7 +675,65 @@
             ],
             "description": "Defines the reusable question-set component type. PASSAGE shows one shared stimulus followed by independently answerable questions."
           }
-        }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "question_type": {
+                  "enum": [
+                    "MCQ",
+                    "TRUE_FALSE"
+                  ]
+                }
+              },
+              "required": [
+                "question_type"
+              ]
+            },
+            "then": {
+              "properties": {
+                "options": {
+                  "minItems": 2,
+                  "maxItems": 5
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "question_type": {
+                  "enum": [
+                    "INFERENCE",
+                    "INPUT",
+                    "NUMERICAL",
+                    "SHORT_ANSWER",
+                    "LONG_ANSWER",
+                    "CASE_BASED",
+                    "SOURCE_BASED",
+                    "DIAGRAM",
+                    "MAP",
+                    "ASSERTION_REASON",
+                    "MATCH",
+                    "ORDER"
+                  ]
+                }
+              },
+              "required": [
+                "question_type"
+              ]
+            },
+            "then": {
+              "properties": {
+                "options": {
+                  "minItems": 0,
+                  "maxItems": 5
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "editorial": {
