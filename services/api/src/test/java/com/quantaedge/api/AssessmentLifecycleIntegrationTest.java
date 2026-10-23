@@ -116,8 +116,8 @@ class AssessmentLifecycleIntegrationTest {
   @Test
   @SuppressWarnings("unchecked")
   void explicitlyEnabledOfflineAttemptStoresNoAnswerKeyAndCanSyncAfterItsTimerWithinGrace() {
-    Fixture fixture=fixture("COMPLETED");
-    jdbc.update("update assessment set assessment_type='ADMIN_CREATED',is_generated=false,lesson_id=null,offline_enabled=true where id=?",fixture.assessmentId());
+    Fixture fixture=fixture("COMPLETED",true);
+
     Map<String,Object> started=controller.startOrResumeAttempt(fixture.assessmentId(),fixture.courseId(),"hi",true,fixture.student(), fixture.tenant());
     long attemptId=((Number)started.get("attempt_id")).longValue();
     String packageToken=String.valueOf(started.get("offlinePackageToken"));
@@ -152,9 +152,8 @@ class AssessmentLifecycleIntegrationTest {
   @Test
   @SuppressWarnings("unchecked")
   void resumingOfflineAttemptDoesNotRotateTokenButExplicitRecoveryDoes() {
-    Fixture fixture=fixture("COMPLETED");
-    jdbc.update("update assessment set assessment_type='ADMIN_CREATED',is_generated=false,lesson_id=null,offline_enabled=true where id=?",
-        fixture.assessmentId());
+    Fixture fixture=fixture("COMPLETED",true);
+
 
     Map<String,Object> started=controller.startOrResumeAttempt(
         fixture.assessmentId(),fixture.courseId(),"hi",true,fixture.student(), fixture.tenant());
@@ -188,7 +187,9 @@ class AssessmentLifecycleIntegrationTest {
     assertEquals(true,saved.get("saved"));
   }
 
-  private Fixture fixture(String progressStatus) {
+  private Fixture fixture(String progressStatus) { return fixture(progressStatus,false); }
+
+  private Fixture fixture(String progressStatus,boolean offlineEnabled) {
     String suffix = UUID.randomUUID().toString().replace("-", "").substring(0, 12);
     String classCode = "E2E" + suffix;
     Long classId = jdbc.queryForObject("""
@@ -260,10 +261,11 @@ class AssessmentLifecycleIntegrationTest {
     Long assessmentId = jdbc.queryForObject("""
       insert into assessment(
         title,description,course_id,subject_id,chapter_id,lesson_id,duration_minutes,max_attempts,status,
-        assessment_type,is_generated,is_current,generation_version,published_at)
+        assessment_type,is_generated,is_current,generation_version,published_at,offline_enabled)
       values('Assessment lifecycle test','CI fixture',?,?,?,?,15,2,'PUBLISHED',
-        'TOPIC_END',true,true,1,now()) returning id
-      """, Long.class, courseId, subjectId, chapterId, lessonId);
+        ?,?,true,1,now(),?) returning id
+      """, Long.class, courseId, subjectId, chapterId, offlineEnabled ? null : lessonId,
+      offlineEnabled ? "ADMIN_CREATED" : "TOPIC_END", !offlineEnabled, offlineEnabled);
     String snapshot = """
       {
         "id": 1,
