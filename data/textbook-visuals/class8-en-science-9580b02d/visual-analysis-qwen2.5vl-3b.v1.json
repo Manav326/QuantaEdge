@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1195,
+    "assets_selected": 1196,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "d55b4af2d39033d603cae25d",
-      "7f905d3625c9b1fe633503af"
+      "88a3607b6990f79eaeac2754",
+      "1b6456072111a67dd4565e07"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1191,
-    "assets_remaining": 1100,
-    "assets_completion_percent": 52.0,
+    "assets_analyzed": 1193,
+    "assets_remaining": 1098,
+    "assets_completion_percent": 52.1,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1190,
+    "assets_skipped_from_checkpoint": 1191,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40008922922",
-      "checkpointed_at": "2026-10-23T20:36:05Z"
+      "checkpointed_at": "2026-10-23T20:45:21Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40008922922",
-      "checkpointed_at": "2026-10-23T20:36:46Z"
+      "checkpointed_at": "2026-10-23T20:46:02Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38429,7 +38429,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40008922922",
-      "checkpointed_at": "2026-10-23T20:37:34Z"
+      "checkpointed_at": "2026-10-23T20:46:50Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -39056,6 +39056,91 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40008922922",
       "checkpointed_at": "2026-10-23T20:44:15Z"
+    },
+    {
+      "asset_id": "88a3607b6990f79eaeac2754",
+      "asset_sha256": "e08baafb6ab6ec595f260e91551abe19a3dd17d024742b81c58597852e067623",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 90,
+      "asset_path": "assets/e08baafb6ab6ec595f260e91551abe19a3dd17d024742b81c58597852e067623.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0975f46f2c0d820742160ed4058dbee315cf7afd7cb940cf3e6d2001e63e547d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two balloons hanging from a table with labels indicating their positions.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 5.8: Charged plastic scale",
+          "Take a plastic scale or a plastic straw, a piece of",
+          "polythene, and small pieces of paper.",
+          "Rub plastic scale/straw vigorously with polythene.",
+          "Do not touch the rubbed part with your hand or",
+          "any metal object.",
+          "Now, bring it close to the small pieces of paper placed",
+          "on a table, taking care"
+        ],
+        "concepts": [
+          "Electrostatic force",
+          "Charged plastic scale",
+          "Rubbing with polythene",
+          "Avoiding contact with metal objects"
+        ],
+        "context_relation": "Experimental setup for electrostatic force demonstration",
+        "limitations": [
+          "No specific experimental setup or apparatus shown",
+          "No indication of the table's material or condition"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40008922922",
+      "checkpointed_at": "2026-10-23T20:48:38Z"
+    },
+    {
+      "asset_id": "1b6456072111a67dd4565e07",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 90,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0975f46f2c0d820742160ed4058dbee315cf7afd7cb940cf3e6d2001e63e547d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A plastic scale or straw is rubbed with polythene, then brought close to small pieces of paper on a table.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Electrostatic force",
+          "Activity 5.6: Let us experiment",
+          "Take a plastic scale or a plastic straw, a piece of polythene, and small pieces of paper.",
+          "Rub plastic scale/straw vigorously with polythene.",
+          "Do not touch the rubbed part with your hand or any metal object.",
+          "Now, bring it close to the small pieces of paper placed on a table, taking care"
+        ],
+        "concepts": [
+          "Electrostatic force",
+          "Rubbing",
+          "Polythene",
+          "Plastic scale or straw",
+          "Small pieces of paper",
+          "Metal object"
+        ],
+        "context_relation": "Experimental setup",
+        "limitations": [
+          "No specific image provided, only text description."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40008922922",
+      "checkpointed_at": "2026-10-23T20:49:11Z"
     }
   ]
 }

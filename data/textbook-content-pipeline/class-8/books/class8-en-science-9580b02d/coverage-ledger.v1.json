@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1207,
-    "successful_visual_analyses": 1194,
-    "missing_visual_analyses": 1084,
+    "raw_analysis_result_rows": 1209,
+    "successful_visual_analyses": 1196,
+    "missing_visual_analyses": 1082,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1097,
+    "unresolved_count": 1095,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -45400,9 +45400,33 @@
       "asset_path": "assets/e08baafb6ab6ec595f260e91551abe19a3dd17d024742b81c58597852e067623.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two balloons hanging from a table with labels indicating their positions.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 5.8: Charged plastic scale",
+          "Take a plastic scale or a plastic straw, a piece of",
+          "polythene, and small pieces of paper.",
+          "Rub plastic scale/straw vigorously with polythene.",
+          "Do not touch the rubbed part with your hand or",
+          "any metal object.",
+          "Now, bring it close to the small pieces of paper placed",
+          "on a table, taking care"
+        ],
+        "concepts": [
+          "Electrostatic force",
+          "Charged plastic scale",
+          "Rubbing with polythene",
+          "Avoiding contact with metal objects"
+        ],
+        "context_relation": "Experimental setup for electrostatic force demonstration",
+        "limitations": [
+          "No specific experimental setup or apparatus shown",
+          "No indication of the table's material or condition"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45418,9 +45442,32 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A plastic scale or straw is rubbed with polythene, then brought close to small pieces of paper on a table.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Electrostatic force",
+          "Activity 5.6: Let us experiment",
+          "Take a plastic scale or a plastic straw, a piece of polythene, and small pieces of paper.",
+          "Rub plastic scale/straw vigorously with polythene.",
+          "Do not touch the rubbed part with your hand or any metal object.",
+          "Now, bring it close to the small pieces of paper placed on a table, taking care"
+        ],
+        "concepts": [
+          "Electrostatic force",
+          "Rubbing",
+          "Polythene",
+          "Plastic scale or straw",
+          "Small pieces of paper",
+          "Metal object"
+        ],
+        "context_relation": "Experimental setup",
+        "limitations": [
+          "No specific image provided, only text description."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
