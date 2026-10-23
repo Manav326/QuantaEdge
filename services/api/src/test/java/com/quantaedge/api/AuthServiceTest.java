@@ -196,23 +196,19 @@ class AuthServiceTest {
   }
 
   @Test
-  void administratorGetsEveryCurrentPermissionFromCatalogNotStaleGrantRows() {
+  void administratorPermissionListComesOnlyFromExplicitWorkspaceGrants() {
     AuthService auth = new AuthService(jdbc, true, 168, false, 60, "7070107483");
-    List<String> catalog = List.of("AUDIT_VIEW", "CONTENT_REVIEW", "CONTENT_PUBLISH", "STAFF_MANAGE");
-    when(jdbc.queryForObject("select role from staff_account where id=?", String.class, 9L))
-        .thenReturn("ADMIN");
-    when(jdbc.queryForList(contains("select permission_key from staff_permission_catalog"), eq(String.class)))
-        .thenReturn(catalog);
+    List<String> grants = List.of("CONTENT_REVIEW", "CONTENT_PUBLISH");
+    when(jdbc.queryForList(contains("from staff_permission_grant"), eq(String.class), any(Object[].class)))
+        .thenReturn(grants);
 
-    assertIterableEquals(catalog, auth.permissionsForStaff(9L));
+    assertIterableEquals(grants, auth.permissionsForStaff(9L));
   }
 
   @Test
-  void suspendedEmployeeStillShowsConfiguredGrantsButAuthorizationRejectsUse() {
+  void staffPermissionListDoesNotDependOnRoleLabel() {
     AuthService auth = new AuthService(jdbc, true, 168, false, 60, "7070107483");
     List<String> grants = List.of("CONTENT_VIEW", "CONTENT_EDIT");
-    when(jdbc.queryForObject("select role from staff_account where id=?", String.class, 12L))
-        .thenReturn("CONTENT_AUTHOR");
     when(jdbc.queryForList(contains("from staff_permission_grant"), eq(String.class), any(Object[].class)))
         .thenReturn(grants);
 
