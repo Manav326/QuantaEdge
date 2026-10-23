@@ -187,7 +187,7 @@ class PortableAssessmentPackageTests(unittest.TestCase):
 
     def test_rejects_translated_fallback_for_native_language_only_question(self):
         package = native_language_package()
-        question_data = package["questions"][-1]
+        question_data = next(q for q in package["questions"] if q["id"] == "sample-language-e101")
         question_data["prompt_i18n"]["hi"] = "अनुवादित प्रश्न"
         question_data["options"][0]["text_i18n"]["hi"] = "अनुवादित विकल्प"
         errors = validate_package(package)
