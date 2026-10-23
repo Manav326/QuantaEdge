@@ -445,7 +445,7 @@ export default function MarketplaceLaunchStepper({
               <h3>Imported packages requiring rights review</h3>
               <p>Record an evidence-backed decision for the source package. Clearance follows the source course identity, including future draft versions; it does not itself approve content quality or publish the course.</p>
             </div>
-            <span className={styles.rightsCount}>{data.coursePackageImports.length} packages</span>
+            <span className={styles.rightsCount}>{(data.coursePackageImports || []).length} packages</span>
           </header>
           <div className={styles.rightsList}>
             {(data.coursePackageImports || []).map(item => {
