@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "514bcff8ed1a02befbf7bb9166b6dd86a438fec433cd8ecc2293b8d77d6a47ac",
+  "raw_analysis_sha256": "b19df50927165ccf1a04cbc4feefbeccf3ef075fdfa31bfc3a2989ac1301d98b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1790,7 +1790,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
+        "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -1804,22 +1804,19 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive education",
-          "safety precautions",
+          "inclusive nature",
+          "special needs",
           "peer interactions",
+          "understanding concepts",
           "assessing understanding",
           "analyzing concepts",
-          "challenging ideas",
-          "additional information",
-          "interesting facts",
-          "engaging materials",
-          "Ever heard of",
-          "A step further",
-          "advanced concepts",
+          "safety precautions",
+          "fascinating facts",
+          "interesting observations",
           "scientific principles",
           "real-life applications"
         ],
-        "context_relation": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
+        "context_relation": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "limitations": [
           "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -1829,9 +1826,9 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39909545638",
-      "checkpointed_at": "2026-10-23T06:21:56Z",
+      "checkpointed_at": "2026-10-23T06:42:17Z",
       "effective_analysis": {
-        "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
+        "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -1845,22 +1842,19 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive education",
-          "safety precautions",
+          "inclusive nature",
+          "special needs",
           "peer interactions",
+          "understanding concepts",
           "assessing understanding",
           "analyzing concepts",
-          "challenging ideas",
-          "additional information",
-          "interesting facts",
-          "engaging materials",
-          "Ever heard of",
-          "A step further",
-          "advanced concepts",
+          "safety precautions",
+          "fascinating facts",
+          "interesting observations",
           "scientific principles",
           "real-life applications"
         ],
-        "context_relation": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
+        "context_relation": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "limitations": [
           "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -2639,22 +2633,26 @@
           "Think like a scientist",
           "Be a scientist",
           "Snapshots",
-          "Keywords",
           "Keep the curiosity alive",
-          "scientific activities",
+          "keywords",
           "competencies",
-          "NEP 2020"
+          "pictorial questions",
+          "puzzles",
+          "multiple choice questions",
+          "NEP 2020",
+          "Indian texts"
         ],
-        "context_relation": "The page discusses various sections and activities within a textbook that aim to engage students with scientific concepts and encourage critical thinking.",
+        "context_relation": "The page discusses various sections and activities in a textbook aimed at teaching scientific concepts and encouraging critical thinking.",
         "limitations": [
-          "The page does not provide specific examples or details about the activities or exercises mentioned."
+          "The page does not provide specific examples or exercises.",
+          "The page does not include images or diagrams."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39909545638",
-      "checkpointed_at": "2026-10-23T06:26:40Z",
+      "checkpointed_at": "2026-10-23T06:43:11Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the contributions of scientists and their impact on society.",
         "visual_type": "page_with_multiple_visuals",
@@ -2671,15 +2669,19 @@
           "Think like a scientist",
           "Be a scientist",
           "Snapshots",
-          "Keywords",
           "Keep the curiosity alive",
-          "scientific activities",
+          "keywords",
           "competencies",
-          "NEP 2020"
+          "pictorial questions",
+          "puzzles",
+          "multiple choice questions",
+          "NEP 2020",
+          "Indian texts"
         ],
-        "context_relation": "The page discusses various sections and activities within a textbook that aim to engage students with scientific concepts and encourage critical thinking.",
+        "context_relation": "The page discusses various sections and activities in a textbook aimed at teaching scientific concepts and encouraging critical thinking.",
         "limitations": [
-          "The page does not provide specific examples or details about the activities or exercises mentioned."
+          "The page does not provide specific examples or exercises.",
+          "The page does not include images or diagrams."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -29342,15 +29344,13 @@
           "Staff",
           "Textbook",
           "Editing",
+          "Support",
           "Publication",
-          "DTP Cell",
-          "Publication Division",
-          "Contractual",
-          "Proofreaders"
+          "Commitment"
         ],
-        "context_relation": "Acknowledgments for the book's contributors and staff.",
+        "context_relation": "The text is a page from a book or document that lists acknowledgments and thanks to various contributors and staff involved in the publication of a textbook.",
         "limitations": [
-          "No specific visual elements are described.",
+          "The text does not provide specific details about the book's content or the subjects it covers.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -29358,7 +29358,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39909545638",
-      "checkpointed_at": "2026-10-23T06:36:10Z",
+      "checkpointed_at": "2026-10-23T06:43:51Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -29374,15 +29374,13 @@
           "Staff",
           "Textbook",
           "Editing",
+          "Support",
           "Publication",
-          "DTP Cell",
-          "Publication Division",
-          "Contractual",
-          "Proofreaders"
+          "Commitment"
         ],
-        "context_relation": "Acknowledgments for the book's contributors and staff.",
+        "context_relation": "The text is a page from a book or document that lists acknowledgments and thanks to various contributors and staff involved in the publication of a textbook.",
         "limitations": [
-          "No specific visual elements are described.",
+          "The text does not provide specific details about the book's content or the subjects it covers.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -33026,21 +33024,69 @@
     {
       "asset_id": "4c550deb0064afbfdf84dbfd",
       "asset_sha256": "d05be1c7942d9c83e01fa4f01f92e8b8ea83e8abb6afdf291c2d8cd44e9c06aa",
-      "page_text_context_sha256": "0ee2b48bc8f1ef05a6a33d797c3ce4cc21087db9f9e9eb177c0e06b0cf0a11f8",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 29,
       "asset_path": "assets/d05be1c7942d9c83e01fa4f01f92e8b8ea83e8abb6afdf291c2d8cd44e9c06aa.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0ee2b48bc8f1ef05a6a33d797c3ce4cc21087db9f9e9eb177c0e06b0cf0a11f8",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A curved piece of glass shaped like a lentil seed, used to magnify small objects.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "lens",
+          "magnifying glass",
+          "microscope",
+          "human eye",
+          "tiny things",
+          "unknown",
+          "improved lenses",
+          "tools",
+          "sight",
+          "size",
+          "lentil seed",
+          "curved piece of glass"
+        ],
+        "context_relation": "The image is a visual representation of a lens, which is used to magnify small objects.",
+        "limitations": [
+          "The image does not provide specific details about the size of the objects that can be magnified.",
+          "The image does not show the process of how the lens works."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39909545638",
+      "checkpointed_at": "2026-10-23T06:45:56Z",
+      "effective_analysis": {
+        "visual_summary": "A curved piece of glass shaped like a lentil seed, used to magnify small objects.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "lens",
+          "magnifying glass",
+          "microscope",
+          "human eye",
+          "tiny things",
+          "unknown",
+          "improved lenses",
+          "tools",
+          "sight",
+          "size",
+          "lentil seed",
+          "curved piece of glass"
+        ],
+        "context_relation": "The image is a visual representation of a lens, which is used to magnify small objects.",
+        "limitations": [
+          "The image does not provide specific details about the size of the objects that can be magnified.",
+          "The image does not show the process of how the lens works."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -34560,9 +34606,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
+      "run_id": "39909545638",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
