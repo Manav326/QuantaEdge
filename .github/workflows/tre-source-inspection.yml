@@ -55,6 +55,16 @@ jobs:
             --output-dir "$RUNNER_TEMP/tre-question-inventory" \
             --repo-root "$GITHUB_WORKSPACE"
 
+      - name: Upload temporary inventory for question and answer review
+        uses: actions/upload-artifact@v4
+        with:
+          name: tre-source-review-inventory
+          path: |
+            ${{ runner.temp }}/tre-source-inspection/
+            ${{ runner.temp }}/tre-question-inventory/
+          if-no-files-found: error
+          retention-days: 3
+
       - name: Commit original PDFs under data/TRE-Papres
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
         env:
@@ -65,15 +75,19 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git commit -m "Store exact TRE source PDFs with checksums"
-            git push origin "HEAD:${BRANCH_NAME}"
+            # Other commits may land while the PDF job is running. Rebase and retry instead
+            # of discarding the downloaded source files on a non-fast-forward push.
+            for attempt in 1 2 3; do
+              git fetch origin "${BRANCH_NAME}"
+              if git rebase "origin/${BRANCH_NAME}"; then
+                if git push origin "HEAD:${BRANCH_NAME}"; then
+                  exit 0
+                fi
+              else
+                git rebase --abort || true
+              fi
+              sleep 2
+            done
+            echo "Could not push extracted TRE source PDFs after three fetch/rebase attempts." >&2
+            exit 1
           fi
-
-      - name: Upload temporary inventory for question and answer review
-        uses: actions/upload-artifact@v4
-        with:
-          name: tre-source-review-inventory
-          path: |
-            ${{ runner.temp }}/tre-source-inspection/
-            ${{ runner.temp }}/tre-question-inventory/
-          if-no-files-found: error
-          retention-days: 3
