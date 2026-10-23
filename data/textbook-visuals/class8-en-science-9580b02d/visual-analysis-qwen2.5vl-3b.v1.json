@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1173,
+    "assets_selected": 1175,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
-      "ba83653c420b9101e5290dee",
       "35f32b476dc5977bc161e8e8",
-      "9dc83721dcdd3c3fceaa5a44",
-      "414a0224c90f14c01c7da9e7"
+      "414a0224c90f14c01c7da9e7",
+      "0037fd56b1a6a076dd9cad41",
+      "031ae494589edcaa391903b5"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1170,
-    "assets_remaining": 1121,
+    "assets_analyzed": 1171,
+    "assets_remaining": 1120,
     "assets_completion_percent": 51.1,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 1168,
+    "assets_skipped_from_checkpoint": 1170,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39920783405",
-      "checkpointed_at": "2026-10-23T08:20:10Z"
+      "checkpointed_at": "2026-10-23T08:28:35Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39920783405",
-      "checkpointed_at": "2026-10-23T08:21:30Z"
+      "checkpointed_at": "2026-10-23T08:29:08Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -25815,51 +25815,19 @@
     {
       "asset_id": "414a0224c90f14c01c7da9e7",
       "asset_sha256": "1761250e3638b8d78afcfeb39f22e48c7a9779867144f2a78a883846e69523e6",
+      "page_text_context_sha256": "032c6eed1c82529ac5069b065ea38e9e1b34e749c2628fa7298def792e22ffec",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 40,
       "asset_path": "page-0040.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "032c6eed1c82529ac5069b065ea38e9e1b34e749c2628fa7298def792e22ffec",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "Page from a textbook discussing the impact of microorganisms on Earth's environment and their role in biogas production.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "Now, think what would have happened if microorganisms did not exist on Earth?",
-          "A step further",
-          "Microbes as a source of biogas",
-          "Many microorganisms, like bacteria and fungi, live in an oxygen-free environment. Some of these bacteria have the ability to decompose plant and animal waste present in the environment or household wastewater. During the process, they release a mixture of gases called biogas primarily composed of ca",
-          "Ananda Mohan Chakrabarty (1938-2020) was a scientist who studied bacteria. In 1971, he developed a special bacterium that could break down oil spills, helping to clean the environment. His discovery received a patent in 1980. Patent is a copyright given to a person so that no one else can copy, use ",
-          "How does the diversity of microorganisms help in our kitchen?",
-          "2.4.2 Microorganisms and food",
-          "Let us try to understand by performing activities in the kitchen.",
-          "Activity 2.8: Let us perform",
-          "Take two bowls A and B.",
-          "In each, take 200 g of flour (atta or maida) and add a pinch of sugar.",
-          "Now, in bowl A, add a small amount of yeast powder and mix it well with the flour.",
-          "In bowl B, do not add any yeast, so that we can compare the results of the two bowls.",
-          "Knead the flour of the two bowls with warm water to make soft dough (Fig. 2.11)."
-        ],
-        "concepts": [
-          "microorganisms",
-          "biogas",
-          "environmental problems",
-          "patent",
-          "microorganisms in the kitchen"
-        ],
-        "context_relation": "educational",
-        "limitations": [
-          "The text does not provide specific details about the activities or the results of the experiment."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39920783405",
-      "checkpointed_at": "2026-10-23T08:27:39Z"
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
     },
     {
       "asset_id": "712649a3e1f8116f4b3f65c9",
@@ -26040,7 +26008,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39909545638",
+      "run_id": "39920783405",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -28734,19 +28702,69 @@
     {
       "asset_id": "031ae494589edcaa391903b5",
       "asset_sha256": "fd00d0e6c56903351d34cc3be190a9d2c308954ae22174d7942785897d08a314",
-      "page_text_context_sha256": "354f1003caef53c02b82f67f8b6d622351c238c5296231d74287494bf8372128",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 50,
       "asset_path": "page-0050.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "354f1003caef53c02b82f67f8b6d622351c238c5296231d74287494bf8372128",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39909545638",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Activity 3.2: Let us list",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Eat a balanced diet",
+          "Stay physically active",
+          "Say 'No' to smoking or alcohol",
+          "Manage stress",
+          "Get enough sleep",
+          "Fig. 3.2: How to be healthy",
+          "Activity 3.2: Let us list",
+          "z List some good habits that your parents, teachers, or elders",
+          "often encourage you to follow. How many of these are already",
+          "a part of your daily routine? Which ones would you like to",
+          "start following? Add to the list below:",
+          "o Keep yourself clean by maintaining personal hygiene.",
+          "o Eat a healthy and balanced diet.",
+          "o Exercise regularly.",
+          "o Make time to relax or meditate every day.",
+          "Now, think about habits that are not good for your health.",
+          "Add more to the list below:",
+          "o Spending too much time on mobile phones or other digital",
+          "screens.",
+          "o Eating fast food and other junk food every day.",
+          "o Sleeping very late or not getting enough sleep.",
+          "o Skipping meals, especially breakfast.",
+          "Taking care of our body and mind is important. Healthy habits",
+          "support a healthy body as well as a healthy mind.",
+          "Discuss your findings with your friends and teacher. From",
+          "the activity you participated in and the discussions, you may",
+          "have realised that our health depends on many factors. These",
+          "factors include our lifestyle (how we live) and our environment",
+          "(our surroundings).",
+          "3.2.1 Maintain a healthy lifestyle"
+        ],
+        "concepts": [
+          "Healthy habits",
+          "Physical activity",
+          "Sleep",
+          "Balanced diet",
+          "Stress management",
+          "Addictive substances",
+          "Healthy lifestyle"
+        ],
+        "context_relation": "Activity 3.2: Let us list",
+        "limitations": [
+          "The image does not provide specific details about the activities or exercises."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39920783405",
+      "checkpointed_at": "2026-10-23T08:38:56Z"
     },
     {
       "asset_id": "66ec88b09ef3d0fb79052a97",
