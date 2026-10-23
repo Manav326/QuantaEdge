@@ -1166,6 +1166,7 @@ public class QaTestPackService {
       join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
         and (s.program_id=ps.program_id or s.program_id is null)
       join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true
+        and ch.content_status='PUBLISHED'
       where p.id=? and p.status='ACTIVE' and s.code='maths'
       order by ch.id limit 1
       """, Long.class, classCode, programId);
