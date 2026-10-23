@@ -23,7 +23,9 @@ type AssessmentCard = {
 };
 type AttemptQuestion = {
   attemptQuestionId:number;answerId:number;question_type:string;prompt:string;explanation?:string;
-  options:Array<{key:string;label:string}>;answer:any;answerStatus:string;maxMarks:number|string;
+  prompt_content_kind?:'PROSE'|'CODE'|'MATHEMATICAL'|'MIXED';code_line_indices?:number[];math_line_indices?:number[];
+  options:Array<{key:string;label:string;content_kind?:'PROSE'|'CODE'|'MATHEMATICAL'|'MIXED';code_line_indices?:number[];math_line_indices?:number[]}>;
+  answer:any;answerStatus:string;maxMarks:number|string;
   section_code?:string;section_result_policy?:'SCORED'|'QUALIFYING_ONLY'|'PRACTICE_ONLY';
   isCorrect?:boolean|null;awardedMarks?:number|string|null;penaltyMarks?:number|string|null;
   teacherFeedback?:string|null;translated?:boolean;correctAnswer?:{kind?:string;value?:any}|null;
@@ -132,8 +134,27 @@ function QuestionContent({question,response,review=false,disabled=false,onAnswer
   const hasOptions=Array.isArray(question.options)&&question.options.length>0;
   const answerTone=review?(question.isCorrect===true?styles.answerFieldCorrect:question.isCorrect===false?styles.answerFieldIncorrect:styles.answerFieldNeutral):'';
   const correctText=review?correctAnswerText(question):'';
+  function renderSourceText(value:string,kind?:'PROSE'|'CODE'|'MATHEMATICAL'|'MIXED',codeLineIndices:number[]=[]){
+    const lines=String(value??'').split(/\r?\n/);
+    const codeLines=new Set(codeLineIndices);
+    if(kind==='CODE'&&codeLines.size===0)return <pre className={styles.questionCodeBlock}><code>{value}</code></pre>;
+    if(codeLines.size===0)return <div className={styles.questionPromptText}>{value}</div>;
+    const chunks:Array<{code:boolean;lines:string[]}[]>=[];
+    const grouped:Array<{code:boolean;lines:string[]}>=[];
+    lines.forEach((line,lineIndex)=>{
+      const code=codeLines.has(lineIndex);
+      const last=grouped[grouped.length-1];
+      if(last&&last.code===code)last.lines.push(line);
+      else grouped.push({code,lines:[line]});
+    });
+    return <div className={styles.questionPromptBody}>{grouped.map((chunk,chunkIndex)=>chunk.code
+      ?<pre key={chunkIndex} className={styles.questionCodeBlock}><code>{chunk.lines.join('\n')}</code></pre>
+      :<div key={chunkIndex} className={styles.questionPromptText}>{chunk.lines.join('\n')}</div>)}</div>;
+  }
   return <>
-    <h2>{question.prompt}</h2>
+    {question.prompt_content_kind==='CODE'||(question.code_line_indices?.length||0)>0
+      ?renderSourceText(question.prompt,question.prompt_content_kind,question.code_line_indices||[])
+      :<h2 className={styles.questionPromptText}>{question.prompt}</h2>}
     {hasOptions&&<div className={styles.options}>{question.options.map(option=>{
       const key=String(option.key);
       const chosen=selectedKeys.has(key);
@@ -148,7 +169,9 @@ function QuestionContent({question,response,review=false,disabled=false,onAnswer
       return <label key={option.key} className={[styles.option,!review&&chosen?styles.optionSelected:'',tone].filter(Boolean).join(' ')}>
         <input type="radio" name={'question-'+question.attemptQuestionId} value={key} checked={chosen} disabled={disabled||review} onChange={()=>onAnswer?.(option.key)}/>
         <span className={styles.optionKey}>{option.key}</span>
-        <span className={styles.optionText}>{option.label}{hint&&<small className={wrongChosen?styles.optionHintIncorrect:correct||question.isCorrect===true?styles.optionHintCorrect:styles.optionHintNeutral}>{hint}</small>}</span>
+        <div className={styles.optionText}>{(option.content_kind==='CODE'||(option.code_line_indices?.length||0)>0)
+          ?<pre className={styles.optionCodeBlock}><code>{option.label}</code></pre>
+          :option.label}{hint&&<small className={wrongChosen?styles.optionHintIncorrect:correct||question.isCorrect===true?styles.optionHintCorrect:styles.optionHintNeutral}>{hint}</small>}</div>
         {review&&(chosen||correct)&&<span className={styles.optionOutcome}
           aria-label={wrongChosen?translateUi(locale, 'legacy.web.incorrect.answer.e6b805c5'):correct?translateUi(locale, 'legacy.web.correct.answer.2a6f5308'):question.isCorrect===true?translateUi(locale, 'legacy.web.correct.d01db0a2'):translateUi(locale, 'legacy.web.recorded.answer.02081560')}>
           {wrongChosen?'!':correct||question.isCorrect===true?'✓':'i'}
