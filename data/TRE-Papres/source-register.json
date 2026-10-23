@@ -91,12 +91,12 @@
         "scored_question_count": 120
       },
       "TRE 3.0": {
-        "total_question_count": 148,
-        "qualifying_language_question_count": 28,
+        "total_question_count": 150,
+        "qualifying_language_question_count": 30,
         "general_studies_question_count": 40,
         "computer_science_question_count": 80,
         "scored_question_count": 120,
-        "source_note": "This provided booklet contains E-2, E-3, E-4, E-5, E-7, E-8 and H-9 through H-30 in the qualifying-language section. E-1 and E-6 are not present and must not be synthesized."
+        "source_note": "The extracted booklet inventory preserves E-1 through E-8 and H-9 through H-30 in the 30-question qualifying-language section."
       }
     }
   }
