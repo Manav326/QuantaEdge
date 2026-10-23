@@ -475,14 +475,18 @@ export default function ContentStudio(){
  const hasPermission=(permission:string)=>isAdmin||permissions.includes(permission);
  const activeProgram=programs.find((p:any)=>String(p.id||p.course_id)===String(programFilter));
  const isSourcedCourse=activeProgram?.course_relationship==='SOURCED';
+ const releaseState=String(activeProgram?.release_state||'DRAFT').toUpperCase();
+ // Released and in-review course graphs are immutable. Source edits must happen in a forked draft,
+ // never by writing into the graph that current offers, learners or invoices already reference.
+ const isEditableDraft=isSourcedCourse&&['DRAFT','REJECTED'].includes(releaseState);
  const canView=hasPermission('CONTENT_VIEW');
- const canCreate=hasPermission('CONTENT_CREATE')&&isSourcedCourse;
- const canEdit=hasPermission('CONTENT_EDIT')&&isSourcedCourse;
- const canSubmit=hasPermission('CONTENT_SUBMIT')&&isSourcedCourse;
- const canReview=hasPermission('CONTENT_REVIEW')&&isSourcedCourse;
- const canPublishPermission=hasPermission('CONTENT_PUBLISH')&&isSourcedCourse;
+ const canCreate=hasPermission('CONTENT_CREATE')&&isEditableDraft;
+ const canEdit=hasPermission('CONTENT_EDIT')&&isEditableDraft;
+ const canSubmit=hasPermission('CONTENT_SUBMIT')&&isEditableDraft;
+ const canReview=hasPermission('CONTENT_REVIEW')&&isEditableDraft;
+ const canPublishPermission=hasPermission('CONTENT_PUBLISH')&&isEditableDraft;
  const canForkVersion=Boolean(isSourcedCourse
-  && ['SHAREABLE','WITHDRAWN','LEGACY_MIGRATED'].includes(String(activeProgram?.release_state||'').toUpperCase())
+  && ['SHAREABLE','WITHDRAWN','LEGACY_MIGRATED'].includes(releaseState)
   && hasPermission('CONTENT_CREATE')&&hasPermission('CONTENT_EDIT'));
  async function createDraftVersion(){
   const sourceCourseId=Number(programFilter);
@@ -869,8 +873,10 @@ export default function ContentStudio(){
     {activeProgram?<div role="status" style={{margin:'0 0 14px',padding:'12px 14px',border:'1px solid var(--admin-border,#d8dce5)',borderRadius:10,background:'var(--admin-surface,#fff)',color:'var(--admin-text,#1b2430)'}}>
       <strong>{activeProgram.course_relationship==='SOURCED'?'SOURCED COURSE':'SHARED COURSE · READ ONLY'}</strong>
       <div style={{marginTop:4,fontSize:13,color:'var(--admin-muted,#64748b)'}}>{activeProgram.course_relationship==='SOURCED'
-        ? 'This institution is the source owner. Editing, submission and publication actions remain governed by your staff permissions and the normal content review workflow.'
-        : 'This course belongs to another source institution. You may inspect its content, but cannot create, edit, review or publish it from this institution. Content updates must be made by its source institution and re-approved through HRMS before Marketplace release.'}</div>
+        ? (isEditableDraft
+          ? 'This institution owns the source content. You may edit this draft according to your staff permissions and the normal content-review workflow.'
+          : 'This version is locked because it has entered release review or publication. Its content, assessments and resource links cannot be edited in place. Create a new draft version; the existing approved version remains unchanged until HRMS approves the update.')
+        : 'This course belongs to another source institution. You may inspect its content, but cannot create, edit, review or publish it from this institution. Content updates must be made by its source institution as a new version and re-approved through the full HRMS Marketplace stepper before distribution.'}</div>
       <small style={{display:'block',marginTop:4}}>Content version v{activeProgram.content_version_no||1} · Release v{activeProgram.release_version||1} · {activeProgram.release_state||'UNKNOWN'} · Source institution ID {activeProgram.source_institution_id}</small>
       {canForkVersion?<div style={{display:'flex',gap:10,flexWrap:'wrap',marginTop:10,alignItems:'center'}}>
        <button type="button" className="qe-secondary-button" disabled={versionBusy||saving} onClick={()=>void createDraftVersion()}>{versionBusy?'Creating draft version…':'Create draft version from published course'}</button>
