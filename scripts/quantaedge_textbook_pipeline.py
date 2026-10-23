@@ -436,7 +436,8 @@ def run_layers(args):
             before_results_by_id={row.get("asset_id"):row for row in before_results if isinstance(row,dict) and row.get("asset_id")}
             subprocess.run(cmd,cwd=repo,check=True)
             subprocess.run([sys.executable,"scripts/quantaedge_textbook_pipeline.py","ledger","--inventory",str(invrepo),"--raw-analysis",str(raw),"--manifest",s["extraction_manifest_repo_path"],"--text-jsonl",str(s["text_jsonl_repo_path"]),"--effective-output",str(eff),"--ledger-output",str(ledger),"--corrections",str(cor),"--repo-root",str(repo)],cwd=repo,check=True)
-            data=read_json(raw);summary=data.get("summary",{});processed=int(summary.get("assets_processed_this_run",0));total_batches+=1
+            data=read_json(raw);summary=data.get("summary",{});processed=int(summary.get("assets_processed_this_run",0))
+            if processed > 0: total_batches += 1
             after_results=data.get("results",[]) if isinstance(data,dict) else []
             processed_ids=summary.get("assets_processed_ids",[])
             overwrote_successes=bool(processed_ids) and all(
