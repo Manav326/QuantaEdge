@@ -83,7 +83,7 @@ test('[QA-004] preview and uninstall only this run, then prove owned rows are cl
       expect(before.rows[0].students).toBeGreaterThan(0);
 
       const previewWaiter = waitForApi(page, 'GET', '/api/v1/hrms/platform/qa/runs/' + runId + '/uninstall-plan');
-      await page.getByRole('button', { name: /uninstall plan/i }).click();
+      await page.getByRole('button', { name: /preview uninstall/i }).click();
       const previewResponse = await previewWaiter;
       expect(previewResponse.status()).toBe(200);
       const preview = await previewResponse.json();
