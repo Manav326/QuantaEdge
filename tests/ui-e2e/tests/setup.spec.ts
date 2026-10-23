@@ -229,12 +229,12 @@ async function installAndVerifyQaPack(browser: Browser, hrmsStatePath: string): 
     expect(tenants.rows[0].count, 'The QA pack must create exactly three run-owned tenant institutions.').toBe(3);
     const manifest = await runPool.query(
       `select count(*)::int as manifest_count,
-              count(*) filter (where state='CREATED')::int as created_count
+              count(*) filter (where state='OWNED')::int as owned_count
        from qa_test_run_resource where run_id=$1`,
       [runId]
     );
     expect(manifest.rows[0].manifest_count).toBeGreaterThan(0);
-    expect(manifest.rows[0].manifest_count).toBe(manifest.rows[0].created_count);
+    expect(manifest.rows[0].manifest_count).toBe(manifest.rows[0].owned_count);
   } finally {
     await runPool.end();
   }
