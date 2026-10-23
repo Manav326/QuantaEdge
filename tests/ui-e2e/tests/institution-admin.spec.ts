@@ -27,7 +27,7 @@ async function apiJson(page: import('@playwright/test').Page, path: string, inst
   }, { path, institutionCode });
 }
 
-test('[TEN-004][TEN-007] institution admin first-login password rotation, session revocation, and tenant-bound reports', async ({ browser }) => {
+test('[TEN-004] institution admin first-login password rotation, session revocation, and tenant-bound reports', async ({ browser }) => {
   test.setTimeout(120_000);
   const fixture = await readPrivateJson<InstitutionFixture>('qa-fixture.json');
   const adminA = fixture.credentials.institutionAdminA;
@@ -150,11 +150,16 @@ test('[TEN-004][TEN-007] institution admin first-login password rotation, sessio
       expect(identity.rows[0].active).toBe(true);
       expect(identity.rows[0].must_change_password).toBe(false);
       const institutionId = Number(identity.rows[0].institution_id);
-      expect(Number(loginBody.institutionId)).toBe(institutionId);
+      // The login response intentionally returns tenant code/name, not database IDs.
+      // Read the authenticated principal from /auth/me before comparing its scope with DB.
+      const meForScope = await apiJson(page, '/api/v1/institution/auth/me', adminA.institutionCode);
+      expect(meForScope.status).toBe(200);
+      expect(Number(meForScope.body.institutionId)).toBe(institutionId);
+      expect(meForScope.body.institutionCode).toBe(adminA.institutionCode);
 
       const [expectedRoster, expectedCourses] = await Promise.all([
         pool.query(`
-          select st.public_user_id as learner_reference
+          select st.public_user_id as learner_reference,st.display_name
           from institution_membership m
           join student st on st.id=m.student_id and st.active=true and st.environment='PRODUCTION'
           where m.institution_id=$1
@@ -183,7 +188,7 @@ test('[TEN-004][TEN-007] institution admin first-login password rotation, sessio
       expect(otherTenant.rowCount).toBe(1);
       const otherTenantId = Number(otherTenant.rows[0].id);
       const otherRoster = await pool.query(`
-        select st.public_user_id as learner_reference
+        select st.public_user_id as learner_reference,st.display_name
         from institution_membership m
         join student st on st.id=m.student_id and st.active=true and st.environment='PRODUCTION'
         where m.institution_id=$1
@@ -201,10 +206,17 @@ test('[TEN-004][TEN-007] institution admin first-login password rotation, sessio
 
       await page.getByRole('button', { name: 'Learners', exact: true }).click();
       const learnersSection = page.locator('.institution-dashboard');
-      await expect(learnersSection).toContainText(String(adminA.institutionCode));
-      await expect(learnersSection).not.toContainText(String(adminB.institutionCode));
+      await expect(learnersSection).toContainText('Learner records');
+      for (const learner of expectedRoster.rows) {
+        await expect(learnersSection.getByText(String(learner.learner_reference), { exact: true })).toBeVisible();
+        if (learner.display_name) await expect(learnersSection).toContainText(String(learner.display_name));
+      }
+      for (const learner of otherRoster.rows) {
+        await expect(learnersSection.getByText(String(learner.learner_reference), { exact: true })).toHaveCount(0);
+      }
       await page.getByRole('button', { name: 'Authorised courses', exact: true }).click();
-      await expect(page.locator('.institution-dashboard')).toContainText(String(expectedCourses.rows[0]?.display_name ?? ''));
+      expect(expectedCourses.rowCount, 'The QA institution fixture must include at least one authorized course.').toBeGreaterThan(0);
+      await expect(page.locator('.institution-dashboard')).toContainText(String(expectedCourses.rows[0].display_name));
     } finally {
       await pool.end();
     }
@@ -219,6 +231,15 @@ test('[TEN-004][TEN-007] institution admin first-login password rotation, sessio
     expect([401, 403]).toContain(signedOut.status);
     expect(authResponses.some(x => x.path === '/api/v1/institution/auth/change-password' && x.status === 200)).toBe(true);
   } finally {
+    // Always revoke a partially established synthetic session, even if an assertion fails.
+    try {
+      await page.evaluate(async () => {
+        await fetch('/api/v1/institution/auth/logout', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'X-QE-Workspace': 'INSTITUTION', Accept: 'application/json' }
+        }).catch(() => undefined);
+      });
+    } catch { /* browser may already be closed or unauthenticated */ }
     page.off('response', onResponse);
     await context.close();
   }

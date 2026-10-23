@@ -308,6 +308,15 @@ public class QaTestPackService {
     }
 
     try {
+      // Real portal reads append audit rows for disposable institutions. These rows
+      // intentionally restrict deletion of tenant/membership/student records and are not
+      // manifest entries themselves. Delete only audit rows owned by this run's tenants.
+      // Never touch history for a pre-existing institution.
+      jdbc.update("""
+        delete from institution_membership_event event
+        using institution_tenant tenant
+        where event.institution_id=tenant.id and tenant.qa_test_run_id=?
+        """, runId);
       List<Map<String,Object>> resources = jdbc.queryForList("""
         select id,resource_key,resource_kind,resource_id,cleanup_order,state
         from qa_test_run_resource where run_id=? and state<>'CLEANED'
