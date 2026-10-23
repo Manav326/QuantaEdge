@@ -28,10 +28,10 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1191,
+    "raw_analysis_result_rows": 1193,
     "successful_visual_analyses": 1183,
-    "missing_visual_analyses": 1100,
-    "failed_visual_analyses": 8,
+    "missing_visual_analyses": 1098,
+    "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
     "unresolved_count": 1108,
@@ -44747,8 +44747,8 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing different types of forces, specifically contact forces and muscular force.",
-        "visual_type": "uncertain",
+        "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -44762,12 +44762,12 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force"
+          "muscular force",
+          "living beings"
         ],
-        "context_relation": "The page discusses different types of forces, specifically contact forces and muscular force, and provides examples of how these forces are used by living beings.",
+        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The page does not provide specific examples of contact forces or muscular force.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The image does not provide specific details about the types of forces or the physical properties of the objects."
         ]
       },
       "chapter_id": null,
@@ -44949,7 +44949,7 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -44967,7 +44967,7 @@
       "asset_path": "page-0087.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,

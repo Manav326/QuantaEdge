@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "71592908faad47bd216f02279e2d53308808b1de9329514e228c25bae9518894",
+  "raw_analysis_sha256": "a4d00a57c72c2fb8cfeac51a8bb737580e816e1216c28de1561691c8948af1cd",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39937902376",
-      "checkpointed_at": "2026-10-23T11:19:51Z",
+      "checkpointed_at": "2026-10-23T11:31:09Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39937902376",
-      "checkpointed_at": "2026-10-23T11:20:32Z",
+      "checkpointed_at": "2026-10-23T11:31:49Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57802,8 +57802,8 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing different types of forces, specifically contact forces and muscular force.",
-        "visual_type": "uncertain",
+        "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -57817,22 +57817,22 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force"
+          "muscular force",
+          "living beings"
         ],
-        "context_relation": "The page discusses different types of forces, specifically contact forces and muscular force, and provides examples of how these forces are used by living beings.",
+        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The page does not provide specific examples of contact forces or muscular force.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The image does not provide specific details about the types of forces or the physical properties of the objects."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39937902376",
-      "checkpointed_at": "2026-10-23T11:29:46Z",
+      "checkpointed_at": "2026-10-23T11:32:38Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing different types of forces, specifically contact forces and muscular force.",
-        "visual_type": "uncertain",
+        "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -57846,12 +57846,12 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force"
+          "muscular force",
+          "living beings"
         ],
-        "context_relation": "The page discusses different types of forces, specifically contact forces and muscular force, and provides examples of how these forces are used by living beings.",
+        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The page does not provide specific examples of contact forces or muscular force.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The image does not provide specific details about the types of forces or the physical properties of the objects."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -58113,6 +58113,46 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d2bb3e6a771b57392e82c877",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "page_text_context_sha256": "4ced2a91f1ad4add1f52a0f90bfa067845579b06c0365565cf231ef29c8dfe09",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39937902376",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ab0af6757186130b77128ff6",
+      "asset_sha256": "085ff29477e307fa6d7f484db6fc602de4f9e4acb75c92c27442c9557edb76f0",
+      "page_text_context_sha256": "4ced2a91f1ad4add1f52a0f90bfa067845579b06c0365565cf231ef29c8dfe09",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 87,
+      "asset_path": "page-0087.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39937902376",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],
