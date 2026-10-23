@@ -19,16 +19,19 @@ async function readJson(response: Response): Promise<any> {
 }
 
 function redirectAfterLogin(body: any): void {
+  // Only this same-origin, known workflow path is accepted as a post-login return target.
+  const requestedReturn = new URLSearchParams(window.location.search).get('returnTo');
+  const safeReturn = requestedReturn === '/account-deletion' ? requestedReturn : null;
   const parentSessionConfirmed = body.workspace === 'PARENT' && body.role === 'PARENT' &&
     Number(body.userId) > 0 && !(Number(body.studentId) > 0);
   const studentSessionConfirmed = body.workspace === 'STUDENT' && body.role === 'STUDENT' &&
     Number(body.studentId) > 0;
   if (parentSessionConfirmed) {
-    window.location.replace('/parent');
+    window.location.replace(safeReturn || '/parent');
     return;
   }
   if (studentSessionConfirmed) {
-    window.location.replace('/student');
+    window.location.replace(safeReturn || '/student');
     return;
   }
   // This unified login page can serve both roles, but must never route a mismatched
