@@ -14,7 +14,17 @@ async function api(
   institutionCode?: string
 ): Promise<ApiResult> {
   const headers: Record<string, string> = { Accept: 'application/json' };
-  if (workspace) headers['X-QE-Workspace'] = workspace;
+  // APIRequestContext does not run the application's apiFetch wrapper, so it must send
+  // the workspace selector itself. Infer only from the known UI origin/route when a test
+  // deliberately omits the argument to exercise another header (for example tenant omission).
+  const currentUrl = new URL(page.url());
+  const inferredWorkspace =
+    currentUrl.port === '3002' ? 'HRMS' :
+    currentUrl.port === '3001' ? 'EDUCATION_ADMIN' :
+    currentUrl.pathname.startsWith('/parent') ? 'PARENT' :
+    currentUrl.pathname.startsWith('/student') ? 'STUDENT' : undefined;
+  const selectedWorkspace = workspace || inferredWorkspace;
+  if (selectedWorkspace) headers['X-QE-Workspace'] = selectedWorkspace;
   // Use Playwright's context-bound request client rather than window.fetch. This bypasses
   // client-side session recovery/header injection so each security probe sends exactly the
   // caller-selected workspace and institution headers while still sharing this context's cookies.
@@ -336,7 +346,7 @@ test('[CAT-001][CAT-002][TEN-002][TEN-003] learner course lists and subjects fol
     // Missing/invalid/unavailable tenant selectors must fail closed; no platform-wide
     // default catalogue is allowed to leak into a routed learner session.
     const missingTenant = await api(childA.page, '/api/v1/students/me/programs', 'STUDENT');
-    expect(missingTenant.status, 'A learner course catalogue request without a selected institution must be rejected.').toBe(400);
+    expect(missingTenant.status, 'A learner course catalogue request without a selected institution must be rejected before returning catalogue rows.').toBe(400);
     expect(String(missingTenant.body.error || missingTenant.body.errorCode || missingTenant.body.code || '')).toContain('INSTITUTION_CONTEXT_REQUIRED');
 
     const malformedTenant = await api(
