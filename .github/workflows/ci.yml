@@ -531,6 +531,23 @@ jobs:
       - name: Install Chromium browser
         working-directory: tests/ui-e2e
         run: npx playwright install chromium
+      - name: Pull disposable PostgreSQL and Redis images with bounded retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          compose=(docker compose -f docker-compose.yml -f docker-compose.e2e.yml)
+          for attempt in 1 2 3; do
+            if "${compose[@]}" pull postgres redis; then
+              break
+            fi
+            if [[ "$attempt" -eq 3 ]]; then
+              echo "::error::Unable to pull disposable PostgreSQL/Redis images after 3 attempts."
+              exit 1
+            fi
+            echo "Registry pull failed on attempt $attempt; retrying after a short backoff."
+            sleep $((attempt * 10))
+          done
+
       - name: Start QuantaEdge on a disposable database
         run: docker compose -f docker-compose.yml -f docker-compose.e2e.yml up --build -d postgres redis api web admin people
       - name: Wait for API and web applications
