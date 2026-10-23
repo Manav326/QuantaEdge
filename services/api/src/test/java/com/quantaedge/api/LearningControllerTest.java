@@ -53,14 +53,14 @@ class LearningControllerTest {
 
   @Test
   void publicQuestionDeliveryDoesNotSelectCorrectAnswerFlags() {
-    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), any(Object[].class)))
+    when(jdbc.queryForObject(contains("from lesson l"), eq(Long.class), any(Object[].class)))
         .thenReturn(1L);
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of());
 
     controller.questions(42L, 91L, "hi", student, TEST_TENANT);
 
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
-    verify(jdbc).queryForList(sql.capture(), eq(1L), eq(7L), eq("hi"), eq(42L));
+    verify(jdbc).queryForList(sql.capture(), eq(1L), eq(7L), eq(91L), eq(7L), eq(91L), eq("hi"), eq(42L));
     assertTrue(sql.getValue().contains("as attempted"));
     assertTrue(sql.getValue().contains("'label',qo.label"));
     assertFalse(sql.getValue().contains("'correct'"));
@@ -130,7 +130,7 @@ class LearningControllerTest {
   @Test
   void lessonBlocksStripAnswerKeysRecursively() {
     when(jdbc.queryForObject(contains("select exists("), eq(Boolean.class), any(Object[].class))).thenReturn(true);
-    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), any(Object[].class)))
+    when(jdbc.queryForObject(contains("from lesson l"), eq(Long.class), any(Object[].class)))
         .thenReturn(1L);
     when(jdbc.queryForList(contains("select l.id,l.code,coalesce(lt.title,l.title) as title"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
@@ -154,7 +154,7 @@ class LearningControllerTest {
 
   @Test
   void revokedInstitutionCourseEntitlementBlocksPreviouslyEnrolledLesson() {
-    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), any(Object[].class)))
+    when(jdbc.queryForObject(contains("from lesson l"), eq(Long.class), any(Object[].class)))
         .thenReturn(1L);
     when(jdbc.queryForObject(contains("select coalesce(s.program_id,("), eq(Long.class), eq(42L)))
         .thenReturn(91L);
@@ -169,7 +169,7 @@ class LearningControllerTest {
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
             "explanation", "Subtract four from both sides.", "answer_payload", "{\"kind\":\"OPTION\",\"value\":\"B\"}")));
-    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(1L), eq(9L)))
+    when(jdbc.queryForObject(contains("from lesson l"), eq(Long.class), eq(91L), eq(7L), eq(1L), eq(1L), eq(9L)))
         .thenReturn(1L);
     when(answerService.evaluate(anyString(), eq("B"))).thenReturn(
         new QuestionAnswerService.Evaluation(true, true, "OPTION"));
@@ -190,7 +190,7 @@ class LearningControllerTest {
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
             "explanation", "Explanation", "answer_payload", "{\"kind\":\"OPTION\",\"value\":\"B\"}")));
-    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(1L), eq(9L)))
+    when(jdbc.queryForObject(contains("from lesson l"), eq(Long.class), eq(91L), eq(7L), eq(1L), eq(1L), eq(9L)))
         .thenReturn(0L);
 
     assertThrows(SecurityException.class,
@@ -205,7 +205,7 @@ class LearningControllerTest {
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
             "explanation", "Explanation", "answer_payload", "{}")));
-    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(1L), eq(9L)))
+    when(jdbc.queryForObject(contains("from lesson l"), eq(Long.class), eq(91L), eq(7L), eq(1L), eq(1L), eq(9L)))
         .thenReturn(1L);
     when(answerService.evaluate("{}", "")).thenReturn(
         new QuestionAnswerService.Evaluation(false, null, ""));
@@ -227,7 +227,7 @@ class LearningControllerTest {
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
             "explanation", "Explanation", "answer_payload", "{}")));
-    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(1L), eq(9L)))
+    when(jdbc.queryForObject(contains("from lesson l"), eq(Long.class), eq(91L), eq(7L), eq(1L), eq(1L), eq(9L)))
         .thenReturn(1L);
     when(answerService.evaluate("{}", "A")).thenReturn(
         new QuestionAnswerService.Evaluation(true, true, "OPTION"));
@@ -250,7 +250,7 @@ class LearningControllerTest {
             "id", 42L, "lesson_id", 9L, "question_type", "ORDER",
             "explanation", "Put the steps in order.",
             "answer_payload", "{\"kind\":\"ORDER\",\"value\":[\"A\",\"B\"]}")));
-    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(1L), eq(9L)))
+    when(jdbc.queryForObject(contains("from lesson l"), eq(Long.class), eq(91L), eq(7L), eq(1L), eq(1L), eq(9L)))
         .thenReturn(1L);
     when(answerService.serializeForPersistence(eq(submitted))).thenReturn("[\"A\",\"B\"]");
     when(answerService.evaluate(anyString(), eq(submitted))).thenReturn(
