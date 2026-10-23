@@ -893,11 +893,11 @@ public class QaTestPackService {
         tenantC, release6, "HRMS", hrmsPlatformAdminId,
         List.of("institution-QAT" + slug + "C", "course-release-class-6"));
 
-    insertInstitutionCourseEntitlement(runId, "course-entitlement-a-class-7", tenantA, class7ProgramId,
+    insertInstitutionCourseEntitlement(runId, "course-entitlement-a-class-7", tenantA, qaClass7ProgramId,
         hrmsPlatformAdminId, "institution-QAT" + slug + "A", "course-release-class-7");
-    insertInstitutionCourseEntitlement(runId, "course-entitlement-b-class-7", tenantB, class7ProgramId,
+    insertInstitutionCourseEntitlement(runId, "course-entitlement-b-class-7", tenantB, qaClass7ProgramId,
         hrmsPlatformAdminId, "institution-QAT" + slug + "B", "course-release-class-7");
-    insertInstitutionCourseEntitlement(runId, "course-entitlement-c-class-6", tenantC, class6ProgramId,
+    insertInstitutionCourseEntitlement(runId, "course-entitlement-c-class-6", tenantC, qaClass6ProgramId,
         hrmsPlatformAdminId, "institution-QAT" + slug + "C", "course-release-class-6");
 
     Map<String,Object> result = new LinkedHashMap<>();
