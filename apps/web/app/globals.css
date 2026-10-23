@@ -2317,3 +2317,42 @@ html[data-qe-appearance] .student-certificate-actions a:hover {
 
 /* Keep preferences reachable immediately on narrow screens, including before login. */
 @media(max-width:850px){.qe-auth-content .qe-public-controls{position:fixed;top:10px;right:12px}}
+
+
+/* Public account-deletion request: visible, keyboard-operable and theme-token based. */
+.qe-account-deletion {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid var(--qe-color-border, #d8dce5);
+  border-radius: 14px;
+  background: var(--qe-color-surface, #fff);
+  color: var(--qe-color-text, #172033);
+}
+.qe-account-deletion--compact { padding: 16px; }
+.qe-account-deletion h2 { margin: 0; font-size: 1.15rem; }
+.qe-account-deletion p { margin: 0; line-height: 1.55; }
+.qe-account-deletion__retention,
+.qe-account-deletion__external-note { color: var(--qe-color-text-muted, #5a6475); font-size: .92rem; }
+.qe-account-deletion__form { display: grid; gap: 12px; margin-top: 4px; }
+.qe-account-deletion__confirmation { display: grid; gap: 6px; font-weight: 600; }
+.qe-account-deletion__confirmation input {
+  min-height: 42px; padding: 9px 11px; border: 1px solid var(--qe-color-border, #d8dce5);
+  border-radius: 8px; background: var(--qe-color-surface, #fff); color: inherit;
+}
+.qe-account-deletion__checkbox { display: flex; align-items: flex-start; gap: 9px; line-height: 1.45; }
+.qe-account-deletion__checkbox input { margin-top: 4px; }
+.qe-account-deletion__status, .qe-account-deletion__signed-out {
+  display: grid; gap: 10px; padding: 12px; border-radius: 10px;
+  border: 1px solid var(--qe-color-border, #d8dce5);
+}
+.qe-account-deletion__warning { padding: 10px 12px; border-left: 3px solid #a35b00; }
+.qe-account-deletion__notice { color: var(--qe-color-success, #176b42); }
+.qe-account-deletion__error { color: var(--qe-color-danger, #a32323); }
+.qe-account-deletion__confirm-cancel { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.qe-account-deletion-page { max-width: 860px; margin-inline: auto; }
+@media (max-width: 540px) {
+  .qe-account-deletion { padding: 14px; }
+  .qe-account-deletion__confirm-cancel { align-items: stretch; }
+}
