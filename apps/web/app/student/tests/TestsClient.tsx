@@ -267,6 +267,15 @@ function questionMarkMetadata(question:AttemptQuestion,attempt:Attempt,locale:st
   return {correctText,incorrectText};
 }
 type QuestionSetItem={question:AttemptQuestion;number:number};
+function QuestionMarkPolicy({question,attempt}:{question:AttemptQuestion;attempt:Attempt}){
+  const {locale}=useLocale();
+  const marks=questionMarkMetadata(question,attempt,locale);
+  return <div className={styles.questionMarkPolicy} aria-label={locale==='english'?'Question type and marks':'प्रश्न प्रकार और अंक'}>
+    <span className={styles.questionSetType}>{questionTypeLabel(question.question_type,locale)}</span>
+    <span>{marks.correctText}</span>
+    <span>{marks.incorrectText}</span>
+  </div>;
+}
 function QuestionSetView({items,activeQuestionId,attempt,responses,disabled,review=false,onAnswer}:{
   items:QuestionSetItem[];activeQuestionId?:number;attempt:Attempt;responses:Record<number,any>;
   disabled:boolean;review?:boolean;onAnswer?:(question:AttemptQuestion,value:any)=>void;
@@ -907,6 +916,7 @@ export default function TestsClient(){
                       <b className={outcomeClass}>{outcome} · {Number(question.awardedMarks??0)} / {Number(question.maxMarks??0)} {translateUi(locale, 'legacy.web.marks.57368a8d')}</b>
                     </div>
                     <div className={styles.questionProgress}><i style={{width:((questionIndex+1)/attempt.questions.length*100)+'%'}}/></div>
+                    <QuestionMarkPolicy question={question} attempt={attempt}/>
                     <StimulusContent question={question}/>
                     <QuestionContent question={question} response={question.answer} review disabled/>
                     <AnswerFeedback
@@ -936,6 +946,7 @@ export default function TestsClient(){
         :<div className={styles.examLayout}>
           <aside className={styles.questionRail}><div><b>{translateUi(locale, 'legacy.web.questions.b5a33268')}</b><small>{answeredCount}/{attempt.questions.length} {translateUi(locale, 'legacy.web.answered.f3b8dd02')}</small></div><div className={styles.questionNumbers}>{attempt.questions.map((q,i)=><button type="button" key={q.attemptQuestionId} className={[i===index?styles.currentNumber:'',!isEmpty(responses[q.attemptQuestionId]??q.answer)?styles.answeredNumber:''].filter(Boolean).join(' ')} onClick={()=>setIndex(i)} aria-label={translateUi(locale, 'legacy.web.question.85099273')+(i+1)}>{i+1}</button>)}</div><div className={styles.railLegend}><span><i className={styles.legendCurrent}/>{translateUi(locale, 'legacy.web.current.e19e8a40')}</span><span><i className={styles.legendAnswered}/>{translateUi(locale, 'legacy.web.answered.5531e37e')}</span></div></aside>
           <section className={styles.questionPanel}><div className={styles.questionPanelTop}><span>{showingQuestionSet?(locale==='english'?'Question Set':'प्रश्न समूह'):<>{translateUi(locale, 'legacy.web.question.3b02187f')} {index+1} {translateUi(locale, 'legacy.web.of.205487ae')} {attempt.questions.length}</>}</span><b>{showingQuestionSet?currentQuestionSetItems.length+' questions':current.maxMarks+' '+translateUi(locale, 'legacy.web.mark.s.a8fb7e84')}</b></div><div className={styles.questionProgress}><i style={{width:((index+1)/attempt.questions.length*100)+'%'}}/></div>
+            {!showingQuestionSet&&<QuestionMarkPolicy question={current} attempt={attempt}/>}
             {showingQuestionSet
               ?<QuestionSetView items={currentQuestionSetItems} activeQuestionId={current.attemptQuestionId} attempt={attempt}
                   responses={responses} disabled={submitted} onAnswer={updateResponse}/>
