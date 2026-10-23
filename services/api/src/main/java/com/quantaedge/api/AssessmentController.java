@@ -1867,11 +1867,11 @@ public class AssessmentController {
     if ("e".equals(nativeSourceLanguage)) nativeSourceLanguage="en";
     if ("h".equals(nativeSourceLanguage)) nativeSourceLanguage="hi";
     Object localizedPrompt=nativeSourceOnly
-        ? localizedSourceValue(snapshot.get("prompt_i18n"),nativeSourceLanguage,language,snapshot.get("prompt"))
+        ? localizedSourceValue(snapshot.get("prompt_i18n"),nativeSourceLanguage,snapshot.get("prompt"))
         : localizedValue(snapshot.get("prompt_i18n"),language,snapshot.get("prompt"));
     if(localizedPrompt!=null) result.put("prompt",localizedPrompt);
     Object localizedStimulus=nativeSourceOnly
-        ? localizedSourceValue(snapshot.get("stimulus_i18n"),nativeSourceLanguage,language,snapshot.get("stimulus"))
+        ? localizedSourceValue(snapshot.get("stimulus_i18n"),nativeSourceLanguage,snapshot.get("stimulus"))
         : localizedValue(snapshot.get("stimulus_i18n"),language,snapshot.get("stimulus"));
     if(localizedStimulus instanceof String stimulusText && !stimulusText.isBlank()) result.put("stimulus",stimulusText);
     Object rawOptions = snapshot.get("options");
@@ -1886,13 +1886,13 @@ public class AssessmentController {
         Object label = option.get("label");
         if (label == null) label = option.get("text");
         Object localizedLabel=nativeSourceOnly
-            ? localizedSourceValue(option.get("text_i18n"),nativeSourceLanguage,language,label)
+            ? localizedSourceValue(option.get("text_i18n"),nativeSourceLanguage,label)
             : localizedValue(option.get("text_i18n"),language,label);
         if(localizedLabel!=null) label=localizedLabel;
         hasSourceLocale=hasSourceLocale||localizedHas(option.get("text_i18n"),language);
         safe.put("key", key);
         safe.put("label", nativeSourceOnly
-            ? localizedSourceValue(option.get("text_i18n"),nativeSourceLanguage,language,label)
+            ? localizedSourceValue(option.get("text_i18n"),nativeSourceLanguage,label)
             : localizedValue(option.get("text_i18n"),language,label));
         for(String metadataKey:List.of("content_kind","code_line_indices","math_line_indices","source_code_preservation_notes")) {
           if(option.containsKey(metadataKey)) safe.put(metadataKey,option.get(metadataKey));
@@ -1916,7 +1916,7 @@ public class AssessmentController {
     return result;
   }
 
-  private Object localizedSourceValue(Object rawLocalized,String nativeSourceLanguage,String requestedLanguage,Object fallback) {
+  private Object localizedSourceValue(Object rawLocalized,String nativeSourceLanguage,Object fallback) {
     if(rawLocalized instanceof Map<?,?> values) {
       if(nativeSourceLanguage!=null&&!nativeSourceLanguage.isBlank()) {
         Object source=values.get(nativeSourceLanguage);
@@ -1927,9 +1927,6 @@ public class AssessmentController {
       if(values.size()==1) {
         Object only=values.values().iterator().next();
         if(only instanceof String text&&!text.isBlank()) return text;
-      } else if(nativeSourceLanguage==null||nativeSourceLanguage.isBlank()) {
-        Object selected=values.get(requestedLanguage);
-        if(selected instanceof String text&&!text.isBlank()) return text;
       }
     }
     return fallback;
