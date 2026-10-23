@@ -265,7 +265,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("RUN_BUDGET_REACHED", pipeline)
         self.assertIn("YIELDED_FOR_RESUME", pipeline)
         self.assertIn("id: layer45_run", workflow)
-        self.assertIn("MAX_BATCHES_PER_RUN: 20", workflow)
+        self.assertIn("MAX_BATCHES_PER_RUN: 8", workflow)
         self.assertIn('--max-batches-per-run "$MAX_BATCHES_PER_RUN"', workflow)
         self.assertIn('result" -eq 10', workflow)
         self.assertIn("steps.layer45_run.outputs.yielded != 'true'", workflow)
