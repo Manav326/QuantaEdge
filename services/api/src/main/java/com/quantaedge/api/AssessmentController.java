@@ -604,7 +604,10 @@ public class AssessmentController {
       where aq.attempt_id=? and ans.answer_status='PENDING_REVIEW'
       """, Long.class, attemptId);
     BigDecimal score = jdbc.queryForObject("""
-      select coalesce(sum(coalesce(ans.awarded_marks,0)),0)
+      select greatest(0::numeric,coalesce(sum(case
+        when coalesce(aq.question_snapshot->>'section_result_policy','SCORED') in ('QUALIFYING_ONLY','PRACTICE_ONLY')
+          or coalesce(aq.question_snapshot->>'section_code','')='LANGUAGE_QUALIFYING' then 0
+        else coalesce(ans.awarded_marks,0)-coalesce(ans.penalty_marks,0) end),0))
       from student_assessment_attempt_question aq
       left join student_assessment_answer ans on ans.attempt_question_id=aq.id
       where aq.attempt_id=?
@@ -1372,7 +1375,7 @@ public class AssessmentController {
     context = authorization.requireStudent(context);
     List<Map<String, Object>> attemptRows = jdbc.queryForList("""
       select id,assessment_id,student_id,status,auto_score,max_score,offline_mode,
-             offline_sync_expires_at,offline_package_token_hash
+             offline_sync_expires_at,offline_package_token_hash,assessment_snapshot::text as assessment_snapshot
       from student_assessment_attempt where id=? and institution_id=? for update
       """, attemptId,institutionId);
     if (attemptRows.isEmpty() || ((Number) attemptRows.getFirst().get("student_id")).longValue() != context.studentId()) {
@@ -1393,7 +1396,16 @@ public class AssessmentController {
       join student_assessment_answer ans on ans.attempt_question_id=aq.id
       where aq.attempt_id=? order by aq.sequence_no for update of ans
       """, attemptId);
+    Map<String,Object> attemptSnapshot=parseObject(String.valueOf(attempt.get("assessment_snapshot")));
+    Object rawPenaltyFraction=attemptSnapshot.getOrDefault("negativeMarkingFraction",BigDecimal.ZERO);
+    BigDecimal negativeFraction;
+    try { negativeFraction=new BigDecimal(String.valueOf(rawPenaltyFraction)); }
+    catch (RuntimeException ex) { throw new IllegalStateException("Stored assessment penalty configuration is invalid.",ex); }
+    if(negativeFraction.signum()<0||negativeFraction.compareTo(BigDecimal.ONE)>0) {
+      throw new IllegalStateException("Stored assessment negative-marking fraction is outside [0,1].");
+    }
     BigDecimal autoScore = BigDecimal.ZERO;
+    BigDecimal penaltyScore = BigDecimal.ZERO;
     boolean needsReview = false;
     for (Map<String, Object> row : answerRows) {
       Map<String, Object> snapshot = parseObject(String.valueOf(row.get("question_snapshot")));
@@ -1401,10 +1413,17 @@ public class AssessmentController {
       String responseJson = String.valueOf(row.get("response_payload"));
       Object response = parseValue(responseJson);
       BigDecimal maxMarks = new BigDecimal(String.valueOf(row.get("max_marks")));
+      boolean includeInScoredTotal=contributesToAggregate(snapshot);
       String answerStatus;
       Boolean correct = null;
       BigDecimal awarded;
-      if (isAutoGradedType(questionType)) {
+      BigDecimal questionPenalty=BigDecimal.ZERO;
+      if (isEmptyAnswer(response)) {
+        // An unanswered question is not a wrong answer and must never attract negative marks.
+        correct = null;
+        awarded = BigDecimal.ZERO;
+        answerStatus = "GRADED";
+      } else if (isAutoGradedType(questionType)) {
         String answerPayload = String.valueOf(snapshot.getOrDefault("answer_payload", "{}"));
         QuestionAnswerService.Evaluation evaluation = answerService.evaluate(answerPayload, response);
         if (!evaluation.autoGraded()) {
@@ -1416,12 +1435,15 @@ public class AssessmentController {
           correct = evaluation.correct();
           awarded = Boolean.TRUE.equals(correct) ? maxMarks : BigDecimal.ZERO;
           answerStatus = "AUTO_GRADED";
-          autoScore = autoScore.add(awarded);
+          if(includeInScoredTotal) {
+            if(Boolean.TRUE.equals(correct)) {
+              autoScore = autoScore.add(awarded);
+            } else if(Boolean.FALSE.equals(correct)) {
+              questionPenalty=maxMarks.multiply(negativeFraction).setScale(2,RoundingMode.HALF_UP);
+              penaltyScore=penaltyScore.add(questionPenalty);
+            }
+          }
         }
-      } else if (isEmptyAnswer(response)) {
-        correct = null;
-        awarded = BigDecimal.ZERO;
-        answerStatus = "GRADED";
       } else {
         correct = null;
         awarded = null;
@@ -1429,20 +1451,20 @@ public class AssessmentController {
         needsReview = true;
       }
       jdbc.update("""
-        update student_assessment_answer set answer_status=?,is_correct=?,awarded_marks=?,
+        update student_assessment_answer set answer_status=?,is_correct=?,awarded_marks=?,penalty_marks=?,
           teacher_feedback=null,graded_at=case when ? in ('AUTO_GRADED','GRADED') then now() else null end,
           graded_by_staff_id=null,saved_at=now()
         where id=?
-        """, answerStatus, correct, awarded, answerStatus, row.get("answer_id"));
+        """, answerStatus, correct, awarded, questionPenalty, answerStatus, row.get("answer_id"));
     }
     String next = needsReview ? "AWAITING_REVIEW" : "RELEASED";
-    BigDecimal finalScore = needsReview ? null : autoScore;
+    BigDecimal finalScore = needsReview ? null : autoScore.subtract(penaltyScore).max(BigDecimal.ZERO);
     jdbc.update("""
-      update student_assessment_attempt set status=?,submitted_at=now(),auto_score=?,final_score=?,
+      update student_assessment_attempt set status=?,submitted_at=now(),auto_score=?,penalty_score=?,final_score=?,
         graded_at=case when ?='RELEASED' then now() else null end,
         released_at=case when ?='RELEASED' then now() else null end,updated_at=now()
       where id=?
-      """, next, autoScore, finalScore, next, next, attemptId);
+      """, next, autoScore, penaltyScore, finalScore, next, next, attemptId);
     audit(assessmentId, attemptId, null, context.studentId(), "STUDENT", "ATTEMPT_SUBMITTED",
         "IN_PROGRESS", next, needsReview ? "Submitted; teacher review is required before the result is released."
             : "Submitted and automatically graded; result released.");
