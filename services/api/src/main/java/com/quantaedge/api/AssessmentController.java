@@ -213,7 +213,7 @@ public class AssessmentController {
     List<Map<String,Object>> items=jdbc.queryForList("""
       select a.id as assessment_id,a.public_id as test_id,a.title,a.description,a.duration_minutes,a.max_attempts,a.status,
              a.offline_enabled,a.assessment_type,a.lesson_id,a.is_generated,a.is_current,a.generation_version,
-             a.negative_marking_fraction,a.created_at,a.published_at,c.code as class_code,c.display_name as class_name,
+             a.negative_marking_fraction,a.created_at,a.published_at,a.source_package_id,c.code as class_code,c.display_name as class_name,
              s.code as subject_code,s.display_name as subject_name,
              p.id as course_id,p.code as course_code,p.display_name as course_name,
              ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
@@ -1112,6 +1112,38 @@ public class AssessmentController {
         published_at=case when ?='PUBLISHED' then now() when ?='DRAFT' then null else published_at end
       where id=?
       """, next, next, context.staffId(), next, next, assessmentId);
+    // A test pack may contain multiple tests. It is publishable only when every included test is
+    // published; mixed draft/published/archived children keep the pack in Draft. Actor/timestamp
+    // fields preserve the last successful pack publication for history.
+    jdbc.update("""
+      update course_assessment_pack p
+      set status=case
+            when not exists(
+              select 1 from course_assessment_pack_item i
+              join assessment child on child.id=i.assessment_id
+              where i.pack_id=p.id and child.status<>'PUBLISHED'
+            ) then 'PUBLISHED'
+            when not exists(
+              select 1 from course_assessment_pack_item i
+              join assessment child on child.id=i.assessment_id
+              where i.pack_id=p.id and child.status<>'ARCHIVED'
+            ) then 'ARCHIVED'
+            else 'DRAFT'
+          end,
+          published_by_staff_id=case when not exists(
+              select 1 from course_assessment_pack_item i
+              join assessment child on child.id=i.assessment_id
+              where i.pack_id=p.id and child.status<>'PUBLISHED'
+            ) then ? else p.published_by_staff_id end,
+          published_at=case when not exists(
+              select 1 from course_assessment_pack_item i
+              join assessment child on child.id=i.assessment_id
+              where i.pack_id=p.id and child.status<>'PUBLISHED'
+            ) then now() else p.published_at end,
+          updated_at=now()
+      where exists(select 1 from course_assessment_pack_item i
+                   where i.pack_id=p.id and i.assessment_id=?)
+      """,context.staffId(),assessmentId);
     audit(assessmentId, null, context, null, null, "ASSESSMENT_STATUS_CHANGED", before, next,
         "Assessment status changed.");
     staffAudit.recordAction(context, "/api/v1/admin/assessments/" + assessmentId + "/status",
