@@ -16,7 +16,7 @@ class Tre4ImporterTests(unittest.TestCase):
     def test_expected_primary_booklet_counts(self):
         self.assertEqual(import_tre4_course.expected_question_count("TRE 1.0"), 120)
         self.assertEqual(import_tre4_course.expected_question_count("TRE 2.0"), 150)
-        self.assertEqual(import_tre4_course.expected_question_count("TRE 3.0"), 148)
+        self.assertEqual(import_tre4_course.expected_question_count("TRE 3.0"), 150)
 
     def test_question_snapshot_preserves_bilingual_options_and_review_gates(self):
         row = {
@@ -75,12 +75,10 @@ class Tre4ImporterTests(unittest.TestCase):
         raw = "    SELECT *\r\n    FROM question\r\n"
         self.assertEqual(import_tre4_course.norm_text(raw), "    SELECT *\n    FROM question")
 
-    def test_exact_tre3_identity_set_does_not_invent_missing_e1_or_e6(self):
+    def test_exact_tre3_identity_set_preserves_all_30_language_items(self):
         expected = import_tre4_course.EXPECTED_SOURCE_IDENTITIES["TRE 3.0"]["LANGUAGE_QUALIFYING"]
-        self.assertIn("E-2", expected)
-        self.assertIn("E-8", expected)
-        self.assertNotIn("E-1", expected)
-        self.assertNotIn("E-6", expected)
+        self.assertEqual(len(expected), 30)
+        self.assertEqual(expected, {f"E-{n}" for n in range(1, 9)} | {f"H-{n}" for n in range(9, 31)})
 
     def test_inventory_validator_rejects_duplicate_identity(self):
         valid = [
