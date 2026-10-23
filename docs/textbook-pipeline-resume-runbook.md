@@ -138,3 +138,8 @@ When a stale all-class push run must be stopped before single-class recovery, pa
 ## Per-class resume markers
 
 Use exactly one class marker per push commit, and ensure the commit changes a file covered by this workflow's push paths. These markers start `resume_layers_4_5` on the existing durable source-bound checkpoints; class resume does not authorize publication.
+
+
+### Class 8 resume lane verification
+
+For Class 8 recovery, the push commit must include `[resume-visual-layers-4-5-class-8]`. The workflow's concurrency expression checks push markers before the manual `class_no` default so this push replaces only the Class 8 runner; the existing book/PDF/model fingerprints and saved checkpoints remain authoritative.
