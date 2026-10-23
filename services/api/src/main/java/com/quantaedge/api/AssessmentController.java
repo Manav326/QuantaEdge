@@ -193,12 +193,14 @@ public class AssessmentController {
     List<Map<String,Object>> items=jdbc.queryForList("""
       select a.id as assessment_id,a.public_id as test_id,a.title,a.description,a.duration_minutes,a.max_attempts,a.status,
              a.offline_enabled,a.assessment_type,a.lesson_id,a.is_generated,a.is_current,a.generation_version,
-             a.created_at,a.published_at,c.code as class_code,c.display_name as class_name,
+             a.negative_marking_fraction,a.created_at,a.published_at,c.code as class_code,c.display_name as class_name,
              s.code as subject_code,s.display_name as subject_name,
              p.id as course_id,p.code as course_code,p.display_name as course_name,
              ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
              (select count(*) from assessment_question aq where aq.assessment_id=a.id) as question_count,
-             (select coalesce(sum(aq.max_marks),0) from assessment_question aq where aq.assessment_id=a.id) as max_score,
+             (select coalesce(sum(case when aq.question_snapshot->>'section_result_policy' in ('QUALIFYING_ONLY','PRACTICE_ONLY')
+                         or aq.question_snapshot->>'section_code'='LANGUAGE_QUALIFYING' then 0 else aq.max_marks end),0)
+              from assessment_question aq where aq.assessment_id=a.id) as max_score,
              (select string_agg(gs.display_name, ', ' order by gs.display_name)
               from assessment_staff_assignment asa join staff_account gs on gs.id=asa.staff_id
               where asa.assessment_id=a.id and asa.active=true) as assigned_grader_names,
@@ -233,6 +235,11 @@ public class AssessmentController {
     requireAssignedCourse(courseId, tenant);
     int duration = integer(body.getOrDefault("durationMinutes", 45), "Duration", 1, 240);
     int maxAttempts = integer(body.getOrDefault("maxAttempts", 1), "Attempt limit", 1, 10);
+    BigDecimal negativeMarkingFraction = decimal(body.getOrDefault("negativeMarkingFraction", "0"), "Negative-marking fraction");
+    if (negativeMarkingFraction.compareTo(BigDecimal.ZERO) < 0
+        || negativeMarkingFraction.compareTo(BigDecimal.ONE) > 0) {
+      throw badRequest("Negative-marking fraction must be between 0 and 1.");
+    }
     Long chapterId = optionalLong(body.get("chapterId"), "chapterId");
     Object rawIds = body.get("questionIds");
     if (!(rawIds instanceof List<?> values) || values.isEmpty() || values.size() > 200) {
@@ -291,10 +298,11 @@ public class AssessmentController {
     }
 
     Long assessmentId = jdbc.queryForObject("""
-      insert into assessment(course_id,title,description,subject_id,chapter_id,duration_minutes,max_attempts,status,created_by_staff_id)
-      values(?,?,?,?,?,?,?,'DRAFT',?) returning id
+      insert into assessment(course_id,title,description,subject_id,chapter_id,duration_minutes,max_attempts,
+        negative_marking_fraction,status,created_by_staff_id)
+      values(?,?,?,?,?,?,?,?, 'DRAFT',?) returning id
       """, Long.class, courseId, title, description.isBlank() ? null : description, subjectId, chapterId,
-        duration, maxAttempts, context.staffId());
+        duration, maxAttempts, negativeMarkingFraction, context.staffId());
 
     BigDecimal maxScore = BigDecimal.ZERO;
     int sequence = 1;
@@ -699,7 +707,9 @@ public class AssessmentController {
              a.created_at,a.published_at,s.code as subject_code,coalesce(max(subject_tx.display_name),s.display_name) as subject_name,
              c.code as class_code,p.id as course_id,p.code as course_code,p.display_name as course_name,
              ch.id as chapter_id,ch.code as chapter_code,coalesce(max(ct.display_name),ch.display_name) as chapter_name,
-             count(distinct aq.id) as question_count,coalesce(sum(aq.max_marks),0) as max_score,
+             count(distinct aq.id) as question_count,
+             coalesce(sum(case when aq.question_snapshot->>'section_result_policy' in ('QUALIFYING_ONLY','PRACTICE_ONLY')
+                        or aq.question_snapshot->>'section_code'='LANGUAGE_QUALIFYING' then 0 else aq.max_marks end),0) as max_score,
              (select count(*) from student_assessment_attempt att
               where att.assessment_id=a.id and att.student_id=st.id and att.institution_id=(select institution_id from tenant_scope)
                 and att.status<>'ABANDONED') as attempts_used,
@@ -843,7 +853,8 @@ public class AssessmentController {
     List<Map<String, Object>> metadata = jdbc.queryForList("""
       select a.id as assessment_id,
              coalesce(max(translated.title), a.title) as assessment_title,
-             coalesce(sum(aq.max_marks), 0) as max_score
+             coalesce(sum(case when aq.question_snapshot->>'section_result_policy' in ('QUALIFYING_ONLY','PRACTICE_ONLY')
+                       or aq.question_snapshot->>'section_code'='LANGUAGE_QUALIFYING' then 0 else aq.max_marks end), 0) as max_score
       from assessment a
       left join assessment_question aq on aq.assessment_id=a.id
       left join lateral (
@@ -1003,11 +1014,13 @@ public class AssessmentController {
       with tenant_scope as (select ?::bigint as institution_id)
       select a.id,coalesce(max(at.title),a.title) as title,
              coalesce(max(at.description),a.description) as description,
-             a.duration_minutes,a.max_attempts,a.status,a.offline_enabled,
+             a.duration_minutes,a.max_attempts,a.status,a.offline_enabled,a.negative_marking_fraction,
              s.id as subject_id,s.code as subject_code,coalesce(max(subject_tx.display_name),s.display_name) as subject_name,
              c.code as class_code,ch.id as chapter_id,coalesce(max(ct.display_name),ch.display_name) as chapter_name,
              selected_course.id as course_id,selected_course.code as course_code,selected_course.display_name as course_name,
-             count(aq.id) as question_count,coalesce(sum(aq.max_marks),0) as max_score
+             count(aq.id) as question_count,
+             coalesce(sum(case when aq.question_snapshot->>'section_result_policy' in ('QUALIFYING_ONLY','PRACTICE_ONLY')
+                       or aq.question_snapshot->>'section_code'='LANGUAGE_QUALIFYING' then 0 else aq.max_marks end),0) as max_score
       from assessment a join curriculum_subject s on s.id=a.subject_id
       join curriculum_class c on c.id=s.class_id
       join student st on st.id=? and st.active=true
@@ -1113,6 +1126,7 @@ public class AssessmentController {
     assessmentSnapshot.put("attemptNumber", attemptNumber);
     assessmentSnapshot.put("questionCount", questionCount);
     assessmentSnapshot.put("maxScore", assessment.get("max_score"));
+    assessmentSnapshot.put("negativeMarkingFraction", assessment.getOrDefault("negative_marking_fraction", BigDecimal.ZERO));
     assessmentSnapshot.put("subjectCode", assessment.get("subject_code"));
     assessmentSnapshot.put("subjectName", assessment.get("subject_name"));
     assessmentSnapshot.put("chapterName", assessment.get("chapter_name"));
@@ -1726,7 +1740,8 @@ public class AssessmentController {
   private Map<String, Object> assessmentDetails(long id, boolean includeQuestionBankDetails) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select a.id as assessment_id,a.public_id as test_id,a.title,a.description,a.duration_minutes,a.max_attempts,a.status,
-             a.offline_enabled,a.created_at,a.published_at,s.code as subject_code,s.display_name as subject_name,
+             a.offline_enabled,a.negative_marking_fraction,a.source_package_id,a.source_package_version,a.source_package_sha256,
+             a.source_exam_cycle,a.source_url,a.created_at,a.published_at,s.code as subject_code,s.display_name as subject_name,
              c.code as class_code,ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name
       from assessment a join curriculum_subject s on s.id=a.subject_id
       join curriculum_class c on c.id=s.class_id
@@ -1736,7 +1751,11 @@ public class AssessmentController {
     if (rows.isEmpty()) throw notFound("Assessment", id);
     Map<String, Object> result = new LinkedHashMap<>(rows.getFirst());
     result.put("question_count", jdbc.queryForObject("select count(*) from assessment_question where assessment_id=?", Integer.class, id));
-    result.put("max_score", jdbc.queryForObject("select coalesce(sum(max_marks),0) from assessment_question where assessment_id=?", BigDecimal.class, id));
+    result.put("max_score", jdbc.queryForObject("""
+      select coalesce(sum(case when question_snapshot->>'section_result_policy' in ('QUALIFYING_ONLY','PRACTICE_ONLY')
+          or question_snapshot->>'section_code'='LANGUAGE_QUALIFYING' then 0 else max_marks end),0)
+      from assessment_question where assessment_id=?
+      """, BigDecimal.class, id));
     if (includeQuestionBankDetails) {
       result.put("questions", jdbc.queryForList("""
         select id as assessment_question_id,source_question_id,sequence_no,max_marks
