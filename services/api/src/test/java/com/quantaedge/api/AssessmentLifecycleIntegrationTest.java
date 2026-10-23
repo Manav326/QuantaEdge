@@ -259,11 +259,11 @@ class AssessmentLifecycleIntegrationTest {
 
     Long assessmentId = jdbc.queryForObject("""
       insert into assessment(
-        title,description,subject_id,chapter_id,lesson_id,duration_minutes,max_attempts,status,
+        title,description,course_id,subject_id,chapter_id,lesson_id,duration_minutes,max_attempts,status,
         assessment_type,is_generated,is_current,generation_version,published_at)
-      values('Assessment lifecycle test','CI fixture',?,?,?,15,2,'PUBLISHED',
+      values('Assessment lifecycle test','CI fixture',?,?,?,?,15,2,'PUBLISHED',
         'TOPIC_END',true,true,1,now()) returning id
-      """, Long.class, subjectId, chapterId, lessonId);
+      """, Long.class, courseId, subjectId, chapterId, lessonId);
     String snapshot = """
       {
         "id": 1,
