@@ -66,13 +66,7 @@ public class CourseAuthoringController {
         }
       }
       type.remove("hierarchy_schema_json");
-      String code=String.valueOf(type.get("code"));
-      boolean nestedPackageImportSupported="K12".equals(code);
-      type.put("nestedPackageImportSupported",nestedPackageImportSupported);
-      type.put("nestedPackageImportStatus",nestedPackageImportSupported?"AVAILABLE":"NOT_IMPLEMENTED");
-      type.put("nestedPackageImportNote",nestedPackageImportSupported
-          ?"Supports subjects, chapters, lessons and teaching blocks in a draft-only package import."
-          :"This course type requires its own hierarchy importer; the K12 course-package endpoint rejects it.");
+
     }
     return Map.of("courseTypes",types,"institutionId",tenant.institutionId());
   }
