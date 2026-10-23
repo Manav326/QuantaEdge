@@ -41,6 +41,7 @@ def question(qid: str, section: str, number: int) -> dict:
                 "en": "A queue removes items in the order they were inserted.",
                 "hi": "क्यू में पहले डाला गया तत्व पहले निकाला जाता है।"
             },
+            "solution_mode": "CONCISE",
             "answer_source": "INDEPENDENTLY_SOLVED",
             "answer_reference_url": None,
             "review_status": "PENDING_HUMAN_REVIEW",
@@ -55,6 +56,7 @@ def sample_package() -> dict:
     return {
         "schema": "quantaedge.portable-assessment-package.v1",
         "package_id": "sample-tre-test",
+        "package_version": "1.0.0",
         "title": "TRE sample previous-year paper",
         "assessment_type": "PREVIOUS_YEAR_PAPER",
         "subject": {"name": "Computer Science", "domain_code": "computer-science", "language": "mixed"},
@@ -155,6 +157,22 @@ class PortableAssessmentPackageTests(unittest.TestCase):
         package = sample_package()
         package["configuration"]["negative_marking_fraction"] = 1.25
         self.assertTrue(any("must be between 0 and 1" in err for err in validate_package(package)))
+
+    def test_requires_short_explanations(self):
+        package = sample_package()
+        package["questions"][0]["proposed_answer"]["explanation"] = "x" * 701
+        self.assertTrue(any("must stay concise" in err for err in validate_package(package)))
+
+    def test_stepwise_numerical_work_requires_ordered_steps_in_both_languages(self):
+        package = sample_package()
+        answer = package["questions"][0]["proposed_answer"]
+        answer["solution_mode"] = "STEPWISE"
+        answer["solution_steps_i18n"] = {
+            "en": ["First, identify the given values.", "Then apply the formula."],
+            "hi": ["पहले दिए गए मान पहचानें।"]
+        }
+        self.assertTrue(any("must contain 2–8 ordered" in err for err in validate_package(package)))
+        self.assertTrue(any("missing required language steps: en" in err for err in validate_package(package)))
 
     def test_answer_completeness_is_an_explicit_later_gate(self):
         package = sample_package()
