@@ -200,6 +200,7 @@ class ApplicationStartupSmokeTest {
   }
 
   @Test
+  @Transactional
   void bilingualSchemaExistsAndTranslationInventoryQueryExecutes() {
     assertTrue(jdbc.queryForObject("select to_regclass('public.curriculum_program') is not null", Boolean.class));
     assertTrue(jdbc.queryForObject("select to_regclass('public.lesson_translation') is not null", Boolean.class));
@@ -224,7 +225,19 @@ class ApplicationStartupSmokeTest {
       order by p.id limit 1
       """, Long.class, institutionId);
     InstitutionTenantContext tenant = new InstitutionTenantContext(institutionId, "QUANTA-EDGE", "QuantaEdge");
-    AuthContext admin = new AuthContext(null, null, 999L, "ADMIN", "CI admin");
+    // Authorization is grant-based: seed an explicit test grant rather than relying on a former
+    // global ADMIN bypass. This test transaction rolls the temporary staff and grant rows back.
+    Long staffId = jdbc.queryForObject("""
+      insert into staff_account(public_id,mobile_e164,display_name,role,active)
+      values(gen_random_uuid(),null,'CI translation smoke reviewer','ADMIN',true)
+      returning id
+      """, Long.class);
+    jdbc.update("""
+      insert into staff_permission_grant(staff_id,workspace_key,permission_key)
+      values(?,'EDUCATION_ADMIN','CONTENT_VIEW')
+      on conflict(staff_id,workspace_key,permission_key) do nothing
+      """, staffId);
+    AuthContext admin = new AuthContext(null, null, staffId, "ADMIN", "CI admin", "EDUCATION_ADMIN");
     Map<String,Object> result = contentTranslationController.list(courseId, null, null, "ALL", "ALL", "ALL", 20, 0, admin, tenant);
     assertTrue(result.get("items") instanceof List<?>);
     assertTrue(result.get("total") instanceof Number);

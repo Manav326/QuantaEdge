@@ -42,8 +42,9 @@ function toDraft(row: OfferDraft): Draft {
 }
 
 /**
- * @deprecated Retained temporarily for migration compatibility. The route now renders the notice
- * component below; this legacy global offer editor must not be reactivated.
+ * OBSOLETE — RETAINED FOR POST-CUTOVER REMOVAL.
+ * @deprecated Do not render or reactivate this legacy global Marketplace editor. The route default
+ * must stay on the deprecation notice until the replacement flow and telemetry are verified.
  */
 export function LegacyCourseMarketplaceAdminPage() {
   const [rows, setRows] = useState<OfferDraft[]>([]);

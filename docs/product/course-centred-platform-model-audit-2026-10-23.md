@@ -78,3 +78,15 @@ The schema page must document physical table/column names and types separately f
 A test-package question should be expressible as stable package ID + version, ordered question ID/type/prompt, option key/label/order, correct answer, explanation/marking rubric, marks, difficulty/tags and provenance/review metadata. The server stores immutable question snapshots per published assessment; public student responses never expose answer keys before allowed result release.
 
 For large imports, validation must report every error at a JSON path (e.g. `$.tests[0].questions[27].options[1].key`) and a row count before any writes. A failed import has zero partial records. Publishing stays in the normal permissioned review/HRMS workflow.
+
+
+## Obsolete paths — retained until post-cutover cleanup
+
+The following paths are explicitly **obsolete and must not be reactivated**. They remain in the codebase until the HRMS-governed replacement is proven; remove them in a dedicated cleanup PR only after route inventory and telemetry show no active callers.
+
+- Legacy Education Admin global Marketplace offer editor and its old `/api/v1/marketplace/admin/courses` API.
+- Institution-side offer configuration, submission, approval and publishing endpoints under `/api/v1/institution/course-assignments/*/offers` and `/api/v1/institution/course-offers/*`.
+- Legacy institution selector / client-controlled tenant switching; the authoritative institution is the server-resolved HRMS staff binding.
+- Any former global-admin permission bypass. Tests must use explicit workspace-scoped grants rather than weakening authorization.
+
+No historical offers, audit events, purchases, release records or course data should be deleted as part of this marking step.

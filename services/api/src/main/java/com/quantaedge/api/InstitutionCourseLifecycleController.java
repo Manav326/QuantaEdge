@@ -24,7 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 /**
- * Tenant-admin course origination, release review and institution-specific offer lifecycle.
+ * OBSOLETE ROUTES ARE RETAINED FOR POST-CUTOVER REMOVAL.
+ * Legacy institution-side Marketplace offer setup/review/publication endpoints remain explicit
+ * deprecated responses only; they must not be reactivated. HRMS is the sole Marketplace publisher.
  * Institution scope is taken only from the authenticated institution_admin_session.
  */
 @RestController

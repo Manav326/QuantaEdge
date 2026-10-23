@@ -88,7 +88,10 @@ class AdminContentControllerTest {
     AuthContext author = new AuthContext(null, null, 42L, "CONTENT_AUTHOR", "Content author");
     when(jdbc.queryForObject("select content_revision from lesson where id=?", Long.class, 7L))
         .thenReturn(12L);
-    when(jdbc.queryForObject(anyString(), eq(Boolean.class), any(Object[].class))).thenReturn(true);
+    // Pass course/lesson scope and source-ownership checks, then confirm this is still an editable
+    // draft. A false third result reaches the stale revision guard this test is meant to exercise.
+    when(jdbc.queryForObject(anyString(), eq(Boolean.class), any(Object[].class)))
+        .thenReturn(true, true, false);
     AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory, assessmentCatalog);
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
