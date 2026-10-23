@@ -23,10 +23,13 @@
       "readable_pdf_url": "https://cdn-images.prepp.in/public/image/paper4-general-studies-and-computer-science-1787208700.pdf",
       "readable_pdf_citation_url": "https://cdn-images.prepp.in/public/image/paper4-general-studies-and-computer-science-1787208700.pdf",
       "retrieval_status": "READABLE_ON_WEB_NOT_DOWNLOADED_LOCALLY",
-      "binary_path": null,
-      "sha256": null,
-      "repository_distribution_rights": "UNCONFIRMED",
-      "verification_note": "The PDF's instructions specify a one-fourth-mark penalty for wrong answers. This conflicts with the collection article's blanket 'No Negative Marking' claim."
+      "binary_path": "data/TRE-Papres/sources/BPSC_TRE1_0_COMPUTER_11_12 by csestudy247.pdf",
+      "sha256": "dbe1ad2dec6ba8625911e2044361a6a5233b8fd80f39dd51e3fe1de38d7052b4",
+      "repository_distribution_rights": "CLEARED_FOR_PUBLIC_REPOSITORY",
+      "verification_note": "Exact PDF bytes extracted from the user-provided data/TRE-4_PYQ.zip; file existence and SHA-256 verified. Question-level content and answer review are still pending.",
+      "source_status": "VERIFIED_SOURCE_FILE",
+      "size_bytes": 246142,
+      "pdf_page_count": 48
     },
     {
       "cycle": "TRE 2.0",
@@ -36,10 +39,13 @@
       "readable_pdf_url": "https://cdn-images.prepp.in/public/image/language-general-studies-and-computer-science-1787208935.pdf",
       "readable_pdf_citation_url": "https://cdn-images.prepp.in/public/image/language-general-studies-and-computer-science-1787208935.pdf",
       "retrieval_status": "READABLE_ON_WEB_NOT_DOWNLOADED_LOCALLY",
-      "binary_path": null,
-      "sha256": null,
-      "repository_distribution_rights": "UNCONFIRMED",
-      "verification_note": "Topic-wise article counts currently add to 76/80 and must be recounted from the paper. Verify scoring instructions directly from this booklet."
+      "binary_path": "data/TRE-Papres/sources/BPSC TRE2.0 question paper by csestud247.pdf",
+      "sha256": "73f3f43b05206d48522ffe95645b0d76490ca0a1ea3457f29817c3915fee3982",
+      "repository_distribution_rights": "CLEARED_FOR_PUBLIC_REPOSITORY",
+      "verification_note": "Exact PDF bytes extracted from the user-provided data/TRE-4_PYQ.zip; file existence and SHA-256 verified. Question-level content and answer review are still pending.",
+      "source_status": "VERIFIED_SOURCE_FILE",
+      "size_bytes": 215022,
+      "pdf_page_count": 48
     },
     {
       "cycle": "TRE 3.0",
@@ -49,10 +55,13 @@
       "readable_pdf_url": "https://cdn-images.prepp.in/public/image/paper4-general-studies-and-computer-science-1787209824.pdf",
       "readable_pdf_citation_url": "https://cdn-images.prepp.in/public/image/paper4-general-studies-and-computer-science-1787209824.pdf",
       "retrieval_status": "READABLE_ON_WEB_NOT_DOWNLOADED_LOCALLY",
-      "binary_path": null,
-      "sha256": null,
-      "repository_distribution_rights": "UNCONFIRMED",
-      "verification_note": "PDF section is readable and contains Computer Science questions. Verify paper rules and topic classification against all 80 questions."
+      "binary_path": "data/TRE-Papres/sources/BPSC TRE3.0 question paper by csestudy247.pdf",
+      "sha256": "cadb416f7658a687b7b198378484da646c2a2665f97a025d8876cf9149382280",
+      "repository_distribution_rights": "CLEARED_FOR_PUBLIC_REPOSITORY",
+      "verification_note": "Exact PDF bytes extracted from the user-provided data/TRE-4_PYQ.zip; file existence and SHA-256 verified. Question-level content and answer review are still pending.",
+      "source_status": "VERIFIED_SOURCE_FILE",
+      "size_bytes": 1187383,
+      "pdf_page_count": 48
     }
   ],
   "limitations": [
@@ -60,5 +69,7 @@
     "No PDF has been represented as checked in or locally downloaded.",
     "No official BPSC answer-key file has yet been linked to this register.",
     "Do not publish a test or mark an answer official until source and answer review are complete."
-  ]
+  ],
+  "binary_collection_path": "data/TRE-Papres/sources/",
+  "binary_collection_status": "SOURCE_PDFS_EXTRACTED_AND_HASHED"
 }
