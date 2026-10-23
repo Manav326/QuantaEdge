@@ -3640,7 +3640,7 @@
   "public.proof.courses": "अलग-अलग goals के लिए courses",
   "public.proof.guided": "Guided practice और feedback",
   "public.proof.progress": "समझने योग्य progress",
-  "public.school.noteBody": "Curriculum और NEP 2020 alignment का उल्लेख केवल उन्हीं specific school courses के लिए होगा जिन्हें इसके अनुसार तैयार और review किया गया है—हर course के लिए नहीं।",
+  "public.school.noteBody": "Classes 6–12 के relevant school courses में curriculum और NEP 2020 alignment तभी बताया जाएगा जब उस specific course को इसके लिए तैयार और review किया गया हो। बाकी courses अपने learning goals के अनुसार होंगे।",
   "public.school.noteTitle": "जहाँ लागू हो, वहीं curriculum alignment",
   "structured.ui.activity": "क्रियाकलाप",
   "structured.ui.artifact": "कलाकृति:",
