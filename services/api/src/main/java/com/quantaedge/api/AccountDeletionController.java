@@ -243,7 +243,7 @@ public class AccountDeletionController {
       select distinct st.id as student_id,st.public_user_id
       from student st
       where st.active=true
-        and st.user_account_id is distinct from ?
+        and st.user_account_id is null
         and (
           exists (select 1 from guardian_student gs
             where gs.guardian_user_id=? and gs.student_id=st.id
@@ -252,7 +252,7 @@ public class AccountDeletionController {
             where slc.guardian_user_id=? and slc.student_id=st.id and slc.active=true)
         )
       order by st.id
-      """, userId, userId, userId);
+      """, userId, userId);
   }
 
   private Map<String,Object> requestView(Map<String,Object> row) {
