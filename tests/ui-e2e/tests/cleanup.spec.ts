@@ -45,6 +45,50 @@ test('[QA-004] preview and uninstall only this run, then prove owned rows are cl
       expect(unexplainedRows.rows[0].count, 'A failed install must not leave an undiscoverable run behind.').toBe(0);
       return;
     }
+
+    const runStatus = await poolForRecovery.query(
+      'select state,created_resource_count,planned_resource_count from qa_test_run where run_id=$1',
+      [runId]
+    );
+    expect(runStatus.rowCount, 'The install intent must resolve to one audit row.').toBe(1);
+    if (runStatus.rows[0].state === 'INSTALL_FAILED') {
+      // A failed seed transaction is expected to roll back all fixture rows and the resource
+      // manifest while retaining only the run/event audit. Prove that before returning rather
+      // than running the successful-install cleanup UI against a zero-row fixture.
+      const leftovers = await poolForRecovery.query(`
+        select
+          (select count(*)::int from institution_tenant where qa_test_run_id=$1) as tenants,
+          (select count(*)::int from institution_branding where qa_test_run_id=$1) as branding,
+          (select count(*)::int from user_account where qa_test_run_id=$1) as users,
+          (select count(*)::int from student where qa_test_run_id=$1) as students,
+          (select count(*)::int from guardian_student where qa_test_run_id=$1) as guardian_links,
+          (select count(*)::int from institution_membership where qa_test_run_id=$1) as student_memberships,
+          (select count(*)::int from institution_user_membership where qa_test_run_id=$1) as user_memberships,
+          (select count(*)::int from student_login_credential where qa_test_run_id=$1) as credentials,
+          (select count(*)::int from institution_course_release where qa_test_run_id=$1) as releases,
+          (select count(*)::int from institution_course_assignment where qa_test_run_id=$1) as assignments,
+          (select count(*)::int from institution_course_entitlement where qa_test_run_id=$1) as entitlements,
+          (select count(*)::int from student_program_enrollment where qa_test_run_id=$1) as enrollments,
+          (select count(*)::int from student_track_enrollment where qa_test_run_id=$1) as tracks,
+          (select count(*)::int from curriculum_chapter where qa_test_run_id=$1) as chapters,
+          (select count(*)::int from lesson where qa_test_run_id=$1) as lessons,
+          (select count(*)::int from question where qa_test_run_id=$1) as questions,
+          (select count(*)::int from question_option where qa_test_run_id=$1) as options,
+          (select count(*)::int from student_lesson_progress where qa_test_run_id=$1) as progress,
+          (select count(*)::int from student_question_attempt where qa_test_run_id=$1) as attempts,
+          (select count(*)::int from qa_test_run_resource where run_id=$1) as manifest_rows
+      `, [runId]);
+      expect(Number(runStatus.rows[0].created_resource_count)).toBe(0);
+      expect(Number(runStatus.rows[0].planned_resource_count)).toBe(0);
+      expect(leftovers.rows[0]).toMatchObject({
+        tenants:0,branding:0,users:0,students:0,guardian_links:0,
+        student_memberships:0,user_memberships:0,credentials:0,releases:0,
+        assignments:0,entitlements:0,enrollments:0,tracks:0,chapters:0,lessons:0,
+        questions:0,options:0,progress:0,attempts:0,manifest_rows:0
+      });
+      return;
+    }
+    expect(runStatus.rows[0].state, 'Only a committed INSTALLED fixture can enter UI cleanup checks.').toBe('INSTALLED');
   } finally {
     await poolForRecovery.end();
   }

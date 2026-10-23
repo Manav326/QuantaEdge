@@ -209,8 +209,23 @@ async function installAndVerifyQaPack(browser: Browser, hrmsStatePath: string): 
     runId,
     packKey: String(pack.packKey),
     idempotencyKey,
+    state: installed.state,
+    errorCode: installed.error_code ?? null,
+    errorSummary: installed.error_summary ?? null,
     credentials: installed.oneTimeSyntheticCredentials || {}
   });
+  // Fail here with the service's actual persisted error summary, rather than later presenting
+  // a failed installation as an idempotency-replay defect.
+  expect(
+    installed.state,
+    'The QA fixture transaction must finish before idempotency replay. Service result: ' +
+      String(installed.error_code ?? 'NO_ERROR_CODE') + ' — ' +
+      String(installed.error_summary ?? 'no installation error summary')
+  ).toBe('INSTALLED');
+  expect(installed.credentialsIncluded).toBe(true);
+  expect(installed.oneTimeSyntheticCredentials).toBeTruthy();
+  expect(runId).toMatch(/^[0-9a-f-]{36}$/i);
+
   // Replay the same install key after a successful UI install. This must return the same
   // run without creating duplicates, and must not disclose one-time credentials a second time.
   const replay = await page.evaluate(async ({ packKey, idempotencyKey }) => {
@@ -226,11 +241,6 @@ async function installAndVerifyQaPack(browser: Browser, hrmsStatePath: string): 
   expect(String(replay.body.run_id || replay.body.runId)).toBe(runId);
   expect(replay.body.credentialsIncluded).toBe(false);
   expect(replay.body.oneTimeSyntheticCredentials).toBeUndefined();
-
-  expect(installed.state).toBe('INSTALLED');
-  expect(installed.credentialsIncluded).toBe(true);
-  expect(installed.oneTimeSyntheticCredentials).toBeTruthy();
-  expect(runId).toMatch(/^[0-9a-f-]{36}$/i);
 
   const runPool = await openQaDatabase();
   try {
