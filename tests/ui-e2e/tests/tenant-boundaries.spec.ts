@@ -98,7 +98,41 @@ test('[FAM-003][TEN-002] parent and child API sessions cannot cross guardian bou
   }
 });
 
-test('[CAT-002][TEN-002][TEN-003][LRN-006] learner course lists and subjects follow explicit institution assignment', async ({ browser }) => {
+test('[AUTH-006][AUTH-007] logout revokes the current parent session and protected reads reject it', async ({ browser }) => {
+  const fixture = await readPrivateJson<QaFixture>('qa-fixture.json');
+  const institutionCode = fixture.credentials.parentA.institutionCode;
+  const parent = await contextPage(browser, join(privateDir(), 'parent-a.json'), WEB + '/parent');
+
+  try {
+    const before = await api(parent.page, '/api/v1/auth/me', undefined, institutionCode);
+    expect(before.status, 'Parent must have an authenticated session before logout.').toBe(200);
+    expect(before.body.role).toBe('PARENT');
+
+    const logoutResponse = await parent.context.request.post(WEB + '/api/v1/auth/logout', {
+      headers: {
+        'X-QE-Workspace': 'PARENT',
+        'X-QE-Institution-Code': institutionCode,
+        Accept: 'application/json'
+      }
+    });
+    expect(logoutResponse.status(), 'Logout must go through the server and revoke the selected workspace session.').toBe(200);
+    expect(await logoutResponse.json()).toMatchObject({ loggedOut: true });
+
+    const sessionAfterLogout = await parent.context.request.get(WEB + '/api/v1/auth/me', {
+      headers: { 'X-QE-Workspace': 'PARENT', 'X-QE-Institution-Code': institutionCode, Accept: 'application/json' }
+    });
+    expect([401, 403], 'The old parent cookie must not continue to authenticate after logout.').toContain(sessionAfterLogout.status());
+
+    const childrenAfterLogout = await parent.context.request.get(WEB + '/api/v1/guardians/children', {
+      headers: { 'X-QE-Workspace': 'PARENT', 'X-QE-Institution-Code': institutionCode, Accept: 'application/json' }
+    });
+    expect([401, 403], 'A revoked session must not continue reading guardian-owned resources.').toContain(childrenAfterLogout.status());
+  } finally {
+    await parent.context.close();
+  }
+});
+
+test('[CAT-001][CAT-002][TEN-002][TEN-003] learner course lists and subjects follow explicit institution assignment', async ({ browser }) => {
   const fixture = await readPrivateJson<QaFixture>('qa-fixture.json');
   const childA = await contextPage(browser, join(privateDir(), 'child-a.json'), WEB + '/student');
   const childB = await contextPage(browser, join(privateDir(), 'child-b.json'), WEB + '/student');
