@@ -256,6 +256,26 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("require-existing-checkpoint", workflow)
         self.assertIn("retryable_segments", workflow)
 
+    def test_layer45_run_budget_yields_safely_and_is_resumable(self):
+        workflow = read("textbook-visual-candidates-v3.yml")
+        pipeline = (ROOT / "scripts" / "quantaedge_textbook_pipeline.py").read_text(encoding="utf-8")
+        self.assertIn("--max-batches-per-run", pipeline)
+        self.assertIn("RUN_BUDGET_REACHED", pipeline)
+        self.assertIn("YIELDED_FOR_RESUME", pipeline)
+        self.assertIn("id: layer45_run", workflow)
+        self.assertIn("MAX_BATCHES_PER_RUN: 20", workflow)
+        self.assertIn('--max-batches-per-run "$MAX_BATCHES_PER_RUN"', workflow)
+        self.assertIn('result" -eq 10', workflow)
+        self.assertIn("steps.layer45_run.outputs.yielded != 'true'", workflow)
+        self.assertIn("needs.prepare.outputs.yielded != 'true'", workflow)
+
+    def test_layer45_no_progress_guard_and_inventory_source_identity_recovery_exist(self):
+        analyzer = (ROOT / "scripts" / "analyze_visual_inventory_with_ollama.py").read_text(encoding="utf-8")
+        pipeline = (ROOT / "scripts" / "quantaedge_textbook_pipeline.py").read_text(encoding="utf-8")
+        self.assertIn("SOURCE_IDENTITY_NORMALIZED", analyzer)
+        self.assertIn("assets_processed_ids", analyzer)
+        self.assertIn("repeated prior successful asset IDs without increasing analyzed/failed counts", pipeline)
+
 
 if __name__ == "__main__":
     unittest.main()
