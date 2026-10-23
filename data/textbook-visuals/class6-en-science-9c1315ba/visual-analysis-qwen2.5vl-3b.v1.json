@@ -11,10 +11,10 @@
     "assets_selected": 1353,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1348,
-    "assets_remaining": 730,
+    "assets_analyzed": 1349,
+    "assets_remaining": 729,
     "assets_completion_percent": 64.9,
-    "assets_failed": 23,
+    "assets_failed": 22,
     "assets_skipped_from_checkpoint": 1348,
     "batch_limit": 5,
     "publication_allowed": false
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864347432",
-      "checkpointed_at": "2026-10-23T00:18:10Z"
+      "checkpointed_at": "2026-10-23T00:28:52Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20124,7 +20124,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864347432",
-      "checkpointed_at": "2026-10-23T00:19:53Z"
+      "checkpointed_at": "2026-10-23T00:30:37Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37690,7 +37690,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864347432",
-      "checkpointed_at": "2026-10-23T00:21:03Z"
+      "checkpointed_at": "2026-10-23T00:31:48Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -41098,19 +41098,41 @@
     {
       "asset_id": "dcbf6beeba45ad6425f002cb",
       "asset_sha256": "56873f7725033e09c73bff6638617b12e4747c9c58b1610c8eb7f5ffc3ec5848",
-      "page_text_context_sha256": "048cbc1559fc282bc8ad66642d9b5e13b098db231abdb04f7c7078187d629f8b",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 117,
       "asset_path": "page-0117.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "048cbc1559fc282bc8ad66642d9b5e13b098db231abdb04f7c7078187d629f8b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39803151021",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for measuring thickness of a page and collecting leaves from the same tree.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "12. Tasneem wants to make a metre scale by herself. She\nconsiders the following materials for it—plywood, paper,\ncloth, stretchable rubber and steel. Which of these should\nshe not use and why?\n\n13. Think, design and develop a card game on conversion of\nunits of length to play with your friends.\n\nLea",
+          "Fig. 5.20: Measuring a leaf",
+          "Table 5.7: Length and breadth of leaves",
+          "S. no. | Name of tree | Length of leaf | Breadth of leaf",
+          "1. | | |",
+          "Discuss why the leaves of the same tree vary in length\nand breadth."
+        ],
+        "concepts": [
+          "Measurement of Length",
+          "Card game on conversion of units of length"
+        ],
+        "context_relation": "Instructional content for educational activities",
+        "limitations": [
+          "No specific limitations mentioned",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39864347432",
+      "checkpointed_at": "2026-10-23T00:34:41Z"
     },
     {
       "asset_id": "b1eafe2ae075efad1fc7d347",
@@ -43736,36 +43758,34 @@
         ],
         "concepts": [
           "Oral Rehydration Solution (ORS)",
-          "diarrhoea",
-          "dehydration",
-          "primary health centres",
-          "market",
-          "packet",
-          "dissolution",
-          "home preparation",
-          "sugar",
-          "salt",
-          "boiled and cooled water",
-          "liquids",
-          "oil",
-          "vinegar",
-          "honey",
-          "dissolution in water",
-          "gases",
-          "water",
-          "survival",
-          "animals"
+          "Diarrhoea",
+          "Dehydration",
+          "Primary health centres",
+          "Market availability",
+          "Preparation of ORS",
+          "Sugar",
+          "Common salt",
+          "Boiled and cooled water",
+          "Liquids",
+          "Oil",
+          "Vinegar",
+          "Honey",
+          "Dissolution in water",
+          "Gases in water",
+          "Survival of animals and plants",
+          "Density",
+          "Weight comparison"
         ],
-        "context_relation": "The image is a page from a textbook that explains the use of Oral Rehydration Solution (ORS) and a related activity involving the measurement of density using paper cups filled with different materials.",
+        "context_relation": "The page explains the use of ORS and provides a related activity to measure the density of different materials.",
         "limitations": [
-          "The image does not provide specific details about the ORS packets or their preparation."
+          "The page does not provide specific instructions for the activity."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39803151021",
-      "checkpointed_at": "2026-10-22T21:14:14Z"
+      "run_id": "39864347432",
+      "checkpointed_at": "2026-10-23T00:37:54Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",

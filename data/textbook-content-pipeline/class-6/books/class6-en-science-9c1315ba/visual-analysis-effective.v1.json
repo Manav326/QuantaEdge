@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "540d1828654928881f0473f056bd926633bb68cb909239dce450ef1aff1da0c5",
+  "raw_analysis_sha256": "8504778328cbb16f38cc1a0050dfd3fcd133a9312b6cb3423ce9b25fd4848707",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864347432",
-      "checkpointed_at": "2026-10-23T00:18:10Z",
+      "checkpointed_at": "2026-10-23T00:28:52Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -29444,7 +29444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864347432",
-      "checkpointed_at": "2026-10-23T00:19:53Z",
+      "checkpointed_at": "2026-10-23T00:30:37Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -56756,7 +56756,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864347432",
-      "checkpointed_at": "2026-10-23T00:21:03Z",
+      "checkpointed_at": "2026-10-23T00:31:48Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -62086,21 +62086,63 @@
     {
       "asset_id": "dcbf6beeba45ad6425f002cb",
       "asset_sha256": "56873f7725033e09c73bff6638617b12e4747c9c58b1610c8eb7f5ffc3ec5848",
-      "page_text_context_sha256": "048cbc1559fc282bc8ad66642d9b5e13b098db231abdb04f7c7078187d629f8b",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 117,
       "asset_path": "page-0117.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "048cbc1559fc282bc8ad66642d9b5e13b098db231abdb04f7c7078187d629f8b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39803151021",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for measuring thickness of a page and collecting leaves from the same tree.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "12. Tasneem wants to make a metre scale by herself. She\nconsiders the following materials for it—plywood, paper,\ncloth, stretchable rubber and steel. Which of these should\nshe not use and why?\n\n13. Think, design and develop a card game on conversion of\nunits of length to play with your friends.\n\nLea",
+          "Fig. 5.20: Measuring a leaf",
+          "Table 5.7: Length and breadth of leaves",
+          "S. no. | Name of tree | Length of leaf | Breadth of leaf",
+          "1. | | |",
+          "Discuss why the leaves of the same tree vary in length\nand breadth."
+        ],
+        "concepts": [
+          "Measurement of Length",
+          "Card game on conversion of units of length"
+        ],
+        "context_relation": "Instructional content for educational activities",
+        "limitations": [
+          "No specific limitations mentioned",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39864347432",
+      "checkpointed_at": "2026-10-23T00:34:41Z",
+      "effective_analysis": {
+        "visual_summary": "Instructions for measuring thickness of a page and collecting leaves from the same tree.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "12. Tasneem wants to make a metre scale by herself. She\nconsiders the following materials for it—plywood, paper,\ncloth, stretchable rubber and steel. Which of these should\nshe not use and why?\n\n13. Think, design and develop a card game on conversion of\nunits of length to play with your friends.\n\nLea",
+          "Fig. 5.20: Measuring a leaf",
+          "Table 5.7: Length and breadth of leaves",
+          "S. no. | Name of tree | Length of leaf | Breadth of leaf",
+          "1. | | |",
+          "Discuss why the leaves of the same tree vary in length\nand breadth."
+        ],
+        "concepts": [
+          "Measurement of Length",
+          "Card game on conversion of units of length"
+        ],
+        "context_relation": "Instructional content for educational activities",
+        "limitations": [
+          "No specific limitations mentioned",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -66201,36 +66243,34 @@
         ],
         "concepts": [
           "Oral Rehydration Solution (ORS)",
-          "diarrhoea",
-          "dehydration",
-          "primary health centres",
-          "market",
-          "packet",
-          "dissolution",
-          "home preparation",
-          "sugar",
-          "salt",
-          "boiled and cooled water",
-          "liquids",
-          "oil",
-          "vinegar",
-          "honey",
-          "dissolution in water",
-          "gases",
-          "water",
-          "survival",
-          "animals"
+          "Diarrhoea",
+          "Dehydration",
+          "Primary health centres",
+          "Market availability",
+          "Preparation of ORS",
+          "Sugar",
+          "Common salt",
+          "Boiled and cooled water",
+          "Liquids",
+          "Oil",
+          "Vinegar",
+          "Honey",
+          "Dissolution in water",
+          "Gases in water",
+          "Survival of animals and plants",
+          "Density",
+          "Weight comparison"
         ],
-        "context_relation": "The image is a page from a textbook that explains the use of Oral Rehydration Solution (ORS) and a related activity involving the measurement of density using paper cups filled with different materials.",
+        "context_relation": "The page explains the use of ORS and provides a related activity to measure the density of different materials.",
         "limitations": [
-          "The image does not provide specific details about the ORS packets or their preparation."
+          "The page does not provide specific instructions for the activity."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39803151021",
-      "checkpointed_at": "2026-10-22T21:14:14Z",
+      "run_id": "39864347432",
+      "checkpointed_at": "2026-10-23T00:37:54Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "page_with_multiple_visuals",
@@ -66249,29 +66289,27 @@
         ],
         "concepts": [
           "Oral Rehydration Solution (ORS)",
-          "diarrhoea",
-          "dehydration",
-          "primary health centres",
-          "market",
-          "packet",
-          "dissolution",
-          "home preparation",
-          "sugar",
-          "salt",
-          "boiled and cooled water",
-          "liquids",
-          "oil",
-          "vinegar",
-          "honey",
-          "dissolution in water",
-          "gases",
-          "water",
-          "survival",
-          "animals"
+          "Diarrhoea",
+          "Dehydration",
+          "Primary health centres",
+          "Market availability",
+          "Preparation of ORS",
+          "Sugar",
+          "Common salt",
+          "Boiled and cooled water",
+          "Liquids",
+          "Oil",
+          "Vinegar",
+          "Honey",
+          "Dissolution in water",
+          "Gases in water",
+          "Survival of animals and plants",
+          "Density",
+          "Weight comparison"
         ],
-        "context_relation": "The image is a page from a textbook that explains the use of Oral Rehydration Solution (ORS) and a related activity involving the measurement of density using paper cups filled with different materials.",
+        "context_relation": "The page explains the use of ORS and provides a related activity to measure the density of different materials.",
         "limitations": [
-          "The image does not provide specific details about the ORS packets or their preparation."
+          "The page does not provide specific instructions for the activity."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
