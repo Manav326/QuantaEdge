@@ -337,7 +337,7 @@ test('[CAT-001][CAT-002][TEN-002][TEN-003] learner course lists and subjects fol
     // default catalogue is allowed to leak into a routed learner session.
     const missingTenant = await api(childA.page, '/api/v1/students/me/programs', 'STUDENT');
     expect(missingTenant.status, 'A learner course catalogue request without a selected institution must be rejected.').toBe(400);
-    expect(String(missingTenant.body.errorCode || missingTenant.body.code || '')).toContain('INSTITUTION_CONTEXT_REQUIRED');
+    expect(String(missingTenant.body.error || missingTenant.body.errorCode || missingTenant.body.code || '')).toContain('INSTITUTION_CONTEXT_REQUIRED');
 
     const malformedTenant = await api(
       childA.page,
@@ -346,7 +346,7 @@ test('[CAT-001][CAT-002][TEN-002][TEN-003] learner course lists and subjects fol
       'bad code'
     );
     expect(malformedTenant.status).toBe(400);
-    expect(String(malformedTenant.body.errorCode || malformedTenant.body.code || '')).toContain('INVALID_INSTITUTION_CODE');
+    expect(String(malformedTenant.body.error || malformedTenant.body.errorCode || malformedTenant.body.code || '')).toContain('INVALID_INSTITUTION_CODE');
 
     const unavailableTenant = await api(
       childA.page,
@@ -355,7 +355,7 @@ test('[CAT-001][CAT-002][TEN-002][TEN-003] learner course lists and subjects fol
       'QAT-UNKNOWN'
     );
     expect(unavailableTenant.status).toBe(403);
-    expect(String(unavailableTenant.body.errorCode || unavailableTenant.body.code || '')).toContain('INSTITUTION_UNAVAILABLE');
+    expect(String(unavailableTenant.body.error || unavailableTenant.body.errorCode || unavailableTenant.body.code || '')).toContain('INSTITUTION_UNAVAILABLE');
 
     // A valid institution code still grants nothing by itself. Parent B's active tenant
     // cannot be selected using Child A's session unless the backend proves membership there.
