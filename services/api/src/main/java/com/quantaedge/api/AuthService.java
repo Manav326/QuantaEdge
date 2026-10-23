@@ -1463,19 +1463,9 @@ public class AuthService {
   }
 
   public List<String> permissionsForStaff(long staffId, String workspace) {
-    String role=jdbc.queryForObject(
-        "select role from staff_account where id=?", String.class, staffId);
-    // Global ADMIN semantics apply only to the education workspace. HRMS permissions are
-    // explicit and remain least-privilege even if a staff identity has an education role.
     String permissionWorkspace = "HRMS".equals(normalizeWorkspace(workspace)) ? "HRMS" : "EDUCATION_ADMIN";
-    if ("ADMIN".equals(role) && "EDUCATION_ADMIN".equals(permissionWorkspace)) {
-      return jdbc.queryForList("""
-          select permission_key from staff_permission_catalog
-          where permission_key not like 'HR\\_%' escape '\\'
-            and permission_key not in ('HR_SELF_SERVICE_VIEW','TEACHING_ASSIGNMENT_VIEW','CLASS_SCHEDULE_POLICY_MANAGE')
-          order by permission_key
-          """, String.class);
-    }
+    // Never synthesize permissions from the role label. The effective permission list is the
+    // active workspace-scoped grants plus scoped additional-role grants, exactly as the API checks.
     return jdbc.queryForList("""
         select effective.permission_key
         from (
@@ -1493,6 +1483,7 @@ public class AuthService {
         order by effective.permission_key
         """, String.class, staffId, permissionWorkspace, staffId, permissionWorkspace);
   }
+
 
   /** Stable 12-character public identity for an account, without exposing its database key. */
   public String publicUserId(AuthContext context) {
