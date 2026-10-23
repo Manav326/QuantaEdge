@@ -37,6 +37,63 @@ class ApplicationStartupSmokeTest {
 
 
   @Test
+  void tre4CourseBootstrapIsTenantOwnedAndKeepsPaperShellsUnpublished() {
+    assertEquals(1, jdbc.queryForObject("""
+      select count(*) from curriculum_program
+      where code='TRE4_CS' and curriculum_version='TRE4-2026'
+        and class_id is null and status='ACTIVE'
+    """, Integer.class), "TRE-4 must be an ordinary class-independent course.");
+
+    assertEquals(1, jdbc.queryForObject("""
+      select count(*) from curriculum_program p
+      join curriculum_subject s on s.program_id=p.id and s.code='computer_science' and s.active=true
+      join curriculum_program_subject ps on ps.program_id=p.id and ps.subject_id=s.id
+        and ps.class_id=s.class_id
+      join curriculum_chapter ch on ch.subject_id=s.id and ch.code='prev-years'
+      where p.code='TRE4_CS' and p.curriculum_version='TRE4-2026'
+        and ch.active=true and ch.content_status='DRAFT'
+    """, Integer.class), "TRE-4 must own its Computer Science subject and draft PYQ chapter.");
+
+    assertEquals(1, jdbc.queryForObject("""
+      select count(*) from institution_course_entitlement e
+      join institution_tenant i on i.id=e.institution_id and i.tenant_code='QUANTA-EDGE'
+      join curriculum_program p on p.id=e.program_id and p.code='TRE4_CS'
+      where e.status='ACTIVE'
+    """, Integer.class), "QuantaEdge must have an institution-level course entitlement.");
+
+    assertEquals(1, jdbc.queryForObject("""
+      select count(*) from institution_course_assignment a
+      join institution_tenant i on i.id=a.institution_id and i.tenant_code='QUANTA-EDGE'
+      join institution_course_release r on r.id=a.course_release_id and r.release_state='DRAFT'
+      join curriculum_program p on p.id=r.program_id and p.code='TRE4_CS'
+      where a.status='ASSIGNED'
+    """, Integer.class), "The course must be assigned to QuantaEdge in draft release state.");
+
+    assertEquals(3, jdbc.queryForObject("""
+      select count(*) from assessment a
+      join curriculum_program p on p.id=a.course_id and p.code='TRE4_CS'
+      where a.assessment_type='PREVIOUS_YEAR_PAPER'
+        and a.status='DRAFT' and a.is_generated=false
+        and a.source_exam_cycle in ('TRE 1.0','TRE 2.0','TRE 3.0')
+    """, Integer.class), "All three assessment shells must use the existing assessment engine.");
+
+    assertEquals(0, jdbc.queryForObject("""
+      select count(*) from assessment a
+      join curriculum_program p on p.id=a.course_id and p.code='TRE4_CS'
+      join assessment_question q on q.assessment_id=a.id
+      where a.assessment_type='PREVIOUS_YEAR_PAPER' and a.status='DRAFT'
+    """, Integer.class), "Bootstrap must not fabricate or publish question content.");
+
+    assertEquals(1, jdbc.queryForObject("""
+      select count(*) from institution_course_lifecycle_event e
+      join institution_tenant i on i.id=e.institution_id and i.tenant_code='QUANTA-EDGE'
+      join institution_course_release r on r.id=e.course_release_id
+      join curriculum_program p on p.id=r.program_id and p.code='TRE4_CS'
+      where e.event_type='TRE4_BOOTSTRAPPED'
+    """, Integer.class), "The course bootstrap must be auditable.");
+  }
+
+  @Test
   @Transactional
   void signupMembershipAuditPersistsNullActorAsJsonNull() {
     Long institutionId = jdbc.queryForObject("""
