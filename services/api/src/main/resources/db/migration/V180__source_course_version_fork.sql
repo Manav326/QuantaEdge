@@ -156,6 +156,11 @@ BEGIN
           -- A snapshot may have originated from an external bank. The immutable question snapshot
           -- remains authoritative, so do not make the new version depend on another course graph.
           v_row := v_row || jsonb_build_object(v_key,NULL);
+        ELSIF v_key IN ('parent_objective_id','parent_concept_id','prerequisite_lesson_id') THEN
+          -- Hierarchical relationships can point forward to another row in the same graph.
+          -- Null them while cloning; qe_fork_course_version restores every relationship from the
+          -- source-to-version maps after all peer entities have been created.
+          v_row := v_row || jsonb_build_object(v_key,NULL);
         ELSIF v_key IN ('resource_id','learning_document_id') THEN
           RAISE EXCEPTION 'COURSE_VERSION_FORK_RESOURCE_MAP_MISSING: %.% references unmapped entity %',
             p_table_name,v_key,v_old_id USING ERRCODE='23514';
@@ -560,7 +565,32 @@ BEGIN
   PERFORM qe_clone_course_table_rows('PROGRAM_SUBJECTS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
   PERFORM qe_clone_course_table_rows('CHAPTERS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
   PERFORM qe_clone_course_table_rows('OBJECTIVES',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  UPDATE learning_objective new_row
+  SET parent_objective_id=parent_map.version_entity_id
+  FROM institution_course_version_entity_map current_map
+  JOIN learning_objective source_row ON source_row.id=current_map.source_entity_id
+  JOIN institution_course_version_entity_map parent_map
+    ON parent_map.version_program_id=current_map.version_program_id
+   AND parent_map.entity_type='OBJECTIVE'
+   AND parent_map.source_entity_id=source_row.parent_objective_id
+  WHERE current_map.version_program_id=v_new_program_id
+    AND current_map.entity_type='OBJECTIVE'
+    AND new_row.id=current_map.version_entity_id
+    AND source_row.parent_objective_id IS NOT NULL;
+
   PERFORM qe_clone_course_table_rows('CONCEPTS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  UPDATE chapter_concept new_row
+  SET parent_concept_id=parent_map.version_entity_id
+  FROM institution_course_version_entity_map current_map
+  JOIN chapter_concept source_row ON source_row.id=current_map.source_entity_id
+  JOIN institution_course_version_entity_map parent_map
+    ON parent_map.version_program_id=current_map.version_program_id
+   AND parent_map.entity_type='CONCEPT'
+   AND parent_map.source_entity_id=source_row.parent_concept_id
+  WHERE current_map.version_program_id=v_new_program_id
+    AND current_map.entity_type='CONCEPT'
+    AND new_row.id=current_map.version_entity_id
+    AND source_row.parent_concept_id IS NOT NULL;
 
   -- Structured-artifact links have stable external IDs. Build a new version-scoped ID and then
   -- rewrite matching references in lesson-block JSON and resource assignments before cloning them.
@@ -583,6 +613,18 @@ BEGIN
   PERFORM qe_clone_course_table_rows('CHAPTER_SOURCES',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
   PERFORM qe_clone_course_table_rows('REQUIREMENTS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
   PERFORM qe_clone_course_table_rows('LESSONS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  UPDATE lesson new_row
+  SET prerequisite_lesson_id=prerequisite_map.version_entity_id
+  FROM institution_course_version_entity_map current_map
+  JOIN lesson source_row ON source_row.id=current_map.source_entity_id
+  JOIN institution_course_version_entity_map prerequisite_map
+    ON prerequisite_map.version_program_id=current_map.version_program_id
+   AND prerequisite_map.entity_type='LESSON'
+   AND prerequisite_map.source_entity_id=source_row.prerequisite_lesson_id
+  WHERE current_map.version_program_id=v_new_program_id
+    AND current_map.entity_type='LESSON'
+    AND new_row.id=current_map.version_entity_id
+    AND source_row.prerequisite_lesson_id IS NOT NULL;
   PERFORM qe_clone_course_table_rows('LESSON_BLOCKS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
   PERFORM qe_clone_course_table_rows('QUESTIONS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
   PERFORM qe_clone_course_table_rows('QUESTION_OPTIONS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
