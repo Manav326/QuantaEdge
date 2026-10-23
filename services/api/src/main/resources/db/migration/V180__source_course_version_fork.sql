@@ -521,7 +521,7 @@ BEGIN
   INSERT INTO institution_course_version_entity_map(
     course_identity_id,source_program_id,version_program_id,entity_type,source_entity_id,version_entity_id
   )
-  SELECT v_identity.id,p_source_program_id,version_program_id,'LEARNING_RESOURCE',r.id,r.id
+  SELECT v_identity.id,p_source_program_id,v_new_program_id,'LEARNING_RESOURCE',r.id,r.id
   FROM learning_resource r
   WHERE EXISTS (
     SELECT 1 FROM learning_resource_assignment a
@@ -541,7 +541,7 @@ BEGIN
   INSERT INTO institution_course_version_entity_map(
     course_identity_id,source_program_id,version_program_id,entity_type,source_entity_id,version_entity_id
   )
-  SELECT v_identity.id,p_source_program_id,version_program_id,'LEARNING_DOCUMENT',d.id,d.id
+  SELECT v_identity.id,p_source_program_id,v_new_program_id,'LEARNING_DOCUMENT',d.id,d.id
   FROM learning_document d
   WHERE EXISTS (
     SELECT 1 FROM learning_document_course_assignment a
@@ -570,7 +570,7 @@ BEGIN
       WHERE version_program_id=v_new_program_id AND entity_type='CHAPTER')
     ORDER BY s.artifact_id
   LOOP
-    v_new_artifact_id := left(v_artifact.artifact_id,85)||'-cv'||v_version||'-'||version_program_id;
+    v_new_artifact_id := left(v_artifact.artifact_id,85)||'-cv'||v_version||'-'||v_new_program_id;
     INSERT INTO institution_course_version_artifact_map(
       course_identity_id,source_program_id,version_program_id,source_artifact_id,version_artifact_id
     ) VALUES(v_identity.id,p_source_program_id,v_new_program_id,v_artifact.artifact_id,v_new_artifact_id);
@@ -602,7 +602,7 @@ BEGIN
   PERFORM qe_clone_course_table_rows('ASSESSMENT_PACK_ITEMS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
   PERFORM qe_clone_course_table_rows('ASSESSMENT_PACK_RESOURCES',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
 
-  v_fingerprint := course_content_fingerprint(version_program_id);
+  v_fingerprint := course_content_fingerprint(v_new_program_id);
   INSERT INTO institution_course_release(
     source_institution_id,program_id,release_version,release_state,content_fingerprint,
     legacy_migration,created_at,updated_at
@@ -620,7 +620,7 @@ BEGIN
   ) VALUES (
     v_identity.id,p_source_program_id,v_new_program_id,v_version,'DRAFT_VERSION_CREATED',
     p_actor_staff_id,p_actor_institution_admin_id,
-    jsonb_build_object('sourceProgramId',p_source_program_id,'versionProgramId',version_program_id,
+    jsonb_build_object('sourceProgramId',p_source_program_id,'versionProgramId',v_new_program_id,
       'releaseId',v_release_id,'releaseState','DRAFT','contentFingerprint',v_fingerprint)
   );
 
