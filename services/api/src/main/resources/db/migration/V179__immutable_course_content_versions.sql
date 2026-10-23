@@ -308,16 +308,14 @@ BEGIN
     WHEN 'course_assessment_pack' THEN
       RETURN QUERY SELECT NULLIF(p_row->>'course_id','')::bigint;
     WHEN 'course_assessment_pack_item' THEN
+      v_parent_id := NULLIF(p_row->>'pack_id','')::bigint;
       SELECT p.course_id INTO v_program_id
-      FROM course_assessment_pack_item i
-      JOIN course_assessment_pack p ON p.id=i.pack_id
-      WHERE i.id=v_id;
+      FROM course_assessment_pack p WHERE p.id=v_parent_id;
       RETURN QUERY SELECT v_program_id WHERE v_program_id IS NOT NULL;
     WHEN 'course_assessment_pack_resource' THEN
+      v_parent_id := NULLIF(p_row->>'pack_id','')::bigint;
       SELECT p.course_id INTO v_program_id
-      FROM course_assessment_pack_resource r
-      JOIN course_assessment_pack p ON p.id=r.pack_id
-      WHERE r.id=v_id;
+      FROM course_assessment_pack p WHERE p.id=v_parent_id;
       RETURN QUERY SELECT v_program_id WHERE v_program_id IS NOT NULL;
     WHEN 'learning_resource_assignment' THEN
       v_parent_id := NULLIF(p_row->>'chapter_id','')::bigint;
