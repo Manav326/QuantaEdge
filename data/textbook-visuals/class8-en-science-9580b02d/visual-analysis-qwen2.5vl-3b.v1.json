@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1177,
+    "assets_selected": 1179,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
-      "9c000d9c87aaab53a1112cac",
-      "bf6d097c9032d517a6297339",
-      "7bceb11bef609f2404522955"
+      "f492c50e9c7d7ef8d140ae06",
+      "ae204e9d8dac6cbaebca9c68",
+      "3c71aba3cff9b6b75ea1d4e2"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1174,
-    "assets_remaining": 1117,
-    "assets_completion_percent": 51.2,
+    "assets_analyzed": 1176,
+    "assets_remaining": 1115,
+    "assets_completion_percent": 51.3,
     "assets_failed": 9,
-    "assets_skipped_from_checkpoint": 1172,
+    "assets_skipped_from_checkpoint": 1174,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39920783405",
-      "checkpointed_at": "2026-10-23T08:59:10Z"
+      "checkpointed_at": "2026-10-23T09:10:07Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39920783405",
-      "checkpointed_at": "2026-10-23T08:59:43Z"
+      "checkpointed_at": "2026-10-23T09:10:41Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38348,7 +38348,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing different types of forces, specifically contact forces and muscular force.",
+        "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -38363,18 +38363,90 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force"
+          "muscular force",
+          "living beings"
         ],
-        "context_relation": "The page discusses different types of forces, specifically contact forces and muscular force, and provides examples of their application in living beings.",
+        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The page does not provide a diagram or illustration of the contact forces or muscular force."
+          "The image does not provide specific details about the forces acting on the objects in the diagram."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
-      "checkpointed_at": "2026-10-23T04:20:50Z"
+      "run_id": "39920783405",
+      "checkpointed_at": "2026-10-23T09:13:51Z"
+    },
+    {
+      "asset_id": "ae204e9d8dac6cbaebca9c68",
+      "asset_sha256": "72f9ea27e93759bdebe0d2ae435bd54c42818e90b465655e9fe319372c5bb0af",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/72f9ea27e93759bdebe0d2ae435bd54c42818e90b465655e9fe319372c5bb0af.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4ced2a91f1ad4add1f52a0f90bfa067845579b06c0365565cf231ef29c8dfe09",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a red shirt, with one hand on their chin, appearing thoughtful or contemplative.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text discussing the muscular force of animals and its role in human functions.",
+        "limitations": [
+          "The image does not provide specific details about the muscular force or its applications in human functions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39920783405",
+      "checkpointed_at": "2026-10-23T09:14:59Z"
+    },
+    {
+      "asset_id": "3c71aba3cff9b6b75ea1d4e2",
+      "asset_sha256": "c20c1293e5e3c0bc36d4fe17fabf0f101f98437a3649d11875266d95c2b55900",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/c20c1293e5e3c0bc36d4fe17fabf0f101f98437a3649d11875266d95c2b55900.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4ced2a91f1ad4add1f52a0f90bfa067845579b06c0365565cf231ef29c8dfe09",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A farmer is plowing a field with two oxen using a wooden plow.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "67",
+          "Humans used the muscular force of some animals to carry out many tasks for a long time (Fig. 5.4).",
+          "Fig. 5.4: Use of muscular force of animals to assist with human tasks",
+          "Ever heard of ...",
+          "Muscular force plays an important role in many functions inside our body too. This force helps us chew food and push it through the alimentary canal during the process of digestion. The expansion and contraction of our heart muscles allows the blood to circulate in our body —"
+        ],
+        "concepts": [
+          "Muscular force",
+          "Animals",
+          "Plowing",
+          "Alimentary canal",
+          "Digestion",
+          "Heart muscles",
+          "Blood circulation"
+        ],
+        "context_relation": "The image illustrates the use of muscular force from animals to assist in human tasks, specifically plowing a field.",
+        "limitations": [
+          "The image does not show the muscular force of animals in the human body."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39920783405",
+      "checkpointed_at": "2026-10-23T09:16:19Z"
     }
   ]
 }
