@@ -75,7 +75,7 @@ class CourseAuthoringPackageTest {
     assertFalse(Boolean.TRUE.equals(result.get("valid")));
     List<String> errors=(List<String>)result.get("errors");
     assertTrue(errors.stream().anyMatch(e->e.contains("unsupported property 'unexpected'")));
-    assertTrue(errors.stream().anyMatch(e->e.contains("subject.code must be unique")));
+    assertTrue(errors.stream().anyMatch(e->e.contains(".code must be unique.")));
   }
 
   @Test
