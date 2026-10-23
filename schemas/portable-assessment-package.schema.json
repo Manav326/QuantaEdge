@@ -560,6 +560,85 @@
           "source_code_preservation_notes": {
             "type": "string",
             "maxLength": 1200
+          },
+          "stimulus_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-z0-9][a-z0-9._-]{2,119}$",
+            "description": "Stable group identifier shared by questions that use the same source passage, dialogue, table, graph or code stimulus."
+          },
+          "stimulus_i18n": {
+            "type": "object",
+            "minProperties": 1,
+            "patternProperties": {
+              "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})?$": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 12000
+              }
+            },
+            "additionalProperties": false,
+            "description": "Original stimulus text in each available source language. The same stimulus_id must use identical values across its questions."
+          },
+          "stimulus_content_kind": {
+            "enum": [
+              "PROSE",
+              "CODE",
+              "MATHEMATICAL",
+              "MIXED"
+            ]
+          },
+          "stimulus_code_line_indices": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "maxItems": 300
+          },
+          "stimulus_math_line_indices": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "maxItems": 300
+          },
+          "stimulus_source_languages": {
+            "type": "object",
+            "patternProperties": {
+              "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})?$": {
+                "enum": [
+                  "en",
+                  "hi",
+                  "ur",
+                  "bn"
+                ]
+              }
+            },
+            "additionalProperties": false
+          },
+          "native_language_only": {
+            "type": "boolean",
+            "description": "Do not translate the source-language prompt, options or stimulus. Convert legacy glyph encoding only when the font is known."
+          },
+          "native_source_language": {
+            "enum": [
+              "en",
+              "hi",
+              "ur",
+              "bn"
+            ]
+          },
+          "content_language_policy": {
+            "enum": [
+              "NATIVE_SOURCE_ONLY",
+              "BILINGUAL_SOURCE_VARIANTS"
+            ]
           }
         }
       }

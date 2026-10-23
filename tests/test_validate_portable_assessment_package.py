@@ -109,9 +109,52 @@ def sample_package() -> dict:
     }
 
 
+def native_language_package() -> dict:
+    package = sample_package()
+    package["sections"].append({
+        "code": "LANGUAGE_QUALIFYING",
+        "name_i18n": {"en": "Qualifying language", "hi": "अर्हकारी भाषा"},
+        "question_count": 2,
+        "result_policy": "QUALIFYING_ONLY"
+    })
+    for number in (101, 102):
+        q = question(f"sample-language-e{number}", "LANGUAGE_QUALIFYING", number)
+        q["section_result_policy"] = "QUALIFYING_ONLY"
+        q["prompt"] = "Choose the correct word for the source-language sentence."
+        q["prompt_i18n"] = {"en": q["prompt"]}
+        for option in q["options"]:
+            option["text_i18n"] = {"en": option["text"]}
+        q["proposed_answer"]["explanation_i18n"] = {"en": "The explanation remains in the source language."}
+        q["native_language_only"] = True
+        q["native_source_language"] = "en"
+        q["content_language_policy"] = "NATIVE_SOURCE_ONLY"
+        q["stimulus_id"] = "tre-3.0-stimulus-e-1-5"
+        q["stimulus_i18n"] = {"en": "An unchanged passage from the original paper."}
+        q["stimulus_content_kind"] = "PROSE"
+        package["questions"].append(q)
+    return package
+
+
 class PortableAssessmentPackageTests(unittest.TestCase):
     def test_accepts_class_neutral_bilingual_sectioned_draft(self):
         self.assertEqual(validate_package(sample_package()), [])
+
+    def test_accepts_native_source_only_questions_sharing_one_passage(self):
+        self.assertEqual(validate_package(native_language_package()), [])
+
+    def test_rejects_translated_fallback_for_native_language_only_question(self):
+        package = native_language_package()
+        question_data = package["questions"][-1]
+        question_data["prompt_i18n"]["hi"] = "अनुवादित प्रश्न"
+        question_data["options"][0]["text_i18n"]["hi"] = "अनुवादित विकल्प"
+        errors = validate_package(package)
+        self.assertTrue(any("only the native source language" in error for error in errors))
+
+    def test_rejects_different_passage_text_for_same_stimulus_id(self):
+        package = native_language_package()
+        package["questions"][-1]["stimulus_i18n"]["en"] = "A conflicting passage."
+        errors = validate_package(package)
+        self.assertTrue(any("conflicts with other questions using shared stimulus ID" in error for error in errors))
 
     def test_rejects_hard_coded_school_class_fields(self):
         package = sample_package()

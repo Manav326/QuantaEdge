@@ -184,6 +184,7 @@ def validate_package(package: Any, repo_root: Path | None = None,
         questions = []
     ids: set[str] = set()
     source_numbers: set[tuple[str, str]] = set()
+    stimulus_groups: dict[str, str] = {}
     actual_section_counts: dict[str, int] = {}
     for index, q in enumerate(questions, 1):
         where = f"questions[{index}]"
@@ -210,6 +211,39 @@ def validate_package(package: Any, repo_root: Path | None = None,
             section_names = q.get("section_name_i18n")
             if section_names is not None:
                 _localized(section_names, f"{where}.section_name_i18n", set(), errors)
+        stimulus_id = q.get("stimulus_id")
+        stimulus_i18n = q.get("stimulus_i18n")
+        if stimulus_i18n is not None:
+            _localized(stimulus_i18n, f"{where}.stimulus_i18n", set(), errors)
+        if stimulus_id is not None:
+            if not isinstance(stimulus_id, str) or not re.fullmatch(r"[a-z0-9][a-z0-9._-]{1,119}", stimulus_id):
+                errors.append(f"{where}.stimulus_id must be a stable lowercase slug when provided.")
+            elif not isinstance(stimulus_i18n, dict):
+                errors.append(f"{where}.stimulus_id requires stimulus_i18n source text.")
+            else:
+                stimulus_signature = json.dumps(stimulus_i18n, ensure_ascii=False, sort_keys=True)
+                previous_signature = stimulus_groups.get(stimulus_id)
+                if previous_signature is not None and previous_signature != stimulus_signature:
+                    errors.append(f"{where}.stimulus_i18n conflicts with other questions using shared stimulus ID {stimulus_id!r}.")
+                else:
+                    stimulus_groups[stimulus_id] = stimulus_signature
+        native_only = q.get("native_language_only", False)
+        native_language = q.get("native_source_language")
+        if "native_language_only" in q and not isinstance(native_only, bool):
+            errors.append(f"{where}.native_language_only must be boolean.")
+        if native_only:
+            if code != "LANGUAGE_QUALIFYING":
+                errors.append(f"{where}.native_language_only is reserved for source-language qualifying questions.")
+            if q.get("content_language_policy") != "NATIVE_SOURCE_ONLY":
+                errors.append(f"{where}.content_language_policy must be NATIVE_SOURCE_ONLY when native_language_only is true.")
+            if native_language not in {"en", "hi", "ur", "bn"}:
+                errors.append(f"{where}.native_source_language must identify the original source language.")
+            else:
+                prompt_languages = set(q.get("prompt_i18n", {})) if isinstance(q.get("prompt_i18n"), dict) else set()
+                if prompt_languages != {native_language}:
+                    errors.append(f"{where}.prompt_i18n must contain only the native source language {native_language!r}; do not add a translated fallback.")
+                if isinstance(stimulus_i18n, dict) and set(stimulus_i18n) != {native_language}:
+                    errors.append(f"{where}.stimulus_i18n must contain only the native source language {native_language!r}.")
         if not isinstance(q.get("prompt"), str) or not q["prompt"].strip():
             errors.append(f"{where}.prompt is required as a display fallback.")
         if q.get("question_type") not in {"MCQ", "TRUE_FALSE"}:
@@ -245,6 +279,13 @@ def validate_package(package: Any, repo_root: Path | None = None,
             is_scored_bilingual = code in {"GENERAL_STUDIES", "COMPUTER_SCIENCE"} and required_scored_languages
             _localized(opt.get("text_i18n"), f"{where}.option[{opt['key']}].text_i18n",
                        required_scored_languages if is_scored_bilingual else set(), errors)
+        if native_only and isinstance(options, list) and native_language in {"en", "hi", "ur", "bn"}:
+            for option in options:
+                if not isinstance(option, dict):
+                    continue
+                option_i18n = option.get("text_i18n")
+                if not isinstance(option_i18n, dict) or set(option_i18n) != {native_language}:
+                    errors.append(f"{where}.option[{option.get('key', '?')}].text_i18n must contain only native source language {native_language!r}; do not translate qualifying-language options.")
         if len(set(option_keys)) != len(option_keys):
             errors.append(f"{where}.options keys must be unique.")
 
