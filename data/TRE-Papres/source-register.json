@@ -71,5 +71,33 @@
     "Do not publish a test or mark an answer official until source and answer review are complete."
   ],
   "binary_collection_path": "data/TRE-Papres/sources/",
-  "binary_collection_status": "SOURCE_PDFS_EXTRACTED_AND_HASHED"
+  "binary_collection_status": "SOURCE_PDFS_EXTRACTED_AND_HASHED",
+  "verified_booklet_structure": {
+    "status": "QUESTION_COUNTS_RECONCILED_TO_SUPPLIED_BOOKLETS",
+    "note": "Counts describe the exact supplied booklet. Only General Studies and Computer Science contribute to the 120-question scored result; qualifying-language items remain visible in the attempt and are reported separately.",
+    "cycles": {
+      "TRE 1.0": {
+        "total_question_count": 120,
+        "qualifying_language_question_count": 0,
+        "general_studies_question_count": 40,
+        "computer_science_question_count": 80,
+        "scored_question_count": 120
+      },
+      "TRE 2.0": {
+        "total_question_count": 150,
+        "qualifying_language_question_count": 30,
+        "general_studies_question_count": 40,
+        "computer_science_question_count": 80,
+        "scored_question_count": 120
+      },
+      "TRE 3.0": {
+        "total_question_count": 148,
+        "qualifying_language_question_count": 28,
+        "general_studies_question_count": 40,
+        "computer_science_question_count": 80,
+        "scored_question_count": 120,
+        "source_note": "This provided booklet contains E-2, E-3, E-4, E-5, E-7, E-8 and H-9 through H-30 in the qualifying-language section. E-1 and E-6 are not present and must not be synthesized."
+      }
+    }
+  }
 }
