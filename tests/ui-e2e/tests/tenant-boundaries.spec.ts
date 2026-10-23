@@ -182,7 +182,7 @@ test('[FAM-003][FAM-005][CERT-003][TEN-002] parent and child API sessions cannot
       undefined,
       fixture.credentials.parentA.institutionCode
     );
-    expect(certificatesA.status, 'A parent may read the own child certificate list for the selected enrolled course.').toBe(200);
+    expect(certificatesA.status, 'A parent may read the own child certificate list for the selected enrolled course. Response: ' + JSON.stringify(certificatesA.body)).toBe(200);
     expect(Number(certificatesA.body.studentId)).toBe(childAId);
     expect(Number(certificatesA.body.courseId)).toBe(reportCourseId);
     expect(Array.isArray(certificatesA.body.items)).toBe(true);
