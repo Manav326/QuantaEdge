@@ -36,11 +36,13 @@ QuantaEdge is a quality-first learning platform for different ages, subjects, sk
 
 - [x] Add an authenticated request/status/cancellation API with typed confirmation, server-derived identity, duplicate-open-request protection, an audit event, and a staff review queue.
 - [x] Add the external User Web request route and link it from Privacy; expose the same request panel in parent/independent-learner profile settings. English/Hinglish strings are centralized.
+- [x] Add the Android in-app request/status/cancel controls to account identity settings, using the existing authenticated API client and centralized Android phrase registry.
 - [x] Require parents to explicitly include every currently linked child in the request; store a per-child public-ID snapshot and do not silently orphan child access.
 - [x] Keep the request visibly distinct from completed deletion; provide cancellation while the request is still open.
-- [ ] Implement actual retention-aware erase/anonymize fulfillment, revocation of all account and learner sessions at finalization, processor-side deletion, and an approved status-completion path.
+- [ ] Implement actual retention-aware erase/anonymize fulfillment, revocation of all account and learner sessions at finalization, processor-side deletion, and an approved status-completion path. Current request intake must not be treated as completed deletion.
 - [ ] Complete the full migrated-schema FK/PII inventory and legal/business retention decision. The confirmed dependencies and blockers are documented in `docs/architecture/account-deletion-dependency-map.md`.
-- [ ] Add and device-test the Android in-app request path. The external web URL can be used without reinstalling the app, but the in-app Android route is not yet wired.
+- [ ] Add a verified step-up identity check for the request/fulfillment process (not just an active session and typed confirmation); define OTP/password/Google re-auth behavior without weakening existing login verification.
+- [ ] Build and device-test the Android in-app request path, including API error states, child confirmation, cancellation and restored sessions. The source controls are wired, but physical-device acceptance has not been run.
 - [ ] Add end-to-end staff operations and verify parent-only, multiple-child, shared-guardian, purchase, invoice, certificate and cancellation scenarios in a real migrated test environment.
 
 ## Status rule
