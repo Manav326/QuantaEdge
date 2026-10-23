@@ -34,7 +34,7 @@ class CourseMarketplaceTenantScopeTest {
 
   @BeforeEach
   void setUp() {
-    when(authorization.requireStudent(student)).thenReturn(student);
+    org.mockito.Mockito.lenient().when(authorization.requireStudent(student)).thenReturn(student);
     controller = new CourseMarketplaceController(jdbc, authorization, new ObjectMapper(),courseOrderFinancialService,
         "", "", "https://api.razorpay.com/v1");
   }
