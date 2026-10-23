@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1355,
+    "assets_selected": 1356,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
       "b90b1ccd2f380e4a35f9f791",
-      "1945650a23405191d83bfc0c",
-      "aac4c1ba6661d83887d09dfc"
+      "7959e62a0e7a492cede4eda6",
+      "9f232483ce16973cb62998c9"
     ],
     "assets_eligible": 2078,
     "assets_analyzed": 1351,
     "assets_remaining": 727,
     "assets_completion_percent": 65.0,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 1350,
+    "assets_skipped_from_checkpoint": 1351,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -456,7 +456,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39909485860",
-      "checkpointed_at": "2026-10-23T06:34:54Z"
+      "checkpointed_at": "2026-10-23T06:44:27Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20135,7 +20135,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39909485860",
-      "checkpointed_at": "2026-10-23T06:35:59Z"
+      "checkpointed_at": "2026-10-23T06:45:32Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23794,7 +23794,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39909485860",
-      "checkpointed_at": "2026-10-23T06:36:53Z"
+      "checkpointed_at": "2026-10-23T06:46:26Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -33048,7 +33048,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864347432",
+      "run_id": "39909485860",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -33986,7 +33986,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864347432",
+      "run_id": "39909485860",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
