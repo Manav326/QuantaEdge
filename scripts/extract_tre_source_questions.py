@@ -324,7 +324,7 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                         candidate = (identity, number, prefix, parsed[2])
                 if candidate:
                     if active:
-                        active["raw_text"] = "\n".join(line.strip() for line in active.pop("_lines") if line.strip())
+                        active["raw_text"] = preserve_layout("\n".join(active.pop("_lines")))
                         collected.append(active)
                     identity, number, prefix, rest = candidate
                     last_numeric_question = number
@@ -338,7 +338,7 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                     else:
                         locale = "en" if page_num % 2 == 0 else "hi"
                         section = section_for_number(cycle, number)
-                    non_empty_lines=[line.strip() for line in text.splitlines() if line.strip()]
+                    non_empty_lines=[line.rstrip() for line in text.splitlines() if line.strip()]
                     active = {
                         "question_identity": identity,
                         "question_number": number,
@@ -352,34 +352,43 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                         "_lines": [],
                     }
                     if rest.strip():
-                        active["_lines"].append(rest.strip())
+                        active["_lines"].append(rest.rstrip())
                     # The PDF extractor can place the stem and all options in one block.
                     # Preserve the remaining lines rather than dropping them after the first line.
                     if non_empty_lines:
                         active["_lines"].extend(non_empty_lines[1:])
                     continue
                 if active:
-                    active["_lines"].append(text.strip())
+                    active["_lines"].append(text.rstrip())
             if active:
-                active["raw_text"] = "\n".join(line.strip() for line in active.pop("_lines") if line.strip())
+                active["raw_text"] = preserve_layout("\n".join(active.pop("_lines")))
                 collected.append(active)
     return collected
 
 
-def parse_prompt_options(text: str, identity: str, language: str, cycle: str) -> tuple[str, list[dict[str, str]]]:
-    normalized = text.replace("\u00a0", " ")
-    # Native PDF text can place the first option on the same physical line as a stem.
+def parse_prompt_options(text: str, identity: str, language: str, cycle: str) -> tuple[str, list[dict[str, Any]]]:
+    """Separate option labels without flattening the question's original layout."""
+    normalized = preserve_layout(text.replace("\u00a0", " "))
+    # Option labels must start a physical source line; an indented code line such as
+    # (a == b) must not be split into an MCQ option.
     option_matches = list(OPTION_START.finditer(normalized))
     if not option_matches:
-        prompt = normalize_space(normalized)
+        prompt = preserve_layout(normalized)
         return prompt, []
-    prompt = normalize_space(normalized[:option_matches[0].start()])
-    options: list[dict[str, str]] = []
+    prompt = preserve_layout(normalized[:option_matches[0].start()])
+    options: list[dict[str, Any]] = []
     for i, match in enumerate(option_matches):
         end = option_matches[i + 1].start() if i + 1 < len(option_matches) else len(normalized)
         label = match.group(1).upper()
-        value = normalize_space(normalized[match.end():end])
-        options.append({"key": label, "raw_text": value, "text": value})
+        value = preserve_layout(normalized[match.end():end])
+        options.append({
+            "key": label,
+            "raw_text": value,
+            "text": value,
+            "content_kind": classify_content(value),
+            "code_line_indices": detected_code_line_indices(value),
+            "math_line_indices": detected_math_line_indices(value),
+        })
     return prompt, options
 
 
