@@ -63,6 +63,28 @@ public class CourseAuthoringController {
     return Map.of("courseTypes",types,"institutionId",tenant.institutionId());
   }
 
+  @PostMapping("/course-packages/validate")
+  public Map<String,Object> validateCoursePackage(
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext supplied,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    requireEducationStaff(supplied,tenant,"CONTENT_CREATE");
+    return courseAuthoring.validateCoursePackage(body);
+  }
+
+  @PostMapping("/course-packages/import")
+  public Map<String,Object> importCoursePackage(
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext supplied,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    AuthContext context=requireEducationStaff(supplied,tenant,"CONTENT_CREATE");
+    authorization.requirePermission(context,"CONTENT_EDIT");
+    return courseAuthoring.importCoursePackage(
+        tenant.institutionId(),tenant.tenantCode(),context.staffId(),body);
+  }
+
   @PostMapping("/courses")
   public Map<String,Object> createSourcedCourse(
       @RequestBody Map<String,Object> body,
