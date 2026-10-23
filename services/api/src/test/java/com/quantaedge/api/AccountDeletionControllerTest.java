@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -30,7 +31,7 @@ class AccountDeletionControllerTest {
 
   @BeforeEach
   void setUp() {
-    when(authorization.requireAuth(parent)).thenReturn(parent);
+    lenient().when(authorization.requireAuth(parent)).thenReturn(parent);
     controller = new AccountDeletionController(jdbc, authorization, staffAudit);
   }
 
