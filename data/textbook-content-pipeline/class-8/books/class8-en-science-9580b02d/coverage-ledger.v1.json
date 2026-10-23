@@ -8669,7 +8669,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
+        "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -8684,25 +8684,23 @@
           "curiosity",
           "teamwork",
           "inclusive education",
-          "safety",
+          "safety precautions",
           "peer interactions",
-          "understanding concepts",
-          "reflecting on ideas",
+          "assessing understanding",
           "analyzing concepts",
-          "sustaining interest",
           "challenging ideas",
           "additional information",
           "interesting facts",
           "engaging materials",
           "Ever heard of",
-          "fascinating facts",
-          "interesting observations",
-          "curiosity-driven questions",
-          "advanced concepts"
+          "A step further",
+          "advanced concepts",
+          "scientific principles",
+          "real-life applications"
         ],
-        "context_relation": "The text discusses the importance of open-ended questions in education, encouraging critical thinking and curiosity. It also mentions the activities and materials used in the textbook to promote teamwork, safety, and understanding of concepts.",
+        "context_relation": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "limitations": [
-          "The text does not provide specific examples or activities from the textbook.",
+          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -9207,39 +9205,30 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
+        "visual_summary": "A page from a textbook discussing the contributions of scientists and their impact on society.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "applications, showing how science has contributed to societal development.",
-          "Our scientific heritage offers information about institutions which have contributed to the progress of scientific temper and any personality or their works of 'heritage level repute'.",
-          "You will find a Think like a scientist section in some chapters, where you can explore the experiment further by making modifications or trying different approaches. It will help you to investigate more deeply and allow new questions to emerge in your minds.",
-          "Some chapters also feature a section called Be a scientist, where you can learn about the contributions of Indian and international scientists related to the topic. These sections include brief biographies and show how scientists have made a difference. Additionally, an interesting element that has ",
-          "The Snapshots section provides the summary of a chapter, which offers an overview of the chapter's main points, reinforcing the key ideas discussed. Each chapter includes Keywords in between the text that highlight key concepts and steps in science, helping learners understand ideas and think critic",
-          "Keep the curiosity alive includes a range of exercises, from pictorial questions and puzzles to multiple choice questions, offering a challenging and engaging experience. These questions also help assess the competencies developed by learners in each chapter. We recommend teachers to use questions s"
+          "applications, showing how science has\ncontributed to societal development.",
+          "Our scientific heritage offers\ninformation about institutions which\nhave contributed to the progress of\nscientific temper and any personality or\ntheir works of ‘heritage level repute’.",
+          "You will find a Think like a scientist\nsection in some chapters, where you\ncan explore the experiment further\nby making modifications or trying\ndifferent approaches. It will help you\ninvestigate more deeply and allow\nnew questions to emerge in your minds.",
+          "Some chapters also feature a section called\nBe a scientist, where you can learn about\nthe contributions of Indian and international\nscientists related to the topic. These sections\ninclude brief biographies and show how\nscientists have made a difference. Additionally,\nan interesting element that has ",
+          "The Snapshots section provides the summary of a chapter, which\noffers an overview of the chapter’s main points, reinforcing the key\nideas discussed. Each chapter includes\nKeywords in between the text that\nhighlight key concepts and steps in\nscience, helping learners understand\nideas and think critic",
+          "Keep the curiosity alive includes a range\nof exercises, from pictorial questions and\npuzzles to multiple choice questions, offering\na challenging and engaging experience. These questions also help\nassess the competencies developed by learners in each chapter. We\nrecommend teachers to use questions s"
         ],
         "concepts": [
           "scientific heritage",
-          "scientific temper",
-          "personality",
-          "heritage level repute",
           "Think like a scientist",
           "Be a scientist",
-          "Indian and international scientists",
-          "NEP 2020",
           "Snapshots",
-          "keywords",
+          "Keywords",
+          "Keep the curiosity alive",
           "scientific activities",
-          "curiosity",
-          "exercises",
-          "pictorial questions",
-          "puzzles",
-          "multiple choice questions",
           "competencies",
-          "evaluation"
+          "NEP 2020"
         ],
-        "context_relation": "The page discusses the educational content of a textbook, focusing on the scientific heritage, encouraging readers to think like a scientist, and providing exercises to assess learners' competencies.",
+        "context_relation": "The page discusses various sections and activities within a textbook that aim to engage students with scientific concepts and encourage critical thinking.",
         "limitations": [
-          "The page does not provide specific examples or details about the exercises or the exercises themselves."
+          "The page does not provide specific examples or details about the activities or exercises mentioned."
         ]
       },
       "chapter_id": null,
@@ -26993,7 +26982,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Acknowledgments for the book's contributors and editors.",
+        "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
@@ -27004,13 +26993,18 @@
         "concepts": [
           "Acknowledgments",
           "Contributors",
-          "Editors",
-          "Support",
-          "Publication process"
+          "Staff",
+          "Textbook",
+          "Editing",
+          "Publication",
+          "DTP Cell",
+          "Publication Division",
+          "Contractual",
+          "Proofreaders"
         ],
-        "context_relation": "Acknowledgments for the book's contributors and editors.",
+        "context_relation": "Acknowledgments for the book's contributors and staff.",
         "limitations": [
-          "No specific limitations mentioned.",
+          "No specific visual elements are described.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
