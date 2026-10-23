@@ -10,7 +10,8 @@
     "Digital Electronics is reported at 14 / 17.5% in TRE 1.0, 10 / 12.5% in TRE 2.0 and 16 / 20% in TRE 3.0.",
     "Computer Organization & Architecture is reported at 6 / 7.5% in TRE 1.0, 2 / 2.5% in TRE 2.0 and 10 / 12.5% in TRE 3.0.",
     "IoT / AI is reported at 6 / 7.5% in TRE 1.0, 3 / 3.75% in TRE 2.0 and 7 / 8.75% in TRE 3.0.",
-    "The collection article's general claim of no negative marking conflicts with the TRE 1.0 primary booklet, whose instructions specify a one-fourth-mark penalty for a wrong answer."
+    "The collection article's general claim of no negative marking conflicts with the TRE 1.0 primary booklet, whose instructions specify a one-fourth-mark penalty for a wrong answer.",
+    "The supplied TRE 3.0 booklet contains 148 total questions (28 qualifying-language + 40 GS + 80 CS); its missing E-1/E-6 identifiers are not extraction errors and must not be reconstructed as extra questions."
   ],
   "per_cycle": {
     "TRE 1.0": {
@@ -80,5 +81,42 @@
       "Cross-check official provisional/final answer keys when available; keep proposed AI-solved answers and explanation confidence separate.",
       "Record uncertainty, ambiguous wording, deleted/invalid questions, and any official-key corrections at question level."
     ]
+  },
+  "primary_booklet_structure": {
+    "source": "data/TRE-Papres/sources/",
+    "status": "RECONCILED_TO_SUPPLIED_BOOKLETS",
+    "scored_sections": {
+      "GENERAL_STUDIES": 40,
+      "COMPUTER_SCIENCE": 80,
+      "scored_question_count": 120
+    },
+    "cycles": {
+      "TRE 1.0": {
+        "total_question_count": 120,
+        "qualifying_language_question_count": 0
+      },
+      "TRE 2.0": {
+        "total_question_count": 150,
+        "qualifying_language_question_count": 30
+      },
+      "TRE 3.0": {
+        "total_question_count": 148,
+        "qualifying_language_question_count": 28,
+        "qualifying_language_keys": [
+          "E-2",
+          "E-3",
+          "E-4",
+          "E-5",
+          "E-7",
+          "E-8",
+          "H-9..H-30"
+        ],
+        "excluded_keys_not_present": [
+          "E-1",
+          "E-6"
+        ]
+      }
+    },
+    "note": "The article's 80-question topic distributions apply to the Computer Science section, not the whole booklet. In TRE 2.0 and TRE 3.0 qualifying-language questions appear in the attempt but are scored separately from GS and CS."
   }
 }
