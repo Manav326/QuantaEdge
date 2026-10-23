@@ -50279,24 +50279,14 @@
         "concepts": [
           "Oral Rehydration Solution (ORS)",
           "Diarrhoea",
-          "Dehydration",
-          "Primary health centres",
-          "Market availability",
+          "Health centres",
           "Preparation of ORS",
-          "Sugar",
-          "Common salt",
-          "Boiled and cooled water",
-          "Liquids",
-          "Oil",
-          "Vinegar",
-          "Honey",
-          "Dissolution in water",
           "Gases in water",
-          "Survival of animals and plants",
           "Density",
-          "Weight comparison"
+          "Water solubility",
+          "Survival of animals and plants"
         ],
-        "context_relation": "The page explains the use of ORS and provides a related activity to measure the density of different materials.",
+        "context_relation": "The page explains the use of ORS and a related activity, focusing on the properties of liquids and gases in water.",
         "limitations": [
           "The page does not provide specific instructions for the activity."
         ]
