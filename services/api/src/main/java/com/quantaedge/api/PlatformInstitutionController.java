@@ -469,23 +469,29 @@ public class PlatformInstitutionController {
       if(!savedFingerprint.equals(courseReleaseFingerprint(courseId)))
         throw new ResponseStatusException(HttpStatus.CONFLICT,
             "Course content changed after quality review. The source institution must submit a fresh release before HRMS can assign it.");
-      Map<String,Object> contentReadiness=jdbc.queryForMap("""
-          select count(distinct s.id) as subject_count,
-            count(distinct case when l.id is not null then s.id end) as subjects_with_published_lessons,
-            count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
-          from curriculum_program_subject ps
-          join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
-            and (s.program_id=ps.program_id or s.program_id is null)
-          left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
-          left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
-          where ps.program_id=?
-          """,courseId);
-      long subjects=((Number)contentReadiness.get("subject_count")).longValue();
-      if(subjects==0||((Number)contentReadiness.get("subjects_with_published_lessons")).longValue()!=subjects
-          ||((Number)contentReadiness.get("published_chapters")).longValue()==0
-          ||((Number)contentReadiness.get("published_lessons")).longValue()==0)
-        throw new ResponseStatusException(HttpStatus.CONFLICT,
-            "Course content is not ready for assignment. Publish reviewed lessons for every mapped active subject first.");
+      if("ASSESSMENT_ONLY".equals(courseDeliveryMode(courseId))) {
+        if(!assessmentOnlyCourseReady(courseId))
+          throw new ResponseStatusException(HttpStatus.CONFLICT,
+              "The assessment-only release no longer contains the three complete, source-verified TRE paper sets.");
+      } else {
+        Map<String,Object> contentReadiness=jdbc.queryForMap("""
+            select count(distinct s.id) as subject_count,
+              count(distinct case when l.id is not null then s.id end) as subjects_with_published_lessons,
+              count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
+            from curriculum_program_subject ps
+            join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+              and (s.program_id=ps.program_id or s.program_id is null)
+            left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
+            left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
+            where ps.program_id=?
+            """,courseId);
+        long subjects=((Number)contentReadiness.get("subject_count")).longValue();
+        if(subjects==0||((Number)contentReadiness.get("subjects_with_published_lessons")).longValue()!=subjects
+            ||((Number)contentReadiness.get("published_chapters")).longValue()==0
+            ||((Number)contentReadiness.get("published_lessons")).longValue()==0)
+          throw new ResponseStatusException(HttpStatus.CONFLICT,
+              "Course content is not ready for assignment. Publish reviewed lessons for every mapped active subject first.");
+      }
     }
     Long assignmentId=null;
     if(enabled) {
@@ -537,6 +543,11 @@ public class PlatformInstitutionController {
     return jdbc.queryForList("""
         select r.id as release_id,r.program_id as course_id,r.release_version,r.release_state,
           r.content_fingerprint,r.submitted_at,p.public_id,p.code as course_code,p.display_name,
+          coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=p.id),'LEARNING_CONTENT') as delivery_model,
+          (select count(*) from assessment da where da.course_id=p.id and da.assessment_type='PREVIOUS_YEAR_PAPER' and da.status='DRAFT') as draft_assessment_count,
+          (select count(*) from assessment da join assessment_question dqa on dqa.assessment_id=da.id
+            where da.course_id=p.id and da.assessment_type='PREVIOUS_YEAR_PAPER' and da.status='DRAFT') as draft_assessment_question_count,
+          assessment_only_course_ready(p.id) as assessment_only_ready,
           t.id as source_institution_id,t.tenant_code as source_institution_code,
           coalesce(b.display_name,t.display_name) as source_institution_name,
           count(distinct s.id) as active_subject_count,
@@ -582,21 +593,27 @@ public class PlatformInstitutionController {
     String savedFingerprint=String.valueOf(release.get("content_fingerprint")).trim();
     if(!savedFingerprint.equals(courseReleaseFingerprint(programId)))
       throw new ResponseStatusException(HttpStatus.CONFLICT,"Course content changed after submission. The origin institution must submit a fresh release.");
-    Map<String,Object> readiness=jdbc.queryForMap("""
-        select count(distinct s.id) as subject_count,
-          count(distinct case when l.id is not null then s.id end) as subjects_with_published_lessons,
-          count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
-        from curriculum_program_subject ps
-        join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
-            and (s.program_id=ps.program_id or s.program_id is null)
-        left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
-        left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
-        where ps.program_id=?
-        """,programId);
-    long subjects=number(readiness.get("subject_count"));
-    if(subjects==0||number(readiness.get("subjects_with_published_lessons"))!=subjects
-        ||number(readiness.get("published_chapters"))==0||number(readiness.get("published_lessons"))==0)
-      throw new ResponseStatusException(HttpStatus.CONFLICT,"Every mapped active subject must retain published content reviewed lessons.");
+    if("ASSESSMENT_ONLY".equals(courseDeliveryMode(programId))) {
+      if(!assessmentOnlyCourseReady(programId))
+        throw new ResponseStatusException(HttpStatus.CONFLICT,
+            "The assessment-only release must contain the three complete, source-verified TRE paper sets. Imported tests remain draft until human review.");
+    } else {
+      Map<String,Object> readiness=jdbc.queryForMap("""
+          select count(distinct s.id) as subject_count,
+            count(distinct case when l.id is not null then s.id end) as subjects_with_published_lessons,
+            count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
+          from curriculum_program_subject ps
+          join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+              and (s.program_id=ps.program_id or s.program_id is null)
+          left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
+          left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
+          where ps.program_id=?
+          """,programId);
+      long subjects=number(readiness.get("subject_count"));
+      if(subjects==0||number(readiness.get("subjects_with_published_lessons"))!=subjects
+          ||number(readiness.get("published_chapters"))==0||number(readiness.get("published_lessons"))==0)
+        throw new ResponseStatusException(HttpStatus.CONFLICT,"Every mapped active subject must retain published content reviewed lessons.");
+    }
     String next=approved?"QUALITY_APPROVED":"REJECTED";
     int changed=jdbc.update("""
         update institution_course_release set release_state=?,quality_reviewed_by_staff_id=?,
@@ -617,31 +634,19 @@ public class PlatformInstitutionController {
   }
 
   private String courseReleaseFingerprint(long programId) {
-    String value=jdbc.queryForObject("""
-        select md5(coalesce(string_agg(entity_type||':'||entity_id::text||':'||row_json,chr(10)
-            order by entity_type,entity_id),'')) as fingerprint
-        from (
-          select 'program'::text entity_type,p.id entity_id,to_jsonb(p)::text row_json
-          from curriculum_program p where p.id=?
-          union all
-          select 'subject',s.id,to_jsonb(ps)::text||to_jsonb(s)::text
-          from curriculum_program_subject ps
-          join curriculum_program p on p.id=ps.program_id
-          join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
-            and (s.program_id=ps.program_id or s.program_id is null)
-          where ps.program_id=?
-          union all
-          select 'chapter',ch.id,to_jsonb(ch)::text
-          from curriculum_program_subject ps join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
-          join curriculum_chapter ch on ch.subject_id=s.id where ps.program_id=?
-          union all
-          select 'lesson',l.id,to_jsonb(l)::text
-          from curriculum_program_subject ps join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
-          join curriculum_chapter ch on ch.subject_id=s.id join lesson l on l.chapter_id=ch.id
-          where ps.program_id=?
-        ) content_rows
-        """,String.class,programId,programId,programId,programId);
+    String value=jdbc.queryForObject("select course_content_fingerprint(?)",String.class,programId);
     return value==null?"d41d8cd98f00b204e9800998ecf8427e":value.trim();
+  }
+
+  private String courseDeliveryMode(long programId) {
+    return jdbc.queryForObject("""
+        select coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=?),'LEARNING_CONTENT')
+        """,String.class,programId);
+  }
+
+  private boolean assessmentOnlyCourseReady(long programId) {
+    Boolean ready=jdbc.queryForObject("select assessment_only_course_ready(?)",Boolean.class,programId);
+    return Boolean.TRUE.equals(ready);
   }
 
   @PutMapping("/{institutionId}/branding")

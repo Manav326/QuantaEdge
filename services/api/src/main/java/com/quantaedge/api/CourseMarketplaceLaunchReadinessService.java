@@ -576,32 +576,7 @@ public class CourseMarketplaceLaunchReadinessService {
   }
 
   private String contentFingerprint(long programId) {
-    String value=jdbc.queryForObject("""
-        select md5(coalesce(string_agg(entity_type||':'||entity_id::text||':'||row_json,chr(10)
-            order by entity_type,entity_id),'')) as fingerprint
-        from (
-          select 'program'::text entity_type,p.id entity_id,to_jsonb(p)::text row_json
-          from curriculum_program p where p.id=?
-          union all
-          select 'subject',s.id,to_jsonb(ps)::text||to_jsonb(s)::text
-          from curriculum_program_subject ps
-          join curriculum_program p on p.id=ps.program_id
-          join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
-            and (s.program_id=ps.program_id or s.program_id is null)
-          where ps.program_id=?
-          union all
-          select 'chapter',ch.id,to_jsonb(ch)::text
-          from curriculum_program_subject ps
-          join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
-          join curriculum_chapter ch on ch.subject_id=s.id where ps.program_id=?
-          union all
-          select 'lesson',l.id,to_jsonb(l)::text
-          from curriculum_program_subject ps
-          join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
-          join curriculum_chapter ch on ch.subject_id=s.id
-          join lesson l on l.chapter_id=ch.id where ps.program_id=?
-        ) content_rows
-        """,String.class,programId,programId,programId,programId);
+    String value=jdbc.queryForObject("select course_content_fingerprint(?)",String.class,programId);
     return value==null?"d41d8cd98f00b204e9800998ecf8427e":value.trim();
   }
 

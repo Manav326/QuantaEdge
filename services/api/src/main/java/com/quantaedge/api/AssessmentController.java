@@ -363,7 +363,7 @@ public class AssessmentController {
     if ("PUBLISHED".equals(next) || "ARCHIVED".equals(next)) authorization.requirePermission(context, "CONTENT_PUBLISH");
     else authorization.requirePermission(context, "CONTENT_EDIT");
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select a.id,a.title,a.status,a.is_generated,a.subject_id,a.chapter_id,
+      select a.id,a.title,a.status,a.is_generated,a.subject_id,a.chapter_id,a.source_package_id,
              s.code as subject_code,c.code as class_code,
              count(aq.id) as question_count
       from assessment a join curriculum_subject s on s.id=a.subject_id
@@ -376,6 +376,24 @@ public class AssessmentController {
     String before = String.valueOf(row.get("status"));
     if ("PUBLISHED".equals(next) && ((Number) row.get("question_count")).intValue() < 1) {
       throw badRequest("Add at least one question before publishing this test.");
+    }
+    if ("PUBLISHED".equals(next) && row.get("source_package_id") != null) {
+      Long pendingReview = jdbc.queryForObject("""
+          select count(*) from assessment_question aq
+          where aq.assessment_id=? and (
+            coalesce(aq.question_snapshot->>'question_review_status','PENDING_HUMAN_REVIEW') <> 'APPROVED'
+            or coalesce((aq.question_snapshot->'answer_payload')->>'kind','UNRESOLVED')='UNRESOLVED'
+            or coalesce((aq.question_snapshot->'answer_payload')->>'value','')=''
+            or not exists (
+              select 1 from jsonb_array_elements(coalesce(aq.question_snapshot->'options','[]'::jsonb)) option_row
+              where coalesce(option_row->>'key',option_row->>'option_key') =
+                (aq.question_snapshot->'answer_payload')->>'value'
+            )
+          )
+          """,Long.class,assessmentId);
+      if(pendingReview!=null&&pendingReview>0) {
+        throw badRequest("This imported source-paper test still has questions or answer keys pending human review. Keep it in Draft until the reviewed answer package is imported.");
+      }
     }
     if (Boolean.TRUE.equals(row.get("is_generated"))) {
       throw badRequest("System-generated tests are governed by published lesson content and cannot be changed manually.");
