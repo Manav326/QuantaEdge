@@ -99,7 +99,73 @@ def sha256_file(path: Path) -> str:
 
 
 def normalize_space(value: str) -> str:
+    """Normalize ordinary labels only; never use this for source question/code text."""
     return re.sub(r"\s+", " ", value).strip()
+
+
+def preserve_layout(value: str) -> str:
+    """Keep line breaks and leading spaces that may encode code or formula notation."""
+    value=value.replace("\r\n","\n").replace("\r","\n").replace("\u00a0"," ")
+    lines=[line.rstrip() for line in value.split("\n")]
+    while lines and not lines[0].strip(): lines.pop(0)
+    while lines and not lines[-1].strip(): lines.pop()
+    return re.sub(r"\n{3,}","\n\n","\n".join(lines))
+
+
+CODE_LINE_RE = re.compile(
+    r"""(?ix)^\s*(?:\#\s*include\b|\#\s*define\b|import\s+[\w.]+|from\s+[\w.]+\s+import\b|
+    using\s+namespace\b|public\s+(?:static|class|void)\b|private\s+(?:static|class|void)\b|
+    protected\s+|class\s+\w+|def\s+\w+\s*\(|function\s+\w*\s*\(|SELECT\b.*\bFROM\b|
+    INSERT\s+INTO\b|CREATE\s+TABLE\b|UPDATE\s+\w+\s+SET\b|DELETE\s+FROM\b|
+    printf\s*\(|scanf\s*\(|cout\s*<<|cin\s*>>|System\.out\.|console\.log\s*\(|print\s*\(|
+    return\b|break\s*;|continue\s*;|for\s*\(|while\s*\(|if\s*\(|switch\s*\(|case\s+.+:|
+    int\s+[*\s]*[A-Za-z_]\w*|float\s+[*\s]*[A-Za-z_]\w*|double\s+[*\s]*[A-Za-z_]\w*|
+    char\s+[*\s]*[A-Za-z_]\w*|void\s+[*\s]*[A-Za-z_]\w*|bool\s+[*\s]*[A-Za-z_]\w*|
+    var\s+\w+\s*=|let\s+\w+\s*=|const\s+\w+\s*=|[\{\}]\s*;?|\w+\s*(?:\+\+|--)\s*;?
+    )"""
+)
+
+
+def looks_like_code_line(value: str) -> bool:
+    text=value.strip()
+    if not text:
+        return False
+    if CODE_LINE_RE.search(text):
+        return True
+    operators=sum(text.count(token) for token in ("==","!=","<=",">=","++","--","->","&&","||","<<",">>","{","}",";"))
+    if operators>=2 and re.search(r"[A-Za-z_]",text):
+        return True
+    if re.match(r"^[A-Za-z_]\w*(?:\[[^\]]+\])?\s*=\s*[^=].*[;]?$",text) and re.search(r"[+\-*/%<>]",text):
+        return True
+    if re.match(r"^\s{2,}\S",value) and re.search(r"(?:[{};]|\+\+|--|==|<=|>=|<<|>>)",text):
+        return True
+    return False
+
+
+def looks_like_math_line(value: str) -> bool:
+    return bool(
+        re.search(r"(?:\d\s*(?:[+\-*/=<>^√×÷]|mod\b)|[A-Za-z]\s*=\s*[-+\d(]|\\(?:frac|sqrt|sum|int)\b)",value)
+        and re.search(r"\d|[=√×÷^]",value)
+        and not looks_like_code_line(value)
+    )
+
+
+def classify_content(value: str) -> str:
+    lines=[line for line in value.splitlines() if line.strip()]
+    code_indices=[i for i,line in enumerate(value.splitlines()) if looks_like_code_line(line)]
+    math_indices=[i for i,line in enumerate(value.splitlines()) if looks_like_math_line(line)]
+    if code_indices and math_indices: return "MIXED"
+    if code_indices: return "CODE" if len(code_indices)==len(lines) else "MIXED"
+    if math_indices: return "MATHEMATICAL" if len(math_indices)==len(lines) else "MIXED"
+    return "PROSE"
+
+
+def detected_code_line_indices(value: str) -> list[int]:
+    return [i for i,line in enumerate(value.splitlines()) if looks_like_code_line(line)]
+
+
+def detected_math_line_indices(value: str) -> list[int]:
+    return [i for i,line in enumerate(value.splitlines()) if looks_like_math_line(line)]
 
 
 def paper_for_name(name: str) -> str | None:
@@ -151,26 +217,53 @@ def protect_shared_latin_terms(hindi_text: str, english_reference: str) -> tuple
 
 
 def convert_hindi_text(raw: str, english_reference: str = "") -> tuple[str, str]:
+    """Convert legacy Hindi prose while preserving code lines, shared tokens and operators."""
     if not raw:
         return "", "EMPTY"
     if HindiPreprocessor is None:
         return raw, "CONVERTER_UNAVAILABLE"
-    protected, markers = protect_shared_latin_terms(raw, english_reference)
-    detected_legacy, detected_font = HindiPreprocessor.detect_encoding(protected)
+    detected_legacy, detected_font = HindiPreprocessor.detect_encoding(raw)
     font_type = detected_font if detected_font in {"krutidev", "chanakya"} else "krutidev"
+    converted_lines: list[str] = []
+    preserved_code = False
     try:
-        converted = HindiPreprocessor.convert(protected, font_type=font_type)
-        converted = HindiPreprocessor.post_process(
-            converted, repair_doubled_consonant_imatra=(font_type == "krutidev")
-        )
+        for line in raw.splitlines():
+            if looks_like_code_line(line):
+                converted_lines.append(line)
+                preserved_code = True
+                continue
+            protected, markers = protect_shared_latin_terms(line, english_reference)
+            # Operators are language-neutral. Hide them from legacy-font substitution so
+            # expressions such as +=, <=, ::, #include and formula symbols cannot be mangled.
+            next_marker = 0xE800
+            operator_markers: list[tuple[str, str]] = []
+            operators = sorted(
+                set(re.findall(r"==|!=|<=|>=|<<|>>|\+\+|--|\+=|-=|\*=|/=|%=|&&|\|\||->|[{};=<>+*/%#]", protected)),
+                key=len, reverse=True,
+            )
+            for operator in operators:
+                if next_marker > 0xF8FF:
+                    break
+                marker = chr(next_marker)
+                next_marker += 1
+                if operator in protected:
+                    protected = protected.replace(operator, marker)
+                    operator_markers.append((marker, operator))
+            converted = HindiPreprocessor.convert(protected, font_type=font_type)
+            converted = HindiPreprocessor.post_process(
+                converted, repair_doubled_consonant_imatra=(font_type == "krutidev")
+            )
+            for marker, token in markers + operator_markers:
+                converted = converted.replace(marker, token)
+            converted_lines.append(converted)
+        status = "CONVERTED_" + font_type.upper()
+        if not detected_legacy:
+            status += "_FORCED_LEGACY"
+        if preserved_code:
+            status += "_CODE_PRESERVED"
+        return "\n".join(converted_lines), status
     except Exception as exc:
         return raw, "CONVERSION_ERROR:" + type(exc).__name__
-    for marker, token in markers:
-        converted = converted.replace(marker, token)
-    status = "CONVERTED_" + font_type.upper()
-    if not detected_legacy:
-        status += "_FORCED_LEGACY"
-    return converted, status
 
 
 def _question_prefix(text: str) -> tuple[str | None, int | None, str] | None:
