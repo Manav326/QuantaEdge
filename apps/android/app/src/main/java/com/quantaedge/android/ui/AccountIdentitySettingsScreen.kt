@@ -17,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -55,6 +56,10 @@ fun AccountIdentitySettingsScreen(
     onSavePassword: (String, String) -> Unit,
     onLinkGmail: (Context) -> Unit,
     onAccountLifecycle: () -> Unit,
+    deletionRequest: JSONObject,
+    onRefreshDeletion: () -> Unit,
+    onRequestDeletion: (String, Boolean) -> Unit,
+    onCancelDeletion: () -> Unit,
     onBack: () -> Unit
 ) {
     fun t(en: String, hi: String) = if (language == "hi") hi else en
@@ -71,6 +76,8 @@ fun AccountIdentitySettingsScreen(
     var currentPasswordVisible by rememberSaveable { mutableStateOf(false) }
     var newPasswordVisible by rememberSaveable { mutableStateOf(false) }
     var confirmPasswordVisible by rememberSaveable { mutableStateOf(false) }
+    var deletionConfirmation by rememberSaveable { mutableStateOf("") }
+    var includeLinkedChildren by rememberSaveable { mutableStateOf(false) }
     val accountType = profile.optString("accountType", "USER")
     val childManaged = profile.optBoolean("credentialsManagedByParent")
     val gmailVerified = profile.optBoolean("gmailVerified")
@@ -248,6 +255,101 @@ fun AccountIdentitySettingsScreen(
                         enabled = !busy && newPassword.length >= 8 && newPassword == confirmPassword &&
                             (!passwordSet || currentPassword.isNotBlank()), modifier = Modifier.fillMaxWidth()) {
                         Text(t("Save password", "पासवर्ड सुरक्षित करें"))
+                    }
+                }
+            }
+        }
+
+        if (accountType != "CHILD") {
+            val requestExists = deletionRequest.optBoolean("hasRequest")
+            val requestStatus = deletionRequest.optString("status", "NONE")
+            val needsChildDecision = deletionRequest.optBoolean("requiresLinkedChildrenConfirmation")
+            val linkedChildCount = deletionRequest.optInt("linkedChildrenCount", 0)
+            val requestIsOpen = requestStatus in setOf("REQUESTED", "UNDER_REVIEW", "AWAITING_LINKED_CHILD_DECISION")
+            val requestStatusLabel = when (requestStatus) {
+                "REQUESTED" -> localizedUiText("Request received")
+                "UNDER_REVIEW" -> localizedUiText("Under review")
+                "AWAITING_LINKED_CHILD_DECISION" -> localizedUiText("Linked-child decision required")
+                "CANCELLED" -> localizedUiText("Request cancelled")
+                "COMPLETED" -> localizedUiText("Deletion completed")
+                "REJECTED" -> localizedUiText("Support is needed for this request")
+                else -> localizedUiText("No deletion request")
+            }
+            Card(Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text(localizedUiText("Delete your account"),
+                        style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    Text(localizedUiText("Submit a request to delete your account and associated personal data. Submitting a request does not mean deletion is complete."),
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(localizedUiText("Payment, invoice, certificate and security records may be retained only where there is a justified legal reason."),
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+
+                    if (requestExists) {
+                        Text(localizedUiText("Request status: ") + requestStatusLabel,
+                            style = MaterialTheme.typography.titleSmall)
+                        if (deletionRequest.optInt("linkedChildrenCount", 0) > 0) {
+                            val childCount = deletionRequest.optInt("linkedChildrenCount", 0)
+                            val childrenMode = if (deletionRequest.optBoolean("includesLinkedChildren")) {
+                                localizedUiText("Included in this deletion request")
+                            } else {
+                                localizedUiText("Not included in this request")
+                            }
+                            Text(localizedUiText("Linked child accounts: ") + childCount + ". " + childrenMode + ".",
+                                style = MaterialTheme.typography.bodySmall)
+                        }
+                        if (requestIsOpen) {
+                            Text(localizedUiText("Your request is recorded but processing has not completed. You can cancel it while it is still open."),
+                                style = MaterialTheme.typography.bodySmall)
+                            OutlinedButton(onClick = onCancelDeletion, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+                                Text(localizedUiText("Cancel deletion request"))
+                            }
+                        }
+                        if (requestStatus == "CANCELLED" || requestStatus == "REJECTED") {
+                            Text(localizedUiText("You can submit a new request after reviewing the current status."),
+                                style = MaterialTheme.typography.bodySmall)
+                        }
+                    }
+
+                    if (!requestExists || requestStatus == "CANCELLED" || requestStatus == "REJECTED") {
+                        if (needsChildDecision && linkedChildCount > 0) {
+                            Text(localizedUiText("This account has linked child accounts. Choose whether to include them in the deletion request."),
+                                color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Checkbox(
+                                    checked = includeLinkedChildren,
+                                    onCheckedChange = { includeLinkedChildren = it },
+                                    enabled = !busy
+                                )
+                                Text(localizedUiText("Include all linked child accounts: ") + linkedChildCount,
+                                    style = MaterialTheme.typography.bodySmall)
+                            }
+                            Text(localizedUiText("If a child account must be kept, arrange a verified guardian transfer before submitting. Do not leave a child without a safe guardian arrangement."),
+                                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        OutlinedTextField(
+                            value = deletionConfirmation,
+                            onValueChange = { deletionConfirmation = it.trim().uppercase().take(20) },
+                            label = { Text(localizedUiText("Type DELETE to confirm")) },
+                            singleLine = true,
+                            enabled = !busy,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        Button(
+                            onClick = { onRequestDeletion(deletionConfirmation, includeLinkedChildren) },
+                            enabled = !busy && deletionConfirmation == "DELETE" &&
+                                (!needsChildDecision || linkedChildCount <= 0 || includeLinkedChildren),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(localizedUiText("Submit deletion request"))
+                        }
+                    }
+
+                    if (deletionRequest.optBoolean("loadFailed")) {
+                        Text(localizedUiText("Request status could not be loaded. Refresh before making a new request."),
+                            color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                    }
+                    OutlinedButton(onClick = onRefreshDeletion, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+                        Text(localizedUiText("Refresh deletion status"))
                     }
                 }
             }
