@@ -1,10 +1,14 @@
 from __future__ import annotations
 
 import unittest
+from unittest.mock import patch
 
 from scripts.extract_tre_source_questions import (
     PAPERS,
     classify_content,
+    convert_hindi_text,
+    native_source_language,
+    normalize_source_language_code,
     detected_code_line_indices,
     detected_math_line_indices,
     expected_language_keys,
@@ -27,6 +31,29 @@ class TreSourceCodePreservationTests(unittest.TestCase):
         self.assertIn("E-1", language_keys)
         self.assertIn("E-6", language_keys)
         self.assertEqual(40 + 80 + len(language_keys), 150)
+
+    def test_native_language_track_and_prefix_normalization(self):
+        self.assertEqual(native_source_language("TRE 3.0", "E-1"), "en")
+        self.assertEqual(native_source_language("TRE 3.0", "E-6"), "en")
+        self.assertEqual(native_source_language("TRE 3.0", "H-30"), "hi")
+        self.assertEqual(native_source_language("TRE 2.0", "1"), "en")
+        self.assertEqual(native_source_language("TRE 2.0", "30"), "hi")
+        self.assertIsNone(native_source_language("TRE 1.0", "1"))
+        self.assertEqual(normalize_source_language_code("e"), "en")
+        self.assertEqual(normalize_source_language_code("H"), "hi")
+        self.assertEqual(normalize_source_language_code("bn"), "bn")
+
+    def test_unrecognized_legacy_font_is_preserved_for_review_not_forced(self):
+        class UnknownFont:
+            @staticmethod
+            def detect_encoding(_raw):
+                return True, "shreedev"
+
+        raw = "legacy Hindi source glyphs"
+        with patch("scripts.extract_tre_source_questions.HindiPreprocessor", UnknownFont):
+            converted, status = convert_hindi_text(raw)
+        self.assertEqual(converted, raw)
+        self.assertEqual(status, "LEGACY_FONT_UNCERTAIN_RAW_PRESERVED")
 
     def test_tre3_unprefixed_hindi_answer_fragments_are_not_questions(self):
         self.assertFalse(_question_is_allowed("TRE 3.0", "11", 11, ""))

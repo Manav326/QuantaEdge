@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Build an auditable bilingual question inventory from the user-provided TRE PDF ZIP.
 
-Uses PDF text blocks rather than OCR. Legacy Hindi text is converted to Unicode with Lipi, but
-both the raw source and a per-question source page are retained for comparison. This script does
+Uses PDF text blocks rather than OCR. Supported legacy Hindi fonts are converted to Unicode with Lipi. When the font is
+uncertain, the exact source text is retained and flagged for visual review. Both raw
+source text and per-question source locations are retained for comparison. This script does
 not solve answers, create database records, or publish assessments.
 """
 from __future__ import annotations
@@ -223,8 +224,15 @@ def convert_hindi_text(raw: str, english_reference: str = "") -> tuple[str, str]
         return "", "EMPTY"
     if HindiPreprocessor is None:
         return raw, "CONVERTER_UNAVAILABLE"
-    detected_legacy, detected_font = HindiPreprocessor.detect_encoding(raw)
-    font_type = detected_font if detected_font in {"krutidev", "chanakya"} else "krutidev"
+    try:
+        detected_legacy, detected_font = HindiPreprocessor.detect_encoding(raw)
+    except Exception:
+        return raw, "LEGACY_FONT_UNCERTAIN_RAW_PRESERVED"
+    # Do not guess KrutiDev when the detector cannot establish a supported legacy
+    # encoding. That can corrupt otherwise recoverable source text without warning.
+    if not detected_legacy or detected_font not in {"krutidev", "chanakya"}:
+        return raw, "LEGACY_FONT_UNCERTAIN_RAW_PRESERVED"
+    font_type = detected_font
     converted_lines: list[str] = []
     preserved_code = False
     try:
@@ -423,7 +431,8 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                     stimulus_by_group[spec["group_id"]] = {
                         "text": passage_text,
                         "source_language": (
-                            spec["prefix"].lower() if spec["prefix"] in {"E", "H", "U", "B"} else
+                            {"E": "en", "H": "hi", "U": "ur", "B": "bn"}.get(str(spec["prefix"]).upper())
+                            if spec["prefix"] in {"E", "H", "U", "B"} else
                             ("en" if spec["first"] <= 8 else "hi")
                         ),
                         "page": page_num,
@@ -581,6 +590,31 @@ def expected_language_keys(cycle: str) -> set[str]:
     return set()
 
 
+def native_source_language(cycle: str, identity: str) -> str | None:
+    """Return the actual source-language track for qualifying items, without translation."""
+    key = str(identity).strip().upper()
+    if cycle == "TRE 3.0":
+        if re.fullmatch(r"E-[1-8]", key):
+            return "en"
+        if re.fullmatch(r"H-(?:[9]|[12][0-9]|30)", key):
+            return "hi"
+    if cycle == "TRE 2.0" and key.isdigit():
+        number = int(key)
+        if 1 <= number <= 8:
+            return "en"
+        if 9 <= number <= 30:
+            return "hi"
+    return None
+
+
+def normalize_source_language_code(value: Any, fallback: str = "en") -> str:
+    """Normalize booklet prefixes (E/H/U/B) and full language codes consistently."""
+    code = str(value or fallback).strip().lower()
+    return {"e": "en", "h": "hi", "u": "ur", "b": "bn"}.get(
+        code, code if code in {"en", "hi", "ur", "bn"} else fallback
+    )
+
+
 def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[str, Any]:
     if fitz is None:
         raise ValueError("PyMuPDF is required for PDF extraction: python -m pip install pymupdf")
@@ -736,7 +770,9 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                     stimulus_i18n[lang] = stimulus_value
                     if variant.get("stimulus_id"):
                         stimulus_ids.add(str(variant["stimulus_id"]))
-                    stimulus_languages[lang] = str(variant.get("stimulus_source_language") or lang)
+                    stimulus_languages[lang] = normalize_source_language_code(
+                        variant.get("stimulus_source_language"), lang
+                    )
                 if stimulus_i18n:
                     if len(stimulus_ids) > 1:
                         entry["review_flags"].append("STIMULUS_ID_MISMATCH_ACROSS_SOURCE_LANGUAGES")
@@ -761,10 +797,25 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                                 entry["review_flags"].append(f"EMPTY_{lang.upper()}_PROMPT")
                             if len(variant.get("options", [])) < 2:
                                 entry["review_flags"].append(f"OPTIONS_NEED_REVIEW_{lang.upper()}")
-                    if hi and hi.get("conversion_status","").endswith("FORCED_LEGACY"):
+                    if hi and (
+                        "FORCED_LEGACY" in hi.get("conversion_status", "")
+                        or hi.get("conversion_status") == "LEGACY_FONT_UNCERTAIN_RAW_PRESERVED"
+                    ):
                         entry["review_flags"].append("HINDI_FONT_DETECTION_UNCERTAIN")
                 else:
-                    selected_lang = "en" if (key.startswith("E-") or (key.isdigit() and int(key) <= 8)) else "hi"
+                    selected_lang = native_source_language(cycle, key) or (
+                        "en" if (key.startswith("E-") or (key.isdigit() and int(key) <= 8)) else "hi"
+                    )
+                    entry["native_language_only"] = True
+                    entry["native_source_language"] = selected_lang
+                    entry["content_language_policy"] = "NATIVE_SOURCE_ONLY"
+                    # Apply the same source-language contract to every variant, including
+                    # standalone questions that do not belong to a shared stimulus.
+                    for source_variant in entry["source_variants"].values():
+                        source_variant["native_language_only"] = True
+                        source_variant["native_source_language"] = selected_lang
+                        source_variant["content_language_policy"] = "NATIVE_SOURCE_ONLY"
+                        source_variant["translation_policy"] = "NATIVE_SOURCE_ONLY"
                     if selected_lang not in entry["source_variants"]:
                         entry["review_flags"].append("MISSING_SELECTED_LANGUAGE_TRACK")
             cycle_records = []
@@ -873,7 +924,7 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 "alternate_language_tracks":alternate_language_tracks,
                 "source_notes":[
                     "Original PDF bytes are preserved exactly; SHA-256 is recorded.",
-                    "Hindi values contain a Unicode conversion of the source's legacy Hindi encoding; raw text is retained beside it.",
+                    "Supported legacy Hindi encodings are converted to Unicode; unsupported or uncertain font encodings remain raw and are flagged for visual review.",
                     "All questions present in each original booklet are preserved. TRE 2.0 and TRE 3.0 each have 30 qualifying-language items in addition to 40 General Studies + 80 Computer Science, for 150 total. Only GS and Computer Science contribute to the scored result, reported in two sections.",
                     "Do not release until question/option pair completeness, Hindi rendering, answers, concise explanations, paper rules and any mathematical/code expressions have been reviewed.",
                 ],
