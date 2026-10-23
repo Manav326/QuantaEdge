@@ -11,6 +11,7 @@ const sessionProxy = read('../proxy.ts');
 const testsClient = read('../app/student/tests/TestsClient.tsx');
 const practiceClient = read('../app/student/practice/PracticeClient.tsx');
 const learnClient = read('../app/student/learn/LearnClient.tsx');
+const apiClient = read('../app/components/apiClient.ts');
 const structuredLessonsClient = read('../app/student/structured-lessons/StructuredLessonsClient.tsx');
 const structuredLessonDetailClient = read('../app/student/structured-lessons/StructuredLessonDetailClient.tsx');
 const tutorDock = read('../app/student/learn/TutorDock.tsx');
@@ -355,6 +356,13 @@ assert.ok(testsClient.includes('const language=learningLanguage;') && testsClien
 assert.ok(testsClient.includes("const uiLanguage=locale==='english'?'en':'hi';") && testsClient.includes('certificateTrackName(cert.subject_code, cert.subject_name, uiLanguage)'), 'Test-result labels must follow app language independently of content language.');
 assert.ok(practiceClient.includes('useStudentCourseScope') && practiceClient.includes('/api/v1/learning/practice/sessions/from-lesson') && practiceClient.includes('practiceSessionId:sessionId') && practiceClient.includes('courseId:selectedCourseId'), 'Practice must preserve the original resumable session UI while scoping session reads, answers and saved results to the selected course.');
 assert.ok(learnClient.includes('useStudentCourseScope') && learnClient.includes('InstitutionCourseSubjectScope') && learnClient.includes('/api/v1/learning/lessons?subjectCode=') && learnClient.includes('qe-student-topic-row') && learnClient.includes('TutorDock') && learnClient.includes('courseKey') && learnClient.includes('canStartTopicPractice') && learnClient.includes('courseId={selectedCourseId!}') && learnClient.includes("encodeURIComponent(selectedCourseKey)") && learnClient.includes('mcq_answered_count') && learnClient.includes('practice_completed_attempts') && !learnClient.includes('classCode='), 'Learning must preserve chapter/topic navigation, inline MCQ marking, practice gate, tutor and progress history while using tenant/course-scoped APIs and public course IDs in generated links.');
+assert.ok(apiClient.includes('function currentPageWorkspace(): string | null') &&
+  apiClient.includes('headers.set(\'X-QE-Workspace\', workspace)') &&
+  apiClient.includes('const workspace = currentPageWorkspace();'),
+  'Central apiFetch must attach route-correct X-QE-Workspace before the session-refresh interceptor runs.');
+assert.ok(!/\\bfetch\\(/.test(learnClient) && (learnClient.match(/\\bapiFetch\\(/g) || []).length >= 15,
+  'Student lesson requests must use the centralized API client rather than bypassing tenant/workspace context.');
+
 const documentCatalogueGuard = learnClient.indexOf('if(loadingCourses||!subjectCode||selectedCourseId===null||selectedCourseId<=0){');
 const documentCatalogueFetch = learnClient.indexOf("apiFetch('/api/v1/learning/documents?subjectCode='");
 assert.ok(documentCatalogueGuard >= 0 && documentCatalogueFetch > documentCatalogueGuard &&
