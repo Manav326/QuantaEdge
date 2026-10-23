@@ -1,221 +1,229 @@
 'use client';
 
-import { UiText } from './i18n/useUiTranslation';
-import { LanguageSwitcher, LocaleText, useLocale } from './components/LanguageProvider';
 import Link from 'next/link';
+import { UiText } from './i18n/useUiTranslation';
+import { LanguageSwitcher, useLocale } from './components/LanguageProvider';
+import { AppearanceModeButton } from './components/ColorThemeProvider';
 import QuantaEdgeBrand from './components/QuantaEdgeBrand';
 import { useTenantBranding } from './components/TenantBrandingProvider';
 import LandingAccountMenu from './components/LandingAccountMenu';
 
-const subjects = [
-  { icon: '∑', name: 'गणित', meta: 'कक्षा 6–8 · हिन्दी माध्यम', tone: 'violet' },
-  { icon: '⚗', name: 'विज्ञान', meta: 'कक्षा 6–8 · हिन्दी माध्यम', tone: 'blue' },
+const featureItems = [
+  { id: 'paths', number: '01', icon: '↗', title: 'public.feature.paths.title', body: 'public.feature.paths.body' },
+  { id: 'practice', number: '02', icon: '◎', title: 'public.feature.practice.title', body: 'public.feature.practice.body' },
+  { id: 'tutor', number: '03', icon: '✦', title: 'public.feature.tutor.title', body: 'public.feature.tutor.body' },
+  { id: 'progress', number: '04', icon: '⌁', title: 'public.feature.progress.title', body: 'public.feature.progress.body' },
+  { id: 'review', number: '05', icon: '✓', title: 'public.feature.review.title', body: 'public.feature.review.body' },
+  { id: 'offline', number: '06', icon: '◌', title: 'public.feature.offline.title', body: 'public.feature.offline.body' },
 ];
 
-const promises = [
-  ['01', 'पहले concept समझेंगे', 'First, understand the concept', 'हर lesson में prerequisite, simple explanation और worked example से concept clear होता है।', 'Each lesson builds understanding through prerequisites, a simple explanation, and a worked example.'],
-  ['02', 'फिर practice करेंगे', 'Then, practise', 'छोटे interactive questions, instant feedback और saved learning progress के साथ।', 'Short interactive questions, instant feedback, and saved learning progress.'],
-  ['03', 'फिर अगला step लेंगे', 'Then, take the next step', 'Diagnostic, progress और concept mastery के आधार पर अगला step तय होता है।', 'The next step is guided by diagnostics, progress, and concept mastery.'],
+const audienceItems = [
+  { id: 'school', icon: '▤', title: 'public.audience.school.title', body: 'public.audience.school.body' },
+  { id: 'family', icon: '⌂', title: 'public.audience.family.title', body: 'public.audience.family.body' },
+  { id: 'adult', icon: '↗', title: 'public.audience.adult.title', body: 'public.audience.adult.body' },
 ];
+
+function DisplayControls() {
+  return (
+    <>
+      <AppearanceModeButton />
+      <LanguageSwitcher compact />
+    </>
+  );
+}
 
 export default function Home() {
   const { brand, isResolving, institutionContextRequested } = useTenantBranding();
   const { locale } = useLocale();
   const english = locale === 'english';
+
   if (!brand && isResolving) return (
-    <main className="site qe-tenant-landing" aria-busy="true">
-      <section className="hero">
-        <div className="hero-copy">
-          <div className="eyebrow">{english ? 'YOUR LEARNING SPACE' : 'आपका सीखने का स्थान'}</div>
-          <h1>{english ? 'Welcome to your' : 'आपके'}<br /><em>{english ? 'learning space' : 'सीखने का स्थान'}</em></h1>
-          <p className="hero-lead">{english ? 'Lessons, practice and progress in one place.' : 'पाठ, अभ्यास और प्रगति — एक ही स्थान पर।'}</p>
-        </div>
-      </section>
-    </main>
-  );
-  if (!brand && institutionContextRequested) return (
-    <main className="site qe-tenant-landing">
-      <section className="hero">
-        <div className="hero-copy">
-          <div className="eyebrow">{english ? 'SCHOOL LINK' : 'विद्यालय लिंक'}</div>
-          <h1>{english ? 'This school link could not be verified.' : 'इस विद्यालय लिंक की पुष्टि नहीं हो सकी।'}</h1>
-          <p className="hero-lead">{english ? 'Please reopen the link shared by your school or ask the school administrator for a current link.' : 'कृपया विद्यालय द्वारा साझा किया गया लिंक फिर खोलें या विद्यालय प्रशासक से नया लिंक लें।'}</p>
-        </div>
-      </section>
-    </main>
-  );
-  if (brand) return (
-    <main className="site qe-tenant-landing">
-      <header className="topbar">
+    <main className="site qe-public-site" aria-busy="true">
+      <header className="topbar qe-public-topbar">
         <QuantaEdgeBrand variant="header" />
-        <div className="top-actions"><LanguageSwitcher compact /><LandingAccountMenu /></div>
+        <div className="top-actions"><DisplayControls /></div>
       </header>
-      <section className="hero">
-        <div className="hero-copy">
-          <div className="eyebrow">{english ? 'YOUR SCHOOL LEARNING SPACE' : 'आपके विद्यालय का सीखने का स्थान'}</div>
+      <section className="qe-public-hero qe-public-hero--loading">
+        <div className="qe-public-hero-copy">
+          <span className="eyebrow">{english ? 'QUALITY LEARNING' : 'Quality learning'}</span>
+          <h1>{english ? 'Learning that grows with you.' : 'आपके साथ आगे बढ़ती learning।'}</h1>
+          <p className="hero-lead">{english ? 'Explore courses, practise with purpose and follow your progress.' : 'Courses explore करें, purpose के साथ practice करें और progress देखें।'}</p>
+        </div>
+      </section>
+    </main>
+  );
+
+  if (!brand && institutionContextRequested) return (
+    <main className="site qe-public-site qe-institution-link-error">
+      <header className="topbar qe-public-topbar">
+        <QuantaEdgeBrand variant="header" />
+        <div className="top-actions"><DisplayControls /></div>
+      </header>
+      <section className="qe-public-hero">
+        <div className="qe-public-hero-copy">
+          <span className="eyebrow">{english ? 'LEARNING SPACE' : 'Learning space'}</span>
+          <h1>{english ? 'This learning link could not be verified.' : 'इस learning link की पुष्टि नहीं हो सकी।'}</h1>
+          <p className="hero-lead">{english ? 'Please reopen the link shared by your institution or ask its administrator for a current link.' : 'कृपया अपने institution का shared link फिर खोलें या administrator से नया link लें।'}</p>
+          <div className="hero-actions">
+            <Link href="/" className="button button-dark">{english ? 'Go to QuantaEdge' : 'QuantaEdge पर जाएँ'}</Link>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+
+  if (brand) return (
+    <main className="site qe-school-landing">
+      <header className="topbar qe-public-topbar">
+        <QuantaEdgeBrand variant="header" />
+        <div className="top-actions">
+          <DisplayControls />
+          <LandingAccountMenu />
+        </div>
+      </header>
+      <section className="qe-school-hero">
+        <div className="qe-public-hero-copy">
+          <span className="eyebrow">{english ? 'YOUR LEARNING SPACE' : 'आपकी learning space'}</span>
           <h1>{english ? 'Learn with' : 'सीखें'}<br /><em>{brand.displayName}</em></h1>
-          <p className="hero-lead">{english ? 'Continue your lessons, practise concepts, take tests and track your progress through your school learning space.' : 'अपने विद्यालय के माध्यम से पाठ पढ़ें, अभ्यास करें, परीक्षा दें और अपनी प्रगति देखें।'}</p>
+          <p className="hero-lead">{english ? 'Explore your available courses, build understanding through practice and follow your progress in one place.' : 'अपने उपलब्ध courses explore करें, practice से समझ बनाएँ और अपनी progress एक जगह देखें।'}</p>
           <div className="hero-actions">
             <Link href="/login/student" className="button button-dark">{english ? 'Student sign in' : 'विद्यार्थी लॉगिन'} <span>→</span></Link>
-            <Link href="/login" className="button button-light">{english ? 'Parent sign in' : 'अभिभावक लॉगिन'}</Link>
+            <Link href="/login" className="button button-light">{english ? 'Parent or learner sign in' : 'Parent या learner साइन इन'}</Link>
             <Link href="/signup" className="text-link">{english ? 'Create account' : 'खाता बनाएँ'}</Link>
           </div>
         </div>
-        <div className="hero-device" aria-hidden="true"><div className="device-glow" /><div className="student-card"><div className="student-head"><div><span className="muted-small">{english ? 'YOUR LEARNING JOURNEY' : 'आपकी सीखने की यात्रा'}</span><h3>{english ? 'Ready to continue?' : 'आगे बढ़ें?'}</h3></div><span className="avatar">{brand.displayName.slice(0, 1).toUpperCase()}</span></div><div className="mission-card"><div><span className="mission-label">{english ? 'NEXT STEP' : 'अगला चरण'}</span><strong>{english ? 'Learn · Practise · Grow' : 'सीखें · अभ्यास करें · बढ़ें'}</strong><small>{english ? 'Your progress stays with your account.' : 'आपकी प्रगति आपके खाते में सुरक्षित रहेगी।'}</small></div></div></div></div>
+        <div className="qe-public-visual" aria-hidden="true">
+          <div className="qe-visual-orbit qe-visual-orbit--one" />
+          <div className="qe-visual-orbit qe-visual-orbit--two" />
+          <div className="qe-visual-panel">
+            <div className="qe-visual-panel-top"><span>YOUR NEXT STEP</span><span className="qe-visual-status">●</span></div>
+            <strong>{english ? 'Learn · Practise · Grow' : 'सीखें · Practice करें · बढ़ें'}</strong>
+            <div className="qe-visual-bars"><i /><i /><i /><i /><i /></div>
+            <div className="qe-visual-panel-foot"><span>{english ? 'Keep moving forward' : 'आगे बढ़ते रहें'}</span><b>↗</b></div>
+          </div>
+        </div>
       </section>
-      <footer className="footer"><QuantaEdgeBrand href={null} variant="footer" /><span>{english ? 'Learning with ' : ''}{english ? brand.displayName : brand.displayName + ' के साथ सीखें'}</span></footer>
+      <section className="qe-school-value-strip">
+        <span>{english ? 'Lessons and course resources' : 'Lessons और course resources'}</span>
+        <span>{english ? 'Practice and assessments' : 'Practice और assessments'}</span>
+        <span>{english ? 'Progress that is easy to follow' : 'समझने योग्य progress'}</span>
+      </section>
+      <footer className="footer qe-public-footer">
+        <QuantaEdgeBrand href={null} variant="footer" />
+        <span>{english ? 'Learning with ' + brand.displayName : brand.displayName + ' के साथ learning'}</span>
+        <div className="footer-links"><Link href="/privacy"><UiText message="legacy.web.privacy.323f3a35" /></Link><Link href="/terms"><UiText message="legacy.web.terms.c9f30225" /></Link></div>
+      </footer>
     </main>
   );
+
   return (
-    <main className="site">
-      <header className="topbar">
+    <main className="site qe-public-site">
+      <header className="topbar qe-public-topbar">
         <QuantaEdgeBrand variant="header" />
-
-        <nav className="topnav" aria-label="Main navigation">
-          <a href="#how-it-works"><UiText message="legacy.web.how.it.works.5f2a2c5d" /></a>
-          <a href="#subjects"><UiText message="legacy.web.learning.9e92d931" /></a>
-          <a href="#parents"><UiText message="legacy.web.parents.a532bfe5" /></a>
+        <nav className="topnav qe-public-nav" aria-label={english ? 'Main navigation' : 'मुख्य navigation'}>
+          <a href="#how-it-works"><UiText message="public.nav.howItWorks" /></a>
+          <a href="#learning"><UiText message="public.nav.learning" /></a>
+          <a href="#audiences"><UiText message="public.nav.forFamilies" /></a>
         </nav>
-
-        <div className="top-actions"><LanguageSwitcher compact />
+        <div className="top-actions qe-public-top-actions">
+          <DisplayControls />
           <LandingAccountMenu />
         </div>
       </header>
 
-      <section className="hero">
-        <div className="hero-copy">
-          <div className="eyebrow"><span className="live-dot" /> <UiText message="legacy.web.classes.6.8.bihar.board.hindi.medium.4009abd6" /></div>
-          <h1><UiText message="legacy.web.learning.5028b955" /><br /><em><UiText message="legacy.web.adapted.to.each.child.291c43fd" /></em></h1>
-          <p className="hero-lead">
-            <UiText message="legacy.web.quantaedge.does.more.than.provide.answ.41cfb954" />
-          </p>
-
+      <section className="qe-public-hero" aria-labelledby="qe-public-heading">
+        <div className="qe-public-hero-copy">
+          <span className="eyebrow"><span className="live-dot" /><UiText message="public.hero.eyebrow" /></span>
+          <h1 id="qe-public-heading"><UiText message="public.hero.titleA" /><br /><em><UiText message="public.hero.titleB" /></em></h1>
+          <p className="hero-lead"><UiText message="public.hero.copy" /></p>
           <div className="hero-actions">
-            <Link href="/login/student" className="button button-dark"><UiText message="legacy.web.start.learning.c0c87037" /> <span>→</span></Link>
-            <Link href="/login" className="button button-light"><UiText message="legacy.web.i.m.a.parent.21661703" /></Link>
+            <Link href="/signup" className="button button-dark"><UiText message="public.hero.primaryCta" /><span>→</span></Link>
+            <a href="#how-it-works" className="button button-light"><UiText message="public.hero.secondaryCta" /></a>
           </div>
-
-          <div className="trust-row">
-            <span><UiText message="legacy.web.no.public.rankings.ff0693c0" /></span>
-            <span><UiText message="legacy.web.focus.on.learning.49160904" /></span>
-            <span><UiText message="legacy.web.parents.can.see.progress.bad0199a" /></span>
+          <div className="qe-public-proof">
+            <span><i aria-hidden="true">✓</i><UiText message="public.proof.courses" /></span>
+            <span><i aria-hidden="true">✓</i><UiText message="public.proof.guided" /></span>
+            <span><i aria-hidden="true">✓</i><UiText message="public.proof.progress" /></span>
           </div>
         </div>
 
-        <div className="hero-device" aria-label="QuantaEdge learning flow preview">
-          <div className="device-glow" />
-          <div className="student-card">
-            <div className="student-head">
-              <div><span className="muted-small"><UiText message="legacy.web.learning.journey.8c1c2635" /></span><h3><UiText message="legacy.web.for.your.child.60a0d8db" /></h3></div>
-              <div className="avatar">Q</div>
-            </div>
-
-            <div className="mission-card">
-              <div>
-                <span className="mission-label"><UiText message="legacy.web.today.s.learning.f636afdf" /></span>
-                <strong><UiText message="legacy.web.one.concept.one.right.next.step.ee2df317" /></strong>
-                <div className="progress-track"><span style={{ width: '58%' }} /></div>
-                <small><UiText message="legacy.web.progress.saves.as.you.answer.7f4dc282" /></small>
-              </div>
-              <span className="streak"><UiText message="legacy.web.live.0fa74861" /></span>
-            </div>
-
-            <div className="section-title"><strong><UiText message="legacy.web.learning.flow.ddb1d3cd" /></strong><span><UiText message="legacy.web.adaptive.716d0f79" /></span></div>
-
-            <div className="task done">
-              <span className="task-icon">↻</span>
-              <div><strong><UiText message="legacy.web.learn.e055cff7" /></strong><small><UiText message="legacy.web.prerequisite.explanation.worked.exampl.cc9f4ed1" /></small></div>
-              <span className="check">✓</span>
-            </div>
-
-            <div className="task active">
-              <span className="task-icon">∑</span>
-              <div><strong><UiText message="legacy.web.practise.ea71f373" /></strong><small><UiText message="legacy.web.interactive.questions.instant.feedback.8e04e36d" /></small></div>
-              <span className="arrow">→</span>
-            </div>
-
-            <div className="task">
-              <span className="task-icon">✦</span>
-              <div><strong><UiText message="legacy.web.build.mastery.4877ba09" /></strong><small><UiText message="legacy.web.next.step.based.on.concept.mastery.3c4e876f" /></small></div>
-              <span className="arrow">→</span>
-            </div>
-
-            <Link href="/login/student" className="device-cta"><UiText message="legacy.web.start.your.learning.journey.0d258640" /></Link>
+        <div className="qe-public-visual" aria-label={english ? 'Illustration of guided learning and progress' : 'Guided learning और progress का चित्र'}>
+          <div className="qe-visual-orbit qe-visual-orbit--one" />
+          <div className="qe-visual-orbit qe-visual-orbit--two" />
+          <div className="qe-visual-node qe-visual-node--one">01</div>
+          <div className="qe-visual-node qe-visual-node--two">02</div>
+          <div className="qe-visual-panel">
+            <div className="qe-visual-panel-top"><span>{english ? 'YOUR LEARNING JOURNEY' : 'आपकी learning journey'}</span><span className="qe-visual-status">●</span></div>
+            <div className="qe-visual-course-icon">✦</div>
+            <span className="qe-visual-kicker">{english ? 'NEXT STEP' : 'अगला step'}</span>
+            <strong>{english ? 'Learn with purpose' : 'Purpose के साथ सीखें'}</strong>
+            <span className="qe-visual-description">{english ? 'Small steps. Meaningful progress.' : 'छोटे steps। Meaningful progress।'}</span>
+            <div className="qe-visual-progress"><i /></div>
+            <div className="qe-visual-panel-foot"><span>{english ? 'Keep moving forward' : 'आगे बढ़ते रहें'}</span><b>↗</b></div>
           </div>
+          <span className="qe-visual-spark qe-visual-spark--one">✧</span>
+          <span className="qe-visual-spark qe-visual-spark--two">✦</span>
         </div>
       </section>
 
-      <section className="strip">
-        <span><UiText message="legacy.web.a.learning.system.that.chooses.the.rig.16c2fefa" /></span>
-        <div><b>DIAGNOSE</b><i>→</i><b>LEARN</b><i>→</i><b>PRACTICE</b><i>→</i><b>MASTER</b></div>
+      <section className="qe-public-flow" aria-label={english ? 'Learning journey' : 'Learning journey'}>
+        <span>{english ? 'A clear path for every goal' : 'हर goal के लिए एक साफ़ रास्ता'}</span>
+        <div><b>{english ? 'DISCOVER' : 'खोजें'}</b><i>→</i><b>{english ? 'LEARN' : 'सीखें'}</b><i>→</i><b>{english ? 'PRACTISE' : 'Practice'}</b><i>→</i><b>{english ? 'IMPROVE' : 'सुधारें'}</b></div>
       </section>
 
-      <section id="how-it-works" className="section">
-        <div className="section-intro">
-          <span className="eyebrow"><UiText message="legacy.web.our.learning.loop.fea94a66" /></span>
-          <h2><UiText message="legacy.web.more.than.content.76733b95" /><br /><em><UiText message="legacy.web.the.right.next.step.every.time.3f3b50f8" /></em></h2>
-          <p><UiText message="legacy.web.progress.question.attempts.sessions.an.70713d1a" /></p>
+      <section id="how-it-works" className="qe-public-section qe-public-features">
+        <div className="qe-public-section-intro">
+          <span className="eyebrow"><UiText message="public.features.eyebrow" /></span>
+          <h2><UiText message="public.features.titleA" /><br /><em><UiText message="public.features.titleB" /></em></h2>
+          <p><UiText message="public.features.copy" /></p>
         </div>
-
-        <div className="promise-grid">
-          {promises.map(([n, titleHi, titleEn, descriptionHi, descriptionEn]) => (
-            <article className="promise" key={n}>
-              <span>{n}</span>
-              <h3><LocaleText hinglish={titleHi} english={titleEn} /></h3>
-              <p><LocaleText hinglish={descriptionHi} english={descriptionEn} /></p>
+        <div id="learning" className="qe-feature-grid">
+          {featureItems.map(item => (
+            <article className={'qe-feature-card qe-feature-card--' + item.id} key={item.id}>
+              <div className="qe-feature-card-top"><span className="qe-feature-icon" aria-hidden="true">{item.icon}</span><span className="qe-feature-number">{item.number}</span></div>
+              <h3><UiText message={item.title} /></h3>
+              <p><UiText message={item.body} /></p>
             </article>
           ))}
         </div>
       </section>
 
-      <section id="subjects" className="section section-soft">
-        <div className="section-heading">
-          <div><span className="eyebrow"><UiText message="legacy.web.start.now.88b76ad2" /></span><h2><UiText message="legacy.web.your.first.step.in.learning.ddd4ba00" /></h2></div>
-          <Link href="/login/student" className="text-link"><UiText message="legacy.web.get.started.cd90a839" /></Link>
+      <section id="audiences" className="qe-public-audiences">
+        <div className="qe-public-section-intro">
+          <span className="eyebrow"><UiText message="public.audience.eyebrow" /></span>
+          <h2><UiText message="public.audience.title" /></h2>
         </div>
-
-        <div className="subject-grid">
-          {subjects.map(subject => (
-            <Link href="/login/student" className="subject-card" key={subject.name}>
-              <div className={`subject-icon ${subject.tone}`}>{subject.icon}</div>
-              <div><span><UiText message="legacy.web.classes.6.8.9af66485" /></span><h3>{subject.name === 'गणित' ? <UiText message="legacy.web.mathematics.4cf6be1a" /> : <UiText message="legacy.web.science.f85a10aa" />}</h3><p><LocaleText hinglish={subject.meta} english="Classes 6–8 · Hindi medium" /></p></div>
-              <span className="card-arrow">↗</span>
-            </Link>
+        <div className="qe-audience-grid">
+          {audienceItems.map(item => (
+            <article className="qe-audience-card" key={item.id}>
+              <span className="qe-audience-icon" aria-hidden="true">{item.icon}</span>
+              <h3><UiText message={item.title} /></h3>
+              <p><UiText message={item.body} /></p>
+            </article>
           ))}
         </div>
-      </section>
-
-      <section id="parents" className="parent-section">
-        <div className="parent-copy">
-          <span className="eyebrow"><UiText message="legacy.web.for.parents.f4a58e74" /></span>
-          <h2><UiText message="legacy.web.not.just.how.much.they.studied.bf5abaa9" /><br /><em><UiText message="legacy.web.see.what.they.learned.7c690630" /></em></h2>
-          <p><UiText message="legacy.web.a.simple.summary.of.your.child.s.actua.45407e46" /></p>
-          <Link href="/login" className="button button-dark"><UiText message="legacy.web.open.parent.view.5d942b13" /></Link>
-        </div>
-
-        <div className="report-card">
-          <div className="report-top">
-            <div><span><UiText message="legacy.web.real.learning.records.8345bc3d" /></span><strong><UiText message="legacy.web.parent.report.82e13ce5" /></strong></div>
-            <span className="up">LIVE</span>
-          </div>
-          <div className="report-stat">
-            <strong><UiText message="legacy.web.progress.953da4d3" /></strong>
-            <span><UiText message="legacy.web.lessons.attempts.mastery.abc38175" /></span>
-            <div className="mini-bars">
-              <i style={{ height: '30%' }} /><i style={{ height: '44%' }} /><i style={{ height: '54%' }} />
-              <i style={{ height: '61%' }} /><i style={{ height: '72%' }} /><i style={{ height: '81%' }} />
-              <i style={{ height: '88%' }} />
-            </div>
-          </div>
-          <div className="report-bottom"><span><UiText message="legacy.web.strengths.mastery.fd7b51ef" /></span><span><UiText message="legacy.web.support.concepts.needing.help.9f502667" /></span></div>
+        <div className="qe-curriculum-note">
+          <span className="qe-curriculum-note-icon" aria-hidden="true">i</span>
+          <div><strong><UiText message="public.school.noteTitle" /></strong><p><UiText message="public.school.noteBody" /></p></div>
         </div>
       </section>
 
-      <footer className="footer">
-        <QuantaEdgeBrand href={null} variant="footer" />
-        <p><UiText message="legacy.web.learning.tailored.to.your.child.ce21e04d" /></p>
-        <div className="footer-links"><Link href="/privacy"><UiText message="legacy.web.privacy.323f3a35" /></Link><Link href="/terms"><UiText message="legacy.web.terms.c9f30225" /></Link></div>
-        <span>© 2026 QuantaEdge Learning</span>
+      <section className="qe-public-close">
+        <div className="qe-public-close-mark" aria-hidden="true">Q</div>
+        <div><h2><UiText message="public.bottom.title" /></h2><p><UiText message="public.bottom.body" /></p></div>
+        <Link href="/signup" className="button button-dark"><UiText message="public.bottom.cta" /><span>→</span></Link>
+      </section>
+
+      <footer className="footer qe-public-footer">
+        <div className="qe-public-footer-brand">
+          <QuantaEdgeBrand href={null} variant="footer" />
+          <span><UiText message="public.footer.tagline" /></span>
+        </div>
+        <div className="footer-links">
+          <Link href="/privacy"><UiText message="legacy.web.privacy.323f3a35" /></Link>
+          <Link href="/terms"><UiText message="legacy.web.terms.c9f30225" /></Link>
+        </div>
+        <span>© 2026 QuantaEdge</span>
       </footer>
     </main>
   );
