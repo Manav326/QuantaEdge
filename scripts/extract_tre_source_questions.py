@@ -23,8 +23,8 @@ try:
 except ImportError:
     try:
         import fitz  # compatibility with older PyMuPDF
-    except ImportError as exc:
-        raise SystemExit("PyMuPDF is required: python -m pip install pymupdf") from exc
+    except ImportError:
+        fitz = None  # pure text-classifier tests can run without the optional PDF dependency
 
 try:
     from lipi.preprocessor import HindiPreprocessor
@@ -415,6 +415,8 @@ def expected_language_keys(cycle: str) -> set[str]:
 
 
 def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[str, Any]:
+    if fitz is None:
+        raise ValueError("PyMuPDF is required for PDF extraction: python -m pip install pymupdf")
     if not zip_path.is_file():
         raise ValueError(f"Source ZIP not found: {zip_path}")
     if zip_path.stat().st_size > MAX_ARCHIVE_BYTES:
