@@ -9,7 +9,6 @@ test('[UX-001][UX-003][UI-005] smoke every current source-discovered web route',
   }
 
   const contexts = new Map<string, BrowserContext>();
-  const pages = new Map<string, Page>();
   const errors: string[] = [];
   let visited = 0;
 
@@ -21,9 +20,11 @@ test('[UX-001][UX-003][UI-005] smoke every current source-discovered web route',
       if (!context) {
         context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
         contexts.set(app, context);
-        pages.set(app, await context.newPage());
       }
-      const page = pages.get(app)!;
+      // Give every route its own page. Auth redirects and client-side middleware can
+      // trigger a follow-up navigation after DOMContentLoaded; reusing the same Page made
+      // the next smoke URL abort that redirect and produced false navigation failures.
+      const page = await context.newPage();
       const destination = appOrigins.get(app)! + expandRoute(route.route);
       const pageErrors: string[] = [];
       const onPageError = (error: Error) => pageErrors.push(error.message);
@@ -40,6 +41,7 @@ test('[UX-001][UX-003][UI-005] smoke every current source-discovered web route',
         errors.push(app + ' ' + route.route + ': navigation failed: ' + navigationError.slice(0, 250));
       } finally {
         page.off('pageerror', onPageError);
+        await page.close().catch(() => undefined);
       }
       if (pageErrors.length) {
         errors.push(app + ' ' + route.route + ': uncaught browser error: ' + pageErrors.join(' | ').slice(0, 350));
