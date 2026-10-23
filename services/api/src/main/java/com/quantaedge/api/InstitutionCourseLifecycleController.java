@@ -34,14 +34,16 @@ public class InstitutionCourseLifecycleController {
   private final InstitutionAuthService institutionAuth;
   private final ObjectMapper objectMapper;
   private final CourseMarketplaceLaunchReadinessService launchReadiness;
+  private final CourseAuthoringService courseAuthoringService;
 
   public InstitutionCourseLifecycleController(
       JdbcTemplate jdbc, InstitutionAuthService institutionAuth, ObjectMapper objectMapper,
-      CourseMarketplaceLaunchReadinessService launchReadiness) {
+      CourseMarketplaceLaunchReadinessService launchReadiness, CourseAuthoringService courseAuthoringService) {
     this.jdbc = jdbc;
     this.institutionAuth = institutionAuth;
     this.objectMapper = objectMapper;
     this.launchReadiness = launchReadiness;
+    this.courseAuthoringService = courseAuthoringService;
   }
 
   @GetMapping("/courses")
@@ -77,79 +79,17 @@ public class InstitutionCourseLifecycleController {
   }
 
   /** Creates the institution's course master and a draft release over its own content graph. */
+  /**
+   * @deprecated Legacy institution-portal creation endpoint delegates to the canonical course
+   * authoring service. New Education Admin UI should call /api/v1/admin/content/courses.
+   */
+  @Deprecated(since="2026-10",forRemoval=false)
   @PostMapping("/courses")
   @Transactional
   public Map<String,Object> createCourse(@RequestBody Map<String,Object> body,HttpServletRequest request) {
     InstitutionAuthService.InstitutionPrincipal principal=requirePrincipal(request);
-    String classCode=requiredText(body,"classCode",1,20,"Class code");
-    String requestedCode=requiredText(body,"code",2,38,"Course code").toUpperCase(Locale.ROOT);
-    if(!requestedCode.matches("^[A-Z0-9][A-Z0-9_-]{1,37}$"))
-      throw new IllegalArgumentException("Course code must use 2–38 letters, digits, hyphens or underscores.");
-    String displayName=requiredText(body,"displayName",2,200,"Course name");
-    String version=optionalText(body.get("curriculumVersion"),"CURRENT",1,120,"Curriculum version");
-    String stream=optionalText(body.get("streamCode"),null,0,60,"Stream code");
-    Object rawSubjects=body.get("subjects");
-    if(!(rawSubjects instanceof List<?> suppliedSubjects)||suppliedSubjects.isEmpty()||suppliedSubjects.size()>30)
-      throw new IllegalArgumentException("Add between 1 and 30 subject tracks to this course.");
-
-    List<Map<String,String>> subjects=new ArrayList<>();
-    Set<String> seenCodes=new HashSet<>();
-    int sequence=1;
-    for(Object raw:suppliedSubjects) {
-      if(!(raw instanceof Map<?,?> subject)) throw new IllegalArgumentException("Each subject needs a code and name.");
-      String code=requiredText(mapOf(subject),"code",2,40,"Subject code").toLowerCase(Locale.ROOT);
-      if(!code.matches("^[a-z0-9][a-z0-9_-]{1,39}$")||!seenCodes.add(code))
-        throw new IllegalArgumentException("Subject codes must be unique and use lowercase letters, digits, hyphens or underscores.");
-      subjects.add(Map.of("code",code,"displayName",requiredText(mapOf(subject),"displayName",2,100,"Subject name"),
-          "sortOrder",String.valueOf(sequence++)));
-    }
-    List<Map<String,Object>> classes=jdbc.queryForList(
-        "select id from curriculum_class where code=? and active=true",classCode);
-    if(classes.isEmpty()) throw new IllegalArgumentException("Select an active curriculum class.");
-    long classId=((Number)classes.getFirst().get("id")).longValue();
-    String internalCode="I"+principal.institutionId()+"_"+requestedCode;
-    Long courseId;
-    String publicId;
-    Long releaseId;
-    try {
-      courseId=jdbc.queryForObject("""
-          insert into curriculum_program(
-            class_id,code,display_name,stream_code,curriculum_version,status,notes,public_id_prefix
-          ) values(?,?,?,?,?,'ACTIVE',?,'INS') returning id
-          """,Long.class,classId,internalCode,displayName,stream,version,
-          "Institution-origin course for tenant "+principal.tenantCode());
-      publicId=jdbc.queryForObject("select public_id from curriculum_program where id=?",String.class,courseId);
-      for(Map<String,String> subject:subjects) {
-        int order=Integer.parseInt(subject.get("sortOrder"));
-        Long subjectId=jdbc.queryForObject("""
-            insert into curriculum_subject(class_id,code,display_name,sort_order,active,program_id)
-            values(?,?,?,?,true,?) returning id
-            """,Long.class,classId,subject.get("code"),subject.get("displayName"),order,courseId);
-        jdbc.update("""
-            insert into curriculum_program_subject(program_id,class_id,subject_id,is_required,sort_order)
-            values(?,?,?,true,?)
-            """,courseId,classId,subjectId,order);
-      }
-      releaseId=jdbc.queryForObject("""
-          insert into institution_course_release(
-            source_institution_id,program_id,release_version,release_state,content_fingerprint,
-            legacy_migration,created_at,updated_at
-          ) values(?,?,1,'DRAFT',?,false,now(),now()) returning id
-          """,Long.class,principal.institutionId(),courseId,contentFingerprint(courseId));
-      long assignmentId=jdbc.queryForObject("""
-          insert into institution_course_assignment(
-            institution_id,course_release_id,status,assignment_source,assigned_at,created_at,updated_at
-          ) values(?,?,'ASSIGNED','ORIGIN',now(),now(),now()) returning id
-          """,Long.class,principal.institutionId(),releaseId);
-      recordEvent(principal.institutionId(),releaseId,assignmentId,null,"COURSE_CREATED",null,principal.adminId(),
-          Map.of("courseId",courseId,"courseCode",internalCode,"publicId",publicId,"subjectCount",subjects.size()));
-    } catch(DuplicateKeyException ex) {
-      throw new ResponseStatusException(HttpStatus.CONFLICT,
-          "A course with that code and curriculum version already exists for this institution.",ex);
-    }
-    return Map.of("created",true,"courseId",courseId,"publicId",publicId,"courseCode",internalCode,
-        "displayName",displayName,"curriculumVersion",version,"subjectCount",subjects.size(),
-        "releaseId",releaseId,"releaseStatus","DRAFT");
+    return courseAuthoringService.createSourceCourse(
+        principal.institutionId(),principal.tenantCode(),null,principal.adminId(),body);
   }
 
   @GetMapping("/course-releases")
