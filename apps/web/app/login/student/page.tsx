@@ -5,10 +5,10 @@ import { apiFetch } from '../../components/apiClient';
 import { UiText, useUiTranslation } from '../../i18n/useUiTranslation';
 import Link from 'next/link';
 import { FormEvent, useState } from 'react';
-import QuantaEdgeBrand from '../../components/QuantaEdgeBrand';
 import PasswordField from '../../components/PasswordField';
-import { LanguageSwitcher, useLocale } from '../../components/LanguageProvider';
+import { useLocale } from "../../components/LanguageProvider";
 import { useTenantBranding } from '../../components/TenantBrandingProvider';
+import PublicAuthFrame from "../../components/PublicAuthFrame";
 
 async function readApi(response: Response): Promise<any> {
   const raw = await response.text();
@@ -49,9 +49,7 @@ export default function StudentLoginPage() {
   }
 
   return (
-    <main className="auth-page">
-      <div className="qe-language-auth-float"><LanguageSwitcher /></div>
-      <div className="auth-brand"><QuantaEdgeBrand variant="auth" /></div>
+    <PublicAuthFrame story="student">
       <section className="auth-card student-login-card">
         <Link href="/" className="auth-back-link">{brand ? (locale === 'english' ? 'Back to ' + brand.displayName : brand.displayName + ' पर वापस जाएँ') : institutionContextRequested ? (locale === 'english' ? 'Back to learning space' : 'सीखने के स्थान पर वापस जाएँ') : <UiText message="legacy.web.back.to.quantaedge.afca99d4" />}</Link>
         <span className="eyebrow"><UiText message="legacy.web.student.login.82db4c55" /></span>
@@ -75,6 +73,6 @@ export default function StudentLoginPage() {
         <div className="auth-mode-links"><Link href="/login"><UiText message="legacy.web.parent.guardian.login.b45fedd1" /></Link></div>
         <small className="auth-note"><UiText message="legacy.web.this.login.opens.only.your.learning.pr.39010a3a" /></small>
       </section>
-    </main>
+    </PublicAuthFrame>
   );
 }
