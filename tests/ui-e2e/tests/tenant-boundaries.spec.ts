@@ -404,6 +404,31 @@ test('[LRN-002] lesson MCQ records incorrect feedback and allows a correct retry
     );
     expect(Number(before.rows[0].total), 'A new QA fixture question must start without learner attempts.').toBe(0);
 
+    const scopedProfile = await api(
+      learner.page,
+      '/api/v1/students/me?courseId=' + encodeURIComponent(String(courseId)),
+      'STUDENT',
+      institutionCode
+    );
+    expect(scopedProfile.status,
+      'The authorised learner profile endpoint must accept the same institution/course that the course catalogue returned. Response: ' +
+        JSON.stringify(scopedProfile.body)
+    ).toBe(200);
+
+    const browserProfileResponses: Array<{ status: number; workspace?: string; institution?: string }> = [];
+    learner.page.on('response', response => {
+      try {
+        const url = new URL(response.url());
+        if (url.pathname !== '/api/v1/students/me') return;
+        const headers = response.request().headers();
+        browserProfileResponses.push({
+          status: response.status(),
+          workspace: headers['x-qe-workspace'],
+          institution: headers['x-qe-institution-code']
+        });
+      } catch { /* Keep this evidence hook non-fatal; the assertions below remain authoritative. */ }
+    });
+
     await learner.page.goto(
       WEB + '/student/learn?courseId=' + encodeURIComponent(String(courseId)) +
         '&lessonId=' + encodeURIComponent(String(lessonId)),
@@ -411,7 +436,14 @@ test('[LRN-002] lesson MCQ records incorrect feedback and allows a correct retry
     );
     const prompt = 'QA fixture: choose the correct lifecycle answer.';
     const questionCard = learner.page.locator('.qe-question-card').filter({ hasText: prompt }).first();
-    await expect(questionCard, 'The real learner lesson UI must render its published QA question.').toBeVisible({ timeout: 25_000 });
+    try {
+      await expect(questionCard, 'The real learner lesson UI must render its published QA question.').toBeVisible({ timeout: 25_000 });
+    } catch (error) {
+      throw new Error(
+        (error instanceof Error ? error.message : String(error)) +
+        '\nBrowser /api/v1/students/me request evidence: ' + JSON.stringify(browserProfileResponses)
+      );
+    }
 
     const wrongOption = questionCard.getByRole('button', { name: /Incorrect synthetic option/ });
     const wrongAnswerWaiter = learner.page.waitForResponse(response =>
