@@ -124,11 +124,13 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("already has active source extraction or Layer 4–5 work", coordinator)
         self.assertIn('else job.get("started_at")', coordinator)
         self.assertIn("checkpoint_baseline=", coordinator)
-    def test_layer45_resume_uses_finite_request_timeout_and_replaces_only_class6_runner(self):
+    def test_layer45_resume_uses_finite_request_timeout_and_replaces_only_matching_class_runner(self):
         workflow = read("textbook-visual-candidates-v3.yml")
         pipeline = (ROOT / "scripts" / "quantaedge_textbook_pipeline.py").read_text(encoding="utf-8")
-        self.assertIn("cancel-in-progress: ${{ github.event_name == 'push' && (contains", workflow)
-        self.assertIn("[resume-visual-layers-4-5-class-6]", workflow)
+        self.assertIn("cancel-in-progress: ${{ github.event_name == 'push' && ((", workflow)
+        self.assertIn("(github.event_name == 'push' && contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') && '6')", workflow)
+        self.assertIn("(github.event_name == 'push' && (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]')", workflow)
+        self.assertIn("(github.event_name == 'push' && (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]')", workflow)
         self.assertIn("--request-timeout 300", workflow)
         self.assertIn('q.add_argument("--request-timeout",type=int,default=300', pipeline)
         self.assertIn('"--timeout",str(args.request_timeout)', pipeline)
