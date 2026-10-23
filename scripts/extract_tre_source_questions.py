@@ -198,6 +198,10 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
     collected: list[dict[str, Any]] = []
     for page_index in range(len(pdf)):
         page_num = page_index + 1
+        # All three source PDFs have question content on PDF pages 2–45.
+        # Later pages are rough-work pages and a repeated Hindi cover/instruction page.
+        if page_num < 2 or page_num > 45:
+            continue
         page = pdf[page_index]
         columns: dict[str, list[tuple[float, str, float]]] = {"left": [], "right": []}
         for block in page.get_text("blocks"):
@@ -227,7 +231,7 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                         candidate = (identity, number, prefix, parsed[2])
                 if candidate:
                     if active:
-                        active["raw_text"] = normalize_space("\n".join(active.pop("_lines")))
+                        active["raw_text"] = "\n".join(line.strip() for line in active.pop("_lines") if line.strip())
                         collected.append(active)
                     identity, number, prefix, rest = candidate
                     last_numeric_question = number
@@ -241,6 +245,7 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                     else:
                         locale = "en" if page_num % 2 == 0 else "hi"
                         section = section_for_number(cycle, number)
+                    non_empty_lines=[line.strip() for line in text.splitlines() if line.strip()]
                     active = {
                         "question_identity": identity,
                         "question_number": number,
@@ -255,11 +260,15 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                     }
                     if rest.strip():
                         active["_lines"].append(rest.strip())
+                    # The PDF extractor can place the stem and all options in one block.
+                    # Preserve the remaining lines rather than dropping them after the first line.
+                    if non_empty_lines:
+                        active["_lines"].extend(non_empty_lines[1:])
                     continue
                 if active:
                     active["_lines"].append(text.strip())
             if active:
-                active["raw_text"] = normalize_space("\n".join(active.pop("_lines")))
+                active["raw_text"] = "\n".join(line.strip() for line in active.pop("_lines") if line.strip())
                 collected.append(active)
     return collected
 
@@ -508,6 +517,26 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
     }
     out_path=output_dir/"tre-question-inventory.json"
     out_path.write_text(json.dumps(inventory,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+
+    # Update the committed source register to reference exact stored binaries and their checksums.
+    register_path=repo_root/"data"/"TRE-Papres"/"source-register.json"
+    if register_path.is_file():
+        register=json.loads(register_path.read_text(encoding="utf-8"))
+        for existing in register.get("sources",[]):
+            cycle=existing.get("cycle")
+            if cycle in records:
+                binary=records[cycle]["source_file"]
+                existing["source_status"]="VERIFIED_SOURCE_FILE"
+                existing["binary_path"]=binary["repository_path"]
+                existing["sha256"]=binary["sha256"]
+                existing["size_bytes"]=binary["size_bytes"]
+                existing["pdf_page_count"]=binary["pdf_page_count"]
+                existing["repository_distribution_rights"]="CLEARED_FOR_PUBLIC_REPOSITORY"
+                existing["verification_note"]="Exact PDF bytes extracted from the user-provided data/TRE-4_PYQ.zip; file existence and SHA-256 verified. Question-level content and answer review are still pending."
+        register["binary_collection_path"]="data/TRE-Papres/sources/"
+        register["binary_collection_status"]="SOURCE_PDFS_EXTRACTED_AND_HASHED"
+        register_path.write_text(json.dumps(register,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+
     report={
         "schema":"quantaedge.tre-question-extraction-report.v1",
         "source_archive_sha256":inventory["source_archive"]["sha256"],
