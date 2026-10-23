@@ -216,9 +216,9 @@ export default function AccountLifecyclePage() {
                       <table style={{width:'100%',borderCollapse:'collapse',fontSize:13}}>
                         <thead><tr>
                           <th style={{textAlign:'left',padding:8}}>{t('admin.lifecycle.deletionClassification')}</th>
-                          <th style={{textAlign:'left',padding:8}}>Table</th>
+                          <th style={{textAlign:'left',padding:8}}>{t('admin.lifecycle.deletionTable')}</th>
                           <th style={{textAlign:'left',padding:8}}>{t('admin.lifecycle.deletionRule')}</th>
-                          <th style={{textAlign:'right',padding:8}}>{t('admin.lifecycle.deletionRows',{count:0}).replace('{count}','#')}</th>
+                          <th style={{textAlign:'right',padding:8}}>{t('admin.lifecycle.deletionRowCount')}</th>
                         </tr></thead>
                         <tbody>{assessment.dependencies.map((dependency,index)=><tr key={dependency.schema+'.'+dependency.table+'.'+dependency.constraint+'-'+index} style={{borderTop:'1px solid var(--admin-border,#e1e5ec)'}}>
                           <td style={{padding:8,verticalAlign:'top'}}>{dependency.classification==='UNKNOWN'?t('admin.lifecycle.deletionUnknown'):dependency.classification}</td>
