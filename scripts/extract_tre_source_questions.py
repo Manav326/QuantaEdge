@@ -73,7 +73,7 @@ PAPERS = {
         "match": ("tre3.0", "tre-3", "tre3"),
         "expected": {"GENERAL_STUDIES": (31, 70), "COMPUTER_SCIENCE": (71, 150)},
         # The provided TRE 3.0 booklet contains 148 items: 40 GS + 80 CS + 28 language.
-        "total_questions": 148,
+        "total_questions": 150,
         "duration_minutes": 150,
         "negative_marking_fraction": 0.0,
         "exam_date": "2024-07-22",
@@ -288,98 +288,260 @@ def _question_prefix(text: str) -> tuple[str | None, int | None, str] | None:
     return identity, number, rest
 
 
+def _parse_question_range(text: str) -> tuple[str | None, int, int] | None:
+    """Read a question range from a passage/section direction, including legacy-Hindi headings."""
+    prefixed = re.search(
+        r"(?is)([EHUB])\s*[-–]\s*(\d{1,3})\s*(?:to|\bgo\b|से|तक|[-–])[\s\S]{0,40}?([EHUB])\s*[-–]\s*(\d{1,3})",
+        text,
+    )
+    if prefixed and prefixed.group(1).upper() == prefixed.group(3).upper():
+        return prefixed.group(1).upper(), int(prefixed.group(2)), int(prefixed.group(4))
+    numeric = re.search(
+        r"(?is)(?:Q\.?\s*Nos?\.?|questions?\s*(?:nos?\.?)?)\s*(\d{1,3})\s*(?:to|through|[-–])\s*(\d{1,3})",
+        text,
+    )
+    if numeric:
+        return None, int(numeric.group(1)), int(numeric.group(2))
+    return None
+
+
+def _is_passage_instruction(text: str) -> bool:
+    lower = text.lower()
+    return (
+        "passage" in lower
+        or "answer the questions that follow" in lower
+        or "an{r>v" in lower
+        or "júm§e" in lower
+    )
+
+
+def _question_is_allowed(cycle: str, identity: str, number: int, prefix: str) -> bool:
+    if prefix in {"E", "H", "U", "B"}:
+        return number <= 30
+    return section_for_number(cycle, number) is not None
+
+
+def _split_block_questions(text: str, cycle: str) -> tuple[str, list[tuple[str, int, str, str]]]:
+    """Split a PDF text block at every question label, even when a passage/directive precedes Q1."""
+    offsets: list[tuple[int, str, int, str]] = []
+    cursor = 0
+    for line in text.splitlines(keepends=True):
+        parsed = _question_prefix(line)
+        if parsed:
+            identity, number, _ = parsed
+            prefix = identity.split("-", 1)[0] if "-" in identity else ""
+            if _question_is_allowed(cycle, identity, number, prefix):
+                offsets.append((cursor, identity, number, prefix))
+        cursor += len(line)
+    if not offsets:
+        return text, []
+    preamble = text[:offsets[0][0]]
+    questions: list[tuple[str, int, str, str]] = []
+    for index, (start, identity, number, prefix) in enumerate(offsets):
+        end = offsets[index + 1][0] if index + 1 < len(offsets) else len(text)
+        questions.append((identity, number, prefix, text[start:end]))
+    return preamble, questions
+
+
 def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
     collected: list[dict[str, Any]] = []
     for page_index in range(len(pdf)):
         page_num = page_index + 1
-        # All three source PDFs have question content on PDF pages 2–45.
-        # Later pages are rough-work pages and a repeated Hindi cover/instruction page.
+        # The question booklet's language section and scored sections run on pages 2–45.
         if page_num < 2 or page_num > 45:
             continue
         page = pdf[page_index]
         columns: dict[str, list[tuple[float, str, float]]] = {"left": [], "right": []}
         for block in page.get_text("blocks"):
-            x0, y0, x1, y1, text, *_ = block
+            x0, y0, x1, y1, block_text, *_ = block
             if y0 < 55 or y0 > 715:
                 continue
             column = "left" if x0 < PAGE_SPLIT_X else "right"
-            columns[column].append((float(y0), str(text), float(x0)))
+            columns[column].append((float(y0), str(block_text), float(x0)))
+
+        # Passage ranges are page-local and language-neutral. They let each question retain a
+        # shared stimulus identity without making copies of the paragraph in the content model.
+        passage_specs: list[dict[str, Any]] = []
         for column, blocks in columns.items():
             blocks.sort(key=lambda item: item[0])
-            # Detect the margin independently for each column. A fixed page-x threshold silently
-            # drops every question in the right column and produced exactly half a paper.
+            for block_index, (y0, block_text, x0) in enumerate(blocks):
+                question_range = _parse_question_range(block_text)
+                if not question_range or not _is_passage_instruction(block_text):
+                    continue
+                range_prefix, first_number, last_number = question_range
+                group_id = (
+                    f"{cycle.lower().replace(' ', '-')}-stimulus-"
+                    f"{(range_prefix or 'q').lower()}-{first_number}-{last_number}"
+                )
+                passage_specs.append({
+                    "column": column,
+                    "header_y": y0,
+                    "header_text": block_text,
+                    "header_index": block_index,
+                    "prefix": range_prefix,
+                    "first": first_number,
+                    "last": last_number,
+                    "group_id": group_id,
+                    "language_only": (
+                        (range_prefix in {"E", "H", "U", "B"} and first_number <= 30)
+                        or (range_prefix is None and section_for_number(cycle, first_number) == "LANGUAGE_QUALIFYING")
+                    ),
+                })
+
+        # Find the actual paragraph for each declared range. Some PDFs combine the first
+        # question with the end of its passage (TRE 3.0 E-1); others put the paragraph in
+        # its own block (TRE 3.0 H-9/H-15).
+        stimulus_by_group: dict[str, dict[str, Any]] = {}
+        stimulus_source_keys: set[tuple[str, float, float, str]] = set()
+        for spec in passage_specs:
+            blocks = columns[spec["column"]]
+            for y0, block_text, x0 in blocks:
+                if y0 <= spec["header_y"] or block_text == spec["header_text"]:
+                    continue
+                preamble, question_parts = _split_block_questions(block_text, cycle)
+                matching_part = next((
+                    part for identity, number, prefix, part in question_parts
+                    if number == spec["first"] and
+                    (spec["prefix"] is None or prefix == spec["prefix"])
+                ), None)
+                passage_text = ""
+                source_y = y0
+                source_x = x0
+                if matching_part is not None and len(preserve_layout(preamble)) >= 80:
+                    passage_text = preserve_layout(preamble)
+                elif not question_parts and len(preserve_layout(block_text)) >= 100:
+                    # Skip running headers, page identifiers and tiny headings; only the large
+                    # first paragraph between the direction and its first question is the stimulus.
+                    stripped = preserve_layout(block_text)
+                    if not re.fullmatch(r"[\d\s./_-]+", stripped) and not stripped.lower().startswith("part -"):
+                        passage_text = stripped
+                if passage_text:
+                    stimulus_by_group[spec["group_id"]] = {
+                        "text": passage_text,
+                        "source_language": (
+                            spec["prefix"].lower() if spec["prefix"] in {"E", "H", "U", "B"} else
+                            ("en" if spec["first"] <= 8 else "hi")
+                        ),
+                        "page": page_num,
+                        "column": spec["column"],
+                    }
+                    # Mark the original paragraph or question-block preamble so it is not appended
+                    # to a previous question as if it were an answer option.
+                    stimulus_source_keys.add((spec["column"], round(source_y, 2), source_x, passage_text))
+                    break
+
+        def identity_matches_spec(identity: str, number: int, prefix: str, spec: dict[str, Any]) -> bool:
+            return spec["first"] <= number <= spec["last"] and (
+                spec["prefix"] is None or prefix == spec["prefix"]
+            )
+
+        # Extract question labels anywhere on a text block's physical lines, not only its first
+        # non-empty line. This fixes missed E-1/E-6 labels after a passage or direction paragraph.
+        for column, blocks in columns.items():
             numbered_x: list[float] = []
             for _, candidate_text, candidate_x in blocks:
-                candidate_prefix = _question_prefix(candidate_text)
-                if not candidate_prefix:
-                    continue
-                candidate_identity, candidate_number, _ = candidate_prefix
-                candidate_kind = candidate_identity.split("-",1)[0] if "-" in candidate_identity else ""
-                plausible = candidate_number <= 30 if candidate_kind in {"E","H","U","B"} else section_for_number(cycle,candidate_number) is not None
-                if plausible:
+                _, candidates = _split_block_questions(candidate_text, cycle)
+                if candidates:
                     numbered_x.append(candidate_x)
-            column_origin = min(numbered_x) if numbered_x else min((item[2] for item in blocks),default=0)
+            column_origin = min(numbered_x) if numbered_x else min((item[2] for item in blocks), default=0)
             question_margin = column_origin + 55
             active: dict[str, Any] | None = None
-            last_numeric_question: int | None = None
-            for y0, text, x0 in blocks:
-                # Only labels aligned near this column's own margin start questions; indented
-                # line-numbered code and numbered statements within a stem stay with the stem.
-                parsed = _question_prefix(text)
-                candidate = None
-                if x0 <= question_margin and parsed:
-                    identity, number, _ = parsed
-                    prefix = identity.split("-", 1)[0] if "-" in identity else ""
-                    if prefix in {"E", "H", "U", "B"}:
-                        allowed = number <= 30
-                    else:
-                        section = section_for_number(cycle, number)
-                        allowed = section is not None
-                    if allowed and (last_numeric_question is None or number > last_numeric_question):
-                        candidate = (identity, number, prefix, parsed[2])
-                if candidate:
-                    if active:
-                        active["raw_text"] = preserve_layout("\n".join(active.pop("_lines")))
-                        collected.append(active)
-                    identity, number, prefix, rest = candidate
-                    last_numeric_question = number
-                    if prefix:
-                        locale = {"E": "en", "H": "hi", "U": "ur", "B": "bn"}[prefix]
-                        section = "LANGUAGE_QUALIFYING"
-                    elif cycle in {"TRE 2.0", "TRE 3.0"} and 1 <= number <= 8:
-                        locale, section = "en", "LANGUAGE_QUALIFYING"
-                    elif cycle in {"TRE 2.0", "TRE 3.0"} and 9 <= number <= 30:
-                        locale, section = "hi", "LANGUAGE_QUALIFYING"
-                    else:
-                        locale = "en" if page_num % 2 == 0 else "hi"
-                        section = section_for_number(cycle, number)
-                    non_empty_lines=[line.rstrip() for line in text.splitlines() if line.strip()]
-                    active = {
-                        "question_identity": identity,
-                        "question_number": number,
-                        "source_prefix": prefix or None,
-                        "section_code": section,
-                        "language": locale,
-                        "pdf_page": page_num,
-                        "column": column,
-                        "top_y": round(y0, 2),
-                        "raw_text": "",
-                        "_lines": [],
-                    }
-                    if rest.strip():
-                        active["_lines"].append(rest.rstrip())
-                    # The PDF extractor can place the stem and all options in one block.
-                    # Preserve the remaining lines rather than dropping them after the first line.
-                    if non_empty_lines:
-                        active["_lines"].extend(non_empty_lines[1:])
-                    continue
-                if active:
-                    active["_lines"].append(text.rstrip())
-            if active:
-                active["raw_text"] = preserve_layout("\n".join(active.pop("_lines")))
-                collected.append(active)
-    return collected
 
+            def flush_active() -> None:
+                nonlocal active
+                if active:
+                    active["raw_text"] = preserve_layout("\n".join(active.pop("_lines")))
+                    collected.append(active)
+                    active = None
+
+            logical: list[tuple[float, str, float, str | None, int | None, str | None, str | None]] = []
+            for y0, block_text, x0 in blocks:
+                preamble, question_parts = _split_block_questions(block_text, cycle)
+                if preamble.strip():
+                    logical.append((y0, preamble, x0, None, None, None, None))
+                for part_index, (identity, number, prefix, part_text) in enumerate(question_parts):
+                    logical.append((y0 + (part_index + 1) * 0.001, part_text, x0, identity, number, prefix, identity))
+                if not question_parts and not preamble.strip():
+                    logical.append((y0, block_text, x0, None, None, None, None))
+
+            logical.sort(key=lambda item: item[0])
+            for y0, block_text, x0, identity, number, prefix, _ in logical:
+                if identity is None:
+                    # Instructions introduce ranges; they are not part of a previous stem.
+                    parsed_range = _parse_question_range(block_text)
+                    if parsed_range and (
+                        _is_passage_instruction(block_text) or "direction" in block_text.lower()
+                        or "fill in the blanks" in block_text.lower()
+                    ):
+                        flush_active()
+                        continue
+                    normalized_block = preserve_layout(block_text)
+                    if any(
+                        col == column and round(y0, 2) == round(source_y, 2)
+                        and normalized_block == source_text
+                        for col, source_y, _source_x, source_text in stimulus_source_keys
+                    ):
+                        flush_active()
+                        continue
+                    # When a passage and its first question share a PDF block, the passage was
+                    # split off into a separate logical item above; skip that preamble here.
+                    if len(normalized_block) >= 80 and any(
+                        spec["column"] == column and spec["header_y"] < y0
+                        and _is_passage_instruction(spec["header_text"])
+                        for spec in passage_specs
+                    ):
+                        flush_active()
+                        continue
+                    if active:
+                        active["_lines"].append(block_text.rstrip())
+                    continue
+
+                assert number is not None and prefix is not None
+                if x0 > question_margin or not _question_is_allowed(cycle, identity, number, prefix):
+                    if active:
+                        active["_lines"].append(block_text.rstrip())
+                    continue
+                flush_active()
+                if prefix:
+                    locale = {"E": "en", "H": "hi", "U": "ur", "B": "bn"}[prefix]
+                    section = "LANGUAGE_QUALIFYING"
+                elif cycle in {"TRE 2.0", "TRE 3.0"} and 1 <= number <= 8:
+                    locale, section = "en", "LANGUAGE_QUALIFYING"
+                elif cycle in {"TRE 2.0", "TRE 3.0"} and 9 <= number <= 30:
+                    locale, section = "hi", "LANGUAGE_QUALIFYING"
+                else:
+                    locale = "en" if page_num % 2 == 0 else "hi"
+                    section = section_for_number(cycle, number)
+
+                first_line = next((line for line in block_text.splitlines() if line.strip()), "")
+                parsed = _question_prefix(first_line)
+                rest = parsed[2] if parsed else ""
+                lines = block_text.splitlines()
+                first_nonempty = next((i for i, line in enumerate(lines) if line.strip()), -1)
+                tail = lines[first_nonempty + 1:] if first_nonempty >= 0 else []
+                question_lines = ([rest] if rest.strip() else []) + tail
+                active = {
+                    "question_identity": identity,
+                    "question_number": number,
+                    "source_prefix": prefix or None,
+                    "section_code": section,
+                    "language": locale,
+                    "pdf_page": page_num,
+                    "column": column,
+                    "top_y": round(y0, 2),
+                    "raw_text": "",
+                    "_lines": question_lines,
+                }
+                # Attach the same stimulus ID/content to every item within its declared range.
+                for spec in passage_specs:
+                    if identity_matches_spec(identity, number, prefix, spec) and spec["group_id"] in stimulus_by_group:
+                        active["stimulus_id"] = spec["group_id"]
+                        active["stimulus_raw_text"] = stimulus_by_group[spec["group_id"]]["text"]
+                        active["stimulus_source_language"] = stimulus_by_group[spec["group_id"]]["source_language"]
+                        active["native_language_only"] = bool(spec["language_only"])
+                        break
+            flush_active()
+    return collected
 
 def parse_prompt_options(text: str, identity: str, language: str, cycle: str) -> tuple[str, list[dict[str, Any]]]:
     """Separate option labels without flattening the question's original layout."""
@@ -409,9 +571,7 @@ def parse_prompt_options(text: str, identity: str, language: str, cycle: str) ->
 
 def expected_language_keys(cycle: str) -> set[str]:
     if cycle == "TRE 3.0":
-        # The supplied source booklet contains E-2..E-5, E-7..E-8 and H-9..H-30.
-        # Do not synthesize E-1/E-6: they are not present in this 148-question paper.
-        return {f"E-{i}" for i in (2, 3, 4, 5, 7, 8)} | {f"H-{i}" for i in range(9, 31)}
+        return {f"E-{i}" for i in range(1, 9)} | {f"H-{i}" for i in range(9, 31)}
     if cycle == "TRE 2.0":
         return {str(i) for i in range(1, 31)}
     return set()
@@ -605,7 +765,7 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 ) if cycle!="TRE 1.0" else [],
                 "included_in_tre4_practice_test":cycle in {"TRE 2.0","TRE 3.0"},
                 "included_in_scored_result":False,
-                "note":"Preserve all questions from each original booklet. TRE 1.0 has 120 questions (40 GS + 80 CS); TRE 2.0 has 150 (30 qualifying language + 40 GS + 80 CS); this TRE 3.0 source booklet has 148 (28 qualifying language + 40 GS + 80 CS). Only GS and CS contribute to the two scored result sections."
+                "note":"Preserve all questions from each original booklet. TRE 1.0 has 120 questions (40 GS + 80 CS); TRE 2.0 and TRE 3.0 have 150 each (30 qualifying language + 40 GS + 80 CS). Only GS and CS contribute to the two scored result sections."
             }
             # Also retain alternative Urdu/Bengali source-track availability without adding those
             # questions to the TRE-4 CS/GS test.
@@ -661,7 +821,7 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 "source_notes":[
                     "Original PDF bytes are preserved exactly; SHA-256 is recorded.",
                     "Hindi values contain a Unicode conversion of the source's legacy Hindi encoding; raw text is retained beside it.",
-                    "All questions present in each original booklet are preserved. TRE 2.0 has 30 qualifying-language items in addition to 40 General Studies + 80 Computer Science; the provided TRE 3.0 booklet has 28 qualifying-language items in addition to 40 General Studies + 80 Computer Science, for 148 total. Only GS and Computer Science contribute to the scored result, reported in two sections.",
+                    "All questions present in each original booklet are preserved. TRE 2.0 and TRE 3.0 each have 30 qualifying-language items in addition to 40 General Studies + 80 Computer Science, for 150 total. Only GS and Computer Science contribute to the scored result, reported in two sections.",
                     "Do not release until question/option pair completeness, Hindi rendering, answers, concise explanations, paper rules and any mathematical/code expressions have been reviewed.",
                 ],
             }
