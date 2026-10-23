@@ -40,8 +40,16 @@ test('[UX-002] learner UI locale persists across navigation without changing lea
     await expect(page.getByRole('heading', { name: 'All Courses' })).toBeVisible({ timeout: 25_000 });
     await expect.poll(() => page.locator('html').getAttribute('data-tenant-brand-code')).toBe(institutionCode);
 
-    const uiLocale = page.locator('label.qe-language-switcher:not(.qe-learning-language-switcher) select').first();
-    await expect(uiLocale, 'The learner shell must expose the shared UI language selector.').toBeVisible();
+    const openAccountSettings = async () => {
+      const trigger = page.locator('button.student-account-trigger');
+      await expect(trigger, 'The authenticated learner shell must expose the account-settings control.').toBeVisible();
+      await trigger.click();
+      await expect(page.locator('#student-account-menu')).toBeVisible();
+      const selector = page.locator('#student-account-menu label.qe-language-switcher:not(.qe-learning-language-switcher) select').first();
+      await expect(selector, 'The account menu must expose the shared UI language selector.').toBeVisible();
+      return selector;
+    };
+    const uiLocale = await openAccountSettings();
 
     const profileResponse = await page.evaluate(async () => {
       const response = await fetch('/api/v1/students/me/profile', {
@@ -68,7 +76,7 @@ test('[UX-002] learner UI locale persists across navigation without changing lea
 
     await page.goto(WEB + '/student/marketplace', { waitUntil: 'domcontentloaded' });
     await expect(page.getByRole('heading', { name: /Marketplace/i })).toBeVisible({ timeout: 25_000 });
-    const localeOnSecondRoute = page.locator('label.qe-language-switcher:not(.qe-learning-language-switcher) select').first();
+    const localeOnSecondRoute = await openAccountSettings();
     await expect(localeOnSecondRoute).toHaveValue('english');
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await localeOnSecondRoute.selectOption('hinglish');
@@ -77,7 +85,8 @@ test('[UX-002] learner UI locale persists across navigation without changing lea
 
     await page.reload({ waitUntil: 'domcontentloaded' });
     await expect(page.locator('html')).toHaveAttribute('lang', 'hi');
-    await expect(page.locator('label.qe-language-switcher:not(.qe-learning-language-switcher) select').first()).toHaveValue('hinglish');
+    const localeAfterReload = await openAccountSettings();
+    await expect(localeAfterReload).toHaveValue('hinglish');
 
     const prefs = await page.evaluate(() => ({
       uiLocale: localStorage.getItem('qe-locale'),
