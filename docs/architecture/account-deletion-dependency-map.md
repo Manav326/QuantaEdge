@@ -16,6 +16,7 @@ API surface:
 - `GET /api/v1/admin/account-deletion-requests?status=REQUESTED`: staff review queue.
 - `GET /api/v1/admin/account-deletion-requests/{requestId}`: request and snapshotted child IDs.
 - `POST /api/v1/admin/account-deletion-requests/{requestId}/start-review`: move a new request into review.
+- `GET /api/v1/admin/account-deletion-requests/{requestId}/assessment`: read-only, live foreign-key dependency census for the account's user row, its independent learner row, request-time child snapshot and currently linked children. The existing Admin account-lifecycle page exposes the queue and assessment.
 
 Requests derive the subject from the authenticated `AuthContext`; the client cannot select an arbitrary user ID. Staff identities cannot use end-user self-service. The API requires an explicit `DELETE` confirmation, snapshots only currently linked **parent-managed** learner public IDs when the guardian explicitly includes all linked children, writes identity-audit events, and does not offer a false “completed” action. A linked learner whose own independent `user_account` is set is deliberately excluded from parent-controlled deletion.
 
@@ -49,6 +50,8 @@ The account model includes verified login identifiers and profile fields (mobile
 ## Why the first slice does not physically delete rows
 
 A direct `DELETE FROM user_account` or `DELETE FROM student` would be blocked by restrictive references and could destroy or orphan child access, paid entitlements, invoices, certificates, immutable finance records or audit evidence. The schema also does not provide a complete, legally approved field-by-field retention/anonymization policy. Account deactivation by itself would not satisfy the deletion requirement.
+
+The follow-up assessment is deliberately read-only. It inspects foreign keys referencing `public.user_account` and `public.student` in the migrated database, counts linked rows without returning their data, flags uncounted/unclassified references, and records only that an assessment was run in the staff audit log. Table-name categories are heuristic triage only; the assessment does not inspect all free-text/JSON personal-data surfaces and does not establish a lawful retention basis. It always reports `automaticFulfillmentAllowed=false`, `canMarkCompleted=false`, and `erasureExecuted=false`.
 
 Do not add an endpoint that marks a request `COMPLETED` until the following are verified:
 
