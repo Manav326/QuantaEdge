@@ -123,6 +123,7 @@ export default function Home() {
           <a href="#audiences"><UiText message="public.nav.forFamilies" /></a>
         </nav>
         <div className="top-actions qe-public-top-actions">
+          <Link href="/login" className="text-link qe-public-sign-in"><UiText message="public.nav.signIn" /></Link>
           <DisplayControls />
           <LandingAccountMenu />
         </div>

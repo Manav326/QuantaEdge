@@ -25,8 +25,9 @@ QuantaEdge is a quality-first learning platform for different ages, subjects, sk
 - [ ] Parent deletion must explicitly resolve each linked child: include that child in the deletion request or complete a verified guardian transfer first. Never leave child login dependent on a deleted guardian without a supported recovery path.
 - [ ] Review purchases, invoices, certificates, assessment records, security/audit evidence, and statutory retention with the responsible legal/business owner. Delete personal data when required; retain only specifically justified records, limit access, and disclose the retention clearly.
 - [ ] Audit Android resource downloads and offline tests on supported content; verify interrupted downloads, app restart, encrypted queued answers, idempotent result sync, server-side grading, and clear sync states before treating offline learning as release-ready.
-- [ ] Add theme and interface-language selection to the pre-login surfaces of Admin and HRMS, preserving each workspace's distinct role identity and concise role-specific messaging.
-- [ ] Verify Android startup and pre-login preference controls and ensure theme/language selections persist correctly.
+- [x] Admin and HRMS pre-login theme/language controls are present in source; each retains concise role-specific messaging.
+- [x] Android signed-out account routes expose the existing persistent theme choices and retain the existing language controls.
+- [ ] Exercise Android theme/language persistence on-device across welcome, login, signup and password recovery.
 - [ ] Verify applicable current Google Play, privacy, account-deletion, institutional, and payment-provider requirements against official rules and the real deployed product. Do not mark compliance complete from copy or links alone.
 - [ ] Verify public contact/operator disclosures, privacy and terms, support path, course availability claims, certificate wording, and any applicable refund/cancellation disclosures.
 - [ ] Keep this tracker and the UI parity ledger updated with source implementation and end-to-end evidence recorded separately.
