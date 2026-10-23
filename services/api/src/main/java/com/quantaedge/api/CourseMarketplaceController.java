@@ -111,6 +111,26 @@ public class CourseMarketplaceController {
           and o.hrms_published_by_staff_id is not null
           and release.release_state='SHAREABLE'
           and release.content_fingerprint=course_content_fingerprint(release.program_id)
+          and not exists (
+            select 1
+            from institution_marketplace_offer newer_offer
+            join institution_course_assignment newer_assignment
+              on newer_assignment.id=newer_offer.assignment_id
+             and newer_assignment.institution_id=newer_offer.institution_id
+             and newer_assignment.status='ASSIGNED'
+            join institution_course_release newer_release
+              on newer_release.id=newer_offer.course_release_id
+             and newer_release.program_id=newer_offer.course_id
+            join curriculum_program newer_program
+              on newer_program.id=newer_release.program_id
+             and newer_program.course_identity_id=p.course_identity_id
+             and newer_program.content_version_no>p.content_version_no
+            where newer_offer.institution_id=o.institution_id
+              and newer_offer.status='PUBLISHED'
+              and newer_offer.hrms_published_by_staff_id is not null
+              and newer_release.release_state='SHAREABLE'
+              and newer_release.content_fingerprint=course_content_fingerprint(newer_release.program_id)
+          )
         order by p.display_name,p.id
         """, institutionId, context.studentId(),
         institutionId, context.studentId(), context.studentId(), context.studentId(), institutionId);
@@ -201,6 +221,26 @@ public class CourseMarketplaceController {
         and o.hrms_published_by_staff_id is not null
         and release.release_state='SHAREABLE'
         and release.content_fingerprint=course_content_fingerprint(release.program_id)
+        and not exists (
+          select 1
+          from institution_marketplace_offer newer_offer
+          join institution_course_assignment newer_assignment
+            on newer_assignment.id=newer_offer.assignment_id
+           and newer_assignment.institution_id=newer_offer.institution_id
+           and newer_assignment.status='ASSIGNED'
+          join institution_course_release newer_release
+            on newer_release.id=newer_offer.course_release_id
+           and newer_release.program_id=newer_offer.course_id
+          join curriculum_program newer_program
+            on newer_program.id=newer_release.program_id
+           and newer_program.course_identity_id=p.course_identity_id
+           and newer_program.content_version_no>p.content_version_no
+          where newer_offer.institution_id=o.institution_id
+            and newer_offer.status='PUBLISHED'
+            and newer_offer.hrms_published_by_staff_id is not null
+            and newer_release.release_state='SHAREABLE'
+            and newer_release.content_fingerprint=course_content_fingerprint(newer_release.program_id)
+        )
       order by p.display_name,p.id
       """, institutionId, parentId, parentId, parentId, parentId, parentId, parentId);
     for (Map<String,Object> offer : offers) {
@@ -260,6 +300,26 @@ public class CourseMarketplaceController {
           and o.hrms_published_by_staff_id is not null
           and r.release_state='SHAREABLE'
           and r.content_fingerprint=course_content_fingerprint(r.program_id)
+          and not exists (
+            select 1
+            from institution_marketplace_offer newer_offer
+            join institution_course_assignment newer_assignment
+              on newer_assignment.id=newer_offer.assignment_id
+             and newer_assignment.institution_id=newer_offer.institution_id
+             and newer_assignment.status='ASSIGNED'
+            join institution_course_release newer_release
+              on newer_release.id=newer_offer.course_release_id
+             and newer_release.program_id=newer_offer.course_id
+            join curriculum_program newer_program
+              on newer_program.id=newer_release.program_id
+             and newer_program.course_identity_id=p.course_identity_id
+             and newer_program.content_version_no>p.content_version_no
+            where newer_offer.institution_id=o.institution_id
+              and newer_offer.status='PUBLISHED'
+              and newer_offer.hrms_published_by_staff_id is not null
+              and newer_release.release_state='SHAREABLE'
+              and newer_release.content_fingerprint=course_content_fingerprint(newer_release.program_id)
+          )
           and o.price_paise=0 and o.currency='INR'
       )
       """, Boolean.class, institutionId, courseId);
@@ -638,6 +698,26 @@ public class CourseMarketplaceController {
           and o.hrms_published_by_staff_id is not null
           and release.release_state='SHAREABLE'
           and release.content_fingerprint=course_content_fingerprint(release.program_id)
+          and not exists (
+            select 1
+            from institution_marketplace_offer newer_offer
+            join institution_course_assignment newer_assignment
+              on newer_assignment.id=newer_offer.assignment_id
+             and newer_assignment.institution_id=newer_offer.institution_id
+             and newer_assignment.status='ASSIGNED'
+            join institution_course_release newer_release
+              on newer_release.id=newer_offer.course_release_id
+             and newer_release.program_id=newer_offer.course_id
+            join curriculum_program newer_program
+              on newer_program.id=newer_release.program_id
+             and newer_program.course_identity_id=p.course_identity_id
+             and newer_program.content_version_no>p.content_version_no
+            where newer_offer.institution_id=o.institution_id
+              and newer_offer.status='PUBLISHED'
+              and newer_offer.hrms_published_by_staff_id is not null
+              and newer_release.release_state='SHAREABLE'
+              and newer_release.content_fingerprint=course_content_fingerprint(newer_release.program_id)
+          )
           and o.price_paise>0
         """, targetStudentId,institutionId,courseId);
     if (rows.isEmpty()) throw new IllegalArgumentException("This paid course is not currently available to the selected institution.");
