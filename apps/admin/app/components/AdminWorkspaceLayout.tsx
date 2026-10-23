@@ -109,75 +109,64 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
     return () => { alive = false; };
   }, [publicRoute]);
 
-  // Institution choice is a UI selector only; the API resolves it to an active tenant and
-  // independently applies the authenticated staff permissions and course-assignment checks.
+  // The institution is an HRMS-assigned property of the signed-in staff identity.
+  // Browser storage is intentionally cleared and never used to select a tenant.
   useEffect(() => {
     let alive = true;
     if (publicRoute) {
       setInstitutions([]);
-      // Reuse the last selected workspace so sign-in/session screens match the
-      // same tenant context used by the existing education-admin API requests.
-      let rememberedTenant = '';
-      try { rememberedTenant = window.localStorage.getItem('qe:admin:activeInstitutionCode') || ''; } catch {}
-      const safeTenant = rememberedTenant.trim().toUpperCase();
-      setInstitutionCode(/^[A-Z0-9][A-Z0-9_-]{2,31}$/.test(safeTenant) ? safeTenant : '');
+      setInstitutionCode('');
       setInstitutionError('');
       setInstitutionLoading(false);
+      try { window.localStorage.removeItem('qe:admin:activeInstitutionCode'); } catch {}
       return () => { alive = false; };
     }
     if (!session) {
       setInstitutionLoading(true);
       return () => { alive = false; };
     }
-    const canViewContent = session.role === 'ADMIN'
-      || (Array.isArray(session.permissions) && session.permissions.includes('CONTENT_VIEW'));
-    if (!session.staffId || !canViewContent) {
+    if (!session.staffId) {
       setInstitutions([]);
       setInstitutionCode('');
-      setInstitutionError('');
+      setInstitutionError('An Education Admin staff account is required for this workspace.');
       setInstitutionLoading(false);
       return () => { alive = false; };
     }
 
     setInstitutionLoading(true);
     setInstitutionError('');
-    apiFetch('/api/v1/admin/content/institutions', { cache: 'no-store' })
+    apiFetch('/api/v1/admin/content/institution-context', { cache: 'no-store' })
       .then(async response => {
-        const body = await response.json().catch(() => []);
+        const body = await response.json().catch(() => ({}));
         if (!response.ok) {
           const detail = body && typeof body === 'object'
             ? String((body as { message?: unknown; detail?: unknown }).message
               || (body as { detail?: unknown }).detail || '')
             : '';
-          throw new Error(detail || 'Available institutions could not be loaded.');
+          if (response.status === 403) {
+            throw new Error(detail || 'This staff account has no active HRMS institution assignment. Ask an HRMS platform owner to assign it.');
+          }
+          throw new Error(detail || 'The assigned institution could not be loaded.');
         }
-        return Array.isArray(body) ? body.flatMap((row: any) => {
-          const tenantCode = String(row?.tenant_code || '').trim().toUpperCase();
-          const name = String(row?.display_name || '').trim();
-          const id = Number(row?.institution_id || row?.id);
-          if (!tenantCode || !name || !Number.isSafeInteger(id) || id <= 0) return [];
-          return [{ institution_id: id, tenant_code: tenantCode, display_name: name, is_default: row?.is_default === true }];
-        }) as AdminInstitution[] : [];
+        const tenantCode = String(body?.tenant_code || '').trim().toUpperCase();
+        const name = String(body?.display_name || '').trim();
+        const id = Number(body?.institution_id);
+        if (!tenantCode || !name || !Number.isSafeInteger(id) || id <= 0) {
+          throw new Error('The HRMS institution assignment returned an invalid institution identity.');
+        }
+        return [{ institution_id: id, tenant_code: tenantCode, display_name: name, is_default: true }] as AdminInstitution[];
       })
       .then(rows => {
         if (!alive) return;
         setInstitutions(rows);
-        let remembered = '';
-        try { remembered = window.localStorage.getItem('qe:admin:activeInstitutionCode') || ''; } catch {}
-        const selected = rows.find(row => row.tenant_code === remembered)?.tenant_code
-          || rows.find(row => row.is_default)?.tenant_code
-          || (rows.length === 1 ? rows[0].tenant_code : '');
-        setInstitutionCode(selected);
-        try {
-          if (selected) window.localStorage.setItem('qe:admin:activeInstitutionCode', selected);
-          else window.localStorage.removeItem('qe:admin:activeInstitutionCode');
-        } catch {}
+        setInstitutionCode(rows[0]?.tenant_code || '');
+        try { window.localStorage.removeItem('qe:admin:activeInstitutionCode'); } catch {}
       })
       .catch(error => {
         if (!alive) return;
         setInstitutions([]);
         setInstitutionCode('');
-        setInstitutionError(error instanceof Error ? error.message : 'Available institutions could not be loaded.');
+        setInstitutionError(error instanceof Error ? error.message : 'The HRMS institution assignment could not be loaded.');
       })
       .finally(() => { if (alive) setInstitutionLoading(false); });
     return () => { alive = false; };
@@ -256,11 +245,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
 
   const active = activeSection(pathname);
   const variant = active === 'overview' ? 'overview' : ['content', 'resources', 'sources', 'classes'].includes(active) ? 'content' : 'default';
-  const canSelectInstitution = Boolean(session?.staffId) && (session?.role === 'ADMIN'
-    || (Array.isArray(session?.permissions) && session.permissions.includes('CONTENT_VIEW')));
-  const tenantScopedPage = ['overview', 'content', 'translations', 'questions', 'resources', 'sources',
-    'assessments', 'classes', 'students', 'parents', 'certificates', 'marketplace', 'notifications'].includes(active);
-  const institutionSelectionRequired = canSelectInstitution && tenantScopedPage && !institutionLoading && !institutionCode;
+  const institutionSelectionRequired = Boolean(session?.staffId) && !institutionLoading && !institutionCode;
   const activeInstitution = institutions.find(item => item.tenant_code === institutionCode) || null;
   const visibleOverviewItems = [ADMIN_OVERVIEW_ITEM].filter(item => canSeeAdminItem(item, value.role, value.permissions));
   const visibleGroups = ADMIN_NAV_GROUPS
@@ -279,7 +264,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
     if (!quickItems.some(candidate => candidate.key === item.key)) quickItems.push(item);
   }
 
-  return <AdminThemeProvider institutionCode={institutionCode || session?.institutionCode || session?.institution_code || session?.tenantCode || session?.tenant_code || ''}>
+  return <AdminThemeProvider institutionCode={institutionCode}>
   <AdminWorkspaceContext.Provider value={value}>
     <div className="qe-admin-workspace-layout">
       <AdminSidebar active={active} variant={variant} displayName={session?.displayName || undefined} persistent />
@@ -292,24 +277,11 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
           </div>
           <div className="qe-admin-global-actions">
             {session?.permissions?.some(permission => ['NOTIFICATION_CAMPAIGN_VIEW','NOTIFICATION_COURSE_SEND','NOTIFICATION_INSTITUTION_SEND','NOTIFICATION_TEMPLATE_MANAGE'].includes(permission)) ? <StaffNotificationBell workspace="admin" /> : null}
-            {canSelectInstitution ? <label className="qe-admin-institution-switcher" style={{ display: 'grid', gap: 3, fontSize: 11, fontWeight: 700, color: 'var(--admin-muted,#64748b)', minWidth: 180 }}>
-              <span>Institution</span>
-              <select
-                value={institutionCode}
-                disabled={institutionLoading || institutions.length === 0}
-                onChange={event => {
-                  const next = event.target.value;
-                  if (!institutions.some(item => item.tenant_code === next)) return;
-                  try { window.localStorage.setItem('qe:admin:activeInstitutionCode', next); } catch {}
-                  setInstitutionCode(next);
-                }}
-                aria-label="Select institution"
-                style={{ minWidth: 180, maxWidth: 280, padding: '7px 9px', border: '1px solid var(--admin-border,#d8dce5)', borderRadius: 9, background: 'var(--admin-surface,#fff)', color: 'var(--admin-text,#1b2430)' }}
-              >
-                <option value="">{institutionLoading ? 'Loading institutions…' : 'Select institution'}</option>
-                {institutions.map(item => <option key={item.tenant_code} value={item.tenant_code}>{item.display_name}</option>)}
-              </select>
-            </label> : null}
+            {activeInstitution ? <div className="qe-admin-institution-switcher" aria-label="Assigned institution" style={{ display: 'grid', gap: 3, fontSize: 11, fontWeight: 700, color: 'var(--admin-muted,#64748b)', minWidth: 180 }}>
+              <span>Assigned institution</span>
+              <strong style={{ fontSize: 13, color: 'var(--admin-text,#1b2430)' }}>{activeInstitution.display_name}</strong>
+              <small style={{ fontSize: 10, fontWeight: 600 }}>Managed by HRMS · fixed assignment</small>
+            </div> : null}
             <label className="qe-admin-language-switcher">
               <span aria-hidden="true">文</span>
               <select value={locale} onChange={event => changeLocale(event.target.value as AdminLocale)} aria-label={t('admin.language.choose')}>
@@ -322,13 +294,12 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
 
         <div className="qe-admin-workspace-page-slot" key={pathname + '|' + institutionCode}>
           {!publicRoute && !session ? <div role="status" style={{ padding: 28 }}>Preparing staff workspace…</div>
-            : institutionLoading && canSelectInstitution ? <div role="status" style={{ padding: 28 }}>Loading institution access…</div>
-            : institutionError && canSelectInstitution ? <div role="alert" style={{ margin: 24, padding: 18, border: '1px solid var(--admin-border,#d8dce5)', borderRadius: 12 }}>
-                <h2>Institution access unavailable</h2><p>{institutionError}</p><button type="button" onClick={() => setInstitutionRetryVersion(version => version + 1)}>Retry</button>
+            : institutionLoading && session?.staffId ? <div role="status" style={{ padding: 28 }}>Resolving your HRMS institution assignment…</div>
+            : institutionError && session?.staffId ? <div role="alert" style={{ margin: 24, padding: 18, border: '1px solid var(--admin-border,#d8dce5)', borderRadius: 12 }}>
+                <h2>Institution access unavailable</h2><p>{institutionError}</p><p>Education Admin cannot switch institutions. An HRMS platform owner must configure or restore this account’s institution assignment.</p><button type="button" onClick={() => setInstitutionRetryVersion(version => version + 1)}>Retry</button>
               </div>
-            : institutionSelectionRequired ? <div role="status" style={{ margin: 24, padding: 22, border: '1px solid var(--admin-border,#d8dce5)', borderRadius: 12 }}>
-                <h2>Select an institution</h2><p>Choose the institution whose assigned courses and curriculum you need to manage.</p>
-                {institutions.length === 0 ? <p>No active institution with assigned courses is available to this account.</p> : null}
+            : institutionSelectionRequired ? <div role="alert" style={{ margin: 24, padding: 22, border: '1px solid var(--admin-border,#d8dce5)', borderRadius: 12 }}>
+                <h2>HRMS institution assignment required</h2><p>This staff account cannot access an institution until HRMS assigns it to one. There is no institution selector in Education Admin.</p>
               </div>
             : children}
         </div>
