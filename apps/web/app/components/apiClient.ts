@@ -108,6 +108,23 @@ function normalizedInstitutionCode(value: unknown): string | null {
  * membership and course entitlement. Attach it centrally so UI login and API requests send the
  * same selector that TenantBrandingProvider used to render the current institution.
  */
+/**
+ * A request must carry the role workspace even during route transitions, before the
+ * SessionBoundary refresh interceptor has attached it. The backend still authorizes
+ * the cookie/session identity and tenant/course membership independently.
+ */
+function currentPageWorkspace(): string | null {
+  if (typeof window === 'undefined') return null;
+  const path = window.location.pathname;
+  if (path.startsWith('/institution')) return 'INSTITUTION';
+  if (path.startsWith('/admin')) return 'EDUCATION_ADMIN';
+  if (path.startsWith('/hrms')) return 'HRMS';
+  if (path === '/parent/learning' || path.startsWith('/parent/learning/')) return 'STUDENT';
+  if (path.startsWith('/student') || path === '/login/student' || path === '/signup') return 'STUDENT';
+  if (path.startsWith('/parent') || path === '/login/parent') return 'PARENT';
+  return null;
+}
+
 function currentPageInstitutionCode(): string | null {
   if (typeof window === 'undefined') return null;
   try {
@@ -150,6 +167,12 @@ function withInstitutionContext(input: RequestInfo | URL, init?: RequestInit): R
     const inputHeaders = typeof Request !== 'undefined' && input instanceof Request ? input.headers : undefined;
     const headers = new Headers(inputHeaders);
     new Headers(init?.headers).forEach((value, key) => headers.set(key, value));
+    // Do not rely exclusively on SessionBoundary's fetch interceptor: nested route
+    // transitions can issue the first request before that interceptor has been installed.
+    if (!headers.has('X-QE-Workspace')) {
+      const workspace = currentPageWorkspace();
+      if (workspace) headers.set('X-QE-Workspace', workspace);
+    }
     if (!headers.has('X-QE-Institution-Code')) {
       const institutionCode = currentPageInstitutionCode();
       if (institutionCode) headers.set('X-QE-Institution-Code', institutionCode);
