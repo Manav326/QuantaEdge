@@ -213,7 +213,7 @@ public class AssessmentController {
     List<Map<String,Object>> items=jdbc.queryForList("""
       select a.id as assessment_id,a.public_id as test_id,a.title,a.description,a.duration_minutes,a.max_attempts,a.status,
              a.offline_enabled,a.assessment_type,a.lesson_id,a.is_generated,a.is_current,a.generation_version,
-             a.negative_marking_fraction,a.created_at,a.published_at,a.source_package_id,c.code as class_code,c.display_name as class_name,
+             a.negative_marking_fraction,a.created_at,a.published_at,a.source_package_id,a.portable_assessment_type,c.code as class_code,c.display_name as class_name,
              s.code as subject_code,s.display_name as subject_name,
              p.id as course_id,p.code as course_code,p.display_name as course_name,
              ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
@@ -1479,7 +1479,7 @@ public class AssessmentController {
       with tenant_scope as (select ?::bigint as institution_id)
       select a.id as assessment_id,a.public_id as test_id,coalesce(max(at.title),a.title) as title,
              coalesce(max(at.description),a.description) as description,a.duration_minutes,a.max_attempts,
-             a.assessment_type,a.lesson_id,a.is_generated,a.generation_version,a.offline_enabled,
+             a.assessment_type,a.portable_assessment_type,a.lesson_id,a.is_generated,a.generation_version,a.offline_enabled,
              a.created_at,a.published_at,s.code as subject_code,coalesce(max(subject_tx.display_name),s.display_name) as subject_name,
              c.code as class_code,p.id as course_id,p.code as course_code,p.display_name as course_name,
              ch.id as chapter_id,ch.code as chapter_code,coalesce(max(ct.display_name),ch.display_name) as chapter_name,
@@ -1798,7 +1798,7 @@ public class AssessmentController {
       with tenant_scope as (select ?::bigint as institution_id)
       select a.id,coalesce(max(at.title),a.title) as title,
              coalesce(max(at.description),a.description) as description,
-             a.duration_minutes,a.max_attempts,a.status,a.offline_enabled,a.negative_marking_fraction,
+             a.duration_minutes,a.max_attempts,a.status,a.offline_enabled,a.negative_marking_fraction,a.portable_assessment_type,
              s.id as subject_id,s.code as subject_code,coalesce(max(subject_tx.display_name),s.display_name) as subject_name,
              c.code as class_code,ch.id as chapter_id,coalesce(max(ct.display_name),ch.display_name) as chapter_name,
              selected_course.id as course_id,selected_course.code as course_code,selected_course.display_name as course_name,
@@ -1914,6 +1914,7 @@ public class AssessmentController {
     assessmentSnapshot.put("courseName", scopedCourse.getFirst().get("display_name"));
     assessmentSnapshot.put("language", language);
     assessmentSnapshot.put("title", assessment.get("title"));
+    assessmentSnapshot.put("portableAssessmentType",assessment.get("portable_assessment_type"));
     assessmentSnapshot.put("description", assessment.get("description"));
     assessmentSnapshot.put("durationMinutes", assessment.get("duration_minutes"));
     assessmentSnapshot.put("attemptNumber", attemptNumber);
@@ -2620,7 +2621,7 @@ public class AssessmentController {
   private Map<String, Object> assessmentDetails(long id, boolean includeQuestionBankDetails) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select a.id as assessment_id,a.public_id as test_id,a.title,a.description,a.duration_minutes,a.max_attempts,a.status,
-             a.offline_enabled,a.negative_marking_fraction,a.source_package_id,a.source_package_version,a.source_package_sha256,
+             a.offline_enabled,a.negative_marking_fraction,a.source_package_id,a.source_package_version,a.source_package_sha256,a.portable_assessment_type,
              a.source_exam_cycle,a.source_url,a.created_at,a.published_at,s.code as subject_code,s.display_name as subject_name,
              c.code as class_code,ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name
       from assessment a
