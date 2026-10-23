@@ -233,6 +233,118 @@ public class PlatformInstitutionController {
     return result;
   }
 
+  /**
+   * Education Admin technical accounts are separate from HR employees and institution-admin
+   * logins. HRMS explicitly binds each technical staff account to one institution here.
+   */
+  @GetMapping("/{institutionId}/education-staff-bindings")
+  public Map<String,Object> educationStaffBindings(
+      @PathVariable long institutionId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    AuthContext owner=requirePlatformOwner(context);
+    assertInstitutionExists(institutionId);
+    List<Map<String,Object>> staff=jdbc.queryForList("""
+        select s.id as staff_id,s.display_name,s.role,s.active,
+          b.id as binding_id,b.status as binding_status,b.assigned_at,b.assigned_by_staff_id,
+          b.institution_id as bound_institution_id,t.tenant_code as bound_tenant_code,
+          t.display_name as bound_institution_name,
+          case when b.id is null then 'UNASSIGNED'
+               when b.institution_id=? then 'ASSIGNED_HERE'
+               else 'ASSIGNED_ELSEWHERE' end as institution_binding_state
+        from staff_account s
+        left join institution_staff_binding b on b.staff_id=s.id and b.status='ACTIVE'
+        left join institution_tenant t on t.id=b.institution_id
+        where s.active=true
+        order by lower(s.display_name),s.id
+        """,institutionId);
+    audit(owner,institutionId,"EDUCATION_STAFF_BINDINGS_VIEWED",
+        "INSTITUTION_STAFF_BINDING",String.valueOf(institutionId),
+        Map.of("activeStaffCount",staff.size()));
+    return Map.of("institutionId",institutionId,"staff",staff,
+        "assignedHereCount",staff.stream().filter(row->
+            "ASSIGNED_HERE".equals(String.valueOf(row.get("institution_binding_state")))).count(),
+        "unassignedCount",staff.stream().filter(row->
+            "UNASSIGNED".equals(String.valueOf(row.get("institution_binding_state")))).count());
+  }
+
+  @PostMapping("/{institutionId}/education-staff-bindings")
+  @Transactional
+  public Map<String,Object> assignEducationStaff(
+      @PathVariable long institutionId,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    AuthContext owner=requirePlatformOwner(context);
+    assertInstitutionExists(institutionId);
+    long staffId=positiveId(body==null?null:body.get("staffId"),"staffId");
+    String reason=value(body,"reason");
+    if(reason.length()>500) throw new IllegalArgumentException("Assignment reason must be 500 characters or fewer.");
+    Boolean institutionActive=jdbc.queryForObject(
+        "select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",
+        Boolean.class,institutionId);
+    if(!Boolean.TRUE.equals(institutionActive)) throw new ResponseStatusException(
+        HttpStatus.CONFLICT,"Only an active institution can receive Education Admin staff.");
+    Boolean staffActive=jdbc.queryForObject(
+        "select exists(select 1 from staff_account where id=? and active=true)",
+        Boolean.class,staffId);
+    if(!Boolean.TRUE.equals(staffActive)) throw new ResponseStatusException(
+        HttpStatus.CONFLICT,"Choose an active Education Admin staff account.");
+    List<Map<String,Object>> activeBindings=jdbc.queryForList("""
+        select id,institution_id from institution_staff_binding
+        where staff_id=? and status='ACTIVE'
+        for update
+        """,staffId);
+    if(!activeBindings.isEmpty()) {
+      long existingInstitution=((Number)activeBindings.getFirst().get("institution_id")).longValue();
+      if(existingInstitution==institutionId) {
+        return Map.of("assigned",true,"unchanged",true,"staffId",staffId,
+            "institutionId",institutionId,"status","ACTIVE");
+      }
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "This staff account is already bound to another institution. Revoke the existing HRMS binding before reassignment.");
+    }
+    Long bindingId=jdbc.queryForObject("""
+        insert into institution_staff_binding(
+          staff_id,institution_id,status,assigned_by_staff_id,assigned_at,reason,created_at
+        ) values(?,?,'ACTIVE',?,now(),?,now()) returning id
+        """,Long.class,staffId,institutionId,owner.staffId(),emptyToNull(reason));
+    audit(owner,institutionId,"EDUCATION_ADMIN_STAFF_ASSIGNED",
+        "INSTITUTION_STAFF_BINDING",String.valueOf(bindingId),
+        Map.of("staffId",staffId,"bindingId",bindingId,"reason",reason));
+    return Map.of("assigned",true,"unchanged",false,"bindingId",bindingId,
+        "staffId",staffId,"institutionId",institutionId,"status","ACTIVE");
+  }
+
+  @DeleteMapping("/{institutionId}/education-staff-bindings/{staffId}")
+  @Transactional
+  public Map<String,Object> revokeEducationStaffBinding(
+      @PathVariable long institutionId,@PathVariable long staffId,
+      @RequestBody(required=false) Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    AuthContext owner=requirePlatformOwner(context);
+    assertInstitutionExists(institutionId);
+    String reason=value(body,"reason");
+    requireText(reason,3,500,"Revocation reason");
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+        select id from institution_staff_binding
+        where staff_id=? and institution_id=? and status='ACTIVE'
+        for update
+        """,staffId,institutionId);
+    if(rows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+        "No active binding exists for this staff account in the selected institution.");
+    long bindingId=((Number)rows.getFirst().get("id")).longValue();
+    int changed=jdbc.update("""
+        update institution_staff_binding
+        set status='REVOKED',revoked_by_staff_id=?,revoked_at=now(),reason=?
+        where id=? and status='ACTIVE'
+        """,owner.staffId(),reason,bindingId);
+    if(changed!=1) throw new ResponseStatusException(HttpStatus.CONFLICT,
+        "The staff binding changed before revocation completed. Refresh and retry.");
+    audit(owner,institutionId,"EDUCATION_ADMIN_STAFF_REVOKED",
+        "INSTITUTION_STAFF_BINDING",String.valueOf(bindingId),
+        Map.of("staffId",staffId,"bindingId",bindingId,"reason",reason));
+    return Map.of("revoked",true,"bindingId",bindingId,"staffId",staffId,
+        "institutionId",institutionId,"status","REVOKED");
+  }
+
   @PostMapping
   @Transactional
   public Map<String,Object> createInstitution(
@@ -1189,6 +1301,14 @@ public class PlatformInstitutionController {
   private LocalDate parseDate(String raw,String name) {
     try { return LocalDate.parse(raw); }
     catch(Exception ex) { throw new IllegalArgumentException(name+" must be an ISO date (YYYY-MM-DD)."); }
+  }
+
+  private long positiveId(Object raw,String label) {
+    if(!(raw instanceof Number numeric) || numeric.longValue()<1L
+        || numeric.doubleValue()!=numeric.longValue()) {
+      throw new IllegalArgumentException(label+" must be a positive integer.");
+    }
+    return numeric.longValue();
   }
 
   private String value(Map<String,Object> body,String key) {
