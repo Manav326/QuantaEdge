@@ -23,6 +23,7 @@ class AccountDeletionControllerTest {
   @Mock private JdbcTemplate jdbc;
   @Mock private AuthorizationService authorization;
   @Mock private StaffAuditService staffAudit;
+  @Mock private AccountDeletionDependencyAssessmentService dependencyAssessment;
 
   private final AuthContext parent = new AuthContext(101L, null, null, "PARENT", "Parent", "PARENT");
   private AccountDeletionController controller;
@@ -31,6 +32,31 @@ class AccountDeletionControllerTest {
   void setUp() {
     when(authorization.requireAuth(parent)).thenReturn(parent);
     controller = new AccountDeletionController(jdbc, authorization, staffAudit);
+  }
+
+
+  @Test
+  void dependencyAssessmentIsReviewerOnlyAndNeverClaimsErasure() {
+    AuthContext reviewer = new AuthContext(null, null, 77L, "ADMIN", "Reviewer", "EDUCATION_ADMIN");
+    java.util.UUID requestId = java.util.UUID.randomUUID();
+    Map<String,Object> report = Map.of(
+        "requestId", requestId.toString(),
+        "automaticFulfillmentAllowed", false,
+        "canMarkCompleted", false,
+        "erasureExecuted", false,
+        "summary", Map.of("affectedRelationships", 3));
+    when(authorization.requirePermission(reviewer, "ACCOUNT_LIFECYCLE_REVIEW")).thenReturn(reviewer);
+    when(dependencyAssessment.assess(requestId)).thenReturn(report);
+    AccountDeletionController reviewerController =
+        new AccountDeletionController(jdbc, authorization, staffAudit, dependencyAssessment);
+
+    Map<String,Object> result = reviewerController.dependencyAssessment(requestId, reviewer);
+
+    assertEquals(false, result.get("automaticFulfillmentAllowed"));
+    assertEquals(false, result.get("canMarkCompleted"));
+    assertEquals(false, result.get("erasureExecuted"));
+    verify(dependencyAssessment).assess(requestId);
+    verify(staffAudit).recordAction(eq(reviewer), contains("/assessment"), contains("affected FK relationships=3"));
   }
 
   @Test
