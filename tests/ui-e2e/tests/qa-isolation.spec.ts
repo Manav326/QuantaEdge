@@ -86,7 +86,7 @@ async function protectedCourseOwnership() {
   }
 }
 
-test('[QA-005] uninstalling one QA run preserves the other run and protected QuantaEdge baseline', async ({ browser }) => {
+test('[QA-002][QA-005] uninstalling one QA run preserves the other run and protected QuantaEdge baseline', async ({ browser }) => {
   const owner = await readPrivateJson<{ statePath: string }>('hrms-owner-state-path.json');
   const context = await browser.newContext({ storageState: owner.statePath });
   const page = await context.newPage();
