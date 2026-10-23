@@ -26,9 +26,14 @@ test('[UX-002] learner UI locale persists across navigation without changing lea
 
   try {
     await page.addInitScript((code: string) => {
+      const initializedKey = 'qe.e2e.locale-theme.initialized';
+      if (!window.sessionStorage.getItem(initializedKey)) {
+        window.localStorage.removeItem('qe-locale');
+        window.localStorage.removeItem('qe-learning-language');
+        document.cookie = 'qe-locale=; Path=/; Max-Age=0; SameSite=Lax';
+        window.sessionStorage.setItem(initializedKey, '1');
+      }
       window.sessionStorage.setItem('qe.institution.brand-code.v1', code);
-      window.localStorage.removeItem('qe-locale');
-      window.localStorage.removeItem('qe-learning-language');
     }, institutionCode);
 
     await page.goto(WEB + '/student/courses', { waitUntil: 'domcontentloaded' });
