@@ -13,19 +13,20 @@ async function api(
   workspace?: string,
   institutionCode?: string
 ): Promise<ApiResult> {
-  return page.evaluate(async ({ path, workspace, institutionCode }) => {
-    const headers: Record<string, string> = { Accept: 'application/json' };
-    if (workspace) headers['X-QE-Workspace'] = workspace;
-    // These tests deliberately use raw fetch to probe authorization. Supply the selected
-    // tenant explicitly so the request reaches the resource/permission guard rather than
-    // failing earlier at the required-institution-context guard.
-    if (institutionCode) headers['X-QE-Institution-Code'] = institutionCode;
-    const response = await fetch(path, { credentials: 'same-origin', cache: 'no-store', headers });
-    const raw = await response.text();
-    let body: any = {};
-    try { body = raw ? JSON.parse(raw) : {}; } catch { body = { unreadable: true }; }
-    return { status: response.status, body };
-  }, { path, workspace, institutionCode });
+  const headers: Record<string, string> = { Accept: 'application/json' };
+  if (workspace) headers['X-QE-Workspace'] = workspace;
+  // Use Playwright's context-bound request client rather than window.fetch. This bypasses
+  // client-side session recovery/header injection so each security probe sends exactly the
+  // caller-selected workspace and institution headers while still sharing this context's cookies.
+  if (institutionCode) headers['X-QE-Institution-Code'] = institutionCode;
+  const response = await page.context().request.get(new URL(path, page.url()).toString(), {
+    headers,
+    failOnStatusCode: false
+  });
+  const raw = await response.text();
+  let body: any = {};
+  try { body = raw ? JSON.parse(raw) : {}; } catch { body = { unreadable: true }; }
+  return { status: response.status(), body };
 }
 
 async function contextPage(browser: Browser, storageState: string, url: string) {
@@ -165,8 +166,32 @@ test('[CAT-001][CAT-002][TEN-002][TEN-003] learner course lists and subjects fol
     expect(coursesB.body[0].subjects.length).toBeGreaterThan(0);
     expect(coursesC.body[0].subjects.length).toBeGreaterThan(0);
 
-    // An attacker-controlled tenant header must not transfer access. Depending on the
-    // authorization guard, a wrong-tenant request may be denied or safely return no rows.
+    // Missing/invalid/unavailable tenant selectors must fail closed; no platform-wide
+    // default catalogue is allowed to leak into a routed learner session.
+    const missingTenant = await api(childA.page, '/api/v1/students/me/programs', 'STUDENT');
+    expect(missingTenant.status, 'A learner course catalogue request without a selected institution must be rejected.').toBe(400);
+    expect(String(missingTenant.body.errorCode || missingTenant.body.code || '')).toContain('INSTITUTION_CONTEXT_REQUIRED');
+
+    const malformedTenant = await api(
+      childA.page,
+      '/api/v1/students/me/programs',
+      'STUDENT',
+      'bad code'
+    );
+    expect(malformedTenant.status).toBe(400);
+    expect(String(malformedTenant.body.errorCode || malformedTenant.body.code || '')).toContain('INVALID_INSTITUTION_CODE');
+
+    const unavailableTenant = await api(
+      childA.page,
+      '/api/v1/students/me/programs',
+      'STUDENT',
+      'QAT-UNKNOWN'
+    );
+    expect(unavailableTenant.status).toBe(403);
+    expect(String(unavailableTenant.body.errorCode || unavailableTenant.body.code || '')).toContain('INSTITUTION_UNAVAILABLE');
+
+    // A valid institution code still grants nothing by itself. Parent B's active tenant
+    // cannot be selected using Child A's session unless the backend proves membership there.
     const forgedTenant = await api(
       childA.page,
       '/api/v1/students/me/programs',
