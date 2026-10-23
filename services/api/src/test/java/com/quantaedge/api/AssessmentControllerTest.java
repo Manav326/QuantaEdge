@@ -49,6 +49,10 @@ class AssessmentControllerTest {
   void setUp() {
     controller = new AssessmentController(
         jdbc, authorization, questionHistory, answerService, staffAudit, new ObjectMapper(), assessmentCatalog);
+    lenient().when(jdbc.queryForObject(
+        contains("release.source_institution_id=assignment.institution_id"),
+        eq(Boolean.class), any(Object[].class)))
+        .thenReturn(true);
     // The public learner attempt routes must supply and prove their selected course scope.
     lenient().when(jdbc.queryForObject(
         contains("select count(*) from curriculum_program p"), eq(Long.class), any(Object[].class)))
