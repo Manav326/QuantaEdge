@@ -1,6 +1,8 @@
 package com.quantaedge.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -17,6 +19,7 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -45,6 +48,26 @@ class HrEmployeeControllerTest {
 
     verify(authorization).requirePermission(hrManager, "HR_EMPLOYEE_VIEW");
     verifyNoInteractions(jdbc, audit);
+  }
+
+  @Test
+  void employeeDirectoryKeepsScopePredicateSeparatedFromOrderByInBothQueries() {
+    when(authorization.requirePermission(hrManager, "HR_EMPLOYEE_VIEW")).thenReturn(hrManager);
+    when(authorization.hasPermission(hrManager, "HR_MANAGER_TEAM_VIEW")).thenReturn(false);
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of());
+    when(jdbc.queryForObject(anyString(), eq(Long.class), any(Object[].class))).thenReturn(0L);
+
+    controller.employees(hrManager, "", false, 0, 50);
+
+    ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
+    verify(jdbc).queryForList(sql.capture(), any(Object[].class));
+    verify(jdbc).queryForObject(sql.capture(), eq(Long.class), any(Object[].class));
+    assertEquals(2, sql.getAllValues().size());
+    for (String statement : sql.getAllValues()) {
+      assertFalse(statement.contains("andtrueorder"), "The SQL scope predicate must not merge into ORDER BY.");
+      assertTrue(statement.contains("and (true)"), "The unscoped predicate must remain a separate SQL expression.");
+    }
+    assertTrue(sql.getAllValues().get(0).contains("order by e.display_name,e.id"));
   }
 
   @Test
