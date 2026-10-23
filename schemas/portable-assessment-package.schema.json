@@ -8,13 +8,15 @@
   "required": [
     "schema",
     "package_id",
+    "package_version",
     "title",
     "assessment_type",
     "subject",
     "source",
     "configuration",
     "questions",
-    "editorial"
+    "editorial",
+    "sections"
   ],
   "properties": {
     "schema": {
@@ -515,6 +517,57 @@
     "course_binding": {
       "description": "Forbidden in portable packages; attach course/tenant/chapter via a separate validated deployment manifest.",
       "not": {}
+    },
+    "package_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._+-]*$"
+    },
+    "sections": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "name_i18n",
+          "question_count",
+          "result_policy"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]{1,49}$"
+          },
+          "name_i18n": {
+            "type": "object",
+            "minProperties": 1,
+            "patternProperties": {
+              "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})?$": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120
+              }
+            },
+            "additionalProperties": false
+          },
+          "question_count": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 250
+          },
+          "result_policy": {
+            "enum": [
+              "SCORED",
+              "QUALIFYING_ONLY",
+              "PRACTICE_ONLY"
+            ]
+          }
+        }
+      }
     }
   }
 }
