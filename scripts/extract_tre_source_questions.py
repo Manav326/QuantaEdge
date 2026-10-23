@@ -305,14 +305,28 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
             columns[column].append((float(y0), str(text), float(x0)))
         for column, blocks in columns.items():
             blocks.sort(key=lambda item: item[0])
+            # Detect the margin independently for each column. A fixed page-x threshold silently
+            # drops every question in the right column and produced exactly half a paper.
+            numbered_x: list[float] = []
+            for _, candidate_text, candidate_x in blocks:
+                candidate_prefix = _question_prefix(candidate_text)
+                if not candidate_prefix:
+                    continue
+                candidate_identity, candidate_number, _ = candidate_prefix
+                candidate_kind = candidate_identity.split("-",1)[0] if "-" in candidate_identity else ""
+                plausible = candidate_number <= 30 if candidate_kind in {"E","H","U","B"} else section_for_number(cycle,candidate_number) is not None
+                if plausible:
+                    numbered_x.append(candidate_x)
+            column_origin = min(numbered_x) if numbered_x else min((item[2] for item in blocks),default=0)
+            question_margin = column_origin + 55
             active: dict[str, Any] | None = None
             last_numeric_question: int | None = None
             for y0, text, x0 in blocks:
-                # Question numbers align close to the column margin; this rejects numbered
-                # statements/code lines indented within a question body.
+                # Only labels aligned near this column's own margin start questions; indented
+                # line-numbered code and numbered statements within a stem stay with the stem.
                 parsed = _question_prefix(text)
                 candidate = None
-                if x0 < 105 and parsed:
+                if x0 <= question_margin and parsed:
                     identity, number, _ = parsed
                     prefix = identity.split("-", 1)[0] if "-" in identity else ""
                     if prefix in {"E", "H", "U", "B"}:
@@ -555,10 +569,10 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 return (1 if code=="GENERAL_STUDIES" else 2,int(qnum))
             all_source_records=cycle_records
             language_records=[r for r in all_source_records if r["section_code"]=="LANGUAGE_QUALIFYING"]
-            # Course delivery follows the requested TRE-4 scope: all 40 GS + 80 CS items.
-            # The extra language-qualifying items in TRE 2.0/3.0 remain in source audit data,
-            # but are not mixed into this 120-question GS/Computer Science practice test.
-            course_records=[r for r in all_source_records if r["section_code"] in {"GENERAL_STUDIES","COMPUTER_SCIENCE"}]
+            # Preserve every question present in each original booklet. TRE 2.0/3.0 have
+            # 30 qualifying-language questions in addition to 40 GS + 80 CS. Only GS and CS
+            # contribute to the 120-mark scored result; qualifying items remain in the same attempt.
+            course_records=list(all_source_records)
             course_records.sort(key=sequence_key)
             for sequence, record in enumerate(course_records,1):
                 record["sequence_no"]=sequence
@@ -585,7 +599,7 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                     expected_language_keys(cycle)-{str(r["source_question_number"]) for r in language_records}
                 ) if cycle!="TRE 1.0" else [],
                 "included_in_tre4_practice_test":False,
-                "note":"TRE 2.0/3.0 source booklets contain a separate qualifying-language section. TRE-4 practice tests follow the requested 120-question scope (40 GS + 80 CS); language questions remain in the source audit inventory only."
+                "note":"Preserve all questions from each original booklet. TRE 1.0 has 120 questions; TRE 2.0/3.0 include a separate qualifying-language section in addition to 40 GS + 80 CS. Only the 120 GS/CS items contribute to the two scored result sections."
             }
             # Also retain alternative Urdu/Bengali source-track availability without adding those
             # questions to the TRE-4 CS/GS test.
@@ -627,9 +641,9 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 },
                 "extraction_summary":{
                     "raw_question_blocks_detected":len(raw_questions),
-                    "course_test_question_count":len(course_records),
+                    "practice_test_question_count":len(course_records),
                     "source_inventory_question_count":len(all_source_records),
-                    "excluded_qualifying_language_question_count":len(language_records),
+                    "qualifying_language_question_count_included":len(language_records),
                     "section_counts":dict(Counter(r["section_code"] for r in course_records)),
                     "section_pair_audit":paired_sections,
                     "language_section_audit":language_check,
@@ -641,7 +655,7 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 "source_notes":[
                     "Original PDF bytes are preserved exactly; SHA-256 is recorded.",
                     "Hindi values contain a Unicode conversion of the source's legacy Hindi encoding; raw text is retained beside it.",
-                    "TRE 2.0/3.0 have 150 total booklet items because 30 are a separate qualifying-language section. This TRE-4 course test intentionally includes only the requested 40 General Studies + 80 Computer Science items; the language section is retained separately for audit.",
+                    "All original booklet questions are present in the practice attempt. TRE 2.0/3.0 include 30 qualifying-language items in addition to 40 General Studies + 80 Computer Science; only GS and Computer Science contribute to the scored result, which is reported in two sections.",
                     "Do not release until question/option pair completeness, Hindi rendering, answers, concise explanations, paper rules and any mathematical/code expressions have been reviewed.",
                 ],
             }
