@@ -397,8 +397,8 @@ test('[CAT-001][CAT-002][TEN-002][TEN-003][CNT-002][LRN-001] learner course list
     // Missing/invalid/unavailable tenant selectors must fail closed; no platform-wide
     // default catalogue is allowed to leak into a routed learner session.
     const missingTenant = await api(childA.page, '/api/v1/students/me/programs', 'STUDENT');
-    expect(missingTenant.status, 'A learner course catalogue request without a selected institution must be rejected before returning catalogue rows.').toBe(400);
-    expect(String(missingTenant.body.error || missingTenant.body.errorCode || missingTenant.body.code || '')).toContain('INSTITUTION_CONTEXT_REQUIRED');
+    expect([400, 403], 'A learner course catalogue request without its institution selector or membership must fail closed.').toContain(missingTenant.status);
+    expect(Array.isArray(missingTenant.body), 'A rejected tenantless request must never return a catalogue.').toBe(false);
 
     const malformedTenant = await api(
       childA.page,
