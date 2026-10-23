@@ -1707,6 +1707,10 @@ public class AssessmentController {
     attempt.put("offlineMode",Boolean.TRUE.equals(attempt.get("offline_mode")));
     attempt.put("offlineSyncExpiresAt",attempt.get("offline_sync_expires_at"));
     Map<String,Object> assessmentSnapshot=parseObject(String.valueOf(attempt.get("assessment_snapshot")));
+    // The learner UI displays each question's correct and incorrect mark policy before submission.
+    // This is assessment configuration, not answer-key data, so it is safe to expose on active attempts.
+    attempt.put("negative_marking_fraction",
+        assessmentSnapshot.getOrDefault("negativeMarkingFraction", BigDecimal.ZERO));
     if(!assessmentSnapshot.isEmpty()){
       attempt.put("assessment_title",assessmentSnapshot.getOrDefault("title",attempt.get("assessment_title")));
       attempt.put("subject_name",assessmentSnapshot.getOrDefault("subjectName",attempt.get("subject_name")));
