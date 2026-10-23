@@ -127,7 +127,29 @@ async function setUpEducationAdmin(browser: Browser): Promise<string> {
   const otpBody = JSON.parse(otpResponseBody || '{}');
   expect(otpBody.firstAccess).toBe(true);
 
-  await page.locator('#staff-otp').fill(String(otpBody.devCode || await readDisposableOtp(ADMIN_MOBILE, 'STAFF_LOGIN')));
+  const validOtp = String(otpBody.devCode || await readDisposableOtp(ADMIN_MOBILE, 'STAFF_LOGIN'));
+  const invalidOtp = validOtp === '000000' ? '000001' : '000000';
+
+  // Exercise the negative authentication path before the valid code. A failed OTP
+  // must not issue a staff session, and the still-live valid code must remain usable.
+  await page.locator('#staff-otp').fill(invalidOtp);
+  const invalidVerifyOtp = page.waitForResponse(response =>
+    response.request().method() === 'POST' &&
+    response.url().includes('/api/v1/auth/verify-otp'));
+  await page.locator('#staff-otp').locator('xpath=ancestor::form').locator('button[type="submit"]').click();
+  const invalidVerifyResponse = await invalidVerifyOtp;
+  expect([400, 401, 403], 'An incorrect one-time code must be rejected without authenticating the staff account.').toContain(invalidVerifyResponse.status());
+
+  const sessionAfterInvalidOtp = await page.evaluate(async () => {
+    const response = await fetch('/api/v1/auth/me', {
+      credentials: 'same-origin', cache: 'no-store',
+      headers: { 'X-QE-Workspace': 'EDUCATION_ADMIN' }
+    });
+    return { status: response.status };
+  });
+  expect([401, 403], 'An incorrect OTP must not establish an Education Admin session.').toContain(sessionAfterInvalidOtp.status);
+
+  await page.locator('#staff-otp').fill(validOtp);
   const verifyOtp = page.waitForResponse(response =>
     response.request().method() === 'POST' &&
     response.url().includes('/api/v1/auth/verify-otp'));
@@ -380,7 +402,7 @@ async function loginStudent(browser: Browser, name: 'childA' | 'childB' | 'indep
   await context.close();
 }
 
-test('[AUTH-001][AUTH-006][AUTH-007][TEN-003][QA-001][QA-002][QA-007] bootstrap test personas, exercise sign-in/QA Center UI, and seed owned relational fixtures', async ({ browser }) => {
+test('[AUTH-001][AUTH-002][AUTH-006][AUTH-007][TEN-003][QA-001][QA-002][QA-007] bootstrap test personas, exercise sign-in/QA Center UI, and seed owned relational fixtures', async ({ browser }) => {
   // Route/CSV drift must stop the run before the first database or account mutation.
   const manifest = await loadUiManifest();
   expect(manifest.summary.registeredWebPages).toBe(manifest.summary.sourceWebPages);
