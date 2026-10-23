@@ -2356,3 +2356,18 @@ html[data-qe-appearance] .student-certificate-actions a:hover {
   .qe-account-deletion { padding: 14px; }
   .qe-account-deletion__confirm-cancel { align-items: stretch; }
 }
+
+.qe-account-deletion__confirmation select,
+.qe-account-deletion__confirmation textarea {
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 11px;
+  border: 1px solid var(--qe-color-border, #d8dce5);
+  border-radius: 8px;
+  background: var(--qe-color-surface, #fff);
+  color: var(--qe-color-text, #172033);
+  font: inherit;
+}
+.qe-account-deletion__confirmation textarea { resize: vertical; }
+.qe-account-deletion__child { display: grid; gap: 7px; padding: 10px 0; }
+.qe-account-deletion__child small { color: var(--qe-color-text-muted, #5a6475); }

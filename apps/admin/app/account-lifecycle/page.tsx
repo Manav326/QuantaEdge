@@ -11,8 +11,9 @@ import { useUiTranslation } from '../i18n/useUiTranslation';
 type AdultReview = { student_id:number; display_name:string; class_code?:string|null; status:string; reviewed_at?:string|null; expires_at?:string|null };
 type ParentReview = { user_id:number; student_id:number; display_name:string; mobile_last_four?:string|null; status:string; reviewed_at?:string|null; expires_at?:string|null };
 type DeletionRequest = {
-  request_id:string; subject_user_public_id:string; subject_student_public_user_id?:string|null;
+  request_id:string; subject_user_public_id?:string|null; subject_student_public_user_id?:string|null;
   request_source:string; status:string; includes_linked_children:boolean; linked_children_count:number;
+  reason_category?:string|null; reason_details?:string|null; requested_by_public_user_id?:string|null;
   requested_at:string; updated_at?:string|null;
 };
 type DeletionDependency = {
@@ -193,10 +194,15 @@ export default function AccountLifecyclePage() {
                 const summary=assessment?.summary||{};
                 return <article key={item.request_id} style={{display:'grid',gap:12,padding:'16px 0',borderTop:'1px solid var(--admin-border,#e1e5ec)'}}>
                   <div>
-                    <strong>{t('admin.lifecycle.deletionSubject',{reference:item.subject_user_public_id})}</strong>
+                    <strong>{t('admin.lifecycle.deletionSubject',{reference:item.subject_user_public_id||item.subject_student_public_user_id||'—'})}</strong>
                     <small style={{display:'block',color:'var(--admin-muted,#687386)'}}>
                       {t('admin.lifecycle.deletionStatus')}: {item.status} · {t('admin.lifecycle.deletionSource')}: {item.request_source} · {t('admin.lifecycle.deletionChildren',{count:Number(item.linked_children_count||0)})}
                     </small>
+                    <small style={{display:'block',color:'var(--admin-muted,#687386)'}}>
+                      {t('admin.lifecycle.deletionReason')}: {item.reason_category||'LEGACY_UNSPECIFIED'}
+                      {item.requested_by_public_user_id ? ' · '+t('admin.lifecycle.requestedBy')+': '+item.requested_by_public_user_id : ''}
+                    </small>
+                    {item.reason_details&&<p>{t('admin.lifecycle.deletionReasonDetails')}: {item.reason_details}</p>}
                   </div>
                   <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
                     {item.status==='REQUESTED'&&<button className="button button-dark" disabled={busy!==null} onClick={()=>void startDeletionReview(item)}>{busy===reviewKey?t('admin.lifecycle.loading'):t('admin.lifecycle.deletionStartReview')}</button>}

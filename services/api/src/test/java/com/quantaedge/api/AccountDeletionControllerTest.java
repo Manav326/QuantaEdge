@@ -78,24 +78,54 @@ class AccountDeletionControllerTest {
   }
 
   @Test
-  void requiresAnExplicitDecisionForLinkedChildren() {
+  void parentDeletionIsBlockedUntilLinkedChildAccountsAreResolved() {
     when(jdbc.queryForList(contains("select id,public_user_id,role"), eq(101L)))
         .thenReturn(List.of(Map.of("id", 101L, "public_user_id", "USER00000101", "role", "PARENT")));
     when(jdbc.queryForList(contains("select id,public_user_id from student"), eq(101L)))
         .thenReturn(List.of());
-    when(jdbc.queryForList(contains("from account_deletion_request"), eq(101L)))
+    when(jdbc.queryForList(contains("where subject_user_id=? and status in"), eq(101L)))
         .thenReturn(List.of());
     when(jdbc.queryForList(contains("select distinct st.id as student_id"), eq(101L), eq(101L)))
-        .thenReturn(List.of(Map.of("student_id", 202L, "public_user_id", "CHILD0000202")));
-
+        .thenReturn(List.of(Map.of("student_id", 202L, "public_user_id", "CHILD0000202",
+            "display_name", "Child", "adult_verification_status", "NOT_REVIEWED",
+            "adult_verified", false, "child_deletion_request_status", "")));
 
     Map<String,Object> result = controller.requestDeletion(
-        Map.of("confirmation", "DELETE", "source", "WEB", "includeLinkedChildren", false,
-            "verificationId",verificationId.toString()), parent);
+        Map.of("confirmation", "DELETE", "source", "WEB", "reasonCategory", "PRIVACY_CONCERN",
+            "includeLinkedChildren", true), parent);
 
     assertFalse(Boolean.TRUE.equals(result.get("accepted")));
-    assertTrue(Boolean.TRUE.equals(result.get("requiresLinkedChildrenConfirmation")));
+    assertTrue(Boolean.TRUE.equals(result.get("requiresChildResolution")));
     assertEquals(1, result.get("linkedChildrenCount"));
+    assertFalse(result.containsKey("requestId"));
+  }
+
+  @Test
+  void verifiedAdultChildMustUseIndependentAccountConversionInsteadOfGuardianDeletion() {
+    AuthContext parentContext = new AuthContext(101L, null, null, "PARENT", "Parent", "PARENT");
+    when(authorization.requireParent(parentContext)).thenReturn(parentContext);
+    when(jdbc.queryForList(contains("select distinct st.id as student_id"), eq(101L), eq(101L)))
+        .thenReturn(List.of(Map.of("student_id", 202L, "public_user_id", "CHILD0000202",
+            "display_name", "Adult child", "adult_verification_status", "VERIFIED",
+            "adult_verified", true, "child_deletion_request_status", "")));
+    Map<String,Object> result=controller.requestChildDeletion("CHILD0000202",
+        Map.of("confirmation","DELETE","reasonCategory","NO_LONGER_NEEDED"),parentContext);
+    assertFalse(Boolean.TRUE.equals(result.get("accepted")));
+    assertTrue(Boolean.TRUE.equals(result.get("requiresIndependentAccountConversion")));
+  }
+
+  @Test
+  void unreviewedChildAgeBlocksGuardianDeletionRequest() {
+    AuthContext parentContext = new AuthContext(101L, null, null, "PARENT", "Parent", "PARENT");
+    when(authorization.requireParent(parentContext)).thenReturn(parentContext);
+    when(jdbc.queryForList(contains("select distinct st.id as student_id"), eq(101L), eq(101L)))
+        .thenReturn(List.of(Map.of("student_id", 202L, "public_user_id", "CHILD0000202",
+            "display_name", "Child", "adult_verification_status", "PENDING",
+            "adult_verified", false, "child_deletion_request_status", "")));
+    Map<String,Object> result=controller.requestChildDeletion("CHILD0000202",
+        Map.of("confirmation","DELETE","reasonCategory","NO_LONGER_NEEDED"),parentContext);
+    assertFalse(Boolean.TRUE.equals(result.get("accepted")));
+    assertTrue(Boolean.TRUE.equals(result.get("requiresAdultVerificationReview")));
   }
 
   @Test
@@ -119,12 +149,12 @@ class AccountDeletionControllerTest {
         .thenReturn(1);
 
     Map<String,Object> result = controller.requestDeletion(
-        Map.of("confirmation", "DELETE", "source", "WEB", "includeLinkedChildren", false,
+        Map.of("confirmation", "DELETE", "source", "WEB", "reasonCategory", "NO_LONGER_NEEDED",
             "verificationId",verificationId.toString()), parent);
 
     assertTrue(Boolean.TRUE.equals(result.get("accepted")));
     assertEquals("REQUESTED", result.get("status"));
-    verify(jdbc).update(contains("insert into account_deletion_request"),
-        any(), any(), any(), any(), any(), any(), any(), any());
+    assertEquals("NO_LONGER_NEEDED", result.get("reasonCategory"));
+    verify(jdbc).update(contains("insert into account_deletion_request"), any(Object[].class));
   }
 }

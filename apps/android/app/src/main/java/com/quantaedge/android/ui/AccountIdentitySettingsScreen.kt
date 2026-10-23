@@ -18,6 +18,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -57,8 +59,13 @@ fun AccountIdentitySettingsScreen(
     onLinkGmail: (Context) -> Unit,
     onAccountLifecycle: () -> Unit,
     deletionRequest: JSONObject,
+    deletionVerificationId: String,
+    deletionOtpDevCode: String,
     onRefreshDeletion: () -> Unit,
-    onRequestDeletion: (String, Boolean) -> Unit,
+    onRequestDeletionOtp: () -> Unit,
+    onVerifyDeletionOtp: (String) -> Unit,
+    onRequestDeletion: (String, String, String, Boolean) -> Unit,
+    onRequestChildDeletion: (String, String, String, String, Boolean) -> Unit,
     onCancelDeletion: () -> Unit,
     onBack: () -> Unit
 ) {
@@ -77,7 +84,12 @@ fun AccountIdentitySettingsScreen(
     var newPasswordVisible by rememberSaveable { mutableStateOf(false) }
     var confirmPasswordVisible by rememberSaveable { mutableStateOf(false) }
     var deletionConfirmation by rememberSaveable { mutableStateOf("") }
-    var includeLinkedChildren by rememberSaveable { mutableStateOf(false) }
+    var deletionReasonCategory by rememberSaveable { mutableStateOf("") }
+    var deletionReasonDetails by rememberSaveable { mutableStateOf("") }
+    var deletionOtp by rememberSaveable { mutableStateOf("") }
+    var deletionOtpRequested by rememberSaveable { mutableStateOf(false) }
+    var deletionManualIdentityReview by rememberSaveable { mutableStateOf(false) }
+    var deletionReasonMenuExpanded by rememberSaveable { mutableStateOf(false) }
     val accountType = profile.optString("accountType", "USER")
     val childManaged = profile.optBoolean("credentialsManagedByParent")
     val gmailVerified = profile.optBoolean("gmailVerified")
@@ -263,8 +275,6 @@ fun AccountIdentitySettingsScreen(
         if (accountType != "CHILD") {
             val requestExists = deletionRequest.optBoolean("hasRequest")
             val requestStatus = deletionRequest.optString("status", "NONE")
-            val needsChildDecision = deletionRequest.optBoolean("requiresLinkedChildrenConfirmation")
-            val linkedChildCount = deletionRequest.optInt("linkedChildrenCount", 0)
             val requestIsOpen = requestStatus in setOf("REQUESTED", "UNDER_REVIEW", "AWAITING_LINKED_CHILD_DECISION")
             val requestStatusLabel = when (requestStatus) {
                 "REQUESTED" -> localizedUiText("Request received")
@@ -302,7 +312,6 @@ fun AccountIdentitySettingsScreen(
                                 style = MaterialTheme.typography.bodySmall)
                             OutlinedButton(onClick = {
                                 deletionConfirmation = ""
-                                includeLinkedChildren = false
                                 onCancelDeletion()
                             }, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
                                 Text(localizedUiText("Cancel deletion request"))
@@ -315,21 +324,154 @@ fun AccountIdentitySettingsScreen(
                     }
 
                     if (!requestExists || requestStatus == "CANCELLED" || requestStatus == "REJECTED") {
-                        if (needsChildDecision && linkedChildCount > 0) {
-                            Text(localizedUiText("This account has linked child accounts. Choose whether to include them in the deletion request."),
-                                color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Checkbox(
-                                    checked = includeLinkedChildren,
-                                    onCheckedChange = { includeLinkedChildren = it },
-                                    enabled = !busy
-                                )
-                                Text(localizedUiText("Include all linked child accounts: ") + linkedChildCount,
-                                    style = MaterialTheme.typography.bodySmall)
+                        Text(localizedUiText("Before submitting an account-deletion request, tell us why you want to delete the account."),
+                            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Box {
+                            OutlinedButton(onClick = { deletionReasonMenuExpanded = true }, enabled = !busy,
+                                modifier = Modifier.fillMaxWidth()) {
+                                val reasonLabel = when (deletionReasonCategory) {
+                                    "NO_LONGER_NEEDED" -> localizedUiText("I no longer need this account")
+                                    "PRIVACY_CONCERN" -> localizedUiText("Privacy concerns")
+                                    "SECURITY_CONCERN" -> localizedUiText("Account security concern")
+                                    "DUPLICATE_ACCOUNT" -> localizedUiText("I have a duplicate account")
+                                    "MOVING_TO_ANOTHER_SERVICE" -> localizedUiText("I am moving to another service")
+                                    "DATA_CONCERN" -> localizedUiText("Concern about my personal data")
+                                    "OTHER" -> localizedUiText("Other reason")
+                                    else -> localizedUiText("Choose a reason")
+                                }
+                                Text(reasonLabel)
                             }
-                            Text(localizedUiText("If a child account must be kept, arrange a verified guardian transfer before submitting. Do not leave a child without a safe guardian arrangement."),
+                            DropdownMenu(expanded = deletionReasonMenuExpanded,
+                                onDismissRequest = { deletionReasonMenuExpanded = false }) {
+                                listOf(
+                                    "NO_LONGER_NEEDED" to "I no longer need this account",
+                                    "PRIVACY_CONCERN" to "Privacy concerns",
+                                    "SECURITY_CONCERN" to "Account security concern",
+                                    "DUPLICATE_ACCOUNT" to "I have a duplicate account",
+                                    "MOVING_TO_ANOTHER_SERVICE" to "I am moving to another service",
+                                    "DATA_CONCERN" to "Concern about my personal data",
+                                    "OTHER" to "Other reason"
+                                ).forEach { (key, label) ->
+                                    DropdownMenuItem(
+                                        text = { Text(localizedUiText(label)) },
+                                        onClick = {
+                                            deletionReasonCategory = key
+                                            deletionReasonMenuExpanded = false
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                        OutlinedTextField(
+                            value = deletionReasonDetails,
+                            onValueChange = { deletionReasonDetails = it.take(1500) },
+                            label = { Text(localizedUiText("Additional explanation (optional; required for Other)")) },
+                            placeholder = { Text(localizedUiText("Share a brief explanation, without passwords or OTPs")) },
+                            enabled = !busy,
+                            minLines = 2,
+                            maxLines = 4,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        if (deletionReasonCategory == "OTHER" && deletionReasonDetails.trim().length < 5) {
+                            Text(localizedUiText("Please add a short explanation when selecting Other."),
+                                color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                        }
+
+                        if (mobileVerified) {
+                            Text(localizedUiText("Verify your identity before submitting or requesting deletion of a linked child account."),
+                                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            OutlinedButton(onClick = {
+                                deletionOtp = ""
+                                deletionOtpRequested = true
+                                onRequestDeletionOtp()
+                            }, enabled = !busy && deletionVerificationId.isBlank(),
+                                modifier = Modifier.fillMaxWidth()) {
+                                Text(localizedUiText("Send verification code to your verified mobile"))
+                            }
+                            if (deletionOtpDevCode.isNotBlank()) {
+                                Text(localizedUiText("Development OTP: ") + deletionOtpDevCode,
+                                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                            if (deletionOtpRequested && deletionVerificationId.isBlank()) {
+                                OutlinedTextField(
+                                    value = deletionOtp,
+                                    onValueChange = { deletionOtp = it.filter(Char::isDigit).take(6) },
+                                    label = { Text(localizedUiText("Enter the 6-digit code")) },
+                                    singleLine = true,
+                                    enabled = !busy,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                                Button(onClick = { onVerifyDeletionOtp(deletionOtp) },
+                                    enabled = !busy && deletionOtp.length == 6,
+                                    modifier = Modifier.fillMaxWidth()) {
+                                    Text(localizedUiText("Verify code"))
+                                }
+                            }
+                        }
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Checkbox(checked = deletionManualIdentityReview, enabled = !busy,
+                                onCheckedChange = { deletionManualIdentityReview = it })
+                            Text(localizedUiText("Ask staff to verify my identity manually"))
+                        }
+                        if (deletionManualIdentityReview) {
+                            Text(localizedUiText("This only requests manual identity review; it does not mark identity as verified or complete deletion."),
                                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
+                        if (deletionVerificationId.isNotBlank() && !deletionManualIdentityReview) {
+                            Text(localizedUiText("Identity verification complete."),
+                                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+                        }
+
+                        val childArray = deletionRequest.optJSONArray("linkedChildren")
+                        val childCount = deletionRequest.optInt("linkedChildrenCount", childArray?.length() ?: 0)
+                        if (childCount > 0) {
+                            Card(Modifier.fillMaxWidth()) {
+                                Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    Text(localizedUiText("Resolve linked child accounts first"),
+                                        style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                                    Text(localizedUiText("The parent account cannot be submitted for deletion until every linked child is safely independent or the child account has been resolved by an authorized process."),
+                                        style = MaterialTheme.typography.bodySmall)
+                                    if (childArray != null) {
+                                        for (index in 0 until childArray.length()) {
+                                            val child = childArray.optJSONObject(index) ?: continue
+                                            val childId = child.optString("publicUserId")
+                                            val childName = child.optString("displayName").ifBlank { childId }
+                                            val adultVerified = child.optBoolean("adultVerified")
+                                            val ageStatus = child.optString("adultVerificationStatus", "NOT_REVIEWED")
+                                            val childRequestStatus = child.optString("deletionRequestStatus")
+                                            HorizontalDivider()
+                                            Text(childName, fontWeight = FontWeight.SemiBold)
+                                            Text(localizedUiText("Account ID: ") + childId,
+                                                style = MaterialTheme.typography.bodySmall)
+                                            when {
+                                                adultVerified -> Text(localizedUiText("Over-18 eligibility is verified. The adult learner must sign in to their own learner session and complete independent-account conversion; a guardian cannot delete their account."),
+                                                    style = MaterialTheme.typography.bodySmall)
+                                                ageStatus != "REJECTED" -> Text(localizedUiText("A reviewer must confirm that this child is under 18 before a guardian-requested deletion can be submitted."),
+                                                    style = MaterialTheme.typography.bodySmall,
+                                                    color = MaterialTheme.colorScheme.error)
+                                                childRequestStatus.isNotBlank() -> Text(localizedUiText("Child deletion request status: ") + childRequestStatus +
+                                                    ". " + localizedUiText("The parent account remains blocked until the child account is resolved."),
+                                                    style = MaterialTheme.typography.bodySmall)
+                                                else -> Button(
+                                                    onClick = {
+                                                        onRequestChildDeletion(childId, "DELETE", deletionReasonCategory,
+                                                            deletionReasonDetails, deletionManualIdentityReview)
+                                                    },
+                                                    enabled = !busy && deletionConfirmation == "DELETE" &&
+                                                        deletionReasonCategory.isNotBlank() &&
+                                                        (deletionManualIdentityReview || deletionVerificationId.isNotBlank()) &&
+                                                        (deletionReasonCategory != "OTHER" || deletionReasonDetails.trim().length >= 5),
+                                                    modifier = Modifier.fillMaxWidth()
+                                                ) {
+                                                    Text(localizedUiText("Request deletion of this child account"))
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
                         OutlinedTextField(
                             value = deletionConfirmation,
                             onValueChange = { deletionConfirmation = it.trim().uppercase().take(20) },
@@ -338,19 +480,24 @@ fun AccountIdentitySettingsScreen(
                             enabled = !busy,
                             modifier = Modifier.fillMaxWidth()
                         )
-                        Button(
-                            onClick = {
-                                val confirmedText = deletionConfirmation
-                                val confirmedChildren = includeLinkedChildren
-                                deletionConfirmation = ""
-                                includeLinkedChildren = false
-                                onRequestDeletion(confirmedText, confirmedChildren)
-                            },
-                            enabled = !busy && deletionConfirmation == "DELETE" &&
-                                (!needsChildDecision || linkedChildCount <= 0 || includeLinkedChildren),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(localizedUiText("Submit deletion request"))
+                        if (childCount == 0) {
+                            Button(
+                                onClick = {
+                                    val confirmedText = deletionConfirmation
+                                    val reason = deletionReasonCategory
+                                    val details = deletionReasonDetails
+                                    val manual = deletionManualIdentityReview
+                                    deletionConfirmation = ""
+                                    onRequestDeletion(confirmedText, reason, details, manual)
+                                },
+                                enabled = !busy && deletionConfirmation == "DELETE" &&
+                                    deletionReasonCategory.isNotBlank() &&
+                                    (deletionManualIdentityReview || deletionVerificationId.isNotBlank()) &&
+                                    (deletionReasonCategory != "OTHER" || deletionReasonDetails.trim().length >= 5),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(localizedUiText("Submit deletion request"))
+                            }
                         }
                     }
 

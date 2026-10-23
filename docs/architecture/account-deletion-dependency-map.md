@@ -1,5 +1,12 @@
 # Account deletion: dependency map and fulfillment boundary
 
+## Parent and linked-child deletion guardrails
+
+- Every deletion request records a required reason category and optional bounded explanation.
+- A parent account request is refused while any active parent-managed child remains linked. Ticking a checkbox cannot override this server-side block.
+- A parent can submit an explicit child-deletion request for an eligible linked child, but that remains a request, not erasure. A verified-over-18 child cannot be deleted by the guardian; they must complete the existing independent-learner account conversion flow.
+- The parent account remains open until every child is safely independent or the child account has been resolved by an authorized workflow. A pending request is not treated as completion. No automatic child deletion, transfer, or guardian-link removal occurs in this PR.
+
 ## Schema versioning after main synchronization
 
 Account-deletion migrations use **V171/V172** because current `main` already uses V167–V170 for portable-assessment and course-release changes. This avoids duplicate Flyway migration versions after synchronization.

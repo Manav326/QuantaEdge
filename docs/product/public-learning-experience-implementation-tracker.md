@@ -32,20 +32,15 @@ QuantaEdge is a quality-first learning platform for different ages, subjects, sk
 - [ ] Verify public contact/operator disclosures, privacy and terms, support path, course availability claims, certificate wording, and any applicable refund/cancellation disclosures.
 - [ ] Keep this tracker and the UI parity ledger updated with source implementation and end-to-end evidence recorded separately.
 
-## Account-deletion implementation progress — request intake and dependency assessment
-
-- [x] Add an authenticated request/status/cancellation API with typed confirmation, server-derived identity, duplicate-open-request protection, an audit event, and a staff review queue.
-- [x] Add the external User Web request route and link it from Privacy; expose the same request panel in parent/independent-learner profile settings. English/Hinglish strings are centralized.
-- [x] Add the Android in-app request/status/cancel controls to account identity settings, using the existing authenticated API client and centralized Android phrase registry.
-- [x] Require parents to explicitly include every currently linked child in the request; store a per-child public-ID snapshot and do not silently orphan child access.
-- [x] Keep the request visibly distinct from completed deletion; provide cancellation while the request is still open.
-- [x] Add a read-only runtime foreign-key census to the staff review API and expose its affected-table counts/rules from Admin. The report fails closed on uncounted or unclassified references, does not expose row contents, and cannot mark a request complete.
-- [ ] Implement actual retention-aware erase/anonymize fulfillment, revocation of all account and learner sessions at finalization, processor-side deletion, and an approved status-completion path. Current request intake and dependency assessment must not be treated as completed deletion.
-- [ ] Complete the full migrated-schema FK/PII inventory and legal/business retention decision. The confirmed dependencies and blockers are documented in `docs/architecture/account-deletion-dependency-map.md`.
-- [ ] Add a verified step-up identity check for the request/fulfillment process (not just an active session and typed confirmation); define OTP/password/Google re-auth behavior without weakening existing login verification.
-- [ ] Build and device-test the Android in-app request path, including API error states, child confirmation, cancellation and restored sessions. The source controls are wired, but physical-device acceptance has not been run.
-- [ ] Add end-to-end staff operations and verify parent-only, multiple-child, shared-guardian, purchase, invoice, certificate and cancellation scenarios in a real migrated test environment.
-
 ## Status rule
 
 A source change or green compilation is not proof of a working user journey. Mark end-to-end items complete only after the named flow is exercised in a real browser/device against an approved test environment and the result is recorded.
+
+
+## Account deletion request lifecycle and linked-child guardrails
+
+- Web and Android provide an identity-verified, reasoned deletion-request intake with status and cancellation; submission is not completion.
+- Requests record a mandatory reason category, optional bounded explanation, request initiator and the child's public identity where a guardian requests child deletion.
+- A parent account is blocked server-side while any active parent-managed child remains linked. A checkbox or URL parameter cannot bypass the guard.
+- A verified adult child must complete the existing independent-learner conversion path. A child with unknown/pending adult status requires staff age-status review before guardian-requested deletion can be submitted.
+- Staff queue and read-only dependency assessment surface the request and associated FK dependencies. Full retention-aware erasure remains out of scope until the approved retention decisions and audited fulfillment workflow are implemented.

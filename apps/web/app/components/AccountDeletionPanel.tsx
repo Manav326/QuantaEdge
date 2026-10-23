@@ -26,9 +26,9 @@ export default function AccountDeletionPanel({ compact = false }: { compact?: bo
   const [request, setRequest] = useState<DeletionRequest | null>(null);
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
   const [confirmation, setConfirmation] = useState('');
-  const [includeChildren, setIncludeChildren] = useState(false);
-  const [childrenConfirmationRequired, setChildrenConfirmationRequired] = useState(false);
   const [childrenCount, setChildrenCount] = useState(0);
+  const [reasonCategory, setReasonCategory] = useState('');
+  const [reasonDetails, setReasonDetails] = useState('');
   const [mobileVerified, setMobileVerified] = useState(false);
   const [gmailVerified, setGmailVerified] = useState(false);
   const [mobileLastFour, setMobileLastFour] = useState('');
@@ -170,7 +170,8 @@ export default function AccountDeletionPanel({ compact = false }: { compact?: bo
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           confirmation: confirmation.trim(),
-          includeLinkedChildren: includeChildren,
+          reasonCategory,
+          reasonDetails,
           ...(verificationId ? { verificationId } : {}),
           manualIdentityReview,
           source: 'WEB',
@@ -178,26 +179,41 @@ export default function AccountDeletionPanel({ compact = false }: { compact?: bo
       });
       const body = await responseBody(response);
       if (!response.ok) throw new Error(body.message || body.detail || body.error || t('accountDeletion.error'));
-      if (body.requiresLinkedChildrenConfirmation) {
-        const count = Number(body.linkedChildrenCount || 0);
-        setChildrenCount(count);
-        setChildrenConfirmationRequired(true);
-        setIncludeChildren(false);
-        setError(t('accountDeletion.childrenRequired', { count }));
+      if (body.requiresChildResolution) {
+        setChildrenCount(Number(body.linkedChildrenCount || 0));
+        setRequest(current => ({
+          ...(current || {}),
+          hasRequest: false,
+          status: 'NONE',
+          linkedChildren: Array.isArray(body.linkedChildren) ? body.linkedChildren : current?.linkedChildren || [],
+          linkedChildrenCount: Number(body.linkedChildrenCount || 0),
+          requiresChildResolution: true,
+        }));
+        setNotice(t('accountDeletion.parentBlocked'));
         return;
       }
-      if (!body.accepted) throw new Error(t('accountDeletion.error'));
+      if (!body.accepted) {
+        if (body.requiresIndependentAccountConversion) {
+          setNotice(t('accountDeletion.childIndependentConversionRequired'));
+          return;
+        }
+        throw new Error(t('accountDeletion.error'));
+      }
       setRequest({
         hasRequest: true,
         requestId: String(body.requestId || ''),
         status: String(body.status || 'REQUESTED'),
         linkedChildrenCount: Number(body.linkedChildrenCount || 0),
-        includesLinkedChildren: Boolean(body.includesLinkedChildren),
+        includesLinkedChildren: false,
+        reasonCategory: String(body.reasonCategory || reasonCategory),
+        reasonDetails: String(body.reasonDetails || reasonDetails),
+        linkedChildren: [],
         requestedAt: String(body.requestedAt || ''),
         updatedAt: String(body.requestedAt || ''),
       });
-      setChildrenConfirmationRequired(false);
       setConfirmation('');
+      setReasonCategory('');
+      setReasonDetails('');
       setVerificationId('');
       setManualIdentityReview(false);
       setOtpRequested(false);
@@ -206,6 +222,64 @@ export default function AccountDeletionPanel({ compact = false }: { compact?: bo
         : t('accountDeletion.requestAccepted'));
     } catch (e) {
       setError(e instanceof Error ? e.message : t('accountDeletion.error'));
+    } finally {
+      setBusy('');
+    }
+  }
+
+  async function requestChildDeletion(child: LinkedChild) {
+    setError('');
+    setNotice('');
+    if (confirmation.trim() !== 'DELETE') {
+      setError(t('accountDeletion.confirmationMismatch'));
+      return;
+    }
+    if (!reasonCategory || (reasonCategory === 'OTHER' && reasonDetails.trim().length < 5)) {
+      setError(t('accountDeletion.reasonRequired'));
+      return;
+    }
+    if (!verificationId && !manualIdentityReview) {
+      setError(t('accountDeletion.verifyIdentityFirst'));
+      return;
+    }
+    setBusy('child-request:' + child.publicUserId);
+    try {
+      const response = await apiFetch('/api/v1/account/me/deletion-request/children/' + encodeURIComponent(child.publicUserId), {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          confirmation: 'DELETE',
+          reasonCategory,
+          reasonDetails,
+          ...(verificationId ? { verificationId } : {}),
+          manualIdentityReview,
+          source: 'WEB',
+        }),
+      });
+      const body = await responseBody(response);
+      if (!response.ok) throw new Error(body.message || body.detail || body.error || t('accountDeletion.childRequestFailed'));
+      if (body.requiresIndependentAccountConversion) {
+        setNotice(t('accountDeletion.childIndependentConversionRequired'));
+        return;
+      }
+      if (body.requiresAdultVerificationReview) {
+        setNotice(t('accountDeletion.childAgeReviewRequired'));
+        await load();
+        return;
+      }
+      if (!body.accepted) throw new Error(t('accountDeletion.childRequestFailed'));
+      setVerificationId('');
+      setManualIdentityReview(false);
+      setOtpRequested(false);
+      setOtp('');
+      setConfirmation('');
+      setNotice(body.alreadyPending
+        ? t('accountDeletion.childRequestAlreadyPending')
+        : t('accountDeletion.childRequestAccepted'));
+      await load();
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : t('accountDeletion.childRequestFailed'));
     } finally {
       setBusy('');
     }
@@ -357,27 +431,74 @@ export default function AccountDeletionPanel({ compact = false }: { compact?: bo
 
           {canStart && (
             <form className="qe-account-deletion__form" onSubmit={submit}>
-              {childrenConfirmationRequired && childrenCount > 0 && (
-                <>
-                  <p className="qe-account-deletion__warning">
-                    {t('accountDeletion.childrenRequired', { count: childrenCount })}
-                  </p>
-                  <label className="qe-account-deletion__checkbox">
-                    <input type="checkbox" checked={includeChildren} onChange={event => setIncludeChildren(event.target.checked)} />
-                    <span>{t('accountDeletion.includeChildren', { count: childrenCount })}</span>
-                  </label>
-                  <p className="qe-account-deletion__retention">{t('accountDeletion.childTransferNote')}</p>
-                </>
+              <h3>{t('accountDeletion.reasonQuestionTitle')}</h3>
+              <p>{t('accountDeletion.reasonQuestionDescription')}</p>
+              <label className="qe-account-deletion__confirmation">
+                {t('accountDeletion.reasonLabel')}
+                <select value={reasonCategory} onChange={event => setReasonCategory(event.target.value)} required>
+                  <option value="">{t('accountDeletion.chooseReason')}</option>
+                  <option value="NO_LONGER_NEEDED">{t('accountDeletion.reason.noLongerNeeded')}</option>
+                  <option value="PRIVACY_CONCERN">{t('accountDeletion.reason.privacyConcern')}</option>
+                  <option value="SECURITY_CONCERN">{t('accountDeletion.reason.securityConcern')}</option>
+                  <option value="DUPLICATE_ACCOUNT">{t('accountDeletion.reason.duplicateAccount')}</option>
+                  <option value="MOVING_TO_ANOTHER_SERVICE">{t('accountDeletion.reason.movingService')}</option>
+                  <option value="DATA_CONCERN">{t('accountDeletion.reason.dataConcern')}</option>
+                  <option value="OTHER">{t('accountDeletion.reason.other')}</option>
+                </select>
+              </label>
+              <label className="qe-account-deletion__confirmation">
+                {t('accountDeletion.reasonDetailsLabel')}
+                <textarea value={reasonDetails} onChange={event => setReasonDetails(event.target.value.slice(0, 1500))}
+                  maxLength={1500} rows={3} placeholder={t('accountDeletion.reasonDetailsPlaceholder')} />
+              </label>
+
+              {childrenCount > 0 && (
+                <div className="qe-account-deletion__warning" role="region" aria-labelledby="qe-account-deletion-children-title">
+                  <h3 id="qe-account-deletion-children-title">{t('accountDeletion.childResolutionTitle')}</h3>
+                  <p>{t('accountDeletion.parentBlocked')}</p>
+                  <p className="qe-account-deletion__retention">{t('accountDeletion.childDeletionNotCompleted')}</p>
+                  <div className="qe-account-deletion__children">
+                    {(request?.linkedChildren || []).map(child => (
+                      <article className="qe-account-deletion__child" key={child.publicUserId}>
+                        <strong>{child.displayName || child.publicUserId}</strong>
+                        <small>{t('accountDeletion.childReference', { reference: child.publicUserId })}</small>
+                        {child.adultVerified ? (
+                          <p>{t('accountDeletion.childAdultVerified')}</p>
+                        ) : (
+                          <p>{t('accountDeletion.childAdultVerificationPending')}</p>
+                        )}
+                        {child.deletionRequestStatus ? (
+                          <p role="status">{t('accountDeletion.childRequestStatus', { status: child.deletionRequestStatus })}</p>
+                        ) : child.adultVerificationStatus === 'REJECTED' ? (
+                          <button type="button" className="button button-light button-small"
+                            disabled={busy !== '' || !reasonCategory || confirmation.trim() !== 'DELETE' ||
+                              (!verificationId && !manualIdentityReview) || (reasonCategory === 'OTHER' && reasonDetails.trim().length < 5)}
+                            onClick={() => void requestChildDeletion(child)}>
+                            {busy === 'child-request:' + child.publicUserId
+                              ? t('accountDeletion.requesting')
+                              : t('accountDeletion.childRequestButton')}
+                          </button>
+                        ) : (
+                          <p>{t('accountDeletion.childAgeReviewRequired')}</p>
+                        )}
+                      </article>
+                    ))}
+                  </div>
+                </div>
               )}
+
               <label className="qe-account-deletion__confirmation">
                 {t('accountDeletion.confirmationLabel')}
                 <input value={confirmation} onChange={event => setConfirmation(event.target.value.toUpperCase().slice(0, 20))}
                   placeholder={t('accountDeletion.confirmInput')} autoComplete="off" required />
               </label>
-              <button type="submit" className="button button-danger button-small"
-                disabled={busy !== '' || (!verificationId && !manualIdentityReview) || confirmation.trim() !== 'DELETE' || (childrenConfirmationRequired && childrenCount > 0 && !includeChildren)}>
-                {busy === 'submit' ? t('accountDeletion.requesting') : t('accountDeletion.submitButton')}
-              </button>
+              {childrenCount === 0 && (
+                <button type="submit" className="button button-danger button-small"
+                  disabled={busy !== '' || !verificationId && !manualIdentityReview || confirmation.trim() !== 'DELETE' ||
+                    !reasonCategory || (reasonCategory === 'OTHER' && reasonDetails.trim().length < 5)}>
+                  {busy === 'submit' ? t('accountDeletion.requesting') : t('accountDeletion.submitButton')}
+                </button>
+              )}
             </form>
           )}
         </>

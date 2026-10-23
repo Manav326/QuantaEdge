@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1190,
-    "successful_visual_analyses": 1182,
-    "missing_visual_analyses": 1101,
-    "failed_visual_analyses": 8,
+    "raw_analysis_result_rows": 1199,
+    "successful_visual_analyses": 1188,
+    "missing_visual_analyses": 1092,
+    "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1109,
+    "unresolved_count": 1103,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -44748,7 +44748,7 @@
       "correction_status": "NONE",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "diagram",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -44762,7 +44762,8 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force"
+          "muscular force",
+          "living beings"
         ],
         "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
@@ -44921,9 +44922,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -44939,7 +44949,7 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -44957,7 +44967,7 @@
       "asset_path": "page-0087.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -44975,9 +44985,27 @@
       "asset_path": "assets/87e439464b6033095e69b85b9b8e7e1df30c97e062a4ba7e7663ae9a8f43f927.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a block sliding on a surface with a force acting against it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "On pushing, the object stops after sliding a certain distance. This must be due to a force acting between the surfaces of the sliding object and the table or floor which are in contact. This force must be acting on the object in a direction opposite to its direction of motion. This force is what bri",
+          "The force that comes into play when an object moves or tries to move over another",
+          "object is called friction."
+        ],
+        "concepts": [
+          "Friction",
+          "Force",
+          "Motion",
+          "Contact surfaces"
+        ],
+        "context_relation": "The image illustrates the concept of friction as a force that opposes the motion of an object.",
+        "limitations": [
+          "The image does not provide specific details about the types of friction or the forces involved."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -44993,7 +45021,7 @@
       "asset_path": "assets/fabc47b6ae3b2f867bbbde1dddcda33cd2f4bb2b5724fa0177411f12f27ad9c4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -45011,9 +45039,18 @@
       "asset_path": "assets/82926bdd9c78089199418cf22faf95b11ff22541270aeb4e3c3e3ab7661406ed.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person climbing a staircase, with one foot on a step and the other foot raised, as if about to step down.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or educational content related to the textbook.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional information or context for the educational content editor to analyze."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45029,9 +45066,18 @@
       "asset_path": "assets/7c74a22e26202e9db746156732e58cea8fa5c8fcf6331abee6343b4819c1f72b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A girl in a yellow shirt with her hand on her chin, appearing to be thinking.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the textbook content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45047,9 +45093,19 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear content or text",
+          "no visible text or images"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45065,9 +45121,33 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An object stopping after sliding a certain distance due to a force acting between the surfaces of the sliding object and the table or floor.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "On pushing, the object stops after sliding a certain distance. This must be due to a force acting between the surfaces of the sliding object and the table or floor which are in contact. This force must be acting on the object in a direction opposite to its direction of motion. This force is what bri",
+          "The force that comes into play when an object moves or tries to move over another",
+          "object is called friction."
+        ],
+        "concepts": [
+          "friction",
+          "force",
+          "object",
+          "sliding",
+          "distance",
+          "contact",
+          "direction",
+          "motion",
+          "stop"
+        ],
+        "context_relation": "The image is a continuation of the previous text, providing a detailed explanation of the concept of friction.",
+        "limitations": [
+          "The image does not contain any visual elements, only text.",
+          "The text is in English and does not include any diagrams or illustrations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
