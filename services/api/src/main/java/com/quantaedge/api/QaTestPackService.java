@@ -524,11 +524,14 @@ public class QaTestPackService {
           join institution_course_release r on r.id=a.course_release_id
           where a.institution_id=e.institution_id and a.status='ASSIGNED'
             and a.qa_test_run_id=? and r.program_id=e.program_id and r.release_state='SHAREABLE')
+        or not exists(select 1 from institution_course_entitlement ece
+          where ece.institution_id=e.institution_id and ece.program_id=e.program_id
+            and ece.status='ACTIVE' and ece.qa_test_run_id=?)
       )
-      """, runId, runId, runId);
+      """, runId, runId, runId, runId);
     addCheck(runId, checks, "LEARNER_COURSE_ENROLLMENTS_MATCH_TENANT_ASSIGNMENTS",
         courseEnrollmentCount == 3 && invalidCourseEnrollments == 0,
-        "Every active learner course enrollment matches that learner's institution membership and an assigned course release",
+        "Every active learner course enrollment matches tenant membership, an assigned shareable release and a course entitlement",
         "enrollments=" + courseEnrollmentCount + ", invalid=" + invalidCourseEnrollments,
         Map.of("enrollments", courseEnrollmentCount, "invalid", invalidCourseEnrollments));
 
