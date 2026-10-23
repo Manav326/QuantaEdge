@@ -4367,6 +4367,18 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 onOpenProfile = ::openParentProfile
             )
 
+            if (route == AppRoute.WELCOME || route == AppRoute.LOGIN ||
+                route == AppRoute.ACCOUNT_SIGNUP || route == AppRoute.PARENT_SIGNUP ||
+                route == AppRoute.PARENT_RESET) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 2.dp),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    PreLoginThemeControl()
+                }
+            }
+
             Box(modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
                 Box(modifier = Modifier.widthIn(max = 1120.dp).fillMaxWidth().fillMaxHeight()) {
                 saveableStateHolder.SaveableStateProvider("$stateOwnerKey:${route.name}") {

@@ -55,6 +55,10 @@ const androidAccountIdentity = read('apps/android/app/src/main/java/com/quantaed
 const androidTutor = read('apps/android/app/src/main/java/com/quantaedge/android/ui/TutorScreen.kt');
 const androidScanner = read('apps/android/app/src/main/java/com/quantaedge/android/ui/PremiumCodeScannerScreen.kt');
 const androidWelcome = read('apps/android/app/src/main/java/com/quantaedge/android/ui/WelcomeScreen.kt');
+const androidPreLoginTheme = read('apps/android/app/src/main/java/com/quantaedge/android/ui/PreLoginThemeControl.kt');
+const androidLocalization = read('apps/android/app/src/main/java/com/quantaedge/android/ui/AndroidLocalization.kt');
+const publicLanding = read('apps/web/app/page.tsx');
+
 const androidCourseCatalog = read('apps/android/app/src/main/java/com/quantaedge/android/ui/StudentCourseCatalog.kt');
 const androidProgress = read('apps/android/app/src/main/java/com/quantaedge/android/ui/StudentProgressScreen.kt');
 const androidLifecycle = read('apps/android/app/src/main/java/com/quantaedge/android/ui/AccountLifecycleScreen.kt');
@@ -144,10 +148,18 @@ assert(androidController.includes('"accentContainer", "onAccentContainer"'), 'An
 assert(androidTheme.includes('darkColorScheme') && androidTheme.includes('lightColorScheme'), 'Android theme must support light and dark.');
 assert(androidTheme.includes('"accentContainer"') && androidTheme.includes('"onAccentContainer"'), 'Android Material secondary roles must consume accent-container tokens.');
 assert(androidSettings.includes('QeAppearanceMode.DARK') && androidSettings.includes('QeAppearanceMode.SYSTEM'), 'Android settings must expose appearance options.');
+assert(androidPreLoginTheme.includes('updateAppearanceMode(QeAppearanceMode.INSTITUTION)') && androidPreLoginTheme.includes('updateAppearanceMode(QeAppearanceMode.SYSTEM)') && androidPreLoginTheme.includes('updateAppearanceMode(QeAppearanceMode.LIGHT)') && androidPreLoginTheme.includes('updateAppearanceMode(QeAppearanceMode.DARK)'), 'Android must expose all persisted theme choices before sign-in.');
+assert(androidApp.includes('PreLoginThemeControl()') && androidApp.includes('route == AppRoute.ACCOUNT_SIGNUP') && androidApp.includes('route == AppRoute.PARENT_SIGNUP') && androidApp.includes('route == AppRoute.PARENT_RESET'), 'Android theme preference must remain available across all signed-out account routes.');
+assert(androidLocalization.includes('UiPhrase("appearance_theme"') && androidLocalization.includes('UiPhrase("welcome_quality_learning"'), 'Android pre-login theme and broad learning copy must use the central phrase registry.');
+
 assert(androidStudentProfile.includes('ColorThemeSettingsCard(language = language)') && androidParentProfile.includes('ColorThemeSettingsCard(language = language)') && !androidAccountIdentity.includes('ColorThemeSettingsCard(language = language)'), 'Appearance controls must be discoverable in both student and parent profiles, not mixed into sign-in identity settings.');
 assert(androidTutor.includes('LocalQuantaEdgeSemanticColors.current.primaryText') && androidTutor.includes('color = if (selectedMode == mode.key) MaterialTheme.colorScheme.primary'), 'Android tutor text must use accessible semantic roles while selected mode surfaces retain the tenant primary fill.');
 assert(androidTutor.includes('MaterialTheme.colorScheme.primaryContainer') && !androidTutor.includes('primaryTextContainer'), 'Learner tutor bubbles must use the validated primary container role, not a nonexistent text/container role.');
 assert(androidWelcome.includes('LocalQuantaEdgeSemanticColors.current.primaryText') && androidWelcome.includes('MaterialTheme.colorScheme.onSurfaceVariant'), 'Android welcome labels must use contrast-safe text and neutral supporting roles.');
+assert(androidWelcome.includes('localizedUiText("Quality learning for school, skills and growth.")') && !androidWelcome.includes('Classes 6–8 · Bihar Board'), 'Android general welcome must not present the whole platform as Classes 6–8 only.');
+assert(publicLanding.includes('href="/login" className="text-link qe-public-sign-in"'), 'Public homepage must offer a direct sign-in link in addition to account creation.');
+assert(publicLanding.includes('public.nav.forFamilies'), 'Public homepage must retain clear audience navigation for school, family, and adult learners.');
+
 assert(androidCourseCatalog.includes('LocalQuantaEdgeSemanticColors.current.primaryText'), 'Android course progress labels must use contrast-safe text.');
 assert(androidProgress.includes('LocalQuantaEdgeSemanticColors.current.success') && androidProgress.includes('MaterialTheme.colorScheme.onSurfaceVariant'), 'Android progress and certificate labels must use semantic success and neutral roles.');
 assert(androidLifecycle.includes('LocalQuantaEdgeSemanticColors.current.success') && androidLifecycle.includes('MaterialTheme.colorScheme.onSurfaceVariant'), 'Android account lifecycle status and helper copy must use semantic roles.');

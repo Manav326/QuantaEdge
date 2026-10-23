@@ -4,11 +4,11 @@
 import { apiFetch } from '../components/apiClient';
 import Link from 'next/link';
 import { FormEvent, useState } from 'react';
-import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
 import GoogleSignInButton from '../components/GoogleSignInButton';
 import PasswordField from '../components/PasswordField';
-import { LanguageSwitcher, useLocale } from '../components/LanguageProvider';
+import { useLocale } from "../components/LanguageProvider";
 import { useTenantBranding } from '../components/TenantBrandingProvider';
+import PublicAuthFrame from "../components/PublicAuthFrame";
 
 type Method = 'mobile' | 'username';
 
@@ -116,9 +116,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="auth-page">
-      <div className="qe-language-auth-float"><LanguageSwitcher /></div>
-      <div className="auth-brand"><QuantaEdgeBrand variant="auth" /></div>
+    <PublicAuthFrame story="account">
       <section className="auth-card parent-auth-card" aria-labelledby="login-heading">
         <Link href="/" className="auth-back-link">{brand ? (english ? 'Back to ' + brand.displayName : brand.displayName + ' पर वापस जाएँ') : institutionContextRequested ? (english ? 'Back to learning space' : 'सीखने के स्थान पर वापस जाएँ') : (english ? 'Back to QuantaEdge' : 'QuantaEdge पर वापस जाएँ')}</Link>
         <span className="eyebrow">{english ? 'YOUR LEARNING SPACE' : 'आपकी सीखने की जगह'}</span>
@@ -181,6 +179,6 @@ export default function LoginPage() {
           ? 'Gmail is marked verified only after Google verifies the identity token. Mobile is marked verified only after a successful OTP.'
           : 'Google पहचान की पुष्टि के बाद ही Gmail और सफल OTP के बाद ही मोबाइल सत्यापित दिखेगा।'}</p>
       </section>
-    </main>
+    </PublicAuthFrame>
   );
 }

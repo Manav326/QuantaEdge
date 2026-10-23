@@ -5,10 +5,10 @@ import { apiFetch } from '../components/apiClient';
 import { FormEvent, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
 import GoogleSignInButton from '../components/GoogleSignInButton';
-import { LanguageSwitcher, useLocale } from '../components/LanguageProvider';
+import { useLocale } from "../components/LanguageProvider";
 import { useTenantBranding } from '../components/TenantBrandingProvider';
+import PublicAuthFrame from "../components/PublicAuthFrame";
 
 async function readJson(response: Response): Promise<any> {
   const body = await response.json().catch(() => ({}));
@@ -74,9 +74,7 @@ export default function SignupPage() {
   }
 
   return (
-    <main className="auth-page">
-      <div className="qe-language-auth-float"><LanguageSwitcher /></div>
-      <div className="auth-brand"><QuantaEdgeBrand variant="auth" /></div>
+    <PublicAuthFrame story="account">
       <section className="auth-card parent-auth-card" aria-labelledby="signup-heading">
         <Link href="/" className="auth-back-link">{brand ? (english ? 'Back to ' + brand.displayName : brand.displayName + ' पर वापस जाएँ') : institutionContextRequested ? (english ? 'Back to learning space' : 'सीखने के स्थान पर वापस जाएँ') : (english ? 'Back to QuantaEdge' : 'QuantaEdge पर वापस जाएँ')}</Link>
         <span className="eyebrow">{english ? 'YOUR LEARNING STARTS HERE' : 'आपकी सीखने की शुरुआत'}</span>
@@ -128,6 +126,6 @@ export default function SignupPage() {
           : 'साइन अप के बाद प्रोफ़ाइल में यूज़रनेम और पासवर्ड सेट करें। Google की पुष्टि के बाद ही Gmail और सफल OTP के बाद ही मोबाइल सत्यापित दिखेगा।'}</p>
         <div className="auth-mode-links"><span>{english ? 'Already have an account?' : 'पहले से खाता है?'}</span><Link href="/login">{english ? 'Sign in' : 'साइन इन करें'}</Link></div>
       </section>
-    </main>
+    </PublicAuthFrame>
   );
 }

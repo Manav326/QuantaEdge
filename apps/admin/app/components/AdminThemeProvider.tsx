@@ -1,6 +1,8 @@
 'use client';
 
 import { apiFetch } from './apiClient';
+import { AdminWorkspaceContext } from './AdminWorkspaceContext';
+import { translateUi } from '../i18n/catalog';
 import {
   createContext,
   useCallback,
@@ -334,16 +336,17 @@ export function useAdminTenantTheme() {
 
 export function AdminAppearanceModeButton() {
   const { brand, mode, setMode } = useAdminTenantTheme();
+  const { locale } = useContext(AdminWorkspaceContext);
   const nextMode: AdminAppearanceMode =
     mode === 'institution' ? 'system' : mode === 'system' ? 'dark' : mode === 'dark' ? 'light' : 'institution';
-  const defaultLabel = brand?.displayName || 'Institution default';
+  const defaultLabel = brand?.displayName || translateUi(locale, 'public.appearance.default');
   const modeName: Record<AdminAppearanceMode, string> = {
     institution: defaultLabel,
-    system: 'System',
-    dark: 'Dark',
-    light: 'Light',
+    system: translateUi(locale, 'public.appearance.system'),
+    dark: translateUi(locale, 'public.appearance.dark'),
+    light: translateUi(locale, 'public.appearance.light'),
   };
-  const currentLabel = mode === 'institution' ? defaultLabel + ' appearance' : modeName[mode] + ' appearance';
+  const currentLabel = translateUi(locale, 'public.appearance.label') + ': ' + modeName[mode];
   const icon = mode === 'institution' ? '⌂' : mode === 'system' ? '◐' : mode === 'dark' ? '☾' : '☀';
 
   return (
@@ -351,8 +354,8 @@ export function AdminAppearanceModeButton() {
       type="button"
       className="qe-appearance-toggle"
       onClick={() => setMode(nextMode)}
-      aria-label={currentLabel + '. Activate to switch to ' + modeName[nextMode] + ' appearance.'}
-      title={currentLabel + ' · next: ' + modeName[nextMode]}
+      aria-label={currentLabel + '. ' + modeName[nextMode]}
+      title={currentLabel + ' · ' + modeName[nextMode]}
       aria-live="polite"
     >
       <span aria-hidden="true">{icon}</span>
