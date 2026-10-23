@@ -318,6 +318,10 @@ def _is_passage_instruction(text: str) -> bool:
 def _question_is_allowed(cycle: str, identity: str, number: int, prefix: str) -> bool:
     if prefix in {"E", "H", "U", "B"}:
         return number <= 30
+    # TRE 3.0 marks language-track questions with E-/H- prefixes. Unprefixed
+    # 1–30 labels inside those passages can be answer fragments, not new questions.
+    if cycle == "TRE 3.0":
+        return number >= 31 and section_for_number(cycle, number) is not None
     return section_for_number(cycle, number) is not None
 
 
