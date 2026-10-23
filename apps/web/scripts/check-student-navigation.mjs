@@ -360,7 +360,7 @@ assert.ok(apiClient.includes('function currentPageWorkspace(): string | null') &
   apiClient.includes('headers.set(\'X-QE-Workspace\', workspace)') &&
   apiClient.includes('const workspace = currentPageWorkspace();'),
   'Central apiFetch must attach route-correct X-QE-Workspace before the session-refresh interceptor runs.');
-assert.ok(!/\\bfetch\\(/.test(learnClient) && (learnClient.match(/\\bapiFetch\\(/g) || []).length >= 15,
+assert.ok(!/\bfetch\(/.test(learnClient) && (learnClient.match(/\bapiFetch\(/g) || []).length >= 15,
   'Student lesson requests must use the centralized API client rather than bypassing tenant/workspace context.');
 
 const documentCatalogueGuard = learnClient.indexOf('if(loadingCourses||!subjectCode||selectedCourseId===null||selectedCourseId<=0){');
