@@ -35,6 +35,7 @@ export default function AccountDeletionPanel({ compact = false }: { compact?: bo
   const [otp, setOtp] = useState('');
   const [otpRequested, setOtpRequested] = useState(false);
   const [verificationId, setVerificationId] = useState('');
+  const [manualIdentityReview, setManualIdentityReview] = useState(false);
   const [confirmCancel, setConfirmCancel] = useState(false);
   const [busy, setBusy] = useState('');
   const [error, setError] = useState('');
@@ -157,7 +158,7 @@ export default function AccountDeletionPanel({ compact = false }: { compact?: bo
       setError(t('accountDeletion.confirmationMismatch'));
       return;
     }
-    if (!verificationId) {
+    if (!verificationId && !manualIdentityReview) {
       setError(t('accountDeletion.verifyIdentityFirst'));
       return;
     }
@@ -170,7 +171,8 @@ export default function AccountDeletionPanel({ compact = false }: { compact?: bo
         body: JSON.stringify({
           confirmation: confirmation.trim(),
           includeLinkedChildren: includeChildren,
-          verificationId,
+          ...(verificationId ? { verificationId } : {}),
+          manualIdentityReview,
           source: 'WEB',
         }),
       });
@@ -197,8 +199,11 @@ export default function AccountDeletionPanel({ compact = false }: { compact?: bo
       setChildrenConfirmationRequired(false);
       setConfirmation('');
       setVerificationId('');
+      setManualIdentityReview(false);
       setOtpRequested(false);
-      setNotice(t('accountDeletion.requestAccepted'));
+      setNotice(body.identityVerificationMethod === 'MANUAL_REVIEW_REQUIRED'
+        ? t('accountDeletion.manualReviewNotice')
+        : t('accountDeletion.requestAccepted'));
     } catch (e) {
       setError(e instanceof Error ? e.message : t('accountDeletion.error'));
     } finally {
@@ -218,6 +223,7 @@ export default function AccountDeletionPanel({ compact = false }: { compact?: bo
       if (!response.ok) throw new Error(body.message || body.detail || body.error || t('accountDeletion.error'));
       setConfirmCancel(false);
       setVerificationId('');
+      setManualIdentityReview(false);
       setOtpRequested(false);
       setNotice(t('accountDeletion.cancelledNotice'));
       await load();
@@ -331,8 +337,20 @@ export default function AccountDeletionPanel({ compact = false }: { compact?: bo
               {!mobileVerified && !gmailVerified && (
                 <p className="qe-account-deletion__retention">{t('accountDeletion.noVerifiedMethod')}</p>
               )}
-              {verificationId && (
+              {verificationId && !manualIdentityReview && (
                 <p className="qe-account-deletion__notice" role="status">{t('accountDeletion.identityVerified')}</p>
+              )}
+              <label className="qe-account-deletion__checkbox">
+                <input type="checkbox" checked={manualIdentityReview}
+                  onChange={event => {
+                    const checked = event.target.checked;
+                    setManualIdentityReview(checked);
+                    if (checked) setVerificationId('');
+                  }} disabled={busy !== ''} />
+                <span>{t('accountDeletion.manualReviewLabel')}</span>
+              </label>
+              {manualIdentityReview && (
+                <p className="qe-account-deletion__retention" role="status">{t('accountDeletion.manualReviewNotice')}</p>
               )}
             </section>
           )}
@@ -357,7 +375,7 @@ export default function AccountDeletionPanel({ compact = false }: { compact?: bo
                   placeholder={t('accountDeletion.confirmInput')} autoComplete="off" required />
               </label>
               <button type="submit" className="button button-danger button-small"
-                disabled={busy !== '' || !verificationId || confirmation.trim() !== 'DELETE' || (childrenConfirmationRequired && childrenCount > 0 && !includeChildren)}>
+                disabled={busy !== '' || (!verificationId && !manualIdentityReview) || confirmation.trim() !== 'DELETE' || (childrenConfirmationRequired && childrenCount > 0 && !includeChildren)}>
                 {busy === 'submit' ? t('accountDeletion.requesting') : t('accountDeletion.submitButton')}
               </button>
             </form>
