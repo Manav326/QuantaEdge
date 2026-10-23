@@ -37,5 +37,5 @@ COMMENT ON COLUMN institution_staff_binding.reason IS
   'Reason for assignment or reassignment; never a substitute for permission checks.';
 
 INSERT INTO app_metadata(key,value)
-VALUES ('schema','hrms-managed-institution-staff-binding-v171')
+VALUES ('schema','hrms-managed-institution-staff-binding-v174')
 ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value;
