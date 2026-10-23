@@ -149,6 +149,9 @@ def validate_package(package: Any, repo_root: Path | None = None,
     unanswered = config.get("unanswered_mark")
     if not isinstance(unanswered, (int, float)) or isinstance(unanswered, bool) or unanswered < 0:
         errors.append("configuration.unanswered_mark must be non-negative.")
+    max_attempts = config.get("max_attempts", 1)
+    if not isinstance(max_attempts, int) or isinstance(max_attempts, bool) or not 1 <= max_attempts <= 10:
+        errors.append("configuration.max_attempts must be an integer from 1 to 10 when provided.")
 
     editorial = package.get("editorial")
     if not isinstance(editorial, dict) or editorial.get("status") != "DRAFT" or editorial.get("student_delivery_allowed") is not False:
@@ -324,6 +327,40 @@ def validate_package(package: Any, repo_root: Path | None = None,
                     errors.append(f"{where}.option[{option.get('key', '?')}].text_i18n must contain only native source language {native_language!r}; do not translate qualifying-language options.")
         if len(set(option_keys)) != len(option_keys):
             errors.append(f"{where}.options keys must be unique.")
+
+        answer_payload = q.get("answer_payload")
+        if answer_payload is not None:
+            if not isinstance(answer_payload, dict):
+                errors.append(f"{where}.answer_payload must be an object when supplied.")
+            else:
+                answer_kind = answer_payload.get("kind")
+                answer_value = answer_payload.get("value")
+                if answer_kind not in {"OPTION", "MULTI_OPTION", "TEXT", "NUMERIC", "ORDER", "MATCH"}:
+                    errors.append(f"{where}.answer_payload.kind is not supported.")
+                if answer_value is None or answer_value == "":
+                    errors.append(f"{where}.answer_payload.value must be set when answer_payload is supplied.")
+                if answer_kind == "OPTION":
+                    if not isinstance(answer_value, str) or answer_value not in option_keys:
+                        errors.append(f"{where}.answer_payload.value must identify one of the option keys for OPTION answers.")
+                elif answer_kind == "MULTI_OPTION":
+                    if not isinstance(answer_value, list) or not answer_value or any(not isinstance(v, str) or v not in option_keys for v in answer_value):
+                        errors.append(f"{where}.answer_payload.value must be a non-empty array of existing option keys for MULTI_OPTION answers.")
+                elif answer_kind == "NUMERIC":
+                    try:
+                        float_value = float(answer_value)
+                        if not __import__("math").isfinite(float_value):
+                            raise ValueError("non-finite numeric answer")
+                    except (TypeError, ValueError):
+                        errors.append(f"{where}.answer_payload.value must be numeric for NUMERIC answers.")
+                    tolerance = answer_payload.get("tolerance", 0)
+                    if not isinstance(tolerance, (int, float)) or isinstance(tolerance, bool) or tolerance < 0:
+                        errors.append(f"{where}.answer_payload.tolerance must be non-negative.")
+                elif answer_kind == "TEXT" and not isinstance(answer_value, str):
+                    errors.append(f"{where}.answer_payload.value must be text for TEXT answers.")
+                elif answer_kind == "ORDER" and (not isinstance(answer_value, list) or not answer_value):
+                    errors.append(f"{where}.answer_payload.value must be a non-empty array for ORDER answers.")
+                elif answer_kind == "MATCH" and not isinstance(answer_value, (dict, list)):
+                    errors.append(f"{where}.answer_payload.value must be an object or array for MATCH answers.")
 
         proposed = q.get("proposed_answer")
         if not isinstance(proposed, dict):
