@@ -77,5 +77,5 @@ COMMENT ON CONSTRAINT ck_marketplace_published_by_hrms ON institution_marketplac
   'New/changed PUBLISHED offers require recorded HRMS approval and publication; historical rows are revalidated as they are changed.';
 
 INSERT INTO app_metadata(key,value)
-VALUES ('schema','course-hrms-publication-authority-v170')
+VALUES ('schema','course-hrms-publication-authority-v173')
 ON CONFLICT(key) DO UPDATE SET value = EXCLUDED.value;
