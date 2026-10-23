@@ -36,7 +36,7 @@ async function contextPage(browser: Browser, storageState: string, url: string) 
   return { context, page };
 }
 
-test('[FAM-003][TEN-002] parent and child API sessions cannot cross guardian boundaries', async ({ browser }) => {
+test('[FAM-003][FAM-005][CERT-003][TEN-002] parent and child API sessions cannot cross guardian boundaries', async ({ browser }) => {
   const fixture = await readPrivateJson<QaFixture>('qa-fixture.json');
   const parentA = await contextPage(browser, join(privateDir(), 'parent-a.json'), WEB + '/parent');
   const parentB = await contextPage(browser, join(privateDir(), 'parent-b.json'), WEB + '/parent');
@@ -74,6 +74,60 @@ test('[FAM-003][TEN-002] parent and child API sessions cannot cross guardian bou
     expect(childAId).toBeGreaterThan(0);
     expect(childBId).toBeGreaterThan(0);
     expect(childAId).not.toBe(childBId);
+
+    // Positive guardian reporting and certificate-list access must be tied to the exact
+    // consented child and an enrolled course in the same selected institution.
+    const reportA = await api(
+      parentA.page,
+      '/api/v1/guardians/children/' + encodeURIComponent(String(childAId)) + '/report',
+      undefined,
+      fixture.credentials.parentA.institutionCode
+    );
+    expect(reportA.status, 'A parent may read the report for their own consented child.').toBe(200);
+    expect(Number(reportA.body.id)).toBe(childAId);
+    const reportCourseId = Number(reportA.body.courseId || reportA.body.course_id);
+    expect(reportCourseId).toBeGreaterThan(0);
+    expect(Array.isArray(reportA.body.availableCourses)).toBe(true);
+    expect(reportA.body.availableCourses).toHaveLength(1);
+    expect(reportA.body.availableCourses[0].course_code).toBe('CLASS_7');
+    expect(reportA.body.lessonStats).toBeTruthy();
+    expect(Number(reportA.body.lessonStats.completed_lessons)).toBeLessThanOrEqual(
+      Number(reportA.body.lessonStats.total_lessons)
+    );
+    expect(reportA.body.questionStats).toBeTruthy();
+    expect(Number(reportA.body.questionStats.correct)).toBeLessThanOrEqual(
+      Number(reportA.body.questionStats.attempts)
+    );
+
+    const certificatesA = await api(
+      parentA.page,
+      '/api/v1/guardians/children/' + encodeURIComponent(String(childAId)) +
+        '/certificates?courseId=' + encodeURIComponent(String(reportCourseId)),
+      undefined,
+      fixture.credentials.parentA.institutionCode
+    );
+    expect(certificatesA.status, 'A parent may read the own child certificate list for the selected enrolled course.').toBe(200);
+    expect(Number(certificatesA.body.studentId)).toBe(childAId);
+    expect(Number(certificatesA.body.courseId)).toBe(reportCourseId);
+    expect(Array.isArray(certificatesA.body.items)).toBe(true);
+
+    // Another parent cannot obtain a report or certificate list by guessing this child's ID,
+    // even when their own institution has an active learner with a matching course class.
+    const crossGuardianReport = await api(
+      parentB.page,
+      '/api/v1/guardians/children/' + encodeURIComponent(String(childAId)) + '/report',
+      undefined,
+      fixture.credentials.parentB.institutionCode
+    );
+    expect([401, 403, 404]).toContain(crossGuardianReport.status);
+    const crossGuardianCertificates = await api(
+      parentB.page,
+      '/api/v1/guardians/children/' + encodeURIComponent(String(childAId)) +
+        '/certificates?courseId=' + encodeURIComponent(String(reportCourseId)),
+      undefined,
+      fixture.credentials.parentB.institutionCode
+    );
+    expect([401, 403, 404]).toContain(crossGuardianCertificates.status);
 
     // A cannot access B's child through an ID substitution; 404 is acceptable to
     // avoid confirming the existence of another institution's private record.
