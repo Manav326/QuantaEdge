@@ -484,6 +484,21 @@ private val uiPhraseBySource: Map<String, UiPhrase> = buildMap {
     }
 }
 
+internal fun localizedUiTextForLanguage(source: String, language: String): String {
+    val phrase = uiPhraseBySource[source] ?: uiPhrases
+        .filter { it.hindi.endsWith(" ") || it.english.endsWith(" ") }
+        .sortedByDescending { maxOf(it.hindi.length, it.english.length) }
+        .firstOrNull { source.startsWith(it.hindi) || source.startsWith(it.english) }
+    if (phrase == null) return source
+    val exact = source == phrase.hindi || source == phrase.english
+    val suffix = if (exact) "" else when {
+        source.startsWith(phrase.hindi) -> source.removePrefix(phrase.hindi)
+        source.startsWith(phrase.english) -> source.removePrefix(phrase.english)
+        else -> ""
+    }
+    return (if (language == "hi") phrase.hindi else phrase.english) + suffix
+}
+
 /** Select a translated resource using the locale chosen inside the app, independently of Android device locale. */
 @Composable
 internal fun localizedUiText(source: String): String {
