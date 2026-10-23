@@ -65,8 +65,10 @@ public class LearningResourceController {
   public Map<String,Object> adminResources(
       @RequestParam(required=false) String status,@RequestParam(required=false) String resourceType,
       @RequestParam(defaultValue="50") Integer limit,@RequestParam(defaultValue="0") Integer offset,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     requireContentView(context);
+    long institutionId=requireInstitution(tenant);
     String statusFilter=normalizeFilter(status,RESOURCE_STATUSES),typeFilter=normalizeFilter(resourceType,RESOURCE_TYPES);
     int rowLimit=Math.max(1,Math.min(limit==null?50:limit,100)),rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     List<Map<String,Object>> items=jdbc.queryForList("""
@@ -78,11 +80,33 @@ public class LearningResourceController {
         (select count(*) from learning_resource_assignment a where a.resource_id=r.id and a.status<>'ARCHIVED') as assignment_count
       from learning_resource r left join recorded_class rc on rc.id=r.recorded_class_id
       left join learning_document ld on ld.id=r.learning_document_id left join content_asset ca on ca.id=r.content_asset_id
-      where (?='' or r.status=?) and (?='' or r.resource_type=?)
+      where (r.owner_institution_id=? or exists(
+          select 1 from learning_resource_assignment a
+          join curriculum_chapter ch on ch.id=a.chapter_id
+          join curriculum_subject s on s.id=ch.subject_id
+          join curriculum_program_subject ps on ps.subject_id=s.id and ps.class_id=s.class_id
+          join institution_course_release rel on rel.program_id=ps.program_id
+          join institution_course_assignment ca on ca.course_release_id=rel.id
+            and ca.institution_id=? and ca.status='ASSIGNED'
+          where a.resource_id=r.id and a.status<>'ARCHIVED'
+        ))
+        and (?='' or r.status=?) and (?='' or r.resource_type=?)
       order by r.created_at desc,r.id desc limit ? offset ?
-      """,statusFilter,statusFilter,typeFilter,typeFilter,rowLimit,rowOffset);
-    Long total=jdbc.queryForObject("select count(*) from learning_resource r where (?='' or r.status=?) and (?='' or r.resource_type=?)",
-        Long.class,statusFilter,statusFilter,typeFilter,typeFilter);
+      """,institutionId,institutionId,statusFilter,statusFilter,typeFilter,typeFilter,rowLimit,rowOffset);
+    Long total=jdbc.queryForObject("""
+      select count(*) from learning_resource r
+      where (r.owner_institution_id=? or exists(
+          select 1 from learning_resource_assignment a
+          join curriculum_chapter ch on ch.id=a.chapter_id
+          join curriculum_subject s on s.id=ch.subject_id
+          join curriculum_program_subject ps on ps.subject_id=s.id and ps.class_id=s.class_id
+          join institution_course_release rel on rel.program_id=ps.program_id
+          join institution_course_assignment ca on ca.course_release_id=rel.id
+            and ca.institution_id=? and ca.status='ASSIGNED'
+          where a.resource_id=r.id and a.status<>'ARCHIVED'
+        ))
+        and (?='' or r.status=?) and (?='' or r.resource_type=?)
+      """,Long.class,institutionId,institutionId,statusFilter,statusFilter,typeFilter,typeFilter);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
@@ -92,6 +116,7 @@ public class LearningResourceController {
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=authorization.requirePermission(context,"CONTENT_EDIT");
+    long institutionId=requireInstitution(tenant);
     String title=requiredText(body.get("title"),"Resource title",240);
     String description=optionalText(body.get("description"),1600);
     String resourceType=requiredEnum(body.get("resourceType"),"Resource type",RESOURCE_TYPES);
@@ -108,8 +133,10 @@ public class LearningResourceController {
     switch(sourceKind) {
       case "RECORDED_CLASS" -> {
         recordedClassId=positiveLong(body.get("recordedClassId"),"Recorded class");
-        List<Map<String,Object>> rows=jdbc.queryForList("select id,title from recorded_class where id=?",recordedClassId);
+        List<Map<String,Object>> rows=jdbc.queryForList("select id,title,institution_id from recorded_class where id=?",recordedClassId);
         if(rows.isEmpty())throw notFound("Recorded class",recordedClassId);
+        if(((Number)rows.getFirst().get("institution_id")).longValue()!=institutionId)
+          throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Recorded-class resources can only be catalogued by their owning institution.");
         if(!"VIDEO".equals(resourceType))throw badRequest("An existing recorded class must be catalogued as VIDEO.");
         if(sourceReference==null)sourceReference="recorded_class:"+recordedClassId;
       }
@@ -119,8 +146,8 @@ public class LearningResourceController {
         if(rows.isEmpty())throw notFound("Learning document",learningDocumentId);
         if(!"PDF".equals(resourceType))throw badRequest("An existing textbook document must be catalogued as PDF.");
         long courseId=positiveLong(body.get("courseId"),"Course");
-        long institutionId=requireInstitution(tenant);
         requireAdminAssignedCourse(courseId,tenant);
+        requireEditableCourse(courseId,tenant);
         requireCourseDocumentAssignment(learningDocumentId,institutionId,courseId);
         if(body.get("language")==null)language=normalizeLanguage(rows.getFirst().get("language"));
         if(sourceReference==null)sourceReference="learning_document:"+learningDocumentId;
@@ -143,10 +170,11 @@ public class LearningResourceController {
     }
     Long id=jdbc.queryForObject("""
       insert into learning_resource(resource_type,title,description,language,source_kind,recorded_class_id,
-        learning_document_id,content_asset_id,external_url,source_reference,download_allowed,status,version_no,created_by_staff_id)
-      values(?,?,?,?,?,?,?,?,?,?,?,'DRAFT',1,?) returning id
+        learning_document_id,content_asset_id,external_url,source_reference,download_allowed,status,version_no,
+        created_by_staff_id,owner_institution_id)
+      values(?,?,?,?,?,?,?,?,?,?,?,'DRAFT',1,?,?) returning id
       """,(rs,rowNum)->rs.getLong(1),resourceType,title,description,language,sourceKind,
-      recordedClassId,learningDocumentId,contentAssetId,externalUrl,sourceReference,downloadAllowed,context.staffId());
+      recordedClassId,learningDocumentId,contentAssetId,externalUrl,sourceReference,downloadAllowed,context.staffId(),institutionId);
     staffAudit.recordAction(context,"/api/v1/admin/learning-resources/"+id+"/created",
         "Created resource #"+id+" ("+resourceType+", source="+sourceKind+").");
     return adminResourceById(id);
@@ -160,8 +188,10 @@ public class LearningResourceController {
       @RequestParam(value="language",defaultValue="mul") String language,
       @RequestParam(value="downloadAllowed",defaultValue="false") boolean downloadAllowed,
       @RequestParam(value="supersedesResourceId",required=false) Long supersedesResourceId,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=authorization.requirePermission(context,"CONTENT_EDIT");
+    long institutionId=requireInstitution(tenant);
     if(downloadAllowed)context=authorization.requirePermission(context,"CONTENT_PUBLISH");
     String title=requiredText(suppliedTitle,"Resource title",240);
     String kind=requiredEnum(suppliedType,"Resource type",Set.of("VIDEO","PDF","WORKSHEET","SLIDES","AUDIO","IMAGE","OTHER"));
@@ -171,6 +201,7 @@ public class LearningResourceController {
       if(supersedesResourceId<=0)throw badRequest("Replacement resource ID must be positive.");
       List<Map<String,Object>> old=jdbc.queryForList("select id,resource_type,version_no from learning_resource where id=?",supersedesResourceId);
       if(old.isEmpty())throw notFound("Resource to replace",supersedesResourceId);
+      requireOwnedResource(supersedesResourceId,institutionId);
       if(!kind.equals(String.valueOf(old.getFirst().get("resource_type"))))throw badRequest("A replacement resource must keep the same resource type.");
       versionNo=((Number)old.getFirst().get("version_no")).intValue()+1;
     }
@@ -178,11 +209,11 @@ public class LearningResourceController {
     try {
       Long id=jdbc.queryForObject("""
         insert into learning_resource(resource_type,title,description,language,source_kind,storage_key,original_filename,
-          media_type,file_size_bytes,sha256,download_allowed,status,version_no,supersedes_resource_id,created_by_staff_id)
-        values(?,?,?,?, 'PRIVATE_UPLOAD',?,?,?,?,?,?,'DRAFT',?,?,?) returning id
+          media_type,file_size_bytes,sha256,download_allowed,status,version_no,supersedes_resource_id,created_by_staff_id,owner_institution_id)
+        values(?,?,?,?, 'PRIVATE_UPLOAD',?,?,?,?,?,?,'DRAFT',?,?,?,?) returning id
         """,(rs,rowNum)->rs.getLong(1),kind,title,optionalText(description,1600),normalizedLanguage,
         stored.storageKey(),stored.originalFilename(),stored.mediaType(),stored.sizeBytes(),stored.sha256(),
-        downloadAllowed,versionNo,supersedesResourceId,context.staffId());
+        downloadAllowed,versionNo,supersedesResourceId,context.staffId(),institutionId);
       staffAudit.recordAction(context,"/api/v1/admin/learning-resources/"+id+"/uploaded",
           "Uploaded private resource #"+id+" ("+kind+", "+stored.sizeBytes()+" bytes, SHA-256 "+stored.sha256()+").");
       return adminResourceById(id);
@@ -200,6 +231,8 @@ public class LearningResourceController {
     context=authorization.requireAuth(context);
     long institutionId=requireInstitution(tenant);
     requireAdminAssignedCourse(courseId,tenant);
+    requireEditableCourse(courseId,tenant);
+    requireOwnedResource(resourceId,institutionId);
     String next=requiredEnum(body.get("status"),"Resource status",RESOURCE_STATUSES);
     if(Set.of("PUBLISHED","ARCHIVED").contains(next))authorization.requirePermission(context,"CONTENT_PUBLISH");
     else authorization.requirePermission(context,"CONTENT_EDIT");
@@ -219,8 +252,10 @@ public class LearningResourceController {
   @PutMapping("/admin/learning-resources/{resourceId}/download-policy")
   @Transactional
   public Map<String,Object> setDownloadPolicy(@PathVariable long resourceId,@RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=authorization.requireAuth(context);
+    requireOwnedResource(resourceId,requireInstitution(tenant));
     boolean allow=booleanValue(body.get("downloadAllowed"),false);
     if(allow)authorization.requirePermission(context,"CONTENT_PUBLISH");
     else authorization.requirePermission(context,"CONTENT_EDIT");
@@ -304,6 +339,30 @@ public class LearningResourceController {
         "The selected chapter is not mapped to this course.");
   }
 
+  private void requireEditableCourse(Long courseId,InstitutionTenantContext tenant) {
+    requireAdminAssignedCourse(courseId,tenant);
+    Boolean sourceOwned=jdbc.queryForObject("""
+      select exists(
+        select 1 from institution_course_release release
+        join institution_course_assignment assignment
+          on assignment.course_release_id=release.id
+         and assignment.institution_id=? and assignment.status='ASSIGNED'
+        where release.program_id=?
+          and release.source_institution_id=assignment.institution_id
+      )
+      """,Boolean.class,tenant.institutionId(),courseId);
+    if(!Boolean.TRUE.equals(sourceOwned))throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+        "Only the source institution may edit course resources. Resources attached to shared courses are read-only here.");
+  }
+
+  private void requireOwnedResource(long resourceId,long institutionId) {
+    Boolean owned=jdbc.queryForObject("""
+      select exists(select 1 from learning_resource where id=? and owner_institution_id=?)
+      """,Boolean.class,resourceId,institutionId);
+    if(!Boolean.TRUE.equals(owned))throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+        "This resource is not owned by the current institution. Legacy or shared resources are read-only here.");
+  }
+
   private void requireAdminAssignedCourse(Long courseId,InstitutionTenantContext tenant) {
     if(courseId==null||courseId<1L)throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Select an active course.");
     if(tenant==null||tenant.institutionId()<1L)throw new ResponseStatusException(HttpStatus.FORBIDDEN,"An active institution context is required.");
@@ -358,7 +417,9 @@ public class LearningResourceController {
     long courseId=positiveLong(body.get("courseId"),"Course");
     long institutionId=requireInstitution(tenant);
     requireAdminAssignedCourse(courseId,tenant);
+    requireEditableCourse(courseId,tenant);
     long resourceId=positiveLong(body.get("resourceId"),"Resource");
+    requireOwnedResource(resourceId,institutionId);
     String targetKind=requiredEnum(body.get("targetKind"),"Target kind",TARGET_KINDS);
     int sortOrder=integerValue(body.getOrDefault("sortOrder",0),"Sort order",0,1_000_000);
     Map<String,Object> resource=resourceRow(resourceId);
@@ -425,11 +486,13 @@ public class LearningResourceController {
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=authorization.requireAuth(context);
     requireAdminAssignedCourse(courseId,tenant);
+    requireEditableCourse(courseId,tenant);
     String next=requiredEnum(body.get("status"),"Assignment status",ASSIGNMENT_STATUSES);
     if(Set.of("PUBLISHED","ARCHIVED").contains(next))authorization.requirePermission(context,"CONTENT_PUBLISH");
     else authorization.requirePermission(context,"CONTENT_EDIT");
     Map<String,Object> row=assignmentRow(assignmentId);
     requireChapterMappedToCourse(((Number)row.get("chapter_id")).longValue(),courseId);
+    requireOwnedResource(((Number)row.get("resource_id")).longValue(),requireInstitution(tenant));
     String previous=String.valueOf(row.get("status"));
     if("PUBLISHED".equals(next)) {
       Map<String,Object> resource=resourceRow(((Number)row.get("resource_id")).longValue());
@@ -453,9 +516,11 @@ public class LearningResourceController {
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=authorization.requirePermission(context,"CONTENT_EDIT");
     requireAdminAssignedCourse(courseId,tenant);
+    requireEditableCourse(courseId,tenant);
     int order=integerValue(body.get("sortOrder"),"Sort order",0,1_000_000);
     Map<String,Object> row=assignmentRow(assignmentId);
     requireChapterMappedToCourse(((Number)row.get("chapter_id")).longValue(),courseId);
+    requireOwnedResource(((Number)row.get("resource_id")).longValue(),requireInstitution(tenant));
     if("ARCHIVED".equals(String.valueOf(row.get("status"))))throw conflict("Archived assignments cannot be reordered.");
     jdbc.update("update learning_resource_assignment set sort_order=?,updated_at=now() where id=?",order,assignmentId);
     staffAudit.recordAction(context,"/api/v1/admin/learning-resource-assignments/"+assignmentId+"/order","Changed resource assignment order to "+order+".");
