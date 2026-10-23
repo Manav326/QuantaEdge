@@ -263,7 +263,7 @@ test('[AUTH-006][AUTH-007] logout revokes the current parent session and protect
   }
 });
 
-test('[CAT-001][CAT-002][TEN-002][TEN-003] learner course lists and subjects follow explicit institution assignment', async ({ browser }) => {
+test('[CAT-001][CAT-002][TEN-002][TEN-003][CNT-002][LRN-001] learner course lists and subjects follow explicit institution assignment', async ({ browser }) => {
   const fixture = await readPrivateJson<QaFixture>('qa-fixture.json');
   const childA = await contextPage(browser, join(privateDir(), 'child-a.json'), WEB + '/student');
   const childB = await contextPage(browser, join(privateDir(), 'child-b.json'), WEB + '/student');
