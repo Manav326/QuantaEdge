@@ -794,6 +794,11 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                     entry["stimulus_source_languages"] = stimulus_languages
                     entry["stimulus_content_kind"] = classify_content(next(iter(stimulus_i18n.values())))
                     entry["native_language_only"] = native_language_only
+                    if entry["stimulus_id"]:
+                        # One-to-many relationship within the existing assessment question model:
+                        # all child questions retain their own source number, marks and response ID.
+                        entry["question_set_id"] = entry["stimulus_id"]
+                        entry["question_set_type"] = "PASSAGE"
                 elif entry["section_code"] == "LANGUAGE_QUALIFYING":
                     entry["native_language_only"] = True
                     entry["content_language_policy"] = "NATIVE_SOURCE_ONLY"

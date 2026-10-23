@@ -289,7 +289,19 @@
           "question_type": {
             "enum": [
               "MCQ",
-              "TRUE_FALSE"
+              "TRUE_FALSE",
+              "INFERENCE",
+              "INPUT",
+              "NUMERICAL",
+              "SHORT_ANSWER",
+              "LONG_ANSWER",
+              "CASE_BASED",
+              "SOURCE_BASED",
+              "DIAGRAM",
+              "MAP",
+              "ASSERTION_REASON",
+              "MATCH",
+              "ORDER"
             ]
           },
           "prompt": {
@@ -639,6 +651,29 @@
               "NATIVE_SOURCE_ONLY",
               "BILINGUAL_SOURCE_VARIANTS"
             ]
+          },
+          "incorrect_marks": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": -1000,
+            "maximum": 0,
+            "description": "Per-question marks awarded for an incorrect response. When absent, the attempt's configured negative_marking_fraction applies; never invent a source-paper penalty."
+          },
+          "question_set_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-z0-9][a-z0-9._-]{2,119}$",
+            "description": "One-to-many group ID. Must match the shared stimulus_id and repeat on each question in the set."
+          },
+          "question_set_type": {
+            "enum": [
+              "PASSAGE"
+            ],
+            "description": "Defines the reusable question-set component type. PASSAGE shows one shared stimulus followed by independently answerable questions."
           }
         }
       }
