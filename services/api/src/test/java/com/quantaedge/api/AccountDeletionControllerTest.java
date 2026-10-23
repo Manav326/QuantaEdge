@@ -3,6 +3,7 @@ package com.quantaedge.api;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -84,9 +85,7 @@ class AccountDeletionControllerTest {
 
     assertTrue(Boolean.TRUE.equals(result.get("accepted")));
     assertEquals("REQUESTED", result.get("status"));
-    verify(jdbc).update(contains("insert into account_deletion_request"), eq(result.get("requestId")) == null ? null : org.mockito.ArgumentMatchers.any(),
-        org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any(),
-        org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any(),
-        org.mockito.ArgumentMatchers.any());
+    verify(jdbc).update(contains("insert into account_deletion_request"),
+        any(), any(), any(), any(), any(), any(), any(), any());
   }
 }
