@@ -320,6 +320,13 @@ def build_paper_plan(cycle: str, record: dict[str, Any], register: dict[str, Any
         "source_url": url,
         "source_file_path": pdf_path,
         "source_file_sha256": source_hash,
+        "configuration": {
+            "duration_minutes": int(record.get("exam_configuration", {}).get("duration_minutes") or 120),
+            "marks_per_question": float(record.get("exam_configuration", {}).get("marks_per_question") or 1),
+            "negative_marking_fraction": float(record.get("exam_configuration", {}).get("negative_marking_fraction") or 0),
+            "scored_sections": record.get("exam_configuration", {}).get("scored_sections", {}),
+            "section_counts": record.get("extraction_summary", {}).get("section_counts", {}),
+        },
         "question_count": len(snapshots),
         "questions": snapshots,
     }
