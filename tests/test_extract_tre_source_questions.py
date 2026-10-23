@@ -3,15 +3,29 @@ from __future__ import annotations
 import unittest
 
 from scripts.extract_tre_source_questions import (
+    PAPERS,
     classify_content,
     detected_code_line_indices,
     detected_math_line_indices,
+    expected_language_keys,
     parse_prompt_options,
     preserve_layout,
 )
 
 
 class TreSourceCodePreservationTests(unittest.TestCase):
+    def test_tre3_source_uses_its_actual_148_question_count(self):
+        self.assertEqual(PAPERS["TRE 3.0"]["total_questions"], 148)
+        language_keys = expected_language_keys("TRE 3.0")
+        self.assertEqual(len(language_keys), 28)
+        self.assertEqual(
+            language_keys,
+            {f"E-{i}" for i in (2, 3, 4, 5, 7, 8)} | {f"H-{i}" for i in range(9, 31)},
+        )
+        self.assertNotIn("E-1", language_keys)
+        self.assertNotIn("E-6", language_keys)
+        self.assertEqual(40 + 80 + len(language_keys), 148)
+
     def test_preserve_layout_keeps_indentation_and_blank_lines(self):
         original = 'for (i = 0; i < 3; i++) {\n    printf("%d", i);\n}\n'
         self.assertEqual(
