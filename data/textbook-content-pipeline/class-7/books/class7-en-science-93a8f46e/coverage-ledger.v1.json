@@ -29,12 +29,12 @@
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
     "raw_analysis_result_rows": 2275,
-    "successful_visual_analyses": 2178,
+    "successful_visual_analyses": 2179,
     "missing_visual_analyses": 5213,
-    "failed_visual_analyses": 97,
+    "failed_visual_analyses": 96,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5310,
+    "unresolved_count": 5309,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -60277,9 +60277,28 @@
       "asset_path": "assets/a375856982a99bbf3e921af65adbd8fc28e5348a13edf12bffdffacf3249494a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An electric cell holder with two wires attached, showing the negative terminal of the cell.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 3.7: (a) An electric cell holder with two wires attached (b) An electric cell inside the cell holder (c) Wires connected to an electric cell using electrical tape",
+          "Insert the cell in the holder such that its negative terminal is towards the spring side of the holder (Fig. 3.7b). In case a cell holder is not available, use a piece of electrical tape to connect the wires to the cell."
+        ],
+        "concepts": [
+          "Electric cell",
+          "Negative terminal",
+          "Cell holder",
+          "Wires",
+          "Electrical tape"
+        ],
+        "context_relation": "The image is a diagram illustrating the setup of an electric cell holder with wires attached to it, emphasizing the negative terminal and the method of connecting the wires to the cell.",
+        "limitations": [
+          "The image does not show the actual setup of the electric cell holder or the cell inside it.",
+          "The image does not provide information on the specific type of electric cell or the exact method of connecting the wires to the cell."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

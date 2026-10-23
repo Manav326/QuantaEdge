@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "07ec150c30f3a88e1f12fb69142c93bcf3d8d1d49cdba43d6d70d74d8ae4d207",
+  "raw_analysis_sha256": "b1f1791825135dd49498433f8496c17eb2ac4472daf6367f45e974d63c724527",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -71458,9 +71458,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "39909517517",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -78104,7 +78104,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "39909517517",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -78152,21 +78152,61 @@
     {
       "asset_id": "7d46dd6bccc2b9e83e2aa3f0",
       "asset_sha256": "a375856982a99bbf3e921af65adbd8fc28e5348a13edf12bffdffacf3249494a",
-      "page_text_context_sha256": "bf91848654fc480a58ce8de42886315b17b7982bc94ef215a5b7b38008ad358d",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 48,
       "asset_path": "assets/a375856982a99bbf3e921af65adbd8fc28e5348a13edf12bffdffacf3249494a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bf91848654fc480a58ce8de42886315b17b7982bc94ef215a5b7b38008ad358d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An electric cell holder with two wires attached, showing the negative terminal of the cell.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 3.7: (a) An electric cell holder with two wires attached (b) An electric cell inside the cell holder (c) Wires connected to an electric cell using electrical tape",
+          "Insert the cell in the holder such that its negative terminal is towards the spring side of the holder (Fig. 3.7b). In case a cell holder is not available, use a piece of electrical tape to connect the wires to the cell."
+        ],
+        "concepts": [
+          "Electric cell",
+          "Negative terminal",
+          "Cell holder",
+          "Wires",
+          "Electrical tape"
+        ],
+        "context_relation": "The image is a diagram illustrating the setup of an electric cell holder with wires attached to it, emphasizing the negative terminal and the method of connecting the wires to the cell.",
+        "limitations": [
+          "The image does not show the actual setup of the electric cell holder or the cell inside it.",
+          "The image does not provide information on the specific type of electric cell or the exact method of connecting the wires to the cell."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39909517517",
+      "checkpointed_at": "2026-10-23T07:08:15Z",
+      "effective_analysis": {
+        "visual_summary": "An electric cell holder with two wires attached, showing the negative terminal of the cell.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 3.7: (a) An electric cell holder with two wires attached (b) An electric cell inside the cell holder (c) Wires connected to an electric cell using electrical tape",
+          "Insert the cell in the holder such that its negative terminal is towards the spring side of the holder (Fig. 3.7b). In case a cell holder is not available, use a piece of electrical tape to connect the wires to the cell."
+        ],
+        "concepts": [
+          "Electric cell",
+          "Negative terminal",
+          "Cell holder",
+          "Wires",
+          "Electrical tape"
+        ],
+        "context_relation": "The image is a diagram illustrating the setup of an electric cell holder with wires attached to it, emphasizing the negative terminal and the method of connecting the wires to the cell.",
+        "limitations": [
+          "The image does not show the actual setup of the electric cell holder or the cell inside it.",
+          "The image does not provide information on the specific type of electric cell or the exact method of connecting the wires to the cell."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -78180,7 +78220,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "39909517517",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -78200,7 +78240,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "39909517517",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,

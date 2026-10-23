@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2182,
+    "assets_selected": 2183,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "5c4068c1672b53fd406b4979",
-      "e16d4a62f7889b707898ea77",
-      "2686a65594f6f695b3cfa269",
-      "37f5d541e4d497b43fdda769",
-      "5de2c7c332b12d26dded6f61"
+      "79bbc448b9853ba138d248e2",
+      "c85f41bbf274ff0251ebf3e6",
+      "7d46dd6bccc2b9e83e2aa3f0",
+      "19182aa83463f523d90ed77b",
+      "5abf0bbf91f1337f73719e33"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2178,
-    "assets_remaining": 5310,
+    "assets_analyzed": 2179,
+    "assets_remaining": 5309,
     "assets_completion_percent": 29.1,
-    "assets_failed": 97,
-    "assets_skipped_from_checkpoint": 2177,
+    "assets_failed": 96,
+    "assets_skipped_from_checkpoint": 2178,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -45381,9 +45381,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "39909517517",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -49671,7 +49671,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "39909517517",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -49706,19 +49706,40 @@
     {
       "asset_id": "7d46dd6bccc2b9e83e2aa3f0",
       "asset_sha256": "a375856982a99bbf3e921af65adbd8fc28e5348a13edf12bffdffacf3249494a",
-      "page_text_context_sha256": "bf91848654fc480a58ce8de42886315b17b7982bc94ef215a5b7b38008ad358d",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 48,
       "asset_path": "assets/a375856982a99bbf3e921af65adbd8fc28e5348a13edf12bffdffacf3249494a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bf91848654fc480a58ce8de42886315b17b7982bc94ef215a5b7b38008ad358d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An electric cell holder with two wires attached, showing the negative terminal of the cell.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 3.7: (a) An electric cell holder with two wires attached (b) An electric cell inside the cell holder (c) Wires connected to an electric cell using electrical tape",
+          "Insert the cell in the holder such that its negative terminal is towards the spring side of the holder (Fig. 3.7b). In case a cell holder is not available, use a piece of electrical tape to connect the wires to the cell."
+        ],
+        "concepts": [
+          "Electric cell",
+          "Negative terminal",
+          "Cell holder",
+          "Wires",
+          "Electrical tape"
+        ],
+        "context_relation": "The image is a diagram illustrating the setup of an electric cell holder with wires attached to it, emphasizing the negative terminal and the method of connecting the wires to the cell.",
+        "limitations": [
+          "The image does not show the actual setup of the electric cell holder or the cell inside it.",
+          "The image does not provide information on the specific type of electric cell or the exact method of connecting the wires to the cell."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39909517517",
+      "checkpointed_at": "2026-10-23T07:08:15Z"
     },
     {
       "asset_id": "19182aa83463f523d90ed77b",
@@ -49731,7 +49752,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "39909517517",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -49748,7 +49769,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "39909517517",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
