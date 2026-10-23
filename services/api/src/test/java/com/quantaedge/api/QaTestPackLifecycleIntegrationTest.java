@@ -409,7 +409,7 @@ class QaTestPackLifecycleIntegrationTest {
         "questionOptions", count(jdbc, """
           select count(*) from curriculum_program_subject ps
           join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
-            and (s.program_id=ps.id or s.program_id is null)
+            and (s.program_id=ps.program_id or s.program_id is null)
           join curriculum_chapter ch on ch.subject_id=s.id
           join lesson l on l.chapter_id=ch.id
           join question q on q.lesson_id=l.id
