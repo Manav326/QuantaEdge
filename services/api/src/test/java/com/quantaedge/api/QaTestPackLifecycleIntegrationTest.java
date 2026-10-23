@@ -107,41 +107,41 @@ class QaTestPackLifecycleIntegrationTest {
           join institution_course_release r on r.id=a.course_release_id
           join institution_tenant source_tenant on source_tenant.id=r.source_institution_id
           join institution_tenant target_tenant on target_tenant.id=a.institution_id
-          join curriculum_program p on p.id=r.program_id and p.code='CLASS_7'
+          join curriculum_program p on p.id=r.program_id and p.qa_test_run_id=? and left(p.code,6)='QA_C7_'
           where a.qa_test_run_id=? and r.qa_test_run_id=? and a.assignment_source='HRMS'
             and r.release_state='SHAREABLE' and source_tenant.tenant_code='QUANTA-EDGE'
             and right(target_tenant.tenant_code,1)='B'
-          """, runA, runA));
+          """, runA, runA, runA));
       assertEquals(1L, count(jdbc, """
           select count(*) from institution_course_assignment a
           join institution_course_release r on r.id=a.course_release_id
           join institution_tenant source_tenant on source_tenant.id=r.source_institution_id
           join institution_tenant target_tenant on target_tenant.id=a.institution_id
-          join curriculum_program p on p.id=r.program_id and p.code='CLASS_7'
+          join curriculum_program p on p.id=r.program_id and p.qa_test_run_id=? and left(p.code,6)='QA_C7_'
           where a.qa_test_run_id=? and r.qa_test_run_id=? and a.assignment_source='HRMS'
             and r.release_state='SHAREABLE' and source_tenant.tenant_code='QUANTA-EDGE'
             and right(target_tenant.tenant_code,1)='A'
-          """, runA, runA), "Institution A receives Class 7 only by an explicit HRMS assignment.");
+          """, runA, runA, runA), "Institution A receives Class 7 only by an explicit HRMS assignment.");
       assertEquals(1L, count(jdbc, """
           select count(*) from institution_course_assignment a
           join institution_course_release r on r.id=a.course_release_id
           join institution_tenant source_tenant on source_tenant.id=r.source_institution_id
           join institution_tenant target_tenant on target_tenant.id=a.institution_id
-          join curriculum_program p on p.id=r.program_id and p.code='CLASS_6'
+          join curriculum_program p on p.id=r.program_id and p.qa_test_run_id=? and left(p.code,6)='QA_C6_'
           where a.qa_test_run_id=? and r.qa_test_run_id=? and a.assignment_source='HRMS'
             and r.release_state='SHAREABLE' and source_tenant.tenant_code='QUANTA-EDGE'
             and right(target_tenant.tenant_code,1)='C'
-          """, runA, runA), "Institution C receives the separately assigned Class 6 release.");
+          """, runA, runA, runA), "Institution C receives the separately assigned Class 6 release.");
       assertEquals(0L, count(jdbc, """
           select count(*) from institution_course_assignment a
           join institution_course_release r on r.id=a.course_release_id
           join institution_tenant source_tenant on source_tenant.id=r.source_institution_id
           join institution_tenant target_tenant on target_tenant.id=a.institution_id
-          join curriculum_program p on p.id=r.program_id and p.code='CLASS_7'
+          join curriculum_program p on p.id=r.program_id and p.qa_test_run_id=? and left(p.code,6)='QA_C7_'
           where a.qa_test_run_id=? and r.qa_test_run_id=?
             and source_tenant.tenant_code='QUANTA-EDGE'
             and right(target_tenant.tenant_code,1)='C'
-          """, runA, runA), "Institution C must not receive QuantaEdge Class 7 without an explicit HRMS assignment.");
+          """, runA, runA, runA), "Institution C must not receive QuantaEdge Class 7 without an explicit HRMS assignment.");
       assertEquals(3L, count(jdbc, "select count(*) from institution_user_membership where qa_test_run_id=?", runA));
       assertEquals(3L, count(jdbc, "select count(*) from institution_membership where qa_test_run_id=?", runA));
       assertEquals(2L, count(jdbc, "select count(*) from lesson where qa_test_run_id=?", runA));
