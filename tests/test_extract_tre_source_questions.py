@@ -10,21 +10,45 @@ from scripts.extract_tre_source_questions import (
     expected_language_keys,
     parse_prompt_options,
     preserve_layout,
+    _question_is_allowed,
+    _split_block_questions,
 )
 
 
 class TreSourceCodePreservationTests(unittest.TestCase):
-    def test_tre3_source_uses_its_actual_148_question_count(self):
-        self.assertEqual(PAPERS["TRE 3.0"]["total_questions"], 148)
+    def test_tre3_source_has_150_questions_with_all_30_language_items(self):
+        self.assertEqual(PAPERS["TRE 3.0"]["total_questions"], 150)
         language_keys = expected_language_keys("TRE 3.0")
-        self.assertEqual(len(language_keys), 28)
+        self.assertEqual(len(language_keys), 30)
         self.assertEqual(
             language_keys,
-            {f"E-{i}" for i in (2, 3, 4, 5, 7, 8)} | {f"H-{i}" for i in range(9, 31)},
+            {f"E-{i}" for i in range(1, 9)} | {f"H-{i}" for i in range(9, 31)},
         )
-        self.assertNotIn("E-1", language_keys)
-        self.assertNotIn("E-6", language_keys)
-        self.assertEqual(40 + 80 + len(language_keys), 148)
+        self.assertIn("E-1", language_keys)
+        self.assertIn("E-6", language_keys)
+        self.assertEqual(40 + 80 + len(language_keys), 150)
+
+    def test_tre3_unprefixed_hindi_answer_fragments_are_not_questions(self):
+        self.assertFalse(_question_is_allowed("TRE 3.0", "11", 11, ""))
+        self.assertFalse(_question_is_allowed("TRE 3.0", "12", 12, ""))
+        self.assertFalse(_question_is_allowed("TRE 3.0", "13", 13, ""))
+        # TRE 2.0 uses plain numeric labels for its language section.
+        self.assertTrue(_question_is_allowed("TRE 2.0", "11", 11, ""))
+
+    def test_split_questions_after_a_shared_passage(self):
+        source = (
+            "Kerala is known for its variety of scenery and food. "
+            "Visitors can enjoy forests, beaches and hills.\\n"
+            "E-1. Why is Kerala just the place for you if you love variety ?\\n"
+            "(A) There is something here to please everyone\\n"
+            "E-2. Why should you take a trip to the spice gardens in the hills ?\\n"
+            "(A) To see spices growing in the hills"
+        )
+        preamble, questions = _split_block_questions(source, "TRE 3.0")
+        self.assertTrue(preamble.startswith("Kerala is known"))
+        self.assertEqual([q[0] for q in questions], ["E-1", "E-2"])
+        self.assertIn("Why is Kerala", questions[0][3])
+        self.assertIn("Why should you", questions[1][3])
 
     def test_preserve_layout_keeps_indentation_and_blank_lines(self):
         original = 'for (i = 0; i < 3; i++) {\n    printf("%d", i);\n}\n'
