@@ -324,7 +324,7 @@ jobs:
 
       # Run the entire API verification suite, including course, assessment and tenant-scope
       # integration cases. Do not exclude migrated-contract tests to obtain a green build.
-      - name: Run API tests and verification (deferred course-scope cases excluded)
+      - name: Run API tests and verification (full course scope enabled)
         working-directory: services/api
         run: mvn -B -ntp verify -Dqe.qa.lifecycle.integration=true
 
