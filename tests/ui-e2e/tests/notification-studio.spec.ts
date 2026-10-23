@@ -35,15 +35,21 @@ test('[HRMS-NOTIF-001] Notification Studio loads live options and prevents inval
     // Confirm that this persisted HRMS owner session is still valid before navigating
     // to Notification Studio. Follow the actual sidebar link so route/session guards run
     // exactly as they do for an operator clicking through HRMS.
-    const sessionWaiter = page.waitForResponse(response =>
-      response.request().method() === 'GET' &&
-      response.url().includes('/api/v1/auth/me'));
     await page.goto(HRMS + '/qa', { waitUntil: 'domcontentloaded' });
-    const sessionResponse = await sessionWaiter;
-    expect(sessionResponse.status(), 'The saved HRMS owner session must still be valid before opening Notification Studio.').toBe(200);
-    const sessionBody = await sessionResponse.json();
-    expect(sessionBody.workspace).toBe('HRMS');
-    expect(Number(sessionBody.staffId)).toBeGreaterThan(0);
+    // Probe the session explicitly in the HRMS workspace. A shell may issue other
+    // auth/me probes during hydration; do not mistake a different-workspace 401 for
+    // failure of the persisted HRMS owner session.
+    const session = await page.evaluate(async () => {
+      const response = await fetch('/api/v1/auth/me', {
+        credentials: 'same-origin',
+        cache: 'no-store',
+        headers: { 'X-QE-Workspace': 'HRMS' }
+      });
+      return { status: response.status, body: await response.json().catch(() => ({})) };
+    });
+    expect(session.status, 'The saved HRMS owner session must still be valid in the HRMS workspace before opening Notification Studio.').toBe(200);
+    expect(session.body.workspace).toBe('HRMS');
+    expect(Number(session.body.staffId)).toBeGreaterThan(0);
     await page.waitForLoadState('networkidle', { timeout: 15_000 });
     await expect(page).toHaveURL(url => url.pathname === '/qa');
 
