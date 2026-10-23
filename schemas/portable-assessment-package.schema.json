@@ -370,7 +370,8 @@
               "explanation",
               "answer_source",
               "review_status",
-              "explanation_i18n"
+              "explanation_i18n",
+              "solution_mode"
             ],
             "properties": {
               "option_key": {
@@ -390,7 +391,8 @@
               },
               "explanation": {
                 "type": "string",
-                "maxLength": 4000
+                "maxLength": 700,
+                "description": "Concise explanation: state the decisive reason, not a long lesson."
               },
               "answer_source": {
                 "enum": [
@@ -421,10 +423,36 @@
                 "patternProperties": {
                   "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})?$": {
                     "type": "string",
-                    "maxLength": 4000
+                    "maxLength": 700
                   }
                 },
-                "additionalProperties": false
+                "additionalProperties": false,
+                "description": "Concise source-language explanation. Keep it direct and easy to understand."
+              },
+              "solution_mode": {
+                "enum": [
+                  "CONCISE",
+                  "STEPWISE"
+                ],
+                "description": "Use STEPWISE for numerical/formula/code-tracing questions that require working; otherwise CONCISE."
+              },
+              "solution_steps_i18n": {
+                "type": "object",
+                "minProperties": 1,
+                "patternProperties": {
+                  "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})?$": {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 8,
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 240
+                    }
+                  }
+                },
+                "additionalProperties": false,
+                "description": "For numerical or procedural solutions, short ordered steps before the final answer. Omit for concise direct answers."
               }
             }
           },
