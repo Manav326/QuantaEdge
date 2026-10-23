@@ -1,0 +1,439 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://quantaedge.invalid/schemas/portable-assessment-package.schema.json",
+  "title": "QuantaEdge portable assessment package",
+  "description": "Course-neutral assessment content. Institution/course/chapter binding is a separate deployment operation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "package_id",
+    "title",
+    "assessment_type",
+    "subject",
+    "source",
+    "configuration",
+    "questions",
+    "editorial"
+  ],
+  "properties": {
+    "schema": {
+      "const": "quantaedge.portable-assessment-package.v1"
+    },
+    "package_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{2,119}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 1200
+    },
+    "assessment_type": {
+      "enum": [
+        "PREVIOUS_YEAR_PAPER",
+        "MOCK_EXAM",
+        "DIAGNOSTIC",
+        "PRACTICE_SET"
+      ]
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "domain_code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 80
+        },
+        "language": {
+          "enum": [
+            "en",
+            "hi",
+            "ur",
+            "bn",
+            "mixed",
+            "other"
+          ]
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "issuer",
+        "exam_name",
+        "cycle",
+        "source_url",
+        "source_status",
+        "repository_distribution_rights"
+      ],
+      "properties": {
+        "issuer": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "exam_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "cycle": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "exam_date": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "paper_title": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 300
+        },
+        "source_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "source_status": {
+          "enum": [
+            "DISCOVERED",
+            "READABLE_ON_WEB_NOT_DOWNLOADED_LOCALLY",
+            "DOWNLOADED_PENDING_REVIEW",
+            "VERIFIED_SOURCE_FILE",
+            "SOURCE_UNAVAILABLE"
+          ]
+        },
+        "source_file_path": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 500
+        },
+        "source_file_sha256": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "repository_distribution_rights": {
+          "enum": [
+            "UNCONFIRMED",
+            "CLEARED_FOR_INTERNAL_USE",
+            "CLEARED_FOR_PUBLIC_REPOSITORY",
+            "DO_NOT_REDISTRIBUTE"
+          ]
+        },
+        "rights_evidence_url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2000
+        }
+      }
+    },
+    "configuration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "duration_minutes",
+        "marks_per_question",
+        "negative_marking_per_wrong_answer",
+        "unanswered_mark"
+      ],
+      "properties": {
+        "duration_minutes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 240
+        },
+        "marks_per_question": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1000
+        },
+        "negative_marking_per_wrong_answer": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1000
+        },
+        "unanswered_mark": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1000
+        },
+        "presentation_hints": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "maxItems": 30
+        }
+      }
+    },
+    "questions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 250,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "source_question_number",
+          "source_location",
+          "question_type",
+          "prompt",
+          "options",
+          "topic_tags",
+          "proposed_answer"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]{1,119}$"
+          },
+          "source_question_number": {
+            "oneOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 40
+              }
+            ]
+          },
+          "source_location": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "pdf_page"
+            ],
+            "properties": {
+              "pdf_page": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "printed_page": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 1
+              },
+              "booklet_series": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 40
+              }
+            }
+          },
+          "question_type": {
+            "enum": [
+              "MCQ",
+              "TRUE_FALSE"
+            ]
+          },
+          "prompt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "options": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 5,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "key",
+                "text"
+              ],
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 20
+                },
+                "text": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1500
+                }
+              }
+            }
+          },
+          "topic_tags": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 12,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          },
+          "secondary_topic_tags": {
+            "type": "array",
+            "maxItems": 12,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          },
+          "marks": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 1000
+          },
+          "proposed_answer": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "option_key",
+              "confidence",
+              "explanation",
+              "answer_source",
+              "review_status"
+            ],
+            "properties": {
+              "option_key": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 20
+              },
+              "confidence": {
+                "enum": [
+                  "HIGH",
+                  "MEDIUM",
+                  "LOW",
+                  "UNRESOLVED"
+                ]
+              },
+              "explanation": {
+                "type": "string",
+                "maxLength": 4000
+              },
+              "answer_source": {
+                "enum": [
+                  "OFFICIAL_KEY",
+                  "OFFICIAL_KEY_CROSS_CHECKED",
+                  "INDEPENDENTLY_SOLVED",
+                  "THIRD_PARTY_KEY",
+                  "UNRESOLVED"
+                ]
+              },
+              "answer_reference_url": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "uri"
+              },
+              "review_status": {
+                "const": "PENDING_HUMAN_REVIEW"
+              },
+              "reviewer_notes": {
+                "type": "string",
+                "maxLength": 2000
+              }
+            }
+          },
+          "question_review_status": {
+            "const": "PENDING_HUMAN_REVIEW"
+          },
+          "source_notes": {
+            "type": "string",
+            "maxLength": 2000
+          }
+        }
+      }
+    },
+    "editorial": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "student_delivery_allowed",
+        "review_status"
+      ],
+      "properties": {
+        "status": {
+          "const": "DRAFT"
+        },
+        "student_delivery_allowed": {
+          "const": false
+        },
+        "review_status": {
+          "const": "PENDING_HUMAN_REVIEW"
+        },
+        "reviewer": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 200
+        },
+        "reviewed_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "review_notes": {
+          "type": "string",
+          "maxLength": 4000
+        }
+      }
+    },
+    "course_binding": {
+      "description": "Forbidden in portable packages; attach course/tenant/chapter via a separate validated deployment manifest.",
+      "not": {}
+    }
+  }
+}
