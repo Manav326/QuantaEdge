@@ -22,7 +22,7 @@ ALTER TABLE otp_challenge
 
 ALTER TABLE account_deletion_request
   ADD COLUMN identity_verification_method varchar(24)
-    CHECK (identity_verification_method IS NULL OR identity_verification_method IN ('MOBILE_OTP','GOOGLE_REAUTH')),
+    CHECK (identity_verification_method IS NULL OR identity_verification_method IN ('MOBILE_OTP','GOOGLE_REAUTH','MANUAL_REVIEW_REQUIRED')),
   ADD COLUMN identity_verified_at timestamptz;
 
 CREATE TABLE account_deletion_verification (
