@@ -40,7 +40,11 @@ function toDraft(row: OfferDraft): Draft {
   };
 }
 
-export default function CourseMarketplaceAdminPage() {
+/**
+ * @deprecated Retained temporarily for migration compatibility. The route now renders the notice
+ * component below; this legacy global offer editor must not be reactivated.
+ */
+export function LegacyCourseMarketplaceAdminPage() {
   const [rows, setRows] = useState<OfferDraft[]>([]);
   const [drafts, setDrafts] = useState<Record<number, Draft>>({});
   const [loading, setLoading] = useState(true);
@@ -205,6 +209,43 @@ export default function CourseMarketplaceAdminPage() {
                 );
               })}
             </div>}
+        </section>
+      </main>
+    </div>
+  );
+}
+
+
+/** Current route: clearly direct Marketplace setup and publication to HRMS. */
+export default function CourseMarketplaceAdminPage() {
+  return (
+    <div className={"qe-admin-marketplace-route " + styles.workspace}>
+      <AdminSidebar active="marketplace" />
+      <main className={styles.main}>
+        <header className={styles.hero}>
+          <div className={styles.mark} aria-hidden="true">₹</div>
+          <div>
+            <span className={styles.eyebrow}>HRMS CONTROLLED PUBLICATION</span>
+            <h1>Course Marketplace</h1>
+            <p>Marketplace availability is controlled centrally by HRMS for every institution, including the institution that sourced the course.</p>
+          </div>
+        </header>
+        <div className={styles.notice} role="status">
+          This legacy editor is retired. Saving or publishing course offers here is no longer supported.
+          HRMS must complete the course-quality, source-release, assignment, listing, payment, seller/tax,
+          invoice and revenue-share checks before an offer can appear in any Marketplace.
+        </div>
+        <section className={styles.panel}>
+          <div className={styles.sectionHead}>
+            <div>
+              <h2>Manage course content in Content Studio</h2>
+              <p>Courses sourced by this institution are editable only by its authorised staff. Courses shared from another institution are read-only here.</p>
+            </div>
+          </div>
+          <div className={styles.empty}>
+            <p>Use Content Studio to work on the institution’s own sourced course content. Shared courses remain available according to their HRMS-approved release and assignment.</p>
+            <Link href="/content">Open Content Studio</Link>
+          </div>
         </section>
       </main>
     </div>
