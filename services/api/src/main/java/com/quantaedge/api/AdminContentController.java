@@ -124,7 +124,8 @@ public class AdminContentController {
     long institutionId = requireInstitution(tenant);
     List<Map<String,Object>> courses=jdbc.queryForList("""
       select p.id,p.id as course_id,p.public_id,p.public_id_prefix,p.code,p.display_name,
-             p.curriculum_version,c.code as curriculum_class_code,
+             p.curriculum_version,p.course_type_code,p.content_version_no,p.course_identity_id,
+             p.supersedes_program_id,c.code as curriculum_class_code,
              scoped.release_id,scoped.release_version,scoped.release_state,
              scoped.source_institution_id,
              case when scoped.source_institution_id=scoped.assigned_institution_id
