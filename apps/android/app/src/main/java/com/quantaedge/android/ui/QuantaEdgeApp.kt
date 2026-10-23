@@ -1279,18 +1279,16 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 .put("source", "ANDROID"))
             if (response.optBoolean("requiresLinkedChildrenConfirmation")) {
                 accountDeletionRequest = response
-                status = if (language == "hi") {
-                    "इस खाते से जुड़े child accounts हैं। सभी को शामिल करने की पुष्टि करें या guardian transfer arrange करने के लिए रुकें।"
-                } else {
-                    "Linked child accounts were found. Confirm their inclusion or arrange a verified guardian transfer before continuing."
-                }
+                status = localizedUiTextForLanguage(
+                    "Linked child accounts were found. Confirm their inclusion or arrange a verified guardian transfer before continuing.",
+                    language
+                )
             } else if (response.optBoolean("accepted")) {
                 accountDeletionRequest = ApiClient.getObject("/api/v1/account/me/deletion-request")
-                status = if (language == "hi") {
-                    "Deletion request दर्ज हो गई। यह deletion पूरा होने की पुष्टि नहीं है।"
-                } else {
-                    "Deletion request recorded. This does not mean deletion is complete."
-                }
+                status = localizedUiTextForLanguage(
+                    "Deletion request recorded. This does not mean deletion is complete.",
+                    language
+                )
             } else {
                 throw IOException("The deletion request was not accepted. Refresh and try again.")
             }
@@ -1301,11 +1299,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         runTask {
             val result = ApiClient.deleteObject("/api/v1/account/me/deletion-request")
             accountDeletionRequest = ApiClient.getObject("/api/v1/account/me/deletion-request")
-            status = if (result.optBoolean("cancelled")) {
-                if (language == "hi") "Deletion request cancel हो गई।" else "Deletion request cancelled."
-            } else {
-                if (language == "hi") "कोई खुली deletion request नहीं मिली।" else "No open deletion request was found."
-            }
+            status = localizedUiTextForLanguage(
+                if (result.optBoolean("cancelled")) "Deletion request cancelled." else "No open deletion request was found.",
+                language
+            )
         }
     }
 
