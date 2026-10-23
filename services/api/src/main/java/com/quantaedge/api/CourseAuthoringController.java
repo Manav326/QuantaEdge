@@ -1,9 +1,9 @@
 package com.quantaedge.api;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
+import tools.jackson.databind.ObjectMapper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,14 +24,16 @@ public class CourseAuthoringController {
   private final CourseAuthoringService courseAuthoring;
   private final CourseVersionService courseVersionService;
   private final JdbcTemplate jdbc;
+  private final ObjectMapper mapper;
 
   public CourseAuthoringController(
       AuthorizationService authorization,CourseAuthoringService courseAuthoring,
-      CourseVersionService courseVersionService,JdbcTemplate jdbc) {
+      CourseVersionService courseVersionService,JdbcTemplate jdbc,ObjectMapper mapper) {
     this.authorization=authorization;
     this.courseAuthoring=courseAuthoring;
     this.courseVersionService=courseVersionService;
     this.jdbc=jdbc;
+    this.mapper=mapper;
   }
 
   @GetMapping("/course-types")
@@ -51,8 +53,7 @@ public class CourseAuthoringController {
       Object hierarchy=type.get("hierarchy_schema_json");
       if(hierarchy!=null) {
         try {
-          type.put("hierarchy_schema",new tools.jackson.databind.ObjectMapper().readValue(
-              String.valueOf(hierarchy),Object.class));
+          type.put("hierarchy_schema",mapper.readValue(String.valueOf(hierarchy),Object.class));
         } catch(Exception ex) {
           throw new IllegalStateException("The registered course-type schema is invalid.",ex);
         }
@@ -77,7 +78,6 @@ public class CourseAuthoringController {
   @PostMapping("/courses/{courseId}/draft-version")
   public Map<String,Object> createDraftVersion(
       @PathVariable long courseId,
-      @RequestBody(required=false) Map<String,Object> body,
       @RequestAttribute(value="authContext",required=false) AuthContext supplied,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
@@ -86,8 +86,6 @@ public class CourseAuthoringController {
     Map<String,Object> result=courseVersionService.forkReleasedVersion(
         courseId,tenant.institutionId(),context.staffId(),null);
     result.put("sourceInstitutionCode",tenant.tenantCode());
-    result.put("requestedAction",body==null?"FORK_RELEASED_VERSION":
-        String.valueOf(body.getOrDefault("action","FORK_RELEASED_VERSION")));
     return result;
   }
 
