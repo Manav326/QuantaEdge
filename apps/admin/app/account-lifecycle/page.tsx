@@ -11,6 +11,22 @@ import { useUiTranslation } from '../i18n/useUiTranslation';
 type AdultReview = { student_id:number; display_name:string; class_code?:string|null; status:string; reviewed_at?:string|null; expires_at?:string|null };
 type ParentReview = { user_id:number; student_id:number; display_name:string; mobile_last_four?:string|null; status:string; reviewed_at?:string|null; expires_at?:string|null };
 
+type DeletionRequest = {
+  request_id:string; subject_user_public_id?:string|null; subject_student_public_user_id?:string|null;
+  request_source:string; status:string; includes_linked_children:boolean; linked_children_count:number;
+  reason_category?:string|null; reason_details?:string|null; requested_by_public_user_id?:string|null;
+  requested_at:string; updated_at?:string|null;
+};
+type DeletionDependency = {
+  schema:string; table:string; constraint:string; target:string; sourceColumns:string[]; targetColumns:string[];
+  deleteRule:string; classification:string; rowCount:number|null; countIssue?:string|null; manualReviewRequired:boolean;
+};
+type DeletionAssessment = {
+  requestId:string; requestStatus:string; assessmentStatus:string; automaticFulfillmentAllowed:boolean;
+  canMarkCompleted:boolean; erasureExecuted:boolean; classificationIsHeuristic:boolean; message:string;
+  summary:Record<string,number|boolean>; dependencies:DeletionDependency[];
+};
+
 async function bodyOf(response:Response):Promise<any> {
   return await response.json().catch(()=>({}));
 }
@@ -20,6 +36,8 @@ export default function AccountLifecyclePage() {
   const t=useUiTranslation();
   const [adultItems,setAdultItems]=useState<AdultReview[]>([]);
   const [parentItems,setParentItems]=useState<ParentReview[]>([]);
+  const [deletionItems,setDeletionItems]=useState<DeletionRequest[]>([]);
+  const [deletionAssessments,setDeletionAssessments]=useState<Record<string,DeletionAssessment>>({});
   const [references,setReferences]=useState<Record<string,string>>({});
   const [loading,setLoading]=useState(true);
   const [busy,setBusy]=useState<string|null>(null);
@@ -29,18 +47,27 @@ export default function AccountLifecyclePage() {
   const load=useCallback(async()=>{
     setError('');
     try {
-      const [adultResponse,parentResponse]=await Promise.all([
+      const deletionStatuses=['REQUESTED','UNDER_REVIEW','AWAITING_LINKED_CHILD_DECISION'];
+      const [adultResponse,parentResponse,...deletionResponses]=await Promise.all([
         apiFetch('/api/v1/admin/account-lifecycle/adult-verifications?status=PENDING',{cache:'no-store'}),
         apiFetch('/api/v1/admin/account-lifecycle/parent-eligibility?status=PENDING',{cache:'no-store'}),
+        ...deletionStatuses.map(status=>apiFetch('/api/v1/admin/account-deletion-requests?status='+status,{cache:'no-store'})),
       ]);
-      if([adultResponse.status,parentResponse.status].some(status=>status===401||status===403)){
+      const allResponses=[adultResponse,parentResponse,...deletionResponses];
+      if(allResponses.some(response=>response.status===401||response.status===403)){
         router.replace('/login'); return;
       }
-      const [adultBody,parentBody]=await Promise.all([bodyOf(adultResponse),bodyOf(parentResponse)]);
+      const [adultBody,parentBody,...deletionBodies]=await Promise.all(allResponses.map(bodyOf));
       if(!adultResponse.ok) throw new Error(adultBody.message||t('admin.lifecycle.loadAdultFailed'));
       if(!parentResponse.ok) throw new Error(parentBody.message||t('admin.lifecycle.loadParentFailed'));
+      const failedDeletionResponse=deletionResponses.find((response)=>!response.ok);
+      if(failedDeletionResponse) {
+        const failedBody=deletionBodies[deletionResponses.indexOf(failedDeletionResponse)]||{};
+        throw new Error(failedBody.message||t('admin.lifecycle.deletionLoadFailed'));
+      }
       setAdultItems(Array.isArray(adultBody.items)?adultBody.items:[]);
       setParentItems(Array.isArray(parentBody.items)?parentBody.items:[]);
+      setDeletionItems(deletionBodies.flatMap((body:any)=>Array.isArray(body.items)?body.items:[]));
     } catch(loadError) {
       setError(loadError instanceof Error?loadError.message:t('admin.lifecycle.loadQueuesFailed'));
     } finally { setLoading(false); }
@@ -88,6 +115,36 @@ export default function AccountLifecyclePage() {
     } finally { setBusy(null); }
   }
 
+  async function startDeletionReview(item:DeletionRequest) {
+    const key='deletion-review:'+item.request_id;
+    setBusy(key);setError('');setNotice('');
+    try {
+      const response=await apiFetch('/api/v1/admin/account-deletion-requests/'+encodeURIComponent(item.request_id)+'/start-review',{
+        method:'POST',
+      });
+      const body=await bodyOf(response);
+      if(!response.ok) throw new Error(body.message||t('admin.lifecycle.deletionLoadFailed'));
+      setNotice(t('admin.lifecycle.deletionStatus')+': '+String(body.status||'UNDER_REVIEW'));
+      await load();
+    } catch(actionError) {
+      setError(actionError instanceof Error?actionError.message:t('admin.lifecycle.deletionLoadFailed'));
+    } finally { setBusy(null); }
+  }
+
+  async function assessDeletion(item:DeletionRequest) {
+    const key='deletion-assessment:'+item.request_id;
+    setBusy(key);setError('');setNotice('');
+    try {
+      const response=await apiFetch('/api/v1/admin/account-deletion-requests/'+encodeURIComponent(item.request_id)+'/assessment',{cache:'no-store'});
+      const body=await bodyOf(response);
+      if(!response.ok) throw new Error(body.message||t('admin.lifecycle.deletionRunFailed'));
+      setDeletionAssessments(current=>({...current,[item.request_id]:body as DeletionAssessment}));
+      setNotice(t('admin.lifecycle.deletionAssessmentTitle'));
+    } catch(actionError) {
+      setError(actionError instanceof Error?actionError.message:t('admin.lifecycle.deletionRunFailed'));
+    } finally { setBusy(null); }
+  }
+
   return (
     <main className="admin-shell">
       <AdminSidebar active="lifecycle" />
@@ -121,6 +178,65 @@ export default function AccountLifecyclePage() {
                   <div><strong>{item.display_name}</strong><small style={{display:'block',color:'var(--admin-muted,#687386)'}}>{t('admin.lifecycle.accountAndLearner',{userId:item.user_id,studentId:item.student_id,lastFour:item.mobile_last_four||'••••'})}</small></div>
                   <label style={{display:'grid',gap:5,maxWidth:520}}>{t('admin.lifecycle.externalEligibilityReference')}<input value={references[key]||''} onChange={e=>setReferences(v=>({...v,[key]:e.target.value}))} placeholder={t("admin.lifecycle.referencePlaceholder")} style={{padding:'10px 12px',border:'1px solid var(--admin-border,#d8dce5)',borderRadius:9}} /></label>
                   <div style={{display:'flex',gap:8,flexWrap:'wrap'}}><button className="button button-dark" disabled={busy===key} onClick={()=>void reviewParent(item,true)}>{t('admin.lifecycle.approveParent')}</button><button className="button" disabled={busy===key} onClick={()=>void reviewParent(item,false)}>{t('admin.lifecycle.reject')}</button></div>
+                </article>;
+              })}
+            </section>
+            <section className="admin-panel">
+              <div className="panel-head">
+                <div><span>{t('admin.lifecycle.deletionQueue')}</span><h2>{t('admin.lifecycle.deletionTitle')}</h2></div>
+                <span className="count">{deletionItems.length}</span>
+              </div>
+              <p>{t('admin.lifecycle.deletionDescription')}</p>
+              <p>{t('admin.lifecycle.deletionNoErasure')}</p>
+              {!deletionItems.length?<p>{t('admin.lifecycle.deletionNoRequests')}</p>:deletionItems.map(item=>{
+                const reviewKey='deletion-review:'+item.request_id;
+                const assessKey='deletion-assessment:'+item.request_id;
+                const assessment=deletionAssessments[item.request_id];
+                const summary=assessment?.summary||{};
+                return <article key={item.request_id} style={{display:'grid',gap:12,padding:'16px 0',borderTop:'1px solid var(--admin-border,#e1e5ec)'}}>
+                  <div>
+                    <strong>{t('admin.lifecycle.deletionSubject',{reference:item.subject_user_public_id||item.subject_student_public_user_id||'—'})}</strong>
+                    <small style={{display:'block',color:'var(--admin-muted,#687386)'}}>
+                      {t('admin.lifecycle.deletionStatus')}: {item.status} · {t('admin.lifecycle.deletionSource')}: {item.request_source} · {t('admin.lifecycle.deletionChildren',{count:Number(item.linked_children_count||0)})}
+                    </small>
+                    <small style={{display:'block',color:'var(--admin-muted,#687386)'}}>
+                      {t('admin.lifecycle.deletionReason')}: {item.reason_category||'LEGACY_UNSPECIFIED'}
+                      {item.requested_by_public_user_id ? ' · '+t('admin.lifecycle.requestedBy')+': '+item.requested_by_public_user_id : ''}
+                    </small>
+                    {item.reason_details&&<p>{t('admin.lifecycle.deletionReasonDetails')}: {item.reason_details}</p>}
+                  </div>
+                  <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+                    {item.status==='REQUESTED'&&<button className="button button-dark" disabled={busy!==null} onClick={()=>void startDeletionReview(item)}>{busy===reviewKey?t('admin.lifecycle.loading'):t('admin.lifecycle.deletionStartReview')}</button>}
+                    <button className="button" disabled={busy!==null} onClick={()=>void assessDeletion(item)}>{busy===assessKey?t('admin.lifecycle.loading'):t('admin.lifecycle.deletionAssess')}</button>
+                  </div>
+                  {assessment&&<div style={{display:'grid',gap:10,padding:14,border:'1px solid var(--admin-border,#d8dce5)',borderRadius:10}}>
+                    <h3 style={{margin:0}}>{t('admin.lifecycle.deletionAssessmentTitle')}</h3>
+                    <p style={{margin:0}}>{t('admin.lifecycle.deletionAssessmentBlocked')}</p>
+                    <p style={{margin:0}}>{assessment.message}</p>
+                    <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))',gap:10}}>
+                      <div><small>{t('admin.lifecycle.deletionReferencesInspected')}</small><strong style={{display:'block'}}>{String(summary.foreignKeyRelationshipsInspected??0)}</strong></div>
+                      <div><small>{t('admin.lifecycle.deletionAffectedRelationships')}</small><strong style={{display:'block'}}>{String(summary.affectedRelationships??0)}</strong></div>
+                      <div><small>{t('admin.lifecycle.deletionRelatedRows')}</small><strong style={{display:'block'}}>{String(summary.relatedRowReferences??0)}</strong></div>
+                    </div>
+                    {summary.childSetChangedSinceRequest===true&&<p role="alert">{t('admin.lifecycle.deletionChildSetChanged')}</p>}
+                    <div style={{overflowX:'auto'}}>
+                      <table style={{width:'100%',borderCollapse:'collapse',fontSize:13}}>
+                        <thead><tr>
+                          <th style={{textAlign:'left',padding:8}}>{t('admin.lifecycle.deletionClassification')}</th>
+                          <th style={{textAlign:'left',padding:8}}>{t('admin.lifecycle.deletionTable')}</th>
+                          <th style={{textAlign:'left',padding:8}}>{t('admin.lifecycle.deletionRule')}</th>
+                          <th style={{textAlign:'right',padding:8}}>{t('admin.lifecycle.deletionRowCount')}</th>
+                        </tr></thead>
+                        <tbody>{assessment.dependencies.map((dependency,index)=><tr key={dependency.schema+'.'+dependency.table+'.'+dependency.constraint+'-'+index} style={{borderTop:'1px solid var(--admin-border,#e1e5ec)'}}>
+                          <td style={{padding:8,verticalAlign:'top'}}>{dependency.classification==='UNKNOWN'?t('admin.lifecycle.deletionUnknown'):dependency.classification}</td>
+                          <td style={{padding:8,verticalAlign:'top'}}>{dependency.schema+'.'+dependency.table}<small style={{display:'block',color:'var(--admin-muted,#687386)'}}>{dependency.constraint}</small></td>
+                          <td style={{padding:8,verticalAlign:'top'}}>{dependency.deleteRule}</td>
+                          <td style={{padding:8,textAlign:'right',verticalAlign:'top'}}>{dependency.rowCount===null?t('admin.lifecycle.deletionUnknown'):dependency.rowCount}</td>
+                        </tr>)}</tbody>
+                      </table>
+                    </div>
+                    {assessment.dependencies.length===0&&<p>{t('admin.lifecycle.deletionRows',{count:0})}</p>}
+                  </div>}
                 </article>;
               })}
             </section>

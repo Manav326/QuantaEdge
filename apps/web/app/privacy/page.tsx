@@ -1,6 +1,7 @@
 import { UiText } from '../i18n/useUiTranslation';
 import { LanguageSwitcher, LocaleText } from '../components/LanguageProvider';
 import { AppearanceModeButton } from '../components/ColorThemeProvider';
+import Link from 'next/link';
 
 export default function PrivacyPage(){
   return <main className="legal-page">
@@ -10,5 +11,6 @@ export default function PrivacyPage(){
     <p><UiText message="legacy.web.student.learning.records.are.linked.to.cbdf9bda" /></p>
     <p><UiText message="legacy.web.when.the.ai.tutor.is.enabled.the.learn.650d7d45" /></p>
     <p><UiText message="legacy.web.for.deletion.or.privacy.requests.use.t.ae8d398e" /></p>
+    <p><Link href="/account-deletion"><UiText message="accountDeletion.privacyLink" /></Link></p>
   </main>;
 }

@@ -11,6 +11,65 @@ internal val LocalQuantaLanguage = staticCompositionLocalOf { "hi" }
 
 private data class UiPhrase(val key: String, val english: String, val hindi: String)
 private val uiPhrases = listOf(
+    UiPhrase("account_deletion_child_request_blocked", "The parent account remains blocked until the child account is resolved.", "बच्चे का खाता resolve होने तक parent account blocked रहेगा।"),
+    UiPhrase("account_deletion_reason_intro", "Before submitting an account-deletion request, tell us why you want to delete the account.", "खाता हटाने की request भेजने से पहले बताएं कि आप खाता क्यों हटाना चाहते हैं।"),
+    UiPhrase("account_deletion_choose_reason", "Choose a reason", "कारण चुनें"),
+    UiPhrase("account_deletion_reason_no_longer_needed", "I no longer need this account", "अब मुझे इस खाते की जरूरत नहीं है"),
+    UiPhrase("account_deletion_reason_privacy", "Privacy concerns", "प्राइवेसी की चिंता"),
+    UiPhrase("account_deletion_reason_security", "Account security concern", "खाते की सुरक्षा की चिंता"),
+    UiPhrase("account_deletion_reason_duplicate", "I have a duplicate account", "मेरा duplicate account है"),
+    UiPhrase("account_deletion_reason_moving", "I am moving to another service", "मैं दूसरी सेवा पर जा रहा/रही हूँ"),
+    UiPhrase("account_deletion_reason_data", "Concern about my personal data", "मेरे personal data को लेकर चिंता"),
+    UiPhrase("account_deletion_reason_other", "Other reason", "अन्य कारण"),
+    UiPhrase("account_deletion_reason_details", "Additional explanation (optional; required for Other)", "अतिरिक्त जानकारी (Other चुनने पर जरूरी)"),
+    UiPhrase("account_deletion_reason_placeholder", "Share a brief explanation, without passwords or OTPs", "पासवर्ड या OTP के बिना छोटा विवरण दें"),
+    UiPhrase("account_deletion_other_reason_required", "Please add a short explanation when selecting Other.", "Other चुनने पर छोटा विवरण दें।"),
+    UiPhrase("account_deletion_verify_before_submit", "Verify your identity before submitting or requesting deletion of a linked child account.", "खाता या जुड़े बच्चे का खाता हटाने की request से पहले पहचान verify करें।"),
+    UiPhrase("account_deletion_send_otp", "Send verification code to your verified mobile", "आपके verified मोबाइल पर verification code भेजें"),
+    UiPhrase("account_deletion_enter_otp", "Enter the 6-digit code", "6 अंकों का code डालें"),
+    UiPhrase("account_deletion_verify_code", "Verify code", "Code verify करें"),
+    UiPhrase("account_deletion_manual_review", "Ask staff to verify my identity manually", "Staff से मेरी पहचान manually verify करने को कहें"),
+    UiPhrase("account_deletion_manual_review_notice", "This only requests manual identity review; it does not mark identity as verified or complete deletion.", "इससे सिर्फ manual identity review की request होगी; पहचान verified नहीं मानी जाएगी और deletion पूरा नहीं होगा।"),
+    UiPhrase("account_deletion_identity_verified", "Identity verification complete.", "पहचान verify हो गई।"),
+    UiPhrase("account_deletion_children_resolve_title", "Resolve linked child accounts first", "पहले जुड़े child accounts resolve करें"),
+    UiPhrase("account_deletion_parent_blocked", "The parent account cannot be submitted for deletion until every linked child is safely independent or the child account has been resolved by an authorized process.", "जब तक हर linked child स्वतंत्र न हो जाए या authorized process से उसका खाता resolve न हो, parent account हटाने की request नहीं हो सकती।"),
+    UiPhrase("account_deletion_child_id", "Account ID: ", "खाता ID: "),
+    UiPhrase("account_deletion_adult_conversion", "Over-18 eligibility is verified. The adult learner must sign in to their own learner session and complete independent-account conversion; a guardian cannot delete their account.", "18+ eligibility verify है। Adult learner को अपने learner session में sign in करके independent account conversion पूरी करनी होगी; guardian उसका खाता delete नहीं कर सकता।"),
+    UiPhrase("account_deletion_age_review", "A reviewer must confirm that this child is under 18 before a guardian-requested deletion can be submitted.", "Guardian द्वारा deletion request से पहले reviewer को child का 18 से कम होना confirm करना होगा।"),
+    UiPhrase("account_deletion_child_request_button", "Request deletion of this child account", "इस child account को delete करने की request दें"),
+    UiPhrase("account_deletion_child_request_status", "Child deletion request status: ", "Child deletion request की स्थिति: "),
+    UiPhrase("account_deletion_child_request_recorded", "The child deletion request was recorded. The parent account remains blocked until the child account is resolved.", "Child deletion request दर्ज हो गई। Child account resolve होने तक parent account blocked रहेगा।"),
+    UiPhrase("account_deletion_child_request_failed", "The child deletion request was not accepted. Refresh and try again.", "Child deletion request स्वीकार नहीं हुई। Refresh करके फिर कोशिश करें।"),
+    UiPhrase("account_deletion_linked_children_resolve", "Resolve linked child accounts first. The parent account cannot be deleted while a linked child remains unresolved.", "पहले linked child accounts resolve करें। किसी child के unresolved रहने पर parent account delete नहीं हो सकता।"),
+    UiPhrase("account_deletion_otp_requested", "A verification code was requested for the mobile ending in ", "सत्यापन कोड इस मोबाइल नंबर पर भेजा गया है: "),
+    UiPhrase("account_deletion_title", "Delete your account", "अपना खाता हटाएँ"),
+    UiPhrase("account_deletion_intro", "Submit a request to delete your account and associated personal data. Submitting a request does not mean deletion is complete.", "अपना खाता और उससे जुड़ा personal data हटाने की request भेजें। Request भेजने का मतलब deletion पूरा होना नहीं है।"),
+    UiPhrase("account_deletion_retention", "Payment, invoice, certificate and security records may be retained only where there is a justified legal reason.", "Payment, invoice, certificate और security records सिर्फ उचित कानूनी वजह से रखे जा सकते हैं।"),
+    UiPhrase("account_deletion_status_requested", "Request received", "Request मिल गई"),
+    UiPhrase("account_deletion_status_review", "Under review", "Review चल रही है"),
+    UiPhrase("account_deletion_status_children", "Linked-child decision required", "Linked child पर decision जरूरी है"),
+    UiPhrase("account_deletion_status_cancelled", "Request cancelled", "Request cancel हो गई"),
+    UiPhrase("account_deletion_status_completed", "Deletion completed", "Deletion पूरा हुआ"),
+    UiPhrase("account_deletion_status_support", "Support is needed for this request", "इस request के लिए support जरूरी है"),
+    UiPhrase("account_deletion_status_none", "No deletion request", "कोई deletion request नहीं है"),
+    UiPhrase("account_deletion_status_prefix", "Request status: ", "Request की स्थिति: "),
+    UiPhrase("account_deletion_child_included", "Included in this deletion request", "इस deletion request में शामिल"),
+    UiPhrase("account_deletion_child_excluded", "Not included in this request", "इस request में शामिल नहीं"),
+    UiPhrase("account_deletion_children_prefix", "Linked child accounts: ", "जुड़े child खाते: "),
+    UiPhrase("account_deletion_open_explanation", "Your request is recorded but processing has not completed. You can cancel it while it is still open.", "आपकी request दर्ज है, लेकिन processing पूरी नहीं हुई है। Request open रहने तक आप इसे cancel कर सकते हैं।"),
+    UiPhrase("account_deletion_cancel", "Cancel deletion request", "Deletion request cancel करें"),
+    UiPhrase("account_deletion_new_request", "You can submit a new request after reviewing the current status.", "मौजूदा स्थिति देखने के बाद नई request भेज सकते हैं।"),
+    UiPhrase("account_deletion_children_prompt", "This account has linked child accounts. Choose whether to include them in the deletion request.", "इस खाते से child accounts जुड़े हैं। चुनें कि उन्हें deletion request में शामिल करना है या नहीं।"),
+    UiPhrase("account_deletion_include_children_prefix", "Include all linked child accounts: ", "सभी जुड़े child खातों को शामिल करें: "),
+    UiPhrase("account_deletion_transfer_note", "If a child account must be kept, arrange a verified guardian transfer before submitting. Do not leave a child without a safe guardian arrangement.", "अगर किसी child account को बनाए रखना है, तो request भेजने से पहले verified guardian transfer arrange करें। किसी child को सुरक्षित guardian व्यवस्था के बिना न छोड़ें।"),
+    UiPhrase("account_deletion_type_confirm", "Type DELETE to confirm", "पुष्टि के लिए DELETE टाइप करें"),
+    UiPhrase("account_deletion_submit", "Submit deletion request", "Deletion request भेजें"),
+    UiPhrase("account_deletion_load_failed", "Request status could not be loaded. Refresh before making a new request.", "Request status load नहीं हो सका। नई request से पहले refresh करें।"),
+    UiPhrase("account_deletion_refresh", "Refresh deletion status", "Deletion status refresh करें"),
+    UiPhrase("account_deletion_linked_children_notice", "Linked child accounts were found. Confirm their inclusion or arrange a verified guardian transfer before continuing.", "Linked child accounts मिले हैं। आगे बढ़ने से पहले उन्हें शामिल करने की पुष्टि करें या verified guardian transfer arrange करें।"),
+    UiPhrase("account_deletion_recorded_notice", "Deletion request recorded. This does not mean deletion is complete.", "Deletion request दर्ज हो गई। इसका मतलब deletion पूरा होना नहीं है।"),
+    UiPhrase("account_deletion_cancelled_notice", "Deletion request cancelled.", "Deletion request cancel हो गई।"),
+    UiPhrase("account_deletion_no_open_request", "No open deletion request was found.", "कोई खुली deletion request नहीं मिली।"),
     UiPhrase("billing_gstin_prefix", "GSTIN: ", "GSTIN: "),
     UiPhrase("resource_pages", "pages", "पृष्ठ"),
     UiPhrase("resource_book_pdf", "Book PDF · ", "पुस्तक PDF · "),
@@ -423,6 +482,21 @@ private val uiPhraseBySource: Map<String, UiPhrase> = buildMap {
         putIfAbsent(phrase.english, phrase)
         putIfAbsent(phrase.hindi, phrase)
     }
+}
+
+internal fun localizedUiTextForLanguage(source: String, language: String): String {
+    val phrase = uiPhraseBySource[source] ?: uiPhrases
+        .filter { it.hindi.endsWith(" ") || it.english.endsWith(" ") }
+        .sortedByDescending { maxOf(it.hindi.length, it.english.length) }
+        .firstOrNull { source.startsWith(it.hindi) || source.startsWith(it.english) }
+    if (phrase == null) return source
+    val exact = source == phrase.hindi || source == phrase.english
+    val suffix = if (exact) "" else when {
+        source.startsWith(phrase.hindi) -> source.removePrefix(phrase.hindi)
+        source.startsWith(phrase.english) -> source.removePrefix(phrase.english)
+        else -> ""
+    }
+    return (if (language == "hi") phrase.hindi else phrase.english) + suffix
 }
 
 /** Select a translated resource using the locale chosen inside the app, independently of Android device locale. */

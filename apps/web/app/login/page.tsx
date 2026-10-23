@@ -19,15 +19,26 @@ async function readJson(response: Response): Promise<any> {
 }
 
 function redirectAfterLogin(body: any): void {
+  // Only this same-origin, known workflow path is accepted as a post-login return target.
+  const requestedReturn = new URLSearchParams(window.location.search).get('returnTo');
+  const safeReturn = requestedReturn === '/account-deletion' ? requestedReturn : null;
   const parentSessionConfirmed = body.workspace === 'PARENT' && body.role === 'PARENT' &&
     Number(body.userId) > 0 && !(Number(body.studentId) > 0);
   const studentSessionConfirmed = body.workspace === 'STUDENT' && body.role === 'STUDENT' &&
     Number(body.studentId) > 0;
   if (parentSessionConfirmed) {
+    if (safeReturn === '/account-deletion') {
+      window.location.replace('/account-deletion');
+      return;
+    }
     window.location.replace('/parent');
     return;
   }
   if (studentSessionConfirmed) {
+    if (safeReturn === '/account-deletion') {
+      window.location.replace('/account-deletion');
+      return;
+    }
     window.location.replace('/student');
     return;
   }

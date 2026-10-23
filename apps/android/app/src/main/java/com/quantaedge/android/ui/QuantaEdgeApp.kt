@@ -500,6 +500,9 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     var parentCertificates by remember { mutableStateOf(emptyList<JSONObject>()) }
     var parentProfile by remember { mutableStateOf(JSONObject()) }
     var accountIdentityProfile by remember { mutableStateOf(JSONObject()) }
+    var accountDeletionRequest by remember { mutableStateOf(JSONObject()) }
+    var accountDeletionVerificationId by remember { mutableStateOf("") }
+    var accountDeletionOtpDevCode by remember { mutableStateOf("") }
     var selectedChild by remember { mutableStateOf(JSONObject()) }
     var selectedChildCourses by remember { mutableStateOf(emptyList<JSONObject>()) }
 
@@ -1248,8 +1251,135 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     fun openAccountIdentity() {
         error = ""
         status = ""
+        accountDeletionVerificationId = ""
+        accountDeletionOtpDevCode = ""
         route = AppRoute.ACCOUNT_IDENTITY
-        runTask { accountIdentityProfile = ApiClient.getObject("/api/v1/account/me/profile") }
+        runTask {
+            val loadedProfile = ApiClient.getObject("/api/v1/account/me/profile")
+            accountIdentityProfile = loadedProfile
+            accountDeletionRequest = if (loadedProfile.optString("accountType") == "CHILD") {
+                JSONObject().put("hasRequest", false)
+            } else {
+                try {
+                    ApiClient.getObject("/api/v1/account/me/deletion-request")
+                } catch (_: Exception) {
+                    JSONObject().put("loadFailed", true)
+                }
+            }
+        }
+    }
+
+    fun refreshAccountDeletionRequest() {
+        runTask {
+            accountDeletionRequest = ApiClient.getObject("/api/v1/account/me/deletion-request")
+        }
+    }
+
+    fun requestAccountDeletionOtp() {
+        runTask {
+            val response = ApiClient.postObject("/api/v1/account/me/deletion-request/otp", JSONObject())
+            accountDeletionOtpDevCode = response.optString("devCode")
+            accountDeletionVerificationId = ""
+            status = localizedUiTextForLanguage(
+                "A verification code was requested for the mobile ending in ", language
+            ) + response.optString("mobileLastFour")
+        }
+    }
+
+    fun verifyAccountDeletionOtp(otp: String) {
+        runTask {
+            val response = ApiClient.postObject("/api/v1/account/me/deletion-request/verify-otp",
+                JSONObject().put("otp", otp.trim()))
+            accountDeletionVerificationId = response.optString("verificationId")
+                .takeIf { it.isNotBlank() }
+                ?: throw IOException("Identity verification could not be confirmed. Request a new code.")
+            accountDeletionOtpDevCode = ""
+            status = localizedUiTextForLanguage("Identity verification complete.", language)
+        }
+    }
+
+    fun submitAccountDeletionRequest(
+        confirmation: String, reasonCategory: String, reasonDetails: String, manualIdentityReview: Boolean
+    ) {
+        runTask {
+            val payload = JSONObject()
+                .put("confirmation", confirmation.trim())
+                .put("reasonCategory", reasonCategory)
+                .put("reasonDetails", reasonDetails.trim())
+                .put("manualIdentityReview", manualIdentityReview)
+                .put("source", "ANDROID")
+            if (!manualIdentityReview && accountDeletionVerificationId.isNotBlank()) {
+                payload.put("verificationId", accountDeletionVerificationId)
+            }
+            val response = ApiClient.postObject("/api/v1/account/me/deletion-request", payload)
+            if (response.optBoolean("requiresChildResolution")) {
+                accountDeletionRequest = response
+                status = localizedUiTextForLanguage(
+                    "Resolve linked child accounts first. The parent account cannot be deleted while a linked child remains unresolved.",
+                    language
+                )
+            } else if (response.optBoolean("accepted")) {
+                accountDeletionRequest = ApiClient.getObject("/api/v1/account/me/deletion-request")
+                accountDeletionVerificationId = ""
+                accountDeletionOtpDevCode = ""
+                status = localizedUiTextForLanguage(
+                    "Deletion request recorded. This does not mean deletion is complete.",
+                    language
+                )
+            } else {
+                throw IOException("The deletion request was not accepted. Refresh and try again.")
+            }
+        }
+    }
+
+    fun submitChildAccountDeletionRequest(
+        childPublicUserId: String, confirmation: String, reasonCategory: String,
+        reasonDetails: String, manualIdentityReview: Boolean
+    ) {
+        runTask {
+            if (childPublicUserId.isBlank()) throw IOException("The linked child account could not be identified.")
+            val payload = JSONObject()
+                .put("confirmation", confirmation.trim())
+                .put("reasonCategory", reasonCategory)
+                .put("reasonDetails", reasonDetails.trim())
+                .put("manualIdentityReview", manualIdentityReview)
+                .put("source", "ANDROID")
+            if (!manualIdentityReview && accountDeletionVerificationId.isNotBlank()) {
+                payload.put("verificationId", accountDeletionVerificationId)
+            }
+            val response = ApiClient.postObject(
+                "/api/v1/account/me/deletion-request/children/" + childPublicUserId, payload)
+            when {
+                response.optBoolean("requiresIndependentAccountConversion") -> status =
+                    localizedUiTextForLanguage(
+                        "This child must sign in to their own learner session and complete independent-account conversion.",
+                        language)
+                response.optBoolean("requiresAdultVerificationReview") -> status =
+                    localizedUiTextForLanguage(
+                        "A reviewer must confirm that this child is under 18 before a guardian-requested deletion can be submitted.",
+                        language)
+                response.optBoolean("accepted") -> {
+                    accountDeletionRequest = ApiClient.getObject("/api/v1/account/me/deletion-request")
+                    accountDeletionVerificationId = ""
+                    accountDeletionOtpDevCode = ""
+                    status = localizedUiTextForLanguage(
+                        "The child deletion request was recorded. The parent account remains blocked until the child account is resolved.",
+                        language)
+                }
+                else -> throw IOException("The child deletion request was not accepted. Refresh and try again.")
+            }
+        }
+    }
+
+    fun cancelAccountDeletionRequest() {
+        runTask {
+            val result = ApiClient.deleteObject("/api/v1/account/me/deletion-request")
+            accountDeletionRequest = ApiClient.getObject("/api/v1/account/me/deletion-request")
+            status = localizedUiTextForLanguage(
+                if (result.optBoolean("cancelled")) "Deletion request cancelled." else "No open deletion request was found.",
+                language
+            )
+        }
     }
 
     fun saveAccountIdentityProfile(displayName: String, preferredLocale: String) {
@@ -4561,6 +4691,15 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onSavePassword = ::saveAccountPassword,
                         onLinkGmail = ::linkGoogleIdentity,
                         onAccountLifecycle = ::openAccountLifecycle,
+                        deletionRequest = accountDeletionRequest,
+                        deletionVerificationId = accountDeletionVerificationId,
+                        deletionOtpDevCode = accountDeletionOtpDevCode,
+                        onRefreshDeletion = ::refreshAccountDeletionRequest,
+                        onRequestDeletionOtp = ::requestAccountDeletionOtp,
+                        onVerifyDeletionOtp = ::verifyAccountDeletionOtp,
+                        onRequestDeletion = ::submitAccountDeletionRequest,
+                        onRequestChildDeletion = ::submitChildAccountDeletionRequest,
+                        onCancelDeletion = ::cancelAccountDeletionRequest,
                         onBack = ::goBack
                     )
                     }
