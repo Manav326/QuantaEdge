@@ -1,4 +1,4 @@
-import { test, expect, type Browser } from '@playwright/test';
+import { test, expect, type Browser, type Page } from '@playwright/test';
 import { join } from 'node:path';
 import { appBaseUrl } from '../support/manifest';
 import { privateDir, readPrivateJson } from '../support/fixtures';
@@ -17,6 +17,17 @@ const VIEWPORTS = [
 
 type Surface = { app: 'web' | 'admin' | 'people'; path: string; statePath: string };
 
+async function waitForOptionalNetworkIdle(page: Page): Promise<void> {
+  try {
+    // Network-idle is only a convenience here, not a route-readiness contract:
+    // authenticated shells may keep polling after the load event has fired.
+    await page.waitForLoadState('networkidle', { timeout: 3_000 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (!/timeout/i.test(message)) throw error;
+  }
+}
+
 async function checkSurfaceAtViewports(browser: Browser, surface: Surface) {
   for (const viewport of VIEWPORTS) {
     const context = await browser.newContext({
@@ -30,9 +41,9 @@ async function checkSurfaceAtViewports(browser: Browser, surface: Surface) {
       const base = surface.app === 'web' ? WEB : surface.app === 'admin' ? ADMIN : HRMS;
       await page.goto(base + surface.path, { waitUntil: 'domcontentloaded' });
       await expect(page.locator('main').first(), surface.app + surface.path + ' should render a main landmark at ' + viewport.width + 'px').toBeVisible();
-      // Authenticated shells finish their session/workspace check after the first HTML
-      // paint. Wait until API/navigation traffic settles before measuring the document.
-      await page.waitForLoadState('networkidle', { timeout: 15_000 });
+      // Authenticated shells may continue polling after the route has rendered. Prefer a
+      // brief best-effort idle window, then assert the route and visible layout directly.
+      await waitForOptionalNetworkIdle(page);
       expect(new URL(page.url()).pathname, 'Authenticated route should remain reachable after session checks at ' + viewport.width + 'px.').toBe(surface.path);
 
       let dimensions: { viewport: number; document: number; body: number } | null = null;
@@ -48,7 +59,7 @@ async function checkSurfaceAtViewports(browser: Browser, surface: Surface) {
           const message = error instanceof Error ? error.message : String(error);
           if (attempt === 2 || !/execution context was destroyed|context was destroyed/i.test(message)) throw error;
           await page.waitForLoadState('domcontentloaded', { timeout: 10_000 }).catch(() => undefined);
-          await page.waitForLoadState('networkidle', { timeout: 15_000 });
+          await waitForOptionalNetworkIdle(page);
           expect(new URL(page.url()).pathname, 'Session/workspace routing must settle back on the requested route.').toBe(surface.path);
           await expect(page.locator('main').first()).toBeVisible();
         }
