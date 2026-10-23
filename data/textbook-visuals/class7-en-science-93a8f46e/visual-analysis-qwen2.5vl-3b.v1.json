@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2183,
+    "assets_selected": 2184,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "79bbc448b9853ba138d248e2",
-      "c85f41bbf274ff0251ebf3e6",
-      "7d46dd6bccc2b9e83e2aa3f0",
-      "19182aa83463f523d90ed77b",
-      "5abf0bbf91f1337f73719e33"
+      "156c826ab2a2fbe86cb5bfea",
+      "3fed92dd41050f1b3bbc86ad",
+      "bfd2a5a7d3b8762a333a2b8e",
+      "21296deea16bc4ccc1bc50a6",
+      "72611f280e6286605f977c23"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2179,
-    "assets_remaining": 5309,
+    "assets_analyzed": 2180,
+    "assets_remaining": 5308,
     "assets_completion_percent": 29.1,
-    "assets_failed": 96,
-    "assets_skipped_from_checkpoint": 2178,
+    "assets_failed": 95,
+    "assets_skipped_from_checkpoint": 2179,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -62757,7 +62757,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "39909517517",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -66987,7 +66987,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "39909517517",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -67057,7 +67057,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "39909517517",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -67147,19 +67147,42 @@
     {
       "asset_id": "21296deea16bc4ccc1bc50a6",
       "asset_sha256": "1a4b834e2e275edc6ca7cde6b6c6ddee85a256e91ed31ed09948a65ae451f93c",
-      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 61,
       "asset_path": "assets/1a4b834e2e275edc6ca7cde6b6c6ddee85a256e91ed31ed09948a65ae451f93c.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An elderly craftsperson, Sudarshan uncle, is discussing with Yashwant and Anandi about making items of daily use.",
+        "visual_type": "photo",
+        "visible_text": [
+          "The World of Metals",
+          "4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "Rajasthan",
+          "school project"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about craftspersons who work with metals.",
+        "limitations": [
+          "The image does not show the actual ironsmiths or the items they make."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39909517517",
+      "checkpointed_at": "2026-10-23T07:30:33Z"
     },
     {
       "asset_id": "72611f280e6286605f977c23",
@@ -67172,7 +67195,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "39909517517",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
