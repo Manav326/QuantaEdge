@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1179,
+    "assets_selected": 1181,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "ae204e9d8dac6cbaebca9c68",
-      "3c71aba3cff9b6b75ea1d4e2"
+      "779227c533fab475e70494a3",
+      "5ea99b2a936c89c223e68c3d"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1176,
-    "assets_remaining": 1115,
-    "assets_completion_percent": 51.3,
+    "assets_analyzed": 1178,
+    "assets_remaining": 1113,
+    "assets_completion_percent": 51.4,
     "assets_failed": 9,
-    "assets_skipped_from_checkpoint": 1174,
+    "assets_skipped_from_checkpoint": 1176,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39920783405",
-      "checkpointed_at": "2026-10-23T09:10:07Z"
+      "checkpointed_at": "2026-10-23T09:17:15Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39920783405",
-      "checkpointed_at": "2026-10-23T09:10:41Z"
+      "checkpointed_at": "2026-10-23T09:17:48Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38349,7 +38349,7 @@
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_type": "diagram",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -38363,19 +38363,18 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force",
-          "living beings"
+          "muscular force"
         ],
         "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The image does not provide specific details about the forces acting on the objects in the diagram."
+          "The image does not provide specific details about the types of forces or the physical properties of the objects."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39920783405",
-      "checkpointed_at": "2026-10-23T09:13:51Z"
+      "checkpointed_at": "2026-10-23T09:18:27Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -38447,6 +38446,76 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39920783405",
       "checkpointed_at": "2026-10-23T09:16:19Z"
+    },
+    {
+      "asset_id": "779227c533fab475e70494a3",
+      "asset_sha256": "5b5b9084e7ad2c7cdf4ac072b557f6ee765e033ebbf47769fa21b33cbba0821c",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/5b5b9084e7ad2c7cdf4ac072b557f6ee765e033ebbf47769fa21b33cbba0821c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4ced2a91f1ad4add1f52a0f90bfa067845579b06c0365565cf231ef29c8dfe09",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A horse-drawn carriage with four people riding in it, on a dirt road with green fields and trees in the background.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "67",
+          "Humans used the muscular force of some animals to carry out many tasks for a long time (Fig. 5.4).",
+          "Fig. 5.4: Use of muscular force of animals to assist with human tasks",
+          "Ever heard of ...",
+          "Muscular force plays an important role in many functions inside our body too. This force helps us chew food and push it through the alimentary canal during the process of digestion. The expansion and contraction of our heart muscles allows the blood to circulate in our body."
+        ],
+        "concepts": [
+          "Muscular force",
+          "Animal-assisted tasks",
+          "Digestion",
+          "Heart muscles",
+          "Blood circulation"
+        ],
+        "context_relation": "The image illustrates the use of muscular force from animals to assist with human tasks, which is related to the concepts of digestion and blood circulation in the text.",
+        "limitations": [
+          "The image does not show the muscular force of animals in action, only their use in assisting with human tasks.",
+          "The text provides additional information about the muscular force's role in the body, which is not directly depicted in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39920783405",
+      "checkpointed_at": "2026-10-23T09:19:50Z"
+    },
+    {
+      "asset_id": "5ea99b2a936c89c223e68c3d",
+      "asset_sha256": "2c56e008cc4b93bd0ecf047dbdfb85b5aa35cb79e14db314206acf1a858341d8",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/2c56e008cc4b93bd0ecf047dbdfb85b5aa35cb79e14db314206acf1a858341d8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4ced2a91f1ad4add1f52a0f90bfa067845579b06c0365565cf231ef29c8dfe09",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a blue shirt, with one hand near their ear and the other hand pointing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of muscular force and its role in human functions.",
+        "limitations": [
+          "The image does not provide specific details about the muscular force or its functions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39920783405",
+      "checkpointed_at": "2026-10-23T09:20:57Z"
     }
   ]
 }
