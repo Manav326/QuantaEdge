@@ -29,12 +29,12 @@
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
     "raw_analysis_result_rows": 2275,
-    "successful_visual_analyses": 2177,
+    "successful_visual_analyses": 2178,
     "missing_visual_analyses": 5213,
-    "failed_visual_analyses": 98,
+    "failed_visual_analyses": 97,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5311,
+    "unresolved_count": 5310,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -47443,9 +47443,32 @@
       "asset_path": "assets/0fd9574ee8dad8f9eca900943802ce2ebf6f67fb2e37609cae6b99bb193511b9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a spiral structure with two rectangular shapes next to it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A solution turns the red litmus paper to blue. Excess addition",
+          "of which of the following solution would reverse the change?",
+          "1. (i) Lime water",
+          "2. (ii) Baking soda",
+          "3. (iii) Vinegar",
+          "4. (iv) Common salt solution",
+          "2. You are provided with three unknown solutions labelled A",
+          "B, and C, but yo"
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Litmus paper",
+          "Solutions",
+          "Acids and bases"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "The visible text is incomplete and does not provide a full question or answer."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

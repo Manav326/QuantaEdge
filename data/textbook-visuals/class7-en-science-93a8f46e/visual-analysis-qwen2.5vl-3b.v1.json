@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2181,
+    "assets_selected": 2182,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "bdb8332fb9f316fc59079355",
-      "3be4d6b418a6733fe7e1fde9",
-      "7e77f5e1b81e3b02b87ea819",
-      "e904eb84e607d05c01b9eca9",
-      "89b40b364042ef1985b11a00"
+      "5c4068c1672b53fd406b4979",
+      "e16d4a62f7889b707898ea77",
+      "2686a65594f6f695b3cfa269",
+      "37f5d541e4d497b43fdda769",
+      "5de2c7c332b12d26dded6f61"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2177,
-    "assets_remaining": 5311,
+    "assets_analyzed": 2178,
+    "assets_remaining": 5310,
     "assets_completion_percent": 29.1,
-    "assets_failed": 98,
-    "assets_skipped_from_checkpoint": 2176,
+    "assets_failed": 97,
+    "assets_skipped_from_checkpoint": 2177,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -12247,9 +12247,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "39909517517",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -13297,9 +13297,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "39909517517",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -24987,9 +24987,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "39909517517",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -36546,19 +36546,44 @@
     {
       "asset_id": "37f5d541e4d497b43fdda769",
       "asset_sha256": "0fd9574ee8dad8f9eca900943802ce2ebf6f67fb2e37609cae6b99bb193511b9",
-      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 40,
       "asset_path": "assets/0fd9574ee8dad8f9eca900943802ce2ebf6f67fb2e37609cae6b99bb193511b9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f994ded2b3d787e95a81f82fceb7602e2b4a629393c4b3e4092ee083b52c787b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a spiral structure with two rectangular shapes next to it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A solution turns the red litmus paper to blue. Excess addition",
+          "of which of the following solution would reverse the change?",
+          "1. (i) Lime water",
+          "2. (ii) Baking soda",
+          "3. (iii) Vinegar",
+          "4. (iv) Common salt solution",
+          "2. You are provided with three unknown solutions labelled A",
+          "B, and C, but yo"
+        ],
+        "concepts": [
+          "Chemical reactions",
+          "Litmus paper",
+          "Solutions",
+          "Acids and bases"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "The visible text is incomplete and does not provide a full question or answer."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39909517517",
+      "checkpointed_at": "2026-10-23T06:53:37Z"
     },
     {
       "asset_id": "f94aba68b96b9c5bf1f4b4b5",
@@ -37089,7 +37114,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "39909517517",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
       "human_review_required": true,
