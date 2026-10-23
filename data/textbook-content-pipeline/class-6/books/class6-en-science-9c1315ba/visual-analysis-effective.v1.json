@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c61f7ac3beddd22448c71432b0b24fb84f5682c0666f5ab773a66dd4f6256ea9",
+  "raw_analysis_sha256": "f0f649abac2184dff33f75d5e07ef87db4d3c9d26147031ef63d95bab9d9625a",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -611,7 +611,7 @@
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "FOREWORD",
+          "Foreword",
           "The National Education Policy 2020, envisages a system of education in the country that is rooted in Indian ethos and its civilisational accomplishments in all domains of human endeavour and knowledge while at the same time preparing the students to constructively engage with the prospects and chall",
           "This framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse",
           "Such a transformative learning culture requires certain essential conditions. One of them is to have appropriate textbooks in different curricular areas as these textbooks will play a central role in mediating between content and pedagogy—a role that will strike a judicious balance between direct in",
@@ -625,25 +625,28 @@
           "Foundational and Preparatory Stages",
           "Analytical, descriptive, and narrative capabilities",
           "Transformative learning culture",
+          "Appropriate textbooks",
+          "Curricular areas",
           "Classroom arrangement",
           "Teacher preparation",
+          "Conceptual connections",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving a transformative learning culture.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving a transformative learning culture.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
+          "The foreword does not provide specific details about the content of the textbooks or the curricular areas."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39975500684",
-      "checkpointed_at": "2026-10-23T16:43:29Z",
+      "run_id": "40008918130",
+      "checkpointed_at": "2026-10-23T19:15:35Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "FOREWORD",
+          "Foreword",
           "The National Education Policy 2020, envisages a system of education in the country that is rooted in Indian ethos and its civilisational accomplishments in all domains of human endeavour and knowledge while at the same time preparing the students to constructively engage with the prospects and chall",
           "This framework, at the Middle Stage, aims to equip students with the skills that are needed to grow, as they advance in their lives. It endeavours to enhance their analytical, descriptive, and narrative capabilities, and to prepare them for the challenges and opportunities that await them. A diverse",
           "Such a transformative learning culture requires certain essential conditions. One of them is to have appropriate textbooks in different curricular areas as these textbooks will play a central role in mediating between content and pedagogy—a role that will strike a judicious balance between direct in",
@@ -657,13 +660,16 @@
           "Foundational and Preparatory Stages",
           "Analytical, descriptive, and narrative capabilities",
           "Transformative learning culture",
+          "Appropriate textbooks",
+          "Curricular areas",
           "Classroom arrangement",
           "Teacher preparation",
+          "Conceptual connections",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving a transformative learning culture.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving a transformative learning culture.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
+          "The foreword does not provide specific details about the content of the textbooks or the curricular areas."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -29425,24 +29431,24 @@
           "DES",
           "Coimbatore",
           "Amrita Vishwa Vidyapeetham",
+          "Development Sector Professional",
           "Freelance Editor",
           "Proofreader",
           "DTP Cell",
           "Publication Division",
-          "Contractual",
-          "Final shape"
+          "Contractual"
         ],
         "context_relation": "acknowledgements",
         "limitations": [
-          "No specific limitations mentioned.",
+          "The image may be a full page, not a cropped figure.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39975500684",
-      "checkpointed_at": "2026-10-23T16:44:47Z",
+      "run_id": "40008918130",
+      "checkpointed_at": "2026-10-23T19:17:45Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -29465,16 +29471,16 @@
           "DES",
           "Coimbatore",
           "Amrita Vishwa Vidyapeetham",
+          "Development Sector Professional",
           "Freelance Editor",
           "Proofreader",
           "DTP Cell",
           "Publication Division",
-          "Contractual",
-          "Final shape"
+          "Contractual"
         ],
         "context_relation": "acknowledgements",
         "limitations": [
-          "No specific limitations mentioned.",
+          "The image may be a full page, not a cropped figure.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -31470,9 +31476,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39975500684",
+      "run_id": "40008918130",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -32350,9 +32356,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39975500684",
+      "run_id": "40008918130",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -35038,15 +35044,15 @@
           "colour",
           "size",
           "arrangement",
-          "herbs",
-          "shrubs",
-          "trees",
-          "height",
-          "types of stem",
-          "features of plants",
-          "nature walk"
+          "height and types of stem",
+          "nature walk",
+          "observations",
+          "bending stems",
+          "stems do not break",
+          "branches of plants",
+          "ground"
         ],
-        "context_relation": "exploration",
+        "context_relation": "The image is a table showing different criteria for grouping plants and animals.",
         "limitations": [
           "The image does not provide specific details about the criteria for grouping plants and animals."
         ]
@@ -35054,8 +35060,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39975500684",
-      "checkpointed_at": "2026-10-23T16:45:51Z",
+      "run_id": "40008918130",
+      "checkpointed_at": "2026-10-23T19:25:23Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -35091,15 +35097,15 @@
           "colour",
           "size",
           "arrangement",
-          "herbs",
-          "shrubs",
-          "trees",
-          "height",
-          "types of stem",
-          "features of plants",
-          "nature walk"
+          "height and types of stem",
+          "nature walk",
+          "observations",
+          "bending stems",
+          "stems do not break",
+          "branches of plants",
+          "ground"
         ],
-        "context_relation": "exploration",
+        "context_relation": "The image is a table showing different criteria for grouping plants and animals.",
         "limitations": [
           "The image does not provide specific details about the criteria for grouping plants and animals."
         ]
