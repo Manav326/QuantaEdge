@@ -82,6 +82,18 @@ async function main() {
     return !mapping || !['COMPLETE', 'MANUAL_VERIFIED'].includes(mapping.coverage_status);
   }).map(row => String(row.case_id).trim());
 
+  // Mapping coverage answers: do we have an explicit test/evidence path for this scenario?
+  // It is intentionally separate from verification coverage; PARTIAL mappings must never
+  // satisfy the production gate below.
+  const mappedScenarios = scenarios.filter(row => {
+    const mapping = mappingById.get(String(row.case_id).trim());
+    return mapping && ['PARTIAL', 'COMPLETE', 'MANUAL_VERIFIED'].includes(mapping.coverage_status) &&
+      String(mapping.test_file || '').split(';').some(file => file.trim());
+  });
+  const mappedScenarioPercent = scenarios.length
+    ? Number((mappedScenarios.length / scenarios.length * 100).toFixed(1))
+    : 0;
+
   const malformedPaths = [];
   const suiteRoot = resolve(ROOT, 'tests/ui-e2e');
   for (const mapping of mappings) {
@@ -130,6 +142,10 @@ async function main() {
     generatedAt: new Date().toISOString(),
     strictProductionGate: STRICT,
     scenarioCount: scenarios.length,
+    mappedScenarioCount: mappedScenarios.length,
+    mappedScenarioPercent,
+    unmappedScenarioCount: scenarios.length - mappedScenarios.length,
+    fullyVerifiedScenarioCount: scenarios.length - missing.length,
     completeAutomationMappings: mappings.filter(row => row.coverage_status === 'COMPLETE').length,
     verifiedManualMappings: mappings.filter(row => row.coverage_status === 'MANUAL_VERIFIED').length,
     partialMappings: mappings.filter(row => row.coverage_status === 'PARTIAL').length,
@@ -149,8 +165,10 @@ async function main() {
   await writeFile(reportOutputPath, JSON.stringify(reportBody, null, 2) + '\n', { mode: 0o600 });
 
   process.stdout.write(
-    'Scenario coverage: ' + (scenarios.length - missing.length) + '/' + scenarios.length +
-    ' scenarios fully mapped; ' + reportBody.partialMappings + ' partial mappings.\n' +
+    'Scenario map: ' + reportBody.mappedScenarioCount + '/' + scenarios.length +
+    ' scenarios mapped (' + reportBody.mappedScenarioPercent + '%); ' +
+    reportBody.fullyVerifiedScenarioCount + '/' + scenarios.length + ' fully verified; ' +
+    reportBody.partialMappings + ' partial mappings; ' + reportBody.unmappedScenarioCount + ' unmapped.\n' +
     'Coverage report: ' + reportOutputPath + '\n'
   );
   if (unknownMappings.length) process.stderr.write('Unknown coverage IDs: ' + unknownMappings.join(', ') + '\n');
