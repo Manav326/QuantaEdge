@@ -43,14 +43,13 @@ fun WelcomeScreen(
             }
             QuantaEdgeBrand(modifier = Modifier.fillMaxWidth(), compact = false, centered = true)
             Spacer(Modifier.height(14.dp))
-            Text(if (hi) "कक्षा 6–8 · Bihar Board" else "Classes 6–8 · Bihar Board",
+            Text(localizedUiText("Quality learning for school, skills and growth."),
                 style = MaterialTheme.typography.labelLarge, color = LocalQuantaEdgeSemanticColors.current.primaryText)
             Spacer(Modifier.height(6.dp))
-            Text(if (hi) "पढ़ाई, बच्चे के हिसाब से।" else "Learning, adapted to each child.",
+            Text(localizedUiText("Learning for every stage of life."),
                 style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(8.dp))
-            Text(if (hi) "Concept समझें, practice करें और progress देखें।"
-                else "Understand concepts, practise, and track progress.",
+            Text(localizedUiText("Explore courses, practise with purpose and follow your progress."),
                 style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(Modifier.height(16.dp))
             Button(onClick = onStudentLogin, modifier = Modifier.fillMaxWidth()) {
@@ -58,7 +57,7 @@ fun WelcomeScreen(
             }
             Spacer(Modifier.height(6.dp))
             OutlinedButton(onClick = onParentLogin, modifier = Modifier.fillMaxWidth()) {
-                Text(if (hi) "मैं Parent हूँ" else "I'm a parent")
+                Text(localizedUiText("Parent / learner sign in"))
             }
             Spacer(Modifier.height(8.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(18.dp), verticalAlignment = Alignment.CenterVertically) {
