@@ -603,14 +603,14 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                             raise ImportErrorSafe("Assessment-only source-package readiness failed; cannot queue the release for HRMS review.")
                         cursor.execute("""
                             UPDATE institution_course_release
-                            SET release_state='IN_QUALITY_REVIEW',content_fingerprint=?,submitted_at=now(),
+                            SET release_state='IN_QUALITY_REVIEW',content_fingerprint=%s,submitted_at=now(),
                                 submitted_by_institution_admin_id=NULL,updated_at=now()
-                            WHERE id=? AND source_institution_id=? AND release_state='DRAFT'
+                            WHERE id=%s AND source_institution_id=%s AND release_state='DRAFT'
                         """, (fingerprint, release_id, institution_id))
                         release_submitted = True
                     else:
                         cursor.execute("""
-                            UPDATE institution_course_release SET content_fingerprint=?,updated_at=now()
+                            UPDATE institution_course_release SET content_fingerprint=%s,updated_at=now()
                             WHERE id=? AND source_institution_id=? AND release_state='DRAFT'
                         """, (fingerprint, release_id, institution_id))
                 elif str(saved_fingerprint).strip() != fingerprint:
