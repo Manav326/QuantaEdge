@@ -286,6 +286,53 @@ test('[CAT-001][CAT-002][TEN-002][TEN-003] learner course lists and subjects fol
     expect(coursesB.body[0].subjects.length).toBeGreaterThan(0);
     expect(coursesC.body[0].subjects.length).toBeGreaterThan(0);
 
+    // Institution C has an assigned/enrolled Class 6 only. A valid Class 7 program ID
+    // copied from Institution A must not allow enrollment or create any access ledger rows.
+    const class7CourseId = Number(coursesA.body[0].id || coursesA.body[0].course_id);
+    const adultSession = await api(
+      adultC.page,
+      '/api/v1/auth/me',
+      'STUDENT',
+      fixture.credentials.independentLearner.institutionCode
+    );
+    expect(adultSession.status).toBe(200);
+    const forgedEnrollment = await adultC.context.request.post(
+      new URL('/api/v1/students/me/programs/id/' + encodeURIComponent(String(class7CourseId)) + '/enroll', adultC.page.url()).toString(),
+      {
+        headers: {
+          'X-QE-Workspace': 'STUDENT',
+          'X-QE-Institution-Code': fixture.credentials.independentLearner.institutionCode,
+          Accept: 'application/json'
+        },
+        data: {},
+        failOnStatusCode: false
+      }
+    );
+    expect([400, 403, 404], 'A globally active course ID is not authority to enroll it in another institution.').toContain(forgedEnrollment.status());
+    const ownershipPool = await openQaDatabase();
+    try {
+      const noForeignAccess = await ownershipPool.query(`
+        select
+          (select count(*)::int from student_program_enrollment
+             where student_id=$1 and institution_id=(select id from institution_tenant where tenant_code=$2)
+               and program_id=$3) as enrollments,
+          (select count(*)::int from course_entitlement
+             where institution_id=(select id from institution_tenant where tenant_code=$2)
+               and course_id=$3 and (holder_student_id=$1 or holder_user_id=$4)) as entitlements,
+          (select count(*)::int from course_purchase
+             where institution_id=(select id from institution_tenant where tenant_code=$2)
+               and course_id=$3 and student_id=$1) as purchases
+      `, [
+        Number(adultSession.body.studentId),
+        fixture.credentials.independentLearner.institutionCode,
+        class7CourseId,
+        Number(adultSession.body.userId)
+      ]);
+      expect(noForeignAccess.rows[0]).toEqual({ enrollments: 0, entitlements: 0, purchases: 0 });
+    } finally {
+      await ownershipPool.end();
+    }
+
     // Missing/invalid/unavailable tenant selectors must fail closed; no platform-wide
     // default catalogue is allowed to leak into a routed learner session.
     const missingTenant = await api(childA.page, '/api/v1/students/me/programs', 'STUDENT');
