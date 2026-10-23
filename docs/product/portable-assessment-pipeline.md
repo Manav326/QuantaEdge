@@ -61,6 +61,16 @@ The source page is `https://csestudy247.com/download-bpsc-tre-1-tre-2-tre-3-comp
 - The article says there is no negative marking, but the readable TRE 1.0 paper explicitly says one-fourth of the question's marks are deducted for a wrong answer. Per-cycle rules must be transcribed from each paper, not copied from the article.
 - TRE 1.0 and TRE 2.0 and TRE 3.0 mirror PDF URLs are logged in `data/TRE-Papres/source-register.json`. Raw binary downloads are not present in this checkout; rights have not been confirmed for public GitHub redistribution.
 
+## Bilingual fidelity and answer explanations
+
+- Preserve the source English and Hindi prompts/options as independent locale values. Do not overwrite either one with a machine translation.
+- Legacy Hindi-font conversion is a reconstruction aid only. Keep the raw extracted text and page reference; flag uncertain or incomplete output. Contextual reconstruction may use the paired English question, but it must not alter the intended meaning.
+- Use short explanations: normally one or two direct sentences explaining why the answer is right.
+- Use `solution_mode: STEPWISE` for calculation, formula substitution, algorithm tracing, or code output. Store 2–8 short ordered steps first, with localized steps for each source language where applicable. Do not jump directly to a final number or output.
+- Each numerical/code explanation must be checked against the displayed source formula, symbols, values and options. A question with an ambiguous source expression, incomplete option set, or uncertain Hindi reconstruction remains blocked from release.
+- The result view shows General Studies and Computer Science scored separately. A qualifying-language section is kept separate and excluded from the 120-mark scored total.
+- Paper-specific penalty is part of the immutable attempt snapshot. TRE 1.0 specifies a one-fourth penalty in its instructions; do not carry that value over to another cycle unless that paper itself states it.
+
 ## Current implementation boundary
 
 This change establishes the class-neutral package contract, source tracking, preliminary article analysis, and an offline validator with tests. It does **not** claim that PDFs were downloaded, that question-level topic counts were independently recounted, that official answer keys were verified, that course TRE-4/Prev years exists in the live tenant, or that a package has been imported into the running database. The API import adapter and live consumer validation must be implemented only after the package content and source-distribution status are resolved; that adapter must use authenticated institution/course binding rather than inventing class mappings.
