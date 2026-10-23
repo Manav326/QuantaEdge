@@ -1,7 +1,7 @@
 import { test, expect, type Browser, type Page } from '@playwright/test';
 import { join } from 'node:path';
 import { appBaseUrl } from '../support/manifest';
-import { privateDir, readPrivateJson, type QaFixture } from '../support/fixtures';
+import { openQaDatabase, privateDir, readPrivateJson, type QaFixture } from '../support/fixtures';
 
 const WEB = appBaseUrl('web');
 const HRMS = appBaseUrl('people');
@@ -34,6 +34,61 @@ async function contextPage(browser: Browser, storageState: string, url: string) 
   const page = await context.newPage();
   await page.goto(url);
   return { context, page };
+}
+
+async function authoritativeReportMetrics(studentId: number, institutionCode: string, courseId: number) {
+  const pool = await openQaDatabase();
+  try {
+    const institution = await pool.query(
+      'select id from institution_tenant where tenant_code=$1 and status=\'ACTIVE\'',
+      [institutionCode]
+    );
+    expect(institution.rowCount).toBe(1);
+    const institutionId = Number(institution.rows[0].id);
+    const lesson = await pool.query(
+      `select count(distinct l.id)::int as total_lessons,
+              count(distinct l.id) filter(where progress.status='COMPLETED')::int as completed_lessons,
+              coalesce(round(100.0*count(distinct l.id) filter(where progress.status='COMPLETED')/
+                nullif(count(distinct l.id),0),1),0)::numeric as completion_percent
+       from student st
+       join curriculum_program_subject mapped on mapped.program_id=$1
+       join curriculum_program selected_program on selected_program.id=mapped.program_id and selected_program.status='ACTIVE'
+       join curriculum_subject s on s.id=mapped.subject_id and s.class_id=mapped.class_id and s.active=true
+         and (s.program_id=mapped.program_id or
+              (s.program_id is null and selected_program.class_id=s.class_id and mapped.class_id=s.class_id))
+       left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
+       left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
+       left join student_lesson_progress progress on progress.lesson_id=l.id
+         and progress.student_id=st.id and progress.institution_id=$2 and progress.course_id=$1
+       where st.id=$3 and st.active=true`,
+      [courseId, institutionId, studentId]
+    );
+    const questions = await pool.query(
+      `select count(*)::int as attempts,
+              count(*) filter(where qa.correct=true)::int as correct,
+              count(*) filter(where qa.correct is not null)::int as graded_attempts,
+              coalesce(round(100.0*count(*) filter(where qa.correct=true)/
+                nullif(count(*) filter(where qa.correct is not null),0),1),0)::numeric as accuracy_percent
+       from student_question_attempt qa
+       join question q on q.id=qa.question_id
+       join lesson l on l.id=q.lesson_id
+       join curriculum_chapter ch on ch.id=l.chapter_id
+       join curriculum_subject s on s.id=ch.subject_id
+       where qa.student_id=$1 and qa.institution_id=$2 and qa.course_id=$3
+         and qa.activity_kind in ('LESSON_INLINE','PRACTICE')
+         and exists(
+           select 1 from curriculum_program_subject mapped
+           join curriculum_program selected_program on selected_program.id=mapped.program_id and selected_program.status='ACTIVE'
+           where mapped.program_id=$3 and mapped.subject_id=s.id and mapped.class_id=s.class_id
+             and (s.program_id=mapped.program_id or
+                  (s.program_id is null and selected_program.class_id=s.class_id and mapped.class_id=s.class_id))
+         )`,
+      [studentId, institutionId, courseId]
+    );
+    return { lessonStats: lesson.rows[0], questionStats: questions.rows[0] };
+  } finally {
+    await pool.end();
+  }
 }
 
 test('[FAM-003][FAM-005][CERT-003][TEN-002] parent and child API sessions cannot cross guardian boundaries', async ({ browser }) => {
@@ -91,13 +146,24 @@ test('[FAM-003][FAM-005][CERT-003][TEN-002] parent and child API sessions cannot
     expect(reportA.body.availableCourses).toHaveLength(1);
     expect(reportA.body.availableCourses[0].course_code).toBe('CLASS_7');
     expect(reportA.body.lessonStats).toBeTruthy();
-    expect(Number(reportA.body.lessonStats.completed_lessons)).toBeLessThanOrEqual(
-      Number(reportA.body.lessonStats.total_lessons)
-    );
     expect(reportA.body.questionStats).toBeTruthy();
-    expect(Number(reportA.body.questionStats.correct)).toBeLessThanOrEqual(
-      Number(reportA.body.questionStats.attempts)
+    const dbMetrics = await authoritativeReportMetrics(
+      childAId,
+      fixture.credentials.parentA.institutionCode,
+      reportCourseId
     );
+    for (const key of ['total_lessons', 'completed_lessons', 'completion_percent']) {
+      expect(
+        Number(reportA.body.lessonStats[key]),
+        'Parent report lesson aggregate ' + key + ' must match PostgreSQL for the exact child/course/institution.'
+      ).toBeCloseTo(Number(dbMetrics.lessonStats[key]), 1);
+    }
+    for (const key of ['attempts', 'correct', 'graded_attempts', 'accuracy_percent']) {
+      expect(
+        Number(reportA.body.questionStats[key]),
+        'Parent report question aggregate ' + key + ' must match PostgreSQL for the exact child/course/institution.'
+      ).toBeCloseTo(Number(dbMetrics.questionStats[key]), 1);
+    }
 
     const certificatesA = await api(
       parentA.page,
