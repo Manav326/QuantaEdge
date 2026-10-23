@@ -1,5 +1,6 @@
 'use client';
 
+import { apiFetch } from '../../components/apiClient';
 import { translateUi } from '../../i18n/catalog';
 import { UiText } from '../../i18n/useUiTranslation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
@@ -258,7 +259,7 @@ function QuestionCard({q,index,onResult,onTutorOpen,courseId}:{q:Question;index:
     setBusy(true);setAnswerError('');setResult(null);
     try {
       const language=learningLanguage;
-      const response=await fetch('/api/v1/learning/questions/'+q.id+'/answer?language='+language+'&courseId='+encodeURIComponent(String(courseId)),{
+      const response=await apiFetch('/api/v1/learning/questions/'+q.id+'/answer?language='+language+'&courseId='+encodeURIComponent(String(courseId)),{
         method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answer:next})
       });
       const body=await response.json();
@@ -403,9 +404,9 @@ export default function LearnClient() {
 
   async function loadLesson(id:number) {
     try {
-      const started=await fetch('/api/v1/learning/lessons/'+id+'/start'+courseStartQuery,{method:'POST'});
+      const started=await apiFetch('/api/v1/learning/lessons/'+id+'/start'+courseStartQuery,{method:'POST'});
       if(!started.ok) throw new Error('lesson progress');
-      const detail=await fetch('/api/v1/learning/lessons/'+id+'?language='+learningLanguage+courseQuery).then(r=>{
+      const detail=await apiFetch('/api/v1/learning/lessons/'+id+'?language='+learningLanguage+courseQuery).then(r=>{
         if(!r.ok) throw new Error('lesson');
         return r.json();
       }) as Detail;
@@ -427,7 +428,7 @@ export default function LearnClient() {
       if(loadingCourses)return;
       if(selectedCourseId===null){setError(courseError||translateUi(locale, 'legacy.web.choose.a.subject.from.this.course.firs.ccf1b720'));return;}
       try{
-        const me=await fetch('/api/v1/students/me'+(selectedCourseId!==null?'?courseId='+selectedCourseId:selectedProgram?'?programCode='+encodeURIComponent(selectedProgram):''));
+        const me=await apiFetch('/api/v1/students/me'+(selectedCourseId!==null?'?courseId='+selectedCourseId:selectedProgram?'?programCode='+encodeURIComponent(selectedProgram):''));
         if(me.status===401||me.status===403){router.replace('/login/student');return;}
         const student=await me.json();
         if(!me.ok) throw new Error(student.message||translateUi(locale, 'legacy.web.student.profile.was.not.found.0d806b0d'));
@@ -441,7 +442,7 @@ export default function LearnClient() {
         if(!requestedId && selectedSubject){
           const selectedLanguage=learningLanguage;
           const subjectQuery=selectedSubject==='ALL'?'':'subjectCode='+encodeURIComponent(selectedSubject)+'&';
-          const listResponse=await fetch('/api/v1/learning/lessons?'+subjectQuery+'language='+selectedLanguage+programQuery);
+          const listResponse=await apiFetch('/api/v1/learning/lessons?'+subjectQuery+'language='+selectedLanguage+programQuery);
           const listBody=await listResponse.json();
           if(!listResponse.ok) throw new Error(listBody.message||'विषय की पाठ सूची नहीं खुल पाई।');
           if(cancelled)return;
@@ -460,20 +461,20 @@ export default function LearnClient() {
         setTrackBrowse(null);
         let targetId=requestedId;
         if(!targetId){
-          const rec=await fetch('/api/v1/recommendations/next');
+          const rec=await apiFetch('/api/v1/recommendations/next');
           const rb=await rec.json();
           if(rec.ok&&rb.kind==='DIAGNOSTIC'){router.replace('/student/diagnostic');return;}
           if(rec.ok&&rb.available&&rb.lesson) targetId=Number(rb.lesson.id);
         }
         if(!targetId) throw new Error(translateUi(locale, 'legacy.web.no.recommended.lesson.is.available.yet.da29dcc9'));
         const selectedLanguage=learningLanguage;
-        const detail=await fetch('/api/v1/learning/lessons/'+targetId+'?language='+selectedLanguage+programQuery);
+        const detail=await apiFetch('/api/v1/learning/lessons/'+targetId+'?language='+selectedLanguage+programQuery);
         if(!detail.ok) throw new Error('lesson');
         const d=await detail.json() as Detail;
-        const list=await fetch('/api/v1/learning/lessons?subjectCode='+encodeURIComponent(d.subject_code)+'&language='+selectedLanguage+programQuery).then(r=>r.json()) as Lesson[];
+        const list=await apiFetch('/api/v1/learning/lessons?subjectCode='+encodeURIComponent(d.subject_code)+'&language='+selectedLanguage+programQuery).then(r=>r.json()) as Lesson[];
         setLessons(list);
-        await fetch('/api/v1/learning/lessons/'+targetId+'/start'+courseStartQuery,{method:'POST'});
-        const sr=await fetch('/api/v1/learning/sessions/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source:'LESSON',...(selectedCourseId!==null?{courseId:selectedCourseId}:{}),...(selectedProgram?{programCode:selectedProgram}:{})})});
+        await apiFetch('/api/v1/learning/lessons/'+targetId+'/start'+courseStartQuery,{method:'POST'});
+        const sr=await apiFetch('/api/v1/learning/sessions/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source:'LESSON',...(selectedCourseId!==null?{courseId:selectedCourseId}:{}),...(selectedProgram?{programCode:selectedProgram}:{})})});
         if(sr.ok){const sb=await sr.json();if(!cancelled){setSessionId(Number(sb.sessionId));setSessionStarted(Date.now());}}
         if(!cancelled){
           localStorage.setItem('qe:student:last-open-lesson:'+(selectedCourseKey?'course-'+selectedCourseKey+':':'')+d.class_code+':'+d.subject_code,String(d.id));
@@ -500,7 +501,7 @@ export default function LearnClient() {
     async function refreshLanguage(){
       try{
         if(trackBrowse){
-          const response=await fetch('/api/v1/learning/lessons?subjectCode='+encodeURIComponent(trackBrowse.subjectCode)+'&language='+language+courseQuery,{cache:'no-store'});
+          const response=await apiFetch('/api/v1/learning/lessons?subjectCode='+encodeURIComponent(trackBrowse.subjectCode)+'&language='+language+courseQuery,{cache:'no-store'});
           const rows=await response.json();
           if(!response.ok)throw new Error(rows?.message||'Could not refresh lesson language.');
           if(!cancelled){
@@ -512,8 +513,8 @@ export default function LearnClient() {
         }
         if(lesson){
           const [detailResponse,listResponse]=await Promise.all([
-            fetch('/api/v1/learning/lessons/'+lesson.id+'?language='+language+courseQuery,{cache:'no-store'}),
-            fetch('/api/v1/learning/lessons?subjectCode='+encodeURIComponent(lesson.subject_code)+'&language='+language+courseQuery,{cache:'no-store'})
+            apiFetch('/api/v1/learning/lessons/'+lesson.id+'?language='+language+courseQuery,{cache:'no-store'}),
+            apiFetch('/api/v1/learning/lessons?subjectCode='+encodeURIComponent(lesson.subject_code)+'&language='+language+courseQuery,{cache:'no-store'})
           ]);
           const [detailBody,listBody]=await Promise.all([detailResponse.json(),listResponse.json()]);
           if(!detailResponse.ok)throw new Error(detailBody?.message||'Could not refresh lesson language.');
@@ -558,7 +559,7 @@ export default function LearnClient() {
     // Show the chosen language first, but do not hide a chapter when its only
     // published PDF is available in the other language.
     const loadLanguage=(language:string):Promise<StudentDocument[]> =>
-      fetch('/api/v1/learning/documents?subjectCode='+encodeURIComponent(subjectCode)+'&language='+language+'&displayLanguage='+preferredLanguage
+      apiFetch('/api/v1/learning/documents?subjectCode='+encodeURIComponent(subjectCode)+'&language='+language+'&displayLanguage='+preferredLanguage
         +courseQuery,{cache:'no-store'})
         .then(async response=>response.ok?response.json():[])
         .then(body=>Array.isArray(body)?body as StudentDocument[]:[])
@@ -593,7 +594,7 @@ export default function LearnClient() {
     return ()=>{
       if(sessionId && sessionStarted){
         const minutes=Math.max(0,Math.min(240,Math.round((Date.now()-sessionStarted)/60000)));
-        void fetch('/api/v1/learning/sessions/'+sessionId+'/end',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({minutes}),keepalive:true});
+        void apiFetch('/api/v1/learning/sessions/'+sessionId+'/end',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({minutes}),keepalive:true});
       }
     };
   },[sessionId,sessionStarted]);
