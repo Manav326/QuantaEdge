@@ -269,17 +269,16 @@ class AdminContentControllerTest {
   }
 
   @Test
-  void institutionCatalogueIsLimitedToActiveInstitutionsWithAssignedActiveCourses() {
+  void deprecatedInstitutionCatalogueRejectsTenantSwitching() {
     AuthContext admin = new AuthContext(null, null, 42L, "ADMIN", "Admin", "EDUCATION_ADMIN");
-    when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(java.util.List.of(
-        Map.of("institution_id", 12L, "tenant_code", "SCHOOL-B", "display_name", "School B", "is_default", false)));
     AdminContentController controller =
         new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory, assessmentCatalog);
 
-    java.util.List<Map<String,Object>> result = controller.institutions(null, admin);
+    ResponseStatusException error = assertThrows(ResponseStatusException.class,
+        () -> controller.institutions(null, admin));
 
-    assertEquals(1, result.size());
-    assertEquals("SCHOOL-B", result.getFirst().get("tenant_code"));
-    verify(authorization).requirePermission(admin, "CONTENT_VIEW");
+    assertEquals(410, error.getStatusCode().value());
+    assertTrue(error.getReason().contains("institution-context"));
+    verifyNoInteractions(jdbc);
   }
 }
