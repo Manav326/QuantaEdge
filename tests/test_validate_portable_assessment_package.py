@@ -172,7 +172,9 @@ class PortableAssessmentPackageTests(unittest.TestCase):
             "hi": ["पहले दिए गए मान पहचानें।"]
         }
         self.assertTrue(any("must contain 2–8 ordered" in err for err in validate_package(package)))
-        self.assertTrue(any("missing required language steps: en" in err for err in validate_package(package)))
+        answer["solution_steps_i18n"].pop("en")
+        errors = validate_package(package)
+        self.assertTrue(any("missing required language steps: en" in err for err in errors))
 
     def test_answer_completeness_is_an_explicit_later_gate(self):
         package = sample_package()
