@@ -209,19 +209,17 @@ class AssessmentLifecycleIntegrationTest {
       values(?,?,'Assessment lifecycle course','CURRENT','ACTIVE','CI fixture course','INS')
       returning id
       """, Long.class, classId, "ASSESSMENT_" + suffix.toUpperCase(Locale.ROOT));
+    Long identityId = jdbc.queryForObject("""
+      insert into institution_course_identity(
+        source_institution_id,stable_course_key,display_name,course_type_code)
+      values(?,?,?,'K12') returning id
+      """, Long.class, institutionId, "assessment-lifecycle-" + suffix,
+      "Assessment lifecycle course");
+    jdbc.update("update curriculum_program set course_identity_id=? where id=?", identityId, courseId);
     jdbc.update("""
       insert into curriculum_program_subject(program_id,class_id,subject_id,is_required,sort_order)
       values(?,?,?,true,1)
       """, courseId, classId, subjectId);
-    Long releaseId = jdbc.queryForObject("""
-      insert into institution_course_release(
-        source_institution_id,program_id,release_version,release_state,content_fingerprint)
-      values(?,?,1,'DRAFT',md5(?)) returning id
-      """, Long.class, institutionId, courseId, "assessment-lifecycle-" + suffix);
-    jdbc.update("""
-      insert into institution_course_assignment(institution_id,course_release_id,status,assignment_source)
-      values(?,?,'ASSIGNED','HRMS')
-      """, institutionId, releaseId);
     Long chapterId = jdbc.queryForObject("""
       insert into curriculum_chapter(
         subject_id,code,display_name,description,sort_order,active,content_status)
@@ -283,6 +281,16 @@ class AssessmentLifecycleIntegrationTest {
       insert into assessment_question(assessment_id,source_question_id,sequence_no,max_marks,question_snapshot)
       values(?,null,1,1,?::jsonb)
       """, assessmentId, snapshot);
+    // Finish the graph before release: released course content is immutable in place.
+    Long releaseId = jdbc.queryForObject("""
+      insert into institution_course_release(
+        source_institution_id,program_id,release_version,release_state,content_fingerprint)
+      values(?,?,1,'SHAREABLE',course_content_fingerprint(?)) returning id
+      """, Long.class, institutionId, courseId, courseId);
+    jdbc.update("""
+      insert into institution_course_assignment(institution_id,course_release_id,status,assignment_source)
+      values(?,?,'ASSIGNED','HRMS')
+      """, institutionId, releaseId);
     return new Fixture(studentId, assessmentId, courseId,
         new AuthContext(null, studentId, "STUDENT", "Assessment CI student"),
         new InstitutionTenantContext(institutionId, "QUANTA-EDGE", "QuantaEdge"));
