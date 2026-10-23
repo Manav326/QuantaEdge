@@ -54,6 +54,12 @@ test('[QA-004] preview and uninstall only this run, then prove owned rows are cl
 
   const context = await browser.newContext({ storageState: ownerState.statePath });
   const page = await context.newPage();
+  const serverErrors: string[] = [];
+  page.on('response', async response => {
+    if (response.status() < 500) return;
+    const raw = await response.text().catch(() => '');
+    serverErrors.push(response.status() + ' ' + new URL(response.url()).pathname + (raw ? ' ' + raw.slice(0, 500) : ''));
+  });
   try {
     const runsWaiter = waitForApi(page, 'GET', '/api/v1/hrms/platform/qa/runs');
     await page.goto(HRMS + '/qa');
@@ -145,7 +151,11 @@ test('[QA-004] preview and uninstall only this run, then prove owned rows are cl
       await poolAfterUninstall.end();
     }
 
-    await expect(page.getByRole('alert')).toHaveCount(0);
+    const visibleAlerts = await page.getByRole('alert').allTextContents();
+    expect(
+      { visibleAlerts, serverErrors },
+      'QA cleanup must complete without app error alerts or HTTP 5xx responses.'
+    ).toEqual({ visibleAlerts: [], serverErrors: [] });
   } finally {
     await context.close();
   }
