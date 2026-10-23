@@ -583,7 +583,8 @@ test('[CAT-001][CAT-002][TEN-002][TEN-003][CNT-002][LRN-001] learner course list
         }
       }
     } else {
-      await expect(childA.page.getByText(/No course offers|कोई कोर्स ऑफर/i)).toBeVisible();
+      await expect(childA.page.locator('[role="status"]').first(), 'An empty marketplace must expose its accessible empty state instead of stale offer cards.').toBeVisible();
+      await expect(childA.page.locator('article h2')).toHaveCount(0);
     }
 
     const class7CourseId = Number(coursesA.body[0].id || coursesA.body[0].course_id);
