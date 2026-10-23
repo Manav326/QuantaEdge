@@ -1672,7 +1672,7 @@ public class AssessmentController {
       select att.id as attempt_id,att.assessment_id,a.public_id as test_id,a.course_id as course_id,
              att.student_id,att.attempt_number,att.status,
              att.started_at,att.deadline_at,att.submitted_at,att.graded_at,att.released_at,
-             att.auto_score,att.final_score,att.max_score,att.offline_mode,att.offline_sync_expires_at,
+             att.auto_score,att.final_score,att.max_score,att.penalty_score,att.offline_mode,att.offline_sync_expires_at,
              att.assessment_snapshot::text as assessment_snapshot,
              st.display_name as student_name,st.class_code,a.title as assessment_title,
              a.assessment_type,a.is_generated,s.code as subject_code,s.display_name as subject_name,ch.display_name as chapter_name
@@ -1698,25 +1698,28 @@ public class AssessmentController {
       throw notFound("Assessment attempt", attemptId);
     }
     if (staffView) requireAssignment(context, ((Number) attempt.get("assessment_id")).longValue());
+    String displayLanguage=String.valueOf(assessmentSnapshot.getOrDefault("language","hi"));
     boolean resultReleased = "RELEASED".equals(String.valueOf(attempt.get("status")));
     attempt.remove("student_id");
     if (!resultReleased) {
       attempt.remove("final_score");
       attempt.remove("auto_score");
+      attempt.remove("penalty_score");
     }
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select aq.id as attempt_question_id,aq.sequence_no,aq.max_marks,
              aq.question_snapshot::text as question_snapshot,
              ans.id as answer_id,ans.response_payload::text as response_payload,
-             ans.answer_status,ans.is_correct,ans.awarded_marks,ans.teacher_feedback
+             ans.answer_status,ans.is_correct,ans.awarded_marks,ans.penalty_marks,ans.teacher_feedback
       from student_assessment_attempt_question aq
       join student_assessment_answer ans on ans.attempt_question_id=aq.id
       where aq.attempt_id=? order by aq.sequence_no
       """, attemptId);
     List<Map<String, Object>> questions = new ArrayList<>();
+    Map<String,Map<String,Object>> sectionSummary=new LinkedHashMap<>();
     for (Map<String, Object> row : rows) {
       Map<String, Object> snapshot = parseObject(String.valueOf(row.get("question_snapshot")));
-      Map<String, Object> item = publicSnapshot(snapshot);
+      Map<String, Object> item = publicSnapshot(snapshot,displayLanguage);
       item.put("attemptQuestionId", row.get("attempt_question_id"));
       item.put("answerId", row.get("answer_id"));
       item.put("maxMarks", row.get("max_marks"));
@@ -1724,9 +1727,11 @@ public class AssessmentController {
       item.put("answerStatus", row.get("answer_status"));
       // Explanations are also grading feedback: do not expose them in active or awaiting-review attempts.
       if (resultReleased || staffView) {
-        if (snapshot.containsKey("explanation")) item.put("explanation", snapshot.get("explanation"));
+        Object explanation=localizedValue(snapshot.get("explanation_i18n"),displayLanguage,snapshot.get("explanation"));
+        if (explanation!=null) item.put("explanation",explanation);
         item.put("isCorrect", row.get("is_correct"));
         item.put("awardedMarks", row.get("awarded_marks"));
+        item.put("penaltyMarks", row.get("penalty_marks"));
         item.put("teacherFeedback", row.get("teacher_feedback"));
       }
       // Correct answers are disclosed to students only after the result is released.
@@ -1748,8 +1753,62 @@ public class AssessmentController {
         item.put("teacherOptions", teacherOptions(snapshot));
       }
       questions.add(item);
+
+      String sectionCode=safeText(snapshot.get("section_code"),50).toUpperCase(Locale.ROOT);
+      if(!sectionCode.isBlank()) {
+        String resultPolicy=sectionResultPolicy(snapshot);
+        Map<String,Object> section=sectionSummary.computeIfAbsent(sectionCode,code->{
+          Map<String,Object> created=new LinkedHashMap<>();
+          created.put("section_code",code);
+          created.put("section_name",localizedValue(snapshot.get("section_name_i18n"),displayLanguage,
+              snapshot.getOrDefault("section_name",code)));
+          created.put("result_policy",resultPolicy);
+          created.put("question_count",0);
+          created.put("correct_count",0);
+          created.put("incorrect_count",0);
+          created.put("unanswered_count",0);
+          created.put("max_score",BigDecimal.ZERO);
+          created.put("earned_marks",BigDecimal.ZERO);
+          created.put("penalty_marks",BigDecimal.ZERO);
+          created.put("net_score",BigDecimal.ZERO);
+          return created;
+        });
+        section.put("question_count",((Number)section.get("question_count")).intValue()+1);
+        BigDecimal qMax=new BigDecimal(String.valueOf(row.get("max_marks")));
+        BigDecimal qEarned=row.get("awarded_marks")==null?BigDecimal.ZERO:new BigDecimal(String.valueOf(row.get("awarded_marks")));
+        BigDecimal qPenalty=row.get("penalty_marks")==null?BigDecimal.ZERO:new BigDecimal(String.valueOf(row.get("penalty_marks")));
+        section.put("max_score",((BigDecimal)section.get("max_score")).add(qMax));
+        section.put("earned_marks",((BigDecimal)section.get("earned_marks")).add(qEarned));
+        section.put("penalty_marks",((BigDecimal)section.get("penalty_marks")).add(qPenalty));
+        if(isEmptyAnswer(parseValue(String.valueOf(row.get("response_payload"))))) {
+          section.put("unanswered_count",((Number)section.get("unanswered_count")).intValue()+1);
+        } else if(Boolean.TRUE.equals(row.get("is_correct"))) {
+          section.put("correct_count",((Number)section.get("correct_count")).intValue()+1);
+        } else if(Boolean.FALSE.equals(row.get("is_correct"))) {
+          section.put("incorrect_count",((Number)section.get("incorrect_count")).intValue()+1);
+        }
+      }
     }
     attempt.put("questions", questions);
+    if(resultReleased || staffView) {
+      List<Map<String,Object>> scoredSections=new ArrayList<>();
+      List<Map<String,Object>> qualifyingSections=new ArrayList<>();
+      List<Map<String,Object>> practiceOnlySections=new ArrayList<>();
+      for(Map<String,Object> section:sectionSummary.values()) {
+        BigDecimal sectionNet=((BigDecimal)section.get("earned_marks")).subtract((BigDecimal)section.get("penalty_marks"));
+        section.put("net_score",sectionNet);
+        String policy=String.valueOf(section.get("result_policy"));
+        if("SCORED".equals(policy)) scoredSections.add(section);
+        else if("QUALIFYING_ONLY".equals(policy)) qualifyingSections.add(section);
+        else practiceOnlySections.add(section);
+      }
+      if(!sectionSummary.isEmpty()) {
+        attempt.put("section_results",scoredSections);
+        if(!qualifyingSections.isEmpty()) attempt.put("qualifying_sections",qualifyingSections);
+        if(!practiceOnlySections.isEmpty()) attempt.put("practice_only_sections",practiceOnlySections);
+        attempt.put("negative_marking_fraction",assessmentSnapshot.getOrDefault("negativeMarkingFraction",BigDecimal.ZERO));
+      }
+    }
     if (assessmentSnapshot.containsKey("language")) {
       attempt.put("translation_complete", questions.stream()
           .allMatch(question -> Boolean.TRUE.equals(question.get("translated"))));
@@ -1793,14 +1852,17 @@ public class AssessmentController {
     return result;
   }
 
-  private Map<String, Object> publicSnapshot(Map<String, Object> snapshot) {
+  private Map<String, Object> publicSnapshot(Map<String, Object> snapshot,String language) {
     Map<String, Object> result = new LinkedHashMap<>();
-    for (String key : List.of("id", "question_type", "prompt", "difficulty",
-        "sort_order", "marks", "exam_format", "topic", "subtopic", "skill")) {
+    for (String key : List.of("id", "question_type", "difficulty","sort_order","marks",
+        "exam_format","topic","subtopic","skill","section_code","section_result_policy","topic_tags","subtopic_tags")) {
       if (snapshot.containsKey(key)) result.put(key, snapshot.get(key));
     }
+    Object localizedPrompt=localizedValue(snapshot.get("prompt_i18n"),language,snapshot.get("prompt"));
+    if(localizedPrompt!=null) result.put("prompt",localizedPrompt);
     Object rawOptions = snapshot.get("options");
     List<Map<String, Object>> options = new ArrayList<>();
+    boolean hasSourceLocale=localizedHas(snapshot.get("prompt_i18n"),language);
     if (rawOptions instanceof List<?> entries) {
       for (Object raw : entries) {
         if (!(raw instanceof Map<?, ?> option)) continue;
@@ -1809,6 +1871,9 @@ public class AssessmentController {
         if (key == null) key = option.get("key");
         Object label = option.get("label");
         if (label == null) label = option.get("text");
+        Object localizedLabel=localizedValue(option.get("text_i18n"),language,label);
+        if(localizedLabel!=null) label=localizedLabel;
+        hasSourceLocale=hasSourceLocale||localizedHas(option.get("text_i18n"),language);
         safe.put("key", key);
         safe.put("label", label);
         options.add(safe);
@@ -1825,8 +1890,36 @@ public class AssessmentController {
     }
     responseMode=responseMode.trim().toUpperCase(Locale.ROOT);
     if(!responseMode.isBlank()) result.put("response_mode",responseMode);
-    result.put("translated", Boolean.TRUE.equals(snapshot.get("_translation_applied")));
+    result.put("translated", Boolean.TRUE.equals(snapshot.get("_translation_applied"))||hasSourceLocale);
     return result;
+  }
+
+  private boolean localizedHas(Object rawLocalized,String language) {
+    return rawLocalized instanceof Map<?,?> values && values.get(language) instanceof String text && !text.isBlank();
+  }
+
+  private Object localizedValue(Object rawLocalized,String language,Object fallback) {
+    if(rawLocalized instanceof Map<?,?> values) {
+      Object selected=values.get(language);
+      if(selected instanceof String text && !text.isBlank()) return text;
+      Object english=values.get("en");
+      if(english instanceof String text && !text.isBlank()) return text;
+      Object hindi=values.get("hi");
+      if(hindi instanceof String text && !text.isBlank()) return text;
+    }
+    return fallback;
+  }
+
+  private String sectionResultPolicy(Map<String,Object> snapshot) {
+    String policy=safeText(snapshot.get("section_result_policy"),40).toUpperCase(Locale.ROOT);
+    if(Set.of("SCORED","QUALIFYING_ONLY","PRACTICE_ONLY").contains(policy)) return policy;
+    return "LANGUAGE_QUALIFYING".equalsIgnoreCase(safeText(snapshot.get("section_code"),50))
+        ? "QUALIFYING_ONLY" : "SCORED";
+  }
+
+  private boolean contributesToAggregate(Map<String,Object> snapshot) {
+    String policy=sectionResultPolicy(snapshot);
+    return "SCORED".equals(policy);
   }
 
   private List<Map<String, Object>> teacherOptions(Map<String, Object> snapshot) {
