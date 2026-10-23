@@ -88,8 +88,17 @@ class AccountDeletionControllerTest {
     when(jdbc.queryForList(contains("select distinct st.id as student_id"), eq(101L), eq(101L)))
         .thenReturn(List.of(Map.of("student_id", 202L, "public_user_id", "CHILD0000202")));
 
+    java.util.UUID verificationId=java.util.UUID.randomUUID();
+    when(jdbc.queryForList(contains("from account_deletion_verification"), eq(verificationId), eq(101L)))
+        .thenReturn(List.of(Map.of(
+            "verification_id",verificationId,
+            "method","MOBILE_OTP",
+            "verified_at",java.sql.Timestamp.from(java.time.Instant.now()))));
+    when(jdbc.update(contains("update account_deletion_verification"), any(), any())).thenReturn(1);
+
     Map<String,Object> result = controller.requestDeletion(
-        Map.of("confirmation", "DELETE", "source", "WEB", "includeLinkedChildren", false), parent);
+        Map.of("confirmation", "DELETE", "source", "WEB", "includeLinkedChildren", false,
+            "verificationId",verificationId.toString()), parent);
 
     assertFalse(Boolean.TRUE.equals(result.get("accepted")));
     assertTrue(Boolean.TRUE.equals(result.get("requiresLinkedChildrenConfirmation")));
