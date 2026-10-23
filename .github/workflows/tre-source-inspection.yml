@@ -26,6 +26,14 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Check out the uploaded ZIP from main as source-only input
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}
+          ref: main
+          path: source-data
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -37,7 +45,7 @@ jobs:
       - name: Inspect the uploaded archive and record exact source bytes
         run: |
           python scripts/inspect_tre_source_archive.py \
-            --archive data/TRE-4_PYQ.zip \
+            --archive "$GITHUB_WORKSPACE/source-data/data/TRE-4_PYQ.zip" \
             --output-dir "$RUNNER_TEMP/tre-source-inspection"
 
       - name: Extract bilingual question inventory with page provenance
