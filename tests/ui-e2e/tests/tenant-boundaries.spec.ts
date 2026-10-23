@@ -352,6 +352,119 @@ test('[AUTH-006][AUTH-007] logout revokes only its fresh parent session and prot
   }
 });
 
+test('[LRN-002] lesson MCQ records incorrect feedback and allows a correct retry', async ({ browser }) => {
+  const fixture = await readPrivateJson<QaFixture>('qa-fixture.json');
+  const institutionCode = fixture.credentials.childA.institutionCode;
+  const learner = await contextPage(browser, join(privateDir(), 'child-a.json'), WEB + '/student');
+  const pool = await openQaDatabase();
+
+  try {
+    const programs = await api(learner.page, '/api/v1/students/me/programs', 'STUDENT', institutionCode);
+    expect(programs.status, 'The signed-in learner must retrieve assigned courses before opening a lesson.').toBe(200);
+    const class7 = (programs.body as any[]).find(course => course.code === 'CLASS_7');
+    expect(class7, 'The child fixture must be enrolled in its assigned Class 7 course.').toBeTruthy();
+    const courseId = Number(class7.id || class7.course_id);
+    expect(courseId).toBeGreaterThan(0);
+
+    const session = await api(learner.page, '/api/v1/auth/me', 'STUDENT', institutionCode);
+    expect(session.status).toBe(200);
+    const studentId = Number(session.body.studentId);
+    expect(studentId).toBeGreaterThan(0);
+
+    const institution = await pool.query(
+      "select id from institution_tenant where tenant_code=$1 and status='ACTIVE'",
+      [institutionCode]
+    );
+    expect(institution.rowCount).toBe(1);
+    const institutionId = Number(institution.rows[0].id);
+
+    const ownedContent = await pool.query(
+      `select l.id::int as lesson_id, q.id::int as question_id
+       from lesson l
+       join curriculum_chapter ch on ch.id=l.chapter_id and ch.qa_test_run_id=$1 and ch.content_status='PUBLISHED'
+       join curriculum_subject s on s.id=ch.subject_id and s.active=true
+       join curriculum_program_subject mapped
+         on mapped.program_id=$2 and mapped.subject_id=s.id and mapped.class_id=s.class_id
+       join question q on q.lesson_id=l.id and q.qa_test_run_id=$1 and q.active=true
+         and q.question_type='MCQ' and q.review_status in ('APPROVED','PUBLISHED')
+       where l.qa_test_run_id=$1 and l.active=true and l.status='PUBLISHED'
+       order by l.id, q.id limit 1`,
+      [fixture.runId, courseId]
+    );
+    expect(ownedContent.rowCount, 'The disposable QA pack must have one published MCQ in the assigned course.').toBe(1);
+    const lessonId = Number(ownedContent.rows[0].lesson_id);
+    const questionId = Number(ownedContent.rows[0].question_id);
+
+    const before = await pool.query(
+      `select count(*)::int as total
+       from student_question_attempt
+       where student_id=$1 and institution_id=$2 and course_id=$3 and question_id=$4
+         and activity_kind='LESSON_INLINE'`,
+      [studentId, institutionId, courseId, questionId]
+    );
+    expect(Number(before.rows[0].total), 'A new QA fixture question must start without learner attempts.').toBe(0);
+
+    await learner.page.goto(
+      WEB + '/student/learn?courseId=' + encodeURIComponent(String(courseId)) +
+        '&lessonId=' + encodeURIComponent(String(lessonId)),
+      { waitUntil: 'domcontentloaded' }
+    );
+    const prompt = 'QA fixture: choose the correct lifecycle answer.';
+    const questionCard = learner.page.locator('.qe-question-card').filter({ hasText: prompt }).first();
+    await expect(questionCard, 'The real learner lesson UI must render its published QA question.').toBeVisible({ timeout: 25_000 });
+
+    const wrongOption = questionCard.getByRole('button', { name: /Incorrect synthetic option/ });
+    const wrongAnswerWaiter = learner.page.waitForResponse(response =>
+      response.request().method() === 'POST' &&
+      new URL(response.url()).pathname === '/api/v1/learning/questions/' + questionId + '/answer');
+    await wrongOption.click();
+    const wrongAnswerResponse = await wrongAnswerWaiter;
+    expect(wrongAnswerResponse.status(), 'Submitting a wrong answer must be accepted and graded by the API.').toBe(200);
+    expect(await wrongAnswerResponse.json()).toMatchObject({ questionId, correct: false, autoGraded: true });
+    await expect(questionCard).toHaveClass(/has-answer-incorrect/);
+    await expect(questionCard.locator('.qe-answer-feedback.is-incorrect')).toBeVisible();
+
+    const afterWrong = await pool.query(
+      `select count(*)::int as total,
+              count(*) filter (where correct=false)::int as incorrect
+       from student_question_attempt
+       where student_id=$1 and institution_id=$2 and course_id=$3 and question_id=$4
+         and activity_kind='LESSON_INLINE'`,
+      [studentId, institutionId, courseId, questionId]
+    );
+    expect(Number(afterWrong.rows[0].total)).toBeGreaterThanOrEqual(1);
+    expect(Number(afterWrong.rows[0].incorrect)).toBeGreaterThanOrEqual(1);
+
+    const correctOption = questionCard.getByRole('button', { name: /Correct synthetic option/ });
+    const correctAnswerWaiter = learner.page.waitForResponse(response =>
+      response.request().method() === 'POST' &&
+      new URL(response.url()).pathname === '/api/v1/learning/questions/' + questionId + '/answer');
+    await correctOption.click();
+    const correctAnswerResponse = await correctAnswerWaiter;
+    expect(correctAnswerResponse.status(), 'The learner must be allowed to retry after an incorrect answer.').toBe(200);
+    expect(await correctAnswerResponse.json()).toMatchObject({ questionId, correct: true, autoGraded: true });
+    await expect(questionCard).toHaveClass(/has-answer-correct/);
+    await expect(questionCard.locator('.qe-answer-feedback.is-correct')).toBeVisible();
+    await expect(correctOption).toBeDisabled();
+
+    const finalAttempts = await pool.query(
+      `select count(*)::int as total,
+              count(*) filter (where correct=false)::int as incorrect,
+              count(*) filter (where correct=true)::int as correct
+       from student_question_attempt
+       where student_id=$1 and institution_id=$2 and course_id=$3 and question_id=$4
+         and activity_kind='LESSON_INLINE'`,
+      [studentId, institutionId, courseId, questionId]
+    );
+    expect(Number(finalAttempts.rows[0].total)).toBeGreaterThanOrEqual(2);
+    expect(Number(finalAttempts.rows[0].incorrect)).toBeGreaterThanOrEqual(1);
+    expect(Number(finalAttempts.rows[0].correct)).toBeGreaterThanOrEqual(1);
+  } finally {
+    await pool.end();
+    await learner.context.close();
+  }
+});
+
 test('[CAT-001][CAT-002][TEN-002][TEN-003][CNT-002][LRN-001] learner course lists and subjects follow explicit institution assignment', async ({ browser }) => {
   const fixture = await readPrivateJson<QaFixture>('qa-fixture.json');
   const childA = await contextPage(browser, join(privateDir(), 'child-a.json'), WEB + '/student');
