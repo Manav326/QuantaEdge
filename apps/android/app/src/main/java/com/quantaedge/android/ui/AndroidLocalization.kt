@@ -49,7 +49,6 @@ private val uiPhrases = listOf(
     UiPhrase("account_deletion_child_request_failed", "The child deletion request was not accepted. Refresh and try again.", "Child deletion request स्वीकार नहीं हुई। Refresh करके फिर कोशिश करें।"),
     UiPhrase("account_deletion_linked_children_resolve", "Resolve linked child accounts first. The parent account cannot be deleted while a linked child remains unresolved.", "पहले linked child accounts resolve करें। किसी child के unresolved रहने पर parent account delete नहीं हो सकता।"),
     UiPhrase("account_deletion_otp_requested", "A verification code was requested for the mobile ending in ", "सत्यापन कोड इस मोबाइल नंबर पर भेजा गया है: "),
-    UiPhrase("account_deletion_child_blocked", "The parent account remains blocked until the child account is resolved.", "बच्चे का खाता resolve होने तक parent account blocked रहेगा."),
     UiPhrase("account_deletion_title", "Delete your account", "अपना खाता हटाएँ"),
     UiPhrase("account_deletion_intro", "Submit a request to delete your account and associated personal data. Submitting a request does not mean deletion is complete.", "अपना खाता और उससे जुड़ा personal data हटाने की request भेजें। Request भेजने का मतलब deletion पूरा होना नहीं है।"),
     UiPhrase("account_deletion_retention", "Payment, invoice, certificate and security records may be retained only where there is a justified legal reason.", "Payment, invoice, certificate और security records सिर्फ उचित कानूनी वजह से रखे जा सकते हैं।"),
