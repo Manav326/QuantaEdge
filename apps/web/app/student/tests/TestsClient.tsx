@@ -890,7 +890,12 @@ export default function TestsClient(){
           <section className={styles.resultDetails}>
             <div className={styles.resultDetailsHeading}><h3>{translateUi(locale, 'legacy.web.question.wise.result.4d0055f4')}</h3><p>{translateUi(locale, 'legacy.web.marks.and.outcomes.are.shown.for.revie.78f6eeaf')}</p></div>
             <div className={styles.resultReviewList}>
-              {current&&(()=>{
+              {current&&showingQuestionSet
+                ?<div className={styles.resultReviewItem} key={'question-set-'+(current.question_set_id||current.stimulus_id)}>
+                  <QuestionSetView items={currentQuestionSetItems} activeQuestionId={current.attemptQuestionId} attempt={attempt}
+                    responses={{}} disabled review/>
+                </div>
+                :current&&(()=> {
                 const question=current;
                 const questionIndex=index;
                 const outcome=question.isCorrect===true?translateUi(locale, 'legacy.web.correct.d01db0a2'):question.isCorrect===false?translateUi(locale, 'legacy.web.incorrect.c7d63751'):isEmpty(question.answer)?translateUi(locale, 'legacy.web.not.answered.f674e469'):translateUi(locale, 'legacy.web.reviewed.6c5656b3');
