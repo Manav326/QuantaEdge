@@ -136,6 +136,12 @@ def native_language_package() -> dict:
         q["incorrect_marks"] = -0.25
         if number == 102:
             q["question_type"] = "INFERENCE"
+            q["options"] = []
+            q["proposed_answer"]["option_key"] = None
+            q["proposed_answer"]["explanation"] = "An inference must be supported by details in the shared passage."
+            q["proposed_answer"]["explanation_i18n"] = {
+                "en": "An inference must be supported by details in the shared passage."
+            }
         package["questions"].append(q)
     return package
 
@@ -154,7 +160,17 @@ class PortableAssessmentPackageTests(unittest.TestCase):
         self.assertEqual(first["question_set_id"], second["question_set_id"])
         self.assertEqual(second["question_type"], "INFERENCE")
         self.assertEqual(first["incorrect_marks"], -0.25)
+        self.assertEqual(second["options"], [])
         self.assertEqual(validate_package(package), [])
+
+    def test_requires_options_for_mcq_but_allows_written_inference(self):
+        package = native_language_package()
+        self.assertEqual(package["questions"][-1]["question_type"], "INFERENCE")
+        self.assertEqual(package["questions"][-1]["options"], [])
+        self.assertEqual(validate_package(package), [])
+        package["questions"][0]["options"] = []
+        errors = validate_package(package)
+        self.assertTrue(any("options must contain 2–5 options for MCQ/TRUE_FALSE" in error for error in errors))
 
     def test_rejects_passage_question_set_with_only_one_child(self):
         package = native_language_package()
