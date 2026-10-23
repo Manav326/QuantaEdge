@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1199,
-    "successful_visual_analyses": 1188,
-    "missing_visual_analyses": 1092,
+    "raw_analysis_result_rows": 1200,
+    "successful_visual_analyses": 1189,
+    "missing_visual_analyses": 1091,
     "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1103,
+    "unresolved_count": 1102,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -44747,8 +44747,8 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing different types of forces, specifically contact forces and muscular force.",
-        "visual_type": "uncertain",
+        "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -44762,12 +44762,12 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force"
+          "muscular force",
+          "living beings"
         ],
-        "context_relation": "The page discusses different types of forces, specifically contact forces and muscular force, and provides examples of how these forces are used by living beings.",
+        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The page does not provide specific examples of contact forces or muscular force.",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+          "The image does not provide specific details about the types of forces or the physical properties of the objects."
         ]
       },
       "chapter_id": null,
@@ -45163,9 +45163,33 @@
       "asset_path": "page-0088.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook explaining friction and its effects on objects.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Fig. 5.5: Friction acts between two surfaces and opposes the motion of the object.",
+          "Fig. 5.6: Friction between two surfaces due to irregularities",
+          "Activity 5.4: Let us explore",
+          "A step further"
+        ],
+        "concepts": [
+          "friction",
+          "force of friction",
+          "contact force",
+          "irregularities in surfaces",
+          "different surfaces",
+          "force of friction depends upon the nature of surfaces",
+          "friction is greater on rough surfaces",
+          "air and water exert force of friction",
+          "specific shapes to reduce friction"
+        ],
+        "context_relation": "The page explains the concept of friction and its effects on objects, including the role of different surfaces and the forces involved.",
+        "limitations": [
+          "The page does not provide visual aids or diagrams to illustrate the concepts."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
