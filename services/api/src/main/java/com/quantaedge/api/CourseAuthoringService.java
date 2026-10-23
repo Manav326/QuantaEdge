@@ -72,17 +72,29 @@ public class CourseAuthoringService {
       throw badRequest("Subject tracks require a curriculum class. For an independent course, use its type-defined sections, topics, question banks and test packs instead.");
 
     String internalCode="I"+institutionId+"_"+requestedCode;
+    Long courseIdentityId;
     Long courseId;
     String publicId;
     Long releaseId;
     Long assignmentId;
     try {
+      // Stable logical identity belongs to the source institution. Every later content edit must
+      // fork a new curriculum_program graph linked to this identity instead of mutating a release.
+      courseIdentityId=jdbc.queryForObject("""
+        insert into institution_course_identity(
+          source_institution_id,stable_course_key,display_name,course_type_code,
+          created_by_staff_id,created_by_institution_admin_id
+        ) values(?,?,?,?,?,?) returning id
+        """,Long.class,institutionId,internalCode,displayName,type,actorStaffId,actorInstitutionAdminId);
+      if(courseIdentityId==null) throw new IllegalStateException("The stable course identity could not be created.");
+
       courseId=jdbc.queryForObject("""
         insert into curriculum_program(
-          class_id,code,display_name,stream_code,curriculum_version,status,notes,public_id_prefix,course_type_code
-        ) values(?,?,?,?,?,'ACTIVE',?,'INS',?) returning id
+          class_id,code,display_name,stream_code,curriculum_version,status,notes,public_id_prefix,
+          course_type_code,course_identity_id,content_version_no
+        ) values(?,?,?,?,?,'ACTIVE',?,'INS',?,?,1) returning id
         """,Long.class,classId,internalCode,displayName,stream,version,
-        "Institution-origin "+type+" course for tenant "+tenantCode,type);
+        "Institution-origin "+type+" course for tenant "+tenantCode,type,courseIdentityId);
       if(courseId==null) throw new IllegalStateException("The course could not be created.");
       publicId=jdbc.queryForObject("select public_id from curriculum_program where id=?",String.class,courseId);
 
@@ -119,7 +131,8 @@ public class CourseAuthoringService {
         ) values(?,?,?,null,'COURSE_CREATED',?,?,?::jsonb)
         """,institutionId,releaseId,assignmentId,actorStaffId,actorInstitutionAdminId,
         json(Map.of("courseId",courseId,"courseCode",internalCode,"publicId",publicId,
-          "courseTypeCode",type,"subjectCount",subjects.size(),"courseIdentity","SOURCED")));
+          "courseTypeCode",type,"subjectCount",subjects.size(),"courseIdentityId",courseIdentityId,
+          "courseIdentity","SOURCED","contentVersionNo",1)));
     } catch(DuplicateKeyException ex) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
           "A course with that code and curriculum version already exists for this institution.",ex);
