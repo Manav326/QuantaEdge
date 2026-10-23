@@ -64,9 +64,6 @@ export default function Home() {
           <span className="eyebrow">{english ? 'LEARNING SPACE' : 'Learning space'}</span>
           <h1>{english ? 'This learning link could not be verified.' : 'इस learning link की पुष्टि नहीं हो सकी।'}</h1>
           <p className="hero-lead">{english ? 'Please reopen the link shared by your institution or ask its administrator for a current link.' : 'कृपया अपने institution का shared link फिर खोलें या administrator से नया link लें।'}</p>
-          <div className="hero-actions">
-            <Link href="/" className="button button-dark">{english ? 'Go to QuantaEdge' : 'QuantaEdge पर जाएँ'}</Link>
-          </div>
         </div>
       </section>
     </main>
