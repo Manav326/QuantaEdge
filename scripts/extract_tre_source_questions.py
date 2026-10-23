@@ -583,7 +583,7 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 record["sequence_no"]=sequence
             for sequence, record in enumerate(sorted(language_records,key=sequence_key),1):
                 record["source_inventory_sequence_no"]=sequence
-            # Count source pairs for the actual 120-question course assessment.
+            # Audit the GS/CS sections scored out of 120; preserve any qualifying-language questions too.
             paired_sections={}
             for section,(low,high) in meta["expected"].items():
                 keys={str(q) for q in range(low,high+1)}
@@ -603,7 +603,8 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 "missing_language_question_keys":sorted(
                     expected_language_keys(cycle)-{str(r["source_question_number"]) for r in language_records}
                 ) if cycle!="TRE 1.0" else [],
-                "included_in_tre4_practice_test":False,
+                "included_in_tre4_practice_test":cycle in {"TRE 2.0","TRE 3.0"},
+                "included_in_scored_result":False,
                 "note":"Preserve all questions from each original booklet. TRE 1.0 has 120 questions (40 GS + 80 CS); TRE 2.0 has 150 (30 qualifying language + 40 GS + 80 CS); this TRE 3.0 source booklet has 148 (28 qualifying language + 40 GS + 80 CS). Only GS and CS contribute to the two scored result sections."
             }
             # Also retain alternative Urdu/Bengali source-track availability without adding those
