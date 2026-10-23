@@ -1,0 +1,38 @@
+# Disposable-only overlay for the browser E2E workflow.
+# Never use this file for a production deployment.
+services:
+  # In-memory provider adapter: no SMS/email delivery and no outbound network calls.
+  # The host port is loopback-only; the API reaches it over the private Compose network.
+  otp-mock:
+    image: python:3.12-alpine
+    environment:
+      OTP_MOCK_TOKEN: ${QE_E2E_OTP_MOCK_TOKEN:?Set a disposable test-only OTP mock token}
+    volumes:
+      - ./tests/ui-e2e/mock-otp-provider.py:/app/mock-otp-provider.py:ro
+    command: ["python", "-u", "/app/mock-otp-provider.py"]
+    ports:
+      - "127.0.0.1:8090:8090"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8090/health', timeout=2).read()"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+    restart: "no"
+  api:
+    depends_on:
+      otp-mock:
+        condition: service_healthy
+    environment:
+      APP_ENVIRONMENT: qa
+      APP_DEMO_SEED: "false"
+      APP_QA_ENABLED: "true"
+      APP_QA_ENVIRONMENT_APPROVED: "true"
+      APP_QA_ENVIRONMENT_LABEL: github-actions-disposable
+      APP_QA_TARGET_DATABASE: quantaedge_qa
+      APP_QA_FIXTURE_PASSWORD: ${APP_QA_FIXTURE_PASSWORD:?Set a synthetic test-only fixture password}
+      APP_AUTH_SECURE_COOKIES: "false"
+      APP_AUTH_ADMIN_MOBILES: ${APP_AUTH_ADMIN_MOBILES:-7070107483}
+      APP_AUTH_ALLOW_REPEATED_DEMO_OTP: "false"
+      APP_OTP_PROVIDER_URL: http://otp-mock:8090/send
+      APP_OTP_PROVIDER_TOKEN: ${QE_E2E_OTP_MOCK_TOKEN:?Set a disposable test-only OTP mock token}
+      APP_HRMS_BOOTSTRAP_PASSWORD: ${APP_HRMS_BOOTSTRAP_PASSWORD:-}

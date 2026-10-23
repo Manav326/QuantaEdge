@@ -107,7 +107,7 @@ public class CertificateController {
     long courseId=resolveStudentCourseId(suppliedCourseId);
     requireActiveCourseEnrollment(context.studentId(),courseId,institutionId);
     List<Map<String, Object>> items = jdbc.queryForList("""
-        SELECT """ + CERTIFICATE_COLUMNS + " " + CERTIFICATE_JOIN + """
+        SELECT """ + " " + CERTIFICATE_COLUMNS + " " + CERTIFICATE_JOIN + """
         WHERE c.student_id=? AND c.institution_id=? AND c.program_id=?
         ORDER BY c.issued_at DESC,c.id DESC
         LIMIT 200
@@ -191,7 +191,7 @@ public class CertificateController {
     requireGuardianChild(context, studentId,institutionId);
     requireChildCourseEnrollment(studentId,courseId,institutionId);
     List<Map<String, Object>> items = jdbc.queryForList("""
-        SELECT """ + CERTIFICATE_COLUMNS + " " + CERTIFICATE_JOIN + """
+        SELECT """ + " " + CERTIFICATE_COLUMNS + " " + CERTIFICATE_JOIN + """
         WHERE c.student_id=? AND c.institution_id=? AND c.program_id=?
         ORDER BY c.issued_at DESC,c.id DESC
         LIMIT 200

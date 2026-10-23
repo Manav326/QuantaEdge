@@ -88,6 +88,79 @@ function plainTextError(value: string, contentType: string | null): string | nul
   if (/^[\[{]\s*["']/.test(value.trim())) return null;
   return cleanMessage(value);
 }
+const INSTITUTION_CODE_PATTERN = /^[A-Z0-9][A-Z0-9_-]{2,31}$/;
+const TENANT_BRANDING_SESSION_KEY = 'qe.institution.brand-code.v1';
+const TENANT_BRANDING_COOKIES = [
+  { name: 'qe-tenant-student', path: '/student' },
+  { name: 'qe-tenant-parent', path: '/parent' },
+  { name: 'qe-tenant-login-student', path: '/login/student' },
+  { name: 'qe-tenant-signup', path: '/signup' },
+  { name: 'qe-tenant-session', path: '/session' },
+] as const;
+
+function normalizedInstitutionCode(value: unknown): string | null {
+  const code = String(value ?? '').trim().toUpperCase();
+  return INSTITUTION_CODE_PATTERN.test(code) ? code : null;
+}
+
+/**
+ * The tenant code is an untrusted selector, not an authorization grant. The API still checks
+ * membership and course entitlement. Attach it centrally so UI login and API requests send the
+ * same selector that TenantBrandingProvider used to render the current institution.
+ */
+function currentPageInstitutionCode(): string | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const query = new URLSearchParams(window.location.search);
+    const queryKey = ['institution', 'institutionCode', 'institution_code', 'tenant']
+      .find(key => query.has(key));
+    if (queryKey) return normalizedInstitutionCode(query.get(queryKey));
+
+    const path = window.location.pathname;
+    if (path.startsWith('/school/')) {
+      return normalizedInstitutionCode(path.split('/').filter(Boolean)[1]);
+    }
+
+    const matchingCookie = TENANT_BRANDING_COOKIES.find(cookie =>
+      path === cookie.path || path.startsWith(cookie.path + '/'));
+    if (matchingCookie) {
+      const cookie = document.cookie.split(';').map(part => part.trim())
+        .find(part => part.startsWith(matchingCookie.name + '='));
+      if (cookie) {
+        try {
+          return normalizedInstitutionCode(decodeURIComponent(cookie.slice(matchingCookie.name.length + 1)));
+        } catch {
+          // Invalid scoped metadata blocks fallback to a possibly stale sessionStorage value.
+          return null;
+        }
+      }
+    }
+    return normalizedInstitutionCode(window.sessionStorage.getItem(TENANT_BRANDING_SESSION_KEY));
+  } catch {
+    return null;
+  }
+}
+
+function withInstitutionContext(input: RequestInfo | URL, init?: RequestInit): RequestInit | undefined {
+  if (typeof window === 'undefined' || !isApiRequest(input)) return init;
+  try {
+    const raw = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
+    if (new URL(raw, window.location.origin).origin !== window.location.origin) return init;
+
+    const inputHeaders = typeof Request !== 'undefined' && input instanceof Request ? input.headers : undefined;
+    const headers = new Headers(inputHeaders);
+    new Headers(init?.headers).forEach((value, key) => headers.set(key, value));
+    if (!headers.has('X-QE-Institution-Code')) {
+      const institutionCode = currentPageInstitutionCode();
+      if (institutionCode) headers.set('X-QE-Institution-Code', institutionCode);
+    }
+    return { ...init, headers };
+  } catch {
+    return init;
+  }
+}
+
+
 async function inspectApiResponse(response: Response) {
   const contentType = response.headers.get('content-type');
   const length = Number(response.headers.get('content-length') || 0);
@@ -112,7 +185,7 @@ async function inspectApiResponse(response: Response) {
 export async function apiFetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
   const isApi = isApiRequest(input);
   let response: Response;
-  try { response = await fetch(input, init); }
+  try { response = await fetch(input, withInstitutionContext(input, init)); }
   catch (error) {
     const isAbort = Boolean(error && typeof error === 'object' && 'name' in error &&
       (error as { name?: unknown }).name === 'AbortError');

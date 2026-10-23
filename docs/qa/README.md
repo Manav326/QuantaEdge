@@ -10,11 +10,11 @@
 - [Phase 1 Source Review Log](./phase-1-source-review-log.md): first-pass actions/API observations by route and Android shell mappings.
 - [API, Workspace and Permission Boundary Map](./phase-1-api-permission-map.md): inspected authorization/workspace guards and sensitive controller families.
 - [Data Relationship and Cleanup Map](./phase-1-data-and-cleanup-map.md): identity/tenant/course/learning/HRMS dependencies, protected baseline data and safe-uninstall requirements.
-- [Workflow Scenario Register](./phase-1-workflow-scenario-register.csv): 72 stable cross-platform test scenarios, expected outcomes, negative cases, fixture dependencies and cleanup rules.
+- [Workflow Scenario Register](./phase-1-workflow-scenario-register.csv): 76 stable cross-platform test scenarios, expected outcomes, negative cases, fixture dependencies and cleanup rules.
 - [Existing Test Evidence](./phase-1-existing-test-evidence.md): links current API/Android test sources to scenario domains and separates tests-present from runtime-verified evidence.
 - [Android Composition Map](./phase-1-android-composition-map.md): maps all 34 native routes to their actual shell/component renderers and documents BackHandler return contracts.
-- [UI State Coverage Checklist](./phase-1-ui-state-coverage.csv): one row for each of the 93 web/native destination entries, with separate columns for controls, loading/empty/errors, validation, authorization, data assertions, responsiveness/accessibility and destructive actions.
-- [API Route Inventory](./phase-1-api-route-inventory.csv): source-extracted register of 435 Spring request/STOMP route mappings across 48 Java source files, including path composition, method name, source line and static guard hints.
+- [UI State Coverage Checklist](./phase-1-ui-state-coverage.csv): one row for each of the 96 web/native destination entries, with separate columns for controls, loading/empty/errors, validation, authorization, data assertions, responsiveness/accessibility and destructive actions.
+- [API Route Inventory](./phase-1-api-route-inventory.csv): source-extracted register of 448 Spring request/STOMP route mappings across 51 Java source files, including path composition, method name, source line and static guard hints.
 - [Role/Workspace Permission Matrix](./phase-1-role-workspace-matrix.md): source-derived Education Admin, HRMS, platform-owner, institution-admin and learner/guardian permission boundaries.
 - [Runtime Execution Log](./phase-1-runtime-execution-log.csv): one execution row per scenario, ready to capture the exact commit/environment/persona/device, actual result, evidence, defect and cleanup verification.
 - [Consolidated Coverage Gaps](./phase-1-coverage-gaps.md): prioritized open findings and the required closure sequence before Phase 2 test-data installation.
@@ -28,13 +28,13 @@ The install/uninstall requirements and acceptance matrix are tracked in [Central
 
 | Measure | Current count/status |
 |---|---:|
-| UI route/destination entries | 94 (29 Web, 19 Admin, 12 HRMS, 34 Android) |
-| API mapped handler entries | 443 request/STOMP mapping rows across 49 source files; all 443 linked to existing scenario IDs, including 8 QA test-center handlers, static extraction only |
-| Screen entries linked to scenario IDs | 94; references validated against the scenario register |
-| Workflow scenarios | 72 total: 70 `NOT_EXECUTED`, 2 `NOT_IMPLEMENTED` (QA scenario runner/report and external-provider safety) |
-| Browser/Android runtime-verified screens | 0 in this audit pass; deployed URL was inaccessible via available browser tool, so this does not establish site outage |
-| Per-screen state coverage | 94 rows; controls/navigation are partial source scans; state categories remain `NOT_REVIEWED` |
-| Test-data ownership/uninstall implementation | Initial run manifest/schema, default-off environment gate, tenant/learner starter pack, HRMS QA Center API/UI and recorded starter-pack checks are present on the feature branch; CI/runtime verification pending |
+| UI route/destination entries | 102 (32 Web, 21 Admin, 15 HRMS, 34 Android) |
+| API mapped handler entries | 448 request/STOMP mapping rows across 51 source files; source extraction only |
+| Screen entries linked to scenario IDs | 102; references validated against the scenario register |
+| Workflow scenarios | 76 total: 74 `NOT_EXECUTED`, 2 `NOT_IMPLEMENTED` (QA scenario runner/report and external-provider safety) |
+| Browser/Android runtime-verified screens | 0 fully verified; first GitHub Playwright run started the app stack but stopped at test-setup failures before route walkthroughs. This does not establish site outage |
+| Per-screen state coverage | 102 rows; controls/navigation are partial source scans; state categories remain `NOT_REVIEWED` |
+| Test-data ownership/uninstall implementation | QA pack/HRMS QA Center remain not certified. The feature-branch browser E2E harness started Web, Education Admin, HRMS, API, PostgreSQL and Redis on a disposable stack; setup failures still block deeper flows and all 76 workflow scenarios remain not fully verified |
 
 Counts describe documentation inventory, not feature pass rates or functional coverage percentages.
 

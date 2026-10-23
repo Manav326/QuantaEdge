@@ -376,7 +376,7 @@ export default function QaCenterPage() {
           <div className={styles.detailActions}>
             <button className="secondary" type="button" onClick={() => void inspectRun(activeRunId)} disabled={busy}>{t('people.qa.refresh')}</button>
             <button className="primary" type="button" onClick={() => void verifyRun()} disabled={busy || selectedRun.state !== 'INSTALLED' || !gate?.writeAllowed}>{t('people.qa.runChecks')}</button>
-            <button className="secondary" type="button" onClick={() => void previewUninstall()} disabled={busy || !canUninstall || !gate?.writeAllowed}>{t('people.qa.uninstallPlan')}</button>
+            <button data-testid="qa-preview-uninstall" className="secondary" type="button" onClick={() => void previewUninstall()} disabled={busy || !canUninstall || !gate?.writeAllowed}>{t('people.qa.uninstallPlan')}</button>
           </div>
           {selectedRun.fixtureSummary && Object.keys(selectedRun.fixtureSummary).length > 0 ? (
             <details className={styles.details}>
@@ -431,7 +431,7 @@ export default function QaCenterPage() {
       {uninstallPlan && selectedRun && (
         <section className={styles.confirmPanel} aria-labelledby="qa-uninstall-heading">
           <div className={styles.sectionHeading}>
-            <h2 id="qa-uninstall-heading">{t('people.qa.uninstallPlan')}</h2>
+            <h2 id="qa-uninstall-heading" data-testid="qa-uninstall-heading">{t('people.qa.uninstallPlan')}</h2>
             <PeopleStatusBadge status="PREVIEW_ONLY" tone="warning" />
           </div>
           <p>{t('people.qa.previewWarning')}</p>
@@ -452,7 +452,7 @@ export default function QaCenterPage() {
           </label>
           <div className={styles.detailActions}>
             <button className="secondary" type="button" disabled={busy} onClick={() => { setUninstallPlan(null); setConfirmRunId(''); }}>{t('people.qa.cancel')}</button>
-            <button className="dangerButton" type="button" disabled={busy || confirmRunId.trim().toLowerCase() !== activeRunId.toLowerCase() || !gate?.writeAllowed} onClick={() => void uninstall()}>{t('people.qa.confirmUninstall')}</button>
+            <button data-testid="qa-confirm-uninstall" className="dangerButton" type="button" disabled={busy || confirmRunId.trim().toLowerCase() !== activeRunId.toLowerCase() || !gate?.writeAllowed} onClick={() => void uninstall()}>{t('people.qa.confirmUninstall')}</button>
           </div>
         </section>
       )}

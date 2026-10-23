@@ -107,7 +107,10 @@ class AuthServiceTest {
     assertEquals("ADMIN", context.role());
     verify(jdbc, never()).update(contains("update auth_session set revoked_at=now()"), eq(mobile));
     verify(jdbc, never()).update(contains("update user_account set role='PARENT', active=false"), eq(mobile));
-    verify(jdbc).update(contains("insert into staff_permission_grant"), eq(staffId));
+    verify(jdbc).update(org.mockito.ArgumentMatchers.argThat(sql ->
+        sql.contains("insert into staff_permission_grant(staff_id,workspace_key,permission_key)")
+            && sql.contains("'EDUCATION_ADMIN'")
+            && sql.contains("on conflict(staff_id,workspace_key,permission_key)")), eq(staffId));
   }
 
   @Test
