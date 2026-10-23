@@ -50506,7 +50506,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "An educational page about Oral Rehydration Solution (ORS) and its preparation.",
+        "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
         "visible_text": [
           "Make your own ORS!",
@@ -50525,15 +50525,14 @@
           "Diarrhoea",
           "Health Centres",
           "Preparation of ORS",
-          "Water Solubility",
           "Gases in Water",
-          "Survival of Animals and Plants",
+          "Solubility",
           "Density",
-          "Comparing Density"
+          "Survival of Animals and Plants"
         ],
-        "context_relation": "Introduction to ORS and its preparation, followed by a question about the solubility of gases in water and the importance of ORS in maintaining water balance in the body.",
+        "context_relation": "Explanation and activity related to ORS and its properties",
         "limitations": [
-          "The text does not provide specific instructions for preparing ORS or explaining the solubility of gases in water.",
+          "No specific limitations mentioned",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -51184,23 +51183,23 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the properties of materials and their classification.",
+        "visual_summary": "A page from a textbook discussing the classification of materials and their properties.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "Can all the materials around us be\nconsidered as different examples of\nmatter? Discuss with your friends.\nFor example, water is matter, sand and\npebbles are matter and so is the cup.\nMaterials are types of matter used in the\ncreation or making of objects.\nWe learnt that materials look different\nand ",
-          "Think it over!"
+          "Can all the materials around us be\nIs air\nconsidered as different examples of\nmatter? Discuss with your friends.\nFor example, water is matter, sand and\npebbles are matter and so is the cup.\nMaterials are types of matter used in the\ncreation or making of objects.\nWe learnt that materials look differe",
+          "Think it over!",
+          "We have explored\nand understood the\nvarious properties of\nmaterials.",
+          "Yes! But most of the materials\nthat we see today would have\nalso existed earlier. I am\ncurious to know how people\nclassified them then."
         ],
         "concepts": [
+          "classification of materials",
           "properties of materials",
-          "classification",
-          "classification of the living world",
-          "classification of the non-living world",
-          "invention of plastic",
-          "properties of rocks, plants and animals"
+          "classification of living world",
+          "classification of non-living world"
         ],
-        "context_relation": "exploring the properties and classification of materials",
+        "context_relation": "explaining the concept of classification of materials",
         "limitations": [
-          "the text does not provide specific examples or explanations for the classification of materials"
+          "limited to the text and images provided"
         ]
       },
       "chapter_id": null,
