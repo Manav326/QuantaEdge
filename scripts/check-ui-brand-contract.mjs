@@ -230,7 +230,7 @@ assert(institutionPlatformController.includes('InstitutionThemeTokens.normalize(
 const adminThemeProvider = read('apps/admin/app/components/AdminThemeProvider.tsx');
 const adminThemeStyles = read('apps/admin/app/admin-theme.css');
 assert(adminWorkspaceLayout.includes('AdminThemeProvider') && adminWorkspaceLayout.includes('AdminAppearanceModeButton'), 'The shared Admin workspace must mount tenant appearance and expose its theme control on every authenticated route.');
-assert(adminWorkspaceLayout.includes('institutionCode={institutionCode || session?.institutionCode || session?.institution_code || session?.tenantCode || session?.tenant_code || \'\'}'), 'Admin appearance must follow the resolved tenant selector or authenticated tenant context.');
+assert(adminWorkspaceLayout.includes("institutionCode={institutionCode}") && adminWorkspaceLayout.includes("/api/v1/admin/content/institution-context"), 'Admin appearance must follow the server-resolved HRMS institution binding; browser-selected tenant fallbacks are forbidden.');
 assert(adminLayout.includes("import './admin-theme.css'"), 'Admin theme overrides must load globally from the root layout, rather than only on selected routes.');
 assert(adminThemeProvider.includes('qe.appearance-mode.v1') && adminThemeProvider.includes("'institution', 'system', 'dark', 'light'"), 'Admin and learner web must share the same saved appearance preference and four-mode cycle.');
 assert(adminThemeProvider.includes('themeTokens') && adminThemeProvider.includes('applyPalette(actual, tokens)') && adminThemeProvider.includes('root.dataset.qeAppearance = actual'), 'Admin must consume the institution palette through the same semantic theme-token roles as learner web.');
