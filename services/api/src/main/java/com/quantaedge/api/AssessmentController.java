@@ -490,7 +490,7 @@ public class AssessmentController {
     if(assessmentId==null) throw new IllegalStateException("The assessment draft could not be created.");
 
     List<?> questions=(List<?>)pkg.get("questions");
-    Map<String,Object> sectionsByCode=new LinkedHashMap<>();
+    Map<String,Map<String,Object>> sectionsByCode=new LinkedHashMap<>();
     for(Object raw:((List<?>)pkg.get("sections"))) {
       Map<String,Object> section=stringMap(raw);
       sectionsByCode.put(String.valueOf(section.get("code")),section);
