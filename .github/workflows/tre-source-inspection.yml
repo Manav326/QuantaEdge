@@ -6,39 +6,66 @@ on:
     paths:
       - "data/TRE-4_PYQ.zip"
       - "scripts/inspect_tre_source_archive.py"
+      - "scripts/extract_tre_source_questions.py"
       - ".github/workflows/tre-source-inspection.yml"
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   inspect-source:
-    name: Inspect paper bundle (temporary artifact only)
+    name: Extract and audit TRE source papers
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
-      - name: Check out exact PR source
+      - name: Check out the same-repository working branch
         uses: actions/checkout@v4
+        with:
+          repository: \${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: \${{ github.event.pull_request.head.ref || github.ref_name }}
+          token: \${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Install PDF parser
-        run: python -m pip install --disable-pip-version-check pymupdf
+      - name: Install deterministic PDF and legacy-Hindi text tools
+        run: python -m pip install --disable-pip-version-check "pymupdf>=1.26,<3" "lipi-aparsoft==1.0.9"
 
-      - name: Inventory PDFs and extract page-addressable text
+      - name: Inspect the uploaded archive and record exact source bytes
         run: |
           python scripts/inspect_tre_source_archive.py \
             --archive data/TRE-4_PYQ.zip \
             --output-dir "$RUNNER_TEMP/tre-source-inspection"
 
-      - name: Upload temporary inspection artifact
+      - name: Extract bilingual question inventory with page provenance
+        run: |
+          python scripts/extract_tre_source_questions.py \
+            --archive data/TRE-4_PYQ.zip \
+            --output-dir "$RUNNER_TEMP/tre-question-inventory" \
+            --repo-root "$GITHUB_WORKSPACE"
+
+      - name: Commit original PDFs under data/TRE-Papres
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          BRANCH_NAME: \${{ github.event.pull_request.head.ref }}
+        run: |
+          git add data/TRE-Papres/sources data/TRE-Papres/source-register.json
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Store exact TRE source PDFs with checksums"
+            git push origin "HEAD:\${BRANCH_NAME}"
+          fi
+
+      - name: Upload temporary inventory for question and answer review
         uses: actions/upload-artifact@v4
         with:
-          name: tre-source-inspection
-          path: ${{ runner.temp }}/tre-source-inspection/
+          name: tre-source-review-inventory
+          path: |
+            \${{ runner.temp }}/tre-source-inspection/
+            \${{ runner.temp }}/tre-question-inventory/
           if-no-files-found: error
           retention-days: 3
