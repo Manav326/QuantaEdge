@@ -296,9 +296,60 @@ test('[CAT-001][CAT-002][TEN-002][TEN-003] learner course lists and subjects fol
     expect(coursesB.body[0].subjects.length).toBeGreaterThan(0);
     expect(coursesC.body[0].subjects.length).toBeGreaterThan(0);
 
+    // Verify a real learner surface and its course-scoped lesson API against the same
+    // source rows. The pack's synthetic lessons are run-owned and removed at teardown.
+    await childA.page.goto(WEB + '/student/courses', { waitUntil: 'domcontentloaded' });
+    await expect(childA.page.getByRole('heading', { name: /all courses/i })).toBeVisible();
+    const ownedCoursesSection = childA.page.getByRole('region', { name: /your enrolled courses/i });
+    await expect(ownedCoursesSection).toContainText(String(coursesA.body[0].display_name));
+    await expect(ownedCoursesSection).not.toContainText(String(coursesC.body[0].display_name));
+
+    const class7CourseId = Number(coursesA.body[0].id || coursesA.body[0].course_id);
+    const class6CourseId = Number(coursesC.body[0].id || coursesC.body[0].course_id);
+    const [class7LessonRows, class6LessonRows] = await Promise.all([
+      api(childA.page, '/api/v1/learning/lessons?courseId=' + encodeURIComponent(String(class7CourseId)) + '&subjectCode=maths&language=en', 'STUDENT', fixture.credentials.childA.institutionCode),
+      api(adultC.page, '/api/v1/learning/lessons?courseId=' + encodeURIComponent(String(class6CourseId)) + '&subjectCode=maths&language=en', 'STUDENT', fixture.credentials.independentLearner.institutionCode)
+    ]);
+    expect(class7LessonRows.status, 'Authorized Class 7 learner must load lessons within the assigned course.').toBe(200);
+    expect(class6LessonRows.status, 'Authorized Class 6 learner must load lessons within the assigned course.').toBe(200);
+    expect(Array.isArray(class7LessonRows.body)).toBe(true);
+    expect(Array.isArray(class6LessonRows.body)).toBe(true);
+
+    const poolForLessons = await openQaDatabase();
+    try {
+      const fixtureLessons = await poolForLessons.query(
+        `select l.id::int as lesson_id, cps.program_id::int as course_id
+         from lesson l
+         join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true
+         join curriculum_subject s on s.id=ch.subject_id and s.active=true
+         join curriculum_program_subject cps on cps.subject_id=s.id and cps.class_id=s.class_id
+         where l.qa_test_run_id=$1 and l.status='PUBLISHED' and s.code='maths'
+           and cps.program_id in ($2,$3)
+         order by cps.program_id,l.id`,
+        [fixture.runId, class7CourseId, class6CourseId]
+      );
+      const expected7 = fixtureLessons.rows.filter(row => Number(row.course_id) === class7CourseId).map(row => Number(row.lesson_id));
+      const expected6 = fixtureLessons.rows.filter(row => Number(row.course_id) === class6CourseId).map(row => Number(row.lesson_id));
+      expect(expected7.length, 'Run-owned Class 7 lesson should exist in the mapped subject.').toBeGreaterThan(0);
+      expect(expected6.length, 'Run-owned Class 6 lesson should exist in the mapped subject.').toBeGreaterThan(0);
+      expect(class7LessonRows.body.map((row: any) => Number(row.id))).toEqual(expect.arrayContaining(expected7));
+      expect(class6LessonRows.body.map((row: any) => Number(row.id))).toEqual(expect.arrayContaining(expected6));
+      expect(class7LessonRows.body.map((row: any) => Number(row.id))).not.toEqual(expect.arrayContaining(expected6));
+      expect(class6LessonRows.body.map((row: any) => Number(row.id))).not.toEqual(expect.arrayContaining(expected7));
+    } finally {
+      await poolForLessons.end();
+    }
+
+    const foreignContentRead = await api(
+      adultC.page,
+      '/api/v1/learning/lessons?courseId=' + encodeURIComponent(String(class7CourseId)) + '&subjectCode=maths&language=en',
+      'STUDENT',
+      fixture.credentials.independentLearner.institutionCode
+    );
+    expect([400, 403, 404], 'A valid global course ID must not expose its lessons from an institution without that assigned enrollment.').toContain(foreignContentRead.status);
+
     // Institution C has an assigned/enrolled Class 6 only. A valid Class 7 program ID
     // copied from Institution A must not allow enrollment or create any access ledger rows.
-    const class7CourseId = Number(coursesA.body[0].id || coursesA.body[0].course_id);
     const adultSession = await api(
       adultC.page,
       '/api/v1/auth/me',
