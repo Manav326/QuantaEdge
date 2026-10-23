@@ -537,6 +537,54 @@ test('[CAT-001][CAT-002][TEN-002][TEN-003][CNT-002][LRN-001] learner course list
     const ownedCoursesSection = childA.page.getByRole('region', { name: /your enrolled courses/i });
     await expect(ownedCoursesSection).toContainText(String(coursesA.body[0].display_name));
     await expect(ownedCoursesSection).not.toContainText(String(coursesC.body[0].display_name));
+    const displayedOwnedCourses = await ownedCoursesSection.locator('article h2').allTextContents();
+    expect(displayedOwnedCourses.map((value: string) => value.trim())).toEqual(
+      coursesA.body.map((course: any) => String(course.display_name).trim())
+    );
+
+    // Compare the Marketplace UI against its own authenticated, institution-scoped API.
+    // A route visit alone is not evidence that published offers and ownership actions agree.
+    const marketplaceWaiter = childA.page.waitForResponse(response =>
+      response.request().method() === 'GET' &&
+      new URL(response.url()).pathname === '/api/v1/marketplace/courses'
+    );
+    await childA.page.goto(WEB + '/student/marketplace', { waitUntil: 'domcontentloaded' });
+    await expect(childA.page.getByRole('heading', { name: /Course Marketplace|कोर्स मार्केटप्लेस/i })).toBeVisible();
+    const marketplaceResponse = await marketplaceWaiter;
+    expect(marketplaceResponse.status(), 'Marketplace offers must be loaded from the authenticated API.').toBe(200);
+    const offers = await marketplaceResponse.json();
+    expect(Array.isArray(offers), 'Marketplace response must be a list of published offers.').toBe(true);
+    const offerIds = offers.map((offer: any) => Number(offer.course_id));
+    expect(new Set(offerIds).size, 'A published offer must not be duplicated in one marketplace response.').toBe(offerIds.length);
+    if (offers.length > 0) {
+      const offerRegion = childA.page.getByRole('region', { name: /Available course offers|उपलब्ध कोर्स ऑफर/i });
+      await expect(offerRegion).toBeVisible();
+      const visibleOfferTitles = await offerRegion.locator('article h2').allTextContents();
+      expect(visibleOfferTitles.map((value: string) => value.trim())).toEqual(
+        offers.map((offer: any) => String(offer.title || offer.course_name).trim())
+      );
+      for (const offer of offers as any[]) {
+        const title = String(offer.title || offer.course_name);
+        const card = offerRegion.locator('article').filter({
+          has: childA.page.getByRole('heading', { name: title, exact: true })
+        });
+        await expect(card, 'Every API offer must have exactly one matching visible card: ' + title).toHaveCount(1);
+        const owned = Boolean(offer.has_access || offer.purchased);
+        if (owned) {
+          await expect(card.getByRole('link', { name: /Open course|कोर्स खोलें/i })).toHaveAttribute(
+            'href', '/student/courses?focus=' + encodeURIComponent(String(offer.course_id))
+          );
+        } else if (Number(offer.price_paise) === 0 && offer.currency === 'INR') {
+          await expect(card.getByRole('button', { name: /Add free course|निःशुल्क कोर्स जोड़ें/i })).toBeVisible();
+        } else if (offer.parent_managed && Number(offer.price_paise) > 0) {
+          await expect(card.getByRole('button', { name: /Ask parent to buy|Parent से खरीदने को कहें|Parent request pending|Parent का अनुरोध लंबित/i })).toBeVisible();
+        } else if (Number(offer.price_paise) > 0 && offer.currency === 'INR') {
+          await expect(card.getByRole('button', { name: /Buy course|कोर्स खरीदें/i })).toBeVisible();
+        }
+      }
+    } else {
+      await expect(childA.page.getByText(/No course offers|कोई कोर्स ऑफर/i)).toBeVisible();
+    }
 
     const class7CourseId = Number(coursesA.body[0].id || coursesA.body[0].course_id);
     const class6CourseId = Number(coursesC.body[0].id || coursesC.body[0].course_id);
