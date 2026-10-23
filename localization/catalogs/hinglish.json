@@ -3836,5 +3836,22 @@
   "admin.lifecycle.deletionRelatedRows": "Linked row references",
   "admin.lifecycle.deletionRunFailed": "Linked records की जाँच नहीं हो सकी।",
   "admin.lifecycle.deletionTable": "Table",
-  "admin.lifecycle.deletionRowCount": "Rows"
+  "admin.lifecycle.deletionRowCount": "Rows",
+  "accountDeletion.verifyIdentityTitle": "अपनी identity verify करें",
+  "accountDeletion.verifyIdentityDescription": "Request record होने से पहले saved verified sign-in method से identity confirm करें। Verification 10 मिनट में expire हो जाती है।",
+  "accountDeletion.otpSent": "आपके verified mobile के आखिरी digits {lastFour} पर code भेजा गया है।",
+  "accountDeletion.otpSixDigits": "छह अंकों का verification code भरें।",
+  "accountDeletion.verifyIdentityFailed": "Identity verify नहीं हो सकी। दोबारा कोशिश करें या manual review चुनें।",
+  "accountDeletion.identityVerified": "Identity verify हो गई है। अब request submit कर सकते हैं।",
+  "accountDeletion.verifyIdentityFirst": "Submit करने से पहले identity verify करें या manual identity review चुनें।",
+  "accountDeletion.verifiedMobile": "Verified mobile के आखिरी digits {lastFour}",
+  "accountDeletion.sendOtp": "Verification code भेजें",
+  "accountDeletion.otpSending": "Code भेजा जा रहा है…",
+  "accountDeletion.otpLabel": "छह अंकों का code",
+  "accountDeletion.otpVerifying": "Verify हो रहा है…",
+  "accountDeletion.verifyOtp": "Code verify करें",
+  "accountDeletion.verifiedGoogle": "इस account से पहले से linked Google account दोबारा confirm करें।",
+  "accountDeletion.noVerifiedMethod": "Verified mobile या linked Google identity उपलब्ध नहीं है। Manual identity review चुनें।",
+  "accountDeletion.manualReviewLabel": "मैं इन verification methods का इस्तेमाल नहीं कर सकता/सकती। Deletion process करने से पहले कृपया मेरी identity manually review करें।",
+  "accountDeletion.manualReviewNotice": "Manual identity review जरूरी है। Review पूरा होने तक account delete नहीं होगा।"
 }
