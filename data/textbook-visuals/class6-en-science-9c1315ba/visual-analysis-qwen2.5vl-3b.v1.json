@@ -11,10 +11,10 @@
     "assets_selected": 1352,
     "assets_processed_this_run": 5,
     "assets_eligible": 2078,
-    "assets_analyzed": 1347,
-    "assets_remaining": 731,
-    "assets_completion_percent": 64.8,
-    "assets_failed": 24,
+    "assets_analyzed": 1348,
+    "assets_remaining": 730,
+    "assets_completion_percent": 64.9,
+    "assets_failed": 23,
     "assets_skipped_from_checkpoint": 1347,
     "batch_limit": 5,
     "publication_allowed": false
@@ -444,7 +444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864347432",
-      "checkpointed_at": "2026-10-22T23:41:42Z"
+      "checkpointed_at": "2026-10-22T23:55:34Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20124,7 +20124,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864347432",
-      "checkpointed_at": "2026-10-22T23:43:26Z"
+      "checkpointed_at": "2026-10-22T23:57:16Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -36891,7 +36891,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39803151021",
+      "run_id": "39864347432",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -36952,19 +36952,54 @@
     {
       "asset_id": "d4ae7f5961c3dc6909f954b4",
       "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
-      "page_text_context_sha256": "8c4ae3b98aa19198e8b221136de8991b6d901dac919bbca1f83712755525334c",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 96,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8c4ae3b98aa19198e8b221136de8991b6d901dac919bbca1f83712755525334c",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39803151021",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing different shapes of magnets and their magnetic poles.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Bar Magnet",
+          "Disc Magnet",
+          "Cylindrical Magnet",
+          "Ring Magnet",
+          "Spherical Magnet",
+          "Magnet says \"Humans have made me in different shapes and sizes as per their requirements. However, my poles always occur in pairs, no matter my shape\"",
+          "N",
+          "S",
+          "S",
+          "N",
+          "N",
+          "N",
+          "S",
+          "S",
+          "S",
+          "N"
+        ],
+        "concepts": [
+          "magnetic poles",
+          "magnetic fields",
+          "magnetic materials",
+          "magnetic properties",
+          "magnetic behavior"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source text.",
+        "limitations": [
+          "The image does not show the magnetic field lines or the interaction between the poles.",
+          "The image does not show the effect of the magnetic field on other materials or objects."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39864347432",
+      "checkpointed_at": "2026-10-23T00:00:58Z"
     },
     {
       "asset_id": "ac3ef67e4ced1dc1152e7b14",
@@ -36977,7 +37012,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39803151021",
+      "run_id": "39864347432",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
