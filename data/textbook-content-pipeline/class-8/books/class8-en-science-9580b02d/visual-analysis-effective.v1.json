@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "712b0a13a43d7f35c5a9eb4b5007d77f6ccd73d7a20df83a2e8dae5c11874c82",
+  "raw_analysis_sha256": "42a4199e8b3bd8b15c44f4c8926961ffd1bc3e7bef2849433b9cc549722b9cc9",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40008922922",
-      "checkpointed_at": "2026-10-23T20:28:14Z",
+      "checkpointed_at": "2026-10-23T20:36:05Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40008922922",
-      "checkpointed_at": "2026-10-23T20:28:54Z",
+      "checkpointed_at": "2026-10-23T20:36:46Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57829,7 +57829,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40008922922",
-      "checkpointed_at": "2026-10-23T20:29:43Z",
+      "checkpointed_at": "2026-10-23T20:37:34Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -58654,7 +58654,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39975507646",
+      "run_id": "40008922922",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -58722,6 +58722,62 @@
         "context_relation": "Experimental setup for electrostatic force demonstration",
         "limitations": [
           "No specific measurements or calculations are shown."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7f905d3625c9b1fe633503af",
+      "asset_sha256": "03fd65d14c699681f85f5f8ddd2cbcc5b108d1e939a9fa5caeaefaff46cfc160",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 90,
+      "asset_path": "assets/03fd65d14c699681f85f5f8ddd2cbcc5b108d1e939a9fa5caeaefaff46cfc160.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0975f46f2c0d820742160ed4058dbee315cf7afd7cb940cf3e6d2001e63e547d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two balloons hanging from a table with blue labels.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "Electrostatic force",
+          "Charged plastic scale",
+          "Polythene",
+          "Small pieces of paper",
+          "Rubbing",
+          "Avoiding contact with hands or metal objects"
+        ],
+        "context_relation": "Experimental setup for electrostatic force demonstration",
+        "limitations": [
+          "No specific quantities or formulas provided",
+          "No specific measurements or data points shown"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40008922922",
+      "checkpointed_at": "2026-10-23T20:44:15Z",
+      "effective_analysis": {
+        "visual_summary": "Two balloons hanging from a table with blue labels.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "Electrostatic force",
+          "Charged plastic scale",
+          "Polythene",
+          "Small pieces of paper",
+          "Rubbing",
+          "Avoiding contact with hands or metal objects"
+        ],
+        "context_relation": "Experimental setup for electrostatic force demonstration",
+        "limitations": [
+          "No specific quantities or formulas provided",
+          "No specific measurements or data points shown"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
