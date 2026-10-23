@@ -611,7 +611,7 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                     else:
                         cursor.execute("""
                             UPDATE institution_course_release SET content_fingerprint=%s,updated_at=now()
-                            WHERE id=? AND source_institution_id=? AND release_state='DRAFT'
+                            WHERE id=%s AND source_institution_id=%s AND release_state='DRAFT'
                         """, (fingerprint, release_id, institution_id))
                 elif str(saved_fingerprint).strip() != fingerprint:
                     raise ImportErrorSafe("Release content differs from the imported source bundle; no release state was changed.")
