@@ -215,7 +215,8 @@ BEGIN
 
   SELECT string_agg(format('%I',column_name),', ' ORDER BY ordinal_position),
          string_agg(format('r.%I',column_name),', ' ORDER BY ordinal_position),
-         bool_or(column_name='id')
+         (SELECT EXISTS(SELECT 1 FROM information_schema.columns c2
+           WHERE c2.table_schema='public' AND c2.table_name=p_table_name AND c2.column_name='id'))
   INTO v_columns,v_select_columns,v_has_id
   FROM information_schema.columns
   WHERE table_schema='public' AND table_name=p_table_name
