@@ -11,14 +11,6 @@ internal val LocalQuantaLanguage = staticCompositionLocalOf { "hi" }
 
 private data class UiPhrase(val key: String, val english: String, val hindi: String)
 private val uiPhrases = listOf(
-    UiPhrase("billing_gstin_prefix", "GSTIN: ", "GSTIN: "),
-    UiPhrase("resource_pages", "pages", "पृष्ठ"),
-    UiPhrase("resource_book_pdf", "Book PDF · ", "पुस्तक PDF · "),
-    UiPhrase("resource_chapter_pdfs", "chapter PDFs", "अध्याय PDF"),
-    UiPhrase("legal_terms", "Terms", "नियम और शर्तें"),
-    UiPhrase("legal_privacy", "Privacy", "गोपनीयता"),
-    UiPhrase("role_learner", "Learner", "विद्यार्थी"),
-    UiPhrase("account_gmail", "Gmail", "Gmail"),
     UiPhrase("account_deletion_reason_intro", "Before submitting an account-deletion request, tell us why you want to delete the account.", "खाता हटाने की request भेजने से पहले बताएं कि आप खाता क्यों हटाना चाहते हैं।"),
     UiPhrase("account_deletion_choose_reason", "Choose a reason", "कारण चुनें"),
     UiPhrase("account_deletion_reason_no_longer_needed", "I no longer need this account", "अब मुझे इस खाते की जरूरत नहीं है"),
@@ -77,6 +69,14 @@ private val uiPhrases = listOf(
     UiPhrase("account_deletion_recorded_notice", "Deletion request recorded. This does not mean deletion is complete.", "Deletion request दर्ज हो गई। इसका मतलब deletion पूरा होना नहीं है।"),
     UiPhrase("account_deletion_cancelled_notice", "Deletion request cancelled.", "Deletion request cancel हो गई।"),
     UiPhrase("account_deletion_no_open_request", "No open deletion request was found.", "कोई खुली deletion request नहीं मिली।"),
+    UiPhrase("billing_gstin_prefix", "GSTIN: ", "GSTIN: "),
+    UiPhrase("resource_pages", "pages", "पृष्ठ"),
+    UiPhrase("resource_book_pdf", "Book PDF · ", "पुस्तक PDF · "),
+    UiPhrase("resource_chapter_pdfs", "chapter PDFs", "अध्याय PDF"),
+    UiPhrase("legal_terms", "Terms", "नियम और शर्तें"),
+    UiPhrase("legal_privacy", "Privacy", "गोपनीयता"),
+    UiPhrase("role_learner", "Learner", "विद्यार्थी"),
+    UiPhrase("account_gmail", "Gmail", "Gmail"),
     UiPhrase("nav_home", "Home", "होम"),
     UiPhrase("nav_learn", "Learn", "सीखें"),
     UiPhrase("nav_tests", "Tests", "टेस्ट"),
@@ -481,11 +481,6 @@ private val uiPhraseBySource: Map<String, UiPhrase> = buildMap {
         putIfAbsent(phrase.english, phrase)
         putIfAbsent(phrase.hindi, phrase)
     }
-}
-
-internal fun localizedUiTextForLanguage(source: String, language: String): String {
-    val phrase = uiPhraseBySource[source] ?: return source
-    return if (language == "hi") phrase.hindi else phrase.english
 }
 
 /** Select a translated resource using the locale chosen inside the app, independently of Android device locale. */

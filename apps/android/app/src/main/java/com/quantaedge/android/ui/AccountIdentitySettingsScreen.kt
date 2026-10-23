@@ -17,11 +17,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -272,7 +271,6 @@ fun AccountIdentitySettingsScreen(
             }
         }
 
-        if (accountType != "CHILD") {
             val requestExists = deletionRequest.optBoolean("hasRequest")
             val requestStatus = deletionRequest.optString("status", "NONE")
             val requestIsOpen = requestStatus in setOf("REQUESTED", "UNDER_REVIEW", "AWAITING_LINKED_CHILD_DECISION")

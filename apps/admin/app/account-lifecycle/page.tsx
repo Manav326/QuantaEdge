@@ -10,6 +10,7 @@ import { useUiTranslation } from '../i18n/useUiTranslation';
 
 type AdultReview = { student_id:number; display_name:string; class_code?:string|null; status:string; reviewed_at?:string|null; expires_at?:string|null };
 type ParentReview = { user_id:number; student_id:number; display_name:string; mobile_last_four?:string|null; status:string; reviewed_at?:string|null; expires_at?:string|null };
+
 type DeletionRequest = {
   request_id:string; subject_user_public_id?:string|null; subject_student_public_user_id?:string|null;
   request_source:string; status:string; includes_linked_children:boolean; linked_children_count:number;
