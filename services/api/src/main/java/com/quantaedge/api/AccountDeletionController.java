@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +21,20 @@ public class AccountDeletionController {
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
   private final StaffAuditService staffAudit;
+  private final AccountDeletionDependencyAssessmentService dependencyAssessment;
 
-  public AccountDeletionController(JdbcTemplate jdbc, AuthorizationService authorization, StaffAuditService staffAudit) {
+  @Autowired
+  public AccountDeletionController(JdbcTemplate jdbc, AuthorizationService authorization,
+      StaffAuditService staffAudit, AccountDeletionDependencyAssessmentService dependencyAssessment) {
     this.jdbc = jdbc;
     this.authorization = authorization;
     this.staffAudit = staffAudit;
+    this.dependencyAssessment = dependencyAssessment;
+  }
+
+  /** Compatibility constructor for focused request-controller tests. */
+  AccountDeletionController(JdbcTemplate jdbc, AuthorizationService authorization, StaffAuditService staffAudit) {
+    this(jdbc, authorization, staffAudit, new AccountDeletionDependencyAssessmentService(jdbc));
   }
 
   @GetMapping("/account/me/deletion-request")
@@ -182,6 +192,19 @@ public class AccountDeletionController {
     Map<String,Object> result = new LinkedHashMap<>(rows.getFirst());
     result.put("linkedChildren", children);
     return result;
+  }
+
+  @GetMapping("/admin/account-deletion-requests/{requestId}/assessment")
+  public Map<String,Object> dependencyAssessment(@PathVariable UUID requestId,
+      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+    context = requireReviewer(context);
+    Map<String,Object> report = dependencyAssessment.assess(requestId);
+    Object affected = report.get("summary") instanceof Map<?,?> summary
+        ? summary.get("affectedRelationships") : "unknown";
+    staffAudit.recordAction(context, "/api/v1/admin/account-deletion-requests/" + requestId + "/assessment",
+        "Ran read-only account-deletion dependency assessment; affected FK relationships=" + affected
+            + ". No account or learner data was changed.");
+    return report;
   }
 
   @PostMapping("/admin/account-deletion-requests/{requestId}/start-review")
