@@ -68,29 +68,52 @@ public class AdminContentController {
     this.assessmentCatalog = assessmentCatalog;
   }
 
+  /** Trusted tenant identity for the current Education Admin staff session. */
+  @GetMapping("/institution-context")
+  public Map<String,Object> institutionContext(
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    authorization.requireAuth(context);
+    if(context.staffId()==null) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+          "An authenticated Education Admin staff account is required.");
+    }
+    if(tenant==null) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+          "This staff account has no active HRMS institution binding.");
+    }
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select b.assigned_at,b.assigned_by_staff_id,t.id as institution_id,
+             t.tenant_code,t.display_name,t.status
+      from institution_staff_binding b
+      join institution_tenant t on t.id=b.institution_id
+      where b.staff_id=? and b.institution_id=? and b.status='ACTIVE'
+        and t.status='ACTIVE'
+      """,context.staffId(),tenant.institutionId());
+    if(rows.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+          "This staff account is not currently assigned to the resolved institution by HRMS.");
+    }
+    Map<String,Object> result=new LinkedHashMap<>(rows.getFirst());
+    result.put("courseRelationshipScope","SOURCE_ONLY_EDIT_SHARED_READ_ONLY");
+    result.put("institutionSwitchingAllowed",false);
+    return result;
+  }
+
+  /**
+   * @deprecated Institution switching has been retired. The active institution is provided by
+   * the authenticated HRMS-managed staff binding at /institution-context.
+   */
+  @Deprecated(since="2026-10",forRemoval=false)
   /** Lists active institutions that have at least one active course assignment. */
   @GetMapping("/institutions")
+  @Deprecated(since="2026-10",forRemoval=false)
   public List<Map<String,Object>> institutions(
       @RequestHeader(value = "X-Admin-Token", required = false) String token,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    authorize(token, context, "CONTENT_VIEW");
-    String preferredCode = defaultInstitutionCode == null
-        ? "" : defaultInstitutionCode.trim().toUpperCase(Locale.ROOT);
-    return jdbc.queryForList("""
-      select t.id as institution_id,t.tenant_code,t.display_name,
-             case when ?<>'' and t.tenant_code=? then true else false end as is_default
-      from institution_tenant t
-      where t.status='ACTIVE'
-        and exists (
-          select 1
-          from institution_course_assignment assignment
-          join institution_course_release release on release.id=assignment.course_release_id
-          join curriculum_program p on p.id=release.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-          where assignment.institution_id=t.id and assignment.status='ASSIGNED'
-        )
-      order by case when ?<>'' and t.tenant_code=? then 0 else 1 end,
-               lower(t.display_name),t.id
-      """, preferredCode, preferredCode, preferredCode, preferredCode);
+    throw new ResponseStatusException(HttpStatus.GONE,
+        "DEPRECATED_INSTITUTION_SELECTOR: Education Admin institutions are assigned in HRMS. Use /api/v1/admin/content/institution-context; institution switching is not supported.");
   }
 
   @GetMapping("/programs")
