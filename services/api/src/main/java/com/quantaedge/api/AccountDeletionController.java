@@ -1,6 +1,5 @@
 package com.quantaedge.api;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -36,9 +35,9 @@ public class AccountDeletionController {
       select request_id,status,request_source,includes_linked_children,linked_children_count,
         requested_at,updated_at,cancelled_at,completed_at
       from account_deletion_request
-      where subject_user_id=? or (? is not null and subject_student_id=?)
+      where subject_user_id=?
       order by requested_at desc limit 1
-      """, subject.userId(), subject.studentId(), subject.studentId());
+      """, subject.userId());
     if (rows.isEmpty()) return Map.of("hasRequest", false, "status", "NONE");
     return requestView(rows.getFirst());
   }
