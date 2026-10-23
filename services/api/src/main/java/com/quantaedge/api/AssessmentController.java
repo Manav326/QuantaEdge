@@ -362,7 +362,8 @@ public class AssessmentController {
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
     context=authorization.requirePermission(context,"CONTENT_CREATE");
-    long courseId=longValue(body==null?null:body.get("courseId"),"Course ID");
+    if(body==null)throw badRequest("Provide the course binding and JSON package.");
+    long courseId=longValue(body.get("courseId"),"Course ID");
     requireAssignedCourse(courseId,tenant);
     requireEditableCourse(courseId,tenant);
     Map<String,Object> target=resolvePortableAssessmentTarget(body,courseId);
@@ -404,7 +405,8 @@ public class AssessmentController {
           InstitutionTenantContext tenant) {
     context=authorization.requirePermission(context,"CONTENT_CREATE");
     authorization.requirePermission(context,"CONTENT_EDIT");
-    long courseId=longValue(body==null?null:body.get("courseId"),"Course ID");
+    if(body==null)throw badRequest("Provide the course binding and JSON package.");
+    long courseId=longValue(body.get("courseId"),"Course ID");
     requireAssignedCourse(courseId,tenant);
     requireEditableCourse(courseId,tenant);
     Map<String,Object> target=resolvePortableAssessmentTarget(body,courseId);
@@ -530,6 +532,7 @@ public class AssessmentController {
       snapshot.put("prompt_i18n",q.getOrDefault("prompt_i18n",Map.of()));
       snapshot.put("options",options);
       snapshot.put("answer_payload",answer);
+      snapshot.put("proposed_answer",proposed);
       snapshot.put("explanation",proposed.get("explanation"));
       snapshot.put("explanation_i18n",proposed.getOrDefault("explanation_i18n",Map.of()));
       snapshot.put("question_review_status","PENDING_HUMAN_REVIEW");
@@ -609,6 +612,45 @@ public class AssessmentController {
     return result;
   }
 
+    @GetMapping("/admin/assessments/{assessmentId}/package-questions")
+  public Map<String,Object> portablePackageQuestions(
+      @PathVariable long assessmentId,@RequestParam Long courseId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    context=authorization.requirePermission(context,"CONTENT_REVIEW");
+    requireAssessmentInCourse(assessmentId,courseId,tenant);
+    requireEditableCourse(courseId,tenant);
+    Boolean imported=jdbc.queryForObject("""
+      select exists(select 1 from assessment where id=? and course_id=? and source_package_id is not null)
+      """,Boolean.class,assessmentId,courseId);
+    if(!Boolean.TRUE.equals(imported))
+      throw badRequest("This endpoint is only for assessments imported from a portable JSON package.");
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select aq.sequence_no,aq.max_marks,aq.question_snapshot::text as question_snapshot
+      from assessment_question aq
+      where aq.assessment_id=?
+      order by aq.sequence_no,aq.id
+      """,assessmentId);
+    List<Map<String,Object>> items=new ArrayList<>();
+    for(Map<String,Object> row:rows) {
+      Map<String,Object> snapshot=parseObject(String.valueOf(row.get("question_snapshot")));
+      Map<String,Object> item=new LinkedHashMap<>();
+      item.put("sequenceNo",row.get("sequence_no"));
+      item.put("maxMarks",row.get("max_marks"));
+      item.put("question",snapshot);
+      items.add(item);
+    }
+    return Map.of("assessmentId",assessmentId,"courseId",courseId,"status",
+        jdbc.queryForObject("select status from assessment where id=?",String.class,assessmentId),
+        "items",items,"total",items.size());
+  }
+
+  /**
+   * The source-course reviewer can correct a proposed answer/explanation on the imported draft.
+   * Review edits are rejected after publication or after learner attempts exist; revisions must
+   * be imported as a new package version instead of mutating historical question snapshots.
+   */
   @PatchMapping("/admin/assessments/{assessmentId}/package-questions/{sequenceNo}/review")
   @Transactional
   public Map<String,Object> reviewImportedPackageQuestion(
@@ -620,37 +662,108 @@ public class AssessmentController {
     context=authorization.requirePermission(context,"CONTENT_REVIEW");
     requireAssessmentInCourse(assessmentId,courseId,tenant);
     requireEditableCourse(courseId,tenant);
-    String reviewStatus=requiredText(body==null?null:body.get("reviewStatus"),"Review status",20).toUpperCase(Locale.ROOT);
+    if(body==null)throw badRequest("Provide a review decision and the question's answer/explanation.");
+    String reviewStatus=requiredText(body.get("reviewStatus"),"Review status",24).toUpperCase(Locale.ROOT);
     if(!Set.of("APPROVED","REJECTED","PENDING_HUMAN_REVIEW").contains(reviewStatus))
       throw badRequest("Review status must be APPROVED, REJECTED, or PENDING_HUMAN_REVIEW.");
     List<Map<String,Object>> rows=jdbc.queryForList("""
-      select aq.id,aq.question_snapshot::text as question_snapshot,a.source_package_id
+      select aq.id,aq.question_snapshot::text as question_snapshot,a.source_package_id,a.status,
+        exists(select 1 from student_assessment_attempt att where att.assessment_id=a.id and att.status<>'ABANDONED') as has_attempts
       from assessment_question aq join assessment a on a.id=aq.assessment_id
       where aq.assessment_id=? and aq.sequence_no=? and a.course_id=?
       """,assessmentId,sequenceNo,courseId);
     if(rows.isEmpty())throw notFound("Imported assessment question",sequenceNo);
-    if(rows.getFirst().get("source_package_id")==null)
+    Map<String,Object> row=rows.getFirst();
+    if(row.get("source_package_id")==null)
       throw badRequest("This review endpoint is only for questions imported from a portable package.");
-    long questionId=((Number)rows.getFirst().get("id")).longValue();
-    Map<String,Object> snapshot=parseObject(String.valueOf(rows.getFirst().get("question_snapshot")));
-    if("APPROVED".equals(reviewStatus)) {
-      Map<String,Object> answer=stringMap(snapshot.get("answer_payload"));
-      if(answer==null||answer.get("kind")==null||answer.get("value")==null||String.valueOf(answer.get("value")).isBlank())
-        throw badRequest("Add a supported answer key to the portable package and import a new version before approving this question.");
-      if("OPTION".equals(String.valueOf(answer.get("kind"))) && !answerContains(snapshot.get("options"),String.valueOf(answer.get("value"))))
-        throw badRequest("The proposed answer key is not present in this question's options.");
+    if(!"DRAFT".equals(String.valueOf(row.get("status")))||Boolean.TRUE.equals(row.get("has_attempts")))
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "This assessment is no longer an untouched draft. Import a new package version to preserve historical attempt snapshots.");
+    long questionId=((Number)row.get("id")).longValue();
+    Map<String,Object> snapshot=parseObject(String.valueOf(row.get("question_snapshot")));
+    Map<String,Object> answer=body.containsKey("answerPayload")
+        ? stringMap(body.get("answerPayload")) : stringMap(snapshot.get("answer_payload"));
+    if(body.containsKey("answerPayload")&&answer==null)
+      throw badRequest("answerPayload must be an object containing kind and value.");
+    if(body.containsKey("answerPayload"))snapshot.put("answer_payload",answer);
+    if(body.containsKey("explanation")) {
+      String explanation=requiredText(body.get("explanation"),"Explanation",700);
+      snapshot.put("explanation",explanation);
+      Map<String,Object> proposed=stringMapOrEmpty(snapshot.get("proposed_answer"));
+      proposed.put("explanation",explanation);
+      snapshot.put("proposed_answer",proposed);
     }
-    jdbc.update("""
-      update assessment_question
-      set question_snapshot=jsonb_set(
-        jsonb_set(question_snapshot,'{question_review_status}',to_jsonb(?::text),true),
-        '{proposed_answer,review_status}',to_jsonb(?::text),true)
-      where id=?
-      """,reviewStatus,reviewStatus,questionId);
+    if(answer!=null) {
+      String kind=String.valueOf(answer.getOrDefault("kind","")).toUpperCase(Locale.ROOT);
+      Object value=answer.get("value");
+      if(!Set.of("OPTION","MULTI_OPTION","TEXT","NUMERIC","ORDER","MATCH").contains(kind)
+          && !("UNRESOLVED".equals(kind)&&!"APPROVED".equals(reviewStatus)))
+        throw badRequest("The answer kind is not supported.");
+      if("APPROVED".equals(reviewStatus)
+          && (value==null||(value instanceof String v&&v.isBlank())||(value instanceof List<?> list&&list.isEmpty())))
+        throw badRequest("Set the correct answer before approving the question.");
+      if("OPTION".equals(kind)&&value!=null&&!answerContains(snapshot.get("options"),String.valueOf(value)))
+        throw badRequest("The proposed answer key is not present in this question's options.");
+      if("MULTI_OPTION".equals(kind)) {
+        if(!(value instanceof List<?> selectedKeys)||selectedKeys.isEmpty())
+          throw badRequest("MULTI_OPTION answers must contain one or more option keys.");
+        for(Object selected:selectedKeys) {
+          if(!answerContains(snapshot.get("options"),String.valueOf(selected)))
+            throw badRequest("A MULTI_OPTION answer key is not present in this question's options.");
+        }
+      }
+      if("NUMERIC".equals(kind)) {
+        try { new BigDecimal(String.valueOf(value)); }
+        catch(Exception ex) { throw badRequest("A NUMERIC answer must contain a valid number."); }
+        if(answer.get("tolerance")!=null) {
+          try {
+            if(new BigDecimal(String.valueOf(answer.get("tolerance"))).signum()<0)
+              throw badRequest("Numeric answer tolerance cannot be negative.");
+          } catch(NumberFormatException ex) { throw badRequest("Numeric answer tolerance must be a non-negative number."); }
+        }
+      }
+      if("TEXT".equals(kind)&&"APPROVED".equals(reviewStatus)&&!(value instanceof String))
+        throw badRequest("TEXT answers must contain text.");
+      if("ORDER".equals(kind)&&"APPROVED".equals(reviewStatus)&&!(value instanceof List<?>))
+        throw badRequest("ORDER answers must contain an ordered list.");
+      if("MATCH".equals(kind)&&"APPROVED".equals(reviewStatus)&&!(value instanceof Map<?,?>||value instanceof List<?>))
+        throw badRequest("MATCH answers must contain a map or list.");
+      if(snapshot.get("options") instanceof List<?> opts) {
+        List<Map<String,Object>> correctedOptions=new ArrayList<>();
+        for(Object raw:opts) {
+          Map<String,Object> option=stringMap(raw);
+          if(option==null)continue;
+          Object rawKey=option.getOrDefault("key",option.get("option_key"));
+          boolean correct="OPTION".equals(kind)&&rawKey!=null&&rawKey.toString().equals(String.valueOf(value));
+          if("MULTI_OPTION".equals(kind)&&rawKey!=null&&value instanceof List<?> selected)
+            correct=selected.stream().anyMatch(v->String.valueOf(v).equals(String.valueOf(rawKey)));
+          option.put("is_correct",correct);
+          correctedOptions.add(option);
+        }
+        snapshot.put("options",correctedOptions);
+      }
+    }
+    if("APPROVED".equals(reviewStatus)) {
+      if(answer==null||answer.get("kind")==null||answer.get("value")==null
+          ||"UNRESOLVED".equals(String.valueOf(answer.get("kind"))))
+        throw badRequest("Set a supported answer key before approving this question.");
+      Object explanation=snapshot.get("explanation");
+      if(!(explanation instanceof String txt)||txt.isBlank())
+        throw badRequest("Add an explanation before approving this question.");
+    }
+    Map<String,Object> proposed=stringMapOrEmpty(snapshot.get("proposed_answer"));
+    proposed.put("review_status",reviewStatus);
+    proposed.put("option_key",answer!=null&&"OPTION".equals(String.valueOf(answer.get("kind")))
+        ?String.valueOf(answer.get("value")):null);
+    proposed.put("explanation",snapshot.getOrDefault("explanation",""));
+    snapshot.put("proposed_answer",proposed);
+    snapshot.put("question_review_status",reviewStatus);
+    String snapshotJson=questionHistory.json(snapshot);
+    jdbc.update("update assessment_question set question_snapshot=?::jsonb where id=?",snapshotJson,questionId);
     audit(assessmentId,null,context,null,null,"IMPORTED_QUESTION_REVIEWED",
         "PENDING_HUMAN_REVIEW",reviewStatus,"Reviewed imported question #"+sequenceNo+".");
     staffAudit.recordAction(context,"/api/v1/admin/assessments/"+assessmentId+"/package-questions/"+sequenceNo+"/review",
-        "Marked imported question #"+sequenceNo+" "+reviewStatus+".");
+        "Reviewed imported question #"+sequenceNo+" as "+reviewStatus+".");
     Map<String,Object> result=new LinkedHashMap<>();
     result.put("assessmentId",assessmentId);result.put("sequenceNo",sequenceNo);
     result.put("reviewStatus",reviewStatus);
@@ -659,6 +772,7 @@ public class AssessmentController {
       where assessment_id=? and question_snapshot->>'question_review_status'='APPROVED'
       """,Integer.class,assessmentId));
     result.put("questionCount",jdbc.queryForObject("select count(*) from assessment_question where assessment_id=?",Integer.class,assessmentId));
+    result.put("question",snapshot);
     return result;
   }
 
@@ -810,9 +924,7 @@ public class AssessmentController {
         Map<String,Object> answer=stringMap(question.get("answer_payload"));
         if(answer==null&& !key.isBlank()) {
           if(!optionKeys.contains(key))issues.add(at+".proposed_answer.option_key must reference an option key.");
-        } else if(answer==null) {
-          issues.add(at+".proposed_answer.option_key or answer_payload must define a proposed answer.");
-        } else {
+        } else if(answer!=null) {
           String kind=String.valueOf(answer.get("kind"));
           Object value=answer.get("value");
           if(!Set.of("OPTION","MULTI_OPTION","TEXT","NUMERIC","ORDER","MATCH").contains(kind))
