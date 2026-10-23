@@ -550,6 +550,18 @@ BEGIN
       ON rm.version_program_id=v_new_program_id AND rm.entity_type='LEARNING_RESOURCE'
        AND rm.source_entity_id=r.id
     WHERE r.learning_document_id=d.id
+  ) OR EXISTS (
+    SELECT 1
+    FROM textbook_extracted_page page
+    JOIN textbook_source_book book ON book.id=page.source_book_id
+    WHERE page.learning_document_id=d.id
+      AND (
+        book.program_id=p_source_program_id
+        OR book.subject_id IN (
+          SELECT source_entity_id FROM institution_course_version_entity_map
+          WHERE version_program_id=v_new_program_id AND entity_type='SUBJECT'
+        )
+      )
   )
   ON CONFLICT(version_program_id,entity_type,source_entity_id) DO NOTHING;
 
