@@ -1773,13 +1773,14 @@ public class AssessmentController {
              count(aq.id) as question_count,
              coalesce(sum(case when aq.question_snapshot->>'section_result_policy' in ('QUALIFYING_ONLY','PRACTICE_ONLY')
                        or aq.question_snapshot->>'section_code'='LANGUAGE_QUALIFYING' then 0 else aq.max_marks end),0) as max_score
-      from assessment a join curriculum_subject s on s.id=a.subject_id
-      join curriculum_class c on c.id=s.class_id
-      join student st on st.id=? and st.active=true
-      join curriculum_program_subject course_subject on course_subject.program_id=?
-        and course_subject.subject_id=s.id and course_subject.class_id=s.class_id
-      join curriculum_program selected_course on selected_course.id=course_subject.program_id
+      from assessment a
+      join curriculum_program selected_course on selected_course.id=a.course_id
         and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
+      left join curriculum_subject s on s.id=a.subject_id and s.active=true
+      left join curriculum_class c on c.id=s.class_id and c.active=true
+      join student st on st.id=? and st.active=true
+      left join curriculum_program_subject course_subject on course_subject.program_id=?
+        and course_subject.subject_id=s.id and course_subject.class_id=s.class_id
       left join curriculum_chapter ch on ch.id=a.chapter_id
       left join assessment_question aq on aq.assessment_id=a.id
       left join lateral (
@@ -1801,7 +1802,11 @@ public class AssessmentController {
         order by t.version_no desc,t.id desc limit 1
       ) ct on true
       where a.id=?
-        and (s.program_id=selected_course.id or (s.program_id is null and selected_course.class_id=s.class_id))
+        and (
+          (a.subject_id is null and selected_course.course_type_code in ('ASSESSMENT','COMPETITIVE'))
+          or (course_subject.program_id=selected_course.id
+            and (s.program_id=selected_course.id or (s.program_id is null and selected_course.class_id=s.class_id)))
+        )
         and (
           a.status='PUBLISHED'
           or exists(select 1 from student_assessment_attempt resumable
@@ -1841,16 +1846,20 @@ public class AssessmentController {
       with tenant_scope as (select ?::bigint as institution_id)
       select a.id
       from assessment a
-      join curriculum_subject s on s.id=a.subject_id and s.active=true
-      join curriculum_class c on c.id=s.class_id and c.active=true
-      join student st on st.id=? and st.active=true
-      join curriculum_program_subject course_subject on course_subject.program_id=?
-        and course_subject.subject_id=s.id and course_subject.class_id=s.class_id
-      join curriculum_program selected_course on selected_course.id=course_subject.program_id
+      join curriculum_program selected_course on selected_course.id=a.course_id
         and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
+      left join curriculum_subject s on s.id=a.subject_id and s.active=true
+      left join curriculum_class c on c.id=s.class_id and c.active=true
+      join student st on st.id=? and st.active=true
+      left join curriculum_program_subject course_subject on course_subject.program_id=?
+        and course_subject.subject_id=s.id and course_subject.class_id=s.class_id
       left join curriculum_chapter ch on ch.id=a.chapter_id
       where a.id=?
-        and (s.program_id=selected_course.id or (s.program_id is null and selected_course.class_id=s.class_id))
+        and (
+          (a.subject_id is null and selected_course.course_type_code in ('ASSESSMENT','COMPETITIVE'))
+          or (course_subject.program_id=selected_course.id
+            and (s.program_id=selected_course.id or (s.program_id is null and selected_course.class_id=s.class_id)))
+        )
         and a.status='PUBLISHED' and
       """ + STUDENT_ASSESSMENT_ELIGIBILITY_SQL, institutionId,context.studentId(),courseId, assessmentId);
     if (eligibleForNewAttempt.isEmpty()) {
@@ -2253,16 +2262,20 @@ public class AssessmentController {
     if(selectedSubject.isBlank()) selectedSubject=null;
     String resultScope="""
          a.course_id=?
-         and exists(select 1 from curriculum_program_subject cps
-          join curriculum_program selected_course on selected_course.id=cps.program_id and selected_course.status='ACTIVE'
-          join institution_course_assignment course_assignment
-            on course_assignment.institution_id=(select institution_id from tenant_scope)
-            and course_assignment.status='ASSIGNED'
-          join institution_course_release course_release on course_release.id=course_assignment.course_release_id
-            and course_release.program_id=selected_course.id
-          where cps.program_id=? and cps.subject_id=s.id and cps.class_id=s.class_id
-            and (s.program_id=cps.program_id or (s.program_id is null and selected_course.class_id=s.class_id)))
-        and exists(select 1 from student_program_enrollment spe
+         and (
+           exists(select 1 from curriculum_program_subject cps
+            join curriculum_program selected_course on selected_course.id=cps.program_id and selected_course.status='ACTIVE'
+            join institution_course_assignment course_assignment
+              on course_assignment.institution_id=(select institution_id from tenant_scope)
+              and course_assignment.status='ASSIGNED'
+            join institution_course_release course_release on course_release.id=course_assignment.course_release_id
+              and course_release.program_id=selected_course.id
+            where cps.program_id=? and cps.subject_id=s.id and cps.class_id=s.class_id
+              and (s.program_id=cps.program_id or (s.program_id is null and selected_course.class_id=s.class_id)))
+           or (a.subject_id is null and exists(select 1 from curriculum_program course_type
+             where course_type.id=a.course_id and course_type.course_type_code in ('ASSESSMENT','COMPETITIVE')))
+         )
+         and exists(select 1 from student_program_enrollment spe
           where spe.student_id=att.student_id and spe.institution_id=(select institution_id from tenant_scope)
             and spe.program_id=? and spe.status='ACTIVE')
         and (?::text is null or lower(s.code)=lower(?))
@@ -2290,8 +2303,8 @@ public class AssessmentController {
                count(*) over(partition by att.assessment_id) as attempt_count
         from student_assessment_attempt att
         join assessment a on a.id=att.assessment_id
-        join curriculum_subject s on s.id=a.subject_id
-        join curriculum_class c on c.id=s.class_id
+        left join curriculum_subject s on s.id=a.subject_id
+        left join curriculum_class c on c.id=s.class_id
         join student st on st.id=att.student_id and st.active=true
         left join curriculum_chapter ch on ch.id=a.chapter_id
         where att.student_id=? and att.institution_id=(select institution_id from tenant_scope)
