@@ -24,6 +24,10 @@ type AssessmentCard = {
 type AttemptQuestion = {
   attemptQuestionId:number;answerId:number;question_type:string;prompt:string;explanation?:string;
   prompt_content_kind?:'PROSE'|'CODE'|'MATHEMATICAL'|'MIXED';code_line_indices?:number[];math_line_indices?:number[];
+  stimulus_id?:string|null;stimulus?:string;stimulus_content_kind?:'PROSE'|'CODE'|'MATHEMATICAL'|'MIXED';
+  stimulus_code_line_indices?:number[];stimulus_math_line_indices?:number[];
+  stimulus_source_languages?:Record<string,string>;native_language_only?:boolean;
+  native_source_language?:'en'|'hi'|'ur'|'bn';content_language_policy?:'NATIVE_SOURCE_ONLY'|'BILINGUAL_SOURCE_VARIANTS';
   options:Array<{key:string;label:string;content_kind?:'PROSE'|'CODE'|'MATHEMATICAL'|'MIXED';code_line_indices?:number[];math_line_indices?:number[]}>;
   answer:any;answerStatus:string;maxMarks:number|string;
   section_code?:string;section_result_policy?:'SCORED'|'QUALIFYING_ONLY'|'PRACTICE_ONLY';
@@ -123,6 +127,26 @@ function correctAnswerText(question:AttemptQuestion):string{
   }
   return answerText(payload.value);
 }
+function StimulusContent({question}:{question:AttemptQuestion}) {
+  const {locale}=useLocale();
+  const text=question.stimulus;
+  if(typeof text!=='string'||!text.trim())return null;
+  const title=locale==='english'?'Shared source passage':'मूल प्रश्नपत्र का साझा गद्यांश';
+  const sourceLabel=question.native_language_only
+    ?(locale==='english'?'Original source language; not translated':'मूल भाषा; अनुवाद नहीं किया गया')
+    :'';
+  const structured=question.stimulus_content_kind==='CODE'||question.stimulus_content_kind==='MATHEMATICAL';
+  return <aside className={styles.questionStimulus} aria-label={title}>
+    <header className={styles.questionStimulusHeader}>
+      <strong>{title}</strong>
+      {sourceLabel&&<span>{sourceLabel}</span>}
+    </header>
+    {structured
+      ?<pre className={styles.stimulusCodeBlock}><code>{text}</code></pre>
+      :<div className={styles.stimulusText}>{text}</div>}
+  </aside>;
+}
+
 type QuestionContentProps={
   question:AttemptQuestion;response:any;review?:boolean;disabled?:boolean;onAnswer?:(value:any)=>void;
 };
@@ -777,6 +801,7 @@ export default function TestsClient(){
                       <b className={outcomeClass}>{outcome} · {Number(question.awardedMarks??0)} / {Number(question.maxMarks??0)} {translateUi(locale, 'legacy.web.marks.57368a8d')}</b>
                     </div>
                     <div className={styles.questionProgress}><i style={{width:((questionIndex+1)/attempt.questions.length*100)+'%'}}/></div>
+                    <StimulusContent question={question}/>
                     <QuestionContent question={question} response={question.answer} review disabled/>
                     <AnswerFeedback
                       outcome={question.isCorrect===true?'correct':question.isCorrect===false?'incorrect':'ungraded'}
@@ -804,7 +829,7 @@ export default function TestsClient(){
         :attempt.status!=='IN_PROGRESS'||!current?<div className={styles.pendingResult}><h2>{translateUi(locale, 'legacy.web.this.attempt.is.closed.3b00ff63')}</h2><p>{translateUi(locale, 'legacy.web.you.cannot.return.to.the.question.navi.83bf6290')}</p><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{translateUi(locale, 'legacy.web.back.to.tests.and.results.29805d19')}</button></div>
         :<div className={styles.examLayout}>
           <aside className={styles.questionRail}><div><b>{translateUi(locale, 'legacy.web.questions.b5a33268')}</b><small>{answeredCount}/{attempt.questions.length} {translateUi(locale, 'legacy.web.answered.f3b8dd02')}</small></div><div className={styles.questionNumbers}>{attempt.questions.map((q,i)=><button type="button" key={q.attemptQuestionId} className={[i===index?styles.currentNumber:'',!isEmpty(responses[q.attemptQuestionId]??q.answer)?styles.answeredNumber:''].filter(Boolean).join(' ')} onClick={()=>setIndex(i)} aria-label={translateUi(locale, 'legacy.web.question.85099273')+(i+1)}>{i+1}</button>)}</div><div className={styles.railLegend}><span><i className={styles.legendCurrent}/>{translateUi(locale, 'legacy.web.current.e19e8a40')}</span><span><i className={styles.legendAnswered}/>{translateUi(locale, 'legacy.web.answered.5531e37e')}</span></div></aside>
-          <section className={styles.questionPanel}><div className={styles.questionPanelTop}><span>{translateUi(locale, 'legacy.web.question.3b02187f')} {index+1} {translateUi(locale, 'legacy.web.of.205487ae')} {attempt.questions.length}</span><b>{current.maxMarks} {translateUi(locale, 'legacy.web.mark.s.a8fb7e84')}</b></div><div className={styles.questionProgress}><i style={{width:((index+1)/attempt.questions.length*100)+'%'}}/></div><QuestionContent question={current} response={currentResponse} disabled={submitted} onAnswer={value=>updateResponse(current,value)}/>
+          <section className={styles.questionPanel}><div className={styles.questionPanelTop}><span>{translateUi(locale, 'legacy.web.question.3b02187f')} {index+1} {translateUi(locale, 'legacy.web.of.205487ae')} {attempt.questions.length}</span><b>{current.maxMarks} {translateUi(locale, 'legacy.web.mark.s.a8fb7e84')}</b></div><div className={styles.questionProgress}><i style={{width:((index+1)/attempt.questions.length*100)+'%'}}/></div><StimulusContent question={current}/><QuestionContent question={current} response={currentResponse} disabled={submitted} onAnswer={value=>updateResponse(current,value)}/>
             {released&&<AnswerFeedback
               outcome={current.isCorrect===true?'correct':current.isCorrect===false?'incorrect':'ungraded'}
               title={current.isCorrect===true?'✓ Correct':current.isCorrect===false?'✕ Incorrect':'Teacher checked'}
@@ -826,10 +851,10 @@ export default function TestsClient(){
         <h2 id="qe-test-start-title">{t('Before you begin','परीक्षा शुरू करने से पहले')}</h2>
         <p><strong>{pendingTestStart.title}</strong></p>
         <p>{t('This paper contains','इस प्रश्नपत्र में कुल')} <strong>{pendingTestStart.question_count}</strong> {t('questions in total.','प्रश्न हैं।')}</p>
-        {(/\bTRE[\s-]*3(?:\.0)?\b/i.test(pendingTestStart.title+' '+(pendingTestStart.description||''))||Number(pendingTestStart.question_count)===148)&&<p>
+        {/\bTRE[\s-]*3(?:\.0)?\b/i.test(pendingTestStart.title+' '+(pendingTestStart.description||''))&&<p>
           {uiLanguage==='hi'
-            ?'इस TRE 3.0 प्रश्नपत्र में कुल 148 प्रश्न ही हैं: 40 सामान्य अध्ययन, 80 कंप्यूटर विज्ञान और 28 अर्हकारी भाषा प्रश्न। सामान्य अध्ययन और कंप्यूटर विज्ञान के अंक अलग-अलग दिखाए जाएंगे; भाषा अनुभाग अलग रहेगा और स्कोर किए गए कुल अंकों में नहीं जुड़ेगा।'
-            :'The TRE 3.0 source paper contains 148 questions in total: 40 General Studies, 80 Computer Science, and 28 qualifying-language questions. General Studies and Computer Science are scored separately; the language section is shown separately and is not added to the scored total.'}
+            ?'इस TRE 3.0 प्रश्नपत्र में कुल 150 प्रश्न हैं: 40 सामान्य अध्ययन, 80 कंप्यूटर विज्ञान और 30 अर्हकारी भाषा प्रश्न। सामान्य अध्ययन और कंप्यूटर विज्ञान के अंक अलग-अलग दिखाए जाएंगे; भाषा अनुभाग अलग रहेगा और स्कोर किए गए कुल अंकों में नहीं जुड़ेगा।'
+            :'The TRE 3.0 source paper contains 150 questions in total: 40 General Studies, 80 Computer Science, and 30 qualifying-language questions. General Studies and Computer Science are scored separately; the language section is shown separately and is not added to the scored total.'}
         </p>}
         <p>{t('The timer starts when you continue. Your answers save automatically, and you can submit when you finish.','आगे बढ़ने पर समय शुरू होगा। आपके उत्तर अपने-आप सहेजे जाएंगे और पूरा होने पर आप जमा कर सकते हैं।')}</p>
         <div>
