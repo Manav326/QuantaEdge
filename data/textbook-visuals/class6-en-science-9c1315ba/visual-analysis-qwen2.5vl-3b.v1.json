@@ -13,15 +13,15 @@
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
-      "055ba61cf9184b7284850138",
-      "98aeae849beaac2dcbccd6da",
-      "2104ecb647e20f98cb93ca2e"
+      "2185c15c0a88a108ea516878",
+      "47bbaaf66932c5ee5e514c6c",
+      "c50388574878f296351f80de"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1356,
-    "assets_remaining": 722,
+    "assets_analyzed": 1357,
+    "assets_remaining": 721,
     "assets_completion_percent": 65.3,
-    "assets_failed": 16,
+    "assets_failed": 15,
     "assets_skipped_from_checkpoint": 1356,
     "batch_limit": 5,
     "publication_allowed": false
@@ -451,7 +451,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40031105894",
-      "checkpointed_at": "2026-10-23T23:04:16Z"
+      "checkpointed_at": "2026-10-23T23:18:50Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20129,7 +20129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40031105894",
-      "checkpointed_at": "2026-10-23T23:05:31Z"
+      "checkpointed_at": "2026-10-23T23:20:14Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -39890,7 +39890,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40008918130",
+      "run_id": "40031105894",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -44005,13 +44005,12 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "An educational page about Oral Rehydration Solution (ORS) and its preparation.",
+        "visual_type": "uncertain",
         "visible_text": [
           "Make your own ORS!",
           "ORS—Oral Rehydration Solution— is used to treat dehydration due to diarrhoea or other illnesses. These ready-made ORS packets are available in primary health centres and also in the market. Each packet is dissolved in a litre of water before use. If these are not available, ORS can be prepared at ho",
           "Do liquids like oil, vinegar and honey dissolve in water?",
-          "Explore.",
           "What about the gases present in water?",
           "Some liquids get completely mixed with water. Some do not mix with water and form a separate layer when left undisturbed for some time. Similarly, some gases are soluble in water whereas others are not. For example, oxygen gas dissolves in water. It is very important for the survival of animals and ",
           "6.3.5 How heavy or light?",
@@ -44023,40 +44022,65 @@
         "concepts": [
           "Oral Rehydration Solution (ORS)",
           "Diarrhoea",
-          "Health centres",
+          "Health Centres",
           "Preparation of ORS",
-          "Gases in water",
+          "Water Solubility",
+          "Gases in Water",
+          "Survival of Animals and Plants",
           "Density",
-          "Water solubility",
-          "Survival of animals and plants"
+          "Comparing Density"
         ],
-        "context_relation": "The page explains the use of ORS and a related activity, focusing on the properties of liquids and gases in water.",
+        "context_relation": "Introduction to ORS and its preparation, followed by a question about the solubility of gases in water and the importance of ORS in maintaining water balance in the body.",
         "limitations": [
-          "The page does not provide specific instructions for the activity."
+          "The text does not provide specific instructions for preparing ORS or explaining the solubility of gases in water.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864347432",
-      "checkpointed_at": "2026-10-23T04:14:50Z"
+      "run_id": "40031105894",
+      "checkpointed_at": "2026-10-23T23:29:26Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
       "asset_sha256": "05e2f3bd3b0e24a8098b65e07ca1c737c324b4fa14edc4f928bb6f1a158f9333",
-      "page_text_context_sha256": "6e5e8f63575da620e239866dea804e7a04f6fa2302c3431240069479bec1406c",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 131,
       "asset_path": "assets/05e2f3bd3b0e24a8098b65e07ca1c737c324b4fa14edc4f928bb6f1a158f9333.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6e5e8f63575da620e239866dea804e7a04f6fa2302c3431240069479bec1406c",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864347432",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A digital scale displaying the weight of a red cup containing water.",
+        "visual_type": "photo",
+        "visible_text": [
+          "g 44.92",
+          "PCS",
+          "TARE",
+          "ON-OFF",
+          "LIGHT",
+          "UNITS"
+        ],
+        "concepts": [
+          "mass",
+          "weight",
+          "digital scale",
+          "measuring objects"
+        ],
+        "context_relation": "The image shows the measurement of an object's mass using a digital scale.",
+        "limitations": [
+          "The image does not show the actual weight of the cup."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40031105894",
+      "checkpointed_at": "2026-10-23T23:31:07Z"
     },
     {
       "asset_id": "d039a566367f5ab57d5c1b4a",
