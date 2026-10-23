@@ -1,4 +1,4 @@
-import { test, expect, type BrowserContext } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { appBaseUrl } from '../support/manifest';
 import { openQaDatabase, readPrivateJson } from '../support/fixtures';
 
@@ -6,7 +6,7 @@ const HRMS = appBaseUrl('people');
 
 type SavedState = { statePath: string };
 
-async function countFinanceTables(context: BrowserContext): Promise<Array<{ table: string; rows: number }>> {
+async function countFinanceTables(): Promise<Array<{ table: string; rows: number }>> {
   const pool = await openQaDatabase();
   try {
     const result = await pool.query(`
@@ -58,22 +58,23 @@ test('[HRMS-FIN-001][PAY-008][PAY-009] finance workspace exposes read-only payme
 
   let before: Array<{ table: string; rows: number }> = [];
   try {
-    before = await countFinanceTables(ownerContext);
+    before = await countFinanceTables();
+    const catalogWaiter = ownerPage.waitForResponse(response =>
+      response.request().method() === 'GET' &&
+      new URL(response.url()).pathname === '/api/v1/hrms/platform/finance/catalog'
+    );
+    const overviewWaiter = ownerPage.waitForResponse(response =>
+      response.request().method() === 'GET' &&
+      new URL(response.url()).pathname === '/api/v1/hrms/platform/finance/overview'
+    );
     await ownerPage.goto(HRMS + '/finance', { waitUntil: 'domcontentloaded' });
     await expect(ownerPage.getByRole('heading', { name: 'Financial control centre' })).toBeVisible({ timeout: 25_000 });
     await expect(ownerPage.getByRole('navigation', { name: 'Finance workspace' })).toBeVisible();
     await expect(ownerPage.getByText('QE_PLATFORM_OWNER', { exact: false }).first()).toBeVisible();
 
-    const catalog = await ownerPage.waitForResponse(response =>
-      response.request().method() === 'GET' &&
-      new URL(response.url()).pathname === '/api/v1/hrms/platform/finance/catalog'
-    );
-    const overview = await ownerPage.waitForResponse(response =>
-      response.request().method() === 'GET' &&
-      new URL(response.url()).pathname === '/api/v1/hrms/platform/finance/overview'
-    ).catch(() => null);
+    const [catalog, overview] = await Promise.all([catalogWaiter, overviewWaiter]);
     expect(catalog.status(), 'Finance catalog is loaded from the live authenticated API.').toBe(200);
-    if (overview) expect(overview.status()).toBe(200);
+    expect(overview.status(), 'Finance overview is loaded from the live authenticated API.').toBe(200);
 
     const paymentsTab = ownerPage.getByRole('navigation', { name: 'Finance workspace' })
       .getByRole('button', { name: /Payments & reconciliation/ });
@@ -127,7 +128,7 @@ test('[HRMS-FIN-001][PAY-008][PAY-009] finance workspace exposes read-only payme
     expect(financeMutations, 'Visiting and searching finance history must not create or mutate payment, invoice, refund, or webhook records.').toEqual([]);
     expect(financeResponses.filter(r => r.status >= 500), 'Finance APIs must not emit server errors during owner read-only inspection.').toEqual([]);
 
-    const after = await countFinanceTables(ownerContext);
+    const after = await countFinanceTables();
     expect(after, 'Finance history/counts must remain unchanged during read-only inspection.').toEqual(before);
   } finally {
     await ownerContext.close();
