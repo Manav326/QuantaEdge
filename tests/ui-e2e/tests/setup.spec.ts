@@ -211,6 +211,22 @@ async function installAndVerifyQaPack(browser: Browser, hrmsStatePath: string): 
     idempotencyKey,
     credentials: installed.oneTimeSyntheticCredentials || {}
   });
+  // Replay the same install key after a successful UI install. This must return the same
+  // run without creating duplicates, and must not disclose one-time credentials a second time.
+  const replay = await page.evaluate(async ({ packKey, idempotencyKey }) => {
+    const response = await fetch('/api/v1/hrms/platform/qa/runs/install', {
+      method: 'POST', credentials: 'same-origin', cache: 'no-store',
+      headers: { 'X-QE-Workspace': 'HRMS', 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ packKey, idempotencyKey })
+    });
+    return { status: response.status, body: await response.json().catch(() => ({})) };
+  }, { packKey: String(pack.packKey), idempotencyKey });
+  expect(replay.status, 'Replaying an installed pack with the same idempotency key must be safe.').toBe(200);
+  expect(replay.body.replayed).toBe(true);
+  expect(String(replay.body.run_id || replay.body.runId)).toBe(runId);
+  expect(replay.body.credentialsIncluded).toBe(false);
+  expect(replay.body.oneTimeSyntheticCredentials).toBeUndefined();
+
   expect(installed.state).toBe('INSTALLED');
   expect(installed.credentialsIncluded).toBe(true);
   expect(installed.oneTimeSyntheticCredentials).toBeTruthy();
@@ -235,6 +251,11 @@ async function installAndVerifyQaPack(browser: Browser, hrmsStatePath: string): 
     );
     expect(manifest.rows[0].manifest_count).toBeGreaterThan(0);
     expect(manifest.rows[0].manifest_count).toBe(manifest.rows[0].owned_count);
+    const idempotentRuns = await runPool.query(
+      'select count(*)::int as count from qa_test_run where pack_key=$1 and pack_version=$2 and idempotency_key=$3',
+      [String(pack.packKey), Number(pack.version), idempotencyKey]
+    );
+    expect(idempotentRuns.rows[0].count, 'Same-key replay must retain one run row.').toBe(1);
   } finally {
     await runPool.end();
   }
@@ -349,7 +370,7 @@ async function loginStudent(browser: Browser, name: 'childA' | 'childB' | 'indep
   await context.close();
 }
 
-test('[AUTH-001][AUTH-006][AUTH-007][QA-001][QA-007] bootstrap test personas, exercise sign-in/QA Center UI, and seed owned relational fixtures', async ({ browser }) => {
+test('[AUTH-001][AUTH-006][AUTH-007][TEN-003][QA-001][QA-002][QA-007] bootstrap test personas, exercise sign-in/QA Center UI, and seed owned relational fixtures', async ({ browser }) => {
   // Route/CSV drift must stop the run before the first database or account mutation.
   const manifest = await loadUiManifest();
   expect(manifest.summary.registeredWebPages).toBe(manifest.summary.sourceWebPages);
