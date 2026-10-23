@@ -46,7 +46,10 @@ test('[UX-002] learner UI locale persists across navigation without changing lea
     const profileResponse = await page.evaluate(async () => {
       const response = await fetch('/api/v1/students/me/profile', {
         credentials: 'same-origin', cache: 'no-store',
-        headers: { 'X-QE-Workspace': 'STUDENT' }
+        headers: {
+          'X-QE-Workspace': 'STUDENT',
+          'X-QE-Institution-Code': window.sessionStorage.getItem('qe.institution.brand-code.v1') || ''
+        }
       });
       return { status: response.status, body: await response.json().catch(() => ({})) };
     });
@@ -92,7 +95,10 @@ test('[UX-002] learner UI locale persists across navigation without changing lea
     const profileAfter = await page.evaluate(async () => {
       const response = await fetch('/api/v1/students/me/profile', {
         credentials: 'same-origin', cache: 'no-store',
-        headers: { 'X-QE-Workspace': 'STUDENT' }
+        headers: {
+          'X-QE-Workspace': 'STUDENT',
+          'X-QE-Institution-Code': window.sessionStorage.getItem('qe.institution.brand-code.v1') || ''
+        }
       });
       return { status: response.status, body: await response.json().catch(() => ({})) };
     });
