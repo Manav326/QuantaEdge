@@ -151,3 +151,8 @@ A Class 7 retry after the workflow regression assertion update must carry `[resu
 ### Class 7 bounded checkpoint resume
 
 The corrected Layer 4–5 workflow limits each run to eight five-asset analysis batches (40 assets max per run) with a five-minute per-request timeout. Resume Class 7 from its matching durable checkpoint and do not mark the class complete on a safe yield.
+
+
+### Class 8 bounded checkpoint resume
+
+The corrected Layer 4–5 workflow limits each run to eight five-asset analysis batches (40 assets max per run) with a five-minute per-request timeout. Resume Class 8 from its matching durable checkpoint and do not mark the class complete on a safe yield.
