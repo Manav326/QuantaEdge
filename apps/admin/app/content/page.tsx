@@ -472,12 +472,14 @@ export default function ContentStudio(){
  const permissions=Array.isArray(identity?.permissions)?identity.permissions:[];
  const isAdmin=identity?.role==='ADMIN';
  const hasPermission=(permission:string)=>isAdmin||permissions.includes(permission);
+ const activeProgram=programs.find((p:any)=>String(p.id||p.course_id)===String(programFilter));
+ const isSourcedCourse=activeProgram?.course_relationship==='SOURCED';
  const canView=hasPermission('CONTENT_VIEW');
- const canCreate=hasPermission('CONTENT_CREATE');
- const canEdit=hasPermission('CONTENT_EDIT');
- const canSubmit=hasPermission('CONTENT_SUBMIT');
- const canReview=hasPermission('CONTENT_REVIEW');
- const canPublishPermission=hasPermission('CONTENT_PUBLISH');
+ const canCreate=hasPermission('CONTENT_CREATE')&&isSourcedCourse;
+ const canEdit=hasPermission('CONTENT_EDIT')&&isSourcedCourse;
+ const canSubmit=hasPermission('CONTENT_SUBMIT')&&isSourcedCourse;
+ const canReview=hasPermission('CONTENT_REVIEW')&&isSourcedCourse;
+ const canPublishPermission=hasPermission('CONTENT_PUBLISH')&&isSourcedCourse;
   const visualTargetRow=selected?.type==='lesson'?rows.find(row=>row.lesson_id===selected.id):undefined;
   const visualCatalogMatchesTarget=visualCatalogMatchesLesson(visualTargetRow,visualCatalog);
  const isEditorView=Boolean(editorOpen&&(selected||createType));
@@ -842,7 +844,14 @@ export default function ContentStudio(){
    </section>
    <section className="qe-library-panel" id="content-library">
     <div className="qe-section-head"><div><span className="admin-kicker">{t('admin.contentStudio.curriculumMap')}</span><h2>{t('admin.contentStudio.findChapterOrTopic')}</h2><p>{t('admin.contentStudio.openEditorHint')}</p></div><div className="qe-create-actions"><button type="button" className="qe-secondary-button" disabled={loading||!canCreate} title={!canCreate?t('admin.contentStudio.noCreatePermission'):undefined} onClick={()=>beginCreate('chapter')} >＋ {t('admin.contentStudio.newChapter')}</button><button type="button" className="qe-primary-button" disabled={loading||!canCreate||!rows.some(r=>r.chapter_id!==null)} title={!canCreate?t('admin.contentStudio.noCreatePermission'):undefined} onClick={()=>beginCreate('lesson')} >＋ {t('admin.contentStudio.newMicroTopic')}</button></div></div>
-    <div className="qe-filters"><label>{t('admin.contentStudio.course')}<select value={programFilter} onChange={e=>{const value=e.target.value;setProgramFilter(value);setClassFilter('ALL');setSubjectFilter('ALL');setSelected(null);setDetail(null);setCreateType(null);const url=new URL(window.location.href);url.searchParams.set('courseId',value);window.history.replaceState({},'',url.toString());void load(value)}}>{programs.map((p:any)=><option value={String(p.id)} key={p.id}>{p.display_name} · {p.curriculum_version}</option>)}</select></label><label>{t('admin.contentStudio.subject')}<select value={subjectFilter} onChange={e=>setSubjectFilter(e.target.value)}><option value="ALL">{t('admin.contentStudio.allSubjects')}</option>{subjectOptions.map(([code,name])=><option key={code} value={code}>{name}</option>)}</select></label><label>{t('admin.contentStudio.status')}<select value={statusFilter} onChange={e=>setStatusFilter(e.target.value)}><option value="ALL">{t('admin.contentStudio.allStatuses')}</option><option value="PUBLISHED">{t('admin.contentStudio.published')}</option><option value="DRAFT">{t('admin.contentStudio.draft')}</option><option value="REVIEW">{t('admin.contentStudio.inReview')}</option><option value="ARCHIVED">{t('admin.contentStudio.archived')}</option></select></label><label className="qe-search-field"><span>{t('admin.contentStudio.search')}</span><input value={search} onChange={e=>setSearch(e.target.value)} placeholder={t('admin.contentStudio.searchPlaceholder')}/></label></div>
+    {activeProgram?<div role="status" style={{margin:'0 0 14px',padding:'12px 14px',border:'1px solid var(--admin-border,#d8dce5)',borderRadius:10,background:'var(--admin-surface,#fff)',color:'var(--admin-text,#1b2430)'}}>
+      <strong>{activeProgram.course_relationship==='SOURCED'?'SOURCED COURSE':'SHARED COURSE · READ ONLY'}</strong>
+      <div style={{marginTop:4,fontSize:13,color:'var(--admin-muted,#64748b)'}}>{activeProgram.course_relationship==='SOURCED'
+        ? 'This institution is the source owner. Editing, submission and publication actions remain governed by your staff permissions and the normal content review workflow.'
+        : 'This course belongs to another source institution. You may inspect its content, but cannot create, edit, review or publish it from this institution. Content updates must be made by its source institution and re-approved through HRMS before Marketplace release.'}</div>
+      {activeProgram.release_version?<small style={{display:'block',marginTop:4}}>Release version {activeProgram.release_version} · {activeProgram.release_state||'UNKNOWN'} · Source institution ID {activeProgram.source_institution_id}</small>:null}
+    </div>:null}
+    <div className="qe-filters"><label>{t('admin.contentStudio.course')}<select value={programFilter} onChange={e=>{const value=e.target.value;setProgramFilter(value);setClassFilter('ALL');setSubjectFilter('ALL');setSelected(null);setDetail(null);setCreateType(null);const url=new URL(window.location.href);url.searchParams.set('courseId',value);window.history.replaceState({},'',url.toString());void load(value)}}>{programs.map((p:any)=><option value={String(p.id||p.course_id)} key={p.id||p.course_id}>{p.display_name} · {p.curriculum_version} · {p.course_relationship==='SOURCED'?'Sourced':'Shared (read-only)'}</option>)}</select></label><label>{t('admin.contentStudio.subject')}<select value={subjectFilter} onChange={e=>setSubjectFilter(e.target.value)}><option value="ALL">{t('admin.contentStudio.allSubjects')}</option>{subjectOptions.map(([code,name])=><option key={code} value={code}>{name}</option>)}</select></label><label>{t('admin.contentStudio.status')}<select value={statusFilter} onChange={e=>setStatusFilter(e.target.value)}><option value="ALL">{t('admin.contentStudio.allStatuses')}</option><option value="PUBLISHED">{t('admin.contentStudio.published')}</option><option value="DRAFT">{t('admin.contentStudio.draft')}</option><option value="REVIEW">{t('admin.contentStudio.inReview')}</option><option value="ARCHIVED">{t('admin.contentStudio.archived')}</option></select></label><label className="qe-search-field"><span>{t('admin.contentStudio.search')}</span><input value={search} onChange={e=>setSearch(e.target.value)} placeholder={t('admin.contentStudio.searchPlaceholder')}/></label></div>
     <div className="qe-curriculum-map">
      {loading&&rows.length===0?<div className="qe-library-empty"><span className="qe-empty-symbol">◌</span><strong>{t('admin.contentStudio.connectingCurriculum')}</strong><p>{t('admin.contentStudio.loadingContentRecords')}</p></div>:groups.length===0?<div className="qe-library-empty"><span className="qe-empty-symbol">⌕</span><strong>{t('admin.contentStudio.noMatchingContent')}</strong><p>{t('admin.contentStudio.adjustFilters')}</p></div>:pagedGroups.map(group=>{
       const chapter=group.chapter;
