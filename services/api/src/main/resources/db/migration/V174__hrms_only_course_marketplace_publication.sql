@@ -1,4 +1,4 @@
--- V173: make HRMS approval/publication attributable and enforce it for new offer writes.
+-- V174: make HRMS approval/publication attributable and enforce it for new offer writes.
 -- Existing offers are backfilled only when the lifecycle ledger proves an HRMS actor performed
 -- the corresponding action. Legacy or institution-admin publication is not treated as approval.
 ALTER TABLE institution_marketplace_offer
@@ -77,5 +77,5 @@ COMMENT ON CONSTRAINT ck_marketplace_published_by_hrms ON institution_marketplac
   'New/changed PUBLISHED offers require recorded HRMS approval and publication; historical rows are revalidated as they are changed.';
 
 INSERT INTO app_metadata(key,value)
-VALUES ('schema','course-hrms-publication-authority-v173')
+VALUES ('schema','course-hrms-publication-authority-v174')
 ON CONFLICT(key) DO UPDATE SET value = EXCLUDED.value;

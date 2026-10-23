@@ -1,4 +1,4 @@
--- V174: authoritative HRMS-managed institution binding for Education Admin staff.
+-- V175: authoritative HRMS-managed institution binding for Education Admin staff.
 -- Employment (hr_employee/hr_organization), technical login identity (staff_account),
 -- and institution tenancy remain separate identities. This table is the explicit bridge.
 CREATE TABLE institution_staff_binding (
@@ -37,5 +37,5 @@ COMMENT ON COLUMN institution_staff_binding.reason IS
   'Reason for assignment or reassignment; never a substitute for permission checks.';
 
 INSERT INTO app_metadata(key,value)
-VALUES ('schema','hrms-managed-institution-staff-binding-v174')
+VALUES ('schema','hrms-managed-institution-staff-binding-v175')
 ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value;

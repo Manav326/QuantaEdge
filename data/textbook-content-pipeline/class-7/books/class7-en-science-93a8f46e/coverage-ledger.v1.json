@@ -29,12 +29,12 @@
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
     "raw_analysis_result_rows": 2275,
-    "successful_visual_analyses": 2189,
+    "successful_visual_analyses": 2193,
     "missing_visual_analyses": 5213,
-    "failed_visual_analyses": 86,
+    "failed_visual_analyses": 82,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5299,
+    "unresolved_count": 5295,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -79571,9 +79571,30 @@
       "asset_path": "assets/e107a6898928da3c34c226b166e80c9656ae775ddca65a0034a0a009a13e46fc.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An elderly craftsperson named Sudarshan discussing the types of items made by ironsmiths.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as flat pans (tawas),",
+          "The World of Metals",
+          "4      and Non-metals"
+        ],
+        "concepts": [
+          "craftspersons",
+          "ironsmiths",
+          "daily use items",
+          "flat pans (tawas)"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about craftspersons who work with metals.",
+        "limitations": [
+          "The image does not show the ironsmiths making the items.",
+          "The image does not show the ironsmiths interacting with Yashwant and Anandi."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -79589,9 +79610,30 @@
       "asset_path": "assets/5d08c61ee9fa56e25421098e3b8ccf9bff8fa6d420b005dadb3b5eb315c3f5aa.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An elderly craftsperson, Sudarshan uncle, is discussing the types of items made by ironsmiths.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as flat pans (tawas),",
+          "The World of Metals",
+          "4      and Non-metals"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "flat pans (tawas)"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about craftspersons who work with metals.",
+        "limitations": [
+          "The image does not show the ironsmiths making the items.",
+          "The image does not show the ironsmiths' tools or techniques."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -80081,9 +80123,31 @@
       "asset_path": "assets/b9783e33a7b37ae18225df72954017bb48490ae90115005261a4079fe0b81229.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A conversation between Yashwant, Anandi, and Sudarshan about making items of daily use.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "The World of Metals",
+          "4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use",
+          "items",
+          "conversation"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about craftspersons who work with metals.",
+        "limitations": [
+          "The image does not show any visual representation of the conversation.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -80465,9 +80529,36 @@
       "asset_path": "assets/54fda8a11fea47774ae81245ca43c8523c6fbf915fcb0d1e79b6bc305a6a086d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An elderly craftsperson named Sudarshan discussing metal items with Yashwant and Anandi.",
+        "visual_type": "photo",
+        "visible_text": [
+          "The World of Metals",
+          "4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "metal items",
+          "Rajasthan",
+          "school project",
+          "elderly craftsperson",
+          "Sudarshan uncle",
+          "Yashwant and Anandi",
+          "items of daily use",
+          "flat pans (tawas)"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about metal items from Sudarshan uncle.",
+        "limitations": [
+          "The image does not show the actual ironsmiths or the items they make."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

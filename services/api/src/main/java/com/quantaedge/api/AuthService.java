@@ -157,6 +157,87 @@ public class AuthService {
     return value==null?"":value.trim();
   }
 
+  /**
+   * Send a fresh OTP only to the account's server-verified mobile number.
+   * Account identity is supplied by the already authenticated deletion controller;
+   * the caller cannot choose a phone number or another user ID in the request body.
+   */
+  public Map<String,Object> requestAccountDeletionOtp(long userId) {
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select mobile_e164 from user_account
+      where id=? and active=true and role in ('PARENT','LEARNER')
+        and mobile_verified_at is not null and mobile_e164 is not null
+      """,userId);
+    if(rows.isEmpty()) {
+      throw new IllegalStateException(
+          "This account has no verified mobile number. Use the verified Google identity option on the account-deletion web page.");
+    }
+    String mobile=normalizeMobile(String.valueOf(rows.getFirst().get("mobile_e164")));
+    String developmentCode=deliverOtp(mobile,"ACCOUNT_DELETION",null,null);
+    Map<String,Object> result=new java.util.LinkedHashMap<>();
+    result.put("sent",true);
+    result.put("expiresInSeconds",300);
+    result.put("mobileLastFour",mobile.length()>=4?mobile.substring(mobile.length()-4):"");
+    if(developmentCode!=null) result.put("devCode",developmentCode);
+    return result;
+  }
+
+  /** A deletion OTP creates a ten-minute, single-use proof bound to this account. */
+  @Transactional(noRollbackFor = IllegalArgumentException.class)
+  public UUID verifyAccountDeletionOtp(long userId,String suppliedOtp) {
+    if(suppliedOtp==null || !suppliedOtp.matches("^[0-9]{6}$")) {
+      throw new IllegalArgumentException("Enter the six-digit verification code.");
+    }
+    List<Map<String,Object>> accountRows=jdbc.queryForList("""
+      select mobile_e164 from user_account
+      where id=? and active=true and role in ('PARENT','LEARNER')
+        and mobile_verified_at is not null and mobile_e164 is not null
+      for update
+      """,userId);
+    if(accountRows.isEmpty()) {
+      throw new SecurityException("A verified mobile number is not available for this account.");
+    }
+    String mobile=normalizeMobile(String.valueOf(accountRows.getFirst().get("mobile_e164")));
+    List<Map<String,Object>> challenges=jdbc.queryForList("""
+      select id,code_hash,attempts,expires_at
+      from otp_challenge
+      where mobile_e164=? and purpose='ACCOUNT_DELETION' and consumed_at is null
+      order by requested_at desc limit 1
+      for update
+      """,mobile);
+    if(challenges.isEmpty()) throw new IllegalArgumentException("Verification code not found or expired.");
+    Map<String,Object> challenge=challenges.getFirst();
+    int attempts=((Number)challenge.get("attempts")).intValue();
+    if(attempts>=5) throw new IllegalStateException("Too many verification attempts. Request a new code later.");
+    jdbc.update("update otp_challenge set attempts=attempts+1 where id=?",challenge.get("id"));
+
+    Object expiryRaw=challenge.get("expires_at");
+    Instant expiresAt=expiryRaw instanceof java.sql.Timestamp timestamp?timestamp.toInstant()
+        :expiryRaw instanceof java.time.OffsetDateTime offsetDateTime?offsetDateTime.toInstant()
+        :expiryRaw instanceof java.time.LocalDateTime localDateTime?localDateTime.toInstant(java.time.ZoneOffset.UTC)
+        :Instant.parse(String.valueOf(expiryRaw));
+    if(Instant.now().isAfter(expiresAt)) {
+      jdbc.update("update otp_challenge set consumed_at=now() where id=? and consumed_at is null",challenge.get("id"));
+      throw new IllegalArgumentException("Verification code expired. Request a new code.");
+    }
+    if(!hash(suppliedOtp).equals(String.valueOf(challenge.get("code_hash")))) {
+      throw new IllegalArgumentException("Incorrect verification code.");
+    }
+    int consumed=jdbc.update("""
+      update otp_challenge set consumed_at=now()
+      where id=? and consumed_at is null and expires_at>now()
+      """,challenge.get("id"));
+    if(consumed!=1) throw new IllegalArgumentException("Verification code has already been used. Request a new code.");
+
+    UUID verificationId=UUID.randomUUID();
+    jdbc.update("""
+      insert into account_deletion_verification(
+        verification_id,user_account_id,method,verified_at,expires_at)
+      values (?,?,'MOBILE_OTP',now(),now()+interval '10 minutes')
+      """,verificationId,userId);
+    return verificationId;
+  }
+
   public String requestOtp(String mobile,String purpose) {
     return requestOtp(mobile,purpose,null);
   }

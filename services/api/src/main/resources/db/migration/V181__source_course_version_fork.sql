@@ -1,4 +1,4 @@
--- V180: safely fork released course graphs so source edits never mutate a live release.
+-- V181: safely fork released course graphs so source edits never mutate a live release.
 -- A fork receives new program/subject/chapter/lesson/question/assessment identities. Learner attempts,
 -- purchases, invoices, entitlements and certificates remain attached to the original program/version.
 -- Generic resources/documents/assets are immutable reusable resources; the fork copies assignments
@@ -641,5 +641,5 @@ COMMENT ON FUNCTION qe_fork_course_version(bigint,bigint,bigint,bigint) IS
   'Creates a separate source-owned editable course graph and draft release. It does not re-parent old enrolments, purchases, invoices, attempts, results or certificates; the new version still requires source approval and the full HRMS Marketplace stepper.';
 
 INSERT INTO app_metadata(key,value)
-VALUES ('schema','source-course-version-fork-v180')
+VALUES ('schema','source-course-version-fork-v181')
 ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value;

@@ -1,4 +1,4 @@
--- V181: allow the centralized QA engine to own and remove course identities it creates.
+-- V182: allow the centralized QA engine to own and remove course identities it creates.
 -- The run marker is not sufficient by itself; cleanup still requires exact manifest IDs.
 ALTER TABLE institution_course_identity
   ADD COLUMN qa_test_run_id uuid REFERENCES qa_test_run(run_id) ON DELETE RESTRICT;
@@ -21,5 +21,5 @@ ALTER TABLE qa_test_run_resource
   ));
 
 INSERT INTO app_metadata(key,value)
-VALUES ('schema','qa-owned-course-identity-cleanup-v181')
+VALUES ('schema','qa-owned-course-identity-cleanup-v182')
 ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value;

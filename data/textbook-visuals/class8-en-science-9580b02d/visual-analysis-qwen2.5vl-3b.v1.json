@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1181,
+    "assets_selected": 1188,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "779227c533fab475e70494a3",
-      "5ea99b2a936c89c223e68c3d"
+      "19660f7f9ed6e518549aed22",
+      "bdf3d8077f9b0fd3c8cc01a0"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1178,
-    "assets_remaining": 1113,
-    "assets_completion_percent": 51.4,
-    "assets_failed": 9,
-    "assets_skipped_from_checkpoint": 1176,
+    "assets_analyzed": 1185,
+    "assets_remaining": 1106,
+    "assets_completion_percent": 51.7,
+    "assets_failed": 11,
+    "assets_skipped_from_checkpoint": 1183,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1188,8 +1188,8 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
+        "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
           "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
@@ -1199,14 +1199,13 @@
         ],
         "concepts": [
           "open-ended questions",
-          "thought-provoking questions",
           "critical thinking",
           "curiosity",
-          "science",
           "teamwork",
           "inclusive nature",
           "special needs",
           "peer interactions",
+          "understanding concepts",
           "assessing understanding",
           "analyzing concepts",
           "safety precautions",
@@ -1215,16 +1214,17 @@
           "scientific principles",
           "real-life applications"
         ],
-        "context_relation": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
+        "context_relation": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "limitations": [
-          "The image does not provide specific examples or details about the questions or activities mentioned."
+          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39920783405",
-      "checkpointed_at": "2026-10-23T09:17:15Z"
+      "run_id": "39937902376",
+      "checkpointed_at": "2026-10-23T11:57:34Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -19840,9 +19840,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39920783405",
+      "run_id": "39937902376",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -20139,8 +20139,8 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Acknowledgments for the book's contributors and staff.",
+        "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
           "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
@@ -20148,27 +20148,26 @@
           "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
         ],
         "concepts": [
-          "Acknowledgment",
-          "Textbook",
+          "Acknowledgments",
           "Contributors",
-          "Roles",
-          "Freelance Language Editor",
-          "APC office",
-          "Administrative staff",
-          "Publication Division",
-          "Contractual",
-          "Proofreaders"
+          "Staff",
+          "Textbook",
+          "Editing",
+          "Support",
+          "Publication",
+          "Commitment"
         ],
-        "context_relation": "Acknowledgment and appreciation for contributors and their roles in the publication of a textbook.",
+        "context_relation": "The text is a page from a book or document that lists acknowledgments and thanks to various contributors and staff involved in the publication of a textbook.",
         "limitations": [
-          "No specific visual elements are described."
+          "The text does not provide specific details about the book's content or the subjects it covers.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39920783405",
-      "checkpointed_at": "2026-10-23T09:17:48Z"
+      "run_id": "39937902376",
+      "checkpointed_at": "2026-10-23T11:58:15Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -22087,9 +22086,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39920783405",
+      "run_id": "39937902376",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -25823,7 +25822,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39920783405",
+      "run_id": "39937902376",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -26008,7 +26007,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39920783405",
+      "run_id": "39937902376",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -30195,9 +30194,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39920783405",
+      "run_id": "39937902376",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -30639,9 +30638,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39920783405",
+      "run_id": "39937902376",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -33062,7 +33061,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39920783405",
+      "run_id": "39937902376",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -34204,19 +34203,74 @@
     {
       "asset_id": "acfb58f02fadc0623057c038",
       "asset_sha256": "6163eff9673da7368edd8c06ec27710b3e57aedfe212cb543407681d81d8f00f",
-      "page_text_context_sha256": "b874d39bde71b7f8c12576c7def3878fb8c85b9f937f4ee2030da25ff04f473f",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 71,
       "asset_path": "page-0071.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "b874d39bde71b7f8c12576c7def3878fb8c85b9f937f4ee2030da25ff04f473f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39920783405",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Diagram of an electromagnet with a compass needle near its ends A and B.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A           B        A           B",
+          "Fig. 4.4: Compass needle near (a) End A; (b) End B of an electromagnet",
+          "As we have learnt earlier, when two magnets are brought close",
+          "to each other, their unlike poles (North–South) attract each other.",
+          "So, if north pole of the magnetic compass is attracted towards",
+          "end A of the electromagnet, then end A is south pole.",
+          "Repeat this procedure to find the polarity of end B as well",
+          "(Fig. 4.4b). Did you find that the polarity of end B is opposite",
+          "to the polarity of end A?",
+          "We learnt in grade 6 that a magnet has two poles. Just like a",
+          "magnet, an electromagnet also has two poles—North and South.",
+          "Think like a scientist",
+          "Repeat Activity 4.3 with — (i) 2 and 4 cells with the same coil, (ii) 2 cells but",
+          "different number of turns of the coil. What do you observe?",
+          "A single cell provides only a small amount of current, so the magnetic",
+          "field is weak. As a result, the deflection of compass needle is less and the coil",
+          "can only attract a few clips. A battery with more cells gives a larger current",
+          "as compared to that with a single cell. This creates a stronger magnetic field,",
+          "so the deflection of the compass needle is more and the coil can attract",
+          "more clips. The increase in number of turns of the coil also makes the coil a",
+          "stronger magnet!",
+          "Also, repeat Activity 4.4 by changing the direction of the current. So, the strength of an electromagnet can be changed by changing the amount",
+          "of electric current flowing through the coil or the number of turns of the coil, or both. Also, its poles can be reversed by changing the direction of the current.",
+          "A step further",
+          "Do you remember learning earlier (in the chapter 'Exploring Magnets' in Curiosity, Grade 6) that a freely suspended magnet rests",
+          "along the north–south direction because our Earth itself behaves like a giant magnet? But why does Earth behave like a magnet? Deep inside the Earth, the movement of liquid iron in the core creates",
+          "electric currents, which generate a magnetic field. Many migratory birds, fish, and animals use this field to navigate across continents and oceans. The Earth’s magnetic field also acts as a shield, blocking",
+          "harmful particles from space, and helps protect life on Earth."
+        ],
+        "concepts": [
+          "Electromagnet",
+          "Magnetic field",
+          "Compass needle",
+          "Polarity",
+          "Magnet poles",
+          "Electric current",
+          "Magnetic field strength",
+          "Magnetic field direction",
+          "Magnetic field reversal",
+          "Magnetic field effect on compass needle",
+          "Magnetic field effect on Earth",
+          "Magnetic field effect on migratory animals"
+        ],
+        "context_relation": "The image is a diagram showing the effect of an electromagnet on a compass needle.",
+        "limitations": [
+          "The image does not provide specific numerical values or measurements.",
+          "The image does not show the exact strength or direction of the magnetic field.",
+          "The image does not show the exact effect of the magnetic field on the compass needle."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39937902376",
+      "checkpointed_at": "2026-10-23T11:18:45Z"
     },
     {
       "asset_id": "b3a9df973adc2b6a2a86e2d2",
@@ -38042,9 +38096,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39920783405",
+      "run_id": "39937902376",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -38349,7 +38403,7 @@
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "diagram",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -38363,7 +38417,8 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force"
+          "muscular force",
+          "living beings"
         ],
         "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
@@ -38373,8 +38428,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39920783405",
-      "checkpointed_at": "2026-10-23T09:18:27Z"
+      "run_id": "39937902376",
+      "checkpointed_at": "2026-10-23T11:59:04Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -38516,6 +38571,250 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39920783405",
       "checkpointed_at": "2026-10-23T09:20:57Z"
+    },
+    {
+      "asset_id": "0552ac2143b804a2f7a66bff",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4ced2a91f1ad4add1f52a0f90bfa067845579b06c0365565cf231ef29c8dfe09",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39937902376",
+      "checkpointed_at": "2026-10-23T11:30:03Z"
+    },
+    {
+      "asset_id": "d2bb3e6a771b57392e82c877",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "page_text_context_sha256": "4ced2a91f1ad4add1f52a0f90bfa067845579b06c0365565cf231ef29c8dfe09",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39937902376",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "ab0af6757186130b77128ff6",
+      "asset_sha256": "085ff29477e307fa6d7f484db6fc602de4f9e4acb75c92c27442c9557edb76f0",
+      "page_text_context_sha256": "4ced2a91f1ad4add1f52a0f90bfa067845579b06c0365565cf231ef29c8dfe09",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 87,
+      "asset_path": "page-0087.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39937902376",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "ae6e360c75544c32a2ffc6cb",
+      "asset_sha256": "87e439464b6033095e69b85b9b8e7e1df30c97e062a4ba7e7663ae9a8f43f927",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/87e439464b6033095e69b85b9b8e7e1df30c97e062a4ba7e7663ae9a8f43f927.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1cfa6eb0856e050215e8288a0fc8cddd57b40724cfc835f71887ac1d9a45e10b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a block sliding on a surface with a force acting against it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "On pushing, the object stops after sliding a certain distance. This must be due to a force acting between the surfaces of the sliding object and the table or floor which are in contact. This force must be acting on the object in a direction opposite to its direction of motion. This force is what bri",
+          "The force that comes into play when an object moves or tries to move over another",
+          "object is called friction."
+        ],
+        "concepts": [
+          "Friction",
+          "Force",
+          "Motion",
+          "Contact surfaces"
+        ],
+        "context_relation": "The image illustrates the concept of friction as a force that opposes the motion of an object.",
+        "limitations": [
+          "The image does not provide specific details about the types of friction or the forces involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39937902376",
+      "checkpointed_at": "2026-10-23T11:47:37Z"
+    },
+    {
+      "asset_id": "daeae54a0a8c53512b7acecc",
+      "asset_sha256": "fabc47b6ae3b2f867bbbde1dddcda33cd2f4bb2b5724fa0177411f12f27ad9c4",
+      "page_text_context_sha256": "1cfa6eb0856e050215e8288a0fc8cddd57b40724cfc835f71887ac1d9a45e10b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/fabc47b6ae3b2f867bbbde1dddcda33cd2f4bb2b5724fa0177411f12f27ad9c4.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39937902376",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "8c1e3a49475682286a74e4a5",
+      "asset_sha256": "82926bdd9c78089199418cf22faf95b11ff22541270aeb4e3c3e3ab7661406ed",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/82926bdd9c78089199418cf22faf95b11ff22541270aeb4e3c3e3ab7661406ed.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1cfa6eb0856e050215e8288a0fc8cddd57b40724cfc835f71887ac1d9a45e10b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person climbing a staircase, with one foot on a step and the other foot raised, as if about to step down.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or educational content related to the textbook.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional information or context for the educational content editor to analyze."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39937902376",
+      "checkpointed_at": "2026-10-23T11:54:50Z"
+    },
+    {
+      "asset_id": "a3824426a27848850b2fe5a7",
+      "asset_sha256": "7c74a22e26202e9db746156732e58cea8fa5c8fcf6331abee6343b4819c1f72b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/7c74a22e26202e9db746156732e58cea8fa5c8fcf6331abee6343b4819c1f72b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1cfa6eb0856e050215e8288a0fc8cddd57b40724cfc835f71887ac1d9a45e10b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl in a yellow shirt with her hand on her chin, appearing to be thinking.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39937902376",
+      "checkpointed_at": "2026-10-23T11:56:28Z"
+    },
+    {
+      "asset_id": "19660f7f9ed6e518549aed22",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1cfa6eb0856e050215e8288a0fc8cddd57b40724cfc835f71887ac1d9a45e10b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear content or text",
+          "no visible text or images"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39937902376",
+      "checkpointed_at": "2026-10-23T11:59:18Z"
+    },
+    {
+      "asset_id": "bdf3d8077f9b0fd3c8cc01a0",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 88,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1cfa6eb0856e050215e8288a0fc8cddd57b40724cfc835f71887ac1d9a45e10b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An object stopping after sliding a certain distance due to a force acting between the surfaces of the sliding object and the table or floor.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "On pushing, the object stops after sliding a certain distance. This must be due to a force acting between the surfaces of the sliding object and the table or floor which are in contact. This force must be acting on the object in a direction opposite to its direction of motion. This force is what bri",
+          "The force that comes into play when an object moves or tries to move over another",
+          "object is called friction."
+        ],
+        "concepts": [
+          "friction",
+          "force",
+          "object",
+          "sliding",
+          "distance",
+          "contact",
+          "direction",
+          "motion",
+          "stop"
+        ],
+        "context_relation": "The image is a continuation of the previous text, providing a detailed explanation of the concept of friction.",
+        "limitations": [
+          "The image does not contain any visual elements, only text.",
+          "The text is in English and does not include any diagrams or illustrations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39937902376",
+      "checkpointed_at": "2026-10-23T11:59:55Z"
     }
   ]
 }

@@ -1,4 +1,4 @@
--- V178: idempotency/audit registry for atomic nested course-definition JSON imports.
+-- V179: idempotency/audit registry for atomic nested course-definition JSON imports.
 -- Course structure remains in the canonical curriculum tables; the manifest preserves the exact
 -- package identity and checksum without duplicating learner progress or historical attempts.
 CREATE TABLE course_package_import (
@@ -27,5 +27,5 @@ COMMENT ON COLUMN course_package_import.package_snapshot IS
   'Exact versioned source package retained for provenance and later schema migration/reconciliation; contains no generated server IDs, secrets or publication authority.';
 
 INSERT INTO app_metadata(key,value)
-VALUES ('schema','atomic-course-package-import-v178')
+VALUES ('schema','atomic-course-package-import-v179')
 ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value;

@@ -2,6 +2,7 @@
 
 
 import { apiFetch } from './apiClient';
+import AccountDeletionPanel from './AccountDeletionPanel';
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import Link from 'next/link';
 import GoogleSignInButton from './GoogleSignInButton';
@@ -302,6 +303,7 @@ export default function AccountIdentitySettings() {
             : 'आप family course marketplace से अपने लिए या जुड़े बच्चे के लिए कोर्स खरीद सकते हैं।'} <Link href="/parent/courses">{english ? 'Family courses' : 'परिवार के कोर्स'}</Link></p>}
         </div>
       </>}
+      {profile?.accountType !== 'CHILD' && <AccountDeletionPanel compact />}
     </section>
   );
 }

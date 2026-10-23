@@ -1,4 +1,4 @@
--- V175: give new generic learning resources an explicit institution owner.
+-- V176: give new generic learning resources an explicit institution owner.
 -- Legacy resources remain null/read-only until a safe source owner can be proved from existing
 -- course assignments. Do not guess ownership from the current viewer or creator staff ID.
 ALTER TABLE learning_resource
@@ -40,5 +40,5 @@ CREATE INDEX idx_learning_resource_owner_status
 COMMENT ON COLUMN learning_resource.owner_institution_id IS
   'Institution that owns metadata and future revisions of this resource. Null indicates legacy/ambiguous ownership and is read-only in institution-admin authoring until HRMS resolves it.';
 INSERT INTO app_metadata(key,value)
-VALUES ('schema','institution-owned-learning-resources-v175')
+VALUES ('schema','institution-owned-learning-resources-v176')
 ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value;

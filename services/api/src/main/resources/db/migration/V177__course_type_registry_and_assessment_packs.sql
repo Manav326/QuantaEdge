@@ -1,4 +1,4 @@
--- V176: establish a type-driven course definition and generic assessment-pack hierarchy.
+-- V177: establish a type-driven course definition and generic assessment-pack hierarchy.
 -- Existing courses are classified from their current curriculum shape; this migration does not
 -- rename course IDs or move any legacy learner/assessment history.
 CREATE TABLE course_type_registry (
@@ -139,5 +139,5 @@ END
 $portable_type_check$;
 
 INSERT INTO app_metadata(key,value)
-VALUES ('schema','course-type-registry-assessment-packs-v176')
+VALUES ('schema','course-type-registry-assessment-packs-v177')
 ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value;

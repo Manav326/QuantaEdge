@@ -35,3 +35,12 @@ QuantaEdge is a quality-first learning platform for different ages, subjects, sk
 ## Status rule
 
 A source change or green compilation is not proof of a working user journey. Mark end-to-end items complete only after the named flow is exercised in a real browser/device against an approved test environment and the result is recorded.
+
+
+## Account deletion request lifecycle and linked-child guardrails
+
+- Web and Android provide an identity-verified, reasoned deletion-request intake with status and cancellation; submission is not completion.
+- Requests record a mandatory reason category, optional bounded explanation, request initiator and the child's public identity where a guardian requests child deletion.
+- A parent account is blocked server-side while any active parent-managed child remains linked. A checkbox or URL parameter cannot bypass the guard.
+- A verified adult child must complete the existing independent-learner conversion path. A child with unknown/pending adult status requires staff age-status review before guardian-requested deletion can be submitted.
+- Staff queue and read-only dependency assessment surface the request and associated FK dependencies. Full retention-aware erasure remains out of scope until the approved retention decisions and audited fulfillment workflow are implemented.

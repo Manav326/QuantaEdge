@@ -1,4 +1,4 @@
--- V179: immutable, source-owned course-version identities and published-graph mutation guardrails.
+-- V180: immutable, source-owned course-version identities and published-graph mutation guardrails.
 -- Existing curriculum rows and learner history are retained. A new content version gets a
 -- distinct curriculum_program graph; it never rewrites an earlier released graph.
 
@@ -463,5 +463,5 @@ COMMENT ON FUNCTION reject_published_course_graph_mutation() IS
   'Blocks direct edits to any course content graph already submitted for release review, made shareable, historically migrated as published, or used by an HRMS-published offer. New drafts use distinct curriculum_program and child IDs.';
 
 INSERT INTO app_metadata(key,value)
-VALUES ('schema','immutable-course-content-version-identity-v179')
+VALUES ('schema','immutable-course-content-version-identity-v180')
 ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value;
