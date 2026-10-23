@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
     "raw_analysis_result_rows": 1186,
-    "successful_visual_analyses": 1176,
+    "successful_visual_analyses": 1177,
     "missing_visual_analyses": 1105,
-    "failed_visual_analyses": 10,
+    "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1115,
+    "unresolved_count": 1114,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -41104,16 +41104,18 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "A page from a textbook discussing the heating effect of electric current in a wire, with a diagram and text explaining the concept.",
+        "visual_type": "diagram",
         "visible_text": [
+          "Chapter 4 — Electricity: Magnetic and Heating Effects",
           "(Do not hold the nichrome wire).",
-          "What difference do you feel?",
           "Safety first",
+          "What difference do you feel?",
           "Do not touch the wire for an extended period to avoid any injuries.",
           "Repeat the last two steps to confirm the observation.",
-          "You may have observed that nichrome wire feels warm when current is passed through it.",
-          "This happens because, when electric current flows through any conductor, it faces some opposition or resistance to its flow. Different conductors offer different levels of resistance to the flow of current. A nichrome wire, for example, offers higher resistance compared to a copper wire of the same ",
+          "You may have observed that nichrome wire feels warm when current is passed through it. This happens because, when electric current flows through any conductor, it faces some opposition or resistance to its flow. Different conductors offer different levels of resistance to the flow of current. A nich",
+          "Fig. 4.5: Heating effect in a wire",
+          "Think like a scientist",
           "This activity should be carried out strictly under the supervision of a teacher.",
           "Repeat Activity 4.5 with a battery of 2 cells. What do you notice? For the same duration, does the wire heat up more with one cell or two cells?",
           "The amount of heat generated is more in the experiment with 2 cells. This is due to the fact that the heat generated depends on the magnitude of the electric current. The heat generated in a wire depends on the material, thickness, length of the wire, and the duration for which the current flows.",
@@ -41123,14 +41125,14 @@
           "Electric current",
           "Resistance",
           "Heat generation",
-          "Nichrome wire",
           "Incandescent lamp",
-          "Electric current in household appliances"
+          "Electric appliances",
+          "Heating effect"
         ],
-        "context_relation": "The page discusses the heating effect of electric current in nichrome wire, explaining the scientific principles behind it and its practical applications in household appliances.",
+        "context_relation": "The text is discussing the heating effect of electric current in a wire, which is a concept in electricity.",
         "limitations": [
-          "The page does not provide specific instructions for the experiment described, only general guidelines.",
-          "The page does not include any visual aids or diagrams to support the explanation."
+          "The text does not provide specific details about the experiment or the apparatus used.",
+          "The text does not provide specific details about the materials used in the experiment."
         ]
       },
       "chapter_id": null,
@@ -41477,9 +41479,30 @@
       "asset_path": "page-0074.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Images of various household electric heating appliances.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 4.6: Simple household electric heating appliances (a) Electric room heater;",
+          "(b) Electric stove; (c) Electric kettle; (d) Electric iron; (e) Water heating immersion rod; (f) Hair dryer",
+          "The heating effect of electric current is useful in many everyday appliances. But sometimes, it can cause problems, like energy loss in wires during transmission. Overheating in appliances may cause damage to plugs and sockets where plastic parts may melt, or even lead to fires. In household circuit",
+          "Beyond household use, heating effect of electric current has several industrial applications. One notable example is in steel manufacturing industries, where a specially designed high-temperature furnace (an enclosed space built to generate heat) uses electric current to produce heat. This is used t"
+        ],
+        "concepts": [
+          "electric current",
+          "heating effect",
+          "household appliances",
+          "safety devices",
+          "industrial applications",
+          "steel manufacturing"
+        ],
+        "context_relation": "descriptive",
+        "limitations": [
+          "The image does not show the specific safety devices mentioned in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1176,
+    "assets_selected": 1177,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
-      "aa8a149fa698d13f05cfdb3e",
-      "4f44f5240e53b89717587e62",
-      "acfb58f02fadc0623057c038"
+      "9c000d9c87aaab53a1112cac",
+      "bf6d097c9032d517a6297339",
+      "7bceb11bef609f2404522955"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1172,
-    "assets_remaining": 1119,
+    "assets_analyzed": 1174,
+    "assets_remaining": 1117,
     "assets_completion_percent": 51.2,
-    "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 1171,
+    "assets_failed": 9,
+    "assets_skipped_from_checkpoint": 1172,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39920783405",
-      "checkpointed_at": "2026-10-23T08:50:58Z"
+      "checkpointed_at": "2026-10-23T08:59:10Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39920783405",
-      "checkpointed_at": "2026-10-23T08:51:31Z"
+      "checkpointed_at": "2026-10-23T08:59:43Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -34656,16 +34656,18 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "A page from a textbook discussing the heating effect of electric current in a wire, with a diagram and text explaining the concept.",
+        "visual_type": "diagram",
         "visible_text": [
+          "Chapter 4 — Electricity: Magnetic and Heating Effects",
           "(Do not hold the nichrome wire).",
-          "What difference do you feel?",
           "Safety first",
+          "What difference do you feel?",
           "Do not touch the wire for an extended period to avoid any injuries.",
           "Repeat the last two steps to confirm the observation.",
-          "You may have observed that nichrome wire feels warm when current is passed through it.",
-          "This happens because, when electric current flows through any conductor, it faces some opposition or resistance to its flow. Different conductors offer different levels of resistance to the flow of current. A nichrome wire, for example, offers higher resistance compared to a copper wire of the same ",
+          "You may have observed that nichrome wire feels warm when current is passed through it. This happens because, when electric current flows through any conductor, it faces some opposition or resistance to its flow. Different conductors offer different levels of resistance to the flow of current. A nich",
+          "Fig. 4.5: Heating effect in a wire",
+          "Think like a scientist",
           "This activity should be carried out strictly under the supervision of a teacher.",
           "Repeat Activity 4.5 with a battery of 2 cells. What do you notice? For the same duration, does the wire heat up more with one cell or two cells?",
           "The amount of heat generated is more in the experiment with 2 cells. This is due to the fact that the heat generated depends on the magnitude of the electric current. The heat generated in a wire depends on the material, thickness, length of the wire, and the duration for which the current flows.",
@@ -34675,21 +34677,21 @@
           "Electric current",
           "Resistance",
           "Heat generation",
-          "Nichrome wire",
           "Incandescent lamp",
-          "Electric current in household appliances"
+          "Electric appliances",
+          "Heating effect"
         ],
-        "context_relation": "The page discusses the heating effect of electric current in nichrome wire, explaining the scientific principles behind it and its practical applications in household appliances.",
+        "context_relation": "The text is discussing the heating effect of electric current in a wire, which is a concept in electricity.",
         "limitations": [
-          "The page does not provide specific instructions for the experiment described, only general guidelines.",
-          "The page does not include any visual aids or diagrams to support the explanation."
+          "The text does not provide specific details about the experiment or the apparatus used.",
+          "The text does not provide specific details about the materials used in the experiment."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
-      "checkpointed_at": "2026-10-23T04:20:22Z"
+      "run_id": "39920783405",
+      "checkpointed_at": "2026-10-23T09:03:03Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -35033,19 +35035,42 @@
     {
       "asset_id": "bf6d097c9032d517a6297339",
       "asset_sha256": "d12327ac34e3d28aadda532b3356f3d6981376f28d2d3400ab8c9604eb0225c1",
-      "page_text_context_sha256": "ee9f7db66583c72118b518cb39649a6e574ddcd06b2c5343317ad64c6f3f6731",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 74,
       "asset_path": "page-0074.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "ee9f7db66583c72118b518cb39649a6e574ddcd06b2c5343317ad64c6f3f6731",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Images of various household electric heating appliances.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 4.6: Simple household electric heating appliances (a) Electric room heater;",
+          "(b) Electric stove; (c) Electric kettle; (d) Electric iron; (e) Water heating immersion rod; (f) Hair dryer",
+          "The heating effect of electric current is useful in many everyday appliances. But sometimes, it can cause problems, like energy loss in wires during transmission. Overheating in appliances may cause damage to plugs and sockets where plastic parts may melt, or even lead to fires. In household circuit",
+          "Beyond household use, heating effect of electric current has several industrial applications. One notable example is in steel manufacturing industries, where a specially designed high-temperature furnace (an enclosed space built to generate heat) uses electric current to produce heat. This is used t"
+        ],
+        "concepts": [
+          "electric current",
+          "heating effect",
+          "household appliances",
+          "safety devices",
+          "industrial applications",
+          "steel manufacturing"
+        ],
+        "context_relation": "descriptive",
+        "limitations": [
+          "The image does not show the specific safety devices mentioned in the text."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39920783405",
+      "checkpointed_at": "2026-10-23T09:05:58Z"
     },
     {
       "asset_id": "ea81c1bb75ba28fdb8d6ca27",
@@ -38017,9 +38042,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
+      "run_id": "39920783405",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false
     },
