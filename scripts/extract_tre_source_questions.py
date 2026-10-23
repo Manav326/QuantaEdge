@@ -72,7 +72,8 @@ PAPERS = {
     "TRE 3.0": {
         "match": ("tre3.0", "tre-3", "tre3"),
         "expected": {"GENERAL_STUDIES": (31, 70), "COMPUTER_SCIENCE": (71, 150)},
-        "total_questions": 150,
+        # The provided TRE 3.0 booklet contains 148 items: 40 GS + 80 CS + 28 language.
+        "total_questions": 148,
         "duration_minutes": 150,
         "negative_marking_fraction": 0.0,
         "exam_date": "2024-07-22",
@@ -408,7 +409,9 @@ def parse_prompt_options(text: str, identity: str, language: str, cycle: str) ->
 
 def expected_language_keys(cycle: str) -> set[str]:
     if cycle == "TRE 3.0":
-        return {f"E-{i}" for i in range(1, 9)} | {f"H-{i}" for i in range(9, 31)}
+        # The supplied source booklet contains E-2..E-5, E-7..E-8 and H-9..H-30.
+        # Do not synthesize E-1/E-6: they are not present in this 148-question paper.
+        return {f"E-{i}" for i in (2, 3, 4, 5, 7, 8)} | {f"H-{i}" for i in range(9, 31)}
     if cycle == "TRE 2.0":
         return {str(i) for i in range(1, 31)}
     return set()
@@ -601,7 +604,7 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                     expected_language_keys(cycle)-{str(r["source_question_number"]) for r in language_records}
                 ) if cycle!="TRE 1.0" else [],
                 "included_in_tre4_practice_test":False,
-                "note":"Preserve all questions from each original booklet. TRE 1.0 has 120 questions; TRE 2.0/3.0 include a separate qualifying-language section in addition to 40 GS + 80 CS. Only the 120 GS/CS items contribute to the two scored result sections."
+                "note":"Preserve all questions from each original booklet. TRE 1.0 has 120 questions (40 GS + 80 CS); TRE 2.0 has 150 (30 qualifying language + 40 GS + 80 CS); this TRE 3.0 source booklet has 148 (28 qualifying language + 40 GS + 80 CS). Only GS and CS contribute to the two scored result sections."
             }
             # Also retain alternative Urdu/Bengali source-track availability without adding those
             # questions to the TRE-4 CS/GS test.
@@ -639,7 +642,7 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                     "negative_marking_fraction":meta["negative_marking_fraction"],
                     "scored_question_count":120,
                     "scored_sections":{"GENERAL_STUDIES":40,"COMPUTER_SCIENCE":80},
-                    "qualifying_section_question_count":30 if cycle in {"TRE 2.0","TRE 3.0"} else 0,
+                    "qualifying_section_question_count":len(expected_language_keys(cycle)) if cycle in {"TRE 2.0","TRE 3.0"} else 0,
                 },
                 "extraction_summary":{
                     "raw_question_blocks_detected":len(raw_questions),
@@ -657,7 +660,7 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 "source_notes":[
                     "Original PDF bytes are preserved exactly; SHA-256 is recorded.",
                     "Hindi values contain a Unicode conversion of the source's legacy Hindi encoding; raw text is retained beside it.",
-                    "All original booklet questions are present in the practice attempt. TRE 2.0/3.0 include 30 qualifying-language items in addition to 40 General Studies + 80 Computer Science; only GS and Computer Science contribute to the scored result, which is reported in two sections.",
+                    "All questions present in each original booklet are preserved. TRE 2.0 has 30 qualifying-language items in addition to 40 General Studies + 80 Computer Science; the provided TRE 3.0 booklet has 28 qualifying-language items in addition to 40 General Studies + 80 Computer Science, for 148 total. Only GS and Computer Science contribute to the scored result, reported in two sections.",
                     "Do not release until question/option pair completeness, Hindi rendering, answers, concise explanations, paper rules and any mathematical/code expressions have been reviewed.",
                 ],
             }
