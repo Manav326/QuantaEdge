@@ -558,6 +558,14 @@ jobs:
       - name: Run browser tests with direct PostgreSQL assertions and cleanup
         working-directory: tests/ui-e2e
         run: npm run test:production-gate
+      - name: Capture backend diagnostics on failure
+        if: failure()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$QE_E2E_ARTIFACTS/diagnostics"
+          docker compose -f docker-compose.yml -f docker-compose.e2e.yml ps --all > "$QE_E2E_ARTIFACTS/diagnostics/compose-status.txt" 2>&1 || true
+          docker compose -f docker-compose.yml -f docker-compose.e2e.yml logs --no-color --timestamps --tail=1500 api postgres > "$QE_E2E_ARTIFACTS/diagnostics/api-postgres.log" 2>&1 || true
       - name: Upload browser evidence
         if: always()
         uses: actions/upload-artifact@v4
