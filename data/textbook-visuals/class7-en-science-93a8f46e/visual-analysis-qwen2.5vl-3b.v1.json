@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2207,
+    "assets_selected": 2210,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "dc77f0a9dc75c6e31578aaa6",
-      "9518c3782a4f9b281923b247",
-      "408f71e4e2186b46d2c2e8f4"
+      "d1950327264d1f4c61ea9a5e",
+      "b626a9b20f023fe97a31656b",
+      "376be79fe47118e8d9fd366f"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2205,
-    "assets_remaining": 5283,
-    "assets_completion_percent": 29.4,
-    "assets_failed": 68,
-    "assets_skipped_from_checkpoint": 2202,
+    "assets_analyzed": 2207,
+    "assets_remaining": 5281,
+    "assets_completion_percent": 29.5,
+    "assets_failed": 66,
+    "assets_skipped_from_checkpoint": 2205,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40008920682",
-      "checkpointed_at": "2026-10-23T20:29:27Z"
+      "checkpointed_at": "2026-10-23T20:35:36Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40008920682",
-      "checkpointed_at": "2026-10-23T20:30:09Z"
+      "checkpointed_at": "2026-10-23T20:36:18Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -69518,7 +69518,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39975504182",
+      "run_id": "40008920682",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -69570,19 +69570,36 @@
     {
       "asset_id": "b626a9b20f023fe97a31656b",
       "asset_sha256": "43e44ed8823260006a32e8050357ba9ed71c3b3fce02678a59c2d860d083e06d",
-      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 61,
       "asset_path": "assets/43e44ed8823260006a32e8050357ba9ed71c3b3fce02678a59c2d860d083e06d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39975504182",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Icons representing various items and symbols, including a globe, a funnel, and a cityscape.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "craftspersons",
+          "daily use items",
+          "metalwork",
+          "global perspective",
+          "city life"
+        ],
+        "context_relation": "The image represents the diverse items and symbols related to the topic of metals and non-metals in the context of daily use and global perspective.",
+        "limitations": [
+          "The image does not provide specific details about the items or symbols."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40008920682",
+      "checkpointed_at": "2026-10-23T20:39:58Z"
     },
     {
       "asset_id": "0b4aab012f1d2040c1f97c31",
@@ -69811,19 +69828,42 @@
     {
       "asset_id": "376be79fe47118e8d9fd366f",
       "asset_sha256": "01b3ad3b544113f3e905e7c79f03e9193cd420c2ab0842f53d7640069ed2748a",
-      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 61,
       "asset_path": "assets/01b3ad3b544113f3e905e7c79f03e9193cd420c2ab0842f53d7640069ed2748a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39975504182",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An elderly craftsperson named Sudarshan discussing the types of items made by ironsmiths.",
+        "visual_type": "photo",
+        "visible_text": [
+          "The World of Metals",
+          "4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "ironsmiths",
+          "Sudarshan uncle"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about metals and their daily use items from Sudarshan uncle.",
+        "limitations": [
+          "The image does not show the actual ironsmiths or the items they make."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40008920682",
+      "checkpointed_at": "2026-10-23T20:41:24Z"
     },
     {
       "asset_id": "55ebc340cfdf4e025755635b",
