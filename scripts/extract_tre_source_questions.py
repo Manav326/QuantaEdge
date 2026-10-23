@@ -644,6 +644,10 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                         "prompt_raw": prompt,
                         "options": options,
                         "conversion_status": "RAW_LEGACY" if row["language"] == "hi" else "SOURCE_TEXT",
+                        "stimulus_id": row.get("stimulus_id"),
+                        "stimulus_raw": row.get("stimulus_raw_text"),
+                        "stimulus_source_language": row.get("stimulus_source_language"),
+                        "native_language_only": bool(row.get("native_language_only")),
                     }
                     entry["source_locations"][row["language"]] = {
                         "pdf_page": row["pdf_page"],
@@ -660,20 +664,26 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                     english_reference = en.get("prompt_raw", "") + " " + " ".join(
                         option.get("raw_text", "") for option in en.get("options", [])
                     )
+                native_language_only = entry["section_code"] == "LANGUAGE_QUALIFYING"
+                # Language-paper items are source-language questions, not translations of a
+                # parallel sibling. Font decoding may be required for Hindi glyphs, but never
+                # use the English sibling to reconstruct the Hindi language-test wording.
+                conversion_reference = "" if native_language_only else english_reference
                 if hi:
-                    converted_prompt, status = convert_hindi_text(hi.get("prompt_raw", ""), english_reference)
+                    converted_prompt, status = convert_hindi_text(hi.get("prompt_raw", ""), conversion_reference)
                     hi["prompt_i18n"] = preserve_layout(converted_prompt)
                     hi["conversion_status"] = status
+                    hi["translation_policy"] = "NATIVE_SOURCE_ONLY" if native_language_only else "BILINGUAL_SOURCE_VARIANTS"
                     hi["prompt_content_kind"] = classify_content(hi["prompt_i18n"])
                     hi["code_line_indices"] = detected_code_line_indices(hi["prompt_i18n"])
                     hi["math_line_indices"] = detected_math_line_indices(hi["prompt_i18n"])
                     hi["source_code_preservation_notes"] = "Original line breaks and indentation preserved; code-looking lines and operators bypass legacy-Hindi glyph substitution."
                     for option in hi.get("options", []):
                         # The exam's standard D/E options are fixed phrases and should be exact.
-                        if option["key"] in STANDARD_HI_OPTIONS:
+                        if option["key"] in STANDARD_HI_OPTIONS and not native_language_only:
                             option["text_i18n"] = STANDARD_HI_OPTIONS[option["key"]]
                         else:
-                            option["text_i18n"], _ = convert_hindi_text(option.get("raw_text", ""), english_reference)
+                            option["text_i18n"], _ = convert_hindi_text(option.get("raw_text", ""), conversion_reference)
                         option["text_i18n"] = preserve_layout(option["text_i18n"])
                         option["content_kind"] = classify_content(option["text_i18n"])
                         option["code_line_indices"] = detected_code_line_indices(option["text_i18n"])
@@ -681,12 +691,13 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                         option["source_code_preservation_notes"] = "Preserve code/formula glyphs and indentation; compare against the source page."
                 if en:
                     en["prompt_i18n"] = preserve_layout(en.get("prompt_raw", ""))
+                    en["translation_policy"] = "NATIVE_SOURCE_ONLY" if native_language_only else "BILINGUAL_SOURCE_VARIANTS"
                     en["prompt_content_kind"] = classify_content(en["prompt_i18n"])
                     en["code_line_indices"] = detected_code_line_indices(en["prompt_i18n"])
                     en["math_line_indices"] = detected_math_line_indices(en["prompt_i18n"])
                     en["source_code_preservation_notes"] = "Original English source, line breaks and indentation preserved."
                     for option in en.get("options", []):
-                        if option["key"] in STANDARD_EN_OPTIONS:
+                        if option["key"] in STANDARD_EN_OPTIONS and not native_language_only:
                             option["text_i18n"] = STANDARD_EN_OPTIONS[option["key"]]
                         else:
                             option["text_i18n"] = preserve_layout(option.get("raw_text", ""))
@@ -695,6 +706,44 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                         option["code_line_indices"] = detected_code_line_indices(option["text_i18n"])
                         option["math_line_indices"] = detected_math_line_indices(option["text_i18n"])
                         option["source_code_preservation_notes"] = "Original English source, line breaks and indentation preserved."
+
+                # Preserve and localize the shared paragraph separately from each question.
+                # Repeated questions use the same stimulus_id, letting the UI render the paragraph
+                # once and add any number of question controls beneath it.
+                stimulus_i18n: dict[str, str] = {}
+                stimulus_ids: set[str] = set()
+                stimulus_languages: dict[str, str] = {}
+                for lang, variant in (("en", en), ("hi", hi)):
+                    if not variant or not variant.get("stimulus_raw"):
+                        continue
+                    raw_stimulus = str(variant["stimulus_raw"])
+                    if lang == "hi":
+                        stimulus_value, stimulus_status = convert_hindi_text(
+                            raw_stimulus, "" if native_language_only else english_reference
+                        )
+                        variant["stimulus_conversion_status"] = stimulus_status
+                    else:
+                        stimulus_value = raw_stimulus
+                    stimulus_value = preserve_layout(stimulus_value)
+                    variant["stimulus_i18n"] = stimulus_value
+                    variant["stimulus_content_kind"] = classify_content(stimulus_value)
+                    variant["stimulus_code_line_indices"] = detected_code_line_indices(stimulus_value)
+                    variant["stimulus_math_line_indices"] = detected_math_line_indices(stimulus_value)
+                    stimulus_i18n[lang] = stimulus_value
+                    if variant.get("stimulus_id"):
+                        stimulus_ids.add(str(variant["stimulus_id"]))
+                    stimulus_languages[lang] = str(variant.get("stimulus_source_language") or lang)
+                if stimulus_i18n:
+                    if len(stimulus_ids) > 1:
+                        entry["review_flags"].append("STIMULUS_ID_MISMATCH_ACROSS_SOURCE_LANGUAGES")
+                    entry["stimulus_id"] = sorted(stimulus_ids)[0] if stimulus_ids else None
+                    entry["stimulus_i18n"] = stimulus_i18n
+                    entry["stimulus_source_languages"] = stimulus_languages
+                    entry["stimulus_content_kind"] = classify_content(next(iter(stimulus_i18n.values())))
+                    entry["native_language_only"] = native_language_only
+                elif entry["section_code"] == "LANGUAGE_QUALIFYING":
+                    entry["native_language_only"] = True
+                    entry["content_language_policy"] = "NATIVE_SOURCE_ONLY"
 
                 if entry["section_code"] in {"GENERAL_STUDIES", "COMPUTER_SCIENCE"}:
                     if not en:
