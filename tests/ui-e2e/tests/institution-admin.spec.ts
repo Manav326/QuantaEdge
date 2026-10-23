@@ -59,7 +59,7 @@ test('[TEN-004][TEN-007] institution admin first-login password rotation, sessio
     await page.getByRole('button', { name: 'Sign in securely' }).click();
     const badLogin = await badLoginWaiter;
     expect([400, 401, 403]).toContain(badLogin.status());
-    await expect(page.getByRole('alert')).toContainText(/incorrect|sign.?in failed/i);
+    await expect(page.locator('.institution-alert.is-error')).toContainText(/incorrect|sign.?in failed/i);
     const unauthenticated = await apiJson(page, '/api/v1/institution/auth/me', adminA.institutionCode);
     expect([401, 403]).toContain(unauthenticated.status);
 

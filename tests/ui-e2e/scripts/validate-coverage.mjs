@@ -120,7 +120,7 @@ async function main() {
   for (const mapping of mappings.filter(row => row.coverage_status === 'COMPLETE')) {
     const id = String(mapping.scenario_id).trim();
     const candidates = String(mapping.test_file || '').split(';')
-      .map(value => value.trim()).filter(Boolean).map(basename);
+      .map(value => value.trim()).filter(Boolean).map(value => basename(value));
     const matching = specs.filter(spec =>
       candidates.some(file => spec.file.endsWith('/' + file) || spec.file === file) &&
       spec.title.includes('[' + id + ']')
