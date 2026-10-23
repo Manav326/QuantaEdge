@@ -44,6 +44,24 @@ def _localized(value: Any, where: str, required_languages: set[str], errors: lis
         errors.append(f"{where} is missing required source-language variants: {', '.join(missing)}.")
 
 
+def _localized_steps(value: Any, where: str, required_languages: set[str], errors: list[str]) -> None:
+    if not isinstance(value,dict) or not value:
+        errors.append(f"{where} is required for stepwise solutions.")
+        return
+    missing=sorted(required_languages-set(value))
+    if missing:
+        errors.append(f"{where} is missing required language steps: {', '.join(missing)}.")
+    for language,steps in value.items():
+        if not isinstance(language,str) or not LANGUAGE_KEY.fullmatch(language):
+            errors.append(f"{where} has an invalid language key {language!r}.")
+        if not isinstance(steps,list) or not 2<=len(steps)<=8:
+            errors.append(f"{where}.{language} must contain 2–8 ordered, concise steps.")
+            continue
+        for index,step in enumerate(steps,1):
+            if not isinstance(step,str) or not step.strip() or len(step)>240:
+                errors.append(f"{where}.{language}[{index}] must be non-empty text of at most 240 characters.")
+
+
 def validate_package(package: Any, repo_root: Path | None = None,
                      require_complete_answers: bool = False,
                      check_public_repository: bool = False) -> list[str]:
@@ -239,10 +257,26 @@ def validate_package(package: Any, repo_root: Path | None = None,
             errors.append(f"{where}.proposed_answer.option_key must match an option key or be null.")
         if proposed.get("review_status") != "PENDING_HUMAN_REVIEW":
             errors.append(f"{where}.proposed_answer.review_status must remain PENDING_HUMAN_REVIEW.")
-        if not isinstance(proposed.get("explanation"), str):
-            errors.append(f"{where}.proposed_answer.explanation must be text.")
+        explanation=proposed.get("explanation")
+        if not isinstance(explanation, str) or not explanation.strip():
+            errors.append(f"{where}.proposed_answer.explanation must be non-empty text.")
+        elif len(explanation)>700:
+            errors.append(f"{where}.proposed_answer.explanation must stay concise (700 characters maximum).")
         expl_required = required_scored_languages if code in {"GENERAL_STUDIES", "COMPUTER_SCIENCE"} else set()
-        _localized(proposed.get("explanation_i18n"), f"{where}.proposed_answer.explanation_i18n", expl_required, errors)
+        explanation_i18n=proposed.get("explanation_i18n")
+        _localized(explanation_i18n, f"{where}.proposed_answer.explanation_i18n", expl_required, errors)
+        if isinstance(explanation_i18n,dict):
+            for language,localized_explanation in explanation_i18n.items():
+                if isinstance(localized_explanation,str) and len(localized_explanation)>700:
+                    errors.append(f"{where}.proposed_answer.explanation_i18n.{language} must stay concise (700 characters maximum).")
+        solution_mode=proposed.get("solution_mode")
+        if solution_mode not in {"CONCISE","STEPWISE"}:
+            errors.append(f"{where}.proposed_answer.solution_mode must be CONCISE or STEPWISE.")
+        solution_steps=proposed.get("solution_steps_i18n")
+        if solution_mode=="STEPWISE":
+            _localized_steps(solution_steps,f"{where}.proposed_answer.solution_steps_i18n",expl_required,errors)
+        elif solution_steps is not None and not isinstance(solution_steps,dict):
+            errors.append(f"{where}.proposed_answer.solution_steps_i18n must be an object when supplied.")
         if require_complete_answers:
             if key is None:
                 errors.append(f"{where} has no proposed answer.")
