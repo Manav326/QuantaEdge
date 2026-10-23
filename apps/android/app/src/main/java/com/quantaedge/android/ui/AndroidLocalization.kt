@@ -11,6 +11,7 @@ internal val LocalQuantaLanguage = staticCompositionLocalOf { "hi" }
 
 private data class UiPhrase(val key: String, val english: String, val hindi: String)
 private val uiPhrases = listOf(
+    UiPhrase("account_deletion_child_request_blocked", "The parent account remains blocked until the child account is resolved.", "बच्चे का खाता resolve होने तक parent account blocked रहेगा।"),
     UiPhrase("account_deletion_reason_intro", "Before submitting an account-deletion request, tell us why you want to delete the account.", "खाता हटाने की request भेजने से पहले बताएं कि आप खाता क्यों हटाना चाहते हैं।"),
     UiPhrase("account_deletion_choose_reason", "Choose a reason", "कारण चुनें"),
     UiPhrase("account_deletion_reason_no_longer_needed", "I no longer need this account", "अब मुझे इस खाते की जरूरत नहीं है"),
