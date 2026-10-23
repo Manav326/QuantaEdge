@@ -62,6 +62,8 @@ class LearningControllerTest {
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
     verify(jdbc).queryForList(sql.capture(), eq(1L), eq(7L), eq(91L), eq(7L), eq(91L), eq("hi"), eq(42L));
     assertTrue(sql.getValue().contains("as attempted"));
+    assertTrue(sql.getValue().contains("qe_student_safe_question_options(q.id,q.question_type,qt.options)"),
+        "Published translations must pass through the same allow-list projection as source-language choices.");
     assertTrue(sql.getValue().contains("'label',qo.label"));
     assertFalse(sql.getValue().contains("'correct'"));
     assertFalse(sql.getValue().contains("qo.is_correct"));

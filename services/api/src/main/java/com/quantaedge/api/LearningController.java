@@ -470,9 +470,7 @@ public class LearningController {
              coalesce(latest_attempt.answer_text,latest_attempt.selected_option) as saved_answer,
              latest_attempt.correct as saved_correct,
              latest_attempt.answered_at as saved_answered_at,
-             case when qt.id is not null and coalesce(qt.options,'[]'::jsonb)<>'[]'::jsonb then qt.options
-                  else qe_student_safe_question_options(q.id,q.question_type)
-             end::text as options,
+             qe_student_safe_question_options(q.id,q.question_type,qt.options)::text as options,
              case when q.question_type in ('INPUT','NUMERICAL','SHORT_ANSWER','LONG_ANSWER','MATCH','ORDER',
                  'ASSERTION_REASON','CASE_BASED','DIAGRAM','MAP','SOURCE_BASED') then 'text'
                else 'choice' end as response_mode
