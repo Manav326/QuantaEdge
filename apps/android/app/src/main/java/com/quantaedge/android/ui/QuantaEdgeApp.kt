@@ -500,6 +500,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     var parentCertificates by remember { mutableStateOf(emptyList<JSONObject>()) }
     var parentProfile by remember { mutableStateOf(JSONObject()) }
     var accountIdentityProfile by remember { mutableStateOf(JSONObject()) }
+    var accountDeletionRequest by remember { mutableStateOf(JSONObject()) }
     var selectedChild by remember { mutableStateOf(JSONObject()) }
     var selectedChildCourses by remember { mutableStateOf(emptyList<JSONObject>()) }
 
@@ -1249,7 +1250,63 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         error = ""
         status = ""
         route = AppRoute.ACCOUNT_IDENTITY
-        runTask { accountIdentityProfile = ApiClient.getObject("/api/v1/account/me/profile") }
+        runTask {
+            val loadedProfile = ApiClient.getObject("/api/v1/account/me/profile")
+            accountIdentityProfile = loadedProfile
+            accountDeletionRequest = if (loadedProfile.optString("accountType") == "CHILD") {
+                JSONObject().put("hasRequest", false)
+            } else {
+                try {
+                    ApiClient.getObject("/api/v1/account/me/deletion-request")
+                } catch (_: Exception) {
+                    JSONObject().put("loadFailed", true)
+                }
+            }
+        }
+    }
+
+    fun refreshAccountDeletionRequest() {
+        runTask {
+            accountDeletionRequest = ApiClient.getObject("/api/v1/account/me/deletion-request")
+        }
+    }
+
+    fun submitAccountDeletionRequest(confirmation: String, includeLinkedChildren: Boolean) {
+        runTask {
+            val response = ApiClient.postObject("/api/v1/account/me/deletion-request", JSONObject()
+                .put("confirmation", confirmation.trim())
+                .put("includeLinkedChildren", includeLinkedChildren)
+                .put("source", "ANDROID"))
+            if (response.optBoolean("requiresLinkedChildrenConfirmation")) {
+                accountDeletionRequest = response
+                status = if (language == "hi") {
+                    "इस खाते से जुड़े child accounts हैं। सभी को शामिल करने की पुष्टि करें या guardian transfer arrange करने के लिए रुकें।"
+                } else {
+                    "Linked child accounts were found. Confirm their inclusion or arrange a verified guardian transfer before continuing."
+                }
+            } else if (response.optBoolean("accepted")) {
+                accountDeletionRequest = ApiClient.getObject("/api/v1/account/me/deletion-request")
+                status = if (language == "hi") {
+                    "Deletion request दर्ज हो गई। यह deletion पूरा होने की पुष्टि नहीं है।"
+                } else {
+                    "Deletion request recorded. This does not mean deletion is complete."
+                }
+            } else {
+                throw IOException("The deletion request was not accepted. Refresh and try again.")
+            }
+        }
+    }
+
+    fun cancelAccountDeletionRequest() {
+        runTask {
+            val result = ApiClient.deleteObject("/api/v1/account/me/deletion-request")
+            accountDeletionRequest = ApiClient.getObject("/api/v1/account/me/deletion-request")
+            status = if (result.optBoolean("cancelled")) {
+                if (language == "hi") "Deletion request cancel हो गई।" else "Deletion request cancelled."
+            } else {
+                if (language == "hi") "कोई खुली deletion request नहीं मिली।" else "No open deletion request was found."
+            }
+        }
     }
 
     fun saveAccountIdentityProfile(displayName: String, preferredLocale: String) {
@@ -4561,6 +4618,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onSavePassword = ::saveAccountPassword,
                         onLinkGmail = ::linkGoogleIdentity,
                         onAccountLifecycle = ::openAccountLifecycle,
+                        deletionRequest = accountDeletionRequest,
+                        onRefreshDeletion = ::refreshAccountDeletionRequest,
+                        onRequestDeletion = ::submitAccountDeletionRequest,
+                        onCancelDeletion = ::cancelAccountDeletionRequest,
                         onBack = ::goBack
                     )
                     }
