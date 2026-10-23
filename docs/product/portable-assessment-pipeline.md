@@ -39,6 +39,14 @@ Optional release-preparation checks:
 
 The validator is a structural gate only; it does not independently prove question correctness, source rights, topic classification or authorization to publish. Human review and deployment checks remain separate.
 
+## Source-script and font fidelity
+
+The student web uses the existing shared typography stack from `apps/web/app/globals.css`: DM Sans for Latin text, with **Noto Sans Devanagari** as the single Hindi/Devanagari display font. Question prompts, shared passages and options must inherit this shared stack; do not introduce per-component Hindi font families.
+
+A legacy PDF font is an encoding, not a display-font choice. Convert the legacy text to correct Unicode before displaying it in Noto Sans Devanagari. The supplied TRE PDFs contain SHREE-DEV-0708/0709 text spans; these must not be force-converted as KrutiDev/Chanakya. If the source encoding is not confidently supported, preserve the raw text and exact page provenance and mark it for visual review. Never substitute an English translation into a native-language qualifying question.
+
+The shared-passage fields are optional metadata on the existing question snapshots. Each item retains its normal attempt question ID, answer persistence, navigation, timer and scoring. A passage does not create a new question/attempt engine or alter course/institution ownership.
+
 ## Authoring pipeline
 
 1. **Discover and register source.** Store a source URL, issuing authority, cycle/date and access status; never label a PDF downloaded until the exact local binary exists and its checksum is calculated.

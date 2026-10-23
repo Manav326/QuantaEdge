@@ -1171,6 +1171,7 @@ public class AssessmentController {
         select t.id,t.prompt,t.explanation,t.options
         from assessment_question_translation t
         where t.assessment_question_id=aq.id and t.language=? and t.translation_status='PUBLISHED'
+          and coalesce(aq.question_snapshot->>'native_language_only','false') <> 'true'
           and t.source_hash::text=md5(jsonb_build_object(
             'prompt',aq.question_snapshot->>'prompt',
             'explanation',aq.question_snapshot->>'explanation',
