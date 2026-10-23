@@ -3836,5 +3836,22 @@
   "admin.lifecycle.deletionRelatedRows": "Linked row references",
   "admin.lifecycle.deletionRunFailed": "Could not assess linked records.",
   "admin.lifecycle.deletionTable": "Table",
-  "admin.lifecycle.deletionRowCount": "Rows"
+  "admin.lifecycle.deletionRowCount": "Rows",
+  "accountDeletion.verifyIdentityTitle": "Verify your identity",
+  "accountDeletion.verifyIdentityDescription": "Before recording this request, confirm your identity with a saved verified sign-in method. Verification expires in 10 minutes.",
+  "accountDeletion.otpSent": "A code was sent to your verified mobile ending in {lastFour}.",
+  "accountDeletion.otpSixDigits": "Enter the six-digit verification code.",
+  "accountDeletion.verifyIdentityFailed": "Identity verification could not be completed. Try again or choose manual review.",
+  "accountDeletion.identityVerified": "Identity verified. You can now submit the request.",
+  "accountDeletion.verifyIdentityFirst": "Verify your identity or select manual identity review before submitting.",
+  "accountDeletion.verifiedMobile": "Verified mobile ending in {lastFour}",
+  "accountDeletion.sendOtp": "Send verification code",
+  "accountDeletion.otpSending": "Sending code…",
+  "accountDeletion.otpLabel": "Six-digit code",
+  "accountDeletion.otpVerifying": "Verifying…",
+  "accountDeletion.verifyOtp": "Verify code",
+  "accountDeletion.verifiedGoogle": "Reconfirm the Google account already linked to this account.",
+  "accountDeletion.noVerifiedMethod": "No verified mobile or linked Google identity is available. Choose manual identity review.",
+  "accountDeletion.manualReviewLabel": "I cannot use these verification methods. Please review my identity manually before processing deletion.",
+  "accountDeletion.manualReviewNotice": "Manual identity review is required. Your account will not be deleted until the review is completed."
 }
