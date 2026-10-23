@@ -23,6 +23,8 @@ class LearningResourceControllerTest {
   @Mock private PrivateMediaStorageService recordingStorage;
   @Mock private StructuredLessonArtifactService artifacts;
 
+  private static final InstitutionTenantContext TEST_TENANT =
+      new InstitutionTenantContext(1L, "TEST", "Test Institution");
   private final AuthContext admin=new AuthContext(101L,null,99L,"ADMIN","Administrator");
   private LearningResourceController controller;
 
@@ -33,7 +35,7 @@ class LearningResourceControllerTest {
   void externalResourcesMustUseHttpsAndCannotContainEmbeddedCredentials() {
     when(authorization.requirePermission(admin,"CONTENT_EDIT")).thenReturn(admin);
     ResponseStatusException error=assertThrows(ResponseStatusException.class,()->controller.createResource(
-      Map.of("title","External study link","resourceType","EXTERNAL_LINK","sourceKind","EXTERNAL_URL","externalUrl","http://example.org/resource"),admin,null));
+      Map.of("title","External study link","resourceType","EXTERNAL_LINK","sourceKind","EXTERNAL_URL","externalUrl","http://example.org/resource"),admin,TEST_TENANT));
     assertEquals(400,error.getStatusCode().value());
     verifyNoInteractions(jdbc,staffAudit,resourceStorage,recordingStorage,artifacts);
   }
@@ -42,7 +44,7 @@ class LearningResourceControllerTest {
   void externalResourcesCannotUseLocalHostsEvenWithHttps() {
     when(authorization.requirePermission(admin,"CONTENT_EDIT")).thenReturn(admin);
     ResponseStatusException error=assertThrows(ResponseStatusException.class,()->controller.createResource(
-      Map.of("title","Private local link","resourceType","EXTERNAL_LINK","sourceKind","EXTERNAL_URL","externalUrl","https://localhost/resource"),admin,null));
+      Map.of("title","Private local link","resourceType","EXTERNAL_LINK","sourceKind","EXTERNAL_URL","externalUrl","https://localhost/resource"),admin,TEST_TENANT));
     assertEquals(400,error.getStatusCode().value());
     verifyNoInteractions(jdbc,staffAudit,resourceStorage,recordingStorage,artifacts);
   }
@@ -52,7 +54,7 @@ class LearningResourceControllerTest {
     when(authorization.requirePermission(admin,"CONTENT_EDIT")).thenReturn(admin);
     when(authorization.requirePermission(admin,"CONTENT_PUBLISH")).thenThrow(new SecurityException("publish required"));
     assertThrows(SecurityException.class,()->controller.createResource(
-      Map.of("title","Restricted video","resourceType","VIDEO","sourceKind","RECORDED_CLASS","recordedClassId",55,"downloadAllowed",true),admin,null));
+      Map.of("title","Restricted video","resourceType","VIDEO","sourceKind","RECORDED_CLASS","recordedClassId",55,"downloadAllowed",true),admin,TEST_TENANT));
     verifyNoInteractions(jdbc,staffAudit,resourceStorage,recordingStorage,artifacts);
   }
 }
