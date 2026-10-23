@@ -43,6 +43,10 @@ private val uiPhrases = listOf(
     UiPhrase("account_deletion_submit", "Submit deletion request", "Deletion request भेजें"),
     UiPhrase("account_deletion_load_failed", "Request status could not be loaded. Refresh before making a new request.", "Request status load नहीं हो सका। नई request से पहले refresh करें।"),
     UiPhrase("account_deletion_refresh", "Refresh deletion status", "Deletion status refresh करें"),
+    UiPhrase("account_deletion_linked_children_notice", "Linked child accounts were found. Confirm their inclusion or arrange a verified guardian transfer before continuing.", "Linked child accounts मिले हैं। आगे बढ़ने से पहले उन्हें शामिल करने की पुष्टि करें या verified guardian transfer arrange करें।"),
+    UiPhrase("account_deletion_recorded_notice", "Deletion request recorded. This does not mean deletion is complete.", "Deletion request दर्ज हो गई। इसका मतलब deletion पूरा होना नहीं है।"),
+    UiPhrase("account_deletion_cancelled_notice", "Deletion request cancelled.", "Deletion request cancel हो गई।"),
+    UiPhrase("account_deletion_no_open_request", "No open deletion request was found.", "कोई खुली deletion request नहीं मिली।"),
     UiPhrase("nav_home", "Home", "होम"),
     UiPhrase("nav_learn", "Learn", "सीखें"),
     UiPhrase("nav_tests", "Tests", "टेस्ट"),
@@ -447,6 +451,11 @@ private val uiPhraseBySource: Map<String, UiPhrase> = buildMap {
         putIfAbsent(phrase.english, phrase)
         putIfAbsent(phrase.hindi, phrase)
     }
+}
+
+internal fun localizedUiTextForLanguage(source: String, language: String): String {
+    val phrase = uiPhraseBySource[source] ?: return source
+    return if (language == "hi") phrase.hindi else phrase.english
 }
 
 /** Select a translated resource using the locale chosen inside the app, independently of Android device locale. */
