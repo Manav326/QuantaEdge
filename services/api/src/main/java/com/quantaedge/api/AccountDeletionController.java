@@ -22,19 +22,58 @@ public class AccountDeletionController {
   private final AuthorizationService authorization;
   private final StaffAuditService staffAudit;
   private final AccountDeletionDependencyAssessmentService dependencyAssessment;
+  private final AuthService authService;
+  private final GoogleIdentityService googleIdentity;
 
   @Autowired
   public AccountDeletionController(JdbcTemplate jdbc, AuthorizationService authorization,
-      StaffAuditService staffAudit, AccountDeletionDependencyAssessmentService dependencyAssessment) {
+      StaffAuditService staffAudit, AccountDeletionDependencyAssessmentService dependencyAssessment,
+      AuthService authService, GoogleIdentityService googleIdentity) {
     this.jdbc = jdbc;
     this.authorization = authorization;
     this.staffAudit = staffAudit;
     this.dependencyAssessment = dependencyAssessment;
+    this.authService = authService;
+    this.googleIdentity = googleIdentity;
+  }
+
+  /** Compatibility constructor for focused request-controller tests. */
+  AccountDeletionController(JdbcTemplate jdbc, AuthorizationService authorization, StaffAuditService staffAudit,
+      AccountDeletionDependencyAssessmentService dependencyAssessment) {
+    this(jdbc, authorization, staffAudit, dependencyAssessment, null, null);
   }
 
   /** Compatibility constructor for focused request-controller tests. */
   AccountDeletionController(JdbcTemplate jdbc, AuthorizationService authorization, StaffAuditService staffAudit) {
-    this(jdbc, authorization, staffAudit, new AccountDeletionDependencyAssessmentService(jdbc));
+    this(jdbc, authorization, staffAudit, new AccountDeletionDependencyAssessmentService(jdbc), null, null);
+  }
+
+  @PostMapping("/account/me/deletion-request/otp")
+  public Map<String,Object> requestDeletionOtp(
+      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+    DeletionSubject subject = subjectFor(context);
+    if (authService == null) throw new IllegalStateException("Account-deletion identity verification is not configured.");
+    return authService.requestAccountDeletionOtp(subject.userId());
+  }
+
+  @PostMapping("/account/me/deletion-request/verify-otp")
+  public Map<String,Object> verifyDeletionOtp(@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+    DeletionSubject subject = subjectFor(context);
+    if (authService == null) throw new IllegalStateException("Account-deletion identity verification is not configured.");
+    UUID verificationId = authService.verifyAccountDeletionOtp(
+        subject.userId(), String.valueOf(body.getOrDefault("otp", "")));
+    return Map.of("verified",true,"verificationId",verificationId.toString(),
+        "method","MOBILE_OTP","expiresInSeconds",600);
+  }
+
+  @PostMapping("/account/me/deletion-request/verify-google")
+  public Map<String,Object> verifyDeletionGoogle(@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+    DeletionSubject subject = subjectFor(context);
+    if (googleIdentity == null) throw new IllegalStateException("Google identity verification is not configured.");
+    return googleIdentity.verifyAccountDeletionIdentity(subject.userId(),
+        String.valueOf(body.getOrDefault("credential", "")));
   }
 
   @GetMapping("/account/me/deletion-request")
@@ -88,15 +127,41 @@ public class AccountDeletionController {
           "linkedChildrenCount", children.size());
     }
 
+    String verificationValue = String.valueOf(body.getOrDefault("verificationId", "")).trim();
+    UUID verificationId;
+    try {
+      verificationId = UUID.fromString(verificationValue);
+    } catch (IllegalArgumentException ex) {
+      throw new SecurityException("Verify your identity again before submitting the deletion request.");
+    }
+    List<Map<String,Object>> proofs = jdbc.queryForList("""
+      select verification_id,method,verified_at
+      from account_deletion_verification
+      where verification_id=? and user_account_id=? and consumed_at is null and expires_at>now()
+      for update
+      """, verificationId, subject.userId());
+    if (proofs.isEmpty()) {
+      throw new SecurityException("Your identity verification has expired or was already used. Verify again.");
+    }
+    Map<String,Object> proof = proofs.getFirst();
+    int proofConsumed = jdbc.update("""
+      update account_deletion_verification set consumed_at=now()
+      where verification_id=? and user_account_id=? and consumed_at is null and expires_at>now()
+      """, verificationId, subject.userId());
+    if (proofConsumed != 1) {
+      throw new SecurityException("Your identity verification has expired or was already used. Verify again.");
+    }
+
     UUID requestId = UUID.randomUUID();
     jdbc.update("""
       insert into account_deletion_request(
         request_id,subject_user_id,subject_user_public_id,subject_student_id,
         subject_student_public_user_id,request_source,status,includes_linked_children,
-        linked_children_count,requested_at,updated_at)
-      values (?,?,?,?,?,?,'REQUESTED',?,?,now(),now())
+        linked_children_count,identity_verification_method,identity_verified_at,requested_at,updated_at)
+      values (?,?,?,?,?,?,'REQUESTED',?,?,?,?,now(),now())
       """, requestId, subject.userId(), subject.publicUserId(), subject.studentId(),
-        subject.publicStudentPublicUserId(), source, includeLinkedChildren, children.size());
+        subject.publicStudentPublicUserId(), source, includeLinkedChildren, children.size(),
+        proof.get("method"), proof.get("verified_at"));
 
     if (includeLinkedChildren) {
       for (Map<String,Object> child : children) {
@@ -111,8 +176,10 @@ public class AccountDeletionController {
     jdbc.update("""
       insert into account_identity_audit(user_id,actor_student_id,event_type,details)
       values (?,?, 'ACCOUNT_DELETION_REQUESTED',
-        jsonb_build_object('requestId',?,'source',?,'linkedChildrenCount',?,'includesLinkedChildren',?))
-      """, subject.userId(), subject.studentId(), requestId.toString(), source, children.size(), includeLinkedChildren);
+        jsonb_build_object('requestId',?,'source',?,'linkedChildrenCount',?,'includesLinkedChildren',?,
+          'identityVerificationMethod',?))
+      """, subject.userId(), subject.studentId(), requestId.toString(), source, children.size(),
+        includeLinkedChildren, String.valueOf(proof.get("method")));
 
     Map<String,Object> result = new LinkedHashMap<>();
     result.put("accepted", true);
