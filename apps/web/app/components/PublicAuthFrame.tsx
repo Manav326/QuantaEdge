@@ -60,7 +60,6 @@ export default function PublicAuthFrame({ children, story = 'account' }: PublicA
         <div className="qe-auth-mobile-brand"><QuantaEdgeBrand variant="auth" /></div>
         {children}
         <footer className="qe-auth-legal">
-          <span><UiText message="public.auth.footer.note" /></span>
           <nav aria-label={english ? 'Legal information' : 'कानूनी जानकारी'}>
             <Link href="/privacy"><UiText message="legacy.web.privacy.323f3a35" /></Link>
             <Link href="/terms"><UiText message="legacy.web.terms.c9f30225" /></Link>
