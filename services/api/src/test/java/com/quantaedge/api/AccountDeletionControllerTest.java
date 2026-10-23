@@ -58,7 +58,7 @@ class AccountDeletionControllerTest {
         .thenReturn(List.of());
     when(jdbc.queryForList(contains("from account_deletion_request"), eq(101L)))
         .thenReturn(List.of());
-    when(jdbc.queryForList(contains("select distinct st.id as student_id"), eq(101L), eq(101L), eq(101L)))
+    when(jdbc.queryForList(contains("select distinct st.id as student_id"), eq(101L), eq(101L)))
         .thenReturn(List.of(Map.of("student_id", 202L, "public_user_id", "CHILD0000202")));
 
     Map<String,Object> result = controller.requestDeletion(
@@ -77,7 +77,7 @@ class AccountDeletionControllerTest {
         .thenReturn(List.of());
     when(jdbc.queryForList(contains("from account_deletion_request"), eq(101L)))
         .thenReturn(List.of());
-    when(jdbc.queryForList(contains("select distinct st.id as student_id"), eq(101L), eq(101L), eq(101L)))
+    when(jdbc.queryForList(contains("select distinct st.id as student_id"), eq(101L), eq(101L)))
         .thenReturn(List.of());
 
     Map<String,Object> result = controller.requestDeletion(
