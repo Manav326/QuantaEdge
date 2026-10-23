@@ -1,0 +1,66 @@
+name: Inspect TRE source archive
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "data/TRE-4_PYQ.zip"
+      - "scripts/inspect_tre_source_archive.py"
+      - "scripts/extract_tre_source_questions.py"
+      - ".github/workflows/tre-source-inspection.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inspect-source:
+    name: Extract and audit TRE source papers
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out the same-repository working branch
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check out the uploaded ZIP from main as source-only input
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}
+          ref: main
+          path: source-data
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install deterministic PDF and legacy-Hindi text tools
+        run: python -m pip install --disable-pip-version-check "pymupdf>=1.26,<3" "lipi-aparsoft==1.0.9"
+
+      - name: Inspect the uploaded archive and record exact source bytes
+        run: |
+          python scripts/inspect_tre_source_archive.py \
+            --archive "$GITHUB_WORKSPACE/source-data/data/TRE-4_PYQ.zip" \
+            --output-dir "$RUNNER_TEMP/tre-source-inspection"
+
+      - name: Extract bilingual question inventory with page provenance
+        run: |
+          python scripts/extract_tre_source_questions.py \
+            --archive "$GITHUB_WORKSPACE/source-data/data/TRE-4_PYQ.zip" \
+            --output-dir "$RUNNER_TEMP/tre-question-inventory" \
+            --repo-root "$GITHUB_WORKSPACE"
+
+      - name: Upload temporary inventory for question and answer review
+        uses: actions/upload-artifact@v4
+        with:
+          name: tre-source-review-inventory
+          path: |
+            ${{ runner.temp }}/tre-source-inspection/
+            ${{ runner.temp }}/tre-question-inventory/
+          if-no-files-found: error
+          retention-days: 3

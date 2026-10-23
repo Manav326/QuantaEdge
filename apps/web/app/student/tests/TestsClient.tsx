@@ -23,14 +23,30 @@ type AssessmentCard = {
 };
 type AttemptQuestion = {
   attemptQuestionId:number;answerId:number;question_type:string;prompt:string;explanation?:string;
-  options:Array<{key:string;label:string}>;answer:any;answerStatus:string;maxMarks:number|string;
-  isCorrect?:boolean|null;awardedMarks?:number|string|null;teacherFeedback?:string|null;translated?:boolean;
-  correctAnswer?:{kind?:string;value?:any}|null;
+  prompt_content_kind?:'PROSE'|'CODE'|'MATHEMATICAL'|'MIXED';code_line_indices?:number[];math_line_indices?:number[];
+  stimulus_id?:string|null;stimulus?:string;stimulus_content_kind?:'PROSE'|'CODE'|'MATHEMATICAL'|'MIXED';
+  stimulus_code_line_indices?:number[];stimulus_math_line_indices?:number[];
+  stimulus_source_languages?:Record<string,string>;native_language_only?:boolean;
+  native_source_language?:'en'|'hi'|'ur'|'bn';content_language_policy?:'NATIVE_SOURCE_ONLY'|'BILINGUAL_SOURCE_VARIANTS';
+  question_set_id?:string|null;question_set_type?:'PASSAGE';incorrect_marks?:number|string|null;
+  options:Array<{key:string;label:string;content_kind?:'PROSE'|'CODE'|'MATHEMATICAL'|'MIXED';code_line_indices?:number[];math_line_indices?:number[]}>;
+  answer:any;answerStatus:string;maxMarks:number|string;
+  section_code?:string;section_result_policy?:'SCORED'|'QUALIFYING_ONLY'|'PRACTICE_ONLY';
+  isCorrect?:boolean|null;awardedMarks?:number|string|null;penaltyMarks?:number|string|null;
+  teacherFeedback?:string|null;translated?:boolean;correctAnswer?:{kind?:string;value?:any}|null;
+};
+type SectionResult = {
+  section_code:string;section_name?:string;result_policy:'SCORED'|'QUALIFYING_ONLY'|'PRACTICE_ONLY';
+  question_count:number;correct_count:number;incorrect_count:number;unanswered_count:number;
+  max_score:number|string;earned_marks:number|string;penalty_marks:number|string;net_score:number|string;
 };
 type Attempt = {
   attempt_id:number;assessment_id:number;test_id?:string|null;course_id?:number|null;attempt_number:number;status:string;started_at:string;deadline_at:string;
   submitted_at?:string|null;released_at?:string|null;assessment_title:string;subject_name:string;chapter_name?:string|null;
-  questions:AttemptQuestion[];resultReleased:boolean;translation_complete?:boolean;final_score?:number|string|null;auto_score?:number|string|null;max_score:number|string;
+  questions:AttemptQuestion[];resultReleased:boolean;translation_complete?:boolean;
+  final_score?:number|string|null;auto_score?:number|string|null;penalty_score?:number|string|null;
+  negative_marking_fraction?:number|string;max_score:number|string;
+  section_results?:SectionResult[];qualifying_sections?:SectionResult[];practice_only_sections?:SectionResult[];
 };
 type ResultAttempt = {attempt_id:number;attempt_number:number;status:string;submitted_at?:string|null;released_at?:string|null;final_score:number|string;max_score:number|string};
 type Result = {attempt_id:number;assessment_id:number;test_id?:string|null;attempt_number:number;status:string;submitted_at:string;released_at:string;final_score:number|string;max_score:number|string;best_score?:number|string;attempt_count?:number;attempts?:ResultAttempt[];assessment_title:string;assessment_type?:string;subject_name:string;chapter_name?:string|null;question_count:number};
@@ -112,6 +128,26 @@ function correctAnswerText(question:AttemptQuestion):string{
   }
   return answerText(payload.value);
 }
+function StimulusContent({question}:{question:AttemptQuestion}) {
+  const {locale}=useLocale();
+  const text=question.stimulus;
+  if(typeof text!=='string'||!text.trim())return null;
+  const title=locale==='english'?'Shared source passage':'मूल प्रश्नपत्र का साझा गद्यांश';
+  const sourceLabel=question.native_language_only
+    ?(locale==='english'?'Original source language; not translated':'मूल भाषा; अनुवाद नहीं किया गया')
+    :'';
+  const structured=question.stimulus_content_kind==='CODE'||question.stimulus_content_kind==='MATHEMATICAL';
+  return <aside className={styles.questionStimulus} aria-label={title}>
+    <header className={styles.questionStimulusHeader}>
+      <strong>{title}</strong>
+      {sourceLabel&&<span>{sourceLabel}</span>}
+    </header>
+    {structured
+      ?<pre className={styles.stimulusCodeBlock}><code>{text}</code></pre>
+      :<div className={styles.stimulusText}>{text}</div>}
+  </aside>;
+}
+
 type QuestionContentProps={
   question:AttemptQuestion;response:any;review?:boolean;disabled?:boolean;onAnswer?:(value:any)=>void;
 };
@@ -123,8 +159,29 @@ function QuestionContent({question,response,review=false,disabled=false,onAnswer
   const hasOptions=Array.isArray(question.options)&&question.options.length>0;
   const answerTone=review?(question.isCorrect===true?styles.answerFieldCorrect:question.isCorrect===false?styles.answerFieldIncorrect:styles.answerFieldNeutral):'';
   const correctText=review?correctAnswerText(question):'';
+  function renderSourceText(value:string,kind?:'PROSE'|'CODE'|'MATHEMATICAL'|'MIXED',codeLineIndices:number[]=[],mathLineIndices:number[]=[]){
+    const lines=String(value??'').split(/\r?\n/);
+    const codeLines=new Set(codeLineIndices);
+    const mathLines=new Set(mathLineIndices);
+    if((kind==='CODE'||kind==='MATHEMATICAL')&&codeLines.size===0&&mathLines.size===0)
+      return <pre className={styles.questionCodeBlock}><code>{value}</code></pre>;
+    if(codeLines.size===0&&mathLines.size===0)return <div className={styles.questionPromptText}>{value}</div>;
+    const grouped:Array<{kind:'code'|'math'|'prose';lines:string[]}>=[];
+    lines.forEach((line,lineIndex)=>{
+      const lineKind: 'code'|'math'|'prose'=codeLines.has(lineIndex)?'code':mathLines.has(lineIndex)?'math':'prose';
+      const last=grouped[grouped.length-1];
+      if(last&&last.kind===lineKind)last.lines.push(line);
+      else grouped.push({kind:lineKind,lines:[line]});
+    });
+    return <div className={styles.questionPromptBody}>{grouped.map((chunk,chunkIndex)=>chunk.kind!=='prose'
+      ?<pre key={chunkIndex} className={styles.questionCodeBlock}><code>{chunk.lines.join('\n')}</code></pre>
+      :<div key={chunkIndex} className={styles.questionPromptText}>{chunk.lines.join('\n')}</div>)}</div>;
+  }
   return <>
-    <h2>{question.prompt}</h2>
+    {question.prompt_content_kind==='CODE'||question.prompt_content_kind==='MATHEMATICAL'||
+      (question.code_line_indices?.length||0)>0||(question.math_line_indices?.length||0)>0
+      ?renderSourceText(question.prompt,question.prompt_content_kind,question.code_line_indices||[],question.math_line_indices||[])
+      :<h2 className={styles.questionPromptText}>{question.prompt}</h2>}
     {hasOptions&&<div className={styles.options}>{question.options.map(option=>{
       const key=String(option.key);
       const chosen=selectedKeys.has(key);
@@ -139,7 +196,10 @@ function QuestionContent({question,response,review=false,disabled=false,onAnswer
       return <label key={option.key} className={[styles.option,!review&&chosen?styles.optionSelected:'',tone].filter(Boolean).join(' ')}>
         <input type="radio" name={'question-'+question.attemptQuestionId} value={key} checked={chosen} disabled={disabled||review} onChange={()=>onAnswer?.(option.key)}/>
         <span className={styles.optionKey}>{option.key}</span>
-        <span className={styles.optionText}>{option.label}{hint&&<small className={wrongChosen?styles.optionHintIncorrect:correct||question.isCorrect===true?styles.optionHintCorrect:styles.optionHintNeutral}>{hint}</small>}</span>
+        <div className={styles.optionText}>{(option.content_kind==='CODE'||option.content_kind==='MATHEMATICAL'||
+          (option.code_line_indices?.length||0)>0||(option.math_line_indices?.length||0)>0)
+          ?<pre className={styles.optionCodeBlock}><code>{option.label}</code></pre>
+          :option.label}{hint&&<small className={wrongChosen?styles.optionHintIncorrect:correct||question.isCorrect===true?styles.optionHintCorrect:styles.optionHintNeutral}>{hint}</small>}</div>
         {review&&(chosen||correct)&&<span className={styles.optionOutcome}
           aria-label={wrongChosen?translateUi(locale, 'legacy.web.incorrect.answer.e6b805c5'):correct?translateUi(locale, 'legacy.web.correct.answer.2a6f5308'):question.isCorrect===true?translateUi(locale, 'legacy.web.correct.d01db0a2'):translateUi(locale, 'legacy.web.recorded.answer.02081560')}>
           {wrongChosen?'!':correct||question.isCorrect===true?'✓':'i'}
@@ -164,6 +224,106 @@ function QuestionContent({question,response,review=false,disabled=false,onAnswer
     </div>}
   </>;
 }
+function finiteMarkValue(value:any):number|null{
+  if(value===null||value===undefined||String(value).trim()==='')return null;
+  const number=Number(value);
+  return Number.isFinite(number)?number:null;
+}
+function formatMarkAmount(value:number):string{
+  const rounded=Math.round(value*100)/100;
+  if(Math.abs(rounded)<0.0005)return '0';
+  const amount=String(Math.abs(rounded));
+  return (rounded<0?'−':'+')+amount;
+}
+function questionTypeLabel(questionType:string,locale:string):string{
+  const labels:Record<string,[string,string]>={
+    MCQ:['MCQ','बहुविकल्पीय'],TRUE_FALSE:['True/false','सही/गलत'],
+    INFERENCE:['Inference','अनुमान'],INPUT:['Input','लिखित उत्तर'],NUMERICAL:['Numerical','संख्यात्मक'],
+    SHORT_ANSWER:['Short answer','लघु उत्तरीय'],LONG_ANSWER:['Long answer','दीर्घ उत्तरीय'],
+    CASE_BASED:['Case-based','केस आधारित'],SOURCE_BASED:['Source-based','स्रोत आधारित'],
+    DIAGRAM:['Diagram','आरेख'],MAP:['Map','मानचित्र'],ASSERTION_REASON:['Assertion/reason','कथन-कारण'],
+    MATCH:['Match the following','मिलान'],ORDER:['Ordering','क्रम निर्धारण']
+  };
+  const key=String(questionType||'').toUpperCase();
+  const value=labels[key];
+  return value?(locale==='english'?value[0]:value[1]):String(questionType||'Question').replace(/_/g,' ').toLowerCase();
+}
+function questionMarkMetadata(question:AttemptQuestion,attempt:Attempt,locale:string){
+  const correct=finiteMarkValue(question.maxMarks)??0;
+  let incorrect=finiteMarkValue(question.incorrect_marks);
+  if(incorrect===null){
+    const fraction=finiteMarkValue(attempt.negative_marking_fraction);
+    if(fraction!==null&&fraction>=0)incorrect=Math.round(-correct*fraction*100)/100;
+  }
+  const plural=(value:number)=>Math.abs(value)===1?'mark':'marks';
+  const correctText=locale==='english'
+    ?'Correct '+formatMarkAmount(correct)+' '+plural(correct)
+    :'सही उत्तर '+formatMarkAmount(correct)+' '+(Math.abs(correct)===1?'अंक':'अंक');
+  const incorrectText=incorrect===null
+    ?(locale==='english'?'Incorrect: not specified':'गलत उत्तर: निर्दिष्ट नहीं')
+    :(locale==='english'
+      ?'Incorrect '+formatMarkAmount(incorrect)+' '+plural(incorrect)
+      :'गलत उत्तर '+formatMarkAmount(incorrect)+' '+(Math.abs(incorrect)===1?'अंक':'अंक'));
+  return {correctText,incorrectText};
+}
+type QuestionSetItem={question:AttemptQuestion;number:number};
+function QuestionMarkPolicy({question,attempt}:{question:AttemptQuestion;attempt:Attempt}){
+  const {locale}=useLocale();
+  const marks=questionMarkMetadata(question,attempt,locale);
+  return <div className={styles.questionMarkPolicy} aria-label={locale==='english'?'Question type and marks':'प्रश्न प्रकार और अंक'}>
+    <span className={styles.questionSetType}>{questionTypeLabel(question.question_type,locale)}</span>
+    <span>{marks.correctText}</span>
+    <span>{marks.incorrectText}</span>
+  </div>;
+}
+function QuestionSetView({items,activeQuestionId,attempt,responses,disabled,review=false,onAnswer}:{
+  items:QuestionSetItem[];activeQuestionId?:number;attempt:Attempt;responses:Record<number,any>;
+  disabled:boolean;review?:boolean;onAnswer?:(question:AttemptQuestion,value:any)=>void;
+}){
+  const {locale}=useLocale();
+  if(items.length<2)return null;
+  const first=items[0].question;
+  return <section className={styles.questionSet} aria-label={locale==='english'?'Question Set':'प्रश्न समूह'}>
+    <header className={styles.questionSetHeader}>
+      <div><span className={styles.questionSetEyebrow}>{locale==='english'?'QUESTION SET':'प्रश्न समूह'}</span>
+        <h3>{locale==='english'?'Question Set':'प्रश्न समूह'}</h3>
+        <p>{locale==='english'?'One shared passage · group type:':'एक साझा गद्यांश · समूह प्रकार:'} <strong>PASSAGE</strong></p>
+      </div>
+      <span className={styles.questionSetRelationship}>{locale==='english'?'One-to-many relationship':'एक से अनेक प्रश्न'}<b>1 {locale==='english'?'passage':'गद्यांश'} → {items.length} {locale==='english'?'questions':'प्रश्न'}</b></span>
+    </header>
+    <StimulusContent question={first}/>
+    <div className={styles.questionSetChildren}>
+      {items.map(({question,number})=>{
+        const marks=questionMarkMetadata(question,attempt,locale);
+        const active=question.attemptQuestionId===activeQuestionId;
+        const outcome=question.isCorrect===true?'correct':question.isCorrect===false?'incorrect':'ungraded';
+        return <article id={'qe-question-'+question.attemptQuestionId} className={[styles.questionSetChild,active?styles.questionSetChildActive:''].filter(Boolean).join(' ')} key={question.attemptQuestionId}>
+          <header className={styles.questionSetChildHeader}>
+            <strong>{locale==='english'?'Question':'प्रश्न'} {number}</strong>
+            <div className={styles.questionSetMarks}>
+              <span className={styles.questionSetType}>{questionTypeLabel(question.question_type,locale)}</span>
+              <span>{marks.correctText}</span>
+              <span>{marks.incorrectText}</span>
+              {review&&<span className={outcome==='correct'?styles.questionSetResultCorrect:outcome==='incorrect'?styles.questionSetResultIncorrect:styles.questionSetResultNeutral}>
+                {outcome==='correct'?(locale==='english'?'Correct':'सही'):outcome==='incorrect'?(locale==='english'?'Incorrect':'गलत'):(locale==='english'?'Reviewed':'समीक्षित')} · {Number(question.awardedMarks??0)} / {Number(question.maxMarks??0)} {locale==='english'?'marks':'अंक'}
+              </span>}
+            </div>
+          </header>
+          <QuestionContent question={question} response={responses[question.attemptQuestionId]??question.answer??''} disabled={disabled} review={review}
+            onAnswer={value=>onAnswer?.(question,value)}/>
+          {review&&<AnswerFeedback
+            outcome={outcome}
+            title={question.isCorrect===true?'✓ '+(locale==='english'?'Correct':'सही'):question.isCorrect===false?'✕ '+(locale==='english'?'Incorrect':'गलत'):(locale==='english'?'Answer reviewed':'उत्तर की समीक्षा हुई')}
+            message={<>{locale==='english'?'Marks':'अंक'}: {question.awardedMarks??0} / {question.maxMarks}{question.teacherFeedback?<> · {question.teacherFeedback}</>:null}</>}
+            explanation={question.explanation||undefined}
+            explanationLabel={locale==='english'?'Explanation':'व्याख्या'}
+          />}
+        </article>;
+      })}
+    </div>
+  </section>;
+}
+
 export default function TestsClient(){
   const router=useRouter();
   const searchParams=useSearchParams();
@@ -201,6 +361,7 @@ export default function TestsClient(){
   const [subjectFilter,setSubjectFilter]=useState('ALL');
   const [dirtyAnswers,setDirtyAnswers]=useState<Record<number,any>>({});
   const [showSubmit,setShowSubmit]=useState(false);
+  const [pendingTestStart,setPendingTestStart]=useState<AssessmentCard|null>(null);
   const leaderboardRequestRef=useRef(0);
   const attemptRef=useRef<Attempt|null>(null);
   const dirtyRef=useRef<Record<number,any>>({});
@@ -313,15 +474,27 @@ export default function TestsClient(){
   const filteredTests=tests.filter(t=>subjectFilter==='ALL'||t.subject_code===subjectFilter);
   const current=attempt?.questions?.[index];
   const currentResponse=current?responses[current.attemptQuestionId]??'':'';
+  const currentQuestionSetId=current?(current.question_set_id||current.stimulus_id):null;
+  const currentQuestionSetItems:QuestionSetItem[]=currentQuestionSetId&&attempt
+    ?attempt.questions.flatMap((question,questionIndex)=>{
+      const setId=question.question_set_id||question.stimulus_id;
+      return setId===currentQuestionSetId&&question.stimulus
+        ?[{question,number:questionIndex+1}]
+        :[];
+    }):[];
+  const showingQuestionSet=currentQuestionSetItems.length>1;
   const released=attempt?.status==='RELEASED';
   const submitted=Boolean(attempt&&attempt.status!=='IN_PROGRESS');
   const answeredCount=attempt?.questions?.filter(q=>!isEmpty(responses[q.attemptQuestionId]??q.answer)).length||0;
   const resultScore=Number(attempt?.final_score??attempt?.auto_score??0);
   const resultMax=Number(attempt?.max_score??0);
   const resultPercent=resultMax>0?Math.round(resultScore/resultMax*100):0;
-  const correctCount=attempt?.questions?.filter(q=>q.isCorrect===true).length||0;
-  const incorrectCount=attempt?.questions?.filter(q=>q.isCorrect===false).length||0;
-  const unansweredCount=attempt?.questions?.filter(q=>isEmpty(q.answer)).length||0;
+  const scoredQuestions=attempt?.questions?.filter(q=>
+    q.section_result_policy ? q.section_result_policy==='SCORED' :
+    String(q.section_code||'').toUpperCase()!=='LANGUAGE_QUALIFYING')||[];
+  const correctCount=scoredQuestions.filter(q=>q.isCorrect===true).length;
+  const incorrectCount=scoredQuestions.filter(q=>q.isCorrect===false).length;
+  const unansweredCount=scoredQuestions.filter(q=>isEmpty(q.answer)).length;
 
   function isEmpty(value:any):boolean{
     if(value===null||value===undefined||value==='')return true;
@@ -388,6 +561,21 @@ export default function TestsClient(){
       // A temporary eligibility lookup failure must not hide the released test result.
     }
   },[]);
+
+  function requestTestStart(test:AssessmentCard,hasInProgressAttempt:boolean){
+    if(hasInProgressAttempt){
+      void openTest(test.assessment_id);
+      return;
+    }
+    setPendingTestStart(test);
+  }
+
+  function confirmTestStart(){
+    const selected=pendingTestStart;
+    if(!selected)return;
+    setPendingTestStart(null);
+    void openTest(selected.assessment_id);
+  }
 
   async function openTest(testId:number){
     setBusy(true);setError('');setNotice('');setAttempt(null);setShowSubmit(false);autoSubmitted.current=false;
@@ -534,7 +722,7 @@ export default function TestsClient(){
             const used=Number(test.attempts_used||0);
             const resultAvailable=Boolean(test.latest_result_attempt_id);
             const exhausted=!started&&used>=Number(test.max_attempts);
-            return <article className={styles.testCard} key={test.assessment_id}><div className={styles.cardTop}><span className={styles.testSymbol}>✓</span><span className={styles.subjectChip}>{test.subject_code==='maths'?translateUi(locale, 'legacy.web.mathematics.4cf6be1a'):translateUi(locale, 'legacy.web.science.f85a10aa')}</span><span className={styles.subjectChip}>{assessmentTypeLabel(test.assessment_type)}</span>{test.chapter_name?.trim()&&<span className={styles.subjectChip}><LocaleText hinglish="अध्याय: " english="Chapter: " />{test.chapter_name}</span>}</div><h3>{test.title}</h3>{test.test_id&&<small>{translateUi(locale, 'legacy.web.test.id.f22e0b35')}: {test.test_id}</small>}<p>{test.description||test.chapter_name||test.subject_name}</p><div className={styles.cardMeta}><span>▤ {test.question_count} {translateUi(locale, 'legacy.web.questions.fa34dc08')}</span><span>◷ {test.duration_minutes} {translateUi(locale, 'legacy.web.min.72242533')}</span><span>★ {test.max_score} {translateUi(locale, 'legacy.web.marks.57368a8d')}</span></div><div className={styles.attemptTrack}><span>{translateUi(locale, 'legacy.web.attempts.used.1eef4b49')}</span><b>{used} / {test.max_attempts}</b></div><div className={styles.attemptBar}><i style={{width:Math.min(100,used/Math.max(1,test.max_attempts)*100)+'%'}}/></div><div className={styles.cardActions}><button type="button" className={styles.primaryButton} disabled={busy||exhausted} onClick={()=>void openTest(test.assessment_id)}>{busy?translateUi(locale, 'legacy.web.opening.c30c8984'):started?translateUi(locale, 'legacy.web.resume.test.f20ec881'):exhausted?translateUi(locale, 'legacy.web.attempts.used.6cc262d7'):translateUi(locale, 'legacy.web.start.test.84f53ec2')}</button>{!started&&<button type="button" className={styles.leaderboardButton} disabled={leaderboardLoading} onClick={()=>void openLeaderboard(test)}><span aria-hidden="true">♛</span> {translateUi(locale, 'legacy.web.top.20.leaderboard.9f98bf6d')}</button>}{!started&&resultAvailable&&<button type="button" className={styles.resultLink} disabled={busy} onClick={()=>void openResult(Number(test.latest_result_attempt_id))}>{translateUi(locale, 'legacy.web.latest.result.e927be6a')}</button>}</div>{exhausted&&!resultAvailable&&<small className={styles.muted}>{translateUi(locale, 'legacy.web.you.have.used.all.allowed.attempts.afaa7d9e')}</small>}</article>;
+            return <article className={styles.testCard} key={test.assessment_id}><div className={styles.cardTop}><span className={styles.testSymbol}>✓</span><span className={styles.subjectChip}>{test.subject_code==='maths'?translateUi(locale, 'legacy.web.mathematics.4cf6be1a'):translateUi(locale, 'legacy.web.science.f85a10aa')}</span><span className={styles.subjectChip}>{assessmentTypeLabel(test.assessment_type)}</span>{test.chapter_name?.trim()&&<span className={styles.subjectChip}><LocaleText hinglish="अध्याय: " english="Chapter: " />{test.chapter_name}</span>}</div><h3>{test.title}</h3>{test.test_id&&<small>{translateUi(locale, 'legacy.web.test.id.f22e0b35')}: {test.test_id}</small>}<p>{test.description||test.chapter_name||test.subject_name}</p><div className={styles.cardMeta}><span>▤ {test.question_count} {translateUi(locale, 'legacy.web.questions.fa34dc08')}</span><span>◷ {test.duration_minutes} {translateUi(locale, 'legacy.web.min.72242533')}</span><span>★ {test.max_score} {translateUi(locale, 'legacy.web.marks.57368a8d')}</span></div><div className={styles.attemptTrack}><span>{translateUi(locale, 'legacy.web.attempts.used.1eef4b49')}</span><b>{used} / {test.max_attempts}</b></div><div className={styles.attemptBar}><i style={{width:Math.min(100,used/Math.max(1,test.max_attempts)*100)+'%'}}/></div><div className={styles.cardActions}><button type="button" className={styles.primaryButton} disabled={busy||exhausted} onClick={()=>requestTestStart(test,started)}>{busy?translateUi(locale, 'legacy.web.opening.c30c8984'):started?translateUi(locale, 'legacy.web.resume.test.f20ec881'):exhausted?translateUi(locale, 'legacy.web.attempts.used.6cc262d7'):translateUi(locale, 'legacy.web.start.test.84f53ec2')}</button>{!started&&<button type="button" className={styles.leaderboardButton} disabled={leaderboardLoading} onClick={()=>void openLeaderboard(test)}><span aria-hidden="true">♛</span> {translateUi(locale, 'legacy.web.top.20.leaderboard.9f98bf6d')}</button>}{!started&&resultAvailable&&<button type="button" className={styles.resultLink} disabled={busy} onClick={()=>void openResult(Number(test.latest_result_attempt_id))}>{translateUi(locale, 'legacy.web.latest.result.e927be6a')}</button>}</div>{exhausted&&!resultAvailable&&<small className={styles.muted}>{translateUi(locale, 'legacy.web.you.have.used.all.allowed.attempts.afaa7d9e')}</small>}</article>;
           })}</div>}
           <PremiumPagination page={testsPage} total={testsTotal} pageSize={testsPageSize}
             onPageChange={setTestsPage} onPageSizeChange={size=>{setTestsPageSize(size);setTestsPage(0);}}
@@ -627,6 +815,54 @@ export default function TestsClient(){
             <article className={styles.resultMetric}><strong>{incorrectCount}</strong><span>{translateUi(locale, 'legacy.web.incorrect.c7d63751')}</span></article>
             <article className={styles.resultMetric}><strong>{unansweredCount}</strong><span>{translateUi(locale, 'legacy.web.not.answered.f674e469')}</span></article>
           </div>
+          {released&&Array.isArray(attempt.section_results)&&attempt.section_results.length>0&&<section className={styles.resultDetails}>
+            <div className={styles.resultDetailsHeading}>
+              <h3>{t('Section-wise scored results','खंडवार स्कोर परिणाम')}</h3>
+              <p>{t('General Studies and Computer Science are scored separately. Their marks add up to the overall result.','सामान्य अध्ययन और कंप्यूटर विज्ञान के अंक अलग-अलग दिखाए जाते हैं। दोनों का योग कुल परिणाम है।')}</p>
+            </div>
+            <div className={styles.resultScoreGrid}>
+              {attempt.section_results.map(section=>{
+                const net=Number(section.net_score??0);
+                const max=Number(section.max_score??0);
+                const percent=max>0?Math.round(net/max*100):0;
+                return <article className={styles.resultMetric} key={section.section_code}>
+                  <strong>{net.toLocaleString(undefined,{maximumFractionDigits:2})}<small> / {max.toLocaleString(undefined,{maximumFractionDigits:2})}</small></strong>
+                  <span>{section.section_name||(
+                    section.section_code==='GENERAL_STUDIES'?t('General Studies','सामान्य अध्ययन'):
+                    section.section_code==='COMPUTER_SCIENCE'?t('Computer Science','कंप्यूटर विज्ञान'):section.section_code
+                  )}</span>
+                  <small>{percent}% · {section.correct_count} {t('correct','सही')} · {section.incorrect_count} {t('incorrect','गलत')} · {section.unanswered_count} {t('unanswered','अनुत्तरित')}</small>
+                  {Number(section.penalty_marks)>0&&<small>{t('Penalty','नकारात्मक अंक')}: −{Number(section.penalty_marks).toLocaleString(undefined,{maximumFractionDigits:2})}</small>}
+                </article>;
+              })}
+            </div>
+            {Number(attempt.penalty_score)>0&&<p>{t('Total negative marking','कुल नकारात्मक अंक')}: −{Number(attempt.penalty_score).toLocaleString(undefined,{maximumFractionDigits:2})} ({Math.round(Number(attempt.negative_marking_fraction||0)*100)}% {t('of marks for each wrong scored answer','प्रत्येक गलत स्कोर वाले उत्तर के अंकों का')}).</p>}
+          </section>}
+          {released&&Array.isArray(attempt.qualifying_sections)&&attempt.qualifying_sections.length>0&&<section className={styles.resultDetails}>
+            <div className={styles.resultDetailsHeading}>
+              <h3>{t('Qualifying language section','अर्हकारी भाषा अनुभाग')}</h3>
+              <p>{t('Shown separately; these questions are not added to the General Studies + Computer Science score.','इसे अलग दिखाया गया है; इन प्रश्नों के अंक सामान्य अध्ययन + कंप्यूटर विज्ञान के कुल स्कोर में नहीं जोड़े जाते।')}</p>
+            </div>
+            <div className={styles.resultScoreGrid}>
+              {attempt.qualifying_sections.map(section=><article className={styles.resultMetric} key={section.section_code}>
+                <strong>{section.correct_count} / {section.question_count}</strong>
+                <span>{section.section_name||section.section_code}</span>
+                <small>{section.incorrect_count} {t('incorrect','गलत')} · {section.unanswered_count} {t('unanswered','अनुत्तरित')}</small>
+              </article>)}
+            </div>
+          </section>}
+          {released&&Array.isArray(attempt.practice_only_sections)&&attempt.practice_only_sections.length>0&&<section className={styles.resultDetails}>
+            <div className={styles.resultDetailsHeading}>
+              <h3>{t('Practice-only sections','केवल अभ्यास अनुभाग')}</h3>
+              <p>{t('These questions are tracked separately and do not affect the scored total.','इन प्रश्नों को अलग से ट्रैक किया जाता है और ये कुल स्कोर को प्रभावित नहीं करते।')}</p>
+            </div>
+            <div className={styles.resultScoreGrid}>
+              {attempt.practice_only_sections.map(section=><article className={styles.resultMetric} key={section.section_code}>
+                <strong>{section.correct_count} / {section.question_count}</strong>
+                <span>{section.section_name||section.section_code}</span>
+              </article>)}
+            </div>
+          </section>}
           {released&&(()=>{
             const cert=certificateEligibility[Number(attempt?.attempt_id)];
             const certificateId=Number(cert?.certificate_id||0);
@@ -663,7 +899,12 @@ export default function TestsClient(){
           <section className={styles.resultDetails}>
             <div className={styles.resultDetailsHeading}><h3>{translateUi(locale, 'legacy.web.question.wise.result.4d0055f4')}</h3><p>{translateUi(locale, 'legacy.web.marks.and.outcomes.are.shown.for.revie.78f6eeaf')}</p></div>
             <div className={styles.resultReviewList}>
-              {current&&(()=>{
+              {current&&showingQuestionSet
+                ?<div className={styles.resultReviewItem} key={'question-set-'+(current.question_set_id||current.stimulus_id)}>
+                  <QuestionSetView items={currentQuestionSetItems} activeQuestionId={current.attemptQuestionId} attempt={attempt}
+                    responses={{}} disabled review/>
+                </div>
+                :current&&(()=> {
                 const question=current;
                 const questionIndex=index;
                 const outcome=question.isCorrect===true?translateUi(locale, 'legacy.web.correct.d01db0a2'):question.isCorrect===false?translateUi(locale, 'legacy.web.incorrect.c7d63751'):isEmpty(question.answer)?translateUi(locale, 'legacy.web.not.answered.f674e469'):translateUi(locale, 'legacy.web.reviewed.6c5656b3');
@@ -675,6 +916,8 @@ export default function TestsClient(){
                       <b className={outcomeClass}>{outcome} · {Number(question.awardedMarks??0)} / {Number(question.maxMarks??0)} {translateUi(locale, 'legacy.web.marks.57368a8d')}</b>
                     </div>
                     <div className={styles.questionProgress}><i style={{width:((questionIndex+1)/attempt.questions.length*100)+'%'}}/></div>
+                    <QuestionMarkPolicy question={question} attempt={attempt}/>
+                    <StimulusContent question={question}/>
                     <QuestionContent question={question} response={question.answer} review disabled/>
                     <AnswerFeedback
                       outcome={question.isCorrect===true?'correct':question.isCorrect===false?'incorrect':'ungraded'}
@@ -702,14 +945,20 @@ export default function TestsClient(){
         :attempt.status!=='IN_PROGRESS'||!current?<div className={styles.pendingResult}><h2>{translateUi(locale, 'legacy.web.this.attempt.is.closed.3b00ff63')}</h2><p>{translateUi(locale, 'legacy.web.you.cannot.return.to.the.question.navi.83bf6290')}</p><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{translateUi(locale, 'legacy.web.back.to.tests.and.results.29805d19')}</button></div>
         :<div className={styles.examLayout}>
           <aside className={styles.questionRail}><div><b>{translateUi(locale, 'legacy.web.questions.b5a33268')}</b><small>{answeredCount}/{attempt.questions.length} {translateUi(locale, 'legacy.web.answered.f3b8dd02')}</small></div><div className={styles.questionNumbers}>{attempt.questions.map((q,i)=><button type="button" key={q.attemptQuestionId} className={[i===index?styles.currentNumber:'',!isEmpty(responses[q.attemptQuestionId]??q.answer)?styles.answeredNumber:''].filter(Boolean).join(' ')} onClick={()=>setIndex(i)} aria-label={translateUi(locale, 'legacy.web.question.85099273')+(i+1)}>{i+1}</button>)}</div><div className={styles.railLegend}><span><i className={styles.legendCurrent}/>{translateUi(locale, 'legacy.web.current.e19e8a40')}</span><span><i className={styles.legendAnswered}/>{translateUi(locale, 'legacy.web.answered.5531e37e')}</span></div></aside>
-          <section className={styles.questionPanel}><div className={styles.questionPanelTop}><span>{translateUi(locale, 'legacy.web.question.3b02187f')} {index+1} {translateUi(locale, 'legacy.web.of.205487ae')} {attempt.questions.length}</span><b>{current.maxMarks} {translateUi(locale, 'legacy.web.mark.s.a8fb7e84')}</b></div><div className={styles.questionProgress}><i style={{width:((index+1)/attempt.questions.length*100)+'%'}}/></div><QuestionContent question={current} response={currentResponse} disabled={submitted} onAnswer={value=>updateResponse(current,value)}/>
-            {released&&<AnswerFeedback
-              outcome={current.isCorrect===true?'correct':current.isCorrect===false?'incorrect':'ungraded'}
-              title={current.isCorrect===true?'✓ Correct':current.isCorrect===false?'✕ Incorrect':'Teacher checked'}
-              message={<>Marks: {current.awardedMarks??0} / {current.maxMarks}{current.teacherFeedback?<> · {current.teacherFeedback}</>:null}</>}
-              explanation={current.explanation||undefined}
-              explanationLabel={translateUi(locale, 'legacy.web.explanation.f09ea03b')}
-            />}
+          <section className={styles.questionPanel}><div className={styles.questionPanelTop}><span>{showingQuestionSet?(locale==='english'?'Question Set':'प्रश्न समूह'):<>{translateUi(locale, 'legacy.web.question.3b02187f')} {index+1} {translateUi(locale, 'legacy.web.of.205487ae')} {attempt.questions.length}</>}</span><b>{showingQuestionSet?currentQuestionSetItems.length+' questions':current.maxMarks+' '+translateUi(locale, 'legacy.web.mark.s.a8fb7e84')}</b></div><div className={styles.questionProgress}><i style={{width:((index+1)/attempt.questions.length*100)+'%'}}/></div>
+            {!showingQuestionSet&&<QuestionMarkPolicy question={current} attempt={attempt}/>}
+            {showingQuestionSet
+              ?<QuestionSetView items={currentQuestionSetItems} activeQuestionId={current.attemptQuestionId} attempt={attempt}
+                  responses={responses} disabled={submitted} onAnswer={updateResponse}/>
+              :<><StimulusContent question={current}/><QuestionContent question={current} response={currentResponse} disabled={submitted} onAnswer={value=>updateResponse(current,value)}/>
+                {released&&<AnswerFeedback
+                  outcome={current.isCorrect===true?'correct':current.isCorrect===false?'incorrect':'ungraded'}
+                  title={current.isCorrect===true?'✓ Correct':current.isCorrect===false?'✕ Incorrect':'Teacher checked'}
+                  message={<>Marks: {current.awardedMarks??0} / {current.maxMarks}{current.teacherFeedback?<> · {current.teacherFeedback}</>:null}</>}
+                  explanation={current.explanation||undefined}
+                  explanationLabel={translateUi(locale, 'legacy.web.explanation.f09ea03b')}
+                />}
+              </>}
             <div className={styles.questionFooter}><span>{saving?translateUi(locale, 'legacy.web.saving.0f10a0df'):Object.keys(dirtyAnswers).length?translateUi(locale, 'legacy.web.save.pending.0d2fabc1'):translateUi(locale, 'legacy.web.saved.answers.are.preserved.689797b2')}</span><div><button type="button" className={styles.secondaryButton} disabled={index===0} onClick={()=>setIndex(i=>Math.max(0,i-1))}>← {translateUi(locale, 'legacy.web.previous.9320332c')}</button>{index<attempt.questions.length-1?<button type="button" className={styles.primaryButton} onClick={()=>setIndex(i=>Math.min(attempt.questions.length-1,i+1))}>{translateUi(locale, 'legacy.web.next.question.e339ba3c')}</button>:attempt.status==='IN_PROGRESS'?<button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>setShowSubmit(true)}>{translateUi(locale, 'legacy.web.review.submit.e856cb00')}</button>:null}</div></div>
           </section>
         </div>}
@@ -717,6 +966,25 @@ export default function TestsClient(){
       </>}
     </section>
 
+    {pendingTestStart&&<div className={styles.confirmBackdrop} onClick={()=>setPendingTestStart(null)}>
+      <section className={styles.confirmModal} role="dialog" aria-modal="true" aria-labelledby="qe-test-start-title"
+        onClick={event=>event.stopPropagation()}>
+        <span className={styles.eyebrow}>{t('EXAM INSTRUCTIONS','परीक्षा निर्देश')}</span>
+        <h2 id="qe-test-start-title">{t('Before you begin','परीक्षा शुरू करने से पहले')}</h2>
+        <p><strong>{pendingTestStart.title}</strong></p>
+        <p>{t('This paper contains','इस प्रश्नपत्र में कुल')} <strong>{pendingTestStart.question_count}</strong> {t('questions in total.','प्रश्न हैं।')}</p>
+        {/\bTRE[\s-]*3(?:\.0)?\b/i.test(pendingTestStart.title+' '+(pendingTestStart.description||''))&&<p>
+          {uiLanguage==='hi'
+            ?'इस TRE 3.0 प्रश्नपत्र में कुल 150 प्रश्न हैं: 40 सामान्य अध्ययन, 80 कंप्यूटर विज्ञान और 30 अर्हकारी भाषा प्रश्न। सामान्य अध्ययन और कंप्यूटर विज्ञान के अंक अलग-अलग दिखाए जाएंगे; भाषा अनुभाग अलग रहेगा और स्कोर किए गए कुल अंकों में नहीं जुड़ेगा।'
+            :'The TRE 3.0 source paper contains 150 questions in total: 40 General Studies, 80 Computer Science, and 30 qualifying-language questions. General Studies and Computer Science are scored separately; the language section is shown separately and is not added to the scored total.'}
+        </p>}
+        <p>{t('The timer starts when you continue. Your answers save automatically, and you can submit when you finish.','आगे बढ़ने पर समय शुरू होगा। आपके उत्तर अपने-आप सहेजे जाएंगे और पूरा होने पर आप जमा कर सकते हैं।')}</p>
+        <div>
+          <button type="button" className={styles.secondaryButton} onClick={()=>setPendingTestStart(null)}>{t('Cancel','रद्द करें')}</button>
+          <button type="button" className={styles.primaryButton} disabled={busy} onClick={confirmTestStart}>{t('Start test','परीक्षा शुरू करें')}</button>
+        </div>
+      </section>
+    </div>}
     {leaderboardTest&&<div className={styles.leaderboardBackdrop} onClick={closeLeaderboard}>
       <section className={styles.leaderboardModal} role="dialog" aria-modal="true" aria-labelledby="qe-leaderboard-title" onClick={event=>event.stopPropagation()}>
         <header className={styles.leaderboardHeader}>

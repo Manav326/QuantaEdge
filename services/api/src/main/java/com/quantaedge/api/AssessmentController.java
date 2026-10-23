@@ -73,6 +73,25 @@ public class AssessmentController {
     return questionType != null && AUTO_GRADED_TYPES.contains(questionType.trim().toUpperCase(Locale.ROOT));
   }
 
+  private static BigDecimal penaltyForIncorrectAnswer(
+      Map<String, Object> questionSnapshot, BigDecimal maxMarks, BigDecimal configuredFraction) {
+    Object configuredMarks = questionSnapshot.get("incorrect_marks");
+    if (configuredMarks != null && !String.valueOf(configuredMarks).isBlank()) {
+      final BigDecimal signedMarks;
+      try {
+        signedMarks = configuredMarks instanceof BigDecimal decimal
+            ? decimal : new BigDecimal(String.valueOf(configuredMarks));
+      } catch (RuntimeException ex) {
+        throw new IllegalStateException("Stored per-question incorrect-mark policy is invalid.", ex);
+      }
+      if (signedMarks.signum() > 0 || signedMarks.abs().compareTo(new BigDecimal("1000")) > 0) {
+        throw new IllegalStateException("Stored incorrect_marks must be between -1,000 and 0.");
+      }
+      return signedMarks.abs().setScale(2, RoundingMode.HALF_UP);
+    }
+    return maxMarks.multiply(configuredFraction).setScale(2, RoundingMode.HALF_UP);
+  }
+
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
   private final QuestionHistoryService questionHistory;
@@ -193,12 +212,14 @@ public class AssessmentController {
     List<Map<String,Object>> items=jdbc.queryForList("""
       select a.id as assessment_id,a.public_id as test_id,a.title,a.description,a.duration_minutes,a.max_attempts,a.status,
              a.offline_enabled,a.assessment_type,a.lesson_id,a.is_generated,a.is_current,a.generation_version,
-             a.created_at,a.published_at,c.code as class_code,c.display_name as class_name,
+             a.negative_marking_fraction,a.created_at,a.published_at,c.code as class_code,c.display_name as class_name,
              s.code as subject_code,s.display_name as subject_name,
              p.id as course_id,p.code as course_code,p.display_name as course_name,
              ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
              (select count(*) from assessment_question aq where aq.assessment_id=a.id) as question_count,
-             (select coalesce(sum(aq.max_marks),0) from assessment_question aq where aq.assessment_id=a.id) as max_score,
+             (select coalesce(sum(case when aq.question_snapshot->>'section_result_policy' in ('QUALIFYING_ONLY','PRACTICE_ONLY')
+                         or aq.question_snapshot->>'section_code'='LANGUAGE_QUALIFYING' then 0 else aq.max_marks end),0)
+              from assessment_question aq where aq.assessment_id=a.id) as max_score,
              (select string_agg(gs.display_name, ', ' order by gs.display_name)
               from assessment_staff_assignment asa join staff_account gs on gs.id=asa.staff_id
               where asa.assessment_id=a.id and asa.active=true) as assigned_grader_names,
@@ -233,6 +254,11 @@ public class AssessmentController {
     requireAssignedCourse(courseId, tenant);
     int duration = integer(body.getOrDefault("durationMinutes", 45), "Duration", 1, 240);
     int maxAttempts = integer(body.getOrDefault("maxAttempts", 1), "Attempt limit", 1, 10);
+    BigDecimal negativeMarkingFraction = decimal(body.getOrDefault("negativeMarkingFraction", "0"), "Negative-marking fraction");
+    if (negativeMarkingFraction.compareTo(BigDecimal.ZERO) < 0
+        || negativeMarkingFraction.compareTo(BigDecimal.ONE) > 0) {
+      throw badRequest("Negative-marking fraction must be between 0 and 1.");
+    }
     Long chapterId = optionalLong(body.get("chapterId"), "chapterId");
     Object rawIds = body.get("questionIds");
     if (!(rawIds instanceof List<?> values) || values.isEmpty() || values.size() > 200) {
@@ -291,10 +317,11 @@ public class AssessmentController {
     }
 
     Long assessmentId = jdbc.queryForObject("""
-      insert into assessment(course_id,title,description,subject_id,chapter_id,duration_minutes,max_attempts,status,created_by_staff_id)
-      values(?,?,?,?,?,?,?,'DRAFT',?) returning id
+      insert into assessment(course_id,title,description,subject_id,chapter_id,duration_minutes,max_attempts,
+        negative_marking_fraction,status,created_by_staff_id)
+      values(?,?,?,?,?,?,?,?, 'DRAFT',?) returning id
       """, Long.class, courseId, title, description.isBlank() ? null : description, subjectId, chapterId,
-        duration, maxAttempts, context.staffId());
+        duration, maxAttempts, negativeMarkingFraction, context.staffId());
 
     BigDecimal maxScore = BigDecimal.ZERO;
     int sequence = 1;
@@ -596,7 +623,10 @@ public class AssessmentController {
       where aq.attempt_id=? and ans.answer_status='PENDING_REVIEW'
       """, Long.class, attemptId);
     BigDecimal score = jdbc.queryForObject("""
-      select coalesce(sum(coalesce(ans.awarded_marks,0)),0)
+      select greatest(0::numeric,coalesce(sum(case
+        when coalesce(aq.question_snapshot->>'section_result_policy','SCORED') in ('QUALIFYING_ONLY','PRACTICE_ONLY')
+          or coalesce(aq.question_snapshot->>'section_code','')='LANGUAGE_QUALIFYING' then 0
+        else coalesce(ans.awarded_marks,0)-coalesce(ans.penalty_marks,0) end),0))
       from student_assessment_attempt_question aq
       left join student_assessment_answer ans on ans.attempt_question_id=aq.id
       where aq.attempt_id=?
@@ -699,7 +729,9 @@ public class AssessmentController {
              a.created_at,a.published_at,s.code as subject_code,coalesce(max(subject_tx.display_name),s.display_name) as subject_name,
              c.code as class_code,p.id as course_id,p.code as course_code,p.display_name as course_name,
              ch.id as chapter_id,ch.code as chapter_code,coalesce(max(ct.display_name),ch.display_name) as chapter_name,
-             count(distinct aq.id) as question_count,coalesce(sum(aq.max_marks),0) as max_score,
+             count(distinct aq.id) as question_count,
+             coalesce(sum(case when aq.question_snapshot->>'section_result_policy' in ('QUALIFYING_ONLY','PRACTICE_ONLY')
+                        or aq.question_snapshot->>'section_code'='LANGUAGE_QUALIFYING' then 0 else aq.max_marks end),0) as max_score,
              (select count(*) from student_assessment_attempt att
               where att.assessment_id=a.id and att.student_id=st.id and att.institution_id=(select institution_id from tenant_scope)
                 and att.status<>'ABANDONED') as attempts_used,
@@ -843,7 +875,8 @@ public class AssessmentController {
     List<Map<String, Object>> metadata = jdbc.queryForList("""
       select a.id as assessment_id,
              coalesce(max(translated.title), a.title) as assessment_title,
-             coalesce(sum(aq.max_marks), 0) as max_score
+             coalesce(sum(case when aq.question_snapshot->>'section_result_policy' in ('QUALIFYING_ONLY','PRACTICE_ONLY')
+                       or aq.question_snapshot->>'section_code'='LANGUAGE_QUALIFYING' then 0 else aq.max_marks end), 0) as max_score
       from assessment a
       left join assessment_question aq on aq.assessment_id=a.id
       left join lateral (
@@ -1003,11 +1036,13 @@ public class AssessmentController {
       with tenant_scope as (select ?::bigint as institution_id)
       select a.id,coalesce(max(at.title),a.title) as title,
              coalesce(max(at.description),a.description) as description,
-             a.duration_minutes,a.max_attempts,a.status,a.offline_enabled,
+             a.duration_minutes,a.max_attempts,a.status,a.offline_enabled,a.negative_marking_fraction,
              s.id as subject_id,s.code as subject_code,coalesce(max(subject_tx.display_name),s.display_name) as subject_name,
              c.code as class_code,ch.id as chapter_id,coalesce(max(ct.display_name),ch.display_name) as chapter_name,
              selected_course.id as course_id,selected_course.code as course_code,selected_course.display_name as course_name,
-             count(aq.id) as question_count,coalesce(sum(aq.max_marks),0) as max_score
+             count(aq.id) as question_count,
+             coalesce(sum(case when aq.question_snapshot->>'section_result_policy' in ('QUALIFYING_ONLY','PRACTICE_ONLY')
+                       or aq.question_snapshot->>'section_code'='LANGUAGE_QUALIFYING' then 0 else aq.max_marks end),0) as max_score
       from assessment a join curriculum_subject s on s.id=a.subject_id
       join curriculum_class c on c.id=s.class_id
       join student st on st.id=? and st.active=true
@@ -1113,6 +1148,7 @@ public class AssessmentController {
     assessmentSnapshot.put("attemptNumber", attemptNumber);
     assessmentSnapshot.put("questionCount", questionCount);
     assessmentSnapshot.put("maxScore", assessment.get("max_score"));
+    assessmentSnapshot.put("negativeMarkingFraction", assessment.getOrDefault("negative_marking_fraction", BigDecimal.ZERO));
     assessmentSnapshot.put("subjectCode", assessment.get("subject_code"));
     assessmentSnapshot.put("subjectName", assessment.get("subject_name"));
     assessmentSnapshot.put("chapterName", assessment.get("chapter_name"));
@@ -1154,6 +1190,7 @@ public class AssessmentController {
         select t.id,t.prompt,t.explanation,t.options
         from assessment_question_translation t
         where t.assessment_question_id=aq.id and t.language=? and t.translation_status='PUBLISHED'
+          and coalesce(aq.question_snapshot->>'native_language_only','false') <> 'true'
           and t.source_hash::text=md5(jsonb_build_object(
             'prompt',aq.question_snapshot->>'prompt',
             'explanation',aq.question_snapshot->>'explanation',
@@ -1358,7 +1395,7 @@ public class AssessmentController {
     context = authorization.requireStudent(context);
     List<Map<String, Object>> attemptRows = jdbc.queryForList("""
       select id,assessment_id,student_id,status,auto_score,max_score,offline_mode,
-             offline_sync_expires_at,offline_package_token_hash
+             offline_sync_expires_at,offline_package_token_hash,assessment_snapshot::text as assessment_snapshot
       from student_assessment_attempt where id=? and institution_id=? for update
       """, attemptId,institutionId);
     if (attemptRows.isEmpty() || ((Number) attemptRows.getFirst().get("student_id")).longValue() != context.studentId()) {
@@ -1379,7 +1416,16 @@ public class AssessmentController {
       join student_assessment_answer ans on ans.attempt_question_id=aq.id
       where aq.attempt_id=? order by aq.sequence_no for update of ans
       """, attemptId);
+    Map<String,Object> attemptSnapshot=parseObject(String.valueOf(attempt.get("assessment_snapshot")));
+    Object rawPenaltyFraction=attemptSnapshot.getOrDefault("negativeMarkingFraction",BigDecimal.ZERO);
+    BigDecimal negativeFraction;
+    try { negativeFraction=new BigDecimal(String.valueOf(rawPenaltyFraction)); }
+    catch (RuntimeException ex) { throw new IllegalStateException("Stored assessment penalty configuration is invalid.",ex); }
+    if(negativeFraction.signum()<0||negativeFraction.compareTo(BigDecimal.ONE)>0) {
+      throw new IllegalStateException("Stored assessment negative-marking fraction is outside [0,1].");
+    }
     BigDecimal autoScore = BigDecimal.ZERO;
+    BigDecimal penaltyScore = BigDecimal.ZERO;
     boolean needsReview = false;
     for (Map<String, Object> row : answerRows) {
       Map<String, Object> snapshot = parseObject(String.valueOf(row.get("question_snapshot")));
@@ -1387,10 +1433,17 @@ public class AssessmentController {
       String responseJson = String.valueOf(row.get("response_payload"));
       Object response = parseValue(responseJson);
       BigDecimal maxMarks = new BigDecimal(String.valueOf(row.get("max_marks")));
+      boolean includeInScoredTotal=contributesToAggregate(snapshot);
       String answerStatus;
       Boolean correct = null;
       BigDecimal awarded;
-      if (isAutoGradedType(questionType)) {
+      BigDecimal questionPenalty=BigDecimal.ZERO;
+      if (isEmptyAnswer(response)) {
+        // An unanswered question is not a wrong answer and must never attract negative marks.
+        correct = null;
+        awarded = BigDecimal.ZERO;
+        answerStatus = "GRADED";
+      } else if (isAutoGradedType(questionType)) {
         String answerPayload = String.valueOf(snapshot.getOrDefault("answer_payload", "{}"));
         QuestionAnswerService.Evaluation evaluation = answerService.evaluate(answerPayload, response);
         if (!evaluation.autoGraded()) {
@@ -1402,12 +1455,15 @@ public class AssessmentController {
           correct = evaluation.correct();
           awarded = Boolean.TRUE.equals(correct) ? maxMarks : BigDecimal.ZERO;
           answerStatus = "AUTO_GRADED";
-          autoScore = autoScore.add(awarded);
+          if(includeInScoredTotal) {
+            if(Boolean.TRUE.equals(correct)) {
+              autoScore = autoScore.add(awarded);
+            } else if(Boolean.FALSE.equals(correct)) {
+              questionPenalty=penaltyForIncorrectAnswer(snapshot,maxMarks,negativeFraction);
+              penaltyScore=penaltyScore.add(questionPenalty);
+            }
+          }
         }
-      } else if (isEmptyAnswer(response)) {
-        correct = null;
-        awarded = BigDecimal.ZERO;
-        answerStatus = "GRADED";
       } else {
         correct = null;
         awarded = null;
@@ -1415,20 +1471,20 @@ public class AssessmentController {
         needsReview = true;
       }
       jdbc.update("""
-        update student_assessment_answer set answer_status=?,is_correct=?,awarded_marks=?,
+        update student_assessment_answer set answer_status=?,is_correct=?,awarded_marks=?,penalty_marks=?,
           teacher_feedback=null,graded_at=case when ? in ('AUTO_GRADED','GRADED') then now() else null end,
           graded_by_staff_id=null,saved_at=now()
         where id=?
-        """, answerStatus, correct, awarded, answerStatus, row.get("answer_id"));
+        """, answerStatus, correct, awarded, questionPenalty, answerStatus, row.get("answer_id"));
     }
     String next = needsReview ? "AWAITING_REVIEW" : "RELEASED";
-    BigDecimal finalScore = needsReview ? null : autoScore;
+    BigDecimal finalScore = needsReview ? null : autoScore.subtract(penaltyScore).max(BigDecimal.ZERO);
     jdbc.update("""
-      update student_assessment_attempt set status=?,submitted_at=now(),auto_score=?,final_score=?,
+      update student_assessment_attempt set status=?,submitted_at=now(),auto_score=?,penalty_score=?,final_score=?,
         graded_at=case when ?='RELEASED' then now() else null end,
         released_at=case when ?='RELEASED' then now() else null end,updated_at=now()
       where id=?
-      """, next, autoScore, finalScore, next, next, attemptId);
+      """, next, autoScore, penaltyScore, finalScore, next, next, attemptId);
     audit(assessmentId, attemptId, null, context.studentId(), "STUDENT", "ATTEMPT_SUBMITTED",
         "IN_PROGRESS", next, needsReview ? "Submitted; teacher review is required before the result is released."
             : "Submitted and automatically graded; result released.");
@@ -1636,7 +1692,7 @@ public class AssessmentController {
       select att.id as attempt_id,att.assessment_id,a.public_id as test_id,a.course_id as course_id,
              att.student_id,att.attempt_number,att.status,
              att.started_at,att.deadline_at,att.submitted_at,att.graded_at,att.released_at,
-             att.auto_score,att.final_score,att.max_score,att.offline_mode,att.offline_sync_expires_at,
+             att.auto_score,att.final_score,att.max_score,att.penalty_score,att.offline_mode,att.offline_sync_expires_at,
              att.assessment_snapshot::text as assessment_snapshot,
              st.display_name as student_name,st.class_code,a.title as assessment_title,
              a.assessment_type,a.is_generated,s.code as subject_code,s.display_name as subject_name,ch.display_name as chapter_name
@@ -1651,6 +1707,10 @@ public class AssessmentController {
     attempt.put("offlineMode",Boolean.TRUE.equals(attempt.get("offline_mode")));
     attempt.put("offlineSyncExpiresAt",attempt.get("offline_sync_expires_at"));
     Map<String,Object> assessmentSnapshot=parseObject(String.valueOf(attempt.get("assessment_snapshot")));
+    // The learner UI displays each question's correct and incorrect mark policy before submission.
+    // This is assessment configuration, not answer-key data, so it is safe to expose on active attempts.
+    attempt.put("negative_marking_fraction",
+        assessmentSnapshot.getOrDefault("negativeMarkingFraction", BigDecimal.ZERO));
     if(!assessmentSnapshot.isEmpty()){
       attempt.put("assessment_title",assessmentSnapshot.getOrDefault("title",attempt.get("assessment_title")));
       attempt.put("subject_name",assessmentSnapshot.getOrDefault("subjectName",attempt.get("subject_name")));
@@ -1662,25 +1722,28 @@ public class AssessmentController {
       throw notFound("Assessment attempt", attemptId);
     }
     if (staffView) requireAssignment(context, ((Number) attempt.get("assessment_id")).longValue());
+    String displayLanguage=String.valueOf(assessmentSnapshot.getOrDefault("language","hi"));
     boolean resultReleased = "RELEASED".equals(String.valueOf(attempt.get("status")));
     attempt.remove("student_id");
     if (!resultReleased) {
       attempt.remove("final_score");
       attempt.remove("auto_score");
+      attempt.remove("penalty_score");
     }
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select aq.id as attempt_question_id,aq.sequence_no,aq.max_marks,
              aq.question_snapshot::text as question_snapshot,
              ans.id as answer_id,ans.response_payload::text as response_payload,
-             ans.answer_status,ans.is_correct,ans.awarded_marks,ans.teacher_feedback
+             ans.answer_status,ans.is_correct,ans.awarded_marks,ans.penalty_marks,ans.teacher_feedback
       from student_assessment_attempt_question aq
       join student_assessment_answer ans on ans.attempt_question_id=aq.id
       where aq.attempt_id=? order by aq.sequence_no
       """, attemptId);
     List<Map<String, Object>> questions = new ArrayList<>();
+    Map<String,Map<String,Object>> sectionSummary=new LinkedHashMap<>();
     for (Map<String, Object> row : rows) {
       Map<String, Object> snapshot = parseObject(String.valueOf(row.get("question_snapshot")));
-      Map<String, Object> item = publicSnapshot(snapshot);
+      Map<String, Object> item = publicSnapshot(snapshot,displayLanguage);
       item.put("attemptQuestionId", row.get("attempt_question_id"));
       item.put("answerId", row.get("answer_id"));
       item.put("maxMarks", row.get("max_marks"));
@@ -1688,9 +1751,11 @@ public class AssessmentController {
       item.put("answerStatus", row.get("answer_status"));
       // Explanations are also grading feedback: do not expose them in active or awaiting-review attempts.
       if (resultReleased || staffView) {
-        if (snapshot.containsKey("explanation")) item.put("explanation", snapshot.get("explanation"));
+        Object explanation=localizedValue(snapshot.get("explanation_i18n"),displayLanguage,snapshot.get("explanation"));
+        if (explanation!=null) item.put("explanation",explanation);
         item.put("isCorrect", row.get("is_correct"));
         item.put("awardedMarks", row.get("awarded_marks"));
+        item.put("penaltyMarks", row.get("penalty_marks"));
         item.put("teacherFeedback", row.get("teacher_feedback"));
       }
       // Correct answers are disclosed to students only after the result is released.
@@ -1712,8 +1777,62 @@ public class AssessmentController {
         item.put("teacherOptions", teacherOptions(snapshot));
       }
       questions.add(item);
+
+      String sectionCode=safeText(snapshot.get("section_code"),50).toUpperCase(Locale.ROOT);
+      if(!sectionCode.isBlank()) {
+        String resultPolicy=sectionResultPolicy(snapshot);
+        Map<String,Object> section=sectionSummary.computeIfAbsent(sectionCode,code->{
+          Map<String,Object> created=new LinkedHashMap<>();
+          created.put("section_code",code);
+          created.put("section_name",localizedValue(snapshot.get("section_name_i18n"),displayLanguage,
+              snapshot.getOrDefault("section_name",code)));
+          created.put("result_policy",resultPolicy);
+          created.put("question_count",0);
+          created.put("correct_count",0);
+          created.put("incorrect_count",0);
+          created.put("unanswered_count",0);
+          created.put("max_score",BigDecimal.ZERO);
+          created.put("earned_marks",BigDecimal.ZERO);
+          created.put("penalty_marks",BigDecimal.ZERO);
+          created.put("net_score",BigDecimal.ZERO);
+          return created;
+        });
+        section.put("question_count",((Number)section.get("question_count")).intValue()+1);
+        BigDecimal qMax=new BigDecimal(String.valueOf(row.get("max_marks")));
+        BigDecimal qEarned=row.get("awarded_marks")==null?BigDecimal.ZERO:new BigDecimal(String.valueOf(row.get("awarded_marks")));
+        BigDecimal qPenalty=row.get("penalty_marks")==null?BigDecimal.ZERO:new BigDecimal(String.valueOf(row.get("penalty_marks")));
+        section.put("max_score",((BigDecimal)section.get("max_score")).add(qMax));
+        section.put("earned_marks",((BigDecimal)section.get("earned_marks")).add(qEarned));
+        section.put("penalty_marks",((BigDecimal)section.get("penalty_marks")).add(qPenalty));
+        if(isEmptyAnswer(parseValue(String.valueOf(row.get("response_payload"))))) {
+          section.put("unanswered_count",((Number)section.get("unanswered_count")).intValue()+1);
+        } else if(Boolean.TRUE.equals(row.get("is_correct"))) {
+          section.put("correct_count",((Number)section.get("correct_count")).intValue()+1);
+        } else if(Boolean.FALSE.equals(row.get("is_correct"))) {
+          section.put("incorrect_count",((Number)section.get("incorrect_count")).intValue()+1);
+        }
+      }
     }
     attempt.put("questions", questions);
+    if(resultReleased || staffView) {
+      List<Map<String,Object>> scoredSections=new ArrayList<>();
+      List<Map<String,Object>> qualifyingSections=new ArrayList<>();
+      List<Map<String,Object>> practiceOnlySections=new ArrayList<>();
+      for(Map<String,Object> section:sectionSummary.values()) {
+        BigDecimal sectionNet=((BigDecimal)section.get("earned_marks")).subtract((BigDecimal)section.get("penalty_marks"));
+        section.put("net_score",sectionNet);
+        String policy=String.valueOf(section.get("result_policy"));
+        if("SCORED".equals(policy)) scoredSections.add(section);
+        else if("QUALIFYING_ONLY".equals(policy)) qualifyingSections.add(section);
+        else practiceOnlySections.add(section);
+      }
+      if(!sectionSummary.isEmpty()) {
+        attempt.put("section_results",scoredSections);
+        if(!qualifyingSections.isEmpty()) attempt.put("qualifying_sections",qualifyingSections);
+        if(!practiceOnlySections.isEmpty()) attempt.put("practice_only_sections",practiceOnlySections);
+        attempt.put("negative_marking_fraction",assessmentSnapshot.getOrDefault("negativeMarkingFraction",BigDecimal.ZERO));
+      }
+    }
     if (assessmentSnapshot.containsKey("language")) {
       attempt.put("translation_complete", questions.stream()
           .allMatch(question -> Boolean.TRUE.equals(question.get("translated"))));
@@ -1726,7 +1845,8 @@ public class AssessmentController {
   private Map<String, Object> assessmentDetails(long id, boolean includeQuestionBankDetails) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select a.id as assessment_id,a.public_id as test_id,a.title,a.description,a.duration_minutes,a.max_attempts,a.status,
-             a.offline_enabled,a.created_at,a.published_at,s.code as subject_code,s.display_name as subject_name,
+             a.offline_enabled,a.negative_marking_fraction,a.source_package_id,a.source_package_version,a.source_package_sha256,
+             a.source_exam_cycle,a.source_url,a.created_at,a.published_at,s.code as subject_code,s.display_name as subject_name,
              c.code as class_code,ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name
       from assessment a join curriculum_subject s on s.id=a.subject_id
       join curriculum_class c on c.id=s.class_id
@@ -1736,7 +1856,11 @@ public class AssessmentController {
     if (rows.isEmpty()) throw notFound("Assessment", id);
     Map<String, Object> result = new LinkedHashMap<>(rows.getFirst());
     result.put("question_count", jdbc.queryForObject("select count(*) from assessment_question where assessment_id=?", Integer.class, id));
-    result.put("max_score", jdbc.queryForObject("select coalesce(sum(max_marks),0) from assessment_question where assessment_id=?", BigDecimal.class, id));
+    result.put("max_score", jdbc.queryForObject("""
+      select coalesce(sum(case when question_snapshot->>'section_result_policy' in ('QUALIFYING_ONLY','PRACTICE_ONLY')
+          or question_snapshot->>'section_code'='LANGUAGE_QUALIFYING' then 0 else max_marks end),0)
+      from assessment_question where assessment_id=?
+      """, BigDecimal.class, id));
     if (includeQuestionBankDetails) {
       result.put("questions", jdbc.queryForList("""
         select id as assessment_question_id,source_question_id,sequence_no,max_marks
@@ -1752,14 +1876,31 @@ public class AssessmentController {
     return result;
   }
 
-  private Map<String, Object> publicSnapshot(Map<String, Object> snapshot) {
+  private Map<String, Object> publicSnapshot(Map<String, Object> snapshot,String language) {
     Map<String, Object> result = new LinkedHashMap<>();
-    for (String key : List.of("id", "question_type", "prompt", "difficulty",
-        "sort_order", "marks", "exam_format", "topic", "subtopic", "skill")) {
+    for (String key : List.of("id", "question_type", "difficulty","sort_order","marks",
+        "exam_format","topic","subtopic","skill","section_code","section_result_policy","topic_tags","subtopic_tags",
+        "prompt_content_kind","code_line_indices","math_line_indices","source_code_preservation_notes",
+        "stimulus_id","stimulus","stimulus_content_kind","stimulus_code_line_indices","stimulus_math_line_indices",
+        "stimulus_source_languages","native_language_only","native_source_language","content_language_policy",
+        "question_set_id","question_set_type","incorrect_marks")) {
       if (snapshot.containsKey(key)) result.put(key, snapshot.get(key));
     }
+    boolean nativeSourceOnly=Boolean.TRUE.equals(snapshot.get("native_language_only"));
+    String nativeSourceLanguage=safeText(snapshot.get("native_source_language"),10).toLowerCase(Locale.ROOT);
+    if ("e".equals(nativeSourceLanguage)) nativeSourceLanguage="en";
+    if ("h".equals(nativeSourceLanguage)) nativeSourceLanguage="hi";
+    Object localizedPrompt=nativeSourceOnly
+        ? localizedSourceValue(snapshot.get("prompt_i18n"),nativeSourceLanguage,snapshot.get("prompt"))
+        : localizedValue(snapshot.get("prompt_i18n"),language,snapshot.get("prompt"));
+    if(localizedPrompt!=null) result.put("prompt",localizedPrompt);
+    Object localizedStimulus=nativeSourceOnly
+        ? localizedSourceValue(snapshot.get("stimulus_i18n"),nativeSourceLanguage,snapshot.get("stimulus"))
+        : localizedValue(snapshot.get("stimulus_i18n"),language,snapshot.get("stimulus"));
+    if(localizedStimulus instanceof String stimulusText && !stimulusText.isBlank()) result.put("stimulus",stimulusText);
     Object rawOptions = snapshot.get("options");
     List<Map<String, Object>> options = new ArrayList<>();
+    boolean hasSourceLocale=localizedHas(snapshot.get("prompt_i18n"),language);
     if (rawOptions instanceof List<?> entries) {
       for (Object raw : entries) {
         if (!(raw instanceof Map<?, ?> option)) continue;
@@ -1768,8 +1909,18 @@ public class AssessmentController {
         if (key == null) key = option.get("key");
         Object label = option.get("label");
         if (label == null) label = option.get("text");
+        Object localizedLabel=nativeSourceOnly
+            ? localizedSourceValue(option.get("text_i18n"),nativeSourceLanguage,label)
+            : localizedValue(option.get("text_i18n"),language,label);
+        if(localizedLabel!=null) label=localizedLabel;
+        hasSourceLocale=hasSourceLocale||localizedHas(option.get("text_i18n"),language);
         safe.put("key", key);
-        safe.put("label", label);
+        safe.put("label", nativeSourceOnly
+            ? localizedSourceValue(option.get("text_i18n"),nativeSourceLanguage,label)
+            : localizedValue(option.get("text_i18n"),language,label));
+        for(String metadataKey:List.of("content_kind","code_line_indices","math_line_indices","source_code_preservation_notes")) {
+          if(option.containsKey(metadataKey)) safe.put(metadataKey,option.get(metadataKey));
+        }
         options.add(safe);
       }
     }
@@ -1784,8 +1935,53 @@ public class AssessmentController {
     }
     responseMode=responseMode.trim().toUpperCase(Locale.ROOT);
     if(!responseMode.isBlank()) result.put("response_mode",responseMode);
-    result.put("translated", Boolean.TRUE.equals(snapshot.get("_translation_applied")));
+    result.put("translated", !nativeSourceOnly &&
+        (Boolean.TRUE.equals(snapshot.get("_translation_applied"))||hasSourceLocale));
     return result;
+  }
+
+  private Object localizedSourceValue(Object rawLocalized,String nativeSourceLanguage,Object fallback) {
+    if(rawLocalized instanceof Map<?,?> values) {
+      if(nativeSourceLanguage!=null&&!nativeSourceLanguage.isBlank()) {
+        Object source=values.get(nativeSourceLanguage);
+        if(source instanceof String text&&!text.isBlank()) return text;
+      }
+      // Older snapshots may lack native_source_language. Prefer an exact requested-language
+      // variant only when the stored set has one language; otherwise do not guess a translation.
+      if(values.size()==1) {
+        Object only=values.values().iterator().next();
+        if(only instanceof String text&&!text.isBlank()) return text;
+      }
+    }
+    return fallback;
+  }
+
+  private boolean localizedHas(Object rawLocalized,String language) {
+    return rawLocalized instanceof Map<?,?> values && values.get(language) instanceof String text && !text.isBlank();
+  }
+
+  private Object localizedValue(Object rawLocalized,String language,Object fallback) {
+    if(rawLocalized instanceof Map<?,?> values) {
+      Object selected=values.get(language);
+      if(selected instanceof String text && !text.isBlank()) return text;
+      Object english=values.get("en");
+      if(english instanceof String text && !text.isBlank()) return text;
+      Object hindi=values.get("hi");
+      if(hindi instanceof String text && !text.isBlank()) return text;
+    }
+    return fallback;
+  }
+
+  private String sectionResultPolicy(Map<String,Object> snapshot) {
+    String policy=safeText(snapshot.get("section_result_policy"),40).toUpperCase(Locale.ROOT);
+    if(Set.of("SCORED","QUALIFYING_ONLY","PRACTICE_ONLY").contains(policy)) return policy;
+    return "LANGUAGE_QUALIFYING".equalsIgnoreCase(safeText(snapshot.get("section_code"),50))
+        ? "QUALIFYING_ONLY" : "SCORED";
+  }
+
+  private boolean contributesToAggregate(Map<String,Object> snapshot) {
+    String policy=sectionResultPolicy(snapshot);
+    return "SCORED".equals(policy);
   }
 
   private List<Map<String, Object>> teacherOptions(Map<String, Object> snapshot) {
