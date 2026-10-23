@@ -24,13 +24,22 @@ type AssessmentCard = {
 type AttemptQuestion = {
   attemptQuestionId:number;answerId:number;question_type:string;prompt:string;explanation?:string;
   options:Array<{key:string;label:string}>;answer:any;answerStatus:string;maxMarks:number|string;
-  isCorrect?:boolean|null;awardedMarks?:number|string|null;teacherFeedback?:string|null;translated?:boolean;
-  correctAnswer?:{kind?:string;value?:any}|null;
+  section_code?:string;section_result_policy?:'SCORED'|'QUALIFYING_ONLY'|'PRACTICE_ONLY';
+  isCorrect?:boolean|null;awardedMarks?:number|string|null;penaltyMarks?:number|string|null;
+  teacherFeedback?:string|null;translated?:boolean;correctAnswer?:{kind?:string;value?:any}|null;
+};
+type SectionResult = {
+  section_code:string;section_name?:string;result_policy:'SCORED'|'QUALIFYING_ONLY'|'PRACTICE_ONLY';
+  question_count:number;correct_count:number;incorrect_count:number;unanswered_count:number;
+  max_score:number|string;earned_marks:number|string;penalty_marks:number|string;net_score:number|string;
 };
 type Attempt = {
   attempt_id:number;assessment_id:number;test_id?:string|null;course_id?:number|null;attempt_number:number;status:string;started_at:string;deadline_at:string;
   submitted_at?:string|null;released_at?:string|null;assessment_title:string;subject_name:string;chapter_name?:string|null;
-  questions:AttemptQuestion[];resultReleased:boolean;translation_complete?:boolean;final_score?:number|string|null;auto_score?:number|string|null;max_score:number|string;
+  questions:AttemptQuestion[];resultReleased:boolean;translation_complete?:boolean;
+  final_score?:number|string|null;auto_score?:number|string|null;penalty_score?:number|string|null;
+  negative_marking_fraction?:number|string;max_score:number|string;
+  section_results?:SectionResult[];qualifying_sections?:SectionResult[];practice_only_sections?:SectionResult[];
 };
 type ResultAttempt = {attempt_id:number;attempt_number:number;status:string;submitted_at?:string|null;released_at?:string|null;final_score:number|string;max_score:number|string};
 type Result = {attempt_id:number;assessment_id:number;test_id?:string|null;attempt_number:number;status:string;submitted_at:string;released_at:string;final_score:number|string;max_score:number|string;best_score?:number|string;attempt_count?:number;attempts?:ResultAttempt[];assessment_title:string;assessment_type?:string;subject_name:string;chapter_name?:string|null;question_count:number};
@@ -319,9 +328,12 @@ export default function TestsClient(){
   const resultScore=Number(attempt?.final_score??attempt?.auto_score??0);
   const resultMax=Number(attempt?.max_score??0);
   const resultPercent=resultMax>0?Math.round(resultScore/resultMax*100):0;
-  const correctCount=attempt?.questions?.filter(q=>q.isCorrect===true).length||0;
-  const incorrectCount=attempt?.questions?.filter(q=>q.isCorrect===false).length||0;
-  const unansweredCount=attempt?.questions?.filter(q=>isEmpty(q.answer)).length||0;
+  const scoredQuestions=attempt?.questions?.filter(q=>
+    q.section_result_policy ? q.section_result_policy==='SCORED' :
+    String(q.section_code||'').toUpperCase()!=='LANGUAGE_QUALIFYING')||[];
+  const correctCount=scoredQuestions.filter(q=>q.isCorrect===true).length;
+  const incorrectCount=scoredQuestions.filter(q=>q.isCorrect===false).length;
+  const unansweredCount=scoredQuestions.filter(q=>isEmpty(q.answer)).length;
 
   function isEmpty(value:any):boolean{
     if(value===null||value===undefined||value==='')return true;
@@ -627,6 +639,54 @@ export default function TestsClient(){
             <article className={styles.resultMetric}><strong>{incorrectCount}</strong><span>{translateUi(locale, 'legacy.web.incorrect.c7d63751')}</span></article>
             <article className={styles.resultMetric}><strong>{unansweredCount}</strong><span>{translateUi(locale, 'legacy.web.not.answered.f674e469')}</span></article>
           </div>
+          {released&&Array.isArray(attempt.section_results)&&attempt.section_results.length>0&&<section className={styles.resultDetails}>
+            <div className={styles.resultDetailsHeading}>
+              <h3>{t('Section-wise scored results','खंडवार स्कोर परिणाम')}</h3>
+              <p>{t('General Studies and Computer Science are scored separately. Their marks add up to the overall result.','सामान्य अध्ययन और कंप्यूटर विज्ञान के अंक अलग-अलग दिखाए जाते हैं। दोनों का योग कुल परिणाम है।')}</p>
+            </div>
+            <div className={styles.resultScoreGrid}>
+              {attempt.section_results.map(section=>{
+                const net=Number(section.net_score??0);
+                const max=Number(section.max_score??0);
+                const percent=max>0?Math.round(net/max*100):0;
+                return <article className={styles.resultMetric} key={section.section_code}>
+                  <strong>{net.toLocaleString(undefined,{maximumFractionDigits:2})}<small> / {max.toLocaleString(undefined,{maximumFractionDigits:2})}</small></strong>
+                  <span>{section.section_name||(
+                    section.section_code==='GENERAL_STUDIES'?t('General Studies','सामान्य अध्ययन'):
+                    section.section_code==='COMPUTER_SCIENCE'?t('Computer Science','कंप्यूटर विज्ञान'):section.section_code
+                  )}</span>
+                  <small>{percent}% · {section.correct_count} {t('correct','सही')} · {section.incorrect_count} {t('incorrect','गलत')} · {section.unanswered_count} {t('unanswered','अनुत्तरित')}</small>
+                  {Number(section.penalty_marks)>0&&<small>{t('Penalty','नकारात्मक अंक')}: −{Number(section.penalty_marks).toLocaleString(undefined,{maximumFractionDigits:2})}</small>}
+                </article>;
+              })}
+            </div>
+            {Number(attempt.penalty_score)>0&&<p>{t('Total negative marking','कुल नकारात्मक अंक')}: −{Number(attempt.penalty_score).toLocaleString(undefined,{maximumFractionDigits:2})} ({Math.round(Number(attempt.negative_marking_fraction||0)*100)}% {t('of marks for each wrong scored answer','प्रत्येक गलत स्कोर वाले उत्तर के अंकों का')}).</p>}
+          </section>}
+          {released&&Array.isArray(attempt.qualifying_sections)&&attempt.qualifying_sections.length>0&&<section className={styles.resultDetails}>
+            <div className={styles.resultDetailsHeading}>
+              <h3>{t('Qualifying language section','अर्हकारी भाषा अनुभाग')}</h3>
+              <p>{t('Shown separately; these questions are not added to the General Studies + Computer Science score.','इसे अलग दिखाया गया है; इन प्रश्नों के अंक सामान्य अध्ययन + कंप्यूटर विज्ञान के कुल स्कोर में नहीं जोड़े जाते।')}</p>
+            </div>
+            <div className={styles.resultScoreGrid}>
+              {attempt.qualifying_sections.map(section=><article className={styles.resultMetric} key={section.section_code}>
+                <strong>{section.correct_count} / {section.question_count}</strong>
+                <span>{section.section_name||section.section_code}</span>
+                <small>{section.incorrect_count} {t('incorrect','गलत')} · {section.unanswered_count} {t('unanswered','अनुत्तरित')}</small>
+              </article>)}
+            </div>
+          </section>}
+          {released&&Array.isArray(attempt.practice_only_sections)&&attempt.practice_only_sections.length>0&&<section className={styles.resultDetails}>
+            <div className={styles.resultDetailsHeading}>
+              <h3>{t('Practice-only sections','केवल अभ्यास अनुभाग')}</h3>
+              <p>{t('These questions are tracked separately and do not affect the scored total.','इन प्रश्नों को अलग से ट्रैक किया जाता है और ये कुल स्कोर को प्रभावित नहीं करते।')}</p>
+            </div>
+            <div className={styles.resultScoreGrid}>
+              {attempt.practice_only_sections.map(section=><article className={styles.resultMetric} key={section.section_code}>
+                <strong>{section.correct_count} / {section.question_count}</strong>
+                <span>{section.section_name||section.section_code}</span>
+              </article>)}
+            </div>
+          </section>}
           {released&&(()=>{
             const cert=certificateEligibility[Number(attempt?.attempt_id)];
             const certificateId=Number(cert?.certificate_id||0);
