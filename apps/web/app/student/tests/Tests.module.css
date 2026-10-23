@@ -84,6 +84,13 @@
 .questionPanelTop>b{color:#79859a;letter-spacing:0;font-size:9px}
 .questionProgress{height:3px;background:#f1f3f7}.questionProgress i{display:block;height:100%;background:linear-gradient(90deg,#fb923c,#c2410c);transition:width .2s}
 .questionPanel>h2{font-size:16px;line-height:1.8;letter-spacing:-.2px;font-weight:750;color:#233148;margin:0;padding:22px 20px}
+.questionPromptText{white-space:pre-wrap;overflow-wrap:anywhere;font-size:16px;line-height:1.8;letter-spacing:-.2px;font-weight:750;color:var(--qe-text-primary,#233148);margin:0;padding:22px 20px}
+.questionPromptBody{display:grid;gap:0;min-width:0}
+.questionCodeBlock,.optionCodeBlock{display:block;max-width:100%;overflow-x:auto;white-space:pre;tab-size:4;font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;letter-spacing:0;font-weight:500;line-height:1.55;color:var(--qe-text-primary,#233148);background:var(--qe-surface-muted,#f5f7fa);border:1px solid var(--qe-border,#dfe5ed);border-radius:9px}
+.questionCodeBlock{margin:4px 20px 18px;padding:13px 15px;font-size:13px}
+.optionCodeBlock{margin:0;padding:9px 10px;font-size:12px}
+.questionPromptBody .questionPromptText{padding-top:8px;padding-bottom:10px;font-weight:600}
+
 .options{display:grid;gap:8px;padding:0 20px 21px}
 .option{display:grid;grid-template-columns:16px 30px minmax(0,1fr);align-items:center;gap:10px;padding:13px;border:1px solid #e5e9f0;border-radius:11px;background:#fff;color:#48556b;font-size:11px;line-height:1.6;cursor:pointer}
 .option:hover{border-color:#efc4a6;background:#fffaf6}.option input{accent-color:#c2410c;width:15px;height:15px;margin:0}
