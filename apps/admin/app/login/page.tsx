@@ -9,6 +9,7 @@ import { AdminWorkspaceContext, type AdminLocale } from '../components/AdminWork
 import { useUiTranslation } from '../i18n/useUiTranslation';
 import { UI_LOCALE_OPTIONS } from '../i18n/catalog';
 import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
+import { AdminAppearanceModeButton } from '../components/AdminThemeProvider';
 
 async function readApiJson(response: Response, t: (key: string, values?: Record<string, string | number>) => string): Promise<any> {
   const body = await response.text();
@@ -147,12 +148,15 @@ export default function AdminLogin() {
           <QuantaEdgeBrand href="/" variant="compact" className="qe-admin-login-brand-lockup" />
         </div>
         <div className="qe-login-card">
+          <div className="qe-admin-login-controls" aria-label={t('admin.language.choose')}>
+          <AdminAppearanceModeButton />
           <label className="qe-admin-language-switcher qe-admin-login-language-switcher">
-          <span aria-hidden="true">文</span>
-          <select value={workspace.locale} onChange={event => workspace.setLocale(event.target.value as AdminLocale)} aria-label={t('admin.language.choose')}>
-            {UI_LOCALE_OPTIONS.map(option => <option key={option.id} value={option.id}>{option.nativeLabel}</option>)}
-          </select>
-        </label>
+            <span aria-hidden="true">文</span>
+            <select value={workspace.locale} onChange={event => workspace.setLocale(event.target.value as AdminLocale)} aria-label={t('admin.language.choose')}>
+              {UI_LOCALE_OPTIONS.map(option => <option key={option.id} value={option.id}>{option.nativeLabel}</option>)}
+            </select>
+          </label>
+        </div>
         <div className="qe-login-card-top">
             <span className="qe-login-symbol">{step === 1 ? '↗' : firstAccess ? '✳' : '✓'}</span>
             <span className="qe-login-secure"><i /> {t('admin.login.secureStaffAccess')}</span>
