@@ -29,12 +29,12 @@
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
     "raw_analysis_result_rows": 2275,
-    "successful_visual_analyses": 2198,
+    "successful_visual_analyses": 2199,
     "missing_visual_analyses": 5213,
-    "failed_visual_analyses": 77,
+    "failed_visual_analyses": 76,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5290,
+    "unresolved_count": 5289,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -21530,7 +21530,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts\nor learning about diﬀ erent things in nature. Science, as we said\nin Grade 6, is a process, so it is about a way of thinking that\nwelcomes curiosity, asks questions, and is open to the unknown.\nIn Grade 7, we will try to ask deeper quest",
@@ -21540,10 +21540,9 @@
         "concepts": [
           "science",
           "curiosity",
-          "open-mindedness",
-          "exploration",
+          "questioning",
           "environment",
-          "society",
+          "responsibility",
           "science as a process",
           "environmental challenges",
           "sustainable world",
@@ -21552,13 +21551,13 @@
           "interconnectedness",
           "scientific ideas",
           "discoveries",
-          "questions",
-          "environmental challenges",
-          "sustainable world"
+          "asking questions"
         ],
-        "context_relation": "exploration and curiosity in science",
+        "context_relation": "exploration and questioning in science",
         "limitations": [
-          "The text does not provide specific examples or activities for Grade 7 students to engage with.",
+          "limited to Grade 7",
+          "focus on nature and environment",
+          "emphasis on responsibility and sustainability",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -24916,9 +24915,29 @@
       "asset_path": "page-0025.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the Earth and the Moon casting shadows during a solar eclipse.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
+          "In the chapters that follow, you'll also make simple observations and do fun experiments, and dive into topics that need careful thinking. Each chapter builds on what you already know and encourages you to ask questions, explore, do hands-on experiments, and think like a scientist! As you will find ",
+          "1.1 Happy Exploring!",
+          "Activity 1.1: Question the Answer"
+        ],
+        "concepts": [
+          "eclipse",
+          "Earth's rotation",
+          "Moon's orbit",
+          "day and night",
+          "scientific inquiry"
+        ],
+        "context_relation": "The text discusses the role of light and shadows in understanding the universe, specifically focusing on eclipses and the movements of the Earth, Moon, and Sun.",
+        "limitations": [
+          "The text does not provide specific details about the diagrams or experiments mentioned."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
