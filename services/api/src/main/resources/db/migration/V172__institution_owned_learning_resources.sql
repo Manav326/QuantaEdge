@@ -7,8 +7,7 @@ ALTER TABLE learning_resource
 -- Backfill only when every current non-archived curriculum attachment resolves to exactly one
 -- source institution. Ambiguous and unattached legacy records intentionally remain unowned.
 WITH attachment_sources AS (
-  SELECT a.resource_id, r.source_institution_id,
-         count(DISTINCT r.source_institution_id) OVER (PARTITION BY a.resource_id) AS source_count
+  SELECT DISTINCT a.resource_id, r.source_institution_id
   FROM learning_resource_assignment a
   JOIN curriculum_chapter ch ON ch.id=a.chapter_id
   JOIN curriculum_subject s ON s.id=ch.subject_id
@@ -16,10 +15,11 @@ WITH attachment_sources AS (
   JOIN institution_course_release r ON r.program_id=ps.program_id
   WHERE a.status<>'ARCHIVED'
 ), unambiguous AS (
-  SELECT resource_id,min(source_institution_id) AS owner_institution_id
+  SELECT resource_id,min(source_institution_id) AS owner_institution_id,
+         count(DISTINCT source_institution_id) AS source_count
   FROM attachment_sources
   GROUP BY resource_id
-  HAVING max(source_count)=1
+  HAVING count(DISTINCT source_institution_id)=1
 )
 UPDATE learning_resource r
 SET owner_institution_id=u.owner_institution_id
