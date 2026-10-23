@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5da2b1d50d8911fd284cbd5093437a26398ece685c363a62c66945035c212ff3",
+  "raw_analysis_sha256": "52d64d8eb582c46f61d34252d91c95c9006c5b09cde63c16a52302a7102f68ad",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864347432",
-      "checkpointed_at": "2026-10-22T23:55:34Z",
+      "checkpointed_at": "2026-10-23T00:07:04Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -29444,7 +29444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864347432",
-      "checkpointed_at": "2026-10-22T23:57:16Z",
+      "checkpointed_at": "2026-10-23T00:08:47Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -56724,7 +56724,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A table showing the number of handspans for different students.",
+        "visual_summary": "Table showing the number of handspans for different students.",
         "visual_type": "table",
         "visible_text": [
           "Table 5.1: Measuring the length of the table",
@@ -56735,7 +56735,7 @@
           "Deepa                Between 13 and 14",
           "Hardeep                       14",
           "Padma says, “Oh, the number of handspans is different for all of us. So, what can we say about the length of the table?”",
-          "“But why should the number be different?” Hardeep asked thoughtfully.",
+          "‘But why should the number be different?’ Hardeep asked thoughtfully.",
           "Tasneem says,  “I can guess. Our handspans are of different sizes.”",
           "Anish gives an idea, “Let us check this.”",
           "So, all five of them put their handspans along each other and arrive at the conclusion that the lengths of their handspans are different.",
@@ -56747,18 +56747,18 @@
           "Measurement of Length and Motion",
           "Handspans"
         ],
-        "context_relation": "The table and the text are discussing the measurement of length using handspans.",
+        "context_relation": "The table shows the number of handspans for different students, and the text discusses the concept of handspans and their use in measuring length.",
         "limitations": [
-          "The table does not provide the actual length of the table in handspans."
+          "The table does not provide the actual length of the table."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39803151021",
-      "checkpointed_at": "2026-10-22T21:13:36Z",
+      "run_id": "39864347432",
+      "checkpointed_at": "2026-10-23T00:12:01Z",
       "effective_analysis": {
-        "visual_summary": "A table showing the number of handspans for different students.",
+        "visual_summary": "Table showing the number of handspans for different students.",
         "visual_type": "table",
         "visible_text": [
           "Table 5.1: Measuring the length of the table",
@@ -56769,7 +56769,7 @@
           "Deepa                Between 13 and 14",
           "Hardeep                       14",
           "Padma says, “Oh, the number of handspans is different for all of us. So, what can we say about the length of the table?”",
-          "“But why should the number be different?” Hardeep asked thoughtfully.",
+          "‘But why should the number be different?’ Hardeep asked thoughtfully.",
           "Tasneem says,  “I can guess. Our handspans are of different sizes.”",
           "Anish gives an idea, “Let us check this.”",
           "So, all five of them put their handspans along each other and arrive at the conclusion that the lengths of their handspans are different.",
@@ -56781,9 +56781,9 @@
           "Measurement of Length and Motion",
           "Handspans"
         ],
-        "context_relation": "The table and the text are discussing the measurement of length using handspans.",
+        "context_relation": "The table shows the number of handspans for different students, and the text discusses the concept of handspans and their use in measuring length.",
         "limitations": [
-          "The table does not provide the actual length of the table in handspans."
+          "The table does not provide the actual length of the table."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -56864,7 +56864,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39803151021",
+      "run_id": "39864347432",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -57192,7 +57192,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39803151021",
+      "run_id": "39864347432",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
