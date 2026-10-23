@@ -8,7 +8,7 @@ import { ColorThemeProvider } from './components/ColorThemeProvider';
 
 export const metadata = {
   title: { default: 'QuantaEdge | Smarter Decisions. Greater Growth.', template: '%s | QuantaEdge' },
-  description: 'AI-powered learning for Hindi-medium students, starting with Bihar Board Classes 6–8. Smarter Decisions. Greater Growth.',
+  description: 'Quality learning for different ages, subjects and goals, with guided practice, topic-aware learning support and meaningful progress.',
   applicationName: 'QuantaEdge',
   icons: {
     icon: [
