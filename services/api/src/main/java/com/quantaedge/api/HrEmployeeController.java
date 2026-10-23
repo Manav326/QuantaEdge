@@ -216,7 +216,7 @@ public class HrEmployeeController {
     String normalizedQuery=q==null?"":q.trim();
     String term="%"+normalizedQuery.replace("%","\\%").replace("_","\\_")+"%";
     Object[] filters={includeInactive,normalizedQuery,term,term,term,term};
-    List<Map<String,Object>> items=jdbc.queryForList("""
+    String itemsSql = """
       select e.id,e.public_id,e.employee_number,e.display_name,e.email,e.phone_e164,
              e.joining_date,e.probation_end_date,e.employment_status,e.exit_date,e.employment_type_code,
              e.department_id,d.name as department_name,e.designation_id,g.name as designation_name,
@@ -228,17 +228,18 @@ public class HrEmployeeController {
       left join hr_employee m on m.id=e.manager_employee_id
       where (? or e.employment_status not in ('INACTIVE','SEPARATED'))
         and (?='' or e.display_name ilike ? or e.employee_number ilike ? or coalesce(d.name,'') ilike ? or coalesce(g.name,'') ilike ?)
-        and """+scope+"""
-      order by e.display_name,e.id
-      limit ? offset ?
-      """,reportingScope.withScopeArgs(context,filters,safeLimit,safeOffset));
-    Long total=jdbc.queryForObject("""
+      """ + "\n      and (" + scope + ")\n      order by e.display_name,e.id\n      limit ? offset ?";
+    List<Map<String,Object>> items=jdbc.queryForList(
+        itemsSql,reportingScope.withScopeArgs(context,filters,safeLimit,safeOffset));
+    String countSql = """
       select count(*) from hr_employee e
       left join hr_department d on d.id=e.department_id
       left join hr_designation g on g.id=e.designation_id
       where (? or e.employment_status not in ('INACTIVE','SEPARATED'))
         and (?='' or e.display_name ilike ? or e.employee_number ilike ? or coalesce(d.name,'') ilike ? or coalesce(g.name,'') ilike ?)
-        and """+scope,Long.class,reportingScope.withScopeArgs(context,filters));
+      """ + "\n      and (" + scope + ")";
+    Long total=jdbc.queryForObject(
+        countSql,Long.class,reportingScope.withScopeArgs(context,filters));
     return Map.of("items",items,"total",total==null?0L:total,"limit",safeLimit,"offset",safeOffset);
   }
 
