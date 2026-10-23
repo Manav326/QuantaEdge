@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f788a0ccde3351281a40cbdcd0105b7f5390e21f794b5e35c4447bdb85b2c603",
+  "raw_analysis_sha256": "75117c0e25e654cb07aef9d9731ac84939bfa29a705404e2674a8d83f23378e2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40031105894",
-      "checkpointed_at": "2026-10-23T23:32:21Z",
+      "checkpointed_at": "2026-10-23T23:45:23Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -29442,7 +29442,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40031105894",
-      "checkpointed_at": "2026-10-23T23:33:35Z",
+      "checkpointed_at": "2026-10-23T23:46:47Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -66762,7 +66762,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40031105894",
-      "checkpointed_at": "2026-10-23T23:34:19Z",
+      "checkpointed_at": "2026-10-23T23:47:36Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -68010,7 +68010,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39726988483",
+      "run_id": "40031105894",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -68466,21 +68466,57 @@
     {
       "asset_id": "5d9cb73835231c1ff26d542d",
       "asset_sha256": "2736f12fedd86ad89bc35af7a3f644b5c2e256668f8a37daa230378099ade11b",
-      "page_text_context_sha256": "53f43aa1584b8de5b1d749b0f82eb11380b3336194efb6a455e207fccd8ea2ba",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 137,
       "asset_path": "page-0137.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "53f43aa1584b8de5b1d749b0f82eb11380b3336194efb6a455e207fccd8ea2ba",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39726988483",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with instructions for a word game and a table with matching words.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "2. Win the 'Word-hub'\n\nThe following words from the chapter like lustrous,\nnon-lustrous, soluble, insoluble, hard, soft, matter, mass,\ntransparent, opaque, volume and translucent are picked up.\n\nGrid\n\nStudents should randomly choose nine words from the given\nlist and write them in the grid.\n\nThen, t",
+          "Let us enhance our learning\n\n1. Visit your kitchen and observe how your parents have\norganised various edibles. Can you suggest a better sorting\nmethod? Write it in your notebook.\n\n2. Unscramble the letters (Column I) and match with their\nproperties (Column II).\n\nColumn I\tColumn II\n(i) T R E M A T\t("
+        ],
+        "concepts": [
+          "Word game",
+          "Sorting",
+          "Properties of matter"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "No specific limitations provided",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40031105894",
+      "checkpointed_at": "2026-10-23T23:57:09Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with instructions for a word game and a table with matching words.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "2. Win the 'Word-hub'\n\nThe following words from the chapter like lustrous,\nnon-lustrous, soluble, insoluble, hard, soft, matter, mass,\ntransparent, opaque, volume and translucent are picked up.\n\nGrid\n\nStudents should randomly choose nine words from the given\nlist and write them in the grid.\n\nThen, t",
+          "Let us enhance our learning\n\n1. Visit your kitchen and observe how your parents have\norganised various edibles. Can you suggest a better sorting\nmethod? Write it in your notebook.\n\n2. Unscramble the letters (Column I) and match with their\nproperties (Column II).\n\nColumn I\tColumn II\n(i) T R E M A T\t("
+        ],
+        "concepts": [
+          "Word game",
+          "Sorting",
+          "Properties of matter"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "No specific limitations provided",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {

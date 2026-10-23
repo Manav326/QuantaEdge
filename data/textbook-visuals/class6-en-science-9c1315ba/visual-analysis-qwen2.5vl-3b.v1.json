@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1362,
+    "assets_selected": 1363,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
       "47bbaaf66932c5ee5e514c6c",
-      "9f51f614abe6354db658fd1d",
-      "b2acda80284007304d94e6e4"
+      "2cea301bf9b05b3d64207203",
+      "5d9cb73835231c1ff26d542d"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1358,
-    "assets_remaining": 720,
+    "assets_analyzed": 1359,
+    "assets_remaining": 719,
     "assets_completion_percent": 65.4,
-    "assets_failed": 15,
-    "assets_skipped_from_checkpoint": 1357,
+    "assets_failed": 14,
+    "assets_skipped_from_checkpoint": 1358,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -451,7 +451,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40031105894",
-      "checkpointed_at": "2026-10-23T23:32:21Z"
+      "checkpointed_at": "2026-10-23T23:45:23Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20129,7 +20129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40031105894",
-      "checkpointed_at": "2026-10-23T23:33:35Z"
+      "checkpointed_at": "2026-10-23T23:46:47Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -44039,7 +44039,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40031105894",
-      "checkpointed_at": "2026-10-23T23:34:19Z"
+      "checkpointed_at": "2026-10-23T23:47:36Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -44852,7 +44852,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39726988483",
+      "run_id": "40031105894",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -45147,19 +45147,38 @@
     {
       "asset_id": "5d9cb73835231c1ff26d542d",
       "asset_sha256": "2736f12fedd86ad89bc35af7a3f644b5c2e256668f8a37daa230378099ade11b",
-      "page_text_context_sha256": "53f43aa1584b8de5b1d749b0f82eb11380b3336194efb6a455e207fccd8ea2ba",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 137,
       "asset_path": "page-0137.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "53f43aa1584b8de5b1d749b0f82eb11380b3336194efb6a455e207fccd8ea2ba",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39726988483",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with instructions for a word game and a table with matching words.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "2. Win the 'Word-hub'\n\nThe following words from the chapter like lustrous,\nnon-lustrous, soluble, insoluble, hard, soft, matter, mass,\ntransparent, opaque, volume and translucent are picked up.\n\nGrid\n\nStudents should randomly choose nine words from the given\nlist and write them in the grid.\n\nThen, t",
+          "Let us enhance our learning\n\n1. Visit your kitchen and observe how your parents have\norganised various edibles. Can you suggest a better sorting\nmethod? Write it in your notebook.\n\n2. Unscramble the letters (Column I) and match with their\nproperties (Column II).\n\nColumn I\tColumn II\n(i) T R E M A T\t("
+        ],
+        "concepts": [
+          "Word game",
+          "Sorting",
+          "Properties of matter"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "No specific limitations provided",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40031105894",
+      "checkpointed_at": "2026-10-23T23:57:09Z"
     },
     {
       "asset_id": "8aa08950c686b9bd2f53456a",
