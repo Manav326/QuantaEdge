@@ -14,14 +14,14 @@
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
       "b90b1ccd2f380e4a35f9f791",
-      "071b9ffb6e11765d8d17e2bf",
-      "ac3ef67e4ced1dc1152e7b14"
+      "055ba61cf9184b7284850138",
+      "4fb4aaecec5e71a335b305a3"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1353,
-    "assets_remaining": 725,
-    "assets_completion_percent": 65.1,
-    "assets_failed": 17,
+    "assets_analyzed": 1354,
+    "assets_remaining": 724,
+    "assets_completion_percent": 65.2,
+    "assets_failed": 16,
     "assets_skipped_from_checkpoint": 1353,
     "batch_limit": 5,
     "publication_allowed": false
@@ -456,7 +456,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39909485860",
-      "checkpointed_at": "2026-10-23T07:13:24Z"
+      "checkpointed_at": "2026-10-23T07:22:59Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20135,7 +20135,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39909485860",
-      "checkpointed_at": "2026-10-23T07:14:28Z"
+      "checkpointed_at": "2026-10-23T07:24:04Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23794,7 +23794,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39909485860",
-      "checkpointed_at": "2026-10-23T07:15:23Z"
+      "checkpointed_at": "2026-10-23T07:24:59Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37889,18 +37889,19 @@
         ],
         "concepts": [
           "Measurement of Length and Motion",
-          "Handspans"
+          "Handspans",
+          "Length of the table"
         ],
-        "context_relation": "The table and the text are discussing the measurement of length using handspans.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
-          "The table does not provide the actual length of the table in handspans."
+          "The table does not provide the actual length of the table."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864347432",
-      "checkpointed_at": "2026-10-23T04:13:45Z"
+      "run_id": "39909485860",
+      "checkpointed_at": "2026-10-23T07:28:26Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -37945,19 +37946,53 @@
     {
       "asset_id": "4fb4aaecec5e71a335b305a3",
       "asset_sha256": "6740670a8aa904ebd4040a6f41a9dff247bdb7015e8c438c7f79086bc45f749f",
-      "page_text_context_sha256": "ce5d5ad84e25afd35c4524211693d2f4d233c6bd566dcbcc44934337c330ef95",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 100,
       "asset_path": "assets/6740670a8aa904ebd4040a6f41a9dff247bdb7015e8c438c7f79086bc45f749f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ce5d5ad84e25afd35c4524211693d2f4d233c6bd566dcbcc44934337c330ef95",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864347432",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Text discussing the history of measurement systems in India, mentioning units like angula, dhanusa, and yojana.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "India has a rich history of measurement",
+          "systems dating back to ancient times. Angula",
+          "(finger width), multiples of angula, dhanusa,",
+          "and yojana are some of the units mentioned",
+          "in ancient Indian literature, and used in",
+          "measuring artefacts, architecture, and",
+          "town planning. The angula is still used by",
+          "traditional craftspeople like carpenters",
+          "and tailors. Several objects with ruled",
+          "markings which could be scales have be"
+        ],
+        "concepts": [
+          "measurement systems",
+          "ancient Indian literature",
+          "units of measurement",
+          "traditional craftspeople",
+          "measuring artefacts",
+          "architecture",
+          "town planning",
+          "angula",
+          "dhanusa",
+          "yojana"
+        ],
+        "context_relation": "Historical context",
+        "limitations": [
+          "No visual elements present",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39909485860",
+      "checkpointed_at": "2026-10-23T07:29:53Z"
     },
     {
       "asset_id": "4f9b956834eea8d2c3c21a9e",
