@@ -151,7 +151,7 @@ public class CourseMarketplaceLaunchController {
     List<String> courseReadinessCodes=List.of(
         "INSTITUTION_ACTIVE","COURSE_ACTIVE","CONTENT_QUALITY_REVIEW",
         "ORIGIN_RELEASE_APPROVAL","ASSIGNMENT_AND_RELEASE",
-        "CONTENT_REVIEW_CURRENT","PUBLISHED_LEARNING_CONTENT");
+        "CONTENT_REVIEW_CURRENT","PUBLISHED_LEARNING_CONTENT","SOURCE_RIGHTS_CLEARANCE");
     for(Map<String,Object> check:checks) {
       if(courseReadinessCodes.contains(text(check.get("code")))
           && !Boolean.TRUE.equals(check.get("passed"))) {

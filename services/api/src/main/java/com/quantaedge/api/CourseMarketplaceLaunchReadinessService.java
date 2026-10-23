@@ -116,6 +116,8 @@ public class CourseMarketplaceLaunchReadinessService {
     boolean contentUnchanged=!savedFingerprint.isBlank()&&savedFingerprint.equals(contentFingerprint(courseId));
     add(checks,"CONTENT_REVIEW_CURRENT","Reviewed course content is current",contentUnchanged,
         "The course content has changed since quality review or has no reviewed fingerprint. Resubmit the release for platform quality review.");
+    addPackageRightsCheck(checks,courseId);
+    addPackageRightsCheck(checks,courseId);
     long subjectCount=number(row.get("subject_count"));
     long subjectsWithLessons=number(row.get("subjects_with_published_lessons"));
     long chapterCount=number(row.get("published_chapter_count"));
@@ -604,6 +606,31 @@ public class CourseMarketplaceLaunchReadinessService {
   private static long percentageOf(long amountPaise,int basisPoints) {
     return BigDecimal.valueOf(amountPaise).multiply(BigDecimal.valueOf(basisPoints))
         .divide(BASIS_POINTS,0,RoundingMode.HALF_UP).longValueExact();
+  }
+
+  /**
+   * If a course originated from the nested Course Studio package importer, HRMS must verify its
+   * source-rights status before Marketplace distribution. Legacy courses without an import ledger
+   * retain the existing review path; an imported package with missing rights is not cleared.
+   */
+  private void addPackageRightsCheck(List<Map<String,Object>> checks,long courseId) {
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select package_id,package_version,
+        coalesce(editorial_metadata->>'source_rights_status','UNCONFIRMED') as source_rights_status
+      from institution_course_package_import
+      where course_id=? and state='IMPORTED'
+      order by imported_at desc,id desc
+      limit 1
+      """,courseId);
+    if(rows.isEmpty())return;
+    Map<String,Object> row=rows.getFirst();
+    String status=text(row.get("source_rights_status"));
+    boolean cleared=List.of("CLEARED_FOR_INTERNAL_USE","CLEARED_FOR_PUBLIC_REPOSITORY").contains(status);
+    add(checks,"SOURCE_RIGHTS_CLEARANCE","Course package distribution rights are cleared",cleared,
+        cleared?"The imported package records an approved internal-use or public-repository rights state."
+            :"Package "+text(row.get("package_id"))+" version "+text(row.get("package_version"))
+                +" has rights state "+(status.isBlank()?"UNCONFIRMED":status)
+                +". HRMS must record CLEARED_FOR_INTERNAL_USE or CLEARED_FOR_PUBLIC_REPOSITORY before Marketplace distribution.");
   }
 
   private static void add(List<Map<String,Object>> checks,String code,String label,boolean passed,String message) {
