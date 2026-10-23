@@ -73,7 +73,7 @@ PAPERS = {
     "TRE 3.0": {
         "match": ("tre3.0", "tre-3", "tre3"),
         "expected": {"GENERAL_STUDIES": (31, 70), "COMPUTER_SCIENCE": (71, 150)},
-        # The provided TRE 3.0 booklet contains 148 items: 40 GS + 80 CS + 28 language.
+        # Preserve the 150 items: 40 GS + 80 CS + 30 qualifying-language questions.
         "total_questions": 150,
         "duration_minutes": 150,
         "negative_marking_fraction": 0.0,
