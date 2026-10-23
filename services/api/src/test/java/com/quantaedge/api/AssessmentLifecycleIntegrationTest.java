@@ -281,12 +281,27 @@ class AssessmentLifecycleIntegrationTest {
       insert into assessment_question(assessment_id,source_question_id,sequence_no,max_marks,question_snapshot)
       values(?,null,1,1,?::jsonb)
       """, assessmentId, snapshot);
+    // Use explicit reviewer and source-owner identities: SHAREABLE releases must carry
+    // both quality-review and source-origin approval evidence under the production constraints.
+    Long reviewerStaffId = jdbc.queryForObject("""
+      insert into staff_account(public_id,mobile_e164,display_name,role,active)
+      values(gen_random_uuid(),null,'Assessment lifecycle CI reviewer','ADMIN',true)
+      returning id
+      """, Long.class);
+    Long sourceAdminId = jdbc.queryForObject("""
+      insert into institution_admin_account(institution_id,username,display_name,password_hash,active)
+      values(?,?,?,'ci-test-password-hash',true)
+      returning id
+      """, Long.class, institutionId, "assessment_" + suffix, "Assessment lifecycle CI publisher");
     // Finish the graph before release: released course content is immutable in place.
     Long releaseId = jdbc.queryForObject("""
       insert into institution_course_release(
-        source_institution_id,program_id,release_version,release_state,content_fingerprint)
-      values(?,?,1,'SHAREABLE',course_content_fingerprint(?)) returning id
-      """, Long.class, institutionId, courseId, courseId);
+        source_institution_id,program_id,release_version,release_state,content_fingerprint,
+        quality_reviewed_by_staff_id,quality_reviewed_at,quality_review_notes,
+        origin_approved_by_admin_id,origin_approved_at,shareable_at)
+      values(?,?,1,'SHAREABLE',course_content_fingerprint(?),?,now(),
+        'Synthetic CI assessment content review',?,now(),now()) returning id
+      """, Long.class, institutionId, courseId, courseId, reviewerStaffId, sourceAdminId);
     jdbc.update("""
       insert into institution_course_assignment(institution_id,course_release_id,status,assignment_source)
       values(?,?,'ASSIGNED','HRMS')
