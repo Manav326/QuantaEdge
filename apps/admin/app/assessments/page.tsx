@@ -92,6 +92,15 @@ export default function AssessmentsPage(){
   const [busy,setBusy]=useState(false);
   const [error,setError]=useState('');
   const [notice,setNotice]=useState('');
+  const [packageJsonText,setPackageJsonText]=useState('');
+  const [packageObject,setPackageObject]=useState<any|null>(null);
+  const [packageFileName,setPackageFileName]=useState('');
+  const [packagePreview,setPackagePreview]=useState<any|null>(null);
+  const [packageBusy,setPackageBusy]=useState(false);
+  const [importedReviewId,setImportedReviewId]=useState<number|null>(null);
+  const [importedReviewItems,setImportedReviewItems]=useState<Array<{sequenceNo:number;maxMarks:number|string;question:any}>>([]);
+  const [importedAnswerEdits,setImportedAnswerEdits]=useState<Record<number,string>>({});
+  const [importedExplanationEdits,setImportedExplanationEdits]=useState<Record<number,string>>({});
 
   const eligibleStaff=staff.filter(s=>s.can_grade);
   const filteredBank=bank;
@@ -119,7 +128,8 @@ export default function AssessmentsPage(){
       const nextSubjects=[...subjectMap.values()];setSubjectOptions(nextSubjects);
       setChapters([...chapterMap.values()]);
       setChapterId(current=>current&&chapterMap.has(Number(current))?current:'');
-      if(nextSubjects.length&&!nextSubjects.some(item=>item.code===subjectCode))setSubjectCode(nextSubjects[0].code);
+      if(nextSubjects.length===0)setSubjectCode('');
+       if(nextSubjects.length&&!nextSubjects.some(item=>item.code===subjectCode))setSubjectCode(nextSubjects[0].code);
     }catch(e){setError(e instanceof Error?e.message:tRef.current('admin.assessments.loadFailed'));}
     finally{setLoading(false);}
   },[classCode,subjectCode,courseId,courses.length,statusFilter,assessmentPage,assessmentPageSize]);
@@ -156,6 +166,114 @@ export default function AssessmentsPage(){
   useEffect(()=>{if(activeCourse?.curriculum_class_code)setClassCode(String(activeCourse.curriculum_class_code));else setClassCode('');},[activeCourse]);
   useEffect(()=>{void loadAssessments();},[loadAssessments]);
   useEffect(()=>{if(activeTab==='review')void loadQueue();},[activeTab,loadQueue]);
+
+  async function readPackageFile(file?:File|null) {
+    if(!file)return;
+    setError('');setNotice('');setPackagePreview(null);setPackageObject(null);
+    if(file.size>5_000_000) {
+      setError('JSON package is larger than 5 MB. Keep media files separate and reference them as resources.');
+      return;
+    }
+    try {
+      const text=await file.text();
+      const parsed=JSON.parse(text);
+      if(!parsed||typeof parsed!=='object'||Array.isArray(parsed))throw new Error('The JSON root must be an object.');
+      setPackageJsonText(JSON.stringify(parsed,null,2));
+      setPackageObject(parsed);
+      setPackageFileName(file.name);
+      setNotice('JSON loaded locally. Validate it against the selected source course before importing.');
+    } catch(e) {
+      setPackageJsonText('');
+      setPackageObject(null);
+      setPackageFileName(file.name);
+      setError(e instanceof Error?'Invalid JSON: '+e.message:'The selected file is not valid JSON.');
+    }
+  }
+  function parsePackageDraft() {
+    try {
+      const parsed=JSON.parse(packageJsonText);
+      if(!parsed||typeof parsed!=='object'||Array.isArray(parsed))throw new Error('The JSON root must be an object.');
+      setPackageObject(parsed);
+      return parsed;
+    } catch(e) {
+      setError(e instanceof Error?'Invalid JSON: '+e.message:'The package JSON could not be parsed.');
+      setPackageObject(null);setPackagePreview(null);
+      return null;
+    }
+  }
+  async function validatePackageDraft() {
+    if(!courseId){setError('Choose a course before validating an assessment package.');return;}
+    const pkg=parsePackageDraft();if(!pkg)return;
+    setPackageBusy(true);setError('');setNotice('');setPackagePreview(null);
+    try {
+      const target:any={courseId:Number(courseId),package:pkg};
+      if(subjectOptions.some(item=>item.code===subjectCode))target.subjectCode=subjectCode;
+      if(chapterId)target.chapterId=Number(chapterId);
+      const preview=await api('/api/v1/admin/assessments/validate-package',{method:'POST',body:JSON.stringify(target)});
+      setPackagePreview(preview);
+      if(preview.valid)setNotice('Validation passed. Import creates a versioned draft pack and will not publish anything.');
+      else setError('Package validation found '+preview.issues.length+' issue(s). Correct the JSON paths below, then validate again.');
+    } catch(e) {
+      setError(e instanceof Error?e.message:'The assessment package could not be validated.');
+    } finally {setPackageBusy(false);}
+  }
+  async function loadImportedPackageQuestions(assessmentId:number) {
+    if(!courseId)return;
+    const data=await api('/api/v1/admin/assessments/'+assessmentId+'/package-questions?courseId='+encodeURIComponent(courseId));
+    const items=Array.isArray(data?.items)?data.items:[];
+    setImportedReviewId(assessmentId);setImportedReviewItems(items);
+    const answerValues:Record<number,string>={},explanationValues:Record<number,string>={};
+    items.forEach((item:any)=>{
+      const sequence=Number(item.sequenceNo);
+      answerValues[sequence]=JSON.stringify(item.question?.answer_payload||{kind:'UNRESOLVED',value:''},null,2);
+      explanationValues[sequence]=String(item.question?.explanation||'');
+    });
+    setImportedAnswerEdits(answerValues);setImportedExplanationEdits(explanationValues);
+  }
+  async function importPackageDraft() {
+    if(!courseId){setError('Choose a source course before importing.');return;}
+    const pkg=packageObject||parsePackageDraft();if(!pkg)return;
+    if(!packagePreview?.valid){setError('Validate this exact JSON package and source-course binding before importing.');return;}
+    setPackageBusy(true);setError('');setNotice('');
+    try {
+      const target:any={courseId:Number(courseId),package:pkg};
+      if(subjectOptions.some(item=>item.code===subjectCode))target.subjectCode=subjectCode;
+      if(chapterId)target.chapterId=Number(chapterId);
+      const result=await api('/api/v1/admin/assessments/import-package',{method:'POST',body:JSON.stringify(target)});
+      const importedId=Number(result?.assessment_id||result?.assessmentId||0);
+      if(!importedId)throw new Error('The server did not return the imported assessment ID.');
+      setNotice((result?.idempotent?'This identical package version was already imported.':'Imported '+Number(result?.question_count||result?.questionCount||0)+' questions.')+
+        ' The test remains a draft; answer keys and explanations require review before publication.');
+      setPackagePreview(null);
+      await loadAssessments();
+      await loadImportedPackageQuestions(importedId);
+    } catch(e) {
+      setError(e instanceof Error?e.message:'The assessment package could not be imported.');
+    } finally {setPackageBusy(false);}
+  }
+  async function saveImportedQuestionReview(sequenceNo:number,reviewStatus:'APPROVED'|'REJECTED'|'PENDING_HUMAN_REVIEW') {
+    if(!courseId||!importedReviewId)return;
+    let answerPayload:any;
+    try {
+      answerPayload=JSON.parse(importedAnswerEdits[sequenceNo]||'{}');
+      if(!answerPayload||typeof answerPayload!=='object'||Array.isArray(answerPayload))throw new Error('Answer payload must be a JSON object.');
+    } catch(e) {
+      setError(e instanceof Error?'Question '+sequenceNo+': '+e.message:'Answer payload JSON is invalid.');
+      return;
+    }
+    setPackageBusy(true);setError('');setNotice('');
+    try {
+      const payload={reviewStatus,answerPayload,explanation:importedExplanationEdits[sequenceNo]||''};
+      const result=await api('/api/v1/admin/assessments/'+importedReviewId+'/package-questions/'+sequenceNo+'/review?courseId='+encodeURIComponent(courseId),{
+        method:'PATCH',body:JSON.stringify(payload)
+      });
+      setNotice('Question '+sequenceNo+' marked '+reviewStatus+'. '+result.approvedQuestionCount+' of '+result.questionCount+' questions approved.');
+      await loadImportedPackageQuestions(importedReviewId);
+      await loadAssessments();
+    } catch(e) {
+      setError(e instanceof Error?e.message:'Question review could not be saved.');
+    } finally {setPackageBusy(false);}
+  }
 
   function toggleQuestion(id:number,checked:boolean){setSelectedQuestionIds(ids=>checked?[...ids,id]:ids.filter(x=>x!==id));}
   async function createAssessment(){
@@ -263,6 +381,60 @@ export default function AssessmentsPage(){
       <div className={styles.tabs} role="group" aria-label={t('admin.assessments.workspaceSections')}><button type="button" aria-pressed={activeTab==='author'} className={activeTab==='author'?styles.activeTab:''} onClick={()=>setActiveTab('author')}>{t('admin.assessments.buildPublishTests')}</button><button type="button" aria-pressed={activeTab==='review'} className={activeTab==='review'?styles.activeTab:''} onClick={()=>setActiveTab('review')}>{t('admin.assessments.teacherReviewQueueTab')} <span>{queue.filter(row=>row.status==='AWAITING_REVIEW').length}</span></button></div>
 
       {activeTab==='author'?<>
+        <section className={styles.panel}>
+          <div className={styles.panelHeading}><div><span>PORTABLE AUTHORING</span><h2>Import test questions from JSON</h2><p>Load a structured test package, validate the selected source course, preview every issue, and import atomically as a draft. Publishing remains a separate review action.</p></div><b>JSON</b></div>
+          <div className={styles.fields}>
+            <label className={styles.wide}>JSON file (maximum 5 MB)
+              <input type="file" accept=".json,application/json" onChange={event=>void readPackageFile(event.currentTarget.files?.[0]||null)}/>
+            </label>
+            {packageFileName?<p className={styles.helpNote}>Loaded file: {packageFileName}</p>:null}
+            <label className={styles.wide}>Portable assessment JSON
+              <textarea rows={12} spellCheck={false} value={packageJsonText} onChange={event=>{setPackageJsonText(event.target.value);setPackageObject(null);setPackagePreview(null);}} placeholder='Paste a quantaedge.portable-assessment-package.v1 object here…'/>
+            </label>
+          </div>
+          <div className={styles.submitBar}>
+            <p>{courseId?'Bound to selected course: '+(activeCourse?.display_name||courseId)+'. JSON cannot override the tenant or course identity.':'Select a course above before validating or importing.'}</p>
+            <button type="button" className={styles.secondaryButton} disabled={packageBusy||!courseId||!packageJsonText.trim()} onClick={()=>void validatePackageDraft()}>{packageBusy?'Validating…':'Validate & preview'}</button>
+            <button type="button" className={styles.primaryButton} disabled={packageBusy||!courseId||!packagePreview?.valid} onClick={()=>void importPackageDraft()}>{packageBusy?'Importing…':'Import draft test'}</button>
+          </div>
+          {packagePreview&&<div className={styles.bank}>
+            <div className={styles.bankHeader}><div><b>{packagePreview.valid?'Preview is valid':'Preview needs corrections'}</b><small>{packagePreview.title} · {packagePreview.questionCount} questions · {packagePreview.sectionCount} sections</small></div><span className={styles.statusDRAFT}>{packagePreview.valid?'DRAFT ONLY':'FIX ISSUES'}</span></div>
+            <div className={styles.resultStats}>
+              <div><small>Assessment type</small><b>{packagePreview.assessmentType||'—'}</b></div>
+              <div><small>Duration</small><b>{packagePreview.durationMinutes} minutes</b></div>
+              <div><small>Attempts</small><b>{packagePreview.maxAttempts}</b></div>
+            </div>
+            {Array.isArray(packagePreview.issues)&&packagePreview.issues.length>0
+              ?<ol className={styles.helpNote}>{packagePreview.issues.map((issue:string,index:number)=><li key={index}>{issue}</li>)}</ol>
+              :<p className={styles.helpNote}>Structural checks passed. The server allocates database IDs and saves immutable question snapshots. Answers remain under human review.</p>}
+          </div>}
+          {importedReviewId&&<div className={styles.bank}>
+            <div className={styles.panelHeading}><div><span>IMPORTED DRAFT #{importedReviewId}</span><h3>Review questions and answer keys</h3><p>Check each answer and explanation. The test cannot publish while questions remain unresolved or unapproved.</p></div><button type="button" className={styles.secondaryButton} disabled={packageBusy} onClick={()=>void loadImportedPackageQuestions(importedReviewId)}>Refresh</button></div>
+            <p className={styles.helpNote}>{importedReviewItems.filter(item=>item.question?.question_review_status==='APPROVED').length} of {importedReviewItems.length} approved. Keep this test in Draft until every question has been reviewed.</p>
+            <div className={styles.testList}>{importedReviewItems.map(item=>{
+              const seq=Number(item.sequenceNo),question=item.question||{},options=Array.isArray(question.options)?question.options:[];
+              return <article className={styles.testCard} key={seq}>
+                <div className={styles.testBody}>
+                  <div className={styles.testTitle}><h4>Question {seq}</h4><span className={styles.statusDRAFT}>{String(question.question_review_status||'PENDING_HUMAN_REVIEW')}</span></div>
+                  <p>{String(question.prompt||'Prompt not supplied')}</p>
+                  {question.prompt_i18n&&<details><summary>Localized prompt</summary><pre>{JSON.stringify(question.prompt_i18n,null,2)}</pre></details>}
+                  {options.length>0&&<ul className={styles.helpNote}>{options.map((option:any,index:number)=><li key={String(option.key||option.option_key||index)}>{String(option.key||option.option_key||'?')}. {String(option.label||option.text||'')}</li>)}</ul>}
+                  <label className={styles.wide}>Answer payload JSON
+                    <textarea rows={3} spellCheck={false} value={importedAnswerEdits[seq]??JSON.stringify(question.answer_payload||{kind:'UNRESOLVED',value:''},null,2)} onChange={event=>setImportedAnswerEdits(current=>({...current,[seq]:event.target.value}))} placeholder='{"kind":"OPTION","value":"B"} or {"kind":"NUMERIC","value":12,"tolerance":0.1}'/>
+                  </label>
+                  <label className={styles.wide}>Explanation
+                    <textarea rows={3} value={importedExplanationEdits[seq]??String(question.explanation||'')} onChange={event=>setImportedExplanationEdits(current=>({...current,[seq]:event.target.value}))} placeholder="Explain why this answer is correct."/>
+                  </label>
+                  <div className={styles.testActions}>
+                    <button type="button" className={styles.secondaryButton} disabled={packageBusy} onClick={()=>void saveImportedQuestionReview(seq,'PENDING_HUMAN_REVIEW')}>Save changes</button>
+                    <button type="button" className={styles.secondaryButton} disabled={packageBusy} onClick={()=>void saveImportedQuestionReview(seq,'REJECTED')}>Reject question</button>
+                    <button type="button" className={styles.primaryButton} disabled={packageBusy} onClick={()=>void saveImportedQuestionReview(seq,'APPROVED')}>Approve answer</button>
+                  </div>
+                </div>
+              </article>;
+            })}</div>
+          </div>}
+        </section>
         <section className={styles.panel}>
           <div className={styles.panelHeading}><div><span>{t('admin.assessments.step01')}</span><h2>{t('admin.assessments.chooseCurriculum')}</h2><p>{t('admin.assessments.chooseCurriculumDescription')}</p></div><b>01</b></div>
           <div className={styles.fields}>
