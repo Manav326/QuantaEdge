@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "51bee810e3a8e25296f136baec756afd4efd560cac6fcedbe2a6a7135e54ec8b",
+  "raw_analysis_sha256": "43bb7eab3860263711f839b20e7a41c1b1d19bc4541db5975a85fb0a1ff516ae",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864347432",
-      "checkpointed_at": "2026-10-23T03:04:20Z",
+      "checkpointed_at": "2026-10-23T03:10:57Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -29444,7 +29444,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864347432",
-      "checkpointed_at": "2026-10-23T03:06:04Z",
+      "checkpointed_at": "2026-10-23T03:12:42Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -56756,7 +56756,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864347432",
-      "checkpointed_at": "2026-10-23T03:07:16Z",
+      "checkpointed_at": "2026-10-23T03:13:54Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66260,7 +66260,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864347432",
-      "checkpointed_at": "2026-10-23T03:08:21Z",
+      "checkpointed_at": "2026-10-23T03:14:59Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "page_with_multiple_visuals",
@@ -67263,7 +67263,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864347432",
-      "checkpointed_at": "2026-10-23T03:09:17Z",
+      "checkpointed_at": "2026-10-23T03:15:55Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the properties of materials and their classification.",
         "visual_type": "page_with_multiple_visuals",
