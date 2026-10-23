@@ -252,6 +252,7 @@ public class AssessmentController {
       throw badRequest("Select an institution-assigned course before creating an assessment.");
     }
     requireAssignedCourse(courseId, tenant);
+    requireEditableCourse(courseId,tenant);
     int duration = integer(body.getOrDefault("durationMinutes", 45), "Duration", 1, 240);
     int maxAttempts = integer(body.getOrDefault("maxAttempts", 1), "Attempt limit", 1, 10);
     BigDecimal negativeMarkingFraction = decimal(body.getOrDefault("negativeMarkingFraction", "0"), "Negative-marking fraction");
@@ -358,6 +359,7 @@ public class AssessmentController {
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context = authorization.requireAuth(context);
     requireAssessmentInCourse(assessmentId,courseId,tenant);
+    requireEditableCourse(courseId,tenant);
     String next = requiredText(body.get("status"), "Status", 20).toUpperCase(Locale.ROOT);
     if (!Set.of("DRAFT", "PUBLISHED", "ARCHIVED").contains(next)) throw badRequest("Choose DRAFT, PUBLISHED, or ARCHIVED.");
     if ("PUBLISHED".equals(next) || "ARCHIVED".equals(next)) authorization.requirePermission(context, "CONTENT_PUBLISH");
@@ -432,6 +434,7 @@ public class AssessmentController {
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=authorization.requireAuth(context);
     requireAssessmentInCourse(assessmentId,courseId,tenant);
+    requireEditableCourse(courseId,tenant);
     authorization.requirePermission(context,"CONTENT_EDIT");
     Object raw=body.get("offlineEnabled");
     if(!(raw instanceof Boolean enabled)) throw badRequest("offlineEnabled must be true or false.");
@@ -468,6 +471,7 @@ public class AssessmentController {
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context = authorization.requirePermission(context, "CONTENT_EDIT");
     requireAssessmentInCourse(assessmentId,courseId,tenant);
+    requireEditableCourse(courseId,tenant);
     long staffId = longValue(body.get("staffId"), "Staff ID");
     Long valid = jdbc.queryForObject("""
       select count(*) from staff_account s
@@ -2022,6 +2026,29 @@ public class AssessmentController {
     String normalized=language==null?"hi":language.trim().toLowerCase(Locale.ROOT);
     if("hi".equals(normalized)||"en".equals(normalized))return normalized;
     throw badRequest("Language must be 'hi' or 'en'.");
+  }
+
+  /**
+   * Assessment definitions are course content. A tenant may view assigned shared assessments,
+   * but only the institution that originated an active release may create or edit their content.
+   */
+  private void requireEditableCourse(Long courseId,InstitutionTenantContext tenant) {
+    if(courseId==null||courseId<1L)throw badRequest("Select an active course.");
+    if(tenant==null||tenant.institutionId()<1L)throw new ResponseStatusException(
+        HttpStatus.FORBIDDEN,"An active institution context is required.");
+    Boolean sourceOwned=jdbc.queryForObject("""
+      select exists(
+        select 1 from institution_course_release release
+        join institution_course_assignment assignment
+          on assignment.course_release_id=release.id
+         and assignment.institution_id=? and assignment.status='ASSIGNED'
+        where release.program_id=?
+          and release.source_institution_id=assignment.institution_id
+      )
+      """,Boolean.class,tenant.institutionId(),courseId);
+    if(!Boolean.TRUE.equals(sourceOwned))throw new ResponseStatusException(
+        HttpStatus.FORBIDDEN,
+        "Only the source institution may edit this assessment. Shared assessments are read-only here.");
   }
 
   private void requireAssignedCourse(Long courseId, InstitutionTenantContext tenant) {
