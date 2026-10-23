@@ -276,6 +276,13 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("assets_processed_ids", analyzer)
         self.assertIn("repeated prior successful asset IDs without increasing analyzed/failed counts", pipeline)
 
+    def test_layer45_cancel_only_marker_skips_work_and_class_resume_markers_cancel_stale_runs(self):
+        workflow = read("textbook-visual-candidates-v3.yml")
+        self.assertIn("[cancel-layer45-matrix]", workflow)
+        self.assertIn("github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]'", workflow)
+        self.assertIn("github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]'", workflow)
+        self.assertIn("&& !(github.event_name == 'push' && contains(github.event.head_commit.message || '', '[cancel-layer45-matrix]'))", workflow)
+
 
 if __name__ == "__main__":
     unittest.main()

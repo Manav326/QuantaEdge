@@ -10,7 +10,7 @@ All generated pipeline data and savepoints belong under `data/`. Application cod
 
 The joint recovery push marker `[resume-visual-layers-4-5-classes-6-8]` starts all three class jobs in parallel and uses `resume_layers_4_5`, the existing `qwen2.5vl:3b` Layer 4 checkpoint identity, and five-asset durable savepoints.
 
-The separate `Resume Class 6–8 Layer 4–5 checkpoints` coordinator checks every 15 minutes. It will dispatch a resume for each class that lacks a durable completion marker only when no Layer 4–5 workflow is queued or running. This covers the finite GitHub-hosted job duration: after a runner is cancelled by the time limit, the coordinator dispatches the remaining classes from their saved checkpoints rather than rebuilding candidate packs.
+The separate `Resume Class 6–8 Layer 4–5 checkpoints` coordinator checks every five minutes. It dispatches a resume for each class that lacks a durable completion marker only when no Layer 4–5 workflow is queued or running. This covers the finite GitHub-hosted job duration: after a runner is cancelled by the time limit, the coordinator dispatches the remaining classes from their saved checkpoints rather than rebuilding candidate packs.
 
 A class completion marker is written only after every selected whole-book Layer 5 ledger in that class reports `COMPLETE`. The coordinator turns off the active state once all three markers exist. This automation does **not** weaken the Layer 5 gate, turn `INCOMPLETE` into `COMPLETE`, or bypass source/PDF/hash checks; unverified checkpoints still require diagnosis rather than blind re-analysis. The continuation control and completion markers remain under `data/`.
 
@@ -126,3 +126,10 @@ The per-class continuation markers are generated from the fixed class set `(6, 7
 ### Class 6 checkpoint restore fix (18 October 2026)
 
 The Class 6 resume run exposed a format mismatch in the Layer 1 inventory restore step: current preparation bundles store files under a book-specific `slug-layer1/` directory and include `layer1-bundle-manifest.v1.json`, while the consumer assumed `inventory/` at archive root. The restore step now accepts the two known layouts, uses the canonical path-safe extractor for wrapped archives, checks the immutable GHCR tag against the embedded preparation fingerprint, validates the embedded per-file manifest against the current source manifest and page JSONL, and restores only verified inventory files. Unknown/mixed layouts, source/context mismatches, path traversal, or file-hash mismatches still fail safely.
+
+
+## Bounded Layer 4–5 runs and emergency recovery
+
+Each candidate-worker invocation processes at most 20 five-asset analyzer batches before it safely yields. The final processed batch and Layer 5 ledger are committed before the yield; the successful yield is not recorded as class completion. The workflow-run coordinator continues from those checkpoints. The analyzer now normalizes legacy per-asset source metadata to the verified whole-book identity, and a no-progress guard stops a worker if it analyzes the same previously successful asset IDs without increasing the durable analyzed/failed counts.
+
+When a stale all-class push run must be stopped before single-class recovery, pair the joint resume marker `[resume-visual-layers-4-5-classes-6-8]` with `[cancel-layer45-matrix]` in a commit that changes a file covered by the candidate workflow's push paths. That run is intentionally skipped after it replaces the in-flight all-class run. Then use a separate class marker for each class that needs to resume: `[resume-visual-layers-4-5-class-6]`, `[resume-visual-layers-4-5-class-7]`, or `[resume-visual-layers-4-5-class-8]`. These single-class push markers replace older in-flight runners for that same class. All paths still use existing source-bound Git/GHCR checkpoints; no checkpoint is discarded or rebuilt merely to resume.
