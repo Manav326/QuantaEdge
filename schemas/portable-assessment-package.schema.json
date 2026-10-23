@@ -331,6 +331,36 @@
                     }
                   },
                   "additionalProperties": false
+                },
+                "content_kind": {
+                  "enum": [
+                    "PROSE",
+                    "CODE",
+                    "MATHEMATICAL",
+                    "MIXED"
+                  ]
+                },
+                "code_line_indices": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "maxItems": 100
+                },
+                "math_line_indices": {
+                  "type": "array",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "maxItems": 100
+                },
+                "source_code_preservation_notes": {
+                  "type": "string",
+                  "maxLength": 600
                 }
               }
             }
@@ -500,6 +530,36 @@
               "PRACTICE_ONLY"
             ],
             "description": "A qualifying-only section is reported separately and excluded from the aggregate GS + subject score."
+          },
+          "prompt_content_kind": {
+            "enum": [
+              "PROSE",
+              "CODE",
+              "MATHEMATICAL",
+              "MIXED"
+            ]
+          },
+          "code_line_indices": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "maxItems": 200
+          },
+          "math_line_indices": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "maxItems": 200
+          },
+          "source_code_preservation_notes": {
+            "type": "string",
+            "maxLength": 1200
           }
         }
       }
