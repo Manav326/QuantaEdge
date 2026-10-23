@@ -105,8 +105,6 @@ public class AdminContentController {
    * @deprecated Institution switching has been retired. The active institution is provided by
    * the authenticated HRMS-managed staff binding at /institution-context.
    */
-  @Deprecated(since="2026-10",forRemoval=false)
-  /** Lists active institutions that have at least one active course assignment. */
   @GetMapping("/institutions")
   @Deprecated(since="2026-10",forRemoval=false)
   public List<Map<String,Object>> institutions(
