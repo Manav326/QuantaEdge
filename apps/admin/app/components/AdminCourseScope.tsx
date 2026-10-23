@@ -21,6 +21,11 @@ export type AdminCourse = {
   display_name: string;
   curriculum_version?: string;
   curriculum_class_code?: string;
+  release_id?: number;
+  release_version?: number;
+  release_state?: string;
+  source_institution_id?: number;
+  course_relationship?: 'SOURCED' | 'SHARED' | string;
   subjects: AdminCourseSubject[];
 };
 
@@ -89,6 +94,11 @@ export function useAdminCourseScope(storageKey = 'qe:admin:activeCourseId'): Adm
           display_name: String(row?.display_name || row?.code || 'Course'),
           curriculum_version: row?.curriculum_version ? String(row.curriculum_version) : undefined,
           curriculum_class_code: row?.curriculum_class_code ? String(row.curriculum_class_code) : undefined,
+          release_id: Number(row?.release_id) || undefined,
+          release_version: Number(row?.release_version) || undefined,
+          release_state: row?.release_state ? String(row.release_state) : undefined,
+          source_institution_id: Number(row?.source_institution_id) || undefined,
+          course_relationship: row?.course_relationship === 'SOURCED' ? 'SOURCED' : 'SHARED',
           subjects,
         }];
       });
@@ -172,10 +182,17 @@ export function AdminCourseSelector({
         <option value="">{loading ? 'Loading courses…' : placeholder}</option>
         {courses.map(course => (
           <option key={course.id} value={String(course.id)}>
-            {course.display_name}{course.curriculum_version ? ' · ' + course.curriculum_version : ''}
+            {course.display_name}{course.curriculum_version ? ' · ' + course.curriculum_version : ''} · {course.course_relationship === 'SOURCED' ? 'Sourced' : 'Shared (read-only)'}
           </option>
         ))}
       </select>
+      {(() => {
+        const active = courses.find(course => String(course.id) === courseId);
+        if (!active || loading) return null;
+        return active.course_relationship === 'SOURCED'
+          ? <small role="status">Sourced by this institution · content editing is available according to your permissions.</small>
+          : <small role="status">Shared from another institution · view-only here. The source institution owns content changes; HRMS controls Marketplace availability.</small>;
+      })()}
       {!loading && courses.length > 0 && !courseId &&
         <small role="status">The requested course is not assigned here. Select an assigned course.</small>}
     </label>
