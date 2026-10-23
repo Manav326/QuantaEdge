@@ -13,15 +13,15 @@
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
-      "9f232483ce16973cb62998c9",
-      "071b9ffb6e11765d8d17e2bf",
-      "ac3ef67e4ced1dc1152e7b14"
+      "055ba61cf9184b7284850138",
+      "98aeae849beaac2dcbccd6da",
+      "2104ecb647e20f98cb93ca2e"
     ],
     "assets_eligible": 2078,
     "assets_analyzed": 1356,
     "assets_remaining": 722,
     "assets_completion_percent": 65.3,
-    "assets_failed": 15,
+    "assets_failed": 16,
     "assets_skipped_from_checkpoint": 1356,
     "batch_limit": 5,
     "publication_allowed": false
@@ -451,7 +451,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40031105894",
-      "checkpointed_at": "2026-10-23T22:51:37Z"
+      "checkpointed_at": "2026-10-23T23:04:16Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20129,7 +20129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40031105894",
-      "checkpointed_at": "2026-10-23T22:52:58Z"
+      "checkpointed_at": "2026-10-23T23:05:31Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37908,50 +37908,19 @@
     {
       "asset_id": "055ba61cf9184b7284850138",
       "asset_sha256": "3e0c60ea4f278651f651f553d8afa55387229e3776597380aab93ed7c66e531e",
+      "page_text_context_sha256": "82809710c53f97379d67c75d8ec2cd7e219ac5e4ed747c8eda7013cfd009e931",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 99,
       "asset_path": "page-0099.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "82809710c53f97379d67c75d8ec2cd7e219ac5e4ed747c8eda7013cfd009e931",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A table showing the number of handspans for different students.",
-        "visual_type": "table",
-        "visible_text": [
-          "Table 5.1: Measuring the length of the table",
-          "Name of the Student      Number of Handspans",
-          "Anish                   Slightly more than 13",
-          "Padma                       13",
-          "Tasneem                   Slightly less than 13",
-          "Deepa                Between 13 and 14",
-          "Hardeep                       14",
-          "Padma says, “Oh, the number of handspans is different for all of us. So, what can we say about the length of the table?”",
-          "“But why should the number be different?” Hardeep asked thoughtfully.",
-          "Tasneem says,  “I can guess. Our handspans are of different sizes.”",
-          "Anish gives an idea, “Let us check this.”",
-          "So, all five of them put their handspans along each other and arrive at the conclusion that the lengths of their handspans are different.",
-          "Deepa says thoughtfully, “No wonder people use scales and measuring tapes.”",
-          "Deepa and her friends compare the length of the table with the length of their handspans. The length of the table is expressed in terms of their handspans. Here, the handspan used for measurement is an example of a unit. And the length is expressed in two parts, a number and a unit. For example, if ",
-          "However, handspans and other similar units, such as length of hand, foot, fist or fingers, differ from person to person. Thus, there is a need for such a unit for which measurements of the same length made by different people do not differ."
-        ],
-        "concepts": [
-          "Measurement of Length and Motion",
-          "Handspans",
-          "Units of Measurement"
-        ],
-        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
-        "limitations": [
-          "The table does not provide the actual length of the table."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40008918130",
-      "checkpointed_at": "2026-10-23T19:55:01Z"
+      "run_id": "40031105894",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -38249,7 +38218,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40008918130",
+      "run_id": "40031105894",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -38651,7 +38620,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40008918130",
+      "run_id": "40031105894",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
