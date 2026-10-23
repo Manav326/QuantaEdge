@@ -43,3 +43,10 @@ A chapter or lesson may contain a `source` object with `title`, `url`, `edition`
 ## Validation notes
 
 The importer rejects unsupported course types, unsupported block types, duplicate codes or block sequence numbers, empty subject/chapter/lesson/block collections, malformed order values, extra fields, and packages exceeding hierarchy-size limits. Validate the exact JSON text immediately before importing; editing the package invalidates the UI validation state.
+
+
+## Size limits
+
+In addition to per-level schema limits, the server caps package JSON at 10 MB, total chapters at 5,000, total lessons at 20,000, and total teaching blocks at 100,000. These limits are checked before database writes, and the import runs inside one transaction.
+
+The `GET /api/v1/admin/content/course-types` response includes `nestedPackageImportSupported`, `nestedPackageImportStatus`, and `nestedPackageImportNote`; only K12 currently reports `AVAILABLE`.

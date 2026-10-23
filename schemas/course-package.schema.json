@@ -55,10 +55,8 @@
           "maxLength": 120
         },
         "class_code": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": "string",
+          "minLength": 1,
           "maxLength": 20
         },
         "stream_code": {

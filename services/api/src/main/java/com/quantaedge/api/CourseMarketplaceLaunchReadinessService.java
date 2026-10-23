@@ -117,7 +117,6 @@ public class CourseMarketplaceLaunchReadinessService {
     add(checks,"CONTENT_REVIEW_CURRENT","Reviewed course content is current",contentUnchanged,
         "The course content has changed since quality review or has no reviewed fingerprint. Resubmit the release for platform quality review.");
     addPackageRightsCheck(checks,courseId);
-    addPackageRightsCheck(checks,courseId);
     long subjectCount=number(row.get("subject_count"));
     long subjectsWithLessons=number(row.get("subjects_with_published_lessons"));
     long chapterCount=number(row.get("published_chapter_count"));
@@ -235,6 +234,7 @@ public class CourseMarketplaceLaunchReadinessService {
         && savedFingerprint.equals(contentFingerprint(courseId));
     add(checks,"CONTENT_REVIEW_CURRENT","Reviewed course content is current",contentUnchanged,
         "The course content has changed since quality review or has no reviewed fingerprint. Resubmit the release for platform quality review.");
+    addPackageRightsCheck(checks,courseId);
     long subjectCount = number(offer.get("subject_count"));
     long subjectsWithLessons = number(offer.get("subjects_with_published_lessons"));
     long chapterCount = number(offer.get("published_chapter_count"));

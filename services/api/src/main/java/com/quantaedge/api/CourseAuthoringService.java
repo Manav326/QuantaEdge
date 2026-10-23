@@ -373,6 +373,8 @@ public class CourseAuthoringService {
     List<String> errors=new ArrayList<>();
     validateKeys(body,Set.of("schema","package_id","package_version","course","subjects","editorial"),"root",errors);
     if(body==null) return List.of("The package root must be a JSON object.");
+    if(canonicalJson(body).length()>10_000_000)
+      return List.of("The course package exceeds the 10 MB validation limit.");
     if(!"quantaedge.course-package.v1".equals(body.get("schema"))) errors.add("schema must be quantaedge.course-package.v1.");
     if(!matches(body.get("package_id"),"^[a-z0-9][a-z0-9._-]{2,119}$")) errors.add("package_id must be a stable lowercase slug of 3–120 characters.");
     if(!matches(body.get("package_version"),"^[A-Za-z0-9][A-Za-z0-9._+-]{0,39}$")) errors.add("package_version must be a valid 1–40 character version label.");
@@ -425,6 +427,7 @@ public class CourseAuthoringService {
           continue;
         }
         totalChapters++;
+        if(totalChapters>5000){errors.add("The package exceeds 5,000 total chapters.");return errors;}
         Set<String> lessonCodes=new HashSet<>();
         for(int li=0;li<lessons.size();li++) {
           if(!(lessons.get(li) instanceof Map<?,?> lessonRaw)){errors.add(cp+".lessons["+li+"] must be an object.");continue;}
@@ -444,6 +447,7 @@ public class CourseAuthoringService {
             continue;
           }
           totalLessons++;
+          if(totalLessons>20000){errors.add("The package exceeds 20,000 total lessons.");return errors;}
           Set<Integer> sequences=new HashSet<>();
           for(int bi=0;bi<blocks.size();bi++) {
             if(!(blocks.get(bi) instanceof Map<?,?> blockRaw)){errors.add(lp+".blocks["+bi+"] must be an object.");continue;}
@@ -458,11 +462,11 @@ public class CourseAuthoringService {
             if(!(block.get("content") instanceof Map<?,?>))errors.add(bp+".content must be an object.");
             if(block.containsKey("active")&&!(block.get("active") instanceof Boolean))errors.add(bp+".active must be boolean.");
             totalBlocks++;
+            if(totalBlocks>100000){errors.add("The package exceeds 100,000 total blocks.");return errors;}
           }
         }
       }
     }
-    if(totalBlocks>100000)errors.add("The package contains too many blocks (maximum 100000).");
     Object editorialRaw=body.get("editorial");
     if(editorialRaw!=null) {
       if(!(editorialRaw instanceof Map<?,?> editorial)){errors.add("editorial must be an object.");}
