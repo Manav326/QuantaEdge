@@ -14,8 +14,9 @@ This folder is the durable home for the TRE 1.0, TRE 2.0 and TRE 3.0 source regi
 
 - `source-register.json` records the source article and three readable paper-mirror URLs.
 - `paper-analysis.json` records the article's published topic counts and flags discrepancies that must be checked against the PDFs.
-- The PDF contents can be inspected from the linked mirrors, but the original binary files were **not downloaded into this checkout**. This runtime could read the indexed PDF pages but could not fetch the raw bytes. Do not mark the papers as downloaded or commit a placeholder in place of a PDF.
-- Before storing source PDFs in this public repository, verify the reproduction/repository-distribution rights for each exact file. Publicly accessible does not by itself establish permission to rehost. Until that is established, keep verified source links and metadata here; add PDF binaries only after rights review.
+- The exact source PDFs supplied in `data/TRE-4_PYQ.zip` are stored under `sources/` on this draft branch and are hashed by the inspection workflow. The source question inventory is an audit artifact, not an approved exam.
+- Source-count reconciliation: TRE 1.0 has 120 questions (40 GS + 80 CS); TRE 2.0 has 150 (30 qualifying language + 40 GS + 80 CS); the supplied TRE 3.0 booklet has 148 (28 qualifying language + 40 GS + 80 CS). Do not invent TRE 3.0 items E-1 or E-6.
+- Keep question wording, Hindi reconstruction, answer keys, explanations and rights review as separate release gates. A green extraction workflow does not mean the paper is ready for students.
 
 ## Review and release safety
 
