@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "24ee947714cd316cfd38d506f085ea9525dbe93a7c6faf5b09042fc40824cb17",
+  "raw_analysis_sha256": "6017888807d979cefc9826482af105f8eb7c481c2428285227c30e10acdc8441",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40031110730",
-      "checkpointed_at": "2026-10-23T23:24:00Z",
+      "checkpointed_at": "2026-10-23T23:32:07Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40031110730",
-      "checkpointed_at": "2026-10-23T23:24:43Z",
+      "checkpointed_at": "2026-10-23T23:32:50Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57829,7 +57829,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40031110730",
-      "checkpointed_at": "2026-10-23T23:25:35Z",
+      "checkpointed_at": "2026-10-23T23:33:41Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -58654,7 +58654,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40008922922",
+      "run_id": "40031110730",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -59068,6 +59068,46 @@
         "limitations": [
           "No specific limitations mentioned in the image.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8e8c208f6f582c71524a4ef3",
+      "asset_sha256": "6ed8d0f335db681a043c3f37eeb58ca8f5cc1f8da2b136df50864ffccc1eb804",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/6ed8d0f335db681a043c3f37eeb58ca8f5cc1f8da2b136df50864ffccc1eb804.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1501ddf68fca3c3f96e7ce10190a3aa309a4b7f069348e6d71e1c6701a77a2d0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a girl with braided hair wearing a yellow and orange top.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of electrical charges and their effects on objects.",
+        "limitations": [
+          "The image does not provide specific details about electrical charges or their effects on objects."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40031110730",
+      "checkpointed_at": "2026-10-23T23:40:18Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a girl with braided hair wearing a yellow and orange top.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of electrical charges and their effects on objects.",
+        "limitations": [
+          "The image does not provide specific details about electrical charges or their effects on objects."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
