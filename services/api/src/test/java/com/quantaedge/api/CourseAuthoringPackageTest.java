@@ -36,6 +36,11 @@ class CourseAuthoringPackageTest {
     return body;
   }
 
+  @SuppressWarnings("unchecked")
+  private static Map<String,Object> firstMap(Object raw) {
+    return new LinkedHashMap<>((Map<String,Object>)((List<?>)raw).getFirst());
+  }
+
   @Test
   void validatesCompleteNestedK12HierarchyAndCountsEveryLevel() {
     Map<String,Object> result=service().validateCoursePackage(validPackage());
@@ -51,8 +56,9 @@ class CourseAuthoringPackageTest {
   @Test
   void rejectsUnsupportedCourseTypeRatherThanPretendingK12HierarchyFits() {
     Map<String,Object> body=validPackage();
-    body.put("course",new LinkedHashMap<>((Map<String,Object>)body.get("course")));
-    ((Map<String,Object>)body.get("course")).put("course_type_code","COMPETITIVE");
+    Map<String,Object> course=new LinkedHashMap<>((Map<String,Object>)body.get("course"));
+    course.put("course_type_code","COMPETITIVE");
+    body.put("course",course);
     Map<String,Object> result=service().validateCoursePackage(body);
     assertEquals(false,result.get("valid"));
     assertTrue(((List<String>)result.get("errors")).stream()
@@ -62,7 +68,7 @@ class CourseAuthoringPackageTest {
   @Test
   void rejectsDuplicateAndUnsupportedNestedFields() {
     Map<String,Object> body=validPackage();
-    Map<String,Object> subject=new LinkedHashMap<>((Map<String,Object>)((List<?>)body.get("subjects")).getFirst());
+    Map<String,Object> subject=firstMap(body.get("subjects"));
     subject.put("unexpected","must not be silently ignored");
     body.put("subjects",List.of(subject,subject));
     Map<String,Object> result=service().validateCoursePackage(body);
@@ -75,15 +81,13 @@ class CourseAuthoringPackageTest {
   @Test
   void rejectsInvalidBlockTypesAndDuplicateSequencesBeforeDatabaseWrites() {
     Map<String,Object> body=validPackage();
-    Map<String,Object> altered=new LinkedHashMap<>((Map<String,Object>)((List<?>)((Map<?,?>)((List<?>)((Map<?,?>)((List<?>)body.get("subjects")).getFirst()).get("chapters")).getFirst()).get("lessons")).getFirst());
-    altered.put("blocks",List.of(
+    Map<String,Object> subject=firstMap(body.get("subjects"));
+    Map<String,Object> chapter=firstMap(subject.get("chapters"));
+    Map<String,Object> lesson=firstMap(chapter.get("lessons"));
+    lesson.put("blocks",List.of(
         Map.of("sequence_no",1,"block_type","DROP_TABLE","content",Map.of()),
         Map.of("sequence_no",1,"block_type","EXPLANATION","content",Map.of())));
-    @SuppressWarnings("unchecked")
-    Map<String,Object> subject=new LinkedHashMap<>((Map<String,Object>)((List<?>)body.get("subjects")).getFirst());
-    @SuppressWarnings("unchecked")
-    Map<String,Object> chapter=new LinkedHashMap<>((Map<String,Object>)((List<?>)subject.get("chapters")).getFirst());
-    chapter.put("lessons",List.of(altered));
+    chapter.put("lessons",List.of(lesson));
     subject.put("chapters",List.of(chapter));
     body.put("subjects",List.of(subject));
     List<String> errors=(List<String>)service().validateCoursePackage(body).get("errors");

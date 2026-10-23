@@ -105,7 +105,7 @@ public class CourseAuthoringService {
 
       for(int i=0;i<subjects.size();i++) {
         Map<String,Object> subject=subjects.get(i);
-        int order=i+1;
+        int order=((Number)subject.get("sortOrder")).intValue();
         Long subjectId=jdbc.queryForObject("""
           insert into curriculum_subject(class_id,code,display_name,sort_order,active,program_id)
           values(?,?,?,?,true,?) returning id
@@ -255,7 +255,8 @@ public class CourseAuthoringService {
     List<Map<String,Object>> packageSubjects=(List<Map<String,Object>>)body.get("subjects");
     List<Map<String,Object>> simpleSubjects=new ArrayList<>();
     for(Map<String,Object> subject:packageSubjects) {
-      simpleSubjects.add(Map.of("code",subject.get("code"),"displayName",subject.get("display_name")));
+      simpleSubjects.add(Map.of("code",subject.get("code"),"displayName",subject.get("display_name"),
+          "sortOrder",subject.get("sort_order")==null?simpleSubjects.size()+1:subject.get("sort_order")));
     }
     Map<String,Object> createBody=new LinkedHashMap<>();
     createBody.put("code",course.get("code"));
@@ -567,7 +568,8 @@ public class CourseAuthoringService {
       if(!code.matches("^[a-z0-9][a-z0-9_-]{1,39}$")||!seen.add(code))
         throw badRequest("Subject codes must be unique and use lowercase letters, digits, hyphens or underscores.");
       String name=requiredText(map.get("displayName"),2,100,"Subject name");
-      result.add(Map.of("code",code,"displayName",name));
+      int sortOrder=intOrDefault(map.get("sortOrder"),result.size()+1,1,10000,"subject.sortOrder");
+      result.add(Map.of("code",code,"displayName",name,"sortOrder",sortOrder));
     }
     return result;
   }
