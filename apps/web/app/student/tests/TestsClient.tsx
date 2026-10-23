@@ -236,6 +236,7 @@ export default function TestsClient(){
   const [subjectFilter,setSubjectFilter]=useState('ALL');
   const [dirtyAnswers,setDirtyAnswers]=useState<Record<number,any>>({});
   const [showSubmit,setShowSubmit]=useState(false);
+  const [pendingTestStart,setPendingTestStart]=useState<AssessmentCard|null>(null);
   const leaderboardRequestRef=useRef(0);
   const attemptRef=useRef<Attempt|null>(null);
   const dirtyRef=useRef<Record<number,any>>({});
@@ -427,6 +428,21 @@ export default function TestsClient(){
     }
   },[]);
 
+  function requestTestStart(test:AssessmentCard,hasInProgressAttempt:boolean){
+    if(hasInProgressAttempt){
+      void openTest(test.assessment_id);
+      return;
+    }
+    setPendingTestStart(test);
+  }
+
+  function confirmTestStart(){
+    const selected=pendingTestStart;
+    if(!selected)return;
+    setPendingTestStart(null);
+    void openTest(selected.assessment_id);
+  }
+
   async function openTest(testId:number){
     setBusy(true);setError('');setNotice('');setAttempt(null);setShowSubmit(false);autoSubmitted.current=false;
     try{
@@ -572,7 +588,7 @@ export default function TestsClient(){
             const used=Number(test.attempts_used||0);
             const resultAvailable=Boolean(test.latest_result_attempt_id);
             const exhausted=!started&&used>=Number(test.max_attempts);
-            return <article className={styles.testCard} key={test.assessment_id}><div className={styles.cardTop}><span className={styles.testSymbol}>✓</span><span className={styles.subjectChip}>{test.subject_code==='maths'?translateUi(locale, 'legacy.web.mathematics.4cf6be1a'):translateUi(locale, 'legacy.web.science.f85a10aa')}</span><span className={styles.subjectChip}>{assessmentTypeLabel(test.assessment_type)}</span>{test.chapter_name?.trim()&&<span className={styles.subjectChip}><LocaleText hinglish="अध्याय: " english="Chapter: " />{test.chapter_name}</span>}</div><h3>{test.title}</h3>{test.test_id&&<small>{translateUi(locale, 'legacy.web.test.id.f22e0b35')}: {test.test_id}</small>}<p>{test.description||test.chapter_name||test.subject_name}</p><div className={styles.cardMeta}><span>▤ {test.question_count} {translateUi(locale, 'legacy.web.questions.fa34dc08')}</span><span>◷ {test.duration_minutes} {translateUi(locale, 'legacy.web.min.72242533')}</span><span>★ {test.max_score} {translateUi(locale, 'legacy.web.marks.57368a8d')}</span></div><div className={styles.attemptTrack}><span>{translateUi(locale, 'legacy.web.attempts.used.1eef4b49')}</span><b>{used} / {test.max_attempts}</b></div><div className={styles.attemptBar}><i style={{width:Math.min(100,used/Math.max(1,test.max_attempts)*100)+'%'}}/></div><div className={styles.cardActions}><button type="button" className={styles.primaryButton} disabled={busy||exhausted} onClick={()=>void openTest(test.assessment_id)}>{busy?translateUi(locale, 'legacy.web.opening.c30c8984'):started?translateUi(locale, 'legacy.web.resume.test.f20ec881'):exhausted?translateUi(locale, 'legacy.web.attempts.used.6cc262d7'):translateUi(locale, 'legacy.web.start.test.84f53ec2')}</button>{!started&&<button type="button" className={styles.leaderboardButton} disabled={leaderboardLoading} onClick={()=>void openLeaderboard(test)}><span aria-hidden="true">♛</span> {translateUi(locale, 'legacy.web.top.20.leaderboard.9f98bf6d')}</button>}{!started&&resultAvailable&&<button type="button" className={styles.resultLink} disabled={busy} onClick={()=>void openResult(Number(test.latest_result_attempt_id))}>{translateUi(locale, 'legacy.web.latest.result.e927be6a')}</button>}</div>{exhausted&&!resultAvailable&&<small className={styles.muted}>{translateUi(locale, 'legacy.web.you.have.used.all.allowed.attempts.afaa7d9e')}</small>}</article>;
+            return <article className={styles.testCard} key={test.assessment_id}><div className={styles.cardTop}><span className={styles.testSymbol}>✓</span><span className={styles.subjectChip}>{test.subject_code==='maths'?translateUi(locale, 'legacy.web.mathematics.4cf6be1a'):translateUi(locale, 'legacy.web.science.f85a10aa')}</span><span className={styles.subjectChip}>{assessmentTypeLabel(test.assessment_type)}</span>{test.chapter_name?.trim()&&<span className={styles.subjectChip}><LocaleText hinglish="अध्याय: " english="Chapter: " />{test.chapter_name}</span>}</div><h3>{test.title}</h3>{test.test_id&&<small>{translateUi(locale, 'legacy.web.test.id.f22e0b35')}: {test.test_id}</small>}<p>{test.description||test.chapter_name||test.subject_name}</p><div className={styles.cardMeta}><span>▤ {test.question_count} {translateUi(locale, 'legacy.web.questions.fa34dc08')}</span><span>◷ {test.duration_minutes} {translateUi(locale, 'legacy.web.min.72242533')}</span><span>★ {test.max_score} {translateUi(locale, 'legacy.web.marks.57368a8d')}</span></div><div className={styles.attemptTrack}><span>{translateUi(locale, 'legacy.web.attempts.used.1eef4b49')}</span><b>{used} / {test.max_attempts}</b></div><div className={styles.attemptBar}><i style={{width:Math.min(100,used/Math.max(1,test.max_attempts)*100)+'%'}}/></div><div className={styles.cardActions}><button type="button" className={styles.primaryButton} disabled={busy||exhausted} onClick={()=>requestTestStart(test,started)}>{busy?translateUi(locale, 'legacy.web.opening.c30c8984'):started?translateUi(locale, 'legacy.web.resume.test.f20ec881'):exhausted?translateUi(locale, 'legacy.web.attempts.used.6cc262d7'):translateUi(locale, 'legacy.web.start.test.84f53ec2')}</button>{!started&&<button type="button" className={styles.leaderboardButton} disabled={leaderboardLoading} onClick={()=>void openLeaderboard(test)}><span aria-hidden="true">♛</span> {translateUi(locale, 'legacy.web.top.20.leaderboard.9f98bf6d')}</button>}{!started&&resultAvailable&&<button type="button" className={styles.resultLink} disabled={busy} onClick={()=>void openResult(Number(test.latest_result_attempt_id))}>{translateUi(locale, 'legacy.web.latest.result.e927be6a')}</button>}</div>{exhausted&&!resultAvailable&&<small className={styles.muted}>{translateUi(locale, 'legacy.web.you.have.used.all.allowed.attempts.afaa7d9e')}</small>}</article>;
           })}</div>}
           <PremiumPagination page={testsPage} total={testsTotal} pageSize={testsPageSize}
             onPageChange={setTestsPage} onPageSizeChange={size=>{setTestsPageSize(size);setTestsPage(0);}}
@@ -803,6 +819,25 @@ export default function TestsClient(){
       </>}
     </section>
 
+    {pendingTestStart&&<div className={styles.confirmBackdrop} onClick={()=>setPendingTestStart(null)}>
+      <section className={styles.confirmModal} role="dialog" aria-modal="true" aria-labelledby="qe-test-start-title"
+        onClick={event=>event.stopPropagation()}>
+        <span className={styles.eyebrow}>{t('EXAM INSTRUCTIONS','परीक्षा निर्देश')}</span>
+        <h2 id="qe-test-start-title">{t('Before you begin','परीक्षा शुरू करने से पहले')}</h2>
+        <p><strong>{pendingTestStart.title}</strong></p>
+        <p>{t('This paper contains','इस प्रश्नपत्र में कुल')} <strong>{pendingTestStart.question_count}</strong> {t('questions in total.','प्रश्न हैं।')}</p>
+        {(/\bTRE[\s-]*3(?:\.0)?\b/i.test(pendingTestStart.title+' '+(pendingTestStart.description||''))||Number(pendingTestStart.question_count)===148)&&<p>
+          {uiLanguage==='hi'
+            ?'इस TRE 3.0 प्रश्नपत्र में कुल 148 प्रश्न ही हैं: 40 सामान्य अध्ययन, 80 कंप्यूटर विज्ञान और 28 अर्हकारी भाषा प्रश्न। सामान्य अध्ययन और कंप्यूटर विज्ञान के अंक अलग-अलग दिखाए जाएंगे; भाषा अनुभाग अलग रहेगा और स्कोर किए गए कुल अंकों में नहीं जुड़ेगा।'
+            :'The TRE 3.0 source paper contains 148 questions in total: 40 General Studies, 80 Computer Science, and 28 qualifying-language questions. General Studies and Computer Science are scored separately; the language section is shown separately and is not added to the scored total.'}
+        </p>}
+        <p>{t('The timer starts when you continue. Your answers save automatically, and you can submit when you finish.','आगे बढ़ने पर समय शुरू होगा। आपके उत्तर अपने-आप सहेजे जाएंगे और पूरा होने पर आप जमा कर सकते हैं।')}</p>
+        <div>
+          <button type="button" className={styles.secondaryButton} onClick={()=>setPendingTestStart(null)}>{t('Cancel','रद्द करें')}</button>
+          <button type="button" className={styles.primaryButton} disabled={busy} onClick={confirmTestStart}>{t('Start test','परीक्षा शुरू करें')}</button>
+        </div>
+      </section>
+    </div>}
     {leaderboardTest&&<div className={styles.leaderboardBackdrop} onClick={closeLeaderboard}>
       <section className={styles.leaderboardModal} role="dialog" aria-modal="true" aria-labelledby="qe-leaderboard-title" onClick={event=>event.stopPropagation()}>
         <header className={styles.leaderboardHeader}>
