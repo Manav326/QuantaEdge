@@ -7,11 +7,7 @@ ALTER TABLE assessment
 COMMENT ON COLUMN assessment.subject_id IS
   'Optional for type-driven assessment/competitive courses whose schema does not require a curriculum subject. K12 tests normally retain a course-mapped subject.';
 
--- Explicit test-pack import uses the content digest and course/code/version as an idempotency key.
--- A duplicate is only a no-op when the canonical payload hash matches exactly.
-CREATE UNIQUE INDEX IF NOT EXISTS uq_course_assessment_pack_identity
-  ON course_assessment_pack(course_id,pack_code,pack_version);
-
+-- V176 already declares course_id + pack_code + pack_version unique on the pack table.
 -- Ensure the schema/DB contract keeps unanswered scoring data at question-snapshot level so
 -- existing immutable attempt-question snapshots remain self-contained.
 COMMENT ON COLUMN assessment_question.question_snapshot IS
