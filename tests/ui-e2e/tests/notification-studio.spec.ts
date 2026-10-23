@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { openQaDatabase, readPrivateJson } from '../support/fixtures';
+import { appBaseUrl } from '../support/manifest';
 
-const HRMS = process.env.QE_E2E_HRMS_URL || 'http://127.0.0.1:3002';
+const HRMS = appBaseUrl('people');
 
 test('[HRMS-NOTIF-001] Notification Studio loads live options and prevents invalid audience actions', async ({ browser }) => {
   const ownerState = await readPrivateJson<{ statePath: string }>('hrms-owner-state-path.json');
