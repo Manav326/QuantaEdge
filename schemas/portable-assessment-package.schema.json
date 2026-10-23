@@ -211,6 +211,13 @@
           "minimum": 0,
           "maximum": 1,
           "description": "Fraction of a question's marks deducted for a wrong answer. 0 = no penalty; 0.25 = one-quarter penalty."
+        },
+        "max_attempts": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "default": 1,
+          "description": "Maximum attempts allowed for each learner. Defaults to one when omitted."
         }
       }
     },
@@ -674,6 +681,59 @@
               "PASSAGE"
             ],
             "description": "Defines the reusable question-set component type. PASSAGE shows one shared stimulus followed by independently answerable questions."
+          },
+          "answer_payload": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "value"
+            ],
+            "description": "Optional explicit scoring payload for non-MCQ responses or answers that cannot be represented by proposed_answer.option_key. The importing service freezes this into the assessment snapshot.",
+            "properties": {
+              "kind": {
+                "enum": [
+                  "OPTION",
+                  "MULTI_OPTION",
+                  "TEXT",
+                  "NUMERIC",
+                  "ORDER",
+                  "MATCH"
+                ]
+              },
+              "value": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    "minItems": 1,
+                    "maxItems": 250
+                  },
+                  {
+                    "type": "object"
+                  }
+                ]
+              },
+              "tolerance": {
+                "type": "number",
+                "minimum": 0
+              }
+            }
           }
         },
         "allOf": [
