@@ -17,7 +17,7 @@ API surface:
 - `GET /api/v1/admin/account-deletion-requests/{requestId}`: request and snapshotted child IDs.
 - `POST /api/v1/admin/account-deletion-requests/{requestId}/start-review`: move a new request into review.
 
-Requests derive the subject from the authenticated `AuthContext`; the client cannot select an arbitrary user ID. Staff identities cannot use end-user self-service. The API requires an explicit `DELETE` confirmation, snapshots the linked learner public IDs when the guardian explicitly includes all linked children, writes identity-audit events, and does not offer a false “completed” action.
+Requests derive the subject from the authenticated `AuthContext`; the client cannot select an arbitrary user ID. Staff identities cannot use end-user self-service. The API requires an explicit `DELETE` confirmation, snapshots only currently linked **parent-managed** learner public IDs when the guardian explicitly includes all linked children, writes identity-audit events, and does not offer a false “completed” action. A linked learner whose own independent `user_account` is set is deliberately excluded from parent-controlled deletion.
 
 ## Confirmed data-dependency blockers
 
