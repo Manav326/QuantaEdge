@@ -9,6 +9,7 @@ from scripts.extract_tre_source_questions import (
     convert_hindi_text,
     native_source_language,
     normalize_source_language_code,
+    hindi_conversion_needs_review,
     detected_code_line_indices,
     detected_math_line_indices,
     expected_language_keys,
@@ -42,6 +43,13 @@ class TreSourceCodePreservationTests(unittest.TestCase):
         self.assertEqual(normalize_source_language_code("e"), "en")
         self.assertEqual(normalize_source_language_code("H"), "hi")
         self.assertEqual(normalize_source_language_code("bn"), "bn")
+
+    def test_uncertain_hindi_conversion_is_flagged_for_every_section(self):
+        self.assertTrue(hindi_conversion_needs_review("LEGACY_FONT_UNCERTAIN_RAW_PRESERVED"))
+        self.assertTrue(hindi_conversion_needs_review("CONVERTER_UNAVAILABLE"))
+        self.assertTrue(hindi_conversion_needs_review("CONVERSION_ERROR:ValueError"))
+        self.assertTrue(hindi_conversion_needs_review("CONVERTED_KRUTIDEV_FORCED_LEGACY"))
+        self.assertFalse(hindi_conversion_needs_review("CONVERTED_CHANAKYA"))
 
     def test_unrecognized_legacy_font_is_preserved_for_review_not_forced(self):
         class UnknownFont:

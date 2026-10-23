@@ -615,6 +615,19 @@ def normalize_source_language_code(value: Any, fallback: str = "en") -> str:
     )
 
 
+def hindi_conversion_needs_review(status: str) -> bool:
+    """Fail closed when a legacy Hindi glyph stream was not reliably decoded."""
+    value = str(status or "")
+    return (
+        "FORCED_LEGACY" in value
+        or value in {
+            "LEGACY_FONT_UNCERTAIN_RAW_PRESERVED",
+            "CONVERTER_UNAVAILABLE",
+        }
+        or value.startswith("CONVERSION_ERROR:")
+    )
+
+
 def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[str, Any]:
     if fitz is None:
         raise ValueError("PyMuPDF is required for PDF extraction: python -m pip install pymupdf")
@@ -797,11 +810,6 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                                 entry["review_flags"].append(f"EMPTY_{lang.upper()}_PROMPT")
                             if len(variant.get("options", [])) < 2:
                                 entry["review_flags"].append(f"OPTIONS_NEED_REVIEW_{lang.upper()}")
-                    if hi and (
-                        "FORCED_LEGACY" in hi.get("conversion_status", "")
-                        or hi.get("conversion_status") == "LEGACY_FONT_UNCERTAIN_RAW_PRESERVED"
-                    ):
-                        entry["review_flags"].append("HINDI_FONT_DETECTION_UNCERTAIN")
                 else:
                     selected_lang = native_source_language(cycle, key) or (
                         "en" if (key.startswith("E-") or (key.isdigit() and int(key) <= 8)) else "hi"
@@ -818,6 +826,12 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                         source_variant["translation_policy"] = "NATIVE_SOURCE_ONLY"
                     if selected_lang not in entry["source_variants"]:
                         entry["review_flags"].append("MISSING_SELECTED_LANGUAGE_TRACK")
+                # Apply the same glyph-conversion warning to qualifying-language questions.
+                # They often have no English sibling by design, but must still never appear
+                # as review-ready merely because the question is in the native language track.
+                if hi and hindi_conversion_needs_review(hi.get("conversion_status", "")):
+                    if "HINDI_FONT_DETECTION_UNCERTAIN" not in entry["review_flags"]:
+                        entry["review_flags"].append("HINDI_FONT_DETECTION_UNCERTAIN")
             cycle_records = []
             for key, entry in variants.items():
                 entry["question_id"] = (
@@ -924,7 +938,7 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 "alternate_language_tracks":alternate_language_tracks,
                 "source_notes":[
                     "Original PDF bytes are preserved exactly; SHA-256 is recorded.",
-                    "Supported legacy Hindi encodings are converted to Unicode; unsupported or uncertain font encodings remain raw and are flagged for visual review.",
+                    "Supported legacy Hindi encodings are converted to Unicode; unsupported or uncertain font encodings remain raw and are flagged for visual review. The current TRE source PDFs include SHREE-DEV-0708/0709 text spans, which must not be force-converted as KrutiDev or Chanakya.",
                     "All questions present in each original booklet are preserved. TRE 2.0 and TRE 3.0 each have 30 qualifying-language items in addition to 40 General Studies + 80 Computer Science, for 150 total. Only GS and Computer Science contribute to the scored result, reported in two sections.",
                     "Do not release until question/option pair completeness, Hindi rendering, answers, concise explanations, paper rules and any mathematical/code expressions have been reviewed.",
                 ],
