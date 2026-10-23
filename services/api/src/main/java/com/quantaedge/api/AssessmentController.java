@@ -1424,16 +1424,20 @@ public class AssessmentController {
     int rowLimit=Math.max(1,Math.min(limit==null?24:limit,60));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     String courseScope="""
-        exists(select 1 from curriculum_program_subject cps
-          join curriculum_program selected_course on selected_course.id=cps.program_id and selected_course.status='ACTIVE'
-          join institution_course_assignment course_assignment
-            on course_assignment.institution_id=(select institution_id from tenant_scope)
-            and course_assignment.status='ASSIGNED'
-          join institution_course_release course_release on course_release.id=course_assignment.course_release_id
-            and course_release.program_id=selected_course.id
-          where cps.program_id=? and cps.subject_id=s.id and cps.class_id=s.class_id
-            and (s.program_id=cps.program_id
-              or (s.program_id is null and selected_course.class_id=s.class_id)))
+        (
+          exists(select 1 from curriculum_program_subject cps
+            join curriculum_program selected_course on selected_course.id=cps.program_id and selected_course.status='ACTIVE'
+            join institution_course_assignment course_assignment
+              on course_assignment.institution_id=(select institution_id from tenant_scope)
+              and course_assignment.status='ASSIGNED'
+            join institution_course_release course_release on course_release.id=course_assignment.course_release_id
+              and course_release.program_id=selected_course.id
+            where cps.program_id=? and cps.subject_id=s.id and cps.class_id=s.class_id
+              and (s.program_id=cps.program_id
+                or (s.program_id is null and selected_course.class_id=s.class_id)))
+          or (a.subject_id is null and exists(select 1 from curriculum_program course_type
+            where course_type.id=a.course_id and course_type.course_type_code in ('ASSESSMENT','COMPETITIVE')))
+        )
         and exists(select 1 from student_program_enrollment selected_enrollment
           where selected_enrollment.student_id=st.id
             and selected_enrollment.institution_id=(select institution_id from tenant_scope)
@@ -1465,8 +1469,9 @@ public class AssessmentController {
              (select att.offline_mode from student_assessment_attempt att
               where att.assessment_id=a.id and att.student_id=st.id and att.institution_id=(select institution_id from tenant_scope)
                 and att.status='IN_PROGRESS' order by att.started_at desc,att.id desc limit 1) as in_progress_offline_mode
-      from assessment a join curriculum_subject s on s.id=a.subject_id and s.active=true
-      join curriculum_class c on c.id=s.class_id and c.active=true
+      from assessment a
+      left join curriculum_subject s on s.id=a.subject_id and s.active=true
+      left join curriculum_class c on c.id=s.class_id and c.active=true
       left join curriculum_program p on p.id=a.course_id
       join student st on st.id=? and st.active=true
       left join curriculum_chapter ch on ch.id=a.chapter_id
@@ -1731,11 +1736,18 @@ public class AssessmentController {
     Long assessmentInCourse=jdbc.queryForObject("""
       select count(*)
       from assessment a
-      join curriculum_subject s on s.id=a.subject_id and s.active=true
-      join curriculum_program_subject cps on cps.program_id=? and cps.subject_id=s.id and cps.class_id=s.class_id
-      join curriculum_program p on p.id=cps.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-      where a.id=? and a.course_id=? and (s.program_id=p.id or (s.program_id is null and p.class_id=s.class_id))
-    """,Long.class,courseId,assessmentId,courseId);
+      join curriculum_program selected_course on selected_course.id=a.course_id
+        and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
+      where a.id=? and a.course_id=? and (
+        (a.subject_id is null and selected_course.course_type_code in ('ASSESSMENT','COMPETITIVE'))
+        or exists(
+          select 1 from curriculum_subject s
+          join curriculum_program_subject cps on cps.program_id=? and cps.subject_id=s.id and cps.class_id=s.class_id
+          where s.id=a.subject_id and s.active=true
+            and (s.program_id=selected_course.id or (s.program_id is null and selected_course.class_id=s.class_id))
+        )
+      )
+    """,Long.class,assessmentId,courseId,courseId);
     if(assessmentInCourse==null || assessmentInCourse==0L) throw notFound("Available assessment in the selected course",assessmentId);
     List<Map<String, Object>> assessmentLock = jdbc.queryForList("""
       with tenant_scope as (select ?::bigint as institution_id)
