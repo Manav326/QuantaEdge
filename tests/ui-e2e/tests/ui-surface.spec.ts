@@ -15,7 +15,7 @@ const VIEWPORTS = [
   { width: 1440, height: 900 }
 ];
 
-type Surface = { app: 'web' | 'admin' | 'people'; path: string; statePath: string };
+type Surface = { app: 'web' | 'admin' | 'people'; path: string; statePath: string; institutionCode?: string };
 
 async function waitForOptionalNetworkIdle(page: Page): Promise<void> {
   try {
@@ -34,6 +34,13 @@ async function checkSurfaceAtViewports(browser: Browser, surface: Surface) {
       storageState: surface.statePath,
       viewport
     });
+    // Playwright storageState restores cookies/localStorage but not sessionStorage.
+    // Learner and guardian API scope depends on the institution selected at login.
+    if (surface.institutionCode) {
+      await context.addInitScript((code: string) => {
+        window.sessionStorage.setItem('qe.institution.brand-code.v1', code);
+      }, surface.institutionCode);
+    }
     const page = await context.newPage();
     const uncaughtErrors: string[] = [];
     page.on('pageerror', error => uncaughtErrors.push(error.message));
@@ -80,10 +87,16 @@ test('[UX-001][CAT-001] core learner, parent, Education Admin and HRMS surfaces 
   test.setTimeout(8 * 60 * 1000);
   const ownerState = await readPrivateJson<{ statePath: string }>('hrms-owner-state-path.json');
   const adminState = await readPrivateJson<{ statePath: string }>('education-admin-state-path.json');
+  const fixture = await readPrivateJson<{
+    credentials: {
+      childA: { institutionCode: string };
+      parentA: { institutionCode: string };
+    };
+  }>('qa-fixture.json');
   const surfaces: Surface[] = [
-    { app: 'web', path: '/student/courses', statePath: join(privateDir(), 'child-a.json') },
-    { app: 'web', path: '/student/marketplace', statePath: join(privateDir(), 'child-a.json') },
-    { app: 'web', path: '/parent', statePath: join(privateDir(), 'parent-a.json') },
+    { app: 'web', path: '/student/courses', statePath: join(privateDir(), 'child-a.json'), institutionCode: fixture.credentials.childA.institutionCode },
+    { app: 'web', path: '/student/marketplace', statePath: join(privateDir(), 'child-a.json'), institutionCode: fixture.credentials.childA.institutionCode },
+    { app: 'web', path: '/parent', statePath: join(privateDir(), 'parent-a.json'), institutionCode: fixture.credentials.parentA.institutionCode },
     { app: 'admin', path: '/content', statePath: adminState.statePath },
     { app: 'people', path: '/qa', statePath: ownerState.statePath }
   ];
