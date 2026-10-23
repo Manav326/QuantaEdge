@@ -27,11 +27,19 @@ function redirectAfterLogin(body: any): void {
   const studentSessionConfirmed = body.workspace === 'STUDENT' && body.role === 'STUDENT' &&
     Number(body.studentId) > 0;
   if (parentSessionConfirmed) {
-    window.location.replace(safeReturn || '/parent');
+    if (safeReturn === '/account-deletion') {
+      window.location.replace('/account-deletion');
+      return;
+    }
+    window.location.replace('/parent');
     return;
   }
   if (studentSessionConfirmed) {
-    window.location.replace(safeReturn || '/student');
+    if (safeReturn === '/account-deletion') {
+      window.location.replace('/account-deletion');
+      return;
+    }
+    window.location.replace('/student');
     return;
   }
   // This unified login page can serve both roles, but must never route a mismatched
