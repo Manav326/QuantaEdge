@@ -300,7 +300,11 @@ fun AccountIdentitySettingsScreen(
                         if (requestIsOpen) {
                             Text(localizedUiText("Your request is recorded but processing has not completed. You can cancel it while it is still open."),
                                 style = MaterialTheme.typography.bodySmall)
-                            OutlinedButton(onClick = onCancelDeletion, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+                            OutlinedButton(onClick = {
+                                deletionConfirmation = ""
+                                includeLinkedChildren = false
+                                onCancelDeletion()
+                            }, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
                                 Text(localizedUiText("Cancel deletion request"))
                             }
                         }
@@ -335,7 +339,13 @@ fun AccountIdentitySettingsScreen(
                             modifier = Modifier.fillMaxWidth()
                         )
                         Button(
-                            onClick = { onRequestDeletion(deletionConfirmation, includeLinkedChildren) },
+                            onClick = {
+                                val confirmedText = deletionConfirmation
+                                val confirmedChildren = includeLinkedChildren
+                                deletionConfirmation = ""
+                                includeLinkedChildren = false
+                                onRequestDeletion(confirmedText, confirmedChildren)
+                            },
                             enabled = !busy && deletionConfirmation == "DELETE" &&
                                 (!needsChildDecision || linkedChildCount <= 0 || includeLinkedChildren),
                             modifier = Modifier.fillMaxWidth()
