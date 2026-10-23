@@ -8,14 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1169,
+    "assets_selected": 1183,
     "assets_processed_this_run": 5,
+    "assets_processed_ids": [
+      "2b71f040b18c02e306e02930",
+      "35f32b476dc5977bc161e8e8",
+      "9c98ea470aafbf3dbbeffd67",
+      "e8da3c2edc6beba380b12468",
+      "acfb58f02fadc0623057c038"
+    ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1164,
-    "assets_remaining": 1127,
-    "assets_completion_percent": 50.8,
-    "assets_failed": 17,
-    "assets_skipped_from_checkpoint": 1164,
+    "assets_analyzed": 1179,
+    "assets_remaining": 1112,
+    "assets_completion_percent": 51.5,
+    "assets_failed": 8,
+    "assets_skipped_from_checkpoint": 1178,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1181,7 +1188,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education, encouraging critical thinking and curiosity.",
+        "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -1195,34 +1202,29 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive education",
-          "safety",
+          "inclusive nature",
+          "special needs",
           "peer interactions",
           "understanding concepts",
-          "reflecting on ideas",
+          "assessing understanding",
           "analyzing concepts",
-          "sustaining interest",
-          "challenging ideas",
-          "additional information",
-          "interesting facts",
-          "engaging materials",
-          "Ever heard of",
+          "safety precautions",
           "fascinating facts",
           "interesting observations",
-          "curiosity-driven questions",
-          "advanced concepts"
+          "scientific principles",
+          "real-life applications"
         ],
-        "context_relation": "The text discusses the importance of open-ended questions in education, encouraging critical thinking and curiosity. It also mentions the activities and materials used in the textbook to promote teamwork, safety, and understanding of concepts.",
+        "context_relation": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "limitations": [
-          "The text does not provide specific examples or activities from the textbook.",
+          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
-      "checkpointed_at": "2026-10-23T03:01:54Z"
+      "run_id": "39937902376",
+      "checkpointed_at": "2026-10-23T11:05:11Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -1736,46 +1738,31 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
+        "visual_summary": "A page from a textbook discussing the contributions of scientists and their impact on society, including sections for thinking like a scientist and snapshots.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "applications, showing how science has contributed to societal development.",
-          "Our scientific heritage offers information about institutions which have contributed to the progress of scientific temper and any personality or their works of 'heritage level repute'.",
-          "You will find a Think like a scientist section in some chapters, where you can explore the experiment further by making modifications or trying different approaches. It will help you to investigate more deeply and allow new questions to emerge in your minds.",
-          "Some chapters also feature a section called Be a scientist, where you can learn about the contributions of Indian and international scientists related to the topic. These sections include brief biographies and show how scientists have made a difference. Additionally, an interesting element that has ",
-          "The Snapshots section provides the summary of a chapter, which offers an overview of the chapter's main points, reinforcing the key ideas discussed. Each chapter includes Keywords in between the text that highlight key concepts and steps in science, helping learners understand ideas and think critic",
-          "Keep the curiosity alive includes a range of exercises, from pictorial questions and puzzles to multiple choice questions, offering a challenging and engaging experience. These questions also help assess the competencies developed by learners in each chapter. We recommend teachers to use questions s"
+          "applications, showing how science has\ncontributed to societal development.\n\nOur scientific heritage offers\ninformation about institutions which\nhave contributed to the progress of\nscientific temper and any personality or\ntheir works of ‘heritage level repute’.\n\nYou will find a Think like a scientist",
+          "Prepare some questions based on your\nlearnings so far ...\n\nReflect on the questions framed by your\nfriends and try to answer ..."
         ],
         "concepts": [
           "scientific heritage",
-          "scientific temper",
-          "personality",
-          "heritage level repute",
-          "Think like a scientist",
-          "Be a scientist",
-          "Indian and international scientists",
-          "NEP 2020",
-          "Snapshots",
+          "thinking like a scientist",
+          "snapshots",
           "keywords",
-          "scientific activities",
           "curiosity",
           "exercises",
-          "pictorial questions",
-          "puzzles",
-          "multiple choice questions",
-          "competencies",
-          "evaluation"
+          "competencies"
         ],
-        "context_relation": "The page discusses the educational content of a textbook, focusing on the scientific heritage, encouraging readers to think like a scientist, and providing exercises to assess learners' competencies.",
+        "context_relation": "The page discusses the educational content of a textbook, focusing on the contributions of scientists, the impact of their work on society, and the various sections within the textbook that help students understand and engage with scientific concepts.",
         "limitations": [
-          "The page does not provide specific examples or details about the exercises or the exercises themselves."
+          "The page does not provide specific details about the exercises or questions included in the 'Keep the curiosity alive' section."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
-      "checkpointed_at": "2026-10-23T03:02:27Z"
+      "run_id": "39920783405",
+      "checkpointed_at": "2026-10-23T08:20:57Z"
     },
     {
       "asset_id": "3f4b295843e5fe3202bdcceb",
@@ -19853,9 +19840,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
+      "run_id": "39937902376",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -20152,7 +20139,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgments for the book's contributors and editors.",
+        "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
@@ -20163,21 +20150,24 @@
         "concepts": [
           "Acknowledgments",
           "Contributors",
-          "Editors",
+          "Staff",
+          "Textbook",
+          "Editing",
           "Support",
-          "Publication process"
+          "Publication",
+          "Commitment"
         ],
-        "context_relation": "Acknowledgments for the book's contributors and editors.",
+        "context_relation": "The text is a page from a book or document that lists acknowledgments and thanks to various contributors and staff involved in the publication of a textbook.",
         "limitations": [
-          "No specific limitations mentioned.",
+          "The text does not provide specific details about the book's content or the subjects it covers.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
-      "checkpointed_at": "2026-10-23T03:02:49Z"
+      "run_id": "39937902376",
+      "checkpointed_at": "2026-10-23T11:05:51Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -22096,9 +22086,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
+      "run_id": "39937902376",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -22494,19 +22484,44 @@
     {
       "asset_id": "4c550deb0064afbfdf84dbfd",
       "asset_sha256": "d05be1c7942d9c83e01fa4f01f92e8b8ea83e8abb6afdf291c2d8cd44e9c06aa",
-      "page_text_context_sha256": "0ee2b48bc8f1ef05a6a33d797c3ce4cc21087db9f9e9eb177c0e06b0cf0a11f8",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 29,
       "asset_path": "assets/d05be1c7942d9c83e01fa4f01f92e8b8ea83e8abb6afdf291c2d8cd44e9c06aa.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0ee2b48bc8f1ef05a6a33d797c3ce4cc21087db9f9e9eb177c0e06b0cf0a11f8",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A curved piece of glass shaped like a lentil seed, used to magnify small objects.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [
+          "lens",
+          "magnifying glass",
+          "microscope",
+          "human eye",
+          "tiny things",
+          "unknown",
+          "improved lenses",
+          "tools",
+          "sight",
+          "size",
+          "lentil seed",
+          "curved piece of glass"
+        ],
+        "context_relation": "The image is a visual representation of a lens, which is used to magnify small objects.",
+        "limitations": [
+          "The image does not provide specific details about the size of the objects that can be magnified.",
+          "The image does not show the process of how the lens works."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39909545638",
+      "checkpointed_at": "2026-10-23T06:45:56Z"
     },
     {
       "asset_id": "d5b07d71464e9d052df1d76f",
@@ -23472,19 +23487,51 @@
     {
       "asset_id": "9dc83721dcdd3c3fceaa5a44",
       "asset_sha256": "57d7965cc24d10a4c081a0bd411eefd12d117780531997f6dc613eaa57960bee",
-      "page_text_context_sha256": "7892dabeb953289efda3c54534fc1268a18aad3624ec78a329bc12544ec4a0cc",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 32,
       "asset_path": "page-0032.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "7892dabeb953289efda3c54534fc1268a18aad3624ec78a329bc12544ec4a0cc",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for preparing a slide of human cheek cells.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Activity 2.3: Let us investigate",
+          "z Rinse your mouth with clean water.",
+          "z Use the blunt end of a clean toothpick, and gently scrape the",
+          "inside of your cheek.",
+          "z Place the scraped material in a drop of water on a clean glass",
+          "slide and spread it evenly.",
+          "z Add a drop of methylene blue (a blue-coloured stain) over",
+          "the material on slide. Adding stain improves the visibility of",
+          "the material under the microscope by increasing contrast.",
+          "z After one minute, add a drop of glycerin over the material on",
+          "the slide to prevent the cells from drying.",
+          "z Now, carefully place a clean coverslip on the material, and",
+          "remove the excess glycerin from the edges of the coverslip using blotting paper.",
+          "z Observe the slide under a microscope and draw what you",
+          "see in your notebook."
+        ],
+        "concepts": [
+          "cell preparation",
+          "microscopy",
+          "cytology"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39920783405",
+      "checkpointed_at": "2026-10-23T08:24:23Z"
     },
     {
       "asset_id": "517ee3c5a3b2f2f57ff3da2f",
@@ -25489,19 +25536,51 @@
     {
       "asset_id": "8564a7c12965a5eb7e99e750",
       "asset_sha256": "387fe7e804cd63561e6dae74ee398d9343cf4eff1395b3c34513d8845d07aeb2",
-      "page_text_context_sha256": "0e3cca0035a6770339d025afda04d4d6eddfdb2116fef35280076a03f20bc5b3",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 39,
       "asset_path": "page-0039.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "0e3cca0035a6770339d025afda04d4d6eddfdb2116fef35280076a03f20bc5b3",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of two children working in a compost bin, with text explaining the process of turning fruit and vegetable peels into manure.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Fig. 2.10: Recycling of nutrients by making manure",
+          "Ancient Indian texts, particularly the Vedas, have references of the word 'Krimi' which means different tiny entities including 'Drishya' (visible) and 'Adrishya' (invisible). Various Vedic texts mention their beneficial and harmful effects.",
+          "Atharvaveda also refers to 'Krimi'.",
+          "If you look around carefully, you might see decaying plants and fallen leaves stored in a container or lying in the garden, disappear after some time from the surroundings. This is because microorganisms breakdown the complex substances of fallen leaves into simpler substances that are rich in nutri",
+          "Isn’t it interesting? By now, you must have understood that bacteria and some fungi are types of microorganisms that play an important role in our lives. And guess what, these helpful bacteria can also decompose animal wastes like dung!",
+          "From Activity 2.7, we can also infer that microorganisms not only help in plant growth, but also clean our environment by breaking down waste."
+        ],
+        "concepts": [
+          "microorganisms",
+          "decomposition",
+          "manure",
+          "Vedas",
+          "Atharvaveda",
+          "plant waste",
+          "soil",
+          "nutrients",
+          "fertility",
+          "microorganisms",
+          "plant growth",
+          "environment",
+          "dung"
+        ],
+        "context_relation": "The image is a visual representation of the process of turning fruit and vegetable peels into manure, which is a part of the larger context of microorganisms and their role in the environment.",
+        "limitations": [
+          "The image does not provide specific details about the microorganisms involved in the decomposition process."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39909545638",
+      "checkpointed_at": "2026-10-23T06:57:58Z"
     },
     {
       "asset_id": "d9aee8788edac618858f2dab",
@@ -25743,7 +25822,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
+      "run_id": "39937902376",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -25808,19 +25887,82 @@
     {
       "asset_id": "b95e4aa142dcd057e69879f3",
       "asset_sha256": "56449aee082a79063b9beaff7256af1f33e93eb35ac310cf7387a1b17b601afe",
-      "page_text_context_sha256": "124e730f1f5bae61e0a1b0b31c3b3388e5167fece5218e698daefc68f9706bda",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 41,
       "asset_path": "page-0041.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "124e730f1f5bae61e0a1b0b31c3b3388e5167fece5218e698daefc68f9706bda",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "instructions for making bread dough with yeast",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "z Cover the dough with a damp cloth and keep it in a warm place.",
+          "z Observe both the bowls after 4–5 hours.",
+          "Did you find any change in the volume, smell, or texture of the",
+          "dough? If not, leave the dough for some more time. After some time,",
+          "you may notice that the dough in bowl A, where yeast was added, has",
+          "risen slightly, become fluffy, and has a different smell compared to",
+          "the dough kneaded without yeast. Why does this happen? What is the",
+          "role of yeast? Why did we add sugar and warm water",
+          "Yeast is a type of microorganism. It belongs to a group",
+          "of microorganisms, called fungi. Yeast grows well in warm",
+          "conditions. You may recall from chapter 'Life Process in Animals'",
+          "in Grade 7 that, like other organisms, yeast also respires and breaks",
+          "down food to release energy for their growth and carry out life",
+          "processes. During this process, carbon dioxide is released, which",
+          "forms bubbles that makes the dough soft and fluffy. Yeast also",
+          "produces a small amount of alcohol during this process, which",
+          "gives the dough a slightly different smell. This special property of",
+          "yeast is used in the process of making breads, cakes, and more!",
+          "In addition to yeast, some bacteria, such as Lactobacillus, help in",
+          "fermentation of batter for making idli and dosa, and dough for",
+          "making bhatura.",
+          "Activity 2.9: Let us prepare",
+          "Take two small glass bowls—label them 'A' and 'B'.",
+          "Pour lukewarm milk in bowl A, and cold milk in bowl B.",
+          "Now, add a small spoonful of curd to each bowl and mix well",
+          "using a spoon.",
+          "Cover both bowls. Keep bowl A in a warm place and bowl B in",
+          "a cool place (like a refrigerator) for a few hours or overnight.",
+          "Observe the changes in the glass bowls. Write your predictions",
+          "and observations in Table 2.4."
+        ],
+        "concepts": [
+          "yeast",
+          "microorganism",
+          "carbon dioxide",
+          "alcohol",
+          "bubbles",
+          "fermentation",
+          "batter",
+          "breads",
+          "cakes",
+          "bacteria",
+          "lactobacillus",
+          "bowl",
+          "milk",
+          "curd",
+          "warm place",
+          "cool place",
+          "refrigerator",
+          "bowl A",
+          "bowl B",
+          "prediction"
+        ],
+        "context_relation": "instructions for making bread dough with yeast",
+        "limitations": [
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39909545638",
+      "checkpointed_at": "2026-10-23T07:12:08Z"
     },
     {
       "asset_id": "d92564ca795761fb02ce73c1",
@@ -25865,9 +26007,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
+      "run_id": "39937902376",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -28559,19 +28701,69 @@
     {
       "asset_id": "031ae494589edcaa391903b5",
       "asset_sha256": "fd00d0e6c56903351d34cc3be190a9d2c308954ae22174d7942785897d08a314",
-      "page_text_context_sha256": "354f1003caef53c02b82f67f8b6d622351c238c5296231d74287494bf8372128",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 50,
       "asset_path": "page-0050.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "354f1003caef53c02b82f67f8b6d622351c238c5296231d74287494bf8372128",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Activity 3.2: Let us list",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Eat a balanced diet",
+          "Stay physically active",
+          "Say 'No' to smoking or alcohol",
+          "Manage stress",
+          "Get enough sleep",
+          "Fig. 3.2: How to be healthy",
+          "Activity 3.2: Let us list",
+          "z List some good habits that your parents, teachers, or elders",
+          "often encourage you to follow. How many of these are already",
+          "a part of your daily routine? Which ones would you like to",
+          "start following? Add to the list below:",
+          "o Keep yourself clean by maintaining personal hygiene.",
+          "o Eat a healthy and balanced diet.",
+          "o Exercise regularly.",
+          "o Make time to relax or meditate every day.",
+          "Now, think about habits that are not good for your health.",
+          "Add more to the list below:",
+          "o Spending too much time on mobile phones or other digital",
+          "screens.",
+          "o Eating fast food and other junk food every day.",
+          "o Sleeping very late or not getting enough sleep.",
+          "o Skipping meals, especially breakfast.",
+          "Taking care of our body and mind is important. Healthy habits",
+          "support a healthy body as well as a healthy mind.",
+          "Discuss your findings with your friends and teacher. From",
+          "the activity you participated in and the discussions, you may",
+          "have realised that our health depends on many factors. These",
+          "factors include our lifestyle (how we live) and our environment",
+          "(our surroundings).",
+          "3.2.1 Maintain a healthy lifestyle"
+        ],
+        "concepts": [
+          "Healthy habits",
+          "Physical activity",
+          "Sleep",
+          "Balanced diet",
+          "Stress management",
+          "Addictive substances",
+          "Healthy lifestyle"
+        ],
+        "context_relation": "Activity 3.2: Let us list",
+        "limitations": [
+          "The image does not provide specific details about the activities or exercises."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39920783405",
+      "checkpointed_at": "2026-10-23T08:38:56Z"
     },
     {
       "asset_id": "66ec88b09ef3d0fb79052a97",
@@ -30002,9 +30194,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
+      "run_id": "39937902376",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -30446,9 +30638,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
+      "run_id": "39937902376",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -31319,19 +31511,33 @@
     {
       "asset_id": "dca29588e457e762592b2148",
       "asset_sha256": "7ad2528ee99044f95599f08644032e490d9b7bcabdd405d5da6264a9246ff4ec",
-      "page_text_context_sha256": "36b580be4bfbd33d42bbfb00c92d71da2611a8e9b85795b9c32efeaf117e1615",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 61,
       "asset_path": "assets/7ad2528ee99044f95599f08644032e490d9b7bcabdd405d5da6264a9246ff4ec.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "36b580be4bfbd33d42bbfb00c92d71da2611a8e9b85795b9c32efeaf117e1615",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of bacteria with crosses over them.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "antibiotic resistance",
+          "bacteria"
+        ],
+        "context_relation": "The image is related to the discussion of antibiotic resistance in bacteria.",
+        "limitations": [
+          "The image does not provide specific details about the bacteria or the crosses over them."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39909545638",
+      "checkpointed_at": "2026-10-23T07:43:25Z"
     },
     {
       "asset_id": "8c3fcfdac425af34825be2a1",
@@ -32855,7 +33061,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
+      "run_id": "39937902376",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -32864,19 +33070,59 @@
     {
       "asset_id": "4f44f5240e53b89717587e62",
       "asset_sha256": "746de891feff87b31b701a0e0f677c2559925386f67c00b1b13b6b1137aa7be9",
-      "page_text_context_sha256": "922447956f4a953b530cdc85f5d22fdfc70b20852d0491e9453fcabff8c1e0cb",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 67,
       "asset_path": "assets/746de891feff87b31b701a0e0f677c2559925386f67c00b1b13b6b1137aa7be9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "922447956f4a953b530cdc85f5d22fdfc70b20852d0491e9453fcabff8c1e0cb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a simple electromagnet model with a battery and a compass.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "120",
+          "140",
+          "160",
+          "80",
+          "100",
+          "60",
+          "40",
+          "200",
+          "220",
+          "240",
+          "260",
+          "280",
+          "300",
+          "320",
+          "340",
+          "0",
+          "E",
+          "S/E",
+          "W",
+          "MN",
+          "N",
+          "S",
+          "1",
+          "+"
+        ],
+        "concepts": [
+          "electromagnet",
+          "battery",
+          "compass"
+        ],
+        "context_relation": "The image illustrates the working principle of an electromagnet using a battery and a compass.",
+        "limitations": [
+          "The compass is not showing the magnetic field direction."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39920783405",
+      "checkpointed_at": "2026-10-23T08:54:15Z"
     },
     {
       "asset_id": "5c66c012b4a116cca5008fb4",
@@ -33957,19 +34203,74 @@
     {
       "asset_id": "acfb58f02fadc0623057c038",
       "asset_sha256": "6163eff9673da7368edd8c06ec27710b3e57aedfe212cb543407681d81d8f00f",
-      "page_text_context_sha256": "b874d39bde71b7f8c12576c7def3878fb8c85b9f937f4ee2030da25ff04f473f",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 71,
       "asset_path": "page-0071.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "b874d39bde71b7f8c12576c7def3878fb8c85b9f937f4ee2030da25ff04f473f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Diagram of an electromagnet with a compass needle near its ends A and B.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "A           B        A           B",
+          "Fig. 4.4: Compass needle near (a) End A; (b) End B of an electromagnet",
+          "As we have learnt earlier, when two magnets are brought close",
+          "to each other, their unlike poles (North–South) attract each other.",
+          "So, if north pole of the magnetic compass is attracted towards",
+          "end A of the electromagnet, then end A is south pole.",
+          "Repeat this procedure to find the polarity of end B as well",
+          "(Fig. 4.4b). Did you find that the polarity of end B is opposite",
+          "to the polarity of end A?",
+          "We learnt in grade 6 that a magnet has two poles. Just like a",
+          "magnet, an electromagnet also has two poles—North and South.",
+          "Think like a scientist",
+          "Repeat Activity 4.3 with — (i) 2 and 4 cells with the same coil, (ii) 2 cells but",
+          "different number of turns of the coil. What do you observe?",
+          "A single cell provides only a small amount of current, so the magnetic",
+          "field is weak. As a result, the deflection of compass needle is less and the coil",
+          "can only attract a few clips. A battery with more cells gives a larger current",
+          "as compared to that with a single cell. This creates a stronger magnetic field,",
+          "so the deflection of the compass needle is more and the coil can attract",
+          "more clips. The increase in number of turns of the coil also makes the coil a",
+          "stronger magnet!",
+          "Also, repeat Activity 4.4 by changing the direction of the current. So, the strength of an electromagnet can be changed by changing the amount",
+          "of electric current flowing through the coil or the number of turns of the coil, or both. Also, its poles can be reversed by changing the direction of the current.",
+          "A step further",
+          "Do you remember learning earlier (in the chapter 'Exploring Magnets' in Curiosity, Grade 6) that a freely suspended magnet rests",
+          "along the north–south direction because our Earth itself behaves like a giant magnet? But why does Earth behave like a magnet? Deep inside the Earth, the movement of liquid iron in the core creates",
+          "electric currents, which generate a magnetic field. Many migratory birds, fish, and animals use this field to navigate across continents and oceans. The Earth’s magnetic field also acts as a shield, blocking",
+          "harmful particles from space, and helps protect life on Earth."
+        ],
+        "concepts": [
+          "Electromagnet",
+          "Magnetic field",
+          "Compass needle",
+          "Polarity",
+          "Magnet poles",
+          "Electric current",
+          "Magnetic field strength",
+          "Magnetic field direction",
+          "Magnetic field reversal",
+          "Magnetic field effect on compass needle",
+          "Magnetic field effect on Earth",
+          "Magnetic field effect on migratory animals"
+        ],
+        "context_relation": "The image is a diagram showing the effect of an electromagnet on a compass needle.",
+        "limitations": [
+          "The image does not provide specific numerical values or measurements.",
+          "The image does not show the exact strength or direction of the magnetic field.",
+          "The image does not show the exact effect of the magnetic field on the compass needle."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39937902376",
+      "checkpointed_at": "2026-10-23T11:18:45Z"
     },
     {
       "asset_id": "b3a9df973adc2b6a2a86e2d2",
@@ -34409,16 +34710,18 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the heating effect of electric current in nichrome wire, emphasizing safety precautions and the scientific reasoning behind it.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "A page from a textbook discussing the heating effect of electric current in a wire, with a diagram and text explaining the concept.",
+        "visual_type": "diagram",
         "visible_text": [
+          "Chapter 4 — Electricity: Magnetic and Heating Effects",
           "(Do not hold the nichrome wire).",
-          "What difference do you feel?",
           "Safety first",
+          "What difference do you feel?",
           "Do not touch the wire for an extended period to avoid any injuries.",
           "Repeat the last two steps to confirm the observation.",
-          "You may have observed that nichrome wire feels warm when current is passed through it.",
-          "This happens because, when electric current flows through any conductor, it faces some opposition or resistance to its flow. Different conductors offer different levels of resistance to the flow of current. A nichrome wire, for example, offers higher resistance compared to a copper wire of the same ",
+          "You may have observed that nichrome wire feels warm when current is passed through it. This happens because, when electric current flows through any conductor, it faces some opposition or resistance to its flow. Different conductors offer different levels of resistance to the flow of current. A nich",
+          "Fig. 4.5: Heating effect in a wire",
+          "Think like a scientist",
           "This activity should be carried out strictly under the supervision of a teacher.",
           "Repeat Activity 4.5 with a battery of 2 cells. What do you notice? For the same duration, does the wire heat up more with one cell or two cells?",
           "The amount of heat generated is more in the experiment with 2 cells. This is due to the fact that the heat generated depends on the magnitude of the electric current. The heat generated in a wire depends on the material, thickness, length of the wire, and the duration for which the current flows.",
@@ -34428,21 +34731,21 @@
           "Electric current",
           "Resistance",
           "Heat generation",
-          "Nichrome wire",
           "Incandescent lamp",
-          "Electric current in household appliances"
+          "Electric appliances",
+          "Heating effect"
         ],
-        "context_relation": "The page discusses the heating effect of electric current in nichrome wire, explaining the scientific principles behind it and its practical applications in household appliances.",
+        "context_relation": "The text is discussing the heating effect of electric current in a wire, which is a concept in electricity.",
         "limitations": [
-          "The page does not provide specific instructions for the experiment described, only general guidelines.",
-          "The page does not include any visual aids or diagrams to support the explanation."
+          "The text does not provide specific details about the experiment or the apparatus used.",
+          "The text does not provide specific details about the materials used in the experiment."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
-      "checkpointed_at": "2026-10-23T03:03:25Z"
+      "run_id": "39920783405",
+      "checkpointed_at": "2026-10-23T09:03:03Z"
     },
     {
       "asset_id": "7c9ef269c86e97f96897e031",
@@ -34786,19 +35089,42 @@
     {
       "asset_id": "bf6d097c9032d517a6297339",
       "asset_sha256": "d12327ac34e3d28aadda532b3356f3d6981376f28d2d3400ab8c9604eb0225c1",
-      "page_text_context_sha256": "ee9f7db66583c72118b518cb39649a6e574ddcd06b2c5343317ad64c6f3f6731",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 74,
       "asset_path": "page-0074.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "ee9f7db66583c72118b518cb39649a6e574ddcd06b2c5343317ad64c6f3f6731",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Images of various household electric heating appliances.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 4.6: Simple household electric heating appliances (a) Electric room heater;",
+          "(b) Electric stove; (c) Electric kettle; (d) Electric iron; (e) Water heating immersion rod; (f) Hair dryer",
+          "The heating effect of electric current is useful in many everyday appliances. But sometimes, it can cause problems, like energy loss in wires during transmission. Overheating in appliances may cause damage to plugs and sockets where plastic parts may melt, or even lead to fires. In household circuit",
+          "Beyond household use, heating effect of electric current has several industrial applications. One notable example is in steel manufacturing industries, where a specially designed high-temperature furnace (an enclosed space built to generate heat) uses electric current to produce heat. This is used t"
+        ],
+        "concepts": [
+          "electric current",
+          "heating effect",
+          "household appliances",
+          "safety devices",
+          "industrial applications",
+          "steel manufacturing"
+        ],
+        "context_relation": "descriptive",
+        "limitations": [
+          "The image does not show the specific safety devices mentioned in the text."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39920783405",
+      "checkpointed_at": "2026-10-23T09:05:58Z"
     },
     {
       "asset_id": "ea81c1bb75ba28fdb8d6ca27",
@@ -37770,9 +38096,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
+      "run_id": "39920783405",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -38076,8 +38402,8 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing different types of forces, specifically contact forces and muscular force.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
+        "visual_type": "diagram",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -38093,16 +38419,157 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The page discusses different types of forces, specifically contact forces and muscular force, and provides examples of their application in living beings.",
+        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The page does not provide a diagram or illustration of the contact forces or muscular force."
+          "The image does not provide specific details about the types of forces or the physical properties of the objects."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864352424",
-      "checkpointed_at": "2026-10-23T03:03:51Z"
+      "run_id": "39920783405",
+      "checkpointed_at": "2026-10-23T09:18:27Z"
+    },
+    {
+      "asset_id": "ae204e9d8dac6cbaebca9c68",
+      "asset_sha256": "72f9ea27e93759bdebe0d2ae435bd54c42818e90b465655e9fe319372c5bb0af",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/72f9ea27e93759bdebe0d2ae435bd54c42818e90b465655e9fe319372c5bb0af.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4ced2a91f1ad4add1f52a0f90bfa067845579b06c0365565cf231ef29c8dfe09",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a red shirt, with one hand on their chin, appearing thoughtful or contemplative.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text discussing the muscular force of animals and its role in human functions.",
+        "limitations": [
+          "The image does not provide specific details about the muscular force or its applications in human functions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39920783405",
+      "checkpointed_at": "2026-10-23T09:14:59Z"
+    },
+    {
+      "asset_id": "3c71aba3cff9b6b75ea1d4e2",
+      "asset_sha256": "c20c1293e5e3c0bc36d4fe17fabf0f101f98437a3649d11875266d95c2b55900",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/c20c1293e5e3c0bc36d4fe17fabf0f101f98437a3649d11875266d95c2b55900.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4ced2a91f1ad4add1f52a0f90bfa067845579b06c0365565cf231ef29c8dfe09",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A farmer is plowing a field with two oxen using a wooden plow.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "67",
+          "Humans used the muscular force of some animals to carry out many tasks for a long time (Fig. 5.4).",
+          "Fig. 5.4: Use of muscular force of animals to assist with human tasks",
+          "Ever heard of ...",
+          "Muscular force plays an important role in many functions inside our body too. This force helps us chew food and push it through the alimentary canal during the process of digestion. The expansion and contraction of our heart muscles allows the blood to circulate in our body —"
+        ],
+        "concepts": [
+          "Muscular force",
+          "Animals",
+          "Plowing",
+          "Alimentary canal",
+          "Digestion",
+          "Heart muscles",
+          "Blood circulation"
+        ],
+        "context_relation": "The image illustrates the use of muscular force from animals to assist in human tasks, specifically plowing a field.",
+        "limitations": [
+          "The image does not show the muscular force of animals in the human body."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39920783405",
+      "checkpointed_at": "2026-10-23T09:16:19Z"
+    },
+    {
+      "asset_id": "779227c533fab475e70494a3",
+      "asset_sha256": "5b5b9084e7ad2c7cdf4ac072b557f6ee765e033ebbf47769fa21b33cbba0821c",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/5b5b9084e7ad2c7cdf4ac072b557f6ee765e033ebbf47769fa21b33cbba0821c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4ced2a91f1ad4add1f52a0f90bfa067845579b06c0365565cf231ef29c8dfe09",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A horse-drawn carriage with four people riding in it, on a dirt road with green fields and trees in the background.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "67",
+          "Humans used the muscular force of some animals to carry out many tasks for a long time (Fig. 5.4).",
+          "Fig. 5.4: Use of muscular force of animals to assist with human tasks",
+          "Ever heard of ...",
+          "Muscular force plays an important role in many functions inside our body too. This force helps us chew food and push it through the alimentary canal during the process of digestion. The expansion and contraction of our heart muscles allows the blood to circulate in our body."
+        ],
+        "concepts": [
+          "Muscular force",
+          "Animal-assisted tasks",
+          "Digestion",
+          "Heart muscles",
+          "Blood circulation"
+        ],
+        "context_relation": "The image illustrates the use of muscular force from animals to assist with human tasks, which is related to the concepts of digestion and blood circulation in the text.",
+        "limitations": [
+          "The image does not show the muscular force of animals in action, only their use in assisting with human tasks.",
+          "The text provides additional information about the muscular force's role in the body, which is not directly depicted in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39920783405",
+      "checkpointed_at": "2026-10-23T09:19:50Z"
+    },
+    {
+      "asset_id": "5ea99b2a936c89c223e68c3d",
+      "asset_sha256": "2c56e008cc4b93bd0ecf047dbdfb85b5aa35cb79e14db314206acf1a858341d8",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 87,
+      "asset_path": "assets/2c56e008cc4b93bd0ecf047dbdfb85b5aa35cb79e14db314206acf1a858341d8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4ced2a91f1ad4add1f52a0f90bfa067845579b06c0365565cf231ef29c8dfe09",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a blue shirt, with one hand near their ear and the other hand pointing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of muscular force and its role in human functions.",
+        "limitations": [
+          "The image does not provide specific details about the muscular force or its functions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39920783405",
+      "checkpointed_at": "2026-10-23T09:20:57Z"
     }
   ]
 }

@@ -124,11 +124,13 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("already has active source extraction or Layer 4–5 work", coordinator)
         self.assertIn('else job.get("started_at")', coordinator)
         self.assertIn("checkpoint_baseline=", coordinator)
-    def test_layer45_resume_uses_finite_request_timeout_and_replaces_only_class6_runner(self):
+    def test_layer45_resume_uses_finite_request_timeout_and_replaces_only_matching_class_runner(self):
         workflow = read("textbook-visual-candidates-v3.yml")
         pipeline = (ROOT / "scripts" / "quantaedge_textbook_pipeline.py").read_text(encoding="utf-8")
-        self.assertIn("cancel-in-progress: ${{ github.event_name == 'push' && (contains", workflow)
-        self.assertIn("[resume-visual-layers-4-5-class-6]", workflow)
+        self.assertIn("cancel-in-progress: ${{ github.event_name == 'push' && ((", workflow)
+        self.assertIn("(github.event_name == 'push' && contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') && '6')", workflow)
+        self.assertIn("(github.event_name == 'push' && (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]')", workflow)
+        self.assertIn("(github.event_name == 'push' && (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]')", workflow)
         self.assertIn("--request-timeout 300", workflow)
         self.assertIn('q.add_argument("--request-timeout",type=int,default=300', pipeline)
         self.assertIn('"--timeout",str(args.request_timeout)', pipeline)
@@ -255,6 +257,34 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("github.event_name == 'workflow_call'", workflow)
         self.assertIn("require-existing-checkpoint", workflow)
         self.assertIn("retryable_segments", workflow)
+
+    def test_layer45_run_budget_yields_safely_and_is_resumable(self):
+        workflow = read("textbook-visual-candidates-v3.yml")
+        pipeline = (ROOT / "scripts" / "quantaedge_textbook_pipeline.py").read_text(encoding="utf-8")
+        self.assertIn("--max-batches-per-run", pipeline)
+        self.assertIn("RUN_BUDGET_REACHED", pipeline)
+        self.assertIn("YIELDED_FOR_RESUME", pipeline)
+        self.assertIn("if processed > 0: total_batches += 1", pipeline)
+        self.assertIn("id: layer45_run", workflow)
+        self.assertIn("MAX_BATCHES_PER_RUN: 8", workflow)
+        self.assertIn('--max-batches-per-run "$MAX_BATCHES_PER_RUN"', workflow)
+        self.assertIn('result" -eq 10', workflow)
+        self.assertIn("steps.layer45_run.outputs.yielded != 'true'", workflow)
+        self.assertIn("needs.prepare.outputs.yielded != 'true'", workflow)
+
+    def test_layer45_no_progress_guard_and_inventory_source_identity_recovery_exist(self):
+        analyzer = (ROOT / "scripts" / "analyze_visual_inventory_with_ollama.py").read_text(encoding="utf-8")
+        pipeline = (ROOT / "scripts" / "quantaedge_textbook_pipeline.py").read_text(encoding="utf-8")
+        self.assertIn("SOURCE_IDENTITY_NORMALIZED", analyzer)
+        self.assertIn("assets_processed_ids", analyzer)
+        self.assertIn("repeated prior successful asset IDs without increasing analyzed/failed counts", pipeline)
+
+    def test_layer45_cancel_only_marker_skips_work_and_class_resume_markers_cancel_stale_runs(self):
+        workflow = read("textbook-visual-candidates-v3.yml")
+        self.assertIn("[cancel-layer45-matrix]", workflow)
+        self.assertIn("github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]'", workflow)
+        self.assertIn("github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]'", workflow)
+        self.assertIn("&& !(github.event_name == 'push' && contains(github.event.head_commit.message || '', '[cancel-layer45-matrix]'))", workflow)
 
 
 if __name__ == "__main__":

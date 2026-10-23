@@ -1,4 +1,4 @@
--- V167: self-service account-deletion request lifecycle.
+-- V171: self-service account-deletion request lifecycle.
 -- Requests are deliberately distinct from completed erasure: finance, certificate,
 -- guardian and audit dependencies require a verified retention-aware fulfillment process.
 CREATE TABLE account_deletion_request (
@@ -51,5 +51,5 @@ CREATE INDEX idx_account_deletion_child_student
   WHERE student_id IS NOT NULL;
 
 INSERT INTO app_metadata(key,value)
-VALUES ('schema','account-deletion-request-lifecycle-v167')
+VALUES ('schema','account-deletion-request-lifecycle-v171')
 ON CONFLICT(key) DO UPDATE SET value=excluded.value;

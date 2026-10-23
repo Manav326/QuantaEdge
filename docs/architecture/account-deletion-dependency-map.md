@@ -1,5 +1,9 @@
 # Account deletion: dependency map and fulfillment boundary
 
+## Schema versioning after main synchronization
+
+Account-deletion migrations use **V171/V172** because current `main` already uses V167–V170 for portable-assessment and course-release changes. This avoids duplicate Flyway migration versions after synchronization.
+
 ## Scope and truth in the UI
 
 The request-intake stage is implemented on branch `feat/account-deletion-lifecycle-20261023`. It does **not** claim that a submitted request has already deleted an account or its personal data.

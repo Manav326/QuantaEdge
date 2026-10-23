@@ -442,6 +442,36 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
                 self.assertEqual(0, main())
         self.assertIsNone(mocked_run.call_args.kwargs["timeout"])
 
+    def test_resume_canonicalizes_legacy_asset_source_identity_to_inventory_source(self):
+        inventory = json.loads(self.inventory_path.read_text(encoding="utf-8"))
+        inventory["assets"][0]["source_book_id"] = "legacy-wrong-book"
+        inventory["assets"][0]["source_pdf_sha256"] = "b" * 64
+        self.inventory_path.write_text(json.dumps(inventory), encoding="utf-8")
+        output = self.root / "visual-analysis.v1.json"
+
+        with redirect_stdout(io.StringIO()) as progress:
+            result = run_analysis(
+                self.inventory_path, endpoint="http://127.0.0.1:11434",
+                model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+                opener=self._opener, output_path=output,
+            )
+        saved = result["results"][0]
+        self.assertEqual("book-c6-science", saved["source_book_id"])
+        self.assertEqual("a" * 64, saved["source_pdf_sha256"])
+        self.assertEqual(1, result["summary"]["assets_analyzed"])
+        self.assertEqual(["asset-1"], result["summary"]["assets_processed_ids"])
+        self.assertIn("SOURCE_IDENTITY_NORMALIZED", progress.getvalue())
+
+        def must_not_call(*args, **kwargs):
+            raise AssertionError("a canonicalized matching checkpoint must be reused")
+
+        resumed = run_analysis(
+            self.inventory_path, endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+            opener=must_not_call, output_path=output, resume=True,
+        )
+        self.assertEqual(1, resumed["summary"]["assets_skipped_from_checkpoint"])
+        self.assertEqual(0, resumed["summary"]["assets_processed_this_run"])
 
 
 if __name__ == "__main__":

@@ -50,6 +50,7 @@ public class CourseMarketplaceLaunchReadinessService {
           r.id as release_id,r.release_state,r.content_fingerprint,
           t.display_name as institution_name,t.status as institution_status,
           p.id as course_id,p.code as course_code,p.display_name as course_name,p.status as course_status,
+          coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=p.id),'LEARNING_CONTENT') as delivery_mode,
           (select count(distinct ps.subject_id)
              from curriculum_program_subject ps join curriculum_subject s
                on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
@@ -119,9 +120,16 @@ public class CourseMarketplaceLaunchReadinessService {
     long subjectsWithLessons=number(row.get("subjects_with_published_lessons"));
     long chapterCount=number(row.get("published_chapter_count"));
     long lessonCount=number(row.get("published_lesson_count"));
-    add(checks,"PUBLISHED_LEARNING_CONTENT","Every active mapped subject has published lessons",
-        subjectCount>0&&subjectsWithLessons==subjectCount&&chapterCount>0&&lessonCount>0,
-        "Publish reviewed lessons in every active subject mapped to this course before listing it.");
+    boolean assessmentOnly="ASSESSMENT_ONLY".equals(text(row.get("delivery_mode")));
+    boolean requiredContentReady=assessmentOnly
+        ? assessmentOnlyCoursePublishReady(courseId)
+        : subjectCount>0&&subjectsWithLessons==subjectCount&&chapterCount>0&&lessonCount>0;
+    add(checks,"PUBLISHED_LEARNING_CONTENT",
+        assessmentOnly?"All three source-paper tests are published and reviewed":"Every active mapped subject has published lessons",
+        requiredContentReady,
+        assessmentOnly
+            ? "Publish all three source-paper tests after human review of questions and answer keys before listing this course."
+            : "Publish reviewed lessons in every active subject mapped to this course before listing it.");
     add(checks,"OFFER_TERMS","Marketplace offer is configured",false,
         "Create a draft marketplace offer and explicitly set its listing title, description and INR price.");
     List<String> blockers=checks.stream().filter(check->!Boolean.TRUE.equals(check.get("passed")))
@@ -154,6 +162,7 @@ public class CourseMarketplaceLaunchReadinessService {
           t.display_name as institution_name,t.status as institution_status,
           a.status as assignment_status,r.release_state,r.content_fingerprint,
           p.status as course_status,p.code as course_code,p.display_name as course_name,
+          coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=p.id),'LEARNING_CONTENT') as delivery_mode,
           (select count(distinct ps.subject_id)
              from curriculum_program_subject ps
              join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
@@ -228,9 +237,16 @@ public class CourseMarketplaceLaunchReadinessService {
     long subjectsWithLessons = number(offer.get("subjects_with_published_lessons"));
     long chapterCount = number(offer.get("published_chapter_count"));
     long lessonCount = number(offer.get("published_lesson_count"));
-    add(checks,"PUBLISHED_LEARNING_CONTENT","Every active mapped subject has published lessons",
-        subjectCount > 0 && subjectsWithLessons == subjectCount && chapterCount > 0 && lessonCount > 0,
-        "Publish reviewed lessons in every active subject mapped to this course before listing it.");
+    boolean assessmentOnly="ASSESSMENT_ONLY".equals(text(offer.get("delivery_mode")));
+    boolean requiredContentReady=assessmentOnly
+        ? assessmentOnlyCoursePublishReady(number(offer.get("course_id")))
+        : subjectCount > 0 && subjectsWithLessons == subjectCount && chapterCount > 0 && lessonCount > 0;
+    add(checks,"PUBLISHED_LEARNING_CONTENT",
+        assessmentOnly?"All three source-paper tests are published and reviewed":"Every active mapped subject has published lessons",
+        requiredContentReady,
+        assessmentOnly
+            ? "Publish all three source-paper tests after human review of questions and answer keys before listing this course."
+            : "Publish reviewed lessons in every active subject mapped to this course before listing it.");
 
     String courseName = text(offer.get("title_override")).isBlank()
         ? text(offer.get("course_name")) : text(offer.get("title_override"));
@@ -576,33 +592,13 @@ public class CourseMarketplaceLaunchReadinessService {
   }
 
   private String contentFingerprint(long programId) {
-    String value=jdbc.queryForObject("""
-        select md5(coalesce(string_agg(entity_type||':'||entity_id::text||':'||row_json,chr(10)
-            order by entity_type,entity_id),'')) as fingerprint
-        from (
-          select 'program'::text entity_type,p.id entity_id,to_jsonb(p)::text row_json
-          from curriculum_program p where p.id=?
-          union all
-          select 'subject',s.id,to_jsonb(ps)::text||to_jsonb(s)::text
-          from curriculum_program_subject ps
-          join curriculum_program p on p.id=ps.program_id
-          join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
-            and (s.program_id=ps.program_id or s.program_id is null)
-          where ps.program_id=?
-          union all
-          select 'chapter',ch.id,to_jsonb(ch)::text
-          from curriculum_program_subject ps
-          join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
-          join curriculum_chapter ch on ch.subject_id=s.id where ps.program_id=?
-          union all
-          select 'lesson',l.id,to_jsonb(l)::text
-          from curriculum_program_subject ps
-          join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
-          join curriculum_chapter ch on ch.subject_id=s.id
-          join lesson l on l.chapter_id=ch.id where ps.program_id=?
-        ) content_rows
-        """,String.class,programId,programId,programId,programId);
+    String value=jdbc.queryForObject("select course_content_fingerprint(?)",String.class,programId);
     return value==null?"d41d8cd98f00b204e9800998ecf8427e":value.trim();
+  }
+
+  private boolean assessmentOnlyCoursePublishReady(long programId) {
+    Boolean ready=jdbc.queryForObject("select assessment_only_course_publish_ready(?)",Boolean.class,programId);
+    return Boolean.TRUE.equals(ready);
   }
 
   private static long percentageOf(long amountPaise,int basisPoints) {

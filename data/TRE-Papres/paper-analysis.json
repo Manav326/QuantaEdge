@@ -1,0 +1,114 @@
+{
+  "schema": "quantaedge.previous-year-paper-analysis.v1",
+  "exam": "BPSC TRE Computer Science (PGT / Senior Secondary)",
+  "source_article": "https://csestudy247.com/download-bpsc-tre-1-tre-2-tre-3-computer-science-question-paper-pdf/",
+  "status": "SECONDARY_ARTICLE_COUNTS_PENDING_PRIMARY_PAPER_RECOUNT",
+  "reported_paper_size": 80,
+  "findings": [
+    "Digital Electronics and Operating Systems are recurring high-weight areas in the source article's classification.",
+    "Operating Systems is reported at 9 questions / 11.25% in TRE 1.0 and 16 / 20% in each of TRE 2.0 and TRE 3.0.",
+    "Digital Electronics is reported at 14 / 17.5% in TRE 1.0, 10 / 12.5% in TRE 2.0 and 16 / 20% in TRE 3.0.",
+    "Computer Organization & Architecture is reported at 6 / 7.5% in TRE 1.0, 2 / 2.5% in TRE 2.0 and 10 / 12.5% in TRE 3.0.",
+    "IoT / AI is reported at 6 / 7.5% in TRE 1.0, 3 / 3.75% in TRE 2.0 and 7 / 8.75% in TRE 3.0.",
+    "The collection article's general claim of no negative marking conflicts with the TRE 1.0 primary booklet, whose instructions specify a one-fourth-mark penalty for a wrong answer.",
+    "The supplied TRE 3.0 booklet inventory contains 150 questions (30 qualifying-language + 40 GS + 80 CS), with E-1 through E-8 and H-9 through H-30 preserved as source identities."
+  ],
+  "per_cycle": {
+    "TRE 1.0": {
+      "counts_reported_by_article": {
+        "Digital Electronics & Logic Circuits": 14,
+        "Operating System": 9,
+        "Computer Fundamentals & Hardware": 8,
+        "DBMS": 7,
+        "Computer Organization & Architecture": 6,
+        "Data Structures & Algorithms": 6,
+        "Computer Networks": 6,
+        "Software Engineering": 6,
+        "Artificial Intelligence & IoT": 6,
+        "Programming Concepts & Translators": 5,
+        "Web & Internet Technology": 4,
+        "E-Commerce & Multimedia": 3
+      },
+      "article_sum": 80,
+      "article_percent_sum": 100,
+      "recount_status": "NOT_INDEPENDENTLY_RECOUNTED"
+    },
+    "TRE 2.0": {
+      "counts_reported_by_article": {
+        "Operating System": 16,
+        "Digital Electronics & Logic Circuits": 10,
+        "Web & Internet Technology": 7,
+        "Data Structures & Algorithms": 6,
+        "Computer Networks": 6,
+        "Operating Systems & Software": 4,
+        "Software Engineering": 4,
+        "Programming & Translators": 3,
+        "IoT & AI": 3,
+        "DBMS": 5,
+        "Computer Fundamentals & Hardware": 8,
+        "Memory & Storage": 2,
+        "Computer Organization & Architecture": 2
+      },
+      "article_claimed_total": 80,
+      "arithmetic_sum_of_listed_counts": 76,
+      "arithmetic_sum_of_listed_percentages": 95,
+      "recount_status": "INCONSISTENT_REQUIRES_PRIMARY_PAPER_RECOUNT",
+      "note": "Possible overlap in category labels or missing categories; do not normalize percentages or invent four missing questions."
+    },
+    "TRE 3.0": {
+      "counts_reported_by_article": {
+        "Digital Electronics & Logic Gates": 16,
+        "Operating System": 16,
+        "Computer Organization & Architecture": 10,
+        "Data Structures & Algorithms": 7,
+        "IoT & AI": 7,
+        "Computer Networks": 6,
+        "Software Engineering": 6,
+        "DBMS": 5,
+        "Web Technology & Internet Concepts": 4,
+        "E-Commerce & Multimedia": 3
+      },
+      "article_sum": 80,
+      "article_percent_sum": 100,
+      "recount_status": "NOT_INDEPENDENTLY_RECOUNTED"
+    }
+  },
+  "analysis_method_next": {
+    "expected_steps": [
+      "Map each of the 80 Computer Science questions to one primary topic and optional secondary topic.",
+      "Keep primary-topic counts mutually exclusive so all 80 questions reconcile to 100%.",
+      "Capture the paper's exact rules from the individual booklet, rather than copying general web-page claims.",
+      "Cross-check official provisional/final answer keys when available; keep proposed AI-solved answers and explanation confidence separate.",
+      "Record uncertainty, ambiguous wording, deleted/invalid questions, and any official-key corrections at question level."
+    ]
+  },
+  "primary_booklet_structure": {
+    "source": "data/TRE-Papres/sources/",
+    "status": "RECONCILED_TO_SUPPLIED_BOOKLETS",
+    "scored_sections": {
+      "GENERAL_STUDIES": 40,
+      "COMPUTER_SCIENCE": 80,
+      "scored_question_count": 120
+    },
+    "cycles": {
+      "TRE 1.0": {
+        "total_question_count": 120,
+        "qualifying_language_question_count": 0
+      },
+      "TRE 2.0": {
+        "total_question_count": 150,
+        "qualifying_language_question_count": 30
+      },
+      "TRE 3.0": {
+        "total_question_count": 150,
+        "qualifying_language_question_count": 30,
+        "qualifying_language_keys": [
+          "E-1..E-8",
+          "H-9..H-30"
+        ],
+        "excluded_keys_not_present": []
+      }
+    },
+    "note": "The article's 80-question topic distributions apply to the Computer Science section, not the whole booklet. In TRE 2.0 and TRE 3.0 qualifying-language questions appear in the attempt but are scored separately from GS and CS."
+  }
+}

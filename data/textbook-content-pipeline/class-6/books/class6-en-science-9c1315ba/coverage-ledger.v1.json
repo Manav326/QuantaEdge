@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
     "raw_analysis_result_rows": 1376,
-    "successful_visual_analyses": 1354,
+    "successful_visual_analyses": 1360,
     "missing_visual_analyses": 702,
-    "failed_visual_analyses": 22,
+    "failed_visual_analyses": 16,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 724,
+    "unresolved_count": 718,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -8227,18 +8227,23 @@
         "concepts": [
           "National Education Policy 2020",
           "National Curriculum Framework for School Education (NCF-SE) 2023",
-          "pañchakoshas",
-          "Middle Stage",
+          "pañchakośhas",
           "Foundational and Preparatory Stages",
-          "Analytical, descriptive, and narrative capabilities",
-          "Transformative learning culture",
-          "Classroom arrangement",
-          "Teacher preparation",
-          "Curricular Area Groups"
+          "Middle Stage",
+          "Secondary Stages",
+          "holistic development",
+          "transformative learning culture",
+          "appropriate textbooks",
+          "curricular areas",
+          "content and pedagogy",
+          "classroom arrangement",
+          "teacher preparation",
+          "conceptual connections",
+          "National Council of Educational Research and Training"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving a transformative learning culture.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving a holistic development.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
+          "The foreword does not provide specific details about the content of the textbooks or the curricular areas."
         ]
       },
       "chapter_id": null,
@@ -27232,7 +27237,7 @@
           "R. Shankar, Former Professor, Mangalore University; Ravi Korishettar, Adjunct Professor, National Institute of Advanced Studies, Bengaluru; Prabhakar Sangurmath, Former Executive Director, Hutti Gold Mines Company Limited, Bengaluru for providing some photographs of rocks and minerals for Chapter 11",
           "Acknowledgements are due to Sridhar Srivastava, Joint Director, NCERT; Amarendra P. Behera, Joint Director, CIET, NCERT; Ranjana Arora, Professor and Head, DCS&D, NCERT; Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi for providing academic, administrative and technical support.",
           "The Council is thankful to Fanindra Sharma, Consultant, Programme Office, NSTC, NCERT, New Delhi; M. Pramod Kumar, Senior Consultant, Programme Office, Assistant Professor, Amrita Darshanam Centre, Amrita Vishwa Vidyapeetham, Coimbatore; Suparna Diwakar, Educator and Development Sector Professional ",
-          "The Council acknowledges the efforts of Annu Dahiya, Archana, Neha Dhingra, Manish Joshi, Tanya Kaur, Senior Research Associates, Nitika Rani, Course Administrator; Amar Kumar and Neha Yadav, Junior Project Fellows, DESM, NCERT, New Delhi; and the support provided by the APC office and administrativ",
+          "The Council acknowledges the efforts of Annu Dahiya, Archana, Neha Dhingra, Manish Joshi, Tanya Kaur, Senior Research Associates, Nitika Rani, Course Administrator, Amar Kumar and Neha Yadav, Junior Project Fellows, DESM, NCERT, New Delhi; and the support provided by the APC office and administrativ",
           "Acknowledgements are due to Ankeeta Bezboruah, Freelance Editor and Mathew John, Former Editor, NCERT, New Delhi, for their valuable assistance in editing the manuscript of this textbook and Ritika Marothia, Proofreader (Contractual) for proofreading the textbook. The Council acknowledges the contri"
         ],
         "concepts": [
@@ -27243,22 +27248,21 @@
           "Indian Astronomical Observatory",
           "HBCSE",
           "TIFR",
-          "Stellarium",
           "NCERT",
           "DES",
           "Coimbatore",
           "Amrita Vishwa Vidyapeetham",
           "Educator",
           "Development Sector Professional",
-          "APC office",
+          "Chief Consultant",
           "Freelance Editor",
           "Proofreader",
-          "DTP Cell",
           "Publication Division",
           "Contractual"
         ],
         "context_relation": "acknowledgements",
         "limitations": [
+          "The image may be a full page, not a cropped figure.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -30420,9 +30424,46 @@
       "asset_path": "page-0030.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table listing different animals and their characteristics.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 2.2: Observations of different animals around us",
+          "Name of the animal (local name)",
+          "Place where they live",
+          "Food they eat",
+          "The way they move around",
+          "Any other observations and features",
+          "Crow",
+          "Tree",
+          "Insects",
+          "Fly and walk",
+          "Carrying a twig in its beak",
+          "Ant",
+          "Nest in soil and burrow",
+          "Leaves, seeds and insects",
+          "Have six legs",
+          "Cow",
+          "Grasses, leaves",
+          "Any other",
+          "What are the similarities and differences among the animals that you have observed and recorded in Table 2.2?",
+          "You would have observed that some animals live on land while some others live on trees. Birds live on trees. Fish live in water and some animals like frogs live on land as well as in water. Animals consume a diverse range of foods and exhibit a variety of movements.",
+          "Sketch the plants and animals observed by you in your notebook or prepare a scrapbook with leaves, flowers from different plants and feathers from animals. Write all the details you have gathered about them."
+        ],
+        "concepts": [
+          "Observing plants",
+          "Observing animals",
+          "Comparing similarities and differences",
+          "Recording observations",
+          "Drawing conclusions"
+        ],
+        "context_relation": "Observing and recording",
+        "limitations": [
+          "No specific limitations mentioned"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -30732,9 +30773,56 @@
       "asset_path": "page-0033.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A table showing different criteria for grouping plants and animals.",
+        "visual_type": "table",
+        "visible_text": [
+          "Presence/ absence of flowers",
+          "Hard/soft stem",
+          "Eating habits",
+          "Place they live",
+          "Fig. 2.2: Some possible criteria of groupings of plants and animals",
+          "You may have grouped animals based on varied features, such as what they eat, where they live, what colour they are and how they move.",
+          "What is the importance of grouping? Grouping makes it easier to understand and study plants and animals on the basis of their similarities and differences.",
+          "You will learn more about the importance of grouping in our daily lives in the chapter, 'Materials Around Us'.",
+          "2.2.1 How to group plants?",
+          "You must have noticed that plants show variation in the features related to stems, leaves, flowers, and more. The stems of different plants vary in thickness, height, and hardness, while the leaves vary in shape, colour, size and arrangement. You might have tried grouping the plants in Activity 2.3 ",
+          "You might have also learnt in earlier classes that plants can be grouped into herbs, shrubs, and trees based on their height and types of stem. Let us study the features of plants in more detail and group them on that basis.",
+          "Activity 2.4: Let us group",
+          "Let us go on a nature walk again for some more interesting observations.",
+          "Look closely at the height of different plants. Are these plants shorter than you, as tall as you, or taller than you?",
+          "Is the stem brown or green? Touch and feel the stems and try to bend them gently. Can you bend the stem easily, or is it stiff? Take care that the stems do not break.",
+          "Also, observe from where the branches of the plants arise—whether they arise close to the ground or higher up on the stem. Fill in your observations in Table 2.3. A few examples are already given."
+        ],
+        "concepts": [
+          "grouping",
+          "plants",
+          "animals",
+          "features",
+          "stems",
+          "leaves",
+          "flowers",
+          "height",
+          "hardness",
+          "shape",
+          "colour",
+          "size",
+          "arrangement",
+          "herbs",
+          "shrubs",
+          "trees",
+          "height",
+          "types of stem",
+          "features of plants",
+          "nature walk"
+        ],
+        "context_relation": "The image is a table showing different criteria for grouping plants and animals.",
+        "limitations": [
+          "The image does not provide specific details about the criteria for grouping plants and animals."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -37923,9 +38011,64 @@
       "asset_path": "page-0071.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Page about healthy food and nutrition.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "a healthy body. Good health is essential for leading a",
+          "happy life.",
+          "Which of the two foods you studied in Activity 3.9 could be",
+          "labelled as junk food?",
+          "Packaged food items must have information about",
+          "the nutrients on their cover. The information should",
+          "list the amount of each nutrient. Sometimes, more",
+          "nutrients are added to the food during processing",
+          "(fortification) to improve its nutritional quality.",
+          "Iodised salt and some baby foods are examples",
+          "of fortified foods. The Food Safety and Standard",
+          "Authority of India (FSSAI) is a government agency",
+          "that regulates food quality in India.",
+          "3.5 Millets: Nutrition-rich Cereals",
+          "You may have heard",
+          "of jowar, bajra, ragi,",
+          "and sanwa (Fig. 3.9).",
+          "These are native crops",
+          "of India (Fig. 3.9).",
+          "These can be easily",
+          "cultivated in different",
+          "climatic conditions.",
+          "These highly nutritious",
+          "grains are also called",
+          "millets. Have you ever",
+          "had food items made",
+          "from these millets?",
+          "Millets are small-sized grains and have been an integral",
+          "part of the Indian diet for centuries. They have regained",
+          "popularity due to their numerous health benefits. They are"
+        ],
+        "concepts": [
+          "healthy body",
+          "good health",
+          "junk food",
+          "nutrients",
+          "fortification",
+          "iodised salt",
+          "baby foods",
+          "Food Safety and Standard Authority of India (FSSAI)",
+          "native crops",
+          "climatic conditions",
+          "highly nutritious grains",
+          "nutri-cereals",
+          "balanced diet"
+        ],
+        "context_relation": "Page about healthy food and nutrition.",
+        "limitations": [
+          "The page does not provide specific examples of junk food or fortified foods.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -41648,9 +41791,24 @@
       "asset_path": "assets/94a0d640f23c7f0c927ca9e89288c6e7c084d13979689a931f07b6050e2fc2e8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A compass needle, a piece of wood, and a ruler are placed on a white surface.",
+        "visual_type": "photo",
+        "visible_text": [
+          "When the North pole of a magnet is brought closer to the North pole of the compass needle, it moves away as shown in Fig. 4.9a. When the South pole of the magnet is brought closer to the North pole of the compass needle, it moves closer (Fig. 4.9b)."
+        ],
+        "concepts": [
+          "compass needle",
+          "magnet",
+          "deflection"
+        ],
+        "context_relation": "The image is related to the text discussing the deflection of a compass needle when a magnet is brought close to it.",
+        "limitations": [
+          "The compass needle is not shown in motion, only its position relative to the magnet and the piece of wood."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -42954,9 +43112,44 @@
       "asset_path": "page-0094.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of magnets, including how to determine the poles of a bar magnet and how to identify the poles of the Earth's magnet using a magnetic compass. It also mentions a scenario involving a mechanic and screws falling down, and asks for a solution to the problem. Additionally, it discusses the arrangement of two ring magnets and the polarity of three bar magnets.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "7. A bar magnet has no markings to indicate its poles. How would you find out near which end its North pole is located without using another magnet?",
+          "8. If the earth is itself a magnet, can you guess the poles of earth’s magnet by looking at the direction of the magnetic compass?",
+          "9. While a mechanic was repairing a gadget using a screw driver, the steel screws kept falling down. Suggest a way to solve the problem of the mechanic on the basis of what you have learnt in this chapter.",
+          "10. Two ring magnets X and Y are arranged as shown in Fig. 4.16. It is observed that the magnet X does not move down further. What could be the possible reason? Suggest a way to bring the magnet X in contact with magnet Y, without pushing either of the magnets.",
+          "11. Three magnets are arranged on a table in the form of the shape shown in Fig. 4.17. What is the polarity, N or S, at the ends 1, 2, 3, 4 and 6 of the magnets? Polarity of one end (5) is given for you.",
+          "Fig. 4.16: Two ring magnets",
+          "Fig. 4.17: Three bar magnets",
+          "Learning further",
+          "Using 3–4 different magnets, try to lift steel pins or U-clips and check which magnet picks up the largest number of pins. Discuss with your friends why different magnets might have picked up different numbers of pins.",
+          "Make a toy 'Hopping Frog' as a combined class activity with the help of your teacher. For constructing the toy, fix ring magnets in an alternate North-South fashion along the"
+        ],
+        "concepts": [
+          "magnet",
+          "North pole",
+          "South pole",
+          "Earth's magnet",
+          "magnetic compass",
+          "mechanic",
+          "screws",
+          "ring magnets",
+          "bar magnets",
+          "polarity",
+          "polar ends",
+          "lifting magnets",
+          "toy 'Hopping Frog'"
+        ],
+        "context_relation": "textbook",
+        "limitations": [
+          "No specific limitations provided.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -44358,11 +44551,12 @@
         ],
         "concepts": [
           "Measurement of Length and Motion",
-          "Handspans"
+          "Handspans",
+          "Units of Measurement"
         ],
-        "context_relation": "The table and the text are discussing the measurement of length using handspans.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
-          "The table does not provide the actual length of the table in handspans."
+          "The table does not provide the actual length of the table."
         ]
       },
       "chapter_id": null,
@@ -44419,9 +44613,41 @@
       "asset_path": "assets/6740670a8aa904ebd4040a6f41a9dff247bdb7015e8c438c7f79086bc45f749f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Text discussing the history of measurement systems in India, mentioning units like angula, dhanusa, and yojana.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "India has a rich history of measurement",
+          "systems dating back to ancient times. Angula",
+          "(finger width), multiples of angula, dhanusa,",
+          "and yojana are some of the units mentioned",
+          "in ancient Indian literature, and used in",
+          "measuring artefacts, architecture, and",
+          "town planning. The angula is still used by",
+          "traditional craftspeople like carpenters",
+          "and tailors. Several objects with ruled",
+          "markings which could be scales have be"
+        ],
+        "concepts": [
+          "measurement systems",
+          "ancient Indian literature",
+          "units of measurement",
+          "traditional craftspeople",
+          "measuring artefacts",
+          "architecture",
+          "town planning",
+          "angula",
+          "dhanusa",
+          "yojana"
+        ],
+        "context_relation": "Historical context",
+        "limitations": [
+          "No visual elements present",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

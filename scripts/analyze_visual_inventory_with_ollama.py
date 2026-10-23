@@ -430,6 +430,7 @@ def run_analysis(
 
     results_by_id = dict(previous)
     processed_this_run = 0
+    processed_asset_ids: list[str] = []
 
     def checkpoint() -> dict[str, Any]:
         ordered_results = list(results_by_id.values())
@@ -460,6 +461,7 @@ def run_analysis(
         summary = {
             "assets_selected": len(selected) + skipped_from_checkpoint,
             "assets_processed_this_run": processed_this_run,
+            "assets_processed_ids": list(processed_asset_ids),
             "assets_eligible": len(seen),
             "assets_analyzed": analyzed_count,
             "assets_remaining": max(0, len(seen) - analyzed_count),
@@ -537,8 +539,24 @@ def run_analysis(
         # checkpoints whose asset hash, source, model, prompt or page-text context
         # differs. Do not perform a weaker second check here, or stale successful
         # analyses can be skipped after the page context changed.
+        # The inventory-level source identity is authoritative: the pipeline verified it
+        # against the exact selected whole-book PDF before analysis. Legacy asset rows with
+        # stale source fields must not create success records that can never be reused.
+        analysis_asset = dict(asset)
+        expected_book_id = source.get("book_id")
+        expected_pdf_sha256 = source.get("pdf_sha256")
+        if (analysis_asset.get("source_book_id") != expected_book_id
+                or str(analysis_asset.get("source_pdf_sha256") or "").lower()
+                != str(expected_pdf_sha256 or "").lower()):
+            print(
+                f"[visual-analysis] SOURCE_IDENTITY_NORMALIZED asset_id={asset_id} "
+                "using validated inventory-level book/PDF identity",
+                flush=True,
+            )
+        analysis_asset["source_book_id"] = expected_book_id
+        analysis_asset["source_pdf_sha256"] = expected_pdf_sha256
         try:
-            item = analyze_one(inventory_dir, asset, endpoint=endpoint, model=model, timeout=timeout, num_ctx=num_ctx, num_predict=num_predict, opener=opener)
+            item = analyze_one(inventory_dir, analysis_asset, endpoint=endpoint, model=model, timeout=timeout, num_ctx=num_ctx, num_predict=num_predict, opener=opener)
             item["prompt_version"] = PROMPT_VERSION
             if run_id:
                 item["run_id"] = run_id
@@ -574,6 +592,7 @@ def run_analysis(
                 flush=True,
             )
         processed_this_run += 1
+        processed_asset_ids.append(asset_id)
         result = checkpoint()
         print(
             f"[visual-analysis] CHECKPOINT saved processed_this_batch={processed_this_run}/{len(selected)} "

@@ -339,10 +339,14 @@ def layer1_inventory_bundle_from_marker(marker_path, inventory_path, source, pac
 
 
 def run_layers(args):
-    repo=args.repo_root.resolve();sroot=args.source_root.resolve();selection=read_json(args.selection);model=re.sub(r"[^A-Za-z0-9._-]","-",args.model);bad=[];registry_writes_enabled=True
+    repo=args.repo_root.resolve();sroot=args.source_root.resolve();selection=read_json(args.selection);model=re.sub(r"[^A-Za-z0-9._-]","-",args.model);bad=[];registry_writes_enabled=True;total_batches=0
     if args.batch_size<1:raise ValueError("batch-size must be positive; it is not a total cap.")
+    if args.max_batches_per_run < 1:raise ValueError("max-batches-per-run must be positive.")
     if not 10 <= args.request_timeout <= 900:raise ValueError("request-timeout must be between 10 and 900 seconds so a stalled model request cannot hang a runner indefinitely.")
     for s in selection["sources"]:
+        if total_batches >= args.max_batches_per_run:
+            print(f"[pipeline] RUN_BUDGET_REACHED class={selection['class']} max_batches={args.max_batches_per_run} completed_batches={total_batches}; all current-book outputs remain checkpointed.",flush=True)
+            return 10
         slug=s["book_slug"];work=sroot/slug;invdir=work/"inventory";inv=invdir/"visual-inventory.v1.json"
         if not inv.is_file():raise ValueError(f"{slug}: inventory missing; refusing omission.")
         inventory=read_json(inv)
@@ -407,8 +411,13 @@ def run_layers(args):
         write_json(index,{"schema_version":"quantaedge.textbook-content-pipeline-index.v1","architecture_version":"8-layer-resumable-v1","class":selection["class"],"book_slug":slug,"source_book_id":s["book_id"],"source_pdf_sha256":s["sha256"],"layers":layers,"inventory_bundle":inventory_bundle,"analysis_path":rel(raw,repo),"effective_analysis_path":rel(eff,repo),"coverage_ledger_path":rel(ledger,repo),"publication_allowed":False,"human_review_required":True})
         checkpoint=f"layer4-class{selection['class']}-{slug}-{model}-checkpoint"
         batch_number=0
+        book_yielded=False
         print(f"[pipeline] BOOK_START class={selection['class']} book={slug} eligible_inventory_assets={len(inventory.get('assets',[]))} batch_size={args.batch_size} checkpoint_tag={checkpoint}",flush=True)
         while True:
+            if total_batches >= args.max_batches_per_run:
+                book_yielded=True
+                print(f"[pipeline] RUN_BUDGET_REACHED class={selection['class']} max_batches={args.max_batches_per_run} completed_batches={total_batches}; yielding after durable checkpoint.",flush=True)
+                break
             batch_number+=1
             print(f"[pipeline] BATCH_START class={selection['class']} book={slug} batch={batch_number} batch_limit={args.batch_size} run_id={args.run_id}",flush=True)
             cmd=[sys.executable,"scripts/analyze_visual_inventory_with_ollama.py","--inventory",str(inv),"--model",args.model,"--max-assets",str(args.batch_size),"--include-page-previews","--run-id",args.run_id,"--timeout",str(args.request_timeout),"--output",str(raw)]
@@ -421,9 +430,29 @@ def run_layers(args):
                 shutil.rmtree(pull,ignore_errors=True)
             if raw.is_file():
                 backfill_legacy_context_hashes(previous_inventory,raw,book_id=s["book_id"],source_sha=s["sha256"],model=args.model)
+            before_data=read_json(raw) if raw.is_file() else {}
+            before_summary=before_data.get("summary",{}) if isinstance(before_data,dict) else {}
+            before_results=before_data.get("results",[]) if isinstance(before_data,dict) else []
+            before_results_by_id={row.get("asset_id"):row for row in before_results if isinstance(row,dict) and row.get("asset_id")}
             subprocess.run(cmd,cwd=repo,check=True)
-            subprocess.run([sys.executable,"scripts/quantaedge_textbook_pipeline.py","ledger","--inventory",str(invrepo),"--raw-analysis",str(raw),"--manifest",s["extraction_manifest_repo_path"],"--text-jsonl",s["text_jsonl_repo_path"],"--effective-output",str(eff),"--ledger-output",str(ledger),"--corrections",str(cor),"--repo-root",str(repo)],cwd=repo,check=True)
+            subprocess.run([sys.executable,"scripts/quantaedge_textbook_pipeline.py","ledger","--inventory",str(invrepo),"--raw-analysis",str(raw),"--manifest",s["extraction_manifest_repo_path"],"--text-jsonl",str(s["text_jsonl_repo_path"]),"--effective-output",str(eff),"--ledger-output",str(ledger),"--corrections",str(cor),"--repo-root",str(repo)],cwd=repo,check=True)
             data=read_json(raw);summary=data.get("summary",{});processed=int(summary.get("assets_processed_this_run",0))
+            if processed > 0: total_batches += 1
+            after_results=data.get("results",[]) if isinstance(data,dict) else []
+            processed_ids=summary.get("assets_processed_ids",[])
+            overwrote_successes=bool(processed_ids) and all(
+                asset_id in before_results_by_id
+                and before_results_by_id[asset_id].get("analysis_status")=="DRAFT_REQUIRES_REVIEW"
+                for asset_id in processed_ids
+            )
+            no_progress=(int(summary.get("assets_analyzed",0))<=int(before_summary.get("assets_analyzed",0))
+                and int(summary.get("assets_failed",0))<=int(before_summary.get("assets_failed",0))
+                and len(after_results)<=len(before_results))
+            if processed>0 and overwrote_successes and no_progress:
+                raise ValueError(
+                    f"{slug}: Layer 4–5 repeated prior successful asset IDs without increasing analyzed/failed counts: {processed_ids}. "
+                    "Stopping instead of burning the runner on an infinite repeat; the last durable checkpoint is preserved."
+                )
             # Git is committed first: even if GHCR times out after analysis, this batch
             # survives runner teardown and the next resume can continue from the repo.
             git_checkpoint(repo,[rel(p,repo) for p in (invrepo,vis/"source.manifest.json",raw,eff,ledger,index)],f"checkpoint(content): Layer 4-5 {slug}")
@@ -438,6 +467,9 @@ def run_layers(args):
             if processed==0:break
         result=read_json(ledger);idx=read_json(index);idx["layers"]["4"]="CHECKPOINTED";idx["layers"]["5"]=result["ledger_status"];write_json(index,idx);git_checkpoint(repo,[rel(index,repo)],f"status(content): Layer 5 {slug}")
         print(json.dumps({"book":slug,"ledger_status":result["ledger_status"],"unresolved_count":result["summary"]["unresolved_count"]}))
+        if book_yielded:
+            print(json.dumps({"pipeline_run_status":"YIELDED_FOR_RESUME","class":selection["class"],"book":slug,"completed_batches":total_batches,"max_batches_per_run":args.max_batches_per_run,"ledger_status":result["ledger_status"],"unresolved_count":result["summary"]["unresolved_count"],"publication_allowed":False}),flush=True)
+            return 10
         if result["ledger_status"]!="COMPLETE":bad.append({"book":slug,"ledger_status":result["ledger_status"],"unresolved_count":result["summary"]["unresolved_count"]})
     print(json.dumps({"class":selection["class"],"incomplete_books":bad,"layers_6_to_8":"NOT_STARTED","publication_allowed":False},indent=2))
     return 3 if bad else 0
@@ -466,7 +498,7 @@ def rebuild_corrections(args):
 
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__);sub=p.add_subparsers(dest="mode",required=True)
-    q=sub.add_parser("run");q.add_argument("--selection",type=Path,required=True);q.add_argument("--source-root",type=Path,required=True);q.add_argument("--repo-root",type=Path,default=Path.cwd());q.add_argument("--package",required=True);q.add_argument("--run-id",required=True);q.add_argument("--model",required=True);q.add_argument("--batch-size",type=int,default=5,help="Assets per durable Layer 4–5 checkpoint; smaller batches make progress visible and reduce uncheckpointed work.");q.add_argument("--request-timeout",type=int,default=300,help="Maximum seconds for each Ollama HTTP request; prevents a stuck model call from hanging a GitHub runner indefinitely.")
+    q=sub.add_parser("run");q.add_argument("--selection",type=Path,required=True);q.add_argument("--source-root",type=Path,required=True);q.add_argument("--repo-root",type=Path,default=Path.cwd());q.add_argument("--package",required=True);q.add_argument("--run-id",required=True);q.add_argument("--model",required=True);q.add_argument("--batch-size",type=int,default=5,help="Assets per durable Layer 4–5 checkpoint; smaller batches make progress visible and reduce uncheckpointed work.");q.add_argument("--max-batches-per-run",type=int,default=8,help="Maximum durable analysis invocations per workflow run. Yield after a bounded run so GitHub's hard timeout cannot discard a long-running pass.");q.add_argument("--request-timeout",type=int,default=300,help="Maximum seconds for each Ollama HTTP request; prevents a stuck model call from hanging a GitHub runner indefinitely.")
     q=sub.add_parser("ledger")
     for k in ("inventory","raw-analysis","manifest","text-jsonl","effective-output","ledger-output"):q.add_argument("--"+k,type=Path,required=True)
     q.add_argument("--corrections",type=Path);q.add_argument("--repo-root",type=Path,default=Path.cwd())

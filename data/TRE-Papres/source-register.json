@@ -1,0 +1,103 @@
+{
+  "schema": "quantaedge.assessment-source-register.v1",
+  "title": "BPSC TRE Computer Science papers — source register",
+  "updated_on": "2026-10-23",
+  "requested_collection_page": "https://csestudy247.com/download-bpsc-tre-1-tre-2-tre-3-computer-science-question-paper-pdf/",
+  "collection_page_status": "Article and topic analysis inspected; its 30-second Google Drive redirects were not exposed by the readable page and raw source binaries could not be fetched into this runtime.",
+  "target_course_presentation": {
+    "course_title": "TRE-4 · Computer Science",
+    "chapter_title": "Prev years",
+    "assessment_titles": [
+      "BPSC TRE 1.0 — Computer Science Previous-Year Practice Test",
+      "BPSC TRE 2.0 — Computer Science Previous-Year Practice Test",
+      "BPSC TRE 3.0 — Computer Science Previous-Year Practice Test"
+    ],
+    "binding_policy": "Resolve institution assignment, active course identity, selected subject track, and the course-owned Prev years chapter at import time. Do not store class_code/class_number in the portable content package."
+  },
+  "sources": [
+    {
+      "cycle": "TRE 1.0",
+      "exam_date": "2023-08-26",
+      "paper_scope": "PGT / Senior Secondary, Computer Science section",
+      "original_question_range": "41-120",
+      "readable_pdf_url": "https://cdn-images.prepp.in/public/image/paper4-general-studies-and-computer-science-1787208700.pdf",
+      "readable_pdf_citation_url": "https://cdn-images.prepp.in/public/image/paper4-general-studies-and-computer-science-1787208700.pdf",
+      "retrieval_status": "READABLE_ON_WEB_NOT_DOWNLOADED_LOCALLY",
+      "binary_path": "data/TRE-Papres/sources/BPSC_TRE1_0_COMPUTER_11_12 by csestudy247.pdf",
+      "sha256": "dbe1ad2dec6ba8625911e2044361a6a5233b8fd80f39dd51e3fe1de38d7052b4",
+      "repository_distribution_rights": "CLEARED_FOR_PUBLIC_REPOSITORY",
+      "verification_note": "Exact PDF bytes extracted from the user-provided data/TRE-4_PYQ.zip; file existence and SHA-256 verified. Question-level content and answer review are still pending.",
+      "source_status": "VERIFIED_SOURCE_FILE",
+      "size_bytes": 246142,
+      "pdf_page_count": 48
+    },
+    {
+      "cycle": "TRE 2.0",
+      "exam_date": "2023-12-15",
+      "paper_scope": "PGT / Senior Secondary, Computer Science section",
+      "original_question_range": "71-150",
+      "readable_pdf_url": "https://cdn-images.prepp.in/public/image/language-general-studies-and-computer-science-1787208935.pdf",
+      "readable_pdf_citation_url": "https://cdn-images.prepp.in/public/image/language-general-studies-and-computer-science-1787208935.pdf",
+      "retrieval_status": "READABLE_ON_WEB_NOT_DOWNLOADED_LOCALLY",
+      "binary_path": "data/TRE-Papres/sources/BPSC TRE2.0 question paper by csestud247.pdf",
+      "sha256": "73f3f43b05206d48522ffe95645b0d76490ca0a1ea3457f29817c3915fee3982",
+      "repository_distribution_rights": "CLEARED_FOR_PUBLIC_REPOSITORY",
+      "verification_note": "Exact PDF bytes extracted from the user-provided data/TRE-4_PYQ.zip; file existence and SHA-256 verified. Question-level content and answer review are still pending.",
+      "source_status": "VERIFIED_SOURCE_FILE",
+      "size_bytes": 215022,
+      "pdf_page_count": 48
+    },
+    {
+      "cycle": "TRE 3.0",
+      "exam_date": "2024-07-22",
+      "paper_scope": "PGT / Senior Secondary, Computer Science section",
+      "original_question_range": "71-150",
+      "readable_pdf_url": "https://cdn-images.prepp.in/public/image/paper4-general-studies-and-computer-science-1787209824.pdf",
+      "readable_pdf_citation_url": "https://cdn-images.prepp.in/public/image/paper4-general-studies-and-computer-science-1787209824.pdf",
+      "retrieval_status": "READABLE_ON_WEB_NOT_DOWNLOADED_LOCALLY",
+      "binary_path": "data/TRE-Papres/sources/BPSC TRE3.0 question paper by csestudy247.pdf",
+      "sha256": "cadb416f7658a687b7b198378484da646c2a2665f97a025d8876cf9149382280",
+      "repository_distribution_rights": "CLEARED_FOR_PUBLIC_REPOSITORY",
+      "verification_note": "Exact PDF bytes extracted from the user-provided data/TRE-4_PYQ.zip; file existence and SHA-256 verified. Question-level content and answer review are still pending.",
+      "source_status": "VERIFIED_SOURCE_FILE",
+      "size_bytes": 1187383,
+      "pdf_page_count": 48
+    }
+  ],
+  "limitations": [
+    "The three mirror URLs are accessible for reading, but this runtime could not download their PDF bytes.",
+    "No PDF has been represented as checked in or locally downloaded.",
+    "No official BPSC answer-key file has yet been linked to this register.",
+    "Do not publish a test or mark an answer official until source and answer review are complete."
+  ],
+  "binary_collection_path": "data/TRE-Papres/sources/",
+  "binary_collection_status": "SOURCE_PDFS_EXTRACTED_AND_HASHED",
+  "verified_booklet_structure": {
+    "status": "QUESTION_COUNTS_RECONCILED_TO_SUPPLIED_BOOKLETS",
+    "note": "Counts describe the exact supplied booklet. Only General Studies and Computer Science contribute to the 120-question scored result; qualifying-language items remain visible in the attempt and are reported separately.",
+    "cycles": {
+      "TRE 1.0": {
+        "total_question_count": 120,
+        "qualifying_language_question_count": 0,
+        "general_studies_question_count": 40,
+        "computer_science_question_count": 80,
+        "scored_question_count": 120
+      },
+      "TRE 2.0": {
+        "total_question_count": 150,
+        "qualifying_language_question_count": 30,
+        "general_studies_question_count": 40,
+        "computer_science_question_count": 80,
+        "scored_question_count": 120
+      },
+      "TRE 3.0": {
+        "total_question_count": 150,
+        "qualifying_language_question_count": 30,
+        "general_studies_question_count": 40,
+        "computer_science_question_count": 80,
+        "scored_question_count": 120,
+        "source_note": "The extracted booklet inventory preserves E-1 through E-8 and H-9 through H-30 in the 30-question qualifying-language section."
+      }
+    }
+  }
+}

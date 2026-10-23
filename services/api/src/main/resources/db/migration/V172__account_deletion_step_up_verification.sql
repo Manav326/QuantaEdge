@@ -1,4 +1,4 @@
--- V168: fresh identity proof for account-deletion requests.
+-- V172: fresh identity proof for account-deletion requests.
 -- A valid request is still distinct from erasure; this only strengthens the request identity check.
 DO $purpose_check$
 DECLARE c record;
@@ -42,5 +42,5 @@ CREATE INDEX idx_account_deletion_verification_account_expiry
   WHERE consumed_at IS NULL;
 
 INSERT INTO app_metadata(key,value)
-VALUES ('schema','account-deletion-step-up-verification-v168')
+VALUES ('schema','account-deletion-step-up-verification-v172')
 ON CONFLICT(key) DO UPDATE SET value=excluded.value;
