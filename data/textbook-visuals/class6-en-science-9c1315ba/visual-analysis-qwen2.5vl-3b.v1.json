@@ -14,14 +14,14 @@
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
       "b90b1ccd2f380e4a35f9f791",
-      "7b18b376c3d52471195107a9",
-      "01128e1da549b4881f224152"
+      "89cf95fdbcd5de946249415f",
+      "0aed53ccf9ac59e876721adf"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1351,
-    "assets_remaining": 727,
-    "assets_completion_percent": 65.0,
-    "assets_failed": 19,
+    "assets_analyzed": 1353,
+    "assets_remaining": 725,
+    "assets_completion_percent": 65.1,
+    "assets_failed": 17,
     "assets_skipped_from_checkpoint": 1351,
     "batch_limit": 5,
     "publication_allowed": false
@@ -456,7 +456,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39909485860",
-      "checkpointed_at": "2026-10-23T06:55:54Z"
+      "checkpointed_at": "2026-10-23T07:05:34Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20135,7 +20135,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39909485860",
-      "checkpointed_at": "2026-10-23T06:56:59Z"
+      "checkpointed_at": "2026-10-23T07:06:39Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23794,7 +23794,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39909485860",
-      "checkpointed_at": "2026-10-23T06:57:53Z"
+      "checkpointed_at": "2026-10-23T07:07:34Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -35048,19 +35048,36 @@
     {
       "asset_id": "89cf95fdbcd5de946249415f",
       "asset_sha256": "94a0d640f23c7f0c927ca9e89288c6e7c084d13979689a931f07b6050e2fc2e8",
-      "page_text_context_sha256": "442beda3066f8aada83d8f9bb89be5e77940035fda17e2115100292d16a0be25",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 88,
       "asset_path": "assets/94a0d640f23c7f0c927ca9e89288c6e7c084d13979689a931f07b6050e2fc2e8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "442beda3066f8aada83d8f9bb89be5e77940035fda17e2115100292d16a0be25",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864347432",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A compass needle, a piece of wood, and a ruler are placed on a white surface.",
+        "visual_type": "photo",
+        "visible_text": [
+          "When the North pole of a magnet is brought closer to the North pole of the compass needle, it moves away as shown in Fig. 4.9a. When the South pole of the magnet is brought closer to the North pole of the compass needle, it moves closer (Fig. 4.9b)."
+        ],
+        "concepts": [
+          "compass needle",
+          "magnet",
+          "deflection"
+        ],
+        "context_relation": "The image is related to the text discussing the deflection of a compass needle when a magnet is brought close to it.",
+        "limitations": [
+          "The compass needle is not shown in motion, only its position relative to the magnet and the piece of wood."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39909485860",
+      "checkpointed_at": "2026-10-23T07:08:48Z"
     },
     {
       "asset_id": "9350e89a35fe0361015f5048",
@@ -36392,19 +36409,56 @@
     {
       "asset_id": "0aed53ccf9ac59e876721adf",
       "asset_sha256": "ed9930066b957f62486826a5633d6186f533c4b00bf7f4f354255ce7ffbdf00a",
-      "page_text_context_sha256": "2dcccec88b5fb132c59756aaa618ccac4e439dffcdeb266c7c328cf4c1e4ba74",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 94,
       "asset_path": "page-0094.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "2dcccec88b5fb132c59756aaa618ccac4e439dffcdeb266c7c328cf4c1e4ba74",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864347432",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of magnets, including how to determine the poles of a bar magnet and how to identify the poles of the Earth's magnet using a magnetic compass. It also mentions a scenario involving a mechanic and screws falling down, and asks for a solution to the problem. Additionally, it discusses the arrangement of two ring magnets and the polarity of three bar magnets.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "7. A bar magnet has no markings to indicate its poles. How would you find out near which end its North pole is located without using another magnet?",
+          "8. If the earth is itself a magnet, can you guess the poles of earth’s magnet by looking at the direction of the magnetic compass?",
+          "9. While a mechanic was repairing a gadget using a screw driver, the steel screws kept falling down. Suggest a way to solve the problem of the mechanic on the basis of what you have learnt in this chapter.",
+          "10. Two ring magnets X and Y are arranged as shown in Fig. 4.16. It is observed that the magnet X does not move down further. What could be the possible reason? Suggest a way to bring the magnet X in contact with magnet Y, without pushing either of the magnets.",
+          "11. Three magnets are arranged on a table in the form of the shape shown in Fig. 4.17. What is the polarity, N or S, at the ends 1, 2, 3, 4 and 6 of the magnets? Polarity of one end (5) is given for you.",
+          "Fig. 4.16: Two ring magnets",
+          "Fig. 4.17: Three bar magnets",
+          "Learning further",
+          "Using 3–4 different magnets, try to lift steel pins or U-clips and check which magnet picks up the largest number of pins. Discuss with your friends why different magnets might have picked up different numbers of pins.",
+          "Make a toy 'Hopping Frog' as a combined class activity with the help of your teacher. For constructing the toy, fix ring magnets in an alternate North-South fashion along the"
+        ],
+        "concepts": [
+          "magnet",
+          "North pole",
+          "South pole",
+          "Earth's magnet",
+          "magnetic compass",
+          "mechanic",
+          "screws",
+          "ring magnets",
+          "bar magnets",
+          "polarity",
+          "polar ends",
+          "lifting magnets",
+          "toy 'Hopping Frog'"
+        ],
+        "context_relation": "textbook",
+        "limitations": [
+          "No specific limitations provided.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39909485860",
+      "checkpointed_at": "2026-10-23T07:12:18Z"
     },
     {
       "asset_id": "7e69b8aff980687ac2e236f4",

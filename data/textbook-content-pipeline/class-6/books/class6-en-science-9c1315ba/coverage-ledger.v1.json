@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
     "raw_analysis_result_rows": 1376,
-    "successful_visual_analyses": 1357,
+    "successful_visual_analyses": 1359,
     "missing_visual_analyses": 702,
-    "failed_visual_analyses": 19,
+    "failed_visual_analyses": 17,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 721,
+    "unresolved_count": 719,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -41791,9 +41791,24 @@
       "asset_path": "assets/94a0d640f23c7f0c927ca9e89288c6e7c084d13979689a931f07b6050e2fc2e8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A compass needle, a piece of wood, and a ruler are placed on a white surface.",
+        "visual_type": "photo",
+        "visible_text": [
+          "When the North pole of a magnet is brought closer to the North pole of the compass needle, it moves away as shown in Fig. 4.9a. When the South pole of the magnet is brought closer to the North pole of the compass needle, it moves closer (Fig. 4.9b)."
+        ],
+        "concepts": [
+          "compass needle",
+          "magnet",
+          "deflection"
+        ],
+        "context_relation": "The image is related to the text discussing the deflection of a compass needle when a magnet is brought close to it.",
+        "limitations": [
+          "The compass needle is not shown in motion, only its position relative to the magnet and the piece of wood."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -43097,9 +43112,44 @@
       "asset_path": "page-0094.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of magnets, including how to determine the poles of a bar magnet and how to identify the poles of the Earth's magnet using a magnetic compass. It also mentions a scenario involving a mechanic and screws falling down, and asks for a solution to the problem. Additionally, it discusses the arrangement of two ring magnets and the polarity of three bar magnets.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "7. A bar magnet has no markings to indicate its poles. How would you find out near which end its North pole is located without using another magnet?",
+          "8. If the earth is itself a magnet, can you guess the poles of earth’s magnet by looking at the direction of the magnetic compass?",
+          "9. While a mechanic was repairing a gadget using a screw driver, the steel screws kept falling down. Suggest a way to solve the problem of the mechanic on the basis of what you have learnt in this chapter.",
+          "10. Two ring magnets X and Y are arranged as shown in Fig. 4.16. It is observed that the magnet X does not move down further. What could be the possible reason? Suggest a way to bring the magnet X in contact with magnet Y, without pushing either of the magnets.",
+          "11. Three magnets are arranged on a table in the form of the shape shown in Fig. 4.17. What is the polarity, N or S, at the ends 1, 2, 3, 4 and 6 of the magnets? Polarity of one end (5) is given for you.",
+          "Fig. 4.16: Two ring magnets",
+          "Fig. 4.17: Three bar magnets",
+          "Learning further",
+          "Using 3–4 different magnets, try to lift steel pins or U-clips and check which magnet picks up the largest number of pins. Discuss with your friends why different magnets might have picked up different numbers of pins.",
+          "Make a toy 'Hopping Frog' as a combined class activity with the help of your teacher. For constructing the toy, fix ring magnets in an alternate North-South fashion along the"
+        ],
+        "concepts": [
+          "magnet",
+          "North pole",
+          "South pole",
+          "Earth's magnet",
+          "magnetic compass",
+          "mechanic",
+          "screws",
+          "ring magnets",
+          "bar magnets",
+          "polarity",
+          "polar ends",
+          "lifting magnets",
+          "toy 'Hopping Frog'"
+        ],
+        "context_relation": "textbook",
+        "limitations": [
+          "No specific limitations provided.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
