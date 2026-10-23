@@ -435,13 +435,14 @@ CREATE OR REPLACE FUNCTION qe_fork_course_version(
   p_institution_id bigint,
   p_actor_staff_id bigint,
   p_actor_institution_admin_id bigint
-) RETURNS TABLE(version_program_id bigint,content_version_no integer,release_id bigint,assignment_id bigint)
+) RETURNS TABLE(new_program_id bigint,content_version_no integer,release_id bigint,assignment_id bigint)
 LANGUAGE plpgsql
 AS $$
 DECLARE
   v_source curriculum_program%ROWTYPE;
   v_identity institution_course_identity%ROWTYPE;
   v_latest_version integer;
+  v_new_program_id bigint;
   v_version integer;
   v_code text;
   v_release_id bigint;
@@ -510,8 +511,8 @@ BEGIN
     v_source.class_id,v_code,v_source.display_name,v_source.stream_code,v_source.curriculum_version,
     'ACTIVE',v_source.notes,v_source.public_id_prefix,v_source.course_type_code,
     v_identity.id,v_version,p_source_program_id
-  ) RETURNING id INTO version_program_id;
-  IF version_program_id IS NULL THEN
+  ) RETURNING id INTO v_new_program_id;
+  IF v_new_program_id IS NULL THEN
     RAISE EXCEPTION 'COURSE_VERSION_CREATE_FAILED: new course graph was not created';
   END IF;
 
@@ -548,17 +549,17 @@ BEGIN
   ) OR EXISTS (
     SELECT 1 FROM learning_resource r
     JOIN institution_course_version_entity_map rm
-      ON rm.version_program_id=version_program_id AND rm.entity_type='LEARNING_RESOURCE'
+      ON rm.version_program_id=v_new_program_id AND rm.entity_type='LEARNING_RESOURCE'
        AND rm.source_entity_id=r.id
     WHERE r.learning_document_id=d.id
   )
   ON CONFLICT(version_program_id,entity_type,source_entity_id) DO NOTHING;
 
-  PERFORM qe_clone_course_table_rows('SUBJECTS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('PROGRAM_SUBJECTS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('CHAPTERS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('OBJECTIVES',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('CONCEPTS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('SUBJECTS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('PROGRAM_SUBJECTS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('CHAPTERS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('OBJECTIVES',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('CONCEPTS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
 
   -- Structured-artifact links have stable external IDs. Build a new version-scoped ID and then
   -- rewrite matching references in lesson-block JSON and resource assignments before cloning them.
@@ -566,46 +567,46 @@ BEGIN
     SELECT s.artifact_id,s.chapter_id
     FROM learning_resource_artifact_scope s
     WHERE s.chapter_id IN (SELECT source_entity_id FROM institution_course_version_entity_map
-      WHERE version_program_id=version_program_id AND entity_type='CHAPTER')
+      WHERE version_program_id=v_new_program_id AND entity_type='CHAPTER')
     ORDER BY s.artifact_id
   LOOP
     v_new_artifact_id := left(v_artifact.artifact_id,85)||'-cv'||v_version||'-'||version_program_id;
     INSERT INTO institution_course_version_artifact_map(
       course_identity_id,source_program_id,version_program_id,source_artifact_id,version_artifact_id
-    ) VALUES(v_identity.id,p_source_program_id,version_program_id,v_artifact.artifact_id,v_new_artifact_id);
+    ) VALUES(v_identity.id,p_source_program_id,v_new_program_id,v_artifact.artifact_id,v_new_artifact_id);
   END LOOP;
-  PERFORM qe_clone_course_table_rows('ARTIFACT_SCOPES',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('ARTIFACT_SCOPES',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
 
-  PERFORM qe_clone_course_table_rows('BOOKS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('PAGES',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('CHAPTER_SOURCES',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('REQUIREMENTS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('LESSONS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('LESSON_BLOCKS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('QUESTIONS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('QUESTION_OPTIONS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('PROGRAM_TRANSLATIONS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('SUBJECT_TRANSLATIONS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('CHAPTER_TRANSLATIONS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('OBJECTIVE_TRANSLATIONS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('LESSON_TRANSLATIONS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('BLOCK_TRANSLATIONS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('QUESTION_TRANSLATIONS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('ASSESSMENTS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('ASSESSMENT_QUESTIONS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('ASSESSMENT_TRANSLATIONS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('ASSESSMENT_QUESTION_TRANSLATIONS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('DOCUMENT_ASSIGNMENTS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('RESOURCE_ASSIGNMENTS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('ASSESSMENT_PACKS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('ASSESSMENT_PACK_ITEMS',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
-  PERFORM qe_clone_course_table_rows('ASSESSMENT_PACK_RESOURCES',p_source_program_id,version_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('BOOKS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('PAGES',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('CHAPTER_SOURCES',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('REQUIREMENTS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('LESSONS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('LESSON_BLOCKS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('QUESTIONS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('QUESTION_OPTIONS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('PROGRAM_TRANSLATIONS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('SUBJECT_TRANSLATIONS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('CHAPTER_TRANSLATIONS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('OBJECTIVE_TRANSLATIONS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('LESSON_TRANSLATIONS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('BLOCK_TRANSLATIONS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('QUESTION_TRANSLATIONS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('ASSESSMENTS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('ASSESSMENT_QUESTIONS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('ASSESSMENT_TRANSLATIONS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('ASSESSMENT_QUESTION_TRANSLATIONS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('DOCUMENT_ASSIGNMENTS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('RESOURCE_ASSIGNMENTS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('ASSESSMENT_PACKS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('ASSESSMENT_PACK_ITEMS',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
+  PERFORM qe_clone_course_table_rows('ASSESSMENT_PACK_RESOURCES',p_source_program_id,v_new_program_id,v_identity.id,v_version,p_actor_staff_id,p_actor_institution_admin_id);
 
   v_fingerprint := course_content_fingerprint(version_program_id);
   INSERT INTO institution_course_release(
     source_institution_id,program_id,release_version,release_state,content_fingerprint,
     legacy_migration,created_at,updated_at
-  ) VALUES(p_institution_id,version_program_id,1,'DRAFT',coalesce(v_fingerprint,''),false,now(),now())
+  ) VALUES(p_institution_id,v_new_program_id,1,'DRAFT',coalesce(v_fingerprint,''),false,now(),now())
   RETURNING id INTO v_release_id;
 
   INSERT INTO institution_course_assignment(
@@ -617,13 +618,13 @@ BEGIN
     course_identity_id,source_program_id,version_program_id,content_version_no,event_type,
     actor_staff_id,actor_institution_admin_id,details
   ) VALUES (
-    v_identity.id,p_source_program_id,version_program_id,v_version,'DRAFT_VERSION_CREATED',
+    v_identity.id,p_source_program_id,v_new_program_id,v_version,'DRAFT_VERSION_CREATED',
     p_actor_staff_id,p_actor_institution_admin_id,
     jsonb_build_object('sourceProgramId',p_source_program_id,'versionProgramId',version_program_id,
       'releaseId',v_release_id,'releaseState','DRAFT','contentFingerprint',v_fingerprint)
   );
 
-  RETURN QUERY SELECT version_program_id,v_version,v_release_id,v_assignment_id;
+  RETURN QUERY SELECT v_new_program_id,v_version,v_release_id,v_assignment_id;
 END
 $$;
 
