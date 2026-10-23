@@ -1855,7 +1855,8 @@ public class AssessmentController {
   private Map<String, Object> publicSnapshot(Map<String, Object> snapshot,String language) {
     Map<String, Object> result = new LinkedHashMap<>();
     for (String key : List.of("id", "question_type", "difficulty","sort_order","marks",
-        "exam_format","topic","subtopic","skill","section_code","section_result_policy","topic_tags","subtopic_tags")) {
+        "exam_format","topic","subtopic","skill","section_code","section_result_policy","topic_tags","subtopic_tags",
+        "prompt_content_kind","code_line_indices","math_line_indices","source_code_preservation_notes")) {
       if (snapshot.containsKey(key)) result.put(key, snapshot.get(key));
     }
     Object localizedPrompt=localizedValue(snapshot.get("prompt_i18n"),language,snapshot.get("prompt"));
@@ -1875,7 +1876,10 @@ public class AssessmentController {
         if(localizedLabel!=null) label=localizedLabel;
         hasSourceLocale=hasSourceLocale||localizedHas(option.get("text_i18n"),language);
         safe.put("key", key);
-        safe.put("label", label);
+        safe.put("label", localizedValue(option.get("text_i18n"),language,label));
+        for(String metadataKey:List.of("content_kind","code_line_indices","math_line_indices","source_code_preservation_notes")) {
+          if(option.containsKey(metadataKey)) safe.put(metadataKey,option.get(metadataKey));
+        }
         options.add(safe);
       }
     }
