@@ -3834,5 +3834,7 @@
   "admin.lifecycle.deletionReferencesInspected": "जाँचे गए relationships",
   "admin.lifecycle.deletionAffectedRelationships": "Affected relationships",
   "admin.lifecycle.deletionRelatedRows": "Linked row references",
-  "admin.lifecycle.deletionRunFailed": "Linked records की जाँच नहीं हो सकी।"
+  "admin.lifecycle.deletionRunFailed": "Linked records की जाँच नहीं हो सकी।",
+  "admin.lifecycle.deletionTable": "Table",
+  "admin.lifecycle.deletionRowCount": "Rows"
 }
