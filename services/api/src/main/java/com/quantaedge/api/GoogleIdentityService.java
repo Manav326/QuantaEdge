@@ -201,6 +201,42 @@ public class GoogleIdentityService {
         "displayName", profile.name(), "verifiedMethods", List.of("GMAIL"));
   }
 
+  /**
+   * Verify a newly-issued Google credential against the exact Google identity already linked
+   * to this account. Unlike linkExisting, this method never changes the profile or identity.
+   */
+  @Transactional
+  public Map<String,Object> verifyAccountDeletionIdentity(long userId,String credential) {
+    GoogleProfile supplied=verifyCredential(credential);
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select google_subject,email from user_account
+      where id=? and active=true and role in ('PARENT','LEARNER')
+      for update
+      """,userId);
+    if(rows.isEmpty()) throw new SecurityException("The account is inactive or unavailable.");
+    Map<String,Object> account=rows.getFirst();
+    Object linkedSubject=account.get("google_subject");
+    Object linkedEmail=account.get("email");
+    if(linkedSubject==null || linkedEmail==null
+        || !supplied.subject().equals(String.valueOf(linkedSubject))
+        || !supplied.email().equalsIgnoreCase(String.valueOf(linkedEmail))) {
+      throw new SecurityException(
+          "Re-authenticate with the verified Google account already linked to this QuantaEdge account.");
+    }
+    UUID verificationId=UUID.randomUUID();
+    jdbc.update("""
+      insert into account_deletion_verification(
+        verification_id,user_account_id,method,verified_at,expires_at)
+      values (?,?,'GOOGLE_REAUTH',now(),now()+interval '10 minutes')
+      """,verificationId,userId);
+    return Map.of(
+        "verified",true,
+        "verificationId",verificationId.toString(),
+        "gmailVerified",true,
+        "verifiedMethods",List.of("GMAIL"),
+        "expiresInSeconds",600);
+  }
+
   private void updateGoogleProfile(long userId, GoogleProfile profile) {
     try {
       int changed = jdbc.update("""
