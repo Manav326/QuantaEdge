@@ -180,7 +180,7 @@ public class CourseMarketplaceLaunchController {
     }
     if(!"DO_NOT_REDISTRIBUTE".equals(status)&&evidence.isBlank()) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-          "A cleared distribution-rights decision requires an HTTPS evidence URL.");
+          "A cleared distribution-rights decision requires a valid HTTPS rights-evidence URL.");
     }
 
     List<Map<String,Object>> imports=jdbc.queryForList("""
