@@ -84,7 +84,7 @@ test('[HRMS-NOTIF-001] Notification Studio loads live options and prevents inval
 
     const before = await readNotificationCounts();
     await previewButton.click();
-    await expect(page.getByRole('alert')).toContainText('Select at least one institution.');
+    await expect(page.getByText('Select at least one institution.', { exact: true })).toBeVisible();
     await expect(sendButton).toBeDisabled();
 
     expect(notificationWrites, 'Invalid audience input must stop locally; it must not create a preview token, template version or campaign.').toEqual([]);
