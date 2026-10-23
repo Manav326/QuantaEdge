@@ -134,26 +134,28 @@ function QuestionContent({question,response,review=false,disabled=false,onAnswer
   const hasOptions=Array.isArray(question.options)&&question.options.length>0;
   const answerTone=review?(question.isCorrect===true?styles.answerFieldCorrect:question.isCorrect===false?styles.answerFieldIncorrect:styles.answerFieldNeutral):'';
   const correctText=review?correctAnswerText(question):'';
-  function renderSourceText(value:string,kind?:'PROSE'|'CODE'|'MATHEMATICAL'|'MIXED',codeLineIndices:number[]=[]){
+  function renderSourceText(value:string,kind?:'PROSE'|'CODE'|'MATHEMATICAL'|'MIXED',codeLineIndices:number[]=[],mathLineIndices:number[]=[]){
     const lines=String(value??'').split(/\r?\n/);
     const codeLines=new Set(codeLineIndices);
-    if(kind==='CODE'&&codeLines.size===0)return <pre className={styles.questionCodeBlock}><code>{value}</code></pre>;
-    if(codeLines.size===0)return <div className={styles.questionPromptText}>{value}</div>;
-    const chunks:Array<{code:boolean;lines:string[]}[]>=[];
-    const grouped:Array<{code:boolean;lines:string[]}>=[];
+    const mathLines=new Set(mathLineIndices);
+    if((kind==='CODE'||kind==='MATHEMATICAL')&&codeLines.size===0&&mathLines.size===0)
+      return <pre className={styles.questionCodeBlock}><code>{value}</code></pre>;
+    if(codeLines.size===0&&mathLines.size===0)return <div className={styles.questionPromptText}>{value}</div>;
+    const grouped:Array<{kind:'code'|'math'|'prose';lines:string[]}>=[];
     lines.forEach((line,lineIndex)=>{
-      const code=codeLines.has(lineIndex);
+      const lineKind: 'code'|'math'|'prose'=codeLines.has(lineIndex)?'code':mathLines.has(lineIndex)?'math':'prose';
       const last=grouped[grouped.length-1];
-      if(last&&last.code===code)last.lines.push(line);
-      else grouped.push({code,lines:[line]});
+      if(last&&last.kind===lineKind)last.lines.push(line);
+      else grouped.push({kind:lineKind,lines:[line]});
     });
-    return <div className={styles.questionPromptBody}>{grouped.map((chunk,chunkIndex)=>chunk.code
+    return <div className={styles.questionPromptBody}>{grouped.map((chunk,chunkIndex)=>chunk.kind!=='prose'
       ?<pre key={chunkIndex} className={styles.questionCodeBlock}><code>{chunk.lines.join('\n')}</code></pre>
       :<div key={chunkIndex} className={styles.questionPromptText}>{chunk.lines.join('\n')}</div>)}</div>;
   }
   return <>
-    {question.prompt_content_kind==='CODE'||(question.code_line_indices?.length||0)>0
-      ?renderSourceText(question.prompt,question.prompt_content_kind,question.code_line_indices||[])
+    {question.prompt_content_kind==='CODE'||question.prompt_content_kind==='MATHEMATICAL'||
+      (question.code_line_indices?.length||0)>0||(question.math_line_indices?.length||0)>0
+      ?renderSourceText(question.prompt,question.prompt_content_kind,question.code_line_indices||[],question.math_line_indices||[])
       :<h2 className={styles.questionPromptText}>{question.prompt}</h2>}
     {hasOptions&&<div className={styles.options}>{question.options.map(option=>{
       const key=String(option.key);
@@ -169,7 +171,8 @@ function QuestionContent({question,response,review=false,disabled=false,onAnswer
       return <label key={option.key} className={[styles.option,!review&&chosen?styles.optionSelected:'',tone].filter(Boolean).join(' ')}>
         <input type="radio" name={'question-'+question.attemptQuestionId} value={key} checked={chosen} disabled={disabled||review} onChange={()=>onAnswer?.(option.key)}/>
         <span className={styles.optionKey}>{option.key}</span>
-        <div className={styles.optionText}>{(option.content_kind==='CODE'||(option.code_line_indices?.length||0)>0)
+        <div className={styles.optionText}>{(option.content_kind==='CODE'||option.content_kind==='MATHEMATICAL'||
+          (option.code_line_indices?.length||0)>0||(option.math_line_indices?.length||0)>0)
           ?<pre className={styles.optionCodeBlock}><code>{option.label}</code></pre>
           :option.label}{hint&&<small className={wrongChosen?styles.optionHintIncorrect:correct||question.isCorrect===true?styles.optionHintCorrect:styles.optionHintNeutral}>{hint}</small>}</div>
         {review&&(chosen||correct)&&<span className={styles.optionOutcome}
