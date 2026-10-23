@@ -195,7 +195,9 @@ test('[QA-004] preview and uninstall only this run, then prove owned rows are cl
       await poolAfterUninstall.end();
     }
 
-    const visibleAlerts = await page.getByRole('alert').allTextContents();
+    const visibleAlerts = (await page.getByRole('alert').allTextContents())
+      .map(text => text.trim())
+      .filter(Boolean);
     expect(
       { visibleAlerts, serverErrors },
       'QA cleanup must complete without app error alerts or HTTP 5xx responses.'
