@@ -13,10 +13,10 @@ from scripts.extract_tre_source_questions import (
 
 class TreSourceCodePreservationTests(unittest.TestCase):
     def test_preserve_layout_keeps_indentation_and_blank_lines(self):
-        original = "for (i = 0; i < 3; i++) {\n    printf(\\"%d\\", i);\n}\n"
+        original = 'for (i = 0; i < 3; i++) {\n    printf("%d", i);\n}\n'
         self.assertEqual(
             preserve_layout(original),
-            "for (i = 0; i < 3; i++) {\n    printf(\\"%d\\", i);\n}",
+            'for (i = 0; i < 3; i++) {\n    printf("%d", i);\n}',
         )
 
     def test_code_detection_marks_program_trace(self):
