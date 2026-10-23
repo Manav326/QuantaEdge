@@ -81,7 +81,8 @@
         "cycle",
         "source_url",
         "source_status",
-        "repository_distribution_rights"
+        "repository_distribution_rights",
+        "available_languages"
       ],
       "properties": {
         "issuer": {
@@ -158,6 +159,15 @@
         "notes": {
           "type": "string",
           "maxLength": 2000
+        },
+        "available_languages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})?$"
+          },
+          "uniqueItems": true,
+          "maxItems": 12
         }
       }
     },
@@ -167,7 +177,7 @@
       "required": [
         "duration_minutes",
         "marks_per_question",
-        "negative_marking_per_wrong_answer",
+        "negative_marking_fraction",
         "unanswered_mark"
       ],
       "properties": {
@@ -179,14 +189,6 @@
         "marks_per_question": {
           "type": "number",
           "exclusiveMinimum": 0,
-          "maximum": 1000
-        },
-        "negative_marking_per_wrong_answer": {
-          "type": [
-            "number",
-            "null"
-          ],
-          "minimum": 0,
           "maximum": 1000
         },
         "unanswered_mark": {
@@ -201,6 +203,12 @@
             "maxLength": 120
           },
           "maxItems": 30
+        },
+        "negative_marking_fraction": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Fraction of a question's marks deducted for a wrong answer. 0 = no penalty; 0.25 = one-quarter penalty."
         }
       }
     },
@@ -219,7 +227,9 @@
           "prompt",
           "options",
           "topic_tags",
-          "proposed_answer"
+          "proposed_answer",
+          "section_code",
+          "prompt_i18n"
         ],
         "properties": {
           "id": {
@@ -263,6 +273,14 @@
                   "null"
                 ],
                 "maxLength": 40
+              },
+              "source_language_page": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 1,
+                "description": "PDF page containing this source-language version."
               }
             }
           },
@@ -286,7 +304,8 @@
               "additionalProperties": false,
               "required": [
                 "key",
-                "text"
+                "text",
+                "text_i18n"
               ],
               "properties": {
                 "key": {
@@ -298,6 +317,18 @@
                   "type": "string",
                   "minLength": 1,
                   "maxLength": 1500
+                },
+                "text_i18n": {
+                  "type": "object",
+                  "minProperties": 1,
+                  "patternProperties": {
+                    "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})?$": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 1500
+                    }
+                  },
+                  "additionalProperties": false
                 }
               }
             }
@@ -336,7 +367,8 @@
               "confidence",
               "explanation",
               "answer_source",
-              "review_status"
+              "review_status",
+              "explanation_i18n"
             ],
             "properties": {
               "option_key": {
@@ -380,6 +412,17 @@
               "reviewer_notes": {
                 "type": "string",
                 "maxLength": 2000
+              },
+              "explanation_i18n": {
+                "type": "object",
+                "minProperties": 1,
+                "patternProperties": {
+                  "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})?$": {
+                    "type": "string",
+                    "maxLength": 4000
+                  }
+                },
+                "additionalProperties": false
               }
             }
           },
@@ -389,6 +432,44 @@
           "source_notes": {
             "type": "string",
             "maxLength": 2000
+          },
+          "section_code": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]{1,49}$",
+            "description": "Exam-defined result section such as GENERAL_STUDIES, COMPUTER_SCIENCE or LANGUAGE_QUALIFYING."
+          },
+          "section_name_i18n": {
+            "type": "object",
+            "minProperties": 1,
+            "patternProperties": {
+              "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})?$": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120
+              }
+            },
+            "additionalProperties": false
+          },
+          "prompt_i18n": {
+            "type": "object",
+            "minProperties": 1,
+            "patternProperties": {
+              "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})?$": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 4000
+              }
+            },
+            "additionalProperties": false,
+            "description": "Original source wording per language. Keep it, even if a separate approved UI translation exists."
+          },
+          "section_result_policy": {
+            "enum": [
+              "SCORED",
+              "QUALIFYING_ONLY",
+              "PRACTICE_ONLY"
+            ],
+            "description": "A qualifying-only section is reported separately and excluded from the aggregate GS + subject score."
           }
         }
       }
