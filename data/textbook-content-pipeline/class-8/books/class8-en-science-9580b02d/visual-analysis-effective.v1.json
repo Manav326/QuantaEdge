@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "012fdf5e45b5353cca48ca0ee49692bd68ee182b21581a7ae2c67a080e05103a",
+  "raw_analysis_sha256": "1fdd9445f1202a499e59b0dcb548965258f1eb3d9afe88c5a2129cae199c47c4",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39975507646",
-      "checkpointed_at": "2026-10-23T16:44:21Z",
+      "checkpointed_at": "2026-10-23T16:49:36Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39975507646",
-      "checkpointed_at": "2026-10-23T16:45:04Z",
+      "checkpointed_at": "2026-10-23T16:50:18Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57829,7 +57829,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39975507646",
-      "checkpointed_at": "2026-10-23T16:45:54Z",
+      "checkpointed_at": "2026-10-23T16:51:08Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -58638,6 +58638,90 @@
         "context_relation": "uncertain",
         "limitations": [
           "The page is completely black and there are no visible elements to analyze."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d55b4af2d39033d603cae25d",
+      "asset_sha256": "13e188b654d58239320b12b9a2387b84c91800b8b1b57e423b389f6c26eb9dae",
+      "page_text_context_sha256": "0172a5b6e6ae1e07aa7f4dc4b845bb40a12e216788b5e705cc16e254655a091e",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 89,
+      "asset_path": "page-0089.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39975507646",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7df52762f8bfea95c0d8e2bf",
+      "asset_sha256": "ad00619c7b1552cae907df7eb8eb015b0342d6dd758f5e2f4e8df1196c15615b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 90,
+      "asset_path": "assets/ad00619c7b1552cae907df7eb8eb015b0342d6dd758f5e2f4e8df1196c15615b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0975f46f2c0d820742160ed4058dbee315cf7afd7cb940cf3e6d2001e63e547d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a green plastic ruler over a pile of small colored paper pieces.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Take a plastic scale or a plastic straw, a piece of polythene, and small pieces of paper.",
+          "Rub plastic scale/straw vigorously with polythene.",
+          "Do not touch the rubbed part with your hand or any metal object.",
+          "Now, bring it close to the small pieces of paper placed on a table, taking care",
+          "Fig. 5.8: Charged plastic scale"
+        ],
+        "concepts": [
+          "Electrostatic force",
+          "Experiment",
+          "Plastic scale",
+          "Polythene",
+          "Small pieces of paper"
+        ],
+        "context_relation": "Experimental setup for electrostatic force demonstration",
+        "limitations": [
+          "No specific measurements or calculations are shown."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "39975507646",
+      "checkpointed_at": "2026-10-23T16:57:51Z",
+      "effective_analysis": {
+        "visual_summary": "A hand holding a green plastic ruler over a pile of small colored paper pieces.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Take a plastic scale or a plastic straw, a piece of polythene, and small pieces of paper.",
+          "Rub plastic scale/straw vigorously with polythene.",
+          "Do not touch the rubbed part with your hand or any metal object.",
+          "Now, bring it close to the small pieces of paper placed on a table, taking care",
+          "Fig. 5.8: Charged plastic scale"
+        ],
+        "concepts": [
+          "Electrostatic force",
+          "Experiment",
+          "Plastic scale",
+          "Polythene",
+          "Small pieces of paper"
+        ],
+        "context_relation": "Experimental setup for electrostatic force demonstration",
+        "limitations": [
+          "No specific measurements or calculations are shown."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
