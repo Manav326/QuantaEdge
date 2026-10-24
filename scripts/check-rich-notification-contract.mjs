@@ -112,8 +112,11 @@ assert.ok(read('apps/admin/app/components/AdminWorkspaceLayout.tsx').includes('<
   'Education Admin header needs a permission-aware notification bell.');
 assert.ok(read('apps/people/app/components/PeopleWorkspaceLayout.tsx').includes('<StaffNotificationBell workspace="hrms" />'),
   'HRMS header needs a notification bell.');
-assert.ok(read('apps/web/app/components/NotificationInboxClient.tsx').includes("role === 'institution'"),
-  'Institution Admin inbox must reuse the durable inbox client.');
+const webInstitutionNotifications = read('apps/web/app/institution/notifications/page.tsx');
+assert.ok(webInstitutionNotifications.includes('InstitutionNotificationsRedirect') &&
+  webInstitutionNotifications.includes('NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN') &&
+  !webInstitutionNotifications.includes('NotificationStudio'),
+  'The legacy institution notification route must redirect to Admin rather than host a third notification studio.');
 assert.ok(read('apps/admin/app/notifications/page.tsx').includes('NotificationStudio surface="admin"'),
   'Education Admin must continue to own the notification design and send studio.');
 const adminInboxClient = read('apps/admin/app/components/StaffNotificationInbox.tsx');

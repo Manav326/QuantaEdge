@@ -3999,5 +3999,8 @@
   "admin.institutionOperations.redirectTitle": "Institution administration has moved to Admin",
   "admin.institutionOperations.redirectDescription": "Institution management, learner reports, the roster, course releases and source approval are now handled in the Education Admin workspace. The learner website is reserved for finding and consuming learning content.",
   "admin.institutionOperations.openAdmin": "Open Institution in Admin",
-  "admin.institutionOperations.adminOriginMissing": "The Admin application address is not configured for this deployment. Open the Education Admin application directly or ask your platform owner to configure NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN."
+  "admin.institutionOperations.adminOriginMissing": "The Admin application address is not configured for this deployment. Open the Education Admin application directly or ask your platform owner to configure NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN.",
+  "admin.institutionOperations.notificationsRedirectTitle": "Institution notifications have moved to Admin",
+  "admin.institutionOperations.notificationsRedirectDescription": "Use the institution's Admin workspace for notification templates, audience review, campaign delivery and the notification inbox. HRMS retains platform-wide notification and institution-governance controls.",
+  "admin.institutionOperations.openAdminNotifications": "Open Admin Notifications"
 }
