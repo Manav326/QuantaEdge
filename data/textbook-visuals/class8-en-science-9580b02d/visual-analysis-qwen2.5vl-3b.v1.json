@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1218,
+    "assets_selected": 1220,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "7d92ff21d3dff496bef2b0c6",
-      "6f53dc26a4cc479670d890d2"
+      "79214d35e0221875f99f17c5",
+      "092e400392cd81a61f705cbc"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1215,
-    "assets_remaining": 1076,
-    "assets_completion_percent": 53.0,
+    "assets_analyzed": 1217,
+    "assets_remaining": 1074,
+    "assets_completion_percent": 53.1,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 1213,
+    "assets_skipped_from_checkpoint": 1215,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40080946926",
-      "checkpointed_at": "2026-10-24T10:27:08Z"
+      "checkpointed_at": "2026-10-24T10:29:54Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40080946926",
-      "checkpointed_at": "2026-10-24T10:27:43Z"
+      "checkpointed_at": "2026-10-24T10:30:29Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38429,7 +38429,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40080946926",
-      "checkpointed_at": "2026-10-24T10:28:25Z"
+      "checkpointed_at": "2026-10-24T10:31:11Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -39844,6 +39844,82 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40080946926",
       "checkpointed_at": "2026-10-24T10:28:54Z"
+    },
+    {
+      "asset_id": "79214d35e0221875f99f17c5",
+      "asset_sha256": "7040f58a7b7f662e9b9d25843e2787af59552001cdbec2303eaf022931721f2f",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 92,
+      "asset_path": "page-0092.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "7e610cba57c888e7994a2493ca585c1648bd962906cbecd75aae8bfa3ef4ff1e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook explaining the concept of gravity and gravitational force.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Why do all the objects fall towards the Earth?",
+          "Is there any force which acts on them?",
+          "What exerts this force?",
+          "Since all the objects fall towards the Earth, it means the Earth attracts (pulls) them. The force with which the Earth attracts objects towards itself is called the gravitational force. The gravitational force exerted by the Earth is also called force of gravity or simply gravity.",
+          "Since the gravitational force acts without contact with the object it attracts, it is a non-contact force. Gravitational force is always an attractive force, unlike magnetic force or electrostatic force, which can either be attractive or repulsive.",
+          "You might have noticed that when an object is dropped from a height, it takes a straight vertical path downwards before touching the ground (Fig. 5.11a). When an object is thrown vertically upwards, the object moves up straight, slows down, stops momentarily at the top, and then takes a straight ver",
+          "While going up, the speed of the object goes on decreasing till the object comes to a stop, its direction of motion changes and while coming down the speed goes on increasing. We say that the object undergoes a vertical motion when it moves in a vertical direction under the influence of the gravitat",
+          "The force with which the Earth pulls an object towards itself is called the weight of the object. The weight measures how strongly an object is pulled by the Earth. Since the weight is a force, it is measured in the same unit as that of force. Therefore, SI unit of weight is also newton (N)."
+        ],
+        "concepts": [
+          "gravitational force",
+          "force of gravity",
+          "non-contact force",
+          "attractive force",
+          "magnetic force",
+          "electrostatic force",
+          "vertical motion",
+          "SI unit of weight"
+        ],
+        "context_relation": "The page explains the concept of gravity and gravitational force, including its properties and how it affects objects.",
+        "limitations": [
+          "The page does not provide visual aids beyond the text and images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40080946926",
+      "checkpointed_at": "2026-10-24T10:34:28Z"
+    },
+    {
+      "asset_id": "092e400392cd81a61f705cbc",
+      "asset_sha256": "82926bdd9c78089199418cf22faf95b11ff22541270aeb4e3c3e3ab7661406ed",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 93,
+      "asset_path": "assets/82926bdd9c78089199418cf22faf95b11ff22541270aeb4e3c3e3ab7661406ed.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "36e5f166a2e34a76c242f2d87ba73dfac71cb3ada4eb9f931e145d2e195df953",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person struggling to climb a set of stairs.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide context or specific information related to the textbook content.",
+        "limitations": [
+          "The image does not show any educational content or activities related to the textbook.",
+          "The image is a cartoon illustration and does not depict any real-world scenario or experiment.",
+          "The image does not include any text or labels that provide additional information about the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40080946926",
+      "checkpointed_at": "2026-10-24T10:35:38Z"
     }
   ]
 }
