@@ -3885,7 +3885,7 @@
   "admin.lifecycle.requestedBy": "Request kisne ki",
   "accountDeletion.childAgeReviewRequired": "Guardian deletion request se pehle reviewer ko child ka 18 se kam hona confirm karna hoga.",
   "admin.institutionOperations.eyebrow": "INSTITUTION OPERATIONS",
-  "admin.institutionOperations.title": "Institution workspace",
+  "admin.institutionOperations.title": "Institution",
   "admin.institutionOperations.description": "Institution ke learners aur course releases ek hi jagah manage karein. Course publication aur Marketplace launch ka control HRMS ke paas rahega.",
   "admin.institutionOperations.refresh": "Refresh",
   "admin.institutionOperations.overview": "Overview",
@@ -3989,5 +3989,11 @@
   "admin.institutionOperations.courseCreatePermission": "Course create karne ke liye Content Create aur Content Edit permissions chahiye.",
   "admin.institutionOperations.openContent": "Content Studio kholen",
   "admin.institutionOperations.draftCreated": "Draft course create ho gaya. Content Studio khol rahe hain…",
-  "admin.institutionOperations.courseCreationNext": "Next: HRMS ko release submit karne se pehle har active subject ke reviewed lessons create aur publish karein."
+  "admin.institutionOperations.courseCreationNext": "Next: HRMS ko release submit karne se pehle har active subject ke reviewed lessons create aur publish karein.",
+  "admin.institutionOperations.billableAmount": "Is period ka recorded billable amount",
+  "admin.institutionOperations.currentPeriodAmount": "{amount}",
+  "admin.institutionOperations.courseDetails": "Course details",
+  "admin.institutionOperations.courseTypeK12": "K–12 course",
+  "admin.institutionOperations.courseRosterLabel": "Institution learner roster",
+  "admin.institutionOperations.releasesCount": "{count} releases"
 }
