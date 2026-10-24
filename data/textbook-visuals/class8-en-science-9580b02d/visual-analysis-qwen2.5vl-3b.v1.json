@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1205,
+    "assets_selected": 1206,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "d55b4af2d39033d603cae25d",
-      "de5e4029f2ed2a544bb80be0"
+      "a4f673cda117cda9c6eb333c",
+      "b21e9a630c986ed7088855f1"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1201,
-    "assets_remaining": 1090,
-    "assets_completion_percent": 52.4,
+    "assets_analyzed": 1203,
+    "assets_remaining": 1088,
+    "assets_completion_percent": 52.5,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1200,
+    "assets_skipped_from_checkpoint": 1201,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40045176028",
-      "checkpointed_at": "2026-10-24T01:59:32Z"
+      "checkpointed_at": "2026-10-24T02:09:21Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40045176028",
-      "checkpointed_at": "2026-10-24T02:00:23Z"
+      "checkpointed_at": "2026-10-24T02:10:11Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38429,7 +38429,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40045176028",
-      "checkpointed_at": "2026-10-24T02:01:25Z"
+      "checkpointed_at": "2026-10-24T02:11:11Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -39402,6 +39402,63 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40045176028",
       "checkpointed_at": "2026-10-24T02:08:00Z"
+    },
+    {
+      "asset_id": "a4f673cda117cda9c6eb333c",
+      "asset_sha256": "90f2b9164db05ef2b9e8ce319ccee55f602468e6fe495e6bc6371e568b60c924",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/90f2b9164db05ef2b9e8ce319ccee55f602468e6fe495e6bc6371e568b60c924.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1501ddf68fca3c3f96e7ce10190a3aa309a4b7f069348e6d71e1c6701a77a2d0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character climbing stairs, smiling and extending their hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the text provided in the source PDF page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40045176028",
+      "checkpointed_at": "2026-10-24T02:12:49Z"
+    },
+    {
+      "asset_id": "b21e9a630c986ed7088855f1",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1501ddf68fca3c3f96e7ce10190a3aa309a4b7f069348e6d71e1c6701a77a2d0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page contains any text or images",
+          "no visible text or images to analyze"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40045176028",
+      "checkpointed_at": "2026-10-24T02:13:08Z"
     }
   ]
 }
