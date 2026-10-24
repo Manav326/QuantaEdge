@@ -465,6 +465,11 @@ export default function MarketplaceLaunchStepper({
     return '/finance?' + params.toString();
   }
 
+  function sourceReleaseHref(item: LaunchItem): string | null {
+    const params = new URLSearchParams({ view: 'courses', courseId: String(item.courseId) });
+    return educationAdminHref('/institution-operations?' + params.toString());
+  }
+
   function blockerHref(item: LaunchItem, check: LaunchCheck): string | null {
     if (check.code === 'SOURCE_RIGHTS_CLEARANCE') return '#marketplace-source-rights';
     if (['RAZORPAY_CREDENTIALS', 'RAZORPAY_WEBHOOK'].includes(check.code)) return '/institutions#hrms-integrations-heading';
@@ -475,8 +480,7 @@ export default function MarketplaceLaunchStepper({
     if (['REVENUE_SHARE_POLICY', 'SHARE_POOL_VALIDATION'].includes(check.code)) return financeSetupHref(item, 'distribution');
     if (check.code === 'DISCOUNT_POOL_COMPATIBILITY') return financeSetupHref(item, 'discounts');
     if (check.code === 'ORIGIN_RELEASE_APPROVAL' || check.code === 'ASSIGNMENT_AND_RELEASE') {
-      const params = new URLSearchParams({ view: 'courses', courseId: String(item.courseId) });
-      return educationAdminHref('/institution-operations?' + params.toString());
+      return sourceReleaseHref(item);
     }
     return null;
   }
@@ -762,7 +766,7 @@ export default function MarketplaceLaunchStepper({
                           {group.key === 'seller' && shouldShowSellerSetupLink(item) && <a className={styles.actionLink} href={financeSetupHref(item, sellerSetupTarget(item))}>Open seller &amp; tax setup <span aria-hidden="true">↗</span></a>}
                           {group.key === 'invoice' && shouldShowInvoiceSetupLink(item) && <a className={styles.actionLink} href={financeSetupHref(item, invoiceSetupTarget(item))}>{invoiceSetupLabel(item)} <span aria-hidden="true">↗</span></a>}
                           {group.key === 'course' && !item.ready && blocker && ['CONTENT_QUALITY_REVIEW', 'CONTENT_REVIEW_CURRENT', 'PUBLISHED_LEARNING_CONTENT'].includes(blocker.code) && <p className={styles.stepHint}>Resolve this in the course release / content-quality workflow, then refresh this checklist.</p>}
-                          {group.key === 'release' && !item.ready && item.checks.some(check => !check.passed && ['ORIGIN_RELEASE_APPROVAL', 'ASSIGNMENT_AND_RELEASE'].includes(check.code)) && <a className={styles.actionLink} href={institutionPortalHref('/institution?view=courses#institution-course-releases')}>Open source course release workflow <span aria-hidden="true">↗</span></a>}
+                          {group.key === 'release' && !item.ready && item.checks.some(check => !check.passed && ['ORIGIN_RELEASE_APPROVAL', 'ASSIGNMENT_AND_RELEASE'].includes(check.code)) && sourceReleaseHref(item) && <a className={styles.actionLink} href={sourceReleaseHref(item)!}>Open Institution in Admin <span aria-hidden="true">↗</span></a>}
                         </div>
                       </section>
                     );
