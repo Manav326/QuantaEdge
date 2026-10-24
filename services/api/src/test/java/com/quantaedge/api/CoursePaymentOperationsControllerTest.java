@@ -1,9 +1,11 @@
 package com.quantaedge.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 class CoursePaymentOperationsControllerTest {
@@ -35,6 +37,29 @@ class CoursePaymentOperationsControllerTest {
     var resolution=CoursePaymentOperationsController.resolutionFor("PENDING",false,false,"");
     assertEquals("PROVIDER_REFERENCE_MISSING",resolution.code());
     assertTrue(resolution.message().contains("Do not create another payment"));
+  }
+
+  @Test
+  void statusTraceRequiresTaxAmountsToMatchTheSavedOrder() {
+    Map<String,Object> consistent=Map.of(
+        "snapshot_taxable_value_paise","900","taxable_value_paise",900L,
+        "snapshot_output_tax_paise","100","output_tax_paise",100L);
+    assertTrue(CoursePaymentOperationsController.snapshotNumberMatches(
+        consistent,"snapshot_taxable_value_paise","taxable_value_paise"));
+    assertTrue(CoursePaymentOperationsController.snapshotNumberMatches(
+        consistent,"snapshot_output_tax_paise","output_tax_paise"));
+
+    Map<String,Object> inconsistent=Map.of(
+        "snapshot_taxable_value_paise","900","taxable_value_paise",900L,
+        "snapshot_output_tax_paise","99","output_tax_paise",100L);
+    assertTrue(CoursePaymentOperationsController.snapshotNumberMatches(
+        inconsistent,"snapshot_taxable_value_paise","taxable_value_paise"));
+    assertFalse(CoursePaymentOperationsController.snapshotNumberMatches(
+        inconsistent,"snapshot_output_tax_paise","output_tax_paise"));
+
+    Map<String,Object> missingSnapshot=Map.of("output_tax_paise",100L);
+    assertFalse(CoursePaymentOperationsController.snapshotNumberMatches(
+        missingSnapshot,"snapshot_output_tax_paise","output_tax_paise"));
   }
 
   @Test
