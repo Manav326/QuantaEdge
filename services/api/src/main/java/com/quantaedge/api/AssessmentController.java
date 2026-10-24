@@ -514,19 +514,19 @@ public class AssessmentController {
         where att.institution_id=? and att.status='RELEASED' and (CAST(? AS bigint) IS NULL OR a.id=?)
       )
       select rv.assessment_id,rv.question_key,
-        coalesce(option.option_json->>'key',option.option_json->>'option_key') as selected_value,
-        max(coalesce(option.option_json->>'label',option.option_json->>'text',
-                     option.option_json->'text_i18n'->>'en',option.option_json->'text_i18n'->>'hi')) as option_label,
+        coalesce(opt.option_json->>'key',opt.option_json->>'option_key') as selected_value,
+        max(coalesce(opt.option_json->>'label',opt.option_json->>'text',
+                     opt.option_json->'text_i18n'->>'en',opt.option_json->'text_i18n'->>'hi')) as option_label,
         count(*) as selection_count
       from response_values rv
       cross join lateral jsonb_array_elements(
         case when jsonb_typeof(rv.question_snapshot->'options')='array'
           then rv.question_snapshot->'options' else '[]'::jsonb end
-      ) option(option_json)
+      ) opt(option_json)
       where rv.selected_value is not null and btrim(rv.selected_value)<>''
-        and rv.selected_value=coalesce(option.option_json->>'key',option.option_json->>'option_key')
+        and rv.selected_value=coalesce(opt.option_json->>'key',opt.option_json->>'option_key')
       group by rv.assessment_id,rv.question_key,
-        coalesce(option.option_json->>'key',option.option_json->>'option_key')
+        coalesce(opt.option_json->>'key',opt.option_json->>'option_key')
       order by rv.assessment_id,rv.question_key,selection_count desc,selected_value
       limit 2000
       """,courseId,institutionId,assessmentId,assessmentId);
