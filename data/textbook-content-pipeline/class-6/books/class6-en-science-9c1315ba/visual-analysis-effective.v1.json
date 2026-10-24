@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1837ed03cc04caa3c37fad3a01bb562d0e89e1bf9841cd71c3b3f84ee575ff53",
+  "raw_analysis_sha256": "932de1487ec15f859d9c16c1da27137ec8e5a293de8ce2d66d869830a71686c3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -643,7 +643,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40123280452",
-      "checkpointed_at": "2026-10-24T20:03:26Z",
+      "checkpointed_at": "2026-10-24T20:09:32Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -29453,7 +29453,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40123280452",
-      "checkpointed_at": "2026-10-24T20:04:30Z",
+      "checkpointed_at": "2026-10-24T20:10:36Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -35067,7 +35067,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40123280452",
-      "checkpointed_at": "2026-10-24T20:05:24Z",
+      "checkpointed_at": "2026-10-24T20:11:29Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57359,7 +57359,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40123280452",
-      "checkpointed_at": "2026-10-24T20:06:09Z",
+      "checkpointed_at": "2026-10-24T20:12:13Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -60474,7 +60474,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40111312107",
+      "run_id": "40123280452",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
