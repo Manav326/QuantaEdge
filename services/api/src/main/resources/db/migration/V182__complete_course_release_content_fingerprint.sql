@@ -103,7 +103,7 @@ AS $$
       FROM curriculum_program_delivery_mode m
       WHERE m.program_id=p_program_id
     UNION ALL
-    SELECT 'program-subject', ps.id::text, to_jsonb(ps)::text
+    SELECT 'program-subject', concat(ps.program_id,':',ps.class_id,':',ps.subject_id), to_jsonb(ps)::text
       FROM curriculum_program_subject ps WHERE ps.program_id=p_program_id
     UNION ALL
     SELECT 'subject', s.id::text, to_jsonb(s)::text
@@ -163,6 +163,10 @@ AS $$
       FROM learning_resource_assignment a
       JOIN scoped_chapters ch ON ch.id=a.chapter_id
     UNION ALL
+    SELECT 'resource-artifact-scope', s.id::text, to_jsonb(s)::text
+      FROM learning_resource_artifact_scope s
+      JOIN scoped_chapters ch ON ch.id=s.chapter_id
+    UNION ALL
     SELECT 'learning-resource', r.id::text, to_jsonb(r)::text
       FROM learning_resource r WHERE r.id IN (SELECT id FROM scoped_resources)
     UNION ALL
@@ -171,6 +175,11 @@ AS $$
     UNION ALL
     SELECT 'learning-document', d.id::text, to_jsonb(d)::text
       FROM learning_document d WHERE d.id IN (SELECT id FROM scoped_documents)
+    UNION ALL
+    SELECT 'learning-pdf-asset', a.id::text, to_jsonb(a)::text
+      FROM learning_pdf_asset a
+      WHERE a.id IN (SELECT d.pdf_asset_id FROM learning_document d WHERE d.id IN (SELECT id FROM scoped_documents))
+        OR a.id IN (SELECT d.pdf_asset_id FROM textbook_source_book d WHERE d.id IN (SELECT id FROM scoped_books))
     UNION ALL
     SELECT 'source-book', b.id::text, to_jsonb(b)::text
       FROM textbook_source_book b WHERE b.id IN (SELECT id FROM scoped_books)
