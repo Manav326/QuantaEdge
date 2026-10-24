@@ -413,11 +413,11 @@ def ensure_schema(cursor: Any) -> None:
     row = cursor.fetchone()
     if not row or any(value is None for value in row):
         raise ImportErrorSafe(
-            "Flyway V168 is not applied. Start the API against this database and verify that V168 completes before importing."
+            "Flyway V168 and V180 are required. Start the API against this database and verify both migrations complete before importing."
         )
     if not re.search(
         r"'TRE 3\.0'::varchar,\s*'tre4-bpsc-tre-3-0-computer-science'::varchar,\s*150",
-        str(row[3] or ""),
+        str(row[4] or ""),
     ):
         raise ImportErrorSafe(
             "Flyway V170 is required: TRE 3.0 must be configured for 150 source questions before importing."
