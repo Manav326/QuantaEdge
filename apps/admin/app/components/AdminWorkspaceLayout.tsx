@@ -376,16 +376,19 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
   return <AdminThemeProvider institutionCode={institutionCode}>
   <AdminWorkspaceContext.Provider value={value}>
     <div className="qe-admin-workspace-layout">
-      <AdminSidebar active={active} variant={variant} displayName={session?.displayName || undefined} persistent />
+      <AdminSidebar active={active} variant={variant} displayName={value.displayName || undefined} persistent />
       <div className="qe-admin-workspace-content">
         <header className="qe-admin-global-header">
           <div className="qe-admin-global-context">
-            <span className="qe-admin-global-context-label">{activeInstitution ? 'Institution workspace' : 'Education Admin'}</span>
+            <span className="qe-admin-global-context-label">{institutionAdminSession || activeInstitution ? 'Institution workspace' : 'Education Admin'}</span>
             <QuantaEdgeBrand href="/" variant="compact" className="qe-admin-global-brand" />
-            <strong>{t('admin.workspace.staff')}</strong>
+            <strong>{institutionAdminSession ? t('admin.institutionOperations.title') : t('admin.workspace.staff')}</strong>
           </div>
           <div className="qe-admin-global-actions">
-            {session?.permissions?.some(permission => ['NOTIFICATION_CAMPAIGN_VIEW','NOTIFICATION_COURSE_SEND','NOTIFICATION_INSTITUTION_SEND','NOTIFICATION_TEMPLATE_MANAGE'].includes(permission)) ? <StaffNotificationBell workspace="admin" /> : null}
+            {institutionAdminSession && value.permissions.includes('NOTIFICATION_INSTITUTION_SEND')
+              ? <StaffNotificationBell workspace="institution" />
+              : session?.permissions?.some(permission => ['NOTIFICATION_CAMPAIGN_VIEW','NOTIFICATION_COURSE_SEND','NOTIFICATION_INSTITUTION_SEND','NOTIFICATION_TEMPLATE_MANAGE'].includes(permission))
+                ? <StaffNotificationBell workspace="admin" /> : null}
             {activeInstitution ? <div className="qe-admin-institution-switcher" aria-label="Assigned institution" style={{ display: 'grid', gap: 3, fontSize: 11, fontWeight: 700, color: 'var(--admin-muted,#64748b)', minWidth: 180 }}>
               <span>Assigned institution</span>
               <strong style={{ fontSize: 13, color: 'var(--admin-text,#1b2430)' }}>{activeInstitution.display_name}</strong>
@@ -402,7 +405,11 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
         </header>
 
         <div className="qe-admin-workspace-page-slot" key={pathname + '|' + institutionCode}>
-          {!publicRoute && !session ? <div role="status" style={{ padding: 28 }}>Preparing staff workspace…</div>
+          {!publicRoute && !session && !institutionAdminSession ? <div role="status" style={{ padding: 28 }}>Preparing workspace…</div>
+            : institutionAdminSession?.mustChangePassword && pathname !== '/institution-change-password'
+              ? <div role="alert" style={{ margin: 24, padding: 18, border: '1px solid var(--admin-border,#d8dce5)', borderRadius: 12 }}>
+                  <h2>Set your institution password</h2><p>Change the temporary password before opening institution operations.</p><Link href="/institution-change-password" className="button button-dark">Change password</Link>
+                </div>
             : institutionLoading && session?.staffId ? <div role="status" style={{ padding: 28 }}>Resolving your HRMS institution assignment…</div>
             : institutionError && session?.staffId ? <div role="alert" style={{ margin: 24, padding: 18, border: '1px solid var(--admin-border,#d8dce5)', borderRadius: 12 }}>
                 <h2>Institution access unavailable</h2><p>{institutionError}</p><p>Education Admin cannot switch institutions. An HRMS platform owner must configure or restore this account’s institution assignment.</p><button type="button" onClick={() => setInstitutionRetryVersion(version => version + 1)}>Retry</button>
