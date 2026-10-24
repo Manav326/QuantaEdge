@@ -2,6 +2,7 @@ package com.quantaedge.api;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URI;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -616,7 +617,11 @@ public class CourseMarketplaceLaunchReadinessService {
   private void addPackageRightsCheck(List<Map<String,Object>> checks,long courseId) {
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select imported_package.package_id,imported_package.package_version,
-        coalesce(imported_package.editorial_metadata->>'source_rights_status','UNCONFIRMED') as source_rights_status
+        coalesce(imported_package.editorial_metadata->>'source_rights_status','UNCONFIRMED') as source_rights_status,
+        imported_package.editorial_metadata->>'rights_evidence_url' as rights_evidence_url,
+        imported_package.rights_reviewed_by_staff_id,
+        imported_package.rights_reviewed_at,
+        imported_package.rights_review_notes
       from institution_course_package_import imported_package
       join curriculum_program source_program on source_program.id=imported_package.course_id
       where imported_package.state='IMPORTED'
@@ -634,12 +639,31 @@ public class CourseMarketplaceLaunchReadinessService {
     if(rows.isEmpty())return;
     Map<String,Object> row=rows.getFirst();
     String status=text(row.get("source_rights_status"));
-    boolean cleared=List.of("CLEARED_FOR_INTERNAL_USE","CLEARED_FOR_PUBLIC_REPOSITORY").contains(status);
-    add(checks,"SOURCE_RIGHTS_CLEARANCE","Course package distribution rights are cleared",cleared,
-        cleared?"The imported package records an approved internal-use or public-repository rights state."
-            :"Package "+text(row.get("package_id"))+" version "+text(row.get("package_version"))
-                +" has rights state "+(status.isBlank()?"UNCONFIRMED":status)
-                +". HRMS must record CLEARED_FOR_INTERNAL_USE or CLEARED_FOR_PUBLIC_REPOSITORY before Marketplace distribution.");
+    boolean cleared=isVerifiedPackageRightsClearance(status,
+        text(row.get("rights_evidence_url")),row.get("rights_reviewed_by_staff_id"),
+        row.get("rights_reviewed_at"),text(row.get("rights_review_notes")));
+    String message=cleared
+        ?"HRMS recorded a cleared rights decision with reviewer attribution, notes, and valid HTTPS evidence."
+        :"Package "+text(row.get("package_id"))+" version "+text(row.get("package_version"))
+            +" has rights state "+(status.isBlank()?"UNCONFIRMED":status)
+            +" without a complete evidence-backed HRMS review. HRMS must record a cleared decision, reviewer attribution, notes, and valid HTTPS evidence before Marketplace distribution.";
+    add(checks,"SOURCE_RIGHTS_CLEARANCE","Course package distribution rights are cleared",cleared,message);
+  }
+
+  static boolean isVerifiedPackageRightsClearance(
+      String status,String evidenceUrl,Object reviewerId,Object reviewedAt,String reviewNotes) {
+    if(!List.of("CLEARED_FOR_INTERNAL_USE","CLEARED_FOR_PUBLIC_REPOSITORY").contains(status)
+        ||!(reviewerId instanceof Number reviewer&&reviewer.longValue()>0L)
+        ||reviewedAt==null||reviewNotes==null||reviewNotes.trim().length()<5) {
+      return false;
+    }
+    try {
+      URI evidence=URI.create(evidenceUrl==null?"":evidenceUrl.trim());
+      return "https".equalsIgnoreCase(evidence.getScheme())
+          &&evidence.getHost()!=null&&evidence.getUserInfo()==null;
+    } catch(IllegalArgumentException ex) {
+      return false;
+    }
   }
 
   private static void add(List<Map<String,Object>> checks,String code,String label,boolean passed,String message) {

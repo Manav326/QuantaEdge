@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Map;
+import java.time.Instant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -107,5 +108,24 @@ class CourseMarketplaceLaunchRightsReviewTest {
     assertEquals(true,result.get("saved"));
     assertEquals("DO_NOT_REDISTRIBUTE",result.get("status"));
     verify(jdbc).update(contains("insert into institution_course_lifecycle_event"), any(Object[].class));
+  }
+  @Test
+  void packageRightsClearanceRequiresEvidenceBackedHrmsReviewAttribution() {
+    Instant reviewedAt=Instant.parse("2026-10-24T00:00:00Z");
+    String notes="Verified publisher licence for redistribution.";
+    String validEvidence="https://publisher.example.org/licence";
+
+    assertFalse(CourseMarketplaceLaunchReadinessService.isVerifiedPackageRightsClearance(
+        "CLEARED_FOR_PUBLIC_REPOSITORY",validEvidence,null,reviewedAt,notes));
+    assertFalse(CourseMarketplaceLaunchReadinessService.isVerifiedPackageRightsClearance(
+        "CLEARED_FOR_PUBLIC_REPOSITORY",validEvidence,42L,null,notes));
+    assertFalse(CourseMarketplaceLaunchReadinessService.isVerifiedPackageRightsClearance(
+        "CLEARED_FOR_PUBLIC_REPOSITORY","http://publisher.example.org/licence",42L,reviewedAt,notes));
+    assertFalse(CourseMarketplaceLaunchReadinessService.isVerifiedPackageRightsClearance(
+        "CLEARED_FOR_PUBLIC_REPOSITORY","https://reviewer:secret@publisher.example.org/licence",42L,reviewedAt,notes));
+    assertFalse(CourseMarketplaceLaunchReadinessService.isVerifiedPackageRightsClearance(
+        "DO_NOT_REDISTRIBUTE",validEvidence,42L,reviewedAt,notes));
+    assertTrue(CourseMarketplaceLaunchReadinessService.isVerifiedPackageRightsClearance(
+        "CLEARED_FOR_PUBLIC_REPOSITORY",validEvidence,42L,reviewedAt,notes));
   }
 }

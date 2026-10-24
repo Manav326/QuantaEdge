@@ -38,7 +38,7 @@ All levels reject undeclared properties. Database identifiers, tenant ownership,
 
 ## Source references and rights
 
-A chapter or lesson may contain a `source` object with `title`, `url`, `edition`, and `pages`. These fields preserve provenance and are not considered verified by import. `editorial.source_rights_status` may be `UNCONFIRMED`, `CLEARED_FOR_INTERNAL_USE`, `CLEARED_FOR_PUBLIC_REPOSITORY`, or `DO_NOT_REDISTRIBUTE`. Package import may create a draft while rights are unresolved, but HRMS Marketplace launch is blocked until the imported package has an internal-use or public-repository clearance. `DO_NOT_REDISTRIBUTE` is not a publishable rights state.
+A chapter or lesson may contain a `source` object with `title`, `url`, `edition`, and `pages`. These fields preserve provenance and are not considered verified by import. `editorial.source_rights_status` is an untrusted source declaration only: the importer always stores `UNCONFIRMED`, even when JSON claims that rights are cleared. Only the HRMS rights-review action can record a cleared state, and Marketplace launch also requires the reviewing staff ID, timestamp, notes, and valid HTTPS evidence. `DO_NOT_REDISTRIBUTE` is not a publishable rights state.
 
 ## Validation notes
 

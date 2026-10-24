@@ -210,6 +210,22 @@ public class CourseAuthoringService {
     return result;
   }
 
+  /**
+   * Package JSON is authored outside the HRMS approval workflow. Only informational notes are
+   * retained at import; the authoritative rights state always starts unconfirmed. HRMS alone
+   * can change it after recording reviewer attribution, notes and HTTPS evidence.
+   */
+  static Map<String,Object> editorialMetadataForImport(Object raw) {
+    Map<String,Object> supplied;
+    if(raw instanceof Map<?,?> map) supplied=stringMap(map);
+    else supplied=Map.of();
+    Map<String,Object> trusted=new LinkedHashMap<>();
+    Object notes=supplied.get("notes");
+    if(notes instanceof String) trusted.put("notes",notes);
+    trusted.put("source_rights_status","UNCONFIRMED");
+    return trusted;
+  }
+
   @Transactional
   public Map<String,Object> importCoursePackage(
       long institutionId,String tenantCode,Long actorStaffId,Map<String,Object> body) {
@@ -225,7 +241,7 @@ public class CourseAuthoringService {
         source_institution_id,package_id,package_version,package_sha256,state,imported_by_staff_id,editorial_metadata
       ) values(?,?,?,?,'IMPORTING',?,?::jsonb)
       on conflict(source_institution_id,package_id,package_version) do nothing
-      """,institutionId,packageId,packageVersion,digest,actorStaffId,json(body.getOrDefault("editorial",Map.of())));
+      """,institutionId,packageId,packageVersion,digest,actorStaffId,json(editorialMetadataForImport(body.get("editorial"))));
     if(reserved==0) {
       List<Map<String,Object>> prior=jdbc.queryForList("""
         select package_sha256,state,course_id,release_id,import_summary

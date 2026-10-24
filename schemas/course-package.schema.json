@@ -242,6 +242,7 @@
           "maxLength": 2000
         },
         "source_rights_status": {
+          "description": "Untrusted source declaration only. Import always stores UNCONFIRMED; only an HRMS reviewer can record a cleared state after entering reviewer attribution, notes and HTTPS evidence.",
           "enum": [
             "UNCONFIRMED",
             "CLEARED_FOR_INTERNAL_USE",

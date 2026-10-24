@@ -54,6 +54,19 @@ class CourseAuthoringPackageTest {
   }
 
   @Test
+  void importedEditorialMetadataCannotSelfApproveSourceRights() {
+    Map<String,Object> supplied=Map.of(
+        "notes","Source statement included with the package.",
+        "source_rights_status","CLEARED_FOR_PUBLIC_REPOSITORY");
+    Map<String,Object> stored=CourseAuthoringService.editorialMetadataForImport(supplied);
+
+    assertEquals("UNCONFIRMED",stored.get("source_rights_status"));
+    assertEquals("Source statement included with the package.",stored.get("notes"));
+    assertFalse(stored.containsKey("rights_evidence_url"));
+    assertFalse(stored.containsKey("rights_reviewed_by_staff_id"));
+  }
+
+  @Test
   void rejectsUnsupportedCourseTypeRatherThanPretendingK12HierarchyFits() {
     Map<String,Object> body=validPackage();
     Map<String,Object> course=new LinkedHashMap<>((Map<String,Object>)body.get("course"));
