@@ -77,6 +77,10 @@ function count(value: unknown) {
   const n = Number(value ?? 0);
   return Number.isFinite(n) ? n.toLocaleString('en-IN') : '0';
 }
+function money(value: unknown) {
+  const amount = Number(value ?? 0) / 100;
+  return Number.isFinite(amount) ? new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 }).format(amount) : '—';
+}
 function dateLabel(value?: string | null) {
   if (!value) return '—';
   const date = new Date(value);
@@ -92,6 +96,7 @@ export default function InstitutionOperationsPage() {
   const canCreateCourse = permissions.includes('CONTENT_CREATE') && permissions.includes('CONTENT_EDIT');
   const canManageReleases = permissions.includes('CONTENT_PUBLISH');
   const [view, setView] = useState<'overview' | 'roster' | 'courses'>('overview');
+  const [focusCourseId, setFocusCourseId] = useState('');
   const [overview, setOverview] = useState<Overview | null>(null);
   const [learners, setLearners] = useState<Learner[]>([]);
   const [rosterTotal, setRosterTotal] = useState(0);
@@ -144,7 +149,18 @@ export default function InstitutionOperationsPage() {
     }
   }, [loadOverviewAndCourses, loadRoster, t]);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('view') === 'courses') setView('courses');
+    const requestedCourse = params.get('courseId') || '';
+    if (/^[0-9]+$/.test(requestedCourse)) setFocusCourseId(requestedCourse);
+  }, []);
   useEffect(() => { void refresh(); }, [refresh]);
+  useEffect(() => {
+    if (view !== 'courses' || !focusCourseId) return;
+    const target = document.querySelector('[data-release-course-id="' + focusCourseId + '"]');
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, [view, focusCourseId, releases]);
 
   async function releaseAction(release: Release, action: 'submit' | 'approve') {
     setBusyRelease(release.release_id);
@@ -212,6 +228,8 @@ export default function InstitutionOperationsPage() {
                 [t('admin.institutionOperations.allMemberships'), count(overview?.all_memberships), '◎'],
                 [t('admin.institutionOperations.authorisedCourses'), count(overview?.authorized_courses), '▤'],
                 [t('admin.institutionOperations.completedLessons'), count(overview?.completed_lessons), '✓'],
+                [t('admin.institutionOperations.billableEvents'), count(overview?.current_period_billable_events), '₹'],
+                [t('admin.institutionOperations.billableAmount'), t('admin.institutionOperations.currentPeriodAmount', { amount: money(overview?.current_period_amount_paise) }), '₹'],
               ].map(([label, value, icon]) => (
                 <article className={styles.metric} key={label}>
                   <span aria-hidden="true">{icon}</span><small>{label}</small><strong>{value}</strong>
@@ -233,13 +251,13 @@ export default function InstitutionOperationsPage() {
             </section>
             <section className={styles.panel}>
               <div className={styles.panelHeader}><div><h2>{t('admin.institutionOperations.courseReleases')}</h2><p>{t('admin.institutionOperations.courseReleasesDescription')}</p></div><span className={styles.statusCount}>{t('admin.institutionOperations.coursesCount', { count: latestReleases.length })}</span></div>
-              <ReleaseList releases={latestReleases.slice(0, 4)} loading={loading} busyRelease={busyRelease} onAction={releaseAction} t={t} canManageReleases={canManageReleases} compact />
+              <ReleaseList releases={latestReleases.slice(0, 4)} loading={loading} busyRelease={busyRelease} onAction={releaseAction} t={t} canManageReleases={canManageReleases} focusCourseId={focusCourseId} compact />
               {latestReleases.length > 4 ? <button type="button" className={styles.textButton} onClick={() => setView('courses')}>{t('admin.institutionOperations.viewAllReleases')} →</button> : null}
             </section>
           </>
         ) : view === 'roster' ? (
           <section className={styles.panel}>
-            <div className={styles.panelHeader}><div><h2>{t('admin.institutionOperations.rosterTitle')}</h2><p>{t('admin.institutionOperations.rosterDescription')}</p></div><span className={styles.statusCount}>{count(rosterTotal)} learners</span></div>
+            <div className={styles.panelHeader}><div><h2>{t('admin.institutionOperations.rosterTitle')}</h2><p>{t('admin.institutionOperations.rosterDescription')}</p></div><span className={styles.statusCount}>{t('admin.institutionOperations.learnerCount', { count: count(rosterTotal) })}</span></div>
             <form className={styles.searchRow} onSubmit={event => { event.preventDefault(); setRosterPage(1); setAppliedQuery(query.trim()); }}>
               <input value={query} onChange={event => setQuery(event.target.value)} placeholder={t('admin.institutionOperations.searchLearners')} aria-label={t('admin.institutionOperations.searchLearners')} />
               <button className="button button-dark" type="submit">{t('admin.institutionOperations.searchButton')}</button>
@@ -267,7 +285,7 @@ export default function InstitutionOperationsPage() {
                   {[10, 20, 30, 50].map(size => <option key={size} value={size}>{size}</option>)}
                 </select>
               </label>
-              <span>{t('admin.institutionOperations.page', { page: rosterPage })} · {count(rosterTotal)} learners</span>
+              <span>{t('admin.institutionOperations.page', { page: rosterPage })} · {t('admin.institutionOperations.learnerCount', { count: count(rosterTotal) })}</span>
               <div>
                 <button type="button" disabled={rosterPage <= 1} onClick={() => setRosterPage(page => Math.max(1, page - 1))}>{t('admin.institutionOperations.previous')}</button>
                 <button type="button" disabled={rosterPage >= maxPages} onClick={() => setRosterPage(page => Math.min(maxPages, page + 1))}>{t('admin.institutionOperations.next')}</button>
@@ -277,7 +295,7 @@ export default function InstitutionOperationsPage() {
         ) : (
           <>
             <section className={styles.panel}>
-              <div className={styles.panelHeader}><div><h2>{t('admin.institutionOperations.authorisedCourses')}</h2><p>{t('admin.institutionOperations.availableCoursesDescription')}</p></div><span className={styles.statusCount}>{courses.length} courses</span></div>
+              <div className={styles.panelHeader}><div><h2>{t('admin.institutionOperations.authorisedCourses')}</h2><p>{t('admin.institutionOperations.availableCoursesDescription')}</p></div><span className={styles.statusCount}>{t('admin.institutionOperations.coursesCount', { count: courses.length })}</span></div>
               {courses.length ? <div className={styles.courseGrid}>{courses.map(course => <article key={course.course_id || course.code}>
                 <span className={styles.courseGlyph}>▤</span><h3>{course.display_name || course.code}</h3><small>{course.code}</small>
                 <div className={styles.courseStats}><span>{t('admin.institutionOperations.publishedLessonsCount')}<strong>{count(course.published_lessons)}</strong></span><span>{t('admin.institutionOperations.institutionLearnersCount')}<strong>{count(course.institution_learners)}</strong></span></div>
@@ -286,7 +304,7 @@ export default function InstitutionOperationsPage() {
             </section>
             <section className={styles.panel}>
               <div className={styles.panelHeader}><div><h2>{t('admin.institutionOperations.courseReleases')}</h2><p>{t('admin.institutionOperations.courseReleasesDescription')}</p></div><span className={styles.statusCount}>{t('admin.institutionOperations.coursesCount', { count: latestReleases.length })}</span></div>
-              <ReleaseList releases={latestReleases} loading={loading} busyRelease={busyRelease} onAction={releaseAction} t={t} canManageReleases={canManageReleases} />
+              <ReleaseList releases={latestReleases} loading={loading} busyRelease={busyRelease} onAction={releaseAction} t={t} canManageReleases={canManageReleases} focusCourseId={focusCourseId} />
             </section>
           </>
         )}
@@ -295,13 +313,14 @@ export default function InstitutionOperationsPage() {
   );
 }
 
-function ReleaseList({ releases, loading, busyRelease, onAction, t, canManageReleases, compact = false }: {
+function ReleaseList({ releases, loading, busyRelease, onAction, t, canManageReleases, focusCourseId, compact = false }: {
   releases: Release[];
   loading: boolean;
   busyRelease: number | null;
   onAction: (release: Release, action: 'submit' | 'approve') => void;
   t: (key: string, values?: Record<string, string | number>) => string;
   canManageReleases: boolean;
+  focusCourseId: string;
   compact?: boolean;
 }) {
   if (loading && releases.length === 0) return <p className={styles.loading}>{t('admin.institutionOperations.loadingReleases')}</p>;
@@ -311,7 +330,7 @@ function ReleaseList({ releases, loading, busyRelease, onAction, t, canManageRel
       const state = String(release.release_state || 'UNKNOWN').toUpperCase();
       const canSubmit = ['DRAFT', 'REJECTED', 'WITHDRAWN', 'LEGACY_MIGRATED'].includes(state);
       const canApprove = state === 'QUALITY_APPROVED';
-      return <article className={styles.releaseCard} key={release.course_id + ':' + release.release_id}>
+      return <article className={styles.releaseCard + (focusCourseId === String(release.course_id) ? ' ' + styles.focused : '')} data-release-course-id={release.course_id} key={release.course_id + ':' + release.release_id}>
         <div className={styles.releaseTitle}>
           <div><h3>{release.display_name || release.course_code || 'Course'}</h3><p>{release.course_code || ''} · v{release.release_version}</p></div>
           <span className={state === 'SHAREABLE' ? styles.activeStatus : styles.status}>{stateLabel(state)}</span>
