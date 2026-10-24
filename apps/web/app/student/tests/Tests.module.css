@@ -1154,3 +1154,5 @@ html[data-qe-appearance] .resultScorePrimary > strong {
   .practiceNavigator .secondaryButton { padding-inline: .5rem; }
   .practiceNavigator .practicePosition strong { font-size: .8rem; }
 }
+
+.practiceQuestionShell { display: grid; gap: .75rem; min-width: 0; }
