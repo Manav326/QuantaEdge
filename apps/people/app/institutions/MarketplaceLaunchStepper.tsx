@@ -405,6 +405,46 @@ export default function MarketplaceLaunchStepper({
     }
   };
 
+  const toggleReviewChapter = async (release: QualityReviewItem, chapterId: number) => {
+    if (expandedReviewChapters[release.release_id] === chapterId) {
+      setExpandedReviewChapters(previous => ({ ...previous, [release.release_id]: null }));
+      return;
+    }
+    const cached = reviewChapters[chapterId];
+    if (cached) {
+      setExpandedReviewChapters(previous => ({ ...previous, [release.release_id]: chapterId }));
+      return;
+    }
+    setReviewChapterLoadingId(chapterId);
+    setReviewContentErrors(previous => ({ ...previous, [release.release_id]: '' }));
+    try {
+      const detail = await api<ReleaseReviewContent>(
+        '/api/v1/hrms/platform/institutions/' + institutionId + '/course-releases/'
+          + release.release_id + '/review-content?chapterId=' + encodeURIComponent(String(chapterId))
+      );
+      const chapter = detail.subjects.flatMap(subject => subject.chapters || [])
+        .find(item => item.id === chapterId);
+      if (!chapter || !Array.isArray(chapter.lessons)) {
+        throw new Error('The selected chapter content is not part of this submitted release.');
+      }
+      setReviewChapters(previous => ({ ...previous, [chapterId]: chapter }));
+      setExpandedReviewChapters(previous => ({ ...previous, [release.release_id]: chapterId }));
+      if (!detail.contentCurrent || detail.content_fingerprint !== release.content_fingerprint) {
+        setReviewContentErrors(previous => ({
+          ...previous,
+          [release.release_id]: 'The source graph no longer matches the submitted fingerprint. This content is shown for diagnosis only; do not approve it.'
+        }));
+      }
+    } catch (e) {
+      setReviewContentErrors(previous => ({
+        ...previous,
+        [release.release_id]: e instanceof Error ? e.message : 'The chapter content could not be loaded.'
+      }));
+    } finally {
+      setReviewChapterLoadingId(null);
+    }
+  };
+
   const reviewQuality = async (release: QualityReviewItem, approved: boolean) => {
     const notes = (reviewNotes[release.release_id] || '').trim();
     if (notes.length < 3 || notes.length > 1000) {
@@ -413,9 +453,9 @@ export default function MarketplaceLaunchStepper({
     }
     const assessmentOnly = release.delivery_mode === 'ASSESSMENT_ONLY' || release.course_type_code === 'ASSESSMENT';
     const preview = reviewContent[release.release_id];
-    if (approved && assessmentOnly && (!preview || !preview.contentCurrent
+    if (approved && (!preview || !preview.contentCurrent
       || preview.content_fingerprint !== release.content_fingerprint)) {
-      setError('Open and inspect the exact submitted assessment content before approving its quality.');
+      setError('Open and inspect the exact submitted release content before approving its quality.');
       return;
     }
     const releaseReady = assessmentOnly
@@ -438,7 +478,7 @@ export default function MarketplaceLaunchStepper({
         body: JSON.stringify({
           approved,
           notes,
-          ...(assessmentOnly ? { reviewedContentFingerprint: preview?.content_fingerprint } : {}),
+          ...(approved ? { reviewedContentFingerprint: preview?.content_fingerprint } : {}),
         }),
       });
       setNotice(approved
@@ -807,13 +847,13 @@ export default function MarketplaceLaunchStepper({
                     </div>
                     {assessmentOnly && <p>Review the exact submitted test papers, question snapshots, source provenance, answer-review state and scoring rules below. This preview is read-only.</p>}
                     {!release.contentCurrent && <p className={styles.availableWarning}>Course content changed after submission. Ask the source institution to submit a fresh release.</p>}
-                    {assessmentOnly && <div className={styles.qualityActions}>
+                    <div className={styles.qualityActions}>
                       <button type="button" className={styles.secondaryButton}
-                        disabled={reviewContentLoadingId !== null || busyKey !== null}
+                        disabled={reviewContentLoadingId !== null || reviewChapterLoadingId !== null || busyKey !== null}
                         onClick={() => void toggleReviewContent(release)}>
                         {reviewContentLoadingId === release.release_id ? 'Loading exact release…' : preview ? 'Hide submitted content' : 'Review submitted content'}
                       </button>
-                    </div>}
+                    </div>
                     {reviewContentErrors[release.release_id] && <p className={styles.availableWarning}>{reviewContentErrors[release.release_id]}</p>}
                     {preview && (
                       <div style={{ marginTop: 14, padding: 14, border: '1px solid var(--border, #d7dce2)', borderRadius: 12 }}>
@@ -890,7 +930,7 @@ export default function MarketplaceLaunchStepper({
                         placeholder={assessmentOnly ? 'Record question inventory, source fidelity, answer review, section scoring and release fingerprint checks…' : 'Record what was checked: syllabus coverage, published lessons, content integrity…'} />
                     </label>
                     <div className={styles.qualityActions}>
-                      <button type="button" className={styles.primaryButton} disabled={busyKey !== null || !qualityReady || (assessmentOnly && (!preview || !preview.contentCurrent || preview.content_fingerprint !== release.content_fingerprint)) || (reviewNotes[release.release_id] || '').trim().length < 3}
+                      <button type="button" className={styles.primaryButton} disabled={busyKey !== null || !qualityReady || !preview || !preview.contentCurrent || preview.content_fingerprint !== release.content_fingerprint || (reviewNotes[release.release_id] || '').trim().length < 3}
                         onClick={() => void reviewQuality(release, true)}>
                         {busyKey === 'quality-' + release.release_id ? 'Saving decision…' : 'Approve quality'}
                       </button>
