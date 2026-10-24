@@ -92,6 +92,7 @@ type ReleaseReviewContent = {
   course_type_code: string;
   delivery_mode: string;
   contentCurrent: boolean;
+  content_fingerprint: string;
   currentFingerprint: string;
   assessmentOnlyReady: boolean;
   assessmentCount: number;
