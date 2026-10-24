@@ -204,7 +204,10 @@ AS $qe_course_fingerprint$
     SELECT 'learning-pdf-asset', a.id::text, to_jsonb(a)::text
       FROM learning_pdf_asset a
       WHERE a.id IN (SELECT d.pdf_asset_id FROM learning_document d WHERE d.id IN (SELECT id FROM scoped_documents))
-        OR a.id IN (SELECT d.pdf_asset_id FROM textbook_source_book d WHERE d.id IN (SELECT id FROM scoped_books))
+        OR a.id IN (
+          SELECT DISTINCT page.pdf_asset_id FROM textbook_extracted_page page
+          WHERE page.source_book_id IN (SELECT id FROM scoped_books) AND page.pdf_asset_id IS NOT NULL
+        )
     UNION ALL
     SELECT 'source-book', b.id::text, to_jsonb(b)::text
       FROM textbook_source_book b WHERE b.id IN (SELECT id FROM scoped_books)
