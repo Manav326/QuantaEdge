@@ -3999,5 +3999,18 @@
   "admin.institutionOperations.redirectTitle": "Institution administration has moved to Admin",
   "admin.institutionOperations.redirectDescription": "Institution management, learner reports, the roster, course releases and source approval are now handled in the Education Admin workspace. The learner website is reserved for finding and consuming learning content.",
   "admin.institutionOperations.openAdmin": "Open Institution in Admin",
-  "admin.institutionOperations.adminOriginMissing": "The Admin application address is not configured for this deployment. Open the Education Admin application directly or ask your platform owner to configure NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN."
+  "admin.institutionOperations.adminOriginMissing": "The Admin application address is not configured for this deployment. Open the Education Admin application directly or ask your platform owner to configure NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN.",
+  "admin.institutionOperations.invitations": "Learner invitations",
+  "admin.institutionOperations.invitationsDescription": "Share a school-branded join link with enrolled learners. Join-code issuance and rotation remain controlled by HRMS.",
+  "admin.institutionOperations.joinCode": "Current learner join code",
+  "admin.institutionOperations.noActiveJoinCode": "There is no active learner join code for this institution. Ask an HRMS platform owner to issue one after the billing contract is active.",
+  "admin.institutionOperations.copySchoolLink": "Copy school learning link",
+  "admin.institutionOperations.copyJoinCode": "Copy code only",
+  "admin.institutionOperations.linkCopied": "School learning link copied.",
+  "admin.institutionOperations.codeCopied": "Learner join code copied.",
+  "admin.institutionOperations.invitationLoadFailed": "Learner invitation details could not be loaded.",
+  "admin.institutionOperations.invitationAccessMissing": "You need the institution invitation permission to view or share the learner join code.",
+  "admin.institutionOperations.learnerOriginMissing": "The learner website address is not configured. Configure NEXT_PUBLIC_LEARNER_APP_ORIGIN to enable safe school links.",
+  "admin.institutionOperations.invitationSecretNote": "The join code is private. The link keeps it in the URL fragment, and only institution-authorised staff can retrieve the current code.",
+  "admin.institutionOperations.refreshInvitation": "Refresh invitation"
 }
