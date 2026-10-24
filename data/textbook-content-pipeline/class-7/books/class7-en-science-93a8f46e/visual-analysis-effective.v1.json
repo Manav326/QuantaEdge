@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2bba206e247f9d1ea7574c120ee7e8bd78e42a92abcde6826053b75f88a25656",
+  "raw_analysis_sha256": "5ae3e26e5988987011260396500fdc75e963c9b49424d4107b50b867a4f84fc8",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -20194,7 +20194,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40097575524",
-      "checkpointed_at": "2026-10-24T15:08:38Z",
+      "checkpointed_at": "2026-10-24T15:22:38Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -115328,7 +115328,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40080945835",
+      "run_id": "40097575524",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -115458,21 +115458,65 @@
     {
       "asset_id": "cddc602827294da71d269add",
       "asset_sha256": "ced6e17d9e59697680e2e35ae75bf254dbe84cdb45a91b39dd3f47d751b45649",
-      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 61,
       "asset_path": "assets/ced6e17d9e59697680e2e35ae75bf254dbe84cdb45a91b39dd3f47d751b45649.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40080945835",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An elderly craftsperson named Sudarshan discussing the types of items made by ironsmiths.",
+        "visual_type": "photo",
+        "visible_text": [
+          "The World of Metals",
+          "4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "ironsmiths",
+          "Sudarshan uncle"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about metals and their daily use items from Sudarshan uncle.",
+        "limitations": [
+          "The image does not show the actual ironsmiths or the items they make."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40097575524",
+      "checkpointed_at": "2026-10-24T15:28:10Z",
+      "effective_analysis": {
+        "visual_summary": "An elderly craftsperson named Sudarshan discussing the types of items made by ironsmiths.",
+        "visual_type": "photo",
+        "visible_text": [
+          "The World of Metals",
+          "4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "ironsmiths",
+          "Sudarshan uncle"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about metals and their daily use items from Sudarshan uncle.",
+        "limitations": [
+          "The image does not show the actual ironsmiths or the items they make."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -115682,7 +115726,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40080945835",
+      "run_id": "40097575524",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -116502,7 +116546,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40080945835",
+      "run_id": "40097575524",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
