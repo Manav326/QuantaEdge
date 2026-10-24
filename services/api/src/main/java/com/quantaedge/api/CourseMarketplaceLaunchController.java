@@ -104,8 +104,10 @@ public class CourseMarketplaceLaunchController {
     }
     List<Map<String,Object>> trustedCoursePolicies=jdbc.queryForList("""
         select i.id as course_identity_id,i.stable_course_key,i.display_name as identity_name,
-          i.trusted_auto_approval,i.trusted_auto_approval_changed_by_staff_id,
-          i.trusted_auto_approval_changed_at,i.trusted_auto_approval_note,
+          coalesce(trust.enabled,false) as trusted_auto_approval,
+          trust.changed_by_staff_id as trusted_auto_approval_changed_by_staff_id,
+          trust.changed_at as trusted_auto_approval_changed_at,
+          trust.note as trusted_auto_approval_note,
           p.id as latest_course_id,p.code as course_code,p.display_name as course_name,
           p.content_version_no,
           exists(
@@ -124,6 +126,8 @@ public class CourseMarketplaceLaunchController {
               )
           ) as authenticated
         from institution_course_identity i
+        left join institution_course_trust_policy trust
+          on trust.course_identity_id=i.id and trust.source_institution_id=i.source_institution_id
         join lateral (
           select p0.id,p0.code,p0.display_name,p0.content_version_no
           from curriculum_program p0
@@ -193,7 +197,8 @@ public class CourseMarketplaceLaunchController {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Add an audit note of at least five characters.");
 
     List<Map<String,Object>> rows=jdbc.queryForList("""
-        select i.id,i.source_institution_id,i.trusted_auto_approval,
+        select i.id,i.source_institution_id,
+          coalesce(trust.enabled,false) as trusted_auto_approval,
           p.id as latest_course_id,
           exists(
             select 1
@@ -211,6 +216,8 @@ public class CourseMarketplaceLaunchController {
               )
           ) as authenticated
         from institution_course_identity i
+        left join institution_course_trust_policy trust
+          on trust.course_identity_id=i.id and trust.source_institution_id=i.source_institution_id
         join lateral (
           select p0.id,p0.course_identity_id
           from curriculum_program p0
@@ -248,12 +255,19 @@ public class CourseMarketplaceLaunchController {
         throw conflict("This course has package provenance that still needs HRMS rights clearance. Clear the source rights before enabling automatic approval.");
     }
 
-    jdbc.update("""
-      update institution_course_identity
-      set trusted_auto_approval=?,trusted_auto_approval_changed_by_staff_id=?,
-          trusted_auto_approval_changed_at=now(),trusted_auto_approval_note=?
-      where id=? and source_institution_id=?
-      """,enabled,context.staffId(),note,identityId,institutionId);
+    int policyChanged=jdbc.update("""
+      insert into institution_course_trust_policy(
+        course_identity_id,source_institution_id,enabled,changed_by_staff_id,changed_at,note
+      ) values(?,?,?, ?,now(),?)
+      on conflict(course_identity_id) do update set
+        source_institution_id=excluded.source_institution_id,
+        enabled=excluded.enabled,
+        changed_by_staff_id=excluded.changed_by_staff_id,
+        changed_at=now(),
+        note=excluded.note
+      where institution_course_trust_policy.source_institution_id=excluded.source_institution_id
+      """,identityId,institutionId,enabled,context.staffId(),note);
+    if(policyChanged!=1) throw conflict("The trusted-course policy changed concurrently. Refresh and retry.");
     jdbc.update("""
       insert into institution_course_trust_policy_event(
         course_identity_id,source_institution_id,previous_enabled,next_enabled,actor_staff_id,note
