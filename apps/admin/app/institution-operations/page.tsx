@@ -58,7 +58,6 @@ type Release = {
   shareable_at?: string | null;
 };
 type RosterResponse = { learners?: Learner[]; total?: number; page?: number; pageSize?: number };
-type Invitation = { institutionCode: string; institutionName: string; joinCode: string; available: boolean };
 
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   const response = await apiFetch(path, {
@@ -96,21 +95,6 @@ export default function InstitutionOperationsPage() {
   const { permissions } = useContext(AdminWorkspaceContext);
   const canCreateCourse = permissions.includes('CONTENT_CREATE') && permissions.includes('CONTENT_EDIT');
   const canManageReleases = permissions.includes('INSTITUTION_RELEASE_MANAGE');
-  const canViewInvitation = permissions.includes('INSTITUTION_INVITATION_VIEW');
-  const learnerAppOrigin = (() => {
-    const configured = process.env.NEXT_PUBLIC_LEARNER_APP_ORIGIN?.trim();
-    if (configured) {
-      try {
-        const parsed = new URL(configured);
-        const local = parsed.hostname === 'localhost' || parsed.hostname === '127.0.0.1';
-        if (parsed.protocol === 'https:' || (local && parsed.protocol === 'http:')) return parsed.origin;
-      } catch { /* Ignore invalid public origin configuration. */ }
-    }
-    if (typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname)) {
-      return 'http://localhost:3000';
-    }
-    return '';
-  })();
   const [view, setView] = useState<'overview' | 'roster' | 'courses'>('overview');
   const [focusCourseId, setFocusCourseId] = useState('');
   const [overview, setOverview] = useState<Overview | null>(null);
@@ -122,8 +106,6 @@ export default function InstitutionOperationsPage() {
   const [appliedQuery, setAppliedQuery] = useState('');
   const [courses, setCourses] = useState<Course[]>([]);
   const [releases, setReleases] = useState<Release[]>([]);
-  const [invitation, setInvitation] = useState<Invitation | null>(null);
-  const [invitationError, setInvitationError] = useState('');
   const [loading, setLoading] = useState(true);
   const [rosterLoading, setRosterLoading] = useState(false);
   const [error, setError] = useState('');
@@ -139,20 +121,7 @@ export default function InstitutionOperationsPage() {
     setOverview(summary);
     setCourses(Array.isArray(authorised) ? authorised : []);
     setReleases(Array.isArray(sourceReleases) ? sourceReleases : []);
-    if (canViewInvitation) {
-      try {
-        const invite = await request<Invitation>('/api/v1/admin/institution-operations/invitation');
-        setInvitation(invite);
-        setInvitationError('');
-      } catch (cause) {
-        setInvitation(null);
-        setInvitationError(cause instanceof Error ? cause.message : t('admin.institutionOperations.invitationLoadFailed'));
-      }
-    } else {
-      setInvitation(null);
-      setInvitationError('');
-    }
-  }, [canViewInvitation, t]);
+  }, []);
 
   const loadRoster = useCallback(async () => {
     setRosterLoading(true);
@@ -217,39 +186,6 @@ export default function InstitutionOperationsPage() {
     }
   }
 
-  function learnerInvitationLink(): string {
-    if (!invitation?.available || !invitation.institutionCode || !invitation.joinCode || !learnerAppOrigin) return '';
-    const link = new URL('/school/' + encodeURIComponent(invitation.institutionCode) + '/', learnerAppOrigin);
-    // Keep the private join code in the fragment; the learner app captures it and removes it from history.
-    link.hash = new URLSearchParams({ join: invitation.joinCode }).toString();
-    return link.toString();
-  }
-
-  async function copySchoolLearningLink() {
-    const link = learnerInvitationLink();
-    if (!link) return;
-    try {
-      await navigator.clipboard.writeText(link);
-      setNotice(t('admin.institutionOperations.linkCopied'));
-      setError('');
-    } catch {
-      setNotice(link);
-      setError('');
-    }
-  }
-
-  async function copyLearnerJoinCode() {
-    if (!invitation?.available || !invitation.joinCode) return;
-    try {
-      await navigator.clipboard.writeText(invitation.joinCode);
-      setNotice(t('admin.institutionOperations.codeCopied'));
-      setError('');
-    } catch {
-      setNotice(invitation.joinCode);
-      setError('');
-    }
-  }
-
   const latestReleases = releases.filter((release, index, all) =>
     all.findIndex(candidate => candidate.course_id === release.course_id) === index,
   );
@@ -300,8 +236,7 @@ export default function InstitutionOperationsPage() {
                 </article>
               ))}
             </section>
-            {canViewInvitation ? (
-              <section className={styles.panel}>
+            <section className={styles.panel}>
                 <div className={styles.panelHeader}>
                   <div>
                     <h2>{t('admin.institutionOperations.invitations')}</h2>
