@@ -128,14 +128,21 @@ public class CoursePaymentOperationsController {
     List<Map<String,Object>> orders=jdbc.queryForList("""
         select o.id as local_order_id,o.institution_id,o.course_id,o.student_id,o.purchaser_user_id,
           o.target_student_id,o.recipient_type,o.status,o.failure_code,o.currency,o.offer_price_paise,
-          o.listed_price_paise,o.discount_amount_paise,o.discount_reference,o.tax_profile_id,
+          o.listed_price_paise,o.discount_offer_id,o.discount_amount_paise,o.discount_reference,o.tax_profile_id,
           o.revenue_share_policy_id,o.taxable_value_paise,o.output_tax_paise,
           o.tax_calculation_snapshot::text as tax_calculation_snapshot_json,
           o.revenue_share_policy_snapshot::text as revenue_share_policy_snapshot_json,
           o.discount_snapshot::text as discount_snapshot_json,
           o.buyer_snapshot::text as buyer_snapshot_json,
           o.tax_calculation_snapshot->>'customerPayablePaise' as snapshot_payable_paise,
+          o.tax_calculation_snapshot->>'listedPricePaise' as snapshot_listed_price_paise,
           o.tax_calculation_snapshot->>'taxProfileId' as snapshot_tax_profile_id,
+          o.tax_calculation_snapshot->>'discountOfferId' as tax_snapshot_discount_offer_id,
+          o.tax_calculation_snapshot->>'discountCode' as tax_snapshot_discount_code,
+          o.tax_calculation_snapshot->>'discountPaise' as tax_snapshot_discount_paise,
+          o.discount_snapshot->>'discountOfferId' as discount_snapshot_offer_id,
+          o.discount_snapshot->>'code' as discount_snapshot_code,
+          o.discount_snapshot->>'discountPaise' as discount_snapshot_discount_paise,
           o.revenue_share_policy_snapshot->>'policyId' as snapshot_share_policy_id,
           case when jsonb_typeof(o.revenue_share_policy_snapshot->'recipients')='array'
             then jsonb_array_length(o.revenue_share_policy_snapshot->'recipients') else 0 end as share_recipient_count,
@@ -168,18 +175,22 @@ public class CoursePaymentOperationsController {
 
     boolean financialSnapshotsPresent=CourseMarketplaceController.hasLockedFinancialSnapshots(order);
     boolean payableSnapshotMatches=numberOrMinusOne(order.get("snapshot_payable_paise"))==payablePaise;
+    boolean listedPriceSnapshotMatches=numberOrMinusOne(order.get("snapshot_listed_price_paise"))==number(order.get("listed_price_paise"));
     boolean taxProfileSnapshotMatches=numberOrMinusOne(order.get("snapshot_tax_profile_id"))==number(order.get("tax_profile_id"));
     boolean sharePolicySnapshotMatches=numberOrMinusOne(order.get("snapshot_share_policy_id"))==number(order.get("revenue_share_policy_id"));
     boolean buyerSnapshotPresent=presentJsonObject(order.get("buyer_snapshot_json"));
-    boolean financialFactsValid=financialSnapshotsPresent&&payableSnapshotMatches
-        &&taxProfileSnapshotMatches&&sharePolicySnapshotMatches&&buyerSnapshotPresent;
+    boolean discountSnapshotMatches=discountSnapshotMatches(order);
+    boolean financialFactsValid=financialSnapshotsPresent&&payableSnapshotMatches&&listedPriceSnapshotMatches
+        &&taxProfileSnapshotMatches&&sharePolicySnapshotMatches&&discountSnapshotMatches&&buyerSnapshotPresent;
     String financialStatus=financialFactsValid?"COMPLETE":"BLOCKED";
     List<String> financialDetails=new ArrayList<>();
     financialDetails.add("Tax profile reference: "+(order.get("tax_profile_id")==null?"missing":String.valueOf(order.get("tax_profile_id"))));
     financialDetails.add("Revenue-share policy reference: "+(order.get("revenue_share_policy_id")==null?"missing":String.valueOf(order.get("revenue_share_policy_id"))));
     financialDetails.add("Snapshot payable matches saved order: "+payableSnapshotMatches);
+    financialDetails.add("Snapshot listed price matches saved order: "+listedPriceSnapshotMatches);
     financialDetails.add("Tax snapshot references match: "+taxProfileSnapshotMatches);
     financialDetails.add("Revenue-share snapshot references match: "+sharePolicySnapshotMatches);
+    financialDetails.add("Discount snapshot matches saved order: "+discountSnapshotMatches);
     financialDetails.add("Original buyer snapshot present: "+buyerSnapshotPresent);
     if(!financialFactsValid) financialDetails.add("The HRMS configuration screen does not itself backfill locked financial facts on an already-created order.");
     steps.add(traceStep("FINANCIAL_SNAPSHOTS","2. Financial snapshots locked",financialStatus,
@@ -411,6 +422,25 @@ public class CoursePaymentOperationsController {
     result.put("readOnly",true);
     result.put("message","Read-only status trace. No payment was created, captured, refunded, reconciled or otherwise changed.");
     return result;
+  }
+
+  private static boolean discountSnapshotMatches(Map<String,Object> order) {
+    long savedDiscount=number(order.get("discount_amount_paise"));
+    long savedOfferId=numberOrMinusOne(order.get("discount_offer_id"));
+    String savedCode=text(order.get("discount_reference"));
+    long taxDiscountOffer=numberOrMinusOne(order.get("tax_snapshot_discount_offer_id"));
+    long taxDiscountAmount=numberOrMinusOne(order.get("tax_snapshot_discount_paise"));
+    long snapshotDiscountAmount=numberOrMinusOne(order.get("discount_snapshot_discount_paise"));
+    if(savedOfferId<0) {
+      return savedDiscount==0&&savedCode.isBlank()
+          &&taxDiscountOffer==0&&taxDiscountAmount==0&&snapshotDiscountAmount==0;
+    }
+    return savedOfferId>0&&savedDiscount>0&&!savedCode.isBlank()
+        &&numberOrMinusOne(order.get("discount_snapshot_offer_id"))==savedOfferId
+        &&numberOrMinusOne(order.get("tax_snapshot_discount_offer_id"))==savedOfferId
+        &&savedCode.equals(text(order.get("discount_snapshot_code")))
+        &&savedCode.equals(text(order.get("tax_snapshot_discount_code")))
+        &&savedDiscount==snapshotDiscountAmount&&savedDiscount==taxDiscountAmount;
   }
 
   private long scalarCount(String sql,Object...args) {
