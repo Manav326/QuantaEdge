@@ -6,7 +6,7 @@
 CREATE OR REPLACE FUNCTION qe_student_safe_question_options(
   p_question_id bigint,
   p_question_type text,
-  p_translated_options jsonb
+  p_translation_options jsonb
 ) RETURNS jsonb
 LANGUAGE sql
 STABLE
@@ -32,7 +32,7 @@ AS $function$
     SELECT NULLIF(BTRIM(candidate.option->>'label'), '') AS label
     FROM jsonb_array_elements(
       CASE
-        WHEN jsonb_typeof(p_translated_options) = 'array' THEN p_translated_options
+        WHEN jsonb_typeof(p_translation_options) = 'array' THEN p_translation_options
         ELSE '[]'::jsonb
       END
     ) WITH ORDINALITY AS candidate(option, ordinal)
