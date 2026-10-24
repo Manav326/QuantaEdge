@@ -154,7 +154,17 @@ class AssessmentLifecycleIntegrationTest {
         Map.of(),fixture.student(),fixture.tenant());
     assertEquals("RELEASED",submitted.get("status"));
 
-    AuthContext reviewer=new AuthContext(101L,null,99L,"ADMIN","Assessment analytics reviewer");
+    Long analyticsStaffId=jdbc.queryForObject("""
+      insert into staff_account(public_id,mobile_e164,display_name,role,active)
+      values(gen_random_uuid(),null,'Assessment analytics reviewer','ADMIN',true)
+      returning id
+      """,Long.class);
+    jdbc.update("""
+      insert into staff_permission_grant(staff_id,workspace_key,permission_key)
+      values(?,'EDUCATION_ADMIN','CONTENT_VIEW')
+      on conflict(staff_id,workspace_key,permission_key) do nothing
+      """,analyticsStaffId);
+    AuthContext reviewer=new AuthContext(101L,null,analyticsStaffId,"ADMIN","Assessment analytics reviewer");
     Map<String,Object> analytics=controller.courseAssessmentAnalytics(
         fixture.courseId(),null,reviewer,fixture.tenant());
     Map<String,Object> summary=(Map<String,Object>)analytics.get("summary");
