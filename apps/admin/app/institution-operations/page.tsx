@@ -123,15 +123,16 @@ export default function InstitutionOperationsPage() {
   const [busyRelease, setBusyRelease] = useState<number | null>(null);
 
   const loadOverviewAndCourses = useCallback(async () => {
+    const prefix = isInstitutionPrincipal ? '/api/v1/institution' : '/api/v1/admin/institution-operations';
     const [summary, authorised, sourceReleases] = await Promise.all([
-      request<Overview>('/api/v1/admin/institution-operations/overview'),
-      request<Course[]>('/api/v1/admin/institution-operations/courses'),
-      request<Release[]>('/api/v1/admin/institution-operations/course-releases'),
+      request<Overview>(prefix + (isInstitutionPrincipal ? '/reports/overview' : '/overview')),
+      request<Course[]>(prefix + (isInstitutionPrincipal ? '/reports/courses' : '/courses')),
+      request<Release[]>(prefix + (isInstitutionPrincipal ? '/course-releases' : '/course-releases')),
     ]);
     setOverview(summary);
     setCourses(Array.isArray(authorised) ? authorised : []);
     setReleases(Array.isArray(sourceReleases) ? sourceReleases : []);
-  }, []);
+  }, [isInstitutionPrincipal]);
 
   const loadRoster = useCallback(async () => {
     setRosterLoading(true);
@@ -139,13 +140,14 @@ export default function InstitutionOperationsPage() {
       const params = new URLSearchParams({
         page: String(rosterPage), pageSize: String(pageSize), query: appliedQuery,
       });
-      const result = await request<RosterResponse>('/api/v1/admin/institution-operations/roster?' + params.toString());
+      const rosterPath = isInstitutionPrincipal ? '/api/v1/institution/reports/roster?' : '/api/v1/admin/institution-operations/roster?';
+      const result = await request<RosterResponse>(rosterPath + params.toString());
       setLearners(Array.isArray(result.learners) ? result.learners : []);
       setRosterTotal(Number(result.total || 0));
     } finally {
       setRosterLoading(false);
     }
-  }, [rosterPage, pageSize, appliedQuery]);
+  }, [rosterPage, pageSize, appliedQuery, isInstitutionPrincipal]);
 
   const refresh = useCallback(async () => {
     setLoading(true);
