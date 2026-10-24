@@ -405,6 +405,11 @@
               "maxLength": 100
             }
           },
+          "difficulty": {
+            "enum": ["FOUNDATION", "CORE", "CHALLENGE"],
+            "default": "CORE",
+            "description": "Stable analytical difficulty band used for course-level performance breakdowns."
+          },
           "marks": {
             "type": "number",
             "exclusiveMinimum": 0,
