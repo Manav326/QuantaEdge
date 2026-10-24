@@ -51,6 +51,7 @@ public class CourseMarketplaceLaunchController {
   public Map<String,Object> reviewReleaseContent(
       @PathVariable long institutionId,
       @PathVariable long releaseId,
+      @org.springframework.web.bind.annotation.RequestParam(required=false) Long chapterId,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     authorization.requirePermission(context,"QE_PLATFORM_OWNER");
     assertInstitution(institutionId);
@@ -70,6 +71,19 @@ public class CourseMarketplaceLaunchController {
         "The submitted course release is not available in this institution's HRMS quality-review queue.");
     Map<String,Object> result=new LinkedHashMap<>(rows.getFirst());
     long courseId=number(result.get("course_id"));
+    if(chapterId!=null) {
+      Boolean chapterBelongs=jdbc.queryForObject("""
+          select exists(
+            select 1 from curriculum_chapter ch
+            join curriculum_subject s on s.id=ch.subject_id
+            join curriculum_program_subject ps on ps.subject_id=s.id and ps.class_id=s.class_id
+            where ch.id=? and ps.program_id=?
+          )
+          """,Boolean.class,chapterId,courseId);
+      if(!Boolean.TRUE.equals(chapterBelongs))
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+            "The requested chapter is not part of this submitted release.");
+    }
     String savedFingerprint=text(result.get("content_fingerprint"));
     String currentFingerprint=jdbc.queryForObject(
         "select course_content_fingerprint(?)",String.class,courseId);
@@ -90,14 +104,20 @@ public class CourseMarketplaceLaunchController {
     for(Map<String,Object> subject:subjects) {
       long subjectId=number(subject.get("id"));
       List<Map<String,Object>> chapters=jdbc.queryForList("""
-          select id,code,display_name,description,sort_order,content_status,
-                 curriculum_source,curriculum_source_url,curriculum_source_edition,
-                 curriculum_source_pages,curriculum_source_verified
-          from curriculum_chapter where subject_id=? and active=true
-          order by sort_order,id
-          """,subjectId);
+          select ch.id,ch.code,ch.display_name,ch.description,ch.sort_order,ch.content_status,
+                 ch.curriculum_source,ch.curriculum_source_url,ch.curriculum_source_edition,
+                 ch.curriculum_source_pages,ch.curriculum_source_verified,
+                 (select count(*) from lesson l where l.chapter_id=ch.id) as lesson_count,
+                 (select count(*) from lesson_block b join lesson l on l.id=b.lesson_id where l.chapter_id=ch.id) as lesson_block_count,
+                 (select count(*) from question q join lesson l on l.id=q.lesson_id where l.chapter_id=ch.id) as lesson_question_count,
+                 (select count(*) from learning_resource_assignment ra where ra.chapter_id=ch.id) as resource_count
+          from curriculum_chapter ch where ch.subject_id=? and ch.active=true
+            and (? is null or ch.id=?)
+          order by ch.sort_order,ch.id
+          """,subjectId,chapterId,chapterId);
       for(Map<String,Object> chapter:chapters) {
-        long chapterId=number(chapter.get("id"));
+        long chapterIdValue=number(chapter.get("id"));
+        if(chapterId==null) continue;
         List<Map<String,Object>> lessons=jdbc.queryForList("""
             select l.id,l.code,l.title,l.summary,l.estimated_minutes,l.status,l.sort_order,l.active,
                    l.objective_id,o.code as objective_code,o.title as objective_title,
@@ -105,7 +125,7 @@ public class CourseMarketplaceLaunchController {
             from lesson l
             left join learning_objective o on o.id=l.objective_id
             where l.chapter_id=? order by l.sort_order,l.id
-            """,chapterId);
+            """,chapterIdValue);
         List<Map<String,Object>> resources=jdbc.queryForList("""
             select a.id as assignment_id,a.target_kind,a.sort_order,a.status as assignment_status,
                    r.id as resource_id,r.resource_type,r.title,r.description,r.language,r.source_kind,
@@ -204,7 +224,7 @@ public class CourseMarketplaceLaunchController {
     result.put("lessonQuestionCount",lessonQuestionCount);
     result.put("courseResourceCount",courseResourceCount);
 
-    List<Map<String,Object>> assessments=jdbc.queryForList("""
+    List<Map<String,Object>> assessments=chapterId==null?jdbc.queryForList("""
         select a.id as assessment_id,a.title,a.description,a.assessment_type,a.portable_assessment_type,
           a.source_exam_cycle,a.source_package_id,a.source_package_version,a.source_package_sha256,
           a.source_url,a.status,a.duration_minutes,a.max_attempts,a.negative_marking_fraction,
@@ -222,7 +242,7 @@ public class CourseMarketplaceLaunchController {
         where a.course_id=?
         group by a.id,s.code,s.display_name,ch.code,ch.display_name
         order by coalesce(a.source_exam_cycle,a.title),a.id
-        """,courseId);
+        """,courseId):new ArrayList<>();
     int totalQuestions=0;
     for(Map<String,Object> assessment:assessments) {
       long assessmentId=number(assessment.get("assessment_id"));
