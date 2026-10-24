@@ -150,6 +150,20 @@ class Tre4ImporterTests(unittest.TestCase):
             import_tre4_course.insert_assessment(cursor, 777, paper)
         self.assertEqual(len(cursor.statements), 1)
 
+    def test_identity_linked_to_another_course_version_is_not_reused(self):
+        cursor = FakeCursor([
+            ("TRE-4 · Computer Science", "ASSESSMENT", None, None, None, None),
+            (0,),
+            (0,),
+            (901, "TRE-4 · Computer Science", "K12", "ACTIVE"),
+            [(7770, "LEGACY_TRE4", "BPSC-TRE-4", 1)],
+        ])
+        with self.assertRaisesRegex(
+            import_tre4_course.ImportErrorSafe, "already linked to another course/version"
+        ):
+            import_tre4_course.ensure_course_identity(cursor, 42, 777)
+        self.assertEqual(len(cursor.statements), 5)
+
     def test_existing_source_owned_tre_identity_is_reused_without_mutation(self):
         cursor = FakeCursor([
             ("TRE-4 · Computer Science", "ASSESSMENT", 901, 42, "I42_TRE4", "ASSESSMENT"),
