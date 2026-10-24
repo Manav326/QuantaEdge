@@ -117,6 +117,7 @@ type LessonReviewLesson = {
   objective_code?: string | null;
   objective_title?: string | null;
   objective_description?: string | null;
+  objectiveTranslations: Array<Record<string, any>>;
   translations: Array<Record<string, any>>;
   blocks: LessonReviewBlock[];
   questions: LessonReviewQuestion[];
@@ -152,6 +153,7 @@ type ReleaseReviewChapter = {
   curriculum_source_edition?: string | null;
   curriculum_source_pages?: string | null;
   curriculum_source_verified: boolean;
+  translations: Array<Record<string, any>>;
   lesson_count: number;
   lesson_block_count: number;
   lesson_question_count: number;
@@ -163,6 +165,7 @@ type ReleaseReviewSubject = {
   id: number;
   code: string;
   display_name: string;
+  translations: Array<Record<string, any>>;
   chapters: ReleaseReviewChapter[];
 };
 type ReleaseReviewContent = {
@@ -178,6 +181,7 @@ type ReleaseReviewContent = {
   content_fingerprint: string;
   currentFingerprint: string;
   assessmentOnlyReady: boolean;
+  courseTranslations: Array<Record<string, any>>;
   assessmentCount: number;
   questionCount: number;
   lessonCount: number;
@@ -955,9 +959,28 @@ export default function MarketplaceLaunchStepper({
                         ) : (
                           <div>
                             <p>{preview.lessonCount} lessons · {preview.lessonBlockCount} teaching blocks · {preview.lessonQuestionCount} lesson questions · {preview.courseResourceCount} resources. Expand a chapter to load its lesson graph and source assets on demand.</p>
+                            {(preview.courseTranslations || []).length > 0 && (
+                              <div style={{margin:'10px 0',padding:10,border:'1px solid var(--border, #d7dce2)',borderRadius:8}}>
+                                <strong>Course translations</strong>
+                                {preview.courseTranslations.map((translation,ti)=>(
+                                  <p key={String(translation.language)+'-'+String(translation.version_no)+'-'+ti} style={{fontSize:12,margin:'5px 0'}}>
+                                    {String(translation.language).toUpperCase()} · {translation.translation_status} v{translation.version_no}: {translation.display_name}
+                                  </p>
+                                ))}
+                              </div>
+                            )}
                             {(preview.subjects || []).map(subject => (
                               <section key={subject.id} style={{ marginBottom: 16, borderTop: '1px solid var(--border, #d7dce2)', paddingTop: 12 }}>
                                 <h4 style={{ margin: '0 0 8px' }}>{subject.display_name} <span style={{ fontSize: 12, fontWeight: 400 }}>({subject.code})</span></h4>
+                                {(subject.translations || []).length > 0 && (
+                                  <div style={{fontSize:12,margin:'4px 0 8px',color:'var(--muted, #667085)'}}>
+                                    {(subject.translations || []).map((translation,ti)=>(
+                                      <p key={String(translation.language)+'-'+String(translation.version_no)+'-'+ti} style={{margin:'3px 0'}}>
+                                        {String(translation.language).toUpperCase()} · {translation.translation_status} v{translation.version_no}: {translation.display_name}
+                                      </p>
+                                    ))}
+                                  </div>
+                                )}
                                 {(subject.chapters || []).map(chapter => {
                                   const chapterContent = reviewChapters[chapter.id];
                                   const expanded = expandedReviewChapters[release.release_id] === chapter.id;
@@ -966,6 +989,15 @@ export default function MarketplaceLaunchStepper({
                                       <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap' }}>
                                         <div>
                                           <strong>{chapter.display_name}</strong> <span style={{ fontSize: 12, color: 'var(--muted, #667085)' }}>· {chapter.content_status} · {chapter.lesson_count} lessons · {chapter.lesson_block_count} blocks · {chapter.lesson_question_count} questions · {chapter.resource_count} resources</span>
+                                          {(chapter.translations || []).length > 0 && (
+                                            <p style={{margin:'4px 0',fontSize:12,color:'var(--muted, #667085)'}}>
+                                              {(chapter.translations || []).map((translation,ti)=>(
+                                                <span key={String(translation.language)+'-'+String(translation.version_no)+'-'+ti}>
+                                                  {ti>0?' · ':''}{String(translation.language).toUpperCase()} · {translation.translation_status} v{translation.version_no}: {translation.display_name}
+                                                </span>
+                                              ))}
+                                            </p>
+                                          )}
                                           <p style={{ margin: '4px 0', fontSize: 12, color: 'var(--muted, #667085)' }}>
                                             Source: {chapter.curriculum_source || 'not recorded'} · Verified: {chapter.curriculum_source_verified ? 'yes' : 'no'}
                                             {chapter.curriculum_source_pages ? ' · Pages: ' + chapter.curriculum_source_pages : ''}
@@ -993,6 +1025,16 @@ export default function MarketplaceLaunchStepper({
                                                   Code: {lesson.code} · Estimated time: {lesson.estimated_minutes} min · Active: {lesson.active ? 'yes' : 'no'}
                                                   {lesson.objective_title ? ' · Objective: ' + lesson.objective_title : ''}
                                                 </p>
+                                                {(lesson.objectiveTranslations || []).length > 0 && (
+                                                  <div style={{margin:'8px 0',padding:8,border:'1px solid var(--border, #d7dce2)',borderRadius:6}}>
+                                                    <strong>Learning objective translations</strong>
+                                                    {(lesson.objectiveTranslations || []).map((translation,ti)=>(
+                                                      <p key={String(translation.language)+'-'+String(translation.version_no)+'-'+ti} style={{margin:'5px 0',fontSize:12,whiteSpace:'pre-wrap'}}>
+                                                        {String(translation.language).toUpperCase()} · {translation.translation_status} v{translation.version_no}: {translation.title || ''}{translation.description ? ' — '+translation.description : ''}
+                                                      </p>
+                                                    ))}
+                                                  </div>
+                                                )}
                                                 {(lesson.translations || []).length > 0 && (
                                                   <div style={{ margin: '8px 0', padding: 8, background: 'var(--surface-muted, #f7f8fa)', borderRadius: 6 }}>
                                                     <strong>Lesson translations</strong>
