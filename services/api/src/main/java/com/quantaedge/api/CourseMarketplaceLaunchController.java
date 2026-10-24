@@ -102,7 +102,34 @@ public class CourseMarketplaceLaunchController {
       release.put("contentCurrent",readiness.contentFingerprintMatches(
           number(release.get("course_id")),text(release.get("content_fingerprint"))));
     }
+    List<Map<String,Object>> trustedCoursePolicies=jdbc.queryForList("""
+        select i.id as course_identity_id,i.stable_course_key,i.display_name as identity_name,
+          i.trusted_auto_approval,i.trusted_auto_approval_changed_by_staff_id,
+          i.trusted_auto_approval_changed_at,i.trusted_auto_approval_note,
+          p.id as latest_course_id,p.code as course_code,p.display_name as course_name,
+          p.content_version_no,
+          exists(
+            select 1
+            from institution_course_release released
+            join institution_marketplace_offer published
+              on published.course_release_id=released.id
+             and published.course_id=released.program_id
+             and published.status='PUBLISHED'
+             and published.hrms_published_by_staff_id is not null
+            where released.program_id=p.id and released.release_state='SHAREABLE'
+          ) as authenticated
+        from institution_course_identity i
+        join lateral (
+          select p0.id,p0.code,p0.display_name,p0.content_version_no
+          from curriculum_program p0
+          where p0.course_identity_id=i.id and p0.status='ACTIVE'
+          order by p0.content_version_no desc,p0.id desc limit 1
+        ) p on true
+        where i.source_institution_id=? and i.status='ACTIVE'
+        order by i.display_name,i.id
+        """,institutionId);
     Map<String,Object> result=new LinkedHashMap<>();
+    result.put("trustedCoursePolicies",trustedCoursePolicies);
     result.put("institutionId",institutionId);
     result.put("institutionName",institutionName(institutionId));
     result.put("items",items);
@@ -143,6 +170,90 @@ public class CourseMarketplaceLaunchController {
     result.put("coursePackageImports",coursePackageImports);
     result.put("coursePackageImportCount",coursePackageImports.size());
     return result;
+  }
+
+  @PostMapping("/{institutionId}/course-identities/{identityId}/trusted-auto-approval")
+  @Transactional
+  public Map<String,Object> setTrustedCourseAutoApproval(
+      @PathVariable long institutionId,@PathVariable long identityId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext supplied) {
+    AuthContext context=authorization.requirePermission(supplied,"QE_PLATFORM_OWNER");
+    requireStaff(context);
+    assertInstitution(institutionId);
+    if(body==null || !(body.get("enabled") instanceof Boolean enabled))
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Choose whether trusted course auto-approval is enabled.");
+    String note=optionalText(body.get("note"),"",1000,"Audit note");
+    if(note.length()<5)
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Add an audit note of at least five characters.");
+
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+        select i.id,i.source_institution_id,i.trusted_auto_approval,
+          p.id as latest_course_id,
+          exists(
+            select 1
+            from institution_course_release released
+            join institution_marketplace_offer published
+              on published.course_release_id=released.id
+             and published.course_id=released.program_id
+             and published.status='PUBLISHED'
+             and published.hrms_published_by_staff_id is not null
+            where released.program_id=p.id and released.release_state='SHAREABLE'
+          ) as authenticated
+        from institution_course_identity i
+        join lateral (
+          select p0.id,p0.course_identity_id
+          from curriculum_program p0
+          where p0.course_identity_id=i.id and p0.status='ACTIVE'
+          order by p0.content_version_no desc,p0.id desc limit 1
+        ) p on true
+        where i.id=? and i.source_institution_id=? and i.status='ACTIVE'
+        for update of i
+        """,identityId,institutionId);
+    if(rows.isEmpty())
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Trusted course identity was not found for this source institution.");
+    Map<String,Object> row=rows.getFirst();
+    boolean previous=Boolean.TRUE.equals(row.get("trusted_auto_approval"));
+    if(enabled && !Boolean.TRUE.equals(row.get("authenticated")))
+      throw conflict("Only a previously HRMS-published, shareable course can be marked trusted. Complete its initial review and publication first.");
+
+    if(enabled) {
+      Boolean unclearedPackageRights=jdbc.queryForObject("""
+        select exists(
+          select 1
+          from institution_course_package_import i
+          join curriculum_program source_course on source_course.id=i.course_id
+          where i.state='IMPORTED'
+            and source_course.course_identity_id=?
+            and (
+              i.rights_reviewed_by_staff_id is null
+              or i.rights_reviewed_at is null
+              or coalesce(i.editorial_metadata->>'source_rights_status','UNCONFIRMED')
+                not in ('CLEARED_FOR_INTERNAL_USE','CLEARED_FOR_PUBLIC_REPOSITORY')
+              or coalesce(i.editorial_metadata->>'rights_evidence_url','') !~ '^https://[^/[:space:]]+'
+            )
+        )
+        """,Boolean.class,identityId);
+      if(Boolean.TRUE.equals(unclearedPackageRights))
+        throw conflict("This course has package provenance that still needs HRMS rights clearance. Clear the source rights before enabling automatic approval.");
+    }
+
+    jdbc.update("""
+      update institution_course_identity
+      set trusted_auto_approval=?,trusted_auto_approval_changed_by_staff_id=?,
+          trusted_auto_approval_changed_at=now(),trusted_auto_approval_note=?
+      where id=? and source_institution_id=?
+      """,enabled,context.staffId(),note,identityId,institutionId);
+    jdbc.update("""
+      insert into institution_course_trust_policy_event(
+        course_identity_id,source_institution_id,previous_enabled,next_enabled,actor_staff_id,note
+      ) values(?,?,?,?,?,?)
+      """,identityId,institutionId,previous,enabled,context.staffId(),note);
+    return Map.of("saved",true,"courseIdentityId",identityId,"enabled",enabled,
+        "changedByStaffId",context.staffId(),
+        "message",enabled
+          ? "Trusted mode is enabled. Future complete source-version submissions can receive automatic HRMS content and origin approval; destination assignments and commercial terms remain institution-scoped."
+          : "Trusted mode is disabled. Future source-version submissions return to the standard HRMS review path; already approved releases are unchanged.");
   }
 
   @PostMapping("/{institutionId}/course-package-imports/{importId}/rights-review")
