@@ -116,7 +116,12 @@ public class CourseMarketplaceLaunchController {
              and published.course_id=released.program_id
              and published.status='PUBLISHED'
              and published.hrms_published_by_staff_id is not null
-            where released.program_id=p.id and released.release_state='SHAREABLE'
+            where released.release_state='SHAREABLE'
+              and exists(
+                select 1 from curriculum_program trusted_version
+                where trusted_version.id=released.program_id
+                  and trusted_version.course_identity_id=i.id
+              )
           ) as authenticated
         from institution_course_identity i
         join lateral (
@@ -198,7 +203,12 @@ public class CourseMarketplaceLaunchController {
              and published.course_id=released.program_id
              and published.status='PUBLISHED'
              and published.hrms_published_by_staff_id is not null
-            where released.program_id=p.id and released.release_state='SHAREABLE'
+            where released.release_state='SHAREABLE'
+              and exists(
+                select 1 from curriculum_program trusted_version
+                where trusted_version.id=released.program_id
+                  and trusted_version.course_identity_id=i.id
+              )
           ) as authenticated
         from institution_course_identity i
         join lateral (
