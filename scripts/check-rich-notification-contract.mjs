@@ -117,8 +117,13 @@ assert.ok(webInstitutionNotifications.includes('InstitutionNotificationsRedirect
   webInstitutionNotifications.includes('NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN') &&
   !webInstitutionNotifications.includes('NotificationStudio'),
   'The legacy institution notification route must redirect to Admin rather than host a third notification studio.');
-assert.ok(read('apps/admin/app/notifications/page.tsx').includes('NotificationStudio surface="admin"'),
-  'Education Admin must continue to own the notification design and send studio.');
+const adminNotificationsPage = read('apps/admin/app/notifications/page.tsx');
+const adminNotificationsClient = read('apps/admin/app/notifications/AdminNotificationsPageClient.tsx');
+assert.ok(adminNotificationsPage.includes('AdminNotificationsPageClient') &&
+  adminNotificationsClient.includes("identityType === 'INSTITUTION'") &&
+  adminNotificationsClient.includes('<NotificationStudio surface="admin" />') &&
+  adminNotificationsClient.includes('<NotificationStudio surface="institution" />'),
+  'Admin notifications route must preserve the staff studio and select the institution-scoped surface for institution principals.');
 const adminInboxClient = read('apps/admin/app/components/StaffNotificationInbox.tsx');
 assert.ok(adminInboxClient.includes('/api/v1/admin/notifications/inbox'),
   'Education Admin must keep the scoped notification inbox after the old institution portal is retired.');
