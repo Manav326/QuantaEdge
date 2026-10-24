@@ -3885,7 +3885,7 @@
   "admin.lifecycle.requestedBy": "Requested by",
   "accountDeletion.childAgeReviewRequired": "A reviewer must confirm whether this child is under 18 before a guardian deletion request can be submitted.",
   "admin.institutionOperations.eyebrow": "INSTITUTION OPERATIONS",
-  "admin.institutionOperations.title": "Institution workspace",
+  "admin.institutionOperations.title": "Institution",
   "admin.institutionOperations.description": "Manage the institution’s learners and course releases in one place. Course publication and Marketplace launch remain governed by HRMS.",
   "admin.institutionOperations.refresh": "Refresh",
   "admin.institutionOperations.overview": "Overview",
@@ -3989,5 +3989,11 @@
   "admin.institutionOperations.courseCreatePermission": "Creating a course requires Content Create and Content Edit permissions.",
   "admin.institutionOperations.openContent": "Open Content Studio",
   "admin.institutionOperations.draftCreated": "Draft course created. Opening Content Studio…",
-  "admin.institutionOperations.courseCreationNext": "Next: create and publish reviewed lessons for every active subject before submitting the release to HRMS."
+  "admin.institutionOperations.courseCreationNext": "Next: create and publish reviewed lessons for every active subject before submitting the release to HRMS.",
+  "admin.institutionOperations.billableAmount": "Recorded billable amount this period",
+  "admin.institutionOperations.currentPeriodAmount": "{amount}",
+  "admin.institutionOperations.courseDetails": "Course details",
+  "admin.institutionOperations.courseTypeK12": "K–12 course",
+  "admin.institutionOperations.courseRosterLabel": "Institution learner roster",
+  "admin.institutionOperations.releasesCount": "{count} releases"
 }
