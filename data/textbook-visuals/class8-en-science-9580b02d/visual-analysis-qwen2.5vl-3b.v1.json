@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1242,
+    "assets_selected": 1243,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
-      "e8da3c2edc6beba380b12468",
-      "7bceb11bef609f2404522955",
-      "f492c50e9c7d7ef8d140ae06"
+      "f492c50e9c7d7ef8d140ae06",
+      "d55b4af2d39033d603cae25d",
+      "72af91ad02c11a8084fd26ac"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1238,
-    "assets_remaining": 1053,
-    "assets_completion_percent": 54.0,
-    "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 1237,
+    "assets_analyzed": 1239,
+    "assets_remaining": 1052,
+    "assets_completion_percent": 54.1,
+    "assets_failed": 11,
+    "assets_skipped_from_checkpoint": 1238,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1229,7 +1229,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40134224881",
-      "checkpointed_at": "2026-10-24T22:11:00Z"
+      "checkpointed_at": "2026-10-24T22:21:57Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20171,7 +20171,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40134224881",
-      "checkpointed_at": "2026-10-24T22:11:51Z"
+      "checkpointed_at": "2026-10-24T22:22:48Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38423,7 +38423,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing different types of forces, specifically contact forces and muscular force.",
+        "visual_summary": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and muscular force.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -38440,16 +38440,16 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The page discusses different types of forces, specifically contact forces and muscular force, and provides examples of how these forces are used by living beings.",
+        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and muscular force.",
         "limitations": [
-          "The page does not provide specific examples of how contact forces are used by living beings."
+          "The image does not provide specific examples or explanations for each type of force."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40134224881",
-      "checkpointed_at": "2026-10-24T22:20:28Z"
+      "checkpointed_at": "2026-10-24T22:23:43Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -39070,9 +39070,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40123283396",
+      "run_id": "40134224881",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -40054,19 +40054,71 @@
     {
       "asset_id": "72af91ad02c11a8084fd26ac",
       "asset_sha256": "8e2c9149ce4db9054ab075a5a8aa34f9646299aa0e94146e6f60a3f0e51a4563",
-      "page_text_context_sha256": "36e5f166a2e34a76c242f2d87ba73dfac71cb3ada4eb9f931e145d2e195df953",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 93,
       "asset_path": "page-0093.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "36e5f166a2e34a76c242f2d87ba73dfac71cb3ada4eb9f931e145d2e195df953",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40123283396",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for an experiment involving a spring and different objects to observe the force exerted by the Earth.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "73",
+          "Let us now try to find out if the Earth pulls every object with",
+          "equal force.",
+          "Activity 5.9: Let us explore",
+          "z Take a spring and a few objects of different masses,",
+          "such as a pencil box, a tiffin box, and a small stone.",
+          "z Hang one end of the spring from a nail (Fig. 5.12a).",
+          "(a)",
+          "From the other end, hang an object and observe the",
+          "spring (Fig. 5.12b). Does the spring stretch?",
+          "z Now hang the other objects, one by one and notice the",
+          "stretch in the spring each time. Is the stretch caused by",
+          "each object the same?",
+          "When an object is hung from a spring, the spring",
+          "stretches due to the force applied on the object by the Earth.",
+          "We find that the stretch caused in the spring is different",
+          "for different objects. This indicates that the Earth pulls",
+          "different objects with different forces, that is, the weight",
+          "of different objects is different. Can we use the spring to",
+          "measure the weight of an object?",
+          "A step further",
+          "A spring balance is a simple device used to measure weight (force).",
+          "It consists of a spring fixed at one end, with a hook attached at",
+          "the other end. When we hang an object from the hook, the spring",
+          "stretches, and the amount of stretching gives the weight of the object.",
+          "There is a scale on the balance which is marked to show the weight",
+          "(force) in newton. Usually, there is also another scale to show the",
+          "corresponding values of mass in gram (g). These values have been",
+          "marked with the assumption that the spring balance is used on the"
+        ],
+        "concepts": [
+          "spring balance",
+          "force",
+          "gravitational force",
+          "mass",
+          "weight",
+          "spring stretching",
+          "Earth's gravitational force"
+        ],
+        "context_relation": "exploring forces",
+        "limitations": [
+          "The experiment involves observing the force exerted by the Earth on different objects using a spring balance.",
+          "The experiment requires careful observation and measurement of the spring stretching caused by different objects.",
+          "The experiment does not provide a direct measurement of the Earth's gravitational force."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40134224881",
+      "checkpointed_at": "2026-10-24T22:32:03Z"
     },
     {
       "asset_id": "e03a02c3fc37627f873ab044",
