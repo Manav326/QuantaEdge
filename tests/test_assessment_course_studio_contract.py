@@ -29,6 +29,16 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("institution_course_identity", importer)
         self.assertIn("EXPECTED_QUESTIONS = {\"TRE 1.0\": 120, \"TRE 2.0\": 150, \"TRE 3.0\": 150}", importer)
 
+    def test_hrms_can_preview_exact_assessment_release_before_quality_decision(self):
+        controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseMarketplaceLaunchController.java").read_text(encoding="utf-8")
+        hrms_ui = (ROOT / "apps/people/app/institutions/MarketplaceLaunchStepper.tsx").read_text(encoding="utf-8")
+        self.assertIn('"/{institutionId}/course-releases/{releaseId}/review-content"', controller)
+        self.assertIn("course_content_fingerprint(?)", controller)
+        self.assertIn("question_snapshot::text as question_snapshot", controller)
+        self.assertIn("Review submitted content", hrms_ui)
+        self.assertIn("Answer review:", hrms_ui)
+        self.assertIn("preview.contentCurrent", hrms_ui)
+
     def test_learner_catalogue_exposes_renderer_contract(self):
         controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/StudentProgramController.java").read_text(encoding="utf-8")
         web_courses = (ROOT / "apps/web/app/student/courses/page.tsx").read_text(encoding="utf-8")
