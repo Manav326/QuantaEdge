@@ -172,6 +172,22 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertEqual(identity_id, 901)
         self.assertEqual(len(cursor.statements), 1)
 
+    def test_generic_assessment_readiness_is_not_tre_specific(self):
+        migration = SCRIPT.parents[0] / "services" / "api" / "src" / "main" / "resources" / "db" / "migration" / "V199__assessment_only_readiness_uses_test_packs.sql"
+        sql = migration.read_text(encoding="utf-8")
+        generic_start = sql.index("CREATE OR REPLACE FUNCTION assessment_only_course_ready")
+        tre_start = sql.index("-- Import-specific contract:")
+        generic = sql[generic_start:tre_start]
+        tre_specific = sql[tre_start:]
+
+        self.assertIn("course_assessment_pack_item", generic)
+        self.assertNotIn("TRE 3.0", generic)
+        self.assertIn("CREATE OR REPLACE FUNCTION tre4_source_package_ready", tre_specific)
+        self.assertIn("'TRE 1.0'::varchar", tre_specific)
+        self.assertIn("'TRE 2.0'::varchar", tre_specific)
+        self.assertIn("'TRE 3.0'::varchar", tre_specific)
+        self.assertIn("150", tre_specific)
+
     def test_expected_primary_booklet_counts(self):
         self.assertEqual(import_tre4_course.expected_question_count("TRE 1.0"), 120)
         self.assertEqual(import_tre4_course.expected_question_count("TRE 2.0"), 150)
