@@ -76,7 +76,8 @@ const EXAMPLE_PACKAGE = {
         { key: 'A', text: 'Option A', text_i18n: { en: 'Option A' } },
         { key: 'B', text: 'Option B', text_i18n: { en: 'Option B' } }
       ],
-      topic_tags: [],
+      topic_tags: ['Computer Science'],
+      difficulty: 'CORE',
       proposed_answer: {
         option_key: null,
         confidence: 'UNRESOLVED',
