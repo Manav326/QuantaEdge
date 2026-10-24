@@ -25,14 +25,18 @@ type NotificationItem = {
   unread?: boolean;
 };
 type InboxResponse = { items?: NotificationItem[]; nextBeforeId?: number | null };
-type Workspace = 'admin' | 'hrms';
+type Workspace = 'admin' | 'hrms' | 'institution';
 function inboxEndpoint(workspace: Workspace) {
-  return workspace === 'hrms' ? '/api/v1/hrms/notifications/inbox' : '/api/v1/admin/notifications/inbox';
+  if (workspace === 'hrms') return '/api/v1/hrms/notifications/inbox';
+  if (workspace === 'institution') return '/api/v1/institution/notifications';
+  return '/api/v1/admin/notifications/inbox';
 }
 function staffNotificationApiFetch(workspace: Workspace, input: string, init: RequestInit = {}) {
   const headers = new Headers(init.headers);
   if (workspace === 'hrms') {
     headers.set('X-QE-Workspace', 'HRMS');
+  } else if (workspace === 'institution') {
+    headers.set('X-QE-Workspace', 'INSTITUTION');
   } else {
     // Education Admin's institution is derived server-side from the HRMS staff binding.
     // Never pin all institutional inboxes to the legacy QUANTA-EDGE code.
