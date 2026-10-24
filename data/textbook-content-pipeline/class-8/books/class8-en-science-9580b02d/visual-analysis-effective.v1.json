@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "6305ac710a9a70681625bbda7d0c35d64bcb202fa8f3c29ce28929a9ec987567",
+  "raw_analysis_sha256": "78482e6a1a7b89973b8b4d422711041de7a5bfdf2b11d94c63f3ee7656968960",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40134224881",
-      "checkpointed_at": "2026-10-24T22:33:33Z",
+      "checkpointed_at": "2026-10-24T22:44:13Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29347,7 +29347,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40134224881",
-      "checkpointed_at": "2026-10-24T22:34:23Z",
+      "checkpointed_at": "2026-10-24T22:45:04Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing names and roles of contributors.",
         "visual_type": "page_with_multiple_visuals",
@@ -57868,7 +57868,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40134224881",
-      "checkpointed_at": "2026-10-24T22:35:19Z",
+      "checkpointed_at": "2026-10-24T22:46:01Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and muscular force.",
         "visual_type": "page_with_multiple_visuals",
@@ -61122,9 +61122,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40123283396",
+      "run_id": "40134224881",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -61406,6 +61406,80 @@
         "context_relation": "uncertain",
         "limitations": [
           "unclear content or visual elements present on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5b7591b9be5595972849fba6",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9dc2465d4f8850201a45c40a5e6052066a129f8027fe8e478a9f4d0123a52c92",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A bucket filled with water and a mug placed on top of it, showing the buoyancy effect.",
+        "visual_type": "photo",
+        "visible_text": [
+          "5.6 Floating and Sinking",
+          "While taking out water from",
+          "a bucket filled with water",
+          "using a mug, do you notice",
+          "acting on all objects, then why don’t all",
+          "them float, while others fall to the bottom.",
+          "The gravitational force of the Earth",
+          "is",
+          "that the mug feels lighter",
+          "when it is inside",
+          "the bucket."
+        ],
+        "concepts": [
+          "Buoyancy",
+          "Floating",
+          "Sinking",
+          "Gravitational force"
+        ],
+        "context_relation": "Explanatory",
+        "limitations": [
+          "No specific objects or figures are visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40134224881",
+      "checkpointed_at": "2026-10-24T22:51:05Z",
+      "effective_analysis": {
+        "visual_summary": "A bucket filled with water and a mug placed on top of it, showing the buoyancy effect.",
+        "visual_type": "photo",
+        "visible_text": [
+          "5.6 Floating and Sinking",
+          "While taking out water from",
+          "a bucket filled with water",
+          "using a mug, do you notice",
+          "acting on all objects, then why don’t all",
+          "them float, while others fall to the bottom.",
+          "The gravitational force of the Earth",
+          "is",
+          "that the mug feels lighter",
+          "when it is inside",
+          "the bucket."
+        ],
+        "concepts": [
+          "Buoyancy",
+          "Floating",
+          "Sinking",
+          "Gravitational force"
+        ],
+        "context_relation": "Explanatory",
+        "limitations": [
+          "No specific objects or figures are visible in the image."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

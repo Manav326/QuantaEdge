@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1244,
+    "assets_selected": 1245,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "e03a02c3fc37627f873ab044",
-      "034c31ca3fc7f277ac925cbd"
+      "d65482e79397897103b91e37",
+      "5b7591b9be5595972849fba6"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1240,
-    "assets_remaining": 1051,
-    "assets_completion_percent": 54.1,
+    "assets_analyzed": 1241,
+    "assets_remaining": 1050,
+    "assets_completion_percent": 54.2,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 1239,
+    "assets_skipped_from_checkpoint": 1240,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1229,7 +1229,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40134224881",
-      "checkpointed_at": "2026-10-24T22:33:33Z"
+      "checkpointed_at": "2026-10-24T22:44:13Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20171,7 +20171,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40134224881",
-      "checkpointed_at": "2026-10-24T22:34:23Z"
+      "checkpointed_at": "2026-10-24T22:45:04Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38449,7 +38449,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40134224881",
-      "checkpointed_at": "2026-10-24T22:35:19Z"
+      "checkpointed_at": "2026-10-24T22:46:01Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -40548,9 +40548,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40123283396",
+      "run_id": "40134224881",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -40741,6 +40741,51 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40123283396",
       "checkpointed_at": "2026-10-24T20:52:18Z"
+    },
+    {
+      "asset_id": "5b7591b9be5595972849fba6",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9dc2465d4f8850201a45c40a5e6052066a129f8027fe8e478a9f4d0123a52c92",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A bucket filled with water and a mug placed on top of it, showing the buoyancy effect.",
+        "visual_type": "photo",
+        "visible_text": [
+          "5.6 Floating and Sinking",
+          "While taking out water from",
+          "a bucket filled with water",
+          "using a mug, do you notice",
+          "acting on all objects, then why don’t all",
+          "them float, while others fall to the bottom.",
+          "The gravitational force of the Earth",
+          "is",
+          "that the mug feels lighter",
+          "when it is inside",
+          "the bucket."
+        ],
+        "concepts": [
+          "Buoyancy",
+          "Floating",
+          "Sinking",
+          "Gravitational force"
+        ],
+        "context_relation": "Explanatory",
+        "limitations": [
+          "No specific objects or figures are visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40134224881",
+      "checkpointed_at": "2026-10-24T22:51:05Z"
     }
   ]
 }
