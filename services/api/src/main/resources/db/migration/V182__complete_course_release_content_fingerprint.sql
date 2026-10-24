@@ -93,6 +93,16 @@ AS $$
       JOIN curriculum_program p ON p.course_identity_id=i.id
       WHERE p.id=p_program_id
     UNION ALL
+    SELECT 'curriculum-class', c.id::text, to_jsonb(c)::text
+      FROM curriculum_class c
+      JOIN curriculum_program p ON p.class_id=c.id
+      WHERE p.id=p_program_id
+    UNION ALL
+    SELECT 'curriculum-class-translation', t.id::text, to_jsonb(t)::text
+      FROM curriculum_class_translation t
+      JOIN curriculum_program p ON p.class_id=t.class_id
+      WHERE p.id=p_program_id
+    UNION ALL
     SELECT 'program', p.id::text, to_jsonb(p)::text
       FROM curriculum_program p WHERE p.id=p_program_id
     UNION ALL
