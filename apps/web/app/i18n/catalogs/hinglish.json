@@ -4002,5 +4002,6 @@
   "admin.institutionOperations.adminOriginMissing": "Is deployment ke liye Admin application ka address configure nahi hai. Education Admin application seedha kholen ya platform owner se NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN configure karne ko kahein.",
   "admin.institutionOperations.notificationsRedirectTitle": "Institution notifications ab Admin mein hain",
   "admin.institutionOperations.notificationsRedirectDescription": "Notification templates, audience review, campaign delivery aur inbox ke liye institution ka Admin workspace use karein. Platform-wide notifications aur institution governance HRMS ke control mein rehte hain.",
-  "admin.institutionOperations.openAdminNotifications": "Admin Notifications kholen"
+  "admin.institutionOperations.openAdminNotifications": "Admin Notifications kholen",
+  "admin.institutionOperations.handoffToHrms": "Course release aur HRMS handoff"
 }
