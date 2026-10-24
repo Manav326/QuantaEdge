@@ -289,14 +289,28 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
     };
   }, [mobileMenuOpen]);
 
-  const value = useMemo(() => ({
-    insideWorkspace: !publicRoute,
-    locale,
-    setLocale: changeLocale,
-    role: session?.role || '',
-    permissions: Array.isArray(session?.permissions) ? session.permissions : [],
-    displayName: session?.displayName || '',
-  }), [publicRoute, locale, session, changeLocale]);
+  const value = useMemo(() => {
+    const identityType: AdminWorkspaceIdentityType | null = session
+      ? 'EDUCATION_ADMIN'
+      : institutionAdminSession ? 'INSTITUTION' : null;
+    const permissions = session && Array.isArray(session.permissions)
+      ? session.permissions
+      : institutionAdminSession && Array.isArray(institutionAdminSession.capabilities)
+        ? institutionAdminSession.capabilities
+        : [];
+    return {
+      insideWorkspace: !publicRoute,
+      locale,
+      setLocale: changeLocale,
+      role: session?.role || (institutionAdminSession ? 'INSTITUTION_ADMIN' : ''),
+      permissions,
+      displayName: session?.displayName || institutionAdminSession?.adminDisplayName || '',
+      identityType,
+      institutionId: institutionAdminSession ? Number(institutionAdminSession.institutionId) || null : null,
+      institutionCode: institutionAdminSession?.institutionCode || institutionCode,
+      mustChangePassword: Boolean(institutionAdminSession?.mustChangePassword),
+    };
+  }, [publicRoute, locale, session, institutionAdminSession, institutionCode, changeLocale]);
 
   async function logout() {
     setLoggingOut(true);
