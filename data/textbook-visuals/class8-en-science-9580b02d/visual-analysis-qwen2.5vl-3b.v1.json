@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1229,
+    "assets_selected": 1231,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "339a386a42e66acc0b9a11c3",
-      "b9276aa0e289058d8fa5dc85"
+      "66707294a93f569383dc7d0f",
+      "a5f6d21a180f130e5a8f8487"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1226,
-    "assets_remaining": 1065,
-    "assets_completion_percent": 53.5,
+    "assets_analyzed": 1228,
+    "assets_remaining": 1063,
+    "assets_completion_percent": 53.6,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1224,
+    "assets_skipped_from_checkpoint": 1226,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40097576981",
-      "checkpointed_at": "2026-10-24T14:58:16Z"
+      "checkpointed_at": "2026-10-24T15:02:57Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40097576981",
-      "checkpointed_at": "2026-10-24T14:59:02Z"
+      "checkpointed_at": "2026-10-24T15:03:42Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38429,7 +38429,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40097576981",
-      "checkpointed_at": "2026-10-24T14:59:56Z"
+      "checkpointed_at": "2026-10-24T15:04:36Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -40299,6 +40299,64 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40097576981",
       "checkpointed_at": "2026-10-24T15:01:46Z"
+    },
+    {
+      "asset_id": "66707294a93f569383dc7d0f",
+      "asset_sha256": "d3e55df2929c4ad5b2e901f4a27955330a1836c5ab70a783367fc97037837816",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 95,
+      "asset_path": "assets/d3e55df2929c4ad5b2e901f4a27955330a1836c5ab70a783367fc97037837816.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f3c1b2f43ada4151a60b916f5c82eed799f0ccb2a4a433435669d7a50b7e53bc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a girl with braided hair wearing a yellow and orange top, pointing upwards with her right hand.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of measuring mass indirectly using weight measurements.",
+        "limitations": [
+          "The image does not provide specific details about the measurement activities mentioned in the text.",
+          "The image does not show the spring balance or beam balance mentioned in the text.",
+          "The image does not include any numerical data or measurements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40097576981",
+      "checkpointed_at": "2026-10-24T15:06:18Z"
+    },
+    {
+      "asset_id": "a5f6d21a180f130e5a8f8487",
+      "asset_sha256": "82926bdd9c78089199418cf22faf95b11ff22541270aeb4e3c3e3ab7661406ed",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 95,
+      "asset_path": "assets/82926bdd9c78089199418cf22faf95b11ff22541270aeb4e3c3e3ab7661406ed.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f3c1b2f43ada4151a60b916f5c82eed799f0ccb2a4a433435669d7a50b7e53bc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person climbing a staircase, with one foot on a step and the other foot raised, appearing to be in motion.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a person climbing a staircase, which is not directly related to the text about measuring mass indirectly using weight or comparing weights.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text about measuring mass indirectly using weight or comparing weights."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40097576981",
+      "checkpointed_at": "2026-10-24T15:07:57Z"
     }
   ]
 }

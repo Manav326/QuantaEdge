@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "126263ef0c6203062edd42de364428e0bfac8db500351bcec0c68534d7032c9b",
+  "raw_analysis_sha256": "959d080f5a4dec3eeba3b0a041dc4d07b1ec1ee06dc0404da2ecccfa834dfb26",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40097576981",
-      "checkpointed_at": "2026-10-24T14:58:16Z",
+      "checkpointed_at": "2026-10-24T15:02:57Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40097576981",
-      "checkpointed_at": "2026-10-24T14:59:02Z",
+      "checkpointed_at": "2026-10-24T15:03:42Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57829,7 +57829,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40097576981",
-      "checkpointed_at": "2026-10-24T14:59:56Z",
+      "checkpointed_at": "2026-10-24T15:04:36Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -60704,6 +60704,90 @@
         "context_relation": "The image is a visual representation of a character climbing stairs, which could be used in an educational context to discuss physical activities or movement.",
         "limitations": [
           "The image does not provide specific information about the educational content it is intended to represent."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "66707294a93f569383dc7d0f",
+      "asset_sha256": "d3e55df2929c4ad5b2e901f4a27955330a1836c5ab70a783367fc97037837816",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 95,
+      "asset_path": "assets/d3e55df2929c4ad5b2e901f4a27955330a1836c5ab70a783367fc97037837816.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f3c1b2f43ada4151a60b916f5c82eed799f0ccb2a4a433435669d7a50b7e53bc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a girl with braided hair wearing a yellow and orange top, pointing upwards with her right hand.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of measuring mass indirectly using weight measurements.",
+        "limitations": [
+          "The image does not provide specific details about the measurement activities mentioned in the text.",
+          "The image does not show the spring balance or beam balance mentioned in the text.",
+          "The image does not include any numerical data or measurements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40097576981",
+      "checkpointed_at": "2026-10-24T15:06:18Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a girl with braided hair wearing a yellow and orange top, pointing upwards with her right hand.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of measuring mass indirectly using weight measurements.",
+        "limitations": [
+          "The image does not provide specific details about the measurement activities mentioned in the text.",
+          "The image does not show the spring balance or beam balance mentioned in the text.",
+          "The image does not include any numerical data or measurements."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a5f6d21a180f130e5a8f8487",
+      "asset_sha256": "82926bdd9c78089199418cf22faf95b11ff22541270aeb4e3c3e3ab7661406ed",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 95,
+      "asset_path": "assets/82926bdd9c78089199418cf22faf95b11ff22541270aeb4e3c3e3ab7661406ed.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f3c1b2f43ada4151a60b916f5c82eed799f0ccb2a4a433435669d7a50b7e53bc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person climbing a staircase, with one foot on a step and the other foot raised, appearing to be in motion.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a person climbing a staircase, which is not directly related to the text about measuring mass indirectly using weight or comparing weights.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text about measuring mass indirectly using weight or comparing weights."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40097576981",
+      "checkpointed_at": "2026-10-24T15:07:57Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person climbing a staircase, with one foot on a step and the other foot raised, appearing to be in motion.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a person climbing a staircase, which is not directly related to the text about measuring mass indirectly using weight or comparing weights.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text about measuring mass indirectly using weight or comparing weights."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
