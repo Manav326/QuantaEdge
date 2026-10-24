@@ -173,7 +173,7 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertEqual(len(cursor.statements), 1)
 
     def test_generic_assessment_readiness_is_not_tre_specific(self):
-        migration = SCRIPT.parents[0] / "services" / "api" / "src" / "main" / "resources" / "db" / "migration" / "V199__assessment_only_readiness_uses_test_packs.sql"
+        migration = SCRIPT.parents[1] / "services" / "api" / "src" / "main" / "resources" / "db" / "migration" / "V199__assessment_only_readiness_uses_test_packs.sql"
         sql = migration.read_text(encoding="utf-8")
         generic_start = sql.index("CREATE OR REPLACE FUNCTION assessment_only_course_ready")
         tre_start = sql.index("-- Import-specific contract:")
