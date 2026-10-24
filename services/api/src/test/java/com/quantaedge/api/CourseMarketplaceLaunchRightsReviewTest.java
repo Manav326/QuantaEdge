@@ -25,6 +25,7 @@ class CourseMarketplaceLaunchRightsReviewTest {
   private JdbcTemplate jdbc;
   private AuthorizationService authorization;
   private ObjectMapper mapper;
+  private CourseVersionLearnerMigrationService versionLearnerMigration;
   private CourseMarketplaceLaunchController controller;
   private final AuthContext reviewer =
       new AuthContext(null, null, 42L, "ADMIN", "HRMS rights reviewer", "HRMS");
@@ -36,11 +37,41 @@ class CourseMarketplaceLaunchRightsReviewTest {
     mapper = org.mockito.Mockito.mock(ObjectMapper.class);
     CourseMarketplaceLaunchReadinessService readiness =
         org.mockito.Mockito.mock(CourseMarketplaceLaunchReadinessService.class);
-    controller = new CourseMarketplaceLaunchController(jdbc, authorization, readiness, mapper);
+    versionLearnerMigration = org.mockito.Mockito.mock(CourseVersionLearnerMigrationService.class);
+    controller = new CourseMarketplaceLaunchController(jdbc, authorization, readiness, mapper, versionLearnerMigration);
 
     when(authorization.requirePermission(reviewer, "QE_PLATFORM_OWNER")).thenReturn(reviewer);
     when(jdbc.queryForObject(anyString(), eq(Boolean.class), any(Object[].class))).thenReturn(true);
     when(mapper.writeValueAsString(any())).thenReturn("{}");
+  }
+
+
+  @Test
+  void normalHrmsPublicationMigratesEligibleLearnersForAnAlreadyReviewedNewVersion() {
+    Map<String,Object> offer = Map.of(
+        "id", 91L,
+        "institution_id", 7L,
+        "assignment_id", 92L,
+        "course_release_id", 93L,
+        "course_id", 1701L,
+        "status", "APPROVED",
+        "price_paise", 10000L,
+        "currency", "INR",
+        "assignment_status", "ASSIGNED",
+        "release_state", "SHAREABLE",
+        "course_identity_id", 701L,
+        "content_version_no", 2);
+    when(jdbc.queryForList(contains("select o.id,o.institution_id,o.assignment_id"), any(Object[].class)))
+        .thenReturn(List.of(offer));
+    when(versionLearnerMigration.grantExistingLearnersToVersion(7L, 701L, 2, 1701L)).thenReturn(3);
+
+    Map<String,Object> result = controller.publishOffer(7L, 91L, reviewer);
+
+    assertEquals(true, result.get("updated"));
+    assertEquals("PUBLISHED", result.get("status"));
+    assertEquals(3, result.get("learnerVersionGrants"));
+    verify(versionLearnerMigration).grantExistingLearnersToVersion(7L, 701L, 2, 1701L);
+    verify(jdbc).update(contains("set status='PUBLISHED'"), any(Object[].class));
   }
 
   @Test

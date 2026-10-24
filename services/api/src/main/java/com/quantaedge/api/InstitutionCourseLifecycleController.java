@@ -37,15 +37,18 @@ public class InstitutionCourseLifecycleController {
   private final ObjectMapper objectMapper;
   private final CourseMarketplaceLaunchReadinessService launchReadiness;
   private final CourseAuthoringService courseAuthoringService;
+  private final CourseVersionLearnerMigrationService versionLearnerMigration;
 
   public InstitutionCourseLifecycleController(
       JdbcTemplate jdbc, InstitutionAuthService institutionAuth, ObjectMapper objectMapper,
-      CourseMarketplaceLaunchReadinessService launchReadiness, CourseAuthoringService courseAuthoringService) {
+      CourseMarketplaceLaunchReadinessService launchReadiness, CourseAuthoringService courseAuthoringService,
+      CourseVersionLearnerMigrationService versionLearnerMigration) {
     this.jdbc = jdbc;
     this.institutionAuth = institutionAuth;
     this.objectMapper = objectMapper;
     this.launchReadiness = launchReadiness;
     this.courseAuthoringService = courseAuthoringService;
+    this.versionLearnerMigration = versionLearnerMigration;
   }
 
   @GetMapping("/courses")
@@ -552,7 +555,7 @@ public class InstitutionCourseLifecycleController {
         eventDetails.put("autoPublished",true);
         recordEvent(tenantId,releaseId,assignmentId,offerId,"OFFER_APPROVED",policyActorStaffId,null,eventDetails);
         recordEvent(tenantId,releaseId,assignmentId,offerId,"OFFER_PUBLISHED",policyActorStaffId,null,eventDetails);
-        int grants=grantExistingLearnersToVersion(tenantId,identityId,versionNo,programId);
+        int grants=versionLearnerMigration.grantExistingLearnersToVersion(tenantId,identityId,versionNo,programId);
         learnerGrants+=grants;
         autoPublished++;
         destinationResults.add(Map.of("institutionId",tenantId,"offerId",offerId,
@@ -674,74 +677,6 @@ public class InstitutionCourseLifecycleController {
           discount.get("approved_by_staff_id"),discount.get("approved_at"));
     }
     return "";
-  }
-
-  private int grantExistingLearnersToVersion(
-      long institutionId,long courseIdentityId,int contentVersionNo,long newProgramId) {
-    List<Long> learners=jdbc.queryForList("""
-        with old_courses as (
-          select p.id
-          from curriculum_program p
-          where p.course_identity_id=? and p.content_version_no<?
-            and exists(
-              select 1 from institution_marketplace_offer o
-              join institution_course_assignment a
-                on a.id=o.assignment_id and a.institution_id=o.institution_id and a.status='ASSIGNED'
-              join institution_course_release r on r.id=o.course_release_id
-                and r.program_id=o.course_id and r.release_state='SHAREABLE'
-              where o.institution_id=? and o.course_id=p.id and o.status='PUBLISHED'
-                and o.hrms_published_by_staff_id is not null
-            )
-        ), eligible_students(student_id) as (
-          select e.student_id from student_program_enrollment e
-          join old_courses old on old.id=e.program_id
-          where e.institution_id=? and e.status in ('ACTIVE','PAUSED')
-          union
-          select purchase.student_id from course_purchase purchase
-          join old_courses old on old.id=purchase.course_id
-          where purchase.institution_id=? and purchase.student_id is not null
-          union
-          select entitlement.holder_student_id from course_entitlement entitlement
-          join old_courses old on old.id=entitlement.course_id
-          where entitlement.institution_id=? and entitlement.holder_student_id is not null
-          union
-          select learner.id from course_entitlement entitlement
-          join student learner on learner.user_account_id=entitlement.holder_user_id and learner.active=true
-          join old_courses old on old.id=entitlement.course_id
-          where entitlement.institution_id=? and entitlement.holder_user_id is not null
-        )
-        select distinct learner.id
-        from eligible_students eligible
-        join student learner on learner.id=eligible.student_id and learner.active=true
-        join institution_membership membership on membership.institution_id=? 
-          and membership.student_id=learner.id and membership.status='ACTIVE'
-        order by learner.id
-        """,Long.class,courseIdentityId,contentVersionNo,institutionId,institutionId,institutionId,
-        institutionId,institutionId,institutionId);
-    if(learners.isEmpty()) return 0;
-    List<Long> subjects=jdbc.queryForList("""
-        select subject_id from curriculum_program_subject
-        where program_id=? order by sort_order,subject_id
-        """,Long.class,newProgramId);
-    for(Long studentId:learners) {
-      jdbc.update("""
-          insert into student_program_enrollment(
-            student_id,program_id,institution_id,status,enrolled_at,ended_at,created_at,updated_at
-          ) values(?,?,?,'ACTIVE',now(),null,now(),now())
-          on conflict(institution_id,student_id,program_id) do update
-            set status='ACTIVE',ended_at=null,updated_at=now()
-          """,studentId,newProgramId,institutionId);
-      for(Long subjectId:subjects) {
-        jdbc.update("""
-            insert into student_track_enrollment(
-              student_id,subject_id,institution_id,status,subscribed_at,created_at,updated_at
-            ) values(?,?,?,'ACTIVE',now(),now(),now())
-            on conflict(institution_id,student_id,subject_id) do update
-              set status='ACTIVE',updated_at=now()
-            """,studentId,subjectId,institutionId);
-      }
-    }
-    return learners.size();
   }
 
   @SuppressWarnings("unchecked")

@@ -32,14 +32,17 @@ public class CourseMarketplaceLaunchController {
   private final AuthorizationService authorization;
   private final CourseMarketplaceLaunchReadinessService readiness;
   private final ObjectMapper mapper;
+  private final CourseVersionLearnerMigrationService versionLearnerMigration;
 
   public CourseMarketplaceLaunchController(
       JdbcTemplate jdbc, AuthorizationService authorization,
-      CourseMarketplaceLaunchReadinessService readiness, ObjectMapper mapper) {
+      CourseMarketplaceLaunchReadinessService readiness, ObjectMapper mapper,
+      CourseVersionLearnerMigrationService versionLearnerMigration) {
     this.jdbc = jdbc;
     this.authorization = authorization;
     this.readiness = readiness;
     this.mapper = mapper;
+    this.versionLearnerMigration = versionLearnerMigration;
   }
 
   @GetMapping("/{institutionId}/marketplace-launches")
@@ -524,10 +527,12 @@ public class CourseMarketplaceLaunchController {
     assertInstitution(institutionId);
     List<Map<String,Object>> offers=jdbc.queryForList("""
         select o.id,o.institution_id,o.assignment_id,o.course_release_id,o.course_id,o.status,
-          o.price_paise,o.currency,a.status as assignment_status,r.release_state
+          o.price_paise,o.currency,a.status as assignment_status,r.release_state,
+          p.course_identity_id,p.content_version_no
         from institution_marketplace_offer o
         join institution_course_assignment a on a.id=o.assignment_id and a.institution_id=o.institution_id
         join institution_course_release r on r.id=o.course_release_id and r.program_id=o.course_id
+        join curriculum_program p on p.id=o.course_id
         where o.id=? and o.institution_id=?
         for update of o,a,r
         """,offerId,institutionId);
@@ -538,6 +543,7 @@ public class CourseMarketplaceLaunchController {
     long assignmentId=number(row.get("assignment_id"));
     long releaseId=number(row.get("course_release_id"));
     String next;
+    int learnerVersionGrants=0;
     switch(action) {
       case "SUBMIT" -> {
         if(!List.of("DRAFT","REJECTED").contains(oldStatus))
@@ -578,6 +584,14 @@ public class CourseMarketplaceLaunchController {
             where id=? and institution_id=? and status='APPROVED'
             """,context.staffId(),offerId,institutionId);
         next="PUBLISHED";
+        long courseIdentityId=row.get("course_identity_id") instanceof Number identity
+            ? identity.longValue() : 0L;
+        int contentVersionNo=row.get("content_version_no") instanceof Number version
+            ? version.intValue() : 1;
+        if(courseIdentityId>0 && contentVersionNo>1) {
+          learnerVersionGrants=versionLearnerMigration.grantExistingLearnersToVersion(
+              institutionId,courseIdentityId,contentVersionNo,number(row.get("course_id")));
+        }
       }
       case "RETURN_TO_DRAFT" -> {
         if(!List.of("IN_REVIEW","APPROVED").contains(oldStatus))
@@ -608,6 +622,7 @@ public class CourseMarketplaceLaunchController {
     Map<String,Object> details=new LinkedHashMap<>();
     details.put("from",oldStatus);details.put("to",next);details.put("action",action);
     details.put("pricePaise",number(row.get("price_paise")));details.put("currency",text(row.get("currency")));
+    if(learnerVersionGrants>0 || "PUBLISH".equals(action)) details.put("learnerVersionGrants",learnerVersionGrants);
     if(reason!=null)details.put("reason",reason);
     record(institutionId,releaseId,assignmentId,offerId,
         switch(action) {
@@ -618,6 +633,7 @@ public class CourseMarketplaceLaunchController {
           default -> "OFFER_ARCHIVED";
         },context.staffId(),details);
     return Map.of("updated",true,"offerId",offerId,"status",next,
+        "learnerVersionGrants",learnerVersionGrants,
         "message","Marketplace listing status updated.");
   }
 
