@@ -90,6 +90,8 @@ services:
   web:
     build:
       context: ./apps/web
+      args:
+        NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN: ${NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN:-http://localhost:3001}
     environment:
       BACKEND_INTERNAL_URL: http://api:8080
     ports:
@@ -108,6 +110,8 @@ services:
   people:
     build:
       context: ./apps/people
+      args:
+        NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN: ${NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN:-http://localhost:3001}
     environment:
       BACKEND_INTERNAL_URL: http://api:8080
     ports:
