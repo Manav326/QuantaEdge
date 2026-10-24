@@ -166,12 +166,16 @@ public class InstitutionCourseLifecycleController {
     String fingerprint=contentFingerprint(programId);
     evidence.put("capturedAt",java.time.Instant.now().toString());
     List<Map<String,Object>> trustedRows=jdbc.queryForList("""
-        select i.trusted_auto_approval,i.trusted_auto_approval_changed_by_staff_id,
-          i.trusted_auto_approval_changed_at,i.trusted_auto_approval_note
+        select coalesce(trust.enabled,false) as trusted_auto_approval,
+          trust.changed_by_staff_id as trusted_auto_approval_changed_by_staff_id,
+          trust.changed_at as trusted_auto_approval_changed_at,
+          trust.note as trusted_auto_approval_note
         from curriculum_program p
         join institution_course_identity i on i.id=p.course_identity_id
-          and i.source_institution_id=?
-        where p.id=? and i.status='ACTIVE'
+          and i.source_institution_id=? and i.status='ACTIVE'
+        left join institution_course_trust_policy trust
+          on trust.course_identity_id=i.id and trust.source_institution_id=i.source_institution_id
+        where p.id=?
         """,principal.institutionId(),programId);
     boolean trustedAutoApproval=!trustedRows.isEmpty()
         && Boolean.TRUE.equals(trustedRows.getFirst().get("trusted_auto_approval"));
