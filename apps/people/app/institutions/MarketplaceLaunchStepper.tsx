@@ -413,19 +413,23 @@ export default function MarketplaceLaunchStepper({
       && hasFailedCheck(item, ['RAZORPAY_CREDENTIALS', 'RAZORPAY_WEBHOOK']);
   }
 
-  function institutionPortalHref(path: string) {
-    const configured = process.env.NEXT_PUBLIC_LEARNER_APP_ORIGIN?.trim();
+  function educationAdminHref(path: string): string | null {
+    const configured = process.env.NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN?.trim();
     if (configured) {
       try {
         const parsed = new URL(configured);
         const local = parsed.hostname === 'localhost' || parsed.hostname === '127.0.0.1';
-        if (parsed.protocol === 'https:' || (local && parsed.protocol === 'http:')) return new URL(path, parsed.origin).toString();
-      } catch { /* Keep the same safe fallback used by the HRMS institution workspace. */ }
+        if (parsed.protocol === 'https:' || (local && parsed.protocol === 'http:')) {
+          return new URL(path, parsed.origin).toString();
+        }
+      } catch { /* A malformed Admin origin must not create a broken handoff link. */ }
     }
     if (typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname)) {
-      return new URL(path, 'http://localhost:3000').toString();
+      return new URL(path, 'http://localhost:3001').toString();
     }
-    return new URL(path, 'https://qe.thinkwithsujeet.in').toString();
+    // Production must explicitly configure the Education Admin origin. Never fall back to
+    // the learner-facing application for an institutional release-approval task.
+    return null;
   }
 
   function shouldShowInvoiceSetupLink(item: LaunchItem) {
@@ -471,7 +475,8 @@ export default function MarketplaceLaunchStepper({
     if (['REVENUE_SHARE_POLICY', 'SHARE_POOL_VALIDATION'].includes(check.code)) return financeSetupHref(item, 'distribution');
     if (check.code === 'DISCOUNT_POOL_COMPATIBILITY') return financeSetupHref(item, 'discounts');
     if (check.code === 'ORIGIN_RELEASE_APPROVAL' || check.code === 'ASSIGNMENT_AND_RELEASE') {
-      return institutionPortalHref('/institution?view=courses#institution-course-releases');
+      const params = new URLSearchParams({ view: 'courses', courseId: String(item.courseId) });
+      return educationAdminHref('/institution-operations?' + params.toString());
     }
     return null;
   }
@@ -770,7 +775,9 @@ export default function MarketplaceLaunchStepper({
                     <div><strong>Next required action · {['RAZORPAY_CREDENTIALS', 'RAZORPAY_WEBHOOK'].includes(blocker.code) ? 'HRMS platform operator' : ['APPROVED_TAX_PROFILE', 'EINVOICE_REVIEW', 'TAX_CALCULATION', 'GST_REGISTRATION', 'PUBLISHED_INVOICE_TEMPLATE', 'REVENUE_SHARE_POLICY', 'SHARE_POOL_VALIDATION', 'DISCOUNT_POOL_COMPATIBILITY'].includes(blocker.code) ? 'HRMS finance' : blocker.code === 'ORIGIN_RELEASE_APPROVAL' ? 'Source institution administrator' : blocker.code === 'SOURCE_RIGHTS_CLEARANCE' ? 'HRMS rights reviewer' : 'Course/content owner'}</strong><p>{blocker.label}: {blocker.message}</p>
                       {blocker.code === 'EINVOICE_REVIEW' && /requires e-invoicing|REQUIRED/i.test(blocker.message) ? <p className={styles.stepHint}>This is a platform integration limitation, not a missing form. Launch remains safely blocked until the supported IRP/IRN and signed-QR path is enabled; repeated Finance edits will not resolve it.</p> : null}
                     </div>
-                    {blockerHref(item, blocker) && <a href={blockerHref(item, blocker)!}>{blocker.code === 'SOURCE_RIGHTS_CLEARANCE' ? 'Review source rights' : ['RAZORPAY_CREDENTIALS', 'RAZORPAY_WEBHOOK'].includes(blocker.code) ? 'Open integration readiness' : blocker.code === 'ORIGIN_RELEASE_APPROVAL' || blocker.code === 'ASSIGNMENT_AND_RELEASE' ? 'Open course release workflow' : 'Open required setup'} <span aria-hidden="true">↗</span></a>}
+                    {blockerHref(item, blocker) && <a href={blockerHref(item, blocker)!}>{blocker.code === 'SOURCE_RIGHTS_CLEARANCE' ? 'Review source rights' : ['RAZORPAY_CREDENTIALS', 'RAZORPAY_WEBHOOK'].includes(blocker.code) ? 'Open integration readiness' : blocker.code === 'ORIGIN_RELEASE_APPROVAL' || blocker.code === 'ASSIGNMENT_AND_RELEASE' ? 'Open Institution in Admin' : 'Open required setup'} <span aria-hidden="true">↗</span></a>}
+                    {!blockerHref(item, blocker) && (blocker.code === 'ORIGIN_RELEASE_APPROVAL' || blocker.code === 'ASSIGNMENT_AND_RELEASE')
+                      ? <small>Open the Institution section in Admin. Set NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN to enable a direct course link.</small> : null}
                   </div>
                 )}
 
