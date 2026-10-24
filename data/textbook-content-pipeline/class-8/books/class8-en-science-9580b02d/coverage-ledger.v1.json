@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1246,
-    "successful_visual_analyses": 1234,
-    "missing_visual_analyses": 1045,
+    "raw_analysis_result_rows": 1248,
+    "successful_visual_analyses": 1236,
+    "missing_visual_analyses": 1043,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1057,
+    "unresolved_count": 1055,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -46756,9 +46756,36 @@
       "asset_path": "page-0095.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A step further section explaining mass and weight measurements.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You can repeat Activities 5.10 to 5.12 for the mass scale shown on the left side on the spring balance (Fig. 5.13) to measure the mass of an object.",
+          "The mass of an object can be measured indirectly by measuring its weight (using a spring balance) or by comparing its weight with the weight of an object of a known mass (using a beam balance). Since the weight of an object remains almost the same everywhere on the Earth, so for all practical purpos",
+          "As we have learnt earlier (in the chapter 'Materials Around Us' in Curiosity, Grade 6), mass is the amount of matter in an object and is measured in grams (g) or kilograms (kg). Its value remains the same at every place. Weight, on the other hand, is the gravitational force with which the Earth (or ",
+          "The following table illustrates that although the mass of an object remains the same, its weight is different on the Earth, the Moon, and other planets.",
+          "In everyday life, particularly for the goods we commonly use, we are more interested in the amount of matter in an object (its mass), rather than the force applied by the Earth upon it (its weight). However, though while the units of mass are used, instead of the term mass, the term weight is typica"
+        ],
+        "concepts": [
+          "mass",
+          "weight",
+          "gravitational force",
+          "gravitational acceleration",
+          "spring balance",
+          "beam balance",
+          "curiosity",
+          "grade 6",
+          "materials around us"
+        ],
+        "context_relation": "exploring forces",
+        "limitations": [
+          "the image does not provide specific details about the spring balance or beam balance used in the activities",
+          "the image does not show the spring balance or beam balance used in the activities",
+          "the image does not show the spring balance or beam balance used in the activities"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -46774,9 +46801,23 @@
       "asset_path": "assets/af8765aaa1b79a9ba81f02f82302af1f985b59a85b1873d2c6f230de04201610.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A bucket filled with water and a plastic bag floating on top.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "floating",
+          "sinking",
+          "buoyancy",
+          "gravitational force"
+        ],
+        "context_relation": "The image illustrates the concept of floating and sinking, explaining why some objects float while others sink in water.",
+        "limitations": [
+          "The image does not provide specific details about the objects or the water's properties."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

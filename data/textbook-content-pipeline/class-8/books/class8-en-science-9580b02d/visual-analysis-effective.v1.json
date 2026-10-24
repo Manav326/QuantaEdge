@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "28e24acb98fb7e9acbe39574dc9ab27f2ec9dadc4820648554b0977b0afba093",
+  "raw_analysis_sha256": "525384f1dc76cac377fd1c8cb769a681fad030cf6f30cb3e923250a9afbc1b4a",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40111315207",
-      "checkpointed_at": "2026-10-24T17:43:22Z",
+      "checkpointed_at": "2026-10-24T17:45:57Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40111315207",
-      "checkpointed_at": "2026-10-24T17:43:57Z",
+      "checkpointed_at": "2026-10-24T17:46:31Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57830,7 +57830,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40111315207",
-      "checkpointed_at": "2026-10-24T17:44:38Z",
+      "checkpointed_at": "2026-10-24T17:47:12Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -60946,6 +60946,132 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d65482e79397897103b91e37",
+      "asset_sha256": "65c51f27904e7b83882c88c21a5a5c6ed996f5f0303a999f2ff929b86d9f7883",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 95,
+      "asset_path": "page-0095.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "f3c1b2f43ada4151a60b916f5c82eed799f0ccb2a4a433435669d7a50b7e53bc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A step further section explaining mass and weight measurements.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You can repeat Activities 5.10 to 5.12 for the mass scale shown on the left side on the spring balance (Fig. 5.13) to measure the mass of an object.",
+          "The mass of an object can be measured indirectly by measuring its weight (using a spring balance) or by comparing its weight with the weight of an object of a known mass (using a beam balance). Since the weight of an object remains almost the same everywhere on the Earth, so for all practical purpos",
+          "As we have learnt earlier (in the chapter 'Materials Around Us' in Curiosity, Grade 6), mass is the amount of matter in an object and is measured in grams (g) or kilograms (kg). Its value remains the same at every place. Weight, on the other hand, is the gravitational force with which the Earth (or ",
+          "The following table illustrates that although the mass of an object remains the same, its weight is different on the Earth, the Moon, and other planets.",
+          "In everyday life, particularly for the goods we commonly use, we are more interested in the amount of matter in an object (its mass), rather than the force applied by the Earth upon it (its weight). However, though while the units of mass are used, instead of the term mass, the term weight is typica"
+        ],
+        "concepts": [
+          "mass",
+          "weight",
+          "gravitational force",
+          "gravitational acceleration",
+          "spring balance",
+          "beam balance",
+          "curiosity",
+          "grade 6",
+          "materials around us"
+        ],
+        "context_relation": "exploring forces",
+        "limitations": [
+          "the image does not provide specific details about the spring balance or beam balance used in the activities",
+          "the image does not show the spring balance or beam balance used in the activities",
+          "the image does not show the spring balance or beam balance used in the activities"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40111315207",
+      "checkpointed_at": "2026-10-24T17:50:33Z",
+      "effective_analysis": {
+        "visual_summary": "A step further section explaining mass and weight measurements.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You can repeat Activities 5.10 to 5.12 for the mass scale shown on the left side on the spring balance (Fig. 5.13) to measure the mass of an object.",
+          "The mass of an object can be measured indirectly by measuring its weight (using a spring balance) or by comparing its weight with the weight of an object of a known mass (using a beam balance). Since the weight of an object remains almost the same everywhere on the Earth, so for all practical purpos",
+          "As we have learnt earlier (in the chapter 'Materials Around Us' in Curiosity, Grade 6), mass is the amount of matter in an object and is measured in grams (g) or kilograms (kg). Its value remains the same at every place. Weight, on the other hand, is the gravitational force with which the Earth (or ",
+          "The following table illustrates that although the mass of an object remains the same, its weight is different on the Earth, the Moon, and other planets.",
+          "In everyday life, particularly for the goods we commonly use, we are more interested in the amount of matter in an object (its mass), rather than the force applied by the Earth upon it (its weight). However, though while the units of mass are used, instead of the term mass, the term weight is typica"
+        ],
+        "concepts": [
+          "mass",
+          "weight",
+          "gravitational force",
+          "gravitational acceleration",
+          "spring balance",
+          "beam balance",
+          "curiosity",
+          "grade 6",
+          "materials around us"
+        ],
+        "context_relation": "exploring forces",
+        "limitations": [
+          "the image does not provide specific details about the spring balance or beam balance used in the activities",
+          "the image does not show the spring balance or beam balance used in the activities",
+          "the image does not show the spring balance or beam balance used in the activities"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "23c090ce1477507ee0f2c79b",
+      "asset_sha256": "af8765aaa1b79a9ba81f02f82302af1f985b59a85b1873d2c6f230de04201610",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/af8765aaa1b79a9ba81f02f82302af1f985b59a85b1873d2c6f230de04201610.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9dc2465d4f8850201a45c40a5e6052066a129f8027fe8e478a9f4d0123a52c92",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A bucket filled with water and a plastic bag floating on top.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "floating",
+          "sinking",
+          "buoyancy",
+          "gravitational force"
+        ],
+        "context_relation": "The image illustrates the concept of floating and sinking, explaining why some objects float while others sink in water.",
+        "limitations": [
+          "The image does not provide specific details about the objects or the water's properties."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40111315207",
+      "checkpointed_at": "2026-10-24T17:51:41Z",
+      "effective_analysis": {
+        "visual_summary": "A bucket filled with water and a plastic bag floating on top.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "floating",
+          "sinking",
+          "buoyancy",
+          "gravitational force"
+        ],
+        "context_relation": "The image illustrates the concept of floating and sinking, explaining why some objects float while others sink in water.",
+        "limitations": [
+          "The image does not provide specific details about the objects or the water's properties."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
