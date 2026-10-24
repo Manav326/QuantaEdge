@@ -100,7 +100,7 @@ public class AdminInstitutionOperationsController {
       @RequestParam(defaultValue="1") int page,
       @RequestParam(defaultValue="20") int pageSize,
       @RequestParam(defaultValue="") String query) {
-    AuthContext actor=requireEducationStaff(supplied,tenant,"CONTENT_VIEW");
+    AuthContext actor=requireEducationStaff(supplied,tenant,"INSTITUTION_REPORTS_VIEW");
     int safePage=Math.max(1,Math.min(page,100000));
     int safeSize=Math.max(1,Math.min(pageSize,200));
     int offset=(safePage-1)*safeSize;
@@ -152,7 +152,7 @@ public class AdminInstitutionOperationsController {
       @RequestAttribute(value="authContext",required=false) AuthContext supplied,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
-    AuthContext actor=requireEducationStaff(supplied,tenant,"CONTENT_VIEW");
+    AuthContext actor=requireEducationStaff(supplied,tenant,"INSTITUTION_REPORTS_VIEW");
     List<Map<String,Object>> courses=jdbc.queryForList("""
         select p.id as course_id,p.code,p.display_name,
           e.valid_from as entitlement_start,e.valid_until as entitlement_end,
@@ -178,7 +178,7 @@ public class AdminInstitutionOperationsController {
       @RequestAttribute(value="authContext",required=false) AuthContext supplied,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
-    AuthContext actor=requireEducationStaff(supplied,tenant,"CONTENT_VIEW");
+    AuthContext actor=requireEducationStaff(supplied,tenant,"INSTITUTION_REPORTS_VIEW");
     staffAudit.recordAction(actor,"/api/v1/admin/institution-operations/course-releases",
         "Viewed source course releases for institutionId="+tenant.institutionId());
     return releaseWorkflow.listSourceReleases(tenant.institutionId());
@@ -203,7 +203,7 @@ public class AdminInstitutionOperationsController {
       @RequestAttribute(value="authContext",required=false) AuthContext supplied,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
-    AuthContext actor=requireEducationStaff(supplied,tenant,"CONTENT_PUBLISH");
+    AuthContext actor=requireEducationStaff(supplied,tenant,"INSTITUTION_RELEASE_MANAGE");
     Map<String,Object> result=releaseWorkflow.approveRelease(releaseId,tenant.institutionId(),actor.staffId(),null);
     staffAudit.recordAction(actor,"/api/v1/admin/institution-operations/course-releases/"+releaseId+"/approve",
         "Approved source release for sharing after HRMS quality review.");
