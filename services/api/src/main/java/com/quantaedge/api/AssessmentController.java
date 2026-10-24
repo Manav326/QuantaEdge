@@ -287,7 +287,7 @@ public class AssessmentController {
         (select count(*) from course_attempts where status='RELEASED') as released_attempt_count,
         (select count(distinct student_id) from released) as learners_with_released_results,
         (select round(avg(score_percent)::numeric,2) from released) as average_released_score_percent,
-        (select percentile_cont(0.5) within group(order by score_percent) from released) as median_released_score_percent,
+        (select percentile_cont(0.5) within group(order by score_percent::double precision) from released) as median_released_score_percent,
         (select round(avg(greatest(0,extract(epoch from (submitted_at-started_at))/60))::numeric,2)
            from course_attempts where submitted_at is not null and started_at is not null) as average_attempt_minutes,
         (select round(100.0*count(*) filter(where status in ('AWAITING_REVIEW','GRADED','RELEASED'))
@@ -320,9 +320,9 @@ public class AssessmentController {
         count(distinct sa.id) filter(where sa.status='RELEASED') as released_attempt_count,
         count(distinct sa.student_id) filter(where sa.status='RELEASED') as learners_with_released_results,
         round(avg(r.score_percent)::numeric,2) as average_score_percent,
-        percentile_cont(0.5) within group(order by r.score_percent) as median_score_percent,
-        round(avg(greatest(0,extract(epoch from (sa.submitted_at-sa.started_at))/60))
-          filter(where sa.submitted_at is not null and sa.started_at is not null)::numeric,2) as average_attempt_minutes
+        percentile_cont(0.5) within group(order by r.score_percent::double precision) as median_score_percent,
+        round((avg(greatest(0,extract(epoch from (sa.submitted_at-sa.started_at))/60))
+          filter(where sa.submitted_at is not null and sa.started_at is not null))::numeric,2) as average_attempt_minutes
       from assessment a
       left join scoped_attempts sa on sa.assessment_id=a.id
       left join released r on r.id=sa.id
@@ -521,7 +521,7 @@ public class AssessmentController {
       """,courseId,institutionId,assessmentId,assessmentId);
     Map<String,Object> result=new LinkedHashMap<>();
     result.put("courseId",courseId);
-    result.put("assessmentId",assessmentId);
+    if(assessmentId!=null) result.put("assessmentId",assessmentId);
     result.put("summary",summary);
     result.put("assessments",tests);
     result.put("scoreBands",scoreBands);
