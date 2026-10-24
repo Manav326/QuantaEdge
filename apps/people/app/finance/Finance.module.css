@@ -135,3 +135,43 @@
 .page .invoiceThemeFrame .paperWrap { padding: 0; background: transparent; border-radius: 0; }
 .page .invoiceThemeFrame .paper { margin: 0; }
 @media (max-width: 1050px) { .page .invoicePreviewGrid { grid-template-columns: minmax(0, 1fr); } }
+
+
+/* Read-only end-to-end course payment delivery trace. */
+.statusTrace{display:grid;gap:14px;border:1px solid var(--finance-line);border-radius:15px;padding:15px;background:var(--finance-subtle);color:var(--finance-ink)}
+.statusTraceHeader{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.statusTraceHeader h3{margin:0 0 5px;font-size:15px}
+.statusTraceHeader p{margin:0 0 6px;font-size:12px;line-height:1.5;color:var(--finance-muted)}
+.statusTraceHeader small{font-size:10px;color:var(--finance-muted)}
+.traceOverallComplete,.traceOverallBlocked,.traceOverallPending,.traceOverallUnknown{display:inline-flex;align-items:center;white-space:nowrap;border-radius:999px;padding:6px 10px;font-size:10px;font-weight:800;letter-spacing:.04em;border:1px solid var(--finance-line);background:var(--finance-surface)}
+.traceOverallComplete{color:#166534;border-color:#bbf7d0;background:#f0fdf4}
+.traceOverallBlocked{color:#991b1b;border-color:#fecaca;background:#fef2f2}
+.traceOverallPending{color:#92400e;border-color:#fde68a;background:#fffbeb}
+.traceOverallUnknown{color:var(--finance-muted)}
+.traceProviderSummary{display:grid;gap:5px;border:1px solid var(--finance-line);border-radius:11px;padding:11px;background:var(--finance-surface);font-size:12px}
+.traceProviderSummary>span{font-size:11px;color:var(--finance-muted)}
+.traceProviderSummary p{margin:0;font-size:11px;line-height:1.5;color:var(--finance-muted);overflow-wrap:anywhere}
+.traceProviderSummary small{font-size:10px;color:var(--finance-muted)}
+.traceStageList{display:grid;gap:9px}
+.traceStage{display:grid;grid-template-columns:26px minmax(0,1fr);gap:10px;border:1px solid var(--finance-line);border-left-width:4px;border-radius:11px;padding:11px;background:var(--finance-surface);min-width:0}
+.traceStageComplete{border-left-color:#16a34a}
+.traceStageBlocked{border-left-color:#dc2626}
+.traceStagePending{border-left-color:#d97706}
+.traceStageUnknown{border-left-color:#64748b}
+.traceStageNotReached{border-left-color:#cbd5e1}
+.traceStageNumber{display:flex;align-items:center;justify-content:center;width:25px;height:25px;border-radius:50%;background:var(--finance-subtle);border:1px solid var(--finance-line);font-size:11px;font-weight:800;color:var(--finance-ink)}
+.traceStageBody{display:grid;gap:6px;min-width:0}
+.traceStageHeading{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.traceStageHeading>b{font-size:12px;color:var(--finance-ink)}
+.traceStageHeading>span{font-size:9px;font-weight:800;letter-spacing:.04em;padding:4px 7px;border:1px solid var(--finance-line);border-radius:999px;background:var(--finance-subtle);white-space:nowrap}
+.traceBadgeComplete{color:#166534!important;border-color:#bbf7d0!important;background:#f0fdf4!important}
+.traceBadgeBlocked{color:#991b1b!important;border-color:#fecaca!important;background:#fef2f2!important}
+.traceBadgePending{color:#92400e!important;border-color:#fde68a!important;background:#fffbeb!important}
+.traceBadgeUnknown,.traceBadgeNotReached{color:var(--finance-muted)!important}
+.traceStageBody p{margin:0;font-size:11px;line-height:1.55;color:var(--finance-muted);overflow-wrap:anywhere}
+.traceStageBody>small{font-size:10px;color:var(--finance-muted)}
+.traceStageBody ul{margin:0;padding-left:18px;display:grid;gap:3px}
+.traceStageBody li{font-size:10px;line-height:1.5;color:var(--finance-muted);overflow-wrap:anywhere}
+.traceReadOnlyNote{font-size:10px;line-height:1.5;color:var(--finance-muted);margin:0;border-top:1px solid var(--finance-line);padding-top:10px}
+.statusTrace h4{margin:0 0 7px;font-size:12px;color:var(--finance-ink)}
+@media(max-width:640px){.statusTrace{padding:10px}.traceStage{grid-template-columns:24px minmax(0,1fr);gap:8px;padding:9px}.traceStageHeading{align-items:flex-start;flex-direction:column}.traceStageHeading>span{white-space:normal}}
