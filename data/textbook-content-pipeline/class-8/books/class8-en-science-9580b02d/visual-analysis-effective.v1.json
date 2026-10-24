@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "27c148e125fff6ca71e0753c59b1eb7c2e493f238d890770387f46a38b218e75",
+  "raw_analysis_sha256": "46cda7d5d93162c01602c48a64a717c64c5644e5e8bec7226fb2557c14cc07d7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40062008155",
-      "checkpointed_at": "2026-10-24T05:41:18Z",
+      "checkpointed_at": "2026-10-24T05:49:01Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40062008155",
-      "checkpointed_at": "2026-10-24T05:41:58Z",
+      "checkpointed_at": "2026-10-24T05:49:41Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57829,7 +57829,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40062008155",
-      "checkpointed_at": "2026-10-24T05:42:46Z",
+      "checkpointed_at": "2026-10-24T05:50:29Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -58654,7 +58654,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40045176028",
+      "run_id": "40062008155",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -59516,6 +59516,58 @@
         "context_relation": "exploring forces",
         "limitations": [
           "The image does not provide specific details about the electrostatic force or gravitational force."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "108fb47435704a1018d1d88e",
+      "asset_sha256": "ebd2d42839fe001ef4f66ef4c34ae16fd6341ac93421d2dda72dd3d6b92fcad4",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 92,
+      "asset_path": "assets/ebd2d42839fe001ef4f66ef4c34ae16fd6341ac93421d2dda72dd3d6b92fcad4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7e610cba57c888e7994a2493ca585c1648bd962906cbecd75aae8bfa3ef4ff1e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a girl with braided hair wearing a yellow shirt and an orange apron, with her hand on her chin.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "gravitational force",
+          "gravity",
+          "Earth's attraction to objects",
+          "force of gravity"
+        ],
+        "context_relation": "The image is related to the educational content about gravitational force and gravity.",
+        "limitations": [
+          "The image does not provide any numerical data or measurements.",
+          "The image does not show any specific experiment or observation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40062008155",
+      "checkpointed_at": "2026-10-24T05:57:10Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a girl with braided hair wearing a yellow shirt and an orange apron, with her hand on her chin.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "gravitational force",
+          "gravity",
+          "Earth's attraction to objects",
+          "force of gravity"
+        ],
+        "context_relation": "The image is related to the educational content about gravitational force and gravity.",
+        "limitations": [
+          "The image does not provide any numerical data or measurements.",
+          "The image does not show any specific experiment or observation."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
