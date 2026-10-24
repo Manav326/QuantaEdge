@@ -107,7 +107,7 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("Show micro-topic breakdown", web)
         self.assertIn("unanswered_count", web)
         self.assertIn("studentAssessmentTopicMetrics", android)
-        self.assertIn("incorrect questions are collected into one practice set", web)
+        self.assertIn("All incorrectly answered questions are collected here in one practice set.", web)
         self.assertIn("Learn from your mistakes", android)
 
         # Retry endpoints are authenticated, released-result-only, course/institution scoped,
