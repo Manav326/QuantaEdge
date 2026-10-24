@@ -29,6 +29,33 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("institution_course_identity", importer)
         self.assertIn("EXPECTED_QUESTIONS = {\"TRE 1.0\": 120, \"TRE 2.0\": 150, \"TRE 3.0\": 150}", importer)
 
+    def test_release_fingerprint_covers_full_lesson_and_resource_graph(self):
+        migration = (ROOT / "services/api/src/main/resources/db/migration/V182__complete_course_release_content_fingerprint.sql").read_text(encoding="utf-8")
+        for token in (
+            "course_content_fingerprint_v169",
+            "lesson-block-translation",
+            "question-option",
+            "question-translation",
+            "learning-resource",
+            "learning-document",
+            "source-book-page",
+            "assessment-pack-resource",
+            "reviewed release adopts the new fingerprint only when its legacy fingerprint still matches",
+        ):
+            self.assertIn(token, migration)
+
+    def test_hrms_preview_includes_k12_lessons_blocks_questions_translations_and_resources(self):
+        controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseMarketplaceLaunchController.java").read_text(encoding="utf-8")
+        hrms_ui = (ROOT / "apps/people/app/institutions/MarketplaceLaunchStepper.tsx").read_text(encoding="utf-8")
+        self.assertIn('RequestParam(required=false) Long chapterId', controller)
+        self.assertIn("lesson_block_translation", controller)
+        self.assertIn("question_option", controller)
+        self.assertIn("learning_resource_assignment", controller)
+        self.assertIn("Review chapter content", hrms_ui)
+        self.assertIn("Teaching blocks", hrms_ui)
+        self.assertIn("Chapter resources", hrms_ui)
+        self.assertIn("Lesson questions and answer keys", hrms_ui)
+
     def test_hrms_can_preview_exact_assessment_release_before_quality_decision(self):
         controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseMarketplaceLaunchController.java").read_text(encoding="utf-8")
         hrms_ui = (ROOT / "apps/people/app/institutions/MarketplaceLaunchStepper.tsx").read_text(encoding="utf-8")
