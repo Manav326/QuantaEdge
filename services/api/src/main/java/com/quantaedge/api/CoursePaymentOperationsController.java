@@ -443,8 +443,6 @@ public class CoursePaymentOperationsController {
     try { return value==null?0:Long.parseLong(String.valueOf(value)); } catch(Exception ignored) { return 0; }
   }
 
-  private static String text(Object value) { return value==null?"":String.valueOf(value); }
-
   @GetMapping("/{orderId}/events")
   public List<Map<String,Object>> orderEvents(
       @PathVariable long orderId,
