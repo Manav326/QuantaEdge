@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5a35b0921eb7eead8747cbf1c65fa71fb2896821aeb5957f2d63852a679d3325",
+  "raw_analysis_sha256": "590b3c214f36171a7c8f196b63077c2659f3b2c526caf70d166d8ae002e1b767",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40123283396",
-      "checkpointed_at": "2026-10-24T20:20:20Z",
+      "checkpointed_at": "2026-10-24T20:32:58Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40123283396",
-      "checkpointed_at": "2026-10-24T20:21:09Z",
+      "checkpointed_at": "2026-10-24T20:33:44Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57829,7 +57829,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40123283396",
-      "checkpointed_at": "2026-10-24T20:22:07Z",
+      "checkpointed_at": "2026-10-24T20:34:39Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -60954,77 +60954,21 @@
     {
       "asset_id": "d65482e79397897103b91e37",
       "asset_sha256": "65c51f27904e7b83882c88c21a5a5c6ed996f5f0303a999f2ff929b86d9f7883",
+      "page_text_context_sha256": "f3c1b2f43ada4151a60b916f5c82eed799f0ccb2a4a433435669d7a50b7e53bc",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 95,
       "asset_path": "page-0095.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "f3c1b2f43ada4151a60b916f5c82eed799f0ccb2a4a433435669d7a50b7e53bc",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A step further section explaining mass and weight measurements.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "You can repeat Activities 5.10 to 5.12 for the mass scale shown on the left side on the spring balance (Fig. 5.13) to measure the mass of an object.",
-          "The mass of an object can be measured indirectly by measuring its weight (using a spring balance) or by comparing its weight with the weight of an object of a known mass (using a beam balance). Since the weight of an object remains almost the same everywhere on the Earth, so for all practical purpos",
-          "As we have learnt earlier (in the chapter 'Materials Around Us' in Curiosity, Grade 6), mass is the amount of matter in an object and is measured in grams (g) or kilograms (kg). Its value remains the same at every place. Weight, on the other hand, is the gravitational force with which the Earth (or ",
-          "The following table illustrates that although the mass of an object remains the same, its weight is different on the Earth, the Moon, and other planets.",
-          "In everyday life, particularly for the goods we commonly use, we are more interested in the amount of matter in an object (its mass), rather than the force applied by the Earth upon it (its weight). However, though while the units of mass are used, instead of the term mass, the term weight is typica"
-        ],
-        "concepts": [
-          "mass",
-          "weight",
-          "gravitational force",
-          "gravitational acceleration",
-          "spring balance",
-          "beam balance",
-          "curiosity",
-          "grade 6",
-          "materials around us"
-        ],
-        "context_relation": "exploring forces",
-        "limitations": [
-          "the image does not provide specific details about the spring balance or beam balance used in the activities",
-          "the image does not show the spring balance or beam balance used in the activities",
-          "the image does not show the spring balance or beam balance used in the activities"
-        ]
-      },
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40123283396",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40111315207",
-      "checkpointed_at": "2026-10-24T17:50:33Z",
-      "effective_analysis": {
-        "visual_summary": "A step further section explaining mass and weight measurements.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "You can repeat Activities 5.10 to 5.12 for the mass scale shown on the left side on the spring balance (Fig. 5.13) to measure the mass of an object.",
-          "The mass of an object can be measured indirectly by measuring its weight (using a spring balance) or by comparing its weight with the weight of an object of a known mass (using a beam balance). Since the weight of an object remains almost the same everywhere on the Earth, so for all practical purpos",
-          "As we have learnt earlier (in the chapter 'Materials Around Us' in Curiosity, Grade 6), mass is the amount of matter in an object and is measured in grams (g) or kilograms (kg). Its value remains the same at every place. Weight, on the other hand, is the gravitational force with which the Earth (or ",
-          "The following table illustrates that although the mass of an object remains the same, its weight is different on the Earth, the Moon, and other planets.",
-          "In everyday life, particularly for the goods we commonly use, we are more interested in the amount of matter in an object (its mass), rather than the force applied by the Earth upon it (its weight). However, though while the units of mass are used, instead of the term mass, the term weight is typica"
-        ],
-        "concepts": [
-          "mass",
-          "weight",
-          "gravitational force",
-          "gravitational acceleration",
-          "spring balance",
-          "beam balance",
-          "curiosity",
-          "grade 6",
-          "materials around us"
-        ],
-        "context_relation": "exploring forces",
-        "limitations": [
-          "the image does not provide specific details about the spring balance or beam balance used in the activities",
-          "the image does not show the spring balance or beam balance used in the activities",
-          "the image does not show the spring balance or beam balance used in the activities"
-        ]
-      },
-      "checkpoint_fingerprint_status": "MATCHED",
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     },
     {
@@ -61072,6 +61016,60 @@
         "context_relation": "The image illustrates the concept of floating and sinking, explaining why some objects float while others sink in water.",
         "limitations": [
           "The image does not provide specific details about the objects or the water's properties."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b3152003ddcf92d3e7dba58b",
+      "asset_sha256": "82926bdd9c78089199418cf22faf95b11ff22541270aeb4e3c3e3ab7661406ed",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/82926bdd9c78089199418cf22faf95b11ff22541270aeb4e3c3e3ab7661406ed.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9dc2465d4f8850201a45c40a5e6052066a129f8027fe8e478a9f4d0123a52c92",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon of a person climbing a staircase, with one foot on each step.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "climbing",
+          "staircase",
+          "person",
+          "foot",
+          "step"
+        ],
+        "context_relation": "The image does not provide any specific context or educational content.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional information.",
+          "The image is a simple cartoon and does not represent a complex concept or relationship."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40123283396",
+      "checkpointed_at": "2026-10-24T20:41:17Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon of a person climbing a staircase, with one foot on each step.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "climbing",
+          "staircase",
+          "person",
+          "foot",
+          "step"
+        ],
+        "context_relation": "The image does not provide any specific context or educational content.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional information.",
+          "The image is a simple cartoon and does not represent a complex concept or relationship."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
