@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1210,
+    "assets_selected": 1211,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "d55b4af2d39033d603cae25d",
-      "108fb47435704a1018d1d88e"
+      "0caf5a7f8cfab5610c05b7ed",
+      "3cd947ad3e6fd18394ca4922"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1206,
-    "assets_remaining": 1085,
-    "assets_completion_percent": 52.6,
+    "assets_analyzed": 1208,
+    "assets_remaining": 1083,
+    "assets_completion_percent": 52.7,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1205,
+    "assets_skipped_from_checkpoint": 1206,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40062008155",
-      "checkpointed_at": "2026-10-24T05:49:01Z"
+      "checkpointed_at": "2026-10-24T05:58:15Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40062008155",
-      "checkpointed_at": "2026-10-24T05:49:41Z"
+      "checkpointed_at": "2026-10-24T05:58:55Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38429,7 +38429,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40062008155",
-      "checkpointed_at": "2026-10-24T05:50:29Z"
+      "checkpointed_at": "2026-10-24T05:59:43Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -39571,6 +39571,73 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40062008155",
       "checkpointed_at": "2026-10-24T05:57:10Z"
+    },
+    {
+      "asset_id": "0caf5a7f8cfab5610c05b7ed",
+      "asset_sha256": "310bdc998856bf548902ba52716d016027922e9629682be17d16130f0708e8e1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 92,
+      "asset_path": "assets/310bdc998856bf548902ba52716d016027922e9629682be17d16130f0708e8e1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7e610cba57c888e7994a2493ca585c1648bd962906cbecd75aae8bfa3ef4ff1e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a boy wearing a red shirt, with one hand near his chest and the other hand open.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "gravity",
+          "gravitational force",
+          "force of gravity",
+          "gravity"
+        ],
+        "context_relation": "The image is related to the explanation of gravity and gravitational force in the text.",
+        "limitations": [
+          "The image does not provide any numerical data or measurements.",
+          "The image does not show any physical objects or experiments related to gravity."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40062008155",
+      "checkpointed_at": "2026-10-24T06:01:21Z"
+    },
+    {
+      "asset_id": "3cd947ad3e6fd18394ca4922",
+      "asset_sha256": "9670ee1500ebbdf2c9e4290b15beef05f0f45c0ff1a59aa26f677befb6073913",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 92,
+      "asset_path": "assets/9670ee1500ebbdf2c9e4290b15beef05f0f45c0ff1a59aa26f677befb6073913.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7e610cba57c888e7994a2493ca585c1648bd962906cbecd75aae8bfa3ef4ff1e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a red shirt, with both hands open and palms facing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "gravitational force",
+          "gravity",
+          "Earth's attraction to objects",
+          "force of gravity"
+        ],
+        "context_relation": "The image is a visual representation of the concept of gravitational force and gravity, explaining that the Earth attracts objects towards itself.",
+        "limitations": [
+          "The image does not provide specific details about the gravitational force or gravity."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40062008155",
+      "checkpointed_at": "2026-10-24T06:03:01Z"
     }
   ]
 }

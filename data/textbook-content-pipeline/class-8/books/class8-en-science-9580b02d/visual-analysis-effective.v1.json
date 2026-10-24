@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "46cda7d5d93162c01602c48a64a717c64c5644e5e8bec7226fb2557c14cc07d7",
+  "raw_analysis_sha256": "8f034506c5d8a1b77f170129670f90b921158ac6343c925c9830193d21b5e4db",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40062008155",
-      "checkpointed_at": "2026-10-24T05:49:01Z",
+      "checkpointed_at": "2026-10-24T05:58:15Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40062008155",
-      "checkpointed_at": "2026-10-24T05:49:41Z",
+      "checkpointed_at": "2026-10-24T05:58:55Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57829,7 +57829,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40062008155",
-      "checkpointed_at": "2026-10-24T05:50:29Z",
+      "checkpointed_at": "2026-10-24T05:59:43Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -59568,6 +59568,108 @@
         "limitations": [
           "The image does not provide any numerical data or measurements.",
           "The image does not show any specific experiment or observation."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0caf5a7f8cfab5610c05b7ed",
+      "asset_sha256": "310bdc998856bf548902ba52716d016027922e9629682be17d16130f0708e8e1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 92,
+      "asset_path": "assets/310bdc998856bf548902ba52716d016027922e9629682be17d16130f0708e8e1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7e610cba57c888e7994a2493ca585c1648bd962906cbecd75aae8bfa3ef4ff1e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a boy wearing a red shirt, with one hand near his chest and the other hand open.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "gravity",
+          "gravitational force",
+          "force of gravity",
+          "gravity"
+        ],
+        "context_relation": "The image is related to the explanation of gravity and gravitational force in the text.",
+        "limitations": [
+          "The image does not provide any numerical data or measurements.",
+          "The image does not show any physical objects or experiments related to gravity."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40062008155",
+      "checkpointed_at": "2026-10-24T06:01:21Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a boy wearing a red shirt, with one hand near his chest and the other hand open.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "gravity",
+          "gravitational force",
+          "force of gravity",
+          "gravity"
+        ],
+        "context_relation": "The image is related to the explanation of gravity and gravitational force in the text.",
+        "limitations": [
+          "The image does not provide any numerical data or measurements.",
+          "The image does not show any physical objects or experiments related to gravity."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3cd947ad3e6fd18394ca4922",
+      "asset_sha256": "9670ee1500ebbdf2c9e4290b15beef05f0f45c0ff1a59aa26f677befb6073913",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 92,
+      "asset_path": "assets/9670ee1500ebbdf2c9e4290b15beef05f0f45c0ff1a59aa26f677befb6073913.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7e610cba57c888e7994a2493ca585c1648bd962906cbecd75aae8bfa3ef4ff1e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a red shirt, with both hands open and palms facing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "gravitational force",
+          "gravity",
+          "Earth's attraction to objects",
+          "force of gravity"
+        ],
+        "context_relation": "The image is a visual representation of the concept of gravitational force and gravity, explaining that the Earth attracts objects towards itself.",
+        "limitations": [
+          "The image does not provide specific details about the gravitational force or gravity."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40062008155",
+      "checkpointed_at": "2026-10-24T06:03:01Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a red shirt, with both hands open and palms facing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "gravitational force",
+          "gravity",
+          "Earth's attraction to objects",
+          "force of gravity"
+        ],
+        "context_relation": "The image is a visual representation of the concept of gravitational force and gravity, explaining that the Earth attracts objects towards itself.",
+        "limitations": [
+          "The image does not provide specific details about the gravitational force or gravity."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

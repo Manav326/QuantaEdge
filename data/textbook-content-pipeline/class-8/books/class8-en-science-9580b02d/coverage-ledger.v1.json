@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1222,
-    "successful_visual_analyses": 1209,
-    "missing_visual_analyses": 1069,
+    "raw_analysis_result_rows": 1224,
+    "successful_visual_analyses": 1211,
+    "missing_visual_analyses": 1067,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1082,
+    "unresolved_count": 1080,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -45900,9 +45900,24 @@
       "asset_path": "assets/310bdc998856bf548902ba52716d016027922e9629682be17d16130f0708e8e1.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a boy wearing a red shirt, with one hand near his chest and the other hand open.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "gravity",
+          "gravitational force",
+          "force of gravity",
+          "gravity"
+        ],
+        "context_relation": "The image is related to the explanation of gravity and gravitational force in the text.",
+        "limitations": [
+          "The image does not provide any numerical data or measurements.",
+          "The image does not show any physical objects or experiments related to gravity."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45918,9 +45933,23 @@
       "asset_path": "assets/9670ee1500ebbdf2c9e4290b15beef05f0f45c0ff1a59aa26f677befb6073913.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a red shirt, with both hands open and palms facing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "gravitational force",
+          "gravity",
+          "Earth's attraction to objects",
+          "force of gravity"
+        ],
+        "context_relation": "The image is a visual representation of the concept of gravitational force and gravity, explaining that the Earth attracts objects towards itself.",
+        "limitations": [
+          "The image does not provide specific details about the gravitational force or gravity."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
