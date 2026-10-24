@@ -180,14 +180,17 @@ export default function InstitutionOperationsPage() {
     setNotice('');
     try {
       if (action === 'submit') {
-        const result = await request<{ releaseVersion?: number }>(
-          '/api/v1/admin/institution-operations/courses/' + release.course_id + '/release-requests',
-          { method: 'POST' },
-        );
+        const submitPath = isInstitutionPrincipal
+          ? '/api/v1/institution/courses/' + release.course_id + '/release-requests'
+          : '/api/v1/admin/institution-operations/courses/' + release.course_id + '/release-requests';
+        const result = await request<{ releaseVersion?: number }>(submitPath, { method: 'POST' });
         setNotice(t('admin.institutionOperations.submitted') + ' ' + t('admin.institutionOperations.existingAccess') +
           (result.releaseVersion ? ' · Release v' + result.releaseVersion : ''));
       } else {
-        await request('/api/v1/admin/institution-operations/course-releases/' + release.release_id + '/approve', { method: 'POST' });
+        const approvePath = isInstitutionPrincipal
+          ? '/api/v1/institution/course-releases/' + release.release_id + '/approve'
+          : '/api/v1/admin/institution-operations/course-releases/' + release.release_id + '/approve';
+        await request(approvePath, { method: 'POST' });
         setNotice(t('admin.institutionOperations.approved') + ' ' + t('admin.institutionOperations.existingAccess'));
       }
       await loadOverviewAndCourses();
