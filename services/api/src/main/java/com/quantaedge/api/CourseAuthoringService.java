@@ -238,10 +238,12 @@ public class CourseAuthoringService {
     String digest=sha256(canonicalJson(body));
     int reserved=jdbc.update("""
       insert into institution_course_package_import(
-        source_institution_id,package_id,package_version,package_sha256,state,imported_by_staff_id,editorial_metadata
-      ) values(?,?,?,?,'IMPORTING',?,?::jsonb)
+        source_institution_id,package_id,package_version,package_sha256,state,imported_by_staff_id,
+        package_snapshot,editorial_metadata
+      ) values(?,?,?,?,'IMPORTING',?,?::jsonb,?::jsonb)
       on conflict(source_institution_id,package_id,package_version) do nothing
-      """,institutionId,packageId,packageVersion,digest,actorStaffId,json(editorialMetadataForImport(body.get("editorial"))));
+      """,institutionId,packageId,packageVersion,digest,actorStaffId,json(body),
+        json(editorialMetadataForImport(body.get("editorial"))));
     if(reserved==0) {
       List<Map<String,Object>> prior=jdbc.queryForList("""
         select package_sha256,state,course_id,release_id,import_summary

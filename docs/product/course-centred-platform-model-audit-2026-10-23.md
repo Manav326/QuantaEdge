@@ -87,6 +87,7 @@ The following paths are explicitly **obsolete and must not be reactivated**. The
 - Legacy Education Admin global Marketplace offer editor and its old `/api/v1/marketplace/admin/courses` API.
 - Institution-side offer configuration, submission, approval and publishing endpoints under `/api/v1/institution/course-assignments/*/offers` and `/api/v1/institution/course-offers/*`.
 - Legacy institution selector / client-controlled tenant switching; the authoritative institution is the server-resolved HRMS staff binding.
+- The V179 `course_package_import` ledger is obsolete for new writes and retained for compatibility; the active importer uses `institution_course_package_import`. Do not dual-write or delete the legacy ledger in this PR.
 - Any former global-admin permission bypass. Tests must use explicit workspace-scoped grants rather than weakening authorization.
 
 No historical offers, audit events, purchases, release records or course data should be deleted as part of this marking step.
