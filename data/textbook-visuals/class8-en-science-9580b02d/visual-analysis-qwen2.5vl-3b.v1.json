@@ -14,14 +14,14 @@
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "72af91ad02c11a8084fd26ac",
-      "e03a02c3fc37627f873ab044"
+      "034c31ca3fc7f277ac925cbd",
+      "322ca09fc21ef05281c20787"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1228,
-    "assets_remaining": 1063,
+    "assets_analyzed": 1229,
+    "assets_remaining": 1062,
     "assets_completion_percent": 53.6,
-    "assets_failed": 13,
+    "assets_failed": 12,
     "assets_skipped_from_checkpoint": 1228,
     "batch_limit": 5,
     "publication_allowed": false
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40111315207",
-      "checkpointed_at": "2026-10-24T17:23:53Z"
+      "checkpointed_at": "2026-10-24T17:32:29Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40111315207",
-      "checkpointed_at": "2026-10-24T17:24:28Z"
+      "checkpointed_at": "2026-10-24T17:33:03Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38429,7 +38429,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40111315207",
-      "checkpointed_at": "2026-10-24T17:25:10Z"
+      "checkpointed_at": "2026-10-24T17:33:43Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -40210,7 +40210,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40097576981",
+      "run_id": "40111315207",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -40219,19 +40219,59 @@
     {
       "asset_id": "322ca09fc21ef05281c20787",
       "asset_sha256": "92acb4788586e142347388a7d7a5ba5949cd4164749dc4bfd61774b9bde10f8c",
-      "page_text_context_sha256": "d2ddb4e2fb613ecddff4d9859c094dbca07a58b1d9c369f079bacb60b7286297",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 94,
       "asset_path": "page-0094.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "d2ddb4e2fb613ecddff4d9859c094dbca07a58b1d9c369f079bacb60b7286297",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40097576981",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for calculating the smallest weight measurable by a spring balance.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Let us now try to find the smallest value of weight that\n can be measured by the spring balance.",
+          "Activity 5.11: Let us calculate",
+          "Look at the spring balance shown in Fig. 5.13 and note\n down the following:",
+          "How much is the weight difference indicated\n between the two bigger marks?",
+          "The weight difference indicated between 0 and 01 N\n or between 01 N and 02 N is 1 N.",
+          "How many divisions (shown by smaller marks) are\n there between these two bigger marks?",
+          "There are 5 divisions between these marks.",
+          "How much weight does one small division indicate?",
+          "One small division can read 1 N / 5 = 0.2 N.",
+          "So, the smallest value that the spring balance can read is 0.2 N.",
+          "Now using this method, calculate the smallest value of weight\n that can be measured with the spring balance given to you. Your\n school laboratory may have spring balances for which the range\n and the value of the smallest division may be different. It is,\n therefore, always necessary to look careful",
+          "Let us now learn how to measure weight using a spring balance.",
+          "Activity 5.12: Let us measure",
+          "Take a spring balance and a few objects. Keep in mind that\n the objects should not be heavier than the maximum value of\n weight the spring balance can measure, otherwise it may get\n damaged.",
+          "Suspend the objects one by one from the hook (Fig. 5.14). Read\n the scale for weight carefully and record your observations\n in the Table 5.2.",
+          "Table 5.2: Measuring weight using a spring\n balance",
+          "S.No. | Object | Weight (N)",
+          "1. | Pencil Box |",
+          "2. | Partially filled water bottle |"
+        ],
+        "concepts": [
+          "spring balance",
+          "weight measurement",
+          "division",
+          "scale",
+          "object weight",
+          "spring balance range"
+        ],
+        "context_relation": "The image provides instructions for calculating the smallest weight measurable by a spring balance and for measuring the weight of objects using a spring balance.",
+        "limitations": [
+          "The image does not provide specific details about the spring balance or the objects being measured.",
+          "The image does not show the actual measurement process or the scale readings.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40111315207",
+      "checkpointed_at": "2026-10-24T17:42:21Z"
     },
     {
       "asset_id": "339a386a42e66acc0b9a11c3",
