@@ -31,8 +31,13 @@ function inboxEndpoint(workspace: Workspace) {
 }
 function staffNotificationApiFetch(workspace: Workspace, input: string, init: RequestInit = {}) {
   const headers = new Headers(init.headers);
-  if (workspace === 'hrms') headers.set('X-QE-Workspace', 'HRMS');
-  else headers.set('X-QE-Institution-Code', 'QUANTA-EDGE');
+  if (workspace === 'hrms') {
+    headers.set('X-QE-Workspace', 'HRMS');
+  } else {
+    // Education Admin's institution is derived server-side from the HRMS staff binding.
+    // Never pin all institutional inboxes to the legacy QUANTA-EDGE code.
+    headers.delete('X-QE-Institution-Code');
+  }
   return apiFetch(input, { ...init, headers });
 }
 
