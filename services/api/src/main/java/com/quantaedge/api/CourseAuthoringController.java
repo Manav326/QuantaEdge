@@ -55,7 +55,8 @@ public class CourseAuthoringController {
       boolean assessmentPackageImportSupported="ASSESSMENT".equals(code);
       type.put("nestedPackageImportSupported",nestedPackageImportSupported);
       type.put("assessmentPackageImportSupported",assessmentPackageImportSupported);
-      type.put("nestedPackageImportStatus",nestedPackageImportSupported||assessmentPackageImportSupported?"AVAILABLE":"NOT_IMPLEMENTED");
+      type.put("nestedPackageImportStatus",nestedPackageImportSupported?"AVAILABLE":"NOT_IMPLEMENTED");
+      type.put("assessmentPackageImportStatus",assessmentPackageImportSupported?"AVAILABLE":"NOT_IMPLEMENTED");
       type.put("nestedPackageImportNote",nestedPackageImportSupported
           ?"Supports subjects, chapters, lessons and teaching blocks in a draft-only package import."
           :assessmentPackageImportSupported
