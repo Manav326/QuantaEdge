@@ -455,7 +455,7 @@ def ensure_schema(cursor: Any) -> None:
             "Flyway V199 is required: TRE source-package readiness must validate test packs, not school chapters."
         )
     if not re.search(
-        r"'TRE 3\\.0'::varchar,\\s*'tre4-bpsc-tre-3-0-computer-science'::varchar,\\s*150",
+        r"'TRE 3\.0'::varchar,\s*'tre4-bpsc-tre-3-0-computer-science'::varchar,\s*150",
         tre4_readiness_definition,
     ):
         raise ImportErrorSafe(
