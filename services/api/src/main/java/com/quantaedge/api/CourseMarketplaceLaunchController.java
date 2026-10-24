@@ -86,16 +86,123 @@ public class CourseMarketplaceLaunchController {
           and s.active=true and (s.program_id=ps.program_id or s.program_id is null)
         where ps.program_id=? order by ps.sort_order,s.sort_order,s.id
         """,courseId);
+    int lessonCount=0,lessonBlockCount=0,lessonQuestionCount=0,courseResourceCount=0;
     for(Map<String,Object> subject:subjects) {
       long subjectId=number(subject.get("id"));
       List<Map<String,Object>> chapters=jdbc.queryForList("""
-          select id,code,display_name,description,sort_order,content_status
+          select id,code,display_name,description,sort_order,content_status,
+                 curriculum_source,curriculum_source_url,curriculum_source_edition,
+                 curriculum_source_pages,curriculum_source_verified
           from curriculum_chapter where subject_id=? and active=true
           order by sort_order,id
           """,subjectId);
+      for(Map<String,Object> chapter:chapters) {
+        long chapterId=number(chapter.get("id"));
+        List<Map<String,Object>> lessons=jdbc.queryForList("""
+            select l.id,l.code,l.title,l.summary,l.estimated_minutes,l.status,l.sort_order,l.active,
+                   l.objective_id,o.code as objective_code,o.title as objective_title,
+                   o.description as objective_description
+            from lesson l
+            left join learning_objective o on o.id=l.objective_id
+            where l.chapter_id=? order by l.sort_order,l.id
+            """,chapterId);
+        List<Map<String,Object>> resources=jdbc.queryForList("""
+            select a.id as assignment_id,a.target_kind,a.sort_order,a.status as assignment_status,
+                   r.id as resource_id,r.resource_type,r.title,r.description,r.language,r.source_kind,
+                   r.external_url,r.source_reference,r.download_allowed,r.status as resource_status,
+                   r.version_no,r.content_asset_id,r.sha256,r.file_size_bytes,r.media_type,r.duration_seconds
+            from learning_resource_assignment a
+            join learning_resource r on r.id=a.resource_id
+            where a.chapter_id=? order by a.sort_order,a.id
+            """,chapterId);
+        courseResourceCount+=resources.size();
+        chapter.put("resources",resources);
+        for(Map<String,Object> lesson:lessons) {
+          long lessonId=number(lesson.get("id"));
+          lesson.put("translations",jdbc.queryForList("""
+              select language,title,summary,source_language,source_hash,version_no,
+                     translation_status,translation_method,quality_notes
+              from lesson_translation where lesson_id=?
+              order by language,version_no desc,id desc
+              """,lessonId));
+          List<Map<String,Object>> blocks=jdbc.queryForList("""
+              select b.id,b.sequence_no,b.block_type,b.content::text as content_json,b.asset_id,
+                     a.url as asset_url,a.title as asset_title,a.alt_text as asset_alt,
+                     a.asset_type,a.status as asset_status
+              from lesson_block b
+              left join content_asset a on a.id=b.asset_id
+              where b.lesson_id=? order by b.sequence_no,b.id
+              """,lessonId);
+          for(Map<String,Object> block:blocks) {
+            Object parsedContent;
+            try {
+              parsedContent=mapper.readValue(String.valueOf(block.remove("content_json")),Object.class);
+            } catch(JsonProcessingException ex) {
+              throw new IllegalStateException("A submitted lesson block could not be decoded for review.",ex);
+            }
+            block.put("content",parsedContent);
+            List<Map<String,Object>> translations=jdbc.queryForList("""
+                select language,content::text as content_json,source_language,source_hash,version_no,
+                       translation_status,translation_method,quality_notes
+                from lesson_block_translation where block_id=?
+                order by language,version_no desc,id desc
+                """,number(block.get("id")));
+            for(Map<String,Object> translation:translations) {
+              try {
+                translation.put("content",mapper.readValue(String.valueOf(translation.remove("content_json")),Object.class));
+              } catch(JsonProcessingException ex) {
+                throw new IllegalStateException("A submitted lesson-block translation could not be decoded for review.",ex);
+              }
+            }
+            block.put("translations",translations);
+          }
+          lessonBlockCount+=blocks.size();
+          lesson.put("blocks",blocks);
+
+          List<Map<String,Object>> questions=jdbc.queryForList("""
+              select q.id,q.question_type,q.prompt,q.explanation,q.difficulty,q.sort_order,q.active
+              from question q where q.lesson_id=? order by q.sort_order,q.id
+              """,lessonId);
+          for(Map<String,Object> question:questions) {
+            long questionId=number(question.get("id"));
+            question.put("options",jdbc.queryForList("""
+                select option_key,label,is_correct,sort_order
+                from question_option where question_id=? order by sort_order,id
+                """,questionId));
+            List<Map<String,Object>> translations=jdbc.queryForList("""
+                select language,prompt,explanation,options::text as options_json,topic,subtopic,skill,
+                       tags::text as tags_json,source_language,source_hash,version_no,
+                       translation_status,translation_method,quality_notes
+                from question_translation where question_id=?
+                order by language,version_no desc,id desc
+                """,questionId);
+            for(Map<String,Object> translation:translations) {
+              for(String jsonField:List.of("options_json","tags_json")) {
+                Object raw=translation.remove(jsonField);
+                if(raw==null) continue;
+                try {
+                  translation.put(jsonField.equals("options_json")?"options":"tags",
+                      mapper.readValue(String.valueOf(raw),Object.class));
+                } catch(JsonProcessingException ex) {
+                  throw new IllegalStateException("A submitted question translation could not be decoded for review.",ex);
+                }
+              }
+            }
+            question.put("translations",translations);
+          }
+          lessonQuestionCount+=questions.size();
+          lesson.put("questions",questions);
+        }
+        lessonCount+=lessons.size();
+        chapter.put("lessons",lessons);
+      }
       subject.put("chapters",chapters);
     }
     result.put("subjects",subjects);
+    result.put("lessonCount",lessonCount);
+    result.put("lessonBlockCount",lessonBlockCount);
+    result.put("lessonQuestionCount",lessonQuestionCount);
+    result.put("courseResourceCount",courseResourceCount);
 
     List<Map<String,Object>> assessments=jdbc.queryForList("""
         select a.id as assessment_id,a.title,a.description,a.assessment_type,a.portable_assessment_type,
