@@ -1,598 +1,65 @@
 'use client';
 
-import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import PasswordField from '../components/PasswordField';
-import NotificationStudio from '../components/NotificationStudio';
-import NotificationInboxClient, { NotificationBell } from '../components/NotificationInboxClient';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { UiText } from '../i18n/useUiTranslation';
 
-type Brand = {
-  institutionCode?: string;
-  displayName?: string;
-  logoAssetKey?: string | null;
-  appIconAssetKey?: string | null;
-  logoUrl?: string | null;
-  appIconUrl?: string | null;
-  brandingVersion?: number;
-  themeTokens?: Record<string, string>;
-};
-type Principal = {
-  authenticated?: boolean;
-  workspace?: string;
-  institutionId?: number;
-  institutionCode?: string;
-  institutionName?: string;
-  adminUsername?: string;
-  adminDisplayName?: string;
-  mustChangePassword?: boolean;
-  joinCode?: string | null;
-  branding?: Brand;
-};
-type Overview = {
-  active_learners?: number;
-  all_memberships?: number;
-  authorized_courses?: number;
-  lessons_with_activity?: number;
-  completed_lessons?: number;
-  current_period_billable_events?: number;
-  current_period_amount_paise?: number;
-};
-type Learner = {
-  learner_reference?: string;
-  display_name?: string;
-  class_code?: string;
-  board?: string;
-  language?: string;
-  city?: string;
-  state?: string;
-  school_name?: string;
-  membership_status?: string;
-  joined_at?: string;
-  completed_lessons?: number;
-  lessons_with_activity?: number;
-  average_lesson_progress_percent?: number;
-};
-type Course = {
-  code?: string;
-  display_name?: string;
-  entitlement_start?: string;
-  entitlement_end?: string | null;
-  published_lessons?: number;
-  institution_learners?: number;
-};
-type SourceRelease = {
-  release_id: number;
-  course_id: number;
-  course_code?: string;
-  display_name?: string;
-  release_version: number;
-  release_state: string;
-  quality_review_notes?: string | null;
-  origin_rejection_reason?: string | null;
-};
-
-async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
-  const headers = new Headers(init.headers);
-  headers.set('X-QE-Workspace', 'INSTITUTION');
-  headers.set('Accept', 'application/json');
-  if (init.body && !headers.has('Content-Type')) headers.set('Content-Type', 'application/json');
-  const response = await fetch(path, { ...init, headers, credentials: 'same-origin', cache: 'no-store' });
-  const raw = await response.text();
-  let data: any = {};
-  try { data = raw ? JSON.parse(raw) : {}; } catch { data = { message: raw }; }
-  if (!response.ok) {
-    const message = data.message || data.detail || data.error || `Request failed (${response.status})`;
-    throw new Error(String(message));
+function resolveAdminTarget(): string {
+  const configured = process.env.NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN?.trim();
+  let origin = '';
+  if (configured) {
+    try {
+      const parsed = new URL(configured);
+      const local = parsed.hostname === 'localhost' || parsed.hostname === '127.0.0.1';
+      if (parsed.protocol === 'https:' || (local && parsed.protocol === 'http:')) origin = parsed.origin;
+    } catch { /* Invalid configuration must never send an administrator to an arbitrary target. */ }
   }
-  return data as T;
+  if (!origin && typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname)) {
+    origin = 'http://localhost:3001';
+  }
+  if (!origin) return '';
+
+  const params = new URLSearchParams();
+  const current = new URLSearchParams(window.location.search);
+  if (current.get('view') === 'courses') {
+    params.set('view', 'courses');
+    const courseId = current.get('courseId') || '';
+    if (/^[0-9]+$/.test(courseId)) params.set('courseId', courseId);
+  }
+  const suffix = params.toString();
+  return new URL('/institution-operations' + (suffix ? '?' + suffix : ''), origin).toString();
 }
 
-function numberText(value: unknown) {
-  const n = Number(value ?? 0);
-  return Number.isFinite(n) ? n.toLocaleString('en-IN') : '0';
-}
-
-function dateText(value?: string) {
-  if (!value) return '—';
-  const parsed = new Date(value);
-  return Number.isNaN(parsed.getTime()) ? value : parsed.toLocaleDateString('en-IN');
-}
-
-export default function InstitutionPortalPage() {
-  const [tenantCode, setTenantCode] = useState('');
-  const [brand, setBrand] = useState<Brand | null>(null);
-  const [brandLoading, setBrandLoading] = useState(false);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [principal, setPrincipal] = useState<Principal | null>(null);
-  const [overview, setOverview] = useState<Overview | null>(null);
-  const [learners, setLearners] = useState<Learner[]>([]);
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [sourceReleases, setSourceReleases] = useState<SourceRelease[]>([]);
-  const [sourceReleaseError, setSourceReleaseError] = useState('');
-  const [releaseBusyId, setReleaseBusyId] = useState<number | null>(null);
-  const [search, setSearch] = useState('');
-  const [activeView, setActiveView] = useState<'overview' | 'learners' | 'courses' | 'notifications' | 'notificationInbox'>('overview');
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [nextPassword, setNextPassword] = useState('');
-  const [error, setError] = useState('');
-  const [notice, setNotice] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [loginMode, setLoginMode] = useState(true);
+/**
+ * Compatibility route only. Institution management now lives in apps/admin.
+ * Keep this page as a safe redirect while old bookmarks and deployed links age out;
+ * the separate institution-admin UI and its third-workspace navigation are retired.
+ */
+export default function InstitutionRouteRedirect() {
+  const [target, setTarget] = useState('');
 
   useEffect(() => {
-    const syncNotificationRoute = () => {
-      const params = new URLSearchParams(window.location.search);
-      const queryTarget = params.get('notifications');
-      const requestedView = params.get('view');
-      const hashTarget = window.location.hash === '#notifications-inbox' ? 'inbox'
-        : window.location.hash === '#notifications-studio' ? 'studio' : null;
-      const target = queryTarget || hashTarget;
-      if (requestedView === 'courses') setActiveView('courses');
-      if (target === 'inbox') setActiveView('notificationInbox');
-      else if (target === 'studio') setActiveView('notifications');
-    };
-    syncNotificationRoute();
-    window.addEventListener('hashchange', syncNotificationRoute);
-    window.addEventListener('popstate', syncNotificationRoute);
-    return () => {
-      window.removeEventListener('hashchange', syncNotificationRoute);
-      window.removeEventListener('popstate', syncNotificationRoute);
-    };
+    const adminTarget = resolveAdminTarget();
+    setTarget(adminTarget);
+    if (adminTarget) window.location.replace(adminTarget);
   }, []);
-
-  const applyBrand = useCallback((value: Brand | null) => {
-    setBrand(value);
-    // Always reset all tenant tokens before applying a new tenant or signing out.
-    // Otherwise an institution with no custom token could inherit the previous tenant's theme.
-    const root = document.documentElement;
-    const mapping: Record<string, { css: string; fallback: string }> = {
-      primary: { css: '--institution-primary', fallback: '#F97316' },
-      accent: { css: '--institution-accent', fallback: '#C2410C' },
-      background: { css: '--institution-background', fallback: '#F7F8FC' },
-      surface: { css: '--institution-surface', fallback: '#FFFFFF' },
-      text: { css: '--institution-text', fallback: '#152038' },
-    };
-    Object.entries(mapping).forEach(([key, token]) => {
-      const color = value?.themeTokens?.[key];
-      root.style.setProperty(token.css,
-        typeof color === 'string' && /^#[0-9a-f]{6}$/i.test(color) ? color : token.fallback);
-    });
-  }, []);
-
-  const loadData = useCallback(async (current: Principal) => {
-    if (!current.authenticated) return;
-    setLoading(true);
-    setError('');
-    try {
-      const [me, summary, roster, authorizedCourses, releaseResult] = await Promise.all([
-        api<Principal>('/api/v1/institution/auth/me'),
-        api<Overview>('/api/v1/institution/reports/overview'),
-        api<{ learners?: Learner[] }>('/api/v1/institution/reports/roster?page=1&pageSize=200'),
-        api<Course[]>('/api/v1/institution/reports/courses'),
-        api<SourceRelease[]>('/api/v1/institution/course-releases')
-          .then(rows => ({ rows: Array.isArray(rows) ? rows : [], error: '' }))
-          .catch(e => ({ rows: [] as SourceRelease[], error: e instanceof Error ? e.message : 'Course release status could not be loaded.' })),
-      ]);
-      setPrincipal(me);
-      setOverview(summary);
-      setLearners(Array.isArray(roster.learners) ? roster.learners : []);
-      setCourses(Array.isArray(authorizedCourses) ? authorizedCourses : []);
-      setSourceReleases(releaseResult.rows);
-      setSourceReleaseError(releaseResult.error);
-      if (me.branding) applyBrand({
-        ...me.branding,
-        institutionCode: me.institutionCode,
-        displayName: me.institutionName || me.branding.displayName,
-      });
-      if (!current.mustChangePassword && !me.mustChangePassword) setNotice('');
-    } catch (e) {
-      const message = e instanceof Error ? e.message : 'Institution data could not be loaded.';
-      setError(message);
-      if (/authentication|required|session expired/i.test(message)) setPrincipal(null);
-    } finally {
-      setLoading(false);
-    }
-  }, [applyBrand]);
-
-  useEffect(() => {
-    let alive = true;
-    api<Principal>('/api/v1/institution/auth/me')
-      .then(me => {
-        if (!alive || !me.authenticated) return;
-        setPrincipal(me);
-        if (me.institutionCode) setTenantCode(me.institutionCode);
-        if (me.branding) applyBrand({ ...me.branding, institutionCode: me.institutionCode, displayName: me.institutionName || me.branding.displayName });
-        void loadData(me);
-      })
-      .catch(() => undefined);
-    return () => { alive = false; };
-  }, [applyBrand, loadData]);
-
-  const filteredLearners = useMemo(() => {
-    const needle = search.trim().toLocaleLowerCase();
-    if (!needle) return learners;
-    return learners.filter(item => [
-      item.display_name, item.class_code, item.city, item.state, item.school_name, item.learner_reference,
-    ].some(value => String(value ?? '').toLocaleLowerCase().includes(needle)));
-  }, [learners, search]);
-
-  async function resolveBrand(code = tenantCode) {
-    const clean = code.trim().toUpperCase();
-    if (!clean) {
-      setError('Enter the institution code shared by your school or college.');
-      return;
-    }
-    setBrandLoading(true);
-    setError('');
-    setNotice('');
-    try {
-      const result = await api<Brand>(`/api/v1/institution/public/branding/${encodeURIComponent(clean)}`);
-      setTenantCode(clean);
-      applyBrand(result);
-      setNotice('Institution identity verified. Sign in with the credentials supplied by your institution.');
-    } catch (e) {
-      applyBrand(null);
-      setError(e instanceof Error ? e.message : 'Institution branding could not be loaded.');
-    } finally {
-      setBrandLoading(false);
-    }
-  }
-
-  async function login(event: FormEvent) {
-    event.preventDefault();
-    setLoading(true);
-    setError('');
-    setNotice('');
-    try {
-      const result = await api<Principal>('/api/v1/institution/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ username, password }),
-      });
-      setPrincipal(result);
-      setPassword('');
-      if (result.institutionCode) setTenantCode(result.institutionCode);
-      if (result.institutionName) applyBrand({
-        ...(brand || {}),
-        institutionCode: result.institutionCode,
-        displayName: result.institutionName,
-      });
-      setNotice(result.mustChangePassword ? 'Set a new password before opening institution reports.' : 'Signed in.');
-      if (!result.mustChangePassword) await loadData(result);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Sign-in failed.');
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function changePassword(event: FormEvent) {
-    event.preventDefault();
-    setLoading(true);
-    setError('');
-    setNotice('');
-    try {
-      await api('/api/v1/institution/auth/change-password', {
-        method: 'POST',
-        body: JSON.stringify({ currentPassword, newPassword: nextPassword }),
-      });
-      setPrincipal(null);
-      setCurrentPassword('');
-      setNextPassword('');
-      setPassword('');
-      setNotice('Password changed. Sign in again with your new password.');
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Password could not be changed.');
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function submitSourceRelease(release: SourceRelease) {
-    if (!principal) return;
-    setReleaseBusyId(release.release_id);
-    setError('');
-    setNotice('');
-    try {
-      const result = await api<{ releaseVersion?: number }>(
-        '/api/v1/institution/courses/' + release.course_id + '/release-requests',
-        { method: 'POST' },
-      );
-      await loadData(principal);
-      setNotice('Release v' + (result.releaseVersion ?? release.release_version) +
-        ' submitted for HRMS quality review. Existing learner access is unchanged.');
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'The course release could not be submitted.');
-    } finally {
-      setReleaseBusyId(null);
-    }
-  }
-
-  async function approveSourceRelease(release: SourceRelease) {
-    if (!principal) return;
-    setReleaseBusyId(release.release_id);
-    setError('');
-    setNotice('');
-    try {
-      await api('/api/v1/institution/course-releases/' + release.release_id + '/approve', { method: 'POST' });
-      await loadData(principal);
-      setNotice('Release approved for sharing. HRMS can assign it where authorised; existing learner access is unchanged.');
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'The course release could not be approved for sharing.');
-    } finally {
-      setReleaseBusyId(null);
-    }
-  }
-
-  async function logout() {
-    try { await api('/api/v1/institution/auth/logout', { method: 'POST' }); } catch {}
-    setPrincipal(null);
-    applyBrand(null);
-    setOverview(null);
-    setLearners([]);
-    setCourses([]);
-    setPassword('');
-    setCurrentPassword('');
-    setNextPassword('');
-    setNotice('You are signed out.');
-  }
-
-  async function copyCode() {
-    if (!principal?.joinCode) return;
-    try {
-      await navigator.clipboard.writeText(principal.joinCode);
-      setNotice('Institution join code copied.');
-    } catch {
-      setNotice(`Share this institution code securely: ${principal.joinCode}`);
-    }
-  }
-
-  async function copyLearnerLink() {
-    const code = principal?.institutionCode?.trim().toUpperCase();
-    const joinCode = principal?.joinCode?.trim();
-    if (!code || !joinCode) return;
-    const link = new URL('/school/' + encodeURIComponent(code) + '/', window.location.origin);
-    link.hash = new URLSearchParams({ join: joinCode }).toString();
-    try {
-      await navigator.clipboard.writeText(link.toString());
-      setNotice('School learning link copied. Share it with your enrolled learners.');
-    } catch {
-      setNotice('Copy this school learning link: ' + link.toString());
-    }
-  }
-
-  // The API returns newest release versions first for each source-owned course.
-  const latestSourceReleases = useMemo(() => {
-    const seen = new Set<number>();
-    return sourceReleases.filter(release => {
-      if (seen.has(release.course_id)) return false;
-      seen.add(release.course_id);
-      return true;
-    });
-  }, [sourceReleases]);
-
-  const heading = principal?.institutionName || brand?.displayName || 'Institution portal';
-  const customPrimary = brand?.themeTokens?.primary;
-  const cssStyle = {
-    ...(customPrimary && /^#[0-9a-f]{6}$/i.test(customPrimary) ? { ['--institution-primary' as any]: customPrimary } : {}),
-  } as React.CSSProperties;
 
   return (
-    <main className="institution-portal" style={cssStyle}>
-      <header className="institution-header">
-        <div className="institution-brand">
-          <div className="institution-mark" aria-hidden="true">
-            {brand?.logoUrl ? <img className="institution-real-logo" src={brand.logoUrl} alt="" /> : heading.trim().slice(0, 1).toUpperCase()}
-          </div>
-          <div>
-            <strong>{heading}</strong>
-            <span>{principal ? 'Institution workspace' : 'School & college learning portal'}</span>
-          </div>
-        </div>
-        {principal ? (
-          <div className="institution-account">
-            <span>{principal.adminDisplayName || principal.adminUsername}</span>
-            <NotificationBell role="institution" />
-            <button type="button" className="institution-quiet-button" onClick={() => void logout()}>Sign out</button>
-          </div>
+    <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', padding: 24, background: 'var(--qe-color-background, #f6f7fa)', color: 'var(--qe-color-text, #172033)' }}>
+      <section style={{ width: 'min(620px, 100%)', border: '1px solid var(--qe-color-border, #d7dee8)', borderRadius: 20, padding: 28, background: 'var(--qe-color-surface, #fff)', boxShadow: '0 18px 55px rgba(20, 32, 56, .08)' }}>
+        <span style={{ fontSize: 12, fontWeight: 800, letterSpacing: '.1em', color: 'var(--qe-color-primary, #c2410c)' }}>QUANTAEDGE · ADMIN</span>
+        <h1 style={{ fontSize: 'clamp(24px, 4vw, 32px)', lineHeight: 1.2, margin: '12px 0' }}><UiText message="admin.institutionOperations.redirectTitle" /></h1>
+        <p style={{ color: 'var(--qe-color-text-muted, #536176)', fontSize: 15, lineHeight: 1.7 }}><UiText message="admin.institutionOperations.redirectDescription" /></p>
+        {target ? (
+          <Link href={target} style={{ display: 'inline-flex', marginTop: 14, padding: '11px 15px', borderRadius: 10, background: 'var(--qe-color-primary, #c2410c)', color: '#fff', fontWeight: 700 }}>
+            <UiText message="admin.institutionOperations.openAdmin" /> ↗
+          </Link>
         ) : (
-          <button type="button" className="institution-quiet-button" onClick={() => { setLoginMode(v => !v); setError(''); }}>
-            {loginMode ? 'Set institution brand' : 'Back to sign in'}
-          </button>
+          <p role="status" style={{ marginTop: 18, padding: 12, borderRadius: 10, background: 'var(--qe-color-background, #f6f7fa)', fontSize: 13, lineHeight: 1.6 }}>
+            <UiText message="admin.institutionOperations.adminOriginMissing" />
+          </p>
         )}
-      </header>
-
-      {error ? <div className="institution-alert is-error" role="alert">{error}</div> : null}
-      {notice ? <div className="institution-alert" role="status">{notice}</div> : null}
-
-      {!principal ? (
-        <section className="institution-auth-layout">
-          <div className="institution-intro">
-            <span className="institution-eyebrow">YOUR INSTITUTION · YOUR LEARNERS</span>
-            <h1>One view of your learners’ progress.</h1>
-            <p>Review the learners who joined through your institution, see authorised courses, and follow learning activity. Course content and student access are managed centrally.</p>
-            <div className="institution-feature-grid">
-              <article><strong>Read-only records</strong><span>Roster, class details and learning progress.</span></article>
-              <article><strong>Authorised catalogue</strong><span>Only courses approved for your institution.</span></article>
-              <article><strong>Institution code</strong><span>Share your code so learners can join your institution.</span></article>
-            </div>
-          </div>
-          <div className="institution-auth-card">
-            <div className="institution-auth-toggle">
-              <button type="button" className={loginMode ? 'is-active' : ''} onClick={() => setLoginMode(true)}>Sign in</button>
-              <button type="button" className={!loginMode ? 'is-active' : ''} onClick={() => setLoginMode(false)}>Identify institution</button>
-            </div>
-            {loginMode ? (
-              <form onSubmit={login}>
-                <h2>Institution sign in</h2>
-                <p>Use the administrator username and initial password provided by the platform owner.</p>
-                <label>Institution code (optional)
-                  <input value={tenantCode} onChange={e => setTenantCode(e.target.value.toUpperCase())} maxLength={32} autoComplete="organization" placeholder="e.g. SCHOOL-01" />
-                </label>
-                <label>Username
-                  <input value={username} onChange={e => setUsername(e.target.value)} autoComplete="username" required />
-                </label>
-                <label>Password
-                  <PasswordField value={password} onChange={e => setPassword(e.target.value)} autoComplete="current-password" required />
-                </label>
-                <button className="institution-primary-button" disabled={loading} type="submit">{loading ? 'Signing in…' : 'Sign in securely'}</button>
-                <p className="institution-small-note">Institution administrators cannot create accounts, add staff, or edit/publish course content.</p>
-              </form>
-            ) : (
-              <form onSubmit={event => { event.preventDefault(); void resolveBrand(); }}>
-                <h2>Identify your institution</h2>
-                <p>Enter the official join code to load your school or college identity before sign-in.</p>
-                <label>Institution code
-                  <input value={tenantCode} onChange={e => setTenantCode(e.target.value.toUpperCase())} maxLength={32} autoComplete="organization" required placeholder="Enter the code shared by the platform owner" />
-                </label>
-                <button className="institution-primary-button" disabled={brandLoading} type="submit">{brandLoading ? 'Checking…' : 'Load institution identity'}</button>
-              </form>
-            )}
-          </div>
-        </section>
-      ) : principal.mustChangePassword ? (
-        <section className="institution-auth-card institution-password-card">
-          <span className="institution-eyebrow">FIRST SIGN-IN</span>
-          <h1>Protect your administrator account.</h1>
-          <p>Choose a password at least 12 characters long. Your initial password will stop working after it is changed.</p>
-          <form onSubmit={changePassword}>
-            <label>Current password<PasswordField autoComplete="current-password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} required /></label>
-            <label>New password<PasswordField autoComplete="new-password" minLength={12} value={nextPassword} onChange={e => setNextPassword(e.target.value)} required /></label>
-            <button className="institution-primary-button" disabled={loading} type="submit">Change password</button>
-          </form>
-        </section>
-      ) : (
-        <section className="institution-dashboard">
-          <div className="institution-page-heading">
-            <div><span className="institution-eyebrow">INSTITUTION REPORTS</span><h1>{heading}</h1><p>View-only insight into the learners and courses linked to this institution.</p></div>
-            <div className="institution-enrollment-actions">
-              <button type="button" className="institution-code-button" onClick={() => void copyLearnerLink()} disabled={!principal.joinCode || !principal.institutionCode}>
-                <span>School learning link</span><strong>{principal.institutionCode ? heading : 'Link unavailable'}</strong><small>{principal.joinCode ? 'Copy and share with learners' : 'Ask the platform owner to issue a code'}</small>
-              </button>
-              <button type="button" className="institution-quiet-button" onClick={() => void copyCode()} disabled={!principal.joinCode}>
-                Copy join code
-              </button>
-            </div>
-          </div>
-          <nav className="institution-tabs" aria-label="Institution report sections">
-            {([['overview','Overview'],['learners','Learners'],['courses','Authorised courses'],['notificationInbox','Inbox'],['notifications','Notification studio']] as const).map(([id,label]) =>
-              <button type="button" key={id} className={activeView===id?'is-active':''} onClick={() => {
-                setActiveView(id);
-                const params = new URLSearchParams(window.location.search);
-                params.delete('notifications');
-                if (id === 'courses') params.set('view', 'courses');
-                else params.delete('view');
-                const query = params.toString();
-                const hash = id === 'notificationInbox' ? '#notifications-inbox'
-                  : id === 'notifications' ? '#notifications-studio' : '';
-                window.history.replaceState(null, '', (query ? '/institution?' + query : '/institution') + hash);
-              }}>{label}</button>
-            )}
-            <button type="button" className="institution-refresh" onClick={()=>principal&&void loadData(principal)} disabled={loading}>{loading?'Refreshing…':'Refresh data'}</button>
-          </nav>
-          {activeView === 'overview' ? (
-            <div className="institution-section">
-              <div className="institution-metrics">
-                <article><span>Active learners</span><strong>{numberText(overview?.active_learners)}</strong><small>Active membership in this institution</small></article>
-                <article><span>All memberships</span><strong>{numberText(overview?.all_memberships)}</strong><small>Includes historical records</small></article>
-                <article><span>Authorised courses</span><strong>{numberText(overview?.authorized_courses)}</strong><small>Published courses allowed for this institution</small></article>
-                <article><span>Completed lessons</span><strong>{numberText(overview?.completed_lessons)}</strong><small>Completed learner-lesson records in authorised courses</small></article>
-              </div>
-              <div className="institution-panel institution-summary-panel">
-                <div><h2>Learning activity</h2><p>Counts reflect recorded lesson activity from active learners and institution-authorised published content.</p></div>
-                <div className="institution-summary-row"><span>Lessons with activity</span><strong>{numberText(overview?.lessons_with_activity)}</strong></div>
-                <div className="institution-summary-row"><span>Billable enrollment events this month</span><strong>{numberText(overview?.current_period_billable_events)}</strong></div>
-                <p className="institution-small-note">Billing totals are shown only when a platform billing contract is configured. Enrollment counts in this portal are informational; contractual invoices are controlled by the platform owner.</p>
-              </div>
-            </div>
-          ) : activeView === 'learners' ? (
-            <div className="institution-panel">
-              <div className="institution-table-heading"><div><h2>Learner records</h2><p>Only learners linked to this institution are listed.</p></div>
-                <input aria-label="Search learners" value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search name, class, city…" /></div>
-              <div className="institution-table-scroll">
-                <table><thead><tr><th>Learner</th><th>Class</th><th>Location</th><th>Membership</th><th>Progress</th></tr></thead>
-                  <tbody>
-                    {filteredLearners.map((learner,index)=><tr key={learner.learner_reference || `${learner.display_name}-${index}`}>
-                      <td><strong>{learner.display_name || '—'}</strong><small>{learner.learner_reference || ''}</small></td>
-                      <td>{learner.class_code || '—'}<small>{learner.board || ''}</small></td>
-                      <td>{[learner.city,learner.state].filter(Boolean).join(', ') || 'Not provided'}</td>
-                      <td><span className={learner.membership_status==='ACTIVE'?'institution-status is-active':'institution-status'}>{learner.membership_status || '—'}</span><small>Joined {dateText(learner.joined_at)}</small></td>
-                      <td><strong>{numberText(learner.average_lesson_progress_percent)}%</strong><small>{numberText(learner.completed_lessons)} completed / {numberText(learner.lessons_with_activity)} active</small></td>
-                    </tr>)}
-                    {!filteredLearners.length ? <tr><td colSpan={5} className="institution-empty-cell">{loading?'Loading learner records…':'No learner records match this search.'}</td></tr>:null}
-                  </tbody>
-                </table>
-              </div>
-              <p className="institution-small-note">This profile contains city/state only, not an exact home address. Contact details and any additional sensitive fields are intentionally not exposed in the institution roster.</p>
-            </div>
-          ) : activeView === 'notificationInbox' ? (
-            <div className="institution-notifications"><NotificationInboxClient role="institution" /></div>
-          ) : activeView === 'notifications' ? (
-            <div className="institution-notifications"><NotificationStudio surface="institution" /></div>
-          ) : (
-            <>
-            <div className="institution-panel">
-              <div className="institution-table-heading"><div><h2>Authorised courses</h2><p>Courses and lessons approved centrally for this institution.</p></div></div>
-              <div className="institution-course-grid">
-                {courses.map(course=><article key={course.code}>
-                  <span className="institution-course-mark">▤</span><div><h3>{course.display_name || course.code}</h3><p>{course.code || ''}</p></div>
-                  <div className="institution-course-meta"><span>Published lessons</span><strong>{numberText(course.published_lessons)}</strong><span>Institution learners</span><strong>{numberText(course.institution_learners)}</strong></div>
-                  <small>Access is controlled by the platform owner.</small>
-                </article>)}
-                {!courses.length ? <p className="institution-empty-cell">{loading?'Loading authorised courses…':'No courses have been authorised for this institution yet.'}</p>:null}
-              </div>
-            </div>
-            <div className="institution-panel" id="institution-course-releases">
-              <div className="institution-table-heading">
-                <div><h2>Course release workflow</h2><p>Submit your completed content for HRMS quality review, then approve the reviewed release for sharing. This does not publish a Marketplace listing or interrupt existing learner access.</p></div>
-                <button type="button" className="institution-quiet-button" onClick={() => principal && void loadData(principal)} disabled={loading || releaseBusyId !== null}>Refresh</button>
-              </div>
-              {sourceReleaseError ? <p className="institution-small-note" role="status">Release status could not be loaded: {sourceReleaseError}. Retry Refresh; learner reports and authorised courses remain available.</p> : null}
-              <p className="institution-small-note">Before submitting, complete and publish the reviewed lessons for each active subject in Education Admin Content Studio. Assessment-only courses must pass their source-paper test review. The server checks these requirements when you submit.</p>
-              <div className="institution-course-grid">
-                {latestSourceReleases.map(release => {
-                  const state = String(release.release_state || 'UNKNOWN').toUpperCase();
-                  const busy = releaseBusyId === release.release_id;
-                  const canSubmit = ['DRAFT','REJECTED','WITHDRAWN','LEGACY_MIGRATED'].includes(state);
-                  return <article key={release.course_id}>
-                    <span className="institution-course-mark">↗</span>
-                    <div><h3>{release.display_name || release.course_code || ('Course #' + release.course_id)}</h3>
-                      <p>{release.course_code || ''} · Release v{release.release_version}</p></div>
-                    <span className={'institution-status' + (state === 'SHAREABLE' ? ' is-active' : '')}>{state.replaceAll('_',' ')}</span>
-                    {state === 'IN_QUALITY_REVIEW' ? <small>Waiting for HRMS review. No action is needed here yet.</small>
-                      : state === 'QUALITY_APPROVED' ? <small>Quality review passed. Approve this release for sharing.</small>
-                      : state === 'SHAREABLE' ? <small>Approved for sharing. HRMS may assign this exact release where authorised.</small>
-                      : state === 'REJECTED' ? <small>Returned for correction. Update content in Content Studio, then submit a fresh release version.</small>
-                      : <small>Submit when the saved course content is ready. Server checks remain authoritative.</small>}
-                    {release.quality_review_notes ? <small>HRMS review: {release.quality_review_notes}</small> : null}
-                    {release.origin_rejection_reason ? <small>Previous decision: {release.origin_rejection_reason}</small> : null}
-                    <div className="institution-course-meta">
-                      {canSubmit ? <button type="button" className="institution-primary-button" disabled={loading || releaseBusyId !== null} onClick={() => void submitSourceRelease(release)}>{busy ? 'Submitting…' : state === 'DRAFT' ? 'Submit for HRMS review' : 'Submit new release version'}</button> : null}
-                      {state === 'QUALITY_APPROVED' ? <button type="button" className="institution-primary-button" disabled={loading || releaseBusyId !== null} onClick={() => void approveSourceRelease(release)}>{busy ? 'Approving…' : 'Approve for sharing'}</button> : null}
-                    </div>
-                  </article>;
-                })}
-                {!latestSourceReleases.length && !sourceReleaseError ? <p className="institution-empty-cell">No source-owned course releases are available yet. Courses must be created in Education Admin Content Studio first.</p> : null}
-              </div>
-            </div>
-            </>
-          )}
-        </section>
-      )}
-      <footer className="institution-footer"><span>{principal?.institutionName || brand?.displayName || 'Institution learning services'}</span><span>Student access and course content are centrally governed.</span></footer>
-
-      <style jsx>{`
-        .institution-portal{--institution-primary:var(--qe-color-primary);--institution-accent:var(--qe-color-accent-text);--institution-background:var(--qe-color-background);--institution-surface:var(--qe-color-surface);--institution-text:var(--qe-color-text);min-height:100vh;background:var(--institution-background);color:var(--institution-text);font-family:Arial,Helvetica,sans-serif;padding-bottom:30px}
-        .institution-header{min-height:76px;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:13px clamp(18px,4vw,52px);background:var(--institution-surface);border-bottom:1px solid var(--qe-color-border-subtle)}
-        .institution-brand{display:flex;align-items:center;gap:12px;min-width:0}.institution-mark{width:42px;height:42px;flex:0 0 42px;border-radius:13px;background:var(--institution-primary);display:grid;place-items:center;color:var(--qe-color-on-primary);font-weight:900;font-size:22px}.institution-brand strong,.institution-brand span{display:block;overflow-wrap:anywhere}.institution-brand strong{font-size:17px}.institution-brand span{font-size:10px;color:var(--qe-color-text-muted);margin-top:4px}.institution-account{display:flex;align-items:center;gap:13px;font-size:12px}.institution-quiet-button{border:1px solid var(--qe-color-border-subtle);border-radius:10px;background:var(--qe-color-surface-elevated);padding:10px 13px;color:var(--qe-color-text);font-size:11px;font-weight:800;cursor:pointer}
-        .institution-alert{max-width:1180px;margin:16px auto 0;padding:11px 15px;border:1px solid var(--qe-color-success);border-radius:11px;background:var(--qe-color-success-container);color:var(--qe-color-on-success-container);font-size:12px;line-height:1.5}.institution-alert.is-error{border-color:var(--qe-color-error);background:var(--qe-color-error-container);color:var(--qe-color-on-error-container)}
-        .institution-auth-layout{max-width:1180px;margin:0 auto;padding:clamp(30px,6vw,78px) clamp(18px,3vw,28px);display:grid;grid-template-columns:minmax(0,1.1fr) minmax(320px,.72fr);align-items:center;gap:clamp(25px,5vw,70px)}
-        .institution-intro h1{max-width:690px;font-size:clamp(36px,5.5vw,62px);letter-spacing:-2.8px;line-height:1.04;margin:22px 0 18px}.institution-intro>p{max-width:650px;color:var(--qe-color-text-muted);font-size:15px;line-height:1.8}.institution-eyebrow{font-size:10px;letter-spacing:.15em;color:var(--institution-accent);font-weight:900}
-        .institution-feature-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:35px}.institution-feature-grid article{padding:15px;border-radius:14px;background:var(--qe-color-surface);border:1px solid var(--qe-color-border-subtle)}.institution-feature-grid strong,.institution-feature-grid span{display:block}.institution-feature-grid strong{font-size:11px}.institution-feature-grid span{margin-top:7px;font-size:10px;line-height:1.6;color:var(--qe-color-text-muted)}
-        .institution-auth-card{width:100%;background:var(--qe-color-surface);border:1px solid var(--qe-color-border-subtle);border-radius:22px;padding:clamp(20px,3vw,30px);box-shadow:var(--qe-elevation-2)}.institution-auth-card h2{font-size:22px;letter-spacing:-.5px;margin:20px 0 7px}.institution-auth-card>p,.institution-auth-card form>p{color:var(--qe-color-text-muted);font-size:12px;line-height:1.65}.institution-auth-card form{display:grid;gap:10px}.institution-auth-card label{display:grid;gap:7px;margin-top:10px;font-size:11px;font-weight:800}.institution-auth-card input,.institution-table-heading input{width:100%;min-height:43px;max-width:100%;border:1px solid var(--qe-color-border);border-radius:10px;padding:11px 12px;outline-color:var(--qe-color-focus);background:var(--qe-color-surface-elevated);color:var(--qe-color-text);font:inherit}.institution-primary-button{width:100%;min-height:45px;margin-top:12px;border:0;border-radius:11px;background:var(--institution-primary);color:var(--qe-color-on-primary);font-weight:850;cursor:pointer}.institution-primary-button:disabled{opacity:.65;cursor:wait}.institution-small-note{color:var(--qe-color-text-muted)!important;font-size:10px!important;line-height:1.65!important;margin:12px 0 0}.institution-auth-toggle{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;background:var(--qe-color-surface-elevated);border:1px solid var(--qe-color-border-subtle);border-radius:11px;padding:4px}.institution-auth-toggle button{border:0;background:transparent;min-height:36px;border-radius:8px;font-size:10px;font-weight:800;color:var(--qe-color-text-muted);cursor:pointer}.institution-auth-toggle button.is-active{background:var(--qe-color-primary-container);box-shadow:var(--qe-elevation-1);color:var(--qe-color-on-primary-container)}.institution-password-card{max-width:470px;margin:55px auto}.institution-password-card h1{font-size:30px;line-height:1.2;letter-spacing:-1px}.institution-password-card form{display:grid;gap:10px}
-        .institution-dashboard{max-width:1240px;margin:0 auto;padding:34px clamp(16px,3vw,30px) 55px}.institution-page-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:22px;margin-bottom:25px}.institution-page-heading h1{font-size:clamp(25px,3.2vw,38px);letter-spacing:-1.5px;margin:7px 0}.institution-page-heading p{color:var(--qe-color-text-muted);font-size:12px;margin:0}.institution-code-button{display:grid;gap:5px;text-align:left;min-width:220px;max-width:330px;padding:14px 16px;border:1px solid var(--qe-color-border-subtle);border-radius:14px;background:var(--qe-color-surface-elevated);cursor:pointer}.institution-code-button span,.institution-code-button small{font-size:9px;color:var(--qe-color-text-muted)}.institution-code-button strong{font-size:16px;overflow-wrap:anywhere;color:var(--qe-color-primary-text)}.institution-tabs{display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--qe-color-border-subtle);margin-bottom:23px}.institution-tabs button{border:0;border-bottom:3px solid transparent;background:transparent;padding:12px 14px;margin-bottom:-1px;color:var(--qe-color-text-muted);font-size:11px;font-weight:800;cursor:pointer}.institution-tabs button.is-active{border-color:var(--institution-primary);color:var(--institution-accent)}.institution-tabs .institution-refresh{margin-left:auto;border:1px solid var(--qe-color-border-subtle);border-radius:9px;margin-bottom:8px;padding:9px 12px}.institution-section{display:grid;gap:16px}.institution-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}.institution-metrics article{padding:20px;background:var(--qe-color-surface);border:1px solid var(--qe-color-border-subtle);border-radius:16px}.institution-metrics span,.institution-metrics small{display:block;color:var(--qe-color-text-muted);font-size:10px;line-height:1.5}.institution-metrics strong{display:block;font-size:30px;margin:10px 0 8px;letter-spacing:-1px}.institution-panel{padding:clamp(16px,2.8vw,24px);background:var(--qe-color-surface);border:1px solid var(--qe-color-border-subtle);border-radius:17px;min-width:0}.institution-summary-panel h2,.institution-table-heading h2{font-size:16px;margin:0 0 6px}.institution-summary-panel p,.institution-table-heading p{color:var(--qe-color-text-muted);font-size:11px;line-height:1.65;margin:0}.institution-summary-row{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:14px 0;border-bottom:1px solid var(--qe-color-border-subtle);font-size:11px}.institution-summary-row strong{font-size:15px}.institution-table-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:15px}.institution-table-heading input{max-width:270px;min-width:190px;min-height:38px;font-size:11px}.institution-table-scroll{max-width:100%;overflow:auto;border:1px solid var(--qe-color-border-subtle);border-radius:12px}table{width:100%;border-collapse:collapse;min-width:710px;text-align:left;font-size:11px}th{background:var(--qe-color-surface-elevated);color:var(--qe-color-text-muted);font-size:9px;text-transform:uppercase;letter-spacing:.06em}th,td{padding:13px 14px;border-bottom:1px solid var(--qe-color-border-subtle);vertical-align:top}td strong,td small{display:block}td small{margin-top:4px;color:var(--qe-color-text-muted);font-size:9px;line-height:1.5}.institution-status{display:inline-flex;padding:4px 7px;border-radius:999px;background:var(--qe-color-disabled-background);color:var(--qe-color-disabled-text);font-size:9px;font-weight:800}.institution-status.is-active{background:var(--qe-color-success-container);color:var(--qe-color-on-success-container)}.institution-empty-cell{text-align:center;padding:25px;color:var(--qe-color-text-muted)}.institution-course-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.institution-course-grid article{display:grid;grid-template-columns:36px 1fr;gap:8px 11px;border:1px solid var(--qe-color-border-subtle);border-radius:13px;padding:16px}.institution-course-mark{grid-row:span 2;display:grid;place-items:center;width:36px;height:36px;border-radius:11px;background:var(--qe-color-primary-container);color:var(--qe-color-on-primary-container);font-size:16px}.institution-course-grid h3{font-size:13px;margin:0 0 5px}.institution-course-grid p{font-size:9px;color:var(--qe-color-text-muted);margin:0}.institution-course-meta{grid-column:1/-1;display:grid;grid-template-columns:1fr auto;gap:8px;font-size:10px;color:var(--qe-color-text-muted);padding-top:9px;border-top:1px solid var(--qe-color-border-subtle)}.institution-course-meta strong{color:var(--qe-color-text)}.institution-course-grid article>small{grid-column:1/-1;color:var(--qe-color-text-muted);font-size:9px}.institution-footer{max-width:1240px;margin:0 auto;padding:20px clamp(16px,3vw,30px);border-top:1px solid var(--qe-color-border-subtle);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--qe-color-text-muted);font-size:9px}
-        @media(max-width:850px){.institution-auth-layout{grid-template-columns:1fr;max-width:720px}.institution-auth-card{max-width:550px}.institution-feature-grid{grid-template-columns:1fr}.institution-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.institution-page-heading{flex-direction:column}.institution-code-button{max-width:100%;width:100%}}
-        @media(max-width:580px){.institution-header{align-items:flex-start;flex-direction:column}.institution-account{width:100%;justify-content:space-between}.institution-intro h1{font-size:38px}.institution-metrics,.institution-course-grid{grid-template-columns:1fr}.institution-table-heading{flex-direction:column}.institution-table-heading input{width:100%;max-width:none;min-width:0}.institution-tabs .institution-refresh{margin-left:0}.institution-footer{flex-direction:column}}
-      `}</style>
+      </section>
     </main>
   );
 }
