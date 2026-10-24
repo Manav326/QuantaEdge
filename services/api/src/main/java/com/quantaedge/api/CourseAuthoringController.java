@@ -52,6 +52,11 @@ public class CourseAuthoringController {
     for(Map<String,Object> type:types) {
       String code=String.valueOf(type.get("code"));
       boolean nestedPackageImportSupported="K12".equals(code);
+      boolean sourceCourseCreationSupported="K12".equals(code);
+      type.put("sourceCourseCreationSupported",sourceCourseCreationSupported);
+      type.put("sourceCourseCreationNote",sourceCourseCreationSupported
+          ? "Creates an institution-owned K12 draft with its subject tracks. Chapters, lessons, release review and Marketplace distribution remain separate steps."
+          : "This type is registered in HRMS but its type-specific source-course creation workflow is not implemented yet.");
       type.put("nestedPackageImportSupported",nestedPackageImportSupported);
       type.put("nestedPackageImportStatus",nestedPackageImportSupported?"AVAILABLE":"NOT_IMPLEMENTED");
       type.put("nestedPackageImportNote",nestedPackageImportSupported
