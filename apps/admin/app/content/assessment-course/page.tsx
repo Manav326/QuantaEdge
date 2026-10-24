@@ -236,7 +236,10 @@ export default function AssessmentCourseStudioPage() {
             <h2>1. Course draft created</h2>
             <p><strong>{course.displayName || displayName}</strong> · Course ID {course.courseId} · Release {course.releaseId ?? '—'} · {course.releaseStatus || 'DRAFT'}</p>
             <p>Delivery mode is assessment-only. The learner experience uses the existing test catalogue, attempt, result and course-scoped analytics APIs.</p>
-            <button className="button button-dark" type="button" onClick={() => router.push('/content?courseId=' + encodeURIComponent(String(course.courseId)))}>Open course in Content Studio</button>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+              <button className="button button-dark" type="button" onClick={() => router.push('/content?courseId=' + encodeURIComponent(String(course.courseId)))}>Open course in Content Studio</button>
+              <Link href={'/institution-operations?view=courses&courseId=' + encodeURIComponent(String(course.courseId))} className="button button-primary">Open release workflow</Link>
+            </div>
           </section>
         )}
 
