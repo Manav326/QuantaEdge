@@ -705,17 +705,17 @@ public class PlatformInstitutionController {
     String savedFingerprint=String.valueOf(release.get("content_fingerprint")).trim();
     if(!savedFingerprint.equals(courseReleaseFingerprint(programId)))
       throw new ResponseStatusException(HttpStatus.CONFLICT,"Course content changed after submission. The origin institution must submit a fresh release.");
+    if(approved) {
+      String reviewedFingerprint=body.get("reviewedContentFingerprint")==null
+          ?"":String.valueOf(body.get("reviewedContentFingerprint")).trim();
+      if(!savedFingerprint.equals(reviewedFingerprint))
+        throw new ResponseStatusException(HttpStatus.CONFLICT,
+            "HRMS must inspect the exact submitted release content and confirm its fingerprint before quality approval.");
+    }
     if("ASSESSMENT_ONLY".equals(courseDeliveryMode(programId))) {
       if(!assessmentOnlyCourseReady(programId))
         throw new ResponseStatusException(HttpStatus.CONFLICT,
             "The assessment-only release must contain the three complete, source-verified TRE paper sets. Imported tests remain draft until human review.");
-      if(approved) {
-        String reviewedFingerprint=body.get("reviewedContentFingerprint")==null
-            ?"":String.valueOf(body.get("reviewedContentFingerprint")).trim();
-        if(!savedFingerprint.equals(reviewedFingerprint))
-          throw new ResponseStatusException(HttpStatus.CONFLICT,
-              "HRMS must inspect the exact submitted assessment content and confirm its fingerprint before quality approval.");
-      }
     } else {
       Map<String,Object> readiness=jdbc.queryForMap("""
           select count(distinct s.id) as subject_count,
