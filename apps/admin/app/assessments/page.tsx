@@ -142,7 +142,7 @@ function CourseAnalyticsPanel({courseId,activeCourse,courseError}:{courseId:stri
         {key:'assessment_title',label:tx('Test','टेस्ट')},{key:'question_key',label:tx('Question key','प्रश्न कुंजी')},{key:'prompt',label:tx('Question','प्रश्न')},{key:'question_type',label:tx('Type','प्रकार')},{key:'topic',label:tx('Primary topic','मुख्य विषय')},{key:'subtopic_tags',label:tx('Secondary topics','द्वितीयक विषय')},{key:'difficulty',label:tx('Difficulty','कठिनाई')},{key:'section_code',label:tx('Section','सेक्शन')},{key:'section_result_policy',label:tx('Scoring policy','अंक नीति')},{key:'exposures',label:tx('Exposures','प्रयास')},{key:'correct_count',label:tx('Correct','सही')},{key:'incorrect_count',label:tx('Incorrect','गलत')},{key:'unanswered_count',label:tx('Unanswered','अनुत्तरित')},{key:'accuracy_percent',label:tx('Accuracy %','सटीकता %')},{key:'average_net_marks_percent',label:tx('Avg. net marks %','औसत शुद्ध अंक %')}
       ])}
       {table(tx('Selected response buckets','चुने गए उत्तर समूह'),tx('Shows selected option keys or normalized responses by question.','प्रश्न के अनुसार चुने गए विकल्प या सामान्यीकृत उत्तर दिखाता है।'),data.optionSelections||[],[
-        {key:'assessment_id',label:tx('Test ID','टेस्ट ID')},{key:'question_key',label:tx('Question key','प्रश्न कुंजी')},{key:'selected_value',label:tx('Selected response','चुना गया उत्तर')},{key:'selection_count',label:tx('Selections','चयन')}
+        {key:'assessment_id',label:tx('Test ID','टेस्ट ID')},{key:'question_key',label:tx('Question key','प्रश्न कुंजी')},{key:'selected_value',label:tx('Selected option key','चुने गए विकल्प की कुंजी')},{key:'option_label',label:tx('Option text','विकल्प का पाठ')},{key:'selection_count',label:tx('Selections','चयन')}
       ])}
     </>}
   </div>;
