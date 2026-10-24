@@ -3995,5 +3995,9 @@
   "admin.institutionOperations.courseDetails": "Course details",
   "admin.institutionOperations.courseTypeK12": "K–12 course",
   "admin.institutionOperations.courseRosterLabel": "Institution learner roster",
-  "admin.institutionOperations.releasesCount": "{count} releases"
+  "admin.institutionOperations.releasesCount": "{count} releases",
+  "admin.institutionOperations.redirectTitle": "Institution administration has moved to Admin",
+  "admin.institutionOperations.redirectDescription": "Institution management, learner reports, the roster, course releases and source approval are now handled in the Education Admin workspace. The learner website is reserved for finding and consuming learning content.",
+  "admin.institutionOperations.openAdmin": "Open Institution in Admin",
+  "admin.institutionOperations.adminOriginMissing": "The Admin application address is not configured for this deployment. Open the Education Admin application directly or ask your platform owner to configure NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN."
 }
