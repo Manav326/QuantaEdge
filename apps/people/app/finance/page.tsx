@@ -45,6 +45,24 @@ type PaymentReconciliationResult = {
   paymentAttempts?:Array<{paymentId:string;status:string;amountPaise:number;currency:string;matchesExpectedAmountAndCurrency:boolean;
     method?:string;errorCode?:string;errorReason?:string;errorDescription?:string}>;
 };
+type PaymentTraceStep = {
+  key:string; title:string; status:'COMPLETE'|'BLOCKED'|'PENDING'|'UNKNOWN'|'NOT_REACHED';
+  summary:string; details?:string[]; occurredAt?:string|null;
+};
+type PaymentStatusTrace = {
+  orderId:number; courseId:number; courseTitle:string; institutionName:string; localOrderStatus:string;
+  createdAt?:string|null; checkedAt:string; overallStatus:string; readOnly:boolean; message:string;
+  steps:PaymentTraceStep[]; blockers:PaymentTraceStep[]; pendingSteps:PaymentTraceStep[];
+  provider?:{
+    providerQueryAvailable?:boolean; providerStatus?:string; configuredProviderMode?:string; matchedProviderMode?:string;
+    providerOrderStatus?:string; providerAmountPaidPaise?:number; providerAttemptCount?:number;
+    providerAmountCurrencyMatch?:boolean; message?:string; credentialModesTried?:string[];
+    paymentAttempts?:Array<{paymentId:string;status:string;amountPaise:number;currency:string;matchesExpectedAmountAndCurrency:boolean;
+      method?:string;errorCode?:string;errorReason?:string;errorDescription?:string}>;
+  };
+  financialFacts?:{listedPricePaise:number;discountAmountPaise:number;payablePaise:number;capturedAmountPaise:number;
+    currency:string;financialSnapshotsPresent:boolean;buyerSnapshotPresent:boolean};
+};
 type Overview = { legalEntities:number; activeTaxProfiles:number; pendingTaxProfiles:number; approvedSharePolicies:number; pendingSharePolicies:number; issuedDocuments:number; allocatedPaise:number };
 type Design = { primaryColor:string; accentColor:string; surfaceStyle:string; layout:string; showLogo:boolean; footerText:string };
 type RecipientDraft = { institutionId:string; calculationType:'PERCENTAGE'|'FLAT'; percentage:string; flatRupees:string };
@@ -105,6 +123,9 @@ export default function FinancePage(){
   const [paymentEventsLoading,setPaymentEventsLoading]=useState(false);
   const [paymentActionLoadingId,setPaymentActionLoadingId]=useState<number|null>(null);
   const [paymentActionResult,setPaymentActionResult]=useState<PaymentReconciliationResult|null>(null);
+  const [statusTrace,setStatusTrace]=useState<PaymentStatusTrace|null>(null);
+  const [statusTraceLoadingId,setStatusTraceLoadingId]=useState<number|null>(null);
+  const [statusTraceError,setStatusTraceError]=useState('');
   const [providerEvents,setProviderEvents]=useState<ProviderEventRecord[]>([]);
   const [providerEventTotal,setProviderEventTotal]=useState(0);
   const [providerEventSearch,setProviderEventSearch]=useState('');
@@ -384,12 +405,26 @@ export default function FinancePage(){
     finally{setSelectedProviderEventsLoading(false);}
   };
   const inspectPaymentOrderId=(orderId:number)=>{
-    setSelectedPaymentOrderId(orderId);setPaymentActionResult(null);
+    setSelectedPaymentOrderId(orderId);setPaymentActionResult(null);setStatusTrace(null);setStatusTraceError('');
     void Promise.all([loadPaymentEvents(orderId),loadSelectedProviderEvents(orderId)]);
   };
   const selectPaymentOrder=(order:CoursePaymentOrder)=>{
-    setSelectedPaymentOrderId(order.local_order_id);setPaymentActionResult(null);
+    setSelectedPaymentOrderId(order.local_order_id);setPaymentActionResult(null);setStatusTraceError('');
+    if(statusTrace?.orderId!==order.local_order_id)setStatusTrace(null);
     void Promise.all([loadPaymentEvents(order.local_order_id),loadSelectedProviderEvents(order.local_order_id)]);
+  };
+  const checkCurrentStatus=async(orderId:number)=>{
+    setSelectedPaymentOrderId(orderId);setPaymentActionResult(null);setStatusTrace(null);setStatusTraceError('');
+    setStatusTraceLoadingId(orderId);
+    void Promise.all([loadPaymentEvents(orderId),loadSelectedProviderEvents(orderId)]);
+    try{
+      const trace=await api<PaymentStatusTrace>('/api/v1/hrms/platform/finance/course-orders/'+orderId+'/status-trace');
+      setStatusTrace(trace);
+    }catch(e){
+      setStatusTraceError(e instanceof Error?e.message:'The transaction delivery chain could not be loaded.');
+    }finally{
+      setStatusTraceLoadingId(current=>current===orderId?null:current);
+    }
   };
   const reconcilePaymentOrder=async(order:CoursePaymentOrder)=>{
     if(!['PENDING','EXPIRED','VERIFIED'].includes(String(order.status).toUpperCase()))return;
@@ -398,7 +433,14 @@ export default function FinancePage(){
     try{
       const result=await api<PaymentReconciliationResult>('/api/v1/hrms/platform/finance/course-orders/'+order.local_order_id+'/reconcile',{method:'POST'});
       setPaymentActionResult(result);
-      setNotice(result.resolutionMessage||result.message||'Provider reconciliation finished. Review the result and saved action history.');
+      const outcome=String(result.status||'').toUpperCase();
+      const resultMessage=result.resolutionMessage||result.message||'Provider reconciliation finished. Review the result and saved action history.';
+      if(outcome==='RECONCILIATION_REQUIRED'||outcome==='ACTION_BLOCKED') {
+        setError(resultMessage);
+        setNotice('');
+      } else {
+        setNotice(resultMessage);
+      }
       await Promise.all([loadPaymentOrders(),loadPaymentEvents(order.local_order_id),loadSelectedProviderEvents(order.local_order_id),loadProviderEvents()]);
     }catch(e){
       setError(e instanceof Error?e.message:'Payment reconciliation could not be completed. Do not ask the learner to pay again until provider status is checked.');
@@ -855,6 +897,11 @@ export default function FinancePage(){
                 <td><b>{order.invoice_number||'Not issued / linked'}</b><small>{order.fiscal_document_id?'Document #'+order.fiscal_document_id:'No invoice reference'}</small></td>
                 <td><div className={styles.paymentRowActions}>
                   <button type="button" className={styles.secondarySmall} onClick={()=>selectPaymentOrder(order)}>Inspect</button>
+                  <button type="button" className={styles.secondarySmall}
+                    disabled={statusTraceLoadingId!==null}
+                    onClick={()=>void checkCurrentStatus(order.local_order_id)}>
+                    {statusTraceLoadingId===order.local_order_id?'Tracing…':'Check current status'}
+                  </button>
                   {canReconcile&&<button type="button" className={styles.primarySmall} disabled={paymentActionLoadingId!==null}
                     onClick={()=>void reconcilePaymentOrder(order)}>{paymentActionLoadingId===order.local_order_id?'Checking…':'Check & reconcile'}</button>}
                   {!canReconcile&&<small>{order.recommended_action}</small>}
@@ -909,6 +956,62 @@ export default function FinancePage(){
           <div className={styles.panelHead}><div><h2>Order #{selectedPaymentOrderId} · resolution history</h2>
             <p>Provider checks and staff actions are recorded as immutable events.</p></div>
             <button type="button" className={styles.secondarySmall} onClick={()=>void Promise.all([loadPaymentEvents(selectedPaymentOrderId),loadSelectedProviderEvents(selectedPaymentOrderId)])} disabled={paymentEventsLoading||selectedProviderEventsLoading}>Refresh history</button></div>
+          {statusTraceLoadingId===selectedPaymentOrderId&&<div className={styles.note} role="status">Checking the saved transaction path and querying Razorpay without changing this order…</div>}
+          {statusTraceError&&<div className={styles.alertError} role="alert">{statusTraceError}</div>}
+          {statusTrace&&statusTrace.orderId===selectedPaymentOrderId&&<section className={styles.statusTrace} aria-label="Transaction delivery chain">
+            <div className={styles.statusTraceHeader}>
+              <div><h3>Transaction delivery chain</h3>
+                <p>Read-only inspection from checkout initiation through invoice PDF storage. No payment, order, financial snapshot, entitlement or invoice is changed.</p>
+                <small>Order QE-ORDER-{statusTrace.orderId} · Checked {new Date(statusTrace.checkedAt).toLocaleString('en-IN')}</small>
+              </div>
+              <span className={statusTrace.overallStatus==='COMPLETE'?styles.traceOverallComplete:statusTrace.overallStatus==='BLOCKED'?styles.traceOverallBlocked:statusTrace.overallStatus==='PENDING'?styles.traceOverallPending:styles.traceOverallUnknown}>
+                {statusTrace.overallStatus}
+              </span>
+            </div>
+            {statusTrace.provider&&<div className={styles.traceProviderSummary}>
+              <b>Razorpay · {statusTrace.provider.matchedProviderMode||statusTrace.provider.configuredProviderMode||'mode unknown'}</b>
+              <span>{statusTrace.provider.providerQueryAvailable
+                ?'Provider order: '+String(statusTrace.provider.providerOrderStatus||'unknown')+' · Result: '+String(statusTrace.provider.providerStatus||'unknown')
+                :'Provider state unconfirmed'}</span>
+              <p>{statusTrace.provider.message||'No provider diagnostic message was returned.'}</p>
+              {statusTrace.provider.providerAmountPaidPaise!==undefined&&<small>Amount paid at provider: {rupees(statusTrace.provider.providerAmountPaidPaise,'INR')} · attempts: {statusTrace.provider.providerAttemptCount??'—'}</small>}
+              {!statusTrace.provider.providerQueryAvailable&&<small>Credentials checked: {(statusTrace.provider.credentialModesTried||[]).join(', ')||'none configured'}. Local database stages remain available even when Razorpay cannot be queried.</small>}
+            </div>}
+            <div className={styles.traceStageList}>
+              {statusTrace.steps.map((step,index)=>{
+                const tone=step.status==='COMPLETE'?styles.traceStageComplete
+                  :step.status==='BLOCKED'?styles.traceStageBlocked
+                  :step.status==='PENDING'?styles.traceStagePending
+                  :step.status==='UNKNOWN'?styles.traceStageUnknown:styles.traceStageNotReached;
+                const badge=step.status==='COMPLETE'?styles.traceBadgeComplete
+                  :step.status==='BLOCKED'?styles.traceBadgeBlocked
+                  :step.status==='PENDING'?styles.traceBadgePending
+                  :step.status==='UNKNOWN'?styles.traceBadgeUnknown:styles.traceBadgeNotReached;
+                return <article className={styles.traceStage+' '+tone} key={step.key}>
+                  <span className={styles.traceStageNumber}>{index+1}</span>
+                  <div className={styles.traceStageBody}>
+                    <div className={styles.traceStageHeading}><b>{step.title}</b><span className={badge}>{step.status.replaceAll('_',' ')}</span></div>
+                    <p>{step.summary}</p>
+                    {step.occurredAt&&<small>Recorded: {new Date(step.occurredAt).toLocaleString('en-IN')}</small>}
+                    {!!step.details?.length&&<ul>{step.details.map((detail,i)=><li key={step.key+'-'+i}>{detail}</li>)}</ul>}
+                  </div>
+                </article>;
+              })}
+            </div>
+            {statusTrace.provider?.paymentAttempts&&statusTrace.provider.paymentAttempts.length>0&&<div>
+              <h4>Razorpay payment attempts</h4>
+              <div className={styles.policyTableWrap}><table className={styles.table}>
+                <thead><tr><th>Payment</th><th>Status</th><th>Amount</th><th>Provider details</th></tr></thead>
+                <tbody>{statusTrace.provider.paymentAttempts.map((attempt,i)=><tr key={attempt.paymentId+'-trace-'+i}>
+                  <td><b>{attempt.paymentId}</b><small>{attempt.method||'Method not reported'}</small></td>
+                  <td><span className={styles.status}>{attempt.status}</span><small>{attempt.matchesExpectedAmountAndCurrency?'Amount/currency match':'Amount/currency mismatch'}</small></td>
+                  <td>{rupees(attempt.amountPaise,attempt.currency||'INR')}</td>
+                  <td><b>{attempt.errorCode||attempt.errorReason||'No failure code'}</b><small>{attempt.errorDescription||'No provider failure description'}</small></td>
+                </tr>)}</tbody>
+              </table></div>
+            </div>}
+            <p className={styles.traceReadOnlyNote}>{statusTrace.message}</p>
+          </section>}
           {paymentActionResult&&<div className={paymentActionResult.status==='VERIFIED'?styles.alertSuccess:styles.note} role="status">
             <b>{paymentActionResult.resolutionCode||paymentActionResult.status}</b>
             <p>{paymentActionResult.resolutionMessage||paymentActionResult.message||'No provider message was returned.'}</p>

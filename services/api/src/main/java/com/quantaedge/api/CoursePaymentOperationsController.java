@@ -115,6 +115,375 @@ public class CoursePaymentOperationsController {
     return response;
   }
 
+  /**
+   * Read-only delivery-chain diagnosis for any saved course-payment order. It combines local
+   * checkout, financial snapshots, access, distribution and invoice facts with a read-only
+   * Razorpay lookup. It never changes the order or advances any transaction stage.
+   */
+  @GetMapping("/{orderId}/status-trace")
+  public Map<String,Object> statusTrace(
+      @PathVariable long orderId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    authorization.requirePermission(context,"QE_PLATFORM_OWNER");
+    List<Map<String,Object>> orders=jdbc.queryForList("""
+        select o.id as local_order_id,o.institution_id,o.course_id,o.student_id,o.purchaser_user_id,
+          o.target_student_id,o.recipient_type,o.status,o.failure_code,o.currency,o.offer_price_paise,
+          o.listed_price_paise,o.discount_offer_id,o.discount_amount_paise,o.discount_reference,o.tax_profile_id,
+          o.revenue_share_policy_id,o.taxable_value_paise,o.output_tax_paise,
+          o.tax_calculation_snapshot::text as tax_calculation_snapshot_json,
+          o.revenue_share_policy_snapshot::text as revenue_share_policy_snapshot_json,
+          o.discount_snapshot::text as discount_snapshot_json,
+          o.buyer_snapshot::text as buyer_snapshot_json,
+          o.tax_calculation_snapshot->>'customerPayablePaise' as snapshot_payable_paise,
+          o.tax_calculation_snapshot->>'listedPricePaise' as snapshot_listed_price_paise,
+          o.tax_calculation_snapshot->>'taxProfileId' as snapshot_tax_profile_id,
+          o.tax_calculation_snapshot->>'taxableValuePaise' as snapshot_taxable_value_paise,
+          o.tax_calculation_snapshot->>'outputTaxPaise' as snapshot_output_tax_paise,
+          o.tax_calculation_snapshot->>'discountOfferId' as tax_snapshot_discount_offer_id,
+          o.tax_calculation_snapshot->>'discountCode' as tax_snapshot_discount_code,
+          o.tax_calculation_snapshot->>'discountPaise' as tax_snapshot_discount_paise,
+          o.discount_snapshot->>'discountOfferId' as discount_snapshot_offer_id,
+          o.discount_snapshot->>'code' as discount_snapshot_code,
+          o.discount_snapshot->>'discountPaise' as discount_snapshot_discount_paise,
+          o.revenue_share_policy_snapshot->>'policyId' as snapshot_share_policy_id,
+          case when jsonb_typeof(o.revenue_share_policy_snapshot->'recipients')='array'
+            then jsonb_array_length(o.revenue_share_policy_snapshot->'recipients') else 0 end as share_recipient_count,
+          o.provider_order_id,o.provider_payment_id,o.captured_amount_paise,o.captured_at,
+          o.created_at,o.updated_at,o.verified_at,o.fiscal_document_id,
+          coalesce(nullif(offer.title_override,''),p.display_name) as course_title,
+          t.display_name as institution_name
+        from course_payment_order o
+        join curriculum_program p on p.id=o.course_id
+        left join institution_tenant t on t.id=o.institution_id
+        left join institution_marketplace_offer offer
+          on offer.id=o.institution_offer_id and offer.institution_id=o.institution_id
+        where o.id=?
+        """,orderId);
+    if(orders.isEmpty()) throw new IllegalArgumentException("Course payment order not found.");
+    Map<String,Object> order=orders.getFirst();
+    String localStatus=text(order.get("status")).toUpperCase(Locale.ROOT);
+    long courseId=number(order.get("course_id"));
+    long institutionId=number(order.get("institution_id"));
+    long payablePaise=number(order.get("offer_price_paise"));
+    String currency=text(order.get("currency"));
+    String providerOrderId=text(order.get("provider_order_id"));
+    List<Map<String,Object>> steps=new ArrayList<>();
+
+    steps.add(traceStep("CHECKOUT_INITIATED","1. Checkout initiated","COMPLETE",
+        "QuantaEdge saved order QE-ORDER-"+orderId+" for "+text(order.get("course_title")!=null?order.get("course_title"):"course #"+courseId)+".",
+        List.of("Local order status: "+localStatus,"Institution: "+text(order.get("institution_name")),
+            "Created: "+text(order.get("created_at")),"Last updated: "+text(order.get("updated_at"))),
+        order.get("created_at")));
+
+    boolean financialSnapshotsPresent=CourseMarketplaceController.hasLockedFinancialSnapshots(order);
+    boolean payableSnapshotMatches=numberOrMinusOne(order.get("snapshot_payable_paise"))==payablePaise;
+    boolean listedPriceSnapshotMatches=numberOrMinusOne(order.get("snapshot_listed_price_paise"))==number(order.get("listed_price_paise"));
+    boolean taxProfileSnapshotMatches=numberOrMinusOne(order.get("snapshot_tax_profile_id"))==number(order.get("tax_profile_id"));
+    boolean taxableValueSnapshotMatches=snapshotNumberMatches(order,"snapshot_taxable_value_paise","taxable_value_paise");
+    boolean outputTaxSnapshotMatches=snapshotNumberMatches(order,"snapshot_output_tax_paise","output_tax_paise");
+    boolean sharePolicySnapshotMatches=numberOrMinusOne(order.get("snapshot_share_policy_id"))==number(order.get("revenue_share_policy_id"));
+    boolean buyerSnapshotPresent=presentJsonObject(order.get("buyer_snapshot_json"));
+    boolean discountSnapshotMatches=discountSnapshotMatches(order);
+    boolean financialFactsValid=financialSnapshotsPresent&&payableSnapshotMatches&&listedPriceSnapshotMatches
+        &&taxProfileSnapshotMatches&&taxableValueSnapshotMatches&&outputTaxSnapshotMatches
+        &&sharePolicySnapshotMatches&&discountSnapshotMatches&&buyerSnapshotPresent;
+    String financialStatus=financialFactsValid?"COMPLETE":"BLOCKED";
+    List<String> financialDetails=new ArrayList<>();
+    financialDetails.add("Tax profile reference: "+(order.get("tax_profile_id")==null?"missing":String.valueOf(order.get("tax_profile_id"))));
+    financialDetails.add("Revenue-share policy reference: "+(order.get("revenue_share_policy_id")==null?"missing":String.valueOf(order.get("revenue_share_policy_id"))));
+    financialDetails.add("Snapshot payable matches saved order: "+payableSnapshotMatches);
+    financialDetails.add("Snapshot listed price matches saved order: "+listedPriceSnapshotMatches);
+    financialDetails.add("Tax snapshot references match: "+taxProfileSnapshotMatches);
+    financialDetails.add("Snapshot taxable value matches saved order: "+taxableValueSnapshotMatches);
+    financialDetails.add("Snapshot output tax matches saved order: "+outputTaxSnapshotMatches);
+    financialDetails.add("Revenue-share snapshot references match: "+sharePolicySnapshotMatches);
+    financialDetails.add("Discount snapshot matches saved order: "+discountSnapshotMatches);
+    financialDetails.add("Original buyer snapshot present: "+buyerSnapshotPresent);
+    if(!financialFactsValid) financialDetails.add("The HRMS configuration screen does not itself backfill locked financial facts on an already-created order.");
+    steps.add(traceStep("FINANCIAL_SNAPSHOTS","2. Financial snapshots locked",financialStatus,
+        financialFactsValid
+            ?"Tax, revenue-share and buyer snapshots are present and their references/payable amount match this order."
+            :"The saved order's financial snapshots are missing or inconsistent. This is a QuantaEdge-side blocker; inspect the exact missing facts before any finalization.",
+        financialDetails,null));
+
+    Map<String,Object> provider=marketplace.inspectProviderStatusForHrms(
+        providerOrderId,payablePaise,currency);
+    boolean providerQueryAvailable=Boolean.TRUE.equals(provider.get("providerQueryAvailable"));
+    boolean providerOrderMatches=Boolean.TRUE.equals(provider.get("providerOrderMatches"));
+    String providerStatus=text(provider.get("providerStatus")).toUpperCase(Locale.ROOT);
+    boolean providerAmountMatch=Boolean.TRUE.equals(provider.get("providerAmountCurrencyMatch"));
+    String providerMode=text(provider.get("matchedProviderMode"));
+    List<String> providerDetails=new ArrayList<>();
+    providerDetails.add("Saved Razorpay order: "+(providerOrderId.isBlank()?"missing":providerOrderId));
+    providerDetails.add("Credential mode used: "+(providerMode.isBlank()?text(provider.get("configuredProviderMode")):providerMode));
+    providerDetails.add("Provider order status: "+text(provider.get("providerOrderStatus")));
+    providerDetails.add("Provider amount / currency match: "+providerAmountMatch);
+    providerDetails.add("Provider attempts: "+text(provider.get("providerAttemptCount")));
+    if(provider.get("message")!=null) providerDetails.add(text(provider.get("message")));
+    String providerOrderStage;
+    String providerOrderSummary;
+    if("NO_PROVIDER_REFERENCE".equals(providerStatus)) {
+      providerOrderStage="BLOCKED";
+      providerOrderSummary="The local checkout has no saved Razorpay order reference.";
+    } else if(providerQueryAvailable&&providerOrderMatches&&providerAmountMatch) {
+      providerOrderStage="COMPLETE";
+      providerOrderSummary="The exact saved Razorpay order was found and its amount/currency match the local order.";
+    } else if(providerQueryAvailable&&providerOrderMatches) {
+      providerOrderStage="BLOCKED";
+      providerOrderSummary="Razorpay returned this order, but its amount or currency differs from the saved order.";
+    } else {
+      providerOrderStage="UNKNOWN";
+      providerOrderSummary="The saved Razorpay reference could not be authoritatively confirmed with the configured credentials.";
+    }
+    steps.add(traceStep("PROVIDER_ORDER","3. Razorpay order linked",providerOrderStage,
+        providerOrderSummary,providerDetails,null));
+
+    boolean capturedProviderPayment=providerQueryAvailable&&"CAPTURED".equals(providerStatus);
+    boolean authorizedProviderPayment=providerQueryAvailable&&"AUTHORIZED".equals(providerStatus);
+    boolean providerPaymentProcessing=providerQueryAvailable&&"PROCESSING".equals(providerStatus);
+    String paymentStage;
+    String paymentSummary;
+    if(capturedProviderPayment) {
+      paymentStage="COMPLETE";
+      paymentSummary="Razorpay reports an exact captured payment for this order.";
+    } else if(authorizedProviderPayment) {
+      paymentStage="PENDING";
+      paymentSummary="Razorpay reports an authorised payment; capture/final verification is not complete.";
+    } else if(providerPaymentProcessing) {
+      paymentStage="PENDING";
+      paymentSummary="Razorpay still has a payment attempt in progress.";
+    } else if(providerQueryAvailable&&"NOT_PAID".equals(providerStatus)) {
+      paymentStage="PENDING";
+      paymentSummary="No exact captured/authorised payment was found for the saved Razorpay order.";
+    } else if(providerQueryAvailable&&"PAID_NO_EXACT_PAYMENT".equals(providerStatus)) {
+      paymentStage="BLOCKED";
+      paymentSummary="Razorpay reports money paid, but there is no exact matching payment attempt in the returned list. Do not pay again.";
+    } else if(providerQueryAvailable&&"ORDER_AMOUNT_CURRENCY_MISMATCH".equals(providerStatus)) {
+      paymentStage="BLOCKED";
+      paymentSummary="The Razorpay amount or currency does not match QuantaEdge's saved order. Do not retry payment.";
+    } else {
+      paymentStage="UNKNOWN";
+      paymentSummary="The payment provider state is not confirmed. This is not evidence that payment failed.";
+    }
+    List<String> paymentDetails=new ArrayList<>();
+    paymentDetails.add("Local order status: "+localStatus);
+    paymentDetails.add("Saved payment ID: "+(order.get("provider_payment_id")==null?"not recorded":text(order.get("provider_payment_id"))));
+    paymentDetails.add("Saved captured amount: "+(order.get("captured_amount_paise")==null?"not recorded":String.valueOf(order.get("captured_amount_paise"))+" paise"));
+    paymentDetails.add("Provider amount paid: "+text(provider.get("providerAmountPaidPaise"))+" paise");
+    paymentDetails.add("Provider attempt count: "+text(provider.get("providerAttemptCount")));
+    steps.add(traceStep("PROVIDER_PAYMENT","4. Payment confirmed by Razorpay",paymentStage,
+        paymentSummary,paymentDetails,order.get("captured_at")));
+
+    String verificationStage;
+    String verificationSummary;
+    if("VERIFIED".equals(localStatus)) {
+      verificationStage="COMPLETE";
+      verificationSummary="QuantaEdge finalized the saved order and recorded its verification timestamp.";
+    } else if(capturedProviderPayment&&!financialFactsValid) {
+      verificationStage="BLOCKED";
+      verificationSummary="Razorpay indicates payment was captured, but QuantaEdge cannot finalize this order because the saved financial snapshots are missing or inconsistent.";
+    } else if(capturedProviderPayment||authorizedProviderPayment) {
+      verificationStage="BLOCKED";
+      verificationSummary="A provider payment exists, but the local order is not VERIFIED. Inspect the financial-snapshot and finalization blockers before retrying.";
+    } else if("CREATING".equals(localStatus)||"PENDING".equals(localStatus)||"EXPIRED".equals(localStatus)) {
+      verificationStage="PENDING";
+      verificationSummary="QuantaEdge has not recorded successful payment verification for this order.";
+    } else {
+      verificationStage="BLOCKED";
+      verificationSummary="The local order is in "+localStatus+" and did not reach verified settlement.";
+    }
+    steps.add(traceStep("QE_VERIFICATION","5. QuantaEdge verifies and finalizes payment",verificationStage,
+        verificationSummary,List.of("Order status: "+localStatus,
+            "Verified at: "+text(order.get("verified_at")),
+            "Captured at: "+text(order.get("captured_at"))),order.get("verified_at")));
+
+    List<Map<String,Object>> purchases=jdbc.queryForList("""
+        select id,provider_payment_id,amount_paise,currency,purchased_at
+        from course_purchase where order_id=? order by id limit 2
+        """,orderId);
+    Map<String,Object> purchase=purchases.isEmpty()?Map.of():purchases.getFirst();
+    Long purchaseId=purchases.isEmpty()?null:number(purchase.get("id"));
+    boolean purchaseExists=purchaseId!=null;
+    String purchaseStage=purchaseExists?"COMPLETE":("VERIFIED".equals(localStatus)?"BLOCKED":"NOT_REACHED");
+    steps.add(traceStep("COURSE_PURCHASE","6. Course purchase recorded",purchaseStage,
+        purchaseExists?"The local course_purchase ledger contains this order."
+            :"VERIFIED".equals(localStatus)
+                ?"The order is verified, but its matching course_purchase ledger row is missing."
+                :"The purchase ledger is created during finalization and has not yet been recorded.",
+        purchaseExists?List.of("Purchase record: #"+purchaseId,
+            "Recorded payment ID: "+text(purchase.get("provider_payment_id")),
+            "Amount: "+text(purchase.get("amount_paise"))+" "+text(purchase.get("currency")),
+            "Purchased at: "+text(purchase.get("purchased_at"))):List.of(),purchase.get("purchased_at")));
+
+    long entitlementCount=0;
+    if(purchaseId!=null) entitlementCount=scalarCount(
+        "select count(*) from course_entitlement where source_purchase_id=? and course_id=?",purchaseId,courseId);
+    String entitlementStage=entitlementCount>0?"COMPLETE":purchaseExists?"BLOCKED":"NOT_REACHED";
+    steps.add(traceStep("COURSE_ENTITLEMENT","7. Course entitlement granted",entitlementStage,
+        entitlementCount>0?"A course_entitlement row links this purchase to a current holder."
+            :purchaseExists?"The purchase exists, but its normalized course entitlement is missing."
+                :"No entitlement is expected until the purchase ledger is finalized.",
+        List.of("Matching entitlements: "+entitlementCount),null));
+
+    List<Map<String,Object>> enrollments=jdbc.queryForList("""
+        select status,enrolled_at,ended_at
+        from student_program_enrollment
+        where institution_id=? and student_id=? and program_id=?
+        order by updated_at desc limit 2
+        """,institutionId,order.get("student_id"),courseId);
+    boolean activeEnrollment=enrollments.stream().anyMatch(e->"ACTIVE".equalsIgnoreCase(text(e.get("status"))));
+    boolean pausedEnrollment=enrollments.stream().anyMatch(e->"PAUSED".equalsIgnoreCase(text(e.get("status"))));
+    String enrollmentStage=activeEnrollment?"COMPLETE":purchaseExists?"BLOCKED":"NOT_REACHED";
+    List<String> enrollmentDetails=new ArrayList<>();
+    enrollmentDetails.add("Active enrollment: "+activeEnrollment);
+    enrollmentDetails.add("Paused enrollment: "+pausedEnrollment);
+    if(!enrollments.isEmpty()) enrollmentDetails.add("Latest enrollment status: "+text(enrollments.getFirst().get("status")));
+    steps.add(traceStep("LEARNING_ENROLLMENT","8. Learning access activated",enrollmentStage,
+        activeEnrollment?"The beneficiary has an ACTIVE student-program enrollment."
+            :pausedEnrollment?"The beneficiary's course enrollment is PAUSED."
+                :purchaseExists?"The purchase exists but no active course enrollment was found."
+                    :"Enrollment is created only after the course purchase is finalized.",
+        enrollmentDetails,enrollments.isEmpty()?null:enrollments.getFirst().get("enrolled_at")));
+
+    Map<String,Object> allocations=jdbc.queryForMap("""
+        select count(*) as allocation_count,
+          coalesce(sum(allocated_amount_paise),0) as allocated_amount_paise,
+          count(distinct institution_id) as recipient_count
+        from revenue_share_allocation where course_payment_order_id=?
+        """,orderId);
+    long allocationCount=number(allocations.get("allocation_count"));
+    long expectedRecipients=number(order.get("share_recipient_count"));
+    String allocationStage;
+    if(allocationCount>0&&(!financialSnapshotsPresent||allocationCount>=expectedRecipients&&expectedRecipients>0)) {
+      allocationStage="COMPLETE";
+    } else if("VERIFIED".equals(localStatus)) {
+      allocationStage="BLOCKED";
+    } else {
+      allocationStage="NOT_REACHED";
+    }
+    steps.add(traceStep("REVENUE_SHARE","9. Revenue-share ledger allocated",allocationStage,
+        allocationStage.equals("COMPLETE")?"Institutional allocations are recorded against this saved course order."
+            :allocationStage.equals("BLOCKED")?"The order is verified but the expected revenue-share allocations are missing or incomplete."
+                :"Revenue share is allocated only after payment finalization.",
+        List.of("Recorded allocations: "+allocationCount,
+            "Expected recipients from saved policy snapshot: "+expectedRecipients,
+            "Total allocated: "+number(allocations.get("allocated_amount_paise"))+" paise",
+            "Distinct allocation recipients: "+number(allocations.get("recipient_count"))),null));
+
+    List<Map<String,Object>> invoiceRows=jdbc.queryForList("""
+        select d.id,d.document_number,d.document_type,d.issued_at,d.total_value_paise,d.tax_value_paise,
+          (select count(*) from fiscal_document_line line where line.fiscal_document_id=d.id) as line_count,
+          (select count(*) from fiscal_document_asset asset where asset.fiscal_document_id=d.id
+            and asset.asset_type in ('PDF','SIGNED_PDF')) as pdf_asset_count,
+          (select coalesce(sum(asset.byte_length),0) from fiscal_document_asset asset
+            where asset.fiscal_document_id=d.id and asset.asset_type in ('PDF','SIGNED_PDF')) as pdf_bytes
+        from fiscal_document d
+        where d.id=? or (d.source_type='COURSE_ORDER' and d.source_record_key=? and d.document_type in ('TAX_INVOICE','BILL_OF_SUPPLY'))
+        order by case when d.id=? then 0 else 1 end,d.id desc limit 1
+        """,order.get("fiscal_document_id"),String.valueOf(orderId),order.get("fiscal_document_id"));
+    Map<String,Object> invoice=invoiceRows.isEmpty()?Map.of():invoiceRows.getFirst();
+    boolean invoiceExists=!invoice.isEmpty();
+    long pdfCount=invoiceExists?number(invoice.get("pdf_asset_count")):0;
+    String invoiceStage=invoiceExists&&pdfCount>0?"COMPLETE"
+        :invoiceExists?"BLOCKED":"VERIFIED".equals(localStatus)?"BLOCKED":"NOT_REACHED";
+    steps.add(traceStep("INVOICE_GENERATED","10. Invoice generated and stored",invoiceStage,
+        invoiceStage.equals("COMPLETE")?"A fiscal invoice and its PDF asset are recorded."
+            :invoiceStage.equals("BLOCKED")&&invoiceExists?"The fiscal document exists, but no PDF/SIGNED_PDF asset is recorded."
+                :invoiceStage.equals("BLOCKED")?"The order is verified but no invoice document is linked or found for this order."
+                    :"The fiscal invoice is generated during finalization and has not yet been recorded.",
+        invoiceExists?List.of("Document: "+text(invoice.get("document_number"))+" (#"+text(invoice.get("id"))+")",
+            "Type: "+text(invoice.get("document_type")),
+            "Lines: "+text(invoice.get("line_count")),
+            "PDF assets: "+pdfCount+" · bytes: "+text(invoice.get("pdf_bytes")),
+            "Issued at: "+text(invoice.get("issued_at"))):List.of(),invoice.get("issued_at")));
+
+    List<Map<String,Object>> blockers=steps.stream()
+        .filter(step->"BLOCKED".equals(text(step.get("status"))))
+        .toList();
+    List<Map<String,Object>> pending=steps.stream()
+        .filter(step->"PENDING".equals(text(step.get("status"))))
+        .toList();
+    String overall= !blockers.isEmpty()?"BLOCKED":!pending.isEmpty()?"PENDING"
+        :steps.stream().anyMatch(step->"UNKNOWN".equals(text(step.get("status"))))?"UNKNOWN":"COMPLETE";
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("orderId",orderId);
+    result.put("courseId",courseId);
+    result.put("courseTitle",text(order.get("course_title")));
+    result.put("institutionName",text(order.get("institution_name")));
+    result.put("localOrderStatus",localStatus);
+    result.put("createdAt",order.get("created_at"));
+    result.put("checkedAt",java.time.OffsetDateTime.now(java.time.ZoneOffset.UTC).toString());
+    result.put("overallStatus",overall);
+    result.put("provider",provider);
+    result.put("financialFacts",Map.of(
+        "listedPricePaise",number(order.get("listed_price_paise")),
+        "discountAmountPaise",number(order.get("discount_amount_paise")),
+        "payablePaise",payablePaise,
+        "capturedAmountPaise",order.get("captured_amount_paise")==null?0L:number(order.get("captured_amount_paise")),
+        "currency",currency,
+        "financialSnapshotsPresent",financialSnapshotsPresent,
+        "buyerSnapshotPresent",buyerSnapshotPresent));
+    result.put("steps",steps);
+    result.put("blockers",blockers);
+    result.put("pendingSteps",pending);
+    result.put("readOnly",true);
+    result.put("message","Read-only status trace. No payment was created, captured, refunded, reconciled or otherwise changed.");
+    return result;
+  }
+
+  private static boolean discountSnapshotMatches(Map<String,Object> order) {
+    long savedDiscount=number(order.get("discount_amount_paise"));
+    long savedOfferId=numberOrMinusOne(order.get("discount_offer_id"));
+    String savedCode=text(order.get("discount_reference"));
+    long taxDiscountOffer=numberOrMinusOne(order.get("tax_snapshot_discount_offer_id"));
+    long taxDiscountAmount=numberOrMinusOne(order.get("tax_snapshot_discount_paise"));
+    long snapshotDiscountAmount=numberOrMinusOne(order.get("discount_snapshot_discount_paise"));
+    if(savedOfferId<0) {
+      return savedDiscount==0&&savedCode.isBlank()
+          &&taxDiscountOffer==0&&taxDiscountAmount==0&&snapshotDiscountAmount==0;
+    }
+    return savedOfferId>0&&savedDiscount>0&&!savedCode.isBlank()
+        &&numberOrMinusOne(order.get("discount_snapshot_offer_id"))==savedOfferId
+        &&numberOrMinusOne(order.get("tax_snapshot_discount_offer_id"))==savedOfferId
+        &&savedCode.equals(text(order.get("discount_snapshot_code")))
+        &&savedCode.equals(text(order.get("tax_snapshot_discount_code")))
+        &&savedDiscount==snapshotDiscountAmount&&savedDiscount==taxDiscountAmount;
+  }
+
+  private long scalarCount(String sql,Object...args) {
+    Long value=jdbc.queryForObject(sql,Long.class,args);
+    return value==null?0L:value;
+  }
+
+  private static Map<String,Object> traceStep(String key,String title,String status,
+      String summary,List<String> details,Object occurredAt) {
+    Map<String,Object> step=new LinkedHashMap<>();
+    step.put("key",key);step.put("title",title);step.put("status",status);step.put("summary",summary);
+    step.put("details",details==null?List.of():details);
+    step.put("occurredAt",occurredAt);
+    return step;
+  }
+
+  private static boolean presentJsonObject(Object raw) {
+    if(raw==null) return false;
+    String value=String.valueOf(raw).trim();
+    return !value.isBlank()&&!"{}".equals(value)&&!"null".equalsIgnoreCase(value);
+  }
+
+  private static long numberOrMinusOne(Object value) {
+    if(value==null) return -1;
+    try { return Long.parseLong(String.valueOf(value)); } catch(Exception ignored) { return -1; }
+  }
+
+  static boolean snapshotNumberMatches(Map<String,Object> row,String snapshotKey,String savedKey) {
+    return numberOrMinusOne(row.get(snapshotKey))==number(row.get(savedKey));
+  }
+
+  private static long number(Object value) {
+    if(value instanceof Number number) return number.longValue();
+    try { return value==null?0:Long.parseLong(String.valueOf(value)); } catch(Exception ignored) { return 0; }
+  }
+
   @GetMapping("/{orderId}/events")
   public List<Map<String,Object>> orderEvents(
       @PathVariable long orderId,
@@ -230,7 +599,16 @@ public class CoursePaymentOperationsController {
       String eventType;
       String code;
       String message;
-      if("VERIFIED".equals(outcome)) {
+      if("VERIFIED".equals(outcome) && Boolean.TRUE.equals(result.get("financialSnapshotsRepaired"))) {
+        eventType="FINANCIAL_SNAPSHOT_REPAIRED_AND_RECONCILED";
+        code="TEST_MODE_FINANCIAL_SNAPSHOT_REPAIRED";
+        String basis=text(result.get("financialSnapshotRepairBasis"));
+        String basisText="CURRENT_APPROVED_TERMS_FOR_TEST_MODE_RECOVERY".equals(basis)
+            ? "using current approved HRMS financial settings, explicitly marked as test-mode recovery"
+            : "using approved financial terms effective at the original order creation time";
+        message="The existing Razorpay test payment was verified, missing financial snapshots were rebuilt "+basisText
+            +", and the existing order was finalized. No replacement order was created.";
+      } else if("VERIFIED".equals(outcome)) {
         eventType="RECONCILIATION_SUCCEEDED";
         code="PAYMENT_VERIFIED";
         message="Provider payment is captured and the existing course order is verified. Review its invoice and entitlement references.";
@@ -250,19 +628,35 @@ public class CoursePaymentOperationsController {
       result.put("resolutionCode",code);
       result.put("resolutionMessage",message);
       Map<String,Object> details=diagnosticDetails(result);
+      if(Boolean.TRUE.equals(result.get("financialSnapshotsRepaired"))) {
+        details.put("financialSnapshotsRepaired",true);
+        details.put("financialSnapshotRepairMode",text(result.get("financialSnapshotRepairMode")));
+        details.put("financialSnapshotRepairBasis",text(result.get("financialSnapshotRepairBasis")));
+      }
       audit.record(orderId,context.staffId(),eventType,code,message,
           text(result.get("providerOrderId")),text(result.get("providerOrderStatus")),details);
       return ResponseEntity.ok(result);
     } catch(RuntimeException exception) {
-      String message=safeError(exception.getMessage());
+      String rawMessage=exception instanceof org.springframework.web.server.ResponseStatusException statusException
+          ? statusException.getReason() : exception.getMessage();
+      String message=safeError(rawMessage);
+      boolean snapshotRepairBlocked=rawMessage!=null
+          && (rawMessage.toLowerCase(Locale.ROOT).contains("snapshot")
+              || rawMessage.toLowerCase(Locale.ROOT).contains("financial terms"));
+      String eventType=snapshotRepairBlocked?"FINANCIAL_SNAPSHOT_REPAIR_BLOCKED":"RECONCILIATION_FAILED";
+      String resolutionCode=snapshotRepairBlocked?"SNAPSHOT_REPAIR_BLOCKED":"PROVIDER_CHECK_FAILED";
+      if(snapshotRepairBlocked&&!message.toLowerCase(Locale.ROOT).contains("do not pay again"))
+        message=message+" Keep this saved order; do not pay again until the financial issue is resolved.";
       Map<String,Object> details=new LinkedHashMap<>();
       details.put("failureCode",text(order.get("failure_code")));
       details.put("orderStatus",currentStatus);
-      audit.record(orderId,context.staffId(),"RECONCILIATION_FAILED","PROVIDER_CHECK_FAILED",
+      details.put("snapshotRepairBlocked",snapshotRepairBlocked);
+      audit.record(orderId,context.staffId(),eventType,resolutionCode,
           message,providerOrderId,null,details);
       Map<String,Object> response=new LinkedHashMap<>();
       response.put("status","RECONCILIATION_REQUIRED");
-      response.put("resolutionCode","PROVIDER_CHECK_FAILED");
+      response.put("resolutionCode",resolutionCode);
+      response.put("resolutionMessage",message);
       response.put("message",message);
       response.put("canRetryCheckout",false);
       response.put("providerOrderId",providerOrderId);

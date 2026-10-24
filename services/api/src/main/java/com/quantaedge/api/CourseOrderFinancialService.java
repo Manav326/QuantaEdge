@@ -77,10 +77,24 @@ public class CourseOrderFinancialService {
     return prepareCheckout(offerId,institutionId,listedPricePaise,currency,courseTitle,buyerSnapshot,null);
   }
 
-  /** Resolve only an HRMS-approved and effective code; client-supplied amounts are never trusted. */
+  /** Resolve only currently effective approved terms; never trust client-supplied amounts. */
   public CheckoutSnapshot prepareCheckout(
       long offerId,long institutionId,long listedPricePaise,String currency,
       String courseTitle,Map<String,Object> buyerSnapshot,String requestedDiscountCode) {
+    return prepareCheckout(offerId,institutionId,listedPricePaise,currency,courseTitle,buyerSnapshot,
+        requestedDiscountCode,OffsetDateTime.now(ZoneOffset.UTC));
+  }
+
+  /**
+   * Rebuild a legacy order only against approved terms effective at its original creation time.
+   * This is used by guarded HRMS recovery; normal checkouts resolve against the current instant.
+   */
+  public CheckoutSnapshot prepareCheckout(
+      long offerId,long institutionId,long listedPricePaise,String currency,
+      String courseTitle,Map<String,Object> buyerSnapshot,String requestedDiscountCode,
+      OffsetDateTime asOf) {
+    if(asOf==null) asOf=OffsetDateTime.now(ZoneOffset.UTC);
+    final OffsetDateTime effectiveAt=asOf;
     if(listedPricePaise<=0) throw new IllegalArgumentException("A paid course needs a positive listed price.");
     if(!"INR".equalsIgnoreCase(currency)) throw new IllegalArgumentException("Financial checkout currently supports INR only.");
     String normalizedCode=normalizeDiscountCode(requestedDiscountCode);
@@ -97,9 +111,9 @@ public class CourseOrderFinancialService {
           currency,effective_from,effective_until
         from course_discount_offer
         where institution_offer_id=? and upper(code)=? and currency=? and status='APPROVED'
-          and effective_from<=now() and (effective_until is null or effective_until>now())
+          and effective_from<=? and (effective_until is null or effective_until>?)
         order by version desc,id desc limit 2
-        """,offerId,normalizedCode,currency.toUpperCase(Locale.ROOT));
+        """,offerId,normalizedCode,currency.toUpperCase(Locale.ROOT),effectiveAt,effectiveAt);
       if(discounts.isEmpty()) throw new IllegalArgumentException(
           "This offer code is not valid for the selected course or is not currently active.");
       if(discounts.size()>1) throw new IllegalStateException(
@@ -130,7 +144,7 @@ public class CourseOrderFinancialService {
       discountSnapshot.put("effectiveUntil",offer.get("effective_until")==null?null:String.valueOf(offer.get("effective_until")));
     }
 
-    LocalDate today=LocalDate.now(INDIA);
+    LocalDate effectiveDate=effectiveAt.atZoneSameInstant(INDIA).toLocalDate();
     List<Map<String,Object>> profiles=jdbc.queryForList("""
       select tp.id as tax_profile_id,tp.version as tax_profile_version,tp.legal_entity_id,
         tp.service_classification_code,tp.tax_treatment,tp.gst_rate_basis_points,tp.cess_rate_basis_points,
@@ -152,10 +166,10 @@ public class CourseOrderFinancialService {
         order by g.effective_from desc,g.id desc limit 1
       ) gr on true
       where tp.institution_offer_id=? and tp.status='APPROVED'
-        and tp.effective_from<=now() and (tp.effective_until is null or tp.effective_until>now())
+        and tp.effective_from<=? and (tp.effective_until is null or tp.effective_until>?)
       order by tp.version desc,tp.id desc
       limit 2
-      """,institutionId,today,today,offerId);
+      """,institutionId,effectiveDate,effectiveDate,offerId,effectiveAt,effectiveAt);
     if(profiles.isEmpty()) throw new IllegalStateException(
         "Checkout is not configured: HRMS must activate the legal seller and approve an effective tax profile for this course.");
     if(profiles.size()>1) throw new IllegalStateException(
@@ -224,12 +238,13 @@ public class CourseOrderFinancialService {
       select v.id as template_version_id,v.design_definition::text as design_definition_json,
         t.scope,t.internal_name
       from invoice_template t
-      join invoice_template_version v on v.template_id=t.id and v.status='PUBLISHED'
+      join invoice_template_version v on v.template_id=t.id
+        and v.published_at is not null and v.published_at<=?
       where (t.scope='SELLER' and t.legal_entity_id=?)
          or (t.scope='PLATFORM' and t.legal_entity_id is null)
       order by case when t.scope='SELLER' then 0 else 1 end,v.published_at desc,v.id desc
       limit 1
-      """,number(profile.get("legal_entity_id")));
+      """,effectiveAt,number(profile.get("legal_entity_id")));
     if(templateRows.isEmpty()) throw new IllegalStateException(
         "Checkout is not ready: HRMS must publish an invoice template before this course can be sold.");
     Map<String,Object> selectedTemplate=templateRows.getFirst();
@@ -240,9 +255,9 @@ public class CourseOrderFinancialService {
       select id,policy_version,currency,effective_from,effective_until
       from revenue_share_policy
       where institution_offer_id=? and status='APPROVED'
-        and currency=? and effective_from<=now() and (effective_until is null or effective_until>now())
+        and currency=? and effective_from<=? and (effective_until is null or effective_until>?)
       order by policy_version desc,id desc limit 2
-      """,offerId,currency.toUpperCase(Locale.ROOT));
+      """,offerId,currency.toUpperCase(Locale.ROOT),effectiveAt,effectiveAt);
     if(policies.isEmpty()) throw new IllegalStateException(
         "Checkout is not ready: HRMS must approve an effective revenue-share policy for this course.");
     if(policies.size()>1) throw new IllegalStateException(
