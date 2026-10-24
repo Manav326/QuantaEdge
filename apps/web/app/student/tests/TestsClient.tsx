@@ -332,6 +332,8 @@ export default function TestsClient(){
     ? (/^\d+$/.test(rawCourseId)&&Number(rawCourseId)>0?Number(rawCourseId):rawCourseId)
     : null;
   const {courses,activeCourse,courseId,selectCourse,loadingCourses,courseError}=useStudentCourseScope(requestedCourseId);
+  const assessmentOnlyCourse = activeCourse?.course_type_code === 'ASSESSMENT'
+    || activeCourse?.delivery_mode === 'ASSESSMENT_ONLY';
   const {locale, learningLanguage, certificateLanguage}=useLocale();
   const language=learningLanguage;
   const uiLanguage=locale==='english'?'en':'hi';
@@ -716,7 +718,7 @@ export default function TestsClient(){
         <InstitutionCourseSubjectScope courses={courses} activeCourse={activeCourse} courseId={courseId}
           onCourseChange={value=>void changeCourse(value)} subjectCode={subjectFilter} onSubjectChange={changeSubject}
           loading={loadingCourses} language={locale} courseLabel={t('Course','कोर्स')} subjectLabel={t('Subject','विषय')}
-          allSubjectsLabel={t('All subjects','सभी विषय')} />
+          allSubjectsLabel={t('All subjects','सभी विषय')} showSubject={!assessmentOnlyCourse} />
         {tab==='tests'?<>
           <div className={styles.toolbar}><div><span className={styles.eyebrow}>{translateUi(locale, 'legacy.web.your.assessments.c34efa9f')}</span><h2>{translateUi(locale, 'legacy.web.tests.available.to.you.6ba5d74e')}</h2><p>{courseId!==null?translateUi(locale, 'legacy.web.tests.are.shown.for.the.selected.cours.48e44b0e'):translateUi(locale, 'legacy.web.tests.are.shown.only.for.your.enrolled.57cf4f75')}</p></div></div>
           {loading?<div className={styles.empty}>{translateUi(locale, 'legacy.web.loading.your.tests.ff94a584')}</div>:error?null:filteredTests.length===0?<StudentEmptyState icon="tests" title={translateUi(locale, 'legacy.web.no.published.tests.yet.04ce394c')} message={translateUi(locale, 'legacy.web.your.teacher.s.published.tests.will.ap.450888e9')} primaryActionHref="/student/learn" primaryActionLabel={<UiText message="web.navigation.student.learnTopics" />} onRetry={() => void loadOverview()} retryLabel={translateUi(locale, 'legacy.web.refresh.944128d0')} retryDisabled={loading}/>:<div className={styles.testGrid}>{filteredTests.map(test=>{
