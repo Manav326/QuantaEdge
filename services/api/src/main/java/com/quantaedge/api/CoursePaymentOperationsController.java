@@ -230,7 +230,11 @@ public class CoursePaymentOperationsController {
       String eventType;
       String code;
       String message;
-      if("VERIFIED".equals(outcome)) {
+      if("VERIFIED".equals(outcome) && Boolean.TRUE.equals(result.get("financialSnapshotsRepaired"))) {
+        eventType="FINANCIAL_SNAPSHOT_REPAIRED_AND_RECONCILED";
+        code="TEST_MODE_FINANCIAL_SNAPSHOT_REPAIRED";
+        message="The existing Razorpay test payment was verified, missing financial snapshots were rebuilt under the guarded test-mode recovery, and the existing order was finalized. No replacement order was created.";
+      } else if("VERIFIED".equals(outcome)) {
         eventType="RECONCILIATION_SUCCEEDED";
         code="PAYMENT_VERIFIED";
         message="Provider payment is captured and the existing course order is verified. Review its invoice and entitlement references.";
@@ -250,6 +254,11 @@ public class CoursePaymentOperationsController {
       result.put("resolutionCode",code);
       result.put("resolutionMessage",message);
       Map<String,Object> details=diagnosticDetails(result);
+      if(Boolean.TRUE.equals(result.get("financialSnapshotsRepaired"))) {
+        details.put("financialSnapshotsRepaired",true);
+        details.put("financialSnapshotRepairMode",text(result.get("financialSnapshotRepairMode")));
+        details.put("financialSnapshotRepairBasis",text(result.get("financialSnapshotRepairBasis")));
+      }
       audit.record(orderId,context.staffId(),eventType,code,message,
           text(result.get("providerOrderId")),text(result.get("providerOrderStatus")),details);
       return ResponseEntity.ok(result);

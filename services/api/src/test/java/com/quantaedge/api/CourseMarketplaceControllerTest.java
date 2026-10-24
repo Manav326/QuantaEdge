@@ -51,6 +51,15 @@ class CourseMarketplaceControllerTest {
   }
 
   @Test
+  void automaticFinancialSnapshotRecoveryIsRestrictedToRazorpayTestMode() {
+    assertTrue(CourseMarketplaceController.isRazorpayTestModeKey("rzp_test_4FKABC123xyz"));
+    assertFalse(CourseMarketplaceController.isRazorpayTestModeKey("rzp_live_4FKABC123xyz"));
+    assertFalse(CourseMarketplaceController.isRazorpayTestModeKey(null));
+    assertFalse(CourseMarketplaceController.isRazorpayTestModeKey("rzp_test_"));
+    assertFalse(CourseMarketplaceController.isRazorpayTestModeKey("test_key_without_provider_prefix"));
+  }
+
+  @Test
   void legacyIncompleteOrderMayOnlyBeRepairedWhenProviderConfirmsRetryIsSafe() {
     assertTrue(CourseMarketplaceController.providerConfirmsRetryIsSafe("RETRYABLE"));
     assertFalse(CourseMarketplaceController.providerConfirmsRetryIsSafe("PAID"));
