@@ -48,7 +48,7 @@ $env:TRE4_DATABASE_URL = "postgresql://quantaedge:YOUR_LOCAL_DB_PASSWORD@localho
 python scripts/import_tre4_course.py --archive data/TRE-4_PYQ.zip --apply --submit-for-review
 ```
 
-The importer also accepts `SPRING_DATASOURCE_URL` (including the `jdbc:postgresql://` prefix). Never commit a database password or put it in this document. The importer requires Flyway V168, V177, V180, V196 and V197; the assessment-only readiness function must validate the pack-to-test mapping and all 150 TRE 3.0 questions.
+The importer also accepts `SPRING_DATASOURCE_URL` (including the `jdbc:postgresql://` prefix). Never commit a database password or put it in this document. The importer requires Flyway V168, V177, V180, V196, V198 and V199; the assessment-only readiness function must validate the pack-to-test mapping and all 150 TRE 3.0 questions.
 
 ## What the script writes
 
@@ -67,7 +67,7 @@ The dry-run JSON reports the course type, delivery mode, hierarchy, each pack co
 
 `--submit-for-review` submits the structurally complete release into `IN_QUALITY_REVIEW`; it does **not** approve, make it shareable or publish any assessment. HRMS must approve the exact submitted fingerprint, then the QuantaEdge source-institution administrator approves the origin release. Only the resulting `SHAREABLE` release can be assigned through the HRMS-controlled distribution workflow. These are separate from question-answer review and student test publication.
 
-The V197 readiness gate checks `ASSESSMENT` + `ASSESSMENT_ONLY`, the three expected versioned test packs, exact pack-to-assessment links, package hashes, question counts, and the rule that a published test cannot carry unresolved or unapproved answers. It does not rely on school-class, subject or chapter mapping. V196 includes the pack and pack-item rows in the canonical course fingerprint, preserving stale-release rejection if any content changes after submission.
+The V199 readiness gate checks `ASSESSMENT` + `ASSESSMENT_ONLY`, the three expected versioned test packs, exact pack-to-assessment links, package hashes, question counts, and the rule that a published test cannot carry unresolved or unapproved answers. It does not rely on school-class, subject or chapter mapping. V196 includes the pack and pack-item rows in the canonical course fingerprint, preserving stale-release rejection if any content changes after submission.
 
 ## Validation
 
