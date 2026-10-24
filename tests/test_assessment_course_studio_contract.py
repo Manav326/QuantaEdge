@@ -38,6 +38,8 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("Review submitted content", hrms_ui)
         self.assertIn("Answer review:", hrms_ui)
         self.assertIn("preview.contentCurrent", hrms_ui)
+        self.assertIn("reviewedContentFingerprint", hrms_ui)
+        self.assertIn("reviewedContentFingerprint", (ROOT / "services/api/src/main/java/com/quantaedge/api/PlatformInstitutionController.java").read_text(encoding="utf-8"))
 
     def test_learner_catalogue_exposes_renderer_contract(self):
         controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/StudentProgramController.java").read_text(encoding="utf-8")
