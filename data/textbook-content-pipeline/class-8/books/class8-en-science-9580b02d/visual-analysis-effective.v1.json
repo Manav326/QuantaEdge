@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0ee377b99723d1d3414a2107aa65f95b666e023a21652a0148f6fbd279676412",
+  "raw_analysis_sha256": "8d24e00386654a24457b03316f9e22cce96cf6d6647efe58a39d670173006077",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40080946926",
-      "checkpointed_at": "2026-10-24T10:00:29Z",
+      "checkpointed_at": "2026-10-24T10:13:50Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40080946926",
-      "checkpointed_at": "2026-10-24T10:01:04Z",
+      "checkpointed_at": "2026-10-24T10:14:25Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57805,7 +57805,7 @@
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_type": "diagram",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -57819,22 +57819,21 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force",
-          "living beings"
+          "muscular force"
         ],
         "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The image does not provide specific details about the forces acting on the objects in the diagram."
+          "The image does not provide specific details about the types of forces or the physical properties of the objects."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40080946926",
-      "checkpointed_at": "2026-10-24T10:07:35Z",
+      "checkpointed_at": "2026-10-24T10:15:06Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_type": "diagram",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -57848,12 +57847,11 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force",
-          "living beings"
+          "muscular force"
         ],
         "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The image does not provide specific details about the forces acting on the objects in the diagram."
+          "The image does not provide specific details about the types of forces or the physical properties of the objects."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -58140,21 +58138,77 @@
     {
       "asset_id": "ab0af6757186130b77128ff6",
       "asset_sha256": "085ff29477e307fa6d7f484db6fc602de4f9e4acb75c92c27442c9557edb76f0",
-      "page_text_context_sha256": "4ced2a91f1ad4add1f52a0f90bfa067845579b06c0365565cf231ef29c8dfe09",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 87,
       "asset_path": "page-0087.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "4ced2a91f1ad4add1f52a0f90bfa067845579b06c0365565cf231ef29c8dfe09",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40062008155",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of animals assisting with human tasks and a diagram explaining the role of muscular force in the body.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 5.4: Use of muscular force of animals to assist with human tasks",
+          "Ever heard of ...",
+          "Muscular force plays an important role in many functions inside our body too. This force helps us chew food and push it through the alimentary canal during the process of digestion. The expansion and contraction of our heart muscles allows the blood to circulate in our body—a process essential for s",
+          "Friction",
+          "A ball rolling on a flat ground stops on its own after some time. If we stop pedalling our bicycle on a flat road, it slows down and comes to a stop. If the road is rough, it stops sooner than on a smoother road. You must have come across many such experiences. What causes the change in the speed of",
+          "Activity 5.3: Let us investigate",
+          "Take an object with a flat base (such as an empty lunch box/ geometry box/ a notebook) and place it on a table or floor.",
+          "Gently push it and observe (Fig. 5.5). Does it stop after travelling some distance? Is there a force acting on it which brings it to rest?",
+          "Now repeat by pushing the object in the opposite direction. Does it stop again after travelling some distance?"
+        ],
+        "concepts": [
+          "Muscular force",
+          "Digestion",
+          "Heart muscles",
+          "Friction",
+          "Speed of objects",
+          "Forces acting on objects",
+          "Observation"
+        ],
+        "context_relation": "exploring forces",
+        "limitations": [
+          "The image does not provide specific details about the animals or the objects being used."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40080946926",
+      "checkpointed_at": "2026-10-24T10:18:19Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of animals assisting with human tasks and a diagram explaining the role of muscular force in the body.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 5.4: Use of muscular force of animals to assist with human tasks",
+          "Ever heard of ...",
+          "Muscular force plays an important role in many functions inside our body too. This force helps us chew food and push it through the alimentary canal during the process of digestion. The expansion and contraction of our heart muscles allows the blood to circulate in our body—a process essential for s",
+          "Friction",
+          "A ball rolling on a flat ground stops on its own after some time. If we stop pedalling our bicycle on a flat road, it slows down and comes to a stop. If the road is rough, it stops sooner than on a smoother road. You must have come across many such experiences. What causes the change in the speed of",
+          "Activity 5.3: Let us investigate",
+          "Take an object with a flat base (such as an empty lunch box/ geometry box/ a notebook) and place it on a table or floor.",
+          "Gently push it and observe (Fig. 5.5). Does it stop after travelling some distance? Is there a force acting on it which brings it to rest?",
+          "Now repeat by pushing the object in the opposite direction. Does it stop again after travelling some distance?"
+        ],
+        "concepts": [
+          "Muscular force",
+          "Digestion",
+          "Heart muscles",
+          "Friction",
+          "Speed of objects",
+          "Forces acting on objects",
+          "Observation"
+        ],
+        "context_relation": "exploring forces",
+        "limitations": [
+          "The image does not provide specific details about the animals or the objects being used."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -58218,21 +58272,67 @@
     {
       "asset_id": "daeae54a0a8c53512b7acecc",
       "asset_sha256": "fabc47b6ae3b2f867bbbde1dddcda33cd2f4bb2b5724fa0177411f12f27ad9c4",
-      "page_text_context_sha256": "1cfa6eb0856e050215e8288a0fc8cddd57b40724cfc835f71887ac1d9a45e10b",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 88,
       "asset_path": "assets/fabc47b6ae3b2f867bbbde1dddcda33cd2f4bb2b5724fa0177411f12f27ad9c4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1cfa6eb0856e050215e8288a0fc8cddd57b40724cfc835f71887ac1d9a45e10b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40062008155",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand pushing a rectangular object on a flat surface.",
+        "visual_type": "photo",
+        "visible_text": [
+          "On pushing, the object stops after sliding a certain distance. This must be due to a force acting between the surfaces of the sliding object and the table or floor which are in contact. This force must be acting on the object in a direction opposite to its direction of motion. This force is what bri",
+          "The force that comes into play when an object moves or tries to move over another",
+          "object is called friction.",
+          "Friction is a force that resists the relative motion of two surfaces in contact."
+        ],
+        "concepts": [
+          "Friction",
+          "Relative motion",
+          "Contact surfaces",
+          "Direction of motion",
+          "Stopping an object"
+        ],
+        "context_relation": "The image illustrates the concept of friction, which is a force that resists the relative motion of two surfaces in contact.",
+        "limitations": [
+          "The image does not show the actual force of friction acting on the object.",
+          "The image does not show the direction of motion of the object.",
+          "The image does not show the direction of the force of friction."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40080946926",
+      "checkpointed_at": "2026-10-24T10:19:39Z",
+      "effective_analysis": {
+        "visual_summary": "A hand pushing a rectangular object on a flat surface.",
+        "visual_type": "photo",
+        "visible_text": [
+          "On pushing, the object stops after sliding a certain distance. This must be due to a force acting between the surfaces of the sliding object and the table or floor which are in contact. This force must be acting on the object in a direction opposite to its direction of motion. This force is what bri",
+          "The force that comes into play when an object moves or tries to move over another",
+          "object is called friction.",
+          "Friction is a force that resists the relative motion of two surfaces in contact."
+        ],
+        "concepts": [
+          "Friction",
+          "Relative motion",
+          "Contact surfaces",
+          "Direction of motion",
+          "Stopping an object"
+        ],
+        "context_relation": "The image illustrates the concept of friction, which is a force that resists the relative motion of two surfaces in contact.",
+        "limitations": [
+          "The image does not show the actual force of friction acting on the object.",
+          "The image does not show the direction of motion of the object.",
+          "The image does not show the direction of the force of friction."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {

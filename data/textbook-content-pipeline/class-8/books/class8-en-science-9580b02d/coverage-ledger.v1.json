@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
     "raw_analysis_result_rows": 1226,
-    "successful_visual_analyses": 1213,
+    "successful_visual_analyses": 1215,
     "missing_visual_analyses": 1065,
-    "failed_visual_analyses": 13,
+    "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1078,
+    "unresolved_count": 1076,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -44749,7 +44749,7 @@
       "correction_status": "NONE",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_type": "diagram",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -44763,12 +44763,11 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force",
-          "living beings"
+          "muscular force"
         ],
         "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The image does not provide specific details about the forces acting on the objects in the diagram."
+          "The image does not provide specific details about the types of forces or the physical properties of the objects."
         ]
       },
       "chapter_id": null,
@@ -44968,9 +44967,36 @@
       "asset_path": "page-0087.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of animals assisting with human tasks and a diagram explaining the role of muscular force in the body.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 5.4: Use of muscular force of animals to assist with human tasks",
+          "Ever heard of ...",
+          "Muscular force plays an important role in many functions inside our body too. This force helps us chew food and push it through the alimentary canal during the process of digestion. The expansion and contraction of our heart muscles allows the blood to circulate in our body—a process essential for s",
+          "Friction",
+          "A ball rolling on a flat ground stops on its own after some time. If we stop pedalling our bicycle on a flat road, it slows down and comes to a stop. If the road is rough, it stops sooner than on a smoother road. You must have come across many such experiences. What causes the change in the speed of",
+          "Activity 5.3: Let us investigate",
+          "Take an object with a flat base (such as an empty lunch box/ geometry box/ a notebook) and place it on a table or floor.",
+          "Gently push it and observe (Fig. 5.5). Does it stop after travelling some distance? Is there a force acting on it which brings it to rest?",
+          "Now repeat by pushing the object in the opposite direction. Does it stop again after travelling some distance?"
+        ],
+        "concepts": [
+          "Muscular force",
+          "Digestion",
+          "Heart muscles",
+          "Friction",
+          "Speed of objects",
+          "Forces acting on objects",
+          "Observation"
+        ],
+        "context_relation": "exploring forces",
+        "limitations": [
+          "The image does not provide specific details about the animals or the objects being used."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45022,9 +45048,31 @@
       "asset_path": "assets/fabc47b6ae3b2f867bbbde1dddcda33cd2f4bb2b5724fa0177411f12f27ad9c4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand pushing a rectangular object on a flat surface.",
+        "visual_type": "photo",
+        "visible_text": [
+          "On pushing, the object stops after sliding a certain distance. This must be due to a force acting between the surfaces of the sliding object and the table or floor which are in contact. This force must be acting on the object in a direction opposite to its direction of motion. This force is what bri",
+          "The force that comes into play when an object moves or tries to move over another",
+          "object is called friction.",
+          "Friction is a force that resists the relative motion of two surfaces in contact."
+        ],
+        "concepts": [
+          "Friction",
+          "Relative motion",
+          "Contact surfaces",
+          "Direction of motion",
+          "Stopping an object"
+        ],
+        "context_relation": "The image illustrates the concept of friction, which is a force that resists the relative motion of two surfaces in contact.",
+        "limitations": [
+          "The image does not show the actual force of friction acting on the object.",
+          "The image does not show the direction of motion of the object.",
+          "The image does not show the direction of the force of friction."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
