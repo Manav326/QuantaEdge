@@ -45,6 +45,24 @@ type PaymentReconciliationResult = {
   paymentAttempts?:Array<{paymentId:string;status:string;amountPaise:number;currency:string;matchesExpectedAmountAndCurrency:boolean;
     method?:string;errorCode?:string;errorReason?:string;errorDescription?:string}>;
 };
+type PaymentTraceStep = {
+  key:string; title:string; status:'COMPLETE'|'BLOCKED'|'PENDING'|'UNKNOWN'|'NOT_REACHED';
+  summary:string; details?:string[]; occurredAt?:string|null;
+};
+type PaymentStatusTrace = {
+  orderId:number; courseId:number; courseTitle:string; institutionName:string; localOrderStatus:string;
+  createdAt?:string|null; checkedAt:string; overallStatus:string; readOnly:boolean; message:string;
+  steps:PaymentTraceStep[]; blockers:PaymentTraceStep[]; pendingSteps:PaymentTraceStep[];
+  provider?:{
+    providerQueryAvailable?:boolean; providerStatus?:string; configuredProviderMode?:string; matchedProviderMode?:string;
+    providerOrderStatus?:string; providerAmountPaidPaise?:number; providerAttemptCount?:number;
+    providerAmountCurrencyMatch?:boolean; message?:string; credentialModesTried?:string[];
+    paymentAttempts?:Array<{paymentId:string;status:string;amountPaise:number;currency:string;matchesExpectedAmountAndCurrency:boolean;
+      method?:string;errorCode?:string;errorReason?:string;errorDescription?:string}>;
+  };
+  financialFacts?:{listedPricePaise:number;discountAmountPaise:number;payablePaise:number;capturedAmountPaise:number;
+    currency:string;financialSnapshotsPresent:boolean;buyerSnapshotPresent:boolean};
+};
 type Overview = { legalEntities:number; activeTaxProfiles:number; pendingTaxProfiles:number; approvedSharePolicies:number; pendingSharePolicies:number; issuedDocuments:number; allocatedPaise:number };
 type Design = { primaryColor:string; accentColor:string; surfaceStyle:string; layout:string; showLogo:boolean; footerText:string };
 type RecipientDraft = { institutionId:string; calculationType:'PERCENTAGE'|'FLAT'; percentage:string; flatRupees:string };
@@ -105,6 +123,9 @@ export default function FinancePage(){
   const [paymentEventsLoading,setPaymentEventsLoading]=useState(false);
   const [paymentActionLoadingId,setPaymentActionLoadingId]=useState<number|null>(null);
   const [paymentActionResult,setPaymentActionResult]=useState<PaymentReconciliationResult|null>(null);
+  const [statusTrace,setStatusTrace]=useState<PaymentStatusTrace|null>(null);
+  const [statusTraceLoadingId,setStatusTraceLoadingId]=useState<number|null>(null);
+  const [statusTraceError,setStatusTraceError]=useState('');
   const [providerEvents,setProviderEvents]=useState<ProviderEventRecord[]>([]);
   const [providerEventTotal,setProviderEventTotal]=useState(0);
   const [providerEventSearch,setProviderEventSearch]=useState('');
@@ -384,12 +405,26 @@ export default function FinancePage(){
     finally{setSelectedProviderEventsLoading(false);}
   };
   const inspectPaymentOrderId=(orderId:number)=>{
-    setSelectedPaymentOrderId(orderId);setPaymentActionResult(null);
+    setSelectedPaymentOrderId(orderId);setPaymentActionResult(null);setStatusTrace(null);setStatusTraceError('');
     void Promise.all([loadPaymentEvents(orderId),loadSelectedProviderEvents(orderId)]);
   };
   const selectPaymentOrder=(order:CoursePaymentOrder)=>{
-    setSelectedPaymentOrderId(order.local_order_id);setPaymentActionResult(null);
+    setSelectedPaymentOrderId(order.local_order_id);setPaymentActionResult(null);setStatusTraceError('');
+    if(statusTrace?.orderId!==order.local_order_id)setStatusTrace(null);
     void Promise.all([loadPaymentEvents(order.local_order_id),loadSelectedProviderEvents(order.local_order_id)]);
+  };
+  const checkCurrentStatus=async(orderId:number)=>{
+    setSelectedPaymentOrderId(orderId);setPaymentActionResult(null);setStatusTrace(null);setStatusTraceError('');
+    setStatusTraceLoadingId(orderId);
+    void Promise.all([loadPaymentEvents(orderId),loadSelectedProviderEvents(orderId)]);
+    try{
+      const trace=await api<PaymentStatusTrace>('/api/v1/hrms/platform/finance/course-orders/'+orderId+'/status-trace');
+      setStatusTrace(trace);
+    }catch(e){
+      setStatusTraceError(e instanceof Error?e.message:'The transaction delivery chain could not be loaded.');
+    }finally{
+      setStatusTraceLoadingId(current=>current===orderId?null:current);
+    }
   };
   const reconcilePaymentOrder=async(order:CoursePaymentOrder)=>{
     if(!['PENDING','EXPIRED','VERIFIED'].includes(String(order.status).toUpperCase()))return;
@@ -862,6 +897,11 @@ export default function FinancePage(){
                 <td><b>{order.invoice_number||'Not issued / linked'}</b><small>{order.fiscal_document_id?'Document #'+order.fiscal_document_id:'No invoice reference'}</small></td>
                 <td><div className={styles.paymentRowActions}>
                   <button type="button" className={styles.secondarySmall} onClick={()=>selectPaymentOrder(order)}>Inspect</button>
+                  <button type="button" className={styles.secondarySmall}
+                    disabled={statusTraceLoadingId!==null}
+                    onClick={()=>void checkCurrentStatus(order.local_order_id)}>
+                    {statusTraceLoadingId===order.local_order_id?'Tracing…':'Check current status'}
+                  </button>
                   {canReconcile&&<button type="button" className={styles.primarySmall} disabled={paymentActionLoadingId!==null}
                     onClick={()=>void reconcilePaymentOrder(order)}>{paymentActionLoadingId===order.local_order_id?'Checking…':'Check & reconcile'}</button>}
                   {!canReconcile&&<small>{order.recommended_action}</small>}
