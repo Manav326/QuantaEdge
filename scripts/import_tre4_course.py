@@ -527,7 +527,7 @@ def ensure_course_identity(cursor: Any, institution_id: int, course_id: int) -> 
 
     cursor.execute("""
         UPDATE curriculum_program
-        SET course_type_code='ASSESSMENT',course_identity_id=%s,content_version_no=1,
+        SET course_type_code='ASSESSMENT',course_identity_id=%s,
             stream_code='BPSC_TRE',updated_at=now()
         WHERE id=%s AND course_identity_id IS NULL
     """, (identity_id, course_id))
