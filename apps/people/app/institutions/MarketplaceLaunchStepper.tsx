@@ -322,6 +322,12 @@ export default function MarketplaceLaunchStepper({
       return;
     }
     const assessmentOnly = release.delivery_mode === 'ASSESSMENT_ONLY' || release.course_type_code === 'ASSESSMENT';
+    const preview = reviewContent[release.release_id];
+    if (approved && assessmentOnly && (!preview || !preview.contentCurrent
+      || preview.content_fingerprint !== release.content_fingerprint)) {
+      setError('Open and inspect the exact submitted assessment content before approving its quality.');
+      return;
+    }
     const releaseReady = assessmentOnly
       ? release.assessment_only_ready === true
       : release.active_subject_count > 0
@@ -339,7 +345,11 @@ export default function MarketplaceLaunchStepper({
     try {
       await api('/api/v1/hrms/platform/institutions/course-releases/' + release.release_id + '/quality-review', {
         method: 'POST',
-        body: JSON.stringify({ approved, notes }),
+        body: JSON.stringify({
+          approved,
+          notes,
+          ...(assessmentOnly ? { reviewedContentFingerprint: preview?.content_fingerprint } : {}),
+        }),
       });
       setNotice(approved
         ? 'Content quality approved. The source institution must still complete its origin approval before the release can be assigned.'
