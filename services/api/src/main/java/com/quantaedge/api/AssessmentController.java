@@ -2850,8 +2850,8 @@ public class AssessmentController {
       select count(distinct att.assessment_id)
       from student_assessment_attempt att
       join assessment a on a.id=att.assessment_id
-      join curriculum_subject s on s.id=a.subject_id
-      join curriculum_class c on c.id=s.class_id
+      left join curriculum_subject s on s.id=a.subject_id
+      left join curriculum_class c on c.id=s.class_id
       join student st on st.id=att.student_id and st.active=true
       where att.student_id=? and att.institution_id=(select institution_id from tenant_scope)
         and att.status='RELEASED' and __RESULT_SCOPE__
@@ -2936,7 +2936,7 @@ public class AssessmentController {
              a.assessment_type,a.is_generated,s.code as subject_code,s.display_name as subject_name,ch.display_name as chapter_name
       from student_assessment_attempt att
       join assessment a on a.id=att.assessment_id
-      join curriculum_subject s on s.id=a.subject_id
+      left join curriculum_subject s on s.id=a.subject_id
       join student st on st.id=att.student_id
       left join curriculum_chapter ch on ch.id=a.chapter_id
       where att.id=?""" + tenantPredicate,queryArgs);
