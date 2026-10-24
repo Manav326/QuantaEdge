@@ -56,7 +56,7 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertEqual(course_id, 777)
         self.assertEqual(public_id, "INS-QE-TRE4")
         self.assertTrue(created)
-        sql = "\\n".join(statement for statement, _ in cursor.statements)
+        sql = "\n".join(statement for statement, _ in cursor.statements)
         self.assertIn("class_id,code,display_name", sql)
         self.assertIn("VALUES (NULL,%s,%s,'BPSC_TRE'", sql)
         self.assertIn("'ASSESSMENT'", sql)
@@ -80,7 +80,7 @@ class Tre4ImporterTests(unittest.TestCase):
 
         self.assertEqual(pack_id, 501)
         self.assertTrue(created)
-        sql = "\\n".join(statement for statement, _ in cursor.statements)
+        sql = "\n".join(statement for statement, _ in cursor.statements)
         self.assertIn("INSERT INTO course_assessment_pack(", sql)
         self.assertIn("INSERT INTO course_assessment_pack_item", sql)
         self.assertIn("VALUES (%s,%s,1,'PREVIOUS_YEAR_PAPER')", sql)
