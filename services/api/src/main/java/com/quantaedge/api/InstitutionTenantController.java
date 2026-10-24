@@ -427,7 +427,7 @@ public class InstitutionTenantController {
     result.put("adminUsername",principal.username());
     result.put("adminDisplayName",principal.displayName());
     result.put("mustChangePassword",principal.mustChangePassword());
-    result.put("capabilities",List.of("INSTITUTION_REPORTS_VIEW"));
+    result.put("capabilities",List.of("INSTITUTION_REPORTS_VIEW","INSTITUTION_RELEASE_MANAGE","NOTIFICATION_INSTITUTION_SEND"));
     return result;
   }
 
