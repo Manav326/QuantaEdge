@@ -45,13 +45,9 @@ function workspaceRequest(input: RequestInfo | URL, init?: RequestInit): Request
   const headers = new Headers(input instanceof Request ? input.headers : undefined);
   new Headers(init?.headers).forEach((value, key) => headers.set(key, value));
   headers.set('X-QE-Workspace', 'EDUCATION_ADMIN');
-  try {
-    const tenantCode = window.localStorage.getItem('qe:admin:activeInstitutionCode')?.trim();
-    if (tenantCode) headers.set('X-QE-Institution-Code', tenantCode);
-    else headers.delete('X-QE-Institution-Code');
-  } catch {
-    headers.delete('X-QE-Institution-Code');
-  }
+  // Tenant identity is resolved server-side from the authenticated staff's HRMS binding.
+  // Never propagate institution selection from browser storage.
+  headers.delete('X-QE-Institution-Code');
   return new Request(input instanceof Request ? input.clone() : input, { ...init, headers });
 }
 

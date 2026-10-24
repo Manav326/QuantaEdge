@@ -108,6 +108,29 @@ public class CourseMarketplaceController {
           order by r.requested_at desc,r.id desc limit 1
         ) parent_request on true
         where o.institution_id=? and o.status='PUBLISHED'
+          and o.hrms_published_by_staff_id is not null
+          and release.release_state='SHAREABLE'
+          and release.content_fingerprint=course_content_fingerprint(release.program_id)
+          and not exists (
+            select 1
+            from institution_marketplace_offer newer_offer
+            join institution_course_assignment newer_assignment
+              on newer_assignment.id=newer_offer.assignment_id
+             and newer_assignment.institution_id=newer_offer.institution_id
+             and newer_assignment.status='ASSIGNED'
+            join institution_course_release newer_release
+              on newer_release.id=newer_offer.course_release_id
+             and newer_release.program_id=newer_offer.course_id
+            join curriculum_program newer_program
+              on newer_program.id=newer_release.program_id
+             and newer_program.course_identity_id=p.course_identity_id
+             and newer_program.content_version_no>p.content_version_no
+            where newer_offer.institution_id=o.institution_id
+              and newer_offer.status='PUBLISHED'
+              and newer_offer.hrms_published_by_staff_id is not null
+              and newer_release.release_state='SHAREABLE'
+              and newer_release.content_fingerprint=course_content_fingerprint(newer_release.program_id)
+          )
         order by p.display_name,p.id
         """, institutionId, context.studentId(),
         institutionId, context.studentId(), context.studentId(), context.studentId(), institutionId);
@@ -195,6 +218,29 @@ public class CourseMarketplaceController {
       join institution_tenant tenant_scope on tenant_scope.id=o.institution_id and tenant_scope.status='ACTIVE'
       join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
       where o.institution_id=(select institution_id from selected_tenant) and o.status='PUBLISHED'
+        and o.hrms_published_by_staff_id is not null
+        and release.release_state='SHAREABLE'
+        and release.content_fingerprint=course_content_fingerprint(release.program_id)
+        and not exists (
+          select 1
+          from institution_marketplace_offer newer_offer
+          join institution_course_assignment newer_assignment
+            on newer_assignment.id=newer_offer.assignment_id
+           and newer_assignment.institution_id=newer_offer.institution_id
+           and newer_assignment.status='ASSIGNED'
+          join institution_course_release newer_release
+            on newer_release.id=newer_offer.course_release_id
+           and newer_release.program_id=newer_offer.course_id
+          join curriculum_program newer_program
+            on newer_program.id=newer_release.program_id
+           and newer_program.course_identity_id=p.course_identity_id
+           and newer_program.content_version_no>p.content_version_no
+          where newer_offer.institution_id=o.institution_id
+            and newer_offer.status='PUBLISHED'
+            and newer_offer.hrms_published_by_staff_id is not null
+            and newer_release.release_state='SHAREABLE'
+            and newer_release.content_fingerprint=course_content_fingerprint(newer_release.program_id)
+        )
       order by p.display_name,p.id
       """, institutionId, parentId, parentId, parentId, parentId, parentId, parentId);
     for (Map<String,Object> offer : offers) {
@@ -251,6 +297,29 @@ public class CourseMarketplaceController {
         join institution_tenant t on t.id=o.institution_id and t.status='ACTIVE'
         join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
         where o.institution_id=? and o.course_id=? and o.status='PUBLISHED'
+          and o.hrms_published_by_staff_id is not null
+          and r.release_state='SHAREABLE'
+          and r.content_fingerprint=course_content_fingerprint(r.program_id)
+          and not exists (
+            select 1
+            from institution_marketplace_offer newer_offer
+            join institution_course_assignment newer_assignment
+              on newer_assignment.id=newer_offer.assignment_id
+             and newer_assignment.institution_id=newer_offer.institution_id
+             and newer_assignment.status='ASSIGNED'
+            join institution_course_release newer_release
+              on newer_release.id=newer_offer.course_release_id
+             and newer_release.program_id=newer_offer.course_id
+            join curriculum_program newer_program
+              on newer_program.id=newer_release.program_id
+             and newer_program.course_identity_id=p.course_identity_id
+             and newer_program.content_version_no>p.content_version_no
+            where newer_offer.institution_id=o.institution_id
+              and newer_offer.status='PUBLISHED'
+              and newer_offer.hrms_published_by_staff_id is not null
+              and newer_release.release_state='SHAREABLE'
+              and newer_release.content_fingerprint=course_content_fingerprint(newer_release.program_id)
+          )
           and o.price_paise=0 and o.currency='INR'
       )
       """, Boolean.class, institutionId, courseId);
@@ -625,7 +694,31 @@ public class CourseMarketplaceController {
           and target_student.environment='PRODUCTION'
         join institution_membership member
           on member.student_id=target_student.id and member.institution_id=o.institution_id and member.status='ACTIVE'
-        where o.institution_id=? and p.id=? and o.status='PUBLISHED' and o.price_paise>0
+        where o.institution_id=? and p.id=? and o.status='PUBLISHED'
+          and o.hrms_published_by_staff_id is not null
+          and release.release_state='SHAREABLE'
+          and release.content_fingerprint=course_content_fingerprint(release.program_id)
+          and not exists (
+            select 1
+            from institution_marketplace_offer newer_offer
+            join institution_course_assignment newer_assignment
+              on newer_assignment.id=newer_offer.assignment_id
+             and newer_assignment.institution_id=newer_offer.institution_id
+             and newer_assignment.status='ASSIGNED'
+            join institution_course_release newer_release
+              on newer_release.id=newer_offer.course_release_id
+             and newer_release.program_id=newer_offer.course_id
+            join curriculum_program newer_program
+              on newer_program.id=newer_release.program_id
+             and newer_program.course_identity_id=p.course_identity_id
+             and newer_program.content_version_no>p.content_version_no
+            where newer_offer.institution_id=o.institution_id
+              and newer_offer.status='PUBLISHED'
+              and newer_offer.hrms_published_by_staff_id is not null
+              and newer_release.release_state='SHAREABLE'
+              and newer_release.content_fingerprint=course_content_fingerprint(newer_release.program_id)
+          )
+          and o.price_paise>0
         """, targetStudentId,institutionId,courseId);
     if (rows.isEmpty()) throw new IllegalArgumentException("This paid course is not currently available to the selected institution.");
     // Course and history ownership are keyed by institution; another tenant's records are independent.
@@ -1591,6 +1684,9 @@ public class CourseMarketplaceController {
             on release.id=offer.course_release_id and release.program_id=offer.course_id
           join institution_tenant tenant_scope on tenant_scope.id=offer.institution_id and tenant_scope.status='ACTIVE'
           where offer.id=? and offer.institution_id=? and offer.course_id=? and offer.status='PUBLISHED'
+            and offer.hrms_published_by_staff_id is not null
+            and release.release_state='SHAREABLE'
+            and release.content_fingerprint=course_content_fingerprint(release.program_id)
         )
         """, Boolean.class, ((Number) order.get("institution_offer_id")).longValue(), institutionId,
         ((Number) order.get("course_id")).longValue());
@@ -1740,64 +1836,33 @@ public class CourseMarketplaceController {
     return result;
   }
 
+  /**
+   * @deprecated Historical platform-wide Marketplace editor. Learner-facing offers are now
+   * institution-scoped and may only be published through the HRMS launch stepper.
+   */
+  @Deprecated(since="2026-10", forRemoval=false)
   @GetMapping("/admin/courses")
   public List<Map<String, Object>> adminCourses(
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    authorization.requireAdmin(context);
-    return jdbc.queryForList("""
-        select p.id as course_id,p.code,p.display_name,p.curriculum_version,p.status as course_status,
-          o.title_override,o.description,o.price_paise,o.currency,o.status as offer_status,
-          o.updated_at
-        from curriculum_program p
-        left join course_marketplace_offer o on o.course_id=p.id
-        where p.status='ACTIVE' and p.code<>'GENERAL'
-        order by p.display_name,p.id
-        """);
+    throw legacyGlobalMarketplaceGone();
   }
 
-  /** Publish/update offer metadata and server-side price through an explicit Admin action. */
+  /**
+   * @deprecated Historical platform-wide offer mutation endpoint. It cannot approve or publish
+   * the current tenant-scoped Marketplace catalogue.
+   */
+  @Deprecated(since="2026-10", forRemoval=false)
   @PutMapping("/admin/courses/{courseId}")
   public Map<String, Object> saveOffer(
       @PathVariable long courseId,
       @RequestBody SaveCourseOfferRequest request,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    context = authorization.requireAdmin(context);
-    if (request == null || request.pricePaise() < 0L) {
-      throw new IllegalArgumentException("Enter a valid course price.");
-    }
-    String currency = request.currency() == null ? "INR" : request.currency().trim().toUpperCase(Locale.ROOT);
-    if (!currency.matches("[A-Z]{3}") || !"INR".equals(currency)) {
-      throw new IllegalArgumentException("Course checkout currently supports INR only.");
-    }
-    String status = request.status() == null ? "DRAFT" : request.status().trim().toUpperCase(Locale.ROOT);
-    if (!List.of("DRAFT", "PUBLISHED", "ARCHIVED").contains(status)) {
-      throw new IllegalArgumentException("Choose a valid marketplace status.");
-    }
-    String title = request.title() == null ? "" : request.title().trim();
-    String description = request.description() == null ? "" : request.description().trim();
-    if (title.length() > 200 || description.length() > 4000) {
-      throw new IllegalArgumentException("The course title or description is too long.");
-    }
-    Integer count = jdbc.queryForObject("""
-        select count(*) from curriculum_program where id=? and status='ACTIVE' and code<>'GENERAL'
-        """, Integer.class, courseId);
-    if (count == null || count != 1) throw new IllegalArgumentException("Choose an active course.");
-    jdbc.update("""
-        insert into course_marketplace_offer(
-          course_id,title_override,description,price_paise,currency,status,created_by_staff_id,updated_by_staff_id
-        ) values(?,?,?,?,?,?,?,?)
-        on conflict(course_id) do update set
-          title_override=excluded.title_override,description=excluded.description,
-          price_paise=excluded.price_paise,currency=excluded.currency,status=excluded.status,
-          updated_by_staff_id=excluded.updated_by_staff_id,updated_at=now()
-        """, courseId, title.isBlank() ? null : title, description.isBlank() ? null : description,
-        request.pricePaise(), currency, status, context.staffId(), context.staffId());
-    return jdbc.queryForMap("""
-        select p.id as course_id,coalesce(nullif(o.title_override,''),p.display_name) as title,
-          o.description,o.price_paise,o.currency,o.status as offer_status,o.updated_at
-        from course_marketplace_offer o join curriculum_program p on p.id=o.course_id
-        where o.course_id=?
-        """, courseId);
+    throw legacyGlobalMarketplaceGone();
+  }
+
+  private ResponseStatusException legacyGlobalMarketplaceGone() {
+    return new ResponseStatusException(HttpStatus.GONE,
+        "DEPRECATED_GLOBAL_MARKETPLACE: Configure and publish institution offers through the HRMS Marketplace launch stepper. The legacy global editor is retained temporarily for migration compatibility.");
   }
 
   private InstitutionTenantContext requireTenant(InstitutionTenantContext tenant) {

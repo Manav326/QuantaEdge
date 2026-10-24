@@ -2,6 +2,7 @@ package com.quantaedge.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -112,7 +113,127 @@ public class CourseMarketplaceLaunchController {
     result.put("availableCount",availableReleases.size());
     result.put("qualityReviewItems",qualityReviewItems);
     result.put("qualityReviewCount",qualityReviewItems.size());
+
+    List<Map<String,Object>> coursePackageImports=jdbc.queryForList("""
+        select i.id as import_id,i.package_id,i.package_version,i.course_id,i.release_id,
+          i.source_institution_id,source.tenant_code as source_institution_code,
+          source.display_name as source_institution_name,p.display_name as course_name,
+          coalesce(i.editorial_metadata->>'source_rights_status','UNCONFIRMED') as source_rights_status,
+          i.editorial_metadata->>'rights_evidence_url' as rights_evidence_url,
+          i.rights_reviewed_at,i.rights_review_notes
+        from institution_course_package_import i
+        join curriculum_program p on p.id=i.course_id
+        join institution_tenant source on source.id=i.source_institution_id
+        where i.state='IMPORTED'
+          and exists (
+            select 1
+            from institution_course_assignment assigned
+            join institution_course_release assigned_release
+              on assigned_release.id=assigned.course_release_id
+            join curriculum_program assigned_course on assigned_course.id=assigned_release.program_id
+            where assigned.institution_id=? and assigned.status='ASSIGNED'
+              and (
+                assigned_course.id=i.course_id
+                or (p.course_identity_id is not null
+                  and assigned_course.course_identity_id=p.course_identity_id)
+              )
+          )
+        order by i.imported_at desc,i.id desc
+        """,institutionId);
+    result.put("coursePackageImports",coursePackageImports);
+    result.put("coursePackageImportCount",coursePackageImports.size());
     return result;
+  }
+
+  @PostMapping("/{institutionId}/course-package-imports/{importId}/rights-review")
+  @Transactional
+  public Map<String,Object> reviewCoursePackageRights(
+      @PathVariable long institutionId,@PathVariable long importId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext supplied) {
+    AuthContext context=authorization.requirePermission(supplied,"QE_PLATFORM_OWNER");
+    requireStaff(context);
+    assertInstitution(institutionId);
+    String status=optionalText(body==null?null:body.get("status"),"",40,"Rights decision")
+        .toUpperCase(Locale.ROOT);
+    if(!List.of("CLEARED_FOR_INTERNAL_USE","CLEARED_FOR_PUBLIC_REPOSITORY","DO_NOT_REDISTRIBUTE")
+        .contains(status)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          "Choose CLEARED_FOR_INTERNAL_USE, CLEARED_FOR_PUBLIC_REPOSITORY, or DO_NOT_REDISTRIBUTE.");
+    }
+    String notes=optionalText(body==null?null:body.get("notes"),"",1000,"Reviewer notes");
+    if(notes.length()<5) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          "Record at least five characters explaining the rights decision.");
+    }
+    String evidence=optionalText(body==null?null:body.get("evidenceUrl"),"",2000,"Rights evidence URL");
+    if(!evidence.isBlank()) {
+      try {
+        URI uri=URI.create(evidence);
+        if(!"https".equalsIgnoreCase(uri.getScheme())||uri.getHost()==null||uri.getUserInfo()!=null) {
+          throw new IllegalArgumentException("Rights evidence must be an HTTPS URL without embedded credentials.");
+        }
+      } catch(IllegalArgumentException ex) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+            "Provide a valid HTTPS rights-evidence URL.",ex);
+      }
+    }
+    if(!"DO_NOT_REDISTRIBUTE".equals(status)&&evidence.isBlank()) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          "A cleared distribution-rights decision requires a valid HTTPS rights-evidence URL.");
+    }
+
+    List<Map<String,Object>> imports=jdbc.queryForList("""
+        select i.id,i.package_id,i.package_version,i.source_institution_id,i.course_id,i.release_id,
+          i.editorial_metadata->>'source_rights_status' as previous_rights_status
+        from institution_course_package_import i
+        join curriculum_program p on p.id=i.course_id
+        where i.id=? and i.state='IMPORTED'
+          and exists (
+            select 1
+            from institution_course_assignment assigned
+            join institution_course_release assigned_release
+              on assigned_release.id=assigned.course_release_id
+            join curriculum_program assigned_course on assigned_course.id=assigned_release.program_id
+            where assigned.institution_id=? and assigned.status='ASSIGNED'
+              and (
+                assigned_course.id=i.course_id
+                or (p.course_identity_id is not null
+                  and assigned_course.course_identity_id=p.course_identity_id)
+              )
+          )
+        for update of i
+        """,importId,institutionId);
+    if(imports.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+          "This imported package is not assigned to the selected institution.");
+    }
+    Map<String,Object> imported=imports.getFirst();
+    String previousStatus=text(imported.get("previous_rights_status"));
+    int updated=jdbc.update("""
+        update institution_course_package_import
+        set editorial_metadata=editorial_metadata || jsonb_build_object(
+              'source_rights_status',?,'rights_evidence_url',?,'rights_review_notes',?),
+            rights_reviewed_by_staff_id=?,rights_reviewed_at=now(),rights_review_notes=?
+        where id=? and state='IMPORTED'
+        """,status,evidence.isBlank()?null:evidence,notes,context.staffId(),notes,importId);
+    if(updated!=1) throw conflict("The imported package changed during rights review. Refresh the checklist and retry.");
+
+    List<Long> sourceAssignments=jdbc.queryForList("""
+        select id from institution_course_assignment
+        where institution_id=? and course_release_id=?
+        order by id desc limit 1
+        """,Long.class,number(imported.get("source_institution_id")),number(imported.get("release_id")));
+    Long sourceAssignmentId=sourceAssignments.isEmpty()?null:sourceAssignments.getFirst();
+    record(number(imported.get("source_institution_id")),number(imported.get("release_id")),
+        sourceAssignmentId,null,"COURSE_PACKAGE_RIGHTS_REVIEWED",context.staffId(),
+        Map.of("packageImportId",importId,"packageId",text(imported.get("package_id")),
+          "packageVersion",text(imported.get("package_version")),
+          "reviewedForInstitutionId",institutionId,"previousStatus",previousStatus==null?"UNCONFIRMED":previousStatus,
+          "decision",status,"evidenceUrl",evidence,"reviewNotes",notes));
+    return Map.of("saved",true,"importId",importId,"status",status,
+        "reviewedByStaffId",context.staffId(),
+        "message","Package rights decision saved with HRMS audit evidence. Marketplace checks will use this decision across all versions of the same course identity.");
   }
 
   @PostMapping("/{institutionId}/marketplace-launches/{assignmentId}/offer")
@@ -151,7 +272,7 @@ public class CourseMarketplaceLaunchController {
     List<String> courseReadinessCodes=List.of(
         "INSTITUTION_ACTIVE","COURSE_ACTIVE","CONTENT_QUALITY_REVIEW",
         "ORIGIN_RELEASE_APPROVAL","ASSIGNMENT_AND_RELEASE",
-        "CONTENT_REVIEW_CURRENT","PUBLISHED_LEARNING_CONTENT");
+        "CONTENT_REVIEW_CURRENT","PUBLISHED_LEARNING_CONTENT","SOURCE_RIGHTS_CLEARANCE");
     for(Map<String,Object> check:checks) {
       if(courseReadinessCodes.contains(text(check.get("code")))
           && !Boolean.TRUE.equals(check.get("passed"))) {
@@ -184,6 +305,8 @@ public class CourseMarketplaceLaunchController {
             title_override=?,description=?,price_paise=?,currency=?,
             status='DRAFT',submitted_by_admin_id=null,submitted_at=null,
             approved_by_admin_id=null,approved_at=null,published_by_admin_id=null,published_at=null,
+            hrms_approved_by_staff_id=null,hrms_approved_at=null,
+            hrms_published_by_staff_id=null,hrms_published_at=null,
             rejected_by_admin_id=null,rejected_at=null,rejection_reason=null,
             updated_by_admin_id=null,updated_at=now()
           where id=? and institution_id=? and assignment_id=?
@@ -268,6 +391,8 @@ public class CourseMarketplaceLaunchController {
         jdbc.update("""
             update institution_marketplace_offer set status='IN_REVIEW',
               submitted_by_admin_id=null,submitted_at=now(),approved_by_admin_id=null,approved_at=null,
+              hrms_approved_by_staff_id=null,hrms_approved_at=null,
+              hrms_published_by_staff_id=null,hrms_published_at=null,
               rejected_by_admin_id=null,rejected_at=null,rejection_reason=null,
               updated_by_admin_id=null,updated_at=now()
             where id=? and institution_id=? and status=?
@@ -279,9 +404,12 @@ public class CourseMarketplaceLaunchController {
         readiness.requireReady(offerId,institutionId);
         jdbc.update("""
             update institution_marketplace_offer set status='APPROVED',
-              approved_by_admin_id=null,approved_at=now(),updated_by_admin_id=null,updated_at=now()
+              approved_by_admin_id=null,approved_at=now(),
+              hrms_approved_by_staff_id=?,hrms_approved_at=now(),
+              hrms_published_by_staff_id=null,hrms_published_at=null,
+              updated_by_admin_id=null,updated_at=now()
             where id=? and institution_id=? and status='IN_REVIEW'
-            """,offerId,institutionId);
+            """,context.staffId(),offerId,institutionId);
         next="APPROVED";
       }
       case "PUBLISH" -> {
@@ -289,9 +417,11 @@ public class CourseMarketplaceLaunchController {
         readiness.requireReady(offerId,institutionId);
         jdbc.update("""
             update institution_marketplace_offer set status='PUBLISHED',
-              published_by_admin_id=null,published_at=now(),updated_by_admin_id=null,updated_at=now()
+              published_by_admin_id=null,published_at=now(),
+              hrms_published_by_staff_id=?,hrms_published_at=now(),
+              updated_by_admin_id=null,updated_at=now()
             where id=? and institution_id=? and status='APPROVED'
-            """,offerId,institutionId);
+            """,context.staffId(),offerId,institutionId);
         next="PUBLISHED";
       }
       case "RETURN_TO_DRAFT" -> {
@@ -300,8 +430,11 @@ public class CourseMarketplaceLaunchController {
         jdbc.update("""
             update institution_marketplace_offer set status='DRAFT',
               submitted_by_admin_id=null,submitted_at=null,approved_by_admin_id=null,approved_at=null,
-              published_by_admin_id=null,published_at=null,rejected_by_admin_id=null,rejected_at=null,
-              rejection_reason=null,updated_by_admin_id=null,updated_at=now()
+              published_by_admin_id=null,published_at=null,
+              hrms_approved_by_staff_id=null,hrms_approved_at=null,
+              hrms_published_by_staff_id=null,hrms_published_at=null,
+              rejected_by_admin_id=null,rejected_at=null,rejection_reason=null,
+              updated_by_admin_id=null,updated_at=now()
             where id=? and institution_id=? and status=?
             """,offerId,institutionId,oldStatus);
         next="DRAFT";
@@ -367,7 +500,7 @@ public class CourseMarketplaceLaunchController {
       throw new SecurityException("A verified HRMS staff identity is required for Marketplace launch changes.");
   }
 
-  private void record(long institutionId,long releaseId,long assignmentId,long offerId,
+  private void record(long institutionId,Long releaseId,Long assignmentId,Long offerId,
       String eventType,long staffId,Map<String,Object> details) {
     try {
       jdbc.update("""

@@ -290,9 +290,8 @@ public class AdminStaffController {
     if (permissions.contains("CONTENT_CREATE") && !permissions.contains("CONTENT_EDIT")) {
       throw badRequest("Create content also requires Edit content so the draft can be completed.");
     }
-    if ("ADMIN".equals(role) && permissions.size()!=permissionCatalogSize()) {
-      throw badRequest("Administrator accounts must retain all permissions.");
-    }
+    // Admin is a route role, not an implicit permission bundle. Explicit grants determine
+    // which institution-scoped tasks this account may perform.
   }
 
   private List<String> defaultPermissions(String role) {

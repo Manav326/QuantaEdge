@@ -322,12 +322,11 @@ jobs:
           PGPASSWORD: quantaedge-test
         run: createdb -h localhost -U quantaedge quantaedge_qa
 
-      # Temporarily defer only the five API test classes whose assertions/fixtures still
-      # target the pre-migration contract. All other API tests run, all test sources compile,
-      # and the API image build remains required. Re-enable these classes after reconciliation.
-      - name: Run API tests and verification (deferred course-scope cases excluded)
+      # Run the entire API verification suite, including course, assessment and tenant-scope
+      # integration cases. Do not exclude migrated-contract tests to obtain a green build.
+      - name: Run API tests and verification (full course scope enabled)
         working-directory: services/api
-        run: mvn -B -ntp verify -Dqe.qa.lifecycle.integration=true -Dtest='!AssessmentLifecycleIntegrationTest,!CourseMarketplaceTenantScopeTest,!LearningClassControllerTest,!LearningControllerTest,!StudentProgramControllerTest'
+        run: mvn -B -ntp verify -Dqe.qa.lifecycle.integration=true
 
   build-api:
     name: Build API image

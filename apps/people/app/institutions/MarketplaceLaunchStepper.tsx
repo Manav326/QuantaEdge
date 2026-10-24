@@ -57,6 +57,22 @@ type QualityReviewItem = {
   published_chapters: number;
   published_lessons: number;
 };
+type PackageRightsReview = {
+  import_id: number;
+  package_id: string;
+  package_version: string;
+  course_id: number;
+  release_id: number;
+  source_institution_id: number;
+  source_institution_code: string;
+  source_institution_name: string;
+  course_name: string;
+  source_rights_status: string;
+  rights_evidence_url?: string | null;
+  rights_reviewed_at?: string | null;
+  rights_review_notes?: string | null;
+};
+type PackageRightsDraft = { status: string; evidenceUrl: string; notes: string };
 type LaunchResponse = {
   institutionId: number;
   institutionName: string;
@@ -68,11 +84,13 @@ type LaunchResponse = {
   availableCount?: number;
   qualityReviewItems?: QualityReviewItem[];
   qualityReviewCount?: number;
+  coursePackageImports?: PackageRightsReview[];
+  coursePackageImportCount?: number;
 };
 type Draft = { title: string; description: string; priceRupees: string };
 
 const GROUPS = [
-  { key: 'course', number: '01', title: 'Course content & quality', subtitle: 'The course is active, every mapped subject has published learning content, and HRMS quality review is complete.', codes: ['INSTITUTION_ACTIVE', 'COURSE_ACTIVE', 'CONTENT_QUALITY_REVIEW', 'CONTENT_REVIEW_CURRENT', 'PUBLISHED_LEARNING_CONTENT'] },
+  { key: 'course', number: '01', title: 'Course content, rights & quality', subtitle: 'The course is active, imported source rights are cleared where applicable, mapped subjects have published learning content, and HRMS quality review is complete.', codes: ['INSTITUTION_ACTIVE', 'COURSE_ACTIVE', 'CONTENT_QUALITY_REVIEW', 'CONTENT_REVIEW_CURRENT', 'PUBLISHED_LEARNING_CONTENT', 'SOURCE_RIGHTS_CLEARANCE'] },
   { key: 'release', number: '02', title: 'Origin approval & assignment', subtitle: 'The source institution approves the reviewed release, then HRMS assigns that exact shareable release to this institution.', codes: ['ORIGIN_RELEASE_APPROVAL', 'ASSIGNMENT_AND_RELEASE'] },
   { key: 'offer', number: '03', title: 'Listing details', subtitle: 'Set the student-facing title, description, currency and explicit price.', codes: ['OFFER_TERMS'] },
   { key: 'payment', number: '04', title: 'Payment setup', subtitle: 'Paid courses require working Razorpay credentials and the signed course-payment webhook.', codes: ['RAZORPAY_CREDENTIALS', 'RAZORPAY_WEBHOOK'] },
@@ -118,6 +136,7 @@ export default function MarketplaceLaunchStepper({
   const [data, setData] = useState<LaunchResponse | null>(null);
   const [drafts, setDrafts] = useState<Record<number, Draft>>({});
   const [reviewNotes, setReviewNotes] = useState<Record<number, string>>({});
+  const [packageRightsDrafts, setPackageRightsDrafts] = useState<Record<number, PackageRightsDraft>>({});
   const [loading, setLoading] = useState(true);
   const [busyKey, setBusyKey] = useState<string | null>(null);
   const [error, setError] = useState('');
@@ -137,6 +156,21 @@ export default function MarketplaceLaunchStepper({
         }
         return next;
       });
+      setPackageRightsDrafts(previous => {
+        const next = { ...previous };
+        for (const item of result.coursePackageImports || []) {
+          if (next[item.import_id] === undefined) {
+            const status = ['CLEARED_FOR_INTERNAL_USE','CLEARED_FOR_PUBLIC_REPOSITORY','DO_NOT_REDISTRIBUTE']
+              .includes(item.source_rights_status) ? item.source_rights_status : '';
+            next[item.import_id] = {
+              status,
+              evidenceUrl: item.rights_evidence_url || '',
+              notes: item.rights_review_notes || '',
+            };
+          }
+        }
+        return next;
+      });
       setDrafts(previous => {
         const next: Record<number, Draft> = {};
         for (const item of items) {
@@ -153,6 +187,42 @@ export default function MarketplaceLaunchStepper({
   }, [institutionId]);
 
   useEffect(() => { void load(); }, [load]);
+
+  async function savePackageRights(item: PackageRightsReview) {
+    const draft = packageRightsDrafts[item.import_id];
+    if (!draft || !draft.status) {
+      setError('Choose a package-rights decision before saving.');
+      return;
+    }
+    if (draft.notes.trim().length < 5) {
+      setError('Add reviewer notes of at least five characters.');
+      return;
+    }
+    if (draft.status !== 'DO_NOT_REDISTRIBUTE' && !/^https:\/\//i.test(draft.evidenceUrl.trim())) {
+      setError('A clearance decision requires an HTTPS rights-evidence URL.');
+      return;
+    }
+    setBusyKey('rights-' + item.import_id);
+    setError('');
+    setNotice('');
+    try {
+      await api('/api/v1/hrms/platform/institutions/' + institutionId
+        + '/course-package-imports/' + item.import_id + '/rights-review', {
+        method: 'POST',
+        body: JSON.stringify({
+          status: draft.status,
+          evidenceUrl: draft.evidenceUrl.trim(),
+          notes: draft.notes.trim(),
+        }),
+      });
+      setNotice('Package rights decision saved. All versions of this source-owned course now use this audited rights status.');
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Package rights review could not be saved.');
+    } finally {
+      setBusyKey(null);
+    }
+  }
 
   const counts = useMemo(() => {
     const items = data?.items || [];
@@ -366,6 +436,76 @@ export default function MarketplaceLaunchStepper({
           <div><strong>{loading ? '—' : counts.published}</strong><span>Currently published</span></div>
         </div>
       </div>
+
+      {!loading && data && (data.coursePackageImports || []).length > 0 && (
+        <section className={styles.rightsPanel}>
+          <header className={styles.availableHeader}>
+            <div>
+              <span className={styles.summaryLabel}>HRMS source-rights gate</span>
+              <h3>Imported packages requiring rights review</h3>
+              <p>Record an evidence-backed decision for the source package. Clearance follows the source course identity, including future draft versions; it does not itself approve content quality or publish the course.</p>
+            </div>
+            <span className={styles.rightsCount}>{(data.coursePackageImports || []).length} packages</span>
+          </header>
+          <div className={styles.rightsList}>
+            {(data.coursePackageImports || []).map(item => {
+              const draft = packageRightsDrafts[item.import_id] || {
+                status: '', evidenceUrl: item.rights_evidence_url || '', notes: item.rights_review_notes || '',
+              };
+              const busy = busyKey === 'rights-' + item.import_id;
+              return (
+                <article className={styles.rightsRow} key={item.import_id}>
+                  <div className={styles.availableMark} aria-hidden="true">§</div>
+                  <div className={styles.rightsCopy}>
+                    <strong>{item.course_name}</strong>
+                    <small>Package {item.package_id} · v{item.package_version} · Source: {item.source_institution_name} ({item.source_institution_code})</small>
+                    <div className={styles.rightsStatusLine}>
+                      <span>Current: {statusText(item.source_rights_status || 'UNCONFIRMED')}</span>
+                      {item.rights_reviewed_at ? <span>Reviewed {new Date(item.rights_reviewed_at).toLocaleString('en-IN')}</span> : <span>Not reviewed by HRMS</span>}
+                    </div>
+                    <div className={styles.rightsFields}>
+                      <label className={styles.reviewNote}>Rights decision
+                        <select value={draft.status} disabled={busyKey !== null}
+                          onChange={event => setPackageRightsDrafts(previous => ({
+                            ...previous, [item.import_id]: { ...draft, status: event.target.value },
+                          }))}>
+                          <option value="">Choose a decision…</option>
+                          <option value="CLEARED_FOR_INTERNAL_USE">Cleared for internal use</option>
+                          <option value="CLEARED_FOR_PUBLIC_REPOSITORY">Cleared for public repository</option>
+                          <option value="DO_NOT_REDISTRIBUTE">Do not redistribute</option>
+                        </select>
+                      </label>
+                      <label className={styles.reviewNote}>Evidence URL {draft.status !== 'DO_NOT_REDISTRIBUTE' ? '(required for clearance)' : '(optional)'}
+                        <input type="url" inputMode="url" maxLength={2000} value={draft.evidenceUrl}
+                          disabled={busyKey !== null}
+                          onChange={event => setPackageRightsDrafts(previous => ({
+                            ...previous, [item.import_id]: { ...draft, evidenceUrl: event.target.value },
+                          }))}
+                          placeholder="https://…"/>
+                      </label>
+                    </div>
+                    <label className={styles.reviewNote}>Reviewer notes (required)
+                      <textarea rows={2} maxLength={1000} value={draft.notes} disabled={busyKey !== null}
+                        onChange={event => setPackageRightsDrafts(previous => ({
+                          ...previous, [item.import_id]: { ...draft, notes: event.target.value },
+                        }))}
+                        placeholder="Record the rights basis, license scope, and any restrictions."/>
+                    </label>
+                    <div className={styles.rightsActions}>
+                      <button type="button" className={styles.primaryButton} disabled={busyKey !== null
+                        || !draft.status || draft.notes.trim().length < 5
+                        || (draft.status !== 'DO_NOT_REDISTRIBUTE' && !/^https:\/\//i.test(draft.evidenceUrl.trim()))}
+                        onClick={() => void savePackageRights(item)}>
+                        {busy ? 'Saving rights review…' : 'Save rights decision'}
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
       {!loading && data && (data.qualityReviewItems || []).length > 0 && (
         <section className={styles.qualityPanel}>

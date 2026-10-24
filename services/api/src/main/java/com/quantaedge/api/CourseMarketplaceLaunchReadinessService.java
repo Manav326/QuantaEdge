@@ -2,6 +2,7 @@ package com.quantaedge.api;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URI;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -116,6 +117,7 @@ public class CourseMarketplaceLaunchReadinessService {
     boolean contentUnchanged=!savedFingerprint.isBlank()&&savedFingerprint.equals(contentFingerprint(courseId));
     add(checks,"CONTENT_REVIEW_CURRENT","Reviewed course content is current",contentUnchanged,
         "The course content has changed since quality review or has no reviewed fingerprint. Resubmit the release for platform quality review.");
+    addPackageRightsCheck(checks,courseId);
     long subjectCount=number(row.get("subject_count"));
     long subjectsWithLessons=number(row.get("subjects_with_published_lessons"));
     long chapterCount=number(row.get("published_chapter_count"));
@@ -233,6 +235,7 @@ public class CourseMarketplaceLaunchReadinessService {
         && savedFingerprint.equals(contentFingerprint(courseId));
     add(checks,"CONTENT_REVIEW_CURRENT","Reviewed course content is current",contentUnchanged,
         "The course content has changed since quality review or has no reviewed fingerprint. Resubmit the release for platform quality review.");
+    addPackageRightsCheck(checks,courseId);
     long subjectCount = number(offer.get("subject_count"));
     long subjectsWithLessons = number(offer.get("subjects_with_published_lessons"));
     long chapterCount = number(offer.get("published_chapter_count"));
@@ -604,6 +607,63 @@ public class CourseMarketplaceLaunchReadinessService {
   private static long percentageOf(long amountPaise,int basisPoints) {
     return BigDecimal.valueOf(amountPaise).multiply(BigDecimal.valueOf(basisPoints))
         .divide(BASIS_POINTS,0,RoundingMode.HALF_UP).longValueExact();
+  }
+
+  /**
+   * If a course originated from the nested Course Studio package importer, HRMS must verify its
+   * source-rights status before Marketplace distribution. Legacy courses without an import ledger
+   * retain the existing review path; an imported package with missing rights is not cleared.
+   */
+  private void addPackageRightsCheck(List<Map<String,Object>> checks,long courseId) {
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select imported_package.package_id,imported_package.package_version,
+        coalesce(imported_package.editorial_metadata->>'source_rights_status','UNCONFIRMED') as source_rights_status,
+        imported_package.editorial_metadata->>'rights_evidence_url' as rights_evidence_url,
+        imported_package.rights_reviewed_by_staff_id,
+        imported_package.rights_reviewed_at,
+        imported_package.rights_review_notes
+      from institution_course_package_import imported_package
+      join curriculum_program source_program on source_program.id=imported_package.course_id
+      where imported_package.state='IMPORTED'
+        and exists(
+          select 1 from curriculum_program current_program
+          where current_program.id=? and (
+            current_program.id=imported_package.course_id
+            or (current_program.course_identity_id is not null
+              and current_program.course_identity_id=source_program.course_identity_id)
+          )
+        )
+      order by imported_package.imported_at desc,imported_package.id desc
+      limit 1
+      """,courseId);
+    if(rows.isEmpty())return;
+    Map<String,Object> row=rows.getFirst();
+    String status=text(row.get("source_rights_status"));
+    boolean cleared=isVerifiedPackageRightsClearance(status,
+        text(row.get("rights_evidence_url")),row.get("rights_reviewed_by_staff_id"),
+        row.get("rights_reviewed_at"),text(row.get("rights_review_notes")));
+    String message=cleared
+        ?"HRMS recorded a cleared rights decision with reviewer attribution, notes, and valid HTTPS evidence."
+        :"Package "+text(row.get("package_id"))+" version "+text(row.get("package_version"))
+            +" has rights state "+(status.isBlank()?"UNCONFIRMED":status)
+            +" without a complete evidence-backed HRMS review. HRMS must record a cleared decision, reviewer attribution, notes, and valid HTTPS evidence before Marketplace distribution.";
+    add(checks,"SOURCE_RIGHTS_CLEARANCE","Course package distribution rights are cleared",cleared,message);
+  }
+
+  static boolean isVerifiedPackageRightsClearance(
+      String status,String evidenceUrl,Object reviewerId,Object reviewedAt,String reviewNotes) {
+    if(!List.of("CLEARED_FOR_INTERNAL_USE","CLEARED_FOR_PUBLIC_REPOSITORY").contains(status)
+        ||!(reviewerId instanceof Number reviewer&&reviewer.longValue()>0L)
+        ||reviewedAt==null||reviewNotes==null||reviewNotes.trim().length()<5) {
+      return false;
+    }
+    try {
+      URI evidence=URI.create(evidenceUrl==null?"":evidenceUrl.trim());
+      return "https".equalsIgnoreCase(evidence.getScheme())
+          &&evidence.getHost()!=null&&evidence.getUserInfo()==null;
+    } catch(IllegalArgumentException ex) {
+      return false;
+    }
   }
 
   private static void add(List<Map<String,Object>> checks,String code,String label,boolean passed,String message) {

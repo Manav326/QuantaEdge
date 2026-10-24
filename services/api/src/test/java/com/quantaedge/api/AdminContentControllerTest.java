@@ -88,7 +88,10 @@ class AdminContentControllerTest {
     AuthContext author = new AuthContext(null, null, 42L, "CONTENT_AUTHOR", "Content author");
     when(jdbc.queryForObject("select content_revision from lesson where id=?", Long.class, 7L))
         .thenReturn(12L);
-    when(jdbc.queryForObject(anyString(), eq(Boolean.class), any(Object[].class))).thenReturn(true);
+    // Pass assignment, lesson-scope and source-ownership checks, then confirm this is still
+    // an editable draft. The fourth boolean result is false so the stale revision guard is reached.
+    when(jdbc.queryForObject(anyString(), eq(Boolean.class), any(Object[].class)))
+        .thenReturn(true, true, true, false);
     AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory, assessmentCatalog);
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
@@ -269,17 +272,16 @@ class AdminContentControllerTest {
   }
 
   @Test
-  void institutionCatalogueIsLimitedToActiveInstitutionsWithAssignedActiveCourses() {
+  void deprecatedInstitutionCatalogueRejectsTenantSwitching() {
     AuthContext admin = new AuthContext(null, null, 42L, "ADMIN", "Admin", "EDUCATION_ADMIN");
-    when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(java.util.List.of(
-        Map.of("institution_id", 12L, "tenant_code", "SCHOOL-B", "display_name", "School B", "is_default", false)));
     AdminContentController controller =
         new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory, assessmentCatalog);
 
-    java.util.List<Map<String,Object>> result = controller.institutions(null, admin);
+    ResponseStatusException error = assertThrows(ResponseStatusException.class,
+        () -> controller.institutions(null, admin));
 
-    assertEquals(1, result.size());
-    assertEquals("SCHOOL-B", result.getFirst().get("tenant_code"));
-    verify(authorization).requirePermission(admin, "CONTENT_VIEW");
+    assertEquals(410, error.getStatusCode().value());
+    assertTrue(error.getReason().contains("institution-context"));
+    verifyNoInteractions(jdbc);
   }
 }

@@ -470,41 +470,7 @@ public class LearningController {
              coalesce(latest_attempt.answer_text,latest_attempt.selected_option) as saved_answer,
              latest_attempt.correct as saved_correct,
              latest_attempt.answered_at as saved_answered_at,
-             case when qt.id is not null and coalesce(qt.options,'[]'::jsonb)<>'[]'::jsonb then qt.options
-                  when q.question_type in ('MCQ','TRUE_FALSE') then
-                    coalesce((select jsonb_agg(jsonb_build_object('key',qo.option_key,'label',qo.label)
-                      order by qo.sort_order) from question_option qo where qo.question_id=q.id),'[]'::jsonb)
-                  when q.question_type='ORDER' then
-                    coalesce((
-                      select jsonb_agg(jsonb_build_object('key',items.option_key,'label',coalesce(qo.label,items.option_key))
-                        order by items.option_key)
-                      from (
-                        select qo.option_key from question_option qo where qo.question_id=q.id
-                        union
-                        select item.value from jsonb_array_elements_text(
-                          case when jsonb_typeof(q.answer_payload->'value')='array' then q.answer_payload->'value' else '[]'::jsonb end
-                        ) as item(value)
-                      ) items
-                      left join question_option qo on qo.question_id=q.id and qo.option_key=items.option_key
-                    ),'[]'::jsonb)
-                  when q.question_type='MATCH' then
-                    coalesce((
-                      select jsonb_agg(jsonb_build_object('key',items.option_key,'label',coalesce(qo.label,items.option_key))
-                        order by items.option_key)
-                      from (
-                        select qo.option_key from question_option qo where qo.question_id=q.id
-                        union
-                        select pair.key from jsonb_each_text(
-                          case when jsonb_typeof(q.answer_payload->'value')='object' then q.answer_payload->'value' else '{}'::jsonb end
-                        ) as pair(key,value)
-                        union
-                        select pair.value from jsonb_each_text(
-                          case when jsonb_typeof(q.answer_payload->'value')='object' then q.answer_payload->'value' else '{}'::jsonb end
-                        ) as pair(key,value)
-                      ) items
-                      left join question_option qo on qo.question_id=q.id and qo.option_key=items.option_key
-                    ),'[]'::jsonb)
-                else '[]'::jsonb end::text as options,
+             qe_student_safe_question_options(q.id,q.question_type,qt.options)::text as options,
              case when q.question_type in ('INPUT','NUMERICAL','SHORT_ANSWER','LONG_ANSWER','MATCH','ORDER',
                  'ASSERTION_REASON','CASE_BASED','DIAGRAM','MAP','SOURCE_BASED') then 'text'
                else 'choice' end as response_mode

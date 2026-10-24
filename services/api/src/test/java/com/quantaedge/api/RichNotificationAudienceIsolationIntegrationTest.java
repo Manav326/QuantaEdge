@@ -123,9 +123,10 @@ class RichNotificationAudienceIsolationIntegrationTest {
           join institution_course_release r on r.id=a.course_release_id
           join curriculum_program p on p.id=r.program_id
           where a.qa_test_run_id=? and r.qa_test_run_id=?
-            and a.institution_id=? and a.status='ASSIGNED' and p.code='CLASS_7'
+            and a.institution_id=? and a.status='ASSIGNED'
+            and p.qa_test_run_id=? and left(p.code,6)='QA_C7_'
           order by a.id limit 1
-          """, Long.class, runId, runId, institutionA);
+          """, Long.class, runId, runId, institutionA, runId);
       assertTrue(class7Program != null && class7Program > 0L,
           "Institution A must have the explicit HRMS Class 7 assignment.");
       List<RichNotificationService.Recipient> courseAudience = service.resolveAudience(

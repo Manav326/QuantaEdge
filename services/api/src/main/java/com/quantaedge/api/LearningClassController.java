@@ -429,8 +429,9 @@ public class LearningClassController {
       @RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
     context=requireClassManage(context);
-    requireAdminSessionScope(sessionId,tenant);
+    // Reject malformed input before database scope lookups; authorization still runs first.
     int joinWindowMinutes=integer(body.get("joinWindowMinutes"),"Join window minutes",0,1440);
+    requireAdminSessionScope(sessionId,tenant);
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select id,status,join_window_minutes from learning_class_session where id=?
       """,sessionId);

@@ -116,8 +116,8 @@ class AssessmentLifecycleIntegrationTest {
   @Test
   @SuppressWarnings("unchecked")
   void explicitlyEnabledOfflineAttemptStoresNoAnswerKeyAndCanSyncAfterItsTimerWithinGrace() {
-    Fixture fixture=fixture("COMPLETED");
-    jdbc.update("update assessment set assessment_type='ADMIN_CREATED',is_generated=false,lesson_id=null,offline_enabled=true where id=?",fixture.assessmentId());
+    Fixture fixture=fixture("COMPLETED",true);
+
     Map<String,Object> started=controller.startOrResumeAttempt(fixture.assessmentId(),fixture.courseId(),"hi",true,fixture.student(), fixture.tenant());
     long attemptId=((Number)started.get("attempt_id")).longValue();
     String packageToken=String.valueOf(started.get("offlinePackageToken"));
@@ -152,9 +152,8 @@ class AssessmentLifecycleIntegrationTest {
   @Test
   @SuppressWarnings("unchecked")
   void resumingOfflineAttemptDoesNotRotateTokenButExplicitRecoveryDoes() {
-    Fixture fixture=fixture("COMPLETED");
-    jdbc.update("update assessment set assessment_type='ADMIN_CREATED',is_generated=false,lesson_id=null,offline_enabled=true where id=?",
-        fixture.assessmentId());
+    Fixture fixture=fixture("COMPLETED",true);
+
 
     Map<String,Object> started=controller.startOrResumeAttempt(
         fixture.assessmentId(),fixture.courseId(),"hi",true,fixture.student(), fixture.tenant());
@@ -188,7 +187,9 @@ class AssessmentLifecycleIntegrationTest {
     assertEquals(true,saved.get("saved"));
   }
 
-  private Fixture fixture(String progressStatus) {
+  private Fixture fixture(String progressStatus) { return fixture(progressStatus,false); }
+
+  private Fixture fixture(String progressStatus,boolean offlineEnabled) {
     String suffix = UUID.randomUUID().toString().replace("-", "").substring(0, 12);
     String classCode = "E2E" + suffix;
     Long classId = jdbc.queryForObject("""
@@ -209,19 +210,17 @@ class AssessmentLifecycleIntegrationTest {
       values(?,?,'Assessment lifecycle course','CURRENT','ACTIVE','CI fixture course','INS')
       returning id
       """, Long.class, classId, "ASSESSMENT_" + suffix.toUpperCase(Locale.ROOT));
+    Long identityId = jdbc.queryForObject("""
+      insert into institution_course_identity(
+        source_institution_id,stable_course_key,display_name,course_type_code)
+      values(?,?,?,'K12') returning id
+      """, Long.class, institutionId, "assessment-lifecycle-" + suffix,
+      "Assessment lifecycle course");
+    jdbc.update("update curriculum_program set course_identity_id=? where id=?", identityId, courseId);
     jdbc.update("""
       insert into curriculum_program_subject(program_id,class_id,subject_id,is_required,sort_order)
       values(?,?,?,true,1)
       """, courseId, classId, subjectId);
-    Long releaseId = jdbc.queryForObject("""
-      insert into institution_course_release(
-        source_institution_id,program_id,release_version,release_state,content_fingerprint)
-      values(?,?,1,'DRAFT',md5(?)) returning id
-      """, Long.class, institutionId, courseId, "assessment-lifecycle-" + suffix);
-    jdbc.update("""
-      insert into institution_course_assignment(institution_id,course_release_id,status,assignment_source)
-      values(?,?,'ASSIGNED','HRMS')
-      """, institutionId, releaseId);
     Long chapterId = jdbc.queryForObject("""
       insert into curriculum_chapter(
         subject_id,code,display_name,description,sort_order,active,content_status)
@@ -261,11 +260,12 @@ class AssessmentLifecycleIntegrationTest {
 
     Long assessmentId = jdbc.queryForObject("""
       insert into assessment(
-        title,description,subject_id,chapter_id,lesson_id,duration_minutes,max_attempts,status,
-        assessment_type,is_generated,is_current,generation_version,published_at)
-      values('Assessment lifecycle test','CI fixture',?,?,?,15,2,'PUBLISHED',
-        'TOPIC_END',true,true,1,now()) returning id
-      """, Long.class, subjectId, chapterId, lessonId);
+        title,description,course_id,subject_id,chapter_id,lesson_id,duration_minutes,max_attempts,status,
+        assessment_type,is_generated,is_current,generation_version,published_at,offline_enabled)
+      values('Assessment lifecycle test','CI fixture',?,?,?,?,15,2,'PUBLISHED',
+        ?,?,true,1,now(),?) returning id
+      """, Long.class, courseId, subjectId, chapterId, offlineEnabled ? null : lessonId,
+      offlineEnabled ? "ADMIN_CREATED" : "TOPIC_END", !offlineEnabled, offlineEnabled);
     String snapshot = """
       {
         "id": 1,
@@ -283,6 +283,31 @@ class AssessmentLifecycleIntegrationTest {
       insert into assessment_question(assessment_id,source_question_id,sequence_no,max_marks,question_snapshot)
       values(?,null,1,1,?::jsonb)
       """, assessmentId, snapshot);
+    // Use explicit reviewer and source-owner identities: SHAREABLE releases must carry
+    // both quality-review and source-origin approval evidence under the production constraints.
+    Long reviewerStaffId = jdbc.queryForObject("""
+      insert into staff_account(public_id,mobile_e164,display_name,role,active)
+      values(gen_random_uuid(),null,'Assessment lifecycle CI reviewer','ADMIN',true)
+      returning id
+      """, Long.class);
+    Long sourceAdminId = jdbc.queryForObject("""
+      insert into institution_admin_account(institution_id,username,display_name,password_hash,active)
+      values(?,?,?,'ci-test-password-hash',true)
+      returning id
+      """, Long.class, institutionId, "assessment_" + suffix, "Assessment lifecycle CI publisher");
+    // Finish the graph before release: released course content is immutable in place.
+    Long releaseId = jdbc.queryForObject("""
+      insert into institution_course_release(
+        source_institution_id,program_id,release_version,release_state,content_fingerprint,
+        quality_reviewed_by_staff_id,quality_reviewed_at,quality_review_notes,
+        origin_approved_by_admin_id,origin_approved_at,shareable_at)
+      values(?,?,1,'SHAREABLE',course_content_fingerprint(?),?,now(),
+        'Synthetic CI assessment content review',?,now(),now()) returning id
+      """, Long.class, institutionId, courseId, courseId, reviewerStaffId, sourceAdminId);
+    jdbc.update("""
+      insert into institution_course_assignment(institution_id,course_release_id,status,assignment_source)
+      values(?,?,'ASSIGNED','HRMS')
+      """, institutionId, releaseId);
     return new Fixture(studentId, assessmentId, courseId,
         new AuthContext(null, studentId, "STUDENT", "Assessment CI student"),
         new InstitutionTenantContext(institutionId, "QUANTA-EDGE", "QuantaEdge"));

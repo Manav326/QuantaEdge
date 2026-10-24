@@ -1,0 +1,75 @@
+# Course package schema v1 — reference
+
+Machine-readable contract: `course-package.schema.json`.
+
+## Scope
+
+Version `quantaedge.course-package.v1` imports **K12 curriculum only**. It represents the complete hierarchy `course → subjects → chapters → lessons → teaching blocks`. The registry's `COMPETITIVE` and `ASSESSMENT` types advertise separate layouts, but their nested hierarchy importer is not part of v1; the importer rejects these types rather than placing them in K12 subject/chapter tables.
+
+## Workflow
+
+1. Submit a package to `POST /api/v1/admin/content/course-packages/validate`. This performs server-side structure, unique-code, order, supported-block and maximum-size checks without writing course data.
+2. After a valid response, submit the same JSON to `POST /api/v1/admin/content/course-packages/import`. Both endpoints require the current Education Admin session, HRMS-bound institution, and `CONTENT_CREATE`; import additionally requires `CONTENT_EDIT`.
+3. A successful import creates all content in one transaction, logs an import ledger entry and lifecycle event, and leaves the course release, every chapter and every lesson in `DRAFT`. Source references are stored but marked unverified.
+4. The package is idempotent by `source institution + package_id + package_version + canonical content SHA-256`. Same ID/version and same content returns the original course/release. Different content under the same ID/version conflicts; increment the version to submit changed content.
+5. HRMS release-quality review, origin approval, and Marketplace publication remain separate. Imported content is never student-deliverable at the end of the import transaction.
+
+## Root fields
+
+| Field | Requirement | Meaning |
+|---|---|---|
+| `schema` | Required; exact constant | `quantaedge.course-package.v1` |
+| `package_id` | Required; unique lowercase slug per institution | Stable logical source-package identity |
+| `package_version` | Required; 1–40 characters | Increment when content changes |
+| `course` | Required object | Course code, display name, curriculum version, `K12` type, active `class_code`, optional stream |
+| `subjects` | Required, 1–30 | Ordered subject track list; each subject includes chapters |
+| `editorial` | Optional | Notes and source-rights metadata; rights clearance is checked again by the HRMS launch checklist |
+
+## Nested fields and limits
+
+| Level | Required fields | Constraints |
+|---|---|---|
+| Subject | `code`, `display_name`, `chapters` | Unique subject codes; up to 30 subjects; 1–1,000 chapters per subject |
+| Chapter | `code`, `display_name`, `lessons` | Unique code within its subject; 1–2,000 lessons; optional description/order/source reference |
+| Lesson | `code`, `title`, `blocks` | Unique code within its chapter; 1–200 blocks; optional summary, duration (1–120 minutes), order and source reference |
+| Teaching block | `sequence_no`, `block_type`, `content` | Unique sequence within lesson; sequence 1–10,000; active flag defaults to true; block type must be a supported QuantaEdge content block |
+
+All levels reject undeclared properties. Database identifiers, tenant ownership, release state, and approvals are generated or resolved server-side and cannot be supplied by JSON.
+
+## Physical relational mapping
+
+JSON field names are not database column names. The API generates numeric IDs and resolves the source institution from the HRMS-bound session; the package cannot choose either.
+
+| JSON path / level | Physical persistence | SQL types / notes |
+|---|---|---|
+| `course.code`, `display_name`, `curriculum_version`, `stream_code` | `curriculum_program.code`, `display_name`, `curriculum_version`, `stream_code` | Existing course columns. Incoming code is uppercased and institution-prefixed; it is not a row ID. |
+| `course.class_code` | Resolve `curriculum_class.code varchar(30)`; store its ID in `curriculum_program.class_id bigint` | Only an active class is accepted for K12. |
+| `course.course_type_code` | `curriculum_program.course_type_code varchar(32)`; `institution_course_identity.course_type_code varchar(32)` | FK to `course_type_registry.code`. This importer accepts K12 only. |
+| Source identity/version | `institution_course_identity.id bigint`, `source_institution_id bigint`, `stable_course_key varchar(160)`, `display_name varchar(200)`; `curriculum_program.course_identity_id bigint`, `content_version_no integer`, `supersedes_program_id bigint` | One logical identity per source institution and stable key. A later content version is a separate course graph. |
+| `subjects[]` | `curriculum_subject.id bigint`, `class_id bigint`, `code varchar(40)`, `display_name varchar(100)`, `sort_order integer`, `active boolean`, `program_id bigint`; mapped by `curriculum_program_subject(program_id bigint,class_id bigint,subject_id bigint,is_required boolean,sort_order integer)` | Course-scoped subject rows and their explicit mapping. IDs are generated by PostgreSQL. |
+| `chapters[]` | `curriculum_chapter(id bigint,subject_id bigint,code varchar(60),display_name varchar(160),description varchar(500),sort_order integer,active boolean,content_status)` | Imported chapter status is DRAFT. Source fields remain unverified. |
+| `lessons[]` | `lesson(id bigint,chapter_id bigint,code varchar(100),title varchar(240),summary varchar(800),estimated_minutes integer,status varchar(30),sort_order integer,active boolean)` | Imported lesson status is DRAFT; source alignment verification is false. |
+| `blocks[]` | `lesson_block(id bigint,lesson_id bigint,sequence_no integer,block_type varchar(40),content jsonb,active boolean)` | Unique sequence within a lesson; typed content is stored in JSONB. |
+| Source release | `institution_course_release(id bigint,source_institution_id bigint,program_id bigint,release_version integer,release_state varchar(24),content_fingerprint char(32))` | New package releases start in DRAFT. |
+| Origin assignment | `institution_course_assignment(id bigint,institution_id bigint,course_release_id bigint,status varchar(12),assignment_source varchar(48))` | An ORIGIN assignment does not distribute a course or publish an offer. |
+| Import ledger | `institution_course_package_import(id bigint,source_institution_id bigint,package_id varchar(120),package_version varchar(40),package_sha256 char(64),package_snapshot jsonb,state varchar(16),course_id bigint,release_id bigint,imported_by_staff_id bigint,editorial_metadata jsonb,import_summary jsonb,created_at/imported_at timestamptz)` | Unique on source institution + package ID + version. Snapshot is semantic JSON provenance, not authority. Earlier rows can have NULL snapshots. |
+| HRMS rights review | `rights_reviewed_by_staff_id bigint`, `rights_reviewed_at timestamptz`, `rights_review_notes varchar(1000)` on the ledger; evidence URL in `editorial_metadata->>'rights_evidence_url'` | Cleared status is authoritative only with reviewer, timestamp, notes and valid HTTPS evidence. The untrusted source claim in `package_snapshot` is never used for launch readiness. |
+
+### Legacy ledger
+
+V179 introduced `course_package_import`. It remains for compatibility but is obsolete for new writes: the active source-owned importer uses `institution_course_package_import` (V183 onward). Do not dual-write or remove the older ledger in this PR; retire it only after a separate data/caller reconciliation.
+
+## Source references and rights
+
+A chapter or lesson may contain a `source` object with `title`, `url`, `edition`, and `pages`. These fields preserve provenance and are not considered verified by import. `editorial.source_rights_status` is an untrusted source declaration only: the importer always stores `UNCONFIRMED`, even when JSON claims that rights are cleared. Only the HRMS rights-review action can record a cleared state, and Marketplace launch also requires the reviewing staff ID, timestamp, notes, and valid HTTPS evidence. `DO_NOT_REDISTRIBUTE` is not a publishable rights state.
+
+## Validation notes
+
+The importer rejects unsupported course types, unsupported block types, duplicate codes or block sequence numbers, empty subject/chapter/lesson/block collections, malformed order values, extra fields, and packages exceeding hierarchy-size limits. Validate the exact JSON text immediately before importing; editing the package invalidates the UI validation state.
+
+
+## Size limits
+
+In addition to per-level schema limits, the server caps package JSON at 10 MB, total chapters at 5,000, total lessons at 20,000, and total teaching blocks at 100,000. These limits are checked before database writes, and the import runs inside one transaction.
+
+The `GET /api/v1/admin/content/course-types` response includes `nestedPackageImportSupported`, `nestedPackageImportStatus`, and `nestedPackageImportNote`; only K12 currently reports `AVAILABLE`.

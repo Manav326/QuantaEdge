@@ -20,12 +20,25 @@ class AuthorizationServiceTest {
   @Mock private JdbcTemplate jdbc;
 
   @Test
-  void adminStaffIdentityReceivesCatalogPermissionsWithoutGrantLookup() {
+  void educationAdminRoleStillRequiresAnExplicitPermissionGrant() {
     AuthorizationService authorization = new AuthorizationService(jdbc);
-    AuthContext admin = new AuthContext(null, null, 7L, "ADMIN", "Admin");
+    AuthContext admin = new AuthContext(null, null, 7L, "ADMIN", "Admin", "EDUCATION_ADMIN");
+    when(jdbc.queryForObject(anyString(), eq(Boolean.class), eq("CONTENT_PUBLISH"), eq(7L), eq("EDUCATION_ADMIN"), eq("EDUCATION_ADMIN")))
+        .thenReturn(true);
 
     assertTrue(authorization.hasPermission(admin, "CONTENT_PUBLISH"));
-    verifyNoInteractions(jdbc);
+    verify(jdbc).queryForObject(anyString(), eq(Boolean.class), eq("CONTENT_PUBLISH"), eq(7L), eq("EDUCATION_ADMIN"), eq("EDUCATION_ADMIN"));
+  }
+
+  @Test
+  void educationAdminRoleDoesNotGrantUnassignedContentPermission() {
+    AuthorizationService authorization = new AuthorizationService(jdbc);
+    AuthContext admin = new AuthContext(null, null, 7L, "ADMIN", "Admin", "EDUCATION_ADMIN");
+    when(jdbc.queryForObject(anyString(), eq(Boolean.class), eq("CONTENT_PUBLISH"), eq(7L), eq("EDUCATION_ADMIN"), eq("EDUCATION_ADMIN")))
+        .thenReturn(false);
+
+    assertFalse(authorization.hasPermission(admin, "CONTENT_PUBLISH"));
+    verify(jdbc).queryForObject(anyString(), eq(Boolean.class), eq("CONTENT_PUBLISH"), eq(7L), eq("EDUCATION_ADMIN"), eq("EDUCATION_ADMIN"));
   }
 
   @Test

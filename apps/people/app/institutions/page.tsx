@@ -20,6 +20,12 @@ type Institution = {
 type Course = { id: number; code: string; display_name: string; class_code?: string | null };
 type Entitlement = { program_id: number; code: string; display_name: string; entitlement_status: string };
 type Admin = { id: number; username: string; display_name: string; active: boolean; must_change_password: boolean; last_login_at?: string | null };
+type EducationAdminStaffRow = {
+  staff_id: number; display_name: string; role: string; active: boolean;
+  binding_id?: number | null; binding_status?: string | null; assigned_at?: string | null;
+  bound_institution_id?: number | null; bound_tenant_code?: string | null; bound_institution_name?: string | null;
+  institution_binding_state: 'UNASSIGNED' | 'ASSIGNED_HERE' | 'ASSIGNED_ELSEWHERE';
+};
 type ThemePalette = Record<string,string>;
 type ThemeTokens = { schemaVersion?: number; presetId?: string; appearance?: string; brandPrimary?: string; brandAccent?: string; primary?: string; accent?: string; background?: string; surface?: string; text?: string; light?: ThemePalette; dark?: ThemePalette; [key: string]: unknown };
 type Detail = Institution & {
@@ -59,6 +65,9 @@ export default function InstitutionsAdminPage() {
   const [readinessError,setReadinessError]=useState('');
   const [institutions,setInstitutions]=useState<Institution[]>([]);
   const [catalog,setCatalog]=useState<Course[]>([]);
+  const [educationAdminStaff,setEducationAdminStaff]=useState<EducationAdminStaffRow[]>([]);
+  const [educationStaffToAssign,setEducationStaffToAssign]=useState('');
+  const [educationStaffReason,setEducationStaffReason]=useState('');
   const [detail,setDetail]=useState<Detail|null>(null);
   const [roster,setRoster]=useState<Learner[]>([]);
   const [auditRows,setAuditRows]=useState<AuditEvent[]>([]);
@@ -110,12 +119,14 @@ export default function InstitutionsAdminPage() {
   const loadDetail=useCallback(async(id:number)=>{
     setLoading(true);setError('');
     try{
-      const [d,r,a]=await Promise.all([
+      const [d,r,a,staffBindings]=await Promise.all([
         api<Detail>('/api/v1/hrms/platform/institutions/'+id),
         api<{learners?:Learner[]}>('/api/v1/hrms/platform/institutions/'+id+'/roster'),
         api<AuditEvent[]>('/api/v1/hrms/platform/institutions/'+id+'/audit'),
+        api<{staff?:EducationAdminStaffRow[]}>('/api/v1/hrms/platform/institutions/'+id+'/education-staff-bindings'),
       ]);
-      setDetail(d);setRoster(r.learners||[]);setAuditRows(a||[]);setTab('summary');setEditingCard(null);setShowAdmin(false);
+      setDetail(d);setRoster(r.learners||[]);setAuditRows(a||[]);setEducationAdminStaff(staffBindings.staff||[]);
+      setTab('summary');setEditingCard(null);setShowAdmin(false);
       setProfile({displayName:d.display_name||'',legalName:d.legal_name||''});
       setBrand({
         displayName:d.brand_display_name||d.display_name,tagline:d.tagline||'',logoAssetKey:d.logo_asset_key||'',
@@ -227,6 +238,38 @@ export default function InstitutionsAdminPage() {
       setShowCreate(false);await loadBase();await loadDetail(result.institutionId);
     }catch(e){setError(e instanceof Error?e.message:'Could not create institution.');}finally{setSaving(false);}
   };
+  async function assignEducationAdminStaff(event:FormEvent) {
+    event.preventDefault();
+    if(!detail)return;
+    const staffId=Number(educationStaffToAssign);
+    if(!Number.isSafeInteger(staffId)||staffId<1){setError('Choose an unassigned active Education Admin staff account.');return;}
+    setSaving(true);setError('');setNotice('');
+    try{
+      await api('/api/v1/hrms/platform/institutions/'+detail.id+'/education-staff-bindings',{
+        method:'POST',body:JSON.stringify({staffId,reason:educationStaffReason.trim()})
+      });
+      setEducationStaffToAssign('');setEducationStaffReason('');
+      notifyUser('Education Admin staff account assigned to '+detail.display_name+'. Its API tenant is now fixed to this institution.','success');
+      await loadDetail(detail.id);
+    }catch(e){setError(e instanceof Error?e.message:'Education Admin staff assignment could not be saved.');}
+    finally{setSaving(false);}
+  }
+  async function revokeEducationAdminStaff(row:EducationAdminStaffRow) {
+    if(!detail)return;
+    const reason=window.prompt('Reason for revoking '+row.display_name+' from '+detail.display_name+':','');
+    if(reason===null)return;
+    if(reason.trim().length<3){setError('Enter at least 3 characters explaining the revocation.');return;}
+    setSaving(true);setError('');setNotice('');
+    try{
+      await api('/api/v1/hrms/platform/institutions/'+detail.id+'/education-staff-bindings/'+row.staff_id,{
+        method:'DELETE',body:JSON.stringify({reason:reason.trim()})
+      });
+      notifyUser('Education Admin institution assignment revoked. Further API requests will fail closed until HRMS assigns this staff account again.','success');
+      await loadDetail(detail.id);
+    }catch(e){setError(e instanceof Error?e.message:'Education Admin staff assignment could not be revoked.');}
+    finally{setSaving(false);}
+  }
+
   async function saveInstitutionProfile(event:FormEvent){
     event.preventDefault();if(!detail)return;const issue=profileDraftIssue();if(issue){setError(issue);return;}if(!profileChanged){setNotice('');notifyUser('No institution profile changes to save.','info');return;}setSaving(true);setError('');setNotice('');
     try{
@@ -438,6 +481,42 @@ export default function InstitutionsAdminPage() {
             <div className={styles.list}>{(detail.admins||[]).map(a=><div className={styles.listItem} key={a.id}><span className={styles.avatar}>{a.display_name.slice(0,1).toUpperCase()}</span><span className={styles.listCopy}><strong>{a.display_name}</strong><small>@{a.username} · {a.must_change_password?'initial password not changed':'password set'}</small><small>Last sign-in: {fmt(a.last_login_at)}</small></span>{editingCard==='admins'?<button className={styles.secondary} disabled={saving} onClick={()=>void toggleAdmin(a)}>{a.active?'Suspend':'Activate'}</button>:<span className={styles.status+(a.active?' '+styles.active:' '+styles.suspended)}>{a.active?'ACTIVE':'SUSPENDED'}</span>}</div>)}
             {!(detail.admins||[]).length?<p className={styles.emptyText}>No institution administrators configured.</p>:null}</div>
             {editingCard==='admins'?<p className={styles.disclaimer}>Admin provisioning and activation changes are applied immediately and recorded in the audit history.</p>:null}
+          </section>
+          <section className={styles.panel}>
+            <div className={styles.panelHeading}>
+              <div><h3>Education Admin staff assignment</h3><p>Bind each Education Admin technical login to exactly one HRMS institution. This is separate from institution administrator accounts and does not grant any role or permission.</p></div>
+              <span className={styles.status+' '+styles.active}>{educationAdminStaff.filter(row=>row.institution_binding_state==='ASSIGNED_HERE').length} assigned</span>
+            </div>
+            <form className={styles.form} onSubmit={assignEducationAdminStaff}>
+              <label>Unassigned active staff login *
+                <select value={educationStaffToAssign} onChange={e=>setEducationStaffToAssign(e.target.value)} disabled={saving}>
+                  <option value="">Choose an unassigned staff account</option>
+                  {educationAdminStaff.filter(row=>row.institution_binding_state==='UNASSIGNED').map(row=>
+                    <option key={row.staff_id} value={row.staff_id}>{row.display_name} · {row.role} · ID {row.staff_id}</option>)}
+                </select>
+              </label>
+              <label>Assignment reason (optional)
+                <input maxLength={500} value={educationStaffReason} onChange={e=>setEducationStaffReason(e.target.value)} placeholder="e.g. Assigned to this institution's Education Admin team"/>
+              </label>
+              <div className={styles.formActions}>
+                <button type="submit" className={styles.primary} disabled={saving||!educationStaffToAssign||detail.status!=='ACTIVE'}>Assign to this institution</button>
+              </div>
+            </form>
+            <div className={styles.list}>
+              {educationAdminStaff.filter(row=>row.institution_binding_state==='ASSIGNED_HERE').map(row=>
+                <div className={styles.listItem} key={row.staff_id}>
+                  <span className={styles.avatar}>{String(row.display_name||'S').slice(0,1).toUpperCase()}</span>
+                  <span className={styles.listCopy}>
+                    <strong>{row.display_name}</strong>
+                    <small>{row.role} · Staff ID {row.staff_id}</small>
+                    <small>Bound by HRMS on {fmt(row.assigned_at)}</small>
+                  </span>
+                  <button type="button" className={styles.secondary} disabled={saving} onClick={()=>void revokeEducationAdminStaff(row)}>Revoke</button>
+                </div>)}
+              {!educationAdminStaff.some(row=>row.institution_binding_state==='ASSIGNED_HERE')?<p className={styles.emptyText}>No Education Admin staff accounts are assigned to this institution. Staff cannot use its Education Admin workspace until HRMS creates a binding.</p>:null}
+            </div>
+            {educationAdminStaff.some(row=>row.institution_binding_state==='ASSIGNED_ELSEWHERE')?<p className={styles.disclaimer}>Some staff accounts are bound to another institution and cannot be assigned here until their current HRMS binding is revoked.</p>:null}
+            <p className={styles.disclaimer}>Only HRMS platform owners can create or revoke a binding. Education Admin cannot select another institution; each API request resolves this assignment server-side and continues to enforce the staff member's existing permission grants.</p>
           </section>
           <section className={styles.panel}>
             {editingCard==='branding'?<>

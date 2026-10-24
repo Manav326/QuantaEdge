@@ -24,7 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 /**
- * Tenant-admin course origination, release review and institution-specific offer lifecycle.
+ * OBSOLETE ROUTES ARE RETAINED FOR POST-CUTOVER REMOVAL.
+ * Legacy institution-side Marketplace offer setup/review/publication endpoints remain explicit
+ * deprecated responses only; they must not be reactivated. HRMS is the sole Marketplace publisher.
  * Institution scope is taken only from the authenticated institution_admin_session.
  */
 @RestController
@@ -34,14 +36,16 @@ public class InstitutionCourseLifecycleController {
   private final InstitutionAuthService institutionAuth;
   private final ObjectMapper objectMapper;
   private final CourseMarketplaceLaunchReadinessService launchReadiness;
+  private final CourseAuthoringService courseAuthoringService;
 
   public InstitutionCourseLifecycleController(
       JdbcTemplate jdbc, InstitutionAuthService institutionAuth, ObjectMapper objectMapper,
-      CourseMarketplaceLaunchReadinessService launchReadiness) {
+      CourseMarketplaceLaunchReadinessService launchReadiness, CourseAuthoringService courseAuthoringService) {
     this.jdbc = jdbc;
     this.institutionAuth = institutionAuth;
     this.objectMapper = objectMapper;
     this.launchReadiness = launchReadiness;
+    this.courseAuthoringService = courseAuthoringService;
   }
 
   @GetMapping("/courses")
@@ -77,79 +81,17 @@ public class InstitutionCourseLifecycleController {
   }
 
   /** Creates the institution's course master and a draft release over its own content graph. */
+  /**
+   * @deprecated Legacy institution-portal creation endpoint delegates to the canonical course
+   * authoring service. New Education Admin UI should call /api/v1/admin/content/courses.
+   */
+  @Deprecated(since="2026-10",forRemoval=false)
   @PostMapping("/courses")
   @Transactional
   public Map<String,Object> createCourse(@RequestBody Map<String,Object> body,HttpServletRequest request) {
     InstitutionAuthService.InstitutionPrincipal principal=requirePrincipal(request);
-    String classCode=requiredText(body,"classCode",1,20,"Class code");
-    String requestedCode=requiredText(body,"code",2,38,"Course code").toUpperCase(Locale.ROOT);
-    if(!requestedCode.matches("^[A-Z0-9][A-Z0-9_-]{1,37}$"))
-      throw new IllegalArgumentException("Course code must use 2–38 letters, digits, hyphens or underscores.");
-    String displayName=requiredText(body,"displayName",2,200,"Course name");
-    String version=optionalText(body.get("curriculumVersion"),"CURRENT",1,120,"Curriculum version");
-    String stream=optionalText(body.get("streamCode"),null,0,60,"Stream code");
-    Object rawSubjects=body.get("subjects");
-    if(!(rawSubjects instanceof List<?> suppliedSubjects)||suppliedSubjects.isEmpty()||suppliedSubjects.size()>30)
-      throw new IllegalArgumentException("Add between 1 and 30 subject tracks to this course.");
-
-    List<Map<String,String>> subjects=new ArrayList<>();
-    Set<String> seenCodes=new HashSet<>();
-    int sequence=1;
-    for(Object raw:suppliedSubjects) {
-      if(!(raw instanceof Map<?,?> subject)) throw new IllegalArgumentException("Each subject needs a code and name.");
-      String code=requiredText(mapOf(subject),"code",2,40,"Subject code").toLowerCase(Locale.ROOT);
-      if(!code.matches("^[a-z0-9][a-z0-9_-]{1,39}$")||!seenCodes.add(code))
-        throw new IllegalArgumentException("Subject codes must be unique and use lowercase letters, digits, hyphens or underscores.");
-      subjects.add(Map.of("code",code,"displayName",requiredText(mapOf(subject),"displayName",2,100,"Subject name"),
-          "sortOrder",String.valueOf(sequence++)));
-    }
-    List<Map<String,Object>> classes=jdbc.queryForList(
-        "select id from curriculum_class where code=? and active=true",classCode);
-    if(classes.isEmpty()) throw new IllegalArgumentException("Select an active curriculum class.");
-    long classId=((Number)classes.getFirst().get("id")).longValue();
-    String internalCode="I"+principal.institutionId()+"_"+requestedCode;
-    Long courseId;
-    String publicId;
-    Long releaseId;
-    try {
-      courseId=jdbc.queryForObject("""
-          insert into curriculum_program(
-            class_id,code,display_name,stream_code,curriculum_version,status,notes,public_id_prefix
-          ) values(?,?,?,?,?,'ACTIVE',?,'INS') returning id
-          """,Long.class,classId,internalCode,displayName,stream,version,
-          "Institution-origin course for tenant "+principal.tenantCode());
-      publicId=jdbc.queryForObject("select public_id from curriculum_program where id=?",String.class,courseId);
-      for(Map<String,String> subject:subjects) {
-        int order=Integer.parseInt(subject.get("sortOrder"));
-        Long subjectId=jdbc.queryForObject("""
-            insert into curriculum_subject(class_id,code,display_name,sort_order,active,program_id)
-            values(?,?,?,?,true,?) returning id
-            """,Long.class,classId,subject.get("code"),subject.get("displayName"),order,courseId);
-        jdbc.update("""
-            insert into curriculum_program_subject(program_id,class_id,subject_id,is_required,sort_order)
-            values(?,?,?,true,?)
-            """,courseId,classId,subjectId,order);
-      }
-      releaseId=jdbc.queryForObject("""
-          insert into institution_course_release(
-            source_institution_id,program_id,release_version,release_state,content_fingerprint,
-            legacy_migration,created_at,updated_at
-          ) values(?,?,1,'DRAFT',?,false,now(),now()) returning id
-          """,Long.class,principal.institutionId(),courseId,contentFingerprint(courseId));
-      long assignmentId=jdbc.queryForObject("""
-          insert into institution_course_assignment(
-            institution_id,course_release_id,status,assignment_source,assigned_at,created_at,updated_at
-          ) values(?,?,'ASSIGNED','ORIGIN',now(),now(),now()) returning id
-          """,Long.class,principal.institutionId(),releaseId);
-      recordEvent(principal.institutionId(),releaseId,assignmentId,null,"COURSE_CREATED",null,principal.adminId(),
-          Map.of("courseId",courseId,"courseCode",internalCode,"publicId",publicId,"subjectCount",subjects.size()));
-    } catch(DuplicateKeyException ex) {
-      throw new ResponseStatusException(HttpStatus.CONFLICT,
-          "A course with that code and curriculum version already exists for this institution.",ex);
-    }
-    return Map.of("created",true,"courseId",courseId,"publicId",publicId,"courseCode",internalCode,
-        "displayName",displayName,"curriculumVersion",version,"subjectCount",subjects.size(),
-        "releaseId",releaseId,"releaseStatus","DRAFT");
+    return courseAuthoringService.createSourceCourse(
+        principal.institutionId(),principal.tenantCode(),null,principal.adminId(),body);
   }
 
   @GetMapping("/course-releases")
@@ -353,156 +295,50 @@ public class InstitutionCourseLifecycleController {
         """,principal.institutionId());
   }
 
+    /**
+   * @deprecated Marketplace offer creation, approval and publication belong to the HRMS launch stepper.
+   * Kept temporarily as an explicit compatibility response so old clients fail safely rather than
+   * silently creating a parallel publication path.
+   */
+  @Deprecated(since="2026-10", forRemoval=false)
   @PostMapping("/course-assignments/{assignmentId}/offers")
-  @Transactional
   public Map<String,Object> configureOffer(
       @PathVariable long assignmentId,@RequestBody Map<String,Object> body,HttpServletRequest request) {
-    InstitutionAuthService.InstitutionPrincipal principal=requirePrincipal(request);
-    List<Map<String,Object>> assignments=jdbc.queryForList("""
-        select a.id,a.institution_id,a.course_release_id,a.status as assignment_status,
-          r.program_id as course_id,r.release_state,p.code,p.display_name
-        from institution_course_assignment a
-        join institution_course_release r on r.id=a.course_release_id
-        join curriculum_program p on p.id=r.program_id
-        where a.id=? and a.institution_id=? for update of a
-        """,assignmentId,principal.institutionId());
-    if(assignments.isEmpty()) throw new SecurityException("This course assignment is not available to the current institution.");
-    Map<String,Object> assignment=assignments.getFirst();
-    if(!"ASSIGNED".equals(String.valueOf(assignment.get("assignment_status")))
-        ||!"SHAREABLE".equals(String.valueOf(assignment.get("release_state"))))
-      throw conflict("Only an active assignment of a shareable release can have an offer.");
-    String courseCode=String.valueOf(assignment.get("code"));
-    long pricePaise;
-    if(Set.of("CLASS_6","CLASS_7","CLASS_8").contains(courseCode)) {
-      pricePaise=body.get("pricePaise") instanceof Number?number(body.get("pricePaise")):100000L;
-      if(pricePaise!=100000L) throw new IllegalArgumentException("Class 6, Class 7 and Class 8 offers must be INR 1,000.");
-    } else {
-      if(!(body.get("pricePaise") instanceof Number)) throw new IllegalArgumentException("Price in paise is required.");
-      pricePaise=number(body.get("pricePaise"));
-      if(pricePaise<0) throw new IllegalArgumentException("Price cannot be negative.");
-    }
-    String title=optionalText(body.get("titleOverride"),null,0,200,"Offer title");
-    String description=optionalText(body.get("description"),null,0,5000,"Offer description");
-    if(title!=null&&title.isBlank()) throw new IllegalArgumentException("Offer title cannot be blank.");
-    long releaseId=((Number)assignment.get("course_release_id")).longValue();
-    long courseId=((Number)assignment.get("course_id")).longValue();
-    Long offerId;
-    try {
-      offerId=jdbc.queryForObject("""
-          insert into institution_marketplace_offer(
-            institution_id,assignment_id,course_release_id,course_id,title_override,description,
-            price_paise,currency,status,created_by_admin_id,updated_by_admin_id,created_at,updated_at
-          ) values(?,?,?,?,?,?,?,'INR','DRAFT',?,?,now(),now())
-          on conflict(institution_id,assignment_id) do update set
-            title_override=excluded.title_override,description=excluded.description,
-            price_paise=excluded.price_paise,currency='INR',status='DRAFT',
-            submitted_by_admin_id=null,submitted_at=null,approved_by_admin_id=null,approved_at=null,
-            published_by_admin_id=null,published_at=null,rejected_by_admin_id=null,rejected_at=null,
-            rejection_reason=null,updated_by_admin_id=excluded.updated_by_admin_id,updated_at=now()
-          returning id
-          """,Long.class,principal.institutionId(),assignmentId,releaseId,courseId,title,description,pricePaise,
-          principal.adminId(),principal.adminId());
-    } catch(DuplicateKeyException ex) {
-      throw new ResponseStatusException(HttpStatus.CONFLICT,"An offer already exists for this course assignment.",ex);
-    }
-    recordEvent(principal.institutionId(),releaseId,assignmentId,offerId,"OFFER_DRAFTED",null,principal.adminId(),
-        Map.of("pricePaise",pricePaise,"currency","INR","receiver","HRMS_PLATFORM_ACCOUNT"));
-    return Map.of("saved",true,"offerId",offerId,"assignmentId",assignmentId,
-        "courseId",courseId,"pricePaise",pricePaise,"currency","INR","status","DRAFT",
-        "paymentReceiver","HRMS_PLATFORM_ACCOUNT");
+    throw legacyOfferLifecycleGone();
   }
 
+  /** @deprecated HRMS owns the offer review and publication state machine. */
+  @Deprecated(since="2026-10", forRemoval=false)
   @PostMapping("/course-offers/{offerId}/submit")
-  @Transactional
   public Map<String,Object> submitOffer(@PathVariable long offerId,HttpServletRequest request) {
-    return transitionOffer(offerId,"SUBMIT",null,request);
+    throw legacyOfferLifecycleGone();
   }
 
+  /** @deprecated HRMS alone may approve a Marketplace offer. */
+  @Deprecated(since="2026-10", forRemoval=false)
   @PostMapping("/course-offers/{offerId}/approve")
-  @Transactional
   public Map<String,Object> approveOffer(@PathVariable long offerId,HttpServletRequest request) {
-    return transitionOffer(offerId,"APPROVE",null,request);
+    throw legacyOfferLifecycleGone();
   }
 
+  /** @deprecated HRMS alone may publish a Marketplace offer. */
+  @Deprecated(since="2026-10", forRemoval=false)
   @PostMapping("/course-offers/{offerId}/publish")
-  @Transactional
   public Map<String,Object> publishOffer(@PathVariable long offerId,HttpServletRequest request) {
-    return transitionOffer(offerId,"PUBLISH",null,request);
+    throw legacyOfferLifecycleGone();
   }
 
+  /** @deprecated Marketplace rejections are handled by the HRMS launch workflow. */
+  @Deprecated(since="2026-10", forRemoval=false)
   @PostMapping("/course-offers/{offerId}/reject")
-  @Transactional
   public Map<String,Object> rejectOffer(
       @PathVariable long offerId,@RequestBody Map<String,Object> body,HttpServletRequest request) {
-    return transitionOffer(offerId,"REJECT",requiredText(body,"reason",3,1000,"Rejection reason"),request);
+    throw legacyOfferLifecycleGone();
   }
 
-  private Map<String,Object> transitionOffer(long offerId,String action,String reason,HttpServletRequest request) {
-    InstitutionAuthService.InstitutionPrincipal principal=requirePrincipal(request);
-    List<Map<String,Object>> rows=jdbc.queryForList("""
-        select o.id,o.status,o.course_id,o.assignment_id,o.course_release_id,o.price_paise,o.currency,
-          a.status as assignment_status,r.release_state
-        from institution_marketplace_offer o
-        join institution_course_assignment a on a.id=o.assignment_id and a.institution_id=o.institution_id
-        join institution_course_release r on r.id=o.course_release_id and r.program_id=o.course_id
-        where o.id=? and o.institution_id=? for update of o,a,r
-        """,offerId,principal.institutionId());
-    if(rows.isEmpty()) throw new SecurityException("This Marketplace offer is not available to the current institution.");
-    Map<String,Object> row=rows.getFirst();
-    String state=String.valueOf(row.get("status"));
-    String next;
-    switch(action) {
-      case "SUBMIT" -> {
-        if(!Set.of("DRAFT","REJECTED").contains(state)) throw conflict("Only a draft or rejected offer can be submitted.");
-        ensureOfferAssignmentReady(row);
-        next="IN_REVIEW";
-        jdbc.update("""
-            update institution_marketplace_offer set status='IN_REVIEW',submitted_by_admin_id=?,
-              submitted_at=now(),rejected_by_admin_id=null,rejected_at=null,rejection_reason=null,
-              updated_by_admin_id=?,updated_at=now() where id=?
-            """,principal.adminId(),principal.adminId(),offerId);
-      }
-      case "APPROVE" -> {
-        if(!"IN_REVIEW".equals(state)) throw conflict("Only an offer in review can be approved.");
-        ensureOfferAssignmentReady(row);
-        next="APPROVED";
-        jdbc.update("""
-            update institution_marketplace_offer set status='APPROVED',approved_by_admin_id=?,
-              approved_at=now(),updated_by_admin_id=?,updated_at=now() where id=?
-            """,principal.adminId(),principal.adminId(),offerId);
-      }
-      case "PUBLISH" -> {
-        if(!"APPROVED".equals(state)) throw conflict("An offer must be approved before publication.");
-        ensureOfferAssignmentReady(row);
-        launchReadiness.requireReady(offerId,principal.institutionId());
-        next="PUBLISHED";
-        jdbc.update("""
-            update institution_marketplace_offer set status='PUBLISHED',published_by_admin_id=?,
-              published_at=now(),updated_by_admin_id=?,updated_at=now() where id=?
-            """,principal.adminId(),principal.adminId(),offerId);
-      }
-      case "REJECT" -> {
-        if(!"IN_REVIEW".equals(state)) throw conflict("Only an offer in review can be rejected.");
-        next="REJECTED";
-        jdbc.update("""
-            update institution_marketplace_offer set status='REJECTED',rejected_by_admin_id=?,
-              rejected_at=now(),rejection_reason=?,updated_by_admin_id=?,updated_at=now() where id=?
-            """,principal.adminId(),reason,principal.adminId(),offerId);
-      }
-      default -> throw new IllegalArgumentException("Unsupported offer transition.");
-    }
-    long releaseId=((Number)row.get("course_release_id")).longValue();
-    long assignmentId=((Number)row.get("assignment_id")).longValue();
-    recordEvent(principal.institutionId(),releaseId,assignmentId,offerId,"OFFER_"+next,null,
-        principal.adminId(),Map.of("from",state,"to",next,"pricePaise",row.get("price_paise"),
-            "currency",row.get("currency"),"paymentReceiver","HRMS_PLATFORM_ACCOUNT"));
-    return Map.of("updated",true,"offerId",offerId,"status",next);
-  }
-
-  private void ensureOfferAssignmentReady(Map<String,Object> row) {
-    if(!"ASSIGNED".equals(String.valueOf(row.get("assignment_status")))
-        ||!"SHAREABLE".equals(String.valueOf(row.get("release_state"))))
-      throw conflict("The assigned course release is no longer available for this offer.");
+  private ResponseStatusException legacyOfferLifecycleGone() {
+    return new ResponseStatusException(HttpStatus.GONE,
+        "DEPRECATED_OFFER_LIFECYCLE: Marketplace offer setup, review and publication are managed exclusively by HRMS. Use the HRMS Marketplace launch stepper.");
   }
 
   private Map<String,Object> loadOriginRelease(long releaseId,long institutionId) {

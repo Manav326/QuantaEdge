@@ -172,6 +172,55 @@ public class InstitutionTenantContextService {
         requestPath.equals(prefix) || requestPath.startsWith(prefix));
   }
 
+  /**
+   * Education Admin tenant is derived from an HRMS-managed staff binding. Browser tenant headers
+   * are selectors only for learner/institution entry flows; they can never choose an Education Admin
+   * workspace's institution.
+   */
+  public InstitutionTenantContext requireStaffInstitution(Long staffId) {
+    if (staffId == null || staffId < 1L) {
+      throw new InvalidInstitutionContextException(
+          403, "EDUCATION_ADMIN_STAFF_REQUIRED",
+          "An authenticated Education Admin staff identity is required.");
+    }
+    List<Map<String,Object>> rows = jdbc.queryForList("""
+        select t.id,t.tenant_code,t.display_name
+        from institution_staff_binding b
+        join staff_account s on s.id=b.staff_id and s.active=true
+        join institution_tenant t on t.id=b.institution_id and t.status='ACTIVE'
+        where b.staff_id=? and b.status='ACTIVE'
+        """, staffId);
+    if (rows.isEmpty()) {
+      throw new InvalidInstitutionContextException(
+          403, "INSTITUTION_STAFF_BINDING_REQUIRED",
+          "This Education Admin staff account has no active HRMS institution assignment. Ask an HRMS platform owner to assign the institution. Institution switching is not available in Education Admin.");
+    }
+    Map<String,Object> row = rows.getFirst();
+    Object rawId = row.get("id");
+    Object rawCode = row.get("tenant_code");
+    if (!(rawId instanceof Number institutionId) || rawCode == null
+        || rawCode.toString().isBlank()) {
+      throw new IllegalStateException("The active HRMS institution binding is incomplete.");
+    }
+    return new InstitutionTenantContext(
+        institutionId.longValue(), rawCode.toString().trim().toUpperCase(Locale.ROOT),
+        row.get("display_name") == null ? "" : row.get("display_name").toString().trim());
+  }
+
+  /**
+   * During a rolling client deployment, reject old clients that still submit a different
+   * institution selector rather than ever honouring it. A matching header carries no authority.
+   */
+  public void rejectMismatchedStaffSelector(String requestedCode, InstitutionTenantContext bound) {
+    if (requestedCode == null || requestedCode.isBlank()) return;
+    String requested = normalizeRequestedCode(requestedCode);
+    if (bound == null || !bound.tenantCode().equals(requested)) {
+      throw new InvalidInstitutionContextException(
+          403, "INSTITUTION_CONTEXT_MISMATCH",
+          "This Education Admin account is bound to a different institution by HRMS. The selected institution header is not an authorization mechanism.");
+    }
+  }
+
   public InstitutionTenantContext requireSelector(String requestedCode) {
     String selectedCode = selectTenantCode(requestedCode);
     if (selectedCode == null || selectedCode.isBlank()) {

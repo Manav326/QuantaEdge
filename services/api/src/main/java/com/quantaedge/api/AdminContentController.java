@@ -68,29 +68,50 @@ public class AdminContentController {
     this.assessmentCatalog = assessmentCatalog;
   }
 
-  /** Lists active institutions that have at least one active course assignment. */
+  /** Trusted tenant identity for the current Education Admin staff session. */
+  @GetMapping("/institution-context")
+  public Map<String,Object> institutionContext(
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    authorization.requireAuth(context);
+    if(context.staffId()==null) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+          "An authenticated Education Admin staff account is required.");
+    }
+    if(tenant==null) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+          "This staff account has no active HRMS institution binding.");
+    }
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select b.assigned_at,b.assigned_by_staff_id,t.id as institution_id,
+             t.tenant_code,t.display_name,t.status
+      from institution_staff_binding b
+      join institution_tenant t on t.id=b.institution_id
+      where b.staff_id=? and b.institution_id=? and b.status='ACTIVE'
+        and t.status='ACTIVE'
+      """,context.staffId(),tenant.institutionId());
+    if(rows.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+          "This staff account is not currently assigned to the resolved institution by HRMS.");
+    }
+    Map<String,Object> result=new LinkedHashMap<>(rows.getFirst());
+    result.put("courseRelationshipScope","SOURCE_ONLY_EDIT_SHARED_READ_ONLY");
+    result.put("institutionSwitchingAllowed",false);
+    return result;
+  }
+
+  /**
+   * @deprecated Institution switching has been retired. The active institution is provided by
+   * the authenticated HRMS-managed staff binding at /institution-context.
+   */
   @GetMapping("/institutions")
+  @Deprecated(since="2026-10",forRemoval=false)
   public List<Map<String,Object>> institutions(
       @RequestHeader(value = "X-Admin-Token", required = false) String token,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    authorize(token, context, "CONTENT_VIEW");
-    String preferredCode = defaultInstitutionCode == null
-        ? "" : defaultInstitutionCode.trim().toUpperCase(Locale.ROOT);
-    return jdbc.queryForList("""
-      select t.id as institution_id,t.tenant_code,t.display_name,
-             case when ?<>'' and t.tenant_code=? then true else false end as is_default
-      from institution_tenant t
-      where t.status='ACTIVE'
-        and exists (
-          select 1
-          from institution_course_assignment assignment
-          join institution_course_release release on release.id=assignment.course_release_id
-          join curriculum_program p on p.id=release.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-          where assignment.institution_id=t.id and assignment.status='ASSIGNED'
-        )
-      order by case when ?<>'' and t.tenant_code=? then 0 else 1 end,
-               lower(t.display_name),t.id
-      """, preferredCode, preferredCode, preferredCode, preferredCode);
+    throw new ResponseStatusException(HttpStatus.GONE,
+        "DEPRECATED_INSTITUTION_SELECTOR: Education Admin institutions are assigned in HRMS. Use /api/v1/admin/content/institution-context; institution switching is not supported.");
   }
 
   @GetMapping("/programs")
@@ -102,14 +123,26 @@ public class AdminContentController {
     authorize(token, context, "CONTENT_VIEW");
     long institutionId = requireInstitution(tenant);
     List<Map<String,Object>> courses=jdbc.queryForList("""
-      select distinct p.id,p.id as course_id,p.public_id,p.public_id_prefix,p.code,p.display_name,
-             p.curriculum_version,c.code as curriculum_class_code
+      select p.id,p.id as course_id,p.public_id,p.public_id_prefix,p.code,p.display_name,
+             p.curriculum_version,p.course_type_code,p.content_version_no,p.course_identity_id,
+             p.supersedes_program_id,c.code as curriculum_class_code,
+             scoped.release_id,scoped.release_version,scoped.release_state,
+             scoped.source_institution_id,
+             case when scoped.source_institution_id=scoped.assigned_institution_id
+               then 'SOURCED' else 'SHARED' end as course_relationship
       from curriculum_program p
       left join curriculum_class c on c.id=p.class_id and c.active=true
-      join institution_course_release release on release.program_id=p.id
-      join institution_course_assignment assignment
-        on assignment.course_release_id=release.id and assignment.institution_id=?
-           and assignment.status='ASSIGNED'
+      join lateral (
+        select release.id as release_id,release.release_version,release.release_state,
+               release.source_institution_id,assignment.institution_id as assigned_institution_id
+        from institution_course_release release
+        join institution_course_assignment assignment
+          on assignment.course_release_id=release.id and assignment.institution_id=?
+             and assignment.status='ASSIGNED'
+        where release.program_id=p.id
+        order by release.release_version desc,release.id desc
+        limit 1
+      ) scoped on true
       where p.status='ACTIVE' and p.code<>'GENERAL'
       order by p.display_name,p.id
       """, institutionId);
@@ -434,6 +467,7 @@ public class AdminContentController {
     Long requestedCourseId = optionalLong(body.get("courseId"), "courseId");
     if (requestedCourseId == null) throw badRequest("Select an institution-assigned course before creating a chapter.");
     requireAssignedCourse(requestedCourseId, institutionId);
+    requireEditableCourse(requestedCourseId, institutionId);
     String classCode = requiredText(body.get("classCode"), 30);
     String subjectCode = requiredText(body.get("subjectCode"), 40);
     String code = requiredText(body.get("code"), 60).toLowerCase();
@@ -490,6 +524,7 @@ public class AdminContentController {
     if (courseId == null) throw badRequest("Select an institution-assigned course before creating a micro-topic.");
     long chapterId = longValue(body.get("chapterId"), "chapterId");
     requireChapterInCourse(chapterId, courseId, institutionId);
+    requireEditableCourse(courseId, institutionId);
     chapterById(chapterId);
     String code = requiredText(body.get("code"), 100).toLowerCase();
     if (!code.matches("[a-z0-9]+(?:-[a-z0-9]+)*")) {
@@ -534,6 +569,7 @@ public class AdminContentController {
     Long courseId = optionalLong(body.get("courseId"), "courseId");
     if (courseId == null) throw badRequest("Select a course before saving this chapter.");
     requireChapterInCourse(chapterId, courseId, requireInstitution(tenant));
+    requireEditableCourse(courseId, requireInstitution(tenant));
     Map<String,Object> current = chapterById(chapterId);
     String name = requiredText(body.get("displayName"), 160);
     String description = optionalText(body.get("description"), 500);
@@ -622,6 +658,7 @@ public class AdminContentController {
           InstitutionTenantContext tenant) {
     authorization.requirePermission(context,"CONTENT_PUBLISH");
     requireChapterInCourse(chapterId, courseId, requireInstitution(tenant));
+    requireEditableCourse(courseId, requireInstitution(tenant));
     Map<String,Object> current=chapterById(chapterId);
     Map<String,Object> body=new LinkedHashMap<>();
     body.put("displayName",current.get("chapter_name"));
@@ -647,6 +684,7 @@ public class AdminContentController {
           InstitutionTenantContext tenant) {
     authorization.requirePermission(context,"CONTENT_PUBLISH");
     requireChapterInCourse(chapterId, courseId, requireInstitution(tenant));
+    requireEditableCourse(courseId, requireInstitution(tenant));
     Map<String,Object> current=chapterById(chapterId);
     Map<String,Object> body=new LinkedHashMap<>();
     body.put("displayName",current.get("chapter_name"));
@@ -672,6 +710,7 @@ public class AdminContentController {
           InstitutionTenantContext tenant) {
     authorization.requirePermission(context,"CONTENT_REVIEW");
     requireChapterInCourse(chapterId, courseId, requireInstitution(tenant));
+    requireEditableCourse(courseId, requireInstitution(tenant));
     Map<String,Object> current=chapterById(chapterId);
     requireCompleteSourceReference(
         current.get("curriculum_source")==null?null:String.valueOf(current.get("curriculum_source")),
@@ -695,6 +734,7 @@ public class AdminContentController {
           InstitutionTenantContext tenant) {
     authorization.requirePermission(context,"CONTENT_REVIEW");
     requireLessonInCourse(lessonId, courseId, requireInstitution(tenant));
+    requireEditableCourse(courseId, requireInstitution(tenant));
     Map<String,Object> current=lessonById(lessonId);
     requireCompleteSourceReference(
         current.get("alignment_source_title")==null?null:String.valueOf(current.get("alignment_source_title")),
@@ -720,6 +760,7 @@ public class AdminContentController {
     Long courseId = optionalLong(body.get("courseId"), "courseId");
     if (courseId == null) throw badRequest("Select a course before confirming this lesson preview.");
     requireLessonInCourse(lessonId, courseId, requireInstitution(tenant));
+    requireEditableCourse(courseId, requireInstitution(tenant));
     long expectedRevision=longValue(body.get("contentRevision"),"contentRevision");
     Long currentRevision;
     try {
@@ -757,6 +798,7 @@ public class AdminContentController {
           InstitutionTenantContext tenant) {
     authorization.requirePermission(context,"CONTENT_SUBMIT");
     requireLessonInCourse(lessonId, courseId, requireInstitution(tenant));
+    requireEditableCourse(courseId, requireInstitution(tenant));
     Map<String,Object> current=lessonById(lessonId);
     String currentStatus=String.valueOf(current.get("lesson_status"));
     if ("PUBLISHED".equals(currentStatus)||"ARCHIVED".equals(currentStatus)) {
@@ -797,6 +839,7 @@ public class AdminContentController {
           InstitutionTenantContext tenant) {
     authorization.requirePermission(context,"CONTENT_PUBLISH");
     requireLessonInCourse(lessonId, courseId, requireInstitution(tenant));
+    requireEditableCourse(courseId, requireInstitution(tenant));
     Map<String,Object> current=lessonById(lessonId);
     String currentStatus=String.valueOf(current.get("lesson_status"));
     if (!"REVIEW".equals(currentStatus) && !"ARCHIVED".equals(currentStatus)) {
@@ -820,6 +863,7 @@ public class AdminContentController {
           InstitutionTenantContext tenant) {
     authorization.requirePermission(context,"CONTENT_PUBLISH");
     requireLessonInCourse(lessonId, courseId, requireInstitution(tenant));
+    requireEditableCourse(courseId, requireInstitution(tenant));
     lessonById(lessonId);
     jdbc.update("update lesson set status='DRAFT', active=true where id=?",lessonId);
     Map<String,Object> result=lessonById(lessonId);
@@ -842,6 +886,7 @@ public class AdminContentController {
     authorization.requirePermission(context,"CONTENT_REVIEW");
     long institutionId=requireInstitution(tenant);
     requireAssignedCourse(courseId,institutionId);
+    requireEditableCourse(courseId,institutionId);
     Boolean inCourse=jdbc.queryForObject("""
       select exists(
         select 1 from question q
@@ -910,6 +955,7 @@ public class AdminContentController {
           InstitutionTenantContext tenant) {
     context=authorization.requirePermission(context,"CONTENT_EDIT");
     requireLessonInCourse(lessonId, courseId, requireInstitution(tenant));
+    requireEditableCourse(courseId, requireInstitution(tenant));
     Map<String,Object> lesson=lessonById(lessonId);
     String lessonStatus=String.valueOf(lesson.get("lesson_status")).toUpperCase(Locale.ROOT);
     if ("ARCHIVED".equals(lessonStatus)
@@ -1085,6 +1131,7 @@ public class AdminContentController {
     Long courseId = optionalLong(body.get("courseId"), "courseId");
     if (courseId == null) throw badRequest("Select a course before saving this lesson.");
     requireLessonInCourse(lessonId, courseId, requireInstitution(tenant));
+    requireEditableCourse(courseId, requireInstitution(tenant));
     Map<String,Object> current = lessonById(lessonId);
     String title = requiredText(body.get("title"), 240);
     String summary = optionalText(body.get("summary"), 800);
@@ -2054,6 +2101,42 @@ public class AdminContentController {
       )
       """, Boolean.class, courseId, lessonId);
     if (!Boolean.TRUE.equals(inCourse)) throw notFound("Lesson", lessonId);
+  }
+
+  /**
+   * Assigned courses are visible to a tenant, but only a tenant that owns an active source
+   * release may mutate course content. This is separate from staff permission checks.
+   */
+  private void requireEditableCourse(long courseId,long institutionId) {
+    if(courseId<1L) throw badRequest("Select a valid course.");
+    Boolean sourceOwned=jdbc.queryForObject("""
+      select exists(
+        select 1
+        from institution_course_release release
+        join institution_course_assignment assignment
+          on assignment.course_release_id=release.id
+         and assignment.institution_id=? and assignment.status='ASSIGNED'
+        where release.program_id=?
+          and release.source_institution_id=assignment.institution_id
+      )
+      """,Boolean.class,institutionId,courseId);
+    if(!Boolean.TRUE.equals(sourceOwned)) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+          "Only the source institution may edit this course. Shared courses are read-only in Education Admin.");
+    }
+    Boolean alreadyReleased=jdbc.queryForObject("""
+      select
+        exists(select 1 from institution_course_release r
+          where r.program_id=? and r.source_institution_id=?
+            and r.release_state in ('IN_QUALITY_REVIEW','QUALITY_APPROVED','SHAREABLE','LEGACY_MIGRATED','WITHDRAWN'))
+        or exists(select 1 from institution_marketplace_offer o
+          where o.course_id=?
+            and (o.status='PUBLISHED' or o.hrms_published_by_staff_id is not null))
+      """,Boolean.class,courseId,institutionId,courseId);
+    if(Boolean.TRUE.equals(alreadyReleased)) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "This course version has entered the release or Marketplace workflow and is immutable. Create a draft version first; edits here must never change a published release.");
+    }
   }
 
   private void requireAssignedCourse(long courseId,long institutionId) {

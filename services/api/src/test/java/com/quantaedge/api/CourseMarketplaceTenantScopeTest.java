@@ -34,7 +34,7 @@ class CourseMarketplaceTenantScopeTest {
 
   @BeforeEach
   void setUp() {
-    when(authorization.requireStudent(student)).thenReturn(student);
+    org.mockito.Mockito.lenient().when(authorization.requireStudent(student)).thenReturn(student);
     controller = new CourseMarketplaceController(jdbc, authorization, new ObjectMapper(),courseOrderFinancialService,
         "", "", "https://api.razorpay.com/v1");
   }
@@ -86,8 +86,10 @@ class CourseMarketplaceTenantScopeTest {
     assertTrue(catalogueSql.contains("where o.institution_id=? and o.status='PUBLISHED'"));
     assertTrue(catalogueSql.contains("assignment.status='ASSIGNED'"));
     assertTrue(catalogueSql.contains("tenant_scope.status='ACTIVE'"));
-    assertTrue(catalogueSql.contains("legacy_grant.institution_id=?"));
-    assertTrue(catalogueSql.contains("cp.institution_id=?"));
+    assertTrue(catalogueSql.contains("o.hrms_published_by_staff_id is not null"));
+    assertTrue(catalogueSql.contains("release.release_state='SHAREABLE'"));
+    assertTrue(catalogueSql.contains("release.content_fingerprint=course_content_fingerprint(release.program_id)"));
+    assertTrue(catalogueSql.contains("newer_release.release_state='SHAREABLE'"));
     assertTrue(!catalogueSql.contains("not exists(select 1 from institution_membership"));
     assertTrue(List.of(catalogueArgs).contains(17L));
   }

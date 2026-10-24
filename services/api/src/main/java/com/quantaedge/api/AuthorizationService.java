@@ -45,10 +45,10 @@ public class AuthorizationService {
         || "TEACHING_ASSIGNMENT_VIEW".equals(permission)
         || "CLASS_SCHEDULE_POLICY_MANAGE".equals(permission)
         || "QE_PLATFORM_OWNER".equals(permission);
-    // The Education Admin global bypass can never satisfy an HRMS-only capability,
-    // even if an endpoint is reached through an unexpected URL or proxy path.
+    // Permissions are authoritative for every staff identity, including role ADMIN.
+    // A role may unlock a route intended only for administrators, but it never silently
+    // grants unrelated content, publication, resource, assessment or HRMS capabilities.
     if (hrmsPermission && !"HRMS".equals(AuthService.normalizeWorkspace(context.workspace()))) return false;
-    if (context.isAdmin()) return !hrmsPermission;
     if (!context.isEmployee()) return false;
     // Role-based permissions are evaluated live on every request; HRMS-only keys remain
     // scoped even when one staff identity legitimately has roles in both applications.

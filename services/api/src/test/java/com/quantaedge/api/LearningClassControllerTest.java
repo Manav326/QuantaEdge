@@ -103,9 +103,9 @@ class LearningClassControllerTest {
     ArgumentCaptor<String> itemSql = ArgumentCaptor.forClass(String.class);
     ArgumentCaptor<String> countSql = ArgumentCaptor.forClass(String.class);
     verify(jdbc).queryForList(itemSql.capture(),
-        eq(7L), eq(1L), eq(true), eq(""), eq(""), eq(71L), eq(71L), eq(25), eq(0));
+        eq(7L), eq(1L), eq(71L), eq(true), eq(""), eq(""), eq(71L), eq(71L), eq(25), eq(0));
     verify(jdbc).queryForObject(countSql.capture(),
-        eq(Long.class), eq(7L), eq(1L), eq(true), eq(""), eq(""), eq(71L), eq(71L));
+        eq(Long.class), eq(7L), eq(1L), eq(71L), eq(true), eq(""), eq(""), eq(71L), eq(71L));
     assertTrue(itemSql.getValue().contains("cs.ends_at>now()-interval '60 days'"));
     assertTrue(countSql.getValue().contains("cs.ends_at>now()-interval '60 days'"));
     assertTrue(itemSql.getValue().contains("(?=true or cs.status<>'SCHEDULED' or cs.starts_at<=now()+interval '24 hours')"));
@@ -320,7 +320,7 @@ class LearningClassControllerTest {
   @Test
   void outOfScopeStudentCannotFetchPrivateRecordingBytes() {
     when(authorization.requireStudent(student)).thenReturn(student);
-    when(jdbc.queryForList(contains("where rc.id=? and rc.institution_id=m.institution_id and rc.status='PUBLISHED'"), any(Object[].class)))
+    when(jdbc.queryForList(contains("where rc.id=? and rc.institution_id=m.institution_id and rc.course_id=? and rc.status='PUBLISHED'"), any(Object[].class)))
         .thenReturn(List.of());
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
@@ -350,14 +350,14 @@ class LearningClassControllerTest {
     assertEquals(501L, row.get("download_resource_id"));
     assertEquals(700L, row.get("download_assignment_id"));
     assertEquals(true, row.get("download_allowed"));
-    verify(jdbc).queryForList(contains("left join lateral"), eq(7L), eq(1L), eq(""), eq(""), eq(71L), eq(71L), eq(25), eq(0));
+    verify(jdbc).queryForList(contains("left join lateral"), eq(7L), eq(1L), eq(71L), eq(""), eq(""), eq(71L), eq(71L), eq(25), eq(0));
     verifyNoInteractions(staffAudit, mediaStorage);
   }
 
   @Test
   void malformedRangeHeaderIsRejectedWithoutOpeningTheMediaFile() {
     when(authorization.requireStudent(student)).thenReturn(student);
-    when(jdbc.queryForList(contains("where rc.id=? and rc.institution_id=m.institution_id and rc.status='PUBLISHED'"), any(Object[].class)))
+    when(jdbc.queryForList(contains("where rc.id=? and rc.institution_id=m.institution_id and rc.course_id=? and rc.status='PUBLISHED'"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "recorded_class_id", 88L, "storage_key", "afe0cdee-218f-4668-a5b6-8e52a66bb718.mp4",
             "original_filename", "class.mp4", "media_type", "video/mp4",

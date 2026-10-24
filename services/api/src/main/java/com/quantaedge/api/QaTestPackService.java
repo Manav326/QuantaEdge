@@ -309,7 +309,7 @@ public class QaTestPackService {
 
     try {
       List<Map<String,Object>> resources = jdbc.queryForList("""
-        select id,resource_key,resource_kind,resource_id,cleanup_order,state
+        select id,resource_key,resource_kind,resource_id,resource_ref,cleanup_order,state
         from qa_test_run_resource where run_id=? and state<>'CLEANED'
         order by cleanup_order,resource_key
         """, runId);
@@ -468,12 +468,12 @@ public class QaTestPackService {
       join institution_course_release r on r.id=a.course_release_id
       join institution_tenant source_tenant on source_tenant.id=r.source_institution_id
       join institution_tenant third_tenant on third_tenant.id=a.institution_id
-      join curriculum_program p on p.id=r.program_id and p.code='CLASS_7'
+      join curriculum_program p on p.id=r.program_id and p.qa_test_run_id=? and left(p.code,6)='QA_C7_'
       where a.qa_test_run_id=? and r.qa_test_run_id=?
         and source_tenant.tenant_code='QUANTA-EDGE' and third_tenant.qa_test_run_id=?
         and right(third_tenant.tenant_code,1)='C'
         and a.status='ASSIGNED' and source_tenant.id<>third_tenant.id
-      """, runId, runId, runId);
+      """, runId, runId, runId, runId);
     addCheck(runId, checks, "THIRD_INSTITUTION_DOES_NOT_INHERIT_COURSE",
         thirdTenantReceivedForeignCourse == 0,
         "Institution C must not receive QuantaEdge Class 7 without its own explicit HRMS assignment",
@@ -524,11 +524,14 @@ public class QaTestPackService {
           join institution_course_release r on r.id=a.course_release_id
           where a.institution_id=e.institution_id and a.status='ASSIGNED'
             and a.qa_test_run_id=? and r.program_id=e.program_id and r.release_state='SHAREABLE')
+        or not exists(select 1 from institution_course_entitlement ece
+          where ece.institution_id=e.institution_id and ece.program_id=e.program_id
+            and ece.status='ACTIVE' and ece.qa_test_run_id=?)
       )
-      """, runId, runId, runId);
+      """, runId, runId, runId, runId);
     addCheck(runId, checks, "LEARNER_COURSE_ENROLLMENTS_MATCH_TENANT_ASSIGNMENTS",
         courseEnrollmentCount == 3 && invalidCourseEnrollments == 0,
-        "Every active learner course enrollment matches that learner's institution membership and an assigned course release",
+        "Every active learner course enrollment matches tenant membership, an assigned shareable release and a course entitlement",
         "enrollments=" + courseEnrollmentCount + ", invalid=" + invalidCourseEnrollments,
         Map.of("enrollments", courseEnrollmentCount, "invalid", invalidCourseEnrollments));
 
@@ -596,7 +599,7 @@ public class QaTestPackService {
         Map.of("lessons", ownedLessons, "questions", ownedQuestions, "options", ownedOptions));
 
     List<Map<String,Object>> resources = jdbc.queryForList("""
-      select id,resource_key,resource_kind,resource_id,state
+      select id,resource_key,resource_kind,resource_id,resource_ref,state
       from qa_test_run_resource where run_id=? order by resource_key
       """, runId);
     long missingOwnedResources = 0;
@@ -629,7 +632,8 @@ public class QaTestPackService {
         'USER_ACCOUNT','STUDENT','GUARDIAN_STUDENT','INSTITUTION_USER_MEMBERSHIP','INSTITUTION_MEMBERSHIP',
         'STUDENT_LOGIN_CREDENTIAL','STUDENT_COURSE_ENROLLMENT','STUDENT_TRACK_ENROLLMENT',
         'STUDENT_LESSON_PROGRESS','STUDENT_QUESTION_ATTEMPT','COURSE_RELEASE','COURSE_ASSIGNMENT',
-        'COURSE_ENTITLEMENT','LESSON','QUESTION','QUESTION_OPTION'
+        'COURSE_ENTITLEMENT','COURSE','COURSE_IDENTITY','COURSE_SUBJECT',
+        'PROGRAM_SUBJECT_MAP','COURSE_CHAPTER','LESSON','QUESTION','QUESTION_OPTION'
       )
       """, runId);
     addCheck(runId, checks, "STARTER_PACK_HAS_NO_EXTERNAL_RESOURCES", unexpectedExternalResources == 0,
@@ -671,7 +675,19 @@ public class QaTestPackService {
   private boolean resourceIsOwned(UUID runId, Map<String,Object> resource) {
     long id = number(resource.get("resource_id"));
     String kind = String.valueOf(resource.get("resource_kind"));
+    if ("PROGRAM_SUBJECT_MAP".equals(kind)) {
+      Map<String,Object> ref=readJsonMap(resource.get("resource_ref"));
+      Boolean found=jdbc.queryForObject("""
+        select exists(select 1 from curriculum_program_subject
+          where program_id=? and subject_id=? and qa_test_run_id=?)
+        """,Boolean.class,id,number(ref.get("subjectId")),runId);
+      return Boolean.TRUE.equals(found);
+    }
     String sql = switch (kind) {
+      case "COURSE_IDENTITY" -> "select exists(select 1 from institution_course_identity where id=? and qa_test_run_id=?)";
+      case "COURSE" -> "select exists(select 1 from curriculum_program where id=? and qa_test_run_id=?)";
+      case "COURSE_SUBJECT" -> "select exists(select 1 from curriculum_subject where id=? and qa_test_run_id=?)";
+      case "COURSE_CHAPTER" -> "select exists(select 1 from curriculum_chapter where id=? and qa_test_run_id=?)";
       case "STUDENT_QUESTION_ATTEMPT" -> "select exists(select 1 from student_question_attempt where id=? and qa_test_run_id=?)";
       case "STUDENT_COURSE_ENROLLMENT" -> "select exists(select 1 from student_program_enrollment where id=? and qa_test_run_id=?)";
       case "COURSE_ENTITLEMENT" -> "select exists(select 1 from institution_course_entitlement where id=? and qa_test_run_id=?)";
@@ -753,25 +769,35 @@ public class QaTestPackService {
 
     Map<String,Object> courseGraph = insertInstitutionCourseGraph(
         runId, slug, tenantA, tenantB, tenantC, quantaEdgeId, class7ProgramId, class6ProgramId);
+    @SuppressWarnings("unchecked")
+    Map<String,Object> testCourseIds = (Map<String,Object>) courseGraph.get("courseIds");
+    Long qaClass7ProgramId = number(testCourseIds.get("class7ProgramId"));
+    Long qaClass6ProgramId = number(testCourseIds.get("class6ProgramId"));
     String class7ReleaseKey = String.valueOf(courseGraph.get("release_class7_resource_key"));
     String class6ReleaseKey = String.valueOf(courseGraph.get("release_class6_resource_key"));
-    Map<String,Object> content7 = insertSyntheticCourseQuestion(runId, class7ProgramId, "7");
-    Map<String,Object> content6 = insertSyntheticCourseQuestion(runId, class6ProgramId, "6");
+    Map<String,Object> content7 = insertSyntheticCourseQuestion(runId, qaClass7ProgramId, "7");
+    Map<String,Object> content6 = insertSyntheticCourseQuestion(runId, qaClass6ProgramId, "6");
+    promoteQaCourseRelease(runId, number(courseGraph.get("release_class7_id")),
+        number(courseGraph.get("qaCourseOwnerAdminId")), number(courseGraph.get("qaCourseReviewStaffId")),
+        "QA-only course graph completed content setup before explicit distribution.");
+    promoteQaCourseRelease(runId, number(courseGraph.get("release_class6_id")),
+        number(courseGraph.get("qaCourseOwnerAdminId")), number(courseGraph.get("qaCourseReviewStaffId")),
+        "QA-only course graph completed content setup before explicit distribution.");
     Long lesson7Id = number(content7.get("lesson_id"));
     Long question7Id = number(content7.get("question_id"));
     Long lesson6Id = number(content6.get("lesson_id"));
     Long question6Id = number(content6.get("question_id"));
 
-    insertStudentCourseEnrollment(runId, "child-a-course-enrollment", childA, tenantA, class7ProgramId,
+    insertStudentCourseEnrollment(runId, "child-a-course-enrollment", childA, tenantA, qaClass7ProgramId,
         "student-child-a", "institution-QAT" + slug + "A", class7ReleaseKey);
-    insertStudentCourseEnrollment(runId, "child-b-course-enrollment", childB, tenantB, class7ProgramId,
+    insertStudentCourseEnrollment(runId, "child-b-course-enrollment", childB, tenantB, qaClass7ProgramId,
         "student-child-b", "institution-QAT" + slug + "B", class7ReleaseKey);
-    insertStudentCourseEnrollment(runId, "adult-course-enrollment-class-6", adultStudent, tenantC, class6ProgramId,
+    insertStudentCourseEnrollment(runId, "adult-course-enrollment-class-6", adultStudent, tenantC, qaClass6ProgramId,
         "student-adult-student", "institution-QAT" + slug + "C", class6ReleaseKey);
 
-    ensureRequiredTracks(runId, childA, tenantA, class7ProgramId, "student-child-a", "institution-QAT" + slug + "A");
-    ensureRequiredTracks(runId, childB, tenantB, class7ProgramId, "student-child-b", "institution-QAT" + slug + "B");
-    ensureRequiredTracks(runId, adultStudent, tenantC, class6ProgramId, "student-adult-student", "institution-QAT" + slug + "C");
+    ensureRequiredTracks(runId, childA, tenantA, qaClass7ProgramId, "student-child-a", "institution-QAT" + slug + "A");
+    ensureRequiredTracks(runId, childB, tenantB, qaClass7ProgramId, "student-child-b", "institution-QAT" + slug + "B");
+    ensureRequiredTracks(runId, adultStudent, tenantC, qaClass6ProgramId, "student-adult-student", "institution-QAT" + slug + "C");
 
     insertProgress(runId, "child-a-progress-class-7", childA, tenantA, lesson7Id,
         "student-child-a", "institution-QAT" + slug + "A", String.valueOf(content7.get("lesson_resource_key")));
@@ -847,12 +873,19 @@ public class QaTestPackService {
         quantaEdgeId, "qa_quantaedge_" + slug.toLowerCase(Locale.ROOT),
         "QA QuantaEdge Course Owner", hrmsPlatformAdminId, "institution-QUANTA-EDGE");
 
+    // QA lessons/questions must never be inserted into the protected production Class 6/7 graph.
+    // Create separate run-owned curriculum graphs and distribute only after their synthetic content
+    // is complete. Existing QuantaEdge courses remain read-only references for this test pack.
+    Long qaClass7ProgramId = insertQaOwnedCourseMaster(
+        runId, slug, "7", quantaEdgeId, quantaEdgeOwnerAdmin, reviewerId, class7ProgramId);
+    Long qaClass6ProgramId = insertQaOwnedCourseMaster(
+        runId, slug, "6", quantaEdgeId, quantaEdgeOwnerAdmin, reviewerId, class6ProgramId);
     Long release7 = insertQuantaEdgeShareableRelease(runId, "course-release-class-7",
-        quantaEdgeId, quantaEdgeOwnerAdmin, reviewerId, class7ProgramId,
-        "Run-owned QA release; Class 7 source owner remains QuantaEdge.");
+        quantaEdgeId, quantaEdgeOwnerAdmin, reviewerId, qaClass7ProgramId,
+        "Run-owned QA release; Class 7 fixture course is owned by QuantaEdge.");
     Long release6 = insertQuantaEdgeShareableRelease(runId, "course-release-class-6",
-        quantaEdgeId, quantaEdgeOwnerAdmin, reviewerId, class6ProgramId,
-        "Run-owned QA release; Class 6 source owner remains QuantaEdge.");
+        quantaEdgeId, quantaEdgeOwnerAdmin, reviewerId, qaClass6ProgramId,
+        "Run-owned QA release; Class 6 fixture course is owned by QuantaEdge.");
 
     Long assignmentA = insertCourseAssignment(runId, "course-assignment-class-7-to-a",
         tenantA, release7, "HRMS", hrmsPlatformAdminId,
@@ -864,11 +897,11 @@ public class QaTestPackService {
         tenantC, release6, "HRMS", hrmsPlatformAdminId,
         List.of("institution-QAT" + slug + "C", "course-release-class-6"));
 
-    insertInstitutionCourseEntitlement(runId, "course-entitlement-a-class-7", tenantA, class7ProgramId,
+    insertInstitutionCourseEntitlement(runId, "course-entitlement-a-class-7", tenantA, qaClass7ProgramId,
         hrmsPlatformAdminId, "institution-QAT" + slug + "A", "course-release-class-7");
-    insertInstitutionCourseEntitlement(runId, "course-entitlement-b-class-7", tenantB, class7ProgramId,
+    insertInstitutionCourseEntitlement(runId, "course-entitlement-b-class-7", tenantB, qaClass7ProgramId,
         hrmsPlatformAdminId, "institution-QAT" + slug + "B", "course-release-class-7");
-    insertInstitutionCourseEntitlement(runId, "course-entitlement-c-class-6", tenantC, class6ProgramId,
+    insertInstitutionCourseEntitlement(runId, "course-entitlement-c-class-6", tenantC, qaClass6ProgramId,
         hrmsPlatformAdminId, "institution-QAT" + slug + "C", "course-release-class-6");
 
     Map<String,Object> result = new LinkedHashMap<>();
@@ -884,7 +917,9 @@ public class QaTestPackService {
         "username", "qa_institution_" + slug.toLowerCase(Locale.ROOT) + "c", "password", fixturePassword));
     result.put("quantaEdgeOwnerAdminCredentials", Map.of("institutionCode", "QUANTA-EDGE",
         "username", "qa_quantaedge_" + slug.toLowerCase(Locale.ROOT), "password", fixturePassword));
-    result.put("courseIds", Map.of("class6ProgramId", class6ProgramId, "class7ProgramId", class7ProgramId,
+    result.put("qaCourseOwnerAdminId", quantaEdgeOwnerAdmin);
+    result.put("qaCourseReviewStaffId", reviewerId);
+    result.put("courseIds", Map.of("class6ProgramId", qaClass6ProgramId, "class7ProgramId", qaClass7ProgramId,
         "class7AssignmentAId", assignmentA, "class7AssignmentBId", assignmentB,
         "class6AssignmentCId", assignmentC));
     return result;
@@ -918,6 +953,91 @@ public class QaTestPackService {
     if (owned == null || owned != 3L) throw new IllegalStateException("QuantaEdge must remain the active owner of Classes 6, 7 and 8.");
   }
 
+  /** Creates disposable course metadata while referencing only the real curriculum class. */
+  private Long insertQaOwnedCourseMaster(UUID runId, String slug, String classCode,
+      Long quantaEdgeId, Long ownerAdminId, Long reviewerStaffId, Long sourceProgramId) {
+    Map<String,Object> source=jdbc.queryForMap("""
+      select class_id,stream_code,course_type_code from curriculum_program
+      where id=? and status='ACTIVE' and code<>'GENERAL'
+      """,sourceProgramId);
+    long classId=number(source.get("class_id"));
+    String type=source.get("course_type_code")==null?"K12":String.valueOf(source.get("course_type_code"));
+    String code="QA_C"+classCode+"_"+slug;
+    String name="QA Class "+classCode+" lifecycle fixture "+slug;
+    Long identityId=jdbc.queryForObject("""
+      insert into institution_course_identity(
+        source_institution_id,stable_course_key,display_name,course_type_code,
+        created_by_staff_id,created_by_institution_admin_id,qa_test_run_id
+      ) values(?,?,?,?,?,?,?) returning id
+      """,Long.class,quantaEdgeId,"qa-pack-"+classCode+"-"+slug,name,type,reviewerStaffId,ownerAdminId,runId);
+    addResource(runId,"course-identity-class-"+classCode,"COURSE_IDENTITY",identityId,40,
+        List.of("institution-admin-quantaedge"),"institution_course_identity");
+
+    Long programId=jdbc.queryForObject("""
+      insert into curriculum_program(
+        class_id,code,display_name,stream_code,curriculum_version,status,notes,public_id_prefix,
+        course_type_code,course_identity_id,content_version_no,qa_test_run_id
+      ) values(?,?,?,?,?,'ACTIVE',?,?,?, ?,1,?) returning id
+      """,Long.class,classId,code,name,source.get("stream_code"),"QA-"+slug,
+      "Run-owned QA fixture; production curriculum is not modified.","INS",type,identityId,runId);
+    addResource(runId,"course-class-"+classCode,"COURSE",programId,39,
+        List.of("course-identity-class-"+classCode),"curriculum_program");
+
+    String subjectCode="qa-maths-"+slug.toLowerCase(Locale.ROOT);
+    Long subjectId=jdbc.queryForObject("""
+      insert into curriculum_subject(class_id,code,display_name,sort_order,active,program_id,qa_test_run_id)
+      values(?,?,?,1,true,?,?) returning id
+      """,Long.class,classId,subjectCode,"QA Mathematics "+slug,programId,runId);
+    addResource(runId,"course-subject-class-"+classCode,"COURSE_SUBJECT",subjectId,38,
+        List.of("course-class-"+classCode),"curriculum_subject");
+    jdbc.update("""
+      insert into curriculum_program_subject(program_id,class_id,subject_id,is_required,sort_order,qa_test_run_id)
+      values(?,?,?,true,1,?)
+      """,programId,classId,subjectId,runId);
+    addProgramSubjectMapResource(runId,"course-subject-map-class-"+classCode,programId,subjectId,
+        List.of("course-class-"+classCode,"course-subject-class-"+classCode));
+
+    Long chapterId=jdbc.queryForObject("""
+      insert into curriculum_chapter(
+        subject_id,code,display_name,description,sort_order,active,content_status,qa_test_run_id
+      ) values(?,'qa-lifecycle',?,?,999,true,'PUBLISHED',?) returning id
+      """,Long.class,subjectId,"QA lifecycle fixture Class "+classCode,
+      "Synthetic QA-only chapter; never production curriculum.",runId);
+    addResource(runId,"course-chapter-class-"+classCode,"COURSE_CHAPTER",chapterId,36,
+        List.of("course-subject-class-"+classCode),"curriculum_chapter");
+    return programId;
+  }
+
+  private void addProgramSubjectMapResource(UUID runId,String key,Long programId,Long subjectId,
+      List<String> dependencies) {
+    Map<String,Object> ref=new LinkedHashMap<>();
+    ref.put("subjectId",subjectId);
+    ref.put("programId",programId);
+    jdbc.update("""
+      insert into qa_test_run_resource(
+        run_id,resource_key,resource_kind,resource_id,resource_ref,dependency_keys,cleanup_order,state
+      ) values(?,?,'PROGRAM_SUBJECT_MAP',?,?::jsonb,?::jsonb,37,'OWNED')
+      """,runId,key,String.valueOf(programId),json(ref),json(dependencies));
+  }
+
+  private void promoteQaCourseRelease(UUID runId,long releaseId,long ownerAdminId,long reviewerStaffId,
+      String reviewNote) {
+    Long programId=jdbc.queryForObject("""
+      select program_id from institution_course_release
+      where id=? and qa_test_run_id=? and release_state='DRAFT'
+      """,Long.class,releaseId,runId);
+    String fingerprint=courseFingerprint(programId);
+    int changed=jdbc.update("""
+      update institution_course_release set release_state='SHAREABLE',content_fingerprint=?,
+        submitted_by_institution_admin_id=?,submitted_at=now(),
+        quality_reviewed_by_staff_id=?,quality_reviewed_at=now(),quality_review_notes=?,
+        origin_approved_by_admin_id=?,origin_approved_at=now(),shareable_at=now(),updated_at=now()
+      where id=? and source_institution_id=(select institution_id from institution_admin_account where id=?)
+        and qa_test_run_id=? and release_state='DRAFT'
+      """,fingerprint,ownerAdminId,reviewerStaffId,reviewNote,ownerAdminId,releaseId,ownerAdminId,runId);
+    if(changed!=1)throw new IllegalStateException("The isolated QA course release could not transition from draft to shareable.");
+  }
+
   private Long insertQuantaEdgeShareableRelease(UUID runId, String resourceKey, Long quantaEdgeId,
       Long quantaEdgeAdminId, Long reviewerStaffId, Long programId, String reviewNote) {
     Long nextVersion = jdbc.queryForObject("""
@@ -927,13 +1047,10 @@ public class QaTestPackService {
     Long id = jdbc.queryForObject("""
       insert into institution_course_release(
         source_institution_id,program_id,release_version,release_state,content_fingerprint,
-        submitted_by_institution_admin_id,submitted_at,quality_reviewed_by_staff_id,quality_reviewed_at,
-        quality_review_notes,origin_approved_by_admin_id,origin_approved_at,shareable_at,
         legacy_migration,created_at,updated_at,qa_test_run_id
-      ) values(?,?,?,'SHAREABLE',?,?,now(),?,now(),?,?,now(),now(),false,now(),now(),?) returning id
-      """, Long.class, quantaEdgeId, programId, nextVersion, courseFingerprint(programId),
-        quantaEdgeAdminId, reviewerStaffId, reviewNote, quantaEdgeAdminId, runId);
-    addResource(runId, resourceKey, "COURSE_RELEASE", id, 46,
+      ) values(?,?,?,'DRAFT',?,false,now(),now(),?) returning id
+      """, Long.class, quantaEdgeId, programId, nextVersion, courseFingerprint(programId),runId);
+    addResource(runId, resourceKey, "COURSE_RELEASE", id, 22,
         List.of("institution-admin-quantaedge", "staff-course-reviewer"), "institution_course_release");
     return id;
   }
@@ -982,7 +1099,7 @@ public class QaTestPackService {
         assigned_at,created_at,updated_at,qa_test_run_id
       ) values(?,?,'ASSIGNED',?,?,now(),now(),now(),?) returning id
       """, Long.class, institutionId, releaseId, source, actorStaffId, runId);
-    addResource(runId, key, "COURSE_ASSIGNMENT", id, 44,
+    addResource(runId, key, "COURSE_ASSIGNMENT", id, 21,
         java.util.stream.Stream.concat(dependencies.stream(), java.util.stream.Stream.of("staff-hrms-platform-admin"))
             .distinct().toList(), "institution_course_assignment");
     return id;
@@ -995,7 +1112,7 @@ public class QaTestPackService {
         institution_id,program_id,status,valid_from,granted_by_staff_id,qa_test_run_id
       ) values(?,?,'ACTIVE',now(),?,?) returning id
       """, Long.class, institutionId, programId, actorStaffId, runId);
-    addResource(runId, key, "COURSE_ENTITLEMENT", id, 42,
+    addResource(runId, key, "COURSE_ENTITLEMENT", id, 20,
         List.of(institutionResourceKey, courseResourceKey, "staff-hrms-platform-admin"), "institution_course_entitlement");
   }
 
@@ -1166,7 +1283,7 @@ public class QaTestPackService {
       join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
         and (s.program_id=ps.program_id or s.program_id is null)
       join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true
-      where p.id=? and p.status='ACTIVE' and s.code='maths'
+      where p.id=? and p.status='ACTIVE' and s.code like 'qa-maths-%'
       order by ch.id limit 1
       """, Long.class, classCode, programId);
     if (chapters.isEmpty()) {
@@ -1179,7 +1296,7 @@ public class QaTestPackService {
       """, Long.class, chapters.getFirst(), "qa-lifecycle-" + slug,
       "QA-only synthetic Class " + classCode + " lesson " + uuidSlug,
       "Run-owned synthetic fixture for institution-scoped QA; not production teaching content.", runId);
-    addResource(runId, lessonKey, "LESSON", lessonId, 26, List.of(), "lesson");
+    addResource(runId, lessonKey, "LESSON", lessonId, 35, List.of(), "lesson");
 
     Long questionId = jdbc.queryForObject("""
       insert into question(
@@ -1196,19 +1313,19 @@ public class QaTestPackService {
         'Synthetic QA fixture; not a production curriculum question.',now(),?
       ) returning id
       """, Long.class, lessonId, "qa-lifecycle:" + runId + ":class" + classCode, runId);
-    addResource(runId, questionKey, "QUESTION", questionId, 24, List.of(lessonKey), "question");
+    addResource(runId, questionKey, "QUESTION", questionId, 34, List.of(lessonKey), "question");
 
     Long optionAId = jdbc.queryForObject("""
       insert into question_option(question_id,option_key,label,is_correct,sort_order,qa_test_run_id)
       values (?,'A','Incorrect synthetic option',false,1,?) returning id
       """, Long.class, questionId, runId);
-    addResource(runId, optionAKey, "QUESTION_OPTION", optionAId, 22, List.of(questionKey), "question_option");
+    addResource(runId, optionAKey, "QUESTION_OPTION", optionAId, 33, List.of(questionKey), "question_option");
 
     Long optionBId = jdbc.queryForObject("""
       insert into question_option(question_id,option_key,label,is_correct,sort_order,qa_test_run_id)
       values (?,'B','Correct synthetic option',true,2,?) returning id
       """, Long.class, questionId, runId);
-    addResource(runId, optionBKey, "QUESTION_OPTION", optionBId, 22, List.of(questionKey), "question_option");
+    addResource(runId, optionBKey, "QUESTION_OPTION", optionBId, 33, List.of(questionKey), "question_option");
 
     Map<String,Object> result = new LinkedHashMap<>();
     result.put("lesson_id", lessonId);
@@ -1275,6 +1392,26 @@ public class QaTestPackService {
     }
     String kind = String.valueOf(resource.get("resource_kind"));
     long resourceId = number(resource.get("resource_id"));
+    if ("PROGRAM_SUBJECT_MAP".equals(kind)) {
+      Map<String,Object> ref=readJsonMap(resource.get("resource_ref"));
+      long subjectId=number(ref.get("subjectId"));
+      int deleted=jdbc.update("""
+        delete from curriculum_program_subject where program_id=? and subject_id=? and qa_test_run_id=?
+        """,resourceId,subjectId,runId);
+      if(deleted==0) {
+        Boolean remaining=jdbc.queryForObject("""
+          select exists(select 1 from curriculum_program_subject where program_id=? and subject_id=?)
+          """,Boolean.class,resourceId,subjectId);
+        if(Boolean.TRUE.equals(remaining))
+          throw new IllegalStateException("Owned course subject mapping could not be deleted: "+resource.get("resource_key")+".");
+      }
+      jdbc.update("""
+        update qa_test_run_resource set state='CLEANED',cleaned_at=now(),
+          cleanup_detail=?::jsonb
+        where id=? and run_id=? and state<>'CLEANED'
+        """,json(Map.of("deletedRows",deleted,"confirmedAbsentOrOwned",true)),manifestId,runId);
+      return;
+    }
     DeleteSpec spec = deleteSpec(kind);
     int deleted = jdbc.update(spec.deleteSql, resourceId, runId);
     if (deleted == 0) {
@@ -1296,6 +1433,18 @@ public class QaTestPackService {
 
   private DeleteSpec deleteSpec(String kind) {
     return switch (kind) {
+      case "COURSE_IDENTITY" -> new DeleteSpec(
+          "delete from institution_course_identity where id=? and qa_test_run_id=?",
+          "select qa_test_run_id from institution_course_identity where id=?");
+      case "COURSE" -> new DeleteSpec(
+          "delete from curriculum_program where id=? and qa_test_run_id=?",
+          "select qa_test_run_id from curriculum_program where id=?");
+      case "COURSE_SUBJECT" -> new DeleteSpec(
+          "delete from curriculum_subject where id=? and qa_test_run_id=?",
+          "select qa_test_run_id from curriculum_subject where id=?");
+      case "COURSE_CHAPTER" -> new DeleteSpec(
+          "delete from curriculum_chapter where id=? and qa_test_run_id=?",
+          "select qa_test_run_id from curriculum_chapter where id=?");
       case "STUDENT_QUESTION_ATTEMPT" -> new DeleteSpec(
           "delete from student_question_attempt where id=? and qa_test_run_id=?",
           "select qa_test_run_id from student_question_attempt where id=?");
@@ -1387,7 +1536,7 @@ public class QaTestPackService {
   }
 
   private boolean baselineSnapshotsMatch(Map<String,Object> before, Map<String,Object> after) {
-    List<String> protectedTables = List.of("curriculum_program", "curriculum_subject", "curriculum_program_subject", "curriculum_chapter", "institution_marketplace_offer", "institution_tenant", "institution_branding", "institution_admin_account", "staff_account", "institution_course_release", "institution_course_assignment", "institution_course_entitlement", "student_program_enrollment", "user_account", "student", "guardian_student", "student_login_credential", "institution_user_membership", "institution_membership", "student_track_enrollment", "student_lesson_progress", "student_question_attempt", "lesson", "question", "question_option");
+    List<String> protectedTables = List.of("institution_course_identity", "curriculum_program", "curriculum_subject", "curriculum_program_subject", "curriculum_chapter", "institution_marketplace_offer", "institution_tenant", "institution_branding", "institution_admin_account", "staff_account", "institution_course_release", "institution_course_assignment", "institution_course_entitlement", "student_program_enrollment", "user_account", "student", "guardian_student", "student_login_credential", "institution_user_membership", "institution_membership", "student_track_enrollment", "student_lesson_progress", "student_question_attempt", "lesson", "question", "question_option");
     if (before == null || after == null || before.size() != protectedTables.size()
         || after.size() != protectedTables.size()) return false;
     for (String table : protectedTables) {
@@ -1403,6 +1552,7 @@ public class QaTestPackService {
   private Map<String,Object> baselineSnapshot() {
     Map<String,Object> snapshot = new LinkedHashMap<>();
     Map<String,String> primaryKeys = Map.ofEntries(
+        Map.entry("institution_course_identity", "id"),
         Map.entry("curriculum_program", "id"),
         Map.entry("curriculum_subject", "id"),
         Map.entry("curriculum_program_subject", "program_id, t.subject_id"),
