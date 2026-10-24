@@ -46,6 +46,9 @@ public class CourseAuthoringService {
       """,type);
     if(types.isEmpty()) throw badRequest("Select an active course type registered in HRMS.");
     boolean requiresClass=Boolean.TRUE.equals(types.getFirst().get("requires_curriculum_class"));
+    if("ASSESSMENT".equals(type)&&!"QUANTA-EDGE".equalsIgnoreCase(tenantCode))
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+          "The current TRE4 assessment-course profile is source-owned by QuantaEdge; other institutions must use an approved assignment.");
     if(!Set.of("K12","ASSESSMENT").contains(type))
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
           "This creation flow supports K12 learning courses and assessment-only courses. Competitive courses require their type-specific hierarchy importer.");
@@ -140,8 +143,9 @@ public class CourseAuthoringService {
       if("ASSESSMENT".equals(type)) {
         if(!"TRE4".equalsIgnoreCase(classCode==null?"":classCode)
             ||!"BPSC-TRE-4".equalsIgnoreCase(version)
-            ||!requestedCode.equalsIgnoreCase("TRE4")) {
-          throw badRequest("The current assessment-only release gate is configured for the TRE4 course identity (code TRE4, version BPSC-TRE-4, compatibility scope TRE4).");
+            ||!requestedCode.equalsIgnoreCase("TRE4")
+            ||!"TRE-4 · Computer Science".equals(displayName)) {
+          throw badRequest("The current assessment-only release gate is configured for the exact TRE4 course identity: TRE4 / TRE-4 · Computer Science / BPSC-TRE-4 / TRE4 compatibility scope.");
         }
         Long subjectId=createdSubjects.get("computer-science");
         if(subjectId==null || subjects.size()!=1
