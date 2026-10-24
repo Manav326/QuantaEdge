@@ -128,4 +128,64 @@ class CourseMarketplaceLaunchRightsReviewTest {
     assertTrue(CourseMarketplaceLaunchReadinessService.isVerifiedPackageRightsClearance(
         "CLEARED_FOR_PUBLIC_REPOSITORY",validEvidence,42L,reviewedAt,notes));
   }
+
+  @Test
+  void trustedCourseAutoApprovalRequiresAnAlreadyPublishedCourseAndAuditsThePolicyChange() {
+    Map<String,Object> identity = Map.of(
+        "id", 701L,
+        "source_institution_id", 7L,
+        "trusted_auto_approval", false,
+        "latest_course_id", 1701L,
+        "authenticated", true);
+    when(jdbc.queryForList(contains("select i.id,i.source_institution_id"), any(Object[].class)))
+        .thenReturn(List.of(identity));
+    when(jdbc.queryForObject(contains("select exists("), eq(Boolean.class), any(Object[].class)))
+        .thenReturn(false);
+    when(jdbc.update(anyString(), any(Object[].class))).thenReturn(1);
+
+    Map<String,Object> result = controller.setTrustedCourseAutoApproval(7L,701L,Map.of(
+        "enabled",true,
+        "note","Trusted source and content lineage independently verified by HRMS."),reviewer);
+
+    assertEquals(true,result.get("saved"));
+    assertEquals(true,result.get("enabled"));
+    assertEquals(701L,result.get("courseIdentityId"));
+    verify(jdbc).update(contains("update institution_course_identity"), any(Object[].class));
+    verify(jdbc).update(contains("insert into institution_course_trust_policy_event"), any(Object[].class));
+  }
+
+  @Test
+  void trustedCourseModeCannotBeEnabledBeforeInitialHrmsPublication() {
+    Map<String,Object> identity = Map.of(
+        "id", 702L,
+        "source_institution_id", 7L,
+        "trusted_auto_approval", false,
+        "latest_course_id", 1702L,
+        "authenticated", false);
+    when(jdbc.queryForList(contains("select i.id,i.source_institution_id"), any(Object[].class)))
+        .thenReturn(List.of(identity));
+
+    ResponseStatusException error = assertThrows(ResponseStatusException.class,
+        () -> controller.setTrustedCourseAutoApproval(7L,702L,Map.of(
+            "enabled",true,
+            "note","Attempted trusted mode before the initial publication."),reviewer));
+
+    assertEquals(HttpStatus.CONFLICT,error.getStatusCode());
+    assertTrue(error.getReason().contains("previously HRMS-published"));
+    verify(jdbc, org.mockito.Mockito.never())
+        .update(contains("update institution_course_identity"), any(Object[].class));
+  }
+
+  @Test
+  void everyTrustedCoursePolicyChangeRequiresAnAuditableReason() {
+    ResponseStatusException error = assertThrows(ResponseStatusException.class,
+        () -> controller.setTrustedCourseAutoApproval(7L,703L,Map.of(
+            "enabled",true,"note","no"),reviewer));
+
+    assertEquals(HttpStatus.BAD_REQUEST,error.getStatusCode());
+    assertTrue(error.getReason().contains("audit note"));
+    verify(jdbc, org.mockito.Mockito.never())
+        .queryForList(contains("select i.id,i.source_institution_id"), any(Object[].class));
+  }
+
 }
