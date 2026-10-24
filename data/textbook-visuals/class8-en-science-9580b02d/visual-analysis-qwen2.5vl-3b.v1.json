@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1224,
+    "assets_selected": 1226,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "8c2744ae445e0677e54f8f8c",
-      "77e152377cc72a4b66c20d84"
+      "72af91ad02c11a8084fd26ac",
+      "e03a02c3fc37627f873ab044"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1221,
     "assets_remaining": 1070,
     "assets_completion_percent": 53.3,
-    "assets_failed": 9,
-    "assets_skipped_from_checkpoint": 1219,
+    "assets_failed": 11,
+    "assets_skipped_from_checkpoint": 1221,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40088318858",
-      "checkpointed_at": "2026-10-24T11:49:04Z"
+      "checkpointed_at": "2026-10-24T11:50:57Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40088318858",
-      "checkpointed_at": "2026-10-24T11:49:29Z"
+      "checkpointed_at": "2026-10-24T11:51:22Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38429,7 +38429,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40088318858",
-      "checkpointed_at": "2026-10-24T11:49:59Z"
+      "checkpointed_at": "2026-10-24T11:51:51Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -40030,6 +40030,40 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40088318858",
       "checkpointed_at": "2026-10-24T11:50:13Z"
+    },
+    {
+      "asset_id": "72af91ad02c11a8084fd26ac",
+      "asset_sha256": "8e2c9149ce4db9054ab075a5a8aa34f9646299aa0e94146e6f60a3f0e51a4563",
+      "page_text_context_sha256": "36e5f166a2e34a76c242f2d87ba73dfac71cb3ada4eb9f931e145d2e195df953",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 93,
+      "asset_path": "page-0093.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40088318858",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "e03a02c3fc37627f873ab044",
+      "asset_sha256": "ae016340fe45c9c80141fa5fe09ddd141b42fa64121d70aeee01bb6376e403d8",
+      "page_text_context_sha256": "d2ddb4e2fb613ecddff4d9859c094dbca07a58b1d9c369f079bacb60b7286297",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 94,
+      "asset_path": "assets/ae016340fe45c9c80141fa5fe09ddd141b42fa64121d70aeee01bb6376e403d8.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40088318858",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
