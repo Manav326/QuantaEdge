@@ -163,7 +163,7 @@ AS $$
       FROM learning_resource_assignment a
       JOIN scoped_chapters ch ON ch.id=a.chapter_id
     UNION ALL
-    SELECT 'resource-artifact-scope', s.id::text, to_jsonb(s)::text
+    SELECT 'resource-artifact-scope', s.artifact_id||':'||s.chapter_id::text, to_jsonb(s)::text
       FROM learning_resource_artifact_scope s
       JOIN scoped_chapters ch ON ch.id=s.chapter_id
     UNION ALL
