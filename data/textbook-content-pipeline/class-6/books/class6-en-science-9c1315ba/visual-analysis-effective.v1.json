@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "840319ecb551bf8b99f10a247147444f1b55c7ceaf70376f71c46b2b9c950282",
+  "raw_analysis_sha256": "7bc9f0296cb0a99a97c84c93d7cbb176e0e5956dde1967153a9b5d4d51e0c8e7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -625,14 +625,11 @@
           "Foundational and Preparatory Stages",
           "Analytical, descriptive, and narrative capabilities",
           "Transformative learning culture",
-          "Appropriate textbooks",
-          "Curricular areas",
           "Classroom arrangement",
           "Teacher preparation",
-          "Conceptual connections",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving the policy's goals.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving a transformative learning culture.",
         "limitations": [
           "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
         ]
@@ -641,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40080944293",
-      "checkpointed_at": "2026-10-24T09:23:47Z",
+      "checkpointed_at": "2026-10-24T09:44:47Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -660,14 +657,11 @@
           "Foundational and Preparatory Stages",
           "Analytical, descriptive, and narrative capabilities",
           "Transformative learning culture",
-          "Appropriate textbooks",
-          "Curricular areas",
           "Classroom arrangement",
           "Teacher preparation",
-          "Conceptual connections",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving the policy's goals.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving a transformative learning culture.",
         "limitations": [
           "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
         ]
@@ -29431,10 +29425,12 @@
           "DES",
           "Coimbatore",
           "Amrita Vishwa Vidyapeetham",
-          "Development Sector Professional",
           "Freelance Editor",
           "Proofreader",
-          "Publication Division"
+          "DTP Cell",
+          "Publication Division",
+          "Contractual",
+          "Final shape"
         ],
         "context_relation": "acknowledgements",
         "limitations": [
@@ -29446,7 +29442,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40080944293",
-      "checkpointed_at": "2026-10-24T09:28:43Z",
+      "checkpointed_at": "2026-10-24T09:46:10Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -29469,10 +29465,12 @@
           "DES",
           "Coimbatore",
           "Amrita Vishwa Vidyapeetham",
-          "Development Sector Professional",
           "Freelance Editor",
           "Proofreader",
-          "Publication Division"
+          "DTP Cell",
+          "Publication Division",
+          "Contractual",
+          "Final shape"
         ],
         "context_relation": "acknowledgements",
         "limitations": [
@@ -35009,7 +35007,7 @@
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
         "visible_text": [
-          "Presence/absence of flowers",
+          "Presence/ absence of flowers",
           "Hard/soft stem",
           "Eating habits",
           "Place they live",
@@ -35048,21 +35046,21 @@
           "features of plants",
           "nature walk"
         ],
-        "context_relation": "The text is a part of a larger educational content, specifically a textbook discussing the criteria for grouping plants and animals.",
+        "context_relation": "exploration",
         "limitations": [
-          "The text does not provide specific examples or instructions for the activities mentioned."
+          "The image does not provide specific details about the criteria for grouping plants and animals."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40080944293",
-      "checkpointed_at": "2026-10-24T09:43:25Z",
+      "checkpointed_at": "2026-10-24T09:47:18Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
         "visible_text": [
-          "Presence/absence of flowers",
+          "Presence/ absence of flowers",
           "Hard/soft stem",
           "Eating habits",
           "Place they live",
@@ -35101,9 +35099,9 @@
           "features of plants",
           "nature walk"
         ],
-        "context_relation": "The text is a part of a larger educational content, specifically a textbook discussing the criteria for grouping plants and animals.",
+        "context_relation": "exploration",
         "limitations": [
-          "The text does not provide specific examples or instructions for the activities mentioned."
+          "The image does not provide specific details about the criteria for grouping plants and animals."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -36062,7 +36060,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40062005691",
+      "run_id": "40080944293",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
       "human_review_required": true,
@@ -51186,21 +51184,79 @@
     {
       "asset_id": "9f232483ce16973cb62998c9",
       "asset_sha256": "7454fc423f4fb78f48d2de98763f7fb9e48ffd0de92a90a79ec9fed660a27a8c",
-      "page_text_context_sha256": "5bde1d283bd7146d7766dafe9af7c2dcb529978fc840569292aa4955ea365085",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 82,
       "asset_path": "page-0082.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "5bde1d283bd7146d7766dafe9af7c2dcb529978fc840569292aa4955ea365085",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40062005691",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Question about prediction and conclusion of magnetic materials.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Was your prediction correct for all objects? Which\nmaterials stuck to the magnet? What conclusion can you\ndraw?",
+          "Through this activity, we found out that some of the\nobjects were attracted to the magnet and stuck to it, while\nothers were not. The materials which are attracted towards\na magnet are called magnetic materials.\nThe metal iron is a magnetic material.\nNickel and cobalt are other metals that are\nalso ",
+          "Which materials listed in Table 4.1 were\nfound to be non-magnetic?",
+          "4.2 Poles of Magnet",
+          "Activity 4.2: Let us investigate",
+          "Spread some iron filings (very small pieces of iron) on a\nsheet of paper.",
+          "Place a bar magnet over them. Tap the paper and\nobserve carefully what happens to the iron filings.",
+          "Do you observe anything special about the way they stick\nto the magnet? Do the iron filings stick all over the magnet\nuniformly? Or do the iron filings stick more at some places?",
+          "We find that maximum iron filings stick near the ends of\nthe bar magnet, as shown in Fig. 4.4, while a very few iron\nfilings stick at the remaining part of the magnet.",
+          "Fig. 4.4: Iron filings sticking\n    to a bar magnet",
+          "If we repeat this\n    activity with\n    magnets of other\n    shapes, do we get\n    the same result?"
+        ],
+        "concepts": [
+          "magnetic materials",
+          "non-magnetic materials",
+          "magnetic poles",
+          "iron filings",
+          "magnet"
+        ],
+        "context_relation": "exploration of magnetic properties and behavior",
+        "limitations": [
+          "No specific figures or equations are provided.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40080944293",
+      "checkpointed_at": "2026-10-24T09:55:31Z",
+      "effective_analysis": {
+        "visual_summary": "Question about prediction and conclusion of magnetic materials.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Was your prediction correct for all objects? Which\nmaterials stuck to the magnet? What conclusion can you\ndraw?",
+          "Through this activity, we found out that some of the\nobjects were attracted to the magnet and stuck to it, while\nothers were not. The materials which are attracted towards\na magnet are called magnetic materials.\nThe metal iron is a magnetic material.\nNickel and cobalt are other metals that are\nalso ",
+          "Which materials listed in Table 4.1 were\nfound to be non-magnetic?",
+          "4.2 Poles of Magnet",
+          "Activity 4.2: Let us investigate",
+          "Spread some iron filings (very small pieces of iron) on a\nsheet of paper.",
+          "Place a bar magnet over them. Tap the paper and\nobserve carefully what happens to the iron filings.",
+          "Do you observe anything special about the way they stick\nto the magnet? Do the iron filings stick all over the magnet\nuniformly? Or do the iron filings stick more at some places?",
+          "We find that maximum iron filings stick near the ends of\nthe bar magnet, as shown in Fig. 4.4, while a very few iron\nfilings stick at the remaining part of the magnet.",
+          "Fig. 4.4: Iron filings sticking\n    to a bar magnet",
+          "If we repeat this\n    activity with\n    magnets of other\n    shapes, do we get\n    the same result?"
+        ],
+        "concepts": [
+          "magnetic materials",
+          "non-magnetic materials",
+          "magnetic poles",
+          "iron filings",
+          "magnet"
+        ],
+        "context_relation": "exploration of magnetic properties and behavior",
+        "limitations": [
+          "No specific figures or equations are provided.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
