@@ -150,7 +150,7 @@ class CourseMarketplaceLaunchRightsReviewTest {
     assertEquals(true,result.get("saved"));
     assertEquals(true,result.get("enabled"));
     assertEquals(701L,result.get("courseIdentityId"));
-    verify(jdbc).update(contains("update institution_course_identity"), any(Object[].class));
+    verify(jdbc).update(contains("insert into institution_course_trust_policy("), any(Object[].class));
     verify(jdbc).update(contains("insert into institution_course_trust_policy_event"), any(Object[].class));
   }
 
