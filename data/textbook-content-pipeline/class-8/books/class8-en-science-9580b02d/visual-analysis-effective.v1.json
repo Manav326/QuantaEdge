@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "dec55bed5137b69faa32aa5624c032f5041d774a2c89372cf0a10c60c415abe2",
+  "raw_analysis_sha256": "a513d0806cda17100313c936a7724c6e96aa67cd0df94c28df8aa66d14759b66",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40045176028",
-      "checkpointed_at": "2026-10-24T02:09:21Z",
+      "checkpointed_at": "2026-10-24T02:14:25Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40045176028",
-      "checkpointed_at": "2026-10-24T02:10:11Z",
+      "checkpointed_at": "2026-10-24T02:15:13Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57829,7 +57829,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40045176028",
-      "checkpointed_at": "2026-10-24T02:11:11Z",
+      "checkpointed_at": "2026-10-24T02:16:12Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -59392,6 +59392,130 @@
         "limitations": [
           "unclear if the page contains any text or images",
           "no visible text or images to analyze"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "907e96e9cf3c45a9b93959d5",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1501ddf68fca3c3f96e7ce10190a3aa309a4b7f069348e6d71e1c6701a77a2d0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40045176028",
+      "checkpointed_at": "2026-10-24T02:16:28Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "062e8ba7cec53f131d3f180b",
+      "asset_sha256": "089c03fcb2320d4439509eaff10a1a4f4ca1923085a8bff6603207d9ba255f7a",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 91,
+      "asset_path": "page-0091.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "1501ddf68fca3c3f96e7ce10190a3aa309a4b7f069348e6d71e1c6701a77a2d0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the interaction between charged objects and the concept of static electricity.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "71",
+          "We found that the two similarly charged balloons repel each other whereas a charged balloon and the woollen cloth (with which the balloon was rubbed) attract each other. Does this indicate that the charge on the balloon is of a different kind from the charge on the woollen cloth?",
+          "Since the balloons were charged in the same way, we can say that they have acquired similar charges. As the similarly charged balloons repelled each other, we can infer that similar (like) charges repel each other. Both the rubbing object and the rubbed object get charged but they acquire opposite k",
+          "The force exerted by a charged body on another charged body or an uncharged body is called electrostatic force. It is a non-contact force.",
+          "A step further",
+          "When the charges move, they constitute an electric current in an electrical circuit. It is the same current which makes a lamp glow or generates a heating effect or a magnetic effect.",
+          "Gravitational force",
+          "Activity 5.8: Let us observe",
+          "Take a ball and throw it vertically upwards. Does it come down?",
+          "Now throw it again, but this time harder. Does it still fall back down to the ground?",
+          "Think about different situations around you where any object thrown up in any direction, finally falls or comes back to the ground or floor (Fig. 5.10).",
+          "Fig. 5.10: Some objects falling towards the Earth"
+        ],
+        "concepts": [
+          "static electricity",
+          "electrostatic force",
+          "gravitational force",
+          "gravity",
+          "electric current",
+          "heating effect",
+          "magnetic effect"
+        ],
+        "context_relation": "exploring forces",
+        "limitations": [
+          "The image does not provide specific details about the electrostatic force or gravitational force."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40045176028",
+      "checkpointed_at": "2026-10-24T02:21:11Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the interaction between charged objects and the concept of static electricity.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "71",
+          "We found that the two similarly charged balloons repel each other whereas a charged balloon and the woollen cloth (with which the balloon was rubbed) attract each other. Does this indicate that the charge on the balloon is of a different kind from the charge on the woollen cloth?",
+          "Since the balloons were charged in the same way, we can say that they have acquired similar charges. As the similarly charged balloons repelled each other, we can infer that similar (like) charges repel each other. Both the rubbing object and the rubbed object get charged but they acquire opposite k",
+          "The force exerted by a charged body on another charged body or an uncharged body is called electrostatic force. It is a non-contact force.",
+          "A step further",
+          "When the charges move, they constitute an electric current in an electrical circuit. It is the same current which makes a lamp glow or generates a heating effect or a magnetic effect.",
+          "Gravitational force",
+          "Activity 5.8: Let us observe",
+          "Take a ball and throw it vertically upwards. Does it come down?",
+          "Now throw it again, but this time harder. Does it still fall back down to the ground?",
+          "Think about different situations around you where any object thrown up in any direction, finally falls or comes back to the ground or floor (Fig. 5.10).",
+          "Fig. 5.10: Some objects falling towards the Earth"
+        ],
+        "concepts": [
+          "static electricity",
+          "electrostatic force",
+          "gravitational force",
+          "gravity",
+          "electric current",
+          "heating effect",
+          "magnetic effect"
+        ],
+        "context_relation": "exploring forces",
+        "limitations": [
+          "The image does not provide specific details about the electrostatic force or gravitational force."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
