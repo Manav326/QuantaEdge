@@ -2,11 +2,15 @@
 -- V169 covered curriculum labels and assessment snapshots, but omitted lesson blocks, question
 -- options/translations, source mappings and resource associations. A mutation in those tables
 -- could therefore escape the review fingerprint even while changing what learners see.
-CREATE OR REPLACE FUNCTION course_content_fingerprint(p_program_id bigint)
+-- Preserve the previous algorithm for migration-safe comparison with fingerprints already stored
+-- on submitted releases. Stale releases are intentionally not silently made current.
+ALTER FUNCTION course_content_fingerprint(bigint) RENAME TO course_content_fingerprint_v169;
+
+CREATE FUNCTION course_content_fingerprint(p_program_id bigint)
 RETURNS char(32)
 LANGUAGE sql
 STABLE
-AS $$
+AS $
   WITH scoped_subjects AS (
     SELECT DISTINCT s.id
     FROM curriculum_program_subject ps
@@ -251,6 +255,20 @@ $$;
 
 COMMENT ON FUNCTION course_content_fingerprint(bigint) IS
   'Stable fingerprint of the course-owned curriculum, all lesson teaching blocks/questions/translations, source evidence, assigned resources and assessment/test-pack snapshots. Publication-only assessment status and timestamps are intentionally excluded so a separately reviewed assessment may be published without changing the submitted content fingerprint.';
+COMMENT ON FUNCTION course_content_fingerprint_v169(bigint) IS
+  'Previous release fingerprint algorithm retained only to distinguish pre-migration stale content while upgrading stored release fingerprints. Do not use for new release decisions.';
+
+-- Drafts have no review decision and can always adopt the new algorithm. A submitted/reviewed
+-- release adopts the new fingerprint only when its legacy fingerprint still matches the current
+-- graph under V169. If V169 already considered a release stale, leave its stored fingerprint
+-- untouched so HRMS continues to require a fresh source submission.
+UPDATE institution_course_release r
+SET content_fingerprint=course_content_fingerprint(r.program_id),updated_at=now()
+WHERE r.release_state='DRAFT'
+   OR (
+     r.release_state IN ('IN_QUALITY_REVIEW','QUALITY_APPROVED','SHAREABLE')
+     AND r.content_fingerprint=course_content_fingerprint_v169(r.program_id)
+   );
 
 INSERT INTO app_metadata(key,value)
 VALUES ('schema','complete-course-release-content-fingerprint-v182')
