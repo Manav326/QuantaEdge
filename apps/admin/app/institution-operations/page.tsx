@@ -60,11 +60,15 @@ type Release = {
 type RosterResponse = { learners?: Learner[]; total?: number; page?: number; pageSize?: number };
 
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+  const headers = new Headers(init.headers);
+  headers.set('Accept', 'application/json');
+  if (init.body && !headers.has('Content-Type')) headers.set('Content-Type', 'application/json');
+  if (path.startsWith('/api/v1/institution/')) headers.set('X-QE-Workspace', 'INSTITUTION');
   const response = await apiFetch(path, {
     ...init,
     credentials: 'same-origin',
     cache: 'no-store',
-    headers: { Accept: 'application/json', ...(init.body ? { 'Content-Type': 'application/json' } : {}), ...init.headers },
+    headers,
   });
   const raw = await response.text();
   let body: any = {};
@@ -92,7 +96,8 @@ function stateLabel(value: string) {
 
 export default function InstitutionOperationsPage() {
   const t = useUiTranslation();
-  const { permissions } = useContext(AdminWorkspaceContext);
+  const { permissions, identityType } = useContext(AdminWorkspaceContext);
+  const isInstitutionPrincipal = identityType === 'INSTITUTION';
   const canViewContent = permissions.includes('CONTENT_VIEW');
   const canCreateCourse = permissions.includes('CONTENT_CREATE') && permissions.includes('CONTENT_EDIT');
   const canManageReleases = permissions.includes('INSTITUTION_RELEASE_MANAGE');
