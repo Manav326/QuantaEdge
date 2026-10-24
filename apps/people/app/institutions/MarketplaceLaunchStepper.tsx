@@ -73,6 +73,20 @@ type PackageRightsReview = {
   rights_review_notes?: string | null;
 };
 type PackageRightsDraft = { status: string; evidenceUrl: string; notes: string };
+type TrustedCoursePolicy = {
+  course_identity_id: number;
+  stable_course_key: string;
+  identity_name: string;
+  trusted_auto_approval: boolean;
+  trusted_auto_approval_changed_by_staff_id?: number | null;
+  trusted_auto_approval_changed_at?: string | null;
+  trusted_auto_approval_note?: string | null;
+  latest_course_id: number;
+  course_code: string;
+  course_name: string;
+  content_version_no: number;
+  authenticated: boolean;
+};
 type LaunchResponse = {
   institutionId: number;
   institutionName: string;
@@ -86,6 +100,7 @@ type LaunchResponse = {
   qualityReviewCount?: number;
   coursePackageImports?: PackageRightsReview[];
   coursePackageImportCount?: number;
+  trustedCoursePolicies?: TrustedCoursePolicy[];
 };
 type Draft = { title: string; description: string; priceRupees: string };
 
@@ -137,6 +152,7 @@ export default function MarketplaceLaunchStepper({
   const [drafts, setDrafts] = useState<Record<number, Draft>>({});
   const [reviewNotes, setReviewNotes] = useState<Record<number, string>>({});
   const [packageRightsDrafts, setPackageRightsDrafts] = useState<Record<number, PackageRightsDraft>>({});
+  const [trustedPolicyNotes, setTrustedPolicyNotes] = useState<Record<number, string>>({});
   const [loading, setLoading] = useState(true);
   const [busyKey, setBusyKey] = useState<string | null>(null);
   const [error, setError] = useState('');
@@ -167,6 +183,15 @@ export default function MarketplaceLaunchStepper({
               evidenceUrl: item.rights_evidence_url || '',
               notes: item.rights_review_notes || '',
             };
+          }
+        }
+        return next;
+      });
+      setTrustedPolicyNotes(previous => {
+        const next = { ...previous };
+        for (const item of result.trustedCoursePolicies || []) {
+          if (next[item.course_identity_id] === undefined) {
+            next[item.course_identity_id] = item.trusted_auto_approval_note || 'Enable for trusted course content updates';
           }
         }
         return next;
@@ -223,6 +248,36 @@ export default function MarketplaceLaunchStepper({
       setBusyKey(null);
     }
   }
+
+  const setTrustedAutoApproval = async (item: TrustedCoursePolicy, enabled: boolean) => {
+    const note = (trustedPolicyNotes[item.course_identity_id] || '').trim();
+    if (note.length < 5 || note.length > 1000) {
+      setError('Add an audit reason between 5 and 1,000 characters before changing trusted-course mode.');
+      return;
+    }
+    if (enabled && !item.authenticated) {
+      setError('Only a previously HRMS-published course can be marked trusted. Complete its initial approval and publication first.');
+      return;
+    }
+    setBusyKey('trusted-' + item.course_identity_id);
+    setError('');
+    setNotice('');
+    try {
+      const result = await api<{ enabled: boolean; message?: string }>(
+        '/api/v1/hrms/platform/institutions/' + institutionId
+          + '/course-identities/' + item.course_identity_id + '/trusted-auto-approval',
+        { method: 'POST', body: JSON.stringify({ enabled, note }) },
+      );
+      setNotice(result.message || (enabled
+        ? 'Trusted course auto-approval enabled.'
+        : 'Trusted course auto-approval disabled.'));
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Trusted-course policy could not be saved.');
+    } finally {
+      setBusyKey(null);
+    }
+  };
 
   const counts = useMemo(() => {
     const items = data?.items || [];
@@ -469,6 +524,61 @@ export default function MarketplaceLaunchStepper({
           <div><strong>{loading ? '—' : counts.published}</strong><span>Currently published</span></div>
         </div>
       </div>
+
+
+      {!loading && data && (data.trustedCoursePolicies || []).length > 0 && (
+        <section className={styles.rightsPanel} aria-labelledby="trusted-course-updates-heading">
+          <header className={styles.availableHeader}>
+            <div>
+              <span className={styles.summaryLabel}>HRMS · TRUST POLICY</span>
+              <h3 id="trusted-course-updates-heading">Trusted course updates</h3>
+              <p>Enable this only for an already authenticated course. Future submitted versions can receive automatic content-quality and source approval, removing repetitive review waits. Course-version integrity, rights checks, destination ownership, prices, tax, invoices and learner history remain protected.</p>
+            </div>
+            <span className={styles.rightsCount}>{(data.trustedCoursePolicies || []).filter(item => item.trusted_auto_approval).length} enabled</span>
+          </header>
+          <div className={styles.rightsList}>
+            {(data.trustedCoursePolicies || []).map(item => {
+              const busy = busyKey === 'trusted-' + item.course_identity_id;
+              const note = trustedPolicyNotes[item.course_identity_id] || '';
+              return (
+                <article className={styles.rightsRow} key={item.course_identity_id}>
+                  <div className={styles.availableMark} aria-hidden="true">{item.trusted_auto_approval ? '✓' : '↻'}</div>
+                  <div className={styles.rightsCopy}>
+                    <strong>{item.course_name || item.identity_name}</strong>
+                    <small>{item.course_code} · content version v{item.content_version_no} · source: {institutionName}</small>
+                    <div className={styles.rightsStatusLine}>
+                      <span>Mode: {item.trusted_auto_approval ? 'TRUSTED AUTO-APPROVAL ON' : 'STANDARD HRMS REVIEW'}</span>
+                      <span>{item.authenticated ? 'Previously HRMS-published' : 'Initial publication required'}</span>
+                      {item.trusted_auto_approval_changed_at
+                        ? <span>Last changed {new Date(item.trusted_auto_approval_changed_at).toLocaleString('en-IN')}</span>
+                        : null}
+                    </div>
+                    <label className={styles.reviewNote}>Audit reason (required for every change)
+                      <textarea rows={2} maxLength={1000} value={note} disabled={busyKey !== null}
+                        onChange={event => setTrustedPolicyNotes(previous => ({
+                          ...previous, [item.course_identity_id]: event.target.value,
+                        }))}
+                        placeholder="Explain why this source course is trusted and how its content is authenticated." />
+                    </label>
+                    <div className={styles.rightsActions}>
+                      <button type="button"
+                        className={item.trusted_auto_approval ? styles.secondaryButton : styles.primaryButton}
+                        disabled={busyKey !== null || loading || ( !item.trusted_auto_approval && !item.authenticated)}
+                        onClick={() => void setTrustedAutoApproval(item, !item.trusted_auto_approval)}>
+                        {busy
+                          ? 'Saving policy…'
+                          : item.trusted_auto_approval
+                            ? 'Disable automatic approval'
+                            : 'Enable trusted course mode'}
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
       {!loading && data && (data.coursePackageImports || []).length > 0 && (
         <section className={styles.rightsPanel}>
