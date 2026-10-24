@@ -56,6 +56,17 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("Chapter resources", hrms_ui)
         self.assertIn("Lesson questions and answer keys", hrms_ui)
 
+    def test_assessment_analytics_is_course_scoped_and_never_buckets_free_text(self):
+        controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/AssessmentController.java").read_text(encoding="utf-8")
+        analytics = controller[controller.index('@GetMapping("/admin/assessments/course-analytics")'):controller.index('@PostMapping("/admin/assessments")', controller.index('@GetMapping("/admin/assessments/course-analytics")'))]
+        self.assertIn('requireAssignedCourse(courseId,tenant)', analytics)
+        self.assertIn('att.institution_id=?', analytics)
+        self.assertIn('CAST(? AS bigint) IS NULL OR a.id=?', analytics)
+        self.assertIn("rv.question_snapshot->'options'", analytics)
+        self.assertIn("rv.selected_value=coalesce(opt.option_json->>'key',opt.option_json->>'option_key')", analytics)
+        self.assertIn('"studentIdentifiersIncluded",false', analytics)
+        self.assertNotIn('ans.response_payload::text as response', analytics)
+
     def test_hrms_can_preview_exact_assessment_release_before_quality_decision(self):
         controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseMarketplaceLaunchController.java").read_text(encoding="utf-8")
         hrms_ui = (ROOT / "apps/people/app/institutions/MarketplaceLaunchStepper.tsx").read_text(encoding="utf-8")
