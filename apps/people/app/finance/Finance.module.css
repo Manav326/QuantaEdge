@@ -175,3 +175,23 @@
 .traceReadOnlyNote{font-size:10px;line-height:1.5;color:var(--finance-muted);margin:0;border-top:1px solid var(--finance-line);padding-top:10px}
 .statusTrace h4{margin:0 0 7px;font-size:12px;color:var(--finance-ink)}
 @media(max-width:640px){.statusTrace{padding:10px}.traceStage{grid-template-columns:24px minmax(0,1fr);gap:8px;padding:9px}.traceStageHeading{align-items:flex-start;flex-direction:column}.traceStageHeading>span{white-space:normal}}
+
+
+/* Contextual setup opened from Institution Marketplace Control. */
+.marketplaceSetupGuide{display:grid;gap:14px;padding:18px;border:1px solid var(--finance-line);border-radius:17px;background:var(--finance-subtle);color:var(--finance-ink)}
+.marketplaceSetupHeader{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.marketplaceSetupHeader h2{margin:4px 0 6px;font-size:19px;letter-spacing:-.45px;color:var(--finance-ink)}
+.marketplaceSetupHeader p{margin:0;max-width:880px;font-size:12px;line-height:1.6;color:var(--finance-muted)}
+.marketplaceSetupOfferTag{display:inline-flex;align-items:center;white-space:nowrap;border:1px solid var(--finance-line);border-radius:999px;padding:6px 9px;background:var(--finance-surface);color:var(--finance-muted);font-size:10px;font-weight:800}
+.marketplaceSetupSteps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.marketplaceSetupStep,.marketplaceSetupStepActive{display:grid;grid-template-columns:30px minmax(0,1fr);align-items:start;gap:9px;text-align:left;min-width:0;padding:13px;border:1px solid var(--finance-line);border-radius:12px;background:var(--finance-surface);color:var(--finance-ink);cursor:pointer}
+.marketplaceSetupStepActive{border-color:var(--qe-people-brand,#f97316);background:var(--qe-people-brand-soft,#fff0e5);box-shadow:inset 0 0 0 1px var(--qe-people-brand,#f97316)}
+.marketplaceSetupStepNumber{display:grid;place-items:center;width:28px;height:28px;border-radius:9px;background:var(--finance-subtle);border:1px solid var(--finance-line);font-size:11px;font-weight:900}
+.marketplaceSetupStepCopy{display:grid;gap:5px;min-width:0}
+.marketplaceSetupStepCopy strong{font-size:12px;color:var(--finance-ink)}
+.marketplaceSetupStepCopy small{font-size:10px;font-weight:500;line-height:1.55;color:var(--finance-muted)}
+.marketplaceSetupStepAction{grid-column:2;font-size:10px;font-weight:800;color:var(--qe-people-brand-strong,#c2410c)}
+.marketplaceSetupNote{margin:0;padding-top:10px;border-top:1px solid var(--finance-line);font-size:11px;line-height:1.6;color:var(--finance-muted)}
+.marketplaceSetupInlineHint{margin:0;font-size:10px;line-height:1.55;color:var(--finance-muted)}
+.page .marketplaceSetupStepActive .marketplaceSetupStepNumber{background:var(--qe-people-brand,#f97316);border-color:var(--qe-people-brand,#f97316);color:var(--qe-people-on-brand,#fff)}
+@media(max-width:900px){.marketplaceSetupSteps{grid-template-columns:1fr}.marketplaceSetupStep,.marketplaceSetupStepActive{grid-template-columns:30px minmax(0,1fr) auto}.marketplaceSetupStepAction{grid-column:auto;align-self:center}}

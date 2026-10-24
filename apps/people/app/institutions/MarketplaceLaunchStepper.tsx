@@ -403,6 +403,39 @@ export default function MarketplaceLaunchStepper({
     ].includes(check.code));
   }
 
+  function shouldShowInvoiceSetupLink(item: LaunchItem) {
+    return item.checks.some(check => !check.passed && [
+      'PUBLISHED_INVOICE_TEMPLATE', 'REVENUE_SHARE_POLICY',
+      'SHARE_POOL_VALIDATION', 'DISCOUNT_POOL_COMPATIBILITY',
+    ].includes(check.code));
+  }
+
+  function invoiceSetupTarget(item: LaunchItem): 'studio' | 'distribution' | 'discounts' {
+    if (item.checks.some(check => check.code === 'PUBLISHED_INVOICE_TEMPLATE' && !check.passed)) return 'studio';
+    if (item.checks.some(check => !check.passed && ['REVENUE_SHARE_POLICY', 'SHARE_POOL_VALIDATION'].includes(check.code))) return 'distribution';
+    return 'discounts';
+  }
+
+  function invoiceSetupLabel(item: LaunchItem) {
+    const templateBlocked = item.checks.some(check => check.code === 'PUBLISHED_INVOICE_TEMPLATE' && !check.passed);
+    const shareBlocked = item.checks.some(check => !check.passed && ['REVENUE_SHARE_POLICY', 'SHARE_POOL_VALIDATION'].includes(check.code));
+    if (templateBlocked && shareBlocked) return 'Configure invoice template and revenue share';
+    if (templateBlocked) return 'Configure invoice template';
+    if (shareBlocked) return 'Configure revenue-share policy';
+    return 'Review approved discounts';
+  }
+
+  function financeSetupHref(item: LaunchItem, target: 'studio' | 'distribution' | 'discounts') {
+    const params = new URLSearchParams({
+      tab: target,
+      setup: 'marketplace',
+      institutionId: String(item.institutionId),
+      courseName: item.courseName,
+    });
+    if (item.offerId) params.set('offerId', String(item.offerId));
+    return '/finance?' + params.toString();
+  }
+
   return (
     <section className={styles.workspace} aria-labelledby="marketplace-launch-heading">
       <header className={styles.hero}>
@@ -681,7 +714,7 @@ export default function MarketplaceLaunchStepper({
                             </div>
                           )}
                           {group.key === 'seller' && shouldShowFinanceLink(item) && <a className={styles.actionLink} href="/finance">Open HRMS Finance & Billing <span aria-hidden="true">↗</span></a>}
-                          {group.key === 'invoice' && shouldShowFinanceLink(item) && <a className={styles.actionLink} href="/finance">Review invoice template and revenue-share policy <span aria-hidden="true">↗</span></a>}
+                          {group.key === 'invoice' && shouldShowInvoiceSetupLink(item) && <a className={styles.actionLink} href={financeSetupHref(item, invoiceSetupTarget(item))}>{invoiceSetupLabel(item)} <span aria-hidden="true">↗</span></a>}
                           {group.key === 'course' && !item.ready && blocker && ['CONTENT_QUALITY_REVIEW', 'CONTENT_REVIEW_CURRENT', 'PUBLISHED_LEARNING_CONTENT'].includes(blocker.code) && <p className={styles.stepHint}>Resolve this in the course release / content-quality workflow, then refresh this checklist.</p>}
                           {group.key === 'release' && !item.ready && item.checks.some(check => !check.passed && ['ORIGIN_RELEASE_APPROVAL', 'ASSIGNMENT_AND_RELEASE'].includes(check.code)) && <p className={styles.stepHint}>After HRMS quality approval, the source institution admin must approve the release in the separate Institution portal. HRMS can assign it to this institution only after it becomes SHAREABLE.</p>}
                         </div>

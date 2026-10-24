@@ -359,7 +359,7 @@ public class CourseMarketplaceLaunchReadinessService {
           "Select the active legal seller, record the tax-adviser review and resolve its e-invoice applicability in HRMS.");
       add(checks,"GST_REGISTRATION","Required seller GST registration is active",false,
           "An effective approved tax profile must be linked to its active seller; taxable treatment also requires a verified GST registration.");
-      add(checks,"PUBLISHED_INVOICE_TEMPLATE","An invoice template is published",hasPublishedTemplate(null),
+      add(checks,"PUBLISHED_INVOICE_TEMPLATE","An invoice template is published",hasPublishedTemplateForInstitution(institutionId),
           "Publish an approved platform or seller invoice template in HRMS Invoice Design Studio.");
       add(checks,"DISCOUNT_POOL_COMPATIBILITY","Approved discounts fit the verified tax/share model",false,
           "HRMS must complete seller/tax readiness before approved coupon amounts can be checked against the distributable pool.");
@@ -559,6 +559,23 @@ public class CourseMarketplaceLaunchReadinessService {
     if(allocated>poolPaise)
       return new ShareReadiness(false,"Institution allocations exceed the current after-tax distributable pool at this offer price.");
     return new ShareReadiness(true,"The approved policy has active recipients and its current allocations fit the distributable pool.");
+  }
+
+  boolean hasPublishedTemplateForInstitution(long institutionId) {
+    Boolean ready=jdbc.queryForObject("""
+        select exists(
+          select 1
+          from invoice_template t
+          join invoice_template_version v on v.template_id=t.id and v.status='PUBLISHED'
+          where (t.scope='PLATFORM' and t.legal_entity_id is null)
+             or (t.scope='SELLER' and exists(
+               select 1 from billing_legal_entity le
+               where le.id=t.legal_entity_id and le.status='ACTIVE'
+                 and (le.entity_kind='PLATFORM' or le.institution_id=?)
+             ))
+        )
+        """,Boolean.class,institutionId);
+    return Boolean.TRUE.equals(ready);
   }
 
   private boolean hasPublishedTemplate(Long legalEntityId) {

@@ -2,7 +2,7 @@
 
 import { apiFetch } from '../components/apiClient';
 import { notifyUser } from '../components/GlobalNotificationHost';
-import { useCallback, useEffect, useMemo, useState, type FormEvent, type CSSProperties } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type CSSProperties } from 'react';
 import styles from './Finance.module.css';
 
 type Institution = { id:number; tenant_code:string; display_name:string; status:string };
@@ -67,6 +67,8 @@ type Overview = { legalEntities:number; activeTaxProfiles:number; pendingTaxProf
 type Design = { primaryColor:string; accentColor:string; surfaceStyle:string; layout:string; showLogo:boolean; footerText:string };
 type RecipientDraft = { institutionId:string; calculationType:'PERCENTAGE'|'FLAT'; percentage:string; flatRupees:string };
 type TaxForm = { offerId:string; legalEntityId:string; serviceClassificationCode:string; taxTreatment:string; gstPercent:string; cessPercent:string; priceIncludesTax:boolean; placeOfSupplyRule:string; effectiveFrom:string };
+type FinanceTab = 'overview'|'entities'|'tax'|'distribution'|'discounts'|'studio'|'documents'|'payments';
+const FINANCE_TABS:FinanceTab[]=['overview','entities','tax','distribution','discounts','studio','documents','payments'];
 
 const BASE='/api/v1/hrms/platform/finance';
 const DEFAULT_DESIGN:Design={primaryColor:'#F97316',accentColor:'#0F766E',surfaceStyle:'WARM_PAPER',layout:'EDITORIAL',showLogo:true,footerText:'Thank you for learning with us.'};
@@ -94,7 +96,10 @@ function parseDesign(value?:string|null):Design{
 }
 
 export default function FinancePage(){
-  const [tab,setTab]=useState<'overview'|'entities'|'tax'|'distribution'|'discounts'|'studio'|'documents'|'payments'>('overview');
+  const [tab,setTab]=useState<FinanceTab>('overview');
+  const launchOfferIdFromUrl=useRef<string|null>(null);
+  const marketplaceSetupFromUrl=useRef(false);
+  const [marketplaceSetupContext,setMarketplaceSetupContext]=useState<{institutionId:number|null;courseName:string;offerId:string}|null>(null);
   const [catalog,setCatalog]=useState<Catalog|null>(null);
   const [overview,setOverview]=useState<Overview|null>(null);
   const [policies,setPolicies]=useState<Policy[]>([]);
@@ -172,12 +177,22 @@ export default function FinancePage(){
         api<DiscountOffer[]>(BASE+'/discounts'),api<Template[]>(BASE+'/invoice-templates'),api<FinancialDocument[]>(BASE+'/documents')
       ]);
       setCatalog(c);setOverview(o);setPolicies(p);setDiscounts(disc);setTemplates(t);setDocuments(d);
-      if(!selectedOfferId&&c.offers.length) setSelectedOfferId(String(c.offers[0].offer_id));
+      const requestedOfferId=launchOfferIdFromUrl.current;
+      const requestedOfferExists=Boolean(requestedOfferId&&c.offers.some(o=>String(o.offer_id)===requestedOfferId));
+      if(requestedOfferId&&!requestedOfferExists){
+        setError('The course offer linked from Institution Marketplace Control was not found in Finance. Refresh the launch checklist or choose the correct offer.');
+        launchOfferIdFromUrl.current=null;
+        marketplaceSetupFromUrl.current=false;
+        setMarketplaceSetupContext(null);
+        if(c.offers.length)setSelectedOfferId(String(c.offers[0].offer_id));
+      } else if(!selectedOfferId&&c.offers.length) {
+        setSelectedOfferId(requestedOfferExists?requestedOfferId!:String(c.offers[0].offer_id));
+      }
       if(!discountForm.offerId&&c.offers.length) setDiscountForm(v=>({...v,offerId:String(c.offers[0].offer_id)}));
       if(!taxForm.offerId&&c.offers.length) setTaxForm(v=>({...v,offerId:String(c.offers[0].offer_id)}));
       if(!taxForm.legalEntityId&&c.legalEntities.length) setTaxForm(v=>({...v,legalEntityId:String(c.legalEntities[0].id)}));
       if(!gstEntityId&&c.legalEntities.length) setGstEntityId(String(c.legalEntities[0].id));
-      if(!selectedTemplateId&&t.length){
+      if(!selectedTemplateId&&t.length&&!marketplaceSetupFromUrl.current){
         const first=t[0];setSelectedTemplateId(String(first.id));setSelectedVersionNo(first.version_no||null);
         setTemplateScope(first.scope);setTemplateEntityId(first.legal_entity_id?String(first.legal_entity_id):'');
         setTemplateName(first.internal_name);setDesign(parseDesign(first.design_definition_json));
@@ -185,6 +200,28 @@ export default function FinancePage(){
     }catch(e){setError(e instanceof Error?e.message:'Finance workspace could not load.');}
     finally{setLoading(false);}
   },[selectedOfferId,taxForm.offerId,taxForm.legalEntityId,gstEntityId,selectedTemplateId,discountForm.offerId]);
+  useEffect(()=>{
+    const params=new URLSearchParams(window.location.search);
+    const requestedTab=params.get('tab');
+    const validTab=Boolean(requestedTab&&FINANCE_TABS.includes(requestedTab as FinanceTab));
+    if(validTab)setTab(requestedTab as FinanceTab);
+    const rawOfferId=params.get('offerId');
+    const offerId=rawOfferId&&Number.isSafeInteger(Number(rawOfferId))&&Number(rawOfferId)>0?rawOfferId:'';
+    if(offerId){
+      launchOfferIdFromUrl.current=offerId;
+      setSelectedOfferId(offerId);
+    }
+    if(params.get('setup')==='marketplace'){
+      marketplaceSetupFromUrl.current=true;
+      const rawInstitutionId=params.get('institutionId');
+      setMarketplaceSetupContext({
+        institutionId:rawInstitutionId&&Number.isSafeInteger(Number(rawInstitutionId))&&Number(rawInstitutionId)>0?Number(rawInstitutionId):null,
+        courseName:(params.get('courseName')||'').trim(),
+        offerId
+      });
+      if(!validTab)setTab('studio');
+    }
+  },[]);
   useEffect(()=>{void loadAll();},[loadAll]);
   useEffect(()=>()=>{if(previewPdfUrl)URL.revokeObjectURL(previewPdfUrl);},[previewPdfUrl]);
 
@@ -209,6 +246,9 @@ export default function FinancePage(){
     }catch(e){setError(e instanceof Error?e.message:'Policy detail could not load.');}
   };
   const selectedOffer=useMemo(()=>catalog?.offers.find(o=>String(o.offer_id)===selectedOfferId),[catalog,selectedOfferId]);
+  const contextualOffer=marketplaceSetupContext?.offerId
+    ? catalog?.offers.find(o=>String(o.offer_id)===marketplaceSetupContext.offerId)
+    : selectedOffer;
   const selectedTemplate=useMemo(()=>templates.find(t=>String(t.id)===selectedTemplateId),[templates,selectedTemplateId]);
   const designUnchanged=Boolean(selectedTemplate)&&JSON.stringify(design)===JSON.stringify(parseDesign(selectedTemplate?.design_definition_json));
 
@@ -668,6 +708,28 @@ export default function FinancePage(){
     </header>
     {error&&<div className={styles.alertError} role="alert">{error}</div>}
     {notice&&<div className={styles.alertSuccess} role="status">{notice}</div>}
+    {marketplaceSetupContext&&<section className={styles.marketplaceSetupGuide} aria-labelledby="marketplace-finance-setup-heading">
+      <div className={styles.marketplaceSetupHeader}>
+        <div>
+          <span className={styles.eyebrow}>INSTITUTION MARKETPLACE CONTROL</span>
+          <h2 id="marketplace-finance-setup-heading">Finish course launch setup</h2>
+          <p>You're configuring <strong>{contextualOffer?.course_name||marketplaceSetupContext.courseName||'this course'}</strong> for <strong>{contextualOffer?.institution_name||(marketplaceSetupContext.institutionId?'institution #'+marketplaceSetupContext.institutionId:'your institution')}</strong>. The selected course offer is carried into the configuration below.</p>
+        </div>
+        {marketplaceSetupContext.offerId&&<span className={styles.marketplaceSetupOfferTag}>Offer #{marketplaceSetupContext.offerId}</span>}
+      </div>
+      <div className={styles.marketplaceSetupSteps}>
+        <button type="button" className={tab==='studio'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('studio')} aria-current={tab==='studio'?'step':undefined}>
+          <span className={styles.marketplaceSetupStepNumber}>01</span><span className={styles.marketplaceSetupStepCopy}><strong>Invoice template</strong><small>Choose the platform or seller scope. A template must be approved and published; saving a draft is not enough.</small></span><span className={styles.marketplaceSetupStepAction}>{tab==='studio'?'Current step':'Open'}</span>
+        </button>
+        <button type="button" className={tab==='distribution'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('distribution')} aria-current={tab==='distribution'?'step':undefined}>
+          <span className={styles.marketplaceSetupStepNumber}>02</span><span className={styles.marketplaceSetupStepCopy}><strong>Revenue share</strong><small>Use this exact course offer, add recipient institutions, then submit and approve the policy.</small></span><span className={styles.marketplaceSetupStepAction}>{tab==='distribution'?'Current step':'Open'}</span>
+        </button>
+        <button type="button" className={tab==='discounts'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('discounts')} aria-current={tab==='discounts'?'step':undefined}>
+          <span className={styles.marketplaceSetupStepNumber}>03</span><span className={styles.marketplaceSetupStepCopy}><strong>Approved discounts</strong><small>Only if discount codes are used, confirm their rules preserve the verified after-tax share pool.</small></span><span className={styles.marketplaceSetupStepAction}>{tab==='discounts'?'Current step':'Open'}</span>
+        </button>
+      </div>
+      <p className={styles.marketplaceSetupNote}><strong>When finished:</strong> return to Institution Marketplace Control and refresh the checklist. These finance settings do not publish the course automatically.</p>
+    </section>}
     <nav className={styles.tabs} aria-label="Finance workspace">
       {tabs.map(([key,label,icon])=><button key={key} className={tab===key?styles.tabActive:styles.tab}
         onClick={()=>{setTab(key);if(key==='payments')void Promise.all([loadPaymentOrders(),loadProviderEvents()]);}}><span>{icon}</span>{label}</button>)}
@@ -819,8 +881,8 @@ export default function FinancePage(){
       </section>}
       {tab==='studio'&&<section className={styles.studio}>
         <section className={styles.panel}><h2>Invoice Design Studio</h2><p>Make a new draft or create a version from a published design. The preview is a watermarked sample; it never issues an invoice or consumes a legal number.</p>
-          <label>Existing template<select value={selectedTemplateId} onChange={e=>selectTemplate(e.target.value)}><option value="">Create a new template…</option>{templates.map(t=><option key={t.id} value={t.id}>{t.internal_name} · {t.scope} · v{t.version_no} ({t.version_status})</option>)}</select></label>
-          {!selectedTemplateId&&<><label>Template name<input value={templateName} onChange={e=>setTemplateName(e.target.value)}/></label><label>Template scope<select value={templateScope} onChange={e=>setTemplateScope(e.target.value)}><option value="PLATFORM">Platform invoice design</option><option value="SELLER">Seller-specific invoice design</option></select></label>{templateScope==='SELLER'&&<label>Legal seller<select value={templateEntityId} onChange={e=>setTemplateEntityId(e.target.value)}><option value="">Select seller</option>{catalog.legalEntities.map(e=><option key={e.id} value={e.id}>{e.legal_name}</option>)}</select></label>}</>}
+          <label>Existing template<select value={selectedTemplateId} onChange={e=>selectTemplate(e.target.value)}><option value="">{marketplaceSetupContext?'Choose an existing template or create new…':'Create a new template…'}</option>{templates.map(t=><option key={t.id} value={t.id}>{t.internal_name} · {t.scope} · v{t.version_no} ({t.version_status})</option>)}</select></label>
+          {!selectedTemplateId&&<><label>Template name<input value={templateName} onChange={e=>setTemplateName(e.target.value)}/></label><label>Template scope<select value={templateScope} onChange={e=>{const nextScope=e.target.value;setTemplateScope(nextScope);if(nextScope==='SELLER'&&selectedOffer?.legal_entity_id)setTemplateEntityId(String(selectedOffer.legal_entity_id));}}><option value="PLATFORM">Platform-wide invoice design</option><option value="SELLER">Seller-specific invoice design</option></select></label>{marketplaceSetupContext&&<p className={styles.marketplaceSetupInlineHint}>Platform-wide templates can serve multiple sellers. Choose seller-specific when the selected course uses a particular legal seller.</p>}{templateScope==='SELLER'&&<label>Legal seller<select value={templateEntityId} onChange={e=>setTemplateEntityId(e.target.value)}><option value="">Select seller</option>{catalog.legalEntities.map(e=><option key={e.id} value={e.id}>{e.legal_name}</option>)}</select></label>}</>}
           {selectedTemplate&&<div className={styles.versionBanner}><span>Editing v{selectedVersionNo||selectedTemplate.version_no} · {selectedTemplate.version_status}</span>{['PUBLISHED','RETIRED'].includes(selectedTemplate.version_status||'')&&<button className={styles.secondarySmall} onClick={startTemplateVersion} disabled={busy}>＋ New draft version</button>}</div>}
           <div className={styles.designControls}><label>Primary colour<input type="color" disabled={!activeDraft} value={design.primaryColor} onChange={e=>setDesign(v=>({...v,primaryColor:e.target.value.toUpperCase()}))}/></label><label>Accent colour<input type="color" disabled={!activeDraft} value={design.accentColor} onChange={e=>setDesign(v=>({...v,accentColor:e.target.value.toUpperCase()}))}/></label></div>
           <label>Paper surface<select disabled={!activeDraft} value={design.surfaceStyle} onChange={e=>setDesign(v=>({...v,surfaceStyle:e.target.value}))}><option value="WARM_PAPER">Warm premium paper</option><option value="CLEAN_WHITE">Clean white</option><option value="SOFT_SLATE">Soft slate</option></select></label>
