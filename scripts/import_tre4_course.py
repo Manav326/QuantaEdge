@@ -26,10 +26,7 @@ DEFAULT_REGISTER = REPO_ROOT / "data" / "TRE-Papres" / "source-register.json"
 COURSE_VERSION = "BPSC-TRE-4"
 COURSE_CODE_SUFFIX = "TRE4"
 COURSE_TITLE = "TRE-4 · Computer Science"
-SUBJECT_CODE = "computer-science"
-SUBJECT_TITLE = "Computer Science"
-CHAPTER_CODE = "prev-years"
-CHAPTER_TITLE = "Prev years"
+COURSE_TYPE_CODE = "ASSESSMENT"
 PACKAGE_VERSION = "1.0.0"
 EXPECTED_QUESTIONS = {"TRE 1.0": 120, "TRE 2.0": 150, "TRE 3.0": 150}
 EXPECTED_SOURCE_IDENTITIES = {
@@ -405,66 +402,101 @@ def database_url(args: argparse.Namespace) -> str:
 
 def ensure_schema(cursor: Any) -> None:
     cursor.execute("""
-        SELECT to_regclass('public.curriculum_program_delivery_mode'),
+        SELECT to_regclass('public.course_type_registry'),
+               to_regclass('public.curriculum_program_delivery_mode'),
+               to_regclass('public.institution_course_identity'),
+               to_regclass('public.course_assessment_pack'),
+               to_regclass('public.course_assessment_pack_item'),
+               to_regprocedure('public.assign_assessment_public_id()'),
                to_regprocedure('public.course_content_fingerprint(bigint)'),
                to_regprocedure('public.assessment_only_course_ready(bigint)'),
-               pg_get_functiondef(to_regprocedure('public.assessment_only_course_ready(bigint)'))
+               to_regprocedure('public.tre4_source_package_ready(bigint)'),
+               pg_get_functiondef(to_regprocedure('public.assign_assessment_public_id()')),
+               pg_get_functiondef(to_regprocedure('public.course_content_fingerprint(bigint)')),
+               pg_get_functiondef(to_regprocedure('public.assessment_only_course_ready(bigint)')),
+               pg_get_functiondef(to_regprocedure('public.tre4_source_package_ready(bigint)'))
     """)
     row = cursor.fetchone()
     if not row or any(value is None for value in row):
         raise ImportErrorSafe(
-            "Flyway V168 and V180 are required. Start the API against this database and verify both migrations complete before importing."
+            "Required migrations V168, V177, V180, V198, and V199 are missing. "
+            "Start the API against this database and verify Flyway completes before importing."
+        )
+    assessment_id_definition = str(row[9] or "")
+    fingerprint_definition = str(row[10] or "")
+    generic_readiness_definition = str(row[11] or "")
+    tre4_readiness_definition = str(row[12] or "")
+
+    # V198 is essential: classless ASSESSMENT tests still need their registered course-scoped IDs.
+    if "A subjectless assessment requires an assessment-only or competitive course" not in assessment_id_definition:
+        raise ImportErrorSafe(
+            "Flyway V198 is required so subjectless tests receive course-scoped public IDs only for ASSESSMENT/COMPETITIVE courses."
+        )
+
+    cursor.execute("SELECT status FROM public.course_type_registry WHERE code='ASSESSMENT'")
+    type_row = cursor.fetchone()
+    if not type_row or type_row[0] != "ACTIVE":
+        raise ImportErrorSafe("The HRMS ASSESSMENT course type must be ACTIVE before TRE papers can be imported.")
+
+    if "assessment-pack-item" not in fingerprint_definition:
+        raise ImportErrorSafe(
+            "Flyway V196 is required so course release fingerprints include test packs and pack items."
+        )
+    if "course_assessment_pack_item" not in generic_readiness_definition:
+        raise ImportErrorSafe(
+            "Flyway V199 is required: generic ASSESSMENT release readiness must validate the test-pack hierarchy."
+        )
+    if "TRE 3.0" in generic_readiness_definition:
+        raise ImportErrorSafe(
+            "Generic ASSESSMENT readiness must not hard-code TRE-specific question counts; apply the corrected Flyway V199."
+        )
+    if "course_assessment_pack_item" not in tre4_readiness_definition:
+        raise ImportErrorSafe(
+            "Flyway V199 is required: TRE source-package readiness must validate test packs, not school chapters."
         )
     if not re.search(
         r"'TRE 3\.0'::varchar,\s*'tre4-bpsc-tre-3-0-computer-science'::varchar,\s*150",
-        str(row[4] or ""),
+        tre4_readiness_definition,
     ):
         raise ImportErrorSafe(
-            "Flyway V170 is required: TRE 3.0 must be configured for 150 source questions before importing."
+            "Flyway V199 is required: the TRE-specific readiness contract must expect all 150 source questions."
         )
 
 
-def get_or_create_container_class(cursor: Any) -> int:
-    cursor.execute("SELECT id,display_name,board,active FROM curriculum_class WHERE code='TRE4'")
+def get_or_create_course(cursor: Any, institution_id: int) -> tuple[int, str, bool]:
+    """Create/reuse an ASSESSMENT course without fabricating a school class or K12 hierarchy."""
+    internal_code = f"I{institution_id}_{COURSE_CODE_SUFFIX}"
+    cursor.execute("""
+        SELECT id,display_name,status,public_id,class_id,course_type_code
+        FROM curriculum_program
+        WHERE code=%s AND curriculum_version=%s
+        FOR UPDATE
+    """, (internal_code, COURSE_VERSION))
     rows = cursor.fetchall()
     if len(rows) > 1:
-        raise ImportErrorSafe("More than one TRE4 compatibility class exists; refusing to choose one.")
+        raise ImportErrorSafe("Multiple TRE-4 course rows exist for the same institution-scoped key; refusing to choose one.")
     if rows:
-        class_id, display_name, board, active = rows[0]
-        if display_name != "Competitive Exam Preparation" or board != "BPSC" or not active:
-            raise ImportErrorSafe("Existing TRE4 class row conflicts with the expected exam-preparation scope.")
-        return int(class_id)
-    cursor.execute("""
-        INSERT INTO curriculum_class(code,display_name,board,sort_order,active)
-        VALUES ('TRE4','Competitive Exam Preparation','BPSC',99,true)
-        RETURNING id
-    """)
-    return int(cursor.fetchone()[0])
-
-
-def get_or_create_course(cursor: Any, institution_id: int, class_id: int) -> tuple[int, str, bool]:
-    internal_code = f"I{institution_id}_TRE4"
-    cursor.execute("""
-        SELECT id,display_name,status,public_id FROM curriculum_program
-        WHERE class_id=%s AND code=%s AND curriculum_version=%s FOR UPDATE
-    """, (class_id, internal_code, COURSE_VERSION))
-    rows = cursor.fetchall()
-    if len(rows) > 1:
-        raise ImportErrorSafe("Duplicate TRE-4 course identity exists; refusing to import.")
-    if rows:
-        course_id, display_name, status, public_id = rows[0]
+        course_id, display_name, status, public_id, class_id, course_type = rows[0]
         if display_name != COURSE_TITLE or status != "ACTIVE" or not public_id:
             raise ImportErrorSafe("Existing TRE-4 course metadata differs from the expected source course.")
+        if class_id is not None:
+            raise ImportErrorSafe(
+                "Existing TRE-4 course still has a curriculum-class link. This importer now requires the registered "
+                "ASSESSMENT hierarchy and will not rewrite a K12-shaped course in place. Reconcile that draft through "
+                "the course-version workflow before retrying."
+            )
+        if course_type != COURSE_TYPE_CODE:
+            raise ImportErrorSafe("Existing TRE-4 course is not registered as course_type_code='ASSESSMENT'.")
         return int(course_id), str(public_id), False
     cursor.execute("""
         INSERT INTO curriculum_program(
           class_id,code,display_name,stream_code,curriculum_version,status,notes,public_id_prefix,
           course_type_code
-        ) VALUES (%s,%s,%s,'BPSC_TRE',%s,'ACTIVE',%s,'INS','ASSESSMENT')
+        ) VALUES (NULL,%s,%s,'BPSC_TRE',%s,'ACTIVE',%s,'INS','ASSESSMENT')
         RETURNING id,public_id
     """, (
-        class_id, internal_code, COURSE_TITLE, COURSE_VERSION,
-        "QuantaEdge-origin BPSC TRE-4 Computer Science practice-paper course. Assessment-only; source PDFs and imported questions remain review-gated.",
+        internal_code, COURSE_TITLE, COURSE_VERSION,
+        "QuantaEdge-origin BPSC TRE-4 assessment course. Hierarchy is course → test packs → assessments → ordered question snapshots; source questions and answers remain review-gated.",
     ))
     course_id, public_id = cursor.fetchone()
     return int(course_id), str(public_id), True
@@ -512,6 +544,18 @@ def ensure_course_identity(cursor: Any, institution_id: int, course_id: int) -> 
         identity_id, identity_name, identity_type, identity_status = existing
         if identity_name != COURSE_TITLE or identity_type not in {"ASSESSMENT", "K12"} or identity_status != "ACTIVE":
             raise ImportErrorSafe("The stable TRE-4 identity exists with conflicting metadata.")
+        cursor.execute("""
+            SELECT id,code,curriculum_version,content_version_no
+            FROM curriculum_program
+            WHERE course_identity_id=%s AND id<>%s
+            FOR UPDATE
+        """, (identity_id, course_id))
+        linked_versions = cursor.fetchall()
+        if linked_versions:
+            raise ImportErrorSafe(
+                "The stable TRE-4 identity is already linked to another course/version. "
+                "Use the course-version workflow; the batch importer will not reuse or retype that identity."
+            )
         if identity_type != "ASSESSMENT":
             cursor.execute("""
                 UPDATE institution_course_identity SET course_type_code='ASSESSMENT',updated_at=now()
@@ -549,57 +593,6 @@ def ensure_delivery_mode(cursor: Any, course_id: int) -> None:
     """, (course_id,))
 
 
-def get_or_create_subject_chapter(cursor: Any, course_id: int, class_id: int) -> tuple[int, int, bool]:
-    cursor.execute("""
-        SELECT id,display_name,active FROM curriculum_subject
-        WHERE program_id=%s AND code=%s FOR UPDATE
-    """, (course_id, SUBJECT_CODE))
-    rows = cursor.fetchall()
-    created_subject = False
-    if rows:
-        if len(rows) != 1 or rows[0][1] != SUBJECT_TITLE or not rows[0][2]:
-            raise ImportErrorSafe("Existing Computer Science subject conflicts with the TRE-4 import.")
-        subject_id = int(rows[0][0])
-    else:
-        cursor.execute("""
-            INSERT INTO curriculum_subject(class_id,code,display_name,sort_order,active,program_id)
-            VALUES (%s,%s,%s,1,true,%s) RETURNING id
-        """, (class_id, SUBJECT_CODE, SUBJECT_TITLE, course_id))
-        subject_id = int(cursor.fetchone()[0])
-        created_subject = True
-
-    cursor.execute("""
-        SELECT 1 FROM curriculum_program_subject
-        WHERE program_id=%s AND class_id=%s AND subject_id=%s
-    """, (course_id, class_id, subject_id))
-    if not cursor.fetchone():
-        cursor.execute("""
-            INSERT INTO curriculum_program_subject(program_id,class_id,subject_id,is_required,sort_order)
-            VALUES (%s,%s,%s,true,1)
-        """, (course_id, class_id, subject_id))
-
-    cursor.execute("""
-        SELECT id,display_name,active,content_status FROM curriculum_chapter
-        WHERE subject_id=%s AND code=%s FOR UPDATE
-    """, (subject_id, CHAPTER_CODE))
-    rows = cursor.fetchall()
-    if rows:
-        if len(rows) != 1 or rows[0][1] != CHAPTER_TITLE or not rows[0][2]:
-            raise ImportErrorSafe("Existing Prev years chapter conflicts with the TRE-4 import.")
-        chapter_id = int(rows[0][0])
-    else:
-        cursor.execute("""
-            INSERT INTO curriculum_chapter(
-              subject_id,code,display_name,description,sort_order,teaching_order,active,content_status
-            ) VALUES (%s,%s,%s,%s,1,1,true,'DRAFT') RETURNING id
-        """, (
-            subject_id, CHAPTER_CODE, CHAPTER_TITLE,
-            "Previous-year BPSC TRE papers. Questions and proposed answers stay draft until editorial review.",
-        ))
-        chapter_id = int(cursor.fetchone()[0])
-    return subject_id, chapter_id, created_subject
-
-
 def ensure_source_assignment(cursor: Any, institution_id: int, release_id: int) -> int:
     cursor.execute("""
         SELECT id,status,assignment_source FROM institution_course_assignment
@@ -618,11 +611,13 @@ def ensure_source_assignment(cursor: Any, institution_id: int, release_id: int) 
     return int(cursor.fetchone()[0])
 
 
-def insert_assessment(cursor: Any, course_id: int, subject_id: int, chapter_id: int, paper: dict[str, Any]) -> tuple[int, bool]:
+def insert_assessment(cursor: Any, course_id: int, paper: dict[str, Any]) -> tuple[int, bool]:
+    """Persist a test as a course-level ASSESSMENT, not under a K12 subject/chapter."""
     package_id = paper["package_id"]
     cursor.execute("""
         SELECT id,title,status,source_package_sha256,
-               (SELECT count(*) FROM assessment_question aq WHERE aq.assessment_id=a.id) AS question_count
+               (SELECT count(*) FROM assessment_question aq WHERE aq.assessment_id=a.id) AS question_count,
+               subject_id,chapter_id,assessment_type,portable_assessment_type,source_exam_cycle,source_url
         FROM assessment a
         WHERE a.course_id=%s AND a.source_package_id=%s AND a.source_package_version=%s
         FOR UPDATE
@@ -632,11 +627,20 @@ def insert_assessment(cursor: Any, course_id: int, subject_id: int, chapter_id: 
     if existing:
         if len(existing) != 1:
             raise ImportErrorSafe(f"Multiple DB assessments exist for {package_id} {paper['package_version']}.")
-        assessment_id, title, status, digest, question_count = existing[0]
+        (
+            assessment_id, title, status, digest, question_count, subject_id, chapter_id,
+            assessment_type, portable_type, source_cycle, source_url,
+        ) = existing[0]
         if (
             title != paper["title"] or digest is None
             or str(digest).strip().lower() != paper["package_sha256"]
             or int(question_count) != expected_count
+            or status not in {"DRAFT", "PUBLISHED"}
+            or subject_id is not None or chapter_id is not None
+            or assessment_type != "PREVIOUS_YEAR_PAPER"
+            or portable_type != "PREVIOUS_YEAR_PAPER"
+            or source_cycle != paper["cycle"]
+            or source_url != paper["source_url"]
         ):
             raise ImportErrorSafe(
                 f"Existing {package_id} differs from source inventory. No updates/deletes were attempted; review it and create a reviewed version explicitly."
@@ -647,13 +651,13 @@ def insert_assessment(cursor: Any, course_id: int, subject_id: int, chapter_id: 
         INSERT INTO assessment(
           course_id,title,description,subject_id,chapter_id,duration_minutes,max_attempts,
           negative_marking_fraction,status,assessment_type,is_generated,source_package_id,
-          source_package_version,source_package_sha256,source_exam_cycle,source_url
-        ) VALUES (%s,%s,%s,%s,%s,%s,3,%s,'DRAFT','PREVIOUS_YEAR_PAPER',false,%s,%s,%s,%s,%s)
+          source_package_version,source_package_sha256,source_exam_cycle,source_url,portable_assessment_type
+        ) VALUES (%s,%s,%s,NULL,NULL,%s,3,%s,'DRAFT','PREVIOUS_YEAR_PAPER',false,%s,%s,%s,%s,%s,'PREVIOUS_YEAR_PAPER')
         RETURNING id
     """, (
         course_id, paper["title"],
         f"{paper['cycle']} source-paper practice test. Imported source wording only; answer key and explanations require human review.",
-        subject_id, chapter_id, paper["duration_minutes"], paper["negative_marking_fraction"],
+        paper["duration_minutes"], paper["negative_marking_fraction"],
         package_id, paper["package_version"], paper["package_sha256"], paper["cycle"], paper["source_url"],
     ))
     assessment_id = int(cursor.fetchone()[0])
@@ -671,6 +675,114 @@ def insert_assessment(cursor: Any, course_id: int, subject_id: int, chapter_id: 
     return assessment_id, True
 
 
+def ensure_test_pack(
+    cursor: Any, institution_id: int, course_id: int, assessment_id: int, paper: dict[str, Any]
+) -> tuple[int, bool]:
+    """Create one versioned test pack per paper and attach its ordered assessment item."""
+    package_id = str(paper["package_id"])
+    package_version = str(paper["package_version"])
+    pack_title = f"BPSC {paper['cycle']} — Computer Science Previous-Year Paper"
+    cursor.execute("""
+        SELECT id,source_institution_id,title,status,content_sha256
+        FROM course_assessment_pack
+        WHERE course_id=%s AND pack_code=%s AND pack_version=%s
+        FOR UPDATE
+    """, (course_id, package_id, package_version))
+    existing = cursor.fetchall()
+    if existing:
+        if len(existing) != 1:
+            raise ImportErrorSafe(f"Multiple test packs exist for {package_id} {package_version}; refusing to choose one.")
+        pack_id, source_institution_id, title, status, content_sha256 = existing[0]
+        if (
+            int(source_institution_id) != institution_id
+            or title != pack_title
+            or str(content_sha256 or "").strip().lower() != str(paper["package_sha256"]).lower()
+            or status not in {"DRAFT", "PUBLISHED"}
+        ):
+            raise ImportErrorSafe(
+                f"Existing test pack {package_id} {package_version} conflicts with the verified source package; "
+                "no existing pack was changed."
+            )
+        cursor.execute("""
+            SELECT assessment_id,sequence_no,test_kind
+            FROM course_assessment_pack_item
+            WHERE pack_id=%s ORDER BY sequence_no,id
+        """, (pack_id,))
+        items = cursor.fetchall()
+        if len(items) != 1 or (
+            int(items[0][0]) != assessment_id
+            or int(items[0][1]) != 1
+            or items[0][2] != "PREVIOUS_YEAR_PAPER"
+        ):
+            raise ImportErrorSafe(
+                f"Existing test pack {package_id} has a missing or conflicting assessment item; no records were changed."
+            )
+        cursor.execute("""
+            SELECT status,source_package_id,source_package_version,source_package_sha256,
+                   assessment_type,portable_assessment_type,subject_id,chapter_id,source_exam_cycle,source_url
+            FROM assessment
+            WHERE id=%s AND course_id=%s
+            FOR UPDATE
+        """, (assessment_id, course_id))
+        linked_test = cursor.fetchone()
+        if (
+            not linked_test
+            or linked_test[1] != package_id
+            or linked_test[2] != package_version
+            or str(linked_test[3] or "").strip().lower() != str(paper["package_sha256"]).lower()
+            or linked_test[4] != "PREVIOUS_YEAR_PAPER"
+            or linked_test[5] != "PREVIOUS_YEAR_PAPER"
+            or linked_test[6] is not None or linked_test[7] is not None
+            or linked_test[8] != paper["cycle"]
+            or linked_test[9] != paper["source_url"]
+        ):
+            raise ImportErrorSafe(
+                f"Existing test pack {package_id} is linked to a test whose status or ASSESSMENT metadata differs; no records were changed."
+            )
+        return int(pack_id), False
+
+    cursor.execute("""
+        SELECT status FROM assessment
+        WHERE id=%s AND course_id=%s
+        FOR UPDATE
+    """, (assessment_id, course_id))
+    assessment_row = cursor.fetchone()
+    if not assessment_row or assessment_row[0] != "DRAFT":
+        raise ImportErrorSafe(
+            f"Assessment {assessment_id} has no matching test pack and is not an untouched DRAFT; "
+            "the importer will not retrofit a reviewed/published assessment."
+        )
+    cursor.execute("""
+        SELECT pack.id
+        FROM course_assessment_pack_item item
+        JOIN course_assessment_pack pack ON pack.id=item.pack_id
+        WHERE item.assessment_id=%s
+        FOR UPDATE OF pack
+    """, (assessment_id,))
+    if cursor.fetchone() is not None:
+        raise ImportErrorSafe(
+            f"Assessment {assessment_id} is already attached to another test pack; refusing to duplicate it."
+        )
+    cursor.execute("""
+        INSERT INTO course_assessment_pack(
+          course_id,source_institution_id,pack_code,pack_version,title,description,
+          status,content_sha256,open_book_enabled,resource_policy,created_by_staff_id
+        ) VALUES (%s,%s,%s,%s,%s,%s,'DRAFT',%s,false,
+                  '{"mode":"CLOSED_BOOK","resources":[]}'::jsonb,NULL)
+        RETURNING id
+    """, (
+        course_id, institution_id, package_id, package_version, pack_title,
+        f"Versioned source-paper pack for {paper['cycle']}. The assessment and every answer remain draft until human review.",
+        paper["package_sha256"],
+    ))
+    pack_id = int(cursor.fetchone()[0])
+    cursor.execute("""
+        INSERT INTO course_assessment_pack_item(pack_id,assessment_id,sequence_no,test_kind)
+        VALUES (%s,%s,1,'PREVIOUS_YEAR_PAPER')
+    """, (pack_id, assessment_id))
+    return pack_id, True
+
+
 def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], archive_sha256: str) -> dict[str, Any]:
     try:
         import psycopg  # type: ignore[import-not-found]
@@ -679,7 +791,14 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
             "psycopg 3 is required for --apply. Install it with: python -m pip install 'psycopg[binary]>=3.2,<4'"
         ) from exc
     url = database_url(args)
-    summary: dict[str, Any] = {"course": COURSE_TITLE, "deliveryMode": "ASSESSMENT_ONLY", "papers": [], "submittedForReview": False}
+    summary: dict[str, Any] = {
+        "course": COURSE_TITLE,
+        "courseTypeCode": COURSE_TYPE_CODE,
+        "deliveryMode": "ASSESSMENT_ONLY",
+        "hierarchy": "COURSE → TEST PACK → ASSESSMENT → ORDERED QUESTIONS",
+        "papers": [],
+        "submittedForReview": False,
+    }
     with psycopg.connect(url) as connection:
         with connection.cursor() as cursor:
             ensure_schema(cursor)
@@ -691,22 +810,28 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
             if len(qe_rows) != 1 or qe_rows[0][1] != "QuantaEdge" or qe_rows[0][2] != "ACTIVE":
                 raise ImportErrorSafe("Expected exactly one active QuantaEdge source institution (QUANTA-EDGE).")
             institution_id = int(qe_rows[0][0])
-            class_id = get_or_create_container_class(cursor)
-            course_id, public_id, created_course = get_or_create_course(cursor, institution_id, class_id)
+            course_id, public_id, created_course = get_or_create_course(cursor, institution_id)
             course_identity_id = ensure_course_identity(cursor, institution_id, course_id)
             ensure_delivery_mode(cursor, course_id)
-            subject_id, chapter_id, created_subject = get_or_create_subject_chapter(cursor, course_id, class_id)
 
             created_assessments: list[int] = []
+            created_test_packs: list[int] = []
             for paper in papers:
-                assessment_id, created = insert_assessment(cursor, course_id, subject_id, chapter_id, paper)
+                assessment_id, created = insert_assessment(cursor, course_id, paper)
+                pack_id, pack_created = ensure_test_pack(cursor, institution_id, course_id, assessment_id, paper)
                 if created:
                     created_assessments.append(assessment_id)
+                if pack_created:
+                    created_test_packs.append(pack_id)
                 summary["papers"].append({
                     "cycle": paper["cycle"],
                     "assessmentId": assessment_id,
+                    "testPackId": pack_id,
+                    "testPackCode": paper["package_id"],
+                    "testPackVersion": paper["package_version"],
                     "questionCount": len(paper["question_snapshots"]),
                     "status": "DRAFT",
+                    "testPackCreated": pack_created,
                     "inserted": created,
                     "packageSha256": paper["package_sha256"],
                 })
@@ -721,10 +846,10 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
             """, (institution_id, course_id))
             release_row = cursor.fetchone()
             if args.submit_for_review:
-                cursor.execute("SELECT assessment_only_course_ready(%s)", (course_id,))
+                cursor.execute("SELECT tre4_source_package_ready(%s)", (course_id,))
                 ready_row = cursor.fetchone()
                 if not ready_row or ready_row[0] is not True:
-                    raise ImportErrorSafe("Assessment-only source-package readiness failed; the release cannot be queued for HRMS review.")
+                    raise ImportErrorSafe("TRE source-package readiness (including generic ASSESSMENT pack integrity) failed; the release cannot be queued for HRMS review.")
             release_created = False
             release_submitted = False
             if release_row is None:
@@ -753,10 +878,10 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                 if release_state == "DRAFT":
                     if args.submit_for_review:
                         cursor.execute("""
-                            SELECT assessment_only_course_ready(%s)
+                            SELECT tre4_source_package_ready(%s)
                         """, (course_id,))
                         if cursor.fetchone()[0] is not True:
-                            raise ImportErrorSafe("Assessment-only source-package readiness failed; cannot queue the release for HRMS review.")
+                            raise ImportErrorSafe("TRE source-package readiness (including generic ASSESSMENT pack integrity) failed; cannot queue the release for HRMS review.")
                         cursor.execute("""
                             UPDATE institution_course_release
                             SET release_state='IN_QUALITY_REVIEW',content_fingerprint=%s,submitted_at=now(),
@@ -787,7 +912,9 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                 """, (institution_id, release_id, assignment_id, json.dumps({
                     "courseId": course_id, "courseCode": f"I{institution_id}_TRE4",
                     "courseIdentityId": course_identity_id, "publicId": public_id,
-                    "subjectId": subject_id, "chapterId": chapter_id,
+                    "courseTypeCode": COURSE_TYPE_CODE,
+                    "hierarchy": "COURSE_TEST_PACK_ASSESSMENT_ORDERED_QUESTIONS",
+                    "testPackIds": [row["testPackId"] for row in summary["papers"]],
                     "deliveryMode": "ASSESSMENT_ONLY", "source": "scripts/import_tre4_course.py",
                 })))
             if release_submitted:
@@ -805,15 +932,15 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                 "institutionId": institution_id,
                 "courseId": course_id,
                 "coursePublicId": public_id,
-                "internalClassCode": "TRE4",
-                "subjectId": subject_id,
-                "chapterId": chapter_id,
+                "courseTypeCode": COURSE_TYPE_CODE,
+                "hierarchy": "COURSE → TEST PACK → ASSESSMENT → ORDERED QUESTIONS",
+                "testPackCount": len(summary["papers"]),
+                "createdTestPacks": created_test_packs,
                 "releaseId": int(release_id),
                 "releaseVersion": int(release_version),
                 "releaseState": str(release_state),
                 "assignmentId": assignment_id,
                 "createdCourse": created_course,
-                "createdSubject": created_subject,
                 "createdAssessments": created_assessments,
                 "releaseFingerprint": fingerprint,
                 "studentDeliveryAllowed": False,
@@ -832,7 +959,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--register", type=Path, default=DEFAULT_REGISTER, help="Verified source-register.json.")
     parser.add_argument("--inventory", type=Path, help="Use a previously generated tre-question-inventory.json instead of extracting.")
     parser.add_argument("--database-url", help="PostgreSQL URL; otherwise TRE4_DATABASE_URL or SPRING_DATASOURCE_URL is used.")
-    parser.add_argument("--apply", action="store_true", help="Commit validated course, chapter, draft assessments, and release records. Without this flag, no DB writes occur.")
+    parser.add_argument("--apply", action="store_true", help="Commit the classless ASSESSMENT course, versioned test packs, draft tests, questions, and release records. Without this flag, no DB writes occur.")
     parser.add_argument("--submit-for-review", action="store_true", help="With --apply, queue a DRAFT release for HRMS quality review after all import gates pass. Does not approve or publish it.")
     return parser.parse_args()
 
@@ -855,14 +982,17 @@ def main() -> int:
             "mode": "APPLY" if args.apply else "DRY_RUN",
             "course": COURSE_TITLE,
             "sourceInstitution": "QUANTA-EDGE",
+            "courseTypeCode": COURSE_TYPE_CODE,
             "deliveryMode": "ASSESSMENT_ONLY",
-            "subject": SUBJECT_TITLE,
-            "chapter": CHAPTER_TITLE,
+            "hierarchy": "COURSE → TEST PACK → ASSESSMENT → ORDERED QUESTIONS",
+            "testPackCount": len(papers),
             "sourceArchiveSha256": archive_hash,
             "papers": [
                 {
                     "cycle": paper["cycle"],
                     "packageId": paper["package_id"],
+                    "testPackCode": paper["package_id"],
+                    "testPackVersion": paper["package_version"],
                     "questionCount": len(paper["question_snapshots"]),
                     "durationMinutes": paper["duration_minutes"],
                     "negativeMarkingFraction": paper["negative_marking_fraction"],

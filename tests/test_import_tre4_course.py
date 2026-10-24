@@ -24,6 +24,14 @@ class FakeCursor:
     def fetchone(self):
         return self.rows.pop(0) if self.rows else None
 
+    def fetchall(self):
+        row = self.rows.pop(0) if self.rows else []
+        if row is None:
+            return []
+        if isinstance(row, list):
+            return row
+        return [row]
+
 
 class Tre4ImporterTests(unittest.TestCase):
     def test_course_identity_is_created_before_tre_content_import(self):
@@ -41,6 +49,121 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertIn("course_type_code='ASSESSMENT'", sql)
         self.assertIn("course_identity_id=%s", sql)
 
+    def test_course_is_created_without_a_curriculum_class(self):
+        cursor = FakeCursor([[], (777, "INS-QE-TRE4")])
+        course_id, public_id, created = import_tre4_course.get_or_create_course(cursor, 42)
+
+        self.assertEqual(course_id, 777)
+        self.assertEqual(public_id, "INS-QE-TRE4")
+        self.assertTrue(created)
+        sql = "\n".join(statement for statement, _ in cursor.statements)
+        self.assertIn("class_id,code,display_name", sql)
+        self.assertIn("VALUES (NULL,%s,%s,'BPSC_TRE'", sql)
+        self.assertIn("'ASSESSMENT'", sql)
+        self.assertNotIn("curriculum_class", sql)
+
+    def test_class_bound_tre4_course_is_not_rewritten_in_place(self):
+        cursor = FakeCursor([[(777, "TRE-4 · Computer Science", "ACTIVE", "INS-QE-TRE4", 123, "ASSESSMENT")]])
+        with self.assertRaises(import_tre4_course.ImportErrorSafe):
+            import_tre4_course.get_or_create_course(cursor, 42)
+        self.assertEqual(len(cursor.statements), 1)
+
+    def test_new_test_pack_links_one_assessment_without_k12_chapter(self):
+        paper = {
+            "cycle": "TRE 1.0",
+            "package_id": "tre4-bpsc-tre-1-0-computer-science",
+            "package_version": "1.0.0",
+            "package_sha256": "a" * 64,
+        }
+        cursor = FakeCursor([[], ("DRAFT",), None, (501,)])
+        pack_id, created = import_tre4_course.ensure_test_pack(cursor, 42, 777, 901, paper)
+
+        self.assertEqual(pack_id, 501)
+        self.assertTrue(created)
+        sql = "\n".join(statement for statement, _ in cursor.statements)
+        self.assertIn("INSERT INTO course_assessment_pack(", sql)
+        self.assertIn("INSERT INTO course_assessment_pack_item", sql)
+        self.assertIn("VALUES (%s,%s,1,'PREVIOUS_YEAR_PAPER')", sql)
+
+    def test_matching_test_pack_is_reused_when_test_publication_state_differs(self):
+        paper = {
+            "cycle": "TRE 1.0",
+            "package_id": "tre4-bpsc-tre-1-0-computer-science",
+            "package_version": "1.0.0",
+            "package_sha256": "a" * 64,
+            "source_url": "https://example.test/tre1.pdf",
+        }
+        title = "BPSC TRE 1.0 — Computer Science Previous-Year Paper"
+        cursor = FakeCursor([
+            [(501, 42, title, "DRAFT", "a" * 64)],
+            [(901, 1, "PREVIOUS_YEAR_PAPER")],
+            ("PUBLISHED", "tre4-bpsc-tre-1-0-computer-science", "1.0.0", "a" * 64,
+             "PREVIOUS_YEAR_PAPER", "PREVIOUS_YEAR_PAPER", None, None, "TRE 1.0",
+             "https://example.test/tre1.pdf"),
+        ])
+        pack_id, created = import_tre4_course.ensure_test_pack(cursor, 42, 777, 901, paper)
+
+        self.assertEqual(pack_id, 501)
+        self.assertFalse(created)
+        self.assertEqual(len(cursor.statements), 3)
+
+    def test_test_inserts_are_course_level_and_mark_portable_type(self):
+        paper = {
+            "cycle": "TRE 1.0",
+            "package_id": "tre4-bpsc-tre-1-0-computer-science",
+            "package_version": "1.0.0",
+            "package_sha256": "a" * 64,
+            "title": "BPSC TRE 1.0 — Computer Science Previous-Year Practice Test",
+            "duration_minutes": 120,
+            "negative_marking_fraction": 0.25,
+            "source_url": "https://example.test/tre1.pdf",
+            "question_snapshots": [],
+        }
+        cursor = FakeCursor([[], (901,)])
+        assessment_id, created = import_tre4_course.insert_assessment(cursor, 777, paper)
+
+        self.assertEqual(assessment_id, 901)
+        self.assertTrue(created)
+        insert_sql = next(sql for sql, _ in cursor.statements if "INSERT INTO assessment(" in sql)
+        self.assertIn("VALUES (%s,%s,%s,NULL,NULL", insert_sql)
+        self.assertIn("portable_assessment_type", insert_sql)
+        self.assertIn("'PREVIOUS_YEAR_PAPER')", insert_sql)
+
+    def test_class_bound_assessment_is_not_reused_by_classless_import(self):
+        paper = {
+            "cycle": "TRE 1.0",
+            "package_id": "tre4-bpsc-tre-1-0-computer-science",
+            "package_version": "1.0.0",
+            "package_sha256": "a" * 64,
+            "title": "BPSC TRE 1.0 — Computer Science Previous-Year Practice Test",
+            "duration_minutes": 120,
+            "negative_marking_fraction": 0.25,
+            "source_url": "https://example.test/tre1.pdf",
+            "question_snapshots": [],
+        }
+        cursor = FakeCursor([
+            [(901, paper["title"], "DRAFT", "a" * 64, 0, 22, 33,
+              "PREVIOUS_YEAR_PAPER", "PREVIOUS_YEAR_PAPER", "TRE 1.0", paper["source_url"])]
+        ])
+
+        with self.assertRaises(import_tre4_course.ImportErrorSafe):
+            import_tre4_course.insert_assessment(cursor, 777, paper)
+        self.assertEqual(len(cursor.statements), 1)
+
+    def test_identity_linked_to_another_course_version_is_not_reused(self):
+        cursor = FakeCursor([
+            ("TRE-4 · Computer Science", "ASSESSMENT", None, None, None, None),
+            (0,),
+            (0,),
+            (901, "TRE-4 · Computer Science", "K12", "ACTIVE"),
+            [(7770, "LEGACY_TRE4", "BPSC-TRE-4", 1)],
+        ])
+        with self.assertRaisesRegex(
+            import_tre4_course.ImportErrorSafe, "already linked to another course/version"
+        ):
+            import_tre4_course.ensure_course_identity(cursor, 42, 777)
+        self.assertEqual(len(cursor.statements), 5)
+
     def test_existing_source_owned_tre_identity_is_reused_without_mutation(self):
         cursor = FakeCursor([
             ("TRE-4 · Computer Science", "ASSESSMENT", 901, 42, "I42_TRE4", "ASSESSMENT"),
@@ -48,6 +171,22 @@ class Tre4ImporterTests(unittest.TestCase):
         identity_id = import_tre4_course.ensure_course_identity(cursor, 42, 777)
         self.assertEqual(identity_id, 901)
         self.assertEqual(len(cursor.statements), 1)
+
+    def test_generic_assessment_readiness_is_not_tre_specific(self):
+        migration = SCRIPT.parents[1] / "services" / "api" / "src" / "main" / "resources" / "db" / "migration" / "V199__assessment_only_readiness_uses_test_packs.sql"
+        sql = migration.read_text(encoding="utf-8")
+        generic_start = sql.index("CREATE OR REPLACE FUNCTION assessment_only_course_ready")
+        tre_start = sql.index("-- Import-specific contract:")
+        generic = sql[generic_start:tre_start]
+        tre_specific = sql[tre_start:]
+
+        self.assertIn("course_assessment_pack_item", generic)
+        self.assertNotIn("TRE 3.0", generic)
+        self.assertIn("CREATE OR REPLACE FUNCTION tre4_source_package_ready", tre_specific)
+        self.assertIn("'TRE 1.0'::varchar", tre_specific)
+        self.assertIn("'TRE 2.0'::varchar", tre_specific)
+        self.assertIn("'TRE 3.0'::varchar", tre_specific)
+        self.assertIn("150", tre_specific)
 
     def test_expected_primary_booklet_counts(self):
         self.assertEqual(import_tre4_course.expected_question_count("TRE 1.0"), 120)
