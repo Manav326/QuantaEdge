@@ -224,7 +224,7 @@ const financePageTheme = read('apps/people/app/finance/page.tsx');
 const financeModuleTheme = read('apps/people/app/finance/Finance.module.css');
 assert(financePageTheme.includes("['overview','Overview'") && financePageTheme.includes("['documents','Issued documents'") && financePageTheme.includes("['studio','Invoice Design Studio'"), 'Finance route must retain its in-page billing, document and design subpages.');
 const marketplaceLaunchFinance = read('apps/people/app/institutions/MarketplaceLaunchStepper.tsx');
-assert(marketplaceLaunchFinance.includes('financeSetupHref(item, invoiceSetupTarget(item))') && marketplaceLaunchFinance.includes("params.set('setup', 'marketplace')") && marketplaceLaunchFinance.includes("params.set('offerId', String(item.offerId))"), 'Marketplace invoice/revenue-share actions must deep-link to Finance with the exact course offer context.');
+assert(marketplaceLaunchFinance.includes('financeSetupHref(item, invoiceSetupTarget(item))') && marketplaceLaunchFinance.includes("setup: 'marketplace'") && marketplaceLaunchFinance.includes("params.set('offerId', String(item.offerId))"), 'Marketplace invoice/revenue-share actions must deep-link to Finance with the exact course offer context.');
 assert(financePageTheme.includes('marketplaceSetupContext&&<section className={styles.marketplaceSetupGuide}') && financePageTheme.includes("onClick={()=>setTab('distribution')}") && financeModuleTheme.includes('.marketplaceSetupSteps{'), 'Finance must provide a visible guided path between invoice templates, revenue shares and discount validation.');
 for (const mode of ['light', 'dark']) {
   assert(financePageTheme.includes('data-preview-theme="' + mode + '"'), 'Finance invoice design must preview in the ' + mode + ' workspace context.');
