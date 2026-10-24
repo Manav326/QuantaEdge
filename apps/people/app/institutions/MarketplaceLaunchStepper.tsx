@@ -678,9 +678,13 @@ export default function MarketplaceLaunchStepper({
           </header>
           <div className={styles.qualityList}>
             {(data.qualityReviewItems || []).map(release => {
-              const qualityReady = release.contentCurrent && release.active_subject_count > 0
-                && release.subjects_with_published_lessons === release.active_subject_count
-                && release.published_chapters > 0 && release.published_lessons > 0;
+              const assessmentOnly = release.delivery_mode === 'ASSESSMENT_ONLY' || release.course_type_code === 'ASSESSMENT';
+              const qualityReady = release.contentCurrent && (assessmentOnly
+                ? release.assessment_only_ready === true
+                : release.active_subject_count > 0
+                  && release.subjects_with_published_lessons === release.active_subject_count
+                  && release.published_chapters > 0 && release.published_lessons > 0);
+              const preview = reviewContent[release.release_id];
               return (
                 <article className={styles.qualityRow} key={release.release_id}>
                   <div className={styles.availableMark} aria-hidden="true">✓</div>
@@ -688,16 +692,101 @@ export default function MarketplaceLaunchStepper({
                     <strong>{release.course_name} <span>v{release.release_version}</span></strong>
                     <small>Source: {release.source_institution_name} · {release.source_institution_code} · Release #{release.release_id}</small>
                     <div className={styles.qualityMetrics}>
-                      <span>{release.active_subject_count} active subjects</span>
-                      <span>{release.subjects_with_published_lessons} with lessons</span>
-                      <span>{release.published_chapters} chapters</span>
-                      <span>{release.published_lessons} lessons</span>
+                      {assessmentOnly ? <>
+                        <span>ASSESSMENT_ONLY</span>
+                        <span>{release.assessment_count} tests</span>
+                        <span>{release.assessment_question_count} questions</span>
+                        <span>{release.assessment_only_ready ? 'TRE inventory complete' : 'TRE inventory incomplete'}</span>
+                      </> : <>
+                        <span>{release.active_subject_count} active subjects</span>
+                        <span>{release.subjects_with_published_lessons} with lessons</span>
+                        <span>{release.published_chapters} chapters</span>
+                        <span>{release.published_lessons} lessons</span>
+                      </>}
                     </div>
+                    {assessmentOnly && <p>Review the exact submitted test papers, question snapshots, source provenance, answer-review state and scoring rules below. This preview is read-only.</p>}
                     {!release.contentCurrent && <p className={styles.availableWarning}>Course content changed after submission. Ask the source institution to submit a fresh release.</p>}
+                    {assessmentOnly && <div className={styles.qualityActions}>
+                      <button type="button" className={styles.secondaryButton}
+                        disabled={reviewContentLoadingId !== null || busyKey !== null}
+                        onClick={() => void toggleReviewContent(release)}>
+                        {reviewContentLoadingId === release.release_id ? 'Loading exact release…' : preview ? 'Hide submitted content' : 'Review submitted content'}
+                      </button>
+                    </div>}
+                    {reviewContentErrors[release.release_id] && <p className={styles.availableWarning}>{reviewContentErrors[release.release_id]}</p>}
+                    {preview && (
+                      <div style={{ marginTop: 14, padding: 14, border: '1px solid var(--border, #d7dce2)', borderRadius: 12 }}>
+                        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'space-between', marginBottom: 12 }}>
+                          <strong>Exact release preview · read-only</strong>
+                          <span style={{ fontSize: 12, color: 'var(--muted, #667085)' }}>
+                            {preview.contentCurrent ? 'Fingerprint matches submission' : 'Fingerprint mismatch — do not approve'}
+                          </span>
+                        </div>
+                        <p style={{ overflowWrap: 'anywhere', fontSize: 12 }}>Submitted fingerprint: {preview.content_fingerprint}</p>
+                        {preview.delivery_mode === 'ASSESSMENT_ONLY' ? (
+                          <>
+                            <p>{preview.assessmentCount} assessments · {preview.questionCount} frozen question snapshots · student publication remains disabled during this review</p>
+                            {(preview.assessments || []).map(assessment => (
+                              <details key={assessment.assessment_id} style={{ borderTop: '1px solid var(--border, #d7dce2)', padding: '10px 0' }}>
+                                <summary style={{ cursor: 'pointer', fontWeight: 600 }}>
+                                  {assessment.title} · {assessment.questionCount ?? assessment.question_count} questions · {assessment.status}
+                                </summary>
+                                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', margin: '8px 0' }}>
+                                  <span>{assessment.source_exam_cycle || assessment.portable_assessment_type || assessment.assessment_type}</span>
+                                  <span>{assessment.duration_minutes} min</span>
+                                  <span>{assessment.max_attempts} attempt(s)</span>
+                                  <span>Negative marking: {assessment.negative_marking_fraction}</span>
+                                  <span>Max score: {assessment.max_score}</span>
+                                </div>
+                                {assessment.source_url && <p style={{ overflowWrap: 'anywhere', fontSize: 12 }}>Source: {assessment.source_url}</p>}
+                                {(assessment.questions || []).map(question => {
+                                  const snapshot = question.question_snapshot || {};
+                                  const promptI18n = snapshot.prompt_i18n || {};
+                                  const options = Array.isArray(snapshot.options) ? snapshot.options : [];
+                                  const answer = snapshot.answer_payload || {};
+                                  const tags = Array.isArray(snapshot.topic_tags) ? snapshot.topic_tags : [];
+                                  return (
+                                    <div key={question.sequence_no} style={{ padding: 10, marginTop: 8, border: '1px solid var(--border, #d7dce2)', borderRadius: 8 }}>
+                                      <strong>Q{question.sequence_no} · {snapshot.question_type || 'Question'} · {question.max_marks} mark(s)</strong>
+                                      {snapshot.prompt && <p style={{ whiteSpace: 'pre-wrap' }}>{snapshot.prompt}</p>}
+                                      {promptI18n.en && promptI18n.en !== snapshot.prompt && <p style={{ whiteSpace: 'pre-wrap' }}><strong>EN:</strong> {promptI18n.en}</p>}
+                                      {promptI18n.hi && <p style={{ whiteSpace: 'pre-wrap' }}><strong>HI:</strong> {promptI18n.hi}</p>}
+                                      {options.length > 0 && <ol type="A">{options.map((option: any, optionIndex: number) => (
+                                        <li key={option.key || option.option_key || optionIndex} style={{ marginBottom: 4 }}>
+                                          {option.text || option.label || option.text_i18n?.en || option.text_i18n?.hi || ''}
+                                          {option.text_i18n?.hi && option.text_i18n?.en && <span> / {option.text_i18n.hi}</span>}
+                                        </li>
+                                      ))}</ol>}
+                                      <p style={{ fontSize: 12, color: 'var(--muted, #667085)' }}>
+                                        Section: {snapshot.section_code || '—'} · Topic tags: {tags.join(', ') || 'not tagged'} · Difficulty: {snapshot.difficulty || 'CORE'}
+                                      </p>
+                                      <p style={{ fontSize: 12 }}>
+                                        Answer review: {snapshot.question_review_status || 'PENDING_HUMAN_REVIEW'} · Answer key: {answer.kind || 'UNRESOLVED'} {answer.value === null || answer.value === undefined ? '(unresolved)' : String(answer.value)}
+                                      </p>
+                                      {snapshot.explanation && <p style={{ whiteSpace: 'pre-wrap' }}><strong>Explanation:</strong> {snapshot.explanation}</p>}
+                                    </div>
+                                  );
+                                })}
+                              </details>
+                            ))}
+                          </>
+                        ) : (
+                          <div>
+                            {(preview.subjects || []).map(subject => (
+                              <div key={subject.id} style={{ marginBottom: 10 }}>
+                                <strong>{subject.display_name}</strong>
+                                <ul>{(subject.chapters || []).map(chapter => <li key={chapter.id}>{chapter.display_name} · {chapter.content_status}</li>)}</ul>
+                              </div>
+                            ))}
+                            <p>This release uses the learning-content layout. Its lesson content remains subject to the lesson-specific review view.</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
                     <label className={styles.reviewNote}>Quality review note
                       <textarea rows={2} maxLength={1000} value={reviewNotes[release.release_id] || ''}
                         onChange={event => setReviewNotes(previous => ({ ...previous, [release.release_id]: event.target.value }))}
-                        placeholder="Record what was checked: syllabus coverage, published lessons, content integrity…" />
+                        placeholder={assessmentOnly ? 'Record question inventory, source fidelity, answer review, section scoring and release fingerprint checks…' : 'Record what was checked: syllabus coverage, published lessons, content integrity…'} />
                     </label>
                     <div className={styles.qualityActions}>
                       <button type="button" className={styles.primaryButton} disabled={busyKey !== null || !qualityReady || (reviewNotes[release.release_id] || '').trim().length < 3}
