@@ -43,7 +43,7 @@ public class AdminInstitutionOperationsController {
       @RequestAttribute(value="authContext",required=false) AuthContext supplied,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
-    AuthContext actor=requireEducationStaff(supplied,tenant,"CONTENT_VIEW");
+    AuthContext actor=requireEducationStaff(supplied,tenant,"INSTITUTION_REPORTS_VIEW");
     Map<String,Object> row=jdbc.queryForMap("""
         select
           (select count(*) from institution_membership m
@@ -190,7 +190,7 @@ public class AdminInstitutionOperationsController {
       @RequestAttribute(value="authContext",required=false) AuthContext supplied,
       @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
           InstitutionTenantContext tenant) {
-    AuthContext actor=requireEducationStaff(supplied,tenant,"CONTENT_PUBLISH");
+    AuthContext actor=requireEducationStaff(supplied,tenant,"INSTITUTION_RELEASE_MANAGE");
     Map<String,Object> result=releaseWorkflow.submitRelease(programId,tenant.institutionId(),actor.staffId(),null);
     staffAudit.recordAction(actor,"/api/v1/admin/institution-operations/courses/"+programId+"/release-requests",
         "Submitted institution source releaseId="+result.get("releaseId")+" for HRMS quality review.");
