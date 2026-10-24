@@ -407,36 +407,48 @@ def ensure_schema(cursor: Any) -> None:
                to_regclass('public.institution_course_identity'),
                to_regclass('public.course_assessment_pack'),
                to_regclass('public.course_assessment_pack_item'),
+               to_regprocedure('public.assign_assessment_public_id()'),
                to_regprocedure('public.course_content_fingerprint(bigint)'),
                to_regprocedure('public.assessment_only_course_ready(bigint)'),
+               pg_get_functiondef(to_regprocedure('public.assign_assessment_public_id()')),
                pg_get_functiondef(to_regprocedure('public.course_content_fingerprint(bigint)')),
                pg_get_functiondef(to_regprocedure('public.assessment_only_course_ready(bigint)'))
     """)
     row = cursor.fetchone()
     if not row or any(value is None for value in row):
         raise ImportErrorSafe(
-            "Flyway V168, V177, V180, and V197 are required. Start the API against this database and verify migrations complete before importing."
+            "Required migrations V168, V177, V180, V198, and V199 are missing. "
+            "Start the API against this database and verify Flyway completes before importing."
         )
-    fingerprint_definition = str(row[7] or "")
-    readiness_definition = str(row[8] or "")
+    assessment_id_definition = str(row[8] or "")
+    fingerprint_definition = str(row[9] or "")
+    readiness_definition = str(row[10] or "")
+
+    # V198 is essential: classless ASSESSMENT tests still need their registered course-scoped IDs.
+    if "A subjectless assessment requires an assessment-only or competitive course" not in assessment_id_definition:
+        raise ImportErrorSafe(
+            "Flyway V198 is required so subjectless tests receive course-scoped public IDs only for ASSESSMENT/COMPETITIVE courses."
+        )
+
     cursor.execute("SELECT status FROM public.course_type_registry WHERE code='ASSESSMENT'")
     type_row = cursor.fetchone()
     if not type_row or type_row[0] != "ACTIVE":
         raise ImportErrorSafe("The HRMS ASSESSMENT course type must be ACTIVE before TRE papers can be imported.")
+
     if "assessment-pack-item" not in fingerprint_definition:
         raise ImportErrorSafe(
             "Flyway V196 is required so course release fingerprints include test packs and pack items."
         )
     if "course_assessment_pack_item" not in readiness_definition:
         raise ImportErrorSafe(
-            "Flyway V197 is required: assessment-only release readiness must validate test packs, not school chapters."
+            "Flyway V199 is required: assessment-only release readiness must validate test packs, not school chapters."
         )
     if not re.search(
-        r"'TRE 3\.0'::varchar,\s*'tre4-bpsc-tre-3-0-computer-science'::varchar,\s*150",
+        r"'TRE 3\\.0'::varchar,\\s*'tre4-bpsc-tre-3-0-computer-science'::varchar,\\s*150",
         readiness_definition,
     ):
         raise ImportErrorSafe(
-            "Flyway V197 is required: the TRE 3.0 readiness contract must expect all 150 source questions."
+            "Flyway V199 is required: the TRE 3.0 readiness contract must expect all 150 source questions."
         )
 
 
