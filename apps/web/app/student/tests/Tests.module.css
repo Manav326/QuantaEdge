@@ -1052,3 +1052,69 @@ html[data-qe-appearance] .resultScorePrimary {
 html[data-qe-appearance] .resultScorePrimary > strong {
   color: var(--qe-color-primary-text);
 }
+
+
+/* Student-facing assessment diagnostics and incorrect-question practice. */
+.topicAnalyticsSection,
+.incorrectPracticeSection {
+  margin: 1.25rem 0;
+  padding: clamp(1rem, 2.5vw, 1.5rem);
+  border: 1px solid var(--qe-color-border-subtle);
+  border-radius: var(--qe-radius-lg, 1rem);
+  background: var(--qe-color-surface);
+  color: var(--qe-color-text);
+  min-width: 0;
+}
+.topicAnalyticsTableWrap {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--qe-color-border-subtle);
+  border-radius: .75rem;
+}
+.topicAnalyticsTable {
+  width: 100%;
+  min-width: 680px;
+  border-collapse: collapse;
+  font-size: .9rem;
+}
+.topicAnalyticsTable th,
+.topicAnalyticsTable td {
+  padding: .75rem .85rem;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--qe-color-border-subtle);
+  white-space: nowrap;
+}
+.topicAnalyticsTable thead th {
+  background: var(--qe-color-surface-elevated);
+  color: var(--qe-color-text-muted);
+  font-size: .78rem;
+  font-weight: 700;
+}
+.topicAnalyticsTable tbody tr:last-child th,
+.topicAnalyticsTable tbody tr:last-child td { border-bottom: 0; }
+.topicAnalyticsTable tbody th { min-width: 12rem; white-space: normal; }
+.topicMetricCorrect { color: var(--qe-color-success); font-weight: 750; }
+.topicMetricIncorrect { color: var(--qe-color-error); font-weight: 750; }
+.topicAnalyticsEmpty { margin: .75rem 0 0; color: var(--qe-color-text-muted); line-height: 1.55; }
+.microTopicDetails { margin-top: .9rem; padding: .75rem 0 0; border-top: 1px solid var(--qe-color-border-subtle); }
+.microTopicDetails summary { cursor: pointer; font-weight: 700; padding: .45rem 0 .75rem; }
+.practiceSummaryRow { display: flex; align-items: center; flex-wrap: wrap; gap: .8rem 1rem; padding: .85rem 0; }
+.practiceSummaryRow > span { display: inline-flex; gap: .3rem; align-items: baseline; color: var(--qe-color-text-muted); }
+.practiceSummaryRow > span strong { color: var(--qe-color-text); font-size: 1.2rem; }
+.practiceQuestionList { display: grid; gap: 1rem; margin-top: .5rem; }
+.practiceSafetyNote { padding: .75rem .9rem; border-radius: .65rem; background: var(--qe-color-primary-container); color: var(--qe-color-on-primary-container); line-height: 1.5; }
+.practiceQuestionCard { min-width: 0; padding: clamp(.8rem, 2vw, 1.2rem); border: 1px solid var(--qe-color-border-subtle); border-radius: .85rem; background: var(--qe-color-surface-elevated); }
+.practiceQuestionHeader { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: .7rem; margin-bottom: .9rem; }
+.practiceQuestionHeader > div:first-child > span { display: block; margin-bottom: .25rem; color: var(--qe-color-text-muted); font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .035em; }
+.practiceQuestionHeader h4 { margin: 0; font-size: 1rem; overflow-wrap: anywhere; }
+.practiceProgressLabels { display: flex; align-items: center; flex-wrap: wrap; gap: .4rem; color: var(--qe-color-text-muted); font-size: .8rem; }
+.practiceMastered { padding: .3rem .55rem; border-radius: 999px; color: var(--qe-color-on-success-container); background: var(--qe-color-success-container); font-weight: 700; }
+.practiceManualNote { margin: .7rem 0 0; color: var(--qe-color-text-muted); line-height: 1.5; }
+.practiceQuestionActions { display: flex; justify-content: flex-end; margin-top: .9rem; }
+@media (max-width: 640px) {
+  .topicAnalyticsSection, .incorrectPracticeSection { padding: .9rem; border-radius: .8rem; }
+  .practiceQuestionHeader { display: grid; }
+  .practiceSummaryRow { align-items: flex-start; flex-direction: column; }
+  .practiceSummaryRow button { width: 100%; }
+}

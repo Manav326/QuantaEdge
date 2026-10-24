@@ -2324,6 +2324,148 @@ public class AssessmentController {
     return attemptDetails(attemptId, context, false,requireInstitution(tenant));
   }
 
+
+  /**
+   * Student retry history for the incorrect answers in one released attempt.
+   * Only the owner of a released result can inspect or practice these questions.
+   * This data is intentionally separate from the immutable official attempt and score.
+   */
+  @GetMapping("/learning/assessment-attempts/{attemptId}/incorrect-practice")
+  public Map<String,Object> studentIncorrectPracticeProgress(
+      @PathVariable long attemptId,
+      @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    context=authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
+    requireAttemptInCourse(attemptId,courseId,tenant);
+    List<Map<String,Object>> owned=jdbc.queryForList("""
+      select att.status,att.student_id
+      from student_assessment_attempt att join assessment a on a.id=att.assessment_id
+      where att.id=? and a.course_id=? and att.institution_id=?
+      """,attemptId,courseId,institutionId);
+    if(owned.isEmpty()||((Number)owned.getFirst().get("student_id")).longValue()!=context.studentId()) {
+      throw notFound("Assessment attempt",attemptId);
+    }
+    if(!"RELEASED".equals(String.valueOf(owned.getFirst().get("status")))) {
+      throw conflict("Incorrect-question practice unlocks after the official result is released.");
+    }
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select aq.id as attempt_question_id,aq.sequence_no,aq.question_snapshot::text as question_snapshot,
+        ans.response_payload::text as source_response,
+        coalesce(practice.practice_count,0) as practice_count,practice.last_correct,
+        coalesce(practice.ever_correct,false) as ever_correct,practice.last_practiced_at
+      from student_assessment_attempt att
+      join assessment a on a.id=att.assessment_id
+      join student_assessment_attempt_question aq on aq.attempt_id=att.id
+      join student_assessment_answer ans on ans.attempt_question_id=aq.id
+      left join lateral (
+        select count(*) as practice_count,
+          (array_agg(p.is_correct order by p.practiced_at desc,p.id desc))[1] as last_correct,
+          bool_or(p.is_correct) as ever_correct,max(p.practiced_at) as last_practiced_at
+        from student_assessment_question_practice_attempt p
+        where p.source_attempt_id=att.id and p.source_attempt_question_id=aq.id
+          and p.institution_id=att.institution_id and p.student_id=att.student_id and p.course_id=a.course_id
+      ) practice on true
+      where att.id=? and att.institution_id=? and att.student_id=? and a.course_id=?
+        and att.status='RELEASED' and ans.is_correct=false
+      order by aq.sequence_no
+      """,attemptId,institutionId,context.studentId(),courseId);
+    List<Map<String,Object>> items=new ArrayList<>();
+    int practiceableCount=0;
+    for(Map<String,Object> row:rows) {
+      Map<String,Object> snapshot=parseObject(String.valueOf(row.get("question_snapshot")));
+      Object rawPayload=snapshot.get("answer_payload");
+      String answerPayload=rawPayload instanceof String serialized?serialized:json(rawPayload==null?Map.of():rawPayload);
+      QuestionAnswerService.Evaluation evaluation=answerService.evaluate(answerPayload,
+          parseValue(String.valueOf(row.get("source_response"))));
+      boolean practiceable=evaluation.autoGraded()&&evaluation.correct()!=null;
+      if(practiceable) practiceableCount++;
+      Map<String,Object> item=new LinkedHashMap<>();
+      item.put("attempt_question_id",row.get("attempt_question_id"));
+      item.put("practiceable",practiceable);
+      item.put("practice_count",row.get("practice_count"));
+      item.put("last_correct",row.get("last_correct"));
+      item.put("ever_correct",row.get("ever_correct"));
+      item.put("last_practiced_at",row.get("last_practiced_at"));
+      items.add(item);
+    }
+    return Map.of("attempt_id",attemptId,"items",items,"total_incorrect_count",items.size(),
+        "practiceable_count",practiceableCount);
+  }
+
+  /** Retries use the same evaluator but never alter official answers, marks, or negative marking. */
+  @PostMapping("/learning/assessment-attempts/{attemptId}/incorrect-practice")
+  @Transactional
+  public Map<String,Object> submitIncorrectPracticeAnswer(
+      @PathVariable long attemptId,
+      @RequestParam Long courseId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    context=authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
+    requireAttemptInCourse(attemptId,courseId,tenant);
+    long questionId;
+    try { questionId=Long.parseLong(String.valueOf(body==null?null:body.get("attemptQuestionId"))); }
+    catch(RuntimeException ex) { throw badRequest("Select an incorrect question to practice."); }
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select att.status,att.student_id,att.institution_id,a.course_id,aq.question_snapshot::text as question_snapshot,
+        ans.is_correct
+      from student_assessment_attempt att
+      join assessment a on a.id=att.assessment_id
+      join student_assessment_attempt_question aq on aq.attempt_id=att.id
+      join student_assessment_answer ans on ans.attempt_question_id=aq.id
+      where att.id=? and att.institution_id=? and a.course_id=? and aq.id=?
+      for update of att
+      """,attemptId,institutionId,courseId,questionId);
+    if(rows.isEmpty()||((Number)rows.getFirst().get("student_id")).longValue()!=context.studentId()) {
+      throw notFound("Incorrect question",questionId);
+    }
+    Map<String,Object> row=rows.getFirst();
+    if(!"RELEASED".equals(String.valueOf(row.get("status")))) {
+      throw conflict("Incorrect-question practice unlocks after the official result is released.");
+    }
+    if(!Boolean.FALSE.equals(row.get("is_correct"))) {
+      throw conflict("Only a question originally marked incorrect can be added to this practice set.");
+    }
+    Object submitted=body.get("answer");
+    if(isEmptyAnswer(submitted)) throw badRequest("Enter an answer before checking it.");
+    Map<String,Object> snapshot=parseObject(String.valueOf(row.get("question_snapshot")));
+    Object rawPayload=snapshot.get("answer_payload");
+    String answerPayload=rawPayload instanceof String serialized?serialized:json(rawPayload==null?Map.of():rawPayload);
+    QuestionAnswerService.Evaluation evaluation=answerService.evaluate(answerPayload,submitted);
+    if(!evaluation.autoGraded()||evaluation.correct()==null) {
+      throw conflict("This question cannot be checked automatically. Review its released feedback instead.");
+    }
+    Integer nextNumber=jdbc.queryForObject("""
+      select coalesce(max(practice_number),0)+1
+      from student_assessment_question_practice_attempt
+      where source_attempt_id=? and source_attempt_question_id=? and institution_id=? and student_id=? and course_id=?
+      """,Integer.class,attemptId,questionId,institutionId,context.studentId(),courseId);
+    int practiceNumber=nextNumber==null?1:nextNumber;
+    jdbc.update("""
+      insert into student_assessment_question_practice_attempt(
+        source_attempt_id,source_attempt_question_id,institution_id,student_id,course_id,
+        practice_number,response_payload,is_correct,practiced_at
+      ) values(?,?,?,?,?,?,?::jsonb,?,now())
+      """,attemptId,questionId,institutionId,context.studentId(),courseId,practiceNumber,json(submitted),evaluation.correct());
+    Map<String,Object> progress=jdbc.queryForMap("""
+      select count(*) as practice_count,
+        (array_agg(is_correct order by practiced_at desc,id desc))[1] as last_correct,
+        bool_or(is_correct) as ever_correct,max(practiced_at) as last_practiced_at
+      from student_assessment_question_practice_attempt
+      where source_attempt_id=? and source_attempt_question_id=? and institution_id=? and student_id=? and course_id=?
+      """,attemptId,questionId,institutionId,context.studentId(),courseId);
+    Map<String,Object> response=new LinkedHashMap<>();
+    response.put("attempt_question_id",questionId);
+    response.put("practiceable",true);
+    response.putAll(progress);
+    return response;
+  }
+
   @PutMapping("/learning/assessment-attempts/{attemptId}/answers/{attemptQuestionId}")
   @Transactional
   public Map<String, Object> saveAnswer(

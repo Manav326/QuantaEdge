@@ -175,6 +175,53 @@ class AssessmentLifecycleIntegrationTest {
     assertTrue(selections.stream().anyMatch(row -> "B".equals(String.valueOf(row.get("selected_value")))));
   }
 
+
+  @Test
+  @SuppressWarnings("unchecked")
+  void releasedIncorrectQuestionsCanBeRetriedWithoutChangingTheOfficialScore() {
+    Fixture fixture=fixture("COMPLETED");
+    Map<String,Object> started=controller.startOrResumeAttempt(
+        fixture.assessmentId(),fixture.courseId(),"hi",false,fixture.student(),fixture.tenant());
+    long attemptId=((Number)started.get("attempt_id")).longValue();
+    List<Map<String,Object>> startedQuestions=(List<Map<String,Object>>)started.get("questions");
+    long questionId=((Number)startedQuestions.getFirst().get("attemptQuestionId")).longValue();
+
+    controller.saveAnswer(attemptId,questionId,fixture.courseId(),Map.of("answer","A"),
+        fixture.student(),fixture.tenant());
+    Map<String,Object> released=controller.submitAttempt(attemptId,fixture.courseId(),Map.of(),
+        fixture.student(),fixture.tenant());
+    assertEquals("RELEASED",released.get("status"));
+    assertEquals(false,((List<Map<String,Object>>)released.get("questions")).getFirst().get("isCorrect"));
+    assertEquals("Algorithms",((List<Map<String,Object>>)released.get("questions")).getFirst().get("topic"));
+    assertEquals(List.of("Sorting"),((List<Map<String,Object>>)released.get("questions")).getFirst().get("subtopic_tags"));
+    Object officialScore=released.get("final_score");
+
+    Map<String,Object> progress=controller.studentIncorrectPracticeProgress(
+        attemptId,fixture.courseId(),fixture.student(),fixture.tenant());
+    List<Map<String,Object>> incorrect=(List<Map<String,Object>>)progress.get("items");
+    assertEquals(1,incorrect.size());
+    assertEquals(true,incorrect.getFirst().get("practiceable"));
+    assertEquals(0L,((Number)incorrect.getFirst().get("practice_count")).longValue());
+
+    Map<String,Object> retry=controller.submitIncorrectPracticeAnswer(attemptId,fixture.courseId(),
+        Map.of("attemptQuestionId",questionId,"answer","B"),fixture.student(),fixture.tenant());
+    assertEquals(true,retry.get("last_correct"));
+    assertEquals(1L,((Number)retry.get("practice_count")).longValue());
+    assertEquals(true,retry.get("ever_correct"));
+
+    Map<String,Object> refreshed=controller.studentIncorrectPracticeProgress(
+        attemptId,fixture.courseId(),fixture.student(),fixture.tenant());
+    List<Map<String,Object>> updated=(List<Map<String,Object>>)refreshed.get("items");
+    assertEquals(true,updated.getFirst().get("last_correct"));
+    assertEquals(true,updated.getFirst().get("ever_correct"));
+    assertEquals(1L,((Number)updated.getFirst().get("practice_count")).longValue());
+
+    Map<String,Object> officialAfterPractice=controller.studentAttempt(
+        attemptId,fixture.courseId(),fixture.student(),fixture.tenant());
+    assertEquals(officialScore,officialAfterPractice.get("final_score"),
+        "Practice answers must never change the released score or negative-marking result.");
+  }
+
   @Test
   void offlineAttemptCannotStartUnlessEditorExplicitlyEnabledIt() {
     Fixture fixture=fixture("COMPLETED");
@@ -307,6 +354,9 @@ class AssessmentLifecycleIntegrationTest {
       {
         "id": 1,
         "question_type": "MCQ",
+        "topic": "Algorithms",
+        "topic_tags": ["Algorithms"],
+        "subtopic_tags": ["Sorting"],
         "prompt": "Which option is correct?",
         "explanation": "Option B is correct.",
         "answer_payload": "{\\"kind\\":\\"OPTION\\",\\"value\\":\\"B\\"}",
