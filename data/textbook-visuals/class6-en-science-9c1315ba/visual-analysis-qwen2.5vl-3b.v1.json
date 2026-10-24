@@ -15,7 +15,7 @@
       "73d7871359ba2e1d3fe3cfeb",
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
-      "98aeae849beaac2dcbccd6da"
+      "2104ecb647e20f98cb93ca2e"
     ],
     "assets_eligible": 2078,
     "assets_analyzed": 1360,
@@ -451,7 +451,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40080944293",
-      "checkpointed_at": "2026-10-24T10:17:56Z"
+      "checkpointed_at": "2026-10-24T10:29:14Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20129,7 +20129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40080944293",
-      "checkpointed_at": "2026-10-24T10:19:18Z"
+      "checkpointed_at": "2026-10-24T10:30:36Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23788,7 +23788,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40080944293",
-      "checkpointed_at": "2026-10-24T10:20:26Z"
+      "checkpointed_at": "2026-10-24T10:31:44Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37989,7 +37989,7 @@
         "concepts": [
           "Measurement of Length and Motion",
           "Handspans",
-          "Units of Measurement"
+          "Length of the table"
         ],
         "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
@@ -38000,7 +38000,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40080944293",
-      "checkpointed_at": "2026-10-24T10:24:49Z"
+      "checkpointed_at": "2026-10-24T10:32:42Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -38700,7 +38700,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40062005691",
+      "run_id": "40080944293",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
