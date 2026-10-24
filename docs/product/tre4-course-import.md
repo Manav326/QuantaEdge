@@ -11,6 +11,16 @@
 
 The legacy curriculum schema requires every course product to reference a curriculum class. The importer uses an internal `TRE4` compatibility scope labelled **Competitive Exam Preparation**; it is not a school grade. The public course hierarchy remains Institution → Course → Subject.
 
+## Admin Web course setup
+
+Education Admin now has **Content Studio → Assessment course**. Create the sourced `TRE4` course with the registered `ASSESSMENT` type; the API creates the source-owned course identity, assessment-only delivery mode, Computer Science track, draft `Prev years` chapter, initial release and origin assignment in one transaction. The TRE4 class is only a legacy-schema compatibility scope labelled **Competitive Exam Preparation**, never a school grade.
+
+The HRMS quality queue now has an in-HRMS, read-only preview for the exact submitted assessment release, including frozen question snapshots, source metadata, answer-review status, section/topic/difficulty tags and scoring rules. The preview compares the current fingerprint with the submitted fingerprint; the server requires that fingerprint confirmation before HRMS can approve assessment quality. It does not redirect the reviewer to institution Admin Web.
+
+The Admin screen also supports validating and importing a portable assessment package as a draft. Course, subject and chapter bindings come from the authenticated institution workspace, not from package JSON. Use one package per paper. Imports are idempotent by package ID/version/content hash and never approve answer keys or publish tests.
+
+For the existing complete TRE archive, the repository importer remains the batch path and can reuse the course created in Admin. It now binds the course to the institution-owned identity and sets `course_type_code='ASSESSMENT'`; it refuses to rewrite an unlinked course with non-draft/reviewed history.
+
 ## Inspect and import
 
 Install the importer dependencies:

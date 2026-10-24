@@ -24,6 +24,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.json.JSONObject
 
+internal fun isAssessmentOnlyCourse(course: JSONObject): Boolean =
+    course.optString("course_type_code") == "ASSESSMENT" ||
+        course.optString("delivery_mode") == "ASSESSMENT_ONLY"
+
 @Composable
 fun StudentAllCoursesScreen(
     programs: List<JSONObject>,
@@ -35,6 +39,7 @@ fun StudentAllCoursesScreen(
     busy: Boolean,
     onActivateCourse: (Long) -> Unit,
     onOpenSubject: (String, Long) -> Unit,
+    onOpenAssessments: (Long) -> Unit,
     onMarketplace: () -> Unit,
     onRefresh: () -> Unit
 ) {
@@ -90,6 +95,7 @@ fun StudentAllCoursesScreen(
             owned.forEach { course ->
                 val id = course.optLong("id", course.optLong("course_id"))
                 val active = id == activeCourseId
+                val assessmentCourse = isAssessmentOnlyCourse(course)
                 val subjects = course.optJSONArray("subjects")?.let { array ->
                     (0 until array.length()).mapNotNull { index -> array.optJSONObject(index) }
                 }.orEmpty()
@@ -125,7 +131,14 @@ fun StudentAllCoursesScreen(
                                 )
                             }
                         }
-                        if (total > 0) {
+                        if (assessmentCourse) {
+                            Text(
+                                if (hi) "इस course में test packs, attempts और results उपलब्ध हैं।"
+                                else "Test packs, attempts and results are available in this course.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        } else if (total > 0) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(if (hi) "$done / $total lessons पूरे" else "$done of $total lessons completed",
                                     modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodySmall,
@@ -143,7 +156,23 @@ fun StudentAllCoursesScreen(
                                 Text(if (hi) "इस course पर पढ़ें" else "Focus on this course")
                             }
                         }
-                        if (subjects.isNotEmpty()) {
+                        if (assessmentCourse) {
+                            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                            Text(if (hi) "परीक्षा सामग्री" else "Assessment content", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+                            Row(
+                                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).clickable(enabled = !busy && id > 0L) {
+                                    onOpenAssessments(id)
+                                }.padding(vertical = 7.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                                    Text(if (hi) "Tests खोलें" else "Open tests", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+                                    Text(if (hi) "Test catalogue, attempts और results" else "Test catalogue, attempts and results",
+                                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                }
+                                Text("→", color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.titleMedium)
+                            }
+                        } else if (subjects.isNotEmpty()) {
                             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                             Text(if (hi) "विषय" else "Subjects", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
                             subjects.forEach { subject ->
@@ -162,7 +191,7 @@ fun StudentAllCoursesScreen(
                                     Text("→", color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.titleMedium)
                                 }
                             }
-                        } else {
+                        } else if (!assessmentCourse) {
                             Text(if (hi) "विषयों की सूची उपलब्ध नहीं है।" else "Subjects are not available for this course yet.",
                                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }

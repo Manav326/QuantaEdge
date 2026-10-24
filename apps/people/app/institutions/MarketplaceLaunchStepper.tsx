@@ -56,6 +56,142 @@ type QualityReviewItem = {
   subjects_with_published_lessons: number;
   published_chapters: number;
   published_lessons: number;
+  course_type_code: string;
+  delivery_mode: string;
+  assessment_only_ready: boolean;
+  assessment_count: number;
+  assessment_question_count: number;
+};
+type ReviewQuestion = { sequence_no: number; max_marks: number; question_snapshot: Record<string, any> };
+type ReviewAssessment = {
+  assessment_id: number;
+  title: string;
+  description?: string | null;
+  assessment_type?: string | null;
+  portable_assessment_type?: string | null;
+  source_exam_cycle?: string | null;
+  source_package_id?: string | null;
+  source_package_version?: string | null;
+  source_url?: string | null;
+  status: string;
+  duration_minutes: number;
+  max_attempts: number;
+  negative_marking_fraction: number;
+  question_count: number;
+  max_score: number;
+  questionCount?: number;
+  questions: ReviewQuestion[];
+};
+type LessonReviewQuestion = {
+  id: number;
+  question_type: string;
+  prompt: string;
+  explanation?: string | null;
+  difficulty: string;
+  active: boolean;
+  options: Array<{ option_key: string; label: string; is_correct: boolean; sort_order: number }>;
+  translations: Array<Record<string, any>>;
+};
+type LessonReviewBlock = {
+  id: number;
+  sequence_no: number;
+  block_type: string;
+  content: unknown;
+  asset_id?: number | null;
+  asset_url?: string | null;
+  asset_title?: string | null;
+  asset_alt?: string | null;
+  asset_type?: string | null;
+  asset_status?: string | null;
+  translations: Array<Record<string, any>>;
+};
+type LessonReviewLesson = {
+  id: number;
+  code: string;
+  title: string;
+  summary?: string | null;
+  estimated_minutes: number;
+  status: string;
+  sort_order: number;
+  active: boolean;
+  objective_code?: string | null;
+  objective_title?: string | null;
+  objective_description?: string | null;
+  objectiveTranslations: Array<Record<string, any>>;
+  translations: Array<Record<string, any>>;
+  blocks: LessonReviewBlock[];
+  questions: LessonReviewQuestion[];
+};
+type LessonReviewResource = {
+  assignment_id: number;
+  target_kind: string;
+  assignment_status: string;
+  resource_id: number;
+  resource_type: string;
+  title: string;
+  description?: string | null;
+  language: string;
+  source_kind: string;
+  external_url?: string | null;
+  source_reference?: string | null;
+  resource_status: string;
+  version_no: number;
+  content_asset_id?: number | null;
+  sha256?: string | null;
+  media_type?: string | null;
+  file_size_bytes?: number | null;
+  duration_seconds?: number | null;
+};
+type ReleaseReviewChapter = {
+  id: number;
+  code: string;
+  display_name: string;
+  description?: string | null;
+  content_status: string;
+  curriculum_source?: string | null;
+  curriculum_source_url?: string | null;
+  curriculum_source_edition?: string | null;
+  curriculum_source_pages?: string | null;
+  curriculum_source_verified: boolean;
+  translations: Array<Record<string, any>>;
+  lesson_count: number;
+  lesson_block_count: number;
+  lesson_question_count: number;
+  resource_count: number;
+  lessons?: LessonReviewLesson[];
+  resources?: LessonReviewResource[];
+};
+type ReleaseReviewSubject = {
+  id: number;
+  code: string;
+  display_name: string;
+  translations: Array<Record<string, any>>;
+  chapters: ReleaseReviewChapter[];
+};
+type ReleaseReviewContent = {
+  release_id: number;
+  course_id: number;
+  release_version: number;
+  release_state: string;
+  course_code: string;
+  course_name: string;
+  course_type_code: string;
+  delivery_mode: string;
+  contentCurrent: boolean;
+  content_fingerprint: string;
+  currentFingerprint: string;
+  assessmentOnlyReady: boolean;
+  courseTranslations: Array<Record<string, any>>;
+  assessmentCount: number;
+  questionCount: number;
+  lessonCount: number;
+  lessonBlockCount: number;
+  lessonQuestionCount: number;
+  courseResourceCount: number;
+  subjects: ReleaseReviewSubject[];
+  assessments: ReviewAssessment[];
+  readOnly: boolean;
+  publicationAllowed: boolean;
 };
 type PackageRightsReview = {
   import_id: number;
@@ -126,6 +262,33 @@ function initialDraft(item: LaunchItem): Draft {
   };
 }
 
+function readableLessonBlock(content: unknown): Array<{label:string;text:string}> {
+  if (content === null || content === undefined) return [];
+  if (typeof content === 'string' || typeof content === 'number' || typeof content === 'boolean') {
+    return [{label:'Content',text:String(content)}];
+  }
+  if (Array.isArray(content)) {
+    return content.map((value,index)=>({
+      label:'Item '+(index+1),
+      text:typeof value==='string'?value:JSON.stringify(value,null,2)
+    }));
+  }
+  if (typeof content !== 'object') return [{label:'Content',text:String(content)}];
+  const source=content as Record<string,unknown>;
+  const preferred=['title','heading','body','text','prompt','explanation','hint','caption','formula','steps','items','content'];
+  const fields:Array<{label:string;text:string}>=[];
+  for(const key of preferred) {
+    const value=source[key];
+    if(value===null||value===undefined||value==='') continue;
+    fields.push({
+      label:key.replace(/_/g,' ').replace(/\b\w/g,letter=>letter.toUpperCase()),
+      text:typeof value==='string'||typeof value==='number'||typeof value==='boolean'
+        ?String(value):JSON.stringify(value,null,2)
+    });
+  }
+  return fields.length?fields:[{label:'Structured content',text:JSON.stringify(content,null,2)}];
+}
+
 export default function MarketplaceLaunchStepper({
   institutionId,
   institutionName,
@@ -136,6 +299,12 @@ export default function MarketplaceLaunchStepper({
   const [data, setData] = useState<LaunchResponse | null>(null);
   const [drafts, setDrafts] = useState<Record<number, Draft>>({});
   const [reviewNotes, setReviewNotes] = useState<Record<number, string>>({});
+  const [reviewContent, setReviewContent] = useState<Record<number, ReleaseReviewContent>>({});
+  const [reviewContentLoadingId, setReviewContentLoadingId] = useState<number | null>(null);
+  const [reviewContentErrors, setReviewContentErrors] = useState<Record<number, string>>({});
+  const [reviewChapters, setReviewChapters] = useState<Record<number, ReleaseReviewChapter>>({});
+  const [expandedReviewChapters, setExpandedReviewChapters] = useState<Record<number, number | null>>({});
+  const [reviewChapterLoadingId, setReviewChapterLoadingId] = useState<number | null>(null);
   const [packageRightsDrafts, setPackageRightsDrafts] = useState<Record<number, PackageRightsDraft>>({});
   const [loading, setLoading] = useState(true);
   const [busyKey, setBusyKey] = useState<string | null>(null);
@@ -240,16 +409,109 @@ export default function MarketplaceLaunchStepper({
     }));
   };
 
+  const toggleReviewContent = async (release: QualityReviewItem) => {
+    const releaseId = release.release_id;
+    if (reviewContent[releaseId]) {
+      setReviewContent(previous => {
+        const next = { ...previous };
+        delete next[releaseId];
+        return next;
+      });
+      return;
+    }
+    setReviewContentLoadingId(releaseId);
+    setReviewContentErrors(previous => ({ ...previous, [releaseId]: '' }));
+    try {
+      const content = await api<ReleaseReviewContent>(
+        '/api/v1/hrms/platform/institutions/' + institutionId + '/course-releases/' + releaseId + '/review-content'
+      );
+      setReviewContent(previous => ({ ...previous, [releaseId]: content }));
+    } catch (e) {
+      setReviewContentErrors(previous => ({
+        ...previous,
+        [releaseId]: e instanceof Error ? e.message : 'The exact submitted release content could not be loaded.'
+      }));
+    } finally {
+      setReviewContentLoadingId(null);
+    }
+  };
+
+  const toggleReviewChapter = async (release: QualityReviewItem, chapterId: number) => {
+    if (expandedReviewChapters[release.release_id] === chapterId) {
+      setExpandedReviewChapters(previous => ({ ...previous, [release.release_id]: null }));
+      return;
+    }
+    const cached = reviewChapters[chapterId];
+    if (cached) {
+      setExpandedReviewChapters(previous => ({ ...previous, [release.release_id]: chapterId }));
+      return;
+    }
+    setReviewChapterLoadingId(chapterId);
+    setReviewContentErrors(previous => ({ ...previous, [release.release_id]: '' }));
+    try {
+      const detail = await api<ReleaseReviewContent>(
+        '/api/v1/hrms/platform/institutions/' + institutionId + '/course-releases/'
+          + release.release_id + '/review-content?chapterId=' + encodeURIComponent(String(chapterId))
+      );
+      const chapter = detail.subjects.flatMap(subject => subject.chapters || [])
+        .find(item => item.id === chapterId);
+      if (!chapter || !Array.isArray(chapter.lessons)) {
+        throw new Error('The selected chapter content is not part of this submitted release.');
+      }
+      setReviewChapters(previous => ({ ...previous, [chapterId]: chapter }));
+      setExpandedReviewChapters(previous => ({ ...previous, [release.release_id]: chapterId }));
+      const exactReleaseCurrent = detail.contentCurrent === true
+        && detail.content_fingerprint === release.content_fingerprint;
+      setReviewContent(previous => {
+        const existing=previous[release.release_id];
+        if(!existing) return previous;
+        return {
+          ...previous,
+          [release.release_id]: {
+            ...existing,
+            contentCurrent:exactReleaseCurrent,
+            currentFingerprint:String(detail.currentFingerprint||'')
+          }
+        };
+      });
+      if (!exactReleaseCurrent) {
+        setReviewContentErrors(previous => ({
+          ...previous,
+          [release.release_id]: 'The source graph no longer matches the submitted fingerprint. This content is shown for diagnosis only; do not approve it.'
+        }));
+      }
+    } catch (e) {
+      setReviewContentErrors(previous => ({
+        ...previous,
+        [release.release_id]: e instanceof Error ? e.message : 'The chapter content could not be loaded.'
+      }));
+    } finally {
+      setReviewChapterLoadingId(null);
+    }
+  };
+
   const reviewQuality = async (release: QualityReviewItem, approved: boolean) => {
     const notes = (reviewNotes[release.release_id] || '').trim();
     if (notes.length < 3 || notes.length > 1000) {
       setError('Add a review note between 3 and 1,000 characters before recording a quality decision.');
       return;
     }
-    if (approved && (!release.contentCurrent || release.active_subject_count < 1
-      || release.subjects_with_published_lessons !== release.active_subject_count
-      || release.published_chapters < 1 || release.published_lessons < 1)) {
-      setError('This release is not ready for quality approval. Refresh the checklist and ensure every active subject has published lessons.');
+    const assessmentOnly = release.delivery_mode === 'ASSESSMENT_ONLY' || release.course_type_code === 'ASSESSMENT';
+    const preview = reviewContent[release.release_id];
+    if (approved && (!preview || !preview.contentCurrent
+      || preview.content_fingerprint !== release.content_fingerprint)) {
+      setError('Open and inspect the exact submitted release content before approving its quality.');
+      return;
+    }
+    const releaseReady = assessmentOnly
+      ? release.assessment_only_ready === true
+      : release.active_subject_count > 0
+        && release.subjects_with_published_lessons === release.active_subject_count
+        && release.published_chapters > 0 && release.published_lessons > 0;
+    if (approved && (!release.contentCurrent || !releaseReady)) {
+      setError(assessmentOnly
+        ? 'This assessment-only release is not ready. Confirm the exact TRE source papers and question inventory are complete, then refresh the review.'
+        : 'This release is not ready for quality approval. Refresh the checklist and ensure every active subject has published lessons.');
       return;
     }
     setBusyKey('quality-' + release.release_id);
@@ -258,7 +520,11 @@ export default function MarketplaceLaunchStepper({
     try {
       await api('/api/v1/hrms/platform/institutions/course-releases/' + release.release_id + '/quality-review', {
         method: 'POST',
-        body: JSON.stringify({ approved, notes }),
+        body: JSON.stringify({
+          approved,
+          notes,
+          ...(approved ? { reviewedContentFingerprint: preview?.content_fingerprint } : {}),
+        }),
       });
       setNotice(approved
         ? 'Content quality approved. The source institution must still complete its origin approval before the release can be assigned.'
@@ -598,9 +864,13 @@ export default function MarketplaceLaunchStepper({
           </header>
           <div className={styles.qualityList}>
             {(data.qualityReviewItems || []).map(release => {
-              const qualityReady = release.contentCurrent && release.active_subject_count > 0
-                && release.subjects_with_published_lessons === release.active_subject_count
-                && release.published_chapters > 0 && release.published_lessons > 0;
+              const assessmentOnly = release.delivery_mode === 'ASSESSMENT_ONLY' || release.course_type_code === 'ASSESSMENT';
+              const qualityReady = release.contentCurrent && (assessmentOnly
+                ? release.assessment_only_ready === true
+                : release.active_subject_count > 0
+                  && release.subjects_with_published_lessons === release.active_subject_count
+                  && release.published_chapters > 0 && release.published_lessons > 0);
+              const preview = reviewContent[release.release_id];
               return (
                 <article className={styles.qualityRow} key={release.release_id}>
                   <div className={styles.availableMark} aria-hidden="true">✓</div>
@@ -608,19 +878,260 @@ export default function MarketplaceLaunchStepper({
                     <strong>{release.course_name} <span>v{release.release_version}</span></strong>
                     <small>Source: {release.source_institution_name} · {release.source_institution_code} · Release #{release.release_id}</small>
                     <div className={styles.qualityMetrics}>
-                      <span>{release.active_subject_count} active subjects</span>
-                      <span>{release.subjects_with_published_lessons} with lessons</span>
-                      <span>{release.published_chapters} chapters</span>
-                      <span>{release.published_lessons} lessons</span>
+                      {assessmentOnly ? <>
+                        <span>ASSESSMENT_ONLY</span>
+                        <span>{release.assessment_count} tests</span>
+                        <span>{release.assessment_question_count} questions</span>
+                        <span>{release.assessment_only_ready ? 'TRE inventory complete' : 'TRE inventory incomplete'}</span>
+                      </> : <>
+                        <span>{release.active_subject_count} active subjects</span>
+                        <span>{release.subjects_with_published_lessons} with lessons</span>
+                        <span>{release.published_chapters} chapters</span>
+                        <span>{release.published_lessons} lessons</span>
+                      </>}
                     </div>
+                    {assessmentOnly && <p>Review the exact submitted test papers, question snapshots, source provenance, answer-review state and scoring rules below. This preview is read-only.</p>}
                     {!release.contentCurrent && <p className={styles.availableWarning}>Course content changed after submission. Ask the source institution to submit a fresh release.</p>}
+                    <div className={styles.qualityActions}>
+                      <button type="button" className={styles.secondaryButton}
+                        disabled={reviewContentLoadingId !== null || reviewChapterLoadingId !== null || busyKey !== null}
+                        onClick={() => void toggleReviewContent(release)}>
+                        {reviewContentLoadingId === release.release_id ? 'Loading exact release…' : preview ? 'Hide submitted content' : 'Review submitted content'}
+                      </button>
+                    </div>
+                    {reviewContentErrors[release.release_id] && <p className={styles.availableWarning}>{reviewContentErrors[release.release_id]}</p>}
+                    {preview && (
+                      <div style={{ marginTop: 14, padding: 14, border: '1px solid var(--border, #d7dce2)', borderRadius: 12 }}>
+                        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'space-between', marginBottom: 12 }}>
+                          <strong>Exact release preview · read-only</strong>
+                          <span style={{ fontSize: 12, color: 'var(--muted, #667085)' }}>
+                            {preview.contentCurrent ? 'Fingerprint matches submission' : 'Fingerprint mismatch — do not approve'}
+                          </span>
+                        </div>
+                        <p style={{ overflowWrap: 'anywhere', fontSize: 12 }}>Submitted fingerprint: {preview.content_fingerprint}</p>
+                        {preview.delivery_mode === 'ASSESSMENT_ONLY' ? (
+                          <>
+                            <p>{preview.assessmentCount} assessments · {preview.questionCount} frozen question snapshots · student publication remains disabled during this review</p>
+                            {(preview.assessments || []).map(assessment => (
+                              <details key={assessment.assessment_id} style={{ borderTop: '1px solid var(--border, #d7dce2)', padding: '10px 0' }}>
+                                <summary style={{ cursor: 'pointer', fontWeight: 600 }}>
+                                  {assessment.title} · {assessment.questionCount ?? assessment.question_count} questions · {assessment.status}
+                                </summary>
+                                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', margin: '8px 0' }}>
+                                  <span>{assessment.source_exam_cycle || assessment.portable_assessment_type || assessment.assessment_type}</span>
+                                  <span>{assessment.duration_minutes} min</span>
+                                  <span>{assessment.max_attempts} attempt(s)</span>
+                                  <span>Negative marking: {assessment.negative_marking_fraction}</span>
+                                  <span>Max score: {assessment.max_score}</span>
+                                </div>
+                                {assessment.source_url && <p style={{ overflowWrap: 'anywhere', fontSize: 12 }}>Source: {assessment.source_url}</p>}
+                                {(assessment.questions || []).map(question => {
+                                  const snapshot = question.question_snapshot || {};
+                                  const promptI18n = snapshot.prompt_i18n || {};
+                                  const options = Array.isArray(snapshot.options) ? snapshot.options : [];
+                                  const answer = snapshot.answer_payload || {};
+                                  const tags = Array.isArray(snapshot.topic_tags) ? snapshot.topic_tags : [];
+                                  return (
+                                    <div key={question.sequence_no} style={{ padding: 10, marginTop: 8, border: '1px solid var(--border, #d7dce2)', borderRadius: 8 }}>
+                                      <strong>Q{question.sequence_no} · {snapshot.question_type || 'Question'} · {question.max_marks} mark(s)</strong>
+                                      {snapshot.prompt && <p style={{ whiteSpace: 'pre-wrap' }}>{snapshot.prompt}</p>}
+                                      {promptI18n.en && promptI18n.en !== snapshot.prompt && <p style={{ whiteSpace: 'pre-wrap' }}><strong>EN:</strong> {promptI18n.en}</p>}
+                                      {promptI18n.hi && <p style={{ whiteSpace: 'pre-wrap' }}><strong>HI:</strong> {promptI18n.hi}</p>}
+                                      {options.length > 0 && <ol type="A">{options.map((option: any, optionIndex: number) => (
+                                        <li key={option.key || option.option_key || optionIndex} style={{ marginBottom: 4 }}>
+                                          {option.text || option.label || option.text_i18n?.en || option.text_i18n?.hi || ''}
+                                          {option.text_i18n?.hi && option.text_i18n?.en && <span> / {option.text_i18n.hi}</span>}
+                                        </li>
+                                      ))}</ol>}
+                                      <p style={{ fontSize: 12, color: 'var(--muted, #667085)' }}>
+                                        Section: {snapshot.section_code || '—'} · Topic tags: {tags.join(', ') || 'not tagged'} · Difficulty: {snapshot.difficulty || 'CORE'}
+                                      </p>
+                                      <p style={{ fontSize: 12 }}>
+                                        Answer review: {snapshot.question_review_status || 'PENDING_HUMAN_REVIEW'} · Answer key: {answer.kind || 'UNRESOLVED'} {answer.value === null || answer.value === undefined ? '(unresolved)' : String(answer.value)}
+                                      </p>
+                                      {snapshot.explanation && <p style={{ whiteSpace: 'pre-wrap' }}><strong>Explanation:</strong> {snapshot.explanation}</p>}
+                                    </div>
+                                  );
+                                })}
+                              </details>
+                            ))}
+                          </>
+                        ) : (
+                          <div>
+                            <p>{preview.lessonCount} lessons · {preview.lessonBlockCount} teaching blocks · {preview.lessonQuestionCount} lesson questions · {preview.courseResourceCount} resources. Expand a chapter to load its lesson graph and source assets on demand.</p>
+                            {(preview.courseTranslations || []).length > 0 && (
+                              <div style={{margin:'10px 0',padding:10,border:'1px solid var(--border, #d7dce2)',borderRadius:8}}>
+                                <strong>Course translations</strong>
+                                {preview.courseTranslations.map((translation,ti)=>(
+                                  <p key={String(translation.language)+'-'+String(translation.version_no)+'-'+ti} style={{fontSize:12,margin:'5px 0'}}>
+                                    {String(translation.language).toUpperCase()} · {translation.translation_status} v{translation.version_no}: {translation.display_name}
+                                  </p>
+                                ))}
+                              </div>
+                            )}
+                            {(preview.subjects || []).map(subject => (
+                              <section key={subject.id} style={{ marginBottom: 16, borderTop: '1px solid var(--border, #d7dce2)', paddingTop: 12 }}>
+                                <h4 style={{ margin: '0 0 8px' }}>{subject.display_name} <span style={{ fontSize: 12, fontWeight: 400 }}>({subject.code})</span></h4>
+                                {(subject.translations || []).length > 0 && (
+                                  <div style={{fontSize:12,margin:'4px 0 8px',color:'var(--muted, #667085)'}}>
+                                    {(subject.translations || []).map((translation,ti)=>(
+                                      <p key={String(translation.language)+'-'+String(translation.version_no)+'-'+ti} style={{margin:'3px 0'}}>
+                                        {String(translation.language).toUpperCase()} · {translation.translation_status} v{translation.version_no}: {translation.display_name}
+                                      </p>
+                                    ))}
+                                  </div>
+                                )}
+                                {(subject.chapters || []).map(chapter => {
+                                  const chapterContent = reviewChapters[chapter.id];
+                                  const expanded = expandedReviewChapters[release.release_id] === chapter.id;
+                                  return (
+                                    <div key={chapter.id} style={{ margin: '8px 0', padding: 12, border: '1px solid var(--border, #d7dce2)', borderRadius: 8 }}>
+                                      <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+                                        <div>
+                                          <strong>{chapter.display_name}</strong> <span style={{ fontSize: 12, color: 'var(--muted, #667085)' }}>· {chapter.content_status} · {chapter.lesson_count} lessons · {chapter.lesson_block_count} blocks · {chapter.lesson_question_count} questions · {chapter.resource_count} resources</span>
+                                          {(chapter.translations || []).length > 0 && (
+                                            <p style={{margin:'4px 0',fontSize:12,color:'var(--muted, #667085)'}}>
+                                              {(chapter.translations || []).map((translation,ti)=>(
+                                                <span key={String(translation.language)+'-'+String(translation.version_no)+'-'+ti}>
+                                                  {ti>0?' · ':''}{String(translation.language).toUpperCase()} · {translation.translation_status} v{translation.version_no}: {translation.display_name}
+                                                </span>
+                                              ))}
+                                            </p>
+                                          )}
+                                          <p style={{ margin: '4px 0', fontSize: 12, color: 'var(--muted, #667085)' }}>
+                                            Source: {chapter.curriculum_source || 'not recorded'} · Verified: {chapter.curriculum_source_verified ? 'yes' : 'no'}
+                                            {chapter.curriculum_source_pages ? ' · Pages: ' + chapter.curriculum_source_pages : ''}
+                                          </p>
+                                          {chapter.curriculum_source_url && <a href={chapter.curriculum_source_url} target="_blank" rel="noreferrer" style={{ fontSize: 12, overflowWrap: 'anywhere' }}>Open chapter source reference</a>}
+                                        </div>
+                                        <button type="button" className={styles.secondaryButton}
+                                          disabled={reviewChapterLoadingId !== null || busyKey !== null}
+                                          aria-expanded={expanded}
+                                          onClick={() => void toggleReviewChapter(release, chapter.id)}>
+                                          {reviewChapterLoadingId === chapter.id ? 'Loading chapter…' : expanded ? 'Hide chapter content' : chapterContent ? 'Show chapter content' : 'Review chapter content'}
+                                        </button>
+                                      </div>
+                                      {expanded && chapterContent && (
+                                        <div style={{ marginTop: 12 }}>
+                                          {(chapterContent.lessons || []).length === 0 && <p>No lesson rows are attached to this chapter.</p>}
+                                          {(chapterContent.lessons || []).map(lesson => (
+                                            <details key={lesson.id} style={{ borderTop: '1px solid var(--border, #d7dce2)', padding: '10px 0' }}>
+                                              <summary style={{ cursor: 'pointer', fontWeight: 600 }}>
+                                                {lesson.sort_order}. {lesson.title} · {lesson.status} · {(lesson.blocks || []).length} blocks · {(lesson.questions || []).length} questions
+                                              </summary>
+                                              <div style={{ marginTop: 8 }}>
+                                                <p style={{ whiteSpace: 'pre-wrap' }}>{lesson.summary || 'No lesson summary'}</p>
+                                                <p style={{ fontSize: 12, color: 'var(--muted, #667085)' }}>
+                                                  Code: {lesson.code} · Estimated time: {lesson.estimated_minutes} min · Active: {lesson.active ? 'yes' : 'no'}
+                                                  {lesson.objective_title ? ' · Objective: ' + lesson.objective_title : ''}
+                                                </p>
+                                                {(lesson.objectiveTranslations || []).length > 0 && (
+                                                  <div style={{margin:'8px 0',padding:8,border:'1px solid var(--border, #d7dce2)',borderRadius:6}}>
+                                                    <strong>Learning objective translations</strong>
+                                                    {(lesson.objectiveTranslations || []).map((translation,ti)=>(
+                                                      <p key={String(translation.language)+'-'+String(translation.version_no)+'-'+ti} style={{margin:'5px 0',fontSize:12,whiteSpace:'pre-wrap'}}>
+                                                        {String(translation.language).toUpperCase()} · {translation.translation_status} v{translation.version_no}: {translation.title || ''}{translation.description ? ' — '+translation.description : ''}
+                                                      </p>
+                                                    ))}
+                                                  </div>
+                                                )}
+                                                {(lesson.translations || []).length > 0 && (
+                                                  <div style={{ margin: '8px 0', padding: 8, background: 'var(--surface-muted, #f7f8fa)', borderRadius: 6 }}>
+                                                    <strong>Lesson translations</strong>
+                                                    {lesson.translations.map((translation, ti) => (
+                                                      <p key={String(translation.language) + '-' + String(translation.version_no) + '-' + ti} style={{ margin: '6px 0', fontSize: 12, whiteSpace: 'pre-wrap' }}>
+                                                        {String(translation.language).toUpperCase()} · {translation.translation_status} v{translation.version_no}: {translation.title || ''}{translation.summary ? ' — ' + translation.summary : ''}
+                                                      </p>
+                                                    ))}
+                                                  </div>
+                                                )}
+                                                <h5 style={{ margin: '12px 0 6px' }}>Teaching blocks</h5>
+                                                {(lesson.blocks || []).map(block => (
+                                                  <details key={block.id} style={{ margin: '6px 0', padding: 8, border: '1px solid var(--border, #d7dce2)', borderRadius: 6 }}>
+                                                    <summary style={{ cursor: 'pointer' }}>Block {block.sequence_no} · {block.block_type}{block.asset_title ? ' · ' + block.asset_title : ''}</summary>
+                                                    <div style={{padding:'8px 10px',borderRadius:6,background:'var(--surface-muted, #f7f8fa)'}}>
+                                                      {readableLessonBlock(block.content).map((field,fieldIndex)=>(
+                                                        <div key={field.label+'-'+fieldIndex} style={{marginBottom:fieldIndex===readableLessonBlock(block.content).length-1?0:8}}>
+                                                          <strong style={{fontSize:12}}>{field.label}</strong>
+                                                          <p style={{margin:'3px 0 0',whiteSpace:'pre-wrap',overflowWrap:'anywhere',fontSize:13}}>{field.text}</p>
+                                                        </div>
+                                                      ))}
+                                                    </div>
+                                                    {block.asset_url && (
+                                                      <div style={{marginTop:8}}>
+                                                        {/^https:\/\//i.test(block.asset_url) && ['IMAGE','DIAGRAM'].includes(String(block.asset_type||'').toUpperCase()) && (
+                                                          <img src={block.asset_url} alt={block.asset_alt||block.asset_title||'Course visual under review'}
+                                                            loading="lazy" referrerPolicy="no-referrer"
+                                                            style={{display:'block',maxWidth:'100%',maxHeight:420,objectFit:'contain',border:'1px solid var(--border, #d7dce2)',borderRadius:8,background:'#fff'}} />
+                                                        )}
+                                                        <p style={{fontSize:12}}>Asset: <a href={block.asset_url} target="_blank" rel="noreferrer">{block.asset_title || block.asset_url}</a> · {block.asset_type || 'file'} · {block.asset_status || 'unknown status'}{block.asset_alt ? ' · Alt: ' + block.asset_alt : ''}</p>
+                                                      </div>
+                                                    )}
+                                                    <details style={{marginTop:8}}>
+                                                      <summary style={{cursor:'pointer',fontSize:12}}>Inspect raw block JSON</summary>
+                                                      <pre style={{whiteSpace:'pre-wrap',overflowWrap:'anywhere',fontSize:12,padding:8}}>{JSON.stringify(block.content,null,2)}</pre>
+                                                    </details>
+                                                    {(block.translations || []).map((translation, ti) => (
+                                                      <div key={String(translation.language) + '-' + String(translation.version_no) + '-' + ti} style={{ marginTop: 8 }}>
+                                                        <strong>{String(translation.language).toUpperCase()} block translation · {translation.translation_status} v{translation.version_no}</strong>
+                                                        <pre style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', fontSize: 12 }}>{JSON.stringify(translation.content, null, 2)}</pre>
+                                                      </div>
+                                                    ))}
+                                                  </details>
+                                                ))}
+                                                <h5 style={{ margin: '12px 0 6px' }}>Lesson questions and answer keys</h5>
+                                                {(lesson.questions || []).map(question => (
+                                                  <div key={question.id} style={{ margin: '6px 0', padding: 8, border: '1px solid var(--border, #d7dce2)', borderRadius: 6 }}>
+                                                    <strong>{question.question_type} · {question.difficulty} · active: {question.active ? 'yes' : 'no'}</strong>
+                                                    <p style={{ whiteSpace: 'pre-wrap' }}>{question.prompt}</p>
+                                                    {question.explanation && <p style={{ whiteSpace: 'pre-wrap' }}>Explanation: {question.explanation}</p>}
+                                                    <ol type="A">{(question.options || []).map(option => (
+                                                      <li key={option.option_key} style={{ marginBottom: 3 }}>
+                                                        {option.label} {option.is_correct ? '✓ Answer key' : ''}
+                                                      </li>
+                                                    ))}</ol>
+                                                    {(question.translations || []).map((translation, ti) => (
+                                                      <details key={String(translation.language) + '-' + String(translation.version_no) + '-' + ti} style={{ marginTop: 6 }}>
+                                                        <summary>{String(translation.language).toUpperCase()} question translation · {translation.translation_status} v{translation.version_no}</summary>
+                                                        <p style={{ whiteSpace: 'pre-wrap' }}>{translation.prompt}</p>
+                                                        {translation.explanation && <p style={{ whiteSpace: 'pre-wrap' }}>Explanation: {translation.explanation}</p>}
+                                                        <pre style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', fontSize: 12 }}>{JSON.stringify(translation.options || [], null, 2)}</pre>
+                                                      </details>
+                                                    ))}
+                                                  </div>
+                                                ))}
+                                              </div>
+                                            </details>
+                                          ))}
+                                          <h5 style={{ margin: '14px 0 6px' }}>Chapter resources</h5>
+                                          {(chapterContent.resources || []).length === 0 && <p>No resources are assigned to this chapter.</p>}
+                                          {(chapterContent.resources || []).map(resource => (
+                                            <div key={resource.assignment_id} style={{ padding: 8, margin: '6px 0', border: '1px solid var(--border, #d7dce2)', borderRadius: 6 }}>
+                                              <strong>{resource.title}</strong> · {resource.resource_type} · {resource.resource_status} · Assignment: {resource.assignment_status}
+                                              <p style={{ fontSize: 12, margin: '4px 0' }}>{resource.description || ''} · {resource.language} · {resource.source_kind} · {resource.version_no ? 'v' + resource.version_no : ''}</p>
+                                              {resource.external_url && <a href={resource.external_url} target="_blank" rel="noreferrer" style={{ fontSize: 12, overflowWrap: 'anywhere' }}>Open external resource</a>}
+                                              {resource.source_reference && <p style={{ fontSize: 12 }}>Source reference: {resource.source_reference}</p>}
+                                              {resource.sha256 && <p style={{ fontSize: 12 }}>SHA-256: {resource.sha256}</p>}
+                                            </div>
+                                          ))}
+                                        </div>
+                                      )}
+                                    </div>
+                                  );
+                                })}
+                              </section>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
                     <label className={styles.reviewNote}>Quality review note
                       <textarea rows={2} maxLength={1000} value={reviewNotes[release.release_id] || ''}
                         onChange={event => setReviewNotes(previous => ({ ...previous, [release.release_id]: event.target.value }))}
-                        placeholder="Record what was checked: syllabus coverage, published lessons, content integrity…" />
+                        placeholder={assessmentOnly ? 'Record question inventory, source fidelity, answer review, section scoring and release fingerprint checks…' : 'Record what was checked: syllabus coverage, published lessons, content integrity…'} />
                     </label>
                     <div className={styles.qualityActions}>
-                      <button type="button" className={styles.primaryButton} disabled={busyKey !== null || !qualityReady || (reviewNotes[release.release_id] || '').trim().length < 3}
+                      <button type="button" className={styles.primaryButton} disabled={busyKey !== null || reviewChapterLoadingId !== null || !qualityReady || !preview || !preview.contentCurrent || preview.content_fingerprint !== release.content_fingerprint || (reviewNotes[release.release_id] || '').trim().length < 3}
                         onClick={() => void reviewQuality(release, true)}>
                         {busyKey === 'quality-' + release.release_id ? 'Saving decision…' : 'Approve quality'}
                       </button>

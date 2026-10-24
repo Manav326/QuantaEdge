@@ -45,6 +45,118 @@ function referenceAnswerText(value:any,t:Translator){
   try{return JSON.stringify(parsed,null,2)}catch{return String(parsed)}
 }
 
+function CourseAnalyticsPanel({courseId,activeCourse,courseError}:{courseId:string;activeCourse:any;courseError:string}) {
+  const {locale}=useContext(AdminWorkspaceContext);
+  const isEnglish=locale==='english';
+  const tx=(english:string,hindi:string)=>isEnglish?english:hindi;
+  const [data,setData]=useState<any>(null);
+  const [loading,setLoading]=useState(false);
+  const [error,setError]=useState('');
+  const requestSequence=useRef(0);
+  const load=useCallback(async()=>{
+    const requestId=++requestSequence.current;
+    if(!courseId||courseError){setData(null);setLoading(false);return;}
+    setLoading(true);setError('');
+    try {
+      const result=await api('/api/v1/admin/assessments/course-analytics?'+new URLSearchParams({courseId}).toString());
+      if(requestId===requestSequence.current)setData(result);
+    } catch(e) {
+      if(requestId===requestSequence.current) {
+        setError(e instanceof Error?e.message:tx('Course analytics could not be loaded.','कोर्स विश्लेषण लोड नहीं हो सका।'));
+        setData(null);
+      }
+    } finally {
+      if(requestId===requestSequence.current)setLoading(false);
+    }
+  },[courseId,courseError]);
+  useEffect(()=>{
+    setData(null);setError('');
+    void load();
+    return ()=>{requestSequence.current+=1;};
+  },[load]);
+  const summary=data?.summary||{};
+  const metric=(key:string)=>summary[key]===null||summary[key]===undefined?'—':String(summary[key]);
+  const percent=(key:string)=>summary[key]===null||summary[key]===undefined?'—':Number(summary[key]).toFixed(1)+'%';
+  const cards=[
+    {label:tx('Tests','टेस्ट'),value:metric('assessment_count'),detail:metric('published_assessment_count')+' '+tx('published','प्रकाशित')+' · '+metric('draft_assessment_count')+' '+tx('draft','ड्राफ्ट')},
+    {label:tx('Learners attempted','प्रयास करने वाले विद्यार्थी'),value:metric('learner_count'),detail:metric('attempt_count')+' '+tx('non-abandoned attempts','न छोड़े गए प्रयास')},
+    {label:tx('Released results','जारी परिणाम'),value:metric('released_attempt_count'),detail:metric('learners_with_released_results')+' '+tx('learners with results','परिणाम वाले विद्यार्थी')},
+    {label:tx('Average score','औसत अंक'),value:percent('average_released_score_percent'),detail:tx('Released results only','केवल जारी परिणाम')},
+    {label:tx('Median score','मध्यिका अंक'),value:percent('median_released_score_percent'),detail:tx('Released results only','केवल जारी परिणाम')},
+    {label:tx('Awaiting review','समीक्षा लंबित'),value:metric('awaiting_review_attempt_count'),detail:metric('in_progress_attempt_count')+' '+tx('in progress','प्रगति में')},
+    {label:tx('Average attempt time','औसत प्रयास समय'),value:summary.average_attempt_minutes===null||summary.average_attempt_minutes===undefined?'—':Number(summary.average_attempt_minutes).toFixed(1)+' min',detail:tx('Whole attempt only; no per-question time inferred','पूरे प्रयास का समय; प्रति-प्रश्न समय अनुमानित नहीं')},
+    {label:tx('Submission rate','सबमिशन दर'),value:percent('submission_rate_percent'),detail:metric('graded_not_released_attempt_count')+' '+tx('graded, not released','जाँचे गए, जारी नहीं')}
+  ];
+  const table=(title:string,description:string|undefined,rows:any[],columns:Array<{key:string;label:string}>)=>
+    <section className={styles.panel} style={{marginTop:14}}>
+      <div className={styles.panelHeading}><div><h2>{title}</h2>{description&&<p>{description}</p>}</div><b>{rows.length}</b></div>
+      {!rows.length?<p className={styles.empty}>{tx('No released-result data is available for this breakdown yet.','इस विश्लेषण के लिए अभी जारी परिणाम उपलब्ध नहीं हैं।')}</p>:
+        <div style={{overflowX:'auto'}}>
+          <table style={{width:'100%',borderCollapse:'collapse',fontSize:13}}>
+            <thead><tr>{columns.map(col=><th key={col.key} style={{textAlign:'left',padding:'10px 8px',borderBottom:'1px solid var(--admin-border,#d8dce5)',whiteSpace:'nowrap'}}>{col.label}</th>)}</tr></thead>
+            <tbody>{rows.map((row,index)=><tr key={String(row.assessment_id||row.question_key||row.topic||row.secondary_topic||row.difficulty||row.question_type||row.section_code||row.band||row.selected_value||index)+'-'+index}>
+              {columns.map(col=>{
+                const value=row[col.key];
+                const formatted=value===null||value===undefined||value===''?'—':typeof value==='object'?JSON.stringify(value):String(value);
+                return <td key={col.key} style={{padding:'9px 8px',borderBottom:'1px solid var(--admin-border,#e5e7eb)',verticalAlign:'top',maxWidth:360,overflowWrap:'anywhere'}}>{formatted}</td>;
+              })}
+            </tr>)}</tbody>
+          </table>
+        </div>}
+    </section>;
+  return <div>
+    <section className={styles.panel}>
+      <div className={styles.panelHeading}>
+        <div><span>COURSE ANALYTICS</span><h2>{activeCourse?.display_name||tx('Select a course','कोर्स चुनें')}</h2>
+          <p>{tx('Course-scoped performance by test, topic, difficulty, question type, section, question accuracy and selected responses.','टेस्ट, विषय, कठिनाई, प्रश्न प्रकार, सेक्शन, प्रश्न की सटीकता और चुने गए उत्तरों के अनुसार कोर्स-स्तरीय प्रदर्शन।')}</p>
+        </div>
+        <button type="button" className={styles.secondaryButton} onClick={()=>void load()} disabled={loading||!courseId}>{loading?tx('Refreshing…','रीफ़्रेश हो रहा है…'):tx('Refresh analytics','विश्लेषण रीफ़्रेश करें')}</button>
+      </div>
+      {courseError&&<div className={styles.error} role="alert">{courseError}</div>}
+      {error&&<div className={styles.error} role="alert">{error}</div>}
+      {!courseId&&!courseError&&<p className={styles.empty}>{tx('Choose an institution-assigned course to see analytics.','विश्लेषण देखने के लिए संस्थान को असाइन किया गया कोर्स चुनें।')}</p>}
+      {loading&&!data&&<p className={styles.empty} role="status">{tx('Loading course analytics…','कोर्स विश्लेषण लोड हो रहा है…')}</p>}
+      {data&&<div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(170px,1fr))',gap:10,marginTop:14}}>
+        {cards.map(card=><div key={card.label} style={{padding:14,border:'1px solid var(--admin-border,#d8dce5)',borderRadius:12,minWidth:0}}>
+          <span style={{fontSize:12,color:'var(--admin-muted,#667085)'}}>{card.label}</span>
+          <strong style={{display:'block',fontSize:25,margin:'6px 0',overflowWrap:'anywhere'}}>{card.value}</strong>
+          <small style={{fontSize:11,color:'var(--admin-muted,#667085)'}}>{card.detail}</small>
+        </div>)}
+      </div>}
+      {data&&<p style={{marginTop:14,fontSize:12,color:'var(--admin-muted,#667085)'}}>
+        {tx('Scores use released attempts only. Ongoing and awaiting-review attempts count only toward participation. Secondary-topic tags overlap; student identifiers are not returned. Attempt duration uses submission minus start time; per-question timing is not inferred.','अंक केवल जारी प्रयासों से गिने जाते हैं। जारी न हुए या समीक्षा लंबित प्रयास केवल भागीदारी में गिने जाते हैं। द्वितीयक विषय टैग एक-दूसरे से ओवरलैप कर सकते हैं; विद्यार्थी पहचान विवरण नहीं लौटाए जाते। समय पूरे प्रयास का है, प्रति-प्रश्न समय का अनुमान नहीं लगाया जाता।')}
+      </p>}
+    </section>
+    {data&&<>
+      {table(tx('Test-by-test performance','टेस्ट-वार प्रदर्शन'),tx('Participation, attempts, scores and whole-attempt duration.','भागीदारी, प्रयास, अंक और पूरे प्रयास की अवधि।'),data.assessments||[],[
+        {key:'title',label:tx('Test','टेस्ट')},{key:'status',label:tx('Status','स्थिति')},{key:'question_count',label:tx('Questions','प्रश्न')},{key:'attempt_count',label:tx('Attempts','प्रयास')},{key:'learner_count',label:tx('Learners','विद्यार्थी')},{key:'in_progress_attempt_count',label:tx('In progress','प्रगति में')},{key:'awaiting_review_attempt_count',label:tx('Awaiting review','समीक्षा लंबित')},{key:'released_attempt_count',label:tx('Released','जारी')},{key:'average_score_percent',label:tx('Average %','औसत %')},{key:'median_score_percent',label:tx('Median %','मध्यिका %')},{key:'average_attempt_minutes',label:tx('Avg. minutes','औसत मिनट')}
+      ])}
+      {table(tx('Released score bands','जारी अंकों के समूह'),undefined,data.scoreBands||[],[{key:'band',label:tx('Score band','अंक समूह')},{key:'learner_attempts',label:tx('Attempts','प्रयास')}])}
+      {table(tx('Section performance','सेक्शन प्रदर्शन'),tx('Scored, qualifying and practice-only sections remain distinct.','अंकित, क्वालिफाइंग और अभ्यास-केवल सेक्शन अलग रखे गए हैं।'),data.sectionPerformance||[],[
+        {key:'section_code',label:tx('Section','सेक्शन')},{key:'result_policy',label:tx('Policy','नीति')},{key:'correct_count',label:tx('Correct','सही')},{key:'incorrect_count',label:tx('Incorrect','गलत')},{key:'unanswered_count',label:tx('Unanswered','अनुत्तरित')},{key:'accuracy_percent',label:tx('Accuracy %','सटीकता %')},{key:'net_marks',label:tx('Net marks','शुद्ध अंक')},{key:'max_marks',label:tx('Available marks','उपलब्ध अंक')}
+      ])}
+      {table(tx('Primary topic performance','मुख्य विषय प्रदर्शन'),tx('A question contributes to its single primary topic.','प्रत्येक प्रश्न अपने एक मुख्य विषय में गिना जाता है।'),data.topicPerformance||[],[
+        {key:'topic',label:tx('Topic','विषय')},{key:'question_exposures',label:tx('Exposures','प्रयास')},{key:'correct_count',label:tx('Correct','सही')},{key:'incorrect_count',label:tx('Incorrect','गलत')},{key:'unanswered_count',label:tx('Unanswered','अनुत्तरित')},{key:'accuracy_percent',label:tx('Accuracy %','सटीकता %')},{key:'average_net_marks_percent',label:tx('Avg. net marks %','औसत शुद्ध अंक %')}
+      ])}
+      {table(tx('Secondary-topic diagnostics','द्वितीयक विषय निदान'),tx('Secondary tags overlap and are not additive to primary-topic totals.','द्वितीयक टैग ओवरलैप कर सकते हैं और मुख्य विषय के कुल में जोड़कर नहीं गिने जाने चाहिए।'),data.secondaryTopicPerformance||[],[
+        {key:'secondary_topic',label:tx('Secondary topic','द्वितीयक विषय')},{key:'question_exposures',label:tx('Exposures','प्रयास')},{key:'correct_count',label:tx('Correct','सही')},{key:'incorrect_count',label:tx('Incorrect','गलत')},{key:'unanswered_count',label:tx('Unanswered','अनुत्तरित')},{key:'accuracy_percent',label:tx('Accuracy %','सटीकता %')}
+      ])}
+      {table(tx('Difficulty performance','कठिनाई-वार प्रदर्शन'),undefined,data.difficultyPerformance||[],[
+        {key:'difficulty',label:tx('Difficulty','कठिनाई')},{key:'question_exposures',label:tx('Exposures','प्रयास')},{key:'correct_count',label:tx('Correct','सही')},{key:'incorrect_count',label:tx('Incorrect','गलत')},{key:'unanswered_count',label:tx('Unanswered','अनुत्तरित')},{key:'accuracy_percent',label:tx('Accuracy %','सटीकता %')}
+      ])}
+      {table(tx('Question-type performance','प्रश्न-प्रकार प्रदर्शन'),undefined,data.questionTypePerformance||[],[
+        {key:'question_type',label:tx('Question type','प्रश्न प्रकार')},{key:'question_exposures',label:tx('Exposures','प्रयास')},{key:'correct_count',label:tx('Correct','सही')},{key:'incorrect_count',label:tx('Incorrect','गलत')},{key:'unanswered_count',label:tx('Unanswered','अनुत्तरित')},{key:'accuracy_percent',label:tx('Accuracy %','सटीकता %')}
+      ])}
+      {table(tx('Question-level diagnostic table','प्रश्न-स्तरीय निदान'),tx('Shows up to 100 most frequently incorrect or least-accurate questions.','सबसे अधिक गलत या कम सटीक प्रश्नों में से अधिकतम 100 दिखाए जाते हैं।'),data.questionPerformance||[],[
+        {key:'assessment_title',label:tx('Test','टेस्ट')},{key:'question_key',label:tx('Question key','प्रश्न कुंजी')},{key:'prompt',label:tx('Question','प्रश्न')},{key:'question_type',label:tx('Type','प्रकार')},{key:'topic',label:tx('Primary topic','मुख्य विषय')},{key:'subtopic_tags',label:tx('Secondary topics','द्वितीयक विषय')},{key:'difficulty',label:tx('Difficulty','कठिनाई')},{key:'section_code',label:tx('Section','सेक्शन')},{key:'section_result_policy',label:tx('Scoring policy','अंक नीति')},{key:'exposures',label:tx('Exposures','प्रयास')},{key:'correct_count',label:tx('Correct','सही')},{key:'incorrect_count',label:tx('Incorrect','गलत')},{key:'unanswered_count',label:tx('Unanswered','अनुत्तरित')},{key:'accuracy_percent',label:tx('Accuracy %','सटीकता %')},{key:'average_net_marks_percent',label:tx('Avg. net marks %','औसत शुद्ध अंक %')}
+      ])}
+      {table(tx('Selected response buckets','चुने गए उत्तर समूह'),tx('Shows selected option keys or normalized responses by question.','प्रश्न के अनुसार चुने गए विकल्प या सामान्यीकृत उत्तर दिखाता है।'),data.optionSelections||[],[
+        {key:'assessment_id',label:tx('Test ID','टेस्ट ID')},{key:'question_key',label:tx('Question key','प्रश्न कुंजी')},{key:'selected_value',label:tx('Selected option key','चुने गए विकल्प की कुंजी')},{key:'option_label',label:tx('Option text','विकल्प का पाठ')},{key:'selection_count',label:tx('Selections','चयन')}
+      ])}
+    </>}
+  </div>;
+}
+
 export default function AssessmentsPage(){
   const {locale}=useContext(AdminWorkspaceContext);
   const t=useUiTranslation();
@@ -72,7 +184,7 @@ export default function AssessmentsPage(){
   const [description,setDescription]=useState('');
   const [duration,setDuration]=useState('45');
   const [maxAttempts,setMaxAttempts]=useState('1');
-  const [activeTab,setActiveTab]=useState<'author'|'review'>('author');
+  const [activeTab,setActiveTab]=useState<'author'|'review'|'analytics'>('author');
   const [queue,setQueue]=useState<any[]>([]);
   const [queuePage,setQueuePage]=useState(0);
   const [queueTotal,setQueueTotal]=useState(0);
@@ -372,14 +484,14 @@ export default function AssessmentsPage(){
   return <main className="admin-shell">
     <AdminSidebar active="assessments" variant="content"/>
     <section className={'admin-main '+styles.page}>
-      <header className="admin-top"><div><span className="admin-kicker">{t('admin.assessments.eyebrow')}</span><h1>{t('admin.assessments.title')}</h1><p>{t('admin.assessments.description')}</p></div><button type="button" className="admin-refresh" onClick={()=>activeTab==='author'?void loadAssessments():void loadQueue()}>↻</button></header>
+      <header className="admin-top"><div><span className="admin-kicker">{t('admin.assessments.eyebrow')}</span><h1>{t('admin.assessments.title')}</h1><p>{t('admin.assessments.description')}</p></div>{activeTab!=='analytics'&&<button type="button" className="admin-refresh" onClick={()=>activeTab==='author'?void loadAssessments():void loadQueue()}>↻</button>}</header>
       <section className={styles.hero}>
         <div className={styles.heroIcon}>✓</div><div><span>{t('admin.assessments.heroEyebrow')}</span><h2>{t('admin.assessments.heroTitle')}</h2><p>{t('admin.assessments.heroDescription')}</p></div>
         <div className={styles.heroStats}><strong>{assessmentTotal}</strong><small>{t('admin.assessments.testsInFilter')}</small><strong>{assessments.reduce((sum,a)=>sum+Number(a.review_count||0),0)}</strong><small>{t('admin.assessments.attemptsAwaiting')}</small></div>
       </section>
       {error&&<div className={styles.error} role="alert">{error}</div>}
       {notice&&<div className={styles.success} role="status">{notice}</div>}
-      <div className={styles.tabs} role="group" aria-label={t('admin.assessments.workspaceSections')}><button type="button" aria-pressed={activeTab==='author'} className={activeTab==='author'?styles.activeTab:''} onClick={()=>setActiveTab('author')}>{t('admin.assessments.buildPublishTests')}</button><button type="button" aria-pressed={activeTab==='review'} className={activeTab==='review'?styles.activeTab:''} onClick={()=>setActiveTab('review')}>{t('admin.assessments.teacherReviewQueueTab')} <span>{queue.filter(row=>row.status==='AWAITING_REVIEW').length}</span></button></div>
+      <div className={styles.tabs} role="group" aria-label={t('admin.assessments.workspaceSections')}><button type="button" aria-pressed={activeTab==='author'} className={activeTab==='author'?styles.activeTab:''} onClick={()=>setActiveTab('author')}>{t('admin.assessments.buildPublishTests')}</button><button type="button" aria-pressed={activeTab==='review'} className={activeTab==='review'?styles.activeTab:''} onClick={()=>setActiveTab('review')}>{t('admin.assessments.teacherReviewQueueTab')} <span>{queue.filter(row=>row.status==='AWAITING_REVIEW').length}</span></button><button type="button" aria-pressed={activeTab==='analytics'} className={activeTab==='analytics'?styles.activeTab:''} onClick={()=>setActiveTab('analytics')}>{locale==='english'?'Course analytics':'कोर्स विश्लेषण'}</button></div>
 
       {activeTab==='author'?<>
         <section className={styles.panel}>
@@ -476,14 +588,14 @@ export default function AssessmentsPage(){
             onPageChange={setAssessmentPage} onPageSizeChange={size=>{setAssessmentPageSize(size);setAssessmentPage(0);}}
             itemLabel={t('admin.assessments.assessmentsItemLabel')} loading={loading} />
         </section>
-      </>:<section className={styles.panel}>
+      </>:activeTab==='review'?<section className={styles.panel}>
         <div className={styles.panelHeading}><div><span>{t('admin.assessments.teacherReviewQueue')}</span><h2>{t('admin.assessments.submittedAwaitingDecision')}</h2><p>{t('admin.assessments.reviewQueueDescription')}</p></div><select className={styles.filter} value={queueStatus} onChange={e=>{setQueueStatus(e.target.value);setQueuePage(0)}}><option value="AWAITING_REVIEW">{t('admin.assessments.awaitingReview')}</option><option value="GRADED">{t('admin.assessments.gradedNotReleased')}</option><option value="RELEASED">{t('admin.assessments.releasedResults')}</option><option value="ALL">{t('admin.assessments.allStates')}</option></select></div>
         <div className={styles.queueSearch}><input aria-label={t('admin.assessments.searchTestStudentChapter')} value={query} onChange={e=>{setQuery(e.target.value);setQueuePage(0)}} placeholder={t('admin.assessments.searchTestStudentChapter')}/><button type="button" className={styles.secondaryButton} onClick={()=>void loadQueue()}>{t('admin.assessments.searchQueueButton')}</button></div>
         {loading?<p className={styles.empty}>{t('admin.assessments.loadingGradingQueue')}</p>:queue.length===0?<div className={styles.empty}><b>{t('admin.assessments.noSubmittedTests')}</b><span>{t('admin.assessments.newAttemptsQueueHint')}</span></div>:<div className={styles.testList}>{queue.map(row=><article className={styles.testCard} key={row.attempt_id}><div className={styles.testIcon}>✎</div><div className={styles.testBody}><div className={styles.testTitle}><h3>{row.assessment_title}</h3><span className={styles['status'+row.status]}>{statusText(row.status,t)}</span></div><p>{row.student_name} · {activeCourse?.display_name || t('admin.assessments.course')} · {row.subject_name||'Course-level assessment'}{row.chapter_name?' · '+row.chapter_name:''}</p><small>{t('admin.assessments.submittedAttemptDetails',{date:fmtDate(row.submitted_at,locale),attempt:row.attempt_number,questions:row.question_count,pending:row.pending_answers})}</small><small>{t('admin.assessments.resultLabel')} {row.status==='RELEASED'?row.final_score+' / '+row.max_score:t('admin.assessments.resultNotYetReleased')}</small></div><div className={styles.testActions}><button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void openReview(row.attempt_id)}>{row.status==='AWAITING_REVIEW'?t('admin.assessments.reviewTest'):t('admin.assessments.openRecord')}</button></div></article>)}</div>}
         <PremiumPagination page={queuePage} total={queueTotal} pageSize={queuePageSize}
           onPageChange={setQueuePage} onPageSizeChange={size=>{setQueuePageSize(size);setQueuePage(0);}}
           itemLabel="submitted tests" loading={loading} />
-      </section>}
+      </section>:<CourseAnalyticsPanel courseId={courseId} activeCourse={activeCourse} courseError={courseError}/>}
 
       {review&&<div className={styles.modalBackdrop} role="presentation" onMouseDown={e=>{if(e.target===e.currentTarget)setReview(null);}}>
         <section className={styles.reviewModal} role="dialog" aria-modal="true" aria-labelledby="review-title">

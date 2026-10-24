@@ -368,9 +368,10 @@ const workspaceLayout = read('../app/components/WorkspaceLayout.tsx');
 const courseScope = read('../app/student/CourseScope.tsx');
 const androidAllCourses = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentAllCoursesScreen.kt');
 const parentPage = read('../app/parent/page.tsx');
-assert.ok(coursesPage.includes("'/student/learn?courseId=' + encodeURIComponent(String(selected.public_id || courseId))") &&
+assert.ok(coursesPage.includes("const destination = assessmentCourse ? '/student/tests?courseId=' : '/student/learn?courseId='") &&
   coursesPage.includes("String(course.public_id || id)") &&
-  coursesPage.includes("!active && (") && coursesPage.includes('Focus on this course'), 'Course focus and subject shortcuts must open the exact selected course using its public ID.');
+  coursesPage.includes("!active && (") && coursesPage.includes('Focus on this course') &&
+  coursesPage.includes("course.delivery_mode === 'ASSESSMENT_ONLY'"), 'Course focus must route assessment-only courses to tests and learning courses to lessons using the exact public course ID.');
 const certificateCourseBackfill = read('../../../services/api/src/main/resources/db/migration/V161__backfill_legacy_certificate_course_identity.sql');
 assert.ok(certificateCourseBackfill.includes('WHERE cert.program_id IS NULL') &&
   certificateCourseBackfill.includes("program.code = 'CLASS_' || source_class.code") &&
@@ -765,6 +766,9 @@ assert.ok(studentClassesClient.includes(':(error||courseError)?null:filteredSess
 assert.ok(testsClient.includes(':error?null:filteredTests.length===0') &&
   testsClient.includes(':error?null:results.length===0'),
   'Test and result empty messages must not misreport API failures as zero data.');
+assert.ok(testsClient.includes("const rawCourseId=(searchParams.get('courseId')||'').trim()") &&
+  testsClient.includes('useStudentCourseScope(requestedCourseId)'),
+  'Test-first course links must resolve stable public course IDs as well as legacy numeric IDs.');
 assert.ok(certificatesPage.includes('error && certificates.length === 0 ? null : !certificates.length ?'),
   'Certificate inventory must not say there are no certificates when its data could not be loaded.');
 assert.ok(studentBooksClient.includes('!error && !courseError && visibleDocuments.length === 0'),

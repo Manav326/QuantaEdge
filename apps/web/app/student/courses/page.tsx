@@ -23,6 +23,8 @@ type Course = {
   code: string;
   display_name: string;
   curriculum_version?: string;
+  course_type_code?: string;
+  delivery_mode?: string;
   status?: string;
   is_enrolled?: boolean;
   enrolled?: boolean;
@@ -73,6 +75,9 @@ export default function StudentCoursesPage() {
       const results = await Promise.all(owned.map(async course => {
         const id = Number(course.id || course.course_id);
         if (!Number.isSafeInteger(id) || id <= 0) return null;
+        if (course.course_type_code === 'ASSESSMENT' || course.delivery_mode === 'ASSESSMENT_ONLY') {
+          return { id, data: { assessmentOnly: true } };
+        }
         try {
           const data = await responseJson(await apiFetch('/api/v1/students/me?courseId=' + encodeURIComponent(String(id)), {
             credentials: 'same-origin', cache: 'no-store',
@@ -124,7 +129,11 @@ export default function StudentCoursesPage() {
       }
       setActiveCourseId(courseId);
       try { window.localStorage.setItem('qe:student:activeCourseId', String(courseId)); } catch { /* storage is optional */ }
-      if (navigate) router.push('/student/learn?courseId=' + encodeURIComponent(String(selected.public_id || courseId)));
+      if (navigate) {
+        const assessmentCourse = selected.course_type_code === 'ASSESSMENT' || selected.delivery_mode === 'ASSESSMENT_ONLY';
+        const destination = assessmentCourse ? '/student/tests?courseId=' : '/student/learn?courseId=';
+        router.push(destination + encodeURIComponent(String(selected.public_id || courseId)));
+      }
     } catch (e: any) {
       setError(e?.message || 'The selected course could not be opened.');
     } finally {
@@ -166,6 +175,7 @@ export default function StudentCoursesPage() {
           {owned.map(course => {
             const id = Number(course.id || course.course_id);
             const active = id === activeCourseId;
+            const assessmentCourse = course.course_type_code === 'ASSESSMENT' || course.delivery_mode === 'ASSESSMENT_ONLY';
             const metric = progress[id];
             const stats = metric?.data?.lessonStats || {};
             const total = Number(stats.total_lessons || stats.totalLessons || 0);
@@ -179,23 +189,35 @@ export default function StudentCoursesPage() {
                 </div>
                 <h2>{course.display_name}</h2>
                 <p className={styles.meta}>{course.curriculum_version || course.code}</p>
-                {total > 0 ? (
+                {assessmentCourse ? (
+                  <p className={styles.meta}>Test packs, attempts and results are available in this course.</p>
+                ) : total > 0 ? (
                   <div className={styles.progress}>
                     <div className={styles.progressLabels}><span>{completed} of {total} lessons</span><strong>{Math.round(percent)}%</strong></div>
                     <span className={styles.progressTrack}><span style={{ width: percent + '%' }} /></span>
                   </div>
                 ) : <p className={styles.meta}>{metric?.error ? 'Progress is temporarily unavailable.' : 'Progress will appear as you learn.'}</p>}
 
-                <div className={styles.subjectList}>
-                  <div className={styles.subjectHeading}>Subjects</div>
-                  {(course.subjects || []).length === 0 ? <p className={styles.meta}>Subjects will appear when available.</p> :
-                    (course.subjects || []).map(subject => (
-                      <Link key={subject.subject_code} href={'/student/learn?courseId=' + encodeURIComponent(String(course.public_id || id)) + '&subjectCode=' + encodeURIComponent(subject.subject_code)} className={styles.subjectLink}>
-                        <span><strong>{subject.subject_name || subject.subject_code}</strong><small>{Number(subject.chapters || 0)} chapters · {Number(subject.lessons || 0)} lessons</small></span>
-                        <span aria-hidden="true">→</span>
-                      </Link>
-                    ))}
-                </div>
+                {assessmentCourse ? (
+                  <div className={styles.subjectList}>
+                    <div className={styles.subjectHeading}>Assessment content</div>
+                    <Link href={'/student/tests?courseId=' + encodeURIComponent(String(course.public_id || id))} className={styles.subjectLink}>
+                      <span><strong>Open tests</strong><small>Test catalogue, attempts, results and review</small></span>
+                      <span aria-hidden="true">→</span>
+                    </Link>
+                  </div>
+                ) : (
+                  <div className={styles.subjectList}>
+                    <div className={styles.subjectHeading}>Subjects</div>
+                    {(course.subjects || []).length === 0 ? <p className={styles.meta}>Subjects will appear when available.</p> :
+                      (course.subjects || []).map(subject => (
+                        <Link key={subject.subject_code} href={'/student/learn?courseId=' + encodeURIComponent(String(course.public_id || id)) + '&subjectCode=' + encodeURIComponent(subject.subject_code)} className={styles.subjectLink}>
+                          <span><strong>{subject.subject_name || subject.subject_code}</strong><small>{Number(subject.chapters || 0)} chapters · {Number(subject.lessons || 0)} lessons</small></span>
+                          <span aria-hidden="true">→</span>
+                        </Link>
+                      ))}
+                  </div>
+                )}
                 {!active && (
                   <button className={styles.secondaryButton} type="button" disabled={busyCourseId !== null}
                     onClick={() => void activateCourse(id)}>

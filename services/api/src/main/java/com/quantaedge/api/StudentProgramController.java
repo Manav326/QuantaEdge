@@ -36,7 +36,9 @@ public class StudentProgramController {
     long institutionId = requireInstitution(tenant);
     List<Map<String,Object>> programs = jdbc.queryForList("""
       select distinct p.id,p.id as course_id,p.public_id,p.public_id_prefix,p.code,p.display_name,
-        p.curriculum_version,p.status,
+        p.curriculum_version,p.status,p.course_type_code,
+        coalesce((select type_registry.layout_schema_version from course_type_registry type_registry where type_registry.code=p.course_type_code),'') as layout_schema_version,
+        coalesce((select mode.delivery_mode from curriculum_program_delivery_mode mode where mode.program_id=p.id),'LEARNING_CONTENT') as delivery_mode,
         exists(select 1 from student_program_enrollment spe
           where spe.institution_id=? and spe.student_id=st.id and spe.program_id=p.id
             and spe.status='ACTIVE') as enrolled,

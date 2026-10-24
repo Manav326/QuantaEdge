@@ -21,6 +21,9 @@ export type EnrolledCourse = {
   code?: string;
   display_name: string;
   curriculum_version?: string;
+  course_type_code?: string;
+  delivery_mode?: string;
+  layout_schema_version?: string;
   is_enrolled: boolean;
   enrolled?: boolean;
   paused?: boolean;

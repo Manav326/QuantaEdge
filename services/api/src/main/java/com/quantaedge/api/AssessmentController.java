@@ -237,6 +237,323 @@ public class AssessmentController {
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
+  /**
+   * Course-scoped analytics. Only released attempts contribute to score/accuracy analysis;
+   * ongoing and awaiting-review attempts are participation metrics only. Student identifiers
+   * and raw responses are never returned by this aggregate endpoint.
+   */
+  @GetMapping("/admin/assessments/course-analytics")
+  public Map<String,Object> courseAssessmentAnalytics(
+      @RequestParam Long courseId,
+      @RequestParam(required=false) Long assessmentId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    requireContentView(context);
+    requireAssignedCourse(courseId,tenant);
+    if(assessmentId!=null) {
+      Long owned=jdbc.queryForObject("select count(*) from assessment where id=? and course_id=?",
+          Long.class,assessmentId,courseId);
+      if(owned==null||owned==0L) throw notFound("Assessment in selected course",assessmentId);
+    }
+    long institutionId=tenant.institutionId();
+    Map<String,Object> summary=jdbc.queryForMap("""
+      with course_tests as (
+        select a.id,a.status
+        from assessment a
+        where a.course_id=? and (CAST(? AS bigint) IS NULL OR a.id=?)
+      ),
+      course_attempts as (
+        select att.*
+        from student_assessment_attempt att
+        join course_tests t on t.id=att.assessment_id
+        where att.institution_id=? and att.status<>'ABANDONED'
+      ),
+      released as (
+        select *,100.0*final_score/nullif(max_score,0) as score_percent
+        from course_attempts
+        where status='RELEASED' and final_score is not null and max_score>0
+      )
+      select
+        (select count(*) from course_tests) as assessment_count,
+        (select count(*) from course_tests where status='PUBLISHED') as published_assessment_count,
+        (select count(*) from course_tests where status='DRAFT') as draft_assessment_count,
+        (select count(*) from course_tests where status='ARCHIVED') as archived_assessment_count,
+        (select count(*) from course_attempts) as attempt_count,
+        (select count(distinct student_id) from course_attempts) as learner_count,
+        (select count(*) from course_attempts where status='IN_PROGRESS') as in_progress_attempt_count,
+        (select count(*) from course_attempts where status='AWAITING_REVIEW') as awaiting_review_attempt_count,
+        (select count(*) from course_attempts where status='GRADED') as graded_not_released_attempt_count,
+        (select count(*) from course_attempts where status='RELEASED') as released_attempt_count,
+        (select count(distinct student_id) from released) as learners_with_released_results,
+        (select round(avg(score_percent)::numeric,2) from released) as average_released_score_percent,
+        (select percentile_cont(0.5) within group(order by score_percent::double precision) from released) as median_released_score_percent,
+        (select round(avg(greatest(0,extract(epoch from (submitted_at-started_at))/60))::numeric,2)
+           from course_attempts where submitted_at is not null and started_at is not null) as average_attempt_minutes,
+        (select round(100.0*count(*) filter(where status in ('AWAITING_REVIEW','GRADED','RELEASED'))
+                         /nullif(count(*),0),2) from course_attempts) as submission_rate_percent
+      """,courseId,assessmentId,assessmentId,institutionId);
+    List<Map<String,Object>> tests=jdbc.queryForList("""
+      with scoped_attempts as (
+        select att.*
+        from student_assessment_attempt att
+        where att.institution_id=? and att.assessment_id in (
+          select a.id from assessment a where a.course_id=? and (CAST(? AS bigint) IS NULL OR a.id=?)
+        ) and att.status<>'ABANDONED'
+      ),
+      released as (
+        select *,100.0*final_score/nullif(max_score,0) as score_percent
+        from scoped_attempts
+        where status='RELEASED' and final_score is not null and max_score>0
+      )
+      select a.id as assessment_id,a.title,a.status,a.assessment_type,a.portable_assessment_type,
+        a.source_exam_cycle,a.duration_minutes,a.max_attempts,a.negative_marking_fraction,
+        (select count(*) from assessment_question aq where aq.assessment_id=a.id) as question_count,
+        (select coalesce(sum(case
+            when coalesce(aq.question_snapshot->>'section_result_policy','SCORED') in ('QUALIFYING_ONLY','PRACTICE_ONLY')
+              or coalesce(aq.question_snapshot->>'section_code','')='LANGUAGE_QUALIFYING' then 0
+            else aq.max_marks end),0) from assessment_question aq where aq.assessment_id=a.id) as max_score,
+        count(distinct sa.id) as attempt_count,
+        count(distinct sa.student_id) as learner_count,
+        count(distinct sa.id) filter(where sa.status='IN_PROGRESS') as in_progress_attempt_count,
+        count(distinct sa.id) filter(where sa.status='AWAITING_REVIEW') as awaiting_review_attempt_count,
+        count(distinct sa.id) filter(where sa.status='RELEASED') as released_attempt_count,
+        count(distinct sa.student_id) filter(where sa.status='RELEASED') as learners_with_released_results,
+        round(avg(r.score_percent)::numeric,2) as average_score_percent,
+        percentile_cont(0.5) within group(order by r.score_percent::double precision) as median_score_percent,
+        round((avg(greatest(0,extract(epoch from (sa.submitted_at-sa.started_at))/60))
+          filter(where sa.submitted_at is not null and sa.started_at is not null))::numeric,2) as average_attempt_minutes
+      from assessment a
+      left join scoped_attempts sa on sa.assessment_id=a.id
+      left join released r on r.id=sa.id
+      where a.course_id=? and (CAST(? AS bigint) IS NULL OR a.id=?)
+      group by a.id
+      order by a.created_at desc,a.id desc
+      """,institutionId,courseId,assessmentId,assessmentId,courseId,assessmentId,assessmentId);
+    List<Map<String,Object>> topicPerformance=jdbc.queryForList("""
+      select coalesce(nullif(aq.question_snapshot->>'topic',''),
+                      nullif(aq.question_snapshot->'topic_tags'->>0,''),
+                      'Untagged') as topic,
+        count(*) as question_exposures,
+        count(*) filter(where coalesce(aq.question_snapshot->>'section_result_policy','SCORED')='SCORED'
+          and coalesce(aq.question_snapshot->>'section_code','')<>'LANGUAGE_QUALIFYING') as scored_exposures,
+        count(*) filter(where ans.is_correct=true) as correct_count,
+        count(*) filter(where ans.is_correct=false) as incorrect_count,
+        count(*) filter(where ans.answer_status='PENDING_REVIEW') as pending_review_count,
+        count(*) filter(where ans.response_payload is null or ans.response_payload in
+          ('null'::jsonb,'""'::jsonb,'[]'::jsonb,'{}'::jsonb)) as unanswered_count,
+        round(100.0*count(*) filter(where ans.is_correct=true)
+          /nullif(count(*) filter(where ans.is_correct is not null),0),2) as accuracy_percent,
+        round(avg((coalesce(ans.awarded_marks,0)-coalesce(ans.penalty_marks,0))
+          /nullif(aq.max_marks,0)*100)
+          filter(where coalesce(aq.question_snapshot->>'section_result_policy','SCORED')='SCORED'
+            and coalesce(aq.question_snapshot->>'section_code','')<>'LANGUAGE_QUALIFYING'),2) as average_net_marks_percent
+      from student_assessment_attempt att
+      join assessment a on a.id=att.assessment_id and a.course_id=?
+      join student_assessment_attempt_question aq on aq.attempt_id=att.id
+      left join student_assessment_answer ans on ans.attempt_question_id=aq.id
+      where att.institution_id=? and att.status='RELEASED' and (CAST(? AS bigint) IS NULL OR a.id=?)
+      group by 1 order by question_exposures desc,topic
+      """,courseId,institutionId,assessmentId,assessmentId);
+    List<Map<String,Object>> secondaryTopicPerformance=jdbc.queryForList("""
+      select tags.tag as secondary_topic,
+        count(*) as question_exposures,
+        count(*) filter(where ans.is_correct=true) as correct_count,
+        count(*) filter(where ans.is_correct=false) as incorrect_count,
+        count(*) filter(where ans.response_payload is null or ans.response_payload in
+          ('null'::jsonb,'""'::jsonb,'[]'::jsonb,'{}'::jsonb)) as unanswered_count,
+        round(100.0*count(*) filter(where ans.is_correct=true)
+          /nullif(count(*) filter(where ans.is_correct is not null),0),2) as accuracy_percent
+      from student_assessment_attempt att
+      join assessment a on a.id=att.assessment_id and a.course_id=?
+      join student_assessment_attempt_question aq on aq.attempt_id=att.id
+      cross join lateral jsonb_array_elements_text(
+        case when jsonb_typeof(aq.question_snapshot->'subtopic_tags')='array'
+          then aq.question_snapshot->'subtopic_tags' else '[]'::jsonb end
+      ) tags(tag)
+      left join student_assessment_answer ans on ans.attempt_question_id=aq.id
+      where att.institution_id=? and att.status='RELEASED' and (CAST(? AS bigint) IS NULL OR a.id=?)
+        and btrim(tags.tag)<>''
+      group by tags.tag order by question_exposures desc,secondary_topic
+      """,courseId,institutionId,assessmentId,assessmentId);
+    List<Map<String,Object>> difficultyPerformance=jdbc.queryForList("""
+      select coalesce(aq.question_snapshot->>'difficulty','CORE') as difficulty,
+        count(*) as question_exposures,
+        count(*) filter(where ans.is_correct=true) as correct_count,
+        count(*) filter(where ans.is_correct=false) as incorrect_count,
+        count(*) filter(where ans.response_payload is null or ans.response_payload in
+          ('null'::jsonb,'""'::jsonb,'[]'::jsonb,'{}'::jsonb)) as unanswered_count,
+        round(100.0*count(*) filter(where ans.is_correct=true)
+          /nullif(count(*) filter(where ans.is_correct is not null),0),2) as accuracy_percent
+      from student_assessment_attempt att
+      join assessment a on a.id=att.assessment_id and a.course_id=?
+      join student_assessment_attempt_question aq on aq.attempt_id=att.id
+      left join student_assessment_answer ans on ans.attempt_question_id=aq.id
+      where att.institution_id=? and att.status='RELEASED' and (CAST(? AS bigint) IS NULL OR a.id=?)
+      group by 1 order by case coalesce(aq.question_snapshot->>'difficulty','CORE')
+        when 'FOUNDATION' then 1 when 'CORE' then 2 when 'CHALLENGE' then 3 else 4 end
+      """,courseId,institutionId,assessmentId,assessmentId);
+    List<Map<String,Object>> questionTypePerformance=jdbc.queryForList("""
+      select coalesce(aq.question_snapshot->>'question_type','UNKNOWN') as question_type,
+        count(*) as question_exposures,
+        count(*) filter(where ans.is_correct=true) as correct_count,
+        count(*) filter(where ans.is_correct=false) as incorrect_count,
+        count(*) filter(where ans.response_payload is null or ans.response_payload in
+          ('null'::jsonb,'""'::jsonb,'[]'::jsonb,'{}'::jsonb)) as unanswered_count,
+        round(100.0*count(*) filter(where ans.is_correct=true)
+          /nullif(count(*) filter(where ans.is_correct is not null),0),2) as accuracy_percent
+      from student_assessment_attempt att
+      join assessment a on a.id=att.assessment_id and a.course_id=?
+      join student_assessment_attempt_question aq on aq.attempt_id=att.id
+      left join student_assessment_answer ans on ans.attempt_question_id=aq.id
+      where att.institution_id=? and att.status='RELEASED' and (CAST(? AS bigint) IS NULL OR a.id=?)
+      group by 1 order by question_exposures desc,question_type
+      """,courseId,institutionId,assessmentId,assessmentId);
+    List<Map<String,Object>> sectionPerformance=jdbc.queryForList("""
+      select coalesce(aq.question_snapshot->>'section_code','UNSECTIONED') as section_code,
+        coalesce(aq.question_snapshot->>'section_result_policy','SCORED') as result_policy,
+        count(*) as question_exposures,
+        count(*) filter(where ans.is_correct=true) as correct_count,
+        count(*) filter(where ans.is_correct=false) as incorrect_count,
+        count(*) filter(where ans.response_payload is null or ans.response_payload in
+          ('null'::jsonb,'""'::jsonb,'[]'::jsonb,'{}'::jsonb)) as unanswered_count,
+        round(100.0*count(*) filter(where ans.is_correct=true)
+          /nullif(count(*) filter(where ans.is_correct is not null),0),2) as accuracy_percent,
+        round(sum(coalesce(ans.awarded_marks,0)-coalesce(ans.penalty_marks,0)),2) as net_marks,
+        round(sum(aq.max_marks),2) as max_marks
+      from student_assessment_attempt att
+      join assessment a on a.id=att.assessment_id and a.course_id=?
+      join student_assessment_attempt_question aq on aq.attempt_id=att.id
+      left join student_assessment_answer ans on ans.attempt_question_id=aq.id
+      where att.institution_id=? and att.status='RELEASED' and (CAST(? AS bigint) IS NULL OR a.id=?)
+      group by 1,2 order by 1,2
+      """,courseId,institutionId,assessmentId,assessmentId);
+    List<Map<String,Object>> scoreBands=jdbc.queryForList("""
+      with released as (
+        select 100.0*att.final_score/nullif(att.max_score,0) as score_percent
+        from student_assessment_attempt att join assessment a on a.id=att.assessment_id
+        where a.course_id=? and att.institution_id=? and att.status='RELEASED'
+          and att.final_score is not null and att.max_score>0 and (CAST(? AS bigint) IS NULL OR a.id=?)
+      )
+      select band, count(*) as learner_attempts
+      from (
+        select case when score_percent<25 then '0–24%'
+                    when score_percent<50 then '25–49%'
+                    when score_percent<75 then '50–74%'
+                    when score_percent<90 then '75–89%'
+                    else '90–100%' end as band,
+               case when score_percent<25 then 1 when score_percent<50 then 2
+                    when score_percent<75 then 3 when score_percent<90 then 4 else 5 end as band_order
+        from released
+      ) buckets
+      group by band,band_order order by band_order
+      """,courseId,institutionId,assessmentId,assessmentId);
+    List<Map<String,Object>> questionPerformance=jdbc.queryForList("""
+      select a.id as assessment_id,a.title as assessment_title,
+        coalesce(aq.source_assessment_question_id::text,aq.source_question_id::text,
+          aq.question_snapshot->>'question_id',aq.sequence_no::text) as question_key,
+        aq.question_snapshot::text as question_snapshot,
+        count(*) as exposures,
+        count(*) filter(where ans.is_correct=true) as correct_count,
+        count(*) filter(where ans.is_correct=false) as incorrect_count,
+        count(*) filter(where ans.response_payload is null or ans.response_payload in
+          ('null'::jsonb,'""'::jsonb,'[]'::jsonb,'{}'::jsonb)) as unanswered_count,
+        round(100.0*count(*) filter(where ans.is_correct=true)
+          /nullif(count(*) filter(where ans.is_correct is not null),0),2) as accuracy_percent,
+        round(avg((coalesce(ans.awarded_marks,0)-coalesce(ans.penalty_marks,0))
+          /nullif(aq.max_marks,0)*100),2) as average_net_marks_percent
+      from student_assessment_attempt att
+      join assessment a on a.id=att.assessment_id and a.course_id=?
+      join student_assessment_attempt_question aq on aq.attempt_id=att.id
+      left join student_assessment_answer ans on ans.attempt_question_id=aq.id
+      where att.institution_id=? and att.status='RELEASED' and (CAST(? AS bigint) IS NULL OR a.id=?)
+      group by a.id,a.title,question_key,aq.question_snapshot
+      order by incorrect_count desc,accuracy_percent asc nulls first,exposures desc
+      limit 100
+      """,courseId,institutionId,assessmentId,assessmentId);
+    for(Map<String,Object> question:questionPerformance) {
+      Object rawSnapshot=question.remove("question_snapshot");
+      Map<String,Object> snapshot=stringMap(rawSnapshot==null?null:parseValue(String.valueOf(rawSnapshot)));
+      if(snapshot==null)snapshot=new LinkedHashMap<>();
+      question.put("question_type",snapshot.getOrDefault("question_type","UNKNOWN"));
+      question.put("prompt",snapshot.getOrDefault("prompt",""));
+      question.put("topic",snapshot.getOrDefault("topic",
+          snapshot.getOrDefault("topic_tags",List.of())));
+      question.put("subtopic_tags",snapshot.getOrDefault("subtopic_tags",List.of()));
+      question.put("difficulty",snapshot.getOrDefault("difficulty","CORE"));
+      question.put("section_code",snapshot.getOrDefault("section_code","UNSECTIONED"));
+      question.put("section_result_policy",snapshot.getOrDefault("section_result_policy","SCORED"));
+      question.put("options",snapshot.getOrDefault("options",List.of()));
+    }
+    List<Map<String,Object>> optionSelections=jdbc.queryForList("""
+      with response_values as (
+        select a.id as assessment_id,
+          coalesce(aq.source_assessment_question_id::text,aq.source_question_id::text,
+            aq.question_snapshot->>'question_id',aq.sequence_no::text) as question_key,
+          aq.question_snapshot,
+          selected.value #>> '{}' as selected_value
+        from student_assessment_attempt att
+        join assessment a on a.id=att.assessment_id and a.course_id=?
+        join student_assessment_attempt_question aq on aq.attempt_id=att.id
+        join student_assessment_answer ans on ans.attempt_question_id=aq.id
+        cross join lateral jsonb_array_elements(
+          case
+            when jsonb_typeof(ans.response_payload)='array' then ans.response_payload
+            when jsonb_typeof(ans.response_payload)='object'
+              and jsonb_typeof(ans.response_payload->'value')='array' then ans.response_payload->'value'
+            when jsonb_typeof(ans.response_payload)='object'
+              and coalesce(ans.response_payload->>'value',ans.response_payload->>'option_key',ans.response_payload->>'answer') is not null
+              then jsonb_build_array(coalesce(ans.response_payload->'value',ans.response_payload->'option_key',ans.response_payload->'answer'))
+            when jsonb_typeof(ans.response_payload)='string'
+              and ans.response_payload not in ('""'::jsonb,'null'::jsonb)
+              then jsonb_build_array(ans.response_payload)
+            when jsonb_typeof(ans.response_payload)='number' then jsonb_build_array(ans.response_payload)
+            else '[]'::jsonb
+          end
+        ) selected(value)
+        where att.institution_id=? and att.status='RELEASED' and (CAST(? AS bigint) IS NULL OR a.id=?)
+      )
+      select rv.assessment_id,rv.question_key,
+        coalesce(opt.option_json->>'key',opt.option_json->>'option_key') as selected_value,
+        max(coalesce(opt.option_json->>'label',opt.option_json->>'text',
+                     opt.option_json->'text_i18n'->>'en',opt.option_json->'text_i18n'->>'hi')) as option_label,
+        count(*) as selection_count
+      from response_values rv
+      cross join lateral jsonb_array_elements(
+        case when jsonb_typeof(rv.question_snapshot->'options')='array'
+          then rv.question_snapshot->'options' else '[]'::jsonb end
+      ) opt(option_json)
+      where rv.selected_value is not null and btrim(rv.selected_value)<>''
+        and rv.selected_value=coalesce(opt.option_json->>'key',opt.option_json->>'option_key')
+      group by rv.assessment_id,rv.question_key,
+        coalesce(opt.option_json->>'key',opt.option_json->>'option_key')
+      order by rv.assessment_id,rv.question_key,selection_count desc,selected_value
+      limit 2000
+      """,courseId,institutionId,assessmentId,assessmentId);
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("courseId",courseId);
+    if(assessmentId!=null) result.put("assessmentId",assessmentId);
+    result.put("summary",summary);
+    result.put("assessments",tests);
+    result.put("scoreBands",scoreBands);
+    result.put("topicPerformance",topicPerformance);
+    result.put("secondaryTopicPerformance",secondaryTopicPerformance);
+    result.put("difficultyPerformance",difficultyPerformance);
+    result.put("questionTypePerformance",questionTypePerformance);
+    result.put("sectionPerformance",sectionPerformance);
+    result.put("questionPerformance",questionPerformance);
+    result.put("optionSelections",optionSelections);
+    result.put("dataPolicy",Map.of(
+        "scoreAnalyticsStatus","RELEASED_ATTEMPTS_ONLY",
+        "participationIncludesNonReleasedAttempts",true,
+        "studentIdentifiersIncluded",false,
+        "secondaryTopicTagsOverlap",true,
+        "perQuestionTimingAvailable",false,
+        "note","Attempt duration uses submitted_at minus started_at; per-question time is not inferred."
+    ));
+    return result;
+  }
+
   @PostMapping("/admin/assessments")
   @Transactional
   public Map<String, Object> createAssessment(
@@ -891,6 +1208,9 @@ public class AssessmentController {
       String type=String.valueOf(question.get("question_type"));
       if(!Set.of("MCQ","TRUE_FALSE","INFERENCE","INPUT","NUMERICAL","SHORT_ANSWER","LONG_ANSWER","CASE_BASED","SOURCE_BASED","DIAGRAM","MAP","ASSERTION_REASON","MATCH","ORDER").contains(type))
         issues.add(at+".question_type is not supported.");
+      if(question.get("difficulty")!=null
+          && !Set.of("FOUNDATION","CORE","CHALLENGE").contains(String.valueOf(question.get("difficulty"))))
+        issues.add(at+".difficulty must be FOUNDATION, CORE, or CHALLENGE.");
       packageText(question,"prompt",1,4000,issues,at);
       Object promptLocales=question.get("prompt_i18n");
       if(!(promptLocales instanceof Map<?,?> localed)||localed.isEmpty())issues.add(at+".prompt_i18n must contain at least one language.");
@@ -2004,6 +2324,148 @@ public class AssessmentController {
     return attemptDetails(attemptId, context, false,requireInstitution(tenant));
   }
 
+
+  /**
+   * Student retry history for the incorrect answers in one released attempt.
+   * Only the owner of a released result can inspect or practice these questions.
+   * This data is intentionally separate from the immutable official attempt and score.
+   */
+  @GetMapping("/learning/assessment-attempts/{attemptId}/incorrect-practice")
+  public Map<String,Object> studentIncorrectPracticeProgress(
+      @PathVariable long attemptId,
+      @RequestParam Long courseId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    context=authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
+    requireAttemptInCourse(attemptId,courseId,tenant);
+    List<Map<String,Object>> owned=jdbc.queryForList("""
+      select att.status,att.student_id
+      from student_assessment_attempt att join assessment a on a.id=att.assessment_id
+      where att.id=? and a.course_id=? and att.institution_id=?
+      """,attemptId,courseId,institutionId);
+    if(owned.isEmpty()||((Number)owned.getFirst().get("student_id")).longValue()!=context.studentId()) {
+      throw notFound("Assessment attempt",attemptId);
+    }
+    if(!"RELEASED".equals(String.valueOf(owned.getFirst().get("status")))) {
+      throw conflict("Incorrect-question practice unlocks after the official result is released.");
+    }
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select aq.id as attempt_question_id,aq.sequence_no,aq.question_snapshot::text as question_snapshot,
+        ans.response_payload::text as source_response,
+        coalesce(practice.practice_count,0) as practice_count,practice.last_correct,
+        coalesce(practice.ever_correct,false) as ever_correct,practice.last_practiced_at
+      from student_assessment_attempt att
+      join assessment a on a.id=att.assessment_id
+      join student_assessment_attempt_question aq on aq.attempt_id=att.id
+      join student_assessment_answer ans on ans.attempt_question_id=aq.id
+      left join lateral (
+        select count(*) as practice_count,
+          (array_agg(p.is_correct order by p.practiced_at desc,p.id desc))[1] as last_correct,
+          bool_or(p.is_correct) as ever_correct,max(p.practiced_at) as last_practiced_at
+        from student_assessment_question_practice_attempt p
+        where p.source_attempt_id=att.id and p.source_attempt_question_id=aq.id
+          and p.institution_id=att.institution_id and p.student_id=att.student_id and p.course_id=a.course_id
+      ) practice on true
+      where att.id=? and att.institution_id=? and att.student_id=? and a.course_id=?
+        and att.status='RELEASED' and ans.is_correct=false
+      order by aq.sequence_no
+      """,attemptId,institutionId,context.studentId(),courseId);
+    List<Map<String,Object>> items=new ArrayList<>();
+    int practiceableCount=0;
+    for(Map<String,Object> row:rows) {
+      Map<String,Object> snapshot=parseObject(String.valueOf(row.get("question_snapshot")));
+      Object rawPayload=snapshot.get("answer_payload");
+      String answerPayload=rawPayload instanceof String serialized?serialized:json(rawPayload==null?Map.of():rawPayload);
+      QuestionAnswerService.Evaluation evaluation=answerService.evaluate(answerPayload,
+          parseValue(String.valueOf(row.get("source_response"))));
+      boolean practiceable=evaluation.autoGraded()&&evaluation.correct()!=null;
+      if(practiceable) practiceableCount++;
+      Map<String,Object> item=new LinkedHashMap<>();
+      item.put("attempt_question_id",row.get("attempt_question_id"));
+      item.put("practiceable",practiceable);
+      item.put("practice_count",row.get("practice_count"));
+      item.put("last_correct",row.get("last_correct"));
+      item.put("ever_correct",row.get("ever_correct"));
+      item.put("last_practiced_at",row.get("last_practiced_at"));
+      items.add(item);
+    }
+    return Map.of("attempt_id",attemptId,"items",items,"total_incorrect_count",items.size(),
+        "practiceable_count",practiceableCount);
+  }
+
+  /** Retries use the same evaluator but never alter official answers, marks, or negative marking. */
+  @PostMapping("/learning/assessment-attempts/{attemptId}/incorrect-practice")
+  @Transactional
+  public Map<String,Object> submitIncorrectPracticeAnswer(
+      @PathVariable long attemptId,
+      @RequestParam Long courseId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    context=authorization.requireStudent(context);
+    long institutionId=requireInstitution(tenant);
+    requireAttemptInCourse(attemptId,courseId,tenant);
+    long questionId;
+    try { questionId=Long.parseLong(String.valueOf(body==null?null:body.get("attemptQuestionId"))); }
+    catch(RuntimeException ex) { throw badRequest("Select an incorrect question to practice."); }
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select att.status,att.student_id,att.institution_id,a.course_id,aq.question_snapshot::text as question_snapshot,
+        ans.is_correct
+      from student_assessment_attempt att
+      join assessment a on a.id=att.assessment_id
+      join student_assessment_attempt_question aq on aq.attempt_id=att.id
+      join student_assessment_answer ans on ans.attempt_question_id=aq.id
+      where att.id=? and att.institution_id=? and a.course_id=? and aq.id=?
+      for update of att
+      """,attemptId,institutionId,courseId,questionId);
+    if(rows.isEmpty()||((Number)rows.getFirst().get("student_id")).longValue()!=context.studentId()) {
+      throw notFound("Incorrect question",questionId);
+    }
+    Map<String,Object> row=rows.getFirst();
+    if(!"RELEASED".equals(String.valueOf(row.get("status")))) {
+      throw conflict("Incorrect-question practice unlocks after the official result is released.");
+    }
+    if(!Boolean.FALSE.equals(row.get("is_correct"))) {
+      throw conflict("Only a question originally marked incorrect can be added to this practice set.");
+    }
+    Object submitted=body.get("answer");
+    if(isEmptyAnswer(submitted)) throw badRequest("Enter an answer before checking it.");
+    Map<String,Object> snapshot=parseObject(String.valueOf(row.get("question_snapshot")));
+    Object rawPayload=snapshot.get("answer_payload");
+    String answerPayload=rawPayload instanceof String serialized?serialized:json(rawPayload==null?Map.of():rawPayload);
+    QuestionAnswerService.Evaluation evaluation=answerService.evaluate(answerPayload,submitted);
+    if(!evaluation.autoGraded()||evaluation.correct()==null) {
+      throw conflict("This question cannot be checked automatically. Review its released feedback instead.");
+    }
+    Integer nextNumber=jdbc.queryForObject("""
+      select coalesce(max(practice_number),0)+1
+      from student_assessment_question_practice_attempt
+      where source_attempt_id=? and source_attempt_question_id=? and institution_id=? and student_id=? and course_id=?
+      """,Integer.class,attemptId,questionId,institutionId,context.studentId(),courseId);
+    int practiceNumber=nextNumber==null?1:nextNumber;
+    jdbc.update("""
+      insert into student_assessment_question_practice_attempt(
+        source_attempt_id,source_attempt_question_id,institution_id,student_id,course_id,
+        practice_number,response_payload,is_correct,practiced_at
+      ) values(?,?,?,?,?,?,?::jsonb,?,now())
+      """,attemptId,questionId,institutionId,context.studentId(),courseId,practiceNumber,json(submitted),evaluation.correct());
+    Map<String,Object> progress=jdbc.queryForMap("""
+      select count(*) as practice_count,
+        (array_agg(is_correct order by practiced_at desc,id desc))[1] as last_correct,
+        bool_or(is_correct) as ever_correct,max(practiced_at) as last_practiced_at
+      from student_assessment_question_practice_attempt
+      where source_attempt_id=? and source_attempt_question_id=? and institution_id=? and student_id=? and course_id=?
+      """,attemptId,questionId,institutionId,context.studentId(),courseId);
+    Map<String,Object> response=new LinkedHashMap<>();
+    response.put("attempt_question_id",questionId);
+    response.put("practiceable",true);
+    response.putAll(progress);
+    return response;
+  }
+
   @PutMapping("/learning/assessment-attempts/{attemptId}/answers/{attemptQuestionId}")
   @Transactional
   public Map<String, Object> saveAnswer(
@@ -2388,8 +2850,8 @@ public class AssessmentController {
       select count(distinct att.assessment_id)
       from student_assessment_attempt att
       join assessment a on a.id=att.assessment_id
-      join curriculum_subject s on s.id=a.subject_id
-      join curriculum_class c on c.id=s.class_id
+      left join curriculum_subject s on s.id=a.subject_id
+      left join curriculum_class c on c.id=s.class_id
       join student st on st.id=att.student_id and st.active=true
       where att.student_id=? and att.institution_id=(select institution_id from tenant_scope)
         and att.status='RELEASED' and __RESULT_SCOPE__
@@ -2474,7 +2936,7 @@ public class AssessmentController {
              a.assessment_type,a.is_generated,s.code as subject_code,s.display_name as subject_name,ch.display_name as chapter_name
       from student_assessment_attempt att
       join assessment a on a.id=att.assessment_id
-      join curriculum_subject s on s.id=a.subject_id
+      left join curriculum_subject s on s.id=a.subject_id
       join student st on st.id=att.student_id
       left join curriculum_chapter ch on ch.id=a.chapter_id
       where att.id=?""" + tenantPredicate,queryArgs);

@@ -39,6 +39,14 @@ Optional release-preparation checks:
 
 The validator is a structural gate only; it does not independently prove question correctness, source rights, topic classification or authorization to publish. Human review and deployment checks remain separate.
 
+## Assessment analytics contract
+
+Assessment course data must preserve both the frozen question definition and each learner's attempt/answer records. The portable package and imported question snapshots carry stable question IDs, source question numbers/locations, question type, language variants, primary and secondary topic tags, difficulty, section code, section scoring policy, marks, answer-review status, and source provenance. The existing assessment attempt engine remains the source of truth for attempts, submitted responses, grading, scores, and result release; do not create a second TRE-only answer store.
+
+From those records, the course analytics layer should be able to aggregate course/test/attempt participation, score distributions, completion and unanswered rates, negative-marking impact, question-level correctness and distractor selection, primary-topic and subtopic performance, difficulty/type performance, and scored-versus-qualifying section outcomes. Primary topic attribution must be mutually exclusive when calculating topic distributions; secondary tags are overlapping diagnostic dimensions and must not be summed as if they were exclusive. Any per-question time metric must only be reported if the runtime explicitly persists reliable per-question timing telemetry.
+
+Every aggregate must be filtered by authenticated institution membership and authorized course/release scope. Keep raw attempt events and frozen question snapshots as the auditable source data; dashboards are derived views and must never change scores or learner history. The current change wires the Assessment course creation/import path into that existing engine; full course-wide analytics dashboards and runtime-verified aggregation remain a separate acceptance item, not something to infer from the presence of metadata fields alone.
+
 ## Source-script and font fidelity
 
 The student web uses the existing shared typography stack from `apps/web/app/globals.css`: DM Sans for Latin text, with **Noto Sans Devanagari** as the single Hindi/Devanagari display font. Question prompts, shared passages and options must inherit this shared stack; do not introduce per-component Hindi font families.

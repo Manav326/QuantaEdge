@@ -52,11 +52,16 @@ public class CourseAuthoringController {
     for(Map<String,Object> type:types) {
       String code=String.valueOf(type.get("code"));
       boolean nestedPackageImportSupported="K12".equals(code);
+      boolean assessmentPackageImportSupported="ASSESSMENT".equals(code);
       type.put("nestedPackageImportSupported",nestedPackageImportSupported);
+      type.put("assessmentPackageImportSupported",assessmentPackageImportSupported);
       type.put("nestedPackageImportStatus",nestedPackageImportSupported?"AVAILABLE":"NOT_IMPLEMENTED");
+      type.put("assessmentPackageImportStatus",assessmentPackageImportSupported?"AVAILABLE":"NOT_IMPLEMENTED");
       type.put("nestedPackageImportNote",nestedPackageImportSupported
           ?"Supports subjects, chapters, lessons and teaching blocks in a draft-only package import."
-          :"This course type requires its own hierarchy importer; the K12 course-package endpoint rejects it.");
+          :assessmentPackageImportSupported
+              ?"Supports portable assessment package validation and draft import through the assessment-specific endpoint."
+              :"This course type requires its own hierarchy importer; the K12 course-package endpoint rejects it.");
       Object hierarchy=type.get("hierarchy_schema_json");
       if(hierarchy!=null) {
         try {

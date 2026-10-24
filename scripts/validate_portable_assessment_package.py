@@ -24,6 +24,7 @@ VALID_QUESTION_TYPES = {
     "LONG_ANSWER", "CASE_BASED", "SOURCE_BASED", "DIAGRAM", "MAP",
     "ASSERTION_REASON", "MATCH", "ORDER",
 }
+VALID_DIFFICULTIES = {"FOUNDATION", "CORE", "CHALLENGE"}
 LANGUAGE_KEY = re.compile(r"^[a-z]{2,3}(?:-[A-Za-z0-9]{2,8})?$")
 
 
@@ -282,6 +283,8 @@ def validate_package(package: Any, repo_root: Path | None = None,
             errors.append(f"{where}.prompt is required as a display fallback.")
         if q.get("question_type") not in VALID_QUESTION_TYPES:
             errors.append(f"{where}.question_type must be one of {', '.join(sorted(VALID_QUESTION_TYPES))}.")
+        if q.get("difficulty") is not None and q.get("difficulty") not in VALID_DIFFICULTIES:
+            errors.append(f"{where}.difficulty must be one of {', '.join(sorted(VALID_DIFFICULTIES))}.")
         loc = q.get("source_location")
         if not isinstance(loc, dict) or not isinstance(loc.get("pdf_page"), int) or loc.get("pdf_page", 0) < 1:
             errors.append(f"{where}.source_location.pdf_page must be a 1-based positive page number.")

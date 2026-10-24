@@ -12,7 +12,43 @@ import_tre4_course = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(import_tre4_course)
 
 
+class FakeCursor:
+    def __init__(self, rows):
+        self.rows = list(rows)
+        self.statements = []
+        self.rowcount = 1
+
+    def execute(self, sql, params=None):
+        self.statements.append((sql, params))
+
+    def fetchone(self):
+        return self.rows.pop(0) if self.rows else None
+
+
 class Tre4ImporterTests(unittest.TestCase):
+    def test_course_identity_is_created_before_tre_content_import(self):
+        cursor = FakeCursor([
+            ("TRE-4 · Computer Science", "ASSESSMENT", None, None, None, None),
+            (0,),
+            (0,),
+            None,
+            (901,),
+        ])
+        identity_id = import_tre4_course.ensure_course_identity(cursor, 42, 777)
+        self.assertEqual(identity_id, 901)
+        sql = "\n".join(statement for statement, _ in cursor.statements)
+        self.assertIn("INSERT INTO institution_course_identity", sql)
+        self.assertIn("course_type_code='ASSESSMENT'", sql)
+        self.assertIn("course_identity_id=%s", sql)
+
+    def test_existing_source_owned_tre_identity_is_reused_without_mutation(self):
+        cursor = FakeCursor([
+            ("TRE-4 · Computer Science", "ASSESSMENT", 901, 42, "I42_TRE4", "ASSESSMENT"),
+        ])
+        identity_id = import_tre4_course.ensure_course_identity(cursor, 42, 777)
+        self.assertEqual(identity_id, 901)
+        self.assertEqual(len(cursor.statements), 1)
+
     def test_expected_primary_booklet_counts(self):
         self.assertEqual(import_tre4_course.expected_question_count("TRE 1.0"), 120)
         self.assertEqual(import_tre4_course.expected_question_count("TRE 2.0"), 150)

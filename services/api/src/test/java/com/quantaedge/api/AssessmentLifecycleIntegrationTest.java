@@ -139,6 +139,187 @@ class AssessmentLifecycleIntegrationTest {
   }
 
   @Test
+  @SuppressWarnings("unchecked")
+  void courseAnalyticsUsesReleasedAttemptsAndExecutesAgainstTheMigratedSchema() {
+    Fixture fixture=fixture("COMPLETED");
+    Map<String,Object> started=controller.startOrResumeAttempt(
+        fixture.assessmentId(),fixture.courseId(),"hi",false,fixture.student(),fixture.tenant());
+    long attemptId=((Number)started.get("attempt_id")).longValue();
+    long attemptQuestionId=jdbc.queryForObject("""
+      select id from student_assessment_attempt_question where attempt_id=?
+      """,Long.class,attemptId);
+    controller.saveAnswer(attemptId,attemptQuestionId,fixture.courseId(),
+        Map.of("answer","B"),fixture.student(),fixture.tenant());
+    Map<String,Object> submitted=controller.submitAttempt(attemptId,fixture.courseId(),
+        Map.of(),fixture.student(),fixture.tenant());
+    assertEquals("RELEASED",submitted.get("status"));
+
+    Long analyticsStaffId=jdbc.queryForObject("""
+      insert into staff_account(public_id,mobile_e164,display_name,role,active)
+      values(gen_random_uuid(),null,'Assessment analytics reviewer','ADMIN',true)
+      returning id
+      """,Long.class);
+    jdbc.update("""
+      insert into staff_permission_grant(staff_id,workspace_key,permission_key)
+      values(?,'EDUCATION_ADMIN','CONTENT_VIEW')
+      on conflict(staff_id,workspace_key,permission_key) do nothing
+      """,analyticsStaffId);
+    AuthContext reviewer=new AuthContext(null,null,analyticsStaffId,"ADMIN","Assessment analytics reviewer","EDUCATION_ADMIN");
+    Map<String,Object> analytics=controller.courseAssessmentAnalytics(
+        fixture.courseId(),null,reviewer,fixture.tenant());
+    Map<String,Object> summary=(Map<String,Object>)analytics.get("summary");
+    assertEquals(1L,((Number)summary.get("assessment_count")).longValue());
+    assertEquals(1L,((Number)summary.get("attempt_count")).longValue());
+    assertEquals(1L,((Number)summary.get("released_attempt_count")).longValue());
+    assertEquals(1L,((Number)summary.get("learner_count")).longValue());
+    assertTrue(new BigDecimal(String.valueOf(summary.get("average_released_score_percent")))
+        .compareTo(new BigDecimal("100"))==0);
+    assertEquals("RELEASED_ATTEMPTS_ONLY",
+        ((Map<String,Object>)analytics.get("dataPolicy")).get("scoreAnalyticsStatus"));
+    assertFalse(analytics.containsKey("student_id"));
+    List<Map<String,Object>> questions=(List<Map<String,Object>>)analytics.get("questionPerformance");
+    assertEquals(1,questions.size());
+    assertEquals(1L,((Number)questions.getFirst().get("exposures")).longValue());
+    assertEquals("Which option is correct?",questions.getFirst().get("prompt"));
+    List<Map<String,Object>> selections=(List<Map<String,Object>>)analytics.get("optionSelections");
+    assertTrue(selections.stream().anyMatch(row -> "B".equals(String.valueOf(row.get("selected_value")))));
+  }
+
+
+  @Test
+  @SuppressWarnings("unchecked")
+  void releasedIncorrectQuestionsCanBeRetriedWithoutChangingTheOfficialScore() {
+    Fixture fixture=fixture("COMPLETED");
+    Map<String,Object> started=controller.startOrResumeAttempt(
+        fixture.assessmentId(),fixture.courseId(),"hi",false,fixture.student(),fixture.tenant());
+    long attemptId=((Number)started.get("attempt_id")).longValue();
+    ResponseStatusException beforeRelease=assertThrows(ResponseStatusException.class,
+        ()->controller.studentIncorrectPracticeProgress(
+            attemptId,fixture.courseId(),fixture.student(),fixture.tenant()));
+    assertEquals(409,beforeRelease.getStatusCode().value(),
+        "Incorrect-question practice must remain locked before result release.");
+    List<Map<String,Object>> startedQuestions=(List<Map<String,Object>>)started.get("questions");
+    long questionId=((Number)startedQuestions.getFirst().get("attemptQuestionId")).longValue();
+
+    controller.saveAnswer(attemptId,questionId,fixture.courseId(),Map.of("answer","A"),
+        fixture.student(),fixture.tenant());
+    Map<String,Object> released=controller.submitAttempt(attemptId,fixture.courseId(),Map.of(),
+        fixture.student(),fixture.tenant());
+    assertEquals("RELEASED",released.get("status"));
+    assertEquals(false,((List<Map<String,Object>>)released.get("questions")).getFirst().get("isCorrect"));
+    assertEquals("Algorithms",((List<Map<String,Object>>)released.get("questions")).getFirst().get("topic"));
+    assertEquals(List.of("Sorting"),((List<Map<String,Object>>)released.get("questions")).getFirst().get("subtopic_tags"));
+    List<Map<String,Object>> releasedQuestions=(List<Map<String,Object>>)released.get("questions");
+    Map<String,Object> officialQuestion=releasedQuestions.getFirst();
+    Object officialAnswer=officialQuestion.get("answer");
+    Object officialCorrectness=officialQuestion.get("isCorrect");
+    Object officialAwardedMarks=officialQuestion.get("awardedMarks");
+    Object officialPenaltyMarks=officialQuestion.get("penaltyMarks");
+    Object officialScore=released.get("final_score");
+    Object officialPenaltyScore=released.get("penalty_score");
+
+    Long otherStudentId=jdbc.queryForObject("""
+      insert into student(public_id,display_name,class_code,board,language,environment,active)
+      values(?,?,?,'E2E Bihar Board','hi','PRODUCTION',true) returning id
+      """,Long.class,UUID.randomUUID(),"Other assessment learner",
+      jdbc.queryForObject("select class_code from student where id=?",String.class,fixture.studentId()));
+    Long institutionId=fixture.tenant().institutionId();
+    jdbc.update("""
+      insert into institution_membership(
+        institution_id,student_id,join_code_id,status,joined_at,left_at,created_at,updated_at)
+      values(?,?,null,'ACTIVE',now(),null,now(),now())
+      """,institutionId,otherStudentId);
+    jdbc.update("""
+      insert into student_program_enrollment(
+        student_id,program_id,institution_id,status,enrolled_at,created_at,updated_at)
+      values(?,?,?,'ACTIVE',now(),now(),now())
+      """,otherStudentId,fixture.courseId(),institutionId);
+    AuthContext otherStudent=new AuthContext(null,otherStudentId,"STUDENT","Other assessment learner");
+    ResponseStatusException otherRead=assertThrows(ResponseStatusException.class,
+        ()->controller.studentIncorrectPracticeProgress(
+            attemptId,fixture.courseId(),otherStudent,fixture.tenant()));
+    assertEquals(404,otherRead.getStatusCode().value(),
+        "A different learner must not be able to inspect another learner's incorrect questions.");
+    ResponseStatusException otherRetry=assertThrows(ResponseStatusException.class,
+        ()->controller.submitIncorrectPracticeAnswer(attemptId,fixture.courseId(),
+            Map.of("attemptQuestionId",questionId,"answer","B"),otherStudent,fixture.tenant()));
+    assertEquals(404,otherRetry.getStatusCode().value(),
+        "A different learner must not be able to submit retries against another learner's attempt.");
+
+    Map<String,Object> progress=controller.studentIncorrectPracticeProgress(
+        attemptId,fixture.courseId(),fixture.student(),fixture.tenant());
+    List<Map<String,Object>> incorrect=(List<Map<String,Object>>)progress.get("items");
+    assertEquals(1,incorrect.size());
+    assertEquals(true,incorrect.getFirst().get("practiceable"));
+    assertEquals(0L,((Number)incorrect.getFirst().get("practice_count")).longValue());
+
+    Map<String,Object> retry=controller.submitIncorrectPracticeAnswer(attemptId,fixture.courseId(),
+        Map.of("attemptQuestionId",questionId,"answer","B"),fixture.student(),fixture.tenant());
+    assertEquals(true,retry.get("last_correct"));
+    assertEquals(1L,((Number)retry.get("practice_count")).longValue());
+    assertEquals(true,retry.get("ever_correct"));
+
+    Map<String,Object> refreshed=controller.studentIncorrectPracticeProgress(
+        attemptId,fixture.courseId(),fixture.student(),fixture.tenant());
+    List<Map<String,Object>> updated=(List<Map<String,Object>>)refreshed.get("items");
+    assertEquals(true,updated.getFirst().get("last_correct"));
+    assertEquals(true,updated.getFirst().get("ever_correct"));
+    assertEquals(1L,((Number)updated.getFirst().get("practice_count")).longValue());
+
+    Map<String,Object> officialAfterPractice=controller.studentAttempt(
+        attemptId,fixture.courseId(),fixture.student(),fixture.tenant());
+    assertEquals(officialScore,officialAfterPractice.get("final_score"),
+        "Practice answers must never change the released score.");
+    assertEquals(officialPenaltyScore,officialAfterPractice.get("penalty_score"),
+        "Practice answers must never change official negative-marking penalties.");
+    List<Map<String,Object>> officialQuestionsAfterPractice=
+        (List<Map<String,Object>>)officialAfterPractice.get("questions");
+    Map<String,Object> officialQuestionAfterPractice=officialQuestionsAfterPractice.getFirst();
+    assertEquals(officialAnswer,officialQuestionAfterPractice.get("answer"),
+        "Retry answers must be stored outside the submitted paper.");
+    assertEquals(officialCorrectness,officialQuestionAfterPractice.get("isCorrect"));
+    assertEquals(officialAwardedMarks,officialQuestionAfterPractice.get("awardedMarks"));
+    assertEquals(officialPenaltyMarks,officialQuestionAfterPractice.get("penaltyMarks"));
+    assertEquals(1L,jdbc.queryForObject("""
+      select count(*) from student_assessment_question_practice_attempt where source_attempt_id=?
+      """,Long.class,attemptId));
+  }
+
+
+  @Test
+  @SuppressWarnings("unchecked")
+  void subjectlessAssessmentCourseCanOpenReleasedResultsAndIncorrectPractice() {
+    Fixture fixture=fixture("COMPLETED",false,"ASSESSMENT");
+    Map<String,Object> started=controller.startOrResumeAttempt(
+        fixture.assessmentId(),fixture.courseId(),"hi",false,fixture.student(),fixture.tenant());
+    long attemptId=((Number)started.get("attempt_id")).longValue();
+    long questionId=((Number)((List<Map<String,Object>>)started.get("questions")).getFirst()
+        .get("attemptQuestionId")).longValue();
+    controller.saveAnswer(attemptId,questionId,fixture.courseId(),Map.of("answer","A"),
+        fixture.student(),fixture.tenant());
+    Map<String,Object> released=controller.submitAttempt(attemptId,fixture.courseId(),Map.of(),
+        fixture.student(),fixture.tenant());
+    assertEquals("RELEASED",released.get("status"));
+    assertEquals(false,((List<Map<String,Object>>)released.get("questions")).getFirst().get("isCorrect"));
+
+    Map<String,Object> resultPage=controller.studentResults(
+        "hi",fixture.courseId(),null,25,0,fixture.student(),fixture.tenant());
+    assertEquals(1L,((Number)resultPage.get("total")).longValue(),
+        "Subjectless assessment-only courses must be counted in student result pagination.");
+    List<Map<String,Object>> resultItems=(List<Map<String,Object>>)resultPage.get("items");
+    assertEquals(1,resultItems.size());
+
+    Map<String,Object> reopened=controller.studentAttempt(
+        attemptId,fixture.courseId(),fixture.student(),fixture.tenant());
+    assertEquals("RELEASED",reopened.get("status"));
+    assertEquals("Algorithms",((List<Map<String,Object>>)reopened.get("questions")).getFirst().get("topic"));
+    Map<String,Object> retry=controller.submitIncorrectPracticeAnswer(attemptId,fixture.courseId(),
+        Map.of("attemptQuestionId",questionId,"answer","B"),fixture.student(),fixture.tenant());
+    assertEquals(true,retry.get("last_correct"));
+    assertEquals(new BigDecimal("0.00"),new BigDecimal(String.valueOf(reopened.get("final_score"))));
+  }
+
+  @Test
   void offlineAttemptCannotStartUnlessEditorExplicitlyEnabledIt() {
     Fixture fixture=fixture("COMPLETED");
     ResponseStatusException error=assertThrows(ResponseStatusException.class,
@@ -187,9 +368,11 @@ class AssessmentLifecycleIntegrationTest {
     assertEquals(true,saved.get("saved"));
   }
 
-  private Fixture fixture(String progressStatus) { return fixture(progressStatus,false); }
+  private Fixture fixture(String progressStatus) { return fixture(progressStatus,false,"K12"); }
 
-  private Fixture fixture(String progressStatus,boolean offlineEnabled) {
+  private Fixture fixture(String progressStatus,boolean offlineEnabled) { return fixture(progressStatus,offlineEnabled,"K12"); }
+
+  private Fixture fixture(String progressStatus,boolean offlineEnabled,String courseType) {
     String suffix = UUID.randomUUID().toString().replace("-", "").substring(0, 12);
     String classCode = "E2E" + suffix;
     Long classId = jdbc.queryForObject("""
@@ -206,16 +389,16 @@ class AssessmentLifecycleIntegrationTest {
       """, Long.class, classId);
     Long courseId = jdbc.queryForObject("""
       insert into curriculum_program(
-        class_id,code,display_name,curriculum_version,status,notes,public_id_prefix)
-      values(?,?,'Assessment lifecycle course','CURRENT','ACTIVE','CI fixture course','INS')
+        class_id,code,display_name,curriculum_version,status,notes,public_id_prefix,course_type_code)
+      values(?,?,'Assessment lifecycle course','CURRENT','ACTIVE','CI fixture course','INS',?)
       returning id
-      """, Long.class, classId, "ASSESSMENT_" + suffix.toUpperCase(Locale.ROOT));
+      """, Long.class, classId, "ASSESSMENT_" + suffix.toUpperCase(Locale.ROOT),courseType);
     Long identityId = jdbc.queryForObject("""
       insert into institution_course_identity(
         source_institution_id,stable_course_key,display_name,course_type_code)
-      values(?,?,?,'K12') returning id
+      values(?,?,?,?) returning id
       """, Long.class, institutionId, "assessment-lifecycle-" + suffix,
-      "Assessment lifecycle course");
+      "Assessment lifecycle course",courseType);
     jdbc.update("update curriculum_program set course_identity_id=? where id=?", identityId, courseId);
     jdbc.update("""
       insert into curriculum_program_subject(program_id,class_id,subject_id,is_required,sort_order)
@@ -258,18 +441,25 @@ class AssessmentLifecycleIntegrationTest {
       """, institutionId, studentId, lessonId, progressStatus,
       "COMPLETED".equals(progressStatus) ? 100 : 25);
 
+    boolean subjectlessAssessment = "ASSESSMENT".equals(courseType);
     Long assessmentId = jdbc.queryForObject("""
       insert into assessment(
         title,description,course_id,subject_id,chapter_id,lesson_id,duration_minutes,max_attempts,status,
         assessment_type,is_generated,is_current,generation_version,published_at,offline_enabled)
       values('Assessment lifecycle test','CI fixture',?,?,?,?,15,2,'PUBLISHED',
         ?,?,true,1,now(),?) returning id
-      """, Long.class, courseId, subjectId, chapterId, offlineEnabled ? null : lessonId,
-      offlineEnabled ? "ADMIN_CREATED" : "TOPIC_END", !offlineEnabled, offlineEnabled);
+      """, Long.class, courseId, subjectlessAssessment ? null : subjectId,
+      subjectlessAssessment ? null : chapterId,
+      offlineEnabled || subjectlessAssessment ? null : lessonId,
+      offlineEnabled || subjectlessAssessment ? "ADMIN_CREATED" : "TOPIC_END",
+      !offlineEnabled && !subjectlessAssessment, offlineEnabled);
     String snapshot = """
       {
         "id": 1,
         "question_type": "MCQ",
+        "topic": "Algorithms",
+        "topic_tags": ["Algorithms"],
+        "subtopic_tags": ["Sorting"],
         "prompt": "Which option is correct?",
         "explanation": "Option B is correct.",
         "answer_payload": "{\\"kind\\":\\"OPTION\\",\\"value\\":\\"B\\"}",

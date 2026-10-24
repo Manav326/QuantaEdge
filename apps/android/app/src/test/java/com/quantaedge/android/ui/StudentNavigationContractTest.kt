@@ -4,6 +4,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.json.JSONObject
 
 class StudentNavigationContractTest {
     @Test
@@ -100,6 +101,14 @@ class StudentNavigationContractTest {
         assertEquals("profile", StudentNavigationContract.parentGroupForRoute(AppRoute.PARENT_PROFILE, "family"))
         assertEquals("children", StudentNavigationContract.parentGroupForRoute(AppRoute.PARENT_REPORT, "children"))
         assertEquals("family", StudentNavigationContract.parentGroupForRoute(AppRoute.PARENT_REPORT, "invalid"))
+    }
+
+    @Test
+    fun assessmentCourseResolverUsesServerTypeAndDeliveryMode() {
+        assertTrue(isAssessmentOnlyCourse(JSONObject("""{"course_type_code":"ASSESSMENT"}""")))
+        assertTrue(isAssessmentOnlyCourse(JSONObject("""{"delivery_mode":"ASSESSMENT_ONLY"}""")))
+        assertFalse(isAssessmentOnlyCourse(JSONObject("""{"course_type_code":"K12","delivery_mode":"LEARNING_CONTENT"}""")))
+        assertFalse(isAssessmentOnlyCourse(JSONObject()))
     }
 
     @Test

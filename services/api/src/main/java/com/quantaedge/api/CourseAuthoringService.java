@@ -46,20 +46,41 @@ public class CourseAuthoringService {
       """,type);
     if(types.isEmpty()) throw badRequest("Select an active course type registered in HRMS.");
     boolean requiresClass=Boolean.TRUE.equals(types.getFirst().get("requires_curriculum_class"));
-    if(!"K12".equals(type))
+    if("ASSESSMENT".equals(type)&&!"QUANTA-EDGE".equalsIgnoreCase(tenantCode))
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+          "The current TRE4 assessment-course profile is source-owned by QuantaEdge; other institutions must use an approved assignment.");
+    if(!Set.of("K12","ASSESSMENT").contains(type))
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
-          "This course creation endpoint currently supports K12 only. Competitive and standalone assessment courses require their type-specific hierarchy importer.");
+          "This creation flow supports K12 learning courses and assessment-only courses. Competitive courses require their type-specific hierarchy importer.");
 
     String requestedCode=requiredText(body.get("code"),2,38,"Course code").toUpperCase(java.util.Locale.ROOT);
     if(!requestedCode.matches("^[A-Z0-9][A-Z0-9_-]{1,37}$"))
       throw badRequest("Course code must use 2–38 letters, digits, hyphens or underscores.");
     String displayName=requiredText(body.get("displayName"),2,200,"Course name");
     String version=optionalText(body.get("curriculumVersion"),"CURRENT",120,"Curriculum version");
-    String stream=optionalText(body.get("streamCode"),null,60,"Stream code");
-    String classCode=optionalText(body.get("classCode"),null,20,"Class code");
+    String stream=optionalText(body.get("streamCode"),"ASSESSMENT".equals(type)?"BPSC_TRE":null,60,"Stream code");
+    String classCode=optionalText(body.get("classCode"),"ASSESSMENT".equals(type)?"TRE4":null,20,"Class code");
 
     Long classId=null;
-    if(classCode!=null) {
+    if("ASSESSMENT".equals(type)&&"TRE4".equalsIgnoreCase(classCode==null?"":classCode)) {
+      List<Map<String,Object>> compatibilityRows=jdbc.queryForList(
+          "select id,display_name,board,active from curriculum_class where code='TRE4'");
+      if(compatibilityRows.size()>1)
+        throw conflict("More than one TRE4 compatibility scope exists; refusing to choose one.");
+      if(compatibilityRows.isEmpty()) {
+        classId=jdbc.queryForObject("""
+          insert into curriculum_class(code,display_name,board,sort_order,active)
+          values('TRE4','Competitive Exam Preparation','BPSC',99,true) returning id
+          """,Long.class);
+      } else {
+        Map<String,Object> compatibility=compatibilityRows.getFirst();
+        if(!"Competitive Exam Preparation".equals(String.valueOf(compatibility.get("display_name")))
+            ||!"BPSC".equals(String.valueOf(compatibility.get("board")))
+            ||!Boolean.TRUE.equals(compatibility.get("active")))
+          throw conflict("The TRE4 compatibility scope conflicts with the expected Competitive Exam Preparation definition.");
+        classId=((Number)compatibility.get("id")).longValue();
+      }
+    } else if(classCode!=null) {
       List<Map<String,Object>> classRows=jdbc.queryForList(
           "select id from curriculum_class where code=? and active=true",classCode);
       if(classRows.isEmpty()) throw badRequest("Select an active curriculum class.");
@@ -69,12 +90,12 @@ public class CourseAuthoringService {
       throw badRequest("The "+type+" course type requires an active curriculum class.");
 
     List<Map<String,Object>> subjects=parseSubjects(body.get("subjects"));
-    if("K12".equals(type)&&subjects.isEmpty())
-      throw badRequest("A K–12 course needs at least one subject track.");
+    if(Set.of("K12","ASSESSMENT").contains(type)&&subjects.isEmpty())
+      throw badRequest("A "+("ASSESSMENT".equals(type)?"standalone assessment":"K–12")+" course needs at least one subject track.");
     if(subjects.size()>30)
       throw badRequest("Add no more than 30 subject tracks to one course.");
     if(classId==null&&!subjects.isEmpty())
-      throw badRequest("Subject tracks require a curriculum class. For an independent course, use its type-defined sections, topics, question banks and test packs instead.");
+      throw badRequest("Subject tracks require an active curriculum class. For a standalone assessment course, use the TRE4 exam-preparation scope.");
 
     String internalCode="I"+institutionId+"_"+requestedCode;
     Long courseIdentityId;
@@ -82,6 +103,7 @@ public class CourseAuthoringService {
     String publicId;
     Long releaseId;
     Long assignmentId;
+    Long assessmentChapterId=null;
     try {
       // Stable logical identity belongs to the source institution. Every later content edit must
       // fork a new curriculum_program graph linked to this identity instead of mutating a release.
@@ -103,6 +125,7 @@ public class CourseAuthoringService {
       if(courseId==null) throw new IllegalStateException("The course could not be created.");
       publicId=jdbc.queryForObject("select public_id from curriculum_program where id=?",String.class,courseId);
 
+      Map<String,Long> createdSubjects=new LinkedHashMap<>();
       for(int i=0;i<subjects.size();i++) {
         Map<String,Object> subject=subjects.get(i);
         int order=((Number)subject.get("sortOrder")).intValue();
@@ -114,6 +137,35 @@ public class CourseAuthoringService {
           insert into curriculum_program_subject(program_id,class_id,subject_id,is_required,sort_order)
           values(?,?,?,true,?)
           """,courseId,classId,subjectId,order);
+        createdSubjects.put(String.valueOf(subject.get("code")),subjectId);
+      }
+
+      if("ASSESSMENT".equals(type)) {
+        if(!"TRE4".equalsIgnoreCase(classCode==null?"":classCode)
+            ||!"BPSC-TRE-4".equalsIgnoreCase(version)
+            ||!requestedCode.equalsIgnoreCase("TRE4")
+            ||!"TRE-4 · Computer Science".equals(displayName)) {
+          throw badRequest("The current assessment-only release gate is configured for the exact TRE4 course identity: TRE4 / TRE-4 · Computer Science / BPSC-TRE-4 / TRE4 compatibility scope.");
+        }
+        Long subjectId=createdSubjects.get("computer-science");
+        if(subjectId==null || subjects.size()!=1
+            || !"Computer Science".equals(String.valueOf(subjects.getFirst().get("displayName")))) {
+          throw badRequest("TRE4 assessment course requires exactly one Computer Science subject track (computer-science).");
+        }
+        jdbc.update("""
+          insert into curriculum_program_delivery_mode(program_id,delivery_mode)
+          values(?,'ASSESSMENT_ONLY')
+          """,courseId);
+        assessmentChapterId=jdbc.queryForObject("""
+          insert into curriculum_chapter(
+            subject_id,code,display_name,description,sort_order,teaching_order,active,content_status,
+            curriculum_source,curriculum_source_url,curriculum_source_edition,curriculum_source_pages,
+            curriculum_source_verified
+          ) values(?, 'prev-years','Prev years',
+            'Previous-year TRE examination papers and their versioned assessment packs.',
+            1,1,true,'DRAFT',null,null,null,null,false)
+          returning id
+          """,Long.class,subjectId);
       }
 
       String fingerprint=jdbc.queryForObject("select course_content_fingerprint(?)",String.class,courseId);
@@ -153,11 +205,13 @@ public class CourseAuthoringService {
     result.put("curriculumClassCode",classCode);
     result.put("curriculumVersion",version);
     result.put("subjectCount",subjects.size());
+    if(assessmentChapterId!=null) result.put("assessmentChapterId",assessmentChapterId);
     result.put("releaseId",releaseId);
     result.put("releaseVersion",1);
     result.put("releaseStatus","DRAFT");
     result.put("courseRelationship","SOURCED");
     result.put("assignmentId",assignmentId);
+    result.put("deliveryMode","ASSESSMENT".equals(type)?"ASSESSMENT_ONLY":"LEARNING_CONTENT");
     result.put("message","Course created as a sourced draft. It is not listed in any Marketplace until the HRMS release and Marketplace approval steps are completed.");
     return result;
   }

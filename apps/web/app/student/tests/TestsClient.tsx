@@ -32,6 +32,7 @@ type AttemptQuestion = {
   options:Array<{key:string;label:string;content_kind?:'PROSE'|'CODE'|'MATHEMATICAL'|'MIXED';code_line_indices?:number[];math_line_indices?:number[]}>;
   answer:any;answerStatus:string;maxMarks:number|string;
   section_code?:string;section_result_policy?:'SCORED'|'QUALIFYING_ONLY'|'PRACTICE_ONLY';
+  topic?:string|string[];topic_tags?:string[];subtopic?:string;subtopic_tags?:string[];difficulty?:string;
   isCorrect?:boolean|null;awardedMarks?:number|string|null;penaltyMarks?:number|string|null;
   teacherFeedback?:string|null;translated?:boolean;correctAnswer?:{kind?:string;value?:any}|null;
 };
@@ -50,12 +51,63 @@ type Attempt = {
 };
 type ResultAttempt = {attempt_id:number;attempt_number:number;status:string;submitted_at?:string|null;released_at?:string|null;final_score:number|string;max_score:number|string};
 type Result = {attempt_id:number;assessment_id:number;test_id?:string|null;attempt_number:number;status:string;submitted_at:string;released_at:string;final_score:number|string;max_score:number|string;best_score?:number|string;attempt_count?:number;attempts?:ResultAttempt[];assessment_title:string;assessment_type?:string;subject_name:string;chapter_name?:string|null;question_count:number};
+type IncorrectPracticeProgress = {attempt_question_id:number;practiceable:boolean;practice_count:number|string;last_correct?:boolean|null;ever_correct?:boolean;last_practiced_at?:string|null};
+type TopicMetric = {topic:string;question_count:number;correct_count:number;incorrect_count:number;unanswered_count:number;unscored_count:number;max_marks:number;earned_marks:number;penalty_marks:number;net_marks:number;accuracy_percent:number|null};
 type CertificateEligibility = {
   attempt_id:number;eligible:boolean;eligibility_reason?:string|null;certificate_id?:number|null;
   course_id?:number|null;course_name?:string|null;program_id?:number|null;
   certificate_number?:string|null;certificate_status?:string|null;pass_threshold_percent?:number|string;
   class_code?:string;subject_code?:string;subject_name?:string;
 };
+
+
+function metricLabels(value:any):string[]{
+  const values=Array.isArray(value)?value:[value];
+  return [...new Set(values.map(item=>String(item??'').trim()).filter(Boolean))];
+}
+function primaryQuestionTopic(question:AttemptQuestion):string{
+  return metricLabels(question.topic)[0]||metricLabels(question.topic_tags)[0]||'Uncategorised';
+}
+function secondaryQuestionTopics(question:AttemptQuestion):string[]{
+  return [...new Set([...metricLabels(question.subtopic),...metricLabels(question.subtopic_tags)])];
+}
+function emptyPracticeResponse(value:any):boolean{
+  if(value===null||value===undefined||value==='')return true;
+  if(Array.isArray(value))return value.length===0;
+  if(typeof value==='object')return Object.keys(value).length===0;
+  return false;
+}
+function buildTopicMetrics(questions:AttemptQuestion[],secondary=false):TopicMetric[]{
+  const grouped=new Map<string,TopicMetric>();
+  for(const question of questions){
+    if(question.section_result_policy&&question.section_result_policy!=='SCORED')continue;
+    if(!question.section_result_policy&&String(question.section_code||'').toUpperCase()==='LANGUAGE_QUALIFYING')continue;
+    const labels=secondary?secondaryQuestionTopics(question):[primaryQuestionTopic(question)];
+    for(const topic of labels){
+      const metric=grouped.get(topic)||{
+        topic,question_count:0,correct_count:0,incorrect_count:0,unanswered_count:0,unscored_count:0,
+        max_marks:0,earned_marks:0,penalty_marks:0,net_marks:0,accuracy_percent:null
+      };
+      metric.question_count++;
+      if(question.isCorrect===true)metric.correct_count++;
+      else if(question.isCorrect===false)metric.incorrect_count++;
+      else if(emptyPracticeResponse(question.answer))metric.unanswered_count++;
+      else metric.unscored_count++;
+      metric.max_marks+=Number(question.maxMarks)||0;
+      metric.earned_marks+=Number(question.awardedMarks)||0;
+      metric.penalty_marks+=Number(question.penaltyMarks)||0;
+      metric.net_marks=metric.earned_marks-metric.penalty_marks;
+      const graded=metric.correct_count+metric.incorrect_count;
+      metric.accuracy_percent=graded?Math.round(metric.correct_count/graded*1000)/10:null;
+      grouped.set(topic,metric);
+    }
+  }
+  return [...grouped.values()].sort((left,right)=>{
+    const leftAccuracy=left.accuracy_percent??101;
+    const rightAccuracy=right.accuracy_percent??101;
+    return leftAccuracy-rightAccuracy||right.incorrect_count-left.incorrect_count||left.topic.localeCompare(right.topic);
+  });
+}
 
 function certificateTrackName(code: string | undefined, name: string | undefined, language: string) {
   const normalized = String(code || '').trim().toLowerCase();
@@ -283,6 +335,8 @@ function QuestionSetView({items,activeQuestionId,attempt,responses,disabled,revi
   const {locale}=useLocale();
   if(items.length<2)return null;
   const first=items[0].question;
+  const activeItems=items.filter(({question})=>question.attemptQuestionId===activeQuestionId);
+  const visibleItems=activeItems.length?activeItems:items.slice(0,1);
   return <section className={styles.questionSet} aria-label={locale==='english'?'Question Set':'प्रश्न समूह'}>
     <header className={styles.questionSetHeader}>
       <div><span className={styles.questionSetEyebrow}>{locale==='english'?'QUESTION SET':'प्रश्न समूह'}</span>
@@ -293,7 +347,7 @@ function QuestionSetView({items,activeQuestionId,attempt,responses,disabled,revi
     </header>
     <StimulusContent question={first}/>
     <div className={styles.questionSetChildren}>
-      {items.map(({question,number})=>{
+      {visibleItems.map(({question,number})=>{
         const marks=questionMarkMetadata(question,attempt,locale);
         const active=question.attemptQuestionId===activeQuestionId;
         const outcome=question.isCorrect===true?'correct':question.isCorrect===false?'incorrect':'ungraded';
@@ -327,9 +381,13 @@ function QuestionSetView({items,activeQuestionId,attempt,responses,disabled,revi
 export default function TestsClient(){
   const router=useRouter();
   const searchParams=useSearchParams();
-  const rawCourseId=searchParams.get('courseId')||'';
-  const requestedCourseId=/^\d+$/.test(rawCourseId)&&Number(rawCourseId)>0?Number(rawCourseId):null;
+  const rawCourseId=(searchParams.get('courseId')||'').trim();
+  const requestedCourseId=rawCourseId
+    ? (/^\d+$/.test(rawCourseId)&&Number(rawCourseId)>0?Number(rawCourseId):rawCourseId)
+    : null;
   const {courses,activeCourse,courseId,selectCourse,loadingCourses,courseError}=useStudentCourseScope(requestedCourseId);
+  const assessmentOnlyCourse = activeCourse?.course_type_code === 'ASSESSMENT'
+    || activeCourse?.delivery_mode === 'ASSESSMENT_ONLY';
   const {locale, learningLanguage, certificateLanguage}=useLocale();
   const language=learningLanguage;
   const uiLanguage=locale==='english'?'en':'hi';
@@ -351,6 +409,15 @@ export default function TestsClient(){
   const [tab,setTab]=useState<'tests'|'results'>('tests');
   const [attempt,setAttempt]=useState<Attempt|null>(null);
   const [responses,setResponses]=useState<Record<number,any>>({});
+  const [incorrectPracticeProgress,setIncorrectPracticeProgress]=useState<Record<number,IncorrectPracticeProgress>>({});
+  const [practiceResponses,setPracticeResponses]=useState<Record<number,any>>({});
+  const [practiceFeedback,setPracticeFeedback]=useState<Record<number,boolean>>({});
+  const [practiceSavingQuestionId,setPracticeSavingQuestionId]=useState<number|null>(null);
+  const [practiceMode,setPracticeMode]=useState(false);
+  const [practiceQuestionIndex,setPracticeQuestionIndex]=useState(0);
+  const [practiceProgressLoading,setPracticeProgressLoading]=useState(false);
+  const [practiceError,setPracticeError]=useState('');
+  const practiceProgressRequestRef=useRef(0);
   const [index,setIndex]=useState(0);
   const [secondsLeft,setSecondsLeft]=useState<number|null>(null);
   const [loading,setLoading]=useState(true);
@@ -410,6 +477,26 @@ export default function TestsClient(){
     }catch(e:any){if(e?.auth){router.replace('/login/student');return;}setError(e instanceof Error?e.message:'Could not load your tests and results.');}
     finally{setLoading(false);}
   },[router,language,resultsPage,resultsPageSize,subjectFilter,testsPage,testsPageSize,courseId]);
+
+  const loadIncorrectPracticeProgress=useCallback(async(attemptId:number)=>{
+    const requestId=++practiceProgressRequestRef.current;
+    if(courseId===null){setIncorrectPracticeProgress({});setPracticeProgressLoading(false);return;}
+    setPracticeProgressLoading(true);
+    try {
+      const result=await api('/api/v1/learning/assessment-attempts/'+attemptId+'/incorrect-practice?courseId='+encodeURIComponent(String(courseId)));
+      if(requestId!==practiceProgressRequestRef.current)return;
+      const next:Record<number,IncorrectPracticeProgress>={};
+      for(const item of Array.isArray(result?.items)?result.items:[]){
+        const id=Number(item.attempt_question_id);
+        if(Number.isSafeInteger(id)&&id>0)next[id]=item as IncorrectPracticeProgress;
+      }
+      setIncorrectPracticeProgress(next);
+      setPracticeError('');
+    } finally {
+      if(requestId===practiceProgressRequestRef.current)setPracticeProgressLoading(false);
+    }
+  },[courseId]);
+
   useEffect(()=>{setTestsPage(0);setResultsPage(0);},[courseId]);
   useEffect(()=>{
     if(subjectFilter==='ALL')return;
@@ -495,6 +582,10 @@ export default function TestsClient(){
   const correctCount=scoredQuestions.filter(q=>q.isCorrect===true).length;
   const incorrectCount=scoredQuestions.filter(q=>q.isCorrect===false).length;
   const unansweredCount=scoredQuestions.filter(q=>isEmpty(q.answer)).length;
+  const topicPerformance=released?buildTopicMetrics(scoredQuestions):[];
+  const microTopicPerformance=released?buildTopicMetrics(scoredQuestions,true):[];
+  const incorrectQuestions=released?(attempt?.questions||[]).filter(q=>q.isCorrect===false):[];
+  const masteredIncorrectCount=incorrectQuestions.filter(q=>incorrectPracticeProgress[Number(q.attemptQuestionId)]?.ever_correct===true).length;
 
   function isEmpty(value:any):boolean{
     if(value===null||value===undefined||value==='')return true;
@@ -508,6 +599,39 @@ export default function TestsClient(){
     dirtyRef.current=next;
     setDirtyAnswers(next);
     setNotice('');
+  }
+
+
+  async function submitIncorrectPracticeAnswer(question:AttemptQuestion){
+    if(!attempt||attempt.status!=='RELEASED'||courseId===null)return;
+    const questionId=Number(question.attemptQuestionId);
+    const answer=practiceResponses[questionId];
+    if(emptyPracticeResponse(answer)){
+      setPracticeError(t('Enter an answer before checking it.','जाँचने से पहले उत्तर दें।'));
+      return;
+    }
+    setPracticeSavingQuestionId(questionId);setPracticeError('');
+    try{
+      const result=await api('/api/v1/learning/assessment-attempts/'+attempt.attempt_id+'/incorrect-practice?courseId='+encodeURIComponent(String(courseId)),{
+        method:'POST',body:JSON.stringify({attemptQuestionId:questionId,answer})
+      });
+      const isCorrect=Boolean(result?.last_correct);
+      setPracticeFeedback(old=>({...old,[questionId]:isCorrect}));
+      setIncorrectPracticeProgress(old=>({
+        ...old,
+        [questionId]:{
+          ...(old[questionId]||{attempt_question_id:questionId,practiceable:true,practice_count:0}),
+          practiceable:true,
+          practice_count:Number(result?.practice_count??0),
+          last_correct:isCorrect,
+          ever_correct:Boolean(result?.ever_correct),
+          last_practiced_at:result?.last_practiced_at??null
+        }
+      }));
+    }catch(e:any){
+      if(e?.auth){router.replace('/login/student');return;}
+      setPracticeError(e instanceof Error?e.message:t('The retry could not be checked. Please try again.','दोबारा उत्तर की जाँच नहीं हो सकी। कृपया फिर प्रयास करें।'));
+    }finally{setPracticeSavingQuestionId(null);}
   }
 
   const saveAnswersBatch=useCallback(async(entries:Array<[string|number,any]>)=>{
@@ -598,7 +722,11 @@ export default function TestsClient(){
       const nextResponses:Record<number,any>={};
       (data.questions||[]).forEach((q:AttemptQuestion)=>{nextResponses[q.attemptQuestionId]=q.answer??'';});
       setAttempt(data);attemptRef.current=data;setResponses(nextResponses);dirtyRef.current={};setDirtyAnswers({});setIndex(0);setTab('results');
-      if(data.status==='RELEASED')await refreshCertificateEligibilityForAttempts([attemptId]);
+      setPracticeResponses({});setPracticeFeedback({});setPracticeMode(false);setPracticeQuestionIndex(0);setPracticeError('');setIncorrectPracticeProgress({});
+      if(data.status==='RELEASED'){
+        try{await loadIncorrectPracticeProgress(attemptId);}catch{setPracticeError(t('Practice history could not be loaded. Refresh this result to try again.','अभ्यास इतिहास लोड नहीं हो सका। दोबारा प्रयास करने के लिए परिणाम रीफ़्रेश करें।'));}
+        await refreshCertificateEligibilityForAttempts([attemptId]);
+      }
     }catch(e:any){if(e?.auth){router.replace('/login/student');return;}setError(e instanceof Error?e.message:'Could not open this result.');}
     finally{setBusy(false);}
   }
@@ -673,12 +801,15 @@ export default function TestsClient(){
       setTab(data.status==='RELEASED'?'results':'tests');
       setNotice(data.status==='RELEASED'?'Your test was submitted and the result has been saved.': 'Your test was submitted. Fill-in, short-answer and long-answer responses are waiting for an assigned staff reviewer. Your final score and feedback will appear after all required answers are checked.');
       await loadOverview();
-      if(data.status==='RELEASED')await refreshCertificateEligibilityForAttempts([Number(data.attempt_id||currentAttempt.attempt_id)]);
+      if(data.status==='RELEASED'){
+        try{await loadIncorrectPracticeProgress(Number(data.attempt_id||currentAttempt.attempt_id));}catch{/* Official results remain visible if practice progress is temporarily unavailable. */}
+        await refreshCertificateEligibilityForAttempts([Number(data.attempt_id||currentAttempt.attempt_id)]);
+      }
     }catch(e:any){
       autoSubmitted.current=false;
       setError(e instanceof Error?e.message:'Could not submit your test. Saved answers are still preserved.');
     }finally{setBusy(false);}
-  },[loadOverview,flushSavedAnswers,refreshCertificateEligibilityForAttempts]);
+  },[loadOverview,flushSavedAnswers,refreshCertificateEligibilityForAttempts,loadIncorrectPracticeProgress]);
   useEffect(()=>{submitFnRef.current=submitTest;},[submitTest]);
 
   useEffect(()=>{
@@ -693,7 +824,8 @@ export default function TestsClient(){
   },[attempt?.attempt_id,attempt?.deadline_at,attempt?.status]);
 
   function closeAttempt(){
-    setAttempt(null);setResponses({});dirtyRef.current={};setDirtyAnswers({});setIndex(0);setShowSubmit(false);setError('');setNotice('');autoSubmitted.current=false;
+    practiceProgressRequestRef.current++;
+    setAttempt(null);setResponses({});setIncorrectPracticeProgress({});setPracticeResponses({});setPracticeFeedback({});setPracticeMode(false);setPracticeQuestionIndex(0);setPracticeProgressLoading(false);setPracticeError('');dirtyRef.current={};setDirtyAnswers({});setIndex(0);setShowSubmit(false);setError('');setNotice('');autoSubmitted.current=false;
     void loadOverview();
   }
 
@@ -714,7 +846,7 @@ export default function TestsClient(){
         <InstitutionCourseSubjectScope courses={courses} activeCourse={activeCourse} courseId={courseId}
           onCourseChange={value=>void changeCourse(value)} subjectCode={subjectFilter} onSubjectChange={changeSubject}
           loading={loadingCourses} language={locale} courseLabel={t('Course','कोर्स')} subjectLabel={t('Subject','विषय')}
-          allSubjectsLabel={t('All subjects','सभी विषय')} />
+          allSubjectsLabel={t('All subjects','सभी विषय')} showSubject={!assessmentOnlyCourse} />
         {tab==='tests'?<>
           <div className={styles.toolbar}><div><span className={styles.eyebrow}>{translateUi(locale, 'legacy.web.your.assessments.c34efa9f')}</span><h2>{translateUi(locale, 'legacy.web.tests.available.to.you.6ba5d74e')}</h2><p>{courseId!==null?translateUi(locale, 'legacy.web.tests.are.shown.for.the.selected.cours.48e44b0e'):translateUi(locale, 'legacy.web.tests.are.shown.only.for.your.enrolled.57cf4f75')}</p></div></div>
           {loading?<div className={styles.empty}>{translateUi(locale, 'legacy.web.loading.your.tests.ff94a584')}</div>:error?null:filteredTests.length===0?<StudentEmptyState icon="tests" title={translateUi(locale, 'legacy.web.no.published.tests.yet.04ce394c')} message={translateUi(locale, 'legacy.web.your.teacher.s.published.tests.will.ap.450888e9')} primaryActionHref="/student/learn" primaryActionLabel={<UiText message="web.navigation.student.learnTopics" />} onRetry={() => void loadOverview()} retryLabel={translateUi(locale, 'legacy.web.refresh.944128d0')} retryDisabled={loading}/>:<div className={styles.testGrid}>{filteredTests.map(test=>{
@@ -863,6 +995,147 @@ export default function TestsClient(){
               </article>)}
             </div>
           </section>}
+
+          {released&&<section className={styles.topicAnalyticsSection} aria-labelledby="qe-topic-analysis-title">
+            <div className={styles.resultDetailsHeading}>
+              <h3 id="qe-topic-analysis-title">{t('Topic-wise analysis','विषय-वार विश्लेषण')}</h3>
+              <p>{t('See which topics you answered correctly, where you lost marks, and which topics deserve more revision. Blank answers stay separate from incorrect answers; answers without a binary correctness grade are shown separately.','देखें कि किन विषयों में सही उत्तर मिले, कहाँ अंक कटे और किन विषयों को दोहराने की ज़रूरत है। खाली उत्तरों को गलत उत्तरों से अलग रखा गया है।')}</p>
+            </div>
+            {topicPerformance.length===0
+              ?<p className={styles.topicAnalyticsEmpty}>{t('Topic tags are not available for the scored questions in this result.','इस परिणाम के स्कोर वाले प्रश्नों के लिए विषय टैग उपलब्ध नहीं हैं।')}</p>
+              :<div className={styles.topicAnalyticsTableWrap}><table className={styles.topicAnalyticsTable}>
+                <thead><tr>
+                  <th scope="col">{t('Topic','विषय')}</th><th scope="col">{t('Questions','प्रश्न')}</th>
+                  <th scope="col">{t('Correct','सही')}</th><th scope="col">{t('Incorrect','गलत')}</th>
+                  <th scope="col">{t('Unanswered','अनुत्तरित')}</th><th scope="col">{t('Not classified','वर्गीकृत नहीं')}</th><th scope="col">{t('Accuracy','सटीकता')}</th>
+                  <th scope="col">{t('Net marks','शुद्ध अंक')}</th>
+                </tr></thead>
+                <tbody>{topicPerformance.map(metric=><tr key={metric.topic}>
+                  <th scope="row">{metric.topic}</th><td>{metric.question_count}</td>
+                  <td className={styles.topicMetricCorrect}>{metric.correct_count}</td>
+                  <td className={styles.topicMetricIncorrect}>{metric.incorrect_count}</td>
+                  <td>{metric.unanswered_count}</td><td>{metric.unscored_count}</td>
+                  <td>{metric.accuracy_percent===null?'—':metric.accuracy_percent+'%'}</td>
+                  <td>{formatMarks(metric.net_marks)} / {formatMarks(metric.max_marks)}</td>
+                </tr>)}</tbody>
+              </table></div>}
+            {microTopicPerformance.length>0&&<details className={styles.microTopicDetails}>
+              <summary>{t('Show micro-topic breakdown','सूक्ष्म-विषय का विश्लेषण देखें')}</summary>
+              <div className={styles.topicAnalyticsTableWrap}><table className={styles.topicAnalyticsTable}>
+                <thead><tr>
+                  <th scope="col">{t('Micro-topic','सूक्ष्म-विषय')}</th><th scope="col">{t('Questions','प्रश्न')}</th>
+                  <th scope="col">{t('Correct','सही')}</th><th scope="col">{t('Incorrect','गलत')}</th>
+                  <th scope="col">{t('Unanswered','अनुत्तरित')}</th><th scope="col">{t('Not classified','वर्गीकृत नहीं')}</th><th scope="col">{t('Accuracy','सटीकता')}</th>
+                  <th scope="col">{t('Net marks','शुद्ध अंक')}</th>
+                </tr></thead>
+                <tbody>{microTopicPerformance.map(metric=><tr key={metric.topic}>
+                  <th scope="row">{metric.topic}</th><td>{metric.question_count}</td>
+                  <td className={styles.topicMetricCorrect}>{metric.correct_count}</td>
+                  <td className={styles.topicMetricIncorrect}>{metric.incorrect_count}</td>
+                  <td>{metric.unanswered_count}</td><td>{metric.unscored_count}</td>
+                  <td>{metric.accuracy_percent===null?'—':metric.accuracy_percent+'%'}</td>
+                  <td>{formatMarks(metric.net_marks)} / {formatMarks(metric.max_marks)}</td>
+                </tr>)}</tbody>
+              </table></div>
+            </details>}
+          </section>}
+          {released&&<section className={styles.incorrectPracticeSection} aria-labelledby="qe-incorrect-practice-title">
+            <div className={styles.resultDetailsHeading}>
+              <h3 id="qe-incorrect-practice-title">{t('Learn from your mistakes','अपनी गलतियों से सीखें')}</h3>
+              <p>{t('All incorrectly answered questions are collected here in one practice set. Retry them together, check the explanation, and track which mistakes you have corrected. Practice does not change your official test score or negative marking.','सभी गलत उत्तर वाले प्रश्न यहाँ एक अभ्यास सेट में साथ रखे गए हैं। उन्हें एक साथ दोबारा हल करें, व्याख्या देखें और पता करें कि कौन-सी गलतियाँ सुधर गई हैं। अभ्यास से आधिकारिक अंक या नकारात्मक अंक नहीं बदलते।')}</p>
+            </div>
+            <div className={styles.practiceSummaryRow}>
+              <span><strong>{incorrectQuestions.length}</strong> {t('incorrect questions','गलत प्रश्न')}</span>
+              <span><strong>{masteredIncorrectCount}</strong> {t('practiced correctly at least once','कम-से-कम एक बार सही अभ्यास')}</span>
+              {incorrectQuestions.length>0&&<button type="button" className={styles.secondaryButton}
+                onClick={()=>{setPracticeMode(value=>!value);setPracticeError('');}}
+                aria-expanded={practiceMode}>
+                {practiceMode?t('Close practice set','अभ्यास सेट बंद करें'):t('Practice incorrect questions','गलत प्रश्नों का अभ्यास करें')}
+              </button>}
+            </div>
+            {incorrectQuestions.length===0
+              ?<p className={styles.topicAnalyticsEmpty}>{t('Great work — there are no incorrectly answered questions in this released test.','बहुत अच्छा — इस जारी परिणाम में कोई गलत उत्तर वाला प्रश्न नहीं है।')}</p>
+              :practiceMode&&<div className={styles.practiceQuestionList}>
+                <div className={styles.practiceSafetyNote}>{t('This is a separate practice session. Answers here never overwrite your submitted paper.','यह अलग अभ्यास सत्र है। यहाँ दिए उत्तर आपके जमा किए गए प्रश्नपत्र को नहीं बदलेंगे।')}</div>
+                {practiceError&&<div className={styles.error} role="alert">{practiceError}
+                  <button type="button" className={styles.secondaryButton} disabled={practiceProgressLoading}
+                    onClick={()=>{if(attempt)void loadIncorrectPracticeProgress(attempt.attempt_id).catch(e=>setPracticeError(e instanceof Error?e.message:t('Practice history could not be loaded.','अभ्यास इतिहास लोड नहीं हो सका।')));}}>
+                    {t('Retry loading practice','अभ्यास दोबारा लोड करें')}
+                  </button>
+                </div>}
+                {practiceProgressLoading
+                  ?<p className={styles.topicAnalyticsEmpty}>{t('Loading your practice progress…','आपकी अभ्यास प्रगति लोड हो रही है…')}</p>
+                  :incorrectQuestions.length>0&&(()=>{
+                    const question=incorrectQuestions[Math.min(practiceQuestionIndex,incorrectQuestions.length-1)];
+                    if(!question)return null;
+                    const practiceIndex=Math.min(practiceQuestionIndex,incorrectQuestions.length-1);
+                    const questionId=Number(question.attemptQuestionId);
+                    const progress=incorrectPracticeProgress[questionId];
+                    const practiceable=progress?.practiceable===true;
+                    const checked=Object.prototype.hasOwnProperty.call(practiceFeedback,questionId);
+                    const practiceCorrect=practiceFeedback[questionId]===true;
+                    const questionForFeedback=checked?{...question,isCorrect:practiceCorrect}:question;
+                    const topic=primaryQuestionTopic(question);
+                    return (
+                      <div className={styles.practiceQuestionShell}>
+                      <div className={styles.practiceNavigator}>
+                        <button type="button" className={styles.secondaryButton} disabled={practiceIndex===0}
+                          onClick={()=>{setPracticeQuestionIndex(value=>Math.max(0,value-1));setPracticeError('');}}>
+                          ← {t('Previous','पिछला')}
+                        </button>
+                        <div className={styles.practicePosition} aria-live="polite">
+                          <strong>{t('Missed question','गलत प्रश्न')} {practiceIndex+1} / {incorrectQuestions.length}</strong>
+                          <span>{t('One question at a time','एक समय में एक प्रश्न')}</span>
+                        </div>
+                        <button type="button" className={styles.secondaryButton} disabled={practiceIndex>=incorrectQuestions.length-1}
+                          onClick={()=>{setPracticeQuestionIndex(value=>Math.min(incorrectQuestions.length-1,value+1));setPracticeError('');}}>
+                          {t('Next','अगला')} →
+                        </button>
+                      </div>
+                      <div className={styles.practiceQuestionPositionTrack} role="progressbar"
+                        aria-label={t('Incorrect-question practice progress','गलत प्रश्न अभ्यास प्रगति')}
+                        aria-valuemin={0} aria-valuemax={incorrectQuestions.length} aria-valuenow={practiceIndex+1}>
+                        <span style={{width:((practiceIndex+1)/incorrectQuestions.length*100)+'%'}}/>
+                      </div>
+                      <article className={styles.practiceQuestionCard} key={questionId}>
+                        <header className={styles.practiceQuestionHeader}>
+                          <div><span>{t('Topic','विषय')}</span><h4>{topic}</h4></div>
+                          <div className={styles.practiceProgressLabels}>
+                            <span>{Number(progress?.practice_count??0)} {t('tries','प्रयास')}</span>
+                            {progress?.ever_correct&&<span className={styles.practiceMastered}>{t('Corrected at least once','कम-से-कम एक बार सही')}</span>}
+                          </div>
+                        </header>
+                        <StimulusContent question={question}/>
+                        {practiceable
+                          ?<QuestionContent question={questionForFeedback} response={practiceResponses[questionId]??''}
+                              review={checked} disabled={checked||practiceSavingQuestionId===questionId}
+                              onAnswer={value=>setPracticeResponses(old=>({...old,[questionId]:value}))}/>
+                          :<><QuestionContent question={question} response={question.answer} review disabled/>
+                            <p className={styles.practiceManualNote}>{t('This response type needs human grading and cannot be automatically retried. Review the released feedback instead.','इस उत्तर प्रकार के लिए मानवीय जाँच चाहिए। जारी की गई प्रतिक्रिया और व्याख्या देखें।')}</p></>}
+                        {checked&&<AnswerFeedback outcome={practiceCorrect?'correct':'incorrect'}
+                          title={practiceCorrect?t('Correct this time — mistake corrected!','इस बार सही — गलती सुधर गई!'):t('Not quite yet. Review the correct answer and try again.','अभी सही नहीं हुआ। सही उत्तर देखें और फिर प्रयास करें।')}
+                          message={t('Practice attempt saved. Your official score is unchanged.','अभ्यास उत्तर सहेजा गया। आपके आधिकारिक अंक नहीं बदले हैं।')}
+                          explanation={question.explanation||undefined}
+                          explanationLabel={translateUi(locale, 'legacy.web.explanation.f09ea03b')}/>}
+                        {practiceable&&<div className={styles.practiceQuestionActions}>
+                          {!checked
+                            ?<button type="button" className={styles.primaryButton}
+                                disabled={practiceSavingQuestionId===questionId||emptyPracticeResponse(practiceResponses[questionId])}
+                                onClick={()=>void submitIncorrectPracticeAnswer(question)}>
+                                {practiceSavingQuestionId===questionId?t('Checking answer…','उत्तर जाँचा जा रहा है…'):t('Check answer','उत्तर जाँचें')}
+                              </button>
+                            :<button type="button" className={styles.secondaryButton}
+                                disabled={practiceSavingQuestionId===questionId}
+                                onClick={()=>{setPracticeFeedback(old=>{const next={...old};delete next[questionId];return next;});setPracticeResponses(old=>({...old,[questionId]:''}));setPracticeError('');}}>
+                                {t('Try again','फिर प्रयास करें')}
+                              </button>}
+                        </div>}
+                      </article>
+                      </div>
+                    );
+                  })()}
+              </div>}
+          </section>}
           {released&&(()=>{
             const cert=certificateEligibility[Number(attempt?.attempt_id)];
             const certificateId=Number(cert?.certificate_id||0);
@@ -944,8 +1217,8 @@ export default function TestsClient(){
         :attempt.status==='ABANDONED'?<div className={styles.pendingResult}><h2>{translateUi(locale, 'legacy.web.this.attempt.is.closed.056ad0ef')}</h2><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{translateUi(locale, 'legacy.web.back.to.tests.0d539e53')}</button></div>
         :attempt.status!=='IN_PROGRESS'||!current?<div className={styles.pendingResult}><h2>{translateUi(locale, 'legacy.web.this.attempt.is.closed.3b00ff63')}</h2><p>{translateUi(locale, 'legacy.web.you.cannot.return.to.the.question.navi.83bf6290')}</p><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{translateUi(locale, 'legacy.web.back.to.tests.and.results.29805d19')}</button></div>
         :<div className={styles.examLayout}>
-          <aside className={styles.questionRail}><div><b>{translateUi(locale, 'legacy.web.questions.b5a33268')}</b><small>{answeredCount}/{attempt.questions.length} {translateUi(locale, 'legacy.web.answered.f3b8dd02')}</small></div><div className={styles.questionNumbers}>{attempt.questions.map((q,i)=><button type="button" key={q.attemptQuestionId} className={[i===index?styles.currentNumber:'',!isEmpty(responses[q.attemptQuestionId]??q.answer)?styles.answeredNumber:''].filter(Boolean).join(' ')} onClick={()=>setIndex(i)} aria-label={translateUi(locale, 'legacy.web.question.85099273')+(i+1)}>{i+1}</button>)}</div><div className={styles.railLegend}><span><i className={styles.legendCurrent}/>{translateUi(locale, 'legacy.web.current.e19e8a40')}</span><span><i className={styles.legendAnswered}/>{translateUi(locale, 'legacy.web.answered.5531e37e')}</span></div></aside>
-          <section className={styles.questionPanel}><div className={styles.questionPanelTop}><span>{showingQuestionSet?(locale==='english'?'Question Set':'प्रश्न समूह'):<>{translateUi(locale, 'legacy.web.question.3b02187f')} {index+1} {translateUi(locale, 'legacy.web.of.205487ae')} {attempt.questions.length}</>}</span><b>{showingQuestionSet?currentQuestionSetItems.length+' questions':current.maxMarks+' '+translateUi(locale, 'legacy.web.mark.s.a8fb7e84')}</b></div><div className={styles.questionProgress}><i style={{width:((index+1)/attempt.questions.length*100)+'%'}}/></div>
+          <aside className={styles.questionRail}><div><b>{translateUi(locale, 'legacy.web.questions.b5a33268')}</b><small>{answeredCount}/{attempt.questions.length} {translateUi(locale, 'legacy.web.answered.f3b8dd02')}</small></div><p className={styles.questionRailHint}>{t('Select a number to jump. Only one question is shown at a time.','किसी संख्या को चुनकर उस प्रश्न पर जाएँ। एक समय में एक ही प्रश्न दिखता है।')}</p><div className={styles.questionNumbers}>{attempt.questions.map((q,i)=><button type="button" key={q.attemptQuestionId} className={[i===index?styles.currentNumber:'',!isEmpty(responses[q.attemptQuestionId]??q.answer)?styles.answeredNumber:''].filter(Boolean).join(' ')} onClick={()=>setIndex(i)} aria-label={translateUi(locale, 'legacy.web.question.85099273')+(i+1)}>{i+1}</button>)}</div><div className={styles.railLegend}><span><i className={styles.legendCurrent}/>{translateUi(locale, 'legacy.web.current.e19e8a40')}</span><span><i className={styles.legendAnswered}/>{translateUi(locale, 'legacy.web.answered.5531e37e')}</span></div></aside>
+          <section className={styles.questionPanel}><div className={styles.questionPanelTop}><span>{translateUi(locale, 'legacy.web.question.3b02187f')} {index+1} {translateUi(locale, 'legacy.web.of.205487ae')} {attempt.questions.length}</span><b>{current.maxMarks+' '+translateUi(locale, 'legacy.web.mark.s.a8fb7e84')}</b></div><div className={styles.questionProgress}><i style={{width:((index+1)/attempt.questions.length*100)+'%'}}/></div>
             {!showingQuestionSet&&<QuestionMarkPolicy question={current} attempt={attempt}/>}
             {showingQuestionSet
               ?<QuestionSetView items={currentQuestionSetItems} activeQuestionId={current.attemptQuestionId} attempt={attempt}
