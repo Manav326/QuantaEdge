@@ -221,7 +221,8 @@ class AssessmentLifecycleIntegrationTest {
     Long otherStudentId=jdbc.queryForObject("""
       insert into student(public_id,display_name,class_code,board,language,environment,active)
       values(?,?,?,'E2E Bihar Board','hi','PRODUCTION',true) returning id
-      """,Long.class,UUID.randomUUID(),"Other assessment learner","E2E-OTHER");
+      """,Long.class,UUID.randomUUID(),"Other assessment learner",
+      jdbc.queryForObject("select class_code from student where id=?",String.class,fixture.studentId()));
     Long institutionId=fixture.tenant().institutionId();
     jdbc.update("""
       insert into institution_membership(
