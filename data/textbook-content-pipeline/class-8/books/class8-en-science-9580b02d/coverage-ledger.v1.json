@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
     "raw_analysis_result_rows": 1253,
-    "successful_visual_analyses": 1240,
+    "successful_visual_analyses": 1241,
     "missing_visual_analyses": 1038,
-    "failed_visual_analyses": 13,
+    "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1051,
+    "unresolved_count": 1050,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -39552,9 +39552,24 @@
       "asset_path": "assets/fb1c8fa477ab3b282923951d1fb173e7b1f8454930591458e1445c78830cb62d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of a simple electromagnet model with a battery and a compass.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Whe"
+        ],
+        "concepts": [
+          "electromagnet",
+          "battery",
+          "compass"
+        ],
+        "context_relation": "The image is related to the chapter on electricity in the science textbook.",
+        "limitations": [
+          "The compass is not showing the magnetic field direction."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -44751,7 +44766,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
+        "visual_summary": "A page from a textbook discussing different types of forces, specifically contact forces and muscular force.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -44766,12 +44781,11 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force",
-          "living beings"
+          "muscular force"
         ],
-        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
+        "context_relation": "The page discusses different types of forces, specifically contact forces and muscular force, and provides examples of how these forces are used by living beings.",
         "limitations": [
-          "The image does not provide specific details about the types of forces or the physical properties of the objects."
+          "The page does not provide specific examples of how contact forces are used by living beings."
         ]
       },
       "chapter_id": null,

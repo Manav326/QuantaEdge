@@ -13,15 +13,15 @@
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
-      "0037fd56b1a6a076dd9cad41",
-      "aa8a149fa698d13f05cfdb3e",
-      "9c98ea470aafbf3dbbeffd67"
+      "e8da3c2edc6beba380b12468",
+      "7bceb11bef609f2404522955",
+      "f492c50e9c7d7ef8d140ae06"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1237,
-    "assets_remaining": 1054,
+    "assets_analyzed": 1238,
+    "assets_remaining": 1053,
     "assets_completion_percent": 54.0,
-    "assets_failed": 13,
+    "assets_failed": 12,
     "assets_skipped_from_checkpoint": 1237,
     "batch_limit": 5,
     "publication_allowed": false
@@ -1229,7 +1229,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40134224881",
-      "checkpointed_at": "2026-10-24T21:56:06Z"
+      "checkpointed_at": "2026-10-24T22:11:00Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20171,7 +20171,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40134224881",
-      "checkpointed_at": "2026-10-24T21:56:57Z"
+      "checkpointed_at": "2026-10-24T22:11:51Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -33057,19 +33057,36 @@
     {
       "asset_id": "e8da3c2edc6beba380b12468",
       "asset_sha256": "fb1c8fa477ab3b282923951d1fb173e7b1f8454930591458e1445c78830cb62d",
-      "page_text_context_sha256": "922447956f4a953b530cdc85f5d22fdfc70b20852d0491e9453fcabff8c1e0cb",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 67,
       "asset_path": "assets/fb1c8fa477ab3b282923951d1fb173e7b1f8454930591458e1445c78830cb62d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "922447956f4a953b530cdc85f5d22fdfc70b20852d0491e9453fcabff8c1e0cb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40123283396",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a simple electromagnet model with a battery and a compass.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Whe"
+        ],
+        "concepts": [
+          "electromagnet",
+          "battery",
+          "compass"
+        ],
+        "context_relation": "The image is related to the chapter on electricity in the science textbook.",
+        "limitations": [
+          "The compass is not showing the magnetic field direction."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40134224881",
+      "checkpointed_at": "2026-10-24T22:12:54Z"
     },
     {
       "asset_id": "4f44f5240e53b89717587e62",
@@ -38100,9 +38117,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40123283396",
+      "run_id": "40134224881",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -38406,7 +38423,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
+        "visual_summary": "A page from a textbook discussing different types of forces, specifically contact forces and muscular force.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -38421,19 +38438,18 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force",
-          "living beings"
+          "muscular force"
         ],
-        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
+        "context_relation": "The page discusses different types of forces, specifically contact forces and muscular force, and provides examples of how these forces are used by living beings.",
         "limitations": [
-          "The image does not provide specific details about the types of forces or the physical properties of the objects."
+          "The page does not provide specific examples of how contact forces are used by living beings."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40123283396",
-      "checkpointed_at": "2026-10-24T20:50:26Z"
+      "run_id": "40134224881",
+      "checkpointed_at": "2026-10-24T22:20:28Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
