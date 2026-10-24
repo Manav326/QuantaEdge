@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1256,
-    "successful_visual_analyses": 1246,
-    "missing_visual_analyses": 1035,
+    "raw_analysis_result_rows": 1258,
+    "successful_visual_analyses": 1248,
+    "missing_visual_analyses": 1033,
     "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1045,
+    "unresolved_count": 1043,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -47163,9 +47163,33 @@
       "asset_path": "assets/720f0773d8868d82d288656c846944a08056012f558ead2a545ae3f5410dd410.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a boy raising his hand, holding a notebook and a pen.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "A force is push or pull on an object resulting from the object’s interaction with another object.",
+          "The SI unit of force is newton and its symbol is N.",
+          "Forces can act with or without contact.",
+          "Muscular force and frictional force are some of the examples of contact forces.",
+          "Magnetic force, gravitational force, and electrostatic force are non-contact forces.",
+          "Force can change an object’s speed, direction of its motion, or both."
+        ],
+        "concepts": [
+          "force",
+          "SI unit",
+          "contact forces",
+          "non-contact forces",
+          "speed",
+          "direction",
+          "motion"
+        ],
+        "context_relation": "The image is related to the educational content about forces in physics.",
+        "limitations": [
+          "The image does not provide specific examples or explanations for each concept."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -47181,9 +47205,33 @@
       "asset_path": "assets/71f07341758553becafcb9770ec8ce038a2c06d426ddcc35bb1e1846deb7ebad.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person holding a pen and a tablet, possibly taking notes or explaining something.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "A force is push or pull on an object resulting from the object’s interaction with another object.",
+          "The SI unit of force is newton and its symbol is N.",
+          "Forces can act with or without contact.",
+          "Muscular force and frictional force are some of the examples of contact forces.",
+          "Magnetic force, gravitational force, and electrostatic force are non-contact forces.",
+          "Force can change an object’s speed, direction of its motion, or both."
+        ],
+        "concepts": [
+          "force",
+          "SI unit",
+          "contact forces",
+          "non-contact forces",
+          "speed",
+          "direction",
+          "motion"
+        ],
+        "context_relation": "The image is related to the educational content about forces in physics.",
+        "limitations": [
+          "The image does not provide specific details about the force being discussed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

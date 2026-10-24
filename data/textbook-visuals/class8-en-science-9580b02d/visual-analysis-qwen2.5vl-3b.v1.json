@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1246,
+    "assets_selected": 1248,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "5dfd0aaa15be11e0916188a6",
-      "99fd0354418d6d653a40a2d2"
+      "5670f377e13b17f69284b59c",
+      "fcf4d35e44c549ab1fcd3b40"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1243,
-    "assets_remaining": 1048,
+    "assets_analyzed": 1245,
+    "assets_remaining": 1046,
     "assets_completion_percent": 54.3,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 1241,
+    "assets_skipped_from_checkpoint": 1243,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1229,7 +1229,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40134224881",
-      "checkpointed_at": "2026-10-24T22:52:36Z"
+      "checkpointed_at": "2026-10-24T23:00:48Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20171,7 +20171,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40134224881",
-      "checkpointed_at": "2026-10-24T22:53:27Z"
+      "checkpointed_at": "2026-10-24T23:01:39Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38449,7 +38449,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40134224881",
-      "checkpointed_at": "2026-10-24T22:54:23Z"
+      "checkpointed_at": "2026-10-24T23:02:34Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -40874,6 +40874,92 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40134224881",
       "checkpointed_at": "2026-10-24T22:59:17Z"
+    },
+    {
+      "asset_id": "5670f377e13b17f69284b59c",
+      "asset_sha256": "720f0773d8868d82d288656c846944a08056012f558ead2a545ae3f5410dd410",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 97,
+      "asset_path": "assets/720f0773d8868d82d288656c846944a08056012f558ead2a545ae3f5410dd410.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "46ebf104ae108f545fdf5591ffbdc838d65dd58c1c174806d0a366a838a7e5e1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a boy raising his hand, holding a notebook and a pen.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "A force is push or pull on an object resulting from the object’s interaction with another object.",
+          "The SI unit of force is newton and its symbol is N.",
+          "Forces can act with or without contact.",
+          "Muscular force and frictional force are some of the examples of contact forces.",
+          "Magnetic force, gravitational force, and electrostatic force are non-contact forces.",
+          "Force can change an object’s speed, direction of its motion, or both."
+        ],
+        "concepts": [
+          "force",
+          "SI unit",
+          "contact forces",
+          "non-contact forces",
+          "speed",
+          "direction",
+          "motion"
+        ],
+        "context_relation": "The image is related to the educational content about forces in physics.",
+        "limitations": [
+          "The image does not provide specific examples or explanations for each concept."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40134224881",
+      "checkpointed_at": "2026-10-24T23:03:50Z"
+    },
+    {
+      "asset_id": "fcf4d35e44c549ab1fcd3b40",
+      "asset_sha256": "71f07341758553becafcb9770ec8ce038a2c06d426ddcc35bb1e1846deb7ebad",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 97,
+      "asset_path": "assets/71f07341758553becafcb9770ec8ce038a2c06d426ddcc35bb1e1846deb7ebad.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "46ebf104ae108f545fdf5591ffbdc838d65dd58c1c174806d0a366a838a7e5e1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a pen and a tablet, possibly taking notes or explaining something.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "A force is push or pull on an object resulting from the object’s interaction with another object.",
+          "The SI unit of force is newton and its symbol is N.",
+          "Forces can act with or without contact.",
+          "Muscular force and frictional force are some of the examples of contact forces.",
+          "Magnetic force, gravitational force, and electrostatic force are non-contact forces.",
+          "Force can change an object’s speed, direction of its motion, or both."
+        ],
+        "concepts": [
+          "force",
+          "SI unit",
+          "contact forces",
+          "non-contact forces",
+          "speed",
+          "direction",
+          "motion"
+        ],
+        "context_relation": "The image is related to the educational content about forces in physics.",
+        "limitations": [
+          "The image does not provide specific details about the force being discussed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40134224881",
+      "checkpointed_at": "2026-10-24T23:05:07Z"
     }
   ]
 }
