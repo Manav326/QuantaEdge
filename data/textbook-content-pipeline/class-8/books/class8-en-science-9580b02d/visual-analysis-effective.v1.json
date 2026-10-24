@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c898c7828f95c3422a751f8128b4113fbfc6cad793b2a14999c09c641c082754",
+  "raw_analysis_sha256": "8f161e7cb3c8623e5c6381aacf01ab191314a8308bcb8849537521adbd2ad1da",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40123283396",
-      "checkpointed_at": "2026-10-24T20:42:31Z",
+      "checkpointed_at": "2026-10-24T20:48:42Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40123283396",
-      "checkpointed_at": "2026-10-24T20:43:18Z",
+      "checkpointed_at": "2026-10-24T20:49:29Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57829,7 +57829,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40123283396",
-      "checkpointed_at": "2026-10-24T20:44:15Z",
+      "checkpointed_at": "2026-10-24T20:50:26Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -61157,6 +61157,96 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c49245b35008a42f4ae6d61e",
+      "asset_sha256": "f62842150eb100f1a6154bace063a9b5c55797a49ac496ea2df4e736e3bad88b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/f62842150eb100f1a6154bace063a9b5c55797a49ac496ea2df4e736e3bad88b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9dc2465d4f8850201a45c40a5e6052066a129f8027fe8e478a9f4d0123a52c92",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two rocks floating in water.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "floating",
+          "sinking",
+          "gravitational force",
+          "water displacement"
+        ],
+        "context_relation": "The image illustrates the concept of floating and sinking, explaining why some objects float while others sink in water.",
+        "limitations": [
+          "The image does not provide specific details about the objects or their properties."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40123283396",
+      "checkpointed_at": "2026-10-24T20:52:03Z",
+      "effective_analysis": {
+        "visual_summary": "Two rocks floating in water.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "floating",
+          "sinking",
+          "gravitational force",
+          "water displacement"
+        ],
+        "context_relation": "The image illustrates the concept of floating and sinking, explaining why some objects float while others sink in water.",
+        "limitations": [
+          "The image does not provide specific details about the objects or their properties."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e5fd32ba344861813d6aeae8",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9dc2465d4f8850201a45c40a5e6052066a129f8027fe8e478a9f4d0123a52c92",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear content or visual elements present on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40123283396",
+      "checkpointed_at": "2026-10-24T20:52:18Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear content or visual elements present on the page."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
