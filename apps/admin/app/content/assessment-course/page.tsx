@@ -77,7 +77,15 @@ const EXAMPLE_PACKAGE = {
         { key: 'B', text: 'Option B', text_i18n: { en: 'Option B' } }
       ],
       topic_tags: [],
-      proposed_answer: { status: 'UNRESOLVED', answer_source: 'UNRESOLVED', confidence: 'UNRESOLVED' },
+      proposed_answer: {
+        option_key: null,
+        confidence: 'UNRESOLVED',
+        explanation: 'Pending human review.',
+        answer_source: 'UNRESOLVED',
+        review_status: 'PENDING_HUMAN_REVIEW',
+        explanation_i18n: { en: 'Pending human review.' },
+        solution_mode: 'CONCISE'
+      },
       section_code: 'COMPUTER_SCIENCE',
       marks: 1
     }
@@ -237,7 +245,7 @@ export default function AssessmentCourseStudioPage() {
             <p>Import one package per test (for example TRE 1.0, TRE 2.0 and TRE 3.0). Use the portable assessment schema; course, institution, subject and chapter binding are supplied by this authenticated workspace, not by package JSON.</p>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 12 }}>
               <button className="button button-dark" type="button" onClick={() => updatePackageText(JSON.stringify(EXAMPLE_PACKAGE, null, 2))}>Load schema example</button>
-              <a className="button button-dark" href="/schemas/portable-assessment-package.schema.json" target="_blank" rel="noreferrer">Open package schema</a>
+              <a className="button button-dark" href="https://github.com/Manav326/QuantaEdge/blob/main/schemas/portable-assessment-package.schema.json" target="_blank" rel="noreferrer">Open package schema</a>
             </div>
             <label htmlFor="assessment-package-json">Portable assessment package JSON</label>
             <textarea id="assessment-package-json" value={packageText} onChange={e => updatePackageText(e.target.value)} rows={18} spellCheck={false} placeholder="Paste the reviewed portable assessment package JSON here." style={{ width: '100%', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace', fontSize: 13 }} />
