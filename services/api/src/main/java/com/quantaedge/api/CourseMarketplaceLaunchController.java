@@ -202,7 +202,7 @@ public class CourseMarketplaceLaunchController {
         left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
         where r.source_institution_id=? and r.release_state='IN_QUALITY_REVIEW'
         group by r.id,r.program_id,r.release_version,r.release_state,r.content_fingerprint,r.submitted_at,
-          p.code,p.display_name,p.course_type_code,t.id,t.tenant_code,t.display_name
+          p.id,p.code,p.display_name,p.course_type_code,t.id,t.tenant_code,t.display_name
         order by r.submitted_at,r.id
         """,institutionId);
     for(Map<String,Object> release:qualityReviewItems) {
