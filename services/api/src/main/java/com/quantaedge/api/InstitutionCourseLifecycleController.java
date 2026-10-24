@@ -229,7 +229,7 @@ public class InstitutionCourseLifecycleController {
               quality_reviewed_by_staff_id,quality_reviewed_at,quality_review_notes,
               origin_approved_by_admin_id,origin_approved_at,shareable_at,
               legacy_migration,created_at,updated_at
-            ) values(?,?,?,'SHAREABLE',?,2,?,?,now(),?, ?,now(),now(),false,now(),now()) returning id
+            ) values(?,?,?,'SHAREABLE',?,2,?,now(),?,now(),?,?,now(),now(),false,now(),now()) returning id
             """,Long.class,principal.institutionId(),programId,version,fingerprint,
             principal.adminId(),trustedPolicyActorId,
             "Automatically approved under HRMS trusted-course policy. "+trustedPolicyNote,
