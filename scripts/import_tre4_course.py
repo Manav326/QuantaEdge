@@ -533,6 +533,18 @@ def ensure_course_identity(cursor: Any, institution_id: int, course_id: int) -> 
         identity_id, identity_name, identity_type, identity_status = existing
         if identity_name != COURSE_TITLE or identity_type not in {"ASSESSMENT", "K12"} or identity_status != "ACTIVE":
             raise ImportErrorSafe("The stable TRE-4 identity exists with conflicting metadata.")
+        cursor.execute("""
+            SELECT id,code,curriculum_version,content_version_no
+            FROM curriculum_program
+            WHERE course_identity_id=%s AND id<>%s
+            FOR UPDATE
+        """, (identity_id, course_id))
+        linked_versions = cursor.fetchall()
+        if linked_versions:
+            raise ImportErrorSafe(
+                "The stable TRE-4 identity is already linked to another course/version. "
+                "Use the course-version workflow; the batch importer will not reuse or retype that identity."
+            )
         if identity_type != "ASSESSMENT":
             cursor.execute("""
                 UPDATE institution_course_identity SET course_type_code='ASSESSMENT',updated_at=now()
