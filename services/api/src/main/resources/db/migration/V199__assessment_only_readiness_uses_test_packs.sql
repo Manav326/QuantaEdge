@@ -1,7 +1,100 @@
--- V199: make assessment-only release readiness follow the registered assessment hierarchy.
--- ASSESSMENT courses are course -> versioned test packs -> assessments -> ordered question snapshots.
--- Do not require school-class, subject, or chapter rows for this course type.
+-- V199: separate generic ASSESSMENT release readiness from the TRE import contract.
+-- ASSESSMENT courses use course -> versioned test packs -> assessments -> ordered question snapshots.
+-- Neither function requires school-class, subject, or chapter rows.
 CREATE OR REPLACE FUNCTION assessment_only_course_ready(p_program_id bigint)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+AS $$
+  WITH owned_course AS (
+    SELECT p.id, identity.source_institution_id
+    FROM curriculum_program p
+    JOIN institution_course_identity identity ON identity.id=p.course_identity_id
+    WHERE p.id=p_program_id AND p.course_type_code='ASSESSMENT'
+  )
+  SELECT EXISTS (
+      SELECT 1
+      FROM owned_course owner
+      JOIN curriculum_program_delivery_mode mode
+        ON mode.program_id=owner.id AND mode.delivery_mode='ASSESSMENT_ONLY'
+    )
+    AND EXISTS (
+      SELECT 1
+      FROM course_assessment_pack pack
+      JOIN owned_course owner ON owner.id=pack.course_id
+        AND owner.source_institution_id=pack.source_institution_id
+      WHERE pack.course_id=p_program_id
+        AND pack.status IN ('DRAFT','PUBLISHED')
+        AND pack.content_sha256 ~ '^[0-9a-f]{64}$'
+        AND EXISTS (
+          SELECT 1 FROM course_assessment_pack_item item
+          JOIN assessment a ON a.id=item.assessment_id AND a.course_id=pack.course_id
+          WHERE item.pack_id=pack.id AND item.sequence_no BETWEEN 1 AND 1000
+            AND a.status IN ('DRAFT','PUBLISHED')
+            AND EXISTS (SELECT 1 FROM assessment_question aq WHERE aq.assessment_id=a.id)
+        )
+    )
+    AND NOT EXISTS (
+      SELECT 1
+      FROM course_assessment_pack pack
+      LEFT JOIN owned_course owner ON owner.id=pack.course_id
+      WHERE pack.course_id=p_program_id
+        AND (
+          owner.id IS NULL
+          OR owner.source_institution_id<>pack.source_institution_id
+          OR pack.status NOT IN ('DRAFT','PUBLISHED')
+          OR pack.content_sha256 !~ '^[0-9a-f]{64}$'
+          OR NOT EXISTS (
+            SELECT 1 FROM course_assessment_pack_item item
+            JOIN assessment a ON a.id=item.assessment_id AND a.course_id=pack.course_id
+            WHERE item.pack_id=pack.id
+              AND a.status IN ('DRAFT','PUBLISHED')
+              AND EXISTS (SELECT 1 FROM assessment_question aq WHERE aq.assessment_id=a.id)
+          )
+          OR EXISTS (
+            SELECT 1
+            FROM course_assessment_pack_item item
+            LEFT JOIN assessment a ON a.id=item.assessment_id
+            WHERE item.pack_id=pack.id
+              AND (a.id IS NULL OR a.course_id<>pack.course_id
+                   OR a.status NOT IN ('DRAFT','PUBLISHED'))
+          )
+        )
+    )
+    AND NOT EXISTS (
+      SELECT 1
+      FROM assessment a
+      WHERE a.course_id=p_program_id
+        AND NOT EXISTS (
+          SELECT 1
+          FROM course_assessment_pack_item item
+          JOIN course_assessment_pack pack ON pack.id=item.pack_id
+          WHERE item.assessment_id=a.id AND pack.course_id=p_program_id
+        )
+    )
+    AND NOT EXISTS (
+      SELECT 1
+      FROM assessment a
+      JOIN assessment_question aq ON aq.assessment_id=a.id
+      WHERE a.course_id=p_program_id
+        AND a.status='PUBLISHED'
+        AND (
+          coalesce(aq.question_snapshot->>'question_review_status','PENDING_HUMAN_REVIEW') <> 'APPROVED'
+          OR coalesce(aq.question_snapshot->'answer_payload'->>'kind','UNRESOLVED') = 'UNRESOLVED'
+          OR coalesce(aq.question_snapshot->'answer_payload'->>'value','') = ''
+          OR NOT EXISTS (
+            SELECT 1
+            FROM jsonb_array_elements(coalesce(aq.question_snapshot->'options','[]'::jsonb)) option_row
+            WHERE coalesce(option_row->>'key',option_row->>'option_key') =
+              aq.question_snapshot->'answer_payload'->>'value'
+          )
+        )
+    );
+$$;
+
+-- Import-specific contract: this checks the exact TRE source bundle without making its
+-- counts/cycle IDs a requirement for unrelated ASSESSMENT courses.
+CREATE OR REPLACE FUNCTION tre4_source_package_ready(p_program_id bigint)
 RETURNS boolean
 LANGUAGE sql
 STABLE
@@ -18,12 +111,7 @@ AS $$
     JOIN institution_course_identity identity ON identity.id=p.course_identity_id
     WHERE p.id=p_program_id AND p.course_type_code='ASSESSMENT'
   )
-  SELECT EXISTS (
-      SELECT 1
-      FROM owned_course owner
-      JOIN curriculum_program_delivery_mode mode ON mode.program_id=owner.id
-        AND mode.delivery_mode='ASSESSMENT_ONLY'
-    )
+  SELECT coalesce(assessment_only_course_ready(p_program_id),false)
     AND (
       SELECT count(*)
       FROM assessment a
