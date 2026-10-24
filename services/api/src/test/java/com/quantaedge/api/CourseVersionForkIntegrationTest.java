@@ -104,7 +104,7 @@ class CourseVersionForkIntegrationTest {
     assertEquals(sourceContent,jdbc.queryForObject("select content::text from lesson_block where id=?",String.class,forkedBlockId));
     jdbc.update("update lesson_block set content=content || ?::jsonb where id=?","{\"fork_probe\":\"new draft only\"}",forkedBlockId);
     assertEquals(sourceContent,jdbc.queryForObject("select content::text from lesson_block where id=?",String.class,sourceBlockId));
-    assertTrue(jdbc.queryForObject("select content ? 'fork_probe' from lesson_block where id=?",Boolean.class,forkedBlockId));
+    assertTrue(jdbc.queryForObject("select jsonb_exists(content, 'fork_probe') from lesson_block where id=?",Boolean.class,forkedBlockId));
 
     assertThrows(DataAccessException.class,() -> jdbc.update("""
       update lesson_block set content=content || '{"forbidden_mutation":true}'::jsonb where id=?
