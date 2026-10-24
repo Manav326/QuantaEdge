@@ -427,7 +427,7 @@ def ensure_schema(cursor: Any) -> None:
             "Flyway V197 is required: assessment-only release readiness must validate test packs, not school chapters."
         )
     if not re.search(
-        r"'TRE 3\\.0'::varchar,\\s*'tre4-bpsc-tre-3-0-computer-science'::varchar,\\s*150",
+        r"'TRE 3\.0'::varchar,\s*'tre4-bpsc-tre-3-0-computer-science'::varchar,\s*150",
         readiness_definition,
     ):
         raise ImportErrorSafe(
@@ -591,6 +591,7 @@ def insert_assessment(cursor: Any, course_id: int, paper: dict[str, Any]) -> tup
             title != paper["title"] or digest is None
             or str(digest).strip().lower() != paper["package_sha256"]
             or int(question_count) != expected_count
+            or status not in {"DRAFT", "PUBLISHED"}
         ):
             raise ImportErrorSafe(
                 f"Existing {package_id} differs from source inventory. No updates/deletes were attempted; review it and create a reviewed version explicitly."
@@ -708,7 +709,14 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
             "psycopg 3 is required for --apply. Install it with: python -m pip install 'psycopg[binary]>=3.2,<4'"
         ) from exc
     url = database_url(args)
-    summary: dict[str, Any] = {"course": COURSE_TITLE, "deliveryMode": "ASSESSMENT_ONLY", "papers": [], "submittedForReview": False}
+    summary: dict[str, Any] = {
+        "course": COURSE_TITLE,
+        "courseTypeCode": COURSE_TYPE_CODE,
+        "deliveryMode": "ASSESSMENT_ONLY",
+        "hierarchy": "COURSE → TEST PACK → ASSESSMENT → ORDERED QUESTIONS",
+        "papers": [],
+        "submittedForReview": False,
+    }
     with psycopg.connect(url) as connection:
         with connection.cursor() as cursor:
             ensure_schema(cursor)
@@ -869,7 +877,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--register", type=Path, default=DEFAULT_REGISTER, help="Verified source-register.json.")
     parser.add_argument("--inventory", type=Path, help="Use a previously generated tre-question-inventory.json instead of extracting.")
     parser.add_argument("--database-url", help="PostgreSQL URL; otherwise TRE4_DATABASE_URL or SPRING_DATASOURCE_URL is used.")
-    parser.add_argument("--apply", action="store_true", help="Commit validated course, chapter, draft assessments, and release records. Without this flag, no DB writes occur.")
+    parser.add_argument("--apply", action="store_true", help="Commit the classless ASSESSMENT course, versioned test packs, draft tests, questions, and release records. Without this flag, no DB writes occur.")
     parser.add_argument("--submit-for-review", action="store_true", help="With --apply, queue a DRAFT release for HRMS quality review after all import gates pass. Does not approve or publish it.")
     return parser.parse_args()
 
