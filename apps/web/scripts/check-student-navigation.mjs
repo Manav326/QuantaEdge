@@ -18,6 +18,8 @@ const tutorService = read('../../../services/api/src/main/java/com/quantaedge/ap
 const tutorController = read('../../../services/api/src/main/java/com/quantaedge/api/TutorController.java');
 const tutorRetriever = read('../../../services/api/src/main/java/com/quantaedge/api/TutorCurriculumRetriever.java');
 const learningController = read('../../../services/api/src/main/java/com/quantaedge/api/LearningController.java');
+const safeQuestionOptionsMigration = read('../../../services/api/src/main/resources/db/migration/V185__student_safe_question_option_projection.sql');
+const translatedSafeQuestionOptionsMigration = read('../../../services/api/src/main/resources/db/migration/V190__translated_student_question_option_projection.sql');
 const relationalStructuredLessonService = read('../../../services/api/src/main/java/com/quantaedge/api/RelationalStructuredLessonService.java');
 const learningStateServiceTest = read('../../../services/api/src/test/java/com/quantaedge/api/LearningStateServiceTest.java');
 const structuredLessonExperience = read('../app/student/structured-lessons/StructuredLessonExperience.tsx');
@@ -401,8 +403,11 @@ assert.ok(!learnClient.includes("import StructuredLessonExperience from '../stru
   learningController.includes('result.put("structured_lesson", structuredPayload)') &&
   learningController.includes('coalesce(latest_attempt.answer_text,latest_attempt.selected_option) as saved_answer') &&
   learningController.includes('latest_attempt.correct as saved_correct') &&
-  learningController.includes("when q.question_type='ORDER' then") &&
-  learningController.includes("when q.question_type='MATCH' then") &&
+  learningController.includes('qe_student_safe_question_options(q.id,q.question_type,qt.options)') &&
+  safeQuestionOptionsMigration.includes("WHEN p_question_type='ORDER' THEN") &&
+  safeQuestionOptionsMigration.includes("WHEN p_question_type='MATCH' THEN") &&
+  translatedSafeQuestionOptionsMigration.includes('p_translation_options jsonb') &&
+  translatedSafeQuestionOptionsMigration.includes('qe_student_safe_question_options(p_question_id, p_question_type)') &&
   relationalStructuredLessonService.includes('question.put("legacy_question_type", rawType)') &&
   relationalStructuredLessonService.includes('question.put("legacy_interaction_type", legacyInteraction)') &&
   relationalStructuredLessonService.includes('question.set("left_items", leftItems)') &&
@@ -700,8 +705,8 @@ assert.ok(issue66LiveClassApiContract.includes('@GetMapping("/learning/live-clas
   'Full schedule visibility must be explicit for the dashboard while the normal class catalogue retains its 24-hour upcoming window and 60-day history boundary.');
 assert.ok(androidApp.includes('&includeFuture=true') &&
   issue66LiveClassTestsContract.includes('studentClassCatalogueCanIncludeFarFutureScheduledSessionsWithoutChangingDefaultWindow') &&
-  issue66LiveClassTestsContract.includes('eq(7L), eq(1L), eq(true), eq(""), eq(""), eq(71L), eq(71L), eq(25), eq(0)') &&
-  issue66LiveClassTestsContract.includes('eq(Long.class), eq(7L), eq(1L), eq(true), eq(""), eq(""), eq(71L), eq(71L)'),
+  issue66LiveClassTestsContract.includes('eq(7L), eq(1L), eq(71L), eq(true), eq(""), eq(""), eq(71L), eq(71L), eq(25), eq(0)') &&
+  issue66LiveClassTestsContract.includes('eq(Long.class), eq(7L), eq(1L), eq(71L), eq(true), eq(""), eq(""), eq(71L), eq(71L)'),
   'Android dashboard and API tests must exercise the full-schedule query mode.');
 const issue66AndroidDashboardRefresh = androidApp.slice(
   androidApp.indexOf('suspend fun refreshDashboardClasses()'),
