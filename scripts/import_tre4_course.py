@@ -410,18 +410,19 @@ def ensure_schema(cursor: Any) -> None:
                to_regprocedure('public.course_content_fingerprint(bigint)'),
                to_regprocedure('public.assessment_only_course_ready(bigint)'),
                pg_get_functiondef(to_regprocedure('public.course_content_fingerprint(bigint)')),
-               pg_get_functiondef(to_regprocedure('public.assessment_only_course_ready(bigint)')),
-               (SELECT status FROM public.course_type_registry WHERE code='ASSESSMENT')
+               pg_get_functiondef(to_regprocedure('public.assessment_only_course_ready(bigint)'))
     """)
     row = cursor.fetchone()
-    if not row or any(value is None for value in row[:9]):
+    if not row or any(value is None for value in row):
         raise ImportErrorSafe(
             "Flyway V168, V177, V180, and V197 are required. Start the API against this database and verify migrations complete before importing."
         )
-    if row[9] != "ACTIVE":
-        raise ImportErrorSafe("The HRMS ASSESSMENT course type must be ACTIVE before TRE papers can be imported.")
     fingerprint_definition = str(row[7] or "")
     readiness_definition = str(row[8] or "")
+    cursor.execute("SELECT status FROM public.course_type_registry WHERE code='ASSESSMENT'")
+    type_row = cursor.fetchone()
+    if not type_row or type_row[0] != "ACTIVE":
+        raise ImportErrorSafe("The HRMS ASSESSMENT course type must be ACTIVE before TRE papers can be imported.")
     if "assessment-pack-item" not in fingerprint_definition:
         raise ImportErrorSafe(
             "Flyway V196 is required so course release fingerprints include test packs and pack items."
