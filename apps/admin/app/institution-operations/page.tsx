@@ -225,7 +225,7 @@ export default function InstitutionOperationsPage() {
               </div>
               <div className={styles.quickLinks}>
                 <Link href="/content">{t('admin.institutionOperations.contentStudio')} <span>↗</span></Link>
-                <{canCreateCourse ? <Link href="/content/create">{t('admin.institutionOperations.createCourse')} <span>↗</span></Link> : null}
+                {canCreateCourse ? <Link href="/content/create">{t('admin.institutionOperations.createCourse')} <span>↗</span></Link> : null}
                 <Link href="/content/import">{t('admin.institutionOperations.importCourse')} <span>↗</span></Link>
                 <Link href="/notifications">{t('admin.institutionOperations.notifications')} <span>↗</span></Link>
               </div>
