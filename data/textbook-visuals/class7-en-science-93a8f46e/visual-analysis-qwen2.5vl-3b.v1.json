@@ -12,10 +12,10 @@
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "e16d4a62f7889b707898ea77",
-      "79bbc448b9853ba138d248e2",
-      "c85f41bbf274ff0251ebf3e6",
-      "19182aa83463f523d90ed77b",
-      "5abf0bbf91f1337f73719e33"
+      "156c826ab2a2fbe86cb5bfea",
+      "bfd2a5a7d3b8762a333a2b8e",
+      "d354a100dc739b82a63326f4",
+      "3488ab5984c46d6346cd4802"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 2225,
@@ -13461,7 +13461,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40097575524",
-      "checkpointed_at": "2026-10-24T13:51:46Z"
+      "checkpointed_at": "2026-10-24T14:11:07Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -62917,7 +62917,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40080945835",
+      "run_id": "40097575524",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -67240,7 +67240,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40080945835",
+      "run_id": "40097575524",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -67458,7 +67458,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40080945835",
+      "run_id": "40097575524",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -68382,7 +68382,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40080945835",
+      "run_id": "40097575524",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
