@@ -10,7 +10,7 @@ import { StaffNotificationBell } from './StaffNotificationInbox';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
 import { AdminAppearanceModeButton, AdminThemeProvider } from './AdminThemeProvider';
 import { getUiLocaleLanguage, resolveUiLocale, UI_LOCALE_OPTIONS, translateUi } from '../i18n/catalog';
-import { AdminWorkspaceContext, type AdminLocale } from './AdminWorkspaceContext';
+import { AdminWorkspaceContext, type AdminLocale, type AdminWorkspaceIdentityType } from './AdminWorkspaceContext';
 import {
   ADMIN_NAV_GROUPS,
   ADMIN_OVERVIEW_ITEM,
@@ -27,6 +27,18 @@ import {
 
 type StaffSession = { role?: string; staffId?: number; displayName?: string; permissions?: string[]; institutionCode?: string; institution_code?: string; tenantCode?: string; tenant_code?: string };
 type AdminInstitution = { institution_id: number; tenant_code: string; display_name: string; is_default?: boolean };
+type InstitutionAdminSession = {
+  authenticated?: boolean;
+  workspace?: string;
+  institutionId?: number;
+  institutionCode?: string;
+  institutionName?: string;
+  adminUsername?: string;
+  adminDisplayName?: string;
+  mustChangePassword?: boolean;
+  capabilities?: string[];
+  branding?: Record<string, unknown>;
+};
 
 function activeSection(pathname: string): AdminSection {
   if (pathname === '/') return 'overview';
@@ -65,6 +77,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
   const publicRoute = pathname === '/login' || pathname === '/session';
   const [locale, setLocale] = useState<AdminLocale>('hinglish');
   const [session, setSession] = useState<StaffSession | null>(null);
+  const [institutionAdminSession, setInstitutionAdminSession] = useState<InstitutionAdminSession | null>(null);
   const [institutions, setInstitutions] = useState<AdminInstitution[]>([]);
   const [institutionCode, setInstitutionCode] = useState('');
   const [institutionLoading, setInstitutionLoading] = useState(true);
@@ -101,17 +114,56 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
   }, []);
 
   useEffect(() => {
-    if (publicRoute) { setSession(null); return; }
+    if (publicRoute) {
+      setSession(null);
+      setInstitutionAdminSession(null);
+      return;
+    }
     let alive = true;
-    apiFetch('/api/v1/auth/me', { cache: 'no-store' })
-      .then(response => response.ok ? response.json() : null)
-      .then(me => { if (alive) setSession(me && me.staffId ? me as StaffSession : null); })
-      .catch(() => { if (alive) setSession(null); });
+    (async () => {
+      // Prefer an actual staff session. Institution principals use a distinct cookie and are
+      // discovered only when no valid Education Admin identity exists.
+      try {
+        const staffResponse = await fetch('/api/v1/auth/me', { cache: 'no-store', credentials: 'same-origin' });
+        const staffMe = staffResponse.ok ? await staffResponse.json().catch(() => null) : null;
+        if (staffMe && Number(staffMe.staffId) > 0) {
+          if (alive) {
+            setSession(staffMe as StaffSession);
+            setInstitutionAdminSession(null);
+          }
+          return;
+        }
+      } catch { /* Try the separate institution principal next. */ }
+
+      try {
+        const institutionResponse = await fetch('/api/v1/institution/auth/me', {
+          cache: 'no-store',
+          credentials: 'same-origin',
+          headers: { Accept: 'application/json', 'X-QE-Workspace': 'INSTITUTION' },
+        });
+        const institutionMe = institutionResponse.ok ? await institutionResponse.json().catch(() => null) : null;
+        if (alive) {
+          if (institutionMe?.authenticated === true && Number(institutionMe.institutionId) > 0 && institutionMe.institutionCode) {
+            setInstitutionAdminSession(institutionMe as InstitutionAdminSession);
+            setSession(null);
+          } else {
+            setInstitutionAdminSession(null);
+            setSession(null);
+          }
+        }
+      } catch {
+        if (alive) {
+          setInstitutionAdminSession(null);
+          setSession(null);
+        }
+      }
+    })();
     return () => { alive = false; };
   }, [publicRoute]);
 
-  // The institution is an HRMS-assigned property of the signed-in staff identity.
-  // Browser storage is intentionally cleared and never used to select a tenant.
+  // Either a staff identity receives its fixed institution binding from HRMS, or an
+  // institution-head identity receives its scope from the institution_admin_session cookie.
+  // Browser storage and request parameters never select an institution.
   useEffect(() => {
     let alive = true;
     if (publicRoute) {
@@ -120,6 +172,23 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
       setInstitutionError('');
       setInstitutionLoading(false);
       try { window.localStorage.removeItem('qe:admin:activeInstitutionCode'); } catch {}
+      return () => { alive = false; };
+    }
+    if (institutionAdminSession) {
+      const tenantCode = String(institutionAdminSession.institutionCode || '').trim().toUpperCase();
+      const name = String(institutionAdminSession.institutionName || '').trim();
+      const id = Number(institutionAdminSession.institutionId);
+      if (!tenantCode || !name || !Number.isSafeInteger(id) || id <= 0) {
+        setInstitutions([]);
+        setInstitutionCode('');
+        setInstitutionError('The institution session returned an invalid institution identity.');
+      } else {
+        setInstitutions([{ institution_id: id, tenant_code: tenantCode, display_name: name, is_default: true }]);
+        setInstitutionCode(tenantCode);
+        setInstitutionError('');
+      }
+      try { window.localStorage.removeItem('qe:admin:activeInstitutionCode'); } catch {}
+      setInstitutionLoading(false);
       return () => { alive = false; };
     }
     if (!session) {
@@ -171,7 +240,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
       })
       .finally(() => { if (alive) setInstitutionLoading(false); });
     return () => { alive = false; };
-  }, [publicRoute, session, institutionRetryVersion]);
+  }, [publicRoute, session, institutionAdminSession, institutionRetryVersion]);
 
   useEffect(() => {
     setMobileMenuOpen(false);
