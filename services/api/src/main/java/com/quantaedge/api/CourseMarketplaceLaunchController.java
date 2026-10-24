@@ -418,11 +418,17 @@ public class CourseMarketplaceLaunchController {
       throw conflict("Course is not ready for an offer draft. Resolve the following first: "+String.join(" ",contentBlockers));
 
     List<Map<String,Object>> existing=jdbc.queryForList("""
-        select id,status from institution_marketplace_offer
+        select id,status,trusted_update_block_reason from institution_marketplace_offer
         where institution_id=? and assignment_id=? for update
         """,institutionId,assignmentId);
     long offerId;
     String oldStatus=existing.isEmpty()?"":text(existing.getFirst().get("status"));
+    String existingContinuityBlock=existing.isEmpty()?"":text(existing.getFirst().get("trusted_update_block_reason"));
+    boolean acknowledgeTrustedUpdateBlock=Boolean.TRUE.equals(body.get("acknowledgeTrustedUpdateBlock"));
+    String trustedUpdateReviewNote=optionalText(body.get("trustedUpdateReviewNote"),"",1000,"Trusted-update review note");
+    if(!existingContinuityBlock.isBlank()&&acknowledgeTrustedUpdateBlock&&trustedUpdateReviewNote.trim().length()<5)
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          "Record at least five characters explaining how inherited discount/finance continuity was reviewed.");
     if(!existing.isEmpty()&&!List.of("DRAFT","REJECTED","ARCHIVED").contains(oldStatus))
       throw conflict("This offer is already "+oldStatus+". Use its review/publish steps instead of replacing its terms.");
     if(existing.isEmpty()) {
@@ -443,16 +449,30 @@ public class CourseMarketplaceLaunchController {
             hrms_approved_by_staff_id=null,hrms_approved_at=null,
             hrms_published_by_staff_id=null,hrms_published_at=null,
             rejected_by_admin_id=null,rejected_at=null,rejection_reason=null,
+            trusted_update_block_reason=case when ? then null else trusted_update_block_reason end,
             updated_by_admin_id=null,updated_at=now()
           where id=? and institution_id=? and assignment_id=?
             and status in ('DRAFT','REJECTED','ARCHIVED')
-          """,title,description,pricePaise,currency,offerId,institutionId,assignmentId);
+          """,title,description,pricePaise,currency,
+          !existingContinuityBlock.isBlank()&&acknowledgeTrustedUpdateBlock,
+          offerId,institutionId,assignmentId);
     }
     record(institutionId,number(assignment.get("release_id")),assignmentId,offerId,
         "OFFER_DRAFTED",context.staffId(),
         Map.of("pricePaise",pricePaise,"currency",currency,"previousStatus",oldStatus.isBlank()?"NONE":oldStatus));
+    boolean continuityBlockCleared=!existingContinuityBlock.isBlank()&&acknowledgeTrustedUpdateBlock;
+    if(continuityBlockCleared) {
+      record(institutionId,number(assignment.get("release_id")),assignmentId,offerId,
+          "TRUSTED_UPDATE_COMMERCIAL_CONTINUITY_REVIEWED",context.staffId(),
+          Map.of("reviewNote",trustedUpdateReviewNote.trim(),
+            "priorBlockReason",existingContinuityBlock,
+            "message","HRMS explicitly reviewed the versioned discount/financial continuity before resuming the launch checklist."));
+    }
     return Map.of("saved",true,"offerId",offerId,"assignmentId",assignmentId,
-        "status","DRAFT","message","Offer draft saved. Re-run the launch checklist before submission or publication.");
+        "status","DRAFT","trustedUpdateBlockCleared",continuityBlockCleared,
+        "message",continuityBlockCleared
+          ? "Draft saved and the trusted-update finance/discount review was recorded. Re-run the checklist before publication."
+          : "Offer draft saved. Re-run the launch checklist before submission or publication.");
   }
 
   @PostMapping("/{institutionId}/marketplace-launches/{offerId}/submit")
