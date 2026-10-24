@@ -52,19 +52,28 @@ function CourseAnalyticsPanel({courseId,activeCourse,courseError}:{courseId:stri
   const [data,setData]=useState<any>(null);
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState('');
+  const requestSequence=useRef(0);
   const load=useCallback(async()=>{
+    const requestId=++requestSequence.current;
     if(!courseId||courseError){setData(null);setLoading(false);return;}
     setLoading(true);setError('');
     try {
       const result=await api('/api/v1/admin/assessments/course-analytics?'+new URLSearchParams({courseId}).toString());
-      setData(result);
+      if(requestId===requestSequence.current)setData(result);
     } catch(e) {
-      setError(e instanceof Error?e.message:tx('Course analytics could not be loaded.','कोर्स विश्लेषण लोड नहीं हो सका।'));
-      setData(null);
-    } finally {setLoading(false);}
+      if(requestId===requestSequence.current) {
+        setError(e instanceof Error?e.message:tx('Course analytics could not be loaded.','कोर्स विश्लेषण लोड नहीं हो सका।'));
+        setData(null);
+      }
+    } finally {
+      if(requestId===requestSequence.current)setLoading(false);
+    }
   },[courseId,courseError]);
-  useEffect(()=>{void load();},[load]);
-  useEffect(()=>{setData(null);setError('');},[courseId]);
+  useEffect(()=>{
+    setData(null);setError('');
+    void load();
+    return ()=>{requestSequence.current+=1;};
+  },[load]);
   const summary=data?.summary||{};
   const metric=(key:string)=>summary[key]===null||summary[key]===undefined?'—':String(summary[key]);
   const percent=(key:string)=>summary[key]===null||summary[key]===undefined?'—':Number(summary[key]).toFixed(1)+'%';
