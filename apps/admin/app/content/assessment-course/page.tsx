@@ -71,10 +71,13 @@ const EXAMPLE_PACKAGE = {
       source_location: { pdf_page: 1 },
       question_type: 'MCQ',
       prompt: 'Replace with the verified source question.',
-      prompt_i18n: { en: 'Replace with the verified source question.' },
+      prompt_i18n: {
+        en: 'Replace with the verified source question.',
+        hi: 'सत्यापित स्रोत के प्रश्न से बदलें।'
+      },
       options: [
-        { key: 'A', text: 'Option A', text_i18n: { en: 'Option A' } },
-        { key: 'B', text: 'Option B', text_i18n: { en: 'Option B' } }
+        { key: 'A', text: 'Option A', text_i18n: { en: 'Option A', hi: 'विकल्प A' } },
+        { key: 'B', text: 'Option B', text_i18n: { en: 'Option B', hi: 'विकल्प B' } }
       ],
       topic_tags: ['Computer Science'],
       difficulty: 'CORE',
@@ -84,7 +87,7 @@ const EXAMPLE_PACKAGE = {
         explanation: 'Pending human review.',
         answer_source: 'UNRESOLVED',
         review_status: 'PENDING_HUMAN_REVIEW',
-        explanation_i18n: { en: 'Pending human review.' },
+        explanation_i18n: { en: 'Pending human review.', hi: 'मानवीय समीक्षा लंबित है।' },
         solution_mode: 'CONCISE'
       },
       section_code: 'COMPUTER_SCIENCE',
