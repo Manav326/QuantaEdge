@@ -30,7 +30,7 @@ public class TrustedCourseVersionDistributionService {
   }
 
   @Transactional
-  private Map<String,Object> propagateTrustedCourseVersion(
+  public Map<String,Object> propagateTrustedCourseVersion(
       long programId,long releaseId,long sourceInstitutionId,long policyActorStaffId,Long submittingAdminId) {
     Map<String,Object> version=jdbc.queryForMap("""
         select p.course_identity_id,p.content_version_no,p.supersedes_program_id

@@ -263,7 +263,6 @@ export default function InstitutionOperationsPage() {
                 ) : null}
                 <p className={styles.note}>{t('admin.institutionOperations.invitationSecretNote')}</p>
               </section>
-            ) : null}
             <section className={styles.panel}>
               <div className={styles.panelHeader}>
                 <div><h2>{t('admin.institutionOperations.lessonsWithActivity')}</h2><p>{t('admin.institutionOperations.description')}</p></div>
