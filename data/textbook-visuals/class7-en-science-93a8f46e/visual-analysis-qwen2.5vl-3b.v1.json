@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2229,
+    "assets_selected": 2230,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "8b590005e818fefd62c7b02b",
-      "8e09d5b8fb92d244ec7ef1f2",
-      "3ea26ab4b26aefb4f93f284d",
-      "49e694679ca469d2e29a2ff9",
-      "9459107ed06b531106e820d7"
+      "e904eb84e607d05c01b9eca9",
+      "89b40b364042ef1985b11a00",
+      "e16d4a62f7889b707898ea77",
+      "2686a65594f6f695b3cfa269",
+      "5de2c7c332b12d26dded6f61"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 2225,
     "assets_remaining": 5263,
     "assets_completion_percent": 29.7,
-    "assets_failed": 50,
-    "assets_skipped_from_checkpoint": 2224,
+    "assets_failed": 49,
+    "assets_skipped_from_checkpoint": 2225,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -4829,7 +4829,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40080945835",
+      "run_id": "40097575524",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -9957,7 +9957,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40080945835",
+      "run_id": "40097575524",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -13417,19 +13417,41 @@
     {
       "asset_id": "e16d4a62f7889b707898ea77",
       "asset_sha256": "ff62d9e1ae71752cc5f7a797bf0d6fadcbd8d4748f021e98609919142f00dad0",
-      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 25,
       "asset_path": "page-0025.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40080945835",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the Earth and the Moon casting shadows during a solar eclipse.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
+          "In the chapters that follow, you'll also make simple observations and do fun experiments, and dive into topics that need careful thinking. Each chapter builds on what you already know and encourages you to ask questions, explore, do hands-on experiments, and think like a scientist! As you will find ",
+          "1.1 Happy Exploring!",
+          "Activity 1.1: Question the Answer"
+        ],
+        "concepts": [
+          "eclipse",
+          "Earth's rotation",
+          "Moon's orbit",
+          "day and night",
+          "scientific inquiry"
+        ],
+        "context_relation": "The text discusses the role of light and shadows in understanding the universe, specifically focusing on eclipses and the movements of the Earth, Moon, and Sun.",
+        "limitations": [
+          "The text does not provide specific details about the diagrams or experiments mentioned."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40097575524",
+      "checkpointed_at": "2026-10-24T13:41:08Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -25115,9 +25137,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40080945835",
+      "run_id": "40097575524",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -37242,9 +37264,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40080945835",
+      "run_id": "40097575524",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
