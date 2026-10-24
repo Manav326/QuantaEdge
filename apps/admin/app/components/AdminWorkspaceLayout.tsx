@@ -316,10 +316,21 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
     setLoggingOut(true);
     setMobileMenuOpen(false);
     try {
-      await apiFetch('/api/v1/auth/logout', { method: 'POST', credentials: 'same-origin' });
+      if (institutionAdminSession) {
+        await fetch('/api/v1/institution/auth/logout', {
+          method: 'POST',
+          credentials: 'same-origin',
+          cache: 'no-store',
+          headers: { Accept: 'application/json', 'X-QE-Workspace': 'INSTITUTION' },
+        });
+      } else {
+        await apiFetch('/api/v1/auth/logout', { method: 'POST', credentials: 'same-origin' });
+      }
     } catch {
       // The UI still returns to login if the logout request cannot reach the server.
     } finally {
+      setSession(null);
+      setInstitutionAdminSession(null);
       router.replace('/login');
       setLoggingOut(false);
     }
