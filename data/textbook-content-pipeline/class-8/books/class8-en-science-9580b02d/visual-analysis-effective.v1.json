@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1b65cb24534c8c0db0fe20297a890a378f0effa3fba6f04d265c21f0e06eaad2",
+  "raw_analysis_sha256": "ea50c3ee43c3a35c885a7da4efde53890f188c48fd404ce4941513aef12f05b7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40045176028",
-      "checkpointed_at": "2026-10-24T01:50:27Z",
+      "checkpointed_at": "2026-10-24T01:59:32Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40045176028",
-      "checkpointed_at": "2026-10-24T01:51:19Z",
+      "checkpointed_at": "2026-10-24T02:00:23Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57829,7 +57829,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40045176028",
-      "checkpointed_at": "2026-10-24T01:52:19Z",
+      "checkpointed_at": "2026-10-24T02:01:25Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -58654,7 +58654,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40031110730",
+      "run_id": "40045176028",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -59271,6 +59271,46 @@
         "concepts": [],
         "context_relation": "The image is a visual representation of a hand pointing towards a purple object.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "de5e4029f2ed2a544bb80be0",
+      "asset_sha256": "11b8d6c2dd28a52e7c3b1a1f9e29c0b876794bd15e628ee31f2eac10d41b6fcd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/11b8d6c2dd28a52e7c3b1a1f9e29c0b876794bd15e628ee31f2eac10d41b6fcd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1501ddf68fca3c3f96e7ce10190a3aa309a4b7f069348e6d71e1c6701a77a2d0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a tree with numerous oranges growing on it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional information or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40045176028",
+      "checkpointed_at": "2026-10-24T02:08:00Z",
+      "effective_analysis": {
+        "visual_summary": "An illustration of a tree with numerous oranges growing on it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional information or context."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

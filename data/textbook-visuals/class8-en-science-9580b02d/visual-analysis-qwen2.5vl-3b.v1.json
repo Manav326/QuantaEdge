@@ -14,12 +14,12 @@
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "daeae54a0a8c53512b7acecc",
-      "a7efa51402012691c3ec230c"
+      "d55b4af2d39033d603cae25d",
+      "de5e4029f2ed2a544bb80be0"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1200,
-    "assets_remaining": 1091,
+    "assets_analyzed": 1201,
+    "assets_remaining": 1090,
     "assets_completion_percent": 52.4,
     "assets_failed": 13,
     "assets_skipped_from_checkpoint": 1200,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40045176028",
-      "checkpointed_at": "2026-10-24T01:50:27Z"
+      "checkpointed_at": "2026-10-24T01:59:32Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40045176028",
-      "checkpointed_at": "2026-10-24T01:51:19Z"
+      "checkpointed_at": "2026-10-24T02:00:23Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38429,7 +38429,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40045176028",
-      "checkpointed_at": "2026-10-24T01:52:19Z"
+      "checkpointed_at": "2026-10-24T02:01:25Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -38975,7 +38975,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40031110730",
+      "run_id": "40045176028",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -39374,6 +39374,34 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40031110730",
       "checkpointed_at": "2026-10-23T23:52:06Z"
+    },
+    {
+      "asset_id": "de5e4029f2ed2a544bb80be0",
+      "asset_sha256": "11b8d6c2dd28a52e7c3b1a1f9e29c0b876794bd15e628ee31f2eac10d41b6fcd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 91,
+      "asset_path": "assets/11b8d6c2dd28a52e7c3b1a1f9e29c0b876794bd15e628ee31f2eac10d41b6fcd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1501ddf68fca3c3f96e7ce10190a3aa309a4b7f069348e6d71e1c6701a77a2d0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a tree with numerous oranges growing on it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or labels that provide additional information or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40045176028",
+      "checkpointed_at": "2026-10-24T02:08:00Z"
     }
   ]
 }
