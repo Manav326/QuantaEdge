@@ -261,7 +261,7 @@ public class AssessmentController {
       with course_tests as (
         select a.id,a.status
         from assessment a
-        where a.course_id=? and CAST(? AS bigint) is null or a.id=?
+        where a.course_id=? and (CAST(? AS bigint) IS NULL OR a.id=?)
       ),
       course_attempts as (
         select att.*
@@ -298,7 +298,7 @@ public class AssessmentController {
         select att.*
         from student_assessment_attempt att
         where att.institution_id=? and att.assessment_id in (
-          select a.id from assessment a where a.course_id=? and CAST(? AS bigint) is null or a.id=?
+          select a.id from assessment a where a.course_id=? and (CAST(? AS bigint) IS NULL OR a.id=?)
         ) and att.status<>'ABANDONED'
       ),
       released as (
@@ -326,7 +326,7 @@ public class AssessmentController {
       from assessment a
       left join scoped_attempts sa on sa.assessment_id=a.id
       left join released r on r.id=sa.id
-      where a.course_id=? and CAST(? AS bigint) is null or a.id=?
+      where a.course_id=? and (CAST(? AS bigint) IS NULL OR a.id=?)
       group by a.id
       order by a.created_at desc,a.id desc
       """,institutionId,courseId,assessmentId,assessmentId,courseId,assessmentId,assessmentId);
@@ -352,7 +352,7 @@ public class AssessmentController {
       join assessment a on a.id=att.assessment_id and a.course_id=?
       join student_assessment_attempt_question aq on aq.attempt_id=att.id
       left join student_assessment_answer ans on ans.attempt_question_id=aq.id
-      where att.institution_id=? and att.status='RELEASED' and CAST(? AS bigint) is null or a.id=?
+      where att.institution_id=? and att.status='RELEASED' and (CAST(? AS bigint) IS NULL OR a.id=?)
       group by 1 order by question_exposures desc,topic
       """,courseId,institutionId,assessmentId,assessmentId);
     List<Map<String,Object>> secondaryTopicPerformance=jdbc.queryForList("""
@@ -372,7 +372,7 @@ public class AssessmentController {
           then aq.question_snapshot->'subtopic_tags' else '[]'::jsonb end
       ) tags(tag)
       left join student_assessment_answer ans on ans.attempt_question_id=aq.id
-      where att.institution_id=? and att.status='RELEASED' and CAST(? AS bigint) is null or a.id=?
+      where att.institution_id=? and att.status='RELEASED' and (CAST(? AS bigint) IS NULL OR a.id=?)
         and btrim(tags.tag)<>''
       group by tags.tag order by question_exposures desc,secondary_topic
       """,courseId,institutionId,assessmentId,assessmentId);
@@ -389,7 +389,7 @@ public class AssessmentController {
       join assessment a on a.id=att.assessment_id and a.course_id=?
       join student_assessment_attempt_question aq on aq.attempt_id=att.id
       left join student_assessment_answer ans on ans.attempt_question_id=aq.id
-      where att.institution_id=? and att.status='RELEASED' and CAST(? AS bigint) is null or a.id=?
+      where att.institution_id=? and att.status='RELEASED' and (CAST(? AS bigint) IS NULL OR a.id=?)
       group by 1 order by case coalesce(aq.question_snapshot->>'difficulty','CORE')
         when 'FOUNDATION' then 1 when 'CORE' then 2 when 'CHALLENGE' then 3 else 4 end
       """,courseId,institutionId,assessmentId,assessmentId);
@@ -406,7 +406,7 @@ public class AssessmentController {
       join assessment a on a.id=att.assessment_id and a.course_id=?
       join student_assessment_attempt_question aq on aq.attempt_id=att.id
       left join student_assessment_answer ans on ans.attempt_question_id=aq.id
-      where att.institution_id=? and att.status='RELEASED' and CAST(? AS bigint) is null or a.id=?
+      where att.institution_id=? and att.status='RELEASED' and (CAST(? AS bigint) IS NULL OR a.id=?)
       group by 1 order by question_exposures desc,question_type
       """,courseId,institutionId,assessmentId,assessmentId);
     List<Map<String,Object>> sectionPerformance=jdbc.queryForList("""
@@ -425,7 +425,7 @@ public class AssessmentController {
       join assessment a on a.id=att.assessment_id and a.course_id=?
       join student_assessment_attempt_question aq on aq.attempt_id=att.id
       left join student_assessment_answer ans on ans.attempt_question_id=aq.id
-      where att.institution_id=? and att.status='RELEASED' and CAST(? AS bigint) is null or a.id=?
+      where att.institution_id=? and att.status='RELEASED' and (CAST(? AS bigint) IS NULL OR a.id=?)
       group by 1,2 order by 1,2
       """,courseId,institutionId,assessmentId,assessmentId);
     List<Map<String,Object>> scoreBands=jdbc.queryForList("""
@@ -433,7 +433,7 @@ public class AssessmentController {
         select 100.0*att.final_score/nullif(att.max_score,0) as score_percent
         from student_assessment_attempt att join assessment a on a.id=att.assessment_id
         where a.course_id=? and att.institution_id=? and att.status='RELEASED'
-          and att.final_score is not null and att.max_score>0 and CAST(? AS bigint) is null or a.id=?
+          and att.final_score is not null and att.max_score>0 and (CAST(? AS bigint) IS NULL OR a.id=?)
       )
       select band, count(*) as learner_attempts
       from (
@@ -466,7 +466,7 @@ public class AssessmentController {
       join assessment a on a.id=att.assessment_id and a.course_id=?
       join student_assessment_attempt_question aq on aq.attempt_id=att.id
       left join student_assessment_answer ans on ans.attempt_question_id=aq.id
-      where att.institution_id=? and att.status='RELEASED' and CAST(? AS bigint) is null or a.id=?
+      where att.institution_id=? and att.status='RELEASED' and (CAST(? AS bigint) IS NULL OR a.id=?)
       group by a.id,a.title,question_key,aq.question_snapshot
       order by incorrect_count desc,accuracy_percent asc nulls first,exposures desc
       limit 100
@@ -510,7 +510,7 @@ public class AssessmentController {
             else '[]'::jsonb
           end
         ) selected(value)
-        where att.institution_id=? and att.status='RELEASED' and CAST(? AS bigint) is null or a.id=?
+        where att.institution_id=? and att.status='RELEASED' and (CAST(? AS bigint) IS NULL OR a.id=?)
       )
       select assessment_id,question_key,selected_value,count(*) as selection_count
       from response_values
