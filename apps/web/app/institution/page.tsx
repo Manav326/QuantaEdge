@@ -59,6 +59,16 @@ type Course = {
   published_lessons?: number;
   institution_learners?: number;
 };
+type SourceRelease = {
+  release_id: number;
+  course_id: number;
+  course_code?: string;
+  display_name?: string;
+  release_version: number;
+  release_state: string;
+  quality_review_notes?: string | null;
+  origin_rejection_reason?: string | null;
+};
 
 async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
   const headers = new Headers(init.headers);
@@ -97,6 +107,9 @@ export default function InstitutionPortalPage() {
   const [overview, setOverview] = useState<Overview | null>(null);
   const [learners, setLearners] = useState<Learner[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
+  const [sourceReleases, setSourceReleases] = useState<SourceRelease[]>([]);
+  const [sourceReleaseError, setSourceReleaseError] = useState('');
+  const [releaseBusyId, setReleaseBusyId] = useState<number | null>(null);
   const [search, setSearch] = useState('');
   const [activeView, setActiveView] = useState<'overview' | 'learners' | 'courses' | 'notifications' | 'notificationInbox'>('overview');
   const [currentPassword, setCurrentPassword] = useState('');
@@ -108,10 +121,13 @@ export default function InstitutionPortalPage() {
 
   useEffect(() => {
     const syncNotificationRoute = () => {
-      const queryTarget = new URLSearchParams(window.location.search).get('notifications');
+      const params = new URLSearchParams(window.location.search);
+      const queryTarget = params.get('notifications');
+      const requestedView = params.get('view');
       const hashTarget = window.location.hash === '#notifications-inbox' ? 'inbox'
         : window.location.hash === '#notifications-studio' ? 'studio' : null;
       const target = queryTarget || hashTarget;
+      if (requestedView === 'courses') setActiveView('courses');
       if (target === 'inbox') setActiveView('notificationInbox');
       else if (target === 'studio') setActiveView('notifications');
     };
@@ -148,16 +164,21 @@ export default function InstitutionPortalPage() {
     setLoading(true);
     setError('');
     try {
-      const [me, summary, roster, authorizedCourses] = await Promise.all([
+      const [me, summary, roster, authorizedCourses, releaseResult] = await Promise.all([
         api<Principal>('/api/v1/institution/auth/me'),
         api<Overview>('/api/v1/institution/reports/overview'),
         api<{ learners?: Learner[] }>('/api/v1/institution/reports/roster?page=1&pageSize=200'),
         api<Course[]>('/api/v1/institution/reports/courses'),
+        api<SourceRelease[]>('/api/v1/institution/course-releases')
+          .then(rows => ({ rows: Array.isArray(rows) ? rows : [], error: '' }))
+          .catch(e => ({ rows: [] as SourceRelease[], error: e instanceof Error ? e.message : 'Course release status could not be loaded.' })),
       ]);
       setPrincipal(me);
       setOverview(summary);
       setLearners(Array.isArray(roster.learners) ? roster.learners : []);
       setCourses(Array.isArray(authorizedCourses) ? authorizedCourses : []);
+      setSourceReleases(releaseResult.rows);
+      setSourceReleaseError(releaseResult.error);
       if (me.branding) applyBrand({
         ...me.branding,
         institutionCode: me.institutionCode,
@@ -266,6 +287,42 @@ export default function InstitutionPortalPage() {
     }
   }
 
+  async function submitSourceRelease(release: SourceRelease) {
+    if (!principal) return;
+    setReleaseBusyId(release.release_id);
+    setError('');
+    setNotice('');
+    try {
+      const result = await api<{ releaseVersion?: number }>(
+        '/api/v1/institution/courses/' + release.course_id + '/release-requests',
+        { method: 'POST' },
+      );
+      await loadData(principal);
+      setNotice('Release v' + (result.releaseVersion ?? release.release_version) +
+        ' submitted for HRMS quality review. Existing learner access is unchanged.');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'The course release could not be submitted.');
+    } finally {
+      setReleaseBusyId(null);
+    }
+  }
+
+  async function approveSourceRelease(release: SourceRelease) {
+    if (!principal) return;
+    setReleaseBusyId(release.release_id);
+    setError('');
+    setNotice('');
+    try {
+      await api('/api/v1/institution/course-releases/' + release.release_id + '/approve', { method: 'POST' });
+      await loadData(principal);
+      setNotice('Release approved for sharing. HRMS can assign it where authorised; existing learner access is unchanged.');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'The course release could not be approved for sharing.');
+    } finally {
+      setReleaseBusyId(null);
+    }
+  }
+
   async function logout() {
     try { await api('/api/v1/institution/auth/logout', { method: 'POST' }); } catch {}
     setPrincipal(null);
@@ -302,6 +359,16 @@ export default function InstitutionPortalPage() {
       setNotice('Copy this school learning link: ' + link.toString());
     }
   }
+
+  // The API returns newest release versions first for each source-owned course.
+  const latestSourceReleases = useMemo(() => {
+    const seen = new Set<number>();
+    return sourceReleases.filter(release => {
+      if (seen.has(release.course_id)) return false;
+      seen.add(release.course_id);
+      return true;
+    });
+  }, [sourceReleases]);
 
   const heading = principal?.institutionName || brand?.displayName || 'Institution portal';
   const customPrimary = brand?.themeTokens?.primary;
@@ -469,6 +536,39 @@ export default function InstitutionPortalPage() {
                   <small>Access is controlled by the platform owner.</small>
                 </article>)}
                 {!courses.length ? <p className="institution-empty-cell">{loading?'Loading authorised courses…':'No courses have been authorised for this institution yet.'}</p>:null}
+              </div>
+            </div>
+            <div className="institution-panel" id="institution-course-releases">
+              <div className="institution-table-heading">
+                <div><h2>Course release workflow</h2><p>Submit your completed content for HRMS quality review, then approve the reviewed release for sharing. This does not publish a Marketplace listing or interrupt existing learner access.</p></div>
+                <button type="button" className="institution-quiet-button" onClick={() => principal && void loadData(principal)} disabled={loading || releaseBusyId !== null}>Refresh</button>
+              </div>
+              {sourceReleaseError ? <p className="institution-small-note" role="status">Release status could not be loaded: {sourceReleaseError}. Retry Refresh; learner reports and authorised courses remain available.</p> : null}
+              <p className="institution-small-note">Before submitting, complete and publish the reviewed lessons for each active subject in Education Admin Content Studio. Assessment-only courses must pass their source-paper test review. The server checks these requirements when you submit.</p>
+              <div className="institution-course-grid">
+                {latestSourceReleases.map(release => {
+                  const state = String(release.release_state || 'UNKNOWN').toUpperCase();
+                  const busy = releaseBusyId === release.release_id;
+                  const canSubmit = ['DRAFT','REJECTED','WITHDRAWN','LEGACY_MIGRATED'].includes(state);
+                  return <article key={release.course_id}>
+                    <span className="institution-course-mark">↗</span>
+                    <div><h3>{release.display_name || release.course_code || ('Course #' + release.course_id)}</h3>
+                      <p>{release.course_code || ''} · Release v{release.release_version}</p></div>
+                    <span className={'institution-status' + (state === 'SHAREABLE' ? ' is-active' : '')}>{state.replaceAll('_',' ')}</span>
+                    {state === 'IN_QUALITY_REVIEW' ? <small>Waiting for HRMS review. No action is needed here yet.</small>
+                      : state === 'QUALITY_APPROVED' ? <small>Quality review passed. Approve this release for sharing.</small>
+                      : state === 'SHAREABLE' ? <small>Approved for sharing. HRMS may assign this exact release where authorised.</small>
+                      : state === 'REJECTED' ? <small>Returned for correction. Update content in Content Studio, then submit a fresh release version.</small>
+                      : <small>Submit when the saved course content is ready. Server checks remain authoritative.</small>}
+                    {release.quality_review_notes ? <small>HRMS review: {release.quality_review_notes}</small> : null}
+                    {release.origin_rejection_reason ? <small>Previous decision: {release.origin_rejection_reason}</small> : null}
+                    <div className="institution-course-meta">
+                      {canSubmit ? <button type="button" className="institution-primary-button" disabled={loading || releaseBusyId !== null} onClick={() => void submitSourceRelease(release)}>{busy ? 'Submitting…' : state === 'DRAFT' ? 'Submit for HRMS review' : 'Submit new release version'}</button> : null}
+                      {state === 'QUALITY_APPROVED' ? <button type="button" className="institution-primary-button" disabled={loading || releaseBusyId !== null} onClick={() => void approveSourceRelease(release)}>{busy ? 'Approving…' : 'Approve for sharing'}</button> : null}
+                    </div>
+                  </article>;
+                })}
+                {!latestSourceReleases.length && !sourceReleaseError ? <p className="institution-empty-cell">No source-owned course releases are available yet. Courses must be created in Education Admin Content Studio first.</p> : null}
               </div>
             </div>
           )}

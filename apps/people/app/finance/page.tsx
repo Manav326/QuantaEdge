@@ -178,19 +178,36 @@ export default function FinancePage(){
       ]);
       setCatalog(c);setOverview(o);setPolicies(p);setDiscounts(disc);setTemplates(t);setDocuments(d);
       const requestedOfferId=launchOfferIdFromUrl.current;
-      const requestedOfferExists=Boolean(requestedOfferId&&c.offers.some(o=>String(o.offer_id)===requestedOfferId));
+      const launchSetup=marketplaceSetupFromUrl.current;
+      const requestedOffer=c.offers.find(o=>String(o.offer_id)===requestedOfferId);
+      const requestedOfferExists=Boolean(requestedOfferId&&requestedOffer);
       if(requestedOfferId&&!requestedOfferExists){
-        setError('The course offer linked from Institution Marketplace Control was not found in Finance. Refresh the launch checklist or choose the correct offer.');
+        setError('The course offer linked from Institution Marketplace Control was not found in Finance. Refresh the launch checklist. No other course offer is selected automatically.');
+        if(launchSetup){
+          setSelectedOfferId('');
+          setTaxForm(v=>({...v,offerId:'',legalEntityId:''}));
+          setDiscountForm(v=>({...v,offerId:''}));
+        } else if(!selectedOfferId&&c.offers.length) {
+          setSelectedOfferId(String(c.offers[0].offer_id));
+        }
         launchOfferIdFromUrl.current=null;
         marketplaceSetupFromUrl.current=false;
         setMarketplaceSetupContext(null);
-        if(c.offers.length)setSelectedOfferId(String(c.offers[0].offer_id));
+      } else if(requestedOfferExists && requestedOfferId) {
+        const linkedSeller=(requestedOffer?.legal_entity_id
+          ? c.legalEntities.find(e=>e.id===requestedOffer.legal_entity_id&&e.status==='ACTIVE')
+          : undefined)
+          || c.legalEntities.find(e=>e.status==='ACTIVE'&&e.entity_kind==='INSTITUTION'&&e.institution_id===requestedOffer?.institution_id)
+          || c.legalEntities.find(e=>e.status==='ACTIVE'&&e.entity_kind==='PLATFORM');
+        setSelectedOfferId(requestedOfferId);
+        setTaxForm(v=>({...v,offerId:requestedOfferId,legalEntityId:linkedSeller?String(linkedSeller.id):''}));
+        setDiscountForm(v=>({...v,offerId:requestedOfferId}));
       } else if(!selectedOfferId&&c.offers.length) {
-        setSelectedOfferId(requestedOfferExists?requestedOfferId!:String(c.offers[0].offer_id));
+        setSelectedOfferId(String(c.offers[0].offer_id));
       }
-      if(!discountForm.offerId&&c.offers.length) setDiscountForm(v=>({...v,offerId:String(c.offers[0].offer_id)}));
-      if(!taxForm.offerId&&c.offers.length) setTaxForm(v=>({...v,offerId:String(c.offers[0].offer_id)}));
-      if(!taxForm.legalEntityId&&c.legalEntities.length) setTaxForm(v=>({...v,legalEntityId:String(c.legalEntities[0].id)}));
+      if(!launchSetup&&!requestedOfferId&&!discountForm.offerId&&c.offers.length) setDiscountForm(v=>({...v,offerId:String(c.offers[0].offer_id)}));
+      if(!launchSetup&&!requestedOfferId&&!taxForm.offerId&&c.offers.length) setTaxForm(v=>({...v,offerId:String(c.offers[0].offer_id)}));
+      if(!launchSetup&&!requestedOfferId&&!taxForm.legalEntityId&&c.legalEntities.length) setTaxForm(v=>({...v,legalEntityId:String(c.legalEntities[0].id)}));
       if(!gstEntityId&&c.legalEntities.length) setGstEntityId(String(c.legalEntities[0].id));
       if(!selectedTemplateId&&t.length&&!marketplaceSetupFromUrl.current){
         const first=t[0];setSelectedTemplateId(String(first.id));setSelectedVersionNo(first.version_no||null);
@@ -718,17 +735,26 @@ export default function FinancePage(){
         {marketplaceSetupContext.offerId&&<span className={styles.marketplaceSetupOfferTag}>Offer #{marketplaceSetupContext.offerId}</span>}
       </div>
       <div className={styles.marketplaceSetupSteps}>
+        <a className={styles.marketplaceSetupStep} href="/institutions#hrms-integrations-heading">
+          <span className={styles.marketplaceSetupStepNumber}>01</span><span className={styles.marketplaceSetupStepCopy}><strong>Payment integration</strong><small>For paid courses only. HRMS checks central Razorpay configuration and webhook readiness.</small></span><span className={styles.marketplaceSetupStepAction}>Open HRMS setup ↗</span>
+        </a>
+        <button type="button" className={tab==='entities'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('entities')} aria-current={tab==='entities'?'step':undefined}>
+          <span className={styles.marketplaceSetupStepNumber}>02</span><span className={styles.marketplaceSetupStepCopy}><strong>Legal seller &amp; GST</strong><small>Activate the seller linked to this offer; verify its registration and record the e-invoice applicability review.</small></span><span className={styles.marketplaceSetupStepAction}>{tab==='entities'?'Current step':'Open'}</span>
+        </button>
+        <button type="button" className={tab==='tax'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('tax')} aria-current={tab==='tax'?'step':undefined}>
+          <span className={styles.marketplaceSetupStepNumber}>03</span><span className={styles.marketplaceSetupStepCopy}><strong>Offer tax profile</strong><small>Use this exact offer and the CA-reviewed classification; submit and approve the effective tax treatment.</small></span><span className={styles.marketplaceSetupStepAction}>{tab==='tax'?'Current step':'Open'}</span>
+        </button>
         <button type="button" className={tab==='studio'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('studio')} aria-current={tab==='studio'?'step':undefined}>
-          <span className={styles.marketplaceSetupStepNumber}>01</span><span className={styles.marketplaceSetupStepCopy}><strong>Invoice template</strong><small>Choose the platform or seller scope. A template must be approved and published; saving a draft is not enough.</small></span><span className={styles.marketplaceSetupStepAction}>{tab==='studio'?'Current step':'Open'}</span>
+          <span className={styles.marketplaceSetupStepNumber}>04</span><span className={styles.marketplaceSetupStepCopy}><strong>Invoice template</strong><small>Choose platform or seller scope. Approve and publish the template; saving a draft is not enough.</small></span><span className={styles.marketplaceSetupStepAction}>{tab==='studio'?'Current step':'Open'}</span>
         </button>
         <button type="button" className={tab==='distribution'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('distribution')} aria-current={tab==='distribution'?'step':undefined}>
-          <span className={styles.marketplaceSetupStepNumber}>02</span><span className={styles.marketplaceSetupStepCopy}><strong>Revenue share</strong><small>Use this exact course offer, add recipient institutions, then submit and approve the policy.</small></span><span className={styles.marketplaceSetupStepAction}>{tab==='distribution'?'Current step':'Open'}</span>
+          <span className={styles.marketplaceSetupStepNumber}>05</span><span className={styles.marketplaceSetupStepCopy}><strong>Revenue share</strong><small>Use this exact offer, add recipient institutions, then submit and approve the policy within the after-tax pool.</small></span><span className={styles.marketplaceSetupStepAction}>{tab==='distribution'?'Current step':'Open'}</span>
         </button>
         <button type="button" className={tab==='discounts'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('discounts')} aria-current={tab==='discounts'?'step':undefined}>
-          <span className={styles.marketplaceSetupStepNumber}>03</span><span className={styles.marketplaceSetupStepCopy}><strong>Approved discounts</strong><small>Only if discount codes are used, confirm their rules preserve the verified after-tax share pool.</small></span><span className={styles.marketplaceSetupStepAction}>{tab==='discounts'?'Current step':'Open'}</span>
+          <span className={styles.marketplaceSetupStepNumber}>06</span><span className={styles.marketplaceSetupStepCopy}><strong>Discount rules · optional</strong><small>Only configure these if discount codes are planned. No discount codes means no extra setup.</small></span><span className={styles.marketplaceSetupStepAction}>{tab==='discounts'?'Current step':'Open'}</span>
         </button>
       </div>
-      <p className={styles.marketplaceSetupNote}><strong>When finished:</strong> return to Institution Marketplace Control and refresh the checklist. These finance settings do not publish the course automatically.</p>
+      <p className={styles.marketplaceSetupNote}><strong>When finished:</strong> the server validates the saved state. Return to Institution Marketplace Control and refresh; financial setup does not publish the course. Existing course access is unchanged while a listing is prepared.</p>
     </section>}
     <nav className={styles.tabs} aria-label="Finance workspace">
       {tabs.map(([key,label,icon])=><button key={key} className={tab===key?styles.tabActive:styles.tab}

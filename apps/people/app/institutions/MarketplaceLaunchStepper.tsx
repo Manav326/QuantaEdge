@@ -394,13 +394,38 @@ export default function MarketplaceLaunchStepper({
     return item.checks.find(check => !check.passed);
   }
 
-  function shouldShowFinanceLink(item: LaunchItem) {
-    return item.checks.some(check => !check.passed && [
-      'RAZORPAY_CREDENTIALS', 'RAZORPAY_WEBHOOK', 'APPROVED_TAX_PROFILE',
-      'EINVOICE_REVIEW', 'TAX_CALCULATION', 'GST_REGISTRATION',
-      'PUBLISHED_INVOICE_TEMPLATE', 'REVENUE_SHARE_POLICY', 'SHARE_POOL_VALIDATION',
-      'DISCOUNT_POOL_COMPATIBILITY',
-    ].includes(check.code));
+  type FinanceSetupTarget = 'entities' | 'tax' | 'studio' | 'distribution' | 'discounts';
+
+  function hasFailedCheck(item: LaunchItem, codes: string[]) {
+    return item.checks.some(check => !check.passed && codes.includes(check.code));
+  }
+
+  function shouldShowSellerSetupLink(item: LaunchItem) {
+    return hasFailedCheck(item, ['APPROVED_TAX_PROFILE', 'EINVOICE_REVIEW', 'TAX_CALCULATION', 'GST_REGISTRATION']);
+  }
+
+  function sellerSetupTarget(item: LaunchItem): FinanceSetupTarget {
+    return hasFailedCheck(item, ['TAX_CALCULATION']) ? 'tax' : 'entities';
+  }
+
+  function shouldShowPaymentSetupLink(item: LaunchItem) {
+    return typeof item.pricePaise === 'number' && item.pricePaise > 0
+      && hasFailedCheck(item, ['RAZORPAY_CREDENTIALS', 'RAZORPAY_WEBHOOK']);
+  }
+
+  function institutionPortalHref(path: string) {
+    const configured = process.env.NEXT_PUBLIC_LEARNER_APP_ORIGIN?.trim();
+    if (configured) {
+      try {
+        const parsed = new URL(configured);
+        const local = parsed.hostname === 'localhost' || parsed.hostname === '127.0.0.1';
+        if (parsed.protocol === 'https:' || (local && parsed.protocol === 'http:')) return new URL(path, parsed.origin).toString();
+      } catch { /* Keep the same safe fallback used by the HRMS institution workspace. */ }
+    }
+    if (typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname)) {
+      return new URL(path, 'http://localhost:3000').toString();
+    }
+    return new URL(path, 'https://qe.thinkwithsujeet.in').toString();
   }
 
   function shouldShowInvoiceSetupLink(item: LaunchItem) {
@@ -410,7 +435,7 @@ export default function MarketplaceLaunchStepper({
     ].includes(check.code));
   }
 
-  function invoiceSetupTarget(item: LaunchItem): 'studio' | 'distribution' | 'discounts' {
+  function invoiceSetupTarget(item: LaunchItem): FinanceSetupTarget {
     if (item.checks.some(check => check.code === 'PUBLISHED_INVOICE_TEMPLATE' && !check.passed)) return 'studio';
     if (item.checks.some(check => !check.passed && ['REVENUE_SHARE_POLICY', 'SHARE_POOL_VALIDATION'].includes(check.code))) return 'distribution';
     return 'discounts';
@@ -425,7 +450,7 @@ export default function MarketplaceLaunchStepper({
     return 'Review approved discounts';
   }
 
-  function financeSetupHref(item: LaunchItem, target: 'studio' | 'distribution' | 'discounts') {
+  function financeSetupHref(item: LaunchItem, target: FinanceSetupTarget) {
     const params = new URLSearchParams({
       tab: target,
       setup: 'marketplace',
@@ -434,6 +459,21 @@ export default function MarketplaceLaunchStepper({
     });
     if (item.offerId) params.set('offerId', String(item.offerId));
     return '/finance?' + params.toString();
+  }
+
+  function blockerHref(item: LaunchItem, check: LaunchCheck): string | null {
+    if (check.code === 'SOURCE_RIGHTS_CLEARANCE') return '#marketplace-source-rights';
+    if (['RAZORPAY_CREDENTIALS', 'RAZORPAY_WEBHOOK'].includes(check.code)) return '/institutions#hrms-integrations-heading';
+    if (check.code === 'EINVOICE_REVIEW' && /requires e-invoicing|REQUIRED/i.test(check.message)) return null;
+    if (['APPROVED_TAX_PROFILE', 'EINVOICE_REVIEW', 'GST_REGISTRATION'].includes(check.code)) return financeSetupHref(item, 'entities');
+    if (check.code === 'TAX_CALCULATION') return financeSetupHref(item, 'tax');
+    if (check.code === 'PUBLISHED_INVOICE_TEMPLATE') return financeSetupHref(item, 'studio');
+    if (['REVENUE_SHARE_POLICY', 'SHARE_POOL_VALIDATION'].includes(check.code)) return financeSetupHref(item, 'distribution');
+    if (check.code === 'DISCOUNT_POOL_COMPATIBILITY') return financeSetupHref(item, 'discounts');
+    if (check.code === 'ORIGIN_RELEASE_APPROVAL' || check.code === 'ASSIGNMENT_AND_RELEASE') {
+      return institutionPortalHref('/institution?view=courses#institution-course-releases');
+    }
+    return null;
   }
 
   return (
@@ -471,7 +511,7 @@ export default function MarketplaceLaunchStepper({
       </div>
 
       {!loading && data && (data.coursePackageImports || []).length > 0 && (
-        <section className={styles.rightsPanel}>
+        <section className={styles.rightsPanel} id="marketplace-source-rights">
           <header className={styles.availableHeader}>
             <div>
               <span className={styles.summaryLabel}>HRMS source-rights gate</span>
@@ -706,17 +746,18 @@ export default function MarketplaceLaunchStepper({
                               <label>Price in INR<input type="number" min="0" step="0.01" inputMode="decimal" placeholder="Enter price" value={draft.priceRupees} onChange={event => updateDraft(item.assignmentId, { priceRupees: event.target.value })} /><small>Set ₹0.00 only for a deliberately free course. Currency is locked to INR.</small></label>
                               <label className={styles.descriptionField}>Marketplace description<textarea rows={3} maxLength={5000} value={draft.description} onChange={event => updateDraft(item.assignmentId, { description: event.target.value })} placeholder="Describe the course for prospective learners." /></label>
                               <div className={styles.formActions}>
-                                <button type="button" className={styles.primaryButton} disabled={busyKey !== null || !item.checks.filter(check => ['INSTITUTION_ACTIVE', 'COURSE_ACTIVE', 'CONTENT_QUALITY_REVIEW', 'CONTENT_REVIEW_CURRENT', 'PUBLISHED_LEARNING_CONTENT', 'ORIGIN_RELEASE_APPROVAL', 'ASSIGNMENT_AND_RELEASE'].includes(check.code)).every(check => check.passed)} onClick={() => void saveDraft(item)}>
+                                <button type="button" className={styles.primaryButton} disabled={busyKey !== null || !item.checks.filter(check => ['INSTITUTION_ACTIVE', 'COURSE_ACTIVE', 'CONTENT_QUALITY_REVIEW', 'CONTENT_REVIEW_CURRENT', 'PUBLISHED_LEARNING_CONTENT', 'SOURCE_RIGHTS_CLEARANCE', 'ORIGIN_RELEASE_APPROVAL', 'ASSIGNMENT_AND_RELEASE'].includes(check.code)).every(check => check.passed)} onClick={() => void saveDraft(item)}>
                                   {busyKey === 'save-' + item.assignmentId ? 'Saving draft…' : item.offerId ? 'Save draft terms' : 'Create draft offer'}
                                 </button>
                                 <span>Saving a draft never publishes it.</span>
                               </div>
                             </div>
                           )}
-                          {group.key === 'seller' && shouldShowFinanceLink(item) && <a className={styles.actionLink} href="/finance">Open HRMS Finance & Billing <span aria-hidden="true">↗</span></a>}
+                          {group.key === 'payment' && shouldShowPaymentSetupLink(item) && <a className={styles.actionLink} href="/institutions#hrms-integrations-heading">Open shared integration readiness <span aria-hidden="true">↗</span></a>}
+                          {group.key === 'seller' && shouldShowSellerSetupLink(item) && <a className={styles.actionLink} href={financeSetupHref(item, sellerSetupTarget(item))}>Open seller &amp; tax setup <span aria-hidden="true">↗</span></a>}
                           {group.key === 'invoice' && shouldShowInvoiceSetupLink(item) && <a className={styles.actionLink} href={financeSetupHref(item, invoiceSetupTarget(item))}>{invoiceSetupLabel(item)} <span aria-hidden="true">↗</span></a>}
                           {group.key === 'course' && !item.ready && blocker && ['CONTENT_QUALITY_REVIEW', 'CONTENT_REVIEW_CURRENT', 'PUBLISHED_LEARNING_CONTENT'].includes(blocker.code) && <p className={styles.stepHint}>Resolve this in the course release / content-quality workflow, then refresh this checklist.</p>}
-                          {group.key === 'release' && !item.ready && item.checks.some(check => !check.passed && ['ORIGIN_RELEASE_APPROVAL', 'ASSIGNMENT_AND_RELEASE'].includes(check.code)) && <p className={styles.stepHint}>After HRMS quality approval, the source institution admin must approve the release in the separate Institution portal. HRMS can assign it to this institution only after it becomes SHAREABLE.</p>}
+                          {group.key === 'release' && !item.ready && item.checks.some(check => !check.passed && ['ORIGIN_RELEASE_APPROVAL', 'ASSIGNMENT_AND_RELEASE'].includes(check.code)) && <a className={styles.actionLink} href={institutionPortalHref('/institution?view=courses#institution-course-releases')}>Open source course release workflow <span aria-hidden="true">↗</span></a>}
                         </div>
                       </section>
                     );
@@ -726,8 +767,10 @@ export default function MarketplaceLaunchStepper({
                 {blocker && !item.ready && (
                   <div className={styles.nextAction}>
                     <span className={styles.nextIcon} aria-hidden="true">→</span>
-                    <div><strong>Next required action</strong><p>{blocker.label}: {blocker.message}</p></div>
-                    {shouldShowFinanceLink(item) && <a href="/finance">Go to Finance</a>}
+                    <div><strong>Next required action · {['RAZORPAY_CREDENTIALS', 'RAZORPAY_WEBHOOK'].includes(blocker.code) ? 'HRMS platform operator' : ['APPROVED_TAX_PROFILE', 'EINVOICE_REVIEW', 'TAX_CALCULATION', 'GST_REGISTRATION', 'PUBLISHED_INVOICE_TEMPLATE', 'REVENUE_SHARE_POLICY', 'SHARE_POOL_VALIDATION', 'DISCOUNT_POOL_COMPATIBILITY'].includes(blocker.code) ? 'HRMS finance' : blocker.code === 'ORIGIN_RELEASE_APPROVAL' ? 'Source institution administrator' : blocker.code === 'SOURCE_RIGHTS_CLEARANCE' ? 'HRMS rights reviewer' : 'Course/content owner'}</strong><p>{blocker.label}: {blocker.message}</p>
+                      {blocker.code === 'EINVOICE_REVIEW' && /requires e-invoicing|REQUIRED/i.test(blocker.message) ? <p className={styles.stepHint}>This is a platform integration limitation, not a missing form. Launch remains safely blocked until the supported IRP/IRN and signed-QR path is enabled; repeated Finance edits will not resolve it.</p> : null}
+                    </div>
+                    {blockerHref(item, blocker) && <a href={blockerHref(item, blocker)!}>{blocker.code === 'SOURCE_RIGHTS_CLEARANCE' ? 'Review source rights' : ['RAZORPAY_CREDENTIALS', 'RAZORPAY_WEBHOOK'].includes(blocker.code) ? 'Open integration readiness' : blocker.code === 'ORIGIN_RELEASE_APPROVAL' || blocker.code === 'ASSIGNMENT_AND_RELEASE' ? 'Open course release workflow' : 'Open required setup'} <span aria-hidden="true">↗</span></a>}
                   </div>
                 )}
 
