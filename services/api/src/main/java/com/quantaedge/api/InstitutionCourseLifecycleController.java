@@ -165,30 +165,83 @@ public class InstitutionCourseLifecycleController {
       throw conflict("This course already has a release in the quality review/approval workflow.");
     String fingerprint=contentFingerprint(programId);
     evidence.put("capturedAt",java.time.Instant.now().toString());
+    List<Map<String,Object>> trustedRows=jdbc.queryForList("""
+        select i.trusted_auto_approval,i.trusted_auto_approval_changed_by_staff_id,
+          i.trusted_auto_approval_changed_at,i.trusted_auto_approval_note
+        from curriculum_program p
+        join institution_course_identity i on i.id=p.course_identity_id
+          and i.source_institution_id=?
+        where p.id=? and i.status='ACTIVE'
+        """,principal.institutionId(),programId);
+    boolean trustedAutoApproval=!trustedRows.isEmpty()
+        && Boolean.TRUE.equals(trustedRows.getFirst().get("trusted_auto_approval"));
+    Long trustedPolicyActorId=trustedAutoApproval
+        && trustedRows.getFirst().get("trusted_auto_approval_changed_by_staff_id") instanceof Number n
+        ? n.longValue() : null;
+    String trustedPolicyNote=trustedAutoApproval
+        ? String.valueOf(trustedRows.getFirst().getOrDefault("trusted_auto_approval_note","")) : "";
+    if(trustedAutoApproval && trustedPolicyActorId==null)
+      throw conflict("Trusted-course policy attribution is incomplete. Disable and re-enable the policy in HRMS before continuing.");
+    if(trustedAutoApproval) {
+      evidence.put("approvalMode","TRUSTED_COURSE_AUTO_APPROVAL");
+      evidence.put("trustedPolicyChangedAt",String.valueOf(trustedRows.getFirst().get("trusted_auto_approval_changed_at")));
+      evidence.put("trustedPolicyNote",trustedPolicyNote);
+      evidence.put("trustedPolicyActorStaffId",trustedPolicyActorId);
+    }
     long releaseId;
     int version;
     if("DRAFT".equals(state)) {
       releaseId=((Number)latest.get("id")).longValue();
       version=((Number)latest.get("release_version")).intValue();
-      jdbc.update("""
-          update institution_course_release set release_state='IN_QUALITY_REVIEW',content_fingerprint=?,
-            submitted_by_institution_admin_id=?,submitted_at=now(),
-            quality_reviewed_by_staff_id=null,quality_reviewed_at=null,quality_review_notes=null,
-            origin_approved_by_admin_id=null,origin_approved_at=null,shareable_at=null,
-            origin_rejected_by_admin_id=null,origin_rejected_at=null,origin_rejection_reason=null,updated_at=now()
-          where id=? and source_institution_id=? and release_state='DRAFT'
-          """,fingerprint,principal.adminId(),releaseId,principal.institutionId());
+      if(trustedAutoApproval) {
+        jdbc.update("""
+            update institution_course_release set release_state='SHAREABLE',content_fingerprint=?,
+              fingerprint_schema_version=2,
+              submitted_by_institution_admin_id=?,submitted_at=now(),
+              quality_reviewed_by_staff_id=?,quality_reviewed_at=now(),quality_review_notes=?,
+              origin_approved_by_admin_id=?,origin_approved_at=now(),shareable_at=now(),
+              origin_rejected_by_admin_id=null,origin_rejected_at=null,origin_rejection_reason=null,updated_at=now()
+            where id=? and source_institution_id=? and release_state='DRAFT'
+            """,fingerprint,principal.adminId(),trustedPolicyActorId,
+            "Automatically approved under HRMS trusted-course policy. "+trustedPolicyNote,
+            principal.adminId(),releaseId,principal.institutionId());
+      } else {
+        jdbc.update("""
+            update institution_course_release set release_state='IN_QUALITY_REVIEW',content_fingerprint=?,
+              fingerprint_schema_version=2,
+              submitted_by_institution_admin_id=?,submitted_at=now(),
+              quality_reviewed_by_staff_id=null,quality_reviewed_at=null,quality_review_notes=null,
+              origin_approved_by_admin_id=null,origin_approved_at=null,shareable_at=null,
+              origin_rejected_by_admin_id=null,origin_rejected_at=null,origin_rejection_reason=null,updated_at=now()
+            where id=? and source_institution_id=? and release_state='DRAFT'
+            """,fingerprint,principal.adminId(),releaseId,principal.institutionId());
+      }
     } else {
       version=jdbc.queryForObject("""
           select coalesce(max(release_version),0)+1 from institution_course_release
           where source_institution_id=? and program_id=?
           """,Integer.class,principal.institutionId(),programId);
-      releaseId=jdbc.queryForObject("""
-          insert into institution_course_release(
-            source_institution_id,program_id,release_version,release_state,content_fingerprint,
-            submitted_by_institution_admin_id,submitted_at,legacy_migration,created_at,updated_at
-          ) values(?,?,?,'IN_QUALITY_REVIEW',?,?,now(),false,now(),now()) returning id
-          """,Long.class,principal.institutionId(),programId,version,fingerprint,principal.adminId());
+      if(trustedAutoApproval) {
+        releaseId=jdbc.queryForObject("""
+            insert into institution_course_release(
+              source_institution_id,program_id,release_version,release_state,content_fingerprint,
+              fingerprint_schema_version,submitted_by_institution_admin_id,submitted_at,
+              quality_reviewed_by_staff_id,quality_reviewed_at,quality_review_notes,
+              origin_approved_by_admin_id,origin_approved_at,shareable_at,
+              legacy_migration,created_at,updated_at
+            ) values(?,?,?,'SHAREABLE',?,2,?,?,now(),?, ?,now(),now(),false,now(),now()) returning id
+            """,Long.class,principal.institutionId(),programId,version,fingerprint,
+            principal.adminId(),trustedPolicyActorId,
+            "Automatically approved under HRMS trusted-course policy. "+trustedPolicyNote,
+            principal.adminId());
+      } else {
+        releaseId=jdbc.queryForObject("""
+            insert into institution_course_release(
+              source_institution_id,program_id,release_version,release_state,content_fingerprint,
+              fingerprint_schema_version,submitted_by_institution_admin_id,submitted_at,legacy_migration,created_at,updated_at
+            ) values(?,?,?,'IN_QUALITY_REVIEW',?,2,?,now(),false,now(),now()) returning id
+            """,Long.class,principal.institutionId(),programId,version,fingerprint,principal.adminId());
+      }
       jdbc.update("""
           insert into institution_course_assignment(
             institution_id,course_release_id,status,assignment_source,assigned_at,created_at,updated_at
@@ -201,10 +254,15 @@ public class InstitutionCourseLifecycleController {
         select id from institution_course_assignment
         where institution_id=? and course_release_id=? and status='ASSIGNED'
         """,Long.class,principal.institutionId(),releaseId);
-    recordEvent(principal.institutionId(),releaseId,assignmentId,null,"RELEASE_SUBMITTED",null,
-        principal.adminId(),evidence);
+    recordEvent(principal.institutionId(),releaseId,assignmentId,null,
+        trustedAutoApproval?"RELEASE_AUTO_APPROVED_TRUSTED_COURSE":"RELEASE_SUBMITTED",
+        trustedPolicyActorId,principal.adminId(),evidence);
     return Map.of("submitted",true,"releaseId",releaseId,"programId",programId,
-        "releaseVersion",version,"status","IN_QUALITY_REVIEW","qualityEvidence",evidence);
+        "releaseVersion",version,"status",trustedAutoApproval?"SHAREABLE":"IN_QUALITY_REVIEW",
+        "autoApprovedByTrustedCoursePolicy",trustedAutoApproval,"qualityEvidence",evidence,
+        "message",trustedAutoApproval
+          ? "Content approved automatically under the HRMS trusted-course policy. The existing Marketplace publication and destination-specific commercial/access rules remain separate."
+          : "Release submitted for the standard HRMS content-quality workflow.");
   }
 
   @PostMapping("/course-releases/{releaseId}/approve")
