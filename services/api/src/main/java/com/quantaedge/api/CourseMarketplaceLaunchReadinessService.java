@@ -160,7 +160,7 @@ public class CourseMarketplaceLaunchReadinessService {
   public Map<String,Object> inspect(long offerId, Long institutionScope) {
     List<Map<String,Object>> rows = jdbc.queryForList("""
         select o.id as offer_id,o.institution_id,o.assignment_id,o.course_release_id,o.course_id,
-          o.title_override,o.description,o.price_paise,o.currency,o.status as offer_status,
+          o.title_override,o.description,o.price_paise,o.currency,o.status as offer_status,o.trusted_update_block_reason,
           t.display_name as institution_name,t.status as institution_status,
           a.status as assignment_status,r.release_state,r.content_fingerprint,
           p.status as course_status,p.code as course_code,p.display_name as course_name,
@@ -259,6 +259,14 @@ public class CourseMarketplaceLaunchReadinessService {
         !courseName.isBlank() && !text(offer.get("description")).isBlank()
             && pricePaise >= 0 && "INR".equals(currency),
         "Set a non-blank listing title and description, and an explicit non-negative INR price. Use zero only for an intentionally free offer.");
+
+    String trustedUpdateBlockReason=text(offer.get("trusted_update_block_reason"));
+    add(checks,"TRUSTED_UPDATE_COMMERCIAL_CONTINUITY",
+        "Trusted-update commercial continuity has been reviewed",
+        trustedUpdateBlockReason.isBlank(),
+        trustedUpdateBlockReason.isBlank()
+            ? "No unresolved inherited commercial continuity issue was recorded."
+            : trustedUpdateBlockReason + " Open the offer's trusted-update review, reconcile the version-specific finance/discount settings, record the review note, then refresh this checklist.");
 
     if (pricePaise > 0) {
       boolean paymentReady = !razorpayKeyId.isBlank() && !razorpayKeySecret.isBlank();

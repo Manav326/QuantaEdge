@@ -5,8 +5,8 @@ const read = (path) => readFileSync(path, 'utf8');
 const senderApps = ['web', 'admin', 'people'];
 const migrationDirectory = 'services/api/src/main/resources/db/migration';
 const migrationVersions = new Map();
-for (const filename of readdirSync(migrationDirectory).filter(name => /^V\d+__.*\.sql$/.test(name))) {
-  const version = filename.match(/^V(\d+)__/)?.[1];
+for (const filename of readdirSync(migrationDirectory).filter(name => /^V\d+(?:\.\d+)*__.*\.sql$/.test(name))) {
+  const version = filename.match(/^V(\d+(?:\.\d+)*)__/)?.[1];
   const previous = migrationVersions.get(version);
   assert.ok(!previous, `Flyway version ${version} is duplicated: ${previous} and ${filename}`);
   migrationVersions.set(version, filename);

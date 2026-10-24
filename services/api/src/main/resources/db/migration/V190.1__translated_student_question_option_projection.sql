@@ -1,4 +1,4 @@
--- V190: provide the translated-label overload used by learner-facing question delivery.
+-- V190.1: provide the translated-label overload used by learner-facing question delivery.
 -- The two-argument function is the source of truth for allowed option identities. It intentionally
 -- exposes ORDER items in an unordered inventory and MATCH sides without their key/value pairing.
 -- This overload only overlays translated display labels onto that safe inventory. It never adds

@@ -1,4 +1,4 @@
--- V189: a new course version may only supersede the current latest source version.
+-- V189.1: a new course version may only supersede the current latest source version.
 -- This closes the stale-fork edge case where a caller could fork v1 into v3 after v2 was released.
 
 CREATE OR REPLACE FUNCTION qe_guard_latest_course_version_fork()
@@ -51,5 +51,5 @@ COMMENT ON FUNCTION qe_guard_latest_course_version_fork() IS
   'Prevents source course version forks from superseded graphs; every new version must supersede the latest course identity version and increment its version number by one.';
 
 INSERT INTO app_metadata(key,value)
-VALUES ('schema','course-version-latest-source-guard-v189')
+VALUES ('schema','course-version-latest-source-guard-v189-1')
 ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value;
