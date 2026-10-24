@@ -137,6 +137,8 @@ public class CoursePaymentOperationsController {
           o.tax_calculation_snapshot->>'customerPayablePaise' as snapshot_payable_paise,
           o.tax_calculation_snapshot->>'listedPricePaise' as snapshot_listed_price_paise,
           o.tax_calculation_snapshot->>'taxProfileId' as snapshot_tax_profile_id,
+          o.tax_calculation_snapshot->>'taxableValuePaise' as snapshot_taxable_value_paise,
+          o.tax_calculation_snapshot->>'outputTaxPaise' as snapshot_output_tax_paise,
           o.tax_calculation_snapshot->>'discountOfferId' as tax_snapshot_discount_offer_id,
           o.tax_calculation_snapshot->>'discountCode' as tax_snapshot_discount_code,
           o.tax_calculation_snapshot->>'discountPaise' as tax_snapshot_discount_paise,
@@ -177,11 +179,14 @@ public class CoursePaymentOperationsController {
     boolean payableSnapshotMatches=numberOrMinusOne(order.get("snapshot_payable_paise"))==payablePaise;
     boolean listedPriceSnapshotMatches=numberOrMinusOne(order.get("snapshot_listed_price_paise"))==number(order.get("listed_price_paise"));
     boolean taxProfileSnapshotMatches=numberOrMinusOne(order.get("snapshot_tax_profile_id"))==number(order.get("tax_profile_id"));
+    boolean taxableValueSnapshotMatches=snapshotNumberMatches(order,"snapshot_taxable_value_paise","taxable_value_paise");
+    boolean outputTaxSnapshotMatches=snapshotNumberMatches(order,"snapshot_output_tax_paise","output_tax_paise");
     boolean sharePolicySnapshotMatches=numberOrMinusOne(order.get("snapshot_share_policy_id"))==number(order.get("revenue_share_policy_id"));
     boolean buyerSnapshotPresent=presentJsonObject(order.get("buyer_snapshot_json"));
     boolean discountSnapshotMatches=discountSnapshotMatches(order);
     boolean financialFactsValid=financialSnapshotsPresent&&payableSnapshotMatches&&listedPriceSnapshotMatches
-        &&taxProfileSnapshotMatches&&sharePolicySnapshotMatches&&discountSnapshotMatches&&buyerSnapshotPresent;
+        &&taxProfileSnapshotMatches&&taxableValueSnapshotMatches&&outputTaxSnapshotMatches
+        &&sharePolicySnapshotMatches&&discountSnapshotMatches&&buyerSnapshotPresent;
     String financialStatus=financialFactsValid?"COMPLETE":"BLOCKED";
     List<String> financialDetails=new ArrayList<>();
     financialDetails.add("Tax profile reference: "+(order.get("tax_profile_id")==null?"missing":String.valueOf(order.get("tax_profile_id"))));
@@ -189,6 +194,8 @@ public class CoursePaymentOperationsController {
     financialDetails.add("Snapshot payable matches saved order: "+payableSnapshotMatches);
     financialDetails.add("Snapshot listed price matches saved order: "+listedPriceSnapshotMatches);
     financialDetails.add("Tax snapshot references match: "+taxProfileSnapshotMatches);
+    financialDetails.add("Snapshot taxable value matches saved order: "+taxableValueSnapshotMatches);
+    financialDetails.add("Snapshot output tax matches saved order: "+outputTaxSnapshotMatches);
     financialDetails.add("Revenue-share snapshot references match: "+sharePolicySnapshotMatches);
     financialDetails.add("Discount snapshot matches saved order: "+discountSnapshotMatches);
     financialDetails.add("Original buyer snapshot present: "+buyerSnapshotPresent);
@@ -466,6 +473,10 @@ public class CoursePaymentOperationsController {
   private static long numberOrMinusOne(Object value) {
     if(value==null) return -1;
     try { return Long.parseLong(String.valueOf(value)); } catch(Exception ignored) { return -1; }
+  }
+
+  static boolean snapshotNumberMatches(Map<String,Object> row,String snapshotKey,String savedKey) {
+    return numberOrMinusOne(row.get(snapshotKey))==number(row.get(savedKey));
   }
 
   private static long number(Object value) {
