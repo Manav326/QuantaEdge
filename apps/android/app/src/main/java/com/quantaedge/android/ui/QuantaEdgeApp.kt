@@ -2559,7 +2559,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     fun openAssessmentReview(attemptId: Long) {
         runTask {
             if (attemptId <= 0L) throw IOException("Result attempt की पहचान नहीं मिली।")
-            assessmentAttempt = ApiClient.getObject("/api/v1/learning/assessment-attempts/" + attemptId)
+            if (currentCourseId <= 0L) throw IOException("Select an enrolled course before opening this result.")
+            assessmentAttempt = ApiClient.getObject("/api/v1/learning/assessment-attempts/" + attemptId + "?courseId=" + currentCourseId)
             answers.clear()
             feedbacks.clear()
             route = AppRoute.ASSESSMENT_REVIEW
@@ -4991,7 +4992,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onRefresh = {
                             runTask {
                                 val id = assessmentAttempt.longAny("attempt_id", "attemptId", "id")
-                                assessmentAttempt = ApiClient.getObject("/api/v1/learning/assessment-attempts/" + id)
+                                if (currentCourseId <= 0L) throw IOException("Select an enrolled course before refreshing this result.")
+                                assessmentAttempt = ApiClient.getObject("/api/v1/learning/assessment-attempts/" + id + "?courseId=" + currentCourseId)
                             }
                         }
                     )
@@ -7206,6 +7208,101 @@ private fun AssessmentRowCard(
     }
 }
 
+
+private data class StudentAssessmentTopicMetric(
+    val name: String,
+    val questions: Int,
+    val correct: Int,
+    val incorrect: Int,
+    val unanswered: Int,
+    val unscored: Int,
+    val maxMarks: Double,
+    val earnedMarks: Double,
+    val penaltyMarks: Double
+) {
+    val accuracyPercent: Double?
+        get() = if (correct + incorrect == 0) null else correct.toDouble() * 100.0 / (correct + incorrect)
+    val netMarks: Double get() = earnedMarks - penaltyMarks
+}
+
+private fun assessmentQuestionLabels(question: JSONObject, vararg keys: String): List<String> {
+    for (key in keys) {
+        val raw = question.opt(key)
+        val values = when (raw) {
+            is JSONArray -> (0 until raw.length()).map { raw.optString(it).trim() }
+            is String -> listOf(raw.trim())
+            else -> emptyList()
+        }.filter { it.isNotBlank() }
+        if (values.isNotEmpty()) return values.distinct()
+    }
+    return emptyList()
+}
+
+private fun assessmentQuestionTopic(question: JSONObject): String =
+    assessmentQuestionLabels(question, "topic").firstOrNull()
+        ?: assessmentQuestionLabels(question, "topic_tags").firstOrNull()
+        ?: "Uncategorised"
+
+private fun studentAssessmentTopicMetrics(
+    questions: List<JSONObject>,
+    secondary: Boolean = false
+): List<StudentAssessmentTopicMetric> {
+    data class Accumulator(
+        var questions: Int = 0,
+        var correct: Int = 0,
+        var incorrect: Int = 0,
+        var unanswered: Int = 0,
+        var unscored: Int = 0,
+        var maxMarks: Double = 0.0,
+        var earnedMarks: Double = 0.0,
+        var penaltyMarks: Double = 0.0
+    )
+    val groups = linkedMapOf<String, Accumulator>()
+    questions.forEach { question ->
+        val policy = question.textAny("section_result_policy").uppercase(Locale.ROOT)
+        val section = question.textAny("section_code").uppercase(Locale.ROOT)
+        if (policy.isNotBlank() && policy != "SCORED") return@forEach
+        if (policy.isBlank() && section == "LANGUAGE_QUALIFYING") return@forEach
+        val topics = if (secondary) {
+            assessmentQuestionLabels(question, "subtopic") +
+                assessmentQuestionLabels(question, "subtopic_tags")
+        } else {
+            listOf(assessmentQuestionTopic(question))
+        }
+        topics.distinct().forEach { topic ->
+            val metric = groups.getOrPut(topic) { Accumulator() }
+            metric.questions++
+            when {
+                question.has("isCorrect") && !question.isNull("isCorrect") && question.optBoolean("isCorrect") ->
+                    metric.correct++
+                question.has("isCorrect") && !question.isNull("isCorrect") -> metric.incorrect++
+                question.opt("answer") == null || question.isNull("answer") ||
+                    question.opt("answer") == JSONObject.NULL ||
+                    question.opt("answer").toString().isBlank() ||
+                    question.opt("answer").toString() == "\"\"" ||
+                    question.opt("answer").toString() == "[]" ||
+                    question.opt("answer").toString() == "{}" -> metric.unanswered++
+                else -> metric.unscored++
+            }
+            metric.maxMarks += question.optDouble("maxMarks", question.optDouble("max_marks", 0.0)).let {
+                if (it.isFinite()) it else 0.0
+            }
+            metric.earnedMarks += question.optDouble("awardedMarks", question.optDouble("awarded_marks", 0.0)).let {
+                if (it.isFinite()) it else 0.0
+            }
+            metric.penaltyMarks += question.optDouble("penaltyMarks", question.optDouble("penalty_marks", 0.0)).let {
+                if (it.isFinite()) it else 0.0
+            }
+        }
+    }
+    return groups.map { (topic, metric) ->
+        StudentAssessmentTopicMetric(topic, metric.questions, metric.correct, metric.incorrect,
+            metric.unanswered, metric.unscored, metric.maxMarks, metric.earnedMarks, metric.penaltyMarks)
+    }.sortedWith(compareBy<StudentAssessmentTopicMetric> { it.accuracyPercent ?: 101.0 }
+        .thenByDescending { it.incorrect }
+        .thenBy { it.name.lowercase(Locale.ROOT) })
+}
+
 @Composable
 private fun AssessmentAttemptScreen(
     attempt: JSONObject,
@@ -7240,6 +7337,57 @@ private fun AssessmentAttemptScreen(
     var nowEpochMillis by remember(attemptId, deadlineEpochMillis) { mutableStateOf(System.currentTimeMillis()) }
     var autoSubmittedAttemptId by remember { mutableStateOf(0L) }
     val remainingSeconds = deadlineEpochMillis?.let { ((it - nowEpochMillis) / 1000L).coerceAtLeast(0L) }
+
+    val attemptCourseId = attempt.longAny("course_id", "courseId", "program_id")
+    var incorrectPracticeProgress by remember(attemptId) { mutableStateOf<Map<Long, JSONObject>>(emptyMap()) }
+    var practiceResponses by remember(attemptId) { mutableStateOf<Map<Long, String>>(emptyMap()) }
+    var practiceCorrectness by remember(attemptId) { mutableStateOf<Map<Long, Boolean>>(emptyMap()) }
+    var practiceExpanded by rememberSaveable(attemptId) { mutableStateOf(false) }
+    var practiceLoading by remember(attemptId) { mutableStateOf(false) }
+    var practiceRefreshVersion by remember(attemptId) { mutableStateOf(0) }
+    var practiceQuestionSaving by remember(attemptId) { mutableStateOf(0L) }
+    var practiceError by remember(attemptId) { mutableStateOf("") }
+    val practiceScope = rememberCoroutineScope()
+    val incorrectQuestions = if (released) questions.filter {
+        it.has("isCorrect") && !it.isNull("isCorrect") && !it.optBoolean("isCorrect")
+    } else emptyList()
+    val topicMetrics = remember(attemptId, questions, released) {
+        if (released) studentAssessmentTopicMetrics(questions) else emptyList()
+    }
+    val microTopicMetrics = remember(attemptId, questions, released) {
+        if (released) studentAssessmentTopicMetrics(questions, secondary = true) else emptyList()
+    }
+    val practicedCorrectlyCount = incorrectQuestions.count {
+        incorrectPracticeProgress[it.longAny("attemptQuestionId", "attempt_question_id")]?.optBoolean("ever_correct") == true
+    }
+
+    LaunchedEffect(attemptId, attemptCourseId, released, practiceRefreshVersion) {
+        if (!released || attemptId <= 0L || attemptCourseId <= 0L) {
+            incorrectPracticeProgress = emptyMap()
+            practiceLoading = false
+        } else {
+            practiceLoading = true
+            practiceError = ""
+            try {
+                val progress = withContext(Dispatchers.IO) {
+                    ApiClient.getObject("/api/v1/learning/assessment-attempts/" + attemptId +
+                        "/incorrect-practice?courseId=" + attemptCourseId)
+                }
+                val items = progress.optJSONArray("items")?.objectItems() ?: emptyList()
+                incorrectPracticeProgress = items.mapNotNull { item ->
+                    val questionId = item.longAny("attempt_question_id", "attemptQuestionId")
+                    if (questionId > 0L) questionId to item else null
+                }.toMap()
+            } catch (failure: Exception) {
+                incorrectPracticeProgress = emptyMap()
+                practiceError = failure.message ?: if (language == "hi")
+                    "गलत प्रश्नों का अभ्यास इतिहास लोड नहीं हो सका।" else "Could not load incorrect-question practice history."
+            } finally {
+                practiceLoading = false
+            }
+        }
+    }
+
     val deadlineReached = inProgress && remainingSeconds != null && remainingSeconds <= 0L
 
     LaunchedEffect(attemptId, deadlineEpochMillis, inProgress) {
@@ -7390,6 +7538,206 @@ private fun AssessmentAttemptScreen(
                         .verticalScroll(rememberScrollState()),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
+
+                    if (released) {
+                        Card(modifier = Modifier.fillMaxWidth()) {
+                            Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Text(t("Topic-wise analysis", "विषय-वार विश्लेषण"),
+                                    style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                                Text(t("Correct, incorrect, unanswered and net marks by topic. Blank answers are not counted as incorrect.",
+                                    "हर विषय के सही, गलत, खाली उत्तर और शुद्ध अंक। खाली उत्तरों को गलत नहीं गिना जाता।"),
+                                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                if (topicMetrics.isEmpty()) {
+                                    Text(t("Topic tags are not available for this result.", "इस परिणाम में विषय टैग उपलब्ध नहीं हैं।"),
+                                        style = MaterialTheme.typography.bodySmall)
+                                } else {
+                                    topicMetrics.forEach { metric ->
+                                        Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                                            Row(verticalAlignment = Alignment.CenterVertically,
+                                                horizontalArrangement = Arrangement.SpaceBetween,
+                                                modifier = Modifier.fillMaxWidth()) {
+                                                Text(metric.name, style = MaterialTheme.typography.bodyMedium,
+                                                    fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
+                                                Text(metric.accuracyPercent?.let { "%.1f%%".format(Locale.ROOT, it) } ?: "—",
+                                                    style = MaterialTheme.typography.labelLarge)
+                                            }
+                                            Text(t("Questions: ", "प्रश्न: ") + metric.questions +
+                                                " · " + t("Correct: ", "सही: ") + metric.correct +
+                                                " · " + t("Incorrect: ", "गलत: ") + metric.incorrect +
+                                                " · " + t("Unanswered: ", "खाली: ") + metric.unanswered,
+                                                style = MaterialTheme.typography.bodySmall)
+                                            Text(t("Net marks: ", "शुद्ध अंक: ") +
+                                                "%.2f".format(Locale.ROOT, metric.netMarks) + " / " +
+                                                "%.2f".format(Locale.ROOT, metric.maxMarks),
+                                                style = MaterialTheme.typography.bodySmall,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                        }
+                                        HorizontalDivider()
+                                    }
+                                }
+                                if (microTopicMetrics.isNotEmpty()) {
+                                    var showMicroTopics by rememberSaveable(attemptId) { mutableStateOf(false) }
+                                    TextButton(onClick = { showMicroTopics = !showMicroTopics }) {
+                                        Text(if (showMicroTopics) t("Hide micro-topics", "सूक्ष्म-विषय छिपाएँ")
+                                            else t("Show micro-topic breakdown", "सूक्ष्म-विषय विश्लेषण देखें"))
+                                    }
+                                    if (showMicroTopics) {
+                                        microTopicMetrics.forEach { metric ->
+                                            Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                                                Text(metric.name, fontWeight = FontWeight.SemiBold)
+                                                Text(t("Correct ", "सही ") + metric.correct +
+                                                    " · " + t("Incorrect ", "गलत ") + metric.incorrect +
+                                                    " · " + t("Unanswered ", "खाली ") + metric.unanswered +
+                                                    " · " + t("Accuracy ", "सटीकता ") +
+                                                    (metric.accuracyPercent?.let { "%.1f%%".format(Locale.ROOT, it) } ?: "—"),
+                                                    style = MaterialTheme.typography.bodySmall)
+                                            }
+                                            HorizontalDivider()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        Card(modifier = Modifier.fillMaxWidth()) {
+                            Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Text(t("Learn from your mistakes", "अपनी गलतियों से सीखें"),
+                                    style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                                Text(t("Incorrect answers are collected into one practice set. Retry them and track your progress; practice never changes your official score or negative marking.",
+                                    "गलत उत्तर एक अभ्यास सेट में साथ रखे गए हैं। दोबारा हल करें और प्रगति देखें; अभ्यास से आधिकारिक अंक या नकारात्मक अंक नहीं बदलते।"),
+                                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Row(verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                                    Column {
+                                        Text(t("Incorrect questions: ", "गलत प्रश्न: ") + incorrectQuestions.size,
+                                            style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+                                        Text(t("Corrected in practice: ", "अभ्यास में सुधरे: ") + practicedCorrectlyCount,
+                                            style = MaterialTheme.typography.bodySmall)
+                                    }
+                                    if (incorrectQuestions.isNotEmpty()) {
+                                        OutlinedButton(onClick = { practiceExpanded = !practiceExpanded }) {
+                                            Text(if (practiceExpanded) t("Close", "बंद करें") else t("Practice", "अभ्यास"))
+                                        }
+                                    }
+                                }
+                                if (incorrectQuestions.isEmpty()) {
+                                    Text(t("Great work — no incorrectly answered questions in this test.",
+                                        "बहुत अच्छा — इस टेस्ट में कोई गलत उत्तर नहीं है।"),
+                                        color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.bodySmall)
+                                } else if (practiceExpanded) {
+                                    Text(t("Separate practice session — the submitted paper is read-only.",
+                                        "अलग अभ्यास सत्र — जमा किया गया प्रश्नपत्र केवल पढ़ने के लिए है।"),
+                                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+                                    if (practiceLoading) CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                                    if (practiceError.isNotBlank()) {
+                                        Text(practiceError, color = MaterialTheme.colorScheme.error,
+                                            style = MaterialTheme.typography.bodySmall)
+                                        TextButton(onClick = { practiceRefreshVersion++ }) { Text(t("Retry loading", "फिर लोड करें")) }
+                                    }
+                                    incorrectQuestions.forEachIndexed { practiceIndex, retryQuestion ->
+                                        val questionId = retryQuestion.longAny("attemptQuestionId", "attempt_question_id")
+                                        val progress = incorrectPracticeProgress[questionId]
+                                        val canPractice = progress?.optBoolean("practiceable", false) == true
+                                        val checked = practiceCorrectness.containsKey(questionId)
+                                        val questionTopic = assessmentQuestionTopic(retryQuestion)
+                                        Card(modifier = Modifier.fillMaxWidth()) {
+                                            Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
+                                                Text(t("Missed question ", "गलत प्रश्न ") + (practiceIndex + 1) + " · " + questionTopic,
+                                                    style = MaterialTheme.typography.titleSmall)
+                                                Text(retryQuestion.textAny("prompt", "question", "text"),
+                                                    style = MaterialTheme.typography.bodyMedium)
+                                                Text(t("Practice attempts: ", "अभ्यास प्रयास: ") +
+                                                    (progress?.optInt("practice_count", 0) ?: 0) +
+                                                    if (progress?.optBoolean("ever_correct") == true)
+                                                        t(" · Corrected at least once", " · कम-से-कम एक बार सही") else "",
+                                                    style = MaterialTheme.typography.bodySmall,
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                                if (canPractice && !practiceLoading && practiceError.isBlank()) {
+                                                    val answer = practiceResponses[questionId].orEmpty()
+                                                    QuestionCard(
+                                                        question = retryQuestion,
+                                                        answer = answer,
+                                                        onAnswerChange = { value -> practiceResponses = practiceResponses + (questionId to value) },
+                                                        onSubmit = {},
+                                                        locked = checked || practiceQuestionSaving == questionId,
+                                                        saving = practiceQuestionSaving == questionId,
+                                                        feedback = if (checked) {
+                                                            if (practiceCorrectness[questionId] == true)
+                                                                t("Correct — mistake corrected.", "सही — गलती सुधर गई।")
+                                                            else t("Not correct yet. Review the answer and try again.", "अभी सही नहीं हुआ। उत्तर देखें और फिर कोशिश करें।")
+                                                        } else null,
+                                                        status = if (checked) t("Practice answer checked", "अभ्यास उत्तर जाँचा गया") else null,
+                                                        showSubmitButton = false
+                                                    )
+                                                    if (checked) {
+                                                        val answerPayload = retryQuestion.optJSONObject("correctAnswer")
+                                                        val key = answerPayload?.textAny("value", "correctOption", "option_key", "key").orEmpty()
+                                                        val options = retryQuestion.optJSONArray("options")?.objectItems() ?: emptyList()
+                                                        val correctLabel = options.firstOrNull {
+                                                            it.textAny("key", "option_key") == key
+                                                        }?.textAny("label", "text").orEmpty()
+                                                        if (correctLabel.isNotBlank()) {
+                                                            Text(t("Correct answer: ", "सही उत्तर: ") + correctLabel,
+                                                                style = MaterialTheme.typography.bodyMedium,
+                                                                color = MaterialTheme.colorScheme.primary)
+                                                        }
+                                                        if (retryQuestion.textAny("explanation").isNotBlank()) {
+                                                            Text(t("Explanation: ", "व्याख्या: ") + retryQuestion.textAny("explanation"),
+                                                                style = MaterialTheme.typography.bodySmall)
+                                                        }
+                                                        OutlinedButton(onClick = {
+                                                            practiceCorrectness = practiceCorrectness - questionId
+                                                            practiceResponses = practiceResponses + (questionId to "")
+                                                        }, enabled = practiceQuestionSaving == 0L) {
+                                                            Text(t("Try again", "फिर प्रयास करें"))
+                                                        }
+                                                    } else {
+                                                        Button(
+                                                            onClick = {
+                                                                practiceScope.launch {
+                                                                    practiceQuestionSaving = questionId
+                                                                    practiceError = ""
+                                                                    try {
+                                                                        val request = JSONObject()
+                                                                            .put("attemptQuestionId", questionId)
+                                                                            .put("answer", answer)
+                                                                        val result = withContext(Dispatchers.IO) {
+                                                                            ApiClient.postObject(
+                                                                                "/api/v1/learning/assessment-attempts/" + attemptId +
+                                                                                    "/incorrect-practice?courseId=" + attemptCourseId,
+                                                                                request
+                                                                            )
+                                                                        }
+                                                                        val correct = result.optBoolean("last_correct")
+                                                                        practiceCorrectness = practiceCorrectness + (questionId to correct)
+                                                                        incorrectPracticeProgress = incorrectPracticeProgress + (questionId to result)
+                                                                    } catch (failure: Exception) {
+                                                                        practiceError = failure.message ?: t("The practice answer could not be checked.",
+                                                                            "अभ्यास उत्तर जाँचा नहीं जा सका।")
+                                                                    } finally {
+                                                                        practiceQuestionSaving = 0L
+                                                                    }
+                                                                }
+                                                            },
+                                                            enabled = !busy && practiceQuestionSaving == 0L && answer.isNotBlank() &&
+                                                                !practiceLoading && practiceError.isBlank()
+                                                        ) { Text(if (practiceQuestionSaving == questionId) t("Checking…", "जाँच रहे हैं…")
+                                                            else t("Check answer", "उत्तर जाँचें")) }
+                                                    }
+                                                } else if (!practiceLoading) {
+                                                    Text(t("This response needs human grading or the practice history is unavailable.",
+                                                        "इस उत्तर के लिए मानवीय जाँच चाहिए या अभ्यास इतिहास उपलब्ध नहीं है。"),
+                                                        style = MaterialTheme.typography.bodySmall,
+                                                        color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    val question = questions[safeQuestionIndex]
                     val question = questions[safeQuestionIndex]
                     val id = question.longAny("attemptQuestionId", "attempt_question_id").toString()
                     val serverAnswer = question.textAny("answer")
