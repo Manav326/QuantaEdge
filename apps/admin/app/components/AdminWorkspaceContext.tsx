@@ -4,6 +4,8 @@ import { createContext } from 'react';
 import type { UiLocale } from '../i18n/catalog';
 
 export type AdminLocale = UiLocale;
+export type AdminWorkspaceIdentityType = 'EDUCATION_ADMIN' | 'INSTITUTION';
+
 export type AdminWorkspaceContextValue = {
   insideWorkspace: boolean;
   locale: AdminLocale;
@@ -11,6 +13,10 @@ export type AdminWorkspaceContextValue = {
   role: string;
   permissions: string[];
   displayName: string;
+  identityType: AdminWorkspaceIdentityType | null;
+  institutionId: number | null;
+  institutionCode: string;
+  mustChangePassword: boolean;
 };
 
 export const AdminWorkspaceContext = createContext<AdminWorkspaceContextValue>({
@@ -20,4 +26,8 @@ export const AdminWorkspaceContext = createContext<AdminWorkspaceContextValue>({
   role: '',
   permissions: [],
   displayName: '',
+  identityType: null,
+  institutionId: null,
+  institutionCode: '',
+  mustChangePassword: false,
 });
