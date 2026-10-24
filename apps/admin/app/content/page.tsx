@@ -501,7 +501,7 @@ export default function ContentStudio(){
    setProgramFilter(String(nextCourseId));
    const url=new URL(window.location.href);url.searchParams.set('courseId',String(nextCourseId));window.history.replaceState({},'',url.toString());
    await load(String(nextCourseId));
-   setNotice('Created draft content version v'+(nextCourseVersion||'?')+'. The previous published version remains unchanged; complete source review and the full HRMS Marketplace update stepper before this version is distributed.');
+   setNotice('Created draft content version v'+(nextCourseVersion||'?')+'. The previous published version remains unchanged. '+(activeProgram?.trusted_auto_approval?'When the complete version is submitted, HRMS trusted-course policy automatically approves its content and source release; destination assignments and commercial publication checks remain separate.':'Complete the standard source review and HRMS Marketplace update workflow before this version is distributed.'));
   }catch(e){setError(e instanceof Error?e.message:'Could not create a safe draft version. The published version was not changed.');}
   finally{setVersionBusy(false);}
  }
