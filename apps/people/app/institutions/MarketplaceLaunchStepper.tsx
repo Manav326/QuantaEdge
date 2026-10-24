@@ -456,7 +456,21 @@ export default function MarketplaceLaunchStepper({
       }
       setReviewChapters(previous => ({ ...previous, [chapterId]: chapter }));
       setExpandedReviewChapters(previous => ({ ...previous, [release.release_id]: chapterId }));
-      if (!detail.contentCurrent || detail.content_fingerprint !== release.content_fingerprint) {
+      const exactReleaseCurrent = detail.contentCurrent === true
+        && detail.content_fingerprint === release.content_fingerprint;
+      setReviewContent(previous => {
+        const existing=previous[release.release_id];
+        if(!existing) return previous;
+        return {
+          ...previous,
+          [release.release_id]: {
+            ...existing,
+            contentCurrent:exactReleaseCurrent,
+            currentFingerprint:String(detail.currentFingerprint||'')
+          }
+        };
+      });
+      if (!exactReleaseCurrent) {
         setReviewContentErrors(previous => ({
           ...previous,
           [release.release_id]: 'The source graph no longer matches the submitted fingerprint. This content is shown for diagnosis only; do not approve it.'
@@ -1075,7 +1089,7 @@ export default function MarketplaceLaunchStepper({
                         placeholder={assessmentOnly ? 'Record question inventory, source fidelity, answer review, section scoring and release fingerprint checks…' : 'Record what was checked: syllabus coverage, published lessons, content integrity…'} />
                     </label>
                     <div className={styles.qualityActions}>
-                      <button type="button" className={styles.primaryButton} disabled={busyKey !== null || !qualityReady || !preview || !preview.contentCurrent || preview.content_fingerprint !== release.content_fingerprint || (reviewNotes[release.release_id] || '').trim().length < 3}
+                      <button type="button" className={styles.primaryButton} disabled={busyKey !== null || reviewChapterLoadingId !== null || !qualityReady || !preview || !preview.contentCurrent || preview.content_fingerprint !== release.content_fingerprint || (reviewNotes[release.release_id] || '').trim().length < 3}
                         onClick={() => void reviewQuality(release, true)}>
                         {busyKey === 'quality-' + release.release_id ? 'Saving decision…' : 'Approve quality'}
                       </button>
