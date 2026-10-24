@@ -51,7 +51,8 @@ BEGIN
     SELECT conname FROM pg_constraint
     WHERE conrelid='public.institution_course_release'::regclass
       AND contype='c'
-      AND pg_get_constraintdef(oid) ILIKE '%release_state <> ''SHAREABLE''%'
+      AND pg_get_constraintdef(oid) ILIKE '%origin_approved_by_admin_id IS NOT NULL%'
+      AND pg_get_constraintdef(oid) ILIKE '%shareable_at IS NOT NULL%'
   LOOP
     EXECUTE format('ALTER TABLE public.institution_course_release DROP CONSTRAINT %I',constraint_name);
   END LOOP;
