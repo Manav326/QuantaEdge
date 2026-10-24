@@ -28,14 +28,34 @@ public class AdminInstitutionOperationsController {
   private final AuthorizationService authorization;
   private final StaffAuditService staffAudit;
   private final InstitutionCourseReleaseWorkflowService releaseWorkflow;
+  private final InstitutionAuthService institutionAuth;
 
   public AdminInstitutionOperationsController(
       JdbcTemplate jdbc, AuthorizationService authorization, StaffAuditService staffAudit,
-      InstitutionCourseReleaseWorkflowService releaseWorkflow) {
+      InstitutionCourseReleaseWorkflowService releaseWorkflow, InstitutionAuthService institutionAuth) {
     this.jdbc = jdbc;
     this.authorization = authorization;
     this.staffAudit = staffAudit;
     this.releaseWorkflow = releaseWorkflow;
+    this.institutionAuth = institutionAuth;
+  }
+
+  @GetMapping("/invitation")
+  public Map<String,Object> invitation(
+      @RequestAttribute(value="authContext",required=false) AuthContext supplied,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    AuthContext actor=requireEducationStaff(supplied,tenant,"INSTITUTION_INVITATION_VIEW");
+    // Join-code rotation is centrally governed by HRMS. Admin may reveal only the currently
+    // valid code for its single assigned institution. Never write the secret itself to audit logs.
+    String joinCode=institutionAuth.readableJoinCode(tenant.institutionId());
+    staffAudit.recordAction(actor,"/api/v1/admin/institution-operations/invitation",
+        "Viewed learner invitation availability for institutionId="+tenant.institutionId());
+    return Map.of(
+        "institutionCode",tenant.tenantCode(),
+        "institutionName",tenant.displayName(),
+        "joinCode",joinCode == null ? "" : joinCode,
+        "available",joinCode != null && !joinCode.isBlank());
   }
 
   @GetMapping("/overview")
