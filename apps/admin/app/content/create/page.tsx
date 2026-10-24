@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminSidebar from '../../components/AdminSidebar';
 import { apiFetch } from '../../components/apiClient';
@@ -73,7 +73,7 @@ export default function CreateCoursePage() {
     setSubjects(current => current.filter((_, i) => i !== index).map((subject, i) => ({ ...subject, sortOrder: i + 1 })));
   }
 
-  async function createCourse(event: React.FormEvent<HTMLFormElement>) {
+  async function createCourse(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!canCreateCourse) { setError(t('admin.institutionOperations.courseCreatePermission')); return; }
     const normalizedSubjects = subjects.map((subject, index) => ({
@@ -133,7 +133,7 @@ export default function CreateCoursePage() {
           </section>
         ) : (
           <form className={styles.panel} onSubmit={createCourse}>
-            <div className={styles.sectionHeading}><h2>Course details</h2><span>K–12</span></div>
+            <div className={styles.sectionHeading}><h2>{t('admin.institutionOperations.courseDetails')}</h2><span>{t('admin.institutionOperations.courseTypeK12')}</span></div>
             <p className={styles.helper}>{t('admin.institutionOperations.courseCodeHint')}</p>
             <div className={styles.formGrid}>
               <label>
