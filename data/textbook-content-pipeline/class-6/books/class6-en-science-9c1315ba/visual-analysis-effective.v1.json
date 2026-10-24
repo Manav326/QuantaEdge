@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0a61b5a006c8af5ac18297b83f690562739d610af892a2930daf6c2125234d6b",
+  "raw_analysis_sha256": "483ad29bd4a6aaadf00903f996e359b4234eae07da26a5a6bf1510561df5b277",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -643,7 +643,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40045173091",
-      "checkpointed_at": "2026-10-24T01:06:53Z",
+      "checkpointed_at": "2026-10-24T01:14:28Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -29453,7 +29453,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40045173091",
-      "checkpointed_at": "2026-10-24T01:07:55Z",
+      "checkpointed_at": "2026-10-24T01:15:31Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -35067,7 +35067,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40045173091",
-      "checkpointed_at": "2026-10-24T01:08:48Z",
+      "checkpointed_at": "2026-10-24T01:16:24Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -56322,9 +56322,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40031105894",
+      "run_id": "40045173091",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -57316,21 +57316,81 @@
     {
       "asset_id": "055ba61cf9184b7284850138",
       "asset_sha256": "3e0c60ea4f278651f651f553d8afa55387229e3776597380aab93ed7c66e531e",
-      "page_text_context_sha256": "82809710c53f97379d67c75d8ec2cd7e219ac5e4ed747c8eda7013cfd009e931",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 99,
       "asset_path": "page-0099.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "82809710c53f97379d67c75d8ec2cd7e219ac5e4ed747c8eda7013cfd009e931",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40031105894",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table showing the number of handspans for different students.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.1: Measuring the length of the table",
+          "Name of the Student      Number of Handspans",
+          "Anish                   Slightly more than 13",
+          "Padma                       13",
+          "Tasneem                   Slightly less than 13",
+          "Deepa                Between 13 and 14",
+          "Hardeep                       14",
+          "Padma says, “Oh, the number of handspans is different for all of us. So, what can we say about the length of the table?”",
+          "“But why should the number be different?” Hardeep asked thoughtfully.",
+          "Tasneem says,  “I can guess. Our handspans are of different sizes.”",
+          "Anish gives an idea, “Let us check this.”",
+          "So, all five of them put their handspans along each other and arrive at the conclusion that the lengths of their handspans are different.",
+          "Deepa says thoughtfully, “No wonder people use scales and measuring tapes.”",
+          "Deepa and her friends compare the length of the table with the length of their handspans. The length of the table is expressed in terms of their handspans. Here, the handspan used for measurement is an example of a unit. And the length is expressed in two parts, a number and a unit. For example, if ",
+          "However, handspans and other similar units, such as length of hand, foot, fist or fingers, differ from person to person. Thus, there is a need for such a unit for which measurements of the same length made by different people do not differ."
+        ],
+        "concepts": [
+          "Measurement of Length and Motion",
+          "Handspans",
+          "Length of the table"
+        ],
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
+        "limitations": [
+          "The table does not provide the actual length of the table."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40045173091",
+      "checkpointed_at": "2026-10-24T01:24:03Z",
+      "effective_analysis": {
+        "visual_summary": "A table showing the number of handspans for different students.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.1: Measuring the length of the table",
+          "Name of the Student      Number of Handspans",
+          "Anish                   Slightly more than 13",
+          "Padma                       13",
+          "Tasneem                   Slightly less than 13",
+          "Deepa                Between 13 and 14",
+          "Hardeep                       14",
+          "Padma says, “Oh, the number of handspans is different for all of us. So, what can we say about the length of the table?”",
+          "“But why should the number be different?” Hardeep asked thoughtfully.",
+          "Tasneem says,  “I can guess. Our handspans are of different sizes.”",
+          "Anish gives an idea, “Let us check this.”",
+          "So, all five of them put their handspans along each other and arrive at the conclusion that the lengths of their handspans are different.",
+          "Deepa says thoughtfully, “No wonder people use scales and measuring tapes.”",
+          "Deepa and her friends compare the length of the table with the length of their handspans. The length of the table is expressed in terms of their handspans. Here, the handspan used for measurement is an example of a unit. And the length is expressed in two parts, a number and a unit. For example, if ",
+          "However, handspans and other similar units, such as length of hand, foot, fist or fingers, differ from person to person. Thus, there is a need for such a unit for which measurements of the same length made by different people do not differ."
+        ],
+        "concepts": [
+          "Measurement of Length and Motion",
+          "Handspans",
+          "Length of the table"
+        ],
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
+        "limitations": [
+          "The table does not provide the actual length of the table."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
