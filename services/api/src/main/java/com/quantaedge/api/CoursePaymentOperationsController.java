@@ -233,7 +233,12 @@ public class CoursePaymentOperationsController {
       if("VERIFIED".equals(outcome) && Boolean.TRUE.equals(result.get("financialSnapshotsRepaired"))) {
         eventType="FINANCIAL_SNAPSHOT_REPAIRED_AND_RECONCILED";
         code="TEST_MODE_FINANCIAL_SNAPSHOT_REPAIRED";
-        message="The existing Razorpay test payment was verified, missing financial snapshots were rebuilt under the guarded test-mode recovery, and the existing order was finalized. No replacement order was created.";
+        String basis=text(result.get("financialSnapshotRepairBasis"));
+        String basisText="CURRENT_APPROVED_TERMS_FOR_TEST_MODE_RECOVERY".equals(basis)
+            ? "using current approved HRMS financial settings, explicitly marked as test-mode recovery"
+            : "using approved financial terms effective at the original order creation time";
+        message="The existing Razorpay test payment was verified, missing financial snapshots were rebuilt "+basisText
+            +", and the existing order was finalized. No replacement order was created.";
       } else if("VERIFIED".equals(outcome)) {
         eventType="RECONCILIATION_SUCCEEDED";
         code="PAYMENT_VERIFIED";
@@ -263,15 +268,26 @@ public class CoursePaymentOperationsController {
           text(result.get("providerOrderId")),text(result.get("providerOrderStatus")),details);
       return ResponseEntity.ok(result);
     } catch(RuntimeException exception) {
-      String message=safeError(exception.getMessage());
+      String rawMessage=exception instanceof org.springframework.web.server.ResponseStatusException statusException
+          ? statusException.getReason() : exception.getMessage();
+      String message=safeError(rawMessage);
+      boolean snapshotRepairBlocked=rawMessage!=null
+          && (rawMessage.toLowerCase(Locale.ROOT).contains("snapshot")
+              || rawMessage.toLowerCase(Locale.ROOT).contains("financial terms"));
+      String eventType=snapshotRepairBlocked?"FINANCIAL_SNAPSHOT_REPAIR_BLOCKED":"RECONCILIATION_FAILED";
+      String resolutionCode=snapshotRepairBlocked?"SNAPSHOT_REPAIR_BLOCKED":"PROVIDER_CHECK_FAILED";
+      if(snapshotRepairBlocked&&!message.toLowerCase(Locale.ROOT).contains("do not pay again"))
+        message=message+" Keep this saved order; do not pay again until the financial issue is resolved.";
       Map<String,Object> details=new LinkedHashMap<>();
       details.put("failureCode",text(order.get("failure_code")));
       details.put("orderStatus",currentStatus);
-      audit.record(orderId,context.staffId(),"RECONCILIATION_FAILED","PROVIDER_CHECK_FAILED",
+      details.put("snapshotRepairBlocked",snapshotRepairBlocked);
+      audit.record(orderId,context.staffId(),eventType,resolutionCode,
           message,providerOrderId,null,details);
       Map<String,Object> response=new LinkedHashMap<>();
       response.put("status","RECONCILIATION_REQUIRED");
-      response.put("resolutionCode","PROVIDER_CHECK_FAILED");
+      response.put("resolutionCode",resolutionCode);
+      response.put("resolutionMessage",message);
       response.put("message",message);
       response.put("canRetryCheckout",false);
       response.put("providerOrderId",providerOrderId);
