@@ -73,6 +73,20 @@ type PackageRightsReview = {
   rights_review_notes?: string | null;
 };
 type PackageRightsDraft = { status: string; evidenceUrl: string; notes: string };
+type TrustedCoursePolicy = {
+  course_identity_id: number;
+  stable_course_key: string;
+  identity_name: string;
+  trusted_auto_approval: boolean;
+  trusted_auto_approval_changed_by_staff_id?: number | null;
+  trusted_auto_approval_changed_at?: string | null;
+  trusted_auto_approval_note?: string | null;
+  latest_course_id: number;
+  course_code: string;
+  course_name: string;
+  content_version_no: number;
+  authenticated: boolean;
+};
 type LaunchResponse = {
   institutionId: number;
   institutionName: string;
@@ -86,13 +100,14 @@ type LaunchResponse = {
   qualityReviewCount?: number;
   coursePackageImports?: PackageRightsReview[];
   coursePackageImportCount?: number;
+  trustedCoursePolicies?: TrustedCoursePolicy[];
 };
-type Draft = { title: string; description: string; priceRupees: string };
+type Draft = { title: string; description: string; priceRupees: string; acknowledgeTrustedUpdateBlock: boolean; trustedUpdateReviewNote: string };
 
 const GROUPS = [
   { key: 'course', number: '01', title: 'Course content, rights & quality', subtitle: 'The course is active, imported source rights are cleared where applicable, mapped subjects have published learning content, and HRMS quality review is complete.', codes: ['INSTITUTION_ACTIVE', 'COURSE_ACTIVE', 'CONTENT_QUALITY_REVIEW', 'CONTENT_REVIEW_CURRENT', 'PUBLISHED_LEARNING_CONTENT', 'SOURCE_RIGHTS_CLEARANCE'] },
   { key: 'release', number: '02', title: 'Origin approval & assignment', subtitle: 'The source institution approves the reviewed release, then HRMS assigns that exact shareable release to this institution.', codes: ['ORIGIN_RELEASE_APPROVAL', 'ASSIGNMENT_AND_RELEASE'] },
-  { key: 'offer', number: '03', title: 'Listing details', subtitle: 'Set the student-facing title, description, currency and explicit price.', codes: ['OFFER_TERMS'] },
+  { key: 'offer', number: '03', title: 'Listing details & trusted-update continuity', subtitle: 'Set the student-facing title, description, currency and explicit price. Any inherited finance or discount exception needs an auditable HRMS review.', codes: ['OFFER_TERMS', 'TRUSTED_UPDATE_COMMERCIAL_CONTINUITY'] },
   { key: 'payment', number: '04', title: 'Payment setup', subtitle: 'Paid courses require working Razorpay credentials and the signed course-payment webhook.', codes: ['RAZORPAY_CREDENTIALS', 'RAZORPAY_WEBHOOK'] },
   { key: 'seller', number: '05', title: 'Seller & tax', subtitle: 'Approve the seller and tax treatment, GST registration where required, and e-invoice applicability.', codes: ['APPROVED_TAX_PROFILE', 'EINVOICE_REVIEW', 'TAX_CALCULATION', 'GST_REGISTRATION'] },
   { key: 'invoice', number: '06', title: 'Invoice & revenue share', subtitle: 'Publish an invoice template; confirm effective shares fit the after-tax pool, including approved discounts.', codes: ['PUBLISHED_INVOICE_TEMPLATE', 'REVENUE_SHARE_POLICY', 'SHARE_POOL_VALIDATION', 'DISCOUNT_POOL_COMPATIBILITY'] },
@@ -123,6 +138,8 @@ function initialDraft(item: LaunchItem): Draft {
     title: item.listingTitle || item.courseName || '',
     description: item.description || '',
     priceRupees: item.pricePaise === null || item.pricePaise === undefined ? '' : (item.pricePaise / 100).toFixed(2).replace(/\.00$/, ''),
+    acknowledgeTrustedUpdateBlock: false,
+    trustedUpdateReviewNote: '',
   };
 }
 
@@ -137,6 +154,7 @@ export default function MarketplaceLaunchStepper({
   const [drafts, setDrafts] = useState<Record<number, Draft>>({});
   const [reviewNotes, setReviewNotes] = useState<Record<number, string>>({});
   const [packageRightsDrafts, setPackageRightsDrafts] = useState<Record<number, PackageRightsDraft>>({});
+  const [trustedPolicyNotes, setTrustedPolicyNotes] = useState<Record<number, string>>({});
   const [loading, setLoading] = useState(true);
   const [busyKey, setBusyKey] = useState<string | null>(null);
   const [error, setError] = useState('');
@@ -167,6 +185,15 @@ export default function MarketplaceLaunchStepper({
               evidenceUrl: item.rights_evidence_url || '',
               notes: item.rights_review_notes || '',
             };
+          }
+        }
+        return next;
+      });
+      setTrustedPolicyNotes(previous => {
+        const next = { ...previous };
+        for (const item of result.trustedCoursePolicies || []) {
+          if (next[item.course_identity_id] === undefined) {
+            next[item.course_identity_id] = '';
           }
         }
         return next;
@@ -223,6 +250,37 @@ export default function MarketplaceLaunchStepper({
       setBusyKey(null);
     }
   }
+
+  const setTrustedAutoApproval = async (item: TrustedCoursePolicy, enabled: boolean) => {
+    const note = (trustedPolicyNotes[item.course_identity_id] || '').trim();
+    if (note.length < 5 || note.length > 1000) {
+      setError('Add an audit reason between 5 and 1,000 characters before changing trusted-course mode.');
+      return;
+    }
+    if (enabled && !item.authenticated) {
+      setError('Only a previously HRMS-published course can be marked trusted. Complete its initial approval and publication first.');
+      return;
+    }
+    setBusyKey('trusted-' + item.course_identity_id);
+    setError('');
+    setNotice('');
+    try {
+      const result = await api<{ enabled: boolean; message?: string }>(
+        '/api/v1/hrms/platform/institutions/' + institutionId
+          + '/course-identities/' + item.course_identity_id + '/trusted-auto-approval',
+        { method: 'POST', body: JSON.stringify({ enabled, note }) },
+      );
+      setNotice(result.message || (enabled
+        ? 'Trusted course auto-approval enabled.'
+        : 'Trusted course auto-approval disabled.'));
+      setTrustedPolicyNotes(previous => ({ ...previous, [item.course_identity_id]: '' }));
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Trusted-course policy could not be saved.');
+    } finally {
+      setBusyKey(null);
+    }
+  };
 
   const counts = useMemo(() => {
     const items = data?.items || [];
@@ -320,9 +378,11 @@ export default function MarketplaceLaunchStepper({
           description: draft.description.trim(),
           pricePaise,
           currency: 'INR',
+          acknowledgeTrustedUpdateBlock: draft.acknowledgeTrustedUpdateBlock,
+          trustedUpdateReviewNote: draft.trustedUpdateReviewNote.trim(),
         }),
       });
-      setNotice(item.offerId ? 'Draft listing saved. Re-run the checklist before resubmitting.' : 'Draft listing created. Continue through the launch checklist.');
+      setNotice(draft.acknowledgeTrustedUpdateBlock ? 'Draft listing and trusted-update finance/discount review saved. Re-run the launch checklist.' : item.offerId ? 'Draft listing saved. Re-run the checklist before resubmitting.' : 'Draft listing created. Continue through the launch checklist.');
       await load();
     } catch (e) {
       setError(e instanceof Error ? e.message : 'The course listing draft could not be saved.');
@@ -519,6 +579,61 @@ export default function MarketplaceLaunchStepper({
         </div>
       </div>
 
+
+      {!loading && data && (data.trustedCoursePolicies || []).length > 0 && (
+        <section className={styles.rightsPanel} aria-labelledby="trusted-course-updates-heading">
+          <header className={styles.availableHeader}>
+            <div>
+              <span className={styles.summaryLabel}>HRMS · TRUST POLICY</span>
+              <h3 id="trusted-course-updates-heading">Trusted course updates</h3>
+              <p>Enable this only for an already authenticated course. Future submitted versions can receive automatic content-quality and source approval, removing repetitive review waits. Course-version integrity, rights checks, destination ownership, prices, tax, invoices and learner history remain protected.</p>
+            </div>
+            <span className={styles.rightsCount}>{(data.trustedCoursePolicies || []).filter(item => item.trusted_auto_approval).length} enabled</span>
+          </header>
+          <div className={styles.rightsList}>
+            {(data.trustedCoursePolicies || []).map(item => {
+              const busy = busyKey === 'trusted-' + item.course_identity_id;
+              const note = trustedPolicyNotes[item.course_identity_id] || '';
+              return (
+                <article className={styles.rightsRow} key={item.course_identity_id}>
+                  <div className={styles.availableMark} aria-hidden="true">{item.trusted_auto_approval ? '✓' : '↻'}</div>
+                  <div className={styles.rightsCopy}>
+                    <strong>{item.course_name || item.identity_name}</strong>
+                    <small>{item.course_code} · content version v{item.content_version_no} · source: {institutionName}</small>
+                    <div className={styles.rightsStatusLine}>
+                      <span>Mode: {item.trusted_auto_approval ? 'TRUSTED AUTO-APPROVAL ON' : 'STANDARD HRMS REVIEW'}</span>
+                      <span>{item.authenticated ? 'Previously HRMS-published' : 'Initial publication required'}</span>
+                      {item.trusted_auto_approval_changed_at
+                        ? <span>Last changed {new Date(item.trusted_auto_approval_changed_at).toLocaleString('en-IN')}</span>
+                        : null}
+                    </div>
+                    <label className={styles.reviewNote}>Audit reason (required for every change)
+                      <textarea rows={2} maxLength={1000} value={note} disabled={busyKey !== null}
+                        onChange={event => setTrustedPolicyNotes(previous => ({
+                          ...previous, [item.course_identity_id]: event.target.value,
+                        }))}
+                        placeholder="Explain why this source course is trusted and how its content is authenticated." />
+                    </label>
+                    <div className={styles.rightsActions}>
+                      <button type="button"
+                        className={item.trusted_auto_approval ? styles.secondaryButton : styles.primaryButton}
+                        disabled={busyKey !== null || loading || note.trim().length < 5 || ( !item.trusted_auto_approval && !item.authenticated)}
+                        onClick={() => void setTrustedAutoApproval(item, !item.trusted_auto_approval)}>
+                        {busy
+                          ? 'Saving policy…'
+                          : item.trusted_auto_approval
+                            ? 'Disable automatic approval'
+                            : 'Enable trusted course mode'}
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
       {!loading && data && (data.coursePackageImports || []).length > 0 && (
         <section className={styles.rightsPanel} id="marketplace-source-rights">
           <header className={styles.availableHeader}>
@@ -687,6 +802,7 @@ export default function MarketplaceLaunchStepper({
             const status = String(item.offerStatus || 'NOT_CONFIGURED').toUpperCase();
             const meter = progress(item);
             const blocker = nextBlocker(item);
+            const continuityCheck = item.checks.find(check => check.code === 'TRUSTED_UPDATE_COMMERCIAL_CONTINUITY');
             const editing = !item.offerId || ['DRAFT', 'REJECTED', 'ARCHIVED'].includes(status);
             const canSubmit = Boolean(item.offerId) && item.ready && ['DRAFT', 'REJECTED'].includes(status);
             const canApprove = Boolean(item.offerId) && item.ready && status === 'IN_REVIEW';
@@ -754,8 +870,24 @@ export default function MarketplaceLaunchStepper({
                               <label>Student-facing title<input value={draft.title} maxLength={200} onChange={event => updateDraft(item.assignmentId, { title: event.target.value })} /></label>
                               <label>Price in INR<input type="number" min="0" step="0.01" inputMode="decimal" placeholder="Enter price" value={draft.priceRupees} onChange={event => updateDraft(item.assignmentId, { priceRupees: event.target.value })} /><small>Set ₹0.00 only for a deliberately free course. Currency is locked to INR.</small></label>
                               <label className={styles.descriptionField}>Marketplace description<textarea rows={3} maxLength={5000} value={draft.description} onChange={event => updateDraft(item.assignmentId, { description: event.target.value })} placeholder="Describe the course for prospective learners." /></label>
+                              {continuityCheck && !continuityCheck.passed && (
+                                <div className={styles.rightsPanel}>
+                                  <strong>Trusted update · commercial continuity review</strong>
+                                  <p>{continuityCheck.message}</p>
+                                  <label className={styles.rightsCopy}>
+                                    <span><input type="checkbox" checked={draft.acknowledgeTrustedUpdateBlock}
+                                      onChange={event => updateDraft(item.assignmentId, { acknowledgeTrustedUpdateBlock: event.target.checked })} />
+                                      I reviewed the previous offer's discount/finance constraints and configured or resolved the new-version terms in HRMS Finance.</span>
+                                  </label>
+                                  <label className={styles.reviewNote}>Review note (required)
+                                    <textarea rows={2} maxLength={1000} value={draft.trustedUpdateReviewNote}
+                                      onChange={event => updateDraft(item.assignmentId, { trustedUpdateReviewNote: event.target.value })}
+                                      placeholder="Record the finance or redemption-continuity decision for this version." />
+                                  </label>
+                                </div>
+                              )}
                               <div className={styles.formActions}>
-                                <button type="button" className={styles.primaryButton} disabled={busyKey !== null || !item.checks.filter(check => ['INSTITUTION_ACTIVE', 'COURSE_ACTIVE', 'CONTENT_QUALITY_REVIEW', 'CONTENT_REVIEW_CURRENT', 'PUBLISHED_LEARNING_CONTENT', 'SOURCE_RIGHTS_CLEARANCE', 'ORIGIN_RELEASE_APPROVAL', 'ASSIGNMENT_AND_RELEASE'].includes(check.code)).every(check => check.passed)} onClick={() => void saveDraft(item)}>
+                                <button type="button" className={styles.primaryButton} disabled={busyKey !== null || !item.checks.filter(check => ['INSTITUTION_ACTIVE', 'COURSE_ACTIVE', 'CONTENT_QUALITY_REVIEW', 'CONTENT_REVIEW_CURRENT', 'PUBLISHED_LEARNING_CONTENT', 'SOURCE_RIGHTS_CLEARANCE', 'ORIGIN_RELEASE_APPROVAL', 'ASSIGNMENT_AND_RELEASE'].includes(check.code)).every(check => check.passed) || Boolean(continuityCheck && !continuityCheck.passed && (!draft.acknowledgeTrustedUpdateBlock || draft.trustedUpdateReviewNote.trim().length < 5))} onClick={() => void saveDraft(item)}>
                                   {busyKey === 'save-' + item.assignmentId ? 'Saving draft…' : item.offerId ? 'Save draft terms' : 'Create draft offer'}
                                 </button>
                                 <span>Saving a draft never publishes it.</span>

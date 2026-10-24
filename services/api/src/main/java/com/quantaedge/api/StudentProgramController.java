@@ -88,9 +88,31 @@ public class StudentProgramController {
             where ce.institution_id=? and ce.course_id=p.id
               and (ce.holder_student_id=st.id or ce.holder_user_id=st.user_account_id))
         )
+        and not exists(
+          select 1
+          from curriculum_program newer_program
+          join institution_course_release newer_release
+            on newer_release.program_id=newer_program.id and newer_release.release_state='SHAREABLE'
+            and newer_release.content_fingerprint=course_content_fingerprint(newer_release.program_id)
+          join institution_course_assignment newer_assignment
+            on newer_assignment.course_release_id=newer_release.id
+            and newer_assignment.institution_id=? and newer_assignment.status='ASSIGNED'
+          join institution_marketplace_offer newer_offer
+            on newer_offer.assignment_id=newer_assignment.id
+            and newer_offer.institution_id=newer_assignment.institution_id
+            and newer_offer.course_release_id=newer_release.id
+            and newer_offer.course_id=newer_program.id
+            and newer_offer.status='PUBLISHED'
+            and newer_offer.hrms_published_by_staff_id is not null
+          where p.course_identity_id is not null
+            and newer_program.course_identity_id=p.course_identity_id
+            and newer_program.content_version_no>p.content_version_no
+            and newer_program.status='ACTIVE'
+        )
       order by p.display_name,p.id
       """, institutionId, institutionId, institutionId, institutionId, institutionId, institutionId,
-          context.studentId(), institutionId, institutionId, institutionId, institutionId, institutionId);
+          context.studentId(), institutionId, institutionId, institutionId, institutionId, institutionId,
+          institutionId);
 
     for (Map<String,Object> program : programs) {
       long courseId = ((Number) program.get("id")).longValue();
