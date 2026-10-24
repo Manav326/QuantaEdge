@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "75117c0e25e654cb07aef9d9731ac84939bfa29a705404e2674a8d83f23378e2",
+  "raw_analysis_sha256": "4b758c55913cb207ef420e2690db9f02606526bd0f55699d7710c2649444d6af",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40031105894",
-      "checkpointed_at": "2026-10-23T23:45:23Z",
+      "checkpointed_at": "2026-10-23T23:58:24Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -29442,7 +29442,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40031105894",
-      "checkpointed_at": "2026-10-23T23:46:47Z",
+      "checkpointed_at": "2026-10-23T23:59:40Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -66762,7 +66762,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40031105894",
-      "checkpointed_at": "2026-10-23T23:47:36Z",
+      "checkpointed_at": "2026-10-24T00:00:25Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -69207,6 +69207,70 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "692e3d21d9a1f15770fb4ae9",
+      "asset_sha256": "1076d75b9926441abadb35b5967b0a33ea89d68d2c9230c0ad0ff60ee5423972",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 141,
+      "asset_path": "assets/1076d75b9926441abadb35b5967b0a33ea89d68d2c9230c0ad0ff60ee5423972.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1f13ef9b0a40cb8c5f04991fffb586942ce905c550c0b95905540e5d0bc64c30",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A QR code with the text '0677CH07' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0677CH07"
+        ],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40031105894",
+      "checkpointed_at": "2026-10-24T00:02:04Z",
+      "effective_analysis": {
+        "visual_summary": "A QR code with the text '0677CH07' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0677CH07"
+        ],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a14a3c2709d921232dcb91ac",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "1f13ef9b0a40cb8c5f04991fffb586942ce905c550c0b95905540e5d0bc64c30",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 141,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40031105894",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],

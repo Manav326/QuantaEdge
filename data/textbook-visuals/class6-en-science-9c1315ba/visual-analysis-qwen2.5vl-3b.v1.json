@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1363,
+    "assets_selected": 1364,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
       "47bbaaf66932c5ee5e514c6c",
-      "2cea301bf9b05b3d64207203",
-      "5d9cb73835231c1ff26d542d"
+      "692e3d21d9a1f15770fb4ae9",
+      "a14a3c2709d921232dcb91ac"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1359,
-    "assets_remaining": 719,
+    "assets_analyzed": 1360,
+    "assets_remaining": 718,
     "assets_completion_percent": 65.4,
-    "assets_failed": 14,
-    "assets_skipped_from_checkpoint": 1358,
+    "assets_failed": 15,
+    "assets_skipped_from_checkpoint": 1359,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -451,7 +451,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40031105894",
-      "checkpointed_at": "2026-10-23T23:45:23Z"
+      "checkpointed_at": "2026-10-23T23:58:24Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20129,7 +20129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40031105894",
-      "checkpointed_at": "2026-10-23T23:46:47Z"
+      "checkpointed_at": "2026-10-23T23:59:40Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -44039,7 +44039,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40031105894",
-      "checkpointed_at": "2026-10-23T23:47:36Z"
+      "checkpointed_at": "2026-10-24T00:00:25Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -45620,6 +45620,53 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39726988483",
       "checkpointed_at": "2026-10-22T11:16:09Z"
+    },
+    {
+      "asset_id": "692e3d21d9a1f15770fb4ae9",
+      "asset_sha256": "1076d75b9926441abadb35b5967b0a33ea89d68d2c9230c0ad0ff60ee5423972",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 141,
+      "asset_path": "assets/1076d75b9926441abadb35b5967b0a33ea89d68d2c9230c0ad0ff60ee5423972.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1f13ef9b0a40cb8c5f04991fffb586942ce905c550c0b95905540e5d0bc64c30",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A QR code with the text '0677CH07' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0677CH07"
+        ],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40031105894",
+      "checkpointed_at": "2026-10-24T00:02:04Z"
+    },
+    {
+      "asset_id": "a14a3c2709d921232dcb91ac",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "1f13ef9b0a40cb8c5f04991fffb586942ce905c550c0b95905540e5d0bc64c30",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 141,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40031105894",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
