@@ -1076,7 +1076,8 @@ export default function TestsClient(){
                     const practiceCorrect=practiceFeedback[questionId]===true;
                     const questionForFeedback=checked?{...question,isCorrect:practiceCorrect}:question;
                     const topic=primaryQuestionTopic(question);
-                    return <>
+                    return (
+                      <div className={styles.practiceQuestionShell}>
                       <div className={styles.practiceNavigator}>
                         <button type="button" className={styles.secondaryButton} disabled={practiceIndex===0}
                           onClick={()=>{setPracticeQuestionIndex(value=>Math.max(0,value-1));setPracticeError('');}}>
@@ -1130,7 +1131,8 @@ export default function TestsClient(){
                               </button>}
                         </div>}
                       </article>
-                    </>;
+                      </div>
+                    );
                   })()}
               </div>
           </section>}
