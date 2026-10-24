@@ -1522,11 +1522,8 @@ public class CourseMarketplaceController {
           org.springframework.http.HttpStatus.CONFLICT,
           "The offer price differs from the original listed price saved on this order. Snapshots were not reconstructed.");
     }
-    if(offerPricePaise!=savedPayable) {
-      throw new org.springframework.web.server.ResponseStatusException(
-          org.springframework.http.HttpStatus.CONFLICT,
-          "The order has no reliable discount snapshot and its saved payable does not equal the current listed price. Snapshots were not reconstructed.");
-    }
+    // Tax may be added on top of the listed price. The authoritative comparison is the
+    // reconstructed customer payable below, not listed price versus payable.
     if(!(order.get("order_created_at_iso") instanceof String createdAtRaw)||createdAtRaw.isBlank()) {
       throw new IllegalStateException("The saved order creation time is unavailable; historical financial terms cannot be resolved.");
     }
