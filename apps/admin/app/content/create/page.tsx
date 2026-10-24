@@ -120,7 +120,10 @@ export default function CreateCoursePage() {
             <h1>{t('admin.institutionOperations.createCourseTitle')}</h1>
             <p>{t('admin.institutionOperations.createCourseIntro')}</p>
           </div>
-          <Link href="/content" className="button button-dark">{t('admin.institutionOperations.cancel')}</Link>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            <Link href="/content/assessment-course" className="button button-primary">Create assessment course</Link>
+            <Link href="/content" className="button button-dark">{t('admin.institutionOperations.cancel')}</Link>
+          </div>
         </header>
 
         {error ? <div className="feedback" role="alert">{error}</div> : null}
