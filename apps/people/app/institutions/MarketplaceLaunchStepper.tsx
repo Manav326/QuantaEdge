@@ -913,13 +913,111 @@ export default function MarketplaceLaunchStepper({
                           </>
                         ) : (
                           <div>
+                            <p>{preview.lessonCount} lessons · {preview.lessonBlockCount} teaching blocks · {preview.lessonQuestionCount} lesson questions · {preview.courseResourceCount} resources. Expand a chapter to load its lesson graph and source assets on demand.</p>
                             {(preview.subjects || []).map(subject => (
-                              <div key={subject.id} style={{ marginBottom: 10 }}>
-                                <strong>{subject.display_name}</strong>
-                                <ul>{(subject.chapters || []).map(chapter => <li key={chapter.id}>{chapter.display_name} · {chapter.content_status}</li>)}</ul>
-                              </div>
+                              <section key={subject.id} style={{ marginBottom: 16, borderTop: '1px solid var(--border, #d7dce2)', paddingTop: 12 }}>
+                                <h4 style={{ margin: '0 0 8px' }}>{subject.display_name} <span style={{ fontSize: 12, fontWeight: 400 }}>({subject.code})</span></h4>
+                                {(subject.chapters || []).map(chapter => {
+                                  const chapterContent = reviewChapters[chapter.id];
+                                  const expanded = expandedReviewChapters[release.release_id] === chapter.id;
+                                  return (
+                                    <div key={chapter.id} style={{ margin: '8px 0', padding: 12, border: '1px solid var(--border, #d7dce2)', borderRadius: 8 }}>
+                                      <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+                                        <div>
+                                          <strong>{chapter.display_name}</strong> <span style={{ fontSize: 12, color: 'var(--muted, #667085)' }}>· {chapter.content_status} · {chapter.lesson_count} lessons · {chapter.lesson_block_count} blocks · {chapter.lesson_question_count} questions · {chapter.resource_count} resources</span>
+                                          <p style={{ margin: '4px 0', fontSize: 12, color: 'var(--muted, #667085)' }}>
+                                            Source: {chapter.curriculum_source || 'not recorded'} · Verified: {chapter.curriculum_source_verified ? 'yes' : 'no'}
+                                            {chapter.curriculum_source_pages ? ' · Pages: ' + chapter.curriculum_source_pages : ''}
+                                          </p>
+                                          {chapter.curriculum_source_url && <a href={chapter.curriculum_source_url} target="_blank" rel="noreferrer" style={{ fontSize: 12, overflowWrap: 'anywhere' }}>Open chapter source reference</a>}
+                                        </div>
+                                        <button type="button" className={styles.secondaryButton}
+                                          disabled={reviewChapterLoadingId !== null || busyKey !== null}
+                                          aria-expanded={expanded}
+                                          onClick={() => void toggleReviewChapter(release, chapter.id)}>
+                                          {reviewChapterLoadingId === chapter.id ? 'Loading chapter…' : expanded ? 'Hide chapter content' : chapterContent ? 'Show chapter content' : 'Review chapter content'}
+                                        </button>
+                                      </div>
+                                      {expanded && chapterContent && (
+                                        <div style={{ marginTop: 12 }}>
+                                          {(chapterContent.lessons || []).length === 0 && <p>No lesson rows are attached to this chapter.</p>}
+                                          {(chapterContent.lessons || []).map(lesson => (
+                                            <details key={lesson.id} style={{ borderTop: '1px solid var(--border, #d7dce2)', padding: '10px 0' }}>
+                                              <summary style={{ cursor: 'pointer', fontWeight: 600 }}>
+                                                {lesson.sort_order}. {lesson.title} · {lesson.status} · {(lesson.blocks || []).length} blocks · {(lesson.questions || []).length} questions
+                                              </summary>
+                                              <div style={{ marginTop: 8 }}>
+                                                <p style={{ whiteSpace: 'pre-wrap' }}>{lesson.summary || 'No lesson summary'}</p>
+                                                <p style={{ fontSize: 12, color: 'var(--muted, #667085)' }}>
+                                                  Code: {lesson.code} · Estimated time: {lesson.estimated_minutes} min · Active: {lesson.active ? 'yes' : 'no'}
+                                                  {lesson.objective_title ? ' · Objective: ' + lesson.objective_title : ''}
+                                                </p>
+                                                {(lesson.translations || []).length > 0 && (
+                                                  <div style={{ margin: '8px 0', padding: 8, background: 'var(--surface-muted, #f7f8fa)', borderRadius: 6 }}>
+                                                    <strong>Lesson translations</strong>
+                                                    {lesson.translations.map((translation, ti) => (
+                                                      <p key={String(translation.language) + '-' + String(translation.version_no) + '-' + ti} style={{ margin: '6px 0', fontSize: 12, whiteSpace: 'pre-wrap' }}>
+                                                        {String(translation.language).toUpperCase()} · {translation.translation_status} v{translation.version_no}: {translation.title || ''}{translation.summary ? ' — ' + translation.summary : ''}
+                                                      </p>
+                                                    ))}
+                                                  </div>
+                                                )}
+                                                <h5 style={{ margin: '12px 0 6px' }}>Teaching blocks</h5>
+                                                {(lesson.blocks || []).map(block => (
+                                                  <details key={block.id} style={{ margin: '6px 0', padding: 8, border: '1px solid var(--border, #d7dce2)', borderRadius: 6 }}>
+                                                    <summary style={{ cursor: 'pointer' }}>Block {block.sequence_no} · {block.block_type}{block.asset_title ? ' · ' + block.asset_title : ''}</summary>
+                                                    <pre style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', fontSize: 12, padding: 8, background: 'var(--surface-muted, #f7f8fa)', borderRadius: 6 }}>{JSON.stringify(block.content, null, 2)}</pre>
+                                                    {block.asset_url && <p style={{ fontSize: 12 }}>Asset: <a href={block.asset_url} target="_blank" rel="noreferrer">{block.asset_title || block.asset_url}</a> · {block.asset_type || 'file'} · {block.asset_status || 'unknown status'}{block.asset_alt ? ' · Alt: ' + block.asset_alt : ''}</p>}
+                                                    {(block.translations || []).map((translation, ti) => (
+                                                      <div key={String(translation.language) + '-' + String(translation.version_no) + '-' + ti} style={{ marginTop: 8 }}>
+                                                        <strong>{String(translation.language).toUpperCase()} block translation · {translation.translation_status} v{translation.version_no}</strong>
+                                                        <pre style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', fontSize: 12 }}>{JSON.stringify(translation.content, null, 2)}</pre>
+                                                      </div>
+                                                    ))}
+                                                  </details>
+                                                ))}
+                                                <h5 style={{ margin: '12px 0 6px' }}>Lesson questions and answer keys</h5>
+                                                {(lesson.questions || []).map(question => (
+                                                  <div key={question.id} style={{ margin: '6px 0', padding: 8, border: '1px solid var(--border, #d7dce2)', borderRadius: 6 }}>
+                                                    <strong>{question.question_type} · {question.difficulty} · active: {question.active ? 'yes' : 'no'}</strong>
+                                                    <p style={{ whiteSpace: 'pre-wrap' }}>{question.prompt}</p>
+                                                    {question.explanation && <p style={{ whiteSpace: 'pre-wrap' }}>Explanation: {question.explanation}</p>}
+                                                    <ol type="A">{(question.options || []).map(option => (
+                                                      <li key={option.option_key} style={{ marginBottom: 3 }}>
+                                                        {option.label} {option.is_correct ? '✓ Answer key' : ''}
+                                                      </li>
+                                                    ))}</ol>
+                                                    {(question.translations || []).map((translation, ti) => (
+                                                      <details key={String(translation.language) + '-' + String(translation.version_no) + '-' + ti} style={{ marginTop: 6 }}>
+                                                        <summary>{String(translation.language).toUpperCase()} question translation · {translation.translation_status} v{translation.version_no}</summary>
+                                                        <p style={{ whiteSpace: 'pre-wrap' }}>{translation.prompt}</p>
+                                                        {translation.explanation && <p style={{ whiteSpace: 'pre-wrap' }}>Explanation: {translation.explanation}</p>}
+                                                        <pre style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', fontSize: 12 }}>{JSON.stringify(translation.options || [], null, 2)}</pre>
+                                                      </details>
+                                                    ))}
+                                                  </div>
+                                                ))}
+                                              </div>
+                                            </details>
+                                          ))}
+                                          <h5 style={{ margin: '14px 0 6px' }}>Chapter resources</h5>
+                                          {(chapterContent.resources || []).length === 0 && <p>No resources are assigned to this chapter.</p>}
+                                          {(chapterContent.resources || []).map(resource => (
+                                            <div key={resource.assignment_id} style={{ padding: 8, margin: '6px 0', border: '1px solid var(--border, #d7dce2)', borderRadius: 6 }}>
+                                              <strong>{resource.title}</strong> · {resource.resource_type} · {resource.resource_status} · Assignment: {resource.assignment_status}
+                                              <p style={{ fontSize: 12, margin: '4px 0' }}>{resource.description || ''} · {resource.language} · {resource.source_kind} · {resource.version_no ? 'v' + resource.version_no : ''}</p>
+                                              {resource.external_url && <a href={resource.external_url} target="_blank" rel="noreferrer" style={{ fontSize: 12, overflowWrap: 'anywhere' }}>Open external resource</a>}
+                                              {resource.source_reference && <p style={{ fontSize: 12 }}>Source reference: {resource.source_reference}</p>}
+                                              {resource.sha256 && <p style={{ fontSize: 12 }}>SHA-256: {resource.sha256}</p>}
+                                            </div>
+                                          ))}
+                                        </div>
+                                      )}
+                                    </div>
+                                  );
+                                })}
+                              </section>
                             ))}
-                            <p>This release uses the learning-content layout. Its lesson content remains subject to the lesson-specific review view.</p>
                           </div>
                         )}
                       </div>
