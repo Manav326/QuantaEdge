@@ -14,13 +14,13 @@
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "72af91ad02c11a8084fd26ac",
-      "e03a02c3fc37627f873ab044"
+      "6964feb7ab32a7345a7db3ba",
+      "9a765eba21e1b0ade51f49e9"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1221,
-    "assets_remaining": 1070,
-    "assets_completion_percent": 53.3,
+    "assets_analyzed": 1223,
+    "assets_remaining": 1068,
+    "assets_completion_percent": 53.4,
     "assets_failed": 11,
     "assets_skipped_from_checkpoint": 1221,
     "batch_limit": 5,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40088318858",
-      "checkpointed_at": "2026-10-24T11:50:57Z"
+      "checkpointed_at": "2026-10-24T11:56:35Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40088318858",
-      "checkpointed_at": "2026-10-24T11:51:22Z"
+      "checkpointed_at": "2026-10-24T11:57:01Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38429,7 +38429,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40088318858",
-      "checkpointed_at": "2026-10-24T11:51:51Z"
+      "checkpointed_at": "2026-10-24T11:57:31Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -40064,6 +40064,111 @@
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "6964feb7ab32a7345a7db3ba",
+      "asset_sha256": "0d5a251da741a27956842df075d7d97a676697fc2d1fd5c2055f3b870386712b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 94,
+      "asset_path": "assets/0d5a251da741a27956842df075d7d97a676697fc2d1fd5c2055f3b870386712b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d2ddb4e2fb613ecddff4d9859c094dbca07a58b1d9c369f079bacb60b7286297",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A spring balance showing measurements in grams and newtons.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "GRAMS",
+          "NEWTONS",
+          "0",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          "07",
+          "08",
+          "09",
+          "10"
+        ],
+        "concepts": [
+          "Spring balance",
+          "Measurement in grams and newtons"
+        ],
+        "context_relation": "The image shows a spring balance used to measure weight in grams and newtons.",
+        "limitations": [
+          "The image does not provide specific numerical values for the measurements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40088318858",
+      "checkpointed_at": "2026-10-24T11:58:12Z"
+    },
+    {
+      "asset_id": "9a765eba21e1b0ade51f49e9",
+      "asset_sha256": "372a028c780eb2f005dabba6e09349e406d37795fbd853e7ef1266b9b14e10c7",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 94,
+      "asset_path": "assets/372a028c780eb2f005dabba6e09349e406d37795fbd853e7ef1266b9b14e10c7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d2ddb4e2fb613ecddff4d9859c094dbca07a58b1d9c369f079bacb60b7286297",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A spring scale with a red indicator pointing to 0 Newtons.",
+        "visual_type": "photo",
+        "visible_text": [
+          "SPRING",
+          "SCALE",
+          "GRAMS",
+          "NEWTONS",
+          "0",
+          "0.01",
+          "0.02",
+          "0.03",
+          "0.04",
+          "0.05",
+          "0.06",
+          "0.07",
+          "0.08",
+          "0.09",
+          "0.1",
+          "0.2",
+          "0.3",
+          "0.4",
+          "0.5",
+          "0.6",
+          "0.7",
+          "0.8",
+          "0.9",
+          "1.0",
+          "10.0",
+          "100.0",
+          "1000.0"
+        ],
+        "concepts": [
+          "Spring scale",
+          "Measurement of weight",
+          "Grams to Newtons conversion"
+        ],
+        "context_relation": "The image shows a spring scale used to measure weight, specifically in grams and Newtons.",
+        "limitations": [
+          "The scale is only showing the weight difference between 0 and 0.01 N, not the actual weight."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40088318858",
+      "checkpointed_at": "2026-10-24T11:59:01Z"
     }
   ]
 }
