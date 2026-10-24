@@ -203,12 +203,13 @@ public class InstitutionCourseLifecycleController {
               fingerprint_schema_version=2,
               submitted_by_institution_admin_id=?,submitted_at=now(),
               quality_reviewed_by_staff_id=?,quality_reviewed_at=now(),quality_review_notes=?,
-              origin_approved_by_admin_id=?,origin_approved_at=now(),shareable_at=now(),
+              origin_approved_by_admin_id=null,origin_auto_approved_by_staff_id=?,
+              origin_approval_mode='HRMS_TRUSTED_AUTO',origin_approved_at=now(),shareable_at=now(),
               origin_rejected_by_admin_id=null,origin_rejected_at=null,origin_rejection_reason=null,updated_at=now()
             where id=? and source_institution_id=? and release_state='DRAFT'
             """,fingerprint,principal.adminId(),trustedPolicyActorId,
             "Automatically approved under HRMS trusted-course policy. "+trustedPolicyNote,
-            principal.adminId(),releaseId,principal.institutionId());
+            trustedPolicyActorId,releaseId,principal.institutionId());
       } else {
         jdbc.update("""
             update institution_course_release set release_state='IN_QUALITY_REVIEW',content_fingerprint=?,
@@ -231,13 +232,13 @@ public class InstitutionCourseLifecycleController {
               source_institution_id,program_id,release_version,release_state,content_fingerprint,
               fingerprint_schema_version,submitted_by_institution_admin_id,submitted_at,
               quality_reviewed_by_staff_id,quality_reviewed_at,quality_review_notes,
-              origin_approved_by_admin_id,origin_approved_at,shareable_at,
-              legacy_migration,created_at,updated_at
-            ) values(?,?,?,'SHAREABLE',?,2,?,now(),?,now(),?,?,now(),now(),false,now(),now()) returning id
+              origin_approved_by_admin_id,origin_auto_approved_by_staff_id,origin_approval_mode,
+              origin_approved_at,shareable_at,legacy_migration,created_at,updated_at
+            ) values(?,?,?,'SHAREABLE',?,2,?,now(),?,now(),?,NULL,?,'HRMS_TRUSTED_AUTO',now(),now(),false,now(),now()) returning id
             """,Long.class,principal.institutionId(),programId,version,fingerprint,
             principal.adminId(),trustedPolicyActorId,
             "Automatically approved under HRMS trusted-course policy. "+trustedPolicyNote,
-            principal.adminId());
+            trustedPolicyActorId);
       } else {
         releaseId=jdbc.queryForObject("""
             insert into institution_course_release(
