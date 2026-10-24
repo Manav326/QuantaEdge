@@ -43,10 +43,10 @@ export default function AdminLogin() {
     setBusy(true);
     try {
       // Keep the two authentication principals separate when changing workspace.
-      await fetch('/api/v1/institution/auth/logout', {
+      await apiFetch('/api/v1/institution/auth/logout', {
         method: 'POST', credentials: 'same-origin', cache: 'no-store',
         headers: { Accept: 'application/json', 'X-QE-Workspace': 'INSTITUTION' },
-      }).catch(() => undefined);
+      }, { notificationMode: 'caller' }).catch(() => undefined);
       const response = await apiFetch('/api/v1/auth/request-otp', {
         method: 'POST',
         credentials: 'same-origin',
@@ -119,11 +119,11 @@ export default function AdminLogin() {
     try {
       // An institution head is not converted into a staff identity. Sign out a previous
       // Education Admin session before creating the separate institution-admin session.
-      await fetch('/api/v1/auth/logout', {
+      await apiFetch('/api/v1/auth/logout', {
         method: 'POST', credentials: 'same-origin', cache: 'no-store',
         headers: { Accept: 'application/json' },
-      }).catch(() => undefined);
-      const response = await fetch('/api/v1/institution/auth/login', {
+      }, { notificationMode: 'caller' }).catch(() => undefined);
+      const response = await apiFetch('/api/v1/institution/auth/login', {
         method: 'POST',
         credentials: 'same-origin',
         cache: 'no-store',
@@ -133,7 +133,7 @@ export default function AdminLogin() {
           'X-QE-Workspace': 'INSTITUTION',
         },
         body: JSON.stringify({ username: institutionUsername.trim(), password: institutionPassword }),
-      });
+      }, { notificationMode: 'caller' });
       const raw = await response.text();
       let body: any = {};
       try { body = raw ? JSON.parse(raw) : {}; } catch { body = { message: raw }; }
