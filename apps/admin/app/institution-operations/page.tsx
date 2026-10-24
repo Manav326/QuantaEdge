@@ -94,7 +94,7 @@ export default function InstitutionOperationsPage() {
   const t = useUiTranslation();
   const { permissions } = useContext(AdminWorkspaceContext);
   const canCreateCourse = permissions.includes('CONTENT_CREATE') && permissions.includes('CONTENT_EDIT');
-  const canManageReleases = permissions.includes('CONTENT_PUBLISH');
+  const canManageReleases = permissions.includes('INSTITUTION_RELEASE_MANAGE');
   const [view, setView] = useState<'overview' | 'roster' | 'courses'>('overview');
   const [focusCourseId, setFocusCourseId] = useState('');
   const [overview, setOverview] = useState<Overview | null>(null);
