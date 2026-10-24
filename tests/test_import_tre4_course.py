@@ -91,17 +91,21 @@ class Tre4ImporterTests(unittest.TestCase):
             "package_id": "tre4-bpsc-tre-1-0-computer-science",
             "package_version": "1.0.0",
             "package_sha256": "a" * 64,
+            "source_url": "https://example.test/tre1.pdf",
         }
         title = "BPSC TRE 1.0 — Computer Science Previous-Year Paper"
         cursor = FakeCursor([
             [(501, 42, title, "DRAFT", "a" * 64)],
             [(901, 1, "PREVIOUS_YEAR_PAPER")],
+            ("DRAFT", "tre4-bpsc-tre-1-0-computer-science", "1.0.0", "a" * 64,
+             "PREVIOUS_YEAR_PAPER", "PREVIOUS_YEAR_PAPER", None, None, "TRE 1.0",
+             "https://example.test/tre1.pdf"),
         ])
         pack_id, created = import_tre4_course.ensure_test_pack(cursor, 42, 777, 901, paper)
 
         self.assertEqual(pack_id, 501)
         self.assertFalse(created)
-        self.assertEqual(len(cursor.statements), 2)
+        self.assertEqual(len(cursor.statements), 3)
 
     def test_test_inserts_are_course_level_and_mark_portable_type(self):
         paper = {
@@ -124,6 +128,27 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertIn("VALUES (%s,%s,%s,NULL,NULL", insert_sql)
         self.assertIn("portable_assessment_type", insert_sql)
         self.assertIn("'PREVIOUS_YEAR_PAPER')", insert_sql)
+
+    def test_class_bound_assessment_is_not_reused_by_classless_import(self):
+        paper = {
+            "cycle": "TRE 1.0",
+            "package_id": "tre4-bpsc-tre-1-0-computer-science",
+            "package_version": "1.0.0",
+            "package_sha256": "a" * 64,
+            "title": "BPSC TRE 1.0 — Computer Science Previous-Year Practice Test",
+            "duration_minutes": 120,
+            "negative_marking_fraction": 0.25,
+            "source_url": "https://example.test/tre1.pdf",
+            "question_snapshots": [],
+        }
+        cursor = FakeCursor([
+            [(901, paper["title"], "DRAFT", "a" * 64, 0, 22, 33,
+              "PREVIOUS_YEAR_PAPER", "PREVIOUS_YEAR_PAPER", "TRE 1.0", paper["source_url"])]
+        ])
+
+        with self.assertRaises(import_tre4_course.ImportErrorSafe):
+            import_tre4_course.insert_assessment(cursor, 777, paper)
+        self.assertEqual(len(cursor.statements), 1)
 
     def test_existing_source_owned_tre_identity_is_reused_without_mutation(self):
         cursor = FakeCursor([
