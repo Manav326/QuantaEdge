@@ -404,20 +404,24 @@ def ensure_schema(cursor: Any) -> None:
     cursor.execute("""
         SELECT to_regclass('public.course_type_registry'),
                to_regclass('public.curriculum_program_delivery_mode'),
+               to_regclass('public.institution_course_identity'),
                to_regclass('public.course_assessment_pack'),
                to_regclass('public.course_assessment_pack_item'),
                to_regprocedure('public.course_content_fingerprint(bigint)'),
                to_regprocedure('public.assessment_only_course_ready(bigint)'),
                pg_get_functiondef(to_regprocedure('public.course_content_fingerprint(bigint)')),
-               pg_get_functiondef(to_regprocedure('public.assessment_only_course_ready(bigint)'))
+               pg_get_functiondef(to_regprocedure('public.assessment_only_course_ready(bigint)')),
+               (SELECT status FROM public.course_type_registry WHERE code='ASSESSMENT')
     """)
     row = cursor.fetchone()
-    if not row or any(value is None for value in row):
+    if not row or any(value is None for value in row[:9]):
         raise ImportErrorSafe(
             "Flyway V168, V177, V180, and V197 are required. Start the API against this database and verify migrations complete before importing."
         )
-    fingerprint_definition = str(row[6] or "")
-    readiness_definition = str(row[7] or "")
+    if row[9] != "ACTIVE":
+        raise ImportErrorSafe("The HRMS ASSESSMENT course type must be ACTIVE before TRE papers can be imported.")
+    fingerprint_definition = str(row[7] or "")
+    readiness_definition = str(row[8] or "")
     if "assessment-pack-item" not in fingerprint_definition:
         raise ImportErrorSafe(
             "Flyway V196 is required so course release fingerprints include test packs and pack items."
@@ -576,7 +580,8 @@ def insert_assessment(cursor: Any, course_id: int, paper: dict[str, Any]) -> tup
     package_id = paper["package_id"]
     cursor.execute("""
         SELECT id,title,status,source_package_sha256,
-               (SELECT count(*) FROM assessment_question aq WHERE aq.assessment_id=a.id) AS question_count
+               (SELECT count(*) FROM assessment_question aq WHERE aq.assessment_id=a.id) AS question_count,
+               subject_id,chapter_id,assessment_type,portable_assessment_type,source_exam_cycle,source_url
         FROM assessment a
         WHERE a.course_id=%s AND a.source_package_id=%s AND a.source_package_version=%s
         FOR UPDATE
@@ -586,12 +591,20 @@ def insert_assessment(cursor: Any, course_id: int, paper: dict[str, Any]) -> tup
     if existing:
         if len(existing) != 1:
             raise ImportErrorSafe(f"Multiple DB assessments exist for {package_id} {paper['package_version']}.")
-        assessment_id, title, status, digest, question_count = existing[0]
+        (
+            assessment_id, title, status, digest, question_count, subject_id, chapter_id,
+            assessment_type, portable_type, source_cycle, source_url,
+        ) = existing[0]
         if (
             title != paper["title"] or digest is None
             or str(digest).strip().lower() != paper["package_sha256"]
             or int(question_count) != expected_count
             or status not in {"DRAFT", "PUBLISHED"}
+            or subject_id is not None or chapter_id is not None
+            or assessment_type != "PREVIOUS_YEAR_PAPER"
+            or portable_type != "PREVIOUS_YEAR_PAPER"
+            or source_cycle != paper["cycle"]
+            or source_url != paper["source_url"]
         ):
             raise ImportErrorSafe(
                 f"Existing {package_id} differs from source inventory. No updates/deletes were attempted; review it and create a reviewed version explicitly."
@@ -667,6 +680,29 @@ def ensure_test_pack(
         ):
             raise ImportErrorSafe(
                 f"Existing test pack {package_id} has a missing or conflicting assessment item; no records were changed."
+            )
+        cursor.execute("""
+            SELECT status,source_package_id,source_package_version,source_package_sha256,
+                   assessment_type,portable_assessment_type,subject_id,chapter_id,source_exam_cycle,source_url
+            FROM assessment
+            WHERE id=%s AND course_id=%s
+            FOR UPDATE
+        """, (assessment_id, course_id))
+        linked_test = cursor.fetchone()
+        if (
+            not linked_test
+            or linked_test[0] != status
+            or linked_test[1] != package_id
+            or linked_test[2] != package_version
+            or str(linked_test[3] or "").strip().lower() != str(paper["package_sha256"]).lower()
+            or linked_test[4] != "PREVIOUS_YEAR_PAPER"
+            or linked_test[5] != "PREVIOUS_YEAR_PAPER"
+            or linked_test[6] is not None or linked_test[7] is not None
+            or linked_test[8] != paper["cycle"]
+            or linked_test[9] != paper["source_url"]
+        ):
+            raise ImportErrorSafe(
+                f"Existing test pack {package_id} is linked to a test whose status or ASSESSMENT metadata differs; no records were changed."
             )
         return int(pack_id), False
 
