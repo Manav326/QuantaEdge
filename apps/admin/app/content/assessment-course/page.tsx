@@ -39,18 +39,18 @@ type ImportResult = {
 
 const EXAMPLE_PACKAGE = {
   schema: 'quantaedge.portable-assessment-package.v1',
-  package_id: 'tre4-bpsc-tre-1-0-computer-science',
+  package_id: 'example-assessment-package-template',
   package_version: '1.0.0',
-  title: 'BPSC TRE 1.0 — Computer Science Previous-Year Practice Test',
+  title: 'EXAMPLE ONLY — Portable Assessment Package Template',
   description: 'Draft import template. Replace with the reviewed package content.',
-  assessment_type: 'PREVIOUS_YEAR_PAPER',
-  subject: { name: 'Computer Science', domain_code: 'computer-science', language: 'mixed' },
+  assessment_type: 'PRACTICE_SET',
+  subject: { name: 'Example subject', domain_code: 'example-subject', language: 'mixed' },
   source: {
-    issuer: 'BPSC',
-    exam_name: 'BPSC TRE',
-    cycle: 'TRE 1.0',
+    issuer: 'Example issuer — replace before use',
+    exam_name: 'Example assessment — not official exam content',
+    cycle: 'EXAMPLE ONLY',
     source_url: 'https://example.invalid/source',
-    source_status: 'VERIFIED_SOURCE_FILE',
+    source_status: 'DISCOVERED',
     repository_distribution_rights: 'UNCONFIRMED',
     available_languages: ['en', 'hi']
   },
@@ -62,24 +62,24 @@ const EXAMPLE_PACKAGE = {
     max_attempts: 1
   },
   sections: [
-    { code: 'COMPUTER_SCIENCE', name_i18n: { en: 'Computer Science', hi: 'कंप्यूटर विज्ञान' }, question_count: 1, result_policy: 'SCORED' }
+    { code: 'EXAMPLE_SUBJECT', name_i18n: { en: 'Example subject', hi: 'उदाहरण विषय' }, question_count: 1, result_policy: 'SCORED' }
   ],
   questions: [
     {
-      id: 'replace-this-question',
-      source_question_number: '41',
+      id: 'example-only-question',
+      source_question_number: 'EXAMPLE-1',
       source_location: { pdf_page: 1 },
       question_type: 'MCQ',
-      prompt: 'Replace with the verified source question.',
+      prompt: 'EXAMPLE ONLY — replace with a question from the verified source file.',
       prompt_i18n: {
-        en: 'Replace with the verified source question.',
-        hi: 'सत्यापित स्रोत के प्रश्न से बदलें।'
+        en: 'EXAMPLE ONLY — replace this with a verified source question.',
+        hi: 'केवल उदाहरण — इसे सत्यापित स्रोत के प्रश्न से बदलें।'
       },
       options: [
         { key: 'A', text: 'Option A', text_i18n: { en: 'Option A', hi: 'विकल्प A' } },
         { key: 'B', text: 'Option B', text_i18n: { en: 'Option B', hi: 'विकल्प B' } }
       ],
-      topic_tags: ['Computer Science'],
+      topic_tags: ['Example topic'],
       difficulty: 'CORE',
       proposed_answer: {
         option_key: null,
@@ -90,7 +90,7 @@ const EXAMPLE_PACKAGE = {
         explanation_i18n: { en: 'Pending human review.', hi: 'मानवीय समीक्षा लंबित है।' },
         solution_mode: 'CONCISE'
       },
-      section_code: 'COMPUTER_SCIENCE',
+      section_code: 'EXAMPLE_SUBJECT',
       marks: 1
     }
   ],
