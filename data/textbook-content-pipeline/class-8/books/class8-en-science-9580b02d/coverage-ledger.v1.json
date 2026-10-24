@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1240,
-    "successful_visual_analyses": 1227,
-    "missing_visual_analyses": 1051,
+    "raw_analysis_result_rows": 1242,
+    "successful_visual_analyses": 1229,
+    "missing_visual_analyses": 1049,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1064,
+    "unresolved_count": 1062,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -46543,9 +46543,23 @@
       "asset_path": "assets/90f2b9164db05ef2b9e8ce319ccee55f602468e6fe495e6bc6371e568b60c924.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character climbing stairs, with a hand outstretched as if offering help.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "climbing",
+          "stairs",
+          "help",
+          "cartoon"
+        ],
+        "context_relation": "The image is a visual representation of a character climbing stairs, possibly to illustrate a concept related to movement or assistance.",
+        "limitations": [
+          "The image does not provide specific information about the context or the character's actions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -46561,9 +46575,24 @@
       "asset_path": "assets/90f2b9164db05ef2b9e8ce319ccee55f602468e6fe495e6bc6371e568b60c924.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character climbing stairs, smiling and extending one hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "climbing",
+          "stairs",
+          "smiling",
+          "hand",
+          "cartoon"
+        ],
+        "context_relation": "The image is a visual representation of a character climbing stairs, which could be used in an educational context to discuss physical activities or movement.",
+        "limitations": [
+          "The image does not provide specific information about the educational content it is intended to represent."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

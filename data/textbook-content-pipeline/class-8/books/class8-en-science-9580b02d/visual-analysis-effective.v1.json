@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "02fe76794f08898c18b2a3e376142caf46230fba1398c3ef72b90b716f073ae5",
+  "raw_analysis_sha256": "126263ef0c6203062edd42de364428e0bfac8db500351bcec0c68534d7032c9b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40097576981",
-      "checkpointed_at": "2026-10-24T14:45:21Z",
+      "checkpointed_at": "2026-10-24T14:58:16Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40097576981",
-      "checkpointed_at": "2026-10-24T14:46:07Z",
+      "checkpointed_at": "2026-10-24T14:59:02Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57829,7 +57829,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40097576981",
-      "checkpointed_at": "2026-10-24T14:47:02Z",
+      "checkpointed_at": "2026-10-24T14:59:56Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -60605,6 +60605,108 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "339a386a42e66acc0b9a11c3",
+      "asset_sha256": "90f2b9164db05ef2b9e8ce319ccee55f602468e6fe495e6bc6371e568b60c924",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 95,
+      "asset_path": "assets/90f2b9164db05ef2b9e8ce319ccee55f602468e6fe495e6bc6371e568b60c924.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f3c1b2f43ada4151a60b916f5c82eed799f0ccb2a4a433435669d7a50b7e53bc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character climbing stairs, with a hand outstretched as if offering help.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "climbing",
+          "stairs",
+          "help",
+          "cartoon"
+        ],
+        "context_relation": "The image is a visual representation of a character climbing stairs, possibly to illustrate a concept related to movement or assistance.",
+        "limitations": [
+          "The image does not provide specific information about the context or the character's actions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40097576981",
+      "checkpointed_at": "2026-10-24T15:01:34Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character climbing stairs, with a hand outstretched as if offering help.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "climbing",
+          "stairs",
+          "help",
+          "cartoon"
+        ],
+        "context_relation": "The image is a visual representation of a character climbing stairs, possibly to illustrate a concept related to movement or assistance.",
+        "limitations": [
+          "The image does not provide specific information about the context or the character's actions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b9276aa0e289058d8fa5dc85",
+      "asset_sha256": "90f2b9164db05ef2b9e8ce319ccee55f602468e6fe495e6bc6371e568b60c924",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 95,
+      "asset_path": "assets/90f2b9164db05ef2b9e8ce319ccee55f602468e6fe495e6bc6371e568b60c924.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f3c1b2f43ada4151a60b916f5c82eed799f0ccb2a4a433435669d7a50b7e53bc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character climbing stairs, smiling and extending one hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "climbing",
+          "stairs",
+          "smiling",
+          "hand",
+          "cartoon"
+        ],
+        "context_relation": "The image is a visual representation of a character climbing stairs, which could be used in an educational context to discuss physical activities or movement.",
+        "limitations": [
+          "The image does not provide specific information about the educational content it is intended to represent."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40097576981",
+      "checkpointed_at": "2026-10-24T15:01:46Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character climbing stairs, smiling and extending one hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "climbing",
+          "stairs",
+          "smiling",
+          "hand",
+          "cartoon"
+        ],
+        "context_relation": "The image is a visual representation of a character climbing stairs, which could be used in an educational context to discuss physical activities or movement.",
+        "limitations": [
+          "The image does not provide specific information about the educational content it is intended to represent."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
