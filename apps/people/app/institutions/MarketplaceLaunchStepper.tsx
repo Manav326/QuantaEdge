@@ -258,6 +258,33 @@ function initialDraft(item: LaunchItem): Draft {
   };
 }
 
+function readableLessonBlock(content: unknown): Array<{label:string;text:string}> {
+  if (content === null || content === undefined) return [];
+  if (typeof content === 'string' || typeof content === 'number' || typeof content === 'boolean') {
+    return [{label:'Content',text:String(content)}];
+  }
+  if (Array.isArray(content)) {
+    return content.map((value,index)=>({
+      label:'Item '+(index+1),
+      text:typeof value==='string'?value:JSON.stringify(value,null,2)
+    }));
+  }
+  if (typeof content !== 'object') return [{label:'Content',text:String(content)}];
+  const source=content as Record<string,unknown>;
+  const preferred=['title','heading','body','text','prompt','explanation','hint','caption','formula','steps','items','content'];
+  const fields:Array<{label:string;text:string}>=[];
+  for(const key of preferred) {
+    const value=source[key];
+    if(value===null||value===undefined||value==='') continue;
+    fields.push({
+      label:key.replace(/_/g,' ').replace(/\b\w/g,letter=>letter.toUpperCase()),
+      text:typeof value==='string'||typeof value==='number'||typeof value==='boolean'
+        ?String(value):JSON.stringify(value,null,2)
+    });
+  }
+  return fields.length?fields:[{label:'Structured content',text:JSON.stringify(content,null,2)}];
+}
+
 export default function MarketplaceLaunchStepper({
   institutionId,
   institutionName,
@@ -966,8 +993,28 @@ export default function MarketplaceLaunchStepper({
                                                 {(lesson.blocks || []).map(block => (
                                                   <details key={block.id} style={{ margin: '6px 0', padding: 8, border: '1px solid var(--border, #d7dce2)', borderRadius: 6 }}>
                                                     <summary style={{ cursor: 'pointer' }}>Block {block.sequence_no} · {block.block_type}{block.asset_title ? ' · ' + block.asset_title : ''}</summary>
-                                                    <pre style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', fontSize: 12, padding: 8, background: 'var(--surface-muted, #f7f8fa)', borderRadius: 6 }}>{JSON.stringify(block.content, null, 2)}</pre>
-                                                    {block.asset_url && <p style={{ fontSize: 12 }}>Asset: <a href={block.asset_url} target="_blank" rel="noreferrer">{block.asset_title || block.asset_url}</a> · {block.asset_type || 'file'} · {block.asset_status || 'unknown status'}{block.asset_alt ? ' · Alt: ' + block.asset_alt : ''}</p>}
+                                                    <div style={{padding:'8px 10px',borderRadius:6,background:'var(--surface-muted, #f7f8fa)'}}>
+                                                      {readableLessonBlock(block.content).map((field,fieldIndex)=>(
+                                                        <div key={field.label+'-'+fieldIndex} style={{marginBottom:fieldIndex===readableLessonBlock(block.content).length-1?0:8}}>
+                                                          <strong style={{fontSize:12}}>{field.label}</strong>
+                                                          <p style={{margin:'3px 0 0',whiteSpace:'pre-wrap',overflowWrap:'anywhere',fontSize:13}}>{field.text}</p>
+                                                        </div>
+                                                      ))}
+                                                    </div>
+                                                    {block.asset_url && (
+                                                      <div style={{marginTop:8}}>
+                                                        {/^https:\/\//i.test(block.asset_url) && ['IMAGE','DIAGRAM'].includes(String(block.asset_type||'').toUpperCase()) && (
+                                                          <img src={block.asset_url} alt={block.asset_alt||block.asset_title||'Course visual under review'}
+                                                            loading="lazy" referrerPolicy="no-referrer"
+                                                            style={{display:'block',maxWidth:'100%',maxHeight:420,objectFit:'contain',border:'1px solid var(--border, #d7dce2)',borderRadius:8,background:'#fff'}} />
+                                                        )}
+                                                        <p style={{fontSize:12}}>Asset: <a href={block.asset_url} target="_blank" rel="noreferrer">{block.asset_title || block.asset_url}</a> · {block.asset_type || 'file'} · {block.asset_status || 'unknown status'}{block.asset_alt ? ' · Alt: ' + block.asset_alt : ''}</p>
+                                                      </div>
+                                                    )}
+                                                    <details style={{marginTop:8}}>
+                                                      <summary style={{cursor:'pointer',fontSize:12}}>Inspect raw block JSON</summary>
+                                                      <pre style={{whiteSpace:'pre-wrap',overflowWrap:'anywhere',fontSize:12,padding:8}}>{JSON.stringify(block.content,null,2)}</pre>
+                                                    </details>
                                                     {(block.translations || []).map((translation, ti) => (
                                                       <div key={String(translation.language) + '-' + String(translation.version_no) + '-' + ti} style={{ marginTop: 8 }}>
                                                         <strong>{String(translation.language).toUpperCase()} block translation · {translation.translation_status} v{translation.version_no}</strong>
