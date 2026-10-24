@@ -36,7 +36,43 @@ CREATE INDEX IF NOT EXISTS idx_course_trust_policy_event_identity
 
 ALTER TABLE institution_course_release
   ADD COLUMN IF NOT EXISTS fingerprint_schema_version smallint NOT NULL DEFAULT 1
-  CHECK (fingerprint_schema_version IN (1,2));
+  CHECK (fingerprint_schema_version IN (1,2)),
+  ADD COLUMN IF NOT EXISTS origin_auto_approved_by_staff_id bigint REFERENCES staff_account(id) ON DELETE RESTRICT,
+  ADD COLUMN IF NOT EXISTS origin_approval_mode varchar(24) NOT NULL DEFAULT 'MANUAL'
+    CHECK (origin_approval_mode IN ('MANUAL','HRMS_TRUSTED_AUTO'));
+
+-- A trusted auto-approved release must record the HRMS actor that exercised the explicit policy.
+-- Do not fill origin_approved_by_admin_id with the submitting admin: that would falsely claim a
+-- manual origin approval. Existing releases retain the MANUAL attribution they already have.
+DO $release_shareable_check$
+DECLARE constraint_name text;
+BEGIN
+  FOR constraint_name IN
+    SELECT conname FROM pg_constraint
+    WHERE conrelid='public.institution_course_release'::regclass
+      AND contype='c'
+      AND pg_get_constraintdef(oid) ILIKE '%release_state <> ''SHAREABLE''%'
+  LOOP
+    EXECUTE format('ALTER TABLE public.institution_course_release DROP CONSTRAINT %I',constraint_name);
+  END LOOP;
+END
+$release_shareable_check$;
+
+ALTER TABLE institution_course_release
+  ADD CONSTRAINT ck_institution_course_release_shareable_attribution
+  CHECK (
+    release_state <> 'SHAREABLE'
+    OR (
+      origin_approved_at IS NOT NULL AND shareable_at IS NOT NULL
+      AND (
+        (origin_approval_mode='MANUAL' AND origin_approved_by_admin_id IS NOT NULL
+          AND origin_auto_approved_by_staff_id IS NULL)
+        OR
+        (origin_approval_mode='HRMS_TRUSTED_AUTO' AND origin_approved_by_admin_id IS NULL
+          AND origin_auto_approved_by_staff_id IS NOT NULL)
+      )
+    )
+  );
 
 -- Fingerprint only material course content. Operational timestamps and the V180 version metadata
 -- are not teaching content and must not invalidate an otherwise unchanged release.
