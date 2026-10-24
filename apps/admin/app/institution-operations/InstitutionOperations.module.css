@@ -62,3 +62,5 @@
 .textButton{background:transparent;color:var(--admin-primary);margin-top:12px}
 @media(max-width:1050px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.quickLinks{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.metrics,.quickLinks,.courseGrid,.releaseGrid{grid-template-columns:1fr}.panel{padding:14px}.panelHeader{flex-direction:column}.searchRow{flex-direction:column}.steps{grid-template-columns:1fr}.headerActions{width:100%}}
+
+.focused{border-color:var(--admin-primary);box-shadow:0 0 0 2px color-mix(in srgb,var(--admin-primary) 18%,transparent)}
