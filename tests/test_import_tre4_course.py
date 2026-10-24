@@ -75,7 +75,7 @@ class Tre4ImporterTests(unittest.TestCase):
             "package_version": "1.0.0",
             "package_sha256": "a" * 64,
         }
-        cursor = FakeCursor([[], None, (501,)])
+        cursor = FakeCursor([[], ("DRAFT",), None, (501,)])
         pack_id, created = import_tre4_course.ensure_test_pack(cursor, 42, 777, 901, paper)
 
         self.assertEqual(pack_id, 501)
