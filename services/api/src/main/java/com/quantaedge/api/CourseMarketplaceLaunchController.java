@@ -112,12 +112,15 @@ public class CourseMarketplaceLaunchController {
                  (select count(*) from question q join lesson l on l.id=q.lesson_id where l.chapter_id=ch.id) as lesson_question_count,
                  (select count(*) from learning_resource_assignment ra where ra.chapter_id=ch.id) as resource_count
           from curriculum_chapter ch where ch.subject_id=? and ch.active=true
-            and (? is null or ch.id=?)
           order by ch.sort_order,ch.id
-          """,subjectId,chapterId,chapterId);
+          """,subjectId);
       for(Map<String,Object> chapter:chapters) {
         long chapterIdValue=number(chapter.get("id"));
-        if(chapterId==null) continue;
+        lessonCount+=number(chapter.get("lesson_count"));
+        lessonBlockCount+=number(chapter.get("lesson_block_count"));
+        lessonQuestionCount+=number(chapter.get("lesson_question_count"));
+        courseResourceCount+=number(chapter.get("resource_count"));
+        if(chapterId==null || chapterIdValue!=chapterId.longValue()) continue;
         List<Map<String,Object>> lessons=jdbc.queryForList("""
             select l.id,l.code,l.title,l.summary,l.estimated_minutes,l.status,l.sort_order,l.active,
                    l.objective_id,o.code as objective_code,o.title as objective_title,
@@ -135,7 +138,7 @@ public class CourseMarketplaceLaunchController {
             join learning_resource r on r.id=a.resource_id
             where a.chapter_id=? order by a.sort_order,a.id
             """,chapterId);
-        courseResourceCount+=resources.size();
+
         chapter.put("resources",resources);
         for(Map<String,Object> lesson:lessons) {
           long lessonId=number(lesson.get("id"));
@@ -176,7 +179,7 @@ public class CourseMarketplaceLaunchController {
             }
             block.put("translations",translations);
           }
-          lessonBlockCount+=blocks.size();
+
           lesson.put("blocks",blocks);
 
           List<Map<String,Object>> questions=jdbc.queryForList("""
@@ -210,10 +213,10 @@ public class CourseMarketplaceLaunchController {
             }
             question.put("translations",translations);
           }
-          lessonQuestionCount+=questions.size();
+
           lesson.put("questions",questions);
         }
-        lessonCount+=lessons.size();
+
         chapter.put("lessons",lessons);
       }
       subject.put("chapters",chapters);
