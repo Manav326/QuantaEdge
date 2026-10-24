@@ -155,6 +155,89 @@ AS $$
       WHERE a.resource_id=res.id AND ps.program_id=p_program_id
     )
     UNION ALL
+    SELECT 'question-translation',tr.id,(to_jsonb(tr) - ARRAY['created_at','updated_at'])::text
+    FROM question_translation tr
+    JOIN question q ON q.id=tr.question_id
+    WHERE EXISTS (
+      SELECT 1 FROM qe_course_program_ids_for_question(q.id) scope WHERE scope.program_id=p_program_id
+    )
+    UNION ALL
+    SELECT 'learning-objective-translation',tr.id,(to_jsonb(tr) - ARRAY['created_at','updated_at'])::text
+    FROM learning_objective_translation tr
+    JOIN learning_objective o ON o.id=tr.objective_id
+    JOIN curriculum_chapter ch ON ch.id=o.chapter_id
+    JOIN curriculum_program_subject ps ON ps.subject_id=ch.subject_id
+    WHERE ps.program_id=p_program_id
+    UNION ALL
+    SELECT 'learning-resource-artifact-scope',scope.id,(to_jsonb(scope) - ARRAY['created_at','updated_at'])::text
+    FROM learning_resource_artifact_scope scope
+    JOIN curriculum_chapter ch ON ch.id=scope.chapter_id
+    JOIN curriculum_program_subject ps ON ps.subject_id=ch.subject_id
+    WHERE ps.program_id=p_program_id
+    UNION ALL
+    SELECT 'learning-document-assignment',a.id,(to_jsonb(a) - ARRAY['created_at','updated_at'])::text
+    FROM learning_document_course_assignment a WHERE a.course_id=p_program_id
+    UNION ALL
+    SELECT 'learning-document',doc.id,(to_jsonb(doc) - ARRAY['created_at','updated_at'])::text
+    FROM learning_document doc
+    WHERE EXISTS (
+      SELECT 1 FROM qe_course_program_ids_for_row('learning_document',to_jsonb(doc)) scope
+      WHERE scope.program_id=p_program_id
+    )
+    UNION ALL
+    SELECT 'content-asset',asset.id,(to_jsonb(asset) - ARRAY['created_at','updated_at'])::text
+    FROM content_asset asset
+    WHERE EXISTS (
+      SELECT 1
+      FROM lesson_block b
+      JOIN lesson l ON l.id=b.lesson_id
+      JOIN curriculum_chapter ch ON ch.id=l.chapter_id
+      JOIN curriculum_program_subject ps ON ps.subject_id=ch.subject_id
+      WHERE b.asset_id=asset.id AND ps.program_id=p_program_id
+    )
+    UNION ALL
+    SELECT 'textbook-source-book',book.id,(to_jsonb(book) - ARRAY['created_at','updated_at'])::text
+    FROM textbook_source_book book
+    WHERE book.program_id=p_program_id
+       OR EXISTS (
+          SELECT 1 FROM curriculum_program_subject ps
+          WHERE ps.program_id=p_program_id AND ps.subject_id=book.subject_id
+       )
+    UNION ALL
+    SELECT 'textbook-extracted-page',page.id,(to_jsonb(page) - ARRAY['created_at','updated_at'])::text
+    FROM textbook_extracted_page page
+    JOIN textbook_source_book book ON book.id=page.source_book_id
+    WHERE book.program_id=p_program_id
+       OR EXISTS (
+          SELECT 1 FROM curriculum_program_subject ps
+          WHERE ps.program_id=p_program_id AND ps.subject_id=book.subject_id
+       )
+    UNION ALL
+    SELECT 'assessment-translation',tr.id,(to_jsonb(tr) - ARRAY['created_at','updated_at'])::text
+    FROM assessment_translation tr
+    JOIN assessment a ON a.id=tr.assessment_id
+    WHERE a.course_id=p_program_id
+    UNION ALL
+    SELECT 'assessment-question-translation',tr.id,(to_jsonb(tr) - ARRAY['created_at','updated_at'])::text
+    FROM assessment_question_translation tr
+    JOIN assessment_question aq ON aq.id=tr.assessment_question_id
+    JOIN assessment a ON a.id=aq.assessment_id
+    WHERE a.course_id=p_program_id
+    UNION ALL
+    SELECT 'course-assessment-pack',pack.id,
+      (to_jsonb(pack) - ARRAY['created_at','updated_at','status','published_by_staff_id','published_at'])::text
+    FROM course_assessment_pack pack WHERE pack.course_id=p_program_id
+    UNION ALL
+    SELECT 'course-assessment-pack-item',item.id,(to_jsonb(item) - ARRAY['created_at','updated_at'])::text
+    FROM course_assessment_pack_item item
+    JOIN course_assessment_pack pack ON pack.id=item.pack_id
+    WHERE pack.course_id=p_program_id
+    UNION ALL
+    SELECT 'course-assessment-pack-resource',res.id,(to_jsonb(res) - ARRAY['created_at','updated_at'])::text
+    FROM course_assessment_pack_resource res
+    JOIN course_assessment_pack pack ON pack.id=res.pack_id
+    WHERE pack.course_id=p_program_id
+    UNION ALL
     SELECT 'delivery-mode',m.program_id,
       (to_jsonb(m) - ARRAY['created_at','updated_at'])::text
     FROM curriculum_program_delivery_mode m
@@ -195,11 +278,11 @@ WHERE r.release_state='SHAREABLE'
 INSERT INTO institution_course_lifecycle_event(
   institution_id,course_release_id,event_type,actor_platform_staff_id,details
 )
-SELECT r.source_institution_id,r.id,'RELEASE_FINGERPRINT_REBASED',i.trusted_auto_approval_changed_by_staff_id,
+SELECT r.source_institution_id,r.id,'RELEASE_FINGERPRINT_REBASED',NULL,
   jsonb_build_object('fromSchemaVersion',1,'toSchemaVersion',2,
+    'actor','SYSTEM_MIGRATION',
     'reason','Canonical material-content fingerprint excludes non-content version metadata and timestamps.')
 FROM institution_course_release r
-JOIN institution_course_identity i ON i.id=(SELECT p.course_identity_id FROM curriculum_program p WHERE p.id=r.program_id)
 WHERE r.release_state='SHAREABLE' AND r.legacy_migration=false;
 
 INSERT INTO app_metadata(key,value)
