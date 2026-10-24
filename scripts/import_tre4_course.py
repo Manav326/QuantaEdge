@@ -458,8 +458,9 @@ def get_or_create_course(cursor: Any, institution_id: int, class_id: int) -> tup
         return int(course_id), str(public_id), False
     cursor.execute("""
         INSERT INTO curriculum_program(
-          class_id,code,display_name,stream_code,curriculum_version,status,notes,public_id_prefix
-        ) VALUES (%s,%s,%s,'BPSC_TRE',%s,'ACTIVE',%s,'INS')
+          class_id,code,display_name,stream_code,curriculum_version,status,notes,public_id_prefix,
+          course_type_code
+        ) VALUES (%s,%s,%s,'BPSC_TRE',%s,'ACTIVE',%s,'INS','ASSESSMENT')
         RETURNING id,public_id
     """, (
         class_id, internal_code, COURSE_TITLE, COURSE_VERSION,
