@@ -14,8 +14,8 @@
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "d55b4af2d39033d603cae25d",
-      "72af91ad02c11a8084fd26ac"
+      "e03a02c3fc37627f873ab044",
+      "034c31ca3fc7f277ac925cbd"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1232,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40123283396",
-      "checkpointed_at": "2026-10-24T20:07:14Z"
+      "checkpointed_at": "2026-10-24T20:20:20Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40123283396",
-      "checkpointed_at": "2026-10-24T20:08:03Z"
+      "checkpointed_at": "2026-10-24T20:21:09Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38429,7 +38429,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40123283396",
-      "checkpointed_at": "2026-10-24T20:09:01Z"
+      "checkpointed_at": "2026-10-24T20:22:07Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -40059,7 +40059,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40111315207",
+      "run_id": "40123283396",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -40210,7 +40210,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40111315207",
+      "run_id": "40123283396",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
