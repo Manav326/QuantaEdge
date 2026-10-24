@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8f034506c5d8a1b77f170129670f90b921158ac6343c925c9830193d21b5e4db",
+  "raw_analysis_sha256": "25467c673fcf911a12683cc0e289ed8b137de69eab086681cac5f9293de3e810",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40062008155",
-      "checkpointed_at": "2026-10-24T05:58:15Z",
+      "checkpointed_at": "2026-10-24T06:04:05Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40062008155",
-      "checkpointed_at": "2026-10-24T05:58:55Z",
+      "checkpointed_at": "2026-10-24T06:04:45Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57829,7 +57829,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40062008155",
-      "checkpointed_at": "2026-10-24T05:59:43Z",
+      "checkpointed_at": "2026-10-24T06:05:33Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -59670,6 +59670,126 @@
         "context_relation": "The image is a visual representation of the concept of gravitational force and gravity, explaining that the Earth attracts objects towards itself.",
         "limitations": [
           "The image does not provide specific details about the gravitational force or gravity."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "33b280a3af43289ff69232cc",
+      "asset_sha256": "afb3a5d32275da801539dff6acf6d8bd4d09bcb3b5fc224f5669940eaea46347",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 92,
+      "asset_path": "assets/afb3a5d32275da801539dff6acf6d8bd4d09bcb3b5fc224f5669940eaea46347.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7e610cba57c888e7994a2493ca585c1648bd962906cbecd75aae8bfa3ef4ff1e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A boy standing on a concrete block, throwing a ball upwards.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Why do all the objects fall towards the Earth?",
+          "Is there any force which acts on them?",
+          "Since all the objects fall towards the Earth, it means the Earth attracts (pulls) them.",
+          "The force with which the Earth attracts objects towards itself is called the gravitational force.",
+          "The gravitational force exerted by the Earth is also called force of gravity or simply gravity."
+        ],
+        "concepts": [
+          "Gravitational force",
+          "Gravity",
+          "Earth's attraction to objects"
+        ],
+        "context_relation": "The image illustrates the concept of gravitational force and gravity.",
+        "limitations": [
+          "The image does not show the actual gravitational force acting on the ball."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40062008155",
+      "checkpointed_at": "2026-10-24T06:07:18Z",
+      "effective_analysis": {
+        "visual_summary": "A boy standing on a concrete block, throwing a ball upwards.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Why do all the objects fall towards the Earth?",
+          "Is there any force which acts on them?",
+          "Since all the objects fall towards the Earth, it means the Earth attracts (pulls) them.",
+          "The force with which the Earth attracts objects towards itself is called the gravitational force.",
+          "The gravitational force exerted by the Earth is also called force of gravity or simply gravity."
+        ],
+        "concepts": [
+          "Gravitational force",
+          "Gravity",
+          "Earth's attraction to objects"
+        ],
+        "context_relation": "The image illustrates the concept of gravitational force and gravity.",
+        "limitations": [
+          "The image does not show the actual gravitational force acting on the ball."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "da8946fbfc8082945374cdc6",
+      "asset_sha256": "d914eba06fa44b7011d5d845598ec7e2c5055a785b05542a975fe6df937fde27",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 92,
+      "asset_path": "assets/d914eba06fa44b7011d5d845598ec7e2c5055a785b05542a975fe6df937fde27.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7e610cba57c888e7994a2493ca585c1648bd962906cbecd75aae8bfa3ef4ff1e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person catching a falling ball in mid-air.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Why do all the objects fall towards the Earth?",
+          "Is there any force which acts on them?",
+          "Since all the objects fall towards the Earth, it means the Earth attracts (pulls) them.",
+          "The force with which the Earth attracts objects towards itself is called the gravitational force.",
+          "The gravitational force exerted by the Earth is also called force of gravity or simply gravity."
+        ],
+        "concepts": [
+          "Gravity",
+          "Gravitational force",
+          "Earth's pull on objects"
+        ],
+        "context_relation": "The image illustrates the concept of gravity and gravitational force as described in the text.",
+        "limitations": [
+          "The image does not show the actual gravitational force acting on objects."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40062008155",
+      "checkpointed_at": "2026-10-24T06:09:03Z",
+      "effective_analysis": {
+        "visual_summary": "A person catching a falling ball in mid-air.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Why do all the objects fall towards the Earth?",
+          "Is there any force which acts on them?",
+          "Since all the objects fall towards the Earth, it means the Earth attracts (pulls) them.",
+          "The force with which the Earth attracts objects towards itself is called the gravitational force.",
+          "The gravitational force exerted by the Earth is also called force of gravity or simply gravity."
+        ],
+        "concepts": [
+          "Gravity",
+          "Gravitational force",
+          "Earth's pull on objects"
+        ],
+        "context_relation": "The image illustrates the concept of gravity and gravitational force as described in the text.",
+        "limitations": [
+          "The image does not show the actual gravitational force acting on objects."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1211,
+    "assets_selected": 1213,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "0caf5a7f8cfab5610c05b7ed",
-      "3cd947ad3e6fd18394ca4922"
+      "33b280a3af43289ff69232cc",
+      "da8946fbfc8082945374cdc6"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1208,
-    "assets_remaining": 1083,
-    "assets_completion_percent": 52.7,
+    "assets_analyzed": 1210,
+    "assets_remaining": 1081,
+    "assets_completion_percent": 52.8,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1206,
+    "assets_skipped_from_checkpoint": 1208,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40062008155",
-      "checkpointed_at": "2026-10-24T05:58:15Z"
+      "checkpointed_at": "2026-10-24T06:04:05Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40062008155",
-      "checkpointed_at": "2026-10-24T05:58:55Z"
+      "checkpointed_at": "2026-10-24T06:04:45Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38429,7 +38429,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40062008155",
-      "checkpointed_at": "2026-10-24T05:59:43Z"
+      "checkpointed_at": "2026-10-24T06:05:33Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -39638,6 +39638,82 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40062008155",
       "checkpointed_at": "2026-10-24T06:03:01Z"
+    },
+    {
+      "asset_id": "33b280a3af43289ff69232cc",
+      "asset_sha256": "afb3a5d32275da801539dff6acf6d8bd4d09bcb3b5fc224f5669940eaea46347",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 92,
+      "asset_path": "assets/afb3a5d32275da801539dff6acf6d8bd4d09bcb3b5fc224f5669940eaea46347.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7e610cba57c888e7994a2493ca585c1648bd962906cbecd75aae8bfa3ef4ff1e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A boy standing on a concrete block, throwing a ball upwards.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Why do all the objects fall towards the Earth?",
+          "Is there any force which acts on them?",
+          "Since all the objects fall towards the Earth, it means the Earth attracts (pulls) them.",
+          "The force with which the Earth attracts objects towards itself is called the gravitational force.",
+          "The gravitational force exerted by the Earth is also called force of gravity or simply gravity."
+        ],
+        "concepts": [
+          "Gravitational force",
+          "Gravity",
+          "Earth's attraction to objects"
+        ],
+        "context_relation": "The image illustrates the concept of gravitational force and gravity.",
+        "limitations": [
+          "The image does not show the actual gravitational force acting on the ball."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40062008155",
+      "checkpointed_at": "2026-10-24T06:07:18Z"
+    },
+    {
+      "asset_id": "da8946fbfc8082945374cdc6",
+      "asset_sha256": "d914eba06fa44b7011d5d845598ec7e2c5055a785b05542a975fe6df937fde27",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 92,
+      "asset_path": "assets/d914eba06fa44b7011d5d845598ec7e2c5055a785b05542a975fe6df937fde27.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "7e610cba57c888e7994a2493ca585c1648bd962906cbecd75aae8bfa3ef4ff1e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person catching a falling ball in mid-air.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Why do all the objects fall towards the Earth?",
+          "Is there any force which acts on them?",
+          "Since all the objects fall towards the Earth, it means the Earth attracts (pulls) them.",
+          "The force with which the Earth attracts objects towards itself is called the gravitational force.",
+          "The gravitational force exerted by the Earth is also called force of gravity or simply gravity."
+        ],
+        "concepts": [
+          "Gravity",
+          "Gravitational force",
+          "Earth's pull on objects"
+        ],
+        "context_relation": "The image illustrates the concept of gravity and gravitational force as described in the text.",
+        "limitations": [
+          "The image does not show the actual gravitational force acting on objects."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40062008155",
+      "checkpointed_at": "2026-10-24T06:09:03Z"
     }
   ]
 }

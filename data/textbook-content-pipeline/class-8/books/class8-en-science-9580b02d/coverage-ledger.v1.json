@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1224,
-    "successful_visual_analyses": 1211,
-    "missing_visual_analyses": 1067,
+    "raw_analysis_result_rows": 1226,
+    "successful_visual_analyses": 1213,
+    "missing_visual_analyses": 1065,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1080,
+    "unresolved_count": 1078,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -45965,9 +45965,28 @@
       "asset_path": "assets/afb3a5d32275da801539dff6acf6d8bd4d09bcb3b5fc224f5669940eaea46347.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A boy standing on a concrete block, throwing a ball upwards.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Why do all the objects fall towards the Earth?",
+          "Is there any force which acts on them?",
+          "Since all the objects fall towards the Earth, it means the Earth attracts (pulls) them.",
+          "The force with which the Earth attracts objects towards itself is called the gravitational force.",
+          "The gravitational force exerted by the Earth is also called force of gravity or simply gravity."
+        ],
+        "concepts": [
+          "Gravitational force",
+          "Gravity",
+          "Earth's attraction to objects"
+        ],
+        "context_relation": "The image illustrates the concept of gravitational force and gravity.",
+        "limitations": [
+          "The image does not show the actual gravitational force acting on the ball."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -45983,9 +46002,28 @@
       "asset_path": "assets/d914eba06fa44b7011d5d845598ec7e2c5055a785b05542a975fe6df937fde27.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person catching a falling ball in mid-air.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Why do all the objects fall towards the Earth?",
+          "Is there any force which acts on them?",
+          "Since all the objects fall towards the Earth, it means the Earth attracts (pulls) them.",
+          "The force with which the Earth attracts objects towards itself is called the gravitational force.",
+          "The gravitational force exerted by the Earth is also called force of gravity or simply gravity."
+        ],
+        "concepts": [
+          "Gravity",
+          "Gravitational force",
+          "Earth's pull on objects"
+        ],
+        "context_relation": "The image illustrates the concept of gravity and gravitational force as described in the text.",
+        "limitations": [
+          "The image does not show the actual gravitational force acting on objects."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
