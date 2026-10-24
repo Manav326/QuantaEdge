@@ -105,8 +105,8 @@ public class InstitutionCourseReleaseWorkflowService {
             source_institution_id,program_id,release_version,release_state,content_fingerprint,
             submitted_by_institution_admin_id,submitted_by_staff_id,submitted_at,
             legacy_migration,created_at,updated_at
-          ) values(?,?,?,'IN_QUALITY_REVIEW',?,?,?,?,false,now(),now()) returning id
-          """,Long.class,institutionId,programId,version,fingerprint,actorAdminId,actorStaffId,Instant.now());
+          ) values(?,?,?,'IN_QUALITY_REVIEW',?,?,?,now(),false,now(),now()) returning id
+          """,Long.class,institutionId,programId,version,fingerprint,actorAdminId,actorStaffId);
       jdbc.update("""
           insert into institution_course_assignment(
             institution_id,course_release_id,status,assignment_source,assigned_at,created_at,updated_at
