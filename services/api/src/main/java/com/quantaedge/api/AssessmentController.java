@@ -490,6 +490,7 @@ public class AssessmentController {
         select a.id as assessment_id,
           coalesce(aq.source_assessment_question_id::text,aq.source_question_id::text,
             aq.question_snapshot->>'question_id',aq.sequence_no::text) as question_key,
+          aq.question_snapshot,
           selected.value #>> '{}' as selected_value
         from student_assessment_attempt att
         join assessment a on a.id=att.assessment_id and a.course_id=?
@@ -512,11 +513,21 @@ public class AssessmentController {
         ) selected(value)
         where att.institution_id=? and att.status='RELEASED' and (CAST(? AS bigint) IS NULL OR a.id=?)
       )
-      select assessment_id,question_key,selected_value,count(*) as selection_count
-      from response_values
-      where selected_value is not null and btrim(selected_value)<>''
-      group by assessment_id,question_key,selected_value
-      order by assessment_id,question_key,selection_count desc,selected_value
+      select rv.assessment_id,rv.question_key,
+        coalesce(option.option_json->>'key',option.option_json->>'option_key') as selected_value,
+        max(coalesce(option.option_json->>'label',option.option_json->>'text',
+                     option.option_json->'text_i18n'->>'en',option.option_json->'text_i18n'->>'hi')) as option_label,
+        count(*) as selection_count
+      from response_values rv
+      cross join lateral jsonb_array_elements(
+        case when jsonb_typeof(rv.question_snapshot->'options')='array'
+          then rv.question_snapshot->'options' else '[]'::jsonb end
+      ) option(option_json)
+      where rv.selected_value is not null and btrim(rv.selected_value)<>''
+        and rv.selected_value=coalesce(option.option_json->>'key',option.option_json->>'option_key')
+      group by rv.assessment_id,rv.question_key,
+        coalesce(option.option_json->>'key',option.option_json->>'option_key')
+      order by rv.assessment_id,rv.question_key,selection_count desc,selected_value
       limit 2000
       """,courseId,institutionId,assessmentId,assessmentId);
     Map<String,Object> result=new LinkedHashMap<>();
