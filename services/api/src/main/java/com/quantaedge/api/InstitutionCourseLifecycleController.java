@@ -163,6 +163,8 @@ public class InstitutionCourseLifecycleController {
     String state=String.valueOf(latest.get("release_state"));
     if(Set.of("IN_QUALITY_REVIEW","QUALITY_APPROVED").contains(state))
       throw conflict("This course already has a release in the quality review/approval workflow.");
+    if(Set.of("SHAREABLE","WITHDRAWN","LEGACY_MIGRATED").contains(state))
+      throw conflict("This release has already left the editable draft state. Create a separate draft content version before submitting an update.");
     String fingerprint=contentFingerprint(programId);
     evidence.put("capturedAt",java.time.Instant.now().toString());
     List<Map<String,Object>> trustedRows=jdbc.queryForList("""
@@ -259,14 +261,32 @@ public class InstitutionCourseLifecycleController {
         select id from institution_course_assignment
         where institution_id=? and course_release_id=? and status='ASSIGNED'
         """,Long.class,principal.institutionId(),releaseId);
+    Map<String,Object> trustedDistribution=trustedAutoApproval
+        ? propagateTrustedCourseVersion(programId,releaseId,principal.institutionId(),trustedPolicyActorId,principal.adminId())
+        : Map.of("autoPublishedOffers",0,"heldOffers",0,"skippedInstitutions",0,"learnerVersionGrants",0);
+    evidence.put("trustedDistribution",trustedDistribution);
+    if(trustedAutoApproval) {
+      jdbc.update("""
+        insert into institution_course_version_event(
+          course_identity_id,source_program_id,version_program_id,content_version_no,event_type,
+          actor_staff_id,actor_institution_admin_id,details
+        )
+        select p.course_identity_id,coalesce(p.supersedes_program_id,p.id),p.id,p.content_version_no,
+          'VERSION_SHAREABLE',?, ?,?::jsonb
+        from curriculum_program p
+        where p.id=? and p.content_version_no>1
+        on conflict(course_identity_id,version_program_id,event_type) do nothing
+        """,trustedPolicyActorId,principal.adminId(),json(evidence),programId);
+    }
     recordEvent(principal.institutionId(),releaseId,assignmentId,null,
         trustedAutoApproval?"RELEASE_AUTO_APPROVED_TRUSTED_COURSE":"RELEASE_SUBMITTED",
         trustedPolicyActorId,principal.adminId(),evidence);
     return Map.of("submitted",true,"releaseId",releaseId,"programId",programId,
         "releaseVersion",version,"status",trustedAutoApproval?"SHAREABLE":"IN_QUALITY_REVIEW",
         "autoApprovedByTrustedCoursePolicy",trustedAutoApproval,"qualityEvidence",evidence,
+        "trustedDistribution",trustedDistribution,
         "message",trustedAutoApproval
-          ? "Content approved automatically under the HRMS trusted-course policy. The existing Marketplace publication and destination-specific commercial/access rules remain separate."
+          ? "Content was automatically approved. Existing published destination offers were carried forward where their full access, rights and commercial readiness checks still pass; exceptions remain visible in HRMS for review."
           : "Release submitted for the standard HRMS content-quality workflow.");
   }
 
