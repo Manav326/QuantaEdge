@@ -287,16 +287,49 @@ export default function MarketplaceLaunchStepper({
     }));
   };
 
+  const toggleReviewContent = async (release: QualityReviewItem) => {
+    const releaseId = release.release_id;
+    if (reviewContent[releaseId]) {
+      setReviewContent(previous => {
+        const next = { ...previous };
+        delete next[releaseId];
+        return next;
+      });
+      return;
+    }
+    setReviewContentLoadingId(releaseId);
+    setReviewContentErrors(previous => ({ ...previous, [releaseId]: '' }));
+    try {
+      const content = await api<ReleaseReviewContent>(
+        '/api/v1/hrms/platform/institutions/' + institutionId + '/course-releases/' + releaseId + '/review-content'
+      );
+      setReviewContent(previous => ({ ...previous, [releaseId]: content }));
+    } catch (e) {
+      setReviewContentErrors(previous => ({
+        ...previous,
+        [releaseId]: e instanceof Error ? e.message : 'The exact submitted release content could not be loaded.'
+      }));
+    } finally {
+      setReviewContentLoadingId(null);
+    }
+  };
+
   const reviewQuality = async (release: QualityReviewItem, approved: boolean) => {
     const notes = (reviewNotes[release.release_id] || '').trim();
     if (notes.length < 3 || notes.length > 1000) {
       setError('Add a review note between 3 and 1,000 characters before recording a quality decision.');
       return;
     }
-    if (approved && (!release.contentCurrent || release.active_subject_count < 1
-      || release.subjects_with_published_lessons !== release.active_subject_count
-      || release.published_chapters < 1 || release.published_lessons < 1)) {
-      setError('This release is not ready for quality approval. Refresh the checklist and ensure every active subject has published lessons.');
+    const assessmentOnly = release.delivery_mode === 'ASSESSMENT_ONLY' || release.course_type_code === 'ASSESSMENT';
+    const releaseReady = assessmentOnly
+      ? release.assessment_only_ready === true
+      : release.active_subject_count > 0
+        && release.subjects_with_published_lessons === release.active_subject_count
+        && release.published_chapters > 0 && release.published_lessons > 0;
+    if (approved && (!release.contentCurrent || !releaseReady)) {
+      setError(assessmentOnly
+        ? 'This assessment-only release is not ready. Confirm the exact TRE source papers and question inventory are complete, then refresh the review.'
+        : 'This release is not ready for quality approval. Refresh the checklist and ensure every active subject has published lessons.');
       return;
     }
     setBusyKey('quality-' + release.release_id);
