@@ -85,7 +85,7 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertIn("INSERT INTO course_assessment_pack_item", sql)
         self.assertIn("VALUES (%s,%s,1,'PREVIOUS_YEAR_PAPER')", sql)
 
-    def test_matching_test_pack_is_reused_idempotently(self):
+    def test_matching_test_pack_is_reused_when_test_publication_state_differs(self):
         paper = {
             "cycle": "TRE 1.0",
             "package_id": "tre4-bpsc-tre-1-0-computer-science",
@@ -97,7 +97,7 @@ class Tre4ImporterTests(unittest.TestCase):
         cursor = FakeCursor([
             [(501, 42, title, "DRAFT", "a" * 64)],
             [(901, 1, "PREVIOUS_YEAR_PAPER")],
-            ("DRAFT", "tre4-bpsc-tre-1-0-computer-science", "1.0.0", "a" * 64,
+            ("PUBLISHED", "tre4-bpsc-tre-1-0-computer-science", "1.0.0", "a" * 64,
              "PREVIOUS_YEAR_PAPER", "PREVIOUS_YEAR_PAPER", None, None, "TRE 1.0",
              "https://example.test/tre1.pdf"),
         ])
