@@ -77,15 +77,8 @@ public class InstitutionTenantController {
     Map<String,Object> result = principalMap(principal);
     Map<String,Object> branding = brandingFor(principal.institutionId());
     result.put("branding", branding);
-    String joinCode = institutionAuth.readableJoinCode(principal.institutionId());
-    result.put("joinCode", joinCode);
-    if (joinCode != null) {
-      auditTenant(principal, "JOIN_CODE_VIEWED", "JOIN_CODE", null, Map.of("delivery", "institution-admin-copy"));
-      jdbc.update("""
-          insert into institution_membership_event(institution_id,event_type,actor_institution_admin_id,details)
-          values (?,'JOIN_CODE_VIEWED',?,jsonb_build_object('delivery','institution-admin-copy'))
-          """, principal.institutionId(), principal.adminId());
-    }
+    // Learner join codes are issued and shared only by HRMS. The institution session may
+    // manage its permitted learner/course operations, but it must never reveal the secret.
     return result;
   }
 
