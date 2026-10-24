@@ -2225,6 +2225,33 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
     }
 
+    fun openAssessmentCourse(courseId: Long) {
+        if (courseId <= 0L) return
+        val course = studentPrograms.firstOrNull {
+            it.longAny("id", "course_id") == courseId &&
+                (it.optBoolean("is_enrolled", it.optBoolean("enrolled")) || it.optBoolean("paused"))
+        }
+        if (course == null) {
+            error = if (language == "hi") "यह assessment course आपके खाते में उपलब्ध नहीं है।"
+                else "This assessment course is not available to your account."
+            return
+        }
+        val shouldReactivate = !course.optBoolean("is_enrolled", course.optBoolean("enrolled"))
+        currentCourseId = courseId
+        preferences.edit().putLong("activeCourseId", courseId).apply()
+        assessmentSubjectFilter = "ALL"
+        if (shouldReactivate) {
+            route = AppRoute.ASSESSMENTS
+            runTask {
+                ApiClient.postObject("/api/v1/students/me/programs/id/" + courseId + "/enroll", JSONObject())
+                refreshStudentPrograms()
+                openAssessments("ALL")
+            }
+        } else {
+            openAssessments("ALL")
+        }
+    }
+
     fun changeAssessmentsPage(pageSize: Int, pageOffset: Int) {
         assessmentsPageSize = pageSize.coerceIn(10, 50)
         assessmentsPageOffset = pageOffset.coerceAtLeast(0)
@@ -4631,6 +4658,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         busy = busy,
                         onActivateCourse = ::activateCourse,
                         onOpenSubject = ::openSubject,
+                        onOpenAssessments = ::openAssessmentCourse,
                         onMarketplace = ::openMarketplace,
                         onRefresh = { runTask { refreshStudentPrograms() } }
                     )
