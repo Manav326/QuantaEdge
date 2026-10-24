@@ -45,6 +45,13 @@ public class CourseMarketplaceController {
   private final String keyId;
   private final String keySecret;
   private final String baseUrl;
+  // Optional dual-mode credentials allow a read-only HRMS trace to inspect legacy orders from
+  // either environment when a shared database contains both. The normal checkout still uses
+  // the existing app.razorpay.key-id/key-secret pair.
+  @Value("${app.razorpay.test.key-id:}") private String testModeKeyId = "";
+  @Value("${app.razorpay.test.key-secret:}") private String testModeKeySecret = "";
+  @Value("${app.razorpay.live.key-id:}") private String liveModeKeyId = "";
+  @Value("${app.razorpay.live.key-secret:}") private String liveModeKeySecret = "";
   private final HttpClient httpClient = HttpClient.newBuilder()
       .connectTimeout(java.time.Duration.ofSeconds(5)).build();
 
@@ -2214,6 +2221,144 @@ public class CourseMarketplaceController {
     }
     return result;
   }
+
+  /**
+   * Read-only Razorpay inspection for the HRMS delivery-chain view. This deliberately does not
+   * reconcile, capture, mark paid, repair snapshots, grant access, or issue documents.
+   *
+   * The active checkout credentials are tried first, followed by optional test/live credentials.
+   * A result is trusted only when the provider returns the exact saved order ID. For legacy orders
+   * created before provider mode was recorded, checking both configured modes avoids guessing.
+   */
+  public Map<String,Object> inspectProviderStatusForHrms(
+      String providerOrderId,long expectedAmountPaise,String expectedCurrency) {
+    Map<String,Object> unavailable=new LinkedHashMap<>();
+    unavailable.put("providerQueryAvailable",false);
+    unavailable.put("providerOrderId",providerOrderId==null?"":providerOrderId);
+    unavailable.put("configuredProviderMode",configuredProviderMode());
+    if(providerOrderId==null||!providerOrderId.matches("order_[A-Za-z0-9]+")) {
+      unavailable.put("providerStatus","NO_PROVIDER_REFERENCE");
+      unavailable.put("message","This local order has no valid saved Razorpay order reference. Local transaction stages are still shown.");
+      unavailable.put("credentialModesTried",List.of());
+      return unavailable;
+    }
+    List<ProviderCredential> credentials=providerCredentialsForInspection();
+    List<String> modesTried=new ArrayList<>();
+    String lastError="";
+    Map<String,Object> amountMismatch=null;
+    for(ProviderCredential credential:credentials) {
+      modesTried.add(credential.mode());
+      try {
+        JsonNode providerOrder=razorpayReadRequest(
+            "/orders/"+providerOrderId,credential.keyId(),credential.keySecret());
+        String returnedId=providerOrder.path("id").asText("");
+        if(!providerOrderId.equals(returnedId)) continue;
+        String returnedCurrency=providerOrder.path("currency").asText("");
+        long returnedAmount=providerOrder.path("amount").asLong(-1);
+        boolean amountMatches=returnedAmount==expectedAmountPaise
+            && expectedCurrency!=null&&expectedCurrency.equalsIgnoreCase(returnedCurrency);
+        JsonNode paymentResponse=razorpayReadRequest(
+            "/orders/"+providerOrderId+"/payments",credential.keyId(),credential.keySecret());
+        JsonNode items=paymentResponse.path("items");
+        Map<String,Object> result=new LinkedHashMap<>(providerPaymentDiagnostics(
+            providerOrder,items,providerOrderId,expectedAmountPaise,expectedCurrency));
+        result.put("providerQueryAvailable",true);
+        result.put("configuredProviderMode",configuredProviderMode());
+        result.put("matchedProviderMode",credential.mode());
+        result.put("credentialModesTried",new ArrayList<>(modesTried));
+        result.put("providerOrderMatches",true);
+        result.put("providerAmountPaise",returnedAmount);
+        result.put("providerCurrency",returnedCurrency);
+        result.put("providerAmountCurrencyMatch",amountMatches);
+        result.put("providerStatus",providerOutcome(providerOrder,items,providerOrderId,
+            expectedAmountPaise,expectedCurrency,amountMatches));
+        result.put("message",amountMatches
+            ? "Razorpay was queried using "+credential.mode()+" credentials for this exact order. No transaction data was changed."
+            : "The Razorpay order exists, but its amount/currency does not match the saved QuantaEdge order. No transaction data was changed.");
+        if(amountMatches) return result;
+        amountMismatch=result;
+      } catch(RuntimeException providerError) {
+        lastError=safeProviderDiagnosticText(providerError.getMessage(),240);
+      }
+    }
+    if(amountMismatch!=null) return amountMismatch;
+    unavailable.put("providerStatus","UNCONFIRMED");
+    unavailable.put("credentialModesTried",modesTried);
+    unavailable.put("message",lastError.isBlank()
+        ? "Razorpay could not confirm this order using the configured credentials. Check that the matching test/live key pair is configured; no transaction data was changed."
+        : "Razorpay could not confirm this order using the configured credentials ("+lastError+"). Check that the matching test/live key pair is configured; no transaction data was changed.");
+    return unavailable;
+  }
+
+  private String providerOutcome(JsonNode providerOrder,JsonNode paymentItems,String orderId,
+      long expectedAmount,String expectedCurrency,boolean amountMatches) {
+    if(!amountMatches) return "ORDER_AMOUNT_CURRENCY_MISMATCH";
+    if(paymentItems!=null&&paymentItems.isArray()) {
+      for(JsonNode payment:paymentItems) {
+        String paymentId=payment.path("id").asText("");
+        if(!paymentId.matches("pay_[A-Za-z0-9]+")
+            ||!isPaymentForExactOrder(payment,paymentId,orderId,expectedAmount,expectedCurrency)) continue;
+        String status=payment.path("status").asText("").toLowerCase(Locale.ROOT);
+        if("captured".equals(status)) return "CAPTURED";
+      }
+      for(JsonNode payment:paymentItems) {
+        String paymentId=payment.path("id").asText("");
+        if(!paymentId.matches("pay_[A-Za-z0-9]+")
+            ||!isPaymentForExactOrder(payment,paymentId,orderId,expectedAmount,expectedCurrency)) continue;
+        String status=payment.path("status").asText("").toLowerCase(Locale.ROOT);
+        if("authorized".equals(status)) return "AUTHORIZED";
+        if(Set.of("created","processing").contains(status)) return "PROCESSING";
+      }
+    }
+    if("paid".equalsIgnoreCase(providerOrder.path("status").asText(""))
+        ||providerOrder.path("amount_paid").asLong(0)>=expectedAmount) return "PAID_NO_EXACT_PAYMENT";
+    return "NOT_PAID";
+  }
+
+  private String configuredProviderMode() {
+    if(isRazorpayTestModeKey(keyId)) return "TEST";
+    if(keyId!=null&&keyId.trim().matches("^rzp_live_[A-Za-z0-9]+$")) return "LIVE";
+    return keyId==null||keyId.isBlank()?"UNCONFIGURED":"UNKNOWN";
+  }
+
+  private List<ProviderCredential> providerCredentialsForInspection() {
+    Map<String,ProviderCredential> byKeyId=new LinkedHashMap<>();
+    addProviderCredential(byKeyId,keyId,keySecret,configuredProviderMode());
+    addProviderCredential(byKeyId,testModeKeyId,testModeKeySecret,"TEST");
+    addProviderCredential(byKeyId,liveModeKeyId,liveModeKeySecret,"LIVE");
+    return new ArrayList<>(byKeyId.values());
+  }
+
+  private static void addProviderCredential(
+      Map<String,ProviderCredential> credentials,String suppliedKeyId,String suppliedSecret,String mode) {
+    String id=suppliedKeyId==null?"":suppliedKeyId.trim();
+    String secret=suppliedSecret==null?"":suppliedSecret.trim();
+    if(!id.isBlank()&&!secret.isBlank()) credentials.putIfAbsent(id,new ProviderCredential(mode,id,secret));
+  }
+
+  private JsonNode razorpayReadRequest(String path,String requestKeyId,String requestKeySecret) {
+    if(requestKeyId==null||requestKeyId.isBlank()||requestKeySecret==null||requestKeySecret.isBlank())
+      throw new IllegalStateException("Matching provider credentials are not configured.");
+    try {
+      String basic=Base64.getEncoder().encodeToString(
+          (requestKeyId+":"+requestKeySecret).getBytes(StandardCharsets.UTF_8));
+      HttpRequest request=HttpRequest.newBuilder(URI.create(baseUrl+path))
+          .timeout(java.time.Duration.ofSeconds(15))
+          .header("Authorization","Basic "+basic)
+          .header("Accept","application/json")
+          .GET().build();
+      HttpResponse<String> response=httpClient.send(request,HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+      if(response.statusCode()<200||response.statusCode()>=300)
+        throw new IllegalStateException("provider returned HTTP "+response.statusCode());
+      return objectMapper.readTree(response.body());
+    } catch(IllegalStateException exception) {
+      throw exception;
+    } catch(Exception exception) {
+      throw new IllegalStateException("provider could not be reached",exception);
+    }
+  }
+
+  private record ProviderCredential(String mode,String keyId,String keySecret) {}
 
   private void requireConfigured() {
     if (keyId.isBlank() || keySecret.isBlank()) {
