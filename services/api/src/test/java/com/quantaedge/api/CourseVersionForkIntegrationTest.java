@@ -1,6 +1,7 @@
 package com.quantaedge.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -102,9 +103,23 @@ class CourseVersionForkIntegrationTest {
       where version_program_id=? and entity_type='LESSON_BLOCK' and source_entity_id=?
       """,Long.class,newCourseId,sourceBlockId);
     assertEquals(sourceContent,jdbc.queryForObject("select content::text from lesson_block where id=?",String.class,forkedBlockId));
+
+    String fingerprintBeforeMetadataChange=jdbc.queryForObject(
+        "select course_content_fingerprint(?)",String.class,newCourseId);
+    jdbc.update("update curriculum_program set updated_at=now()+interval '1 minute' where id=?",newCourseId);
+    String fingerprintAfterMetadataChange=jdbc.queryForObject(
+        "select course_content_fingerprint(?)",String.class,newCourseId);
+    assertEquals(fingerprintBeforeMetadataChange,fingerprintAfterMetadataChange,
+        "Non-content course metadata changes must not stale a reviewed content fingerprint.");
+
     jdbc.update("update lesson_block set content=content || ?::jsonb where id=?","{\"fork_probe\":\"new draft only\"}",forkedBlockId);
     assertEquals(sourceContent,jdbc.queryForObject("select content::text from lesson_block where id=?",String.class,sourceBlockId));
     assertTrue(jdbc.queryForObject("select jsonb_exists(content, 'fork_probe') from lesson_block where id=?",Boolean.class,forkedBlockId));
+    String fingerprintAfterContentChange=jdbc.queryForObject(
+        "select course_content_fingerprint(?)",String.class,newCourseId);
+    assertNotEquals(fingerprintAfterMetadataChange,fingerprintAfterContentChange,
+        "Material lesson-block changes must produce a new content fingerprint.");
+
 
     assertThrows(DataAccessException.class,() -> jdbc.update("""
       update lesson_block set content=content || '{"forbidden_mutation":true}'::jsonb where id=?
