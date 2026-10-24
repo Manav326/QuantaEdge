@@ -327,8 +327,10 @@ function QuestionSetView({items,activeQuestionId,attempt,responses,disabled,revi
 export default function TestsClient(){
   const router=useRouter();
   const searchParams=useSearchParams();
-  const rawCourseId=searchParams.get('courseId')||'';
-  const requestedCourseId=/^\d+$/.test(rawCourseId)&&Number(rawCourseId)>0?Number(rawCourseId):null;
+  const rawCourseId=(searchParams.get('courseId')||'').trim();
+  const requestedCourseId=rawCourseId
+    ? (/^\d+$/.test(rawCourseId)&&Number(rawCourseId)>0?Number(rawCourseId):rawCourseId)
+    : null;
   const {courses,activeCourse,courseId,selectCourse,loadingCourses,courseError}=useStudentCourseScope(requestedCourseId);
   const {locale, learningLanguage, certificateLanguage}=useLocale();
   const language=learningLanguage;
