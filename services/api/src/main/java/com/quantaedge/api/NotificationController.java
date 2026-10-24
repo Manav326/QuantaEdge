@@ -608,14 +608,21 @@ public class NotificationController {
       return new RichNotificationService.Actor("INSTITUTION_ADMIN",null,principal.adminId(),principal.institutionId());
     }
     context=authorization.requirePermission(context,permission);
-    InstitutionTenantContext tenant=educationAdminTenant(institutionCode);
-    // The separate Institution Admin portal is the multi-tenant institution sender. Education
-    // Admin remains bound to QuantaEdge until an explicit staff-to-institution grant exists.
-    if(!"QUANTA-EDGE".equals(tenant.tenantCode())) {
-      throw new SecurityException("Education Admin notifications are restricted to the QuantaEdge institution. Use that institution's authenticated Admin portal for other tenants.");
+    if(context.staffId()==null||!"EDUCATION_ADMIN".equals(AuthService.normalizeWorkspace(context.workspace()))) {
+      throw new SecurityException("An Education Admin staff session is required.");
+    }
+    Object resolved=request.getAttribute(InstitutionTenantContextService.REQUEST_ATTRIBUTE);
+    if(!(resolved instanceof InstitutionTenantContext tenant)) {
+      throw new SecurityException("The active institution must be resolved from the HRMS staff binding.");
+    }
+    // Re-check the binding at the notification boundary. The request header/query is never an
+    // institution identity: AuthFilter resolves it from the current staff account's HRMS assignment.
+    InstitutionTenantContext bound=tenantContexts.requireStaffInstitution(context.staffId());
+    if(bound.institutionId()!=tenant.institutionId()) {
+      throw new SecurityException("The Admin staff account is bound to a different institution.");
     }
     return new RichNotificationService.Actor(
-      "EDUCATION_ADMIN",context.staffId(),null,tenant.institutionId());
+      "EDUCATION_ADMIN",context.staffId(),null,bound.institutionId());
   }
 
   private Target target(HttpServletRequest request,RichNotificationService.Actor actor,Map<String,Object> body,String institutionCode) {
@@ -656,12 +663,6 @@ public class NotificationController {
     }
     if(raw==null) throw new IllegalArgumentException("Rich notification content is required.");
     return notifications.validateDocument(raw);
-  }
-
-  private InstitutionTenantContext educationAdminTenant(String suppliedCode) {
-    String configured=tenantContexts.selectTenantCode(suppliedCode);
-    if(configured==null||configured.isBlank()) configured="QUANTA-EDGE";
-    return tenantContexts.requireSelector(configured);
   }
 
   private InstitutionAuthService.InstitutionPrincipal institutionPrincipal(HttpServletRequest request) {
