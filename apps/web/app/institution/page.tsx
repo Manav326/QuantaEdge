@@ -479,6 +479,8 @@ export default function InstitutionPortalPage() {
                 setActiveView(id);
                 const params = new URLSearchParams(window.location.search);
                 params.delete('notifications');
+                if (id === 'courses') params.set('view', 'courses');
+                else params.delete('view');
                 const query = params.toString();
                 const hash = id === 'notificationInbox' ? '#notifications-inbox'
                   : id === 'notifications' ? '#notifications-studio' : '';
@@ -527,6 +529,7 @@ export default function InstitutionPortalPage() {
           ) : activeView === 'notifications' ? (
             <div className="institution-notifications"><NotificationStudio surface="institution" /></div>
           ) : (
+            <>
             <div className="institution-panel">
               <div className="institution-table-heading"><div><h2>Authorised courses</h2><p>Courses and lessons approved centrally for this institution.</p></div></div>
               <div className="institution-course-grid">
@@ -571,6 +574,7 @@ export default function InstitutionPortalPage() {
                 {!latestSourceReleases.length && !sourceReleaseError ? <p className="institution-empty-cell">No source-owned course releases are available yet. Courses must be created in Education Admin Content Studio first.</p> : null}
               </div>
             </div>
+            </>
           )}
         </section>
       )}
