@@ -222,10 +222,10 @@ export default function AssessmentCourseStudioPage() {
             <h2>1. Create assessment course</h2>
             <p>The current launch-ready assessment profile is TRE-4. The TRE4 class is an internal compatibility scope named “Competitive Exam Preparation”, not a school grade.</p>
             <label htmlFor="assessment-course-code">Course code</label>
-            <input id="assessment-course-code" value={code} onChange={e => setCode(e.target.value)} required minLength={2} maxLength={38} />
+            <input id="assessment-course-code" value={code} onChange={e => setCode(e.target.value)} required minLength={2} maxLength={38} readOnly />
             <label htmlFor="assessment-course-name">Course name</label>
-            <input id="assessment-course-name" value={displayName} onChange={e => setDisplayName(e.target.value)} required minLength={2} maxLength={200} />
-            <p>Course type: <strong>ASSESSMENT</strong> · Version: <strong>BPSC-TRE-4</strong> · Subject: <strong>Computer Science</strong> · Chapter: <strong>Prev years</strong></p>
+            <input id="assessment-course-name" value={displayName} onChange={e => setDisplayName(e.target.value)} required minLength={2} maxLength={200} readOnly />
+            <p>Course identity is fixed to the existing TRE-4 source-import contract. Course type: <strong>ASSESSMENT</strong> · Version: <strong>BPSC-TRE-4</strong> · Subject: <strong>Computer Science</strong> · Chapter: <strong>Prev years</strong></p>
             <button className="button button-primary" type="submit" disabled={creating}>{creating ? 'Creating draft…' : 'Create assessment course'}</button>
           </form>
         )}
