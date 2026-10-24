@@ -108,9 +108,17 @@ async function inspectApiResponse(response: Response) {
     notifyUser(explicit.message, explicit.tone);
   }
 }
-/** Central request/response path; the caller still receives the original Response. */
-export async function apiFetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
-  const isApi = isApiRequest(input);
+/** Central request/response path; the caller still receives the original Response.
+ * Use caller mode only when the caller intentionally handles expected auth probes or renders
+ * the failure inline. All other API requests retain global notification handling by default.
+ */
+export type ApiFetchOptions = { notificationMode?: 'global' | 'caller' };
+export async function apiFetch(
+  input: RequestInfo | URL,
+  init?: RequestInit,
+  options: ApiFetchOptions = {},
+): Promise<Response> {
+  const isApi = options.notificationMode !== 'caller' && isApiRequest(input);
   let response: Response;
   try { response = await fetch(input, init); }
   catch (error) {
