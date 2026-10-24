@@ -355,6 +355,27 @@ public class AssessmentController {
       where att.institution_id=? and att.status='RELEASED' and (? is null or a.id=?)
       group by 1 order by question_exposures desc,topic
       """,courseId,institutionId,assessmentId,assessmentId);
+    List<Map<String,Object>> secondaryTopicPerformance=jdbc.queryForList("""
+      select tags.tag as secondary_topic,
+        count(*) as question_exposures,
+        count(*) filter(where ans.is_correct=true) as correct_count,
+        count(*) filter(where ans.is_correct=false) as incorrect_count,
+        count(*) filter(where ans.response_payload is null or ans.response_payload in
+          ('null'::jsonb,'""'::jsonb,'[]'::jsonb,'{}'::jsonb)) as unanswered_count,
+        round(100.0*count(*) filter(where ans.is_correct=true)
+          /nullif(count(*) filter(where ans.is_correct is not null),0),2) as accuracy_percent
+      from student_assessment_attempt att
+      join assessment a on a.id=att.assessment_id and a.course_id=?
+      join student_assessment_attempt_question aq on aq.attempt_id=att.id
+      cross join lateral jsonb_array_elements_text(
+        case when jsonb_typeof(aq.question_snapshot->'subtopic_tags')='array'
+          then aq.question_snapshot->'subtopic_tags' else '[]'::jsonb end
+      ) tags(tag)
+      left join student_assessment_answer ans on ans.attempt_question_id=aq.id
+      where att.institution_id=? and att.status='RELEASED' and (? is null or a.id=?)
+        and btrim(tags.tag)<>''
+      group by tags.tag order by question_exposures desc,secondary_topic
+      """,courseId,institutionId,assessmentId,assessmentId);
     List<Map<String,Object>> difficultyPerformance=jdbc.queryForList("""
       select coalesce(aq.question_snapshot->>'difficulty','CORE') as difficulty,
         count(*) as question_exposures,
@@ -505,6 +526,7 @@ public class AssessmentController {
     result.put("assessments",tests);
     result.put("scoreBands",scoreBands);
     result.put("topicPerformance",topicPerformance);
+    result.put("secondaryTopicPerformance",secondaryTopicPerformance);
     result.put("difficultyPerformance",difficultyPerformance);
     result.put("questionTypePerformance",questionTypePerformance);
     result.put("sectionPerformance",sectionPerformance);
