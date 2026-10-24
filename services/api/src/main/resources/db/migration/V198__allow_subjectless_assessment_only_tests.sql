@@ -34,8 +34,8 @@ BEGIN
     END IF;
 
     IF NEW.subject_id IS NULL THEN
-      IF selected_course_type IS DISTINCT FROM 'ASSESSMENT' THEN
-        RAISE EXCEPTION 'A subjectless assessment requires an assessment-only course'
+      IF selected_course_type IS NULL OR selected_course_type NOT IN ('ASSESSMENT','COMPETITIVE') THEN
+        RAISE EXCEPTION 'A subjectless assessment requires an assessment-only or competitive course'
           USING ERRCODE = '23514';
       END IF;
     ELSE
