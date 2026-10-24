@@ -8,6 +8,8 @@ RUN --mount=type=cache,target=/root/.npm npm install --prefer-offline --no-audit
 FROM node:22-alpine AS build
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
+ARG NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN=""
+ENV NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN=${NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN}
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build
