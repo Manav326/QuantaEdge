@@ -58,6 +58,10 @@ public class CourseVersionService {
         throw conflict("This course has not entered the release workflow yet. Edit its existing draft instead of forking a version.");
       if(message.contains("COURSE_VERSION_DRAFT_EXISTS"))
         throw conflict("A draft version already exists for this course. Open that draft instead of creating another copy.");
+      if(message.contains("COURSE_VERSION_SOURCE_STALE"))
+        throw conflict("This source version has been superseded. Open the latest source version before creating a new draft.");
+      if(message.contains("COURSE_VERSION_SEQUENCE_INVALID"))
+        throw conflict("The new content version must be based on the latest source version.");
       if(message.contains("COURSE_VERSION_FORK_"))
         throw conflict("The course graph could not be copied safely: "+safeReason(message));
       throw ex;

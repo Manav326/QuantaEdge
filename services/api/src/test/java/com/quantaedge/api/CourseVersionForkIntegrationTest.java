@@ -111,6 +111,39 @@ class CourseVersionForkIntegrationTest {
       """,sourceBlockId),"Editing the released source graph must be blocked by immutability triggers.");
   }
 
+  @Test
+  @Transactional
+  void databaseRejectsForksBasedOnAnOlderVersionAfterANewerDraftExists() {
+    Long sourceInstitutionId = jdbc.queryForObject("""
+      select id from institution_tenant where tenant_code='QUANTA-EDGE' and status='ACTIVE'
+      """, Long.class);
+    Map<String,Object> source = jdbc.queryForMap("""
+      select p.id as course_id,p.content_version_no
+      from curriculum_program p
+      join institution_course_release r on r.program_id=p.id and r.source_institution_id=?
+      where p.code='CLASS_6' and p.status='ACTIVE'
+        and r.release_state in ('SHAREABLE','WITHDRAWN','LEGACY_MIGRATED')
+      order by r.release_version desc,p.id desc limit 1
+      """, sourceInstitutionId);
+    long sourceId=((Number)source.get("course_id")).longValue();
+    int oldVersion=((Number)source.get("content_version_no")).intValue();
+
+    versions.forkReleasedVersion(sourceId,sourceInstitutionId,null,null);
+
+    // Simulate an alternate caller trying to use the old source row after a newer draft has
+    // already been created. The database trigger must reject it independently of the service.
+    assertThrows(DataAccessException.class,() -> jdbc.update("""
+      insert into curriculum_program(
+        class_id,code,display_name,stream_code,curriculum_version,status,notes,public_id_prefix,
+        course_type_code,course_identity_id,content_version_no,supersedes_program_id
+      )
+      select class_id,left(code,40)||'_STALE_PROBE',display_name,stream_code,curriculum_version,
+        'ACTIVE',notes,public_id_prefix,course_type_code,course_identity_id,?,id
+      from curriculum_program where id=?
+      """,oldVersion+2,sourceId),
+      "A superseding version must reference the latest course version, not an older course graph.");
+  }
+
   private long count(String sql,Object... args) {
     Long value=jdbc.queryForObject(sql,Long.class,args);
     return value==null?0L:value;
