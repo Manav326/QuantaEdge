@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "02906c7c5466d619b0878343dcba2a12885d2b7e92f03d4afe0d8c6a11567e06",
+  "raw_analysis_sha256": "4eb6394737263337fde8c529b49948ed239d0efec849710fd3a4eb6e6295c2ed",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -116284,7 +116284,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40062006970",
+      "run_id": "40080945835",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -116304,7 +116304,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40062006970",
+      "run_id": "40080945835",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -116324,7 +116324,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40062006970",
+      "run_id": "40080945835",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -116400,21 +116400,65 @@
     {
       "asset_id": "49e694679ca469d2e29a2ff9",
       "asset_sha256": "20629b332d0c2806022f415fa52d65b56092c7d9b7287caa0682a227f5518804",
-      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 61,
       "asset_path": "assets/20629b332d0c2806022f415fa52d65b56092c7d9b7287caa0682a227f5518804.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An elderly craftsperson named Sudarshan discussing the types of items made by ironsmiths.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as flat pans (tawas),",
+          "The World of Metals",
+          "4      and Non-metals"
+        ],
+        "concepts": [
+          "craftspersons",
+          "ironsmiths",
+          "daily use items",
+          "flat pans (tawas)"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about craftspersons who work with metals and decide to visit ironsmiths to learn how they make items of daily use.",
+        "limitations": [
+          "The image does not show the ironsmiths making the items.",
+          "The image does not show the ironsmiths' tools or techniques."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40080945835",
+      "checkpointed_at": "2026-10-24T11:31:19Z",
+      "effective_analysis": {
+        "visual_summary": "An elderly craftsperson named Sudarshan discussing the types of items made by ironsmiths.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as flat pans (tawas),",
+          "The World of Metals",
+          "4      and Non-metals"
+        ],
+        "concepts": [
+          "craftspersons",
+          "ironsmiths",
+          "daily use items",
+          "flat pans (tawas)"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about craftspersons who work with metals and decide to visit ironsmiths to learn how they make items of daily use.",
+        "limitations": [
+          "The image does not show the ironsmiths making the items.",
+          "The image does not show the ironsmiths' tools or techniques."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -116428,7 +116472,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "40080945835",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
