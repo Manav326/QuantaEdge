@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1222,
+    "assets_selected": 1223,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
-      "7bceb11bef609f2404522955",
       "f492c50e9c7d7ef8d140ae06",
-      "d2bb3e6a771b57392e82c877"
+      "d55b4af2d39033d603cae25d",
+      "84884402e6386e5c30be2b35"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1218,
-    "assets_remaining": 1073,
+    "assets_analyzed": 1219,
+    "assets_remaining": 1072,
     "assets_completion_percent": 53.2,
     "assets_failed": 9,
-    "assets_skipped_from_checkpoint": 1217,
+    "assets_skipped_from_checkpoint": 1218,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40088318858",
-      "checkpointed_at": "2026-10-24T11:36:42Z"
+      "checkpointed_at": "2026-10-24T11:44:12Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40088318858",
-      "checkpointed_at": "2026-10-24T11:37:09Z"
+      "checkpointed_at": "2026-10-24T11:44:37Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38404,7 +38404,7 @@
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_type": "diagram",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -38418,19 +38418,18 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force",
-          "living beings"
+          "muscular force"
         ],
         "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The image does not provide specific details about the forces acting on the objects in the diagram."
+          "The image does not provide specific details about the types of forces or the physical properties of the objects."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40088318858",
-      "checkpointed_at": "2026-10-24T11:40:52Z"
+      "checkpointed_at": "2026-10-24T11:45:07Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -39051,7 +39050,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40080946926",
+      "run_id": "40088318858",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -39932,6 +39931,49 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40080946926",
       "checkpointed_at": "2026-10-24T10:35:38Z"
+    },
+    {
+      "asset_id": "84884402e6386e5c30be2b35",
+      "asset_sha256": "0d12349628b6194c43558eded6720c2350195494ebb312b000be0b8b379deab2",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 93,
+      "asset_path": "assets/0d12349628b6194c43558eded6720c2350195494ebb312b000be0b8b379deab2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "36e5f166a2e34a76c242f2d87ba73dfac71cb3ada4eb9f931e145d2e195df953",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two springs hanging from nails with stones attached to them, demonstrating the force exerted by the springs.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Take a spring and a few objects of different masses, such as a pencil box, a tiffin box, and a small stone.",
+          "Hang one end of the spring from a nail (Fig. 5.12a).",
+          "From the other end, hang an object and observe the spring (Fig. 5.12b).",
+          "Does the spring stretch?",
+          "Now hang the other objects, one by one and notice the stretch in the spring each time.",
+          "Is the stretch?",
+          "Chapter 5 — Exploring Forces",
+          "73"
+        ],
+        "concepts": [
+          "Spring force",
+          "Mass",
+          "Observation",
+          "Stretching",
+          "Comparison"
+        ],
+        "context_relation": "The image is a visual representation of an educational activity to explore the force exerted by springs on different objects.",
+        "limitations": [
+          "The image does not show the actual stretching of the springs or the objects."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40088318858",
+      "checkpointed_at": "2026-10-24T11:48:21Z"
     }
   ]
 }
