@@ -29,6 +29,17 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("institution_course_identity", importer)
         self.assertIn("EXPECTED_QUESTIONS = {\"TRE 1.0\": 120, \"TRE 2.0\": 150, \"TRE 3.0\": 150}", importer)
 
+    def test_learner_catalogue_exposes_renderer_contract(self):
+        controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/StudentProgramController.java").read_text(encoding="utf-8")
+        web_courses = (ROOT / "apps/web/app/student/courses/page.tsx").read_text(encoding="utf-8")
+        web_tests = (ROOT / "apps/web/app/student/tests/TestsClient.tsx").read_text(encoding="utf-8")
+        self.assertIn("p.course_type_code", controller)
+        self.assertIn("as delivery_mode", controller)
+        self.assertIn("as layout_schema_version", controller)
+        self.assertIn("'/student/tests?courseId='", web_courses)
+        self.assertIn("useStudentCourseScope(requestedCourseId)", web_tests)
+        self.assertIn("const rawCourseId=(searchParams.get('courseId')||'').trim()", web_tests)
+
     def test_portable_package_preserves_analytics_dimensions(self):
         schema = (ROOT / "schemas/portable-assessment-package.schema.json").read_text(encoding="utf-8")
         for field in ('"topic_tags"', '"secondary_topic_tags"', '"difficulty"', '"section_code"', '"source_location"', '"question_type"'):
