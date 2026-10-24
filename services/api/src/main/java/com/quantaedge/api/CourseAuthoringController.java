@@ -71,6 +71,20 @@ public class CourseAuthoringController {
     return Map.of("courseTypes",types,"institutionId",tenant.institutionId());
   }
 
+  @GetMapping("/class-options")
+  public java.util.List<java.util.Map<String,Object>> classOptions(
+      @RequestAttribute(value="authContext",required=false) AuthContext supplied,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    requireEducationStaff(supplied,tenant,"CONTENT_CREATE");
+    return jdbc.queryForList("""
+      select code,display_name
+      from curriculum_class
+      where active=true
+      order by sort_order,code
+      """);
+  }
+
   @PostMapping("/course-packages/validate")
   public Map<String,Object> validateCoursePackage(
       @RequestBody Map<String,Object> body,
