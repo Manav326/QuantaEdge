@@ -800,7 +800,7 @@ export default function MarketplaceLaunchStepper({
                         placeholder={assessmentOnly ? 'Record question inventory, source fidelity, answer review, section scoring and release fingerprint checks…' : 'Record what was checked: syllabus coverage, published lessons, content integrity…'} />
                     </label>
                     <div className={styles.qualityActions}>
-                      <button type="button" className={styles.primaryButton} disabled={busyKey !== null || !qualityReady || (reviewNotes[release.release_id] || '').trim().length < 3}
+                      <button type="button" className={styles.primaryButton} disabled={busyKey !== null || !qualityReady || (assessmentOnly && (!preview || !preview.contentCurrent || preview.content_fingerprint !== release.content_fingerprint)) || (reviewNotes[release.release_id] || '').trim().length < 3}
                         onClick={() => void reviewQuality(release, true)}>
                         {busyKey === 'quality-' + release.release_id ? 'Saving decision…' : 'Approve quality'}
                       </button>
