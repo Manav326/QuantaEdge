@@ -12,7 +12,7 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("/api/v1/admin/content/courses", page)
         self.assertIn("/api/v1/admin/assessments/validate-package", page)
         self.assertIn("/api/v1/admin/assessments/import-package", page)
-        self.assertIn("student-delivery", page.lower())
+        self.assertIn("student delivery", page.lower())
 
     def test_assessment_course_creation_is_type_specific_and_tenant_owned(self):
         service = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseAuthoringService.java").read_text(encoding="utf-8")
