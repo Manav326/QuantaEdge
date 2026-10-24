@@ -42,6 +42,107 @@ public class CourseMarketplaceLaunchController {
     this.mapper = mapper;
   }
 
+  /**
+   * Read-only HRMS preview of the exact release currently in quality review. Assessment
+   * questions and answer-review metadata are read from the release's course graph; the source's
+   * latest draft is never substituted for the submitted release.
+   */
+  @GetMapping("/{institutionId}/course-releases/{releaseId}/review-content")
+  public Map<String,Object> reviewReleaseContent(
+      @PathVariable long institutionId,
+      @PathVariable long releaseId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    authorization.requirePermission(context,"QE_PLATFORM_OWNER");
+    assertInstitution(institutionId);
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+        select r.id as release_id,r.program_id as course_id,r.release_version,r.release_state,
+          r.content_fingerprint,r.submitted_at,p.code as course_code,p.display_name as course_name,
+          p.course_type_code,t.id as source_institution_id,t.tenant_code as source_institution_code,
+          t.display_name as source_institution_name,
+          coalesce((select mode.delivery_mode from curriculum_program_delivery_mode mode where mode.program_id=p.id),
+                   'LEARNING_CONTENT') as delivery_mode
+        from institution_course_release r
+        join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        join institution_tenant t on t.id=r.source_institution_id and t.status='ACTIVE'
+        where r.id=? and r.source_institution_id=? and r.release_state='IN_QUALITY_REVIEW'
+        """,releaseId,institutionId);
+    if(rows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+        "The submitted course release is not available in this institution's HRMS quality-review queue.");
+    Map<String,Object> result=new LinkedHashMap<>(rows.getFirst());
+    long courseId=number(result.get("course_id"));
+    String savedFingerprint=text(result.get("content_fingerprint"));
+    String currentFingerprint=jdbc.queryForObject(
+        "select course_content_fingerprint(?)",String.class,courseId);
+    boolean contentCurrent=savedFingerprint.equals(currentFingerprint==null?"":currentFingerprint.trim());
+    result.put("contentCurrent",contentCurrent);
+    result.put("currentFingerprint",currentFingerprint==null?"":currentFingerprint.trim());
+    result.put("assessmentOnlyReady",Boolean.TRUE.equals(
+        jdbc.queryForObject("select assessment_only_course_ready(?)",Boolean.class,courseId)));
+
+    List<Map<String,Object>> subjects=jdbc.queryForList("""
+        select s.id,s.code,s.display_name,s.sort_order
+        from curriculum_program_subject ps
+        join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id
+          and s.active=true and (s.program_id=ps.program_id or s.program_id is null)
+        where ps.program_id=? order by ps.sort_order,s.sort_order,s.id
+        """,courseId);
+    for(Map<String,Object> subject:subjects) {
+      long subjectId=number(subject.get("id"));
+      List<Map<String,Object>> chapters=jdbc.queryForList("""
+          select id,code,display_name,description,sort_order,content_status
+          from curriculum_chapter where subject_id=? and active=true
+          order by sort_order,id
+          """,subjectId);
+      subject.put("chapters",chapters);
+    }
+    result.put("subjects",subjects);
+
+    List<Map<String,Object>> assessments=jdbc.queryForList("""
+        select a.id as assessment_id,a.title,a.description,a.assessment_type,a.portable_assessment_type,
+          a.source_exam_cycle,a.source_package_id,a.source_package_version,a.source_package_sha256,
+          a.source_url,a.status,a.duration_minutes,a.max_attempts,a.negative_marking_fraction,
+          s.code as subject_code,s.display_name as subject_name,
+          ch.code as chapter_code,ch.display_name as chapter_name,
+          count(aq.id) as question_count,
+          coalesce(sum(case
+            when coalesce(aq.question_snapshot->>'section_result_policy','SCORED') in ('QUALIFYING_ONLY','PRACTICE_ONLY')
+              or coalesce(aq.question_snapshot->>'section_code','')='LANGUAGE_QUALIFYING' then 0
+            else aq.max_marks end),0) as max_score
+        from assessment a
+        left join curriculum_subject s on s.id=a.subject_id
+        left join curriculum_chapter ch on ch.id=a.chapter_id
+        left join assessment_question aq on aq.assessment_id=a.id
+        where a.course_id=?
+        group by a.id,s.code,s.display_name,ch.code,ch.display_name
+        order by coalesce(a.source_exam_cycle,a.title),a.id
+        """,courseId);
+    int totalQuestions=0;
+    for(Map<String,Object> assessment:assessments) {
+      long assessmentId=number(assessment.get("assessment_id"));
+      List<Map<String,Object>> questions=jdbc.queryForList("""
+          select sequence_no,max_marks,question_snapshot::text as question_snapshot
+          from assessment_question where assessment_id=? order by sequence_no,id
+          """,assessmentId);
+      for(Map<String,Object> question:questions) {
+        try {
+          question.put("question_snapshot",mapper.readValue(
+              String.valueOf(question.get("question_snapshot")),Map.class));
+        } catch(JsonProcessingException ex) {
+          throw new IllegalStateException("A submitted assessment question snapshot could not be read.",ex);
+        }
+      }
+      assessment.put("questions",questions);
+      assessment.put("questionCount",questions.size());
+      totalQuestions+=questions.size();
+    }
+    result.put("assessments",assessments);
+    result.put("assessmentCount",assessments.size());
+    result.put("questionCount",totalQuestions);
+    result.put("readOnly",true);
+    result.put("publicationAllowed",false);
+    return result;
+  }
+
   @GetMapping("/{institutionId}/marketplace-launches")
   public Map<String,Object> marketplaceLaunches(
       @PathVariable long institutionId,
@@ -80,6 +181,12 @@ public class CourseMarketplaceLaunchController {
     List<Map<String,Object>> qualityReviewItems=jdbc.queryForList("""
         select r.id as release_id,r.program_id as course_id,r.release_version,r.release_state,
           r.content_fingerprint,r.submitted_at,p.code as course_code,p.display_name as course_name,
+          p.course_type_code,
+          coalesce((select mode.delivery_mode from curriculum_program_delivery_mode mode where mode.program_id=p.id),
+                   'LEARNING_CONTENT') as delivery_mode,
+          assessment_only_course_ready(p.id) as assessment_only_ready,
+          (select count(*) from assessment a where a.course_id=p.id) as assessment_count,
+          (select count(*) from assessment_question aq join assessment a on a.id=aq.assessment_id where a.course_id=p.id) as assessment_question_count,
           t.id as source_institution_id,t.tenant_code as source_institution_code,
           t.display_name as source_institution_name,
           count(distinct s.id) as active_subject_count,
@@ -95,7 +202,7 @@ public class CourseMarketplaceLaunchController {
         left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
         where r.source_institution_id=? and r.release_state='IN_QUALITY_REVIEW'
         group by r.id,r.program_id,r.release_version,r.release_state,r.content_fingerprint,r.submitted_at,
-          p.code,p.display_name,t.id,t.tenant_code,t.display_name
+          p.code,p.display_name,p.course_type_code,t.id,t.tenant_code,t.display_name
         order by r.submitted_at,r.id
         """,institutionId);
     for(Map<String,Object> release:qualityReviewItems) {
