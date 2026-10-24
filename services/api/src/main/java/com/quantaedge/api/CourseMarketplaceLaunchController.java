@@ -92,6 +92,12 @@ public class CourseMarketplaceLaunchController {
     result.put("currentFingerprint",currentFingerprint==null?"":currentFingerprint.trim());
     result.put("assessmentOnlyReady",Boolean.TRUE.equals(
         jdbc.queryForObject("select assessment_only_course_ready(?)",Boolean.class,courseId)));
+    result.put("courseTranslations",jdbc.queryForList("""
+        select language,display_name,source_language,source_hash,version_no,
+               translation_status,translation_method,quality_notes
+        from curriculum_program_translation where program_id=?
+        order by language,version_no desc,id desc
+        """,courseId));
 
     List<Map<String,Object>> subjects=jdbc.queryForList("""
         select s.id,s.code,s.display_name,s.sort_order
@@ -103,6 +109,12 @@ public class CourseMarketplaceLaunchController {
     int lessonCount=0,lessonBlockCount=0,lessonQuestionCount=0,courseResourceCount=0;
     for(Map<String,Object> subject:subjects) {
       long subjectId=number(subject.get("id"));
+      subject.put("translations",jdbc.queryForList("""
+          select language,display_name,source_language,source_hash,version_no,
+                 translation_status,translation_method,quality_notes
+          from curriculum_subject_translation where subject_id=?
+          order by language,version_no desc,id desc
+          """,subjectId));
       List<Map<String,Object>> chapters=jdbc.queryForList("""
           select ch.id,ch.code,ch.display_name,ch.description,ch.sort_order,ch.content_status,
                  ch.curriculum_source,ch.curriculum_source_url,ch.curriculum_source_edition,
@@ -116,6 +128,12 @@ public class CourseMarketplaceLaunchController {
           """,subjectId);
       for(Map<String,Object> chapter:chapters) {
         long chapterIdValue=number(chapter.get("id"));
+        chapter.put("translations",jdbc.queryForList("""
+            select language,display_name,description,source_language,source_hash,version_no,
+                   translation_status,translation_method,quality_notes
+            from curriculum_chapter_translation where chapter_id=?
+            order by language,version_no desc,id desc
+            """,chapterIdValue));
         lessonCount+=number(chapter.get("lesson_count"));
         lessonBlockCount+=number(chapter.get("lesson_block_count"));
         lessonQuestionCount+=number(chapter.get("lesson_question_count"));
@@ -148,6 +166,16 @@ public class CourseMarketplaceLaunchController {
               from lesson_translation where lesson_id=?
               order by language,version_no desc,id desc
               """,lessonId));
+          if(lesson.get("objective_id")!=null) {
+            lesson.put("objectiveTranslations",jdbc.queryForList("""
+                select language,title,description,source_language,source_hash,version_no,
+                       translation_status,translation_method,quality_notes
+                from learning_objective_translation where objective_id=?
+                order by language,version_no desc,id desc
+                """,number(lesson.get("objective_id"))));
+          } else {
+            lesson.put("objectiveTranslations",List.of());
+          }
           List<Map<String,Object>> blocks=jdbc.queryForList("""
               select b.id,b.sequence_no,b.block_type,b.content::text as content_json,b.asset_id,
                      a.url as asset_url,a.title as asset_title,a.alt_text as asset_alt,
