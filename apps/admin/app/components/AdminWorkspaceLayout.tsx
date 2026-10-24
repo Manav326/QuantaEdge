@@ -124,7 +124,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
       // Prefer an actual staff session. Institution principals use a distinct cookie and are
       // discovered only when no valid Education Admin identity exists.
       try {
-        const staffResponse = await fetch('/api/v1/auth/me', { cache: 'no-store', credentials: 'same-origin' });
+        const staffResponse = await apiFetch('/api/v1/auth/me', { cache: 'no-store', credentials: 'same-origin' }, { notificationMode: 'caller' });
         const staffMe = staffResponse.ok ? await staffResponse.json().catch(() => null) : null;
         if (staffMe && Number(staffMe.staffId) > 0) {
           if (alive) {
@@ -136,11 +136,11 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
       } catch { /* Try the separate institution principal next. */ }
 
       try {
-        const institutionResponse = await fetch('/api/v1/institution/auth/me', {
+        const institutionResponse = await apiFetch('/api/v1/institution/auth/me', {
           cache: 'no-store',
           credentials: 'same-origin',
           headers: { Accept: 'application/json', 'X-QE-Workspace': 'INSTITUTION' },
-        });
+        }, { notificationMode: 'caller' });
         const institutionMe = institutionResponse.ok ? await institutionResponse.json().catch(() => null) : null;
         if (alive) {
           if (institutionMe?.authenticated === true && Number(institutionMe.institutionId) > 0 && institutionMe.institutionCode) {
@@ -331,12 +331,12 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
     setMobileMenuOpen(false);
     try {
       if (institutionAdminSession) {
-        await fetch('/api/v1/institution/auth/logout', {
+        await apiFetch('/api/v1/institution/auth/logout', {
           method: 'POST',
           credentials: 'same-origin',
           cache: 'no-store',
           headers: { Accept: 'application/json', 'X-QE-Workspace': 'INSTITUTION' },
-        });
+        }, { notificationMode: 'caller' });
       } else {
         await apiFetch('/api/v1/auth/logout', { method: 'POST', credentials: 'same-origin' });
       }
