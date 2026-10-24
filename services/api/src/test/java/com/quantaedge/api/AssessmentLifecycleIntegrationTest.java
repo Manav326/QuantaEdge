@@ -139,6 +139,43 @@ class AssessmentLifecycleIntegrationTest {
   }
 
   @Test
+  @SuppressWarnings("unchecked")
+  void courseAnalyticsUsesReleasedAttemptsAndExecutesAgainstTheMigratedSchema() {
+    Fixture fixture=fixture("COMPLETED");
+    Map<String,Object> started=controller.startOrResumeAttempt(
+        fixture.assessmentId(),fixture.courseId(),"hi",false,fixture.student(),fixture.tenant());
+    long attemptId=((Number)started.get("attempt_id")).longValue();
+    long attemptQuestionId=jdbc.queryForObject("""
+      select id from student_assessment_attempt_question where attempt_id=?
+      """,Long.class,attemptId);
+    controller.saveAnswer(attemptId,attemptQuestionId,fixture.courseId(),
+        Map.of("answer","B"),fixture.student(),fixture.tenant());
+    Map<String,Object> submitted=controller.submitAttempt(attemptId,fixture.courseId(),
+        Map.of(),fixture.student(),fixture.tenant());
+    assertEquals("RELEASED",submitted.get("status"));
+
+    AuthContext reviewer=new AuthContext(101L,null,99L,"ADMIN","Assessment analytics reviewer");
+    Map<String,Object> analytics=controller.courseAssessmentAnalytics(
+        fixture.courseId(),null,reviewer,fixture.tenant());
+    Map<String,Object> summary=(Map<String,Object>)analytics.get("summary");
+    assertEquals(1L,((Number)summary.get("assessment_count")).longValue());
+    assertEquals(1L,((Number)summary.get("attempt_count")).longValue());
+    assertEquals(1L,((Number)summary.get("released_attempt_count")).longValue());
+    assertEquals(1L,((Number)summary.get("learner_count")).longValue());
+    assertTrue(new BigDecimal(String.valueOf(summary.get("average_released_score_percent")))
+        .compareTo(new BigDecimal("100"))==0);
+    assertEquals("RELEASED_ATTEMPTS_ONLY",
+        ((Map<String,Object>)analytics.get("dataPolicy")).get("scoreAnalyticsStatus"));
+    assertFalse(analytics.containsKey("student_id"));
+    List<Map<String,Object>> questions=(List<Map<String,Object>>)analytics.get("questionPerformance");
+    assertEquals(1,questions.size());
+    assertEquals(1L,((Number)questions.getFirst().get("exposures")).longValue());
+    assertEquals("Which option is correct?",questions.getFirst().get("prompt"));
+    List<Map<String,Object>> selections=(List<Map<String,Object>>)analytics.get("optionSelections");
+    assertTrue(selections.stream().anyMatch(row -> "B".equals(String.valueOf(row.get("selected_value")))));
+  }
+
+  @Test
   void offlineAttemptCannotStartUnlessEditorExplicitlyEnabledIt() {
     Fixture fixture=fixture("COMPLETED");
     ResponseStatusException error=assertThrows(ResponseStatusException.class,
