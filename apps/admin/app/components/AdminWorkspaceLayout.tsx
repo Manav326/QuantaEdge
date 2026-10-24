@@ -243,6 +243,20 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
   }, [publicRoute, session, institutionAdminSession, institutionRetryVersion]);
 
   useEffect(() => {
+    if (!institutionAdminSession) return;
+    const mustChange = Boolean(institutionAdminSession.mustChangePassword);
+    if (mustChange && pathname !== '/institution-change-password') {
+      router.replace('/institution-change-password');
+      return;
+    }
+    if (!mustChange) {
+      const allowedRoutes = ['/institution-operations', '/notifications', '/institution-change-password'];
+      const allowed = allowedRoutes.some(route => pathname === route || pathname.startsWith(route + '/'));
+      if (!allowed) router.replace('/institution-operations');
+    }
+  }, [institutionAdminSession, pathname, router]);
+
+  useEffect(() => {
     setMobileMenuOpen(false);
   }, [pathname]);
 
