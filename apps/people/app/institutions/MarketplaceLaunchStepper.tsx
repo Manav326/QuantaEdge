@@ -102,12 +102,12 @@ type LaunchResponse = {
   coursePackageImportCount?: number;
   trustedCoursePolicies?: TrustedCoursePolicy[];
 };
-type Draft = { title: string; description: string; priceRupees: string };
+type Draft = { title: string; description: string; priceRupees: string; acknowledgeTrustedUpdateBlock: boolean; trustedUpdateReviewNote: string };
 
 const GROUPS = [
   { key: 'course', number: '01', title: 'Course content, rights & quality', subtitle: 'The course is active, imported source rights are cleared where applicable, mapped subjects have published learning content, and HRMS quality review is complete.', codes: ['INSTITUTION_ACTIVE', 'COURSE_ACTIVE', 'CONTENT_QUALITY_REVIEW', 'CONTENT_REVIEW_CURRENT', 'PUBLISHED_LEARNING_CONTENT', 'SOURCE_RIGHTS_CLEARANCE'] },
   { key: 'release', number: '02', title: 'Origin approval & assignment', subtitle: 'The source institution approves the reviewed release, then HRMS assigns that exact shareable release to this institution.', codes: ['ORIGIN_RELEASE_APPROVAL', 'ASSIGNMENT_AND_RELEASE'] },
-  { key: 'offer', number: '03', title: 'Listing details', subtitle: 'Set the student-facing title, description, currency and explicit price.', codes: ['OFFER_TERMS'] },
+  { key: 'offer', number: '03', title: 'Listing details & trusted-update continuity', subtitle: 'Set the student-facing title, description, currency and explicit price. Any inherited finance or discount exception needs an auditable HRMS review.', codes: ['OFFER_TERMS', 'TRUSTED_UPDATE_COMMERCIAL_CONTINUITY'] },
   { key: 'payment', number: '04', title: 'Payment setup', subtitle: 'Paid courses require working Razorpay credentials and the signed course-payment webhook.', codes: ['RAZORPAY_CREDENTIALS', 'RAZORPAY_WEBHOOK'] },
   { key: 'seller', number: '05', title: 'Seller & tax', subtitle: 'Approve the seller and tax treatment, GST registration where required, and e-invoice applicability.', codes: ['APPROVED_TAX_PROFILE', 'EINVOICE_REVIEW', 'TAX_CALCULATION', 'GST_REGISTRATION'] },
   { key: 'invoice', number: '06', title: 'Invoice & revenue share', subtitle: 'Publish an invoice template; confirm effective shares fit the after-tax pool, including approved discounts.', codes: ['PUBLISHED_INVOICE_TEMPLATE', 'REVENUE_SHARE_POLICY', 'SHARE_POOL_VALIDATION', 'DISCOUNT_POOL_COMPATIBILITY'] },
@@ -138,6 +138,8 @@ function initialDraft(item: LaunchItem): Draft {
     title: item.listingTitle || item.courseName || '',
     description: item.description || '',
     priceRupees: item.pricePaise === null || item.pricePaise === undefined ? '' : (item.pricePaise / 100).toFixed(2).replace(/\.00$/, ''),
+    acknowledgeTrustedUpdateBlock: false,
+    trustedUpdateReviewNote: '',
   };
 }
 
@@ -376,9 +378,11 @@ export default function MarketplaceLaunchStepper({
           description: draft.description.trim(),
           pricePaise,
           currency: 'INR',
+          acknowledgeTrustedUpdateBlock: draft.acknowledgeTrustedUpdateBlock,
+          trustedUpdateReviewNote: draft.trustedUpdateReviewNote.trim(),
         }),
       });
-      setNotice(item.offerId ? 'Draft listing saved. Re-run the checklist before resubmitting.' : 'Draft listing created. Continue through the launch checklist.');
+      setNotice(draft.acknowledgeTrustedUpdateBlock ? 'Draft listing and trusted-update finance/discount review saved. Re-run the launch checklist.' : item.offerId ? 'Draft listing saved. Re-run the checklist before resubmitting.' : 'Draft listing created. Continue through the launch checklist.');
       await load();
     } catch (e) {
       setError(e instanceof Error ? e.message : 'The course listing draft could not be saved.');
@@ -749,6 +753,7 @@ export default function MarketplaceLaunchStepper({
             const status = String(item.offerStatus || 'NOT_CONFIGURED').toUpperCase();
             const meter = progress(item);
             const blocker = nextBlocker(item);
+            const continuityCheck = item.checks.find(check => check.code === 'TRUSTED_UPDATE_COMMERCIAL_CONTINUITY');
             const editing = !item.offerId || ['DRAFT', 'REJECTED', 'ARCHIVED'].includes(status);
             const canSubmit = Boolean(item.offerId) && item.ready && ['DRAFT', 'REJECTED'].includes(status);
             const canApprove = Boolean(item.offerId) && item.ready && status === 'IN_REVIEW';
@@ -816,8 +821,24 @@ export default function MarketplaceLaunchStepper({
                               <label>Student-facing title<input value={draft.title} maxLength={200} onChange={event => updateDraft(item.assignmentId, { title: event.target.value })} /></label>
                               <label>Price in INR<input type="number" min="0" step="0.01" inputMode="decimal" placeholder="Enter price" value={draft.priceRupees} onChange={event => updateDraft(item.assignmentId, { priceRupees: event.target.value })} /><small>Set ₹0.00 only for a deliberately free course. Currency is locked to INR.</small></label>
                               <label className={styles.descriptionField}>Marketplace description<textarea rows={3} maxLength={5000} value={draft.description} onChange={event => updateDraft(item.assignmentId, { description: event.target.value })} placeholder="Describe the course for prospective learners." /></label>
+                              {continuityCheck && !continuityCheck.passed && (
+                                <div className={styles.rightsPanel}>
+                                  <strong>Trusted update · commercial continuity review</strong>
+                                  <p>{continuityCheck.message}</p>
+                                  <label className={styles.rightsCopy}>
+                                    <span><input type="checkbox" checked={draft.acknowledgeTrustedUpdateBlock}
+                                      onChange={event => updateDraft(item.assignmentId, { acknowledgeTrustedUpdateBlock: event.target.checked })} />
+                                      I reviewed the previous offer's discount/finance constraints and configured or resolved the new-version terms in HRMS Finance.</span>
+                                  </label>
+                                  <label className={styles.reviewNote}>Review note (required)
+                                    <textarea rows={2} maxLength={1000} value={draft.trustedUpdateReviewNote}
+                                      onChange={event => updateDraft(item.assignmentId, { trustedUpdateReviewNote: event.target.value })}
+                                      placeholder="Record the finance or redemption-continuity decision for this version." />
+                                  </label>
+                                </div>
+                              )}
                               <div className={styles.formActions}>
-                                <button type="button" className={styles.primaryButton} disabled={busyKey !== null || !item.checks.filter(check => ['INSTITUTION_ACTIVE', 'COURSE_ACTIVE', 'CONTENT_QUALITY_REVIEW', 'CONTENT_REVIEW_CURRENT', 'PUBLISHED_LEARNING_CONTENT', 'ORIGIN_RELEASE_APPROVAL', 'ASSIGNMENT_AND_RELEASE'].includes(check.code)).every(check => check.passed)} onClick={() => void saveDraft(item)}>
+                                <button type="button" className={styles.primaryButton} disabled={busyKey !== null || !item.checks.filter(check => ['INSTITUTION_ACTIVE', 'COURSE_ACTIVE', 'CONTENT_QUALITY_REVIEW', 'CONTENT_REVIEW_CURRENT', 'PUBLISHED_LEARNING_CONTENT', 'ORIGIN_RELEASE_APPROVAL', 'ASSIGNMENT_AND_RELEASE'].includes(check.code)).every(check => check.passed) || Boolean(continuityCheck && !continuityCheck.passed && (!draft.acknowledgeTrustedUpdateBlock || draft.trustedUpdateReviewNote.trim().length < 5))} onClick={() => void saveDraft(item)}>
                                   {busyKey === 'save-' + item.assignmentId ? 'Saving draft…' : item.offerId ? 'Save draft terms' : 'Create draft offer'}
                                 </button>
                                 <span>Saving a draft never publishes it.</span>
