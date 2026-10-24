@@ -19,5 +19,5 @@ WHERE s.role='ADMIN' AND s.active=true AND s.education_access_configured=true
 ON CONFLICT(staff_id,workspace_key,permission_key) DO NOTHING;
 
 INSERT INTO app_metadata(key,value)
-VALUES ('schema','institution-operations-permissions-v190')
+VALUES ('schema','institution-operations-permissions-v193')
 ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value;

@@ -3999,18 +3999,5 @@
   "admin.institutionOperations.redirectTitle": "Institution administration ab Admin mein hai",
   "admin.institutionOperations.redirectDescription": "Institution management, learner reports, roster, course releases aur source approval ab Education Admin workspace mein hote hain. Learner website learning content explore aur consume karne ke liye hai.",
   "admin.institutionOperations.openAdmin": "Admin mein Institution kholen",
-  "admin.institutionOperations.adminOriginMissing": "Is deployment ke liye Admin application ka address configure nahi hai. Education Admin application seedha kholen ya platform owner se NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN configure karne ko kahein.",
-  "admin.institutionOperations.invitations": "Learner invitations",
-  "admin.institutionOperations.invitationsDescription": "Enrolled learners ke saath school-branded join link share karein. Join code issue aur rotate karne ka control HRMS ke paas rahega.",
-  "admin.institutionOperations.joinCode": "Current learner join code",
-  "admin.institutionOperations.noActiveJoinCode": "Is institution ke liye koi active learner join code nahi hai. Active billing contract ke baad HRMS platform owner se code issue karwayein.",
-  "admin.institutionOperations.copySchoolLink": "School learning link copy karein",
-  "admin.institutionOperations.copyJoinCode": "Sirf code copy karein",
-  "admin.institutionOperations.linkCopied": "School learning link copy ho gaya.",
-  "admin.institutionOperations.codeCopied": "Learner join code copy ho gaya.",
-  "admin.institutionOperations.invitationLoadFailed": "Learner invitation details load nahi ho sakin.",
-  "admin.institutionOperations.invitationAccessMissing": "Learner join code dekhne ya share karne ke liye institution invitation permission chahiye.",
-  "admin.institutionOperations.learnerOriginMissing": "Learner website ka address configure nahi hai. Safe school links ke liye NEXT_PUBLIC_LEARNER_APP_ORIGIN set karein.",
-  "admin.institutionOperations.invitationSecretNote": "Join code private hai. Link mein code URL fragment mein rehta hai aur current code sirf authorised staff dekh sakte hain.",
-  "admin.institutionOperations.refreshInvitation": "Invitation refresh karein"
+  "admin.institutionOperations.adminOriginMissing": "Is deployment ke liye Admin application ka address configure nahi hai. Education Admin application seedha kholen ya platform owner se NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN configure karne ko kahein."
 }

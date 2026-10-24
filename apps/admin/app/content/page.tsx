@@ -317,8 +317,8 @@ function LearnerBlock({block,language='hi'}:{block:ContentBlock;language?:'hi'|'
 }
 export default function ContentStudio(){
  const t=useUiTranslation();
- const {permissions}=useContext(AdminWorkspaceContext);
- const canCreateCourse=permissions.includes('CONTENT_CREATE')&&permissions.includes('CONTENT_EDIT');
+ const {permissions:workspacePermissions}=useContext(AdminWorkspaceContext);
+ const canCreateCourse=workspacePermissions.includes('CONTENT_CREATE')&&workspacePermissions.includes('CONTENT_EDIT');
  function statusLabel(value:string|null|undefined){
   const code=String(value||'DRAFT').toUpperCase();
   const keys:Record<string,string>={PUBLISHED:'admin.contentStudio.statusPublished',DRAFT:'admin.contentStudio.statusDraft',REVIEW:'admin.contentStudio.statusReview',ARCHIVED:'admin.contentStudio.statusArchived'};

@@ -41,5 +41,5 @@ CREATE INDEX idx_institution_course_release_origin_approved_staff
   WHERE origin_approved_by_staff_id IS NOT NULL;
 
 INSERT INTO app_metadata(key,value)
-VALUES ('schema','admin-institution-release-workflow-v189')
+VALUES ('schema','admin-institution-release-workflow-v192')
 ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value;
