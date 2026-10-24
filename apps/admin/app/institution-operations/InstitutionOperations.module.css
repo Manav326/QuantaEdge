@@ -64,3 +64,13 @@
 @media(max-width:700px){.metrics,.quickLinks,.courseGrid,.releaseGrid{grid-template-columns:1fr}.panel{padding:14px}.panelHeader{flex-direction:column}.searchRow{flex-direction:column}.steps{grid-template-columns:1fr}.headerActions{width:100%}}
 
 .focused{border-color:var(--admin-primary);box-shadow:0 0 0 2px color-mix(in srgb,var(--admin-primary) 18%,transparent)}
+
+.invitationCard{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border:1px solid var(--admin-border);border-radius:14px;padding:16px;background:var(--admin-background)}
+.invitationCode{display:grid;gap:6px;min-width:180px}
+.invitationCode>span{font-size:12px;color:var(--admin-muted);font-weight:650}
+.invitationCode code{font-size:21px;font-weight:800;letter-spacing:.08em;color:var(--admin-text);overflow-wrap:anywhere}
+.invitationCode small{font-size:11px;color:var(--admin-muted)}
+.invitationActions{display:flex;gap:8px;flex-wrap:wrap}
+.invitationActions button{border:1px solid var(--admin-primary);border-radius:10px;padding:10px 13px;background:var(--admin-primary);color:var(--admin-on-primary,#fff);font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.invitationActions button:disabled{opacity:.5;cursor:not-allowed}
+.invitationActions .secondaryButton{background:var(--admin-surface);color:var(--admin-text);border-color:var(--admin-border)}
