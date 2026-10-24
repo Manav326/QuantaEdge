@@ -4,7 +4,8 @@ import Link from 'next/link';
 import AdminSidebar from '../components/AdminSidebar';
 import PremiumPagination from '../components/PremiumPagination';
 import { useUiTranslation } from '../i18n/useUiTranslation';
-import {useEffect,useMemo,useRef,useState} from 'react';
+import {useContext,useEffect,useMemo,useRef,useState} from 'react';
+import { AdminWorkspaceContext } from '../components/AdminWorkspaceContext';
 
 type Row={class_code:string;class_name:string;program_code?:string|null;program_name?:string|null;subject_code:string;subject_name:string;chapter_id:number|null;chapter_code:string|null;chapter_name:string|null;chapter_description:string|null;chapter_sort_order:number|null;chapter_status:string|null;chapter_active:boolean|null;curriculum_source?:string|null;curriculum_source_url?:string|null;curriculum_source_edition?:string|null;curriculum_source_pages?:string|null;curriculum_source_verified?:boolean;lesson_id:number|null;lesson_code:string|null;lesson_title:string|null;lesson_summary:string|null;estimated_minutes:number|null;lesson_sort_order:number|null;lesson_status:string|null;lesson_active:boolean|null;alignment_source_title?:string|null;alignment_source_url?:string|null;alignment_source_edition?:string|null;alignment_page_range?:string|null;alignment_source_verified?:boolean;block_count:number|null;question_count:number|null};
 type ContentBlock={id?:number;sequence_no:number;block_type:string;content:Record<string,any>;active:boolean};
@@ -316,6 +317,8 @@ function LearnerBlock({block,language='hi'}:{block:ContentBlock;language?:'hi'|'
 }
 export default function ContentStudio(){
  const t=useUiTranslation();
+ const {permissions}=useContext(AdminWorkspaceContext);
+ const canCreateCourse=permissions.includes('CONTENT_CREATE')&&permissions.includes('CONTENT_EDIT');
  function statusLabel(value:string|null|undefined){
   const code=String(value||'DRAFT').toUpperCase();
   const keys:Record<string,string>={PUBLISHED:'admin.contentStudio.statusPublished',DRAFT:'admin.contentStudio.statusDraft',REVIEW:'admin.contentStudio.statusReview',ARCHIVED:'admin.contentStudio.statusArchived'};
@@ -856,7 +859,7 @@ export default function ContentStudio(){
  return <main className="admin-shell qe-content-shell">
   <AdminSidebar active="content" variant="content" />
   <section className="admin-main qe-content-main" id="top">
-   <header className={'admin-top qe-studio-top '+(isEditorView?'qe-editor-page-top':'')}><div><span className="admin-kicker">{t('admin.contentStudio.headerKicker')}</span><h1>{t('admin.contentStudio.pageTitle')} <span className="admin-title-spark">✦</span></h1><p>{t('admin.contentStudio.pageIntro')}</p></div><div className="admin-top-actions"><Link href="/content/import" className="qe-secondary-button">Import course JSON</Link><Link href="/structured-lesson-preview" className="qe-secondary-button" >{t('admin.contentStudio.structuredPreview')}</Link><span className="top-status" role="status" aria-live="polite"><span className="status-dot" aria-hidden="true"/>{loading?t('admin.contentStudio.librarySyncing'):canView?t('admin.contentStudio.connectedToApi'):t('admin.contentStudio.checkingStaffAccess')}</span><button type="button" className="admin-refresh" onClick={()=>void load()} aria-label={t('admin.contentStudio.refreshContent')} title={t('admin.contentStudio.refreshContent')}>↻</button></div></header>
+   <header className={'admin-top qe-studio-top '+(isEditorView?'qe-editor-page-top':'')}><div><span className="admin-kicker">{t('admin.contentStudio.headerKicker')}</span><h1>{t('admin.contentStudio.pageTitle')} <span className="admin-title-spark">✦</span></h1><p>{t('admin.contentStudio.pageIntro')}</p></div><div className="admin-top-actions">{canCreateCourse?<Link href="/content/create" className="qe-secondary-button">{t('admin.institutionOperations.createCourse')}</Link>:null}{canCreateCourse?<Link href="/content/import" className="qe-secondary-button">{t('admin.institutionOperations.importCourse')}</Link>:null}<Link href="/structured-lesson-preview" className="qe-secondary-button" >{t('admin.contentStudio.structuredPreview')}</Link><span className="top-status" role="status" aria-live="polite"><span className="status-dot" aria-hidden="true"/>{loading?t('admin.contentStudio.librarySyncing'):canView?t('admin.contentStudio.connectedToApi'):t('admin.contentStudio.checkingStaffAccess')}</span><button type="button" className="admin-refresh" onClick={()=>void load()} aria-label={t('admin.contentStudio.refreshContent')} title={t('admin.contentStudio.refreshContent')}>↻</button></div></header>
    <nav className="admin-mobile-nav" aria-label={t('admin.contentStudio.adminNavigation')}><Link href="/">{t('admin.contentStudio.overview')}</Link><Link className="active" href="/content">{t('admin.contentStudio.pageTitle')}</Link><Link href="/structured-lesson-preview" >{t('admin.contentStudio.structuredPreview')}</Link><Link href="/students">{t('admin.contentStudio.students')}</Link><Link href="/parents">{t('admin.contentStudio.families')}</Link></nav>
    
    {error&&<div className="admin-alert qe-feedback" role="alert"><strong>{t('admin.contentStudio.needsAttention')}</strong><span>{error}</span><button type="button" onClick={()=>setError('')}>{t('admin.contentStudio.dismiss')}</button></div>}{notice&&<div className="admin-notice qe-feedback" role="status"><strong>{t('admin.contentStudio.workspaceUpdate')}</strong><span>{notice}</span><button type="button" onClick={()=>setNotice('')}>{t('admin.contentStudio.dismiss')}</button></div>}
