@@ -34,6 +34,9 @@ CREATE TABLE IF NOT EXISTS institution_course_trust_policy_event (
 CREATE INDEX IF NOT EXISTS idx_course_trust_policy_event_identity
   ON institution_course_trust_policy_event(course_identity_id,created_at DESC,id DESC);
 
+ALTER TABLE institution_marketplace_offer
+  ADD COLUMN IF NOT EXISTS trusted_update_block_reason varchar(1000);
+
 ALTER TABLE institution_course_release
   ADD COLUMN IF NOT EXISTS fingerprint_schema_version smallint NOT NULL DEFAULT 1
   CHECK (fingerprint_schema_version IN (1,2)),
