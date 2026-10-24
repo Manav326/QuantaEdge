@@ -54,7 +54,7 @@ AS $$
       (to_jsonb(p) - ARRAY['created_at','updated_at','course_identity_id','content_version_no','supersedes_program_id'])::text row_json
     FROM curriculum_program p WHERE p.id=p_program_id
     UNION ALL
-    SELECT 'subject',s.id,
+    SELECT 'subject',s.id::text,
       (to_jsonb(ps) - ARRAY['created_at','updated_at'])::text||(to_jsonb(s) - ARRAY['created_at','updated_at'])::text
     FROM curriculum_program_subject ps
     JOIN curriculum_program p ON p.id=ps.program_id
@@ -62,33 +62,33 @@ AS $$
       AND (s.program_id=ps.program_id OR s.program_id IS NULL)
     WHERE ps.program_id=p_program_id
     UNION ALL
-    SELECT 'chapter',ch.id,(to_jsonb(ch) - ARRAY['created_at','updated_at'])::text
+    SELECT 'chapter',ch.id::text,(to_jsonb(ch) - ARRAY['created_at','updated_at'])::text
     FROM curriculum_program_subject ps
     JOIN curriculum_subject s ON s.id=ps.subject_id AND s.class_id=ps.class_id
     JOIN curriculum_chapter ch ON ch.subject_id=s.id
     WHERE ps.program_id=p_program_id
     UNION ALL
-    SELECT 'objective',o.id,(to_jsonb(o) - ARRAY['created_at','updated_at'])::text
+    SELECT 'objective',o.id::text,(to_jsonb(o) - ARRAY['created_at','updated_at'])::text
     FROM learning_objective o
     JOIN curriculum_chapter ch ON ch.id=o.chapter_id
     JOIN curriculum_program_subject ps ON ps.subject_id=ch.subject_id
     WHERE ps.program_id=p_program_id
     UNION ALL
-    SELECT 'concept',c.id,(to_jsonb(c) - ARRAY['created_at','updated_at'])::text
+    SELECT 'concept',c.id::text,(to_jsonb(c) - ARRAY['created_at','updated_at'])::text
     FROM chapter_concept c
     JOIN curriculum_program_subject ps ON ps.subject_id IN (
       SELECT ch.subject_id FROM curriculum_chapter ch WHERE ch.id=c.chapter_id
     )
     WHERE ps.program_id=p_program_id
     UNION ALL
-    SELECT 'lesson',l.id,(to_jsonb(l) - ARRAY['created_at','updated_at'])::text
+    SELECT 'lesson',l.id::text,(to_jsonb(l) - ARRAY['created_at','updated_at'])::text
     FROM curriculum_program_subject ps
     JOIN curriculum_subject s ON s.id=ps.subject_id AND s.class_id=ps.class_id
     JOIN curriculum_chapter ch ON ch.subject_id=s.id
     JOIN lesson l ON l.chapter_id=ch.id
     WHERE ps.program_id=p_program_id
     UNION ALL
-    SELECT 'lesson-block',b.id,(to_jsonb(b) - ARRAY['created_at','updated_at'])::text
+    SELECT 'lesson-block',b.id::text,(to_jsonb(b) - ARRAY['created_at','updated_at'])::text
     FROM curriculum_program_subject ps
     JOIN curriculum_subject s ON s.id=ps.subject_id AND s.class_id=ps.class_id
     JOIN curriculum_chapter ch ON ch.subject_id=s.id
@@ -96,55 +96,55 @@ AS $$
     JOIN lesson_block b ON b.lesson_id=l.id
     WHERE ps.program_id=p_program_id
     UNION ALL
-    SELECT 'lesson-requirement',req.id,(to_jsonb(req) - ARRAY['created_at','updated_at'])::text
+    SELECT 'lesson-requirement',req.id::text,(to_jsonb(req) - ARRAY['created_at','updated_at'])::text
     FROM lesson_requirement req
     JOIN curriculum_program_subject ps ON ps.subject_id IN (
       SELECT ch.subject_id FROM curriculum_chapter ch WHERE ch.id=req.chapter_id
     )
     WHERE ps.program_id=p_program_id
     UNION ALL
-    SELECT 'chapter-source',src.id,(to_jsonb(src) - ARRAY['created_at','updated_at'])::text
+    SELECT 'chapter-source',src.id::text,(to_jsonb(src) - ARRAY['created_at','updated_at'])::text
     FROM chapter_source src
     JOIN curriculum_program_subject ps ON ps.subject_id IN (
       SELECT ch.subject_id FROM curriculum_chapter ch WHERE ch.id=src.chapter_id
     )
     WHERE ps.program_id=p_program_id
     UNION ALL
-    SELECT 'question',q.id,(to_jsonb(q) - ARRAY['created_at','updated_at'])::text
+    SELECT 'question',q.id::text,(to_jsonb(q) - ARRAY['created_at','updated_at'])::text
     FROM question q
     WHERE EXISTS (
       SELECT 1 FROM qe_course_program_ids_for_question(q.id) scope WHERE scope.program_id=p_program_id
     )
     UNION ALL
-    SELECT 'question-option',qo.id,(to_jsonb(qo) - ARRAY['created_at','updated_at'])::text
+    SELECT 'question-option',qo.id::text,(to_jsonb(qo) - ARRAY['created_at','updated_at'])::text
     FROM question_option qo
     JOIN question q ON q.id=qo.question_id
     WHERE EXISTS (
       SELECT 1 FROM qe_course_program_ids_for_question(q.id) scope WHERE scope.program_id=p_program_id
     )
     UNION ALL
-    SELECT 'curriculum-program-translation',tr.id,(to_jsonb(tr) - ARRAY['created_at','updated_at'])::text
+    SELECT 'curriculum-program-translation',tr.id::text,(to_jsonb(tr) - ARRAY['created_at','updated_at'])::text
     FROM curriculum_program_translation tr WHERE tr.program_id=p_program_id
     UNION ALL
-    SELECT 'curriculum-subject-translation',tr.id,(to_jsonb(tr) - ARRAY['created_at','updated_at'])::text
+    SELECT 'curriculum-subject-translation',tr.id::text,(to_jsonb(tr) - ARRAY['created_at','updated_at'])::text
     FROM curriculum_subject_translation tr
     JOIN curriculum_program_subject ps ON ps.subject_id=tr.subject_id
     WHERE ps.program_id=p_program_id
     UNION ALL
-    SELECT 'curriculum-chapter-translation',tr.id,(to_jsonb(tr) - ARRAY['created_at','updated_at'])::text
+    SELECT 'curriculum-chapter-translation',tr.id::text,(to_jsonb(tr) - ARRAY['created_at','updated_at'])::text
     FROM curriculum_chapter_translation tr
     JOIN curriculum_chapter ch ON ch.id=tr.chapter_id
     JOIN curriculum_program_subject ps ON ps.subject_id=ch.subject_id
     WHERE ps.program_id=p_program_id
     UNION ALL
-    SELECT 'lesson-translation',tr.id,(to_jsonb(tr) - ARRAY['created_at','updated_at'])::text
+    SELECT 'lesson-translation',tr.id::text,(to_jsonb(tr) - ARRAY['created_at','updated_at'])::text
     FROM lesson_translation tr
     JOIN lesson l ON l.id=tr.lesson_id
     JOIN curriculum_chapter ch ON ch.id=l.chapter_id
     JOIN curriculum_program_subject ps ON ps.subject_id=ch.subject_id
     WHERE ps.program_id=p_program_id
     UNION ALL
-    SELECT 'lesson-block-translation',tr.id,(to_jsonb(tr) - ARRAY['created_at','updated_at'])::text
+    SELECT 'lesson-block-translation',tr.id::text,(to_jsonb(tr) - ARRAY['created_at','updated_at'])::text
     FROM lesson_block_translation tr
     JOIN lesson_block b ON b.id=tr.block_id
     JOIN lesson l ON l.id=b.lesson_id
@@ -152,14 +152,14 @@ AS $$
     JOIN curriculum_program_subject ps ON ps.subject_id=ch.subject_id
     WHERE ps.program_id=p_program_id
     UNION ALL
-    SELECT 'learning-resource-assignment',a.id,(to_jsonb(a) - ARRAY['created_at','updated_at'])::text
+    SELECT 'learning-resource-assignment',a.id::text,(to_jsonb(a) - ARRAY['created_at','updated_at'])::text
     FROM learning_resource_assignment a
     JOIN curriculum_program_subject ps ON ps.subject_id IN (
       SELECT ch.subject_id FROM curriculum_chapter ch WHERE ch.id=a.chapter_id
     )
     WHERE ps.program_id=p_program_id
     UNION ALL
-    SELECT 'learning-resource',res.id,(to_jsonb(res) - ARRAY['created_at','updated_at'])::text
+    SELECT 'learning-resource',res.id::text,(to_jsonb(res) - ARRAY['created_at','updated_at'])::text
     FROM learning_resource res
     WHERE EXISTS (
       SELECT 1 FROM learning_resource_assignment a
@@ -168,37 +168,37 @@ AS $$
       WHERE a.resource_id=res.id AND ps.program_id=p_program_id
     )
     UNION ALL
-    SELECT 'question-translation',tr.id,(to_jsonb(tr) - ARRAY['created_at','updated_at'])::text
+    SELECT 'question-translation',tr.id::text,(to_jsonb(tr) - ARRAY['created_at','updated_at'])::text
     FROM question_translation tr
     JOIN question q ON q.id=tr.question_id
     WHERE EXISTS (
       SELECT 1 FROM qe_course_program_ids_for_question(q.id) scope WHERE scope.program_id=p_program_id
     )
     UNION ALL
-    SELECT 'learning-objective-translation',tr.id,(to_jsonb(tr) - ARRAY['created_at','updated_at'])::text
+    SELECT 'learning-objective-translation',tr.id::text,(to_jsonb(tr) - ARRAY['created_at','updated_at'])::text
     FROM learning_objective_translation tr
     JOIN learning_objective o ON o.id=tr.objective_id
     JOIN curriculum_chapter ch ON ch.id=o.chapter_id
     JOIN curriculum_program_subject ps ON ps.subject_id=ch.subject_id
     WHERE ps.program_id=p_program_id
     UNION ALL
-    SELECT 'learning-resource-artifact-scope',scope.artifact_id,(to_jsonb(scope) - ARRAY['created_at','updated_at'])::text
+    SELECT 'learning-resource-artifact-scope',scope.artifact_id::text,(to_jsonb(scope) - ARRAY['created_at','updated_at'])::text
     FROM learning_resource_artifact_scope scope
     JOIN curriculum_chapter ch ON ch.id=scope.chapter_id
     JOIN curriculum_program_subject ps ON ps.subject_id=ch.subject_id
     WHERE ps.program_id=p_program_id
     UNION ALL
-    SELECT 'learning-document-assignment',a.id,(to_jsonb(a) - ARRAY['created_at','updated_at'])::text
+    SELECT 'learning-document-assignment',a.id::text,(to_jsonb(a) - ARRAY['created_at','updated_at'])::text
     FROM learning_document_course_assignment a WHERE a.course_id=p_program_id
     UNION ALL
-    SELECT 'learning-document',doc.id,(to_jsonb(doc) - ARRAY['created_at','updated_at'])::text
+    SELECT 'learning-document',doc.id::text,(to_jsonb(doc) - ARRAY['created_at','updated_at'])::text
     FROM learning_document doc
     WHERE EXISTS (
       SELECT 1 FROM qe_course_program_ids_for_row('learning_document',to_jsonb(doc)) scope
       WHERE scope.program_id=p_program_id
     )
     UNION ALL
-    SELECT 'content-asset',asset.id,(to_jsonb(asset) - ARRAY['created_at','updated_at'])::text
+    SELECT 'content-asset',asset.id::text,(to_jsonb(asset) - ARRAY['created_at','updated_at'])::text
     FROM content_asset asset
     WHERE EXISTS (
       SELECT 1
@@ -209,7 +209,7 @@ AS $$
       WHERE b.asset_id=asset.id AND ps.program_id=p_program_id
     )
     UNION ALL
-    SELECT 'textbook-source-book',book.id,(to_jsonb(book) - ARRAY['created_at','updated_at'])::text
+    SELECT 'textbook-source-book',book.id::text,(to_jsonb(book) - ARRAY['created_at','updated_at'])::text
     FROM textbook_source_book book
     WHERE book.program_id=p_program_id
        OR EXISTS (
@@ -217,7 +217,7 @@ AS $$
           WHERE ps.program_id=p_program_id AND ps.subject_id=book.subject_id
        )
     UNION ALL
-    SELECT 'textbook-extracted-page',page.id,(to_jsonb(page) - ARRAY['created_at','updated_at'])::text
+    SELECT 'textbook-extracted-page',page.id::text,(to_jsonb(page) - ARRAY['created_at','updated_at'])::text
     FROM textbook_extracted_page page
     JOIN textbook_source_book book ON book.id=page.source_book_id
     WHERE book.program_id=p_program_id
@@ -226,37 +226,37 @@ AS $$
           WHERE ps.program_id=p_program_id AND ps.subject_id=book.subject_id
        )
     UNION ALL
-    SELECT 'assessment-translation',tr.id,(to_jsonb(tr) - ARRAY['created_at','updated_at'])::text
+    SELECT 'assessment-translation',tr.id::text,(to_jsonb(tr) - ARRAY['created_at','updated_at'])::text
     FROM assessment_translation tr
     JOIN assessment a ON a.id=tr.assessment_id
     WHERE a.course_id=p_program_id
     UNION ALL
-    SELECT 'assessment-question-translation',tr.id,(to_jsonb(tr) - ARRAY['created_at','updated_at'])::text
+    SELECT 'assessment-question-translation',tr.id::text,(to_jsonb(tr) - ARRAY['created_at','updated_at'])::text
     FROM assessment_question_translation tr
     JOIN assessment_question aq ON aq.id=tr.assessment_question_id
     JOIN assessment a ON a.id=aq.assessment_id
     WHERE a.course_id=p_program_id
     UNION ALL
-    SELECT 'course-assessment-pack',pack.id,
+    SELECT 'course-assessment-pack',pack.id::text,
       (to_jsonb(pack) - ARRAY['created_at','updated_at','status','published_by_staff_id','published_at'])::text
     FROM course_assessment_pack pack WHERE pack.course_id=p_program_id
     UNION ALL
-    SELECT 'course-assessment-pack-item',item.id,(to_jsonb(item) - ARRAY['created_at','updated_at'])::text
+    SELECT 'course-assessment-pack-item',item.id::text,(to_jsonb(item) - ARRAY['created_at','updated_at'])::text
     FROM course_assessment_pack_item item
     JOIN course_assessment_pack pack ON pack.id=item.pack_id
     WHERE pack.course_id=p_program_id
     UNION ALL
-    SELECT 'course-assessment-pack-resource',res.id,(to_jsonb(res) - ARRAY['created_at','updated_at'])::text
+    SELECT 'course-assessment-pack-resource',res.id::text,(to_jsonb(res) - ARRAY['created_at','updated_at'])::text
     FROM course_assessment_pack_resource res
     JOIN course_assessment_pack pack ON pack.id=res.pack_id
     WHERE pack.course_id=p_program_id
     UNION ALL
-    SELECT 'delivery-mode',m.program_id,
+    SELECT 'delivery-mode',m.program_id::text,
       (to_jsonb(m) - ARRAY['created_at','updated_at'])::text
     FROM curriculum_program_delivery_mode m
     WHERE m.program_id=p_program_id AND m.delivery_mode='ASSESSMENT_ONLY'
     UNION ALL
-    SELECT 'assessment',a.id,jsonb_build_object(
+    SELECT 'assessment',a.id::text,jsonb_build_object(
       'course_id',a.course_id,'title',a.title,'description',a.description,'subject_id',a.subject_id,
       'chapter_id',a.chapter_id,'duration_minutes',a.duration_minutes,'max_attempts',a.max_attempts,
       'negative_marking_fraction',a.negative_marking_fraction,'assessment_type',a.assessment_type,
@@ -267,7 +267,7 @@ AS $$
     FROM assessment a
     WHERE a.course_id=p_program_id
     UNION ALL
-    SELECT 'assessment-question',aq.id,jsonb_build_object(
+    SELECT 'assessment-question',aq.id::text,jsonb_build_object(
       'assessment_id',aq.assessment_id,'source_question_id',aq.source_question_id,
       'sequence_no',aq.sequence_no,'max_marks',aq.max_marks,'question_snapshot',aq.question_snapshot
     )::text
