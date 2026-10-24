@@ -671,6 +671,17 @@ def ensure_test_pack(
         return int(pack_id), False
 
     cursor.execute("""
+        SELECT status FROM assessment
+        WHERE id=%s AND course_id=%s
+        FOR UPDATE
+    """, (assessment_id, course_id))
+    assessment_row = cursor.fetchone()
+    if not assessment_row or assessment_row[0] != "DRAFT":
+        raise ImportErrorSafe(
+            f"Assessment {assessment_id} has no matching test pack and is not an untouched DRAFT; "
+            "the importer will not retrofit a reviewed/published assessment."
+        )
+    cursor.execute("""
         SELECT pack.id
         FROM course_assessment_pack_item item
         JOIN course_assessment_pack pack ON pack.id=item.pack_id
