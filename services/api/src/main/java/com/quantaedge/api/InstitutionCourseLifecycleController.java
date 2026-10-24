@@ -596,7 +596,7 @@ public class InstitutionCourseLifecycleController {
           gst_rate_basis_points,cess_rate_basis_points,price_includes_tax,place_of_supply_rule,
           rounding_rule,tax_components,status,effective_from,effective_until,
           created_by_staff_id,approved_by_staff_id,approved_at,created_at
-        ) values(?,?,1,?,?,?,?,?,?,?,?::jsonb,'APPROVED',now(),?,?,?,now(),now())
+        ) values(?,?,1,?,?,?,?,?,?,?,?::jsonb,'APPROVED',now(),?,?,?,?,now())
         """,newOfferId,profile.get("legal_entity_id"),profile.get("service_classification_code"),
         profile.get("tax_treatment"),profile.get("gst_rate_basis_points"),profile.get("cess_rate_basis_points"),
         profile.get("price_includes_tax"),profile.get("place_of_supply_rule"),profile.get("rounding_rule"),
