@@ -410,9 +410,11 @@ def ensure_schema(cursor: Any) -> None:
                to_regprocedure('public.assign_assessment_public_id()'),
                to_regprocedure('public.course_content_fingerprint(bigint)'),
                to_regprocedure('public.assessment_only_course_ready(bigint)'),
+               to_regprocedure('public.tre4_source_package_ready(bigint)'),
                pg_get_functiondef(to_regprocedure('public.assign_assessment_public_id()')),
                pg_get_functiondef(to_regprocedure('public.course_content_fingerprint(bigint)')),
-               pg_get_functiondef(to_regprocedure('public.assessment_only_course_ready(bigint)'))
+               pg_get_functiondef(to_regprocedure('public.assessment_only_course_ready(bigint)')),
+               pg_get_functiondef(to_regprocedure('public.tre4_source_package_ready(bigint)'))
     """)
     row = cursor.fetchone()
     if not row or any(value is None for value in row):
@@ -420,9 +422,10 @@ def ensure_schema(cursor: Any) -> None:
             "Required migrations V168, V177, V180, V198, and V199 are missing. "
             "Start the API against this database and verify Flyway completes before importing."
         )
-    assessment_id_definition = str(row[8] or "")
-    fingerprint_definition = str(row[9] or "")
-    readiness_definition = str(row[10] or "")
+    assessment_id_definition = str(row[9] or "")
+    fingerprint_definition = str(row[10] or "")
+    generic_readiness_definition = str(row[11] or "")
+    tre4_readiness_definition = str(row[12] or "")
 
     # V198 is essential: classless ASSESSMENT tests still need their registered course-scoped IDs.
     if "A subjectless assessment requires an assessment-only or competitive course" not in assessment_id_definition:
@@ -439,16 +442,24 @@ def ensure_schema(cursor: Any) -> None:
         raise ImportErrorSafe(
             "Flyway V196 is required so course release fingerprints include test packs and pack items."
         )
-    if "course_assessment_pack_item" not in readiness_definition:
+    if "course_assessment_pack_item" not in generic_readiness_definition:
         raise ImportErrorSafe(
-            "Flyway V199 is required: assessment-only release readiness must validate test packs, not school chapters."
+            "Flyway V199 is required: generic ASSESSMENT release readiness must validate the test-pack hierarchy."
+        )
+    if "TRE 3.0" in generic_readiness_definition:
+        raise ImportErrorSafe(
+            "Generic ASSESSMENT readiness must not hard-code TRE-specific question counts; apply the corrected Flyway V199."
+        )
+    if "course_assessment_pack_item" not in tre4_readiness_definition:
+        raise ImportErrorSafe(
+            "Flyway V199 is required: TRE source-package readiness must validate test packs, not school chapters."
         )
     if not re.search(
-        r"'TRE 3\.0'::varchar,\s*'tre4-bpsc-tre-3-0-computer-science'::varchar,\s*150",
-        readiness_definition,
+        r"'TRE 3\\.0'::varchar,\\s*'tre4-bpsc-tre-3-0-computer-science'::varchar,\\s*150",
+        tre4_readiness_definition,
     ):
         raise ImportErrorSafe(
-            "Flyway V199 is required: the TRE 3.0 readiness contract must expect all 150 source questions."
+            "Flyway V199 is required: the TRE-specific readiness contract must expect all 150 source questions."
         )
 
 
@@ -835,10 +846,10 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
             """, (institution_id, course_id))
             release_row = cursor.fetchone()
             if args.submit_for_review:
-                cursor.execute("SELECT assessment_only_course_ready(%s)", (course_id,))
+                cursor.execute("SELECT tre4_source_package_ready(%s)", (course_id,))
                 ready_row = cursor.fetchone()
                 if not ready_row or ready_row[0] is not True:
-                    raise ImportErrorSafe("Assessment-only source-package readiness failed; the release cannot be queued for HRMS review.")
+                    raise ImportErrorSafe("TRE source-package readiness (including generic ASSESSMENT pack integrity) failed; the release cannot be queued for HRMS review.")
             release_created = False
             release_submitted = False
             if release_row is None:
@@ -867,10 +878,10 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                 if release_state == "DRAFT":
                     if args.submit_for_review:
                         cursor.execute("""
-                            SELECT assessment_only_course_ready(%s)
+                            SELECT tre4_source_package_ready(%s)
                         """, (course_id,))
                         if cursor.fetchone()[0] is not True:
-                            raise ImportErrorSafe("Assessment-only source-package readiness failed; cannot queue the release for HRMS review.")
+                            raise ImportErrorSafe("TRE source-package readiness (including generic ASSESSMENT pack integrity) failed; cannot queue the release for HRMS review.")
                         cursor.execute("""
                             UPDATE institution_course_release
                             SET release_state='IN_QUALITY_REVIEW',content_fingerprint=%s,submitted_at=now(),
