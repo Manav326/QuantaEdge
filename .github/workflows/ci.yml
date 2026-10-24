@@ -402,6 +402,8 @@ jobs:
         with:
           context: ./apps/web
           push: ${{ github.event_name != 'pull_request' }}
+          build-args: |
+            NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN=${{ vars.NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=web
@@ -478,6 +480,8 @@ jobs:
         with:
           context: ./apps/people
           push: ${{ github.event_name != 'pull_request' }}
+          build-args: |
+            NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN=${{ vars.NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=people
