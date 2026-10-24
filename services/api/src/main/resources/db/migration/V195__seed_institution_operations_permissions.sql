@@ -15,7 +15,7 @@ WITH effective_permissions AS (
   JOIN staff_role_permission rp ON rp.role_code=ar.role_code AND rp.workspace_key='EDUCATION_ADMIN'
 )
 INSERT INTO staff_permission_grant(staff_id,workspace_key,permission_key,granted_by_staff_id)
-SELECT DISTINCT s.id,'EDUCATION_ADMIN','INSTITUTION_REPORTS_VIEW',NULL
+SELECT DISTINCT s.id,'EDUCATION_ADMIN','INSTITUTION_REPORTS_VIEW',NULL::bigint
 FROM staff_account s
 JOIN institution_staff_binding b ON b.staff_id=s.id AND b.status='ACTIVE'
 JOIN institution_tenant t ON t.id=b.institution_id AND t.status='ACTIVE'
@@ -37,7 +37,7 @@ WITH effective_permissions AS (
   JOIN staff_role_permission rp ON rp.role_code=ar.role_code AND rp.workspace_key='EDUCATION_ADMIN'
 )
 INSERT INTO staff_permission_grant(staff_id,workspace_key,permission_key,granted_by_staff_id)
-SELECT DISTINCT s.id,'EDUCATION_ADMIN','INSTITUTION_RELEASE_MANAGE',NULL
+SELECT DISTINCT s.id,'EDUCATION_ADMIN','INSTITUTION_RELEASE_MANAGE',NULL::bigint
 FROM staff_account s
 JOIN institution_staff_binding b ON b.staff_id=s.id AND b.status='ACTIVE'
 JOIN institution_tenant t ON t.id=b.institution_id AND t.status='ACTIVE'
