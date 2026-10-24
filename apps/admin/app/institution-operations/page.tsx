@@ -237,33 +237,6 @@ export default function InstitutionOperationsPage() {
               ))}
             </section>
             <section className={styles.panel}>
-                <div className={styles.panelHeader}>
-                  <div>
-                    <h2>{t('admin.institutionOperations.invitations')}</h2>
-                    <p>{t('admin.institutionOperations.invitationsDescription')}</p>
-                  </div>
-                  <button type="button" className={styles.textButton} onClick={() => void loadOverviewAndCourses()} disabled={loading}>{t('admin.institutionOperations.refreshInvitation')}</button>
-                </div>
-                {invitationError ? <p className={styles.reviewNote} role="alert">{invitationError}</p> : null}
-                {invitation?.available ? (
-                  <div className={styles.invitationCard}>
-                    <div className={styles.invitationCode}>
-                      <span>{t('admin.institutionOperations.joinCode')}</span>
-                      <code>{invitation.joinCode}</code>
-                      <small>{invitation.institutionName} · {invitation.institutionCode}</small>
-                    </div>
-                    <div className={styles.invitationActions}>
-                      <button type="button" disabled={!learnerAppOrigin} onClick={() => void copySchoolLearningLink()}>{t('admin.institutionOperations.copySchoolLink')}</button>
-                      <button type="button" className={styles.secondaryButton} onClick={() => void copyLearnerJoinCode()}>{t('admin.institutionOperations.copyJoinCode')}</button>
-                    </div>
-                    {!learnerAppOrigin ? <p className={styles.note}>{t('admin.institutionOperations.learnerOriginMissing')}</p> : null}
-                  </div>
-                ) : !invitationError ? (
-                  <p className={styles.note}>{t('admin.institutionOperations.noActiveJoinCode')}</p>
-                ) : null}
-                <p className={styles.note}>{t('admin.institutionOperations.invitationSecretNote')}</p>
-              </section>
-            <section className={styles.panel}>
               <div className={styles.panelHeader}>
                 <div><h2>{t('admin.institutionOperations.lessonsWithActivity')}</h2><p>{t('admin.institutionOperations.description')}</p></div>
                 <strong className={styles.bigNumber}>{count(overview?.lessons_with_activity)}</strong>
