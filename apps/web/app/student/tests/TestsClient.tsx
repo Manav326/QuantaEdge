@@ -335,6 +335,8 @@ function QuestionSetView({items,activeQuestionId,attempt,responses,disabled,revi
   const {locale}=useLocale();
   if(items.length<2)return null;
   const first=items[0].question;
+  const activeItems=items.filter(({question})=>question.attemptQuestionId===activeQuestionId);
+  const visibleItems=activeItems.length?activeItems:items.slice(0,1);
   return <section className={styles.questionSet} aria-label={locale==='english'?'Question Set':'प्रश्न समूह'}>
     <header className={styles.questionSetHeader}>
       <div><span className={styles.questionSetEyebrow}>{locale==='english'?'QUESTION SET':'प्रश्न समूह'}</span>
@@ -345,7 +347,7 @@ function QuestionSetView({items,activeQuestionId,attempt,responses,disabled,revi
     </header>
     <StimulusContent question={first}/>
     <div className={styles.questionSetChildren}>
-      {items.map(({question,number})=>{
+      {visibleItems.map(({question,number})=>{
         const marks=questionMarkMetadata(question,attempt,locale);
         const active=question.attemptQuestionId===activeQuestionId;
         const outcome=question.isCorrect===true?'correct':question.isCorrect===false?'incorrect':'ungraded';
@@ -412,6 +414,8 @@ export default function TestsClient(){
   const [practiceFeedback,setPracticeFeedback]=useState<Record<number,boolean>>({});
   const [practiceSavingQuestionId,setPracticeSavingQuestionId]=useState<number|null>(null);
   const [practiceMode,setPracticeMode]=useState(false);
+  const [practiceQuestionIndex,setPracticeQuestionIndex]=useState(0);
+  const [practiceProgressLoading,setPracticeProgressLoading]=useState(false);
   const [practiceError,setPracticeError]=useState('');
   const practiceProgressRequestRef=useRef(0);
   const [index,setIndex]=useState(0);
@@ -476,15 +480,21 @@ export default function TestsClient(){
 
   const loadIncorrectPracticeProgress=useCallback(async(attemptId:number)=>{
     const requestId=++practiceProgressRequestRef.current;
-    if(courseId===null){setIncorrectPracticeProgress({});return;}
-    const result=await api('/api/v1/learning/assessment-attempts/'+attemptId+'/incorrect-practice?courseId='+encodeURIComponent(String(courseId)));
-    if(requestId!==practiceProgressRequestRef.current)return;
-    const next:Record<number,IncorrectPracticeProgress>={};
-    for(const item of Array.isArray(result?.items)?result.items:[]){
-      const id=Number(item.attempt_question_id);
-      if(Number.isSafeInteger(id)&&id>0)next[id]=item as IncorrectPracticeProgress;
+    if(courseId===null){setIncorrectPracticeProgress({});setPracticeProgressLoading(false);return;}
+    setPracticeProgressLoading(true);
+    try {
+      const result=await api('/api/v1/learning/assessment-attempts/'+attemptId+'/incorrect-practice?courseId='+encodeURIComponent(String(courseId)));
+      if(requestId!==practiceProgressRequestRef.current)return;
+      const next:Record<number,IncorrectPracticeProgress>={};
+      for(const item of Array.isArray(result?.items)?result.items:[]){
+        const id=Number(item.attempt_question_id);
+        if(Number.isSafeInteger(id)&&id>0)next[id]=item as IncorrectPracticeProgress;
+      }
+      setIncorrectPracticeProgress(next);
+      setPracticeError('');
+    } finally {
+      if(requestId===practiceProgressRequestRef.current)setPracticeProgressLoading(false);
     }
-    setIncorrectPracticeProgress(next);
   },[courseId]);
 
   useEffect(()=>{setTestsPage(0);setResultsPage(0);},[courseId]);
@@ -713,7 +723,7 @@ export default function TestsClient(){
       const nextResponses:Record<number,any>={};
       (data.questions||[]).forEach((q:AttemptQuestion)=>{nextResponses[q.attemptQuestionId]=q.answer??'';});
       setAttempt(data);attemptRef.current=data;setResponses(nextResponses);dirtyRef.current={};setDirtyAnswers({});setIndex(0);setTab('results');
-      setPracticeResponses({});setPracticeFeedback({});setPracticeMode(false);setPracticeError('');setIncorrectPracticeProgress({});
+      setPracticeResponses({});setPracticeFeedback({});setPracticeMode(false);setPracticeQuestionIndex(0);setPracticeError('');setIncorrectPracticeProgress({});
       if(data.status==='RELEASED'){
         try{await loadIncorrectPracticeProgress(attemptId);}catch{setPracticeError(t('Practice history could not be loaded. Refresh this result to try again.','अभ्यास इतिहास लोड नहीं हो सका। दोबारा प्रयास करने के लिए परिणाम रीफ़्रेश करें।'));}
         await refreshCertificateEligibilityForAttempts([attemptId]);
@@ -816,7 +826,7 @@ export default function TestsClient(){
 
   function closeAttempt(){
     practiceProgressRequestRef.current++;
-    setAttempt(null);setResponses({});setIncorrectPracticeProgress({});setPracticeResponses({});setPracticeFeedback({});setPracticeMode(false);setPracticeError('');dirtyRef.current={};setDirtyAnswers({});setIndex(0);setShowSubmit(false);setError('');setNotice('');autoSubmitted.current=false;
+    setAttempt(null);setResponses({});setIncorrectPracticeProgress({});setPracticeResponses({});setPracticeFeedback({});setPracticeMode(false);setPracticeQuestionIndex(0);setPracticeProgressLoading(false);setPracticeError('');dirtyRef.current={};setDirtyAnswers({});setIndex(0);setShowSubmit(false);setError('');setNotice('');autoSubmitted.current=false;
     void loadOverview();
   }
 
@@ -1048,53 +1058,82 @@ export default function TestsClient(){
               ?<p className={styles.topicAnalyticsEmpty}>{t('Great work — there are no incorrectly answered questions in this released test.','बहुत अच्छा — इस जारी परिणाम में कोई गलत उत्तर वाला प्रश्न नहीं है।')}</p>
               :practiceMode&&<div className={styles.practiceQuestionList}>
                 <div className={styles.practiceSafetyNote}>{t('This is a separate practice session. Answers here never overwrite your submitted paper.','यह अलग अभ्यास सत्र है। यहाँ दिए उत्तर आपके जमा किए गए प्रश्नपत्र को नहीं बदलेंगे।')}</div>
-                {practiceError&&<div className={styles.error} role="alert">{practiceError}</div>}
-                {practiceableIncorrectQuestions.length===0
-                  ?<p className={styles.topicAnalyticsEmpty}>{t('These questions have released feedback but cannot be automatically checked for a second try. Review their explanation in the question-wise results below.','इन प्रश्नों की प्रतिक्रिया जारी हो चुकी है, लेकिन इनके दूसरे उत्तर की स्वचालित जाँच नहीं हो सकती। प्रश्न-वार परिणाम में इनकी व्याख्या देखें।')}</p>
-                  :incorrectQuestions.map((question,practiceIndex)=>{
+                {practiceError&&<div className={styles.error} role="alert">{practiceError}
+                  <button type="button" className={styles.secondaryButton} disabled={practiceProgressLoading}
+                    onClick={()=>{if(attempt)void loadIncorrectPracticeProgress(attempt.attempt_id).catch(e=>setPracticeError(e instanceof Error?e.message:t('Practice history could not be loaded.','अभ्यास इतिहास लोड नहीं हो सका।')));}}>
+                    {t('Retry loading practice','अभ्यास दोबारा लोड करें')}
+                  </button>
+                </div>}
+                {practiceProgressLoading
+                  ?<p className={styles.topicAnalyticsEmpty}>{t('Loading your practice progress…','आपकी अभ्यास प्रगति लोड हो रही है…')}</p>
+                  :incorrectQuestions.length>0&&(()=>{
+                    const question=incorrectQuestions[Math.min(practiceQuestionIndex,incorrectQuestions.length-1)];
+                    if(!question)return null;
+                    const practiceIndex=Math.min(practiceQuestionIndex,incorrectQuestions.length-1);
                     const questionId=Number(question.attemptQuestionId);
                     const progress=incorrectPracticeProgress[questionId];
-                    const practiceable=progress?.practiceable!==false;
+                    const practiceable=progress?.practiceable===true;
                     const checked=Object.prototype.hasOwnProperty.call(practiceFeedback,questionId);
                     const practiceCorrect=practiceFeedback[questionId]===true;
                     const questionForFeedback=checked?{...question,isCorrect:practiceCorrect}:question;
                     const topic=primaryQuestionTopic(question);
-                    return <article className={styles.practiceQuestionCard} key={questionId}>
-                      <header className={styles.practiceQuestionHeader}>
-                        <div><span>{t('Missed question','गलत प्रश्न')} {practiceIndex+1} / {incorrectQuestions.length}</span><h4>{topic}</h4></div>
-                        <div className={styles.practiceProgressLabels}>
-                          <span>{Number(progress?.practice_count??0)} {t('tries','प्रयास')}</span>
-                          {progress?.ever_correct&&<span className={styles.practiceMastered}>{t('Corrected at least once','कम-से-कम एक बार सही')}</span>}
+                    return <>
+                      <div className={styles.practiceNavigator}>
+                        <button type="button" className={styles.secondaryButton} disabled={practiceIndex===0}
+                          onClick={()=>{setPracticeQuestionIndex(value=>Math.max(0,value-1));setPracticeError('');}}>
+                          ← {t('Previous','पिछला')}
+                        </button>
+                        <div className={styles.practicePosition} aria-live="polite">
+                          <strong>{t('Missed question','गलत प्रश्न')} {practiceIndex+1} / {incorrectQuestions.length}</strong>
+                          <span>{t('One question at a time','एक समय में एक प्रश्न')}</span>
                         </div>
-                      </header>
-                      <StimulusContent question={question}/>
-                      {practiceable
-                        ?<QuestionContent question={questionForFeedback} response={practiceResponses[questionId]??''}
-                            review={checked} disabled={checked||practiceSavingQuestionId===questionId}
-                            onAnswer={value=>setPracticeResponses(old=>({...old,[questionId]:value}))}/>
-                        :<><QuestionContent question={question} response={question.answer} review disabled/>
-                          <p className={styles.practiceManualNote}>{t('This response type needs human grading and cannot be automatically retried.','इस उत्तर प्रकार के लिए मानवीय जाँच चाहिए; इसे स्वचालित रूप से दोबारा नहीं जाँचा जा सकता।')}</p></>}
-                      {checked&&<AnswerFeedback outcome={practiceCorrect?'correct':'incorrect'}
-                        title={practiceCorrect?t('Correct this time — mistake corrected!','इस बार सही — गलती सुधर गई!'):t('Not quite yet. Review the correct answer and try again.','अभी सही नहीं हुआ। सही उत्तर देखें और फिर प्रयास करें।')}
-                        message={t('Practice attempt saved. Your official score is unchanged.','अभ्यास उत्तर सहेजा गया। आपके आधिकारिक अंक नहीं बदले हैं।')}
-                        explanation={question.explanation||undefined}
-                        explanationLabel={translateUi(locale, 'legacy.web.explanation.f09ea03b')}/>}
-                      {practiceable&&<div className={styles.practiceQuestionActions}>
-                        {!checked
-                          ?<button type="button" className={styles.primaryButton}
-                              disabled={practiceSavingQuestionId===questionId||emptyPracticeResponse(practiceResponses[questionId])}
-                              onClick={()=>void submitIncorrectPracticeAnswer(question)}>
-                              {practiceSavingQuestionId===questionId?t('Checking answer…','उत्तर जाँचा जा रहा है…'):t('Check answer','उत्तर जाँचें')}
-                            </button>
-                          :<button type="button" className={styles.secondaryButton}
-                              disabled={practiceSavingQuestionId===questionId}
-                              onClick={()=>{setPracticeFeedback(old=>{const next={...old};delete next[questionId];return next;});setPracticeResponses(old=>({...old,[questionId]:''}));setPracticeError('');}}>
-                              {t('Try again','फिर प्रयास करें')}
-                            </button>}
-                      </div>}
-                    </article>;
-                  })}
-              </div>}
+                        <button type="button" className={styles.secondaryButton} disabled={practiceIndex>=incorrectQuestions.length-1}
+                          onClick={()=>{setPracticeQuestionIndex(value=>Math.min(incorrectQuestions.length-1,value+1));setPracticeError('');}}>
+                          {t('Next','अगला')} →
+                        </button>
+                      </div>
+                      <div className={styles.practiceQuestionPositionTrack} role="progressbar"
+                        aria-label={t('Incorrect-question practice progress','गलत प्रश्न अभ्यास प्रगति')}
+                        aria-valuemin={0} aria-valuemax={incorrectQuestions.length} aria-valuenow={practiceIndex+1}>
+                        <span style={{width:((practiceIndex+1)/incorrectQuestions.length*100)+'%'}}/>
+                      </div>
+                      <article className={styles.practiceQuestionCard} key={questionId}>
+                        <header className={styles.practiceQuestionHeader}>
+                          <div><span>{t('Topic','विषय')}</span><h4>{topic}</h4></div>
+                          <div className={styles.practiceProgressLabels}>
+                            <span>{Number(progress?.practice_count??0)} {t('tries','प्रयास')}</span>
+                            {progress?.ever_correct&&<span className={styles.practiceMastered}>{t('Corrected at least once','कम-से-कम एक बार सही')}</span>}
+                          </div>
+                        </header>
+                        <StimulusContent question={question}/>
+                        {practiceable
+                          ?<QuestionContent question={questionForFeedback} response={practiceResponses[questionId]??''}
+                              review={checked} disabled={checked||practiceSavingQuestionId===questionId}
+                              onAnswer={value=>setPracticeResponses(old=>({...old,[questionId]:value}))}/>
+                          :<><QuestionContent question={question} response={question.answer} review disabled/>
+                            <p className={styles.practiceManualNote}>{t('This response type needs human grading and cannot be automatically retried. Review the released feedback instead.','इस उत्तर प्रकार के लिए मानवीय जाँच चाहिए। जारी की गई प्रतिक्रिया और व्याख्या देखें।')}</p></>}
+                        {checked&&<AnswerFeedback outcome={practiceCorrect?'correct':'incorrect'}
+                          title={practiceCorrect?t('Correct this time — mistake corrected!','इस बार सही — गलती सुधर गई!'):t('Not quite yet. Review the correct answer and try again.','अभी सही नहीं हुआ। सही उत्तर देखें और फिर प्रयास करें।')}
+                          message={t('Practice attempt saved. Your official score is unchanged.','अभ्यास उत्तर सहेजा गया। आपके आधिकारिक अंक नहीं बदले हैं।')}
+                          explanation={question.explanation||undefined}
+                          explanationLabel={translateUi(locale, 'legacy.web.explanation.f09ea03b')}/>}
+                        {practiceable&&<div className={styles.practiceQuestionActions}>
+                          {!checked
+                            ?<button type="button" className={styles.primaryButton}
+                                disabled={practiceSavingQuestionId===questionId||emptyPracticeResponse(practiceResponses[questionId])}
+                                onClick={()=>void submitIncorrectPracticeAnswer(question)}>
+                                {practiceSavingQuestionId===questionId?t('Checking answer…','उत्तर जाँचा जा रहा है…'):t('Check answer','उत्तर जाँचें')}
+                              </button>
+                            :<button type="button" className={styles.secondaryButton}
+                                disabled={practiceSavingQuestionId===questionId}
+                                onClick={()=>{setPracticeFeedback(old=>{const next={...old};delete next[questionId];return next;});setPracticeResponses(old=>({...old,[questionId]:''}));setPracticeError('');}}>
+                                {t('Try again','फिर प्रयास करें')}
+                              </button>}
+                        </div>}
+                      </article>
+                    </>;
+                  })()}
+              </div>
           </section>}
           {released&&(()=>{
             const cert=certificateEligibility[Number(attempt?.attempt_id)];
@@ -1177,7 +1216,7 @@ export default function TestsClient(){
         :attempt.status==='ABANDONED'?<div className={styles.pendingResult}><h2>{translateUi(locale, 'legacy.web.this.attempt.is.closed.056ad0ef')}</h2><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{translateUi(locale, 'legacy.web.back.to.tests.0d539e53')}</button></div>
         :attempt.status!=='IN_PROGRESS'||!current?<div className={styles.pendingResult}><h2>{translateUi(locale, 'legacy.web.this.attempt.is.closed.3b00ff63')}</h2><p>{translateUi(locale, 'legacy.web.you.cannot.return.to.the.question.navi.83bf6290')}</p><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{translateUi(locale, 'legacy.web.back.to.tests.and.results.29805d19')}</button></div>
         :<div className={styles.examLayout}>
-          <aside className={styles.questionRail}><div><b>{translateUi(locale, 'legacy.web.questions.b5a33268')}</b><small>{answeredCount}/{attempt.questions.length} {translateUi(locale, 'legacy.web.answered.f3b8dd02')}</small></div><div className={styles.questionNumbers}>{attempt.questions.map((q,i)=><button type="button" key={q.attemptQuestionId} className={[i===index?styles.currentNumber:'',!isEmpty(responses[q.attemptQuestionId]??q.answer)?styles.answeredNumber:''].filter(Boolean).join(' ')} onClick={()=>setIndex(i)} aria-label={translateUi(locale, 'legacy.web.question.85099273')+(i+1)}>{i+1}</button>)}</div><div className={styles.railLegend}><span><i className={styles.legendCurrent}/>{translateUi(locale, 'legacy.web.current.e19e8a40')}</span><span><i className={styles.legendAnswered}/>{translateUi(locale, 'legacy.web.answered.5531e37e')}</span></div></aside>
+          <aside className={styles.questionRail}><div><b>{translateUi(locale, 'legacy.web.questions.b5a33268')}</b><small>{answeredCount}/{attempt.questions.length} {translateUi(locale, 'legacy.web.answered.f3b8dd02')}</small></div><p className={styles.questionRailHint}>{t('Select a number to jump. Only one question is shown at a time.','किसी संख्या को चुनकर उस प्रश्न पर जाएँ। एक समय में एक ही प्रश्न दिखता है।')}</p><div className={styles.questionNumbers}>{attempt.questions.map((q,i)=><button type="button" key={q.attemptQuestionId} className={[i===index?styles.currentNumber:'',!isEmpty(responses[q.attemptQuestionId]??q.answer)?styles.answeredNumber:''].filter(Boolean).join(' ')} onClick={()=>setIndex(i)} aria-label={translateUi(locale, 'legacy.web.question.85099273')+(i+1)}>{i+1}</button>)}</div><div className={styles.railLegend}><span><i className={styles.legendCurrent}/>{translateUi(locale, 'legacy.web.current.e19e8a40')}</span><span><i className={styles.legendAnswered}/>{translateUi(locale, 'legacy.web.answered.5531e37e')}</span></div></aside>
           <section className={styles.questionPanel}><div className={styles.questionPanelTop}><span>{showingQuestionSet?(locale==='english'?'Question Set':'प्रश्न समूह'):<>{translateUi(locale, 'legacy.web.question.3b02187f')} {index+1} {translateUi(locale, 'legacy.web.of.205487ae')} {attempt.questions.length}</>}</span><b>{showingQuestionSet?currentQuestionSetItems.length+' questions':current.maxMarks+' '+translateUi(locale, 'legacy.web.mark.s.a8fb7e84')}</b></div><div className={styles.questionProgress}><i style={{width:((index+1)/attempt.questions.length*100)+'%'}}/></div>
             {!showingQuestionSet&&<QuestionMarkPolicy question={current} attempt={attempt}/>}
             {showingQuestionSet

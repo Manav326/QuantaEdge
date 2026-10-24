@@ -7343,6 +7343,7 @@ private fun AssessmentAttemptScreen(
     var practiceResponses by remember(attemptId) { mutableStateOf<Map<Long, String>>(emptyMap()) }
     var practiceCorrectness by remember(attemptId) { mutableStateOf<Map<Long, Boolean>>(emptyMap()) }
     var practiceExpanded by rememberSaveable(attemptId) { mutableStateOf(false) }
+    var practiceQuestionIndex by rememberSaveable(attemptId) { mutableStateOf(0) }
     var practiceLoading by remember(attemptId) { mutableStateOf(false) }
     var practiceRefreshVersion by remember(attemptId) { mutableStateOf(0) }
     var practiceQuestionSaving by remember(attemptId) { mutableStateOf(0L) }
@@ -7533,6 +7534,49 @@ private fun AssessmentAttemptScreen(
                     progress = { (safeQuestionIndex + 1).toFloat() / questions.size.toFloat() },
                     modifier = Modifier.fillMaxWidth()
                 )
+                Row(
+                    modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    questions.forEachIndexed { questionIndex, item ->
+                        val itemId = item.longAny("attemptQuestionId", "attempt_question_id").toString()
+                        val itemAnswer = answers[itemId] ?: item.textAny("answer")
+                        val selected = questionIndex == safeQuestionIndex
+                        val label = (questionIndex + 1).toString() + if (itemAnswer.isNotBlank()) " ✓" else ""
+                        val description = if (language == "hi") {
+                            "प्रश्न ${questionIndex + 1}" + if (itemAnswer.isNotBlank()) ", उत्तर दिया गया" else ", अभी उत्तर नहीं दिया"
+                        } else {
+                            "Question ${questionIndex + 1}" + if (itemAnswer.isNotBlank()) ", answered" else ", unanswered"
+                        }
+                        val jump: () -> Unit = {
+                            val active = questions[safeQuestionIndex]
+                            val activeId = active.longAny("attemptQuestionId", "attempt_question_id").toString()
+                            val activeAnswer = answers[activeId] ?: active.textAny("answer")
+                            val shouldSave = inProgress && !deadlineReached && !released &&
+                                activeAnswer.isNotBlank() && activeAnswer != active.textAny("answer")
+                            if (shouldSave) onSave(active, activeAnswer) { currentQuestionIndex = questionIndex }
+                            else currentQuestionIndex = questionIndex
+                        }
+                        if (selected) {
+                            Button(
+                                onClick = jump,
+                                enabled = !busy && !deadlineReached,
+                                modifier = Modifier.widthIn(min = 44.dp).height(40.dp)
+                                    .semantics { contentDescription = description },
+                                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp, vertical = 0.dp)
+                            ) { Text(label, style = MaterialTheme.typography.labelMedium, maxLines = 1) }
+                        } else {
+                            OutlinedButton(
+                                onClick = jump,
+                                enabled = !busy && !deadlineReached,
+                                modifier = Modifier.widthIn(min = 44.dp).height(40.dp)
+                                    .semantics { contentDescription = description },
+                                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp, vertical = 0.dp)
+                            ) { Text(label, style = MaterialTheme.typography.labelMedium, maxLines = 1) }
+                        }
+                    }
+                }
                 Column(
                     modifier = Modifier.weight(1f).fillMaxWidth()
                         .verticalScroll(rememberScrollState()),
@@ -7634,7 +7678,34 @@ private fun AssessmentAttemptScreen(
                                             style = MaterialTheme.typography.bodySmall)
                                         TextButton(onClick = { practiceRefreshVersion++ }) { Text(t("Retry loading", "फिर लोड करें")) }
                                     }
-                                    incorrectQuestions.forEachIndexed { practiceIndex, retryQuestion ->
+                                    val practiceIndex = practiceQuestionIndex.coerceIn(0, (incorrectQuestions.size - 1).coerceAtLeast(0))
+                                    val retryQuestion = incorrectQuestions.getOrNull(practiceIndex)
+                                    if (retryQuestion != null) {
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.SpaceBetween
+                                        ) {
+                                            OutlinedButton(
+                                                onClick = { practiceQuestionIndex = (practiceIndex - 1).coerceAtLeast(0) },
+                                                enabled = practiceIndex > 0 && practiceQuestionSaving == 0L
+                                            ) { Text(t("Previous", "पिछला")) }
+                                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                                Text(t("Missed question", "गलत प्रश्न") + " ${practiceIndex + 1} / ${incorrectQuestions.size}",
+                                                    style = MaterialTheme.typography.titleSmall)
+                                                Text(t("One at a time", "एक समय में एक"),
+                                                    style = MaterialTheme.typography.labelSmall,
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                            }
+                                            OutlinedButton(
+                                                onClick = { practiceQuestionIndex = (practiceIndex + 1).coerceAtMost(incorrectQuestions.lastIndex) },
+                                                enabled = practiceIndex < incorrectQuestions.lastIndex && practiceQuestionSaving == 0L
+                                            ) { Text(t("Next", "अगला")) }
+                                        }
+                                        LinearProgressIndicator(
+                                            progress = { (practiceIndex + 1).toFloat() / incorrectQuestions.size.toFloat() },
+                                            modifier = Modifier.fillMaxWidth()
+                                        )
                                         val questionId = retryQuestion.longAny("attemptQuestionId", "attempt_question_id")
                                         val progress = incorrectPracticeProgress[questionId]
                                         val canPractice = progress?.optBoolean("practiceable", false) == true
@@ -7642,8 +7713,7 @@ private fun AssessmentAttemptScreen(
                                         val questionTopic = assessmentQuestionTopic(retryQuestion)
                                         Card(modifier = Modifier.fillMaxWidth()) {
                                             Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
-                                                Text(t("Missed question ", "गलत प्रश्न ") + (practiceIndex + 1) + " · " + questionTopic,
-                                                    style = MaterialTheme.typography.titleSmall)
+                                                Text(t("Topic: ", "विषय: ") + questionTopic, style = MaterialTheme.typography.titleSmall)
                                                 Text(retryQuestion.textAny("prompt", "question", "text"),
                                                     style = MaterialTheme.typography.bodyMedium)
                                                 Text(t("Practice attempts: ", "अभ्यास प्रयास: ") +
@@ -7737,7 +7807,6 @@ private fun AssessmentAttemptScreen(
                             }
                         }
                     }
-                    val question = questions[safeQuestionIndex]
                     val question = questions[safeQuestionIndex]
                     val id = question.longAny("attemptQuestionId", "attempt_question_id").toString()
                     val serverAnswer = question.textAny("answer")
