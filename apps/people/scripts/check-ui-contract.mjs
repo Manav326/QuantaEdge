@@ -234,7 +234,17 @@ const institutionAdminWorkspace = read('apps/admin/app/institution-operations/pa
 const guidedCourseCreator = read('apps/admin/app/content/create/page.tsx');
 const hrmsCourseHandoff = read('apps/people/app/institutions/MarketplaceLaunchStepper.tsx');
 assert(institutionCompatibilityRoute.includes('InstitutionRouteRedirect') && institutionCompatibilityRoute.includes('NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN') && !institutionCompatibilityRoute.includes('Submit for HRMS review'), 'The learner-facing web app must redirect the retired institution-management page into Admin instead of hosting a third workspace.');
-assert(institutionAdminWorkspace.includes('/api/v1/admin/institution-operations/course-releases') && institutionAdminWorkspace.includes('/api/v1/admin/institution-operations/courses/') && institutionAdminWorkspace.includes('Approve for sharing') && institutionAdminWorkspace.includes('Institution learner roster'), 'Institution reports, roster and release handoff must be placed in the Admin workspace.');
+const institutionAdminEnglishCatalog = read('apps/admin/app/i18n/catalogs/english.json');
+const institutionAdminHinglishCatalog = read('apps/admin/app/i18n/catalogs/hinglish.json');
+assert(institutionAdminWorkspace.includes('/api/v1/admin/institution-operations/course-releases')
+  && institutionAdminWorkspace.includes('/api/v1/admin/institution-operations/courses/')
+  && institutionAdminWorkspace.includes("t('admin.institutionOperations.approveForSharing')")
+  && institutionAdminWorkspace.includes("t('admin.institutionOperations.rosterTitle')")
+  && institutionAdminEnglishCatalog.includes('"admin.institutionOperations.approveForSharing": "Approve for sharing"')
+  && institutionAdminEnglishCatalog.includes('"admin.institutionOperations.rosterTitle": "Institution learner roster"')
+  && institutionAdminHinglishCatalog.includes('"admin.institutionOperations.approveForSharing": "Sharing approve karein"')
+  && institutionAdminHinglishCatalog.includes('"admin.institutionOperations.rosterTitle": "Institution learner roster"'),
+  'Institution reports, roster and release handoff must be implemented in Admin with shared localized labels.');
 assert(guidedCourseCreator.includes("'/api/v1/admin/content/courses'") && guidedCourseCreator.includes("router.push('/content?courseId='"), 'Guided course creation must open Content Studio in the newly created course context.');
 assert(hrmsCourseHandoff.includes('NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN') && hrmsCourseHandoff.includes("'/institution-operations?'"), 'HRMS release blockers must hand the authorised actor into the Admin institution workflow, never the learner portal.');
 const financeSetupContract = read('apps/people/app/finance/page.tsx');
