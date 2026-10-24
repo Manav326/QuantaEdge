@@ -716,7 +716,6 @@ def ensure_test_pack(
         linked_test = cursor.fetchone()
         if (
             not linked_test
-            or linked_test[0] != status
             or linked_test[1] != package_id
             or linked_test[2] != package_version
             or str(linked_test[3] or "").strip().lower() != str(paper["package_sha256"]).lower()
