@@ -164,7 +164,7 @@ class AssessmentLifecycleIntegrationTest {
       values(?,'EDUCATION_ADMIN','CONTENT_VIEW')
       on conflict(staff_id,workspace_key,permission_key) do nothing
       """,analyticsStaffId);
-    AuthContext reviewer=new AuthContext(101L,null,analyticsStaffId,"ADMIN","Assessment analytics reviewer");
+    AuthContext reviewer=new AuthContext(null,null,analyticsStaffId,"ADMIN","Assessment analytics reviewer","EDUCATION_ADMIN");
     Map<String,Object> analytics=controller.courseAssessmentAnalytics(
         fixture.courseId(),null,reviewer,fixture.tenant());
     Map<String,Object> summary=(Map<String,Object>)analytics.get("summary");
