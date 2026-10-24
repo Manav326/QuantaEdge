@@ -191,7 +191,7 @@ export default function MarketplaceLaunchStepper({
         const next = { ...previous };
         for (const item of result.trustedCoursePolicies || []) {
           if (next[item.course_identity_id] === undefined) {
-            next[item.course_identity_id] = item.trusted_auto_approval_note || 'Enable for trusted course content updates';
+            next[item.course_identity_id] = '';
           }
         }
         return next;
@@ -271,6 +271,7 @@ export default function MarketplaceLaunchStepper({
       setNotice(result.message || (enabled
         ? 'Trusted course auto-approval enabled.'
         : 'Trusted course auto-approval disabled.'));
+      setTrustedPolicyNotes(previous => ({ ...previous, [item.course_identity_id]: '' }));
       await load();
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Trusted-course policy could not be saved.');
@@ -563,7 +564,7 @@ export default function MarketplaceLaunchStepper({
                     <div className={styles.rightsActions}>
                       <button type="button"
                         className={item.trusted_auto_approval ? styles.secondaryButton : styles.primaryButton}
-                        disabled={busyKey !== null || loading || ( !item.trusted_auto_approval && !item.authenticated)}
+                        disabled={busyKey !== null || loading || note.trim().length < 5 || ( !item.trusted_auto_approval && !item.authenticated)}
                         onClick={() => void setTrustedAutoApproval(item, !item.trusted_auto_approval)}>
                         {busy
                           ? 'Saving policy…'
