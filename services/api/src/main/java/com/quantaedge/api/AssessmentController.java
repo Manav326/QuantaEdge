@@ -891,6 +891,9 @@ public class AssessmentController {
       String type=String.valueOf(question.get("question_type"));
       if(!Set.of("MCQ","TRUE_FALSE","INFERENCE","INPUT","NUMERICAL","SHORT_ANSWER","LONG_ANSWER","CASE_BASED","SOURCE_BASED","DIAGRAM","MAP","ASSERTION_REASON","MATCH","ORDER").contains(type))
         issues.add(at+".question_type is not supported.");
+      if(question.get("difficulty")!=null
+          && !Set.of("FOUNDATION","CORE","CHALLENGE").contains(String.valueOf(question.get("difficulty"))))
+        issues.add(at+".difficulty must be FOUNDATION, CORE, or CHALLENGE.");
       packageText(question,"prompt",1,4000,issues,at);
       Object promptLocales=question.get("prompt_i18n");
       if(!(promptLocales instanceof Map<?,?> localed)||localed.isEmpty())issues.add(at+".prompt_i18n must contain at least one language.");
