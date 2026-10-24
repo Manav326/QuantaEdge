@@ -24,6 +24,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.json.JSONObject
 
+internal fun isAssessmentOnlyCourse(course: JSONObject): Boolean =
+    course.optString("course_type_code") == "ASSESSMENT" ||
+        course.optString("delivery_mode") == "ASSESSMENT_ONLY"
+
 @Composable
 fun StudentAllCoursesScreen(
     programs: List<JSONObject>,
@@ -91,8 +95,7 @@ fun StudentAllCoursesScreen(
             owned.forEach { course ->
                 val id = course.optLong("id", course.optLong("course_id"))
                 val active = id == activeCourseId
-                val assessmentCourse = course.optString("course_type_code") == "ASSESSMENT" ||
-                    course.optString("delivery_mode") == "ASSESSMENT_ONLY"
+                val assessmentCourse = isAssessmentOnlyCourse(course)
                 val subjects = course.optJSONArray("subjects")?.let { array ->
                     (0 until array.length()).mapNotNull { index -> array.optJSONObject(index) }
                 }.orEmpty()
