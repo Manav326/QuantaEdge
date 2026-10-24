@@ -114,8 +114,12 @@ assert.ok(read('apps/people/app/components/PeopleWorkspaceLayout.tsx').includes(
   'HRMS header needs a notification bell.');
 assert.ok(read('apps/web/app/components/NotificationInboxClient.tsx').includes("role === 'institution'"),
   'Institution Admin inbox must reuse the durable inbox client.');
-assert.ok(read('apps/web/app/institution/page.tsx').includes('<NotificationInboxClient role="institution" />'),
-  'Institution Admin portal needs an inbox view separate from the sender studio.');
+assert.ok(read('apps/admin/app/notifications/page.tsx').includes('NotificationStudio surface="admin"'),
+  'Education Admin must continue to own the notification design and send studio.');
+assert.ok(read('apps/admin/app/components/StaffNotificationInbox.tsx').includes('/api/v1/admin/notifications/inbox'),
+  'Education Admin must keep the scoped notification inbox after the old institution portal is retired.');
+assert.ok(!read('apps/web/app/institution/page.tsx').includes('NotificationInboxClient'),
+  'The learner-facing app must not retain a duplicate institution-admin notification inbox.');
 
 const webLayout = read('apps/web/app/components/WorkspaceLayout.tsx');
 assert.ok(webLayout.includes('<NotificationBell role={role} />'),
