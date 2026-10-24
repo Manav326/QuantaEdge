@@ -170,7 +170,7 @@ class CourseMarketplaceLaunchRightsReviewTest {
         "authenticated", true);
     when(jdbc.queryForList(contains("select i.id,i.source_institution_id"), any(Object[].class)))
         .thenReturn(List.of(identity));
-    when(jdbc.queryForObject(contains("select exists("), eq(Boolean.class), any(Object[].class)))
+    when(jdbc.queryForObject(contains("from institution_course_package_import i"), eq(Boolean.class), any(Object[].class)))
         .thenReturn(false);
     when(jdbc.update(anyString(), any(Object[].class))).thenReturn(1);
 
