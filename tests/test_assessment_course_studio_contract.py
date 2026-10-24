@@ -96,9 +96,6 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
             self.assertIn(field, schema)
 
 
-if __name__ == "__main__":
-    unittest.main()
-
     def test_student_assessment_review_renders_one_question_at_a_time_with_navigation(self):
         web = (ROOT / "apps/web/app/student/tests/TestsClient.tsx").read_text(encoding="utf-8")
         android = (ROOT / "apps/android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt").read_text(encoding="utf-8")
@@ -108,3 +105,7 @@ if __name__ == "__main__":
         self.assertIn("questions.forEachIndexed", android)
         self.assertIn("One at a time", android)
         self.assertIn("practiceQuestionIndex = (practiceIndex + 1).coerceAtMost(incorrectQuestions.lastIndex)", android)
+
+
+if __name__ == "__main__":
+    unittest.main()
