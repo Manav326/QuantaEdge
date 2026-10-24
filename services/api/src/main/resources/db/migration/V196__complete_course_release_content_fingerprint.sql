@@ -10,7 +10,7 @@ CREATE FUNCTION course_content_fingerprint(p_program_id bigint)
 RETURNS char(32)
 LANGUAGE sql
 STABLE
-AS $
+AS $qe_course_fingerprint$
   WITH scoped_subjects AS (
     SELECT DISTINCT s.id
     FROM curriculum_program_subject ps
@@ -251,7 +251,7 @@ AS $
       ORDER BY entity_type,entity_id
   ),''))::char(32)
   FROM content_rows;
-$$;
+$qe_course_fingerprint$;
 
 COMMENT ON FUNCTION course_content_fingerprint(bigint) IS
   'Stable fingerprint of the course-owned curriculum, all lesson teaching blocks/questions/translations, source evidence, assigned resources and assessment/test-pack snapshots. Publication-only assessment status and timestamps are intentionally excluded so a separately reviewed assessment may be published without changing the submitted content fingerprint.';
@@ -271,5 +271,5 @@ WHERE r.release_state='DRAFT'
    );
 
 INSERT INTO app_metadata(key,value)
-VALUES ('schema','complete-course-release-content-fingerprint-v182')
+VALUES ('schema','complete-course-release-content-fingerprint-v196')
 ON CONFLICT(key) DO UPDATE SET value=EXCLUDED.value;
