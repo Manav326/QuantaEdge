@@ -398,7 +398,14 @@ export default function FinancePage(){
     try{
       const result=await api<PaymentReconciliationResult>('/api/v1/hrms/platform/finance/course-orders/'+order.local_order_id+'/reconcile',{method:'POST'});
       setPaymentActionResult(result);
-      setNotice(result.resolutionMessage||result.message||'Provider reconciliation finished. Review the result and saved action history.');
+      const outcome=String(result.status||'').toUpperCase();
+      const resultMessage=result.resolutionMessage||result.message||'Provider reconciliation finished. Review the result and saved action history.';
+      if(outcome==='RECONCILIATION_REQUIRED'||outcome==='ACTION_BLOCKED') {
+        setError(resultMessage);
+        setNotice('');
+      } else {
+        setNotice(resultMessage);
+      }
       await Promise.all([loadPaymentOrders(),loadPaymentEvents(order.local_order_id),loadSelectedProviderEvents(order.local_order_id),loadProviderEvents()]);
     }catch(e){
       setError(e instanceof Error?e.message:'Payment reconciliation could not be completed. Do not ask the learner to pay again until provider status is checked.');
