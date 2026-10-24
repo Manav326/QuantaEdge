@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "590b3c214f36171a7c8f196b63077c2659f3b2c526caf70d166d8ae002e1b767",
+  "raw_analysis_sha256": "c898c7828f95c3422a751f8128b4113fbfc6cad793b2a14999c09c641c082754",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40123283396",
-      "checkpointed_at": "2026-10-24T20:32:58Z",
+      "checkpointed_at": "2026-10-24T20:42:31Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40123283396",
-      "checkpointed_at": "2026-10-24T20:33:44Z",
+      "checkpointed_at": "2026-10-24T20:43:18Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57829,7 +57829,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40123283396",
-      "checkpointed_at": "2026-10-24T20:34:39Z",
+      "checkpointed_at": "2026-10-24T20:44:15Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -61071,6 +61071,92 @@
           "The image does not contain any text or labels that provide additional information.",
           "The image is a simple cartoon and does not represent a complex concept or relationship."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a050aeaaff85aea12a94f742",
+      "asset_sha256": "a35b7da95dc44dab2369d0f07612d427ec50b78efe87e91a4e16ff57a4682418",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/a35b7da95dc44dab2369d0f07612d427ec50b78efe87e91a4e16ff57a4682418.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9dc2465d4f8850201a45c40a5e6052066a129f8027fe8e478a9f4d0123a52c92",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl wearing a yellow and orange striped shirt with blue bows, standing with her hands open and palms facing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "floating",
+          "sinking",
+          "gravitational force",
+          "water displacement"
+        ],
+        "context_relation": "The image is related to the concept of floating and sinking, as it shows a girl standing with her hands open, possibly demonstrating the concept of buoyancy.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the objects being used."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40123283396",
+      "checkpointed_at": "2026-10-24T20:45:57Z",
+      "effective_analysis": {
+        "visual_summary": "A girl wearing a yellow and orange striped shirt with blue bows, standing with her hands open and palms facing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "floating",
+          "sinking",
+          "gravitational force",
+          "water displacement"
+        ],
+        "context_relation": "The image is related to the concept of floating and sinking, as it shows a girl standing with her hands open, possibly demonstrating the concept of buoyancy.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the objects being used."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6f171459d5dd0adf29db12a2",
+      "asset_sha256": "22e7befa1343fff84463bcd0b93a3b2a2869b48c502630ebaaff69e6a928083e",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/22e7befa1343fff84463bcd0b93a3b2a2869b48c502630ebaaff69e6a928083e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9dc2465d4f8850201a45c40a5e6052066a129f8027fe8e478a9f4d0123a52c92",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person pointing upwards while holding their ear, possibly indicating a sound or a question.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40123283396",
+      "checkpointed_at": "2026-10-24T20:47:27Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person pointing upwards while holding their ear, possibly indicating a sound or a question.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

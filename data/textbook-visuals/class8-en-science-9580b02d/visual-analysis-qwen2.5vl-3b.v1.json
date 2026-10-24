@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1237,
+    "assets_selected": 1238,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "d65482e79397897103b91e37",
-      "b3152003ddcf92d3e7dba58b"
+      "a050aeaaff85aea12a94f742",
+      "6f171459d5dd0adf29db12a2"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1233,
-    "assets_remaining": 1058,
-    "assets_completion_percent": 53.8,
+    "assets_analyzed": 1235,
+    "assets_remaining": 1056,
+    "assets_completion_percent": 53.9,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1232,
+    "assets_skipped_from_checkpoint": 1233,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40123283396",
-      "checkpointed_at": "2026-10-24T20:32:58Z"
+      "checkpointed_at": "2026-10-24T20:42:31Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40123283396",
-      "checkpointed_at": "2026-10-24T20:33:44Z"
+      "checkpointed_at": "2026-10-24T20:43:18Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38429,7 +38429,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40123283396",
-      "checkpointed_at": "2026-10-24T20:34:39Z"
+      "checkpointed_at": "2026-10-24T20:44:15Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -40538,6 +40538,65 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40123283396",
       "checkpointed_at": "2026-10-24T20:41:17Z"
+    },
+    {
+      "asset_id": "a050aeaaff85aea12a94f742",
+      "asset_sha256": "a35b7da95dc44dab2369d0f07612d427ec50b78efe87e91a4e16ff57a4682418",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/a35b7da95dc44dab2369d0f07612d427ec50b78efe87e91a4e16ff57a4682418.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9dc2465d4f8850201a45c40a5e6052066a129f8027fe8e478a9f4d0123a52c92",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl wearing a yellow and orange striped shirt with blue bows, standing with her hands open and palms facing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "floating",
+          "sinking",
+          "gravitational force",
+          "water displacement"
+        ],
+        "context_relation": "The image is related to the concept of floating and sinking, as it shows a girl standing with her hands open, possibly demonstrating the concept of buoyancy.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the objects being used."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40123283396",
+      "checkpointed_at": "2026-10-24T20:45:57Z"
+    },
+    {
+      "asset_id": "6f171459d5dd0adf29db12a2",
+      "asset_sha256": "22e7befa1343fff84463bcd0b93a3b2a2869b48c502630ebaaff69e6a928083e",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 96,
+      "asset_path": "assets/22e7befa1343fff84463bcd0b93a3b2a2869b48c502630ebaaff69e6a928083e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9dc2465d4f8850201a45c40a5e6052066a129f8027fe8e478a9f4d0123a52c92",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person pointing upwards while holding their ear, possibly indicating a sound or a question.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40123283396",
+      "checkpointed_at": "2026-10-24T20:47:27Z"
     }
   ]
 }
