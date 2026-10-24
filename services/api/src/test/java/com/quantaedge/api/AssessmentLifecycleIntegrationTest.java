@@ -193,6 +193,11 @@ class AssessmentLifecycleIntegrationTest {
     Map<String,Object> started=controller.startOrResumeAttempt(
         fixture.assessmentId(),fixture.courseId(),"hi",false,fixture.student(),fixture.tenant());
     long attemptId=((Number)started.get("attempt_id")).longValue();
+    ResponseStatusException beforeRelease=assertThrows(ResponseStatusException.class,
+        ()->controller.studentIncorrectPracticeProgress(
+            attemptId,fixture.courseId(),fixture.student(),fixture.tenant()));
+    assertEquals(409,beforeRelease.getStatusCode().value(),
+        "Incorrect-question practice must remain locked before result release.");
     List<Map<String,Object>> startedQuestions=(List<Map<String,Object>>)started.get("questions");
     long questionId=((Number)startedQuestions.getFirst().get("attemptQuestionId")).longValue();
 
@@ -204,7 +209,41 @@ class AssessmentLifecycleIntegrationTest {
     assertEquals(false,((List<Map<String,Object>>)released.get("questions")).getFirst().get("isCorrect"));
     assertEquals("Algorithms",((List<Map<String,Object>>)released.get("questions")).getFirst().get("topic"));
     assertEquals(List.of("Sorting"),((List<Map<String,Object>>)released.get("questions")).getFirst().get("subtopic_tags"));
+    List<Map<String,Object>> releasedQuestions=(List<Map<String,Object>>)released.get("questions");
+    Map<String,Object> officialQuestion=releasedQuestions.getFirst();
+    Object officialAnswer=officialQuestion.get("answer");
+    Object officialCorrectness=officialQuestion.get("isCorrect");
+    Object officialAwardedMarks=officialQuestion.get("awardedMarks");
+    Object officialPenaltyMarks=officialQuestion.get("penaltyMarks");
     Object officialScore=released.get("final_score");
+    Object officialPenaltyScore=released.get("penalty_score");
+
+    Long otherStudentId=jdbc.queryForObject("""
+      insert into student(public_id,display_name,class_code,board,language,environment,active)
+      values(?,?,?,'E2E Bihar Board','hi','PRODUCTION',true) returning id
+      """,Long.class,UUID.randomUUID(),"Other assessment learner","E2E-OTHER");
+    Long institutionId=fixture.tenant().institutionId();
+    jdbc.update("""
+      insert into institution_membership(
+        institution_id,student_id,join_code_id,status,joined_at,left_at,created_at,updated_at)
+      values(?,?,null,'ACTIVE',now(),null,now(),now())
+      """,institutionId,otherStudentId);
+    jdbc.update("""
+      insert into student_program_enrollment(
+        student_id,program_id,institution_id,status,enrolled_at,created_at,updated_at)
+      values(?,?,?,'ACTIVE',now(),now(),now())
+      """,otherStudentId,fixture.courseId(),institutionId);
+    AuthContext otherStudent=new AuthContext(null,otherStudentId,"STUDENT","Other assessment learner");
+    ResponseStatusException otherRead=assertThrows(ResponseStatusException.class,
+        ()->controller.studentIncorrectPracticeProgress(
+            attemptId,fixture.courseId(),otherStudent,fixture.tenant()));
+    assertEquals(404,otherRead.getStatusCode().value(),
+        "A different learner must not be able to inspect another learner's incorrect questions.");
+    ResponseStatusException otherRetry=assertThrows(ResponseStatusException.class,
+        ()->controller.submitIncorrectPracticeAnswer(attemptId,fixture.courseId(),
+            Map.of("attemptQuestionId",questionId,"answer","B"),otherStudent,fixture.tenant()));
+    assertEquals(404,otherRetry.getStatusCode().value(),
+        "A different learner must not be able to submit retries against another learner's attempt.");
 
     Map<String,Object> progress=controller.studentIncorrectPracticeProgress(
         attemptId,fixture.courseId(),fixture.student(),fixture.tenant());
@@ -229,7 +268,20 @@ class AssessmentLifecycleIntegrationTest {
     Map<String,Object> officialAfterPractice=controller.studentAttempt(
         attemptId,fixture.courseId(),fixture.student(),fixture.tenant());
     assertEquals(officialScore,officialAfterPractice.get("final_score"),
-        "Practice answers must never change the released score or negative-marking result.");
+        "Practice answers must never change the released score.");
+    assertEquals(officialPenaltyScore,officialAfterPractice.get("penalty_score"),
+        "Practice answers must never change official negative-marking penalties.");
+    List<Map<String,Object>> officialQuestionsAfterPractice=
+        (List<Map<String,Object>>)officialAfterPractice.get("questions");
+    Map<String,Object> officialQuestionAfterPractice=officialQuestionsAfterPractice.getFirst();
+    assertEquals(officialAnswer,officialQuestionAfterPractice.get("answer"),
+        "Retry answers must be stored outside the submitted paper.");
+    assertEquals(officialCorrectness,officialQuestionAfterPractice.get("isCorrect"));
+    assertEquals(officialAwardedMarks,officialQuestionAfterPractice.get("awardedMarks"));
+    assertEquals(officialPenaltyMarks,officialQuestionAfterPractice.get("penaltyMarks"));
+    assertEquals(1L,jdbc.queryForObject("""
+      select count(*) from student_assessment_question_practice_attempt where source_attempt_id=?
+      """,Long.class,attemptId));
   }
 
 
