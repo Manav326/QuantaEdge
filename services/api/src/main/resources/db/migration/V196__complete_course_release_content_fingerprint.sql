@@ -1,4 +1,4 @@
--- V182: include the complete learner-visible content graph in course release fingerprints.
+-- V196: include the complete learner-visible content graph in course release fingerprints.
 -- V169 covered curriculum labels and assessment snapshots, but omitted lesson blocks, question
 -- options/translations, source mappings and resource associations. A mutation in those tables
 -- could therefore escape the review fingerprint even while changing what learners see.
@@ -135,6 +135,13 @@ AS $qe_course_fingerprint$
     SELECT 'chapter-source', cs.id::text, to_jsonb(cs)::text
       FROM chapter_source cs WHERE cs.chapter_id IN (SELECT id FROM scoped_chapters)
     UNION ALL
+    SELECT 'content-source', src.id::text, to_jsonb(src)::text
+      FROM content_source src
+      WHERE src.id IN (
+        SELECT cs.source_id FROM chapter_source cs
+        WHERE cs.chapter_id IN (SELECT id FROM scoped_chapters)
+      )
+    UNION ALL
     SELECT 'lesson-requirement', lr.id::text, to_jsonb(lr)::text
       FROM lesson_requirement lr WHERE lr.chapter_id IN (SELECT id FROM scoped_chapters)
     UNION ALL
@@ -185,7 +192,11 @@ AS $qe_course_fingerprint$
       FROM learning_resource r WHERE r.id IN (SELECT id FROM scoped_resources)
     UNION ALL
     SELECT 'learning-document-assignment', a.id::text, to_jsonb(a)::text
-      FROM learning_document_course_assignment a WHERE a.course_id=p_program_id
+      FROM learning_document_course_assignment a
+      JOIN curriculum_program p ON p.id=a.course_id AND p.id=p_program_id
+      JOIN institution_course_identity i ON i.id=p.course_identity_id
+        AND i.source_institution_id=a.institution_id
+      WHERE a.course_id=p_program_id
     UNION ALL
     SELECT 'learning-document', d.id::text, to_jsonb(d)::text
       FROM learning_document d WHERE d.id IN (SELECT id FROM scoped_documents)
