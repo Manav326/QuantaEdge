@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2275,
-    "successful_visual_analyses": 2238,
-    "missing_visual_analyses": 5213,
-    "failed_visual_analyses": 37,
+    "raw_analysis_result_rows": 2276,
+    "successful_visual_analyses": 2240,
+    "missing_visual_analyses": 5212,
+    "failed_visual_analyses": 36,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5250,
+    "unresolved_count": 5248,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -88221,9 +88221,27 @@
       "asset_path": "assets/4a46a03a4b6d71fe4c42b5225047aaeaa00feae45aa6e1c62f0bbdcb1793f6cc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the composition of steel and its properties.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Steel",
+          "Mixture of metal (iron) and non-metal (carbon)",
+          "Wires made of steel can support heavy loads",
+          "Used in suspension bridges and cranes to lift heavy objects"
+        ],
+        "concepts": [
+          "Composition of steel",
+          "Properties of steel",
+          "Applications of steel"
+        ],
+        "context_relation": "The text discusses the properties and applications of steel, specifically focusing on its ability to support heavy loads.",
+        "limitations": [
+          "The text does not provide specific details about the composition of steel or the exact properties that make it suitable for these applications."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -94247,9 +94265,29 @@
       "asset_path": "assets/fc15540eb382c72afabdbdfd3de2a33a023c2313b602487898b55327f2efb20d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Observation of iron nails in different environments.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "What can you conclude from this experiment?",
+          "It is observed in glass bottles A and B that the iron nails do not show any brown deposits.",
+          "What does this observation indicate?",
+          "This indicates that brown deposits or discolouration on the iron nails do not develop when the iron nail is kept in dry air alone (bottle A) or water alone (bottle B). However, in glass bottle C, the iron nail shows the presence of brown deposits."
+        ],
+        "concepts": [
+          "Iron nails",
+          "Brown deposits",
+          "Dry air",
+          "Water",
+          "Observation"
+        ],
+        "context_relation": "Observation and conclusion",
+        "limitations": [
+          "The experiment is conducted in a controlled environment with iron nails in glass bottles."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

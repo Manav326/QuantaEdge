@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2242,
+    "assets_selected": 2243,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "3ea26ab4b26aefb4f93f284d",
-      "9459107ed06b531106e820d7",
-      "338a1872e9b9cffd9bc516cf",
-      "03718ba2359975b98bdebc1b",
-      "25477d9d165b80a701e0e7dd"
+      "5ee56b21f0830e88558f6ff0",
+      "4b1298747dc1ec978a226ae5",
+      "7f9f71d3e8d5f7497b695ebb",
+      "647c2218dab5482dd1c1758e",
+      "266230064d1b549d7515207f"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2238,
-    "assets_remaining": 5250,
+    "assets_analyzed": 2240,
+    "assets_remaining": 5248,
     "assets_completion_percent": 29.9,
-    "assets_failed": 37,
-    "assets_skipped_from_checkpoint": 2237,
+    "assets_failed": 36,
+    "assets_skipped_from_checkpoint": 2238,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -75006,7 +75006,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "40123281939",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -78303,7 +78303,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "40123281939",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -78380,19 +78380,39 @@
     {
       "asset_id": "7f9f71d3e8d5f7497b695ebb",
       "asset_sha256": "4a46a03a4b6d71fe4c42b5225047aaeaa00feae45aa6e1c62f0bbdcb1793f6cc",
-      "page_text_context_sha256": "00476094dbf2935081d62341fdac18e4e4cfbdaf307ebc930df0102a262df5f7",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 65,
       "asset_path": "assets/4a46a03a4b6d71fe4c42b5225047aaeaa00feae45aa6e1c62f0bbdcb1793f6cc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "00476094dbf2935081d62341fdac18e4e4cfbdaf307ebc930df0102a262df5f7",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the composition of steel and its properties.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Steel",
+          "Mixture of metal (iron) and non-metal (carbon)",
+          "Wires made of steel can support heavy loads",
+          "Used in suspension bridges and cranes to lift heavy objects"
+        ],
+        "concepts": [
+          "Composition of steel",
+          "Properties of steel",
+          "Applications of steel"
+        ],
+        "context_relation": "The text discusses the properties and applications of steel, specifically focusing on its ability to support heavy loads.",
+        "limitations": [
+          "The text does not provide specific details about the composition of steel or the exact properties that make it suitable for these applications."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40123281939",
+      "checkpointed_at": "2026-10-24T21:19:51Z"
     },
     {
       "asset_id": "acc9a35c54d7fe62944a334e",
@@ -81897,9 +81917,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "39864349902",
+      "run_id": "40123281939",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -84566,6 +84586,45 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "39864349902",
       "checkpointed_at": "2026-10-23T04:13:56Z"
+    },
+    {
+      "asset_id": "266230064d1b549d7515207f",
+      "asset_sha256": "fc15540eb382c72afabdbdfd3de2a33a023c2313b602487898b55327f2efb20d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 70,
+      "asset_path": "assets/fc15540eb382c72afabdbdfd3de2a33a023c2313b602487898b55327f2efb20d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "99164189d212906e693acf4173dfd96e26c4ac89a9d93bc77611637895b192a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Observation of iron nails in different environments.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "What can you conclude from this experiment?",
+          "It is observed in glass bottles A and B that the iron nails do not show any brown deposits.",
+          "What does this observation indicate?",
+          "This indicates that brown deposits or discolouration on the iron nails do not develop when the iron nail is kept in dry air alone (bottle A) or water alone (bottle B). However, in glass bottle C, the iron nail shows the presence of brown deposits."
+        ],
+        "concepts": [
+          "Iron nails",
+          "Brown deposits",
+          "Dry air",
+          "Water",
+          "Observation"
+        ],
+        "context_relation": "Observation and conclusion",
+        "limitations": [
+          "The experiment is conducted in a controlled environment with iron nails in glass bottles."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40123281939",
+      "checkpointed_at": "2026-10-24T21:26:43Z"
     }
   ]
 }
