@@ -916,6 +916,62 @@ export default function FinancePage(){
           <div className={styles.panelHead}><div><h2>Order #{selectedPaymentOrderId} · resolution history</h2>
             <p>Provider checks and staff actions are recorded as immutable events.</p></div>
             <button type="button" className={styles.secondarySmall} onClick={()=>void Promise.all([loadPaymentEvents(selectedPaymentOrderId),loadSelectedProviderEvents(selectedPaymentOrderId)])} disabled={paymentEventsLoading||selectedProviderEventsLoading}>Refresh history</button></div>
+          {statusTraceLoadingId===selectedPaymentOrderId&&<div className={styles.note} role="status">Checking the saved transaction path and querying Razorpay without changing this order…</div>}
+          {statusTraceError&&<div className={styles.alertError} role="alert">{statusTraceError}</div>}
+          {statusTrace&&statusTrace.orderId===selectedPaymentOrderId&&<section className={styles.statusTrace} aria-label="Transaction delivery chain">
+            <div className={styles.statusTraceHeader}>
+              <div><h3>Transaction delivery chain</h3>
+                <p>Read-only inspection from checkout initiation through invoice PDF storage. No payment, order, financial snapshot, entitlement or invoice is changed.</p>
+                <small>Order QE-ORDER-{statusTrace.orderId} · Checked {new Date(statusTrace.checkedAt).toLocaleString('en-IN')}</small>
+              </div>
+              <span className={statusTrace.overallStatus==='COMPLETE'?styles.traceOverallComplete:statusTrace.overallStatus==='BLOCKED'?styles.traceOverallBlocked:statusTrace.overallStatus==='PENDING'?styles.traceOverallPending:styles.traceOverallUnknown}>
+                {statusTrace.overallStatus}
+              </span>
+            </div>
+            {statusTrace.provider&&<div className={styles.traceProviderSummary}>
+              <b>Razorpay · {statusTrace.provider.matchedProviderMode||statusTrace.provider.configuredProviderMode||'mode unknown'}</b>
+              <span>{statusTrace.provider.providerQueryAvailable
+                ?'Provider order: '+String(statusTrace.provider.providerOrderStatus||'unknown')+' · Result: '+String(statusTrace.provider.providerStatus||'unknown')
+                :'Provider state unconfirmed'}</span>
+              <p>{statusTrace.provider.message||'No provider diagnostic message was returned.'}</p>
+              {statusTrace.provider.providerAmountPaidPaise!==undefined&&<small>Amount paid at provider: {rupees(statusTrace.provider.providerAmountPaidPaise,'INR')} · attempts: {statusTrace.provider.providerAttemptCount??'—'}</small>}
+              {!statusTrace.provider.providerQueryAvailable&&<small>Credentials checked: {(statusTrace.provider.credentialModesTried||[]).join(', ')||'none configured'}. Local database stages remain available even when Razorpay cannot be queried.</small>}
+            </div>}
+            <div className={styles.traceStageList}>
+              {statusTrace.steps.map((step,index)=>{
+                const tone=step.status==='COMPLETE'?styles.traceStageComplete
+                  :step.status==='BLOCKED'?styles.traceStageBlocked
+                  :step.status==='PENDING'?styles.traceStagePending
+                  :step.status==='UNKNOWN'?styles.traceStageUnknown:styles.traceStageNotReached;
+                const badge=step.status==='COMPLETE'?styles.traceBadgeComplete
+                  :step.status==='BLOCKED'?styles.traceBadgeBlocked
+                  :step.status==='PENDING'?styles.traceBadgePending
+                  :step.status==='UNKNOWN'?styles.traceBadgeUnknown:styles.traceBadgeNotReached;
+                return <article className={styles.traceStage+' '+tone} key={step.key}>
+                  <span className={styles.traceStageNumber}>{index+1}</span>
+                  <div className={styles.traceStageBody}>
+                    <div className={styles.traceStageHeading}><b>{step.title}</b><span className={badge}>{step.status.replaceAll('_',' ')}</span></div>
+                    <p>{step.summary}</p>
+                    {step.occurredAt&&<small>Recorded: {new Date(step.occurredAt).toLocaleString('en-IN')}</small>}
+                    {!!step.details?.length&&<ul>{step.details.map((detail,i)=><li key={step.key+'-'+i}>{detail}</li>)}</ul>}
+                  </div>
+                </article>;
+              })}
+            </div>
+            {statusTrace.provider?.paymentAttempts&&statusTrace.provider.paymentAttempts.length>0&&<div>
+              <h4>Razorpay payment attempts</h4>
+              <div className={styles.policyTableWrap}><table className={styles.table}>
+                <thead><tr><th>Payment</th><th>Status</th><th>Amount</th><th>Provider details</th></tr></thead>
+                <tbody>{statusTrace.provider.paymentAttempts.map((attempt,i)=><tr key={attempt.paymentId+'-trace-'+i}>
+                  <td><b>{attempt.paymentId}</b><small>{attempt.method||'Method not reported'}</small></td>
+                  <td><span className={styles.status}>{attempt.status}</span><small>{attempt.matchesExpectedAmountAndCurrency?'Amount/currency match':'Amount/currency mismatch'}</small></td>
+                  <td>{rupees(attempt.amountPaise,attempt.currency||'INR')}</td>
+                  <td><b>{attempt.errorCode||attempt.errorReason||'No failure code'}</b><small>{attempt.errorDescription||'No provider failure description'}</small></td>
+                </tr>)}</tbody>
+              </table></div>
+            </div>}
+            <p className={styles.traceReadOnlyNote}>{statusTrace.message}</p>
+          </section>}
           {paymentActionResult&&<div className={paymentActionResult.status==='VERIFIED'?styles.alertSuccess:styles.note} role="status">
             <b>{paymentActionResult.resolutionCode||paymentActionResult.status}</b>
             <p>{paymentActionResult.resolutionMessage||paymentActionResult.message||'No provider message was returned.'}</p>
