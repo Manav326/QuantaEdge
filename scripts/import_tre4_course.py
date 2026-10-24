@@ -470,6 +470,72 @@ def get_or_create_course(cursor: Any, institution_id: int, class_id: int) -> tup
     return int(course_id), str(public_id), True
 
 
+def ensure_course_identity(cursor: Any, institution_id: int, course_id: int) -> int:
+    """Attach the TRE4 course to its source-owned identity before content import."""
+    stable_key = f"I{institution_id}_TRE4"
+    cursor.execute("""
+        SELECT p.display_name,p.course_type_code,p.course_identity_id,
+               i.source_institution_id,i.stable_course_key,i.course_type_code
+        FROM curriculum_program p
+        LEFT JOIN institution_course_identity i ON i.id=p.course_identity_id
+        WHERE p.id=%s FOR UPDATE OF p
+    """, (course_id,))
+    row = cursor.fetchone()
+    if not row or row[0] != COURSE_TITLE:
+        raise ImportErrorSafe("TRE-4 course identity cannot be reconciled with the expected course.")
+    display_name, course_type, identity_id, owner_id, saved_key, identity_type = row
+    if identity_id is not None:
+        if int(owner_id or 0) != institution_id or saved_key != stable_key:
+            raise ImportErrorSafe("TRE-4 course is linked to a different source identity; refusing cross-institution mutation.")
+        if course_type != "ASSESSMENT" or identity_type != "ASSESSMENT":
+            raise ImportErrorSafe("TRE-4 course identity has a conflicting type; reconcile it through the source-owned draft workflow.")
+        return int(identity_id)
+
+    cursor.execute("""
+        SELECT count(*) FROM institution_course_release
+        WHERE program_id=%s AND release_state NOT IN ('DRAFT')
+    """, (course_id,))
+    non_draft_releases = int(cursor.fetchone()[0])
+    cursor.execute("SELECT count(*) FROM assessment WHERE course_id=%s AND status='PUBLISHED'", (course_id,))
+    published_assessments = int(cursor.fetchone()[0])
+    if non_draft_releases or published_assessments:
+        raise ImportErrorSafe("An unlinked TRE-4 course has reviewed/published history; refusing to rewrite its identity or type.")
+
+    cursor.execute("""
+        SELECT id,display_name,course_type_code,status
+        FROM institution_course_identity
+        WHERE source_institution_id=%s AND stable_course_key=%s
+        FOR UPDATE
+    """, (institution_id, stable_key))
+    existing = cursor.fetchone()
+    if existing:
+        identity_id, identity_name, identity_type, identity_status = existing
+        if identity_name != COURSE_TITLE or identity_type not in {"ASSESSMENT", "K12"} or identity_status != "ACTIVE":
+            raise ImportErrorSafe("The stable TRE-4 identity exists with conflicting metadata.")
+        if identity_type != "ASSESSMENT":
+            cursor.execute("""
+                UPDATE institution_course_identity SET course_type_code='ASSESSMENT',updated_at=now()
+                WHERE id=%s AND source_institution_id=%s AND status='ACTIVE'
+            """, (identity_id, institution_id))
+    else:
+        cursor.execute("""
+            INSERT INTO institution_course_identity(
+              source_institution_id,stable_course_key,display_name,course_type_code
+            ) VALUES (%s,%s,%s,'ASSESSMENT') RETURNING id
+        """, (institution_id, stable_key, COURSE_TITLE))
+        identity_id = int(cursor.fetchone()[0])
+
+    cursor.execute("""
+        UPDATE curriculum_program
+        SET course_type_code='ASSESSMENT',course_identity_id=%s,content_version_no=1,
+            stream_code='BPSC_TRE',updated_at=now()
+        WHERE id=%s AND course_identity_id IS NULL
+    """, (identity_id, course_id))
+    if cursor.rowcount != 1:
+        raise ImportErrorSafe("TRE-4 course identity changed concurrently; retry the import.")
+    return int(identity_id)
+
+
 def ensure_delivery_mode(cursor: Any, course_id: int) -> None:
     cursor.execute("SELECT delivery_mode FROM curriculum_program_delivery_mode WHERE program_id=%s FOR UPDATE", (course_id,))
     row = cursor.fetchone()
@@ -627,6 +693,7 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
             institution_id = int(qe_rows[0][0])
             class_id = get_or_create_container_class(cursor)
             course_id, public_id, created_course = get_or_create_course(cursor, institution_id, class_id)
+            course_identity_id = ensure_course_identity(cursor, institution_id, course_id)
             ensure_delivery_mode(cursor, course_id)
             subject_id, chapter_id, created_subject = get_or_create_subject_chapter(cursor, course_id, class_id)
 
@@ -719,7 +786,8 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                     ) VALUES (%s,%s,%s,'COURSE_CREATED',%s::jsonb)
                 """, (institution_id, release_id, assignment_id, json.dumps({
                     "courseId": course_id, "courseCode": f"I{institution_id}_TRE4",
-                    "publicId": public_id, "subjectId": subject_id, "chapterId": chapter_id,
+                    "courseIdentityId": course_identity_id, "publicId": public_id,
+                    "subjectId": subject_id, "chapterId": chapter_id,
                     "deliveryMode": "ASSESSMENT_ONLY", "source": "scripts/import_tre4_course.py",
                 })))
             if release_submitted:
