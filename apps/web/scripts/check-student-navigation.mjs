@@ -407,7 +407,7 @@ assert.ok(!learnClient.includes("import StructuredLessonExperience from '../stru
   safeQuestionOptionsMigration.includes("WHEN p_question_type='ORDER' THEN") &&
   safeQuestionOptionsMigration.includes("WHEN p_question_type='MATCH' THEN") &&
   translatedSafeQuestionOptionsMigration.includes('p_translated_options jsonb') &&
-  translatedSafeQuestionOptionsMigration.includes('qe_student_safe_question_options(p_question_id,p_question_type)') &&
+  translatedSafeQuestionOptionsMigration.includes('qe_student_safe_question_options(p_question_id, p_question_type)') &&
   relationalStructuredLessonService.includes('question.put("legacy_question_type", rawType)') &&
   relationalStructuredLessonService.includes('question.put("legacy_interaction_type", legacyInteraction)') &&
   relationalStructuredLessonService.includes('question.set("left_items", leftItems)') &&
