@@ -705,8 +705,8 @@ assert.ok(issue66LiveClassApiContract.includes('@GetMapping("/learning/live-clas
   'Full schedule visibility must be explicit for the dashboard while the normal class catalogue retains its 24-hour upcoming window and 60-day history boundary.');
 assert.ok(androidApp.includes('&includeFuture=true') &&
   issue66LiveClassTestsContract.includes('studentClassCatalogueCanIncludeFarFutureScheduledSessionsWithoutChangingDefaultWindow') &&
-  issue66LiveClassTestsContract.includes('eq(7L), eq(1L), eq(true), eq(""), eq(""), eq(71L), eq(71L), eq(25), eq(0)') &&
-  issue66LiveClassTestsContract.includes('eq(Long.class), eq(7L), eq(1L), eq(true), eq(""), eq(""), eq(71L), eq(71L)'),
+  issue66LiveClassTestsContract.includes('eq(7L), eq(1L), eq(71L), eq(true), eq(""), eq(""), eq(71L), eq(71L), eq(25), eq(0)') &&
+  issue66LiveClassTestsContract.includes('eq(Long.class), eq(7L), eq(1L), eq(71L), eq(true), eq(""), eq(""), eq(71L), eq(71L)'),
   'Android dashboard and API tests must exercise the full-schedule query mode.');
 const issue66AndroidDashboardRefresh = androidApp.slice(
   androidApp.indexOf('suspend fun refreshDashboardClasses()'),
