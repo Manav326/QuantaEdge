@@ -5041,7 +5041,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onRefresh = {
                             runTask {
                                 val id = assessmentAttempt.longAny("attempt_id", "attemptId", "id")
-                                assessmentAttempt = ApiClient.getObject("/api/v1/learning/assessment-attempts/" + id)
+                                if (currentCourseId <= 0L) throw IOException("Select an enrolled course before refreshing this result.")
+                                assessmentAttempt = ApiClient.getObject("/api/v1/learning/assessment-attempts/" + id + "?courseId=" + currentCourseId)
                             }
                         }
                     )
