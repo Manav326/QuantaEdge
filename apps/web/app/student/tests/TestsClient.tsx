@@ -1134,8 +1134,7 @@ export default function TestsClient(){
                       </div>
                     );
                   })()}
-              </div>
-              </div>
+              </div>}
           </section>}
           {released&&(()=>{
             const cert=certificateEligibility[Number(attempt?.attempt_id)];
