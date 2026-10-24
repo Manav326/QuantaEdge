@@ -93,8 +93,13 @@ function stateLabel(value: string) {
 export default function InstitutionOperationsPage() {
   const t = useUiTranslation();
   const { permissions } = useContext(AdminWorkspaceContext);
+  const canViewContent = permissions.includes('CONTENT_VIEW');
   const canCreateCourse = permissions.includes('CONTENT_CREATE') && permissions.includes('CONTENT_EDIT');
   const canManageReleases = permissions.includes('INSTITUTION_RELEASE_MANAGE');
+  const canUseNotifications = permissions.some(permission => [
+    'NOTIFICATION_CAMPAIGN_VIEW', 'NOTIFICATION_COURSE_SEND',
+    'NOTIFICATION_INSTITUTION_SEND', 'NOTIFICATION_TEMPLATE_MANAGE',
+  ].includes(permission));
   const [view, setView] = useState<'overview' | 'roster' | 'courses'>('overview');
   const [focusCourseId, setFocusCourseId] = useState('');
   const [overview, setOverview] = useState<Overview | null>(null);
@@ -202,7 +207,7 @@ export default function InstitutionOperationsPage() {
             <p>{overview?.institution_name ? overview.institution_name + ' · ' : ''}{t('admin.institutionOperations.description')}</p>
           </div>
           <div className={styles.headerActions}>
-            <Link href="/content" className="button button-dark">{t('admin.institutionOperations.contentStudio')}</Link>
+            {canViewContent || canCreateCourse ? <Link href="/content" className="button button-dark">{t('admin.institutionOperations.contentStudio')}</Link> : null}
             <button type="button" className="admin-refresh" onClick={() => void refresh()} disabled={loading}>
               {loading ? '…' : '↻ ' + t('admin.institutionOperations.refresh')}
             </button>
@@ -242,12 +247,12 @@ export default function InstitutionOperationsPage() {
                 <strong className={styles.bigNumber}>{count(overview?.lessons_with_activity)}</strong>
               </div>
               <div className={styles.quickLinks}>
-                <Link href="/content">{t('admin.institutionOperations.contentStudio')} <span>↗</span></Link>
+                {canViewContent ? <Link href="/content">{t('admin.institutionOperations.contentStudio')} <span>↗</span></Link> : null}
                 {canCreateCourse ? <Link href="/content/create">{t('admin.institutionOperations.createCourse')} <span>↗</span></Link> : null}
-                <Link href="/content/import">{t('admin.institutionOperations.importCourse')} <span>↗</span></Link>
-                <Link href="/notifications">{t('admin.institutionOperations.notifications')} <span>↗</span></Link>
+                {canCreateCourse ? <Link href="/content/import">{t('admin.institutionOperations.importCourse')} <span>↗</span></Link> : null}
+                {canUseNotifications ? <Link href="/notifications">{t('admin.institutionOperations.notifications')} <span>↗</span></Link> : null}
               </div>
-              <p className={styles.note}>{t('admin.institutionOperations.notificationsHelp')}</p>
+              {canUseNotifications ? <p className={styles.note}>{t('admin.institutionOperations.notificationsHelp')}</p> : null}
             </section>
             <section className={styles.panel}>
               <div className={styles.panelHeader}><div><h2>{t('admin.institutionOperations.courseReleases')}</h2><p>{t('admin.institutionOperations.courseReleasesDescription')}</p></div><span className={styles.statusCount}>{t('admin.institutionOperations.coursesCount', { count: latestReleases.length })}</span></div>
