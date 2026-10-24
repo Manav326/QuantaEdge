@@ -1,10 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import AdminSidebar from '../components/AdminSidebar';
 import { apiFetch } from '../components/apiClient';
 import { useUiTranslation } from '../i18n/useUiTranslation';
+import { AdminWorkspaceContext } from '../components/AdminWorkspaceContext';
 import styles from './InstitutionOperations.module.css';
 
 type Overview = {
@@ -87,6 +88,9 @@ function stateLabel(value: string) {
 
 export default function InstitutionOperationsPage() {
   const t = useUiTranslation();
+  const { permissions } = useContext(AdminWorkspaceContext);
+  const canCreateCourse = permissions.includes('CONTENT_CREATE') && permissions.includes('CONTENT_EDIT');
+  const canManageReleases = permissions.includes('CONTENT_PUBLISH');
   const [view, setView] = useState<'overview' | 'roster' | 'courses'>('overview');
   const [overview, setOverview] = useState<Overview | null>(null);
   const [learners, setLearners] = useState<Learner[]>([]);
@@ -221,16 +225,16 @@ export default function InstitutionOperationsPage() {
               </div>
               <div className={styles.quickLinks}>
                 <Link href="/content">{t('admin.institutionOperations.contentStudio')} <span>↗</span></Link>
-                <Link href="/content/create">{t('admin.institutionOperations.createCourse')} <span>↗</span></Link>
+                <{canCreateCourse ? <Link href="/content/create">{t('admin.institutionOperations.createCourse')} <span>↗</span></Link> : null}
                 <Link href="/content/import">{t('admin.institutionOperations.importCourse')} <span>↗</span></Link>
                 <Link href="/notifications">{t('admin.institutionOperations.notifications')} <span>↗</span></Link>
               </div>
               <p className={styles.note}>{t('admin.institutionOperations.notificationsHelp')}</p>
             </section>
             <section className={styles.panel}>
-              <div className={styles.panelHeader}><div><h2>{t('admin.institutionOperations.courseReleases')}</h2><p>{t('admin.institutionOperations.courseReleasesDescription')}</p></div><span className={styles.statusCount}>{latestReleases.length} courses</span></div>
-              <ReleaseList releases={latestReleases.slice(0, 4)} loading={loading} busyRelease={busyRelease} onAction={releaseAction} t={t} compact />
-              {latestReleases.length > 4 ? <button type="button" className={styles.textButton} onClick={() => setView('courses')}>View all course releases →</button> : null}
+              <div className={styles.panelHeader}><div><h2>{t('admin.institutionOperations.courseReleases')}</h2><p>{t('admin.institutionOperations.courseReleasesDescription')}</p></div><span className={styles.statusCount}>{t('admin.institutionOperations.coursesCount', { count: latestReleases.length })}</span></div>
+              <ReleaseList releases={latestReleases.slice(0, 4)} loading={loading} busyRelease={busyRelease} onAction={releaseAction} t={t} canManageReleases={canManageReleases} compact />
+              {latestReleases.length > 4 ? <button type="button" className={styles.textButton} onClick={() => setView('courses')}>{t('admin.institutionOperations.viewAllReleases')} →</button> : null}
             </section>
           </>
         ) : view === 'roster' ? (
@@ -238,7 +242,7 @@ export default function InstitutionOperationsPage() {
             <div className={styles.panelHeader}><div><h2>{t('admin.institutionOperations.rosterTitle')}</h2><p>{t('admin.institutionOperations.rosterDescription')}</p></div><span className={styles.statusCount}>{count(rosterTotal)} learners</span></div>
             <form className={styles.searchRow} onSubmit={event => { event.preventDefault(); setRosterPage(1); setAppliedQuery(query.trim()); }}>
               <input value={query} onChange={event => setQuery(event.target.value)} placeholder={t('admin.institutionOperations.searchLearners')} aria-label={t('admin.institutionOperations.searchLearners')} />
-              <button className="button button-dark" type="submit">Search</button>
+              <button className="button button-dark" type="submit">{t('admin.institutionOperations.searchButton')}</button>
             </form>
             <div className={styles.tableScroll}>
               <table className={styles.table}>
@@ -249,14 +253,14 @@ export default function InstitutionOperationsPage() {
                     <td>{learner.class_code || '—'}<small>{learner.board || learner.language || ''}</small></td>
                     <td>{[learner.city, learner.state].filter(Boolean).join(', ') || '—'}</td>
                     <td><span className={learner.membership_status === 'ACTIVE' ? styles.activeStatus : styles.status}>{stateLabel(learner.membership_status || 'UNKNOWN')}</span><small>{t('admin.institutionOperations.joined')} {dateLabel(learner.joined_at)}</small></td>
-                    <td><strong>{count(learner.average_lesson_progress_percent)}%</strong><small>{count(learner.completed_lessons)} completed / {count(learner.lessons_with_activity)} active</small></td>
+                    <td><strong>{count(learner.average_lesson_progress_percent)}%</strong><small>{t('admin.institutionOperations.progressCounts', { completed: count(learner.completed_lessons), active: count(learner.lessons_with_activity) })}</small></td>
                   </tr>)}
                   {!rosterLoading && learners.length === 0 ? <tr><td colSpan={5} className={styles.empty}>{t('admin.institutionOperations.noLearners')}</td></tr> : null}
                 </tbody>
               </table>
               {rosterLoading ? <p className={styles.loading}>{t('admin.institutionOperations.loadingRoster')}</p> : null}
             </div>
-            <p className={styles.note}>Only city and state are shown. Exact home addresses and additional sensitive contact fields are not exposed in this roster.</p>
+            <p className={styles.note}>{t('admin.institutionOperations.privacyNote')}</p>
             <div className={styles.pagination}>
               <label>{t('admin.institutionOperations.rowsPerPage')}
                 <select value={pageSize} onChange={event => { setPageSize(Number(event.target.value)); setRosterPage(1); }}>
@@ -273,16 +277,16 @@ export default function InstitutionOperationsPage() {
         ) : (
           <>
             <section className={styles.panel}>
-              <div className={styles.panelHeader}><div><h2>{t('admin.institutionOperations.authorisedCourses')}</h2><p>Courses available to learners through this institution.</p></div><span className={styles.statusCount}>{courses.length} courses</span></div>
+              <div className={styles.panelHeader}><div><h2>{t('admin.institutionOperations.authorisedCourses')}</h2><p>{t('admin.institutionOperations.availableCoursesDescription')}</p></div><span className={styles.statusCount}>{courses.length} courses</span></div>
               {courses.length ? <div className={styles.courseGrid}>{courses.map(course => <article key={course.course_id || course.code}>
                 <span className={styles.courseGlyph}>▤</span><h3>{course.display_name || course.code}</h3><small>{course.code}</small>
-                <div className={styles.courseStats}><span>Published lessons <strong>{count(course.published_lessons)}</strong></span><span>Institution learners <strong>{count(course.institution_learners)}</strong></span></div>
-                {course.entitlement_end ? <small>Access until {dateLabel(course.entitlement_end)}</small> : null}
-              </article>)}</div> : <p className={styles.empty}>No centrally authorised courses are available yet.</p>}
+                <div className={styles.courseStats}><span>{t('admin.institutionOperations.publishedLessonsCount')}<strong>{count(course.published_lessons)}</strong></span><span>{t('admin.institutionOperations.institutionLearnersCount')}<strong>{count(course.institution_learners)}</strong></span></div>
+                {course.entitlement_end ? <small>{t('admin.institutionOperations.accessUntil', { date: dateLabel(course.entitlement_end) })}</small> : null}
+              </article>)}</div> : <p className={styles.empty}>{t('admin.institutionOperations.noCoursesAvailable')}</p>}
             </section>
             <section className={styles.panel}>
-              <div className={styles.panelHeader}><div><h2>{t('admin.institutionOperations.courseReleases')}</h2><p>{t('admin.institutionOperations.courseReleasesDescription')}</p></div><span className={styles.statusCount}>{latestReleases.length} courses</span></div>
-              <ReleaseList releases={latestReleases} loading={loading} busyRelease={busyRelease} onAction={releaseAction} t={t} />
+              <div className={styles.panelHeader}><div><h2>{t('admin.institutionOperations.courseReleases')}</h2><p>{t('admin.institutionOperations.courseReleasesDescription')}</p></div><span className={styles.statusCount}>{t('admin.institutionOperations.coursesCount', { count: latestReleases.length })}</span></div>
+              <ReleaseList releases={latestReleases} loading={loading} busyRelease={busyRelease} onAction={releaseAction} t={t} canManageReleases={canManageReleases} />
             </section>
           </>
         )}
@@ -291,12 +295,13 @@ export default function InstitutionOperationsPage() {
   );
 }
 
-function ReleaseList({ releases, loading, busyRelease, onAction, t, compact = false }: {
+function ReleaseList({ releases, loading, busyRelease, onAction, t, canManageReleases, compact = false }: {
   releases: Release[];
   loading: boolean;
   busyRelease: number | null;
   onAction: (release: Release, action: 'submit' | 'approve') => void;
   t: (key: string, values?: Record<string, string | number>) => string;
+  canManageReleases: boolean;
   compact?: boolean;
 }) {
   if (loading && releases.length === 0) return <p className={styles.loading}>{t('admin.institutionOperations.loadingReleases')}</p>;
@@ -312,32 +317,32 @@ function ReleaseList({ releases, loading, busyRelease, onAction, t, compact = fa
           <span className={state === 'SHAREABLE' ? styles.activeStatus : styles.status}>{stateLabel(state)}</span>
         </div>
         <ol className={styles.steps}>
-          <li className={['IN_QUALITY_REVIEW', 'QUALITY_APPROVED', 'SHAREABLE'].includes(state) ? styles.completedStep : styles.currentStep}>Content ready and submitted</li>
-          <li className={['QUALITY_APPROVED', 'SHAREABLE'].includes(state) ? styles.completedStep : state === 'IN_QUALITY_REVIEW' ? styles.currentStep : ''}>HRMS quality review</li>
-          <li className={state === 'SHAREABLE' ? styles.completedStep : state === 'QUALITY_APPROVED' ? styles.currentStep : ''}>Source approval & HRMS assignment</li>
-          <li className={state === 'SHAREABLE' ? styles.completedStep : ''}>Marketplace readiness & publication in HRMS</li>
+          <li className={['IN_QUALITY_REVIEW', 'QUALITY_APPROVED', 'SHAREABLE'].includes(state) ? styles.completedStep : styles.currentStep}>{t('admin.institutionOperations.contentReadyStep')}</li>
+          <li className={['QUALITY_APPROVED', 'SHAREABLE'].includes(state) ? styles.completedStep : state === 'IN_QUALITY_REVIEW' ? styles.currentStep : ''}>{t('admin.institutionOperations.qualityReviewStep')}</li>
+          <li className={state === 'SHAREABLE' ? styles.completedStep : state === 'QUALITY_APPROVED' ? styles.currentStep : ''}>{t('admin.institutionOperations.sourceApprovalStep')}</li>
+          <li className={state === 'SHAREABLE' ? styles.completedStep : ''}>{t('admin.institutionOperations.marketplaceStep')}</li>
         </ol>
         {state === 'IN_QUALITY_REVIEW' ? <p className={styles.note}>{t('admin.institutionOperations.awaitingReview')}</p>
           : state === 'QUALITY_APPROVED' ? <p className={styles.note}>{t('admin.institutionOperations.qualityApproved')}</p>
           : state === 'SHAREABLE' ? <p className={styles.note}>{t('admin.institutionOperations.shareable')}</p>
           : state === 'REJECTED' ? <p className={styles.note}>{t('admin.institutionOperations.returned')}</p>
           : <p className={styles.note}>{t('admin.institutionOperations.draft')}</p>}
-        {release.quality_review_notes ? <p className={styles.reviewNote}>HRMS: {release.quality_review_notes}</p> : null}
-        {release.origin_rejection_reason ? <p className={styles.reviewNote}>Previous decision: {release.origin_rejection_reason}</p> : null}
+        {release.quality_review_notes ? <p className={styles.reviewNote}>{t('admin.institutionOperations.hrmsReview', { notes: release.quality_review_notes })}</p> : null}
+        {release.origin_rejection_reason ? <p className={styles.reviewNote}>{t('admin.institutionOperations.previousDecision', { reason: release.origin_rejection_reason })}</p> : null}
         <div className={styles.releaseMeta}>
-          {release.submitted_at ? <span>Submitted {dateLabel(release.submitted_at)}</span> : null}
-          {release.quality_reviewed_at ? <span>Reviewed {dateLabel(release.quality_reviewed_at)}</span> : null}
-          {release.shareable_at ? <span>Approved {dateLabel(release.shareable_at)}</span> : null}
+          {release.submitted_at ? <span>{t('admin.institutionOperations.submittedAt', { date: dateLabel(release.submitted_at) })}</span> : null}
+          {release.quality_reviewed_at ? <span>{t('admin.institutionOperations.reviewedAt', { date: dateLabel(release.quality_reviewed_at) })}</span> : null}
+          {release.shareable_at ? <span>{t('admin.institutionOperations.approvedAt', { date: dateLabel(release.shareable_at) })}</span> : null}
         </div>
         <div className={styles.releaseActions}>
-          {canSubmit ? <button type="button" disabled={busyRelease !== null} onClick={() => onAction(release, 'submit')}>
-            {busyRelease === release.release_id ? 'Submitting…' : state === 'DRAFT' ? t('admin.institutionOperations.submitForReview') : t('admin.institutionOperations.submitNewVersion')}
+          {canManageReleases && canSubmit ? <button type="button" disabled={busyRelease !== null} onClick={() => onAction(release, 'submit')}>
+            {busyRelease === release.release_id ? t('admin.institutionOperations.submitting') : state === 'DRAFT' ? t('admin.institutionOperations.submitForReview') : t('admin.institutionOperations.submitNewVersion')}
           </button> : null}
-          {canApprove ? <button type="button" disabled={busyRelease !== null} onClick={() => onAction(release, 'approve')}>
-            {busyRelease === release.release_id ? 'Approving…' : t('admin.institutionOperations.approveForSharing')}
+          {canManageReleases && canApprove ? <button type="button" disabled={busyRelease !== null} onClick={() => onAction(release, 'approve')}>
+            {busyRelease === release.release_id ? t('admin.institutionOperations.approving') : t('admin.institutionOperations.approveForSharing')}
           </button> : null}
         </div>
-        {compact && state === 'SHAREABLE' ? <small>HRMS can assign this exact release and continue launch setup.</small> : null}
+        {compact && state === 'SHAREABLE' ? <small>{t('admin.institutionOperations.shareable')}</small> : null}
       </article>;
     })}
   </div>;
