@@ -49,6 +49,8 @@ public class AuthorizationService {
     // A role may unlock a route intended only for administrators, but it never silently
     // grants unrelated content, publication, resource, assessment or HRMS capabilities.
     if (hrmsPermission && !"HRMS".equals(AuthService.normalizeWorkspace(context.workspace()))) return false;
+    boolean institutionPermission = permission.startsWith("INSTITUTION_");
+    if (institutionPermission && !"EDUCATION_ADMIN".equals(AuthService.normalizeWorkspace(context.workspace()))) return false;
     if (!context.isEmployee()) return false;
     // Role-based permissions are evaluated live on every request; HRMS-only keys remain
     // scoped even when one staff identity legitimately has roles in both applications.
