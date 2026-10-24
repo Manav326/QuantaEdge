@@ -32,14 +32,17 @@ public class CourseMarketplaceLaunchController {
   private final AuthorizationService authorization;
   private final CourseMarketplaceLaunchReadinessService readiness;
   private final ObjectMapper mapper;
+  private final CourseVersionLearnerMigrationService versionLearnerMigration;
 
   public CourseMarketplaceLaunchController(
       JdbcTemplate jdbc, AuthorizationService authorization,
-      CourseMarketplaceLaunchReadinessService readiness, ObjectMapper mapper) {
+      CourseMarketplaceLaunchReadinessService readiness, ObjectMapper mapper,
+      CourseVersionLearnerMigrationService versionLearnerMigration) {
     this.jdbc = jdbc;
     this.authorization = authorization;
     this.readiness = readiness;
     this.mapper = mapper;
+    this.versionLearnerMigration = versionLearnerMigration;
   }
 
   @GetMapping("/{institutionId}/marketplace-launches")
@@ -102,7 +105,43 @@ public class CourseMarketplaceLaunchController {
       release.put("contentCurrent",readiness.contentFingerprintMatches(
           number(release.get("course_id")),text(release.get("content_fingerprint"))));
     }
+    List<Map<String,Object>> trustedCoursePolicies=jdbc.queryForList("""
+        select i.id as course_identity_id,i.stable_course_key,i.display_name as identity_name,
+          coalesce(trust.enabled,false) as trusted_auto_approval,
+          trust.changed_by_staff_id as trusted_auto_approval_changed_by_staff_id,
+          trust.changed_at as trusted_auto_approval_changed_at,
+          trust.note as trusted_auto_approval_note,
+          p.id as latest_course_id,p.code as course_code,p.display_name as course_name,
+          p.content_version_no,
+          exists(
+            select 1
+            from institution_course_release released
+            join institution_marketplace_offer published
+              on published.course_release_id=released.id
+             and published.course_id=released.program_id
+             and published.status='PUBLISHED'
+             and published.hrms_published_by_staff_id is not null
+            where released.release_state='SHAREABLE'
+              and exists(
+                select 1 from curriculum_program trusted_version
+                where trusted_version.id=released.program_id
+                  and trusted_version.course_identity_id=i.id
+              )
+          ) as authenticated
+        from institution_course_identity i
+        left join institution_course_trust_policy trust
+          on trust.course_identity_id=i.id and trust.source_institution_id=i.source_institution_id
+        join lateral (
+          select p0.id,p0.code,p0.display_name,p0.content_version_no
+          from curriculum_program p0
+          where p0.course_identity_id=i.id and p0.status='ACTIVE'
+          order by p0.content_version_no desc,p0.id desc limit 1
+        ) p on true
+        where i.source_institution_id=? and i.status='ACTIVE'
+        order by i.display_name,i.id
+        """,institutionId);
     Map<String,Object> result=new LinkedHashMap<>();
+    result.put("trustedCoursePolicies",trustedCoursePolicies);
     result.put("institutionId",institutionId);
     result.put("institutionName",institutionName(institutionId));
     result.put("items",items);
@@ -143,6 +182,105 @@ public class CourseMarketplaceLaunchController {
     result.put("coursePackageImports",coursePackageImports);
     result.put("coursePackageImportCount",coursePackageImports.size());
     return result;
+  }
+
+  @PostMapping("/{institutionId}/course-identities/{identityId}/trusted-auto-approval")
+  @Transactional
+  public Map<String,Object> setTrustedCourseAutoApproval(
+      @PathVariable long institutionId,@PathVariable long identityId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext supplied) {
+    AuthContext context=authorization.requirePermission(supplied,"QE_PLATFORM_OWNER");
+    requireStaff(context);
+    assertInstitution(institutionId);
+    if(body==null || !(body.get("enabled") instanceof Boolean enabled))
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Choose whether trusted course auto-approval is enabled.");
+    String note=optionalText(body.get("note"),"",1000,"Audit note");
+    if(note.length()<5)
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Add an audit note of at least five characters.");
+
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+        select i.id,i.source_institution_id,
+          coalesce(trust.enabled,false) as trusted_auto_approval,
+          p.id as latest_course_id,
+          exists(
+            select 1
+            from institution_course_release released
+            join institution_marketplace_offer published
+              on published.course_release_id=released.id
+             and published.course_id=released.program_id
+             and published.status='PUBLISHED'
+             and published.hrms_published_by_staff_id is not null
+            where released.release_state='SHAREABLE'
+              and exists(
+                select 1 from curriculum_program trusted_version
+                where trusted_version.id=released.program_id
+                  and trusted_version.course_identity_id=i.id
+              )
+          ) as authenticated
+        from institution_course_identity i
+        left join institution_course_trust_policy trust
+          on trust.course_identity_id=i.id and trust.source_institution_id=i.source_institution_id
+        join lateral (
+          select p0.id,p0.course_identity_id
+          from curriculum_program p0
+          where p0.course_identity_id=i.id and p0.status='ACTIVE'
+          order by p0.content_version_no desc,p0.id desc limit 1
+        ) p on true
+        where i.id=? and i.source_institution_id=? and i.status='ACTIVE'
+        for update of i
+        """,identityId,institutionId);
+    if(rows.isEmpty())
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Trusted course identity was not found for this source institution.");
+    Map<String,Object> row=rows.getFirst();
+    boolean previous=Boolean.TRUE.equals(row.get("trusted_auto_approval"));
+    if(enabled && !Boolean.TRUE.equals(row.get("authenticated")))
+      throw conflict("Only a previously HRMS-published, shareable course can be marked trusted. Complete its initial review and publication first.");
+
+    if(enabled) {
+      Boolean unclearedPackageRights=jdbc.queryForObject("""
+        select exists(
+          select 1
+          from institution_course_package_import i
+          join curriculum_program source_course on source_course.id=i.course_id
+          where i.state='IMPORTED'
+            and source_course.course_identity_id=?
+            and (
+              i.rights_reviewed_by_staff_id is null
+              or i.rights_reviewed_at is null
+              or coalesce(i.editorial_metadata->>'source_rights_status','UNCONFIRMED')
+                not in ('CLEARED_FOR_INTERNAL_USE','CLEARED_FOR_PUBLIC_REPOSITORY')
+              or coalesce(i.editorial_metadata->>'rights_evidence_url','') !~ '^https://[^/[:space:]]+'
+            )
+        )
+        """,Boolean.class,identityId);
+      if(Boolean.TRUE.equals(unclearedPackageRights))
+        throw conflict("This course has package provenance that still needs HRMS rights clearance. Clear the source rights before enabling automatic approval.");
+    }
+
+    int policyChanged=jdbc.update("""
+      insert into institution_course_trust_policy(
+        course_identity_id,source_institution_id,enabled,changed_by_staff_id,changed_at,note
+      ) values(?,?,?, ?,now(),?)
+      on conflict(course_identity_id) do update set
+        source_institution_id=excluded.source_institution_id,
+        enabled=excluded.enabled,
+        changed_by_staff_id=excluded.changed_by_staff_id,
+        changed_at=now(),
+        note=excluded.note
+      where institution_course_trust_policy.source_institution_id=excluded.source_institution_id
+      """,identityId,institutionId,enabled,context.staffId(),note);
+    if(policyChanged!=1) throw conflict("The trusted-course policy changed concurrently. Refresh and retry.");
+    jdbc.update("""
+      insert into institution_course_trust_policy_event(
+        course_identity_id,source_institution_id,previous_enabled,next_enabled,actor_staff_id,note
+      ) values(?,?,?,?,?,?)
+      """,identityId,institutionId,previous,enabled,context.staffId(),note);
+    return Map.of("saved",true,"courseIdentityId",identityId,"enabled",enabled,
+        "changedByStaffId",context.staffId(),
+        "message",enabled
+          ? "Trusted mode is enabled. Future complete source-version submissions can receive automatic HRMS content and origin approval; destination assignments and commercial terms remain institution-scoped."
+          : "Trusted mode is disabled. Future source-version submissions return to the standard HRMS review path; already approved releases are unchanged.");
   }
 
   @PostMapping("/{institutionId}/course-package-imports/{importId}/rights-review")
@@ -283,11 +421,17 @@ public class CourseMarketplaceLaunchController {
       throw conflict("Course is not ready for an offer draft. Resolve the following first: "+String.join(" ",contentBlockers));
 
     List<Map<String,Object>> existing=jdbc.queryForList("""
-        select id,status from institution_marketplace_offer
+        select id,status,trusted_update_block_reason from institution_marketplace_offer
         where institution_id=? and assignment_id=? for update
         """,institutionId,assignmentId);
     long offerId;
     String oldStatus=existing.isEmpty()?"":text(existing.getFirst().get("status"));
+    String existingContinuityBlock=existing.isEmpty()?"":text(existing.getFirst().get("trusted_update_block_reason"));
+    boolean acknowledgeTrustedUpdateBlock=Boolean.TRUE.equals(body.get("acknowledgeTrustedUpdateBlock"));
+    String trustedUpdateReviewNote=optionalText(body.get("trustedUpdateReviewNote"),"",1000,"Trusted-update review note");
+    if(!existingContinuityBlock.isBlank()&&acknowledgeTrustedUpdateBlock&&trustedUpdateReviewNote.trim().length()<5)
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          "Record at least five characters explaining how inherited discount/finance continuity was reviewed.");
     if(!existing.isEmpty()&&!List.of("DRAFT","REJECTED","ARCHIVED").contains(oldStatus))
       throw conflict("This offer is already "+oldStatus+". Use its review/publish steps instead of replacing its terms.");
     if(existing.isEmpty()) {
@@ -308,16 +452,30 @@ public class CourseMarketplaceLaunchController {
             hrms_approved_by_staff_id=null,hrms_approved_at=null,
             hrms_published_by_staff_id=null,hrms_published_at=null,
             rejected_by_admin_id=null,rejected_at=null,rejection_reason=null,
+            trusted_update_block_reason=case when ? then null else trusted_update_block_reason end,
             updated_by_admin_id=null,updated_at=now()
           where id=? and institution_id=? and assignment_id=?
             and status in ('DRAFT','REJECTED','ARCHIVED')
-          """,title,description,pricePaise,currency,offerId,institutionId,assignmentId);
+          """,title,description,pricePaise,currency,
+          !existingContinuityBlock.isBlank()&&acknowledgeTrustedUpdateBlock,
+          offerId,institutionId,assignmentId);
     }
     record(institutionId,number(assignment.get("release_id")),assignmentId,offerId,
         "OFFER_DRAFTED",context.staffId(),
         Map.of("pricePaise",pricePaise,"currency",currency,"previousStatus",oldStatus.isBlank()?"NONE":oldStatus));
+    boolean continuityBlockCleared=!existingContinuityBlock.isBlank()&&acknowledgeTrustedUpdateBlock;
+    if(continuityBlockCleared) {
+      record(institutionId,number(assignment.get("release_id")),assignmentId,offerId,
+          "TRUSTED_UPDATE_COMMERCIAL_CONTINUITY_REVIEWED",context.staffId(),
+          Map.of("reviewNote",trustedUpdateReviewNote.trim(),
+            "priorBlockReason",existingContinuityBlock,
+            "message","HRMS explicitly reviewed the versioned discount/financial continuity before resuming the launch checklist."));
+    }
     return Map.of("saved",true,"offerId",offerId,"assignmentId",assignmentId,
-        "status","DRAFT","message","Offer draft saved. Re-run the launch checklist before submission or publication.");
+        "status","DRAFT","trustedUpdateBlockCleared",continuityBlockCleared,
+        "message",continuityBlockCleared
+          ? "Draft saved and the trusted-update finance/discount review was recorded. Re-run the checklist before publication."
+          : "Offer draft saved. Re-run the launch checklist before submission or publication.");
   }
 
   @PostMapping("/{institutionId}/marketplace-launches/{offerId}/submit")
@@ -369,10 +527,12 @@ public class CourseMarketplaceLaunchController {
     assertInstitution(institutionId);
     List<Map<String,Object>> offers=jdbc.queryForList("""
         select o.id,o.institution_id,o.assignment_id,o.course_release_id,o.course_id,o.status,
-          o.price_paise,o.currency,a.status as assignment_status,r.release_state
+          o.price_paise,o.currency,a.status as assignment_status,r.release_state,
+          p.course_identity_id,p.content_version_no
         from institution_marketplace_offer o
         join institution_course_assignment a on a.id=o.assignment_id and a.institution_id=o.institution_id
         join institution_course_release r on r.id=o.course_release_id and r.program_id=o.course_id
+        join curriculum_program p on p.id=o.course_id
         where o.id=? and o.institution_id=?
         for update of o,a,r
         """,offerId,institutionId);
@@ -383,6 +543,7 @@ public class CourseMarketplaceLaunchController {
     long assignmentId=number(row.get("assignment_id"));
     long releaseId=number(row.get("course_release_id"));
     String next;
+    int learnerVersionGrants=0;
     switch(action) {
       case "SUBMIT" -> {
         if(!List.of("DRAFT","REJECTED").contains(oldStatus))
@@ -423,6 +584,14 @@ public class CourseMarketplaceLaunchController {
             where id=? and institution_id=? and status='APPROVED'
             """,context.staffId(),offerId,institutionId);
         next="PUBLISHED";
+        long courseIdentityId=row.get("course_identity_id") instanceof Number identity
+            ? identity.longValue() : 0L;
+        int contentVersionNo=row.get("content_version_no") instanceof Number version
+            ? version.intValue() : 1;
+        if(courseIdentityId>0 && contentVersionNo>1) {
+          learnerVersionGrants=versionLearnerMigration.grantExistingLearnersToVersion(
+              institutionId,courseIdentityId,contentVersionNo,number(row.get("course_id")));
+        }
       }
       case "RETURN_TO_DRAFT" -> {
         if(!List.of("IN_REVIEW","APPROVED").contains(oldStatus))
@@ -453,6 +622,7 @@ public class CourseMarketplaceLaunchController {
     Map<String,Object> details=new LinkedHashMap<>();
     details.put("from",oldStatus);details.put("to",next);details.put("action",action);
     details.put("pricePaise",number(row.get("price_paise")));details.put("currency",text(row.get("currency")));
+    if(learnerVersionGrants>0 || "PUBLISH".equals(action)) details.put("learnerVersionGrants",learnerVersionGrants);
     if(reason!=null)details.put("reason",reason);
     record(institutionId,releaseId,assignmentId,offerId,
         switch(action) {
@@ -463,6 +633,7 @@ public class CourseMarketplaceLaunchController {
           default -> "OFFER_ARCHIVED";
         },context.staffId(),details);
     return Map.of("updated",true,"offerId",offerId,"status",next,
+        "learnerVersionGrants",learnerVersionGrants,
         "message","Marketplace listing status updated.");
   }
 

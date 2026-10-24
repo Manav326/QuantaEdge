@@ -126,12 +126,17 @@ public class AdminContentController {
       select p.id,p.id as course_id,p.public_id,p.public_id_prefix,p.code,p.display_name,
              p.curriculum_version,p.course_type_code,p.content_version_no,p.course_identity_id,
              p.supersedes_program_id,c.code as curriculum_class_code,
+             coalesce(trust.enabled,false) as trusted_auto_approval,
+             trust.changed_at as trusted_auto_approval_changed_at,
+             trust.note as trusted_auto_approval_note,
              scoped.release_id,scoped.release_version,scoped.release_state,
              scoped.source_institution_id,
              case when scoped.source_institution_id=scoped.assigned_institution_id
                then 'SOURCED' else 'SHARED' end as course_relationship
       from curriculum_program p
       left join curriculum_class c on c.id=p.class_id and c.active=true
+      left join institution_course_trust_policy trust
+        on trust.course_identity_id=p.course_identity_id
       join lateral (
         select release.id as release_id,release.release_version,release.release_state,
                release.source_institution_id,assignment.institution_id as assigned_institution_id

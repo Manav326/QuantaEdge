@@ -473,8 +473,8 @@ export default function ContentStudio(){
  const activeQuestionDrafts=activeQuestionCount(['DRAFT']);
  const activeRejectedQuestions=activeQuestionCount(['REJECTED']);
  const active=activeBlock>=0&&activeBlock<blocks.length?blocks[activeBlock]:null;
- const permissions=Array.isArray(identity?.permissions)?identity.permissions:[];
- const hasPermission=(permission:string)=>permissions.includes(permission);
+ const coursePermissions=Array.isArray(identity?.permissions)?identity.permissions:[];
+ const hasPermission=(permission:string)=>coursePermissions.includes(permission);
  const activeProgram=programs.find((p:any)=>String(p.id||p.course_id)===String(programFilter));
  const isSourcedCourse=activeProgram?.course_relationship==='SOURCED';
  const releaseState=String(activeProgram?.release_state||'DRAFT').toUpperCase();
@@ -504,7 +504,7 @@ export default function ContentStudio(){
    setProgramFilter(String(nextCourseId));
    const url=new URL(window.location.href);url.searchParams.set('courseId',String(nextCourseId));window.history.replaceState({},'',url.toString());
    await load(String(nextCourseId));
-   setNotice('Created draft content version v'+(nextCourseVersion||'?')+'. The previous published version remains unchanged; complete source review and the full HRMS Marketplace update stepper before this version is distributed.');
+   setNotice('Created draft content version v'+(nextCourseVersion||'?')+'. The previous published version remains unchanged. '+(activeProgram?.trusted_auto_approval?'When the complete version is submitted, HRMS trusted-course policy automatically approves its content and source release; destination assignments and commercial publication checks remain separate.':'Complete the standard source review and HRMS Marketplace update workflow before this version is distributed.'));
   }catch(e){setError(e instanceof Error?e.message:'Could not create a safe draft version. The published version was not changed.');}
   finally{setVersionBusy(false);}
  }
@@ -877,12 +877,15 @@ export default function ContentStudio(){
       <div style={{marginTop:4,fontSize:13,color:'var(--admin-muted,#64748b)'}}>{activeProgram.course_relationship==='SOURCED'
         ? (isEditableDraft
           ? 'This institution owns the source content. You may edit this draft according to your staff permissions and the normal content-review workflow.'
-          : 'This version is locked because it has entered release review or publication. Its content, assessments and resource links cannot be edited in place. Create a new draft version; the existing approved version remains unchanged until HRMS approves the update.')
-        : 'This course belongs to another source institution. You may inspect its content, but cannot create, edit, review or publish it from this institution. Content updates must be made by its source institution as a new version and re-approved through the full HRMS Marketplace stepper before distribution.'}</div>
+          : (activeProgram.trusted_auto_approval
+            ? 'This version is locked. HRMS has marked this course as trusted, so a submitted new version can receive automatic content and source approval. Existing live content stays unchanged while the draft is edited; institution-specific distribution and commercial controls still apply.'
+            : 'This version is locked because it has entered release review or publication. Its content, assessments and resource links cannot be edited in place. Create a new draft version; the existing approved version remains unchanged until HRMS approves the update.'))
+        : 'This course belongs to another source institution. You may inspect its content, but cannot create, edit, review or publish it from this institution. Content updates must be made by its source institution as a new version and follow the HRMS-controlled publication workflow before distribution.'}</div>
       <small style={{display:'block',marginTop:4}}>Content version v{activeProgram.content_version_no||1} · Release v{activeProgram.release_version||1} · {activeProgram.release_state||'UNKNOWN'} · Source institution ID {activeProgram.source_institution_id}</small>
+      {activeProgram.trusted_auto_approval&&activeProgram.course_relationship==='SOURCED'?<small style={{display:'block',marginTop:6,fontWeight:700,color:'var(--admin-accent,#c75b20)'}}>HRMS TRUSTED COURSE · Automatic content approval enabled</small>:null}
       {canForkVersion?<div style={{display:'flex',gap:10,flexWrap:'wrap',marginTop:10,alignItems:'center'}}>
        <button type="button" className="qe-secondary-button" disabled={versionBusy||saving} onClick={()=>void createDraftVersion()}>{versionBusy?'Creating draft version…':'Create draft version from published course'}</button>
-       <small>Edits will be isolated in a new version. Nothing is pushed to other institutions before HRMS approval.</small>
+       <small>Edits are isolated in a new version. Trusted courses skip manual content review after submission; distribution never overwrites the previously approved release.</small>
       </div>:null}
     </div>:null}
     <div className="qe-filters"><label>{t('admin.contentStudio.course')}<select value={programFilter} onChange={e=>{const value=e.target.value;setProgramFilter(value);setClassFilter('ALL');setSubjectFilter('ALL');setSelected(null);setDetail(null);setCreateType(null);const url=new URL(window.location.href);url.searchParams.set('courseId',value);window.history.replaceState({},'',url.toString());void load(value)}}>{programs.map((p:any)=><option value={String(p.id||p.course_id)} key={p.id||p.course_id}>{p.display_name} · {p.curriculum_version} · content v{p.content_version_no||1} · {p.course_relationship==='SOURCED'?'Sourced':'Shared (read-only)'}</option>)}</select></label><label>{t('admin.contentStudio.subject')}<select value={subjectFilter} onChange={e=>setSubjectFilter(e.target.value)}><option value="ALL">{t('admin.contentStudio.allSubjects')}</option>{subjectOptions.map(([code,name])=><option key={code} value={code}>{name}</option>)}</select></label><label>{t('admin.contentStudio.status')}<select value={statusFilter} onChange={e=>setStatusFilter(e.target.value)}><option value="ALL">{t('admin.contentStudio.allStatuses')}</option><option value="PUBLISHED">{t('admin.contentStudio.published')}</option><option value="DRAFT">{t('admin.contentStudio.draft')}</option><option value="REVIEW">{t('admin.contentStudio.inReview')}</option><option value="ARCHIVED">{t('admin.contentStudio.archived')}</option></select></label><label className="qe-search-field"><span>{t('admin.contentStudio.search')}</span><input value={search} onChange={e=>setSearch(e.target.value)} placeholder={t('admin.contentStudio.searchPlaceholder')}/></label></div>
