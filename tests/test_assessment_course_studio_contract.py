@@ -96,9 +96,35 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
             self.assertIn(field, schema)
 
 
-    def test_student_assessment_review_renders_one_question_at_a_time_with_navigation(self):
+    def test_student_assessment_review_renders_topic_analysis_and_persistent_mistake_practice(self):
         web = (ROOT / "apps/web/app/student/tests/TestsClient.tsx").read_text(encoding="utf-8")
         android = (ROOT / "apps/android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt").read_text(encoding="utf-8")
+        controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/AssessmentController.java").read_text(encoding="utf-8")
+        api_test = (ROOT / "services/api/src/test/java/com/quantaedge/api/AssessmentLifecycleIntegrationTest.java").read_text(encoding="utf-8")
+
+        # The released result exposes topic/micro-topic diagnostics and keeps blank answers distinct.
+        self.assertIn("Topic-wise analysis", web)
+        self.assertIn("Show micro-topic breakdown", web)
+        self.assertIn("unanswered_count", web)
+        self.assertIn("studentAssessmentTopicMetrics", android)
+        self.assertIn("incorrect questions are collected into one practice set", web)
+        self.assertIn("Learn from your mistakes", android)
+
+        # Retry endpoints are authenticated, released-result-only, course/institution scoped,
+        # and persist attempts independently so official scoring/negative marking is immutable.
+        self.assertIn('@GetMapping("/learning/assessment-attempts/{attemptId}/incorrect-practice")', controller)
+        self.assertIn('@PostMapping("/learning/assessment-attempts/{attemptId}/incorrect-practice")', controller)
+        self.assertIn("Only a question originally marked incorrect", controller)
+        self.assertIn("student_assessment_question_practice_attempt", controller)
+        self.assertIn("releasedIncorrectQuestionsCanBeRetriedWithoutChangingTheOfficialScore", api_test)
+        self.assertIn("Practice answers must never change the released score", api_test)
+
+        # Each opened and refreshed result is bound to the currently selected course in Android.
+        review_start = android.index("fun renderAssessmentReviewRoute()")
+        review_end = android.index("fun renderResourcesRoute()", review_start)
+        review_route = android[review_start:review_end]
+        self.assertIn('?courseId=" + currentCourseId', review_route)
+
         self.assertIn("const visibleItems=activeItems.length?activeItems:items.slice(0,1)", web)
         self.assertIn("Missed question", web)
         self.assertIn("practiceQuestionIndex", web)
