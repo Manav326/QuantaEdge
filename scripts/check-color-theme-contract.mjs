@@ -35,6 +35,7 @@ const webStructuredCss = read('apps/web/app/student/structured-lessons/structure
 const webAssignedResourcesCss = read('apps/web/app/student/structured-lessons/AssignedLearningResources.module.css');
 const webVerifyCertificateCss = read('apps/web/app/certificate/verify/Verify.module.css');
 const webInstitutionScreen = read('apps/web/app/institution/page.tsx');
+const webInstitutionRedirectStyles = read('apps/web/app/institution/InstitutionRedirect.module.css');
 const webStudentProfile = read('apps/web/app/student/profile/page.tsx');
 const webParentProfile = read('apps/web/app/parent/profile/page.tsx');
 
@@ -111,7 +112,12 @@ assert(webMarketplaceCss.includes('html[data-qe-appearance="dark"] .courseCard')
 assert(webStructuredCss.includes('var(--qe-color-surface-elevated)') && webStructuredCss.includes('var(--qe-color-focus)') && webStructuredCss.includes('var(--qe-color-error-container)'), 'Structured lesson activity and lightbox controls must use shared tokens.');
 assert(webAssignedResourcesCss.includes('var(--qe-color-error-container)') && webAssignedResourcesCss.includes('var(--qe-color-success)'), 'Assigned learning resource states must be semantic.');
 assert(webVerifyCertificateCss.includes('html[data-qe-appearance="dark"] .card') && webVerifyCertificateCss.includes('var(--qe-color-border-subtle)'), 'Certificate verification must theme its page and form surfaces.');
-assert(webInstitutionScreen.includes('--institution-background:var(--qe-color-background)') && webInstitutionScreen.includes('var(--qe-color-border-subtle)'), 'Institution portal must consume the central palette rather than hard-coded page surfaces.');
+assert(webInstitutionScreen.includes('InstitutionRouteRedirect') &&
+  webInstitutionScreen.includes('styles.page') && webInstitutionScreen.includes('styles.card') &&
+  webInstitutionRedirectStyles.includes('var(--qe-color-background)') &&
+  webInstitutionRedirectStyles.includes('var(--qe-color-border-subtle)') &&
+  webInstitutionRedirectStyles.includes('var(--qe-color-surface)'),
+  'Retired institution route must redirect to Admin and use the central semantic palette.');
 assert(webCss.includes('.student-profile-card{') && webCss.includes('.parent-profile-card{') && webCss.includes('background:var(--qe-color-surface)'), 'Student and parent profile pages must share neutral cards and inputs.');
 
 assert(webCss.includes('--qe-elevation-1:') && webCss.includes('--qe-elevation-3:'), 'Shared web surface elevation scale is required for calm layering.');

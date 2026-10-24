@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { UiText } from '../i18n/useUiTranslation';
+import styles from './InstitutionRedirect.module.css';
 
 function resolveAdminTarget(): string {
   const configured = process.env.NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN?.trim();
@@ -45,17 +46,17 @@ export default function InstitutionRouteRedirect() {
   }, []);
 
   return (
-    <main style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', padding: 24, background: 'var(--qe-color-background, #f6f7fa)', color: 'var(--qe-color-text, #172033)' }}>
-      <section style={{ width: 'min(620px, 100%)', border: '1px solid var(--qe-color-border, #d7dee8)', borderRadius: 20, padding: 28, background: 'var(--qe-color-surface, #fff)', boxShadow: '0 18px 55px rgba(20, 32, 56, .08)' }}>
-        <span style={{ fontSize: 12, fontWeight: 800, letterSpacing: '.1em', color: 'var(--qe-color-primary, #c2410c)' }}>QUANTAEDGE · ADMIN</span>
-        <h1 style={{ fontSize: 'clamp(24px, 4vw, 32px)', lineHeight: 1.2, margin: '12px 0' }}><UiText message="admin.institutionOperations.redirectTitle" /></h1>
-        <p style={{ color: 'var(--qe-color-text-muted, #536176)', fontSize: 15, lineHeight: 1.7 }}><UiText message="admin.institutionOperations.redirectDescription" /></p>
+    <main className={styles.page}>
+      <section className={styles.card}>
+        <span className={styles.eyebrow}>QUANTAEDGE · ADMIN</span>
+        <h1 className={styles.title}><UiText message="admin.institutionOperations.redirectTitle" /></h1>
+        <p className={styles.message}><UiText message="admin.institutionOperations.redirectDescription" /></p>
         {target ? (
-          <Link href={target} style={{ display: 'inline-flex', marginTop: 14, padding: '11px 15px', borderRadius: 10, background: 'var(--qe-color-primary, #c2410c)', color: '#fff', fontWeight: 700 }}>
+          <Link href={target} className={styles.link}>
             <UiText message="admin.institutionOperations.openAdmin" /> ↗
           </Link>
         ) : (
-          <p role="status" style={{ marginTop: 18, padding: 12, borderRadius: 10, background: 'var(--qe-color-background, #f6f7fa)', fontSize: 13, lineHeight: 1.6 }}>
+          <p role="status" className={styles.status}>
             <UiText message="admin.institutionOperations.adminOriginMissing" />
           </p>
         )}

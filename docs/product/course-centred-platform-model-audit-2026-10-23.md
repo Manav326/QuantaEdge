@@ -4,6 +4,20 @@
 **Main baseline reviewed:** `0efb0b91d02f7cf57d233345ab6762f5423a0a04`  
 **Change policy:** additive migrations and compatibility-preserving API changes first; mark superseded routes and components deprecated; remove only after usage has been measured and cutover is verified.
 
+
+## Implementation update — 24 October 2026
+
+The original findings below record the state inspected on 23 October 2026; they are not all current-state claims. The following cutover changes have since landed on `main`:
+
+- **Operator boundary:** HRMS is the parent platform and control plane. Every institution is operated through `apps/admin` by staff bound to that institution in HRMS. Admin must not offer institution switching; the API obtains the active institution from the authenticated staff binding and rejects a mismatched selector.
+- **Retired Web operator screen:** `apps/web/app/institution/page.tsx` is a compatibility redirect to the Admin institution workspace, preserving the course view and numeric course ID when present. It is not the active institution dashboard. Learner signup/login, school-branded learner links and content consumption stay in Web/Android.
+- **Learner onboarding:** issuing, rotating and sharing school-branded join links remains an HRMS responsibility. The abandoned Admin join-code read capability is revoked by migration; Admin must not render or expose a live join code.
+- **Admin institution operations:** `apps/admin/app/institution-operations/page.tsx` provides institution-scoped overview metrics, learner roster/progress, authorised courses and source-release status/actions. Institution report and release permissions are separate, and server checks bind each action to the HRMS-assigned institution. Release transitions reuse the shared release workflow service; HRMS quality review, assignment and Marketplace publication remain HRMS-controlled.
+- **Course entry and notifications:** Admin Content Studio has a guided K–12 draft-course entry and an import entry, with permission gating. The importer/creator still do not implement every registered Competitive/Assessment hierarchy; this is an acknowledged scope limit, not an implied feature. Existing Admin Notifications studio and inbox are reused, and the Admin inbox obtains institution scope from the HRMS-managed server binding.
+- **Remaining production gates:** clean Flyway execution and full API/Next build tests, role-permission cases (including institution-appointed limited staff), real browser testing of course creation → content publication → release submission → HRMS review → source approval → exact-release assignment, transaction/report scoping tests, and configured production `NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN` are still required before release acceptance. These commits do not by themselves prove production readiness.
+
+The audit sections below remain useful as historical findings and constraints. Where they describe the Web institution screen, tenant selection header, or missing HRMS binding as current behavior, use this update and current source as the source of truth.
+
 ## Non-negotiable rules
 
 1. HRMS is the control plane. Every learner-facing Marketplace offer—also the offer in the source institution's own Marketplace—must pass HRMS quality review, source-institution release approval, destination assignment where applicable, the HRMS Marketplace launch stepper, and HRMS offer approval/publication. No client- or institution-admin route may publish an offer.

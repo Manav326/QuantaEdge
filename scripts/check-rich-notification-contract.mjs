@@ -116,8 +116,12 @@ assert.ok(read('apps/web/app/components/NotificationInboxClient.tsx').includes("
   'Institution Admin inbox must reuse the durable inbox client.');
 assert.ok(read('apps/admin/app/notifications/page.tsx').includes('NotificationStudio surface="admin"'),
   'Education Admin must continue to own the notification design and send studio.');
-assert.ok(read('apps/admin/app/components/StaffNotificationInbox.tsx').includes('/api/v1/admin/notifications/inbox'),
+const adminInboxClient = read('apps/admin/app/components/StaffNotificationInbox.tsx');
+assert.ok(adminInboxClient.includes('/api/v1/admin/notifications/inbox'),
   'Education Admin must keep the scoped notification inbox after the old institution portal is retired.');
+assert.ok(adminInboxClient.includes("headers.delete('X-QE-Institution-Code')") &&
+  !adminInboxClient.includes("'QUANTA-EDGE'"),
+  'Admin notification inbox must use the server HRMS staff binding and never pin all institutions to QUANTA-EDGE.');
 assert.ok(!read('apps/web/app/institution/page.tsx').includes('NotificationInboxClient'),
   'The learner-facing app must not retain a duplicate institution-admin notification inbox.');
 
