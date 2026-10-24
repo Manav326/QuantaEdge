@@ -34,11 +34,19 @@ export default function AdminLogin() {
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const [devCode, setDevCode] = useState('');
+  const [loginMode, setLoginMode] = useState<'staff' | 'institution'>('staff');
+  const [institutionUsername, setInstitutionUsername] = useState('');
+  const [institutionPassword, setInstitutionPassword] = useState('');
 
   async function requestOtp() {
     setError('');
     setBusy(true);
     try {
+      // Keep the two authentication principals separate when changing workspace.
+      await fetch('/api/v1/institution/auth/logout', {
+        method: 'POST', credentials: 'same-origin', cache: 'no-store',
+        headers: { Accept: 'application/json', 'X-QE-Workspace': 'INSTITUTION' },
+      }).catch(() => undefined);
       const response = await apiFetch('/api/v1/auth/request-otp', {
         method: 'POST',
         credentials: 'same-origin',
@@ -104,6 +112,44 @@ export default function AdminLogin() {
     }
   }
 
+  async function loginInstitution(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError('');
+    setBusy(true);
+    try {
+      // An institution head is not converted into a staff identity. Sign out a previous
+      // Education Admin session before creating the separate institution-admin session.
+      await fetch('/api/v1/auth/logout', {
+        method: 'POST', credentials: 'same-origin', cache: 'no-store',
+        headers: { Accept: 'application/json' },
+      }).catch(() => undefined);
+      const response = await fetch('/api/v1/institution/auth/login', {
+        method: 'POST',
+        credentials: 'same-origin',
+        cache: 'no-store',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'X-QE-Workspace': 'INSTITUTION',
+        },
+        body: JSON.stringify({ username: institutionUsername.trim(), password: institutionPassword }),
+      });
+      const raw = await response.text();
+      let body: any = {};
+      try { body = raw ? JSON.parse(raw) : {}; } catch { body = { message: raw }; }
+      if (!response.ok || body.authenticated !== true || !body.institutionCode) {
+        throw new Error(String(body.message || body.detail || body.error || 'Institution sign-in failed. Check the username and password.'));
+      }
+      setInstitutionPassword('');
+      router.replace(body.mustChangePassword ? '/institution-change-password' : '/institution-operations');
+      router.refresh();
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'Institution sign-in failed.');
+    } finally {
+      setBusy(false);
+    }
+  }
+
   function changeNumber() {
     setStep(1);
     setOtp('');
@@ -157,22 +203,43 @@ export default function AdminLogin() {
             </select>
           </label>
         </div>
+        <div className="qe-login-mode-switch" role="group" aria-label={t('admin.login.loginMode')}>
+          <button type="button" className={loginMode === 'staff' ? 'qe-login-mode-active' : 'qe-login-mode'} onClick={() => { setLoginMode('staff'); setError(''); }} disabled={busy}>{t('admin.login.staffMode')}</button>
+          <button type="button" className={loginMode === 'institution' ? 'qe-login-mode-active' : 'qe-login-mode'} onClick={() => { setLoginMode('institution'); setStep(1); setError(''); }} disabled={busy}>{t('admin.login.institutionMode')}</button>
+        </div>
         <div className="qe-login-card-top">
-            <span className="qe-login-symbol">{step === 1 ? '↗' : firstAccess ? '✳' : '✓'}</span>
+            <span className="qe-login-symbol">{loginMode === 'institution' ? '⌂' : step === 1 ? '↗' : firstAccess ? '✳' : '✓'}</span>
             <span className="qe-login-secure"><i /> {t('admin.login.secureStaffAccess')}</span>
           </div>
 
           <div className="qe-login-heading">
-            <span className="qe-login-overline">{step === 1 ? t('admin.login.workspaceAwaits') : firstAccess ? t('admin.login.firstTimeAccess') : t('admin.login.welcomeBack')}</span>
-            <h2>{step === 1 ? t('admin.login.signInTeam') : firstAccess ? t('admin.login.activateInvitation') : t('admin.login.verifyIdentity')}</h2>
-            <p>{step === 1
-              ? t('admin.login.mobileStepInstruction')
-              : firstAccess
-                ? t('admin.login.firstAccessInstruction')
-                : t('admin.login.otpStepInstruction')}</p>
+            <span className="qe-login-overline">{loginMode === 'institution' ? t('admin.login.institutionOverline') : step === 1 ? t('admin.login.workspaceAwaits') : firstAccess ? t('admin.login.firstTimeAccess') : t('admin.login.welcomeBack')}</span>
+            <h2>{loginMode === 'institution' ? t('admin.login.institutionHeading') : step === 1 ? t('admin.login.signInTeam') : firstAccess ? t('admin.login.activateInvitation') : t('admin.login.verifyIdentity')}</h2>
+            <p>{loginMode === 'institution'
+              ? t('admin.login.institutionInstruction')
+              : step === 1
+                ? t('admin.login.mobileStepInstruction')
+                : firstAccess
+                  ? t('admin.login.firstAccessInstruction')
+                  : t('admin.login.otpStepInstruction')}</p>
           </div>
 
-          {step === 1 ? (
+          {loginMode === 'institution' ? (
+            <form className="qe-login-form" onSubmit={loginInstitution}>
+              <label htmlFor="institution-username">{t('admin.login.institutionUsername')}</label>
+              <input id="institution-username" value={institutionUsername} onChange={event => setInstitutionUsername(event.target.value)} autoComplete="username" required />
+              <label htmlFor="institution-password">{t('admin.login.institutionPassword')}</label>
+              <input id="institution-password" type="password" value={institutionPassword} onChange={event => setInstitutionPassword(event.target.value)} autoComplete="current-password" required />
+              {error && <div className="qe-login-error" role="alert"><strong>{t('admin.login.errorContinue')}</strong><span>{error}</span></div>}
+              <button className="qe-login-primary" disabled={busy || institutionUsername.trim().length < 3 || institutionPassword.length === 0} type="submit">
+                {busy ? t('admin.login.checkingAccount') : t('admin.login.institutionSignIn')} <span>→</span>
+              </button>
+              <div className="qe-login-activation-note">
+                <span className="qe-login-note-icon">i</span>
+                <p>{t('admin.login.institutionLoginNote')}</p>
+              </div>
+            </form>
+          ) : step === 1 ? (
             <form className="qe-login-form" onSubmit={event => {event.preventDefault(); if (!busy && normalizedLength === 10) void requestOtp();}}>
               <label htmlFor="staff-mobile">{t('admin.login.mobileLabel')}</label>
               <div className="qe-login-input-wrap">
