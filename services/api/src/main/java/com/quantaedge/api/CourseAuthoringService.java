@@ -100,6 +100,7 @@ public class CourseAuthoringService {
     String publicId;
     Long releaseId;
     Long assignmentId;
+    Long assessmentChapterId=null;
     try {
       // Stable logical identity belongs to the source institution. Every later content edit must
       // fork a new curriculum_program graph linked to this identity instead of mutating a release.
@@ -151,7 +152,7 @@ public class CourseAuthoringService {
           insert into curriculum_program_delivery_mode(program_id,delivery_mode)
           values(?,'ASSESSMENT_ONLY')
           """,courseId);
-        jdbc.update("""
+        assessmentChapterId=jdbc.queryForObject("""
           insert into curriculum_chapter(
             subject_id,code,display_name,description,sort_order,teaching_order,active,content_status,
             curriculum_source,curriculum_source_url,curriculum_source_edition,curriculum_source_pages,
@@ -159,7 +160,8 @@ public class CourseAuthoringService {
           ) values(?, 'prev-years','Prev years',
             'Previous-year TRE examination papers and their versioned assessment packs.',
             1,1,true,'DRAFT',null,null,null,null,false)
-          """,subjectId);
+          returning id
+          """,Long.class,subjectId);
       }
 
       String fingerprint=jdbc.queryForObject("select course_content_fingerprint(?)",String.class,courseId);
@@ -199,6 +201,7 @@ public class CourseAuthoringService {
     result.put("curriculumClassCode",classCode);
     result.put("curriculumVersion",version);
     result.put("subjectCount",subjects.size());
+    if(assessmentChapterId!=null) result.put("assessmentChapterId",assessmentChapterId);
     result.put("releaseId",releaseId);
     result.put("releaseVersion",1);
     result.put("releaseStatus","DRAFT");
