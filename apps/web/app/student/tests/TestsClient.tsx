@@ -999,7 +999,7 @@ export default function TestsClient(){
           {released&&<section className={styles.topicAnalyticsSection} aria-labelledby="qe-topic-analysis-title">
             <div className={styles.resultDetailsHeading}>
               <h3 id="qe-topic-analysis-title">{t('Topic-wise analysis','विषय-वार विश्लेषण')}</h3>
-              <p>{t('See which topics you answered correctly, where you lost marks, and which topics deserve more revision. Blank answers stay separate from incorrect answers.','देखें कि किन विषयों में सही उत्तर मिले, कहाँ अंक कटे और किन विषयों को दोहराने की ज़रूरत है। खाली उत्तरों को गलत उत्तरों से अलग रखा गया है।')}</p>
+              <p>{t('See which topics you answered correctly, where you lost marks, and which topics deserve more revision. Blank answers stay separate from incorrect answers; answers without a binary correctness grade are shown separately.','देखें कि किन विषयों में सही उत्तर मिले, कहाँ अंक कटे और किन विषयों को दोहराने की ज़रूरत है। खाली उत्तरों को गलत उत्तरों से अलग रखा गया है।')}</p>
             </div>
             {topicPerformance.length===0
               ?<p className={styles.topicAnalyticsEmpty}>{t('Topic tags are not available for the scored questions in this result.','इस परिणाम के स्कोर वाले प्रश्नों के लिए विषय टैग उपलब्ध नहीं हैं।')}</p>
@@ -1007,14 +1007,14 @@ export default function TestsClient(){
                 <thead><tr>
                   <th scope="col">{t('Topic','विषय')}</th><th scope="col">{t('Questions','प्रश्न')}</th>
                   <th scope="col">{t('Correct','सही')}</th><th scope="col">{t('Incorrect','गलत')}</th>
-                  <th scope="col">{t('Unanswered','अनुत्तरित')}</th><th scope="col">{t('Accuracy','सटीकता')}</th>
+                  <th scope="col">{t('Unanswered','अनुत्तरित')}</th><th scope="col">{t('Not classified','वर्गीकृत नहीं')}</th><th scope="col">{t('Accuracy','सटीकता')}</th>
                   <th scope="col">{t('Net marks','शुद्ध अंक')}</th>
                 </tr></thead>
                 <tbody>{topicPerformance.map(metric=><tr key={metric.topic}>
                   <th scope="row">{metric.topic}</th><td>{metric.question_count}</td>
                   <td className={styles.topicMetricCorrect}>{metric.correct_count}</td>
                   <td className={styles.topicMetricIncorrect}>{metric.incorrect_count}</td>
-                  <td>{metric.unanswered_count}</td>
+                  <td>{metric.unanswered_count}</td><td>{metric.unscored_count}</td>
                   <td>{metric.accuracy_percent===null?'—':metric.accuracy_percent+'%'}</td>
                   <td>{formatMarks(metric.net_marks)} / {formatMarks(metric.max_marks)}</td>
                 </tr>)}</tbody>
@@ -1025,14 +1025,14 @@ export default function TestsClient(){
                 <thead><tr>
                   <th scope="col">{t('Micro-topic','सूक्ष्म-विषय')}</th><th scope="col">{t('Questions','प्रश्न')}</th>
                   <th scope="col">{t('Correct','सही')}</th><th scope="col">{t('Incorrect','गलत')}</th>
-                  <th scope="col">{t('Unanswered','अनुत्तरित')}</th><th scope="col">{t('Accuracy','सटीकता')}</th>
+                  <th scope="col">{t('Unanswered','अनुत्तरित')}</th><th scope="col">{t('Not classified','वर्गीकृत नहीं')}</th><th scope="col">{t('Accuracy','सटीकता')}</th>
                   <th scope="col">{t('Net marks','शुद्ध अंक')}</th>
                 </tr></thead>
                 <tbody>{microTopicPerformance.map(metric=><tr key={metric.topic}>
                   <th scope="row">{metric.topic}</th><td>{metric.question_count}</td>
                   <td className={styles.topicMetricCorrect}>{metric.correct_count}</td>
                   <td className={styles.topicMetricIncorrect}>{metric.incorrect_count}</td>
-                  <td>{metric.unanswered_count}</td>
+                  <td>{metric.unanswered_count}</td><td>{metric.unscored_count}</td>
                   <td>{metric.accuracy_percent===null?'—':metric.accuracy_percent+'%'}</td>
                   <td>{formatMarks(metric.net_marks)} / {formatMarks(metric.max_marks)}</td>
                 </tr>)}</tbody>

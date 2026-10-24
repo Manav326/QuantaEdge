@@ -106,7 +106,10 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("Topic-wise analysis", web)
         self.assertIn("Show micro-topic breakdown", web)
         self.assertIn("unanswered_count", web)
+        self.assertIn("Not classified", web)
         self.assertIn("studentAssessmentTopicMetrics", android)
+        self.assertIn("Not classified", android)
+        self.assertIn("metric.unscored", android)
         self.assertIn("All incorrectly answered questions are collected here in one practice set.", web)
         self.assertIn("Learn from your mistakes", android)
 

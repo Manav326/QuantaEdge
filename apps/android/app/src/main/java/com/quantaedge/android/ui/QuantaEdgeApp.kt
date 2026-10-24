@@ -7589,7 +7589,7 @@ private fun AssessmentAttemptScreen(
                             Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 Text(t("Topic-wise analysis", "विषय-वार विश्लेषण"),
                                     style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                                Text(t("Correct, incorrect, unanswered and net marks by topic. Blank answers are not counted as incorrect.",
+                                Text(t("Correct, incorrect, unanswered and not-classified counts are shown separately. Blank answers are not counted as incorrect.",
                                     "हर विषय के सही, गलत, खाली उत्तर और शुद्ध अंक। खाली उत्तरों को गलत नहीं गिना जाता।"),
                                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 if (topicMetrics.isEmpty()) {
@@ -7609,7 +7609,8 @@ private fun AssessmentAttemptScreen(
                                             Text(t("Questions: ", "प्रश्न: ") + metric.questions +
                                                 " · " + t("Correct: ", "सही: ") + metric.correct +
                                                 " · " + t("Incorrect: ", "गलत: ") + metric.incorrect +
-                                                " · " + t("Unanswered: ", "खाली: ") + metric.unanswered,
+                                                " · " + t("Unanswered: ", "खाली: ") + metric.unanswered +
+                                                " · " + t("Not classified: ", "वर्गीकृत नहीं: ") + metric.unscored,
                                                 style = MaterialTheme.typography.bodySmall)
                                             Text(t("Net marks: ", "शुद्ध अंक: ") +
                                                 "%.2f".format(Locale.ROOT, metric.netMarks) + " / " +
@@ -7633,6 +7634,7 @@ private fun AssessmentAttemptScreen(
                                                 Text(t("Correct ", "सही ") + metric.correct +
                                                     " · " + t("Incorrect ", "गलत ") + metric.incorrect +
                                                     " · " + t("Unanswered ", "खाली ") + metric.unanswered +
+                                                    " · " + t("Not classified ", "वर्गीकृत नहीं ") + metric.unscored +
                                                     " · " + t("Accuracy ", "सटीकता ") +
                                                     (metric.accuracyPercent?.let { "%.1f%%".format(Locale.ROOT, it) } ?: "—"),
                                                     style = MaterialTheme.typography.bodySmall)
