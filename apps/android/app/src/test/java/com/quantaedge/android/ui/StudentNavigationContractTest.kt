@@ -45,6 +45,14 @@ class StudentNavigationContractTest {
     }
 
     @Test
+    fun courseInvoicesStayInTheSelectedLearnerOrFamilyWorkspace() {
+        assertEquals("courses", StudentNavigationContract.studentGroupForRoute(AppRoute.COURSE_INVOICES, "learn"))
+        assertEquals("family", StudentNavigationContract.parentGroupForRoute(AppRoute.COURSE_INVOICES, "family"))
+        assertEquals("children", StudentNavigationContract.parentGroupForRoute(AppRoute.COURSE_INVOICES, "children"))
+        assertEquals("family", StudentNavigationContract.parentGroupForRoute(AppRoute.COURSE_INVOICES, "invalid"))
+    }
+
+    @Test
     fun practiceTestsResultsAndLeaderboardStayTogether() {
         listOf(
             AppRoute.PRACTICE, AppRoute.DIAGNOSTIC, AppRoute.ASSESSMENTS, AppRoute.ASSESSMENT_ATTEMPT,
