@@ -85,11 +85,11 @@ public class CourseMarketplaceLaunchController {
             "The requested chapter is not part of this submitted release.");
     }
     String savedFingerprint=text(result.get("content_fingerprint"));
-    String currentFingerprint=jdbc.queryForObject(
-        "select course_content_fingerprint(?)",String.class,courseId);
-    boolean contentCurrent=savedFingerprint.equals(currentFingerprint==null?"":currentFingerprint.trim());
+    boolean contentCurrent=Boolean.TRUE.equals(jdbc.queryForObject(
+        "select course_release_fingerprint_current(?,?,?)",Boolean.class,
+        courseId,savedFingerprint,result.get("release_updated_at")));
     result.put("contentCurrent",contentCurrent);
-    result.put("currentFingerprint",currentFingerprint==null?"":currentFingerprint.trim());
+    result.put("currentFingerprint",savedFingerprint.trim());
     result.put("assessmentOnlyReady",Boolean.TRUE.equals(
         jdbc.queryForObject("select assessment_only_course_ready(?)",Boolean.class,courseId)));
     result.put("courseTranslations",jdbc.queryForList("""
@@ -340,7 +340,7 @@ public class CourseMarketplaceLaunchController {
     }
     List<Map<String,Object>> qualityReviewItems=jdbc.queryForList("""
         select r.id as release_id,r.program_id as course_id,r.release_version,r.release_state,
-          r.content_fingerprint,r.submitted_at,p.code as course_code,p.display_name as course_name,
+          r.content_fingerprint,r.updated_at as release_updated_at,r.submitted_at,p.code as course_code,p.display_name as course_name,
           p.course_type_code,
           coalesce((select mode.delivery_mode from curriculum_program_delivery_mode mode where mode.program_id=p.id),
                    'LEARNING_CONTENT') as delivery_mode,
