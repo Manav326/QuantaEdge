@@ -477,6 +477,7 @@ export default function ContentStudio(){
  const permissions=Array.isArray(identity?.permissions)?identity.permissions:[];
  const hasPermission=(permission:string)=>permissions.includes(permission);
  const activeProgram=programs.find((p:any)=>String(p.id||p.course_id)===String(programFilter));
+ const isAssessmentCourse=String(activeProgram?.course_type_code||'').toUpperCase()==='ASSESSMENT';
  const isSourcedCourse=activeProgram?.course_relationship==='SOURCED';
  const releaseState=String(activeProgram?.release_state||'DRAFT').toUpperCase();
  // Released and in-review course graphs are immutable. Source edits must happen in a forked draft,
@@ -864,15 +865,25 @@ export default function ContentStudio(){
    <nav className="admin-mobile-nav" aria-label={t('admin.contentStudio.adminNavigation')}><Link href="/">{t('admin.contentStudio.overview')}</Link><Link className="active" href="/content">{t('admin.contentStudio.pageTitle')}</Link><Link href="/structured-lesson-preview" >{t('admin.contentStudio.structuredPreview')}</Link><Link href="/students">{t('admin.contentStudio.students')}</Link><Link href="/parents">{t('admin.contentStudio.families')}</Link></nav>
    
    {error&&<div className="admin-alert qe-feedback" role="alert"><strong>{t('admin.contentStudio.needsAttention')}</strong><span>{error}</span><button type="button" onClick={()=>setError('')}>{t('admin.contentStudio.dismiss')}</button></div>}{notice&&<div className="admin-notice qe-feedback" role="status"><strong>{t('admin.contentStudio.workspaceUpdate')}</strong><span>{notice}</span><button type="button" onClick={()=>setNotice('')}>{t('admin.contentStudio.dismiss')}</button></div>}
-   <section className="qe-stats-grid">
+   {!isAssessmentCourse && (
+    <section className="qe-stats-grid">
     <article><span className="qe-stat-icon purple">▦</span><div><small>{t('admin.contentStudio.courseSubjects')}</small><strong>{subjectOptions.length||'—'}</strong><span>{t('admin.contentStudio.databaseRecords')}</span></div></article>
     <article><span className="qe-stat-icon blue">◇</span><div><small>{t('admin.contentStudio.chaptersTopics')}</small><strong>{uniqueChapters}</strong><span>{t('admin.contentStudio.publishedUnpublished')}</span></div></article>
     <article><span className="qe-stat-icon green">▤</span><div><small>{t('admin.contentStudio.publishedLessons')}</small><strong>{publishedLessons}</strong><span>{t('admin.contentStudio.availableToEnrolled')}</span></div></article>
     <article><span className="qe-stat-icon amber">✎</span><div><small>{t('admin.contentStudio.lessonsNeedingAuthoring')}</small><strong>{draftLessons}</strong><span>{t('admin.contentStudio.draftOrReviewTopics')}</span></div></article>
     <article><span className="qe-stat-icon amber">✓</span><div><small>{t('admin.contentStudio.questionsAwaitingReview')}</small><strong>{activeQuestionsAwaitingReview}</strong><span>{t('admin.contentStudio.activeQuestionCounts',{drafts:activeQuestionDrafts,rejected:activeRejectedQuestions})}</span></div></article>
    </section>
+       )}
    <section className="qe-library-panel" id="content-library">
-    <div className="qe-section-head"><div><span className="admin-kicker">{t('admin.contentStudio.curriculumMap')}</span><h2>{t('admin.contentStudio.findChapterOrTopic')}</h2><p>{t('admin.contentStudio.openEditorHint')}</p></div><div className="qe-create-actions"><button type="button" className="qe-secondary-button" disabled={loading||!canCreate} title={!canCreate?t('admin.contentStudio.noCreatePermission'):undefined} onClick={()=>beginCreate('chapter')} >＋ {t('admin.contentStudio.newChapter')}</button><button type="button" className="qe-primary-button" disabled={loading||!canCreate||!rows.some(r=>r.chapter_id!==null)} title={!canCreate?t('admin.contentStudio.noCreatePermission'):undefined} onClick={()=>beginCreate('lesson')} >＋ {t('admin.contentStudio.newMicroTopic')}</button></div></div>
+<div className="qe-section-head">
+     <div><span className="admin-kicker">{isAssessmentCourse?'ASSESSMENT COURSE':'COURSE CONTENT'}</span>
+      <h2>{isAssessmentCourse?'Tests, test packs and questions':t('admin.contentStudio.findChapterOrTopic')}</h2>
+      <p>{isAssessmentCourse?'This is a classless assessment course. Its tests and ordered question snapshots live in the assessment workspace, not in chapters or micro-topics.':t('admin.contentStudio.openEditorHint')}</p>
+     </div>
+     {isAssessmentCourse
+       ? <div className="qe-create-actions"><Link className="qe-primary-button" href={'/assessments?courseId='+encodeURIComponent(programFilter)}>Open tests and questions ↗</Link></div>
+       : <div className="qe-create-actions"><button type="button" className="qe-secondary-button" disabled={loading||!canCreate} title={!canCreate?t('admin.contentStudio.noCreatePermission'):undefined} onClick={()=>beginCreate('chapter')} >＋ {t('admin.contentStudio.newChapter')}</button><button type="button" className="qe-primary-button" disabled={loading||!canCreate||!rows.some(r=>r.chapter_id!==null)} title={!canCreate?t('admin.contentStudio.noCreatePermission'):undefined} onClick={()=>beginCreate('lesson')} >＋ {t('admin.contentStudio.newMicroTopic')}</button></div>}
+    </div>
     {activeProgram?<div role="status" style={{margin:'0 0 14px',padding:'12px 14px',border:'1px solid var(--admin-border,#d8dce5)',borderRadius:10,background:'var(--admin-surface,#fff)',color:'var(--admin-text,#1b2430)'}}>
       <strong>{activeProgram.course_relationship==='SOURCED'?'SOURCED COURSE':'SHARED COURSE · READ ONLY'}</strong>
       <div style={{marginTop:4,fontSize:13,color:'var(--admin-muted,#64748b)'}}>{activeProgram.course_relationship==='SOURCED'
@@ -886,8 +897,17 @@ export default function ContentStudio(){
        <small>Edits will be isolated in a new version. Nothing is pushed to other institutions before HRMS approval.</small>
       </div>:null}
     </div>:null}
-    <div className="qe-filters"><label>{t('admin.contentStudio.course')}<select value={programFilter} onChange={e=>{const value=e.target.value;setProgramFilter(value);setClassFilter('ALL');setSubjectFilter('ALL');setSelected(null);setDetail(null);setCreateType(null);const url=new URL(window.location.href);url.searchParams.set('courseId',value);window.history.replaceState({},'',url.toString());void load(value)}}>{programs.map((p:any)=><option value={String(p.id||p.course_id)} key={p.id||p.course_id}>{p.display_name} · {p.curriculum_version} · content v{p.content_version_no||1} · {p.course_relationship==='SOURCED'?'Sourced':'Shared (read-only)'}</option>)}</select></label><label>{t('admin.contentStudio.subject')}<select value={subjectFilter} onChange={e=>setSubjectFilter(e.target.value)}><option value="ALL">{t('admin.contentStudio.allSubjects')}</option>{subjectOptions.map(([code,name])=><option key={code} value={code}>{name}</option>)}</select></label><label>{t('admin.contentStudio.status')}<select value={statusFilter} onChange={e=>setStatusFilter(e.target.value)}><option value="ALL">{t('admin.contentStudio.allStatuses')}</option><option value="PUBLISHED">{t('admin.contentStudio.published')}</option><option value="DRAFT">{t('admin.contentStudio.draft')}</option><option value="REVIEW">{t('admin.contentStudio.inReview')}</option><option value="ARCHIVED">{t('admin.contentStudio.archived')}</option></select></label><label className="qe-search-field"><span>{t('admin.contentStudio.search')}</span><input value={search} onChange={e=>setSearch(e.target.value)} placeholder={t('admin.contentStudio.searchPlaceholder')}/></label></div>
-    <div className="qe-curriculum-map">
+    <div className="qe-filters"><label>{t('admin.contentStudio.course')}<select value={programFilter} onChange={e=>{const value=e.target.value;setProgramFilter(value);setClassFilter('ALL');setSubjectFilter('ALL');setSelected(null);setDetail(null);setCreateType(null);const url=new URL(window.location.href);url.searchParams.set('courseId',value);window.history.replaceState({},'',url.toString());void load(value)}}>{programs.map((p:any)=><option value={String(p.id||p.course_id)} key={p.id||p.course_id}>{p.display_name} · {p.curriculum_version} · content v{p.content_version_no||1} · {p.course_relationship==='SOURCED'?'Sourced':'Shared (read-only)'}</option>)}</select></label>{!isAssessmentCourse && <><label>{t('admin.contentStudio.subject')}<select value={subjectFilter} onChange={e=>setSubjectFilter(e.target.value)}><option value="ALL">{t('admin.contentStudio.allSubjects')}</option>{subjectOptions.map(([code,name])=><option key={code} value={code}>{name}</option>)}</select></label><label>{t('admin.contentStudio.status')}<select value={statusFilter} onChange={e=>setStatusFilter(e.target.value)}><option value="ALL">{t('admin.contentStudio.allStatuses')}</option><option value="PUBLISHED">{t('admin.contentStudio.published')}</option><option value="DRAFT">{t('admin.contentStudio.draft')}</option><option value="REVIEW">{t('admin.contentStudio.inReview')}</option><option value="ARCHIVED">{t('admin.contentStudio.archived')}</option></select></label><label className="qe-search-field"><span>{t('admin.contentStudio.search')}</span><input value={search} onChange={e=>setSearch(e.target.value)} placeholder={t('admin.contentStudio.searchPlaceholder')}/></label></>}</div>
+    {isAssessmentCourse ? (
+      <div className="qe-library-empty" role="status">
+       <span className="qe-empty-symbol">▤</span>
+       <strong>Assessment content is managed as tests, not chapters</strong>
+       <p>No matching chapter or micro-topic is expected for this course type. The existing test packs, assessments and ordered question snapshots are managed in the course-scoped assessment workspace. This message does not mean the imported questions are missing.</p>
+       <Link className="qe-primary-button" href={'/assessments?courseId='+encodeURIComponent(programFilter)}>Open tests, test packs and questions</Link>
+      </div>
+     ) : (
+      <>
+      <div className="qe-curriculum-map">
      {loading&&rows.length===0?<div className="qe-library-empty"><span className="qe-empty-symbol">◌</span><strong>{t('admin.contentStudio.connectingCurriculum')}</strong><p>{t('admin.contentStudio.loadingContentRecords')}</p></div>:groups.length===0?<div className="qe-library-empty"><span className="qe-empty-symbol">⌕</span><strong>{t('admin.contentStudio.noMatchingContent')}</strong><p>{t('admin.contentStudio.adjustFilters')}</p></div>:pagedGroups.map(group=>{
       const chapter=group.chapter;
       const totalLessons=group.rows.filter(r=>r.lesson_id!==null).length;
@@ -916,7 +936,8 @@ export default function ContentStudio(){
       </article>;
      })}</div><PremiumPagination page={chapterPage} total={groups.length} pageSize={chapterPageSize} onPageChange={setChapterPage} onPageSizeChange={size=>{setChapterPageSize(size);setChapterPage(0);}} itemLabel={t('admin.contentStudio.chaptersPaginationLabel')} />
     <div className="qe-library-foot"><span><b>{t('admin.contentStudio.librarySummary',{chapters:uniqueChapters,lessons:uniqueLessons,published:publishedChapters})}</b></span><span>{t('admin.contentStudio.teachingOrderHint')}</span></div>
-   </section>
+   
+      </>)}</section>
    {editorOpen&&(createType||selected)&&<section role="dialog" aria-modal="true" aria-label={createType?(createType==='chapter'?t('admin.contentStudio.createChapterTitle'):t('admin.contentStudio.createMicroTopicTitle')):selected?.type==='chapter'?t('admin.contentStudio.chapterEditor'):t('admin.contentStudio.microTopicEditor')} tabIndex={-1} className={'qe-workspace '+(isEditorView?'qe-workspace-fullscreen':'')} id="editor" ref={workspaceRef}>
     <div className="qe-fullscreen-bar">
      <div><strong>{createType?(createType==='chapter'?t('admin.contentStudio.createChapterTitle'):t('admin.contentStudio.createMicroTopicTitle')):selected?.type==='chapter'?t('admin.contentStudio.chapterEditor'):t('admin.contentStudio.microTopicEditor')}</strong><p>{selected&&detail?t('admin.contentStudio.workspaceSelectedContext',{classCode:detail.class_code,subject:detail.subject_name,chapter:selected.type==='chapter'?detail.chapter_name:detail.chapter_name+' / '+(form.title||detail.lesson_title)}):t('admin.contentStudio.workspaceIntro')}</p></div>
