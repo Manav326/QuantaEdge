@@ -98,6 +98,28 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn('snapshot.put("answer_review_status",reviewStatus)', review_route)
         self.assertIn("assessment_question_snapshot_publish_ready", review_route)
 
+    def test_hrms_assessment_quality_review_opens_full_screen_bilingual_snapshot_inspector(self):
+        hrms_page = (ROOT / "apps/people/app/institutions/MarketplaceLaunchStepper.tsx").read_text(encoding="utf-8")
+        hrms_styles = (ROOT / "apps/people/app/institutions/MarketplaceLaunchStepper.module.css").read_text(encoding="utf-8")
+        controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseMarketplaceLaunchController.java").read_text(encoding="utf-8")
+        for token in (
+            "openAssessmentReview(release.release_id,assessment.assessment_id,firstSequence)",
+            "hrmsAssessmentReviewBackdrop",
+            "hrmsAssessmentBilingualGrid",
+            "hrmsReviewPrompt(activeAssessmentReviewSnapshot,'en')",
+            "hrmsReviewPrompt(activeAssessmentReviewSnapshot,'hi')",
+            "hrmsReviewOption(option,'en')",
+            "hrmsReviewOption(option,'hi')",
+            "assessmentReviewContent?.content_fingerprint",
+            "setAssessmentReviewTarget",
+            "immutable release snapshot",
+        ):
+            self.assertIn(token, hrms_page)
+        for token in ("position:fixed", "width:100vw", ".hrmsAssessmentBilingualGrid", ".hrmsAssessmentQuestionNav", ".hrmsAssessmentReviewFooter"):
+            self.assertIn(token, hrms_styles)
+        self.assertIn("course_release_fingerprint_current(?,?,?)", controller)
+        self.assertIn("reviewedContentFingerprint", controller)
+
     def test_assessment_course_creation_is_type_specific_and_tenant_owned(self):
         service = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseAuthoringService.java").read_text(encoding="utf-8")
         self.assertIn('"ASSESSMENT".equals(type)', service)
