@@ -818,7 +818,7 @@ def resolve_quantaedge_source_institution(cursor: Any) -> int:
 
 
 def lock_latest_draft_release(cursor: Any, institution_id: int, course_id: int) -> tuple[Any, ...] | None:
-    """Lock and validate the latest source release before any assessment rows can be changed."""
+    """Lock and validate every release guard that protects the course graph from mutation."""
     cursor.execute("""
         SELECT id,release_version,release_state,content_fingerprint
         FROM institution_course_release
@@ -829,8 +829,38 @@ def lock_latest_draft_release(cursor: Any, institution_id: int, course_id: int) 
     if row and str(row[2]) != "DRAFT":
         raise ImportErrorSafe(
             f"The latest TRE-4 course release is {row[2]}; source import only writes into an editable DRAFT release. "
-            "Do not change a release in quality review, approved, shareable, rejected or withdrawn. "
-            "Use the supported release/version workflow to start a new editable version before importing revised content."
+            "Use the supported release/version workflow before importing revised content."
+        )
+
+    # The database immutability trigger applies to the course graph if ANY release for this
+    # program has entered one of these states, even if a newer DRAFT row exists.
+    cursor.execute("""
+        SELECT id,release_state
+        FROM institution_course_release
+        WHERE program_id=%s
+          AND release_state IN ('IN_QUALITY_REVIEW','QUALITY_APPROVED','SHAREABLE','LEGACY_MIGRATED','WITHDRAWN')
+        ORDER BY release_version DESC,id DESC
+        LIMIT 1 FOR UPDATE
+    """, (course_id,))
+    frozen_release = cursor.fetchone()
+    if frozen_release:
+        raise ImportErrorSafe(
+            f"TRE-4 course graph is immutable because release {frozen_release[0]} is {frozen_release[1]}. "
+            "Create/fork a new course version through the supported course-version workflow; do not import into the frozen graph."
+        )
+
+    cursor.execute("""
+        SELECT id,status
+        FROM institution_marketplace_offer
+        WHERE course_id=%s AND (status='PUBLISHED' OR hrms_published_by_staff_id IS NOT NULL)
+        ORDER BY updated_at DESC,id DESC
+        LIMIT 1 FOR UPDATE
+    """, (course_id,))
+    published_offer = cursor.fetchone()
+    if published_offer:
+        raise ImportErrorSafe(
+            f"TRE-4 course graph is immutable because Marketplace offer {published_offer[0]} has reached published state/history. "
+            "Create/fork a new course version through the supported course-version workflow before importing changes."
         )
     return row
 
