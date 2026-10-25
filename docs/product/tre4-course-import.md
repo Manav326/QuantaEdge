@@ -41,7 +41,7 @@ From the repository root, first run the dry-run. It validates source counts, sou
 python scripts/import_tre4_course.py --archive data/TRE-4_PYQ.zip
 ```
 
-After reviewing the dry-run output and confirming the required migrations are applied, set the local API PostgreSQL URL in the current PowerShell session and apply the import. The importer has **no release-submission option**:
+After reviewing the dry-run output and confirming the required migrations are applied, set the local API PostgreSQL URL in the current PowerShell session and apply the import. The import is DRAFT-only unless the explicit, database-gated `--submit-for-review` option is supplied on a subsequent run:
 
 ```powershell
 $env:TRE4_DATABASE_URL = "postgresql://quantaedge:YOUR_LOCAL_DB_PASSWORD@localhost:5432/quantaedge"
@@ -52,7 +52,7 @@ The importer locks the latest release and refuses to update content when that re
 
 The importer also accepts `SPRING_DATASOURCE_URL` (including the `jdbc:postgresql://` prefix). Never commit a database password or put it in this document. The importer requires Flyway V168, V177, V180, V196, V198 and V199 plus the current Marketplace-readiness migrations.
 
-**Do not submit this release while the imported questions still have unresolved answers.** The source-owned course graph is frozen when a release enters HRMS quality review. The import script has no submission switch by design; it always leaves a newly created source release in `DRAFT`. A user must first complete the assessment/question workflow, then submit the release from Institution Operations. If any gate is incomplete, the supported API rejects submission without changing the lifecycle status.
+**Do not submit this release while the imported questions still have unresolved answers.** The source-owned course graph is frozen when a release enters HRMS quality review. A new source release always persists as `DRAFT`. After an existing draft has all questions/answers reviewed and every assessment/test pack published, the operator may use Institution Operations or re-run the importer with `--apply --submit-for-review`. When any gate is incomplete, the importer leaves the release in `DRAFT` and reports `submissionDeferred: true`; it never freezes an incomplete graph.
 
 ## What the script writes
 
