@@ -4091,5 +4091,11 @@
   "admin.assessments.hindiPromptMissing": "हिंदी प्रश्न इस पैकेज में उपलब्ध नहीं है।",
   "admin.assessments.hindiStimulus": "पठन / कोड सामग्री",
   "admin.assessments.reviewerCorrectionNote": "Reviewer correction note",
-  "admin.assessments.previousRejectionFeedback": "Previous rejection / review feedback"
+  "admin.assessments.previousRejectionFeedback": "Previous rejection / review feedback",
+  "admin.assessments.hindiOptionMissing": "हिंदी विकल्प उपलब्ध नहीं है।",
+  "admin.assessments.answerPayloadJson": "Answer payload JSON",
+  "admin.assessments.answerPayloadExample": "For example: {\"kind\":\"OPTION\",\"value\":\"B\"} or {\"kind\":\"NUMERIC\",\"value\":12,\"tolerance\":0.1}",
+  "admin.assessments.englishExplanationAria": "English explanation",
+  "admin.assessments.hindiExplanationAria": "Hindi explanation",
+  "admin.assessments.questionSourceProvenance": "Question source provenance"
 }
