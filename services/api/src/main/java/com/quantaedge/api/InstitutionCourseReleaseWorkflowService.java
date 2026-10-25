@@ -55,9 +55,9 @@ public class InstitutionCourseReleaseWorkflowService {
         """,programId);
     String deliveryMode=String.valueOf(owned.getFirst().get("delivery_model"));
     if("ASSESSMENT_ONLY".equals(deliveryMode)) {
-      Boolean ready=jdbc.queryForObject("select assessment_only_course_ready(?)",Boolean.class,programId);
+      Boolean ready=jdbc.queryForObject("select assessment_only_course_publish_ready(?)",Boolean.class,programId);
       if(!Boolean.TRUE.equals(ready)) {
-        throw conflict("Assessment-only release requires a valid source-owned test-pack hierarchy with complete question snapshots. Assessment tests remain draft until question/answer review passes.");
+        throw conflict("Before submitting an assessment-only release, finish human question/answer review and publish every assessment and its complete test pack. The release graph freezes once HRMS quality review starts; complete test review first, then submit the release.");
       }
       evidence.put("deliveryMode",deliveryMode);
       evidence.put("assessmentOnlyReady",true);
