@@ -32,7 +32,9 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
 
         self.assertIn('taxSnapshot.put("courseTypeCode"', financial)
         self.assertIn('transaction.put("courseTypeCode"', financial)
-        self.assertIn("p.course_type_code", invoices)
+        self.assertIn("d.transaction_snapshot->>'courseTitle'", invoices)
+        self.assertIn("d.transaction_snapshot->>'courseCode'", invoices)
+        self.assertIn("d.transaction_snapshot->>'courseTypeCode'", invoices)
         self.assertIn("course_type_code?:string|null", invoice_ui)
         self.assertIn("Course type:", renderer)
         self.assertIn('case "ASSESSMENT" -> "Assessment & tests"', renderer)
