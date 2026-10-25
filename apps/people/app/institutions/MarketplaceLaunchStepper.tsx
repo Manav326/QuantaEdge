@@ -28,7 +28,7 @@ function activateAccessibleReviewDialog(dialog:HTMLElement,onEscape:()=>void):()
   let branch:HTMLElement|null=dialog;
   document.body.style.overflow='hidden';
   while(branch?.parentElement&&branch.parentElement!==document.body){
-    const parent=branch.parentElement;
+    const parent:HTMLElement=branch.parentElement as HTMLElement;
     for(const sibling of Array.from(parent.children)){
       if(sibling!==branch&&sibling instanceof HTMLElement){
         inertedElements.push({element:sibling,wasInert:sibling.inert});
