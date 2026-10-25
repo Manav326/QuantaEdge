@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "73d7871359ba2e1d3fe3cfeb",
       "b90b1ccd2f380e4a35f9f791",
-      "9f232483ce16973cb62998c9",
-      "ac3ef67e4ced1dc1152e7b14",
-      "055ba61cf9184b7284850138"
+      "055ba61cf9184b7284850138",
+      "2104ecb647e20f98cb93ca2e",
+      "2185c15c0a88a108ea516878"
     ],
     "assets_eligible": 2078,
     "assets_analyzed": 1362,
@@ -20101,7 +20101,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40233308114",
-      "checkpointed_at": "2026-10-25T21:46:51Z"
+      "checkpointed_at": "2026-10-25T22:01:14Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23760,7 +23760,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40233308114",
-      "checkpointed_at": "2026-10-25T21:48:05Z"
+      "checkpointed_at": "2026-10-25T22:02:25Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37994,7 +37994,7 @@
         "concepts": [
           "Measurement of Length and Motion",
           "Handspans",
-          "Units of Measurement"
+          "Length of the table"
         ],
         "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
@@ -38005,7 +38005,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40233308114",
-      "checkpointed_at": "2026-10-25T21:59:43Z"
+      "checkpointed_at": "2026-10-25T22:03:28Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -38746,7 +38746,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40220753642",
+      "run_id": "40233308114",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -40016,7 +40016,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40220753642",
+      "run_id": "40233308114",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
