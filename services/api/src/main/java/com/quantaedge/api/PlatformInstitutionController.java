@@ -686,7 +686,7 @@ public class PlatformInstitutionController {
     // release fingerprints and fails closed for older rows that require a fresh submission.
     for(Map<String,Object> release:releases) {
       long courseId=number(release.get("course_id"));
-      String fingerprint=text(release.get("content_fingerprint")).trim();
+      String fingerprint=release.get("content_fingerprint")==null?"":String.valueOf(release.get("content_fingerprint")).trim();
       boolean contentCurrent=Boolean.TRUE.equals(jdbc.queryForObject(
           "select course_release_fingerprint_current(?,?,?)",Boolean.class,
           courseId,fingerprint,release.get("release_updated_at")));
