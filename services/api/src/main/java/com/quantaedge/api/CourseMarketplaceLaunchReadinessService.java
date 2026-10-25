@@ -50,7 +50,7 @@ public class CourseMarketplaceLaunchReadinessService {
         select a.id as assignment_id,a.institution_id,a.status as assignment_status,
           r.id as release_id,r.release_state,r.content_fingerprint,r.updated_at as release_updated_at,
           t.display_name as institution_name,t.status as institution_status,
-          p.id as course_id,p.code as course_code,p.display_name as course_name,p.status as course_status,
+          p.id as course_id,p.code as course_code,p.display_name as course_name,p.status as course_status,p.course_type_code,
           coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=p.id),'LEARNING_CONTENT') as delivery_mode,
           (select count(distinct ps.subject_id)
              from curriculum_program_subject ps join curriculum_subject s
@@ -129,16 +129,23 @@ public class CourseMarketplaceLaunchReadinessService {
     long subjectsWithLessons=number(row.get("subjects_with_published_lessons"));
     long chapterCount=number(row.get("published_chapter_count"));
     long lessonCount=number(row.get("published_lesson_count"));
-    boolean assessmentOnly="ASSESSMENT_ONLY".equals(text(row.get("delivery_mode")));
+    String courseTypeCode=text(row.get("course_type_code"));
+    boolean assessmentOnly="ASSESSMENT".equals(courseTypeCode)
+        &&"ASSESSMENT_ONLY".equals(text(row.get("delivery_mode")));
+    boolean k12Course="K12".equals(courseTypeCode)
+        &&!"ASSESSMENT_ONLY".equals(text(row.get("delivery_mode")));
     boolean requiredContentReady=assessmentOnly
         ? assessmentOnlyCoursePublishReady(courseId)
-        : subjectCount>0&&subjectsWithLessons==subjectCount&&chapterCount>0&&lessonCount>0;
+        : k12Course&&subjectCount>0&&subjectsWithLessons==subjectCount&&chapterCount>0&&lessonCount>0;
     add(checks,"PUBLISHED_LEARNING_CONTENT",
-        assessmentOnly?"All test-pack assessments are published and reviewed":"Every active mapped subject has published lessons",
+        assessmentOnly?"All test-pack assessments are published and reviewed"
+            : k12Course?"Every active mapped subject has published lessons":"Course-type Marketplace readiness is not supported",
         requiredContentReady,
         assessmentOnly
             ? "Publish every assessment in every test pack after human review of questions and answer keys before listing this course."
-            : "Publish reviewed lessons in every active subject mapped to this course before listing it.");
+            : k12Course
+                ? "Publish reviewed lessons in every active subject mapped to this course."
+                : "Keep this course unlisted until its registered hierarchy has a complete importer and server-side publication-readiness contract.");
     add(checks,"OFFER_TERMS","Marketplace offer is configured",false,
         "Create a draft marketplace offer and explicitly set its listing title, description and INR price.");
     List<String> blockers=checks.stream().filter(check->!Boolean.TRUE.equals(check.get("passed")))
@@ -191,7 +198,8 @@ public class CourseMarketplaceLaunchReadinessService {
           ) as current_offer_version,
           t.display_name as institution_name,t.status as institution_status,
           a.status as assignment_status,r.release_state,r.content_fingerprint,r.updated_at as release_updated_at,
-          p.status as course_status,p.code as course_code,p.display_name as course_name,
+          p.status as course_status,p.code as course_code,p.display_name as course_name,p.course_type_code,
+          course_marketplace_content_type_ready(p.id) as course_type_publish_ready,
           coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=p.id),'LEARNING_CONTENT') as delivery_mode,
           (select count(distinct ps.subject_id)
              from curriculum_program_subject ps
@@ -275,16 +283,23 @@ public class CourseMarketplaceLaunchReadinessService {
     long subjectsWithLessons = number(offer.get("subjects_with_published_lessons"));
     long chapterCount = number(offer.get("published_chapter_count"));
     long lessonCount = number(offer.get("published_lesson_count"));
-    boolean assessmentOnly="ASSESSMENT_ONLY".equals(text(offer.get("delivery_mode")));
+    String courseTypeCode=text(offer.get("course_type_code"));
+    boolean assessmentOnly="ASSESSMENT".equals(courseTypeCode)
+        &&"ASSESSMENT_ONLY".equals(text(offer.get("delivery_mode")));
+    boolean k12Course="K12".equals(courseTypeCode)
+        &&!"ASSESSMENT_ONLY".equals(text(offer.get("delivery_mode")));
     boolean requiredContentReady=assessmentOnly
         ? assessmentOnlyCoursePublishReady(number(offer.get("course_id")))
-        : subjectCount > 0 && subjectsWithLessons == subjectCount && chapterCount > 0 && lessonCount > 0;
+        : k12Course&&subjectCount>0&&subjectsWithLessons==subjectCount&&chapterCount>0&&lessonCount>0;
     add(checks,"PUBLISHED_LEARNING_CONTENT",
-        assessmentOnly?"All three source-paper tests are published and reviewed":"Every active mapped subject has published lessons",
+        assessmentOnly?"All test-pack assessments are published and reviewed"
+            : k12Course?"Every active mapped subject has published lessons":"Course-type Marketplace readiness is not supported",
         requiredContentReady,
         assessmentOnly
-            ? "Publish all three source-paper tests after human review of questions and answer keys before listing this course."
-            : "Publish reviewed lessons in every active subject mapped to this course before listing it.");
+            ? "Publish every assessment in every test pack after human review of questions and answer keys before listing this course."
+            : k12Course
+                ? "Publish reviewed lessons in every active subject mapped to this course."
+                : "Keep this course unlisted until its registered hierarchy has a complete importer and server-side publication-readiness contract.");
 
     String courseName = text(offer.get("title_override")).isBlank()
         ? text(offer.get("course_name")) : text(offer.get("title_override"));
@@ -348,7 +363,8 @@ public class CourseMarketplaceLaunchReadinessService {
             &&"ASSIGNED".equals(text(offer.get("assignment_status")))
             &&"SHAREABLE".equals(releaseState)
             &&contentUnchanged
-            &&Boolean.TRUE.equals(offer.get("current_offer_version")));
+            &&Boolean.TRUE.equals(offer.get("current_offer_version"))
+            &&Boolean.TRUE.equals(offer.get("course_type_publish_ready")));
     result.put("checks",checks);
     result.put("blockingIssues",blockers);
     result.put("message",blockers.isEmpty()
