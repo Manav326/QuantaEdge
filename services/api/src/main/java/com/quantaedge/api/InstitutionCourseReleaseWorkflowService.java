@@ -72,12 +72,8 @@ public class InstitutionCourseReleaseWorkflowService {
       evidence.put("deliveryMode",deliveryMode);
       evidence.put("assessmentOnlyReady",true);
     } else {
-      long subjectCount=number(evidence.get("subject_count"));
-      long coveredSubjects=number(evidence.get("subjects_with_published_lessons"));
-      if(subjectCount==0||coveredSubjects!=subjectCount||number(evidence.get("published_chapters"))==0
-          ||number(evidence.get("published_lessons"))==0) {
-        throw conflict("Every mapped active K12 subject must have published, content-reviewed lesson content before release review.");
-      }
+      // The shared database gate is the sole readiness authority. Keep the counts as audit
+      // evidence only; do not reimplement a second, slightly different K12 gate here.
       evidence.put("courseTypeCode",courseType);
       evidence.put("deliveryMode",deliveryMode);
     }
