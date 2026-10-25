@@ -4078,5 +4078,8 @@
   "admin.assessments.rejectionReasonRequired": "Question reject karne se pehle correction reason (kam se kam 3 characters) likhein.",
   "admin.assessments.reviewerNoteTooLong": "Reviewer note 1,000 characters ya usse kam hona chahiye.",
   "admin.assessments.questionPosition": "Question {current} of {total}",
-  "admin.assessments.questionNumber": "Question {number}"
+  "admin.assessments.questionNumber": "Question {number}",
+  "admin.assessments.approved": "Approved",
+  "admin.assessments.rejected": "Rejected",
+  "admin.assessments.assessment": "Assessment"
 }

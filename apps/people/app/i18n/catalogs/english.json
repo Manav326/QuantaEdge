@@ -4078,5 +4078,8 @@
   "admin.assessments.rejectionReasonRequired": "Add a correction reason (at least 3 characters) before rejecting this question.",
   "admin.assessments.reviewerNoteTooLong": "Reviewer note must be 1,000 characters or fewer.",
   "admin.assessments.questionPosition": "Question {current} of {total}",
-  "admin.assessments.questionNumber": "Question {number}"
+  "admin.assessments.questionNumber": "Question {number}",
+  "admin.assessments.approved": "Approved",
+  "admin.assessments.rejected": "Rejected",
+  "admin.assessments.assessment": "Assessment"
 }
