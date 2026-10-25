@@ -1466,3 +1466,5 @@
 .hrmsAssessmentReviewWorkspace:focus,.k12ReviewWorkspace:focus{outline:none}
 .hrmsAssessmentReviewWorkspace :focus-visible,.k12ReviewWorkspace :focus-visible{outline:2px solid var(--qe-color-primary,#e96d22);outline-offset:2px}
 .hrmsAssessmentAnswerSummary a{color:var(--qe-color-primary,#c2410c);overflow-wrap:anywhere}
+
+.hrmsAssessmentSourceTitle{grid-column:1/-1;margin:0 0 2px;font-size:12px;line-height:1.4;color:#25344b}
