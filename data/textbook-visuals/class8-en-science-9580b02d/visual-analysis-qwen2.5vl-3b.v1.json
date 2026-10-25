@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1295,
+    "assets_selected": 1296,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "35ff0b921f1e0b0945a8f8df",
-      "50ad9b07522858e9eda7ab39"
+      "c34415d98e206ae179288c52",
+      "2e6061f0b73bd81b8c0d4b93"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1291,
-    "assets_remaining": 1000,
+    "assets_analyzed": 1293,
+    "assets_remaining": 998,
     "assets_completion_percent": 56.4,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1290,
+    "assets_skipped_from_checkpoint": 1291,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40233310877",
-      "checkpointed_at": "2026-10-25T22:31:47Z"
+      "checkpointed_at": "2026-10-25T22:41:05Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40233310877",
-      "checkpointed_at": "2026-10-25T22:32:36Z"
+      "checkpointed_at": "2026-10-25T22:41:52Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40233310877",
-      "checkpointed_at": "2026-10-25T22:33:35Z"
+      "checkpointed_at": "2026-10-25T22:42:49Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -42676,6 +42676,96 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40233310877",
       "checkpointed_at": "2026-10-25T22:39:47Z"
+    },
+    {
+      "asset_id": "c34415d98e206ae179288c52",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "77dac7f858d3c2ad86ca022679a4bf0db50a31cf27b414c0681a8331db1e8f89",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A balloon with a water column inside it, showing the effect of increasing the height of the water column on the balloon's bulge.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "What will happen to the",
+          "bulge of the balloon if we",
+          "increase the height of the",
+          "water column?",
+          "More",
+          "Water",
+          "Pour some more water in any one of the pipes",
+          "used in Fig. 6.5. Observe the bulge of the balloon.",
+          "Balloon",
+          "Balloon",
+          "Repeat this process a few time"
+        ],
+        "concepts": [
+          "Water column",
+          "Balloon",
+          "Effect of height on bulge"
+        ],
+        "context_relation": "The image shows a diagram of a balloon with a water column inside it, demonstrating the effect of increasing the height of the water column on the balloon's bulge.",
+        "limitations": [
+          "The image does not provide specific measurements or calculations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40233310877",
+      "checkpointed_at": "2026-10-25T22:43:26Z"
+    },
+    {
+      "asset_id": "2e6061f0b73bd81b8c0d4b93",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "77dac7f858d3c2ad86ca022679a4bf0db50a31cf27b414c0681a8331db1e8f89",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A balloon is shown with a water column inside it, and the text describes an experiment involving increasing the height of the water column in a pipe.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "What will happen to the",
+          "bulge of the balloon if we",
+          "increase the height of the",
+          "water column?",
+          "More",
+          "Water",
+          "Pour some more water in any one of the pipes",
+          "used in Fig. 6.5. Observe the bulge of the balloon.",
+          "Balloon",
+          "Balloon",
+          "Repeat this process a few time"
+        ],
+        "concepts": [
+          "Experiment",
+          "Water column",
+          "Bulge",
+          "Pipe",
+          "Fig. 6.5"
+        ],
+        "context_relation": "Experimental",
+        "limitations": [
+          "No specific limitations provided."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40233310877",
+      "checkpointed_at": "2026-10-25T22:43:59Z"
     }
   ]
 }

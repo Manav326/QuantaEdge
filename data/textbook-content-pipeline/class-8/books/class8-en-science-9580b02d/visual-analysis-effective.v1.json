@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a5f451ea7752ef1f96f26365a6578838ace40e145736077cdf82b22d7cec30c3",
+  "raw_analysis_sha256": "dd40b8e61dbaabcec2a08dd77dcf0d5a545ae8c174366c63adfde9db0f2aefd1",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40233310877",
-      "checkpointed_at": "2026-10-25T22:31:47Z",
+      "checkpointed_at": "2026-10-25T22:41:05Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40233310877",
-      "checkpointed_at": "2026-10-25T22:32:36Z",
+      "checkpointed_at": "2026-10-25T22:41:52Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57861,7 +57861,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40233310877",
-      "checkpointed_at": "2026-10-25T22:33:35Z",
+      "checkpointed_at": "2026-10-25T22:42:49Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -64419,6 +64419,154 @@
         "concepts": [],
         "context_relation": "The image is a cartoon-style illustration of a person thinking, possibly related to educational content about thinking or problem-solving.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c34415d98e206ae179288c52",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "77dac7f858d3c2ad86ca022679a4bf0db50a31cf27b414c0681a8331db1e8f89",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A balloon with a water column inside it, showing the effect of increasing the height of the water column on the balloon's bulge.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "What will happen to the",
+          "bulge of the balloon if we",
+          "increase the height of the",
+          "water column?",
+          "More",
+          "Water",
+          "Pour some more water in any one of the pipes",
+          "used in Fig. 6.5. Observe the bulge of the balloon.",
+          "Balloon",
+          "Balloon",
+          "Repeat this process a few time"
+        ],
+        "concepts": [
+          "Water column",
+          "Balloon",
+          "Effect of height on bulge"
+        ],
+        "context_relation": "The image shows a diagram of a balloon with a water column inside it, demonstrating the effect of increasing the height of the water column on the balloon's bulge.",
+        "limitations": [
+          "The image does not provide specific measurements or calculations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40233310877",
+      "checkpointed_at": "2026-10-25T22:43:26Z",
+      "effective_analysis": {
+        "visual_summary": "A balloon with a water column inside it, showing the effect of increasing the height of the water column on the balloon's bulge.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "What will happen to the",
+          "bulge of the balloon if we",
+          "increase the height of the",
+          "water column?",
+          "More",
+          "Water",
+          "Pour some more water in any one of the pipes",
+          "used in Fig. 6.5. Observe the bulge of the balloon.",
+          "Balloon",
+          "Balloon",
+          "Repeat this process a few time"
+        ],
+        "concepts": [
+          "Water column",
+          "Balloon",
+          "Effect of height on bulge"
+        ],
+        "context_relation": "The image shows a diagram of a balloon with a water column inside it, demonstrating the effect of increasing the height of the water column on the balloon's bulge.",
+        "limitations": [
+          "The image does not provide specific measurements or calculations."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2e6061f0b73bd81b8c0d4b93",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "77dac7f858d3c2ad86ca022679a4bf0db50a31cf27b414c0681a8331db1e8f89",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A balloon is shown with a water column inside it, and the text describes an experiment involving increasing the height of the water column in a pipe.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "What will happen to the",
+          "bulge of the balloon if we",
+          "increase the height of the",
+          "water column?",
+          "More",
+          "Water",
+          "Pour some more water in any one of the pipes",
+          "used in Fig. 6.5. Observe the bulge of the balloon.",
+          "Balloon",
+          "Balloon",
+          "Repeat this process a few time"
+        ],
+        "concepts": [
+          "Experiment",
+          "Water column",
+          "Bulge",
+          "Pipe",
+          "Fig. 6.5"
+        ],
+        "context_relation": "Experimental",
+        "limitations": [
+          "No specific limitations provided."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40233310877",
+      "checkpointed_at": "2026-10-25T22:43:59Z",
+      "effective_analysis": {
+        "visual_summary": "A balloon is shown with a water column inside it, and the text describes an experiment involving increasing the height of the water column in a pipe.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "What will happen to the",
+          "bulge of the balloon if we",
+          "increase the height of the",
+          "water column?",
+          "More",
+          "Water",
+          "Pour some more water in any one of the pipes",
+          "used in Fig. 6.5. Observe the bulge of the balloon.",
+          "Balloon",
+          "Balloon",
+          "Repeat this process a few time"
+        ],
+        "concepts": [
+          "Experiment",
+          "Water column",
+          "Bulge",
+          "Pipe",
+          "Fig. 6.5"
+        ],
+        "context_relation": "Experimental",
+        "limitations": [
+          "No specific limitations provided."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
