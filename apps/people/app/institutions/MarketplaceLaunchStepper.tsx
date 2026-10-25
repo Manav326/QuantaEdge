@@ -1285,17 +1285,17 @@ export default function MarketplaceLaunchStepper({
               <footer className={styles.hrmsAssessmentReviewFooter}>
                 <div className={styles.hrmsAssessmentQuestionPaging}>
                   <button type="button" className={styles.secondaryButton}
-                    disabled={activeAssessmentReviewQuestion.sequence_no===assessmentReviewQuestions[0]?.sequence_no}
+                    disabled={!filteredAssessmentReviewQuestions.length||filteredAssessmentReviewQuestions.findIndex(question=>question.sequence_no===activeAssessmentReviewQuestion.sequence_no)<=0}
                     onClick={()=>{
-                      const index=assessmentReviewQuestions.findIndex(question=>question.sequence_no===activeAssessmentReviewQuestion.sequence_no);
-                      if(index>0)setAssessmentReviewTarget(current=>current?{...current,sequenceNo:assessmentReviewQuestions[index-1].sequence_no}:current);
+                      const index=filteredAssessmentReviewQuestions.findIndex(question=>question.sequence_no===activeAssessmentReviewQuestion.sequence_no);
+                      if(index>0)setAssessmentReviewTarget(current=>current?{...current,sequenceNo:filteredAssessmentReviewQuestions[index-1].sequence_no}:current);
                     }}>← Previous question</button>
-                  <span>Question {activeAssessmentReviewQuestion.sequence_no} / {assessmentReviewQuestions.length}</span>
+                  <span>Question {Math.max(0,filteredAssessmentReviewQuestions.findIndex(question=>question.sequence_no===activeAssessmentReviewQuestion.sequence_no)+1)} / {filteredAssessmentReviewQuestions.length}</span>
                   <button type="button" className={styles.secondaryButton}
-                    disabled={activeAssessmentReviewQuestion.sequence_no===assessmentReviewQuestions[assessmentReviewQuestions.length-1]?.sequence_no}
+                    disabled={!filteredAssessmentReviewQuestions.length||filteredAssessmentReviewQuestions.findIndex(question=>question.sequence_no===activeAssessmentReviewQuestion.sequence_no)<0||filteredAssessmentReviewQuestions.findIndex(question=>question.sequence_no===activeAssessmentReviewQuestion.sequence_no)>=filteredAssessmentReviewQuestions.length-1}
                     onClick={()=>{
-                      const index=assessmentReviewQuestions.findIndex(question=>question.sequence_no===activeAssessmentReviewQuestion.sequence_no);
-                      if(index>=0&&index<assessmentReviewQuestions.length-1)setAssessmentReviewTarget(current=>current?{...current,sequenceNo:assessmentReviewQuestions[index+1].sequence_no}:current);
+                      const index=filteredAssessmentReviewQuestions.findIndex(question=>question.sequence_no===activeAssessmentReviewQuestion.sequence_no);
+                      if(index>=0&&index<filteredAssessmentReviewQuestions.length-1)setAssessmentReviewTarget(current=>current?{...current,sequenceNo:filteredAssessmentReviewQuestions[index+1].sequence_no}:current);
                     }}>Next question →</button>
                 </div>
                 <div className={styles.hrmsAssessmentQuestionPaging}>
