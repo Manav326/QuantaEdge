@@ -823,6 +823,11 @@ public class CourseMarketplaceLaunchController {
                 or (pending_request.institution_offer_id is null and pending_request.course_id=stale.course_id))
               and pending_request.status='PENDING'
           )
+          and not exists (
+            select 1 from course_discount_redemption reserved_redemption
+            where reserved_redemption.institution_offer_id=stale.id
+              and reserved_redemption.status='RESERVED'
+          )
         for update of stale
         """,currentCourseId,institutionId,currentOfferId);
     for(Map<String,Object> stale:staleOffers) {
@@ -833,10 +838,26 @@ public class CourseMarketplaceLaunchController {
           where id=? and institution_id=? and status<>'ARCHIVED'
           """,staleOfferId,institutionId);
       if(changed==1) {
+        // Retire obsolete offer-specific configuration without deleting its approved history.
+        int taxProfilesRetired=jdbc.update("""
+            update course_tax_profile set status='RETIRED'
+            where institution_offer_id=? and status in ('DRAFT','PENDING_APPROVAL','APPROVED')
+            """,staleOfferId);
+        int sharePoliciesRetired=jdbc.update("""
+            update revenue_share_policy set status='RETIRED'
+            where institution_offer_id=? and status in ('DRAFT','PENDING_APPROVAL','APPROVED')
+            """,staleOfferId);
+        int discountsRetired=jdbc.update("""
+            update course_discount_offer set status='RETIRED',retired_by_staff_id=?,retired_at=now(),updated_at=now()
+            where institution_offer_id=? and status in ('DRAFT','PENDING_APPROVAL','APPROVED')
+            """,staffId,staleOfferId);
         record(institutionId,number(stale.get("course_release_id")),number(stale.get("assignment_id")),staleOfferId,
             "OFFER_ARCHIVED",staffId,
             Map.of("reason","SUPERSEDED_OFFER_REPLACED","previousStatus",previousStatus,
-              "replacedByOfferId",currentOfferId));
+              "replacedByOfferId",currentOfferId,
+              "retiredTaxProfiles",taxProfilesRetired,
+              "retiredSharePolicies",sharePoliciesRetired,
+              "retiredDiscountOffers",discountsRetired));
       }
     }
   }
