@@ -11,14 +11,17 @@ import InstitutionBrandTemplate from './InstitutionBrandTemplate';
 import PasswordField from '../components/PasswordField';
 
 type Session = { staffId?: number; displayName?: string; permissions?: string[] };
-type EditableCard = 'profile' | 'status' | 'courses' | 'admins' | 'branding' | 'billing';
+type EditableCard = 'profile' | 'status' | 'admins' | 'branding' | 'billing';
 type Institution = {
   id: number; tenant_code: string; display_name: string; legal_name?: string | null; status: string;
   brand_display_name?: string | null; active_memberships?: number; authorized_courses?: number;
   current_period_billable_events?: number; current_period_amount_paise?: number; contract_currency?: string | null;
 };
-type Course = { id: number; code: string; display_name: string; class_code?: string | null };
-type Entitlement = { program_id: number; code: string; display_name: string; entitlement_status: string };
+type CourseReleaseAssignment = {
+  assignment_id: number; assignment_source: string; release_id: number; release_version: number;
+  release_state: string; program_id: number; course_identity_id: number | null; content_version_no: number;
+  code: string; display_name: string; published_lessons?: number;
+};
 type Admin = { id: number; username: string; display_name: string; active: boolean; must_change_password: boolean; last_login_at?: string | null };
 type EducationAdminStaffRow = {
   staff_id: number; display_name: string; role: string; active: boolean;
@@ -32,7 +35,7 @@ type Detail = Institution & {
   brand_display_name?: string | null; tagline?: string | null; logo_asset_key?: string | null; app_icon_asset_key?: string | null;
   store_listing_url?: string | null; logo_url?: string | null; app_icon_url?: string | null; themeTokens?: ThemeTokens; contract_id?: number | null; currency?: string;
   unit_price_paise?: number; billing_cadence?: string; effective_from?: string; effective_until?: string | null;
-  admins?: Admin[]; courses?: Entitlement[];
+  admins?: Admin[]; courses?: CourseReleaseAssignment[];
 };
 type Overview = { institutions?: { institutions_total?: number; institutions_active?: number; institutions_suspended?: number }; billing?: { current_period_billable_enrollments?: number; amount_by_currency?: string } };
 type IntegrationCheck = {integration:string;configured:boolean;required:boolean;owner:string;tenantCredentialsRequired:boolean;operatorAction:string};
@@ -64,7 +67,6 @@ export default function InstitutionsAdminPage() {
   const [integrationReadiness,setIntegrationReadiness]=useState<IntegrationReadiness|null>(null);
   const [readinessError,setReadinessError]=useState('');
   const [institutions,setInstitutions]=useState<Institution[]>([]);
-  const [catalog,setCatalog]=useState<Course[]>([]);
   const [educationAdminStaff,setEducationAdminStaff]=useState<EducationAdminStaffRow[]>([]);
   const [educationStaffToAssign,setEducationStaffToAssign]=useState('');
   const [educationStaffReason,setEducationStaffReason]=useState('');
@@ -76,7 +78,6 @@ export default function InstitutionsAdminPage() {
   const [showCreate,setShowCreate]=useState(false);
   const [showAdmin,setShowAdmin]=useState(false);
   const [editingCard,setEditingCard]=useState<EditableCard|null>(null);
-  const [courseDraft,setCourseDraft]=useState<Record<string,boolean>>({});
   const [loading,setLoading]=useState(true);
   const [saving,setSaving]=useState(false);
   const [error,setError]=useState('');
@@ -103,15 +104,14 @@ export default function InstitutionsAdminPage() {
       const me=await api<Session>('/api/v1/auth/me');setSession(me);setReady(true);
       if(!me.staffId){router.replace('/login');return;}
       if(!me.permissions?.includes('QE_PLATFORM_OWNER'))return;
-      const [o,i,c,presets,integrations]=await Promise.all([
+      const [o,i,presets,integrations]=await Promise.all([
         api<Overview>('/api/v1/hrms/platform/institutions/overview'),
         api<Institution[]>('/api/v1/hrms/platform/institutions'),
-        api<Course[]>('/api/v1/hrms/platform/institutions/catalog/courses'),
         api<ThemePreset[]>('/api/v1/hrms/platform/institutions/theme-presets'),
         api<IntegrationReadiness>('/api/v1/hrms/platform/institutions/integration-readiness')
           .catch(e=>{setReadinessError(e instanceof Error?e.message:'Platform integration readiness is unavailable.');return null;}),
       ]);
-      setOverview(o);setInstitutions(Array.isArray(i)?i:[]);setCatalog(Array.isArray(c)?c:[]);setThemePresets(Array.isArray(presets)?presets:[]);
+      setOverview(o);setInstitutions(Array.isArray(i)?i:[]);setThemePresets(Array.isArray(presets)?presets:[]);
       if(integrations){setIntegrationReadiness(integrations);setReadinessError('');}
     }catch(e){const msg=e instanceof Error?e.message:'Platform tenant records could not be loaded.';setError(msg);if(/authentication|required|session expired/i.test(msg))router.replace('/login');}
     finally{setLoading(false);}
@@ -225,10 +225,6 @@ export default function InstitutionsAdminPage() {
     billing.effectiveFrom!==(detail?.effective_from?.slice(0,10)||new Date().toISOString().slice(0,10))||
     billing.effectiveUntil!==(detail?.effective_until?.slice(0,10)||'')
   );
-  const hasCourseChanges=catalog.some(course=>{
-    const enabled=detail?.courses?.some(x=>x.program_id===course.id&&x.entitlement_status==='ACTIVE')||false;
-    return Boolean(courseDraft[course.id])!==enabled;
-  });
   const doCreate=async(event:FormEvent)=>{
     event.preventDefault();const issue=createDraftIssue();if(issue){setError(issue);return;}setSaving(true);setError('');setNotice('');setJoinCode('');
     try{
@@ -285,28 +281,9 @@ export default function InstitutionsAdminPage() {
     try{await api('/api/v1/hrms/platform/institutions/'+detail.id+'/status',{method:'PUT',body:JSON.stringify({status,reason})});setNotice('');notifyUser('Institution status saved.','success');await loadBase();await loadDetail(detail.id);}
     catch(e){setError(e instanceof Error?e.message:'Status change failed.');}finally{setSaving(false);}
   }
-  async function saveCourseAuthorisation(){
-    if(!detail)return;
-    const changes=catalog.filter(course=>{
-      const enabled=detail.courses?.some(x=>x.program_id===course.id&&x.entitlement_status==='ACTIVE')||false;
-      return Boolean(courseDraft[course.id])!==enabled;
-    });
-    if(!changes.length){setNotice('');notifyUser('There are no course authorisation changes to save.','info');setEditingCard(null);return;}
-    setSaving(true);setError('');setNotice('');
-    try{
-      for(const course of changes){await api('/api/v1/hrms/platform/institutions/'+detail.id+'/courses/'+course.id,{method:'PUT',body:JSON.stringify({enabled:Boolean(courseDraft[course.id])})});}
-      setNotice('');notifyUser('Saved '+changes.length+' course authorisation change'+(changes.length===1?'':'s')+'.','success');
-      await loadBase();await loadDetail(detail.id);
-    }catch(e){
-      const message=e instanceof Error?e.message:'Course authorisation could not be saved.';
-      await loadDetail(detail.id);
-      setError('Course authorisation may have been partially saved. '+message+' The current server state has been reloaded; review it before retrying.');
-    }finally{setSaving(false);}
-  }
   function cancelCardEdit(card:EditableCard){
     if(detail){
       if(card==='profile')setProfile({displayName:detail.display_name||'',legalName:detail.legal_name||''});
-      if(card==='courses')setCourseDraft(Object.fromEntries(catalog.map(course=>[course.id,(detail.courses||[]).some(x=>x.program_id===course.id&&x.entitlement_status==='ACTIVE')])));
       if(card==='branding')setBrand({displayName:detail.brand_display_name||detail.display_name,tagline:detail.tagline||'',logoAssetKey:detail.logo_asset_key||'',appIconAssetKey:detail.app_icon_asset_key||'',storeListingUrl:detail.store_listing_url||'',presetId:String(detail.themeTokens?.presetId||'quantaedge-orange'),appearance:String(detail.themeTokens?.appearance||'system'),primary:String(detail.themeTokens?.brandPrimary||detail.themeTokens?.primary||'#F97316'),accent:String(detail.themeTokens?.brandAccent||detail.themeTokens?.accent||'#0F766E')});
       if(card==='billing')setBilling({currency:detail.currency||'INR',unitPriceRupees:detail.unit_price_paise===undefined?'0.00':(detail.unit_price_paise/100).toFixed(2),billingCadence:detail.billing_cadence||'MONTHLY',effectiveFrom:detail.effective_from?.slice(0,10)||new Date().toISOString().slice(0,10),effectiveUntil:detail.effective_until?.slice(0,10)||''});
     }
@@ -468,10 +445,24 @@ export default function InstitutionsAdminPage() {
         {tab==='summary'?<>
           <section className={styles.panel}>
             <div className={styles.panelHeading}>
-              <div><h3>Course authorisation</h3><p>Only active course products are available. Course content itself remains centrally managed.</p></div>
-              {editingCard==='courses'?<div className={styles.cardActions}><button type="button" className={styles.secondary} onClick={()=>cancelCardEdit('courses')} disabled={saving}>Cancel</button><button type="button" className={styles.primary} onClick={()=>void saveCourseAuthorisation()} disabled={saving||!hasCourseChanges}>{saving?'Saving…':'Save changes'}</button></div>:<button type="button" className={styles.secondary} onClick={()=>{setCourseDraft(Object.fromEntries(catalog.map(course=>[course.id,(detail.courses||[]).some(x=>x.program_id===course.id&&x.entitlement_status==='ACTIVE')])));setEditingCard('courses');}} disabled={saving||editingCard!==null}>Edit</button>}
+              <div>
+                <h3>Course release access</h3>
+                <p>Access is scoped to an assigned course release. Assignment does not publish a Marketplace offer; listing and publication remain a separate HRMS approval workflow.</p>
+              </div>
+              <button type="button" className={styles.secondary} onClick={()=>setTab('marketplace')} disabled={saving}>Manage releases</button>
             </div>
-            {editingCard==='courses'?<div className={styles.courseList}>{catalog.map(course=><label key={course.id} className={styles.courseItem}><span><strong>{course.display_name}</strong><small>{course.code}{course.class_code?' · Class '+course.class_code:''}</small></span><input type="checkbox" checked={Boolean(courseDraft[course.id])} disabled={saving||detail.status==='CLOSED'} onChange={e=>setCourseDraft(current=>({...current,[course.id]:e.target.checked}))} aria-label={'Authorise '+course.display_name}/></label>)}{!catalog.length?<p className={styles.emptyText}>No active courses in the catalogue.</p>:null}</div>:<div className={styles.readOnlySummary}><div className={styles.readOnlyMetric}><strong>{(detail.courses||[]).filter(x=>x.entitlement_status==='ACTIVE').length}</strong><span>Authorised course(s)</span></div><div className={styles.readOnlyValues}>{(detail.courses||[]).filter(x=>x.entitlement_status==='ACTIVE').map(course=><span key={course.program_id} className={styles.valueChip}>{course.display_name}</span>)}{!(detail.courses||[]).some(x=>x.entitlement_status==='ACTIVE')?<span className={styles.emptyValue}>No courses authorised yet.</span>:null}</div></div>}
+            <div className={styles.readOnlySummary}>
+              <div className={styles.readOnlyMetric}>
+                <strong>{(detail.courses||[]).length}</strong>
+                <span>Active course identities</span>
+              </div>
+              <div className={styles.readOnlyValues}>
+                {(detail.courses||[]).map(course=><span key={String(course.course_identity_id??course.program_id)} className={styles.valueChip}>
+                  {course.display_name} · Release v{course.release_version} · {course.release_state.replaceAll('_',' ')} · {course.assignment_source==='ORIGIN'?'Source-owned':course.assignment_source==='HRMS'?'HRMS assigned':course.assignment_source==='LEGACY_ENTITLEMENT_MIGRATION'?'Migrated access':course.assignment_source.replaceAll('_',' ')}
+                </span>)}
+                {!(detail.courses||[]).length?<span className={styles.emptyValue}>No active release assignments. Open Marketplace launch to assign an eligible release.</span>:null}
+              </div>
+            </div>
           </section>
           <section className={styles.panel}>
             <div className={styles.panelHeading}><div><h3>Institution administrators</h3><p>Only platform owner can create or suspend client admins.</p></div>
