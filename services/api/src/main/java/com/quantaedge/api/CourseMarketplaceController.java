@@ -87,7 +87,13 @@ public class CourseMarketplaceController {
     List<Map<String, Object>> offers = jdbc.queryForList("""
         select p.id as course_id, p.public_id, p.code as course_code,
           coalesce(nullif(o.title_override,''),p.display_name) as title,
-          p.display_name as course_name, p.curriculum_version,
+          p.display_name as course_name, p.curriculum_version,p.course_type_code,
+          (select count(*) from course_assessment_pack pack
+            where pack.course_id=p.id and pack.status='PUBLISHED') as test_pack_count,
+          (select count(*) from assessment a
+            where a.course_id=p.id and a.status='PUBLISHED') as assessment_count,
+          (select count(*) from assessment_question aq join assessment a on a.id=aq.assessment_id
+            where a.course_id=p.id and a.status='PUBLISHED') as assessment_question_count,
           o.description, o.price_paise, o.currency, o.status as offer_status,
           (exists(select 1 from student_program_enrollment e
             where e.institution_id=? and e.student_id=? and e.program_id=p.id
@@ -175,8 +181,14 @@ public class CourseMarketplaceController {
       with selected_tenant as (select ?::bigint as institution_id)
       select p.id as course_id,p.public_id,p.code as course_code,
         coalesce(nullif(o.title_override,''),p.display_name) as title,
-        p.display_name as course_name,p.curriculum_version,o.description,
-        o.price_paise,o.currency,o.status as offer_status,
+        p.display_name as course_name,p.curriculum_version,p.course_type_code,
+        (select count(*) from course_assessment_pack pack
+          where pack.course_id=p.id and pack.status='PUBLISHED') as test_pack_count,
+        (select count(*) from assessment a
+          where a.course_id=p.id and a.status='PUBLISHED') as assessment_count,
+        (select count(*) from assessment_question aq join assessment a on a.id=aq.assessment_id
+          where a.course_id=p.id and a.status='PUBLISHED') as assessment_question_count,
+        o.description,o.price_paise,o.currency,o.status as offer_status,
         (exists(select 1 from course_entitlement ce
           where ce.institution_id=(select institution_id from selected_tenant)
             and ce.course_id=p.id and ce.holder_user_id=?)
