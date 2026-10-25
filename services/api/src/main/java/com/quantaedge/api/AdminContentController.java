@@ -165,6 +165,54 @@ public class AdminContentController {
     return courses;
   }
 
+  /**
+   * Metadata-only inventory for classless assessment courses in Content Studio.
+   * It deliberately does not use the teacher grading queue's staff-assignment filter or expose
+   * attempt/learner data. Question snapshots require the dedicated CONTENT_REVIEW route.
+   */
+  @GetMapping("/courses/{courseId}/assessment-inventory")
+  public List<Map<String,Object>> assessmentCourseInventory(
+      @PathVariable long courseId,
+      @RequestHeader(value = "X-Admin-Token", required = false) String token,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
+    authorize(token, context, "CONTENT_VIEW");
+    long institutionId=requireInstitution(tenant);
+    requireAssignedCourse(courseId,institutionId);
+    Boolean assessmentOnly=jdbc.queryForObject("""
+      select exists(
+        select 1 from curriculum_program p
+        join curriculum_program_delivery_mode mode on mode.program_id=p.id
+          and mode.delivery_mode='ASSESSMENT_ONLY'
+        where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+          and p.course_type_code='ASSESSMENT'
+      )
+      """,Boolean.class,courseId);
+    if(!Boolean.TRUE.equals(assessmentOnly))
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          "The selected course does not use the classless ASSESSMENT_ONLY delivery model.");
+    return jdbc.queryForList("""
+      select a.id as assessment_id,a.public_id as test_id,a.title,a.description,a.status,
+        a.assessment_type,a.portable_assessment_type,a.source_exam_cycle,
+        a.source_package_id,a.source_package_version,a.duration_minutes,a.max_attempts,
+        pack.pack_code as test_pack_code,pack.pack_version as test_pack_version,
+        pack.title as test_pack_title,pack.status as test_pack_status,
+        (select count(*) from assessment_question aq where aq.assessment_id=a.id) as question_count,
+        (select coalesce(sum(case
+          when coalesce(aq.question_snapshot->>'section_result_policy','SCORED') in ('QUALIFYING_ONLY','PRACTICE_ONLY')
+            or coalesce(aq.question_snapshot->>'section_code','')='LANGUAGE_QUALIFYING' then 0
+          else aq.max_marks end),0)
+         from assessment_question aq where aq.assessment_id=a.id) as max_score
+      from assessment a
+      left join course_assessment_pack_item pack_item on pack_item.assessment_id=a.id
+      left join course_assessment_pack pack
+        on pack.id=pack_item.pack_id and pack.course_id=a.course_id
+      where a.course_id=?
+      order by coalesce(a.source_exam_cycle,a.title),a.id
+      """,courseId);
+  }
+
   @GetMapping
   public List<Map<String, Object>> list(
       @RequestHeader(value = "X-Admin-Token", required = false) String token,
