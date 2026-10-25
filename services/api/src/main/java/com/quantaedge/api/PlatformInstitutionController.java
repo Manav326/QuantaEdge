@@ -603,6 +603,30 @@ public class PlatformInstitutionController {
         throw new ResponseStatusException(HttpStatus.CONFLICT,
             "This release is not ready for assignment under its registered course type and delivery mode. Assessment-only courses require every test pack and assessment to be published after question/answer review; K12 courses require published lessons in every mapped active subject. Unsupported or mismatched course types remain blocked.");
     }
+    if(!enabled) {
+      Boolean unresolvedActivity=jdbc.queryForObject("""
+          select exists(
+            select 1
+            from institution_marketplace_offer o
+            where o.institution_id=? and o.course_release_id=?
+              and (
+                exists(select 1 from course_payment_order po
+                  where po.institution_id=o.institution_id
+                    and (po.institution_offer_id=o.id
+                      or (po.institution_offer_id is null and po.course_id=o.course_id))
+                    and po.status in ('CREATING','PENDING'))
+                or exists(select 1 from parent_course_purchase_request pcr
+                  where pcr.institution_id=o.institution_id and pcr.status='PENDING'
+                    and (pcr.institution_offer_id=o.id
+                      or (pcr.institution_offer_id is null and pcr.course_id=o.course_id)))
+              )
+          )
+          """,Boolean.class,institutionId,releaseId);
+      if(Boolean.TRUE.equals(unresolvedActivity)) {
+        throw new ResponseStatusException(HttpStatus.CONFLICT,
+            "Resolve open payment orders and pending parent purchase requests before unassigning this release. Historical purchases, invoices and entitlements will be preserved.");
+      }
+    }
     Long assignmentId=null;
     if(enabled) {
       assignmentId=jdbc.queryForObject("""
