@@ -247,6 +247,21 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertNotIn("course_content_fingerprint(", helper,
                          "Marketplace reads must not rehash pre-V196 graphs.")
 
+    def test_course_fingerprint_aggregates_compact_row_hashes(self):
+        migration = SCRIPT.parents[1] / "services" / "api" / "src" / "main" / "resources" / "db" / "migration" / "V203__compact_course_release_fingerprint.sql"
+        sql = migration.read_text(encoding="utf-8")
+        function_start = sql.index("CREATE OR REPLACE FUNCTION course_content_fingerprint")
+        function_end = sql.index("COMMENT ON FUNCTION course_content_fingerprint", function_start)
+        function = sql[function_start:function_end]
+
+        self.assertIn("content_rows AS NOT MATERIALIZED", function)
+        self.assertIn("md5(row_json)", function)
+        self.assertIn("ORDER BY entity_type,entity_id", function)
+        for entity in ("'lesson-block'", "'question-option'", "'assessment-pack-item'", "'source-book-page'"):
+            self.assertIn(entity, function)
+        self.assertNotIn("entity_type||':'||entity_id||':'||row_json", function,
+                         "Do not aggregate full JSON course rows into one large string.")
+
     def test_expected_primary_booklet_counts(self):
         self.assertEqual(import_tre4_course.expected_question_count("TRE 1.0"), 120)
         self.assertEqual(import_tre4_course.expected_question_count("TRE 2.0"), 150)
