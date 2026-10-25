@@ -126,6 +126,8 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
         assessment_controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/AssessmentController.java").read_text(encoding="utf-8")
         admin_assessments = (ROOT / "apps/admin/app/assessments/page.tsx").read_text(encoding="utf-8")
         self.assertIn("assessment_question_snapshot_publish_ready", migration)
+        self.assertIn("SELECT COALESCE(CASE", migration)
+        self.assertIn("END, false);", migration)
         for kind in ("OPTION", "MULTI_OPTION", "TEXT", "NUMERIC", "ORDER", "MATCH"):
             self.assertIn(f"WHEN '{kind}'", migration)
         self.assertIn("answer_review_status", migration)
