@@ -7,9 +7,10 @@
 -- onward. We can therefore trust a well-formed saved fingerprint for those releases without
 -- recomputing the full content graph for every listing, checkout and payment verification.
 --
--- Releases older than the V196 cutoff retain the conservative full comparison. This preserves
--- V196's intentional stale-release rejection for pre-existing releases whose fingerprints were
--- not refreshed because their content had already changed.
+-- V196 intentionally leaves stale reviewed releases' fingerprints and updated_at untouched.
+-- A pre-cutoff release is therefore treated as stale and fails closed until its source submits a
+-- fresh version. Do not recompute its full graph here: it could be the same memory-heavy legacy
+-- course that caused PostgreSQL to kill a backend process.
 CREATE OR REPLACE FUNCTION course_release_fingerprint_current(
   p_program_id bigint,
   p_saved_fingerprint text,
@@ -36,14 +37,18 @@ BEGIN
   ORDER BY installed_rank DESC
   LIMIT 1;
 
-  IF v_v196_cutoff IS NOT NULL
-     AND p_release_updated_at >= v_v196_cutoff - interval '1 minute' THEN
+  IF v_v196_cutoff IS NULL THEN
+    RETURN false;
+  END IF;
+
+  IF p_release_updated_at >= v_v196_cutoff - interval '1 minute' THEN
     RETURN true;
   END IF;
 
-  RETURN btrim(p_saved_fingerprint)=btrim(course_content_fingerprint(p_program_id)::text);
+  -- V196 deliberately did not refresh stale reviewed rows. Fail closed without invoking the
+  -- expensive graph hash; re-submission computes a current fingerprint and opens a new release.
 END
 $$;
 
 COMMENT ON FUNCTION course_release_fingerprint_current(bigint,text,timestamptz) IS
-  'Validates pre-V196/legacy release fingerprints against the full graph. Fingerprints refreshed by V196 or stored by later validated release transitions are trusted because V180 freezes released course content, avoiding repeated high-memory graph hashing on Marketplace reads.';
+  'Trusts canonical fingerprints refreshed by V196 or stored by later validated release transitions because V180 freezes released course graphs. Pre-V196 rows left untouched by V196 fail closed and require fresh source submission rather than triggering a potentially memory-heavy legacy hash.';
