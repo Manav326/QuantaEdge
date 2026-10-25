@@ -4097,5 +4097,6 @@
   "admin.assessments.answerPayloadExample": "For example: {\"kind\":\"OPTION\",\"value\":\"B\"} or {\"kind\":\"NUMERIC\",\"value\":12,\"tolerance\":0.1}",
   "admin.assessments.englishExplanationAria": "English explanation",
   "admin.assessments.hindiExplanationAria": "Hindi explanation",
-  "admin.assessments.questionSourceProvenance": "Question source provenance"
+  "admin.assessments.questionSourceProvenance": "Question source provenance",
+  "admin.assessments.hindiExplanationGuidance": "The Hindi explanation is saved separately from the English explanation."
 }
