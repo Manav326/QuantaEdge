@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-"""Import the TRE-4 source papers into QuantaEdge as a draft, assessment-only course.
+"""Import TRE-4 source papers into QuantaEdge while preserving the database lifecycle.
 
-Default mode is a dry run. This importer never publishes assessments or treats extracted/AI
-answers as official. Use --apply to write the course and three immutable draft assessment sets.
-Use --submit-for-review with --apply to enqueue the release for the existing HRMS quality-review
-workflow; it does not approve the release or make it shareable.
+Default mode is a dry run. --apply creates/reuses the source-owned ASSESSMENT course, DRAFT
+assessments, DRAFT test packs and, on first import, a DRAFT release. The importer never approves
+questions, publishes assessments/packs, approves a release, approves the origin release, or creates
+or publishes a Marketplace offer. With explicit --submit-for-review, it may transition an existing
+DRAFT release to IN_QUALITY_REVIEW only after the database publish-readiness gate passes.
+Question/answer review, assessment publication, HRMS quality approval, origin approval and
+Marketplace offer transitions use their own supported workflows. Existing non-DRAFT releases are
+immutable to this importer.
 """
 from __future__ import annotations
 
@@ -411,21 +415,30 @@ def ensure_schema(cursor: Any) -> None:
                to_regprocedure('public.course_content_fingerprint(bigint)'),
                to_regprocedure('public.assessment_only_course_ready(bigint)'),
                to_regprocedure('public.tre4_source_package_ready(bigint)'),
+               to_regprocedure('public.assessment_only_course_publish_ready(bigint)'),
+               to_regprocedure('public.course_marketplace_content_type_ready(bigint)'),
+               to_regprocedure('public.assessment_question_snapshot_publish_ready(jsonb)'),
                pg_get_functiondef(to_regprocedure('public.assign_assessment_public_id()')),
                pg_get_functiondef(to_regprocedure('public.course_content_fingerprint(bigint)')),
                pg_get_functiondef(to_regprocedure('public.assessment_only_course_ready(bigint)')),
-               pg_get_functiondef(to_regprocedure('public.tre4_source_package_ready(bigint)'))
+               pg_get_functiondef(to_regprocedure('public.tre4_source_package_ready(bigint)')),
+               pg_get_functiondef(to_regprocedure('public.assessment_only_course_publish_ready(bigint)')),
+               pg_get_functiondef(to_regprocedure('public.course_marketplace_content_type_ready(bigint)')),
+               pg_get_functiondef(to_regprocedure('public.assessment_question_snapshot_publish_ready(jsonb)'))
     """)
     row = cursor.fetchone()
     if not row or any(value is None for value in row):
         raise ImportErrorSafe(
-            "Required migrations V168, V177, V180, V198, and V199 are missing. "
+            "Required migrations V168, V177, V180, V198, V199, V200, V202, and V204 are missing. "
             "Start the API against this database and verify Flyway completes before importing."
         )
-    assessment_id_definition = str(row[9] or "")
-    fingerprint_definition = str(row[10] or "")
-    generic_readiness_definition = str(row[11] or "")
-    tre4_readiness_definition = str(row[12] or "")
+    assessment_id_definition = str(row[12] or "")
+    fingerprint_definition = str(row[13] or "")
+    generic_readiness_definition = str(row[14] or "")
+    tre4_readiness_definition = str(row[15] or "")
+    publish_readiness_definition = str(row[16] or "")
+    course_type_readiness_definition = str(row[17] or "")
+    answer_gate_definition = str(row[18] or "")
 
     # V198 is essential: classless ASSESSMENT tests still need their registered course-scoped IDs.
     if "A subjectless assessment requires an assessment-only or competitive course" not in assessment_id_definition:
@@ -454,6 +467,34 @@ def ensure_schema(cursor: Any) -> None:
         raise ImportErrorSafe(
             "Flyway V199 is required: TRE source-package readiness must validate test packs, not school chapters."
         )
+    if "assessment_question_snapshot_publish_ready(aq.question_snapshot)" not in generic_readiness_definition:
+        raise ImportErrorSafe(
+            "Flyway V204 is required: generic assessment readiness must use the typed question/answer review gate."
+        )
+    if "assessment_question_snapshot_publish_ready(aq.question_snapshot)" not in tre4_readiness_definition:
+        raise ImportErrorSafe(
+            "Flyway V204 is required: TRE readiness must use the same typed question/answer review gate."
+        )
+    if "course_marketplace_content_type_ready" not in course_type_readiness_definition or "assessment_only_course_publish_ready" not in course_type_readiness_definition:
+        raise ImportErrorSafe(
+            "Flyway V202 is required: course-type-aware Marketplace readiness must be available for release submission."
+        )
+    if "registered_type.status='ACTIVE'" not in course_type_readiness_definition or "identity.status='ACTIVE'" not in course_type_readiness_definition:
+        raise ImportErrorSafe(
+            "Flyway V205 is required: Marketplace readiness must require an active registered type and active source-owned course identity."
+        )
+    if "conflicting_release.source_institution_id<>identity.source_institution_id" not in course_type_readiness_definition:
+        raise ImportErrorSafe(
+            "Flyway V205 is required: Marketplace readiness must reject courses whose release ownership conflicts with the source institution identity."
+        )
+    if "p.course_type_code='ASSESSMENT'" not in course_type_readiness_definition or "p.course_type_code='K12'" not in course_type_readiness_definition:
+        raise ImportErrorSafe(
+            "Flyway V205 is required: Marketplace readiness must use the registered course type, not infer the hierarchy from legacy tables."
+        )
+    if "assessment_question_snapshot_publish_ready" not in answer_gate_definition:
+        raise ImportErrorSafe("Flyway V204 is required: the shared typed assessment question/answer review function is unavailable.")
+    if "assessment_only_course_publish_ready" not in publish_readiness_definition:
+        raise ImportErrorSafe("Flyway V200 is required: generic assessment Marketplace publication readiness is unavailable.")
     if not re.search(
         r"'TRE 3\.0'::varchar,\s*'tre4-bpsc-tre-3-0-computer-science'::varchar,\s*150",
         tre4_readiness_definition,
@@ -507,7 +548,7 @@ def ensure_course_identity(cursor: Any, institution_id: int, course_id: int) -> 
     stable_key = f"I{institution_id}_TRE4"
     cursor.execute("""
         SELECT p.display_name,p.course_type_code,p.course_identity_id,
-               i.source_institution_id,i.stable_course_key,i.course_type_code
+               i.source_institution_id,i.stable_course_key,i.course_type_code,i.status
         FROM curriculum_program p
         LEFT JOIN institution_course_identity i ON i.id=p.course_identity_id
         WHERE p.id=%s FOR UPDATE OF p
@@ -515,10 +556,12 @@ def ensure_course_identity(cursor: Any, institution_id: int, course_id: int) -> 
     row = cursor.fetchone()
     if not row or row[0] != COURSE_TITLE:
         raise ImportErrorSafe("TRE-4 course identity cannot be reconciled with the expected course.")
-    display_name, course_type, identity_id, owner_id, saved_key, identity_type = row
+    display_name, course_type, identity_id, owner_id, saved_key, identity_type, identity_status = row
     if identity_id is not None:
         if int(owner_id or 0) != institution_id or saved_key != stable_key:
             raise ImportErrorSafe("TRE-4 course is linked to a different source identity; refusing cross-institution mutation.")
+        if identity_status != "ACTIVE":
+            raise ImportErrorSafe("TRE-4 course is linked to an inactive identity; reactivate/reconcile the identity through the HRMS/source-owner workflow before importing.")
         if course_type != "ASSESSMENT" or identity_type != "ASSESSMENT":
             raise ImportErrorSafe("TRE-4 course identity has a conflicting type; reconcile it through the source-owned draft workflow.")
         return int(identity_id)
@@ -813,6 +856,54 @@ def resolve_quantaedge_source_institution(cursor: Any) -> int:
     return int(institution_id)
 
 
+def lock_latest_draft_release(cursor: Any, institution_id: int, course_id: int) -> tuple[Any, ...] | None:
+    """Lock and validate every release guard that protects the course graph from mutation."""
+    cursor.execute("""
+        SELECT id,release_version,release_state,content_fingerprint
+        FROM institution_course_release
+        WHERE source_institution_id=%s AND program_id=%s
+        ORDER BY release_version DESC,id DESC LIMIT 1 FOR UPDATE
+    """, (institution_id, course_id))
+    row = cursor.fetchone()
+    if row and str(row[2]) != "DRAFT":
+        raise ImportErrorSafe(
+            f"The latest TRE-4 course release is {row[2]}; source import only writes into an editable DRAFT release. "
+            "Use the supported release/version workflow before importing revised content."
+        )
+
+    # The database immutability trigger applies to the course graph if ANY release for this
+    # program has entered one of these states, even if a newer DRAFT row exists.
+    cursor.execute("""
+        SELECT id,release_state
+        FROM institution_course_release
+        WHERE program_id=%s
+          AND release_state IN ('IN_QUALITY_REVIEW','QUALITY_APPROVED','SHAREABLE','LEGACY_MIGRATED','WITHDRAWN')
+        ORDER BY release_version DESC,id DESC
+        LIMIT 1 FOR UPDATE
+    """, (course_id,))
+    frozen_release = cursor.fetchone()
+    if frozen_release:
+        raise ImportErrorSafe(
+            f"TRE-4 course graph is immutable because release {frozen_release[0]} is {frozen_release[1]}. "
+            "Create/fork a new course version through the supported course-version workflow; do not import into the frozen graph."
+        )
+
+    cursor.execute("""
+        SELECT id,status
+        FROM institution_marketplace_offer
+        WHERE course_id=%s AND (status='PUBLISHED' OR hrms_published_by_staff_id IS NOT NULL)
+        ORDER BY updated_at DESC,id DESC
+        LIMIT 1 FOR UPDATE
+    """, (course_id,))
+    published_offer = cursor.fetchone()
+    if published_offer:
+        raise ImportErrorSafe(
+            f"TRE-4 course graph is immutable because Marketplace offer {published_offer[0]} has reached published state/history. "
+            "Create/fork a new course version through the supported course-version workflow before importing changes."
+        )
+    return row
+
+
 def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], archive_sha256: str) -> dict[str, Any]:
     try:
         import psycopg  # type: ignore[import-not-found]
@@ -836,6 +927,10 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
             course_id, public_id, created_course = get_or_create_course(cursor, institution_id)
             course_identity_id = ensure_course_identity(cursor, institution_id, course_id)
             ensure_delivery_mode(cursor, course_id)
+            # Lock and validate the release before touching assessments, question snapshots or packs.
+            # Import never publishes tests/packs or approves anything. The explicit submit flag can
+            # only request DRAFT -> IN_QUALITY_REVIEW after both database readiness gates pass.
+            release_row = lock_latest_draft_release(cursor, institution_id, course_id)
 
             created_assessments: list[int] = []
             created_test_packs: list[int] = []
@@ -846,14 +941,38 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                     created_assessments.append(assessment_id)
                 if pack_created:
                     created_test_packs.append(pack_id)
+                cursor.execute("SELECT status FROM assessment WHERE id=%s AND course_id=%s FOR UPDATE", (assessment_id, course_id))
+                assessment_state_row = cursor.fetchone()
+                cursor.execute("SELECT status FROM course_assessment_pack WHERE id=%s AND course_id=%s FOR UPDATE", (pack_id, course_id))
+                pack_state_row = cursor.fetchone()
+                if not assessment_state_row or not pack_state_row:
+                    raise ImportErrorSafe(f"{paper['cycle']} assessment/test-pack lifecycle rows disappeared during import.")
+                assessment_state = str(assessment_state_row[0])
+                pack_state = str(pack_state_row[0])
+                cursor.execute("""
+                    SELECT coalesce(question_snapshot->>'question_review_status','PENDING_HUMAN_REVIEW') AS status,
+                           count(*)
+                    FROM assessment_question WHERE assessment_id=%s GROUP BY 1
+                """, (assessment_id,))
+                question_review_states = {str(row[0]): int(row[1]) for row in cursor.fetchall()}
+                cursor.execute("""
+                    SELECT coalesce(question_snapshot->>'answer_review_status','PENDING_HUMAN_REVIEW') AS status,
+                           count(*)
+                    FROM assessment_question WHERE assessment_id=%s GROUP BY 1
+                """, (assessment_id,))
+                answer_review_states = {str(row[0]): int(row[1]) for row in cursor.fetchall()}
                 summary["papers"].append({
                     "cycle": paper["cycle"],
                     "assessmentId": assessment_id,
+                    "assessmentStatus": assessment_state,
                     "testPackId": pack_id,
+                    "testPackStatus": pack_state,
                     "testPackCode": paper["package_id"],
                     "testPackVersion": paper["package_version"],
                     "questionCount": len(paper["question_snapshots"]),
-                    "status": "DRAFT",
+                    "questionReviewStatusCounts": question_review_states,
+                    "answerReviewStatusCounts": answer_review_states,
+                    "status": assessment_state,
                     "testPackCreated": pack_created,
                     "inserted": created,
                     "packageSha256": paper["package_sha256"],
@@ -861,92 +980,112 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
 
             cursor.execute("SELECT course_content_fingerprint(%s)", (course_id,))
             fingerprint = str(cursor.fetchone()[0]).strip()
-            cursor.execute("""
-                SELECT id,release_version,release_state,content_fingerprint
-                FROM institution_course_release
-                WHERE source_institution_id=%s AND program_id=%s
-                ORDER BY release_version DESC,id DESC LIMIT 1 FOR UPDATE
-            """, (institution_id, course_id))
-            release_row = cursor.fetchone()
+
+            # Structural package integrity is mandatory even for a DRAFT-only import.
+            cursor.execute("SELECT tre4_source_package_ready(%s)", (course_id,))
+            tre_ready_row = cursor.fetchone()
+            if not tre_ready_row or tre_ready_row[0] is not True:
+                raise ImportErrorSafe(
+                    "TRE source-package readiness failed after import. The transaction will roll back; "
+                    "no incomplete pack graph will be kept."
+                )
+
             requested_submit_for_review = bool(args.submit_for_review)
-            submit_for_review = requested_submit_for_review
             submission_deferred = False
+            submit_for_review = False
+            publish_ready = False
             if requested_submit_for_review:
-                cursor.execute("SELECT tre4_source_package_ready(%s)", (course_id,))
-                ready_row = cursor.fetchone()
-                if not ready_row or ready_row[0] is not True:
-                    raise ImportErrorSafe("TRE source-package readiness (including generic ASSESSMENT pack integrity) failed; the import cannot be submitted.")
                 cursor.execute("SELECT assessment_only_course_publish_ready(%s)", (course_id,))
-                publish_row = cursor.fetchone()
-                publish_ready = bool(publish_row and publish_row[0] is True)
+                publish_ready_row = cursor.fetchone()
+                assessment_publish_ready = bool(publish_ready_row and publish_ready_row[0] is True)
+                cursor.execute("SELECT course_marketplace_content_type_ready(%s)", (course_id,))
+                course_type_ready_row = cursor.fetchone()
+                course_type_ready = bool(course_type_ready_row and course_type_ready_row[0] is True)
+                publish_ready = assessment_publish_ready and course_type_ready
                 if not publish_ready:
-                    existing_state = str(release_row[2]) if release_row else ""
-                    if existing_state in {"IN_QUALITY_REVIEW", "QUALITY_APPROVED", "SHAREABLE", "LEGACY_MIGRATED", "WITHDRAWN"}:
-                        raise ImportErrorSafe(
-                            f"The existing release is {existing_state} while assessment tests/packs are not publish-ready. "
-                            "Do not change the frozen course graph. HRMS must reject an incomplete in-review release first; "
-                            "then review the question/answer keys, publish all tests/packs, and submit a fresh release."
-                        )
-                    submit_for_review = False
                     submission_deferred = True
                     summary["submissionDeferred"] = True
                     summary["submissionDeferralReason"] = (
-                        "Assessment questions/answer keys must pass human review and every assessment/test pack must be published "
-                        "before release submission. The imported course and draft test packs were committed in DRAFT so they remain editable."
+                        "Release submission was not performed: at least one assessment/test pack is "
+                        "not published, a question/answer review gate is incomplete, or the registered "
+                        "course type/source identity/delivery mode fails Marketplace readiness. The release remains "
+                        "DRAFT. Complete human question/answer review, correct any course registration mismatch, and publish each assessment through "
+                        "the supported Admin Web workflow, then rerun with --submit-for-review."
                     )
+                elif release_row is None:
+                    # Persist the first DRAFT release before a later invocation can submit it.
+                    # Never create a release directly in IN_QUALITY_REVIEW in its first transaction.
+                    submission_deferred = True
+                    summary["submissionDeferred"] = True
+                    summary["submissionDeferralReason"] = (
+                        "All content passes the current publish-readiness gate, but this run is creating "
+                        "the first course release. It has been persisted as DRAFT first; rerun this script "
+                        "with --apply --submit-for-review to advance that existing DRAFT release into "
+                        "IN_QUALITY_REVIEW."
+                    )
+                else:
+                    # Match the same active-type, institution-identity and release-ownership gate
+                    # used by source release submission, HRMS assignment and Marketplace.
+                    cursor.execute("SELECT course_marketplace_content_type_ready(%s)", (course_id,))
+                    type_ready_row = cursor.fetchone()
+                    if type_ready_row and type_ready_row[0] is True:
+                        # Assessments/packs reached PUBLISHED only through the normal, audited API.
+                        submit_for_review = True
+                    else:
+                        submission_deferred = True
+                        summary["submissionDeferred"] = True
+                        summary["submissionDeferralReason"] = (
+                            "Release submission was not performed because the canonical course-type/ownership readiness "
+                            "gate failed. Verify the course type is ACTIVE, the institution-owned identity matches it, "
+                            "and every release belongs to the source institution. No lifecycle state was advanced."
+                        )
+
             release_created = False
             release_submitted = False
             if release_row is None:
-                initial_state = "IN_QUALITY_REVIEW" if submit_for_review else "DRAFT"
                 cursor.execute("""
                     INSERT INTO institution_course_release(
                       source_institution_id,program_id,release_version,release_state,content_fingerprint,
-                      submitted_at,legacy_migration,legacy_migration_note,created_at,updated_at
-                    ) VALUES (%s,%s,1,%s,%s,CASE WHEN %s THEN now() ELSE NULL END,false,NULL,now(),now())
+                      submitted_at,submitted_by_institution_admin_id,submitted_by_staff_id,
+                      legacy_migration,legacy_migration_note,created_at,updated_at
+                    ) VALUES (%s,%s,1,'DRAFT',%s,NULL,NULL,NULL,false,NULL,now(),now())
                     RETURNING id,release_version,release_state,content_fingerprint
-                """, (institution_id, course_id, initial_state, fingerprint, submit_for_review))
+                """, (institution_id, course_id, fingerprint))
                 release_row = cursor.fetchone()
                 release_created = True
-                release_submitted = submit_for_review
             else:
                 release_id, release_version, release_state, saved_fingerprint = release_row
-                if str(saved_fingerprint).strip() != fingerprint and release_state != "DRAFT":
-                    raise ImportErrorSafe(
-                        f"Course release {release_id} is {release_state} but its content fingerprint changed. "
-                        "The script will not rewrite approved/shareable review evidence; submit a new release through the Institution workflow."
-                    )
-                if release_state in {"REJECTED", "WITHDRAWN"}:
-                    raise ImportErrorSafe(
-                        f"Latest course release is {release_state}; create a new release through the Institution workflow before retrying."
-                    )
-                if release_state == "DRAFT":
-                    if submit_for_review:
-                        cursor.execute("""
-                            SELECT tre4_source_package_ready(%s)
-                        """, (course_id,))
-                        if cursor.fetchone()[0] is not True:
-                            raise ImportErrorSafe("TRE source-package readiness (including generic ASSESSMENT pack integrity) failed; cannot queue the release for HRMS review.")
-                        cursor.execute("""
-                            UPDATE institution_course_release
-                            SET release_state='IN_QUALITY_REVIEW',content_fingerprint=%s,submitted_at=now(),
-                                submitted_by_institution_admin_id=NULL,updated_at=now()
-                            WHERE id=%s AND source_institution_id=%s AND release_state='DRAFT'
-                        """, (fingerprint, release_id, institution_id))
-                        release_submitted = True
-                    else:
-                        cursor.execute("""
-                            UPDATE institution_course_release SET content_fingerprint=%s,updated_at=now()
-                            WHERE id=%s AND source_institution_id=%s AND release_state='DRAFT'
-                        """, (fingerprint, release_id, institution_id))
-                elif str(saved_fingerprint).strip() != fingerprint:
-                    raise ImportErrorSafe("Release content differs from the imported source bundle; no release state was changed.")
+                if str(release_state) != "DRAFT":
+                    raise ImportErrorSafe(f"Release {release_id} is {release_state}; only DRAFT releases may be imported.")
+                if submit_for_review:
+                    cursor.execute("""
+                        UPDATE institution_course_release
+                        SET release_state='IN_QUALITY_REVIEW',content_fingerprint=%s,
+                            submitted_at=now(),submitted_by_institution_admin_id=NULL,
+                            submitted_by_staff_id=NULL,updated_at=now()
+                        WHERE id=%s AND source_institution_id=%s AND release_state='DRAFT'
+                    """, (fingerprint, release_id, institution_id))
+                    if cursor.rowcount != 1:
+                        raise ImportErrorSafe("The editable TRE-4 release changed concurrently; retry the import.")
+                    release_submitted = True
+                elif str(saved_fingerprint or "").strip() != fingerprint:
+                    cursor.execute("""
+                        UPDATE institution_course_release
+                        SET content_fingerprint=%s,updated_at=now()
+                        WHERE id=%s AND source_institution_id=%s AND release_state='DRAFT'
+                    """, (fingerprint, release_id, institution_id))
+                    if cursor.rowcount != 1:
+                        raise ImportErrorSafe("The editable TRE-4 release changed concurrently; retry the import.")
                 cursor.execute("""
                     SELECT id,release_version,release_state,content_fingerprint
                     FROM institution_course_release WHERE id=%s
                 """, (release_id,))
                 release_row = cursor.fetchone()
-
+            if not release_row:
+                raise ImportErrorSafe("TRE-4 release row is missing after import.")
             release_id, release_version, release_state, _ = release_row
+            if str(release_state) not in ({"DRAFT", "IN_QUALITY_REVIEW"} if release_submitted else {"DRAFT"}):
+                raise ImportErrorSafe("TRE-4 import ended in an unexpected lifecycle state.")
             assignment_id = ensure_source_assignment(cursor, institution_id, int(release_id))
             if created_course:
                 cursor.execute("""
@@ -967,10 +1106,15 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                       institution_id,course_release_id,assignment_id,event_type,details
                     ) VALUES (%s,%s,%s,'RELEASE_SUBMITTED',%s::jsonb)
                 """, (institution_id, release_id, assignment_id, json.dumps({
-                    "courseId": course_id, "workflow": "TRE-4 importer",
-                    "deliveryMode": "ASSESSMENT_ONLY", "sourceArchiveSha256": archive_sha256,
-                    "reviewRequired": True, "studentDeliveryAllowed": False,
+                    "courseId": course_id,
+                    "workflow": "TRE-4 import CLI",
+                    "deliveryMode": "ASSESSMENT_ONLY",
+                    "sourceArchiveSha256": archive_sha256,
+                    "reviewRequired": True,
+                    "studentDeliveryAllowed": False,
+                    "submissionGate": "assessment_only_course_publish_ready+course_marketplace_content_type_ready",
                 })))
+
             summary.update({
                 "applied": True,
                 "institutionId": institution_id,
@@ -992,9 +1136,11 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                 "submissionDeferred": submission_deferred,
                 "submissionDeferralReason": summary.get("submissionDeferralReason", ""),
                 "nextStep": (
-                    "HRMS quality review, then QuantaEdge origin approval, then HRMS can assign the SHAREABLE release."
-                    if str(release_state) == "IN_QUALITY_REVIEW"
-                    else "Complete human review of every question and answer key, publish all three assessments (which publishes their complete test packs), then submit the editable course release for HRMS quality review."
+                    "1) Human-review every source question and authoritative answer; 2) publish each assessment through the supported, audited assessment API; "
+                    "3) verify each complete pack is PUBLISHED; 4) rerun this script with --apply --submit-for-review to advance the ready DRAFT release to IN_QUALITY_REVIEW; "
+                    "5) HRMS performs quality review and moves it to QUALITY_APPROVED; 6) the source-institution approver moves it to SHAREABLE; "
+                    "7) HRMS creates/configures the Marketplace offer and advances it through DRAFT → IN_REVIEW → APPROVED → PUBLISHED. "
+                    "The script does not invent reviewer approval, publish assessments, perform HRMS decisions, or publish Marketplace offers."
                 ),
             })
     return summary
@@ -1007,7 +1153,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--inventory", type=Path, help="Use a previously generated tre-question-inventory.json instead of extracting.")
     parser.add_argument("--database-url", help="PostgreSQL URL; otherwise TRE4_DATABASE_URL or SPRING_DATASOURCE_URL is used.")
     parser.add_argument("--apply", action="store_true", help="Commit the classless ASSESSMENT course, versioned test packs, draft tests, questions, and release records. Without this flag, no DB writes occur.")
-    parser.add_argument("--submit-for-review", action="store_true", help="With --apply, queue a DRAFT release for HRMS quality review after all import gates pass. Does not approve or publish it.")
+    parser.add_argument(
+        "--submit-for-review", action="store_true",
+        help="With --apply, transition the source release DRAFT → IN_QUALITY_REVIEW only when all assessments and complete test packs are already PUBLISHED and every server-side review/readiness gate passes. Does not approve or publish content."
+    )
     return parser.parse_args()
 
 
@@ -1050,8 +1199,9 @@ def main() -> int:
                 }
                 for paper in papers
             ],
-            "submitForReview": bool(args.submit_for_review),
             "studentDeliveryAllowed": False,
+            "submitForReviewRequested": bool(args.submit_for_review),
+            "submissionWillRequirePublishedAssessmentsAndPacks": True,
         }
         if not args.apply:
             print(json.dumps(plan, ensure_ascii=False, indent=2))
