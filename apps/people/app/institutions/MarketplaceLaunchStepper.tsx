@@ -74,6 +74,8 @@ type LaunchItem = {
   institutionId: number;
   institutionName: string;
   courseId: number;
+  courseCode?: string;
+  courseIdentityPublicId?: string;
   courseName: string;
   listingTitle?: string;
   description?: string;
@@ -1536,7 +1538,7 @@ export default function MarketplaceLaunchStepper({
                 <header className={styles.courseHeader}>
                   <div className={styles.courseIdentity}>
                     <span className={styles.courseMark} aria-hidden="true">QE</span>
-                    <div><h3>{item.courseName}</h3><p>Course #{item.courseId} · Assignment #{item.assignmentId}</p></div>
+                    <div><h3>{item.courseName}</h3><p>{item.courseCode || 'Course'} · Current assignment</p></div>
                   </div>
                   <div className={styles.statusCluster}>
                     <span className={styles.statusPill + ' ' + (status === 'PUBLISHED' ? styles.statusPublished : status === 'NOT_CONFIGURED' ? styles.statusDraft : styles.statusOther)}>{statusText(status)}</span>
