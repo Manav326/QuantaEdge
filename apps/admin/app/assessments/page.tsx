@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { getUiLocaleLanguage } from '../i18n/catalog';
 import AdminSidebar from '../components/AdminSidebar';
 import { AdminWorkspaceContext } from '../components/AdminWorkspaceContext';
