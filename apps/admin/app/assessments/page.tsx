@@ -875,9 +875,13 @@ export default function AssessmentsPage(){
               </div>
               <footer className={styles.assessmentReviewFooter}>
                 <div className={styles.reviewFooterNavigation}>
-                  <button type="button" className={styles.secondaryButton} disabled={!importedReviewItems.length||selectedImportedSequence<=Number(importedReviewItems[0]?.sequenceNo||1)} onClick={()=>setImportedReviewSequence(selectedImportedSequence-1)}>← Previous</button>
-                  <span>Question {selectedImportedSequence} / {importedReviewItems.length}</span>
-                  <button type="button" className={styles.secondaryButton} disabled={!importedReviewItems.length||selectedImportedSequence>=Number(importedReviewItems[importedReviewItems.length-1]?.sequenceNo||importedReviewItems.length)} onClick={()=>setImportedReviewSequence(selectedImportedSequence+1)}>Next →</button>
+                  <button type="button" className={styles.secondaryButton}
+                    disabled={!filteredImportedReviewItems.length||filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence)<=0}
+                    onClick={()=>{const index=filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence);if(index>0)setImportedReviewSequence(Number(filteredImportedReviewItems[index-1].sequenceNo));}}>← Previous</button>
+                  <span>Question {Math.max(0,filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence)+1)} / {filteredImportedReviewItems.length}</span>
+                  <button type="button" className={styles.secondaryButton}
+                    disabled={!filteredImportedReviewItems.length||filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence)<0||filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence)>=filteredImportedReviewItems.length-1}
+                    onClick={()=>{const index=filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence);if(index>=0&&index<filteredImportedReviewItems.length-1)setImportedReviewSequence(Number(filteredImportedReviewItems[index+1].sequenceNo));}}>Next →</button>
                 </div>
                 <div className={styles.reviewFooterActions}>
                   <button type="button" className={styles.secondaryButton} disabled={packageBusy||importedReviewStatus!=='DRAFT'} onClick={()=>void saveImportedQuestionReview(selectedImportedSequence,'PENDING_HUMAN_REVIEW')}>Save changes</button>
