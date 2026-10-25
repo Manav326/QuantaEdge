@@ -63,7 +63,7 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("as delivery_mode", controller)
         self.assertIn('release.put("contentCurrent",contentCurrent)', controller)
         self.assertIn("course_release_fingerprint_current(?,?,?)", controller)
-        self.assertNotIn("as delivery_model", controller)
+        self.assertIn("as delivery_model", controller)
 
     def test_content_studio_routes_assessment_only_course_to_test_editor(self):
         page = (ROOT / "apps/admin/app/content/page.tsx").read_text(encoding="utf-8")
