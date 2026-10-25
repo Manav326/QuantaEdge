@@ -116,6 +116,8 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("onClick={() => void toggleReviewContent(release)}", hrms_ui)
         self.assertIn("previewFingerprintMismatch", hrms_ui)
         self.assertIn("normalizeFingerprint", hrms_ui)
+        self.assertIn("normalizeFingerprint(detail.content_fingerprint) === normalizeFingerprint(release.content_fingerprint)", hrms_ui)
+        self.assertIn("normalizeFingerprint(preview.content_fingerprint) !== normalizeFingerprint(release.content_fingerprint)", hrms_ui)
         self.assertIn("Load exact submitted content", hrms_ui)
         self.assertIn("reviewedContentFingerprint", review_controller)
         self.assertIn("savedFingerprint.equals(reviewedFingerprint)", review_controller)
