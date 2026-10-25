@@ -85,7 +85,8 @@ public class CourseMarketplaceController {
     }
     long institutionId = tenant.institutionId();
     List<Map<String, Object>> offers = jdbc.queryForList("""
-        select p.id as course_id, p.public_id, p.code as course_code,
+        select p.id as course_id, p.public_id, coalesce(identity.stable_course_key,p.code) as course_code,
+          identity.public_id as course_identity_public_id,
           coalesce(nullif(o.title_override,''),p.display_name) as title,
           p.display_name as course_name, p.curriculum_version,p.course_type_code,
           (select count(*) from course_assessment_pack pack
@@ -114,6 +115,7 @@ public class CourseMarketplaceController {
         join institution_tenant tenant_scope
           on tenant_scope.id=o.institution_id and tenant_scope.status='ACTIVE'
         join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        left join institution_course_identity identity on identity.id=p.course_identity_id
         left join lateral (
           select r.status,r.requested_at
           from parent_course_purchase_request r
@@ -188,7 +190,8 @@ public class CourseMarketplaceController {
     long parentId = context.userId();
     List<Map<String,Object>> offers = jdbc.queryForList("""
       with selected_tenant as (select ?::bigint as institution_id)
-      select p.id as course_id,p.public_id,p.code as course_code,
+      select p.id as course_id,p.public_id,coalesce(identity.stable_course_key,p.code) as course_code,
+         identity.public_id as course_identity_public_id,
         coalesce(nullif(o.title_override,''),p.display_name) as title,
         p.display_name as course_name,p.curriculum_version,p.course_type_code,
         (select count(*) from course_assessment_pack pack
@@ -245,6 +248,7 @@ public class CourseMarketplaceController {
         on release.id=o.course_release_id and release.program_id=o.course_id
       join institution_tenant tenant_scope on tenant_scope.id=o.institution_id and tenant_scope.status='ACTIVE'
       join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
+      left join institution_course_identity identity on identity.id=p.course_identity_id
       where o.institution_id=(select institution_id from selected_tenant) and o.status='PUBLISHED'
         and o.hrms_published_by_staff_id is not null
         and release.release_state='SHAREABLE'
