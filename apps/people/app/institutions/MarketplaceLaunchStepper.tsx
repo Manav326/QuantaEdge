@@ -1337,7 +1337,8 @@ export default function MarketplaceLaunchStepper({
                   <div><span>REVIEW SNAPSHOT STATES</span><b>Question: {String(activeAssessmentReviewSnapshot.question_review_status||'PENDING_HUMAN_REVIEW')} · Answer: {String(activeAssessmentReviewSnapshot.answer_review_status||'PENDING_HUMAN_REVIEW')}</b></div>
                   <p>This is the immutable release snapshot currently under HRMS review. HRMS inspection does not edit or approve individual answers; return the release for source correction if an answer or translation is wrong.</p>
                 </section>
-                <section className={styles.hrmsAssessmentAnswerSummary} aria-label="Question source provenance">
+                <section className={styles.hrmsAssessmentAnswerSummary} aria-labelledby="hrms-question-source-title">
+                  <h3 id="hrms-question-source-title" className={styles.hrmsAssessmentSourceTitle}>Question source and provenance</h3>
                   <div><span>QUESTION SOURCE</span><b>{String(activeAssessmentReviewSnapshot.source_title||'Source not recorded')}</b></div>
                   <div><span>ISSUER / BOARD</span><b>{String(activeAssessmentReviewSnapshot.board||'Not recorded')}</b></div>
                   <div><span>SOURCE YEAR</span><b>{String(activeAssessmentReviewSnapshot.source_year||'Not recorded')}</b></div>
