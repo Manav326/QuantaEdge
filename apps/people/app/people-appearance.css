@@ -19,6 +19,9 @@
   --qe-people-brand-hover: #c2410c;
   --qe-people-brand-soft: #fff0e5;
   --qe-people-on-brand: #ffffff;
+  --qe-people-disabled-surface: #f2f4f7;
+  --qe-people-disabled-ink: #667085;
+  --qe-people-disabled-border: #d0d5dd;
   --qe-people-focus: #c2410c;
   --qe-people-sidebar: #ffffff;
   --qe-people-sidebar-ink: #344054;
@@ -103,6 +106,9 @@ html[data-qe-people-appearance="dark"] {
   --qe-people-brand-hover: #ea580c;
   --qe-people-brand-soft: #3a281c;
   --qe-people-on-brand: #182337;
+  --qe-people-disabled-surface: #293548;
+  --qe-people-disabled-ink: #a7b3c5;
+  --qe-people-disabled-border: #42516a;
   --qe-people-focus: #fb923c;
   --qe-people-sidebar: #111a2b;
   --qe-people-sidebar-ink: #d5deeb;
@@ -141,6 +147,9 @@ html[data-qe-people-appearance="dark"] {
     --qe-people-brand-hover: #ea580c;
     --qe-people-brand-soft: #3a281c;
   --qe-people-on-brand: #182337;
+  --qe-people-disabled-surface: #293548;
+  --qe-people-disabled-ink: #a7b3c5;
+  --qe-people-disabled-border: #42516a;
     --qe-people-focus: #fb923c;
     --qe-people-sidebar: #111a2b;
     --qe-people-sidebar-ink: #d5deeb;

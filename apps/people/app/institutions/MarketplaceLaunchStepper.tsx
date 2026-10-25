@@ -878,6 +878,24 @@ export default function MarketplaceLaunchStepper({
                   && release.subjects_with_published_lessons === release.active_subject_count
                   && release.published_chapters > 0 && release.published_lessons > 0);
               const preview = reviewContent[release.release_id];
+              const reviewNoteLength = (reviewNotes[release.release_id] || '').trim().length;
+              const exactPreviewReady = Boolean(preview && preview.contentCurrent
+                && preview.content_fingerprint === release.content_fingerprint);
+              const qualityBlocker = !release.contentCurrent
+                ? 'Approval is blocked because the submitted content no longer matches its reviewed fingerprint. The source institution must submit a fresh release.'
+                : !qualityReady
+                  ? assessmentOnly
+                    ? 'Approval is blocked because one or more assessments or test packs are still drafts or their question/answer review is incomplete. Return this release for correction, finish human review and publish every test/pack, then submit a fresh release.'
+                    : 'Approval is blocked until every active mapped subject has published chapter and lesson content.'
+                  : !exactPreviewReady
+                    ? 'Review the exact submitted release content first. Approval requires its fingerprint to match the submitted version.'
+                    : reviewNoteLength < 3
+                      ? 'Enter a quality review note of at least 3 characters before approving.'
+                      : reviewChapterLoadingId !== null
+                        ? 'Wait for the selected chapter review to finish loading.'
+                        : busyKey !== null
+                          ? 'Another HRMS action is in progress. Wait for it to finish, then retry.'
+                          : '';
               return (
                 <article className={styles.qualityRow} key={release.release_id}>
                   <div className={styles.availableMark} aria-hidden="true">✓</div>
@@ -1137,8 +1155,13 @@ export default function MarketplaceLaunchStepper({
                         onChange={event => setReviewNotes(previous => ({ ...previous, [release.release_id]: event.target.value }))}
                         placeholder={assessmentOnly ? 'Record question inventory, source fidelity, answer review, section scoring and release fingerprint checks…' : 'Record what was checked: syllabus coverage, published lessons, content integrity…'} />
                     </label>
+                    {qualityBlocker ? <p id={'quality-blocker-' + release.release_id}
+                      className={styles.actionHint + (!release.contentCurrent || !qualityReady ? ' ' + styles.actionHintWarning : '')}
+                      role="note">{qualityBlocker}</p> : null}
                     <div className={styles.qualityActions}>
-                      <button type="button" className={styles.primaryButton} disabled={busyKey !== null || reviewChapterLoadingId !== null || !qualityReady || !preview || !preview.contentCurrent || preview.content_fingerprint !== release.content_fingerprint || (reviewNotes[release.release_id] || '').trim().length < 3}
+                      <button type="button" className={styles.primaryButton}
+                        aria-describedby={qualityBlocker ? 'quality-blocker-' + release.release_id : undefined}
+                        disabled={busyKey !== null || reviewChapterLoadingId !== null || !qualityReady || !exactPreviewReady || reviewNoteLength < 3}
                         onClick={() => void reviewQuality(release, true)}>
                         {busyKey === 'quality-' + release.release_id ? 'Saving decision…' : 'Approve quality'}
                       </button>

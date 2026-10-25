@@ -1,7 +1,7 @@
 .page{--ink:#152038;--muted:#68738a;--line:#e5e8ee;--paper:#f6f7fa;--brand:#f97316;--brand-deep:#c2410c;max-width:1440px;margin:0 auto;padding:clamp(18px,3vw,34px);color:var(--ink);display:grid;gap:19px}
 .page button,.page input,.page select{font:inherit}
 .page button{cursor:pointer}
-.page button:disabled{opacity:.6;cursor:wait}
+.page button:disabled{opacity:1;filter:saturate(.55);cursor:not-allowed;box-shadow:none}
 .pageHeader{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
 .pageHeader h1{margin:8px 0;font-size:clamp(27px,3vw,38px);letter-spacing:-1.5px;line-height:1.08}
 .pageHeader p,.panel>p,.panelHeading p,.detailHeader p{color:var(--muted);font-size:12px;line-height:1.7;margin:0;max-width:750px}

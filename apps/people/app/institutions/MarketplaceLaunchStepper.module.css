@@ -75,8 +75,19 @@
 .refresh:disabled,
 .primaryButton:disabled,
 .secondaryButton:disabled {
-  opacity: .55;
+  opacity: 1;
+  filter: saturate(.55);
   cursor: not-allowed;
+  box-shadow: none;
+}
+
+.primaryButton:disabled,
+.secondaryButton:disabled,
+.refresh:disabled {
+  border-color: var(--qe-color-border-subtle, #dfe5ed);
+  background: var(--qe-color-surface-elevated, #f2f5f8);
+  color: var(--qe-color-text-muted, #687489);
+  filter: none;
 }
 
 .alertError,
@@ -332,6 +343,23 @@
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 9px;
+}
+
+.actionHint {
+  margin: 8px 0 0;
+  padding: 9px 11px;
+  border: 1px solid var(--qe-color-border-subtle, #dfe5ed);
+  border-radius: 9px;
+  background: var(--qe-color-surface-elevated, #f8fafc);
+  color: var(--qe-color-text-muted, #687489);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.actionHintWarning {
+  border-color: var(--qe-color-warning, #b54708);
+  background: var(--qe-color-warning-container, #fffaeb);
+  color: var(--qe-color-on-warning-container, #89500d);
 }
 
 .qualityFootnote {
