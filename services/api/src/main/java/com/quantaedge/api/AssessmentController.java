@@ -1094,10 +1094,12 @@ public class AssessmentController {
         throw badRequest("The question does not satisfy the shared publication contract. Check the answer type/value, option references, explanation and both review statuses before approving it.");
     }
     jdbc.update("update assessment_question set question_snapshot=?::jsonb where id=?",snapshotJson,questionId);
-    audit(assessmentId,null,context,null,null,"IMPORTED_QUESTION_REVIEWED",
-        "PENDING_HUMAN_REVIEW",reviewStatus,"Reviewed imported question #"+sequenceNo+".");
+    String reviewAuditAction=row.get("source_package_id")!=null
+        ?"IMPORTED_QUESTION_REVIEWED":"ASSESSMENT_ONLY_QUESTION_REVIEWED";
+    audit(assessmentId,null,context,null,null,reviewAuditAction,
+        "PENDING_HUMAN_REVIEW",reviewStatus,"Reviewed assessment question #"+sequenceNo+".");
     staffAudit.recordAction(context,"/api/v1/admin/assessments/"+assessmentId+"/package-questions/"+sequenceNo+"/review",
-        "Reviewed imported question #"+sequenceNo+" as "+reviewStatus+".");
+        "Reviewed assessment question #"+sequenceNo+" as "+reviewStatus+".");
     Map<String,Object> result=new LinkedHashMap<>();
     result.put("assessmentId",assessmentId);result.put("sequenceNo",sequenceNo);
     result.put("reviewStatus",reviewStatus);
