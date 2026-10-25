@@ -34,6 +34,35 @@ class FakeCursor:
 
 
 class Tre4ImporterTests(unittest.TestCase):
+    def test_source_institution_uses_stable_tenant_code_not_editable_display_name(self):
+        cursor = FakeCursor([[(42, "ACTIVE", "QuantaEdge Bihar")]])
+
+        institution_id = import_tre4_course.resolve_quantaedge_source_institution(cursor)
+
+        self.assertEqual(institution_id, 42)
+        sql = "\n".join(statement for statement, _ in cursor.statements)
+        self.assertIn("tenant_code='QUANTA-EDGE'", sql)
+        self.assertNotIn("display_name='QuantaEdge'", sql)
+
+    def test_source_institution_missing_has_actionable_error_and_is_not_created(self):
+        cursor = FakeCursor([[]])
+
+        with self.assertRaisesRegex(
+            import_tre4_course.ImportErrorSafe, "No institution_tenant row exists.*V125"
+        ):
+            import_tre4_course.resolve_quantaedge_source_institution(cursor)
+        self.assertEqual(len(cursor.statements), 1)
+        self.assertNotIn("INSERT", cursor.statements[0][0].upper())
+
+    def test_inactive_source_institution_must_be_reactivated_through_hrms(self):
+        cursor = FakeCursor([[(42, "SUSPENDED", "QuantaEdge")]])
+
+        with self.assertRaisesRegex(
+            import_tre4_course.ImportErrorSafe, "SUSPENDED.*authorized HRMS/platform institution"
+        ):
+            import_tre4_course.resolve_quantaedge_source_institution(cursor)
+        self.assertEqual(len(cursor.statements), 1)
+
     def test_course_identity_is_created_before_tre_content_import(self):
         cursor = FakeCursor([
             ("TRE-4 · Computer Science", "ASSESSMENT", None, None, None, None),

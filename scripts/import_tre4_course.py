@@ -783,6 +783,36 @@ def ensure_test_pack(
     return pack_id, True
 
 
+def resolve_quantaedge_source_institution(cursor: Any) -> int:
+    """Resolve the existing source tenant by stable code; display_name is editable metadata."""
+    cursor.execute("""
+        SELECT id,status,display_name FROM public.institution_tenant
+        WHERE tenant_code='QUANTA-EDGE'
+        FOR UPDATE
+    """)
+    rows = cursor.fetchall()
+    if not rows:
+        raise ImportErrorSafe(
+            "No institution_tenant row exists for tenant_code='QUANTA-EDGE'. "
+            "Verify this is the intended local database and that Flyway V125 "
+            "(which seeds the local QuantaEdge tenant) was applied. The importer "
+            "will not create or activate an institution implicitly."
+        )
+    if len(rows) != 1:
+        raise ImportErrorSafe(
+            f"Expected one source institution for tenant_code='QUANTA-EDGE'; found {len(rows)}. "
+            "Resolve the duplicate tenant records before importing."
+        )
+    institution_id, status, display_name = rows[0]
+    if status != "ACTIVE":
+        raise ImportErrorSafe(
+            f"Source institution QUANTA-EDGE exists (display name {display_name!r}) but its status is "
+            f"{status!r}, not 'ACTIVE'. Reactivate it through the authorized HRMS/platform institution "
+            "workflow before importing; the importer will not change institution status."
+        )
+    return int(institution_id)
+
+
 def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], archive_sha256: str) -> dict[str, Any]:
     try:
         import psycopg  # type: ignore[import-not-found]
@@ -802,14 +832,7 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
     with psycopg.connect(url) as connection:
         with connection.cursor() as cursor:
             ensure_schema(cursor)
-            cursor.execute("""
-                SELECT id,display_name,status FROM institution_tenant
-                WHERE tenant_code='QUANTA-EDGE' FOR UPDATE
-            """)
-            qe_rows = cursor.fetchall()
-            if len(qe_rows) != 1 or qe_rows[0][1] != "QuantaEdge" or qe_rows[0][2] != "ACTIVE":
-                raise ImportErrorSafe("Expected exactly one active QuantaEdge source institution (QUANTA-EDGE).")
-            institution_id = int(qe_rows[0][0])
+            institution_id = resolve_quantaedge_source_institution(cursor)
             course_id, public_id, created_course = get_or_create_course(cursor, institution_id)
             course_identity_id = ensure_course_identity(cursor, institution_id, course_id)
             ensure_delivery_mode(cursor, course_id)
