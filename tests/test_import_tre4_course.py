@@ -354,8 +354,7 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertIn("FOR UPDATE", cursor.statements[0][0])
         self.assertIn("ORDER BY release_version DESC,id DESC", cursor.statements[0][0])
         self.assertIn("IN_QUALITY_REVIEW", cursor.statements[1][0])
-        self.assertIn("published_by_admin_id", cursor.statements[2][0])
-        self.assertIn("published_at", cursor.statements[2][0])
+        self.assertIn("hrms_published_by_staff_id", cursor.statements[2][0])
 
     def test_importer_refuses_to_modify_any_non_draft_latest_release(self):
         for state in ("IN_QUALITY_REVIEW", "QUALITY_APPROVED", "SHAREABLE", "REJECTED", "WITHDRAWN", "LEGACY_MIGRATED"):
@@ -436,8 +435,8 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertIn("registered_type.status='ACTIVE'", marketplace_readiness_v205)
         self.assertIn("identity.status='ACTIVE'", marketplace_readiness_v205)
         self.assertIn("conflicting_release.source_institution_id<>identity.source_institution_id", marketplace_readiness_v205)
-        self.assertNotIn("hrms_published_by_staff_id", importer)
-        self.assertIn("published_by_admin_id IS NOT NULL", importer)
+        self.assertIn("hrms_published_by_staff_id IS NOT NULL", importer)
+        self.assertNotIn("published_by_admin_id IS NOT NULL", importer)
         self.assertIn("Flyway V205 is required", importer)
         self.assertIn("Flyway V204 is required: the shared typed assessment", importer)
         self.assertNotIn('next="SUBMITTED"', offer_controller)
