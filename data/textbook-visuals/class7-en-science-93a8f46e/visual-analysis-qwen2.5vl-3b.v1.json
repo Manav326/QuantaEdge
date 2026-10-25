@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2275,
+    "assets_selected": 2279,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "29c388b0161ccfef7bc70795",
-      "b386b33b3744df00f2dea868",
-      "2abba348817bf35cbd9fe870",
-      "dd4340924327d53761b073f9",
-      "edb4662dff23ec89be1d4bd4"
+      "31799bfc832653ad96d51e7a",
+      "0ec63612ecf07f728d11e38e",
+      "ce02adfe2fd80f8303d315f9",
+      "1163a7bbba92e30997c4ebb4",
+      "dd54dfcba4d661a6021cf2e2"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2274,
-    "assets_remaining": 5214,
+    "assets_analyzed": 2278,
+    "assets_remaining": 5210,
     "assets_completion_percent": 30.4,
-    "assets_failed": 31,
-    "assets_skipped_from_checkpoint": 2270,
+    "assets_failed": 32,
+    "assets_skipped_from_checkpoint": 2274,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -86026,6 +86026,162 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40233309551",
       "checkpointed_at": "2026-10-25T23:05:40Z"
+    },
+    {
+      "asset_id": "31799bfc832653ad96d51e7a",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40233309551",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "0ec63612ecf07f728d11e38e",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40233309551",
+      "checkpointed_at": "2026-10-25T23:12:46Z"
+    },
+    {
+      "asset_id": "ce02adfe2fd80f8303d315f9",
+      "asset_sha256": "52e7fd709190cca0eded834268abff42dad908cd93d9b0cb5d9afa95e4d20779",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 71,
+      "asset_path": "page-0071.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for a demonstration activity involving magnesium ribbon and a spirit lamp.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "The teacher may demonstrate this activity.",
+          "Caution— It is advisable for students to wear protective eyeglasses and keep safe distance.",
+          "Take a magnesium ribbon about 3–4 centimetres long. Clean it by rubbing with a piece of sandpaper.",
+          "Hold it with a pair of tongs. Ignite the other end using a spirit lamp or a candle (Fig. 4.5).",
+          "Let the magnesium ribbon burn.",
+          "What do you observe?",
+          "You must have observed that magnesium ribbon burns with a dazzling white flame and changes into a white powder. Collect it on a watch glass. This powder is magnesium oxide. It is formed due to the reaction between magnesium and oxygen present in the air.",
+          "Add a few drops of warm water to this white powder, stir it well, and check its nature.",
+          "Recall the chapter 'Exploring Substances: Acidic, Basic, and Neutral'. Find out whether the solution of magnesium oxide is acidic or basic or neutral in nature. You can use any acid-base indicator.",
+          "What effect does this solution have on blue and red litmus papers?",
+          "You would observe that it changes the colour of red litmus paper to blue (Fig. 4.6); hence, it is basic in nature. Generally, oxides of metals are basic in nature.",
+          "We will discuss this burning of magnesium ribbon further in the chapter 'Changes Around Us: Physical and Chemical'.",
+          "Fig. 4.5: Burning magnesium ribbon",
+          "Fig. 4.6: Testing the nature of magnesium oxide"
+        ],
+        "concepts": [
+          "Magnesium ribbon",
+          "Spirit lamp",
+          "Watch glass",
+          "Litmus paper",
+          "Acid-base indicator",
+          "Magnesium oxide",
+          "Basic nature",
+          "Physical and Chemical"
+        ],
+        "context_relation": "Demonstration activity",
+        "limitations": [
+          "Wear protective eyeglasses",
+          "Keep safe distance",
+          "Use spirit lamp or candle",
+          "Collect magnesium oxide on a watch glass",
+          "Use acid-base indicator to test solution",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40233309551",
+      "checkpointed_at": "2026-10-25T23:17:15Z"
+    },
+    {
+      "asset_id": "1163a7bbba92e30997c4ebb4",
+      "asset_sha256": "3c592f7a47fcbc1e16ead05f54686eb66c070a8f19d8792bc5f0a92fb8ae41b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/3c592f7a47fcbc1e16ead05f54686eb66c070a8f19d8792bc5f0a92fb8ae41b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3a8a26fd2f994b5fe96973ee6baef181b01066aa9e73a939c7f33ee3e6ce602",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue, stylized, abstract figure resembling a person or an object with a curved line and a circular shape.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the discussion of substances that do not behave like metals.",
+        "limitations": [
+          "The image does not provide specific details about the substance or its properties."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40233309551",
+      "checkpointed_at": "2026-10-25T23:18:51Z"
+    },
+    {
+      "asset_id": "dd54dfcba4d661a6021cf2e2",
+      "asset_sha256": "04359c6b8f97f6c90232ee85623c8aba2c6ecd1f7f545100561329f1b74d8742",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/04359c6b8f97f6c90232ee85623c8aba2c6ecd1f7f545100561329f1b74d8742.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3a8a26fd2f994b5fe96973ee6baef181b01066aa9e73a939c7f33ee3e6ce602",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40233309551",
+      "checkpointed_at": "2026-10-25T23:20:22Z"
     }
   ]
 }
