@@ -70,9 +70,27 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("isAssessmentCourse", page)
         self.assertIn("ASSESSMENT", page)
         self.assertIn("Course → test packs → assessments/tests → ordered question snapshots", page)
-        self.assertIn("Open this course’s tests and questions", page)
+        self.assertIn("assessment-inventory", page)
+        self.assertIn("assessmentRows.map(row=>", page)
+        self.assertIn("test_pack_title", page)
+        self.assertIn("Review questions and answers", page)
         self.assertIn("href={'/assessments?courseId='+encodeURIComponent(programFilter)}", page)
+        self.assertIn("&assessmentId=", page)
         self.assertIn("{isAssessmentCourse ? (", page)
+
+        assessment_page = (ROOT / "apps/admin/app/assessments/page.tsx").read_text(encoding="utf-8")
+        self.assertIn("requestedReviewRef", assessment_page)
+        self.assertIn("loadImportedPackageQuestions(assessmentId)", assessment_page)
+        self.assertIn("/package-questions?courseId=", assessment_page)
+
+        api_content = (ROOT / "services/api/src/main/java/com/quantaedge/api/AdminContentController.java").read_text(encoding="utf-8")
+        route_start = api_content.index('@GetMapping("/courses/{courseId}/assessment-inventory")')
+        route_end = api_content.index('  @GetMapping\\n  public List<Map<String, Object>> list(', route_start)
+        inventory_route = api_content[route_start:route_end]
+        self.assertIn('authorize(token, context, "CONTENT_VIEW")', inventory_route)
+        self.assertIn("requireAssignedCourse(courseId,institutionId)", inventory_route)
+        self.assertIn("course_assessment_pack_item", inventory_route)
+        self.assertNotIn("assessment_staff_assignment", inventory_route)
 
     def test_assessment_analytics_is_course_scoped_and_never_buckets_free_text(self):
         controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/AssessmentController.java").read_text(encoding="utf-8")
