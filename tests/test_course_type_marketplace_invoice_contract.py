@@ -80,5 +80,52 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
         self.assertIn('taxSnapshot.put("serviceClassificationCode",nullableString(profile.get("service_classification_code")))', financial)
 
 
+    def test_release_hrms_assignment_origin_approval_and_marketplace_share_type_gate(self):
+        root = ROOT
+        migration = (root / "services/api/src/main/resources/db/migration/V205__active_course_type_marketplace_readiness.sql").read_text(encoding="utf-8")
+        self.assertIn("type_registry.status <> 'ACTIVE'", migration)
+        self.assertIn("p.status <> 'ACTIVE' OR p.code='GENERAL'", migration)
+        self.assertIn("p.course_type_code='ASSESSMENT'", migration)
+        self.assertIn("coalesce(mode.delivery_mode,'LEARNING_CONTENT')='ASSESSMENT_ONLY'", migration)
+        self.assertIn("p.course_type_code='K12'", migration)
+        self.assertIn("coalesce(mode.delivery_mode,'LEARNING_CONTENT')='LEARNING_CONTENT'", migration)
+        self.assertIn("ELSE false", migration)
+        self.assertIn("assessment_only_course_publish_ready(p.id)", migration)
+
+        release_workflow = (root / "services/api/src/main/java/com/quantaedge/api/InstitutionCourseReleaseWorkflowService.java").read_text(encoding="utf-8")
+        hrms_controller = (root / "services/api/src/main/java/com/quantaedge/api/PlatformInstitutionController.java").read_text(encoding="utf-8")
+        launch_controller = (root / "services/api/src/main/java/com/quantaedge/api/CourseMarketplaceLaunchController.java").read_text(encoding="utf-8")
+        launch_readiness = (root / "services/api/src/main/java/com/quantaedge/api/CourseMarketplaceLaunchReadinessService.java").read_text(encoding="utf-8")
+        hrms_ui = (root / "apps/people/app/institutions/MarketplaceLaunchStepper.tsx").read_text(encoding="utf-8")
+        importer = (root / "scripts/import_tre4_course.py").read_text(encoding="utf-8")
+
+        # Source release submission and origin approval use the same DB-owned contract.
+        self.assertGreaterEqual(release_workflow.count("select course_marketplace_content_type_ready(?)"), 2)
+        # HRMS quality approval and destination assignment each recheck canonical readiness.
+        self.assertGreaterEqual(hrms_controller.count("select course_marketplace_content_type_ready(?)"), 2)
+        self.assertIn("course_marketplace_content_type_ready(p.id) as course_type_publish_ready", hrms_controller)
+        # Marketplace launch checklist, submitted-content preview and available-release list align.
+        self.assertGreaterEqual(launch_readiness.count("select course_marketplace_content_type_ready(?)"), 2)
+        self.assertIn("course_marketplace_content_type_ready(p.id) as course_type_publish_ready", launch_controller)
+        self.assertIn('result.put("courseTypePublishReady"', launch_controller)
+        self.assertIn("and course_marketplace_content_type_ready(p.id)", launch_controller)
+        # UI reads the server verdict, it does not independently reimplement readiness.
+        self.assertIn("release.course_type_publish_ready === true", hrms_ui)
+        self.assertIn("preview.courseTypePublishReady !== true", hrms_ui)
+        # New importer refuses to run without the same active-type contract.
+        self.assertIn("Flyway V205 is required", importer)
+        self.assertIn("type_registry.status <> 'ACTIVE'", importer)
+
+    def test_typed_answer_review_gate_is_shared_with_assessment_publication(self):
+        migration = (ROOT / "services/api/src/main/resources/db/migration/V204__typed_assessment_answer_review_readiness.sql").read_text(encoding="utf-8")
+        assessment_controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/AssessmentController.java").read_text(encoding="utf-8")
+        self.assertIn("assessment_question_snapshot_publish_ready", migration)
+        for kind in ("OPTION", "MULTI_OPTION", "TEXT", "NUMERIC", "ORDER", "MATCH"):
+            self.assertIn(f"WHEN '{kind}'", migration)
+        self.assertIn("answer_review_status", migration)
+        self.assertIn("not assessment_question_snapshot_publish_ready(aq.question_snapshot)", assessment_controller)
+        self.assertIn('snapshot.put("answer_review_status",reviewStatus)', assessment_controller)
+
+
 if __name__ == "__main__":
     unittest.main()
