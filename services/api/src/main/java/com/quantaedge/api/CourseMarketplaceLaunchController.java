@@ -749,6 +749,8 @@ public class CourseMarketplaceLaunchController {
         if("ARCHIVED".equals(oldStatus)) return Map.of("updated",true,"offerId",offerId,"status","ARCHIVED");
         jdbc.update("""
             update institution_marketplace_offer set status='ARCHIVED',
+              obsolete_at=coalesce(obsolete_at,now()),
+              obsolete_reason=coalesce(obsolete_reason,'OBSOLETE: listing archived by HRMS; existing financial records are retained.'),
               updated_by_admin_id=null,updated_at=now()
             where id=? and institution_id=? and status=?
             """,offerId,institutionId,oldStatus);
@@ -829,9 +831,11 @@ public class CourseMarketplaceLaunchController {
         long previousReleaseId=number(previous.get("course_release_id"));
         int archived=jdbc.update("""
             update institution_marketplace_offer
-            set status='ARCHIVED',updated_at=now()
+            set status='ARCHIVED',obsolete_at=coalesce(obsolete_at,now()),
+              obsolete_reason=coalesce(obsolete_reason,'OBSOLETE: superseded by offer '||?::text),
+              updated_at=now()
             where id=? and institution_id=? and status='PUBLISHED'
-            """,previousOfferId,institutionId);
+            """,offerId,previousOfferId,institutionId);
         if(archived==1) {
           supersededOfferIds.add(previousOfferId);
           record(institutionId,previousReleaseId,previousAssignmentId,previousOfferId,
