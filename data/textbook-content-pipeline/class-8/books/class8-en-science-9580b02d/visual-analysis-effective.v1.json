@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2ec19eb75a089f59f6e27b14460e417302afd9cc509ba57146884d6c15d397ec",
+  "raw_analysis_sha256": "3d4df17a8a6b2d2d6cf2dc5e3a71ba449626b2a18a71acb283379f6c649fcfd4",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40188597850",
-      "checkpointed_at": "2026-10-25T12:29:31Z",
+      "checkpointed_at": "2026-10-25T12:33:48Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40188597850",
-      "checkpointed_at": "2026-10-25T12:30:05Z",
+      "checkpointed_at": "2026-10-25T12:34:22Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40188597850",
-      "checkpointed_at": "2026-10-25T12:30:45Z",
+      "checkpointed_at": "2026-10-25T12:35:02Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -63535,7 +63535,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40188597850",
-      "checkpointed_at": "2026-10-25T12:31:42Z",
+      "checkpointed_at": "2026-10-25T12:35:59Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing pressure, winds, storms, and cyclones.",
         "visual_type": "page_with_multiple_visuals",
@@ -63795,6 +63795,42 @@
         "limitations": [
           "The image does not provide any specific question or answer related to the text."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2e9840e3e6b46ddb2fc50f23",
+      "asset_sha256": "51963e82367ab44f8cd1387e0aba0cb7f24f3190fa94c799975cf728d23666d0",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 102,
+      "asset_path": "assets/51963e82367ab44f8cd1387e0aba0cb7f24f3190fa94c799975cf728d23666d0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f3609a74f6b9bc75917f652f29735b6712124160a390320c36e3648f81ded621",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration showing a hand holding a hammer above a hand holding a nail, both hands wearing purple sleeves.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about buckets and straps.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40188597850",
+      "checkpointed_at": "2026-10-25T12:37:03Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration showing a hand holding a hammer above a hand holding a nail, both hands wearing purple sleeves.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about buckets and straps.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
