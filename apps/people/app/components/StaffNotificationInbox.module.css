@@ -10,7 +10,7 @@
 .unreadPill{display:inline-flex;align-items:center;min-height:30px;padding:5px 10px;border:1px solid var(--qe-color-border-subtle,var(--line,#d8e0e8));border-radius:999px;background:var(--qe-color-surface,var(--card,#fff));font-size:12px;font-weight:700;white-space:nowrap}
 .secondaryButton{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:8px 12px;border:1px solid var(--qe-color-border-subtle,var(--line,#d8e0e8));border-radius:11px;background:var(--qe-color-surface,var(--card,#fff));color:var(--qe-color-text,var(--ink,#172637));font-size:12px;font-weight:700;cursor:pointer}
 .secondaryButton:hover:not(:disabled){background:var(--qe-color-surface-subtle,var(--surface,#f4f7fa))}
-.secondaryButton:disabled{opacity:.45;cursor:not-allowed}
+.secondaryButton:disabled{border-color:var(--qe-color-border,#d7dee8);background:var(--qe-color-surface-subtle,#f4f7fa);color:var(--qe-color-text-muted,#687489);opacity:1;filter:none;cursor:not-allowed}
 .filters{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
 .segmented{display:flex;gap:3px;padding:3px;border:1px solid var(--qe-color-border-subtle,var(--line,#d8e0e8));border-radius:12px;background:var(--qe-color-surface-subtle,var(--surface,#f4f7fa))}
 .segmented button{border:0;background:transparent;color:var(--qe-color-text-muted,var(--muted,#637083));border-radius:9px;padding:8px 13px;font-size:12px;font-weight:700;cursor:pointer}
