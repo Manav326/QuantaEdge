@@ -716,26 +716,13 @@ public class PlatformInstitutionController {
         throw new ResponseStatusException(HttpStatus.CONFLICT,
             "HRMS must inspect the exact submitted release content and confirm its fingerprint before quality approval.");
     }
-    if(approved && "ASSESSMENT_ONLY".equals(courseDeliveryMode(programId))) {
-      if(!assessmentOnlyCourseReady(programId))
+    if(approved) {
+      Boolean typeReady=jdbc.queryForObject(
+          "select course_marketplace_content_type_ready(?)",Boolean.class,programId);
+      if(!Boolean.TRUE.equals(typeReady)) {
         throw new ResponseStatusException(HttpStatus.CONFLICT,
-            "Before approving this frozen release, publish every source-owned test pack and assessment after question/answer review. Reject this release to return it for correction, then resubmit the reviewed content.");
-    } else if(approved) {
-      Map<String,Object> readiness=jdbc.queryForMap("""
-          select count(distinct s.id) as subject_count,
-            count(distinct case when l.id is not null then s.id end) as subjects_with_published_lessons,
-            count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
-          from curriculum_program_subject ps
-          join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
-              and (s.program_id=ps.program_id or s.program_id is null)
-          left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
-          left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
-          where ps.program_id=?
-          """,programId);
-      long subjects=number(readiness.get("subject_count"));
-      if(subjects==0||number(readiness.get("subjects_with_published_lessons"))!=subjects
-          ||number(readiness.get("published_chapters"))==0||number(readiness.get("published_lessons"))==0)
-        throw new ResponseStatusException(HttpStatus.CONFLICT,"Every mapped active subject must retain published content reviewed lessons.");
+            "This course is not ready for quality approval under its registered course type and delivery mode. Assessment-only courses require every test pack and assessment to be published after question/answer review; K12 courses require published content in every mapped active subject. Unsupported or mismatched course types stay blocked.");
+      }
     }
     String next=approved?"QUALITY_APPROVED":"REJECTED";
     int changed=jdbc.update("""
