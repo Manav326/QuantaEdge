@@ -343,5 +343,39 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertEqual(import_tre4_course.sha256_json(first), import_tre4_course.sha256_json(second))
 
 
+    def test_importer_locks_only_the_latest_editable_draft_release(self):
+        draft = (77, 2, "DRAFT", "a" * 64)
+        cursor = FakeCursor([draft])
+
+        result = import_tre4_course.lock_latest_draft_release(cursor, 42, 777)
+
+        self.assertEqual(result, draft)
+        self.assertEqual(len(cursor.statements), 1)
+        self.assertIn("FOR UPDATE", cursor.statements[0][0])
+        self.assertIn("ORDER BY release_version DESC,id DESC", cursor.statements[0][0])
+
+    def test_importer_refuses_to_modify_any_non_draft_release(self):
+        for state in ("IN_QUALITY_REVIEW", "QUALITY_APPROVED", "SHAREABLE", "REJECTED", "WITHDRAWN", "LEGACY_MIGRATED"):
+            with self.subTest(state=state):
+                cursor = FakeCursor([(77, 2, state, "a" * 64)])
+                with self.assertRaisesRegex(import_tre4_course.ImportErrorSafe, state):
+                    import_tre4_course.lock_latest_draft_release(cursor, 42, 777)
+                self.assertEqual(len(cursor.statements), 1)
+
+    def test_importer_never_shortcuts_course_release_lifecycle(self):
+        importer = SCRIPT.read_text(encoding="utf-8")
+
+        self.assertNotIn("--submit-for-review", importer)
+        self.assertNotIn("SET release_state='IN_QUALITY_REVIEW'", importer)
+        self.assertNotIn('initial_state = "IN_QUALITY_REVIEW"', importer)
+        self.assertIn("VALUES (%s,%s,1,'DRAFT',%s,NULL,false,NULL,now(),now())", importer)
+        self.assertIn('"submittedForReview": False', importer)
+        self.assertIn('"assessmentStatus": assessment_state', importer)
+        self.assertIn('"testPackStatus": pack_state', importer)
+        self.assertIn("questionReviewStatusCounts", importer)
+        self.assertIn("answerReviewStatusCounts", importer)
+
+
+
 if __name__ == "__main__":
     unittest.main()
