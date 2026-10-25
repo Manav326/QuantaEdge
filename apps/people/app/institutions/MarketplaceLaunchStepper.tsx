@@ -884,7 +884,7 @@ export default function MarketplaceLaunchStepper({
               const previewFingerprintMismatch = Boolean(preview
                 && preview.content_fingerprint !== release.content_fingerprint);
               const previewLoadInProgress = reviewContentLoadingId !== null;
-              const previewNeedsLoading = !preview && release.contentCurrent && qualityReady
+              const previewNeedsLoading = !preview
                 && !previewLoadInProgress && reviewChapterLoadingId === null && busyKey === null;
               const qualityBlocker = !release.contentCurrent
                 ? 'Approval is blocked because this release is not fingerprint-current. Return it for correction, have the source institution correct the content and submit a fresh release.'
@@ -931,11 +931,13 @@ export default function MarketplaceLaunchStepper({
                     {assessmentOnly && <p>Review the exact submitted test papers, question snapshots, source provenance, answer-review state and scoring rules below. This preview is read-only.</p>}
                     {!release.contentCurrent && <p className={styles.availableWarning}>Course content changed after submission. Ask the source institution to submit a fresh release.</p>}
                     <div className={styles.qualityActions}>
-                      <button type="button" className={styles.secondaryButton}
-                        disabled={reviewContentLoadingId !== null || reviewChapterLoadingId !== null || busyKey !== null}
-                        onClick={() => void toggleReviewContent(release)}>
-                        {reviewContentLoadingId === release.release_id ? 'Loading exact release…' : preview ? 'Hide submitted content' : 'Review submitted content'}
-                      </button>
+                      <button type="button" className={preview ? styles.secondaryButton : styles.primaryButton}
+                         disabled={reviewContentLoadingId !== null || reviewChapterLoadingId !== null || busyKey !== null}
+                         aria-label={preview ? 'Hide submitted content' : 'Review submitted content before approving'}
+                         aria-describedby={qualityBlocker ? 'quality-blocker-' + release.release_id : undefined}
+                         onClick={() => void toggleReviewContent(release)}>
+                         {reviewContentLoadingId === release.release_id ? 'Loading exact release…' : preview ? 'Hide submitted content' : 'Load exact submitted content'}
+                       </button>
                     </div>
                     {reviewContentErrors[release.release_id] && <p className={styles.availableWarning}>{reviewContentErrors[release.release_id]}</p>}
                     {preview && (
@@ -1173,13 +1175,7 @@ export default function MarketplaceLaunchStepper({
                         className={styles.actionHint + (!release.contentCurrent || !qualityReady || Boolean(preview && (!preview.contentCurrent || previewFingerprintMismatch)) ? ' ' + styles.actionHintWarning : '')}
                         role="note">
                         <span>{qualityBlocker}</span>
-                        {previewNeedsLoading ? (
-                          <button type="button" className={styles.secondaryButton}
-                            disabled={reviewContentLoadingId !== null || reviewChapterLoadingId !== null || busyKey !== null}
-                            onClick={() => void toggleReviewContent(release)}>
-                            Load exact submitted content
-                          </button>
-                        ) : null}
+                        {previewNeedsLoading ? <span>Use the “Load exact submitted content” button above to inspect this release before deciding.</span> : null}
                       </div>
                     ) : null}
                     <div className={styles.qualityActions}>
