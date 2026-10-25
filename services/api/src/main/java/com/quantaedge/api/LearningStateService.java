@@ -701,9 +701,7 @@ public class LearningStateService {
               and (e.valid_until is null or e.valid_until>now())
             where m.student_id=? and m.status='ACTIVE')
           or exists(select 1 from course_purchase cp where cp.student_id=? and cp.course_id=?)
-          or exists(select 1 from student_course_access_grant g
-            where g.student_id=? and g.course_id=? and g.grant_reason='LEGACY_CLASS_ENROLLMENT')
-      """,Boolean.class,programId,studentId,studentId,programId,studentId,programId);
+      """,Boolean.class,programId,studentId,studentId,programId);
       if(!Boolean.TRUE.equals(allowed)) throw new SecurityException("This course is not authorised for your institution or direct purchase.");
       return;
     }
@@ -713,21 +711,20 @@ public class LearningStateService {
         join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
         join institution_course_assignment a on a.institution_id=m.institution_id and a.status='ASSIGNED'
         join institution_course_release r on r.id=a.course_release_id and r.program_id=?
-          and r.release_state in ('SHAREABLE','LEGACY_MIGRATED')
+          and r.release_state='SHAREABLE' and r.legacy_migration=false
+          and a.assignment_source in ('ORIGIN','HRMS')
         where m.student_id=? and m.institution_id=? and m.status='ACTIVE'
       )
       and (
         exists(select 1 from student_program_enrollment e where e.student_id=? and e.institution_id=?
           and e.program_id=? and e.status in ('ACTIVE','PAUSED'))
         or exists(select 1 from course_purchase cp where cp.student_id=? and cp.institution_id=? and cp.course_id=?)
-        or exists(select 1 from student_course_access_grant g where g.student_id=? and g.institution_id=?
-          and g.course_id=? and g.grant_reason='LEGACY_CLASS_ENROLLMENT')
         or exists(select 1 from course_entitlement ce where ce.institution_id=? and ce.course_id=?
           and (ce.holder_student_id=? or ce.holder_user_id=(select user_account_id from student where id=?)))
       )
       """,Boolean.class,programId,studentId,institutionId,
       studentId,institutionId,programId,studentId,institutionId,programId,
-      studentId,institutionId,programId,institutionId,programId,studentId,studentId);
+      institutionId,programId,studentId,studentId);
     if(!Boolean.TRUE.equals(allowed)) {
       throw new SecurityException("This course is not authorised for the selected institution or learner.");
     }
