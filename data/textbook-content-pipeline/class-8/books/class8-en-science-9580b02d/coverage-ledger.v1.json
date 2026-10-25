@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1282,
-    "successful_visual_analyses": 1271,
-    "missing_visual_analyses": 1009,
+    "raw_analysis_result_rows": 1284,
+    "successful_visual_analyses": 1273,
+    "missing_visual_analyses": 1007,
     "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1020,
+    "unresolved_count": 1018,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -48105,9 +48105,36 @@
       "asset_path": "page-0100.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a science textbook titled 'Pressure, Winds, Storms, and Cyclones' with a question prompt and a QR code.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Pressure, Winds, Storms, and Cyclones",
+          "6",
+          "Probe and ponder",
+          "Why are winds stronger on some days than on others?",
+          "Why are water tanks usually placed at a height?",
+          "Can air pressure really crush us?",
+          "What causes storms and cyclones? If the Earth stopped rotating, would cyclones still form?",
+          "Share your questions",
+          "?",
+          "80",
+          "Curiosity— Textbook of Science for Grade 8",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Pressure",
+          "Winds",
+          "Storms",
+          "Cyclones"
+        ],
+        "context_relation": "The page is part of a science textbook discussing weather phenomena.",
+        "limitations": [
+          "The page does not provide answers to the questions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -48123,9 +48150,23 @@
       "asset_path": "assets/4b41487d57bed61d7b3dba49990ef9690edcee33e70bb365b45dd0087ac77444.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two students walking on a sidewalk with backpacks.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "students",
+          "walking",
+          "sidewalk",
+          "backpacks"
+        ],
+        "context_relation": "The image is related to the educational content about pressure, winds, storms, and cyclones.",
+        "limitations": [
+          "No specific text or labels are provided in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

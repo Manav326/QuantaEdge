@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "57e45f41716b5fc5eedbf65491a8a6a734706d505d12dfd05662f00f6e0ac08d",
+  "raw_analysis_sha256": "f742da91922acf5385011a9f16f580614c1928cd665203d722d887ddd6576359",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40169037462",
-      "checkpointed_at": "2026-10-25T07:56:37Z",
+      "checkpointed_at": "2026-10-25T08:00:13Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40169037462",
-      "checkpointed_at": "2026-10-25T07:57:25Z",
+      "checkpointed_at": "2026-10-25T08:01:01Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57861,7 +57861,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40169037462",
-      "checkpointed_at": "2026-10-25T07:58:22Z",
+      "checkpointed_at": "2026-10-25T08:01:58Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -63142,6 +63142,132 @@
         "context_relation": "The image is a blank page with no visible content.",
         "limitations": [
           "The image is a blank page with no visible content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ad712043b0f2e1a7d6cb03c7",
+      "asset_sha256": "c1085a2801fed5b779c91345f6134e2355abfaf8eb8237fe601fd8fcb34e3f90",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 100,
+      "asset_path": "page-0100.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "621906418b19de46342da6d992739c055a601ed772b759e8a147f091bba33328",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a science textbook titled 'Pressure, Winds, Storms, and Cyclones' with a question prompt and a QR code.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Pressure, Winds, Storms, and Cyclones",
+          "6",
+          "Probe and ponder",
+          "Why are winds stronger on some days than on others?",
+          "Why are water tanks usually placed at a height?",
+          "Can air pressure really crush us?",
+          "What causes storms and cyclones? If the Earth stopped rotating, would cyclones still form?",
+          "Share your questions",
+          "?",
+          "80",
+          "Curiosity— Textbook of Science for Grade 8",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Pressure",
+          "Winds",
+          "Storms",
+          "Cyclones"
+        ],
+        "context_relation": "The page is part of a science textbook discussing weather phenomena.",
+        "limitations": [
+          "The page does not provide answers to the questions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40169037462",
+      "checkpointed_at": "2026-10-25T08:06:02Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a science textbook titled 'Pressure, Winds, Storms, and Cyclones' with a question prompt and a QR code.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Pressure, Winds, Storms, and Cyclones",
+          "6",
+          "Probe and ponder",
+          "Why are winds stronger on some days than on others?",
+          "Why are water tanks usually placed at a height?",
+          "Can air pressure really crush us?",
+          "What causes storms and cyclones? If the Earth stopped rotating, would cyclones still form?",
+          "Share your questions",
+          "?",
+          "80",
+          "Curiosity— Textbook of Science for Grade 8",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Pressure",
+          "Winds",
+          "Storms",
+          "Cyclones"
+        ],
+        "context_relation": "The page is part of a science textbook discussing weather phenomena.",
+        "limitations": [
+          "The page does not provide answers to the questions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "678506737cd1e2768f038978",
+      "asset_sha256": "4b41487d57bed61d7b3dba49990ef9690edcee33e70bb365b45dd0087ac77444",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 101,
+      "asset_path": "assets/4b41487d57bed61d7b3dba49990ef9690edcee33e70bb365b45dd0087ac77444.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e49a2c7ebfa3c0eb05f66bf35931ba92635bb20b0358303eda5a3efc873edac9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two students walking on a sidewalk with backpacks.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "students",
+          "walking",
+          "sidewalk",
+          "backpacks"
+        ],
+        "context_relation": "The image is related to the educational content about pressure, winds, storms, and cyclones.",
+        "limitations": [
+          "No specific text or labels are provided in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40169037462",
+      "checkpointed_at": "2026-10-25T08:07:38Z",
+      "effective_analysis": {
+        "visual_summary": "Two students walking on a sidewalk with backpacks.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "students",
+          "walking",
+          "sidewalk",
+          "backpacks"
+        ],
+        "context_relation": "The image is related to the educational content about pressure, winds, storms, and cyclones.",
+        "limitations": [
+          "No specific text or labels are provided in the image."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
