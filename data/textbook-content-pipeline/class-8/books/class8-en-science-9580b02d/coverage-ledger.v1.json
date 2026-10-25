@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1270,
-    "successful_visual_analyses": 1258,
-    "missing_visual_analyses": 1021,
+    "raw_analysis_result_rows": 1273,
+    "successful_visual_analyses": 1261,
+    "missing_visual_analyses": 1018,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1033,
+    "unresolved_count": 1030,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -47649,9 +47649,18 @@
       "asset_path": "assets/2fcf568c5c4b5b4d3a84649843def519f05386554f7fc33e67bbb1fe9a8f9488.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a large green octagonal object.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or labels that can be used to infer the context or relation to the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -47667,9 +47676,16 @@
       "asset_path": "assets/0743d85a1d99d2c3dc89e9b948b35ac950db62df0f9a4aec99250c9f94065756.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a large yellow signboard.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text provided.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -47685,9 +47701,33 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Three objects of different materials are placed in water, showing different depths of immersion.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "79",
+          "10. Three objects 1, 2, and 3 of the same size and shape but made",
+          "3    of different materials are placed in the water.",
+          "2                                                            1   They dip to different depths as shown in Fig. 5.17.",
+          "If the weights of the three objects 1, 2, and 3 are",
+          "w1, w2, and w3, respectively, then",
+          "(i) w1 = w2 = w3",
+          "(ii) w1 > w2 > w3"
+        ],
+        "concepts": [
+          "Density",
+          "Buoyancy",
+          "Material properties"
+        ],
+        "context_relation": "The image represents a scenario where the buoyancy of different materials in water is being compared.",
+        "limitations": [
+          "The image does not provide specific values for the weights or the densities of the materials.",
+          "The image does not show the actual buoyancy forces acting on the objects."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
