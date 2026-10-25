@@ -43,7 +43,7 @@ public class CourseInvoiceController {
       select o.id as course_order_id,d.id as invoice_document_id,d.document_number,d.document_type,
         d.issued_at,d.currency,d.taxable_value_paise,d.discount_value_paise,d.tax_value_paise,
         d.total_value_paise,d.amount_paid_paise,
-        coalesce(nullif(offer.title_override,''),p.display_name) as course_title,
+        coalesce(nullif(d.transaction_snapshot->>'courseTitle',''),nullif(offer.title_override,''),p.display_name) as course_title,
         p.code as course_code,p.course_type_code,
         true as pdf_available
       from course_payment_order o
@@ -68,7 +68,7 @@ public class CourseInvoiceController {
       select o.id as course_order_id,d.id as invoice_document_id,d.document_number,d.document_type,
         d.issued_at,d.currency,d.taxable_value_paise,d.discount_value_paise,d.tax_value_paise,
         d.total_value_paise,d.amount_paid_paise,
-        coalesce(nullif(offer.title_override,''),p.display_name) as course_title,
+        coalesce(nullif(d.transaction_snapshot->>'courseTitle',''),nullif(offer.title_override,''),p.display_name) as course_title,
         p.code as course_code,p.course_type_code,
         learner.display_name as beneficiary_name,
         true as pdf_available
