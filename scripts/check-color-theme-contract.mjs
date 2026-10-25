@@ -286,6 +286,14 @@ assert(adminContentStudio.includes('PremiumPagination') && adminContentStudio.in
   adminContentStudio.includes('expandedChapters') && adminContentStudio.includes('role="dialog" aria-modal="true"') &&
   adminContentStudio.includes('editorReturnFocusRef') && adminContentStudio.includes('backToLibraryRef.current?.()'),
   'Content Studio must paginate chapters, expand/collapse child micro-topics and preserve a focused accessible editor flow.');
+assert(adminContentStudio.includes("String(selectedCourse?.course_type_code||'').toUpperCase()==='ASSESSMENT'") &&
+  adminContentStudio.includes("'/api/v1/admin/assessments?'+params.toString()") &&
+  adminContentStudio.includes('filteredAssessmentRows.map') &&
+  adminContentStudio.includes("'&assessmentId='+encodeURIComponent(String(row.assessment_id))"),
+  'Content Studio must use the assessment hierarchy for classless ASSESSMENT courses and expose each imported test question-review path.');
+assert(adminContentStudio.includes("!isAssessmentCourse?<label>{t('admin.contentStudio.subject')}") &&
+  adminContentStudio.includes('assessmentContentTitle') && adminContentStudio.includes("isAssessmentCourse ? <Link href={assessmentStudioHref"),
+  'Assessment-only courses must hide K-12 subject filters/chapter creation and show course-type-specific content navigation.');
 assert(adminContentEnglish.includes('"admin.contentStudio.courseSubjects": "Subjects with content"') &&
   adminContentEnglish.includes('"admin.contentStudio.databaseRecords": "From this course’s content records"') &&
   adminContentHinglish.includes('"admin.contentStudio.showMicroTopics"') &&
