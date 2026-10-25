@@ -255,6 +255,7 @@ export default function AssessmentsPage(){
   const [importedAnswerEdits,setImportedAnswerEdits]=useState<Record<number,string>>({});
   const [importedExplanationEdits,setImportedExplanationEdits]=useState<Record<number,string>>({});
   const [importedHindiExplanationEdits,setImportedHindiExplanationEdits]=useState<Record<number,string>>({});
+  const [importedReviewerNoteEdits,setImportedReviewerNoteEdits]=useState<Record<number,string>>({});
   const [importedReviewOpen,setImportedReviewOpen]=useState(false);
   const [importedReviewSequence,setImportedReviewSequence]=useState(1);
   const [importedReviewFilter,setImportedReviewFilter]=useState<'ALL'|'PENDING'|'APPROVED'|'REJECTED'>('ALL');
@@ -402,16 +403,18 @@ export default function AssessmentsPage(){
     const data=await api('/api/v1/admin/assessments/'+assessmentId+'/package-questions?courseId='+encodeURIComponent(courseId));
     const items=Array.isArray(data?.items)?data.items:[];
     setImportedReviewId(assessmentId);setImportedReviewItems(items);setImportedReviewStatus(String(data?.status||'DRAFT'));
-    const answerValues:Record<number,string>={},explanationValues:Record<number,string>={},hindiExplanationValues:Record<number,string>={};
+    const answerValues:Record<number,string>={},explanationValues:Record<number,string>={},hindiExplanationValues:Record<number,string>={},noteValues:Record<number,string>={};
     items.forEach((item:any)=>{
       const sequence=Number(item.sequenceNo),question=item.question||{},translations=question.explanation_i18n||{};
       answerValues[sequence]=JSON.stringify(question.answer_payload||{kind:'UNRESOLVED',value:''},null,2);
       explanationValues[sequence]=String(translations.en||question.explanation||'');
       hindiExplanationValues[sequence]=String(translations.hi||'');
+      noteValues[sequence]=String(question.human_review_note||'');
     });
     setImportedAnswerEdits(answerValues);
     setImportedExplanationEdits(explanationValues);
     setImportedHindiExplanationEdits(hindiExplanationValues);
+    setImportedReviewerNoteEdits(noteValues);
     const firstPending=items.find((item:any)=>importedQuestionStatus(item.question)!=='APPROVED'&&importedQuestionStatus(item.question)!=='REJECTED');
     const selectedSequence=focusSequenceNo&&items.some((item:any)=>Number(item.sequenceNo)===focusSequenceNo)
       ?focusSequenceNo:Number(firstPending?.sequenceNo||items[0]?.sequenceNo||1);
@@ -489,11 +492,20 @@ export default function AssessmentsPage(){
       setError(e instanceof Error?'Question '+sequenceNo+': '+e.message:'Answer payload JSON is invalid.');
       return;
     }
+    const reviewerNote=(importedReviewerNoteEdits[sequenceNo]||'').trim();
+    if(reviewStatus==='REJECTED'&&(reviewerNote.length<3||reviewerNote.length>1000)){
+      setError(tRef.current('admin.assessments.rejectionReasonRequired'));
+      return;
+    }
+    if(reviewerNote.length>1000){
+      setError(tRef.current('admin.assessments.reviewerNoteTooLong'));
+      return;
+    }
     setPackageBusy(true);setError('');setNotice('');
     try {
       const explanation=importedExplanationEdits[sequenceNo]||'';
       const explanationI18n={en:explanation,hi:importedHindiExplanationEdits[sequenceNo]||''};
-      const payload={reviewStatus,answerPayload,explanation,explanationI18n};
+      const payload={reviewStatus,answerPayload,explanation,explanationI18n,reviewerNote};
       const result=await api('/api/v1/admin/assessments/'+importedReviewId+'/package-questions/'+sequenceNo+'/review?courseId='+encodeURIComponent(courseId),{
         method:'PATCH',body:JSON.stringify(payload)
       });
@@ -787,6 +799,17 @@ export default function AssessmentsPage(){
                     <p>Set the authoritative answer key. Option keys are language-independent; the same key is highlighted in both language panels.</p>
                     <textarea aria-label="Answer payload JSON" rows={7} spellCheck={false} disabled={importedReviewStatus!=='DRAFT'} value={importedAnswerEdits[selectedImportedSequence]??JSON.stringify(selectedImportedQuestion.answer_payload||{kind:'UNRESOLVED',value:''},null,2)} onChange={event=>setImportedAnswerEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))} placeholder='{"kind":"OPTION","value":"B"} or {"kind":"NUMERIC","value":12,"tolerance":0.1}'/>
                     <small>Supported kinds include OPTION, MULTI_OPTION, TEXT, NUMERIC, ORDER and MATCH. Approval validates the answer against the saved options.</small>
+                    <label className={styles.reviewNoteField}>
+                      Reviewer correction note
+                      <textarea aria-label="Reviewer correction note" rows={3} maxLength={1000}
+                        value={importedReviewerNoteEdits[selectedImportedSequence]??''}
+                        onChange={event=>setImportedReviewerNoteEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))}
+                        placeholder="Explain precisely what the source author must fix. Required when rejecting."/>
+                    </label>
+                    {(selectedImportedQuestion.last_rejection_note||selectedImportedQuestion.human_review_note)&&<div className={styles.reviewPreviousFeedback}>
+                      <b>Previous rejection / review feedback</b>
+                      <p>{String(selectedImportedQuestion.last_rejection_note||selectedImportedQuestion.human_review_note)}</p>
+                    </div>}
                   </section>
                   <section className={styles.reviewEditorPanel}>
                     <div className={styles.reviewEditorHeader}><div><span>EXPLANATION · EN</span><h3>English explanation</h3></div></div>
