@@ -188,6 +188,7 @@ public class CourseMarketplaceLaunchReadinessService {
              and newer_release.program_id=newer_offer.course_id
             join curriculum_program newer_program
               on newer_program.id=newer_release.program_id
+             and newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'
              and newer_program.course_identity_id=p.course_identity_id
              and newer_program.content_version_no>p.content_version_no
             where newer_offer.institution_id=o.institution_id
