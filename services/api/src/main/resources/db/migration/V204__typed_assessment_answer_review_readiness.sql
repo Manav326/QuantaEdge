@@ -87,7 +87,10 @@ AS $$
     SELECT p.id, identity.source_institution_id
     FROM curriculum_program p
     JOIN institution_course_identity identity ON identity.id=p.course_identity_id
-    WHERE p.id=p_program_id AND p.course_type_code='ASSESSMENT'
+      AND identity.status='ACTIVE' AND identity.course_type_code=p.course_type_code
+    JOIN course_type_registry registered_type ON registered_type.code=p.course_type_code
+      AND registered_type.status='ACTIVE'
+    WHERE p.id=p_program_id AND p.status='ACTIVE' AND p.course_type_code='ASSESSMENT'
   )
   SELECT EXISTS (
       SELECT 1
@@ -176,7 +179,10 @@ AS $$
     SELECT p.id, identity.source_institution_id
     FROM curriculum_program p
     JOIN institution_course_identity identity ON identity.id=p.course_identity_id
-    WHERE p.id=p_program_id AND p.course_type_code='ASSESSMENT'
+      AND identity.status='ACTIVE' AND identity.course_type_code=p.course_type_code
+    JOIN course_type_registry registered_type ON registered_type.code=p.course_type_code
+      AND registered_type.status='ACTIVE'
+    WHERE p.id=p_program_id AND p.status='ACTIVE' AND p.course_type_code='ASSESSMENT'
   )
   SELECT coalesce(assessment_only_course_ready(p_program_id),false)
     AND (
@@ -240,6 +246,60 @@ AS $$
     );
 $$;
 
+
+-- Redefine the Marketplace gate as the final authority for every course-type path.
+-- A registered type must still be ACTIVE, the program and its institution-owned identity must
+-- agree on type, and the graph must be active. Unsupported/deprecated/orphaned combinations fail closed.
+CREATE OR REPLACE FUNCTION course_marketplace_content_type_ready(p_program_id bigint)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+AS $qe_course_type_marketplace_ready$
+  SELECT CASE
+    WHEN p.course_type_code='ASSESSMENT'
+      AND coalesce(mode.delivery_mode,'LEARNING_CONTENT')='ASSESSMENT_ONLY'
+      THEN coalesce(assessment_only_course_publish_ready(p.id),false)
+    WHEN p.course_type_code='K12'
+      AND coalesce(mode.delivery_mode,'LEARNING_CONTENT')='LEARNING_CONTENT'
+      AND EXISTS (
+        SELECT 1
+        FROM curriculum_program_subject ps
+        JOIN curriculum_subject s ON s.id=ps.subject_id
+          AND s.class_id=ps.class_id AND s.active=true
+          AND (s.program_id=ps.program_id OR s.program_id IS NULL)
+        WHERE ps.program_id=p.id
+      )
+      AND NOT EXISTS (
+        SELECT 1
+        FROM curriculum_program_subject ps
+        JOIN curriculum_subject s ON s.id=ps.subject_id
+          AND s.class_id=ps.class_id AND s.active=true
+          AND (s.program_id=ps.program_id OR s.program_id IS NULL)
+        WHERE ps.program_id=p.id
+          AND NOT EXISTS (
+            SELECT 1
+            FROM curriculum_chapter ch
+            JOIN lesson l ON l.chapter_id=ch.id
+            WHERE ch.subject_id=s.id
+              AND ch.active=true AND ch.content_status='PUBLISHED'
+              AND l.active=true AND l.status='PUBLISHED'
+          )
+      )
+      THEN true
+    ELSE false
+  END
+  FROM curriculum_program p
+  JOIN course_type_registry registered_type
+    ON registered_type.code=p.course_type_code AND registered_type.status='ACTIVE'
+  JOIN institution_course_identity identity
+    ON identity.id=p.course_identity_id AND identity.status='ACTIVE'
+   AND identity.course_type_code=p.course_type_code
+  LEFT JOIN curriculum_program_delivery_mode mode ON mode.program_id=p.id
+  WHERE p.id=p_program_id AND p.status='ACTIVE' AND p.code<>'GENERAL'
+$qe_course_type_marketplace_ready$;
+
+COMMENT ON FUNCTION course_marketplace_content_type_ready(bigint) IS
+  'Canonical course-type readiness gate: active K12 learning requires published lessons in every active mapped subject; active ASSESSMENT/ASSESSMENT_ONLY requires every pack and assessment published with valid approved question and answer snapshots. Deprecated types, inactive course identities, mismatched type/identity/delivery modes, orphan courses and unsupported types fail closed.';
 
 INSERT INTO app_metadata(key,value)
 VALUES ('schema','typed-assessment-answer-review-readiness-v204')
