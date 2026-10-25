@@ -60,6 +60,7 @@ public class ParentCoursePurchaseRequestController {
       join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
       where o.institution_id=? and o.course_id=? and o.status='PUBLISHED' and o.price_paise>0
         and o.hrms_published_by_staff_id is not null
+        and qe_is_current_institution_assignment(assignment.id)
         and release.release_state='SHAREABLE'
         and course_marketplace_content_type_ready(release.program_id)
         and course_release_fingerprint_current(release.program_id,release.content_fingerprint::text,release.updated_at)
