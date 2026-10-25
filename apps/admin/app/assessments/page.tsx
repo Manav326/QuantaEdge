@@ -855,8 +855,8 @@ export default function AssessmentsPage(){
                     })}</ol>:<p className={styles.reviewMissingLanguage}>{t('admin.assessments.noStructuredOptions')}</p>}
                   </section>
                 </div>
-                <section className={styles.reviewProvenancePanel} aria-label={t('admin.assessments.questionSourceProvenance')}>
-                  <h3>{t('admin.assessments.questionProvenance')}</h3>
+                <section className={styles.reviewProvenancePanel} aria-labelledby="review-question-provenance-title">
+                  <h3 id="review-question-provenance-title">{t('admin.assessments.questionProvenance')}</h3>
                   <div className={styles.reviewProvenanceGrid}>
                     {selectedImportedQuestion.source_title&&<div><span>{t('admin.assessments.sourceTitle')}</span><strong>{String(selectedImportedQuestion.source_title)}</strong></div>}
                     {selectedImportedQuestion.board&&<div><span>{t('admin.assessments.sourceBoard')}</span><strong>{String(selectedImportedQuestion.board)}</strong></div>}
