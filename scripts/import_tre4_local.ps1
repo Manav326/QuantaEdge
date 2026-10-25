@@ -8,7 +8,7 @@
   a dry run only. With -Apply it validates that the database URL targets localhost, asks for
   explicit confirmation, then calls scripts/import_tre4_course.py. The Python importer owns
   the database transaction and checks required migrations, including V199.
-  This script never publishes assessments. -SubmitForReview is a separate opt-in.
+  This script only imports into DRAFT. Review submission and every later lifecycle transition must be performed through the supported UI/API, in order.
 
 .EXAMPLE
   .\scripts\import_tre4_local.ps1
@@ -19,14 +19,10 @@
   .\scripts\import_tre4_local.ps1 -Apply
   Remove-Item Env:TRE4_DATABASE_URL
 
-.EXAMPLE
-  .\scripts\import_tre4_local.ps1 -Apply -SubmitForReview
-  Queues the draft release for HRMS quality review; does not approve or publish it.
 #>
 [CmdletBinding()]
 param(
     [switch]$Apply,
-    [switch]$SubmitForReview,
     [switch]$Yes,
     [string]$ArchivePath = "data/TRE-4_PYQ.zip",
     [string]$DatabaseUrl,
@@ -104,10 +100,6 @@ function Resolve-LocalDatabase {
 }
 
 try {
-    if ($SubmitForReview -and -not $Apply) {
-        Stop-WithMessage "-SubmitForReview requires -Apply."
-    }
-
     $gitCommand = Get-Command git -ErrorAction SilentlyContinue
     if (-not $gitCommand) {
         Stop-WithMessage "Git was not found. Run this script from a QuantaEdge Git checkout."
@@ -193,7 +185,7 @@ try {
         Write-Host "To import locally, set TRE4_DATABASE_URL to your localhost PostgreSQL URL and rerun with -Apply."
         Write-Host 'Example: $env:TRE4_DATABASE_URL = "postgresql://quantaedge:YOUR_LOCAL_DB_PASSWORD@localhost:5432/quantaedge"'
         Write-Host ".\scripts\import_tre4_local.ps1 -Apply"
-        Write-Host "Optional review queue submission: add -SubmitForReview. This does not approve or publish the course."
+        Write-Host "The importer is DRAFT-only. It will not submit the course to HRMS or approve/publish any content."
         return
     }
 
@@ -210,11 +202,7 @@ try {
     Write-Host ""
     Write-Host "Target database: $($database.Host):$($database.Port)/$($database.Database)" -ForegroundColor Yellow
     Write-Host "The importer uses one transaction and refuses to proceed if required migrations/readiness functions are missing."
-    if ($SubmitForReview) {
-        Write-Host "Review workflow: the release may be queued as IN_QUALITY_REVIEW; this is NOT approval or publication." -ForegroundColor Yellow
-    } else {
-        Write-Host "Review workflow: the release will remain a DRAFT. No HRMS review submission will be made."
-    }
+    Write-Host "Lifecycle guard: imported assessments, test packs and course release remain in their current valid states; new records are DRAFT. No HRMS submission, approval, assignment distribution or Marketplace publication will be triggered." -ForegroundColor Yellow
 
     if (-not $Yes) {
         $confirmation = Read-Host "To write to this local database, type IMPORT (anything else cancels)"
@@ -229,7 +217,6 @@ try {
     try {
         $env:TRE4_DATABASE_URL = $database.Url
         $applyArguments = @($importer, "--archive", $archiveFullPath, "--register", $sourceRegister, "--apply")
-        if ($SubmitForReview) { $applyArguments += "--submit-for-review" }
         Write-Host ""
         Write-Host "Applying TRE-4 data to the confirmed local database..." -ForegroundColor Cyan
         Invoke-CheckedPython -Arguments $applyArguments
