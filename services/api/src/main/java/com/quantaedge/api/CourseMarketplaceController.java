@@ -123,6 +123,7 @@ public class CourseMarketplaceController {
           order by r.requested_at desc,r.id desc limit 1
         ) parent_request on true
         where o.institution_id=? and o.status='PUBLISHED'
+          and qe_marketplace_offer_publicly_sellable(o.id)
           and o.hrms_published_by_staff_id is not null
           and release.release_state='SHAREABLE'
           and course_marketplace_content_type_ready(release.program_id)
@@ -250,6 +251,7 @@ public class CourseMarketplaceController {
       join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
       left join institution_course_identity identity on identity.id=p.course_identity_id
       where o.institution_id=(select institution_id from selected_tenant) and o.status='PUBLISHED'
+        and qe_marketplace_offer_publicly_sellable(o.id)
         and o.hrms_published_by_staff_id is not null
         and release.release_state='SHAREABLE'
         and course_marketplace_content_type_ready(release.program_id)
@@ -338,6 +340,7 @@ public class CourseMarketplaceController {
         join institution_tenant t on t.id=o.institution_id and t.status='ACTIVE'
         join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
         where o.institution_id=? and o.course_id=? and o.status='PUBLISHED'
+          and qe_marketplace_offer_publicly_sellable(o.id)
           and o.hrms_published_by_staff_id is not null
           and r.release_state='SHAREABLE'
           and course_marketplace_content_type_ready(r.program_id)
@@ -745,6 +748,7 @@ public class CourseMarketplaceController {
         join institution_membership member
           on member.student_id=target_student.id and member.institution_id=o.institution_id and member.status='ACTIVE'
         where o.institution_id=? and p.id=? and o.status='PUBLISHED'
+          and qe_marketplace_offer_publicly_sellable(o.id)
           and o.hrms_published_by_staff_id is not null
           and release.release_state='SHAREABLE'
           and course_marketplace_content_type_ready(release.program_id)
