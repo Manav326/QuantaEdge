@@ -627,7 +627,11 @@ public class PlatformInstitutionController {
           where institution_id=? and course_release_id=? and assignment_source='HRMS' and status='ASSIGNED'
           """,owner.staffId(),institutionId,releaseId);
       jdbc.update("""
-          update institution_marketplace_offer set status='ARCHIVED',updated_at=now()
+          update institution_marketplace_offer
+           set status='ARCHIVED',
+               obsolete_at=coalesce(obsolete_at,now()),
+               obsolete_reason=coalesce(obsolete_reason,'OBSOLETE: HRMS revoked the institution assignment; relisting requires a new source release.'),
+               updated_at=now()
           where institution_id=? and course_release_id=? and status<>'ARCHIVED'
           """,institutionId,releaseId);
     }
