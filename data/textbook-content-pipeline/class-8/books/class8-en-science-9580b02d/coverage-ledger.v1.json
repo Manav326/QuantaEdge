@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1276,
-    "successful_visual_analyses": 1264,
-    "missing_visual_analyses": 1015,
+    "raw_analysis_result_rows": 1279,
+    "successful_visual_analyses": 1267,
+    "missing_visual_analyses": 1012,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1027,
+    "unresolved_count": 1024,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -47867,9 +47867,30 @@
       "asset_path": "assets/710f896eb4160ccb760fa646534a67731cb55c820546d9737c43e5b2c106d697.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A girl in a light blue dress holding a book and waving her hand.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Why are winds stronger on some days than on others?",
+          "Why are water tanks usually placed at a height?",
+          "Can air pressure really crush us?",
+          "What causes storms and cyclones? If the Earth stopped rotating, would cyclones still form?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Winds",
+          "Water tanks",
+          "Air pressure",
+          "Storms and cyclones",
+          "Earth rotation"
+        ],
+        "context_relation": "The image is related to the textbook content about pressure, winds, storms, and cyclones.",
+        "limitations": [
+          "The image does not provide specific answers to the questions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -47885,9 +47906,30 @@
       "asset_path": "assets/95f484230e239ea9d70efffb3d5405792630add357e70edfd8658d314ed08458.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character wearing a light blue shirt and dark green pants, pointing with one finger and holding up the other hand.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Why are winds stronger on some days than on others?",
+          "Why are water tanks usually placed at a height?",
+          "Can air pressure really crush us?",
+          "What causes storms and cyclones? If the Earth stopped rotating, would cyclones still form?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Winds",
+          "Water tanks",
+          "Air pressure",
+          "Storms and cyclones",
+          "Earth rotation"
+        ],
+        "context_relation": "The image is related to the textbook content about pressure, winds, storms, and cyclones.",
+        "limitations": [
+          "The image does not provide specific details about the questions or the answers."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -47903,9 +47945,30 @@
       "asset_path": "assets/e614b682c6f00714351c978dc99af47d51633b2b2455fbe5a96ef207e04c9c4c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a tablet and a pencil, wearing a light blue shirt and green pants.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Why are winds stronger on some days than on others?",
+          "Why are water tanks usually placed at a height?",
+          "Can air pressure really crush us?",
+          "What causes storms and cyclones? If the Earth stopped rotating, would cyclones still form?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Winds",
+          "Water tanks",
+          "Air pressure",
+          "Storms and cyclones",
+          "Earth rotation"
+        ],
+        "context_relation": "The image is related to the textbook content about pressure, winds, storms, and cyclones.",
+        "limitations": [
+          "The image does not provide specific details about the questions or answers."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

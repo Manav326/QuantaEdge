@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1264,
+    "assets_selected": 1267,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "a70a475e2cd0a309e00b3a2f",
-      "7fb3c4e9a0d63c97e789ace6",
-      "8e3a01379942658217317600"
+      "eb472a17f1e5720c9f2422ed",
+      "0e8a14c9ead6cc3745198ab6",
+      "27040dbd47db8c268b9a2e1a"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1262,
-    "assets_remaining": 1029,
-    "assets_completion_percent": 55.1,
+    "assets_analyzed": 1265,
+    "assets_remaining": 1026,
+    "assets_completion_percent": 55.2,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 1259,
+    "assets_skipped_from_checkpoint": 1262,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -20133,7 +20133,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40150632213",
-      "checkpointed_at": "2026-10-25T03:05:35Z"
+      "checkpointed_at": "2026-10-25T03:17:13Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38412,7 +38412,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40150632213",
-      "checkpointed_at": "2026-10-25T03:06:32Z"
+      "checkpointed_at": "2026-10-25T03:18:21Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -41594,6 +41594,126 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40150632213",
       "checkpointed_at": "2026-10-25T03:16:10Z"
+    },
+    {
+      "asset_id": "eb472a17f1e5720c9f2422ed",
+      "asset_sha256": "710f896eb4160ccb760fa646534a67731cb55c820546d9737c43e5b2c106d697",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 100,
+      "asset_path": "assets/710f896eb4160ccb760fa646534a67731cb55c820546d9737c43e5b2c106d697.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "621906418b19de46342da6d992739c055a601ed772b759e8a147f091bba33328",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl in a light blue dress holding a book and waving her hand.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Why are winds stronger on some days than on others?",
+          "Why are water tanks usually placed at a height?",
+          "Can air pressure really crush us?",
+          "What causes storms and cyclones? If the Earth stopped rotating, would cyclones still form?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Winds",
+          "Water tanks",
+          "Air pressure",
+          "Storms and cyclones",
+          "Earth rotation"
+        ],
+        "context_relation": "The image is related to the textbook content about pressure, winds, storms, and cyclones.",
+        "limitations": [
+          "The image does not provide specific answers to the questions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40150632213",
+      "checkpointed_at": "2026-10-25T03:20:11Z"
+    },
+    {
+      "asset_id": "0e8a14c9ead6cc3745198ab6",
+      "asset_sha256": "95f484230e239ea9d70efffb3d5405792630add357e70edfd8658d314ed08458",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 100,
+      "asset_path": "assets/95f484230e239ea9d70efffb3d5405792630add357e70edfd8658d314ed08458.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "621906418b19de46342da6d992739c055a601ed772b759e8a147f091bba33328",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character wearing a light blue shirt and dark green pants, pointing with one finger and holding up the other hand.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Why are winds stronger on some days than on others?",
+          "Why are water tanks usually placed at a height?",
+          "Can air pressure really crush us?",
+          "What causes storms and cyclones? If the Earth stopped rotating, would cyclones still form?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Winds",
+          "Water tanks",
+          "Air pressure",
+          "Storms and cyclones",
+          "Earth rotation"
+        ],
+        "context_relation": "The image is related to the textbook content about pressure, winds, storms, and cyclones.",
+        "limitations": [
+          "The image does not provide specific details about the questions or the answers."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40150632213",
+      "checkpointed_at": "2026-10-25T03:22:07Z"
+    },
+    {
+      "asset_id": "27040dbd47db8c268b9a2e1a",
+      "asset_sha256": "e614b682c6f00714351c978dc99af47d51633b2b2455fbe5a96ef207e04c9c4c",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 100,
+      "asset_path": "assets/e614b682c6f00714351c978dc99af47d51633b2b2455fbe5a96ef207e04c9c4c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "621906418b19de46342da6d992739c055a601ed772b759e8a147f091bba33328",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a tablet and a pencil, wearing a light blue shirt and green pants.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Why are winds stronger on some days than on others?",
+          "Why are water tanks usually placed at a height?",
+          "Can air pressure really crush us?",
+          "What causes storms and cyclones? If the Earth stopped rotating, would cyclones still form?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Winds",
+          "Water tanks",
+          "Air pressure",
+          "Storms and cyclones",
+          "Earth rotation"
+        ],
+        "context_relation": "The image is related to the textbook content about pressure, winds, storms, and cyclones.",
+        "limitations": [
+          "The image does not provide specific details about the questions or answers."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40150632213",
+      "checkpointed_at": "2026-10-25T03:24:02Z"
     }
   ]
 }

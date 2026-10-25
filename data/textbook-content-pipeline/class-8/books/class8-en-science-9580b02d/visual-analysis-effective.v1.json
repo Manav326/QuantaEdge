@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "067fcdc69c4d243bb41ca9b167fe0288aa8ff287d5a25c90c9820e0897c000de",
+  "raw_analysis_sha256": "567068b293a48fd7c70a9cda0b9bcd8b31246f6d20e6b923857186c5bb490cdf",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -29272,7 +29272,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40150632213",
-      "checkpointed_at": "2026-10-25T03:05:35Z",
+      "checkpointed_at": "2026-10-25T03:17:13Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57795,7 +57795,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40150632213",
-      "checkpointed_at": "2026-10-25T03:06:32Z",
+      "checkpointed_at": "2026-10-25T03:18:21Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -62748,6 +62748,198 @@
         "context_relation": "The image is a visual representation of the concepts discussed in the text.",
         "limitations": [
           "The image does not provide specific details about the causes of storms and cyclones."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "eb472a17f1e5720c9f2422ed",
+      "asset_sha256": "710f896eb4160ccb760fa646534a67731cb55c820546d9737c43e5b2c106d697",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 100,
+      "asset_path": "assets/710f896eb4160ccb760fa646534a67731cb55c820546d9737c43e5b2c106d697.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "621906418b19de46342da6d992739c055a601ed772b759e8a147f091bba33328",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl in a light blue dress holding a book and waving her hand.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Why are winds stronger on some days than on others?",
+          "Why are water tanks usually placed at a height?",
+          "Can air pressure really crush us?",
+          "What causes storms and cyclones? If the Earth stopped rotating, would cyclones still form?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Winds",
+          "Water tanks",
+          "Air pressure",
+          "Storms and cyclones",
+          "Earth rotation"
+        ],
+        "context_relation": "The image is related to the textbook content about pressure, winds, storms, and cyclones.",
+        "limitations": [
+          "The image does not provide specific answers to the questions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40150632213",
+      "checkpointed_at": "2026-10-25T03:20:11Z",
+      "effective_analysis": {
+        "visual_summary": "A girl in a light blue dress holding a book and waving her hand.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Why are winds stronger on some days than on others?",
+          "Why are water tanks usually placed at a height?",
+          "Can air pressure really crush us?",
+          "What causes storms and cyclones? If the Earth stopped rotating, would cyclones still form?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Winds",
+          "Water tanks",
+          "Air pressure",
+          "Storms and cyclones",
+          "Earth rotation"
+        ],
+        "context_relation": "The image is related to the textbook content about pressure, winds, storms, and cyclones.",
+        "limitations": [
+          "The image does not provide specific answers to the questions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0e8a14c9ead6cc3745198ab6",
+      "asset_sha256": "95f484230e239ea9d70efffb3d5405792630add357e70edfd8658d314ed08458",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 100,
+      "asset_path": "assets/95f484230e239ea9d70efffb3d5405792630add357e70edfd8658d314ed08458.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "621906418b19de46342da6d992739c055a601ed772b759e8a147f091bba33328",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character wearing a light blue shirt and dark green pants, pointing with one finger and holding up the other hand.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Why are winds stronger on some days than on others?",
+          "Why are water tanks usually placed at a height?",
+          "Can air pressure really crush us?",
+          "What causes storms and cyclones? If the Earth stopped rotating, would cyclones still form?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Winds",
+          "Water tanks",
+          "Air pressure",
+          "Storms and cyclones",
+          "Earth rotation"
+        ],
+        "context_relation": "The image is related to the textbook content about pressure, winds, storms, and cyclones.",
+        "limitations": [
+          "The image does not provide specific details about the questions or the answers."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40150632213",
+      "checkpointed_at": "2026-10-25T03:22:07Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character wearing a light blue shirt and dark green pants, pointing with one finger and holding up the other hand.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Why are winds stronger on some days than on others?",
+          "Why are water tanks usually placed at a height?",
+          "Can air pressure really crush us?",
+          "What causes storms and cyclones? If the Earth stopped rotating, would cyclones still form?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Winds",
+          "Water tanks",
+          "Air pressure",
+          "Storms and cyclones",
+          "Earth rotation"
+        ],
+        "context_relation": "The image is related to the textbook content about pressure, winds, storms, and cyclones.",
+        "limitations": [
+          "The image does not provide specific details about the questions or the answers."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "27040dbd47db8c268b9a2e1a",
+      "asset_sha256": "e614b682c6f00714351c978dc99af47d51633b2b2455fbe5a96ef207e04c9c4c",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 100,
+      "asset_path": "assets/e614b682c6f00714351c978dc99af47d51633b2b2455fbe5a96ef207e04c9c4c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "621906418b19de46342da6d992739c055a601ed772b759e8a147f091bba33328",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a tablet and a pencil, wearing a light blue shirt and green pants.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Why are winds stronger on some days than on others?",
+          "Why are water tanks usually placed at a height?",
+          "Can air pressure really crush us?",
+          "What causes storms and cyclones? If the Earth stopped rotating, would cyclones still form?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Winds",
+          "Water tanks",
+          "Air pressure",
+          "Storms and cyclones",
+          "Earth rotation"
+        ],
+        "context_relation": "The image is related to the textbook content about pressure, winds, storms, and cyclones.",
+        "limitations": [
+          "The image does not provide specific details about the questions or answers."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40150632213",
+      "checkpointed_at": "2026-10-25T03:24:02Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a tablet and a pencil, wearing a light blue shirt and green pants.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Why are winds stronger on some days than on others?",
+          "Why are water tanks usually placed at a height?",
+          "Can air pressure really crush us?",
+          "What causes storms and cyclones? If the Earth stopped rotating, would cyclones still form?",
+          "Share your questions"
+        ],
+        "concepts": [
+          "Winds",
+          "Water tanks",
+          "Air pressure",
+          "Storms and cyclones",
+          "Earth rotation"
+        ],
+        "context_relation": "The image is related to the textbook content about pressure, winds, storms, and cyclones.",
+        "limitations": [
+          "The image does not provide specific details about the questions or answers."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
