@@ -10,6 +10,21 @@
 -- Older rows are not deleted. They are archived/revoked, kept for audit, and excluded from
 -- the resolver used by Marketplace, free enrollment, parent purchases and finance catalog.
 
+-- Obsolescence is explicit on the affected row, not only implicit in a status/comment.
+-- Retirement markers do not rewrite financial or learner-history foreign keys.
+ALTER TABLE institution_course_release
+  ADD COLUMN IF NOT EXISTS obsolete_at timestamptz,
+  ADD COLUMN IF NOT EXISTS obsolete_reason text;
+ALTER TABLE institution_course_assignment
+  ADD COLUMN IF NOT EXISTS obsolete_at timestamptz,
+  ADD COLUMN IF NOT EXISTS obsolete_reason text;
+ALTER TABLE institution_marketplace_offer
+  ADD COLUMN IF NOT EXISTS obsolete_at timestamptz,
+  ADD COLUMN IF NOT EXISTS obsolete_reason text;
+ALTER TABLE course_marketplace_offer
+  ADD COLUMN IF NOT EXISTS obsolete_at timestamptz,
+  ADD COLUMN IF NOT EXISTS obsolete_reason text;
+
 ALTER TABLE student_certificate
   ADD COLUMN IF NOT EXISTS course_identity_id bigint
     REFERENCES institution_course_identity(id) ON DELETE RESTRICT;
@@ -62,7 +77,7 @@ CREATE TRIGGER trg_qe_certificate_course_identity_insert
   BEFORE INSERT ON student_certificate
   FOR EACH ROW EXECUTE FUNCTION qe_require_course_identity_for_new_certificate();
 
-CREATE OR REPLACE FUNCTION qe_current_course_offer_revisionCREATE OR REPLACE FUNCTION qe_current_course_offer_revision(p_offer_id bigint)
+CREATE OR REPLACE FUNCTION qe_current_course_offer_revision(p_offer_id bigint)
 RETURNS boolean
 LANGUAGE sql
 STABLE
@@ -255,7 +270,7 @@ AS $function$
   )
 $function$;
 
-COMMENT ON FUNCTION qe_current_course_offer_revisionCOMMENT ON FUNCTION qe_current_course_offer_revision(bigint) IS
+COMMENT ON FUNCTION qe_current_course_offer_revision(bigint) IS
   'Canonical resolver for the current, active institution offer revision. Rejects archived/migrated offers, legacy assignments/releases, stale release versions, inactive tenants, unready content and invalid release fingerprints.';
 COMMENT ON FUNCTION qe_marketplace_offer_publicly_sellable(bigint) IS
   'Canonical learner-facing sales eligibility. Keeps the previous live offer sellable while a newer version is pending listing approval; swaps only when a newer approved and published offer is eligible. Do not reimplement this rule in UI code.';
@@ -271,8 +286,8 @@ BEGIN
     IF OLD.status = 'ASSIGNED'
        AND NEW.status = 'REVOKED'
        AND NEW.assignment_source = OLD.assignment_source
-       AND (to_jsonb(OLD) - ARRAY['status','revoked_at','revoked_by_staff_id','updated_at'])
-         = (to_jsonb(NEW) - ARRAY['status','revoked_at','revoked_by_staff_id','updated_at']) THEN
+       AND (to_jsonb(OLD) - ARRAY['status','revoked_at','revoked_by_staff_id','updated_at','obsolete_at','obsolete_reason'])
+         = (to_jsonb(NEW) - ARRAY['status','revoked_at','revoked_by_staff_id','updated_at','obsolete_at','obsolete_reason']) THEN
       RETURN NEW;
     END IF;
 
@@ -362,19 +377,26 @@ WHERE offer.status <> 'ARCHIVED'
 
 UPDATE institution_marketplace_offer offer
 SET status = 'ARCHIVED',
+    obsolete_at = coalesce(offer.obsolete_at, now()),
+    obsolete_reason = coalesce(offer.obsolete_reason,
+      'OBSOLETE: offer is not the current eligible revision or is missing required HRMS publication approval; historical transaction references are retained.'),
     updated_at = now()
-WHERE offer.status <> 'ARCHIVED'
-  AND (
-    offer.legacy_migration = true
-    OR (
-      NOT qe_current_course_offer_revision(offer.id)
-      AND NOT qe_marketplace_offer_publicly_sellable(offer.id)
-    )
-    OR (
-      offer.status = 'PUBLISHED'
-      AND NOT qe_marketplace_offer_publicly_sellable(offer.id)
-    )
-  );
+WHERE offer.legacy_migration = true
+   OR (
+     NOT qe_current_course_offer_revision(offer.id)
+     AND NOT qe_marketplace_offer_publicly_sellable(offer.id)
+   )
+   OR (
+     offer.status = 'PUBLISHED'
+     AND NOT qe_marketplace_offer_publicly_sellable(offer.id)
+   );
+
+-- Explicitly mark migrated releases as obsolete, retaining their original content graph.
+UPDATE institution_course_release
+SET obsolete_at = coalesce(obsolete_at, now()),
+    obsolete_reason = coalesce(obsolete_reason,
+      'OBSOLETE: release was created by the prior migration pipeline; new assignments require a current source-owned release.')
+WHERE legacy_migration = true OR release_state = 'LEGACY_MIGRATED';
 
 -- Mark and audit legacy assignments as unusable. This does not delete order, invoice,
 -- entitlement, attempt, progress, certificate or audit history.
@@ -401,6 +423,9 @@ WHERE assignment.status = 'ASSIGNED'
 UPDATE institution_course_assignment assignment
 SET status = 'REVOKED',
     revoked_at = coalesce(assignment.revoked_at, now()),
+    obsolete_at = coalesce(assignment.obsolete_at, now()),
+    obsolete_reason = coalesce(assignment.obsolete_reason,
+      'OBSOLETE: assignment uses a retired source type or legacy-migrated release; use ORIGIN or HRMS in the current lifecycle.'),
     updated_at = now()
 FROM institution_course_release release
 WHERE release.id = assignment.course_release_id
@@ -410,6 +435,23 @@ WHERE release.id = assignment.course_release_id
     OR release.legacy_migration = true
     OR release.release_state = 'LEGACY_MIGRATED'
   );
+
+COMMENT ON COLUMN institution_course_release.obsolete_at IS
+  'Set when a release is retired from the active pipeline; content graph and learner history remain preserved.';
+COMMENT ON COLUMN institution_course_release.obsolete_reason IS
+  'Reason this historical release cannot participate in the active course pipeline.';
+COMMENT ON COLUMN institution_course_assignment.obsolete_at IS
+  'Set on retired legacy assignment rows; only ORIGIN or HRMS assignments are usable.';
+COMMENT ON COLUMN institution_course_assignment.obsolete_reason IS
+  'Reason this historical assignment cannot participate in the active course pipeline.';
+COMMENT ON COLUMN institution_marketplace_offer.obsolete_at IS
+  'Set when an offer is retired from live listing; orders and invoice snapshots remain bound to the exact offer.';
+COMMENT ON COLUMN institution_marketplace_offer.obsolete_reason IS
+  'Reason this offer cannot be used for a new sale or publication.';
+COMMENT ON COLUMN course_marketplace_offer.obsolete_at IS
+  'All rows in this superseded global catalogue are obsolete; live listings use institution_marketplace_offer.';
+COMMENT ON COLUMN course_marketplace_offer.obsolete_reason IS
+  'Reason this row from the superseded global catalogue was retired.';
 
 COMMENT ON TABLE institution_course_identity IS
   'ACTIVE: permanent logical course identity. Its public_id is the stable public reference; content versions live in curriculum_program.';
@@ -583,8 +625,10 @@ CREATE TRIGGER trg_qe_obsolete_student_course_access_grant_write
 -- The later dependency cleanup may drop it only after all financial/audit references are reconciled.
 UPDATE course_marketplace_offer
 SET status = 'ARCHIVED',
-    updated_at = now()
-WHERE status <> 'ARCHIVED';
+    obsolete_at = coalesce(obsolete_at, now()),
+    obsolete_reason = coalesce(obsolete_reason,
+      'OBSOLETE: global Marketplace catalogue replaced by HRMS-controlled institution_marketplace_offer. Historical references are retained for reconciliation.'),
+    updated_at = now();
 
 COMMENT ON COLUMN course_marketplace_offer.status IS
   'OBSOLETE TABLE: all global-catalogue offers are archived. Live offers belong only to institution_marketplace_offer and are controlled by HRMS.';
