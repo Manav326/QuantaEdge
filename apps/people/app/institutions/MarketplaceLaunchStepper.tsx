@@ -1329,8 +1329,12 @@ export default function MarketplaceLaunchStepper({
                   <div><span>QUESTION SOURCE</span><b>{String(activeAssessmentReviewSnapshot.source_title||'Source not recorded')}</b></div>
                   <div><span>ISSUER / BOARD</span><b>{String(activeAssessmentReviewSnapshot.board||'Not recorded')}</b></div>
                   <div><span>SOURCE YEAR</span><b>{String(activeAssessmentReviewSnapshot.source_year||'Not recorded')}</b></div>
+                  {activeAssessmentReviewSnapshot.source_exam_date&&<div><span>SOURCE EXAM DATE</span><b>{String(activeAssessmentReviewSnapshot.source_exam_date)}</b></div>}
+                  {activeAssessmentReviewSnapshot.source_question_number!==null&&activeAssessmentReviewSnapshot.source_question_number!==undefined&&<div><span>SOURCE QUESTION NUMBER</span><b>{String(activeAssessmentReviewSnapshot.source_question_number)}</b></div>}
+                  {activeAssessmentReviewSnapshot.source_status&&<div><span>SOURCE VERIFICATION STATUS</span><b>{String(activeAssessmentReviewSnapshot.source_status).replaceAll('_',' ')}</b></div>}
                   <div><span>SOURCE LOCATION / PAGE</span><b>{formatReviewSourceLocation(activeAssessmentReviewSnapshot.source_location)||'Not recorded'}</b></div>
                   <div><span>SOURCE PACKAGE</span><b>{String(activeAssessmentReviewSnapshot.source_id||'Not recorded')}</b></div>
+                  {activeAssessmentReviewSnapshot.source_file_sha256&&<div><span>SOURCE FILE SHA-256</span><b>{String(activeAssessmentReviewSnapshot.source_file_sha256)}</b></div>}
                   {activeAssessmentReviewSnapshot.source_package_sha256&&<div><span>SOURCE PACKAGE SHA-256</span><b>{String(activeAssessmentReviewSnapshot.source_package_sha256)}</b></div>}
                   {safeReviewReference(activeAssessmentReviewSnapshot.source_ref)&&<div><span>SOURCE REFERENCE</span><b><a href={safeReviewReference(activeAssessmentReviewSnapshot.source_ref)} target="_blank" rel="noreferrer">{String(activeAssessmentReviewSnapshot.source_ref)}</a></b></div>}
                   {activeAssessmentReviewSnapshot.source_note&&<div><span>IMPORT NOTE</span><b>{String(activeAssessmentReviewSnapshot.source_note)}</b></div>}
