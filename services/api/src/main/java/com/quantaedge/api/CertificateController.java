@@ -42,6 +42,8 @@ import org.springframework.web.server.ResponseStatusException;
 public class CertificateController {
   private static final String CERTIFICATE_COLUMNS = """
       c.id,c.certificate_number,c.achievement_type,c.class_code,c.subject_id,c.program_id,c.program_id AS course_id,
+      c.course_identity_id,identity.public_id AS course_identity_public_id,
+      coalesce(identity.stable_course_key,p.code) AS stable_course_key,
       s.code AS subject_code,s.display_name AS subject_name,p.code AS course_code,p.display_name AS course_name,
       c.assessment_attempt_id,c.template_id,c.language,
       c.recipient_name,c.achievement_title,c.achievement_summary,c.status,c.issued_at,
@@ -51,6 +53,7 @@ public class CertificateController {
       FROM student_certificate c
       LEFT JOIN curriculum_subject s ON s.id=c.subject_id
       LEFT JOIN curriculum_program p ON p.id=c.program_id
+      LEFT JOIN institution_course_identity identity ON identity.id=c.course_identity_id
       """;
   private static final String CERTIFICATE_NUMBER_PATTERN = "QE-[0-9]{4}-[A-F0-9]{16}";
 
@@ -706,6 +709,28 @@ public class CertificateController {
     OffsetDateTime issuedAt = OffsetDateTime.now(ZoneId.of("Asia/Kolkata"));
     String certificateNumber = "QE-" + issuedAt.getYear() + "-"
         + HexFormat.of().withUpperCase().formatHex(randomBytes(8));
+    if (courseId == null || courseId < 1L) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "A certificate must reference a stable course identity and the exact content version.");
+    }
+    List<Map<String,Object>> courseIdentityRows = jdbc.queryForList("""
+        select identity.id,identity.public_id::text as public_id,identity.stable_course_key,
+          program.content_version_no
+        from curriculum_program program
+        join institution_course_identity identity on identity.id=program.course_identity_id
+          and identity.status='ACTIVE'
+        where program.id=? and program.status='ACTIVE' and program.code<>'GENERAL'
+          and identity.course_type_code=program.course_type_code
+        """, courseId);
+    if (courseIdentityRows.size() != 1) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "The course has no unique active identity. Certificates are issued only for the current course pipeline.");
+    }
+    Map<String,Object> courseIdentity = courseIdentityRows.getFirst();
+    long courseIdentityId = ((Number) courseIdentity.get("id")).longValue();
+    snapshot.put("courseIdentityPublicId", courseIdentity.get("public_id"));
+    snapshot.put("stableCourseKey", courseIdentity.get("stable_course_key"));
+    snapshot.put("contentVersionNo", courseIdentity.get("content_version_no"));
     CertificateRenderer.CertificateBranding issuer = resolveCertificateIssuer(studentId,courseId,institutionCode,snapshot,institutionId);
     CertificateRenderer.CertificateDetails details =
         certificateDetails(snapshot, achievementType, language, classCode, title);
@@ -721,14 +746,14 @@ public class CertificateController {
       png = storage.store(rendered.png(), "png");
       jdbc.update("""
           INSERT INTO student_certificate(
-            certificate_number,student_id,institution_id,achievement_key,achievement_type,class_code,subject_id,program_id,
-            assessment_attempt_id,template_id,language,recipient_name,achievement_title,
-            achievement_summary,achievement_snapshot,artifact_version,status,issued_at,pdf_storage_key,png_storage_key,
-            pdf_sha256,png_sha256,pdf_size_bytes,png_size_bytes)
-          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?::jsonb,5,'ISSUED',?,?,?,?,?,?,?)
+            certificate_number,student_id,institution_id,course_identity_id,achievement_key,achievement_type,
+            class_code,subject_id,program_id,assessment_attempt_id,template_id,language,recipient_name,
+            achievement_title,achievement_summary,achievement_snapshot,artifact_version,status,issued_at,
+            pdf_storage_key,png_storage_key,pdf_sha256,png_sha256,pdf_size_bytes,png_size_bytes)
+          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?::jsonb,5,'ISSUED',?,?,?,?,?,?,?)
           """,
-          certificateNumber,studentId,institutionId,achievementKey,achievementType,classCode,subjectId,courseId,
-          attemptId,template,language,safeText(recipient, 120),safeText(title, 240),
+          certificateNumber,studentId,institutionId,courseIdentityId,achievementKey,achievementType,classCode,
+          subjectId,courseId,attemptId,template,language,safeText(recipient, 120),safeText(title, 240),
           safeText(summary, 600), json(snapshot), issuedAt, pdf.storageKey(), png.storageKey(),
           pdf.sha256(), png.sha256(), pdf.sizeBytes(), png.sizeBytes());
       long certificateId = jdbc.queryForObject(
