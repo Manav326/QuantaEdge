@@ -112,7 +112,7 @@ public class CourseAuthoringService {
           source_institution_id,stable_course_key,display_name,course_type_code,
           created_by_staff_id,created_by_institution_admin_id
         ) values(?,?,?,?,?,?) returning id
-        """,Long.class,institutionId,internalCode,displayName,type,actorStaffId,actorInstitutionAdminId);
+        """,Long.class,institutionId,requestedCode,displayName,type,actorStaffId,actorInstitutionAdminId);
       if(courseIdentityId==null) throw new IllegalStateException("The stable course identity could not be created.");
 
       courseId=jdbc.queryForObject("""
