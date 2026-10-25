@@ -25,16 +25,18 @@ function activateAccessibleReviewDialog(dialog:HTMLElement,onEscape:()=>void):()
   const previousOverflow=document.body.style.overflow;
   const previousFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
   const inertedElements:Array<{element:HTMLElement;wasInert:boolean}>=[];
-  let branch:HTMLElement|null=dialog;
+  let branch:HTMLElement=dialog;
   document.body.style.overflow='hidden';
-  while(branch?.parentElement&&branch.parentElement!==document.body){
-    const nextAncestor: HTMLElement = branch.parentElement;
+  // Keep the application shell inert until the full-screen reviewer closes.
+  while(branch.parentElement){
+    const nextAncestor:HTMLElement=branch.parentElement;
     for(const sibling of Array.from(nextAncestor.children)){
-      if(sibling!==branch&&sibling instanceof HTMLElement){
+      if(sibling!==branch&&sibling instanceof HTMLElement&&!sibling.contains(dialog)){
         inertedElements.push({element:sibling,wasInert:sibling.inert});
         sibling.inert=true;
       }
     }
+    if(nextAncestor===document.body)break;
     branch=nextAncestor;
   }
   const selector='a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
