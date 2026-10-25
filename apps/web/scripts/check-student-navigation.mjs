@@ -368,10 +368,14 @@ const workspaceLayout = read('../app/components/WorkspaceLayout.tsx');
 const courseScope = read('../app/student/CourseScope.tsx');
 const androidAllCourses = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentAllCoursesScreen.kt');
 const parentPage = read('../app/parent/page.tsx');
-assert.ok(coursesPage.includes("const destination = assessmentCourse ? '/student/tests?courseId=' : '/student/learn?courseId='") &&
+assert.ok(coursesPage.includes("const destination = isAssessmentCourse(selected) ? '/student/tests?courseId=' : '/student/learn?courseId='") &&
   coursesPage.includes("String(course.public_id || id)") &&
-  coursesPage.includes("!active && (") && coursesPage.includes('Focus on this course') &&
-  coursesPage.includes("course.delivery_mode === 'ASSESSMENT_ONLY'"), 'Course focus must route assessment-only courses to tests and learning courses to lessons using the exact public course ID.');
+  coursesPage.includes("!active && !unsupportedCourse && (") && coursesPage.includes('Focus on this course') &&
+  coursesPage.includes("course.course_type_code === 'ASSESSMENT' && course.delivery_mode === 'ASSESSMENT_ONLY'") &&
+  coursesPage.includes("course.course_type_code === 'K12' && course.delivery_mode !== 'ASSESSMENT_ONLY'") &&
+  coursesPage.includes("!isSupportedLearnerCourse(selected)") &&
+  coursesPage.includes("unsupportedCourseType: true"),
+  'Course focus must route only supported K12 courses to lessons and valid assessment-only courses to tests, while unsupported/mismatched types fail closed using the exact public course ID.');
 const certificateCourseBackfill = read('../../../services/api/src/main/resources/db/migration/V161__backfill_legacy_certificate_course_identity.sql');
 assert.ok(certificateCourseBackfill.includes('WHERE cert.program_id IS NULL') &&
   certificateCourseBackfill.includes("program.code = 'CLASS_' || source_class.code") &&
