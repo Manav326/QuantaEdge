@@ -548,12 +548,12 @@ export default function AssessmentsPage(){
       return;
     }
     const reviewerNote=(importedReviewerNoteEdits[sequenceNo]||'').trim();
-    if(reviewStatus==='REJECTED'&&(reviewerNote.length<3||reviewerNote.length>1000)){
-      setError(tRef.current('admin.assessments.rejectionReasonRequired'));
-      return;
-    }
     if(reviewerNote.length>1000){
       setError(tRef.current('admin.assessments.reviewerNoteTooLong'));
+      return;
+    }
+    if(reviewStatus==='REJECTED'&&reviewerNote.length<3){
+      setError(tRef.current('admin.assessments.rejectionReasonRequired'));
       return;
     }
     setPackageBusy(true);setError('');setNotice('');
