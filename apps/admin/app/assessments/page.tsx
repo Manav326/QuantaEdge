@@ -5,7 +5,7 @@ import { getUiLocaleLanguage } from '../i18n/catalog';
 import AdminSidebar from '../components/AdminSidebar';
 import { AdminWorkspaceContext } from '../components/AdminWorkspaceContext';
 import PremiumPagination from '../components/PremiumPagination';
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useUiTranslation } from '../i18n/useUiTranslation';
 import styles from './Assessments.module.css';
 import { AdminCourseSelector, useAdminCourseScope } from '../components/AdminCourseScope';
@@ -305,15 +305,15 @@ export default function AssessmentsPage(){
   const filteredBank=bank;
   const importedApprovedCount=importedReviewItems.filter(item=>importedQuestionStatus(item.question)==='APPROVED').length;
   const importedRejectedCount=importedReviewItems.filter(item=>importedQuestionStatus(item.question)==='REJECTED').length;
-  const normalizedReviewSearch=importedReviewSearch.trim().toLocaleLowerCase();
-  const filteredImportedReviewItems=importedReviewItems.filter(item=>{
+  const normalizedReviewSearch=useMemo(()=>importedReviewSearch.trim().toLocaleLowerCase(),[importedReviewSearch]);
+  const filteredImportedReviewItems=useMemo(()=>importedReviewItems.filter(item=>{
     const status=importedQuestionStatus(item.question);
     if(importedReviewFilter!=='ALL'&&status!==(importedReviewFilter==='PENDING'?'PENDING_HUMAN_REVIEW':importedReviewFilter))return false;
     if(!normalizedReviewSearch)return true;
     const question=item.question||{};
     return [question.prompt,question.prompt_i18n?.en,question.prompt_i18n?.hi,item.sequenceNo]
       .some(value=>String(value??'').toLocaleLowerCase().includes(normalizedReviewSearch));
-  });
+  }),[importedReviewItems,importedReviewFilter,normalizedReviewSearch]);
   useEffect(()=>{
     if(importedReviewOpen&&filteredImportedReviewItems.length&&!filteredImportedReviewItems.some(item=>Number(item.sequenceNo)===importedReviewSequence)){
       setImportedReviewSequence(Number(filteredImportedReviewItems[0].sequenceNo));
