@@ -92,6 +92,8 @@ public class CourseMarketplaceLaunchController {
     result.put("currentFingerprint",savedFingerprint.trim());
     result.put("assessmentOnlyReady",Boolean.TRUE.equals(
         jdbc.queryForObject("select assessment_only_course_publish_ready(?)",Boolean.class,courseId)));
+    result.put("courseTypePublishReady",Boolean.TRUE.equals(
+        jdbc.queryForObject("select course_marketplace_content_type_ready(?)",Boolean.class,courseId)));
     result.put("courseTranslations",jdbc.queryForList("""
         select language,display_name,source_language,source_hash,version_no,
                translation_status,translation_method,quality_notes
@@ -345,6 +347,7 @@ public class CourseMarketplaceLaunchController {
           coalesce((select mode.delivery_mode from curriculum_program_delivery_mode mode where mode.program_id=p.id),
                    'LEARNING_CONTENT') as delivery_mode,
           assessment_only_course_publish_ready(p.id) as assessment_only_ready,
+          course_marketplace_content_type_ready(p.id) as course_type_publish_ready,
           (select count(*) from assessment a where a.course_id=p.id) as assessment_count,
           (select count(*) from assessment_question aq join assessment a on a.id=aq.assessment_id where a.course_id=p.id) as assessment_question_count,
           t.id as source_institution_id,t.tenant_code as source_institution_code,
