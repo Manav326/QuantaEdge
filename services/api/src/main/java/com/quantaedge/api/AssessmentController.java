@@ -985,14 +985,20 @@ public class AssessmentController {
       throw badRequest("Review status must be APPROVED, REJECTED, or PENDING_HUMAN_REVIEW.");
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select aq.id,aq.question_snapshot::text as question_snapshot,a.source_package_id,a.status,
+        p.course_type_code,coalesce(mode.delivery_mode,'LEARNING_CONTENT') as delivery_mode,
         exists(select 1 from student_assessment_attempt att where att.assessment_id=a.id and att.status<>'ABANDONED') as has_attempts
-      from assessment_question aq join assessment a on a.id=aq.assessment_id
+      from assessment_question aq
+      join assessment a on a.id=aq.assessment_id
+      join curriculum_program p on p.id=a.course_id
+      left join curriculum_program_delivery_mode mode on mode.program_id=p.id
       where aq.assessment_id=? and aq.sequence_no=? and a.course_id=?
       """,assessmentId,sequenceNo,courseId);
     if(rows.isEmpty())throw notFound("Imported assessment question",sequenceNo);
     Map<String,Object> row=rows.getFirst();
-    if(row.get("source_package_id")==null)
-      throw badRequest("This review endpoint is only for questions imported from a portable package.");
+    boolean assessmentOnlyCourse = "ASSESSMENT".equals(String.valueOf(row.get("course_type_code")))
+        && "ASSESSMENT_ONLY".equals(String.valueOf(row.get("delivery_mode")));
+    if(row.get("source_package_id")==null && !assessmentOnlyCourse)
+      throw badRequest("This review endpoint is for portable-package questions or tests belonging to an ASSESSMENT_ONLY course.");
     if(!"DRAFT".equals(String.valueOf(row.get("status")))||Boolean.TRUE.equals(row.get("has_attempts")))
       throw new ResponseStatusException(HttpStatus.CONFLICT,
           "This assessment is no longer an untouched draft. Import a new package version to preserve historical attempt snapshots.");
@@ -1372,13 +1378,16 @@ public class AssessmentController {
     else authorization.requirePermission(context, "CONTENT_EDIT");
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select a.id,a.title,a.status,a.is_generated,a.subject_id,a.chapter_id,a.source_package_id,
+             p.course_type_code,coalesce(mode.delivery_mode,'LEARNING_CONTENT') as delivery_mode,
              s.code as subject_code,c.code as class_code,
              count(aq.id) as question_count
       from assessment a
+      join curriculum_program p on p.id=a.course_id
+      left join curriculum_program_delivery_mode mode on mode.program_id=p.id
       left join curriculum_subject s on s.id=a.subject_id
       left join curriculum_class c on c.id=s.class_id
       left join assessment_question aq on aq.assessment_id=a.id
-      where a.id=? and a.course_id=? group by a.id,s.code,c.code
+      where a.id=? and a.course_id=? group by a.id,s.code,c.code,p.course_type_code,mode.delivery_mode
       """, assessmentId,courseId);
     if (rows.isEmpty()) throw notFound("Assessment", assessmentId);
     Map<String, Object> row = rows.getFirst();
@@ -1386,14 +1395,17 @@ public class AssessmentController {
     if ("PUBLISHED".equals(next) && ((Number) row.get("question_count")).intValue() < 1) {
       throw badRequest("Add at least one question before publishing this test.");
     }
-    if ("PUBLISHED".equals(next) && row.get("source_package_id") != null) {
+    boolean assessmentOnlyCourse = "ASSESSMENT".equals(String.valueOf(row.get("course_type_code")))
+        && "ASSESSMENT_ONLY".equals(String.valueOf(row.get("delivery_mode")));
+    boolean requiresQuestionAnswerReview = row.get("source_package_id") != null || assessmentOnlyCourse;
+    if ("PUBLISHED".equals(next) && requiresQuestionAnswerReview) {
       Long pendingReview = jdbc.queryForObject("""
           select count(*) from assessment_question aq
           where aq.assessment_id=?
             and not assessment_question_snapshot_publish_ready(aq.question_snapshot)
           """,Long.class,assessmentId);
       if(pendingReview!=null&&pendingReview>0) {
-        throw badRequest("This imported source-paper test still has questions or answer keys pending human review. Keep it in Draft until the reviewed answer package is imported.");
+        throw badRequest("This test still has questions or answer keys that have not passed human review. Keep it in Draft until every question and answer satisfies the shared publication contract.");
       }
     }
     if (Boolean.TRUE.equals(row.get("is_generated"))) {
