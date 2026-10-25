@@ -1195,3 +1195,119 @@
     margin-left: 34px;
   }
 }
+
+
+/* Full-screen bilingual frozen assessment inspection inside HRMS quality review */
+.assessmentReviewLaunch{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:12px 0 4px;padding:14px;border:1px solid var(--qe-color-border,#d7dee8);border-radius:12px;background:var(--qe-color-surface-elevated,#fbfcfe)}
+.assessmentReviewLaunch>div{display:grid;gap:5px;min-width:0}
+.assessmentReviewLaunch strong{font-size:12px;color:var(--qe-color-text,#192538)}
+.assessmentReviewLaunch p{margin:0;font-size:10px;line-height:1.55;color:var(--qe-color-text-muted,#687489)}
+.assessmentReviewLaunch small{font-size:10px;line-height:1.55;color:var(--qe-color-text-muted,#687489)}
+.hrmsAssessmentReviewBackdrop{position:fixed;z-index:1600;inset:0;width:100vw;height:100vh;height:100dvh;overflow:hidden;background:#f4f6fa;color:#192538}
+.hrmsAssessmentReviewWorkspace{display:grid;grid-template-columns:282px minmax(0,1fr);width:100%;height:100%;min-height:0;background:#f7f9fc}
+.hrmsAssessmentReviewSidebar{display:flex;flex-direction:column;min-width:0;min-height:0;background:#172239;color:#fff;border-right:1px solid #29364d}
+.hrmsAssessmentSidebarHeader{padding:22px 17px 15px;border-bottom:1px solid #ffffff1b}
+.hrmsAssessmentSidebarHeader>span,.hrmsAssessmentReviewHeader>div>span{font-size:9px;font-weight:900;letter-spacing:1.35px;color:#f4b58c}
+.hrmsAssessmentSidebarHeader h2{margin:7px 0 4px;font-size:19px;letter-spacing:-.45px}
+.hrmsAssessmentSidebarHeader p{margin:0;color:#c3ccda;font-size:10px;line-height:1.55}
+.hrmsAssessmentProgress{height:6px;margin-top:15px;border-radius:99px;background:#ffffff20;overflow:hidden}
+.hrmsAssessmentProgress>span{display:block;height:100%;border-radius:inherit;background:#fb923c;transition:width .15s}
+.hrmsAssessmentProgressMeta{display:flex;justify-content:space-between;gap:8px;margin-top:8px;font-size:9px;color:#d5dce7}
+.hrmsAssessmentProgressMeta b{color:#fff}
+.hrmsAssessmentNavigatorFilters{display:grid;gap:8px;padding:12px;border-bottom:1px solid #ffffff1b}
+.hrmsAssessmentNavigatorFilters input,.hrmsAssessmentNavigatorFilters select{width:100%;min-width:0;padding:9px 10px;border:1px solid #ffffff26;border-radius:9px;background:#202e46;color:#fff;font:inherit;font-size:11px;outline-offset:2px}
+.hrmsAssessmentNavigatorFilters input::placeholder{color:#abb6c7}
+.hrmsAssessmentQuestionNav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start;gap:6px;padding:10px;overflow-y:auto;overscroll-behavior:contain}
+.hrmsAssessmentQuestionNavItem{display:grid;grid-template-columns:24px minmax(0,1fr);align-items:center;column-gap:6px;row-gap:2px;min-width:0;padding:8px;border:1px solid #ffffff13;border-radius:9px;background:#ffffff08;color:#e1e7f0;text-align:left;cursor:pointer}
+.hrmsAssessmentQuestionNavItem:hover{border-color:#f5b58a;background:#ffffff12}
+.hrmsAssessmentQuestionNavItemActive{border-color:#fb923c;background:#3a2a23;box-shadow:inset 0 0 0 1px #fb923c35}
+.hrmsAssessmentQuestionNavItem>span{grid-row:span 2;display:grid;place-items:center;width:24px;height:24px;border-radius:7px;background:#ffffff12;font-size:10px;font-weight:850}
+.hrmsAssessmentQuestionNavItem>b{overflow:hidden;text-overflow:ellipsis;font-size:10px}
+.hrmsAssessmentQuestionNavItem>small{overflow:hidden;text-overflow:ellipsis;font-size:8px;color:#b8c2d2}
+.hrmsAssessmentNavigatorEmpty{grid-column:1/-1;padding:14px;color:#c5cedb;font-size:11px;line-height:1.6}
+.hrmsAssessmentReviewMain{display:flex;flex-direction:column;min-width:0;min-height:0;height:100%;overflow:hidden}
+.hrmsAssessmentReviewHeader{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding:16px clamp(16px,2.2vw,32px);border-bottom:1px solid #e2e7ef;background:#fff}
+.hrmsAssessmentReviewHeader h1{margin:5px 0 4px;font-size:20px;line-height:1.28;letter-spacing:-.6px;color:#19253c}
+.hrmsAssessmentReviewHeader p{margin:0;color:#6f7b90;font-size:11px;line-height:1.6}
+.hrmsAssessmentReviewClose{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;border:1px solid #dfe5ed;border-radius:10px;background:#fff;color:#4b596e;font-size:25px;cursor:pointer}
+.hrmsAssessmentReviewClose:hover{border-color:#e69b70;color:#9a3412;background:#fff7f1}
+.hrmsAssessmentFingerprintBar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px clamp(16px,2.2vw,32px);border-bottom:1px solid #e2e7ef;background:#fff}
+.hrmsAssessmentFingerprintBar>div{display:grid;gap:4px;min-width:0}
+.hrmsAssessmentFingerprintBar strong{font-size:9px;color:#6f7b90}
+.hrmsAssessmentFingerprintBar code{font-size:9px;color:#455168;overflow-wrap:anywhere;word-break:break-all}
+.hrmsAssessmentFingerprintCurrent,.hrmsAssessmentFingerprintStale{flex:0 0 auto;display:inline-flex;padding:7px 9px;border-radius:99px;font-size:9px;font-weight:850}
+.hrmsAssessmentFingerprintCurrent{background:#e4f8ed;color:#18794e}
+.hrmsAssessmentFingerprintStale{background:#fff0ef;color:#a12f2f}
+.hrmsAssessmentReviewContent{flex:1;min-height:0;overflow:auto;padding:clamp(14px,1.8vw,24px);overscroll-behavior:contain}
+.hrmsAssessmentReviewEmpty{display:grid;place-items:center;flex:1;padding:30px;color:#6f7b90;font-size:13px;text-align:center}
+.hrmsAssessmentQuestionTitle{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px}
+.hrmsAssessmentQuestionTitle>div>span{font-size:9px;font-weight:900;letter-spacing:1.2px;color:#b4471a}
+.hrmsAssessmentQuestionTitle h2{margin:4px 0;font-size:19px;color:#1f2d44;letter-spacing:-.4px}
+.hrmsAssessmentQuestionTitle p{margin:0;color:#7b869a;font-size:10px}
+.hrmsAssessmentStatusPill{display:inline-flex;align-items:center;justify-content:center;padding:7px 10px;border-radius:999px;font-size:9px;font-weight:900;letter-spacing:.3px;white-space:nowrap}
+.hrmsAssessmentStatusPending{background:#fff0e4;color:#9b421a}
+.hrmsAssessmentStatusApproved{background:#e4f8ed;color:#18794e}
+.hrmsAssessmentStatusRejected{background:#fff0ef;color:#a12f2f}
+.hrmsAssessmentBilingualGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:stretch}
+.hrmsAssessmentLanguagePanel{display:flex;flex-direction:column;gap:12px;min-width:0;padding:16px;border:1px solid #dfe5ee;border-radius:13px;background:#fff;box-shadow:0 4px 15px #18243a06}
+.hrmsAssessmentLanguageHeader{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:10px;border-bottom:1px solid #edf0f5}
+.hrmsAssessmentLanguageHeader>div{display:flex;align-items:center;gap:9px;min-width:0}
+.hrmsAssessmentLanguageHeader>div>span{display:grid;place-items:center;width:32px;height:32px;border-radius:9px;background:#fff0e5;color:#a43b14;font-size:10px;font-weight:900}
+.hrmsAssessmentLanguageHeader h3{margin:0;font-size:14px;color:#233149}
+.hrmsAssessmentLanguageHeader>small{font-size:9px;color:#8792a4;text-align:right}
+.hrmsAssessmentPrompt{font-size:14px;line-height:1.85;color:#24334b;white-space:pre-wrap;overflow-wrap:anywhere}
+.hrmsAssessmentPrompt em,.hrmsAssessmentMissingLanguage{color:#9b6a4d;font-size:11px;line-height:1.6;font-style:normal}
+.hrmsAssessmentLanguagePanel h4{margin:0;font-size:10px;letter-spacing:.5px;color:#778398;text-transform:uppercase}
+.hrmsAssessmentStimulus{padding:10px 11px;border:1px solid #d9e5f4;border-radius:9px;background:#f5f9ff}
+.hrmsAssessmentStimulus>b{display:block;margin-bottom:5px;color:#45628e;font-size:9px;font-weight:900}
+.hrmsAssessmentStimulus p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;color:#354964;font-size:11px;line-height:1.7}
+.hrmsAssessmentOptions{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.hrmsAssessmentOptions>li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;align-items:start;gap:8px;padding:9px 10px;border:1px solid #e9edf3;border-radius:9px;background:#fbfcfe}
+.hrmsAssessmentOptions>li>span{display:grid;place-items:center;width:25px;height:25px;border:1px solid #e1e6ee;border-radius:7px;background:#fff;color:#606d82;font-size:10px;font-weight:900}
+.hrmsAssessmentOptions>li>p{margin:3px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;color:#36455d;font-size:11px;line-height:1.65}
+.hrmsAssessmentOptions>li>b{font-size:8px;font-weight:900;color:#9a3412;white-space:nowrap}
+.hrmsAssessmentOptions>li.hrmsAssessmentOptionSelected{border-color:#f0b48e;background:#fff8f2}
+.hrmsAssessmentOptions>li.hrmsAssessmentOptionSelected>span{border-color:#e9a77e;background:#c2410c;color:#fff}
+.hrmsAssessmentExplanation{margin-top:auto;padding:11px;border:1px solid #e5e9f0;border-radius:9px;background:#fafbfd}
+.hrmsAssessmentExplanation>b{display:block;color:#536177;font-size:9px;font-weight:900}
+.hrmsAssessmentExplanation>p{margin:5px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:11px;line-height:1.65;color:#35445b}
+.hrmsAssessmentExplanationMissing{margin-top:auto;padding:11px;border:1px dashed #e6c8b9;border-radius:9px;background:#fffaf6;color:#9b6a4d;font-size:10px}
+.hrmsAssessmentAnswerSummary{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-top:14px;padding:13px;border:1px solid #e0e5ed;border-radius:11px;background:#fff}
+.hrmsAssessmentAnswerSummary>div{display:grid;gap:6px;min-width:0}
+.hrmsAssessmentAnswerSummary>div>span{font-size:8px;font-weight:900;letter-spacing:1.1px;color:#9a4b24}
+.hrmsAssessmentAnswerSummary>div>b{font-size:10px;line-height:1.6;overflow-wrap:anywhere;color:#33425a}
+.hrmsAssessmentAnswerSummary>p{grid-column:1/-1;margin:0;padding-top:8px;border-top:1px solid #edf0f5;color:#69758a;font-size:10px;line-height:1.6}
+.hrmsAssessmentReviewFooter{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px clamp(14px,2vw,24px);border-top:1px solid #e0e6ef;background:#fff;box-shadow:0 -4px 15px #17223905}
+.hrmsAssessmentQuestionPaging{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hrmsAssessmentQuestionPaging>span{font-size:10px;font-weight:750;color:#657187;white-space:nowrap}
+.hrmsAssessmentQuestionPaging>button{min-height:35px}
+@media(max-width:1100px){
+  .hrmsAssessmentReviewWorkspace{grid-template-columns:230px minmax(0,1fr)}
+}
+@media(max-width:760px){
+  .assessmentReviewLaunch{align-items:stretch;flex-direction:column}
+  .hrmsAssessmentReviewWorkspace{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}
+  .hrmsAssessmentReviewSidebar{max-height:180px;border-right:0;border-bottom:1px solid #29364d}
+  .hrmsAssessmentSidebarHeader{padding:9px 12px}
+  .hrmsAssessmentSidebarHeader h2{display:inline;margin:0 8px;font-size:14px}
+  .hrmsAssessmentSidebarHeader p{display:none}
+  .hrmsAssessmentProgress{margin-top:7px}
+  .hrmsAssessmentNavigatorFilters{grid-template-columns:minmax(0,1fr) minmax(105px,.6fr);padding:7px}
+  .hrmsAssessmentNavigatorFilters input,.hrmsAssessmentNavigatorFilters select{padding:8px;font-size:10px}
+  .hrmsAssessmentQuestionNav{display:flex;gap:6px;padding:7px;overflow-x:auto;overflow-y:hidden}
+  .hrmsAssessmentQuestionNavItem{flex:0 0 86px;grid-template-columns:20px minmax(0,1fr);padding:6px}
+  .hrmsAssessmentQuestionNavItem>span{width:20px;height:20px}
+  .hrmsAssessmentQuestionNavItem>small{font-size:7px}
+  .hrmsAssessmentReviewHeader{padding:12px}
+  .hrmsAssessmentReviewHeader h1{font-size:16px}
+  .hrmsAssessmentReviewHeader p{font-size:10px}
+  .hrmsAssessmentFingerprintBar{align-items:flex-start;flex-direction:column;padding:9px 12px}
+  .hrmsAssessmentReviewContent{padding:12px}
+  .hrmsAssessmentBilingualGrid,.hrmsAssessmentAnswerSummary{grid-template-columns:minmax(0,1fr)}
+  .hrmsAssessmentAnswerSummary>p{grid-column:auto}
+  .hrmsAssessmentLanguagePanel{padding:12px}
+  .hrmsAssessmentQuestionTitle{align-items:flex-start;flex-direction:column}
+  .hrmsAssessmentReviewFooter{align-items:stretch;flex-direction:column;padding:9px}
+  .hrmsAssessmentQuestionPaging{justify-content:space-between}
+  .hrmsAssessmentQuestionPaging>button{flex:1;white-space:normal}
+}
