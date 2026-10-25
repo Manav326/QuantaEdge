@@ -583,29 +583,11 @@ public class PlatformInstitutionController {
           courseId,savedFingerprint,release.get("updated_at"))))
         throw new ResponseStatusException(HttpStatus.CONFLICT,
             "Course content changed after quality review. The source institution must submit a fresh release before HRMS can assign it.");
-      if("ASSESSMENT_ONLY".equals(courseDeliveryMode(courseId))) {
-        if(!assessmentOnlyCourseReady(courseId))
-          throw new ResponseStatusException(HttpStatus.CONFLICT,
-              "The assessment-only release no longer satisfies the generic published test-pack readiness checks.");
-      } else {
-        Map<String,Object> contentReadiness=jdbc.queryForMap("""
-            select count(distinct s.id) as subject_count,
-              count(distinct case when l.id is not null then s.id end) as subjects_with_published_lessons,
-              count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
-            from curriculum_program_subject ps
-            join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
-              and (s.program_id=ps.program_id or s.program_id is null)
-            left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
-            left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
-            where ps.program_id=?
-            """,courseId);
-        long subjects=((Number)contentReadiness.get("subject_count")).longValue();
-        if(subjects==0||((Number)contentReadiness.get("subjects_with_published_lessons")).longValue()!=subjects
-            ||((Number)contentReadiness.get("published_chapters")).longValue()==0
-            ||((Number)contentReadiness.get("published_lessons")).longValue()==0)
-          throw new ResponseStatusException(HttpStatus.CONFLICT,
-              "Course content is not ready for assignment. Publish reviewed lessons for every mapped active subject first.");
-      }
+      Boolean courseTypeReady=jdbc.queryForObject(
+          "select course_marketplace_content_type_ready(?)",Boolean.class,courseId);
+      if(!Boolean.TRUE.equals(courseTypeReady))
+        throw new ResponseStatusException(HttpStatus.CONFLICT,
+            "This release is not ready for assignment under its registered course type and delivery mode. Assessment-only courses require every test pack and assessment to be published after question/answer review; K12 courses require published lessons in every mapped active subject. Unsupported or mismatched course types remain blocked.");
     }
     Long assignmentId=null;
     if(enabled) {
