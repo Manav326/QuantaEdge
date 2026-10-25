@@ -887,8 +887,10 @@ export default function MarketplaceLaunchStepper({
               const previewFingerprintMismatch = Boolean(preview
                 && (!previewFingerprint || !submittedFingerprint || previewFingerprint !== submittedFingerprint));
               const previewLoadInProgress = reviewContentLoadingId !== null;
-              const previewNeedsLoading = !preview && release.contentCurrent && qualityReady
-                && !previewLoadInProgress && reviewChapterLoadingId === null && busyKey === null;
+              // Always allow read-only inspection of the submitted snapshot, even when
+              // quality/readiness or fingerprint gates fail. Only approval stays gated.
+              const previewNeedsLoading = !preview && !previewLoadInProgress
+                && reviewChapterLoadingId === null && busyKey === null;
               const qualityBlocker = !release.contentCurrent
                 ? 'Approval is blocked because this release is not fingerprint-current. Return it for correction, have the source institution correct the content and submit a fresh release.'
                 : !qualityReady
