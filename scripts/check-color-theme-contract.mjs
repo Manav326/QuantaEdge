@@ -267,6 +267,7 @@ assert(webNotificationCss.includes('html[data-qe-appearance="dark"] .segmented b
 /* Admin/HRMS regression coverage for the Oct 2026 theme and content-authoring audit. */
 const adminContentStudio = read('apps/admin/app/content/page.tsx');
 const adminContentController = read('services/api/src/main/java/com/quantaedge/api/AdminContentController.java');
+const adminAssessmentController = read('services/api/src/main/java/com/quantaedge/api/AssessmentController.java');
 const adminContentEnglish = read('apps/admin/app/i18n/catalogs/english.json');
 const adminContentHinglish = read('apps/admin/app/i18n/catalogs/hinglish.json');
 const adminPagination = read('apps/admin/app/components/PremiumPagination.tsx');
@@ -294,10 +295,9 @@ assert(adminContentStudio.includes("String(selectedCourse?.course_type_code||'')
   adminContentStudio.includes("'&reviewAssessmentId='+encodeURIComponent(String(row.assessment_id))") &&
   adminContentController.includes('@GetMapping("/courses/{courseId}/assessment-inventory")'),
   'Content Studio must use the tenant-scoped assessment inventory and expose each imported test question-review path.');
-assert(adminContentStudio.includes("!isAssessmentCourse") &&
+assert(adminContentStudio.includes("isAssessmentCourse ? (") &&
   adminContentStudio.includes('assessmentContentTitle') &&
   adminContentStudio.includes("isAssessmentCourse ? <Link href={'/assessments?courseId='") &&
-  adminContentStudio.includes("isAssessmentCourse ? (") &&
   adminContentStudio.includes("beginCreate('chapter')") &&
   adminAssessmentsPage.includes("!isAssessmentOnlyCourse && (") &&
   adminAssessmentsPage.includes("subjectCode,setSubjectCode]=useState('')"),
@@ -305,8 +305,9 @@ assert(adminContentStudio.includes("!isAssessmentCourse") &&
 assert(adminAssessmentsPage.includes("loadImportedPackageQuestions(assessmentId)") &&
   adminAssessmentsPage.includes("requestedPackageReviewRef.current===requestKey") &&
   adminAssessmentsPage.includes("get('reviewAssessmentId')") &&
-  adminAssessmentsPage.includes("requireEditableCourse") &&
-  adminAssessmentsPage.includes("/package-questions?courseId="),
+  adminAssessmentsPage.includes("/package-questions?courseId=") &&
+  adminAssessmentController.includes("requireEditableCourse(courseId,tenant)") &&
+  adminAssessmentController.includes("requireAssessmentInCourse(assessmentId,courseId,tenant)"),
   'Imported question deep links must open by server-authorized course scope, not the grader-filtered assessment catalogue.');
 assert(adminContentEnglish.includes('"admin.contentStudio.courseSubjects": "Subjects with content"') &&
   adminContentEnglish.includes('"admin.contentStudio.databaseRecords": "From this course’s content records"') &&
