@@ -18,6 +18,8 @@ type Invoice={
   total_value_paise:number;
   amount_paid_paise:number;
   course_title:string;
+  course_code?:string|null;
+  course_type_code?:string|null;
   beneficiary_name?:string|null;
   pdf_available:boolean;
 };
@@ -28,6 +30,14 @@ export default function InvoiceDownloads({workspace,english=true}:{workspace:Wor
   const [error,setError]=useState('');
   const [downloading,setDownloading]=useState<number|null>(null);
   const t=(en:string,hi:string)=>english?en:hi;
+  const courseTypeName=(code?:string|null)=>{
+    switch(String(code||'').trim().toUpperCase()){
+      case 'K12': return t('K–12 learning','विद्यालयी पढ़ाई');
+      case 'COMPETITIVE': return t('Competitive preparation','प्रतियोगी परीक्षा तैयारी');
+      case 'ASSESSMENT': return t('Assessment & tests','परीक्षा एवं टेस्ट');
+      default: return '';
+    }
+  };
   const load=useCallback(async()=>{
     setLoading(true);setError('');
     try {
@@ -97,6 +107,7 @@ export default function InvoiceDownloads({workspace,english=true}:{workspace:Wor
           <div className={styles.details}>
             <strong>{invoice.document_number}</strong>
             <span>{invoice.course_title||t('Course purchase','कोर्स खरीद')}</span>
+            {(courseTypeName(invoice.course_type_code)||invoice.course_code)&&<small>{[courseTypeName(invoice.course_type_code),invoice.course_code].filter(Boolean).join(' · ')}</small>}
             {workspace==='PARENT'&&invoice.beneficiary_name&&<small>{t('Learner: ','विद्यार्थी: ')+invoice.beneficiary_name}</small>}
             <small>{new Date(invoice.issued_at).toLocaleDateString(english?'en-IN':'hi-IN')} · {t('Tax ','टैक्स ')}{money(invoice.tax_value_paise,invoice.currency)}</small>
           </div>
