@@ -63,6 +63,31 @@ class AssessmentControllerTest {
   }
 
   @Test
+  void contentAssessmentInventoryShowsImportedPapersWithoutGraderAssignments() {
+    when(authorization.requireAuth(author)).thenReturn(author);
+    when(authorization.hasPermission(author,"CONTENT_VIEW")).thenReturn(true);
+    when(jdbc.queryForObject(contains("course_type_code='ASSESSMENT'"),eq(Boolean.class),any(Object[].class)))
+        .thenReturn(true);
+    when(jdbc.queryForList(contains("select a.id as assessment_id,a.public_id as test_id"),any(Object[].class)))
+        .thenReturn(List.of(Map.of(
+            "assessment_id",901L,"test_id","INS00000001","title","BPSC TRE 2.0 — Computer Science",
+            "status","DRAFT","source_package_id","tre4-bpsc-tre-2-0-computer-science",
+            "duration_minutes",150,"negative_marking_fraction",new BigDecimal("0.25"),"question_count",150L)));
+    when(jdbc.queryForObject(contains("select count(*) from assessment a where a.course_id=?"),
+        eq(Long.class),any(Object[].class))).thenReturn(3L);
+
+    Map<String,Object> result=controller.contentAssessmentPapers(77L,"ALL",100,0,author,TEST_TENANT);
+
+    assertEquals(3L,result.get("total"));
+    @SuppressWarnings("unchecked")
+    List<Map<String,Object>> items=(List<Map<String,Object>>)result.get("items");
+    assertEquals(1,items.size());
+    assertEquals("BPSC TRE 2.0 — Computer Science",items.get(0).get("title"));
+    assertEquals(150L,items.get(0).get("question_count"));
+    verify(jdbc,never()).queryForList(contains("assessment_staff_assignment"),any(Object[].class));
+  }
+
+  @Test
   void offlinePolicyRequiresContentEditAndRejectsGeneratedTests() {
     when(jdbc.queryForObject(contains("join institution_course_assignment assignment"), eq(Long.class), any(Object[].class))).thenReturn(1L);
     when(jdbc.queryForObject(contains("select count(*) from assessment a where a.id=? and a.course_id=?"), eq(Long.class), any(Object[].class))).thenReturn(1L);
