@@ -210,7 +210,10 @@ public class InstitutionCourseReleaseWorkflowService {
     List<Map<String,Object>> rows=jdbc.queryForList("""
         select id,program_id,source_institution_id,release_version,release_state,content_fingerprint,updated_at
         from institution_course_release
-        where id=? and source_institution_id=? for update
+        where id=? and source_institution_id=?
+           and legacy_migration=false and release_state<>'LEGACY_MIGRATED'
+           and obsolete_at is null
+         for update
         """,releaseId,institutionId);
     if(rows.isEmpty()) throw new SecurityException("This course release is not owned by the current institution.");
     return rows.getFirst();
