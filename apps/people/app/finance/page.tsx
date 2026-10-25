@@ -7,7 +7,7 @@ import styles from './Finance.module.css';
 
 type Institution = { id:number; tenant_code:string; display_name:string; status:string };
 type LegalEntity = { id:number; entity_kind:string; institution_id?:number|null; institution_name?:string|null; legal_name:string; trade_name?:string|null; invoice_series_code?:string; einvoice_applicability?:'UNREVIEWED'|'NOT_REQUIRED'|'REQUIRED'; einvoice_applicability_reviewed_at?:string|null; einvoice_applicability_review_note?:string|null; status:string; active_gst_registrations?:number };
-type Offer = { offer_id:number; institution_id:number; institution_name:string; course_code:string; course_name:string; price_paise:number; currency:string; offer_status:string; legal_entity_id?:number|null; legal_seller_name?:string|null; latest_tax_profile_id?:number|null; tax_profile_status?:string|null; tax_treatment?:string|null; latest_share_policy_status?:string|null };
+type Offer = { offer_id:number; institution_id:number; institution_name:string; course_code:string; course_name:string; price_paise:number; currency:string; offer_status:string; is_current_offer:boolean; assignment_id?:number|null; course_release_id?:number|null; assignment_status?:string|null; assignment_source?:string|null; release_version?:number|null; release_state?:string|null; course_identity_id?:number|null; course_identity_public_id?:string|null; content_version_no?:number|null; legacy_migration?:boolean; legal_entity_id?:number|null; legal_seller_name?:string|null; latest_tax_profile_id?:number|null; tax_profile_status?:string|null; tax_treatment?:string|null; latest_share_policy_status?:string|null };
 type Registration = { id:number; legal_entity_id:number; legal_entity_name:string; gstin:string; state_code:string; status:string; effective_from:string };
 type Catalog = { institutions:Institution[]; legalEntities:LegalEntity[]; offers:Offer[]; registrations:Registration[] };
 type Policy = { id:number; institution_offer_id:number; policy_version:number; currency:string; status:string; institution_name:string; course_name:string; recipient_count:number; effective_from:string; effective_until?:string|null };
@@ -146,6 +146,7 @@ export default function FinancePage(){
   const [error,setError]=useState('');
   const [notice,setNotice]=useState('');
   const [selectedOfferId,setSelectedOfferId]=useState('');
+  const [selectedTaxHistoryOfferId,setSelectedTaxHistoryOfferId]=useState('');
   const [selectedPolicyId,setSelectedPolicyId]=useState('');
   const [policyDetail,setPolicyDetail]=useState<PolicyDetail|null>(null);
   const [recipients,setRecipients]=useState<RecipientDraft[]>([]);
@@ -177,19 +178,21 @@ export default function FinancePage(){
         api<DiscountOffer[]>(BASE+'/discounts'),api<Template[]>(BASE+'/invoice-templates'),api<FinancialDocument[]>(BASE+'/documents')
       ]);
       setCatalog(c);setOverview(o);setPolicies(p);setDiscounts(disc);setTemplates(t);setDocuments(d);
+      const currentOffers=c.offers.filter(o=>o.is_current_offer);
+      const defaultOffer=currentOffers[0];
       const requestedOfferId=launchOfferIdFromUrl.current;
       const launchSetup=marketplaceSetupFromUrl.current;
       const requestedOffer=c.offers.find(o=>String(o.offer_id)===requestedOfferId);
       const requestedOfferExists=Boolean(requestedOfferId&&requestedOffer);
-      if(requestedOfferId&&!requestedOfferExists){
-        setError('The course offer linked from Institution Marketplace Control was not found in Finance. Refresh the launch checklist. No other course offer is selected automatically.');
-        if(launchSetup){
-          setSelectedOfferId('');
-          setTaxForm(v=>({...v,offerId:'',legalEntityId:''}));
-          setDiscountForm(v=>({...v,offerId:''}));
-        } else if(!selectedOfferId&&c.offers.length) {
-          setSelectedOfferId(String(c.offers[0].offer_id));
-        }
+      const requestedOfferIsCurrent=Boolean(requestedOffer?.is_current_offer);
+      if(requestedOfferId&&(!requestedOfferExists||!requestedOfferIsCurrent)){
+        setError(requestedOfferExists
+          ? 'The course offer linked from Institution Marketplace Control is superseded. Refresh the launch checklist and configure Finance against the current assignment. The historical offer and its records are preserved.'
+          : 'The course offer linked from Institution Marketplace Control was not found in Finance. Refresh the launch checklist. No other course offer is selected automatically.');
+        setSelectedOfferId('');
+        setTaxForm(v=>({...v,offerId:'',legalEntityId:''}));
+        setDiscountForm(v=>({...v,offerId:''}));
+        if(currentOffers.length) setSelectedTaxHistoryOfferId(String(currentOffers[0].offer_id));
         launchOfferIdFromUrl.current=null;
         marketplaceSetupFromUrl.current=false;
         setMarketplaceSetupContext(null);
@@ -202,11 +205,13 @@ export default function FinancePage(){
         setSelectedOfferId(requestedOfferId);
         setTaxForm(v=>({...v,offerId:requestedOfferId,legalEntityId:linkedSeller?String(linkedSeller.id):''}));
         setDiscountForm(v=>({...v,offerId:requestedOfferId}));
-      } else if(!selectedOfferId&&c.offers.length) {
-        setSelectedOfferId(String(c.offers[0].offer_id));
+        setSelectedTaxHistoryOfferId(requestedOfferId);
+      } else if(!selectedOfferId&&currentOffers.length) {
+        setSelectedOfferId(String(currentOffers[0].offer_id));
       }
-      if(!launchSetup&&!requestedOfferId&&!discountForm.offerId&&c.offers.length) setDiscountForm(v=>({...v,offerId:String(c.offers[0].offer_id)}));
-      if(!launchSetup&&!requestedOfferId&&!taxForm.offerId&&c.offers.length) setTaxForm(v=>({...v,offerId:String(c.offers[0].offer_id)}));
+      if(!launchSetup&&!requestedOfferId&&!discountForm.offerId&&defaultOffer) setDiscountForm(v=>({...v,offerId:String(defaultOffer.offer_id)}));
+      if(!launchSetup&&!requestedOfferId&&!taxForm.offerId&&defaultOffer) setTaxForm(v=>({...v,offerId:String(defaultOffer.offer_id)}));
+      if(!selectedTaxHistoryOfferId&&c.offers.length) setSelectedTaxHistoryOfferId(String((defaultOffer||c.offers[0]).offer_id));
       if(!launchSetup&&!requestedOfferId&&!taxForm.legalEntityId&&c.legalEntities.length) setTaxForm(v=>({...v,legalEntityId:String(c.legalEntities[0].id)}));
       if(!gstEntityId&&c.legalEntities.length) setGstEntityId(String(c.legalEntities[0].id));
       if(!selectedTemplateId&&t.length&&!marketplaceSetupFromUrl.current){
@@ -552,6 +557,7 @@ export default function FinancePage(){
     try{const rows=await api<any[]>(BASE+'/offers/'+offerId+'/tax-profiles');setTaxProfiles(v=>({...v,[offerId]:rows}));return rows;}
     catch(e){setError(e instanceof Error?e.message:'Tax profiles could not load.');return [];}
   };
+  useEffect(()=>{if(selectedTaxHistoryOfferId)void loadTaxProfiles(selectedTaxHistoryOfferId);},[selectedTaxHistoryOfferId]);
   const submitTaxProfile=async(id:number,offerId:string)=>{
     const ok=await action(()=>api(BASE+'/tax-profiles/'+id+'/submit',{method:'POST'}),'Tax profile submitted for HRMS approval.');
     if(ok)await loadTaxProfiles(offerId);
@@ -717,6 +723,9 @@ export default function FinancePage(){
           </article>
   );
 
+  const currentOffers = catalog?.offers.filter(offer=>offer.is_current_offer) ?? [];
+  const taxHistoryOfferIsCurrent = catalog?.offers.some(offer=>String(offer.offer_id)===selectedTaxHistoryOfferId&&offer.is_current_offer) ?? false;
+
   return <main className={styles.page}>
     <header className={styles.header}>
       <div><span className={styles.eyebrow}>HRMS · FINANCE & BILLING</span><h1>Financial control centre</h1>
@@ -843,7 +852,8 @@ export default function FinancePage(){
       {tab==='tax'&&<section className={styles.twoCol}>
         <div className={styles.panel}><h2>Offer tax profile</h2><p>Enter only the service classification and rates approved for this exact seller and sale. No default GST rate is preselected.</p>
           <form className={styles.form} onSubmit={createTaxProfile}>
-            <label>Course offer<select required value={taxForm.offerId} onChange={e=>setTaxForm(v=>({...v,offerId:e.target.value}))}><option value="">Select offer</option>{catalog.offers.map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_name} · {o.offer_status}</option>)}</select></label>
+            <label>Current course offer<select required value={taxForm.offerId} onChange={e=>setTaxForm(v=>({...v,offerId:e.target.value}))}><option value="">Select current offer</option>{currentOffers.map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_name} · Content v{o.content_version_no??'—'} · {o.offer_status}</option>)}</select></label>
+            {!currentOffers.length&&<p className={styles.note}>No offer is linked to the current shareable assignment. Create the draft from the Marketplace launch stepper first; historical offers cannot receive new finance configuration.</p>}
             <label>Legal seller<select required value={taxForm.legalEntityId} onChange={e=>setTaxForm(v=>({...v,legalEntityId:e.target.value}))}><option value="">Select legal entity</option>{catalog.legalEntities.map(e=><option key={e.id} value={e.id}>{e.legal_name} · {e.status}</option>)}</select></label>
             <label>Service classification / SAC<input value={taxForm.serviceClassificationCode} onChange={e=>setTaxForm(v=>({...v,serviceClassificationCode:e.target.value}))} placeholder="Enter CA-approved code"/></label>
             <label>Tax treatment<select value={taxForm.taxTreatment} onChange={e=>setTaxForm(v=>({...v,taxTreatment:e.target.value}))}><option value="TAXABLE">Taxable</option><option value="EXEMPT">Exempt</option><option value="NIL_RATED">Nil-rated</option><option value="NON_GST">Non-GST</option><option value="COMPOSITION">Composition treatment</option></select></label>
@@ -854,15 +864,17 @@ export default function FinancePage(){
             <button className={styles.primary} disabled={busy}>Save draft and submit for review</button>
           </form>
         </div>
-        <div className={styles.panel}><h2>Saved tax profiles</h2><label>Course offer<select value={taxForm.offerId} onChange={e=>setTaxForm(v=>({...v,offerId:e.target.value}))}>{catalog.offers.map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_name}</option>)}</select></label>
-          {(taxProfiles[taxForm.offerId]||[]).map(p=><article className={styles.policyRow} key={p.id}><div><b>Version {p.version} · {p.tax_treatment}</b><span>{p.status} · GST {Number(p.gst_rate_basis_points)/100}%</span></div>{p.status==='DRAFT'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void submitTaxProfile(Number(p.id),taxForm.offerId)}>Submit</button>}{p.status==='PENDING_APPROVAL'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void action(()=>api(BASE+'/tax-profiles/'+p.id+'/approve',{method:'POST'}),'Tax profile approved.')}>Approve</button>}</article>)}
-          {!taxProfiles[taxForm.offerId]?.length&&<p className={styles.empty}>No tax profile saved for this offer yet.</p>}
+        <div className={styles.panel}><h2>Saved tax profiles &amp; history</h2><label>Course offer<select value={selectedTaxHistoryOfferId} onChange={e=>setSelectedTaxHistoryOfferId(e.target.value)}><option value="">Select offer history</option>{catalog.offers.map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_name} · {o.is_current_offer?'CURRENT':'HISTORICAL'} · {o.offer_status}</option>)}</select></label>
+          {!taxHistoryOfferIsCurrent&&selectedTaxHistoryOfferId&&<p className={styles.note}>Read-only historical offer. Its approved profiles and financial references are retained for audit; create or approve new configuration only on the current assignment.</p>}
+          {(taxProfiles[selectedTaxHistoryOfferId]||[]).map(p=><article className={styles.policyRow} key={p.id}><div><b>Version {p.version} · {p.tax_treatment}</b><span>{p.status} · GST {Number(p.gst_rate_basis_points)/100}%</span></div>{taxHistoryOfferIsCurrent&&p.status==='DRAFT'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void submitTaxProfile(Number(p.id),selectedTaxHistoryOfferId)}>Submit</button>}{taxHistoryOfferIsCurrent&&p.status==='PENDING_APPROVAL'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void action(()=>api(BASE+'/tax-profiles/'+p.id+'/approve',{method:'POST'}),'Tax profile approved.')}>Approve</button>}</article>)}
+          {!taxProfiles[selectedTaxHistoryOfferId]?.length&&<p className={styles.empty}>No tax profile saved for this offer yet.</p>}
           <p className={styles.note}>Approval requires an active legal seller. Taxable treatment also requires an active, HRMS-verified GST registration for the effective date.</p>
         </div>
       </section>}
       {tab==='distribution'&&<section className={styles.stack}>
         <section className={styles.panel}><div className={styles.panelHead}><div><h2>Institution revenue-share policies</h2><p>Shares are calculated from actual captured consideration minus the invoice's approved output-tax amount—not list price.</p></div><button className={styles.primary} disabled={busy||!selectedOfferId} onClick={createPolicy}>＋ New policy</button></div>
-          <label className={styles.wideLabel}>Course offer<select value={selectedOfferId} onChange={e=>setSelectedOfferId(e.target.value)}><option value="">Select offer</option>{catalog.offers.map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_name} ({o.offer_status})</option>)}</select></label>
+          <label className={styles.wideLabel}>Current course offer<select value={selectedOfferId} onChange={e=>setSelectedOfferId(e.target.value)}><option value="">Select current offer</option>{currentOffers.map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_name} · Content v{o.content_version_no??'—'} ({o.offer_status})</option>)}</select></label>
+          {!currentOffers.length&&<p className={styles.note}>No current marketplace offer is configured yet. Create the listing from the current HRMS launch stepper before configuring revenue shares.</p>}
           {policies.length?<div className={styles.policyTableWrap}><table className={styles.table}><thead><tr><th>Course / institution</th><th>Version</th><th>Status</th><th>Recipients</th><th>Action</th></tr></thead><tbody>{policies.map(p=><tr key={p.id}><td><b>{p.course_name}</b><small>{p.institution_name}</small></td><td>v{p.policy_version}</td><td><span className={styles.status}>{p.status}</span></td><td>{p.recipient_count}</td><td><button className={styles.secondarySmall} onClick={()=>void loadPolicy(String(p.id))}>Open</button></td></tr>)}</tbody></table></div>:<p className={styles.empty}>No revenue-share policies have been created.</p>}
         </section>
         {policyDetail&&<section className={styles.panel}><div className={styles.panelHead}><div><h2>Policy v{policyDetail.policy_version}: {policyDetail.course_name}</h2><p>Source offer: {policyDetail.institution_name} · Currency {policyDetail.currency} · Status {policyDetail.status}</p></div>{policyDetail.status==='DRAFT'&&<button className={styles.secondary} onClick={()=>void saveRecipients()} disabled={busy||recipientsUnchanged}>Save recipients</button>}</div>
@@ -882,7 +894,7 @@ export default function FinancePage(){
         <section className={styles.panel}>
           <div className={styles.panelHead}><div><h2>Course offer discount codes</h2><p>HRMS approves a versioned percentage or flat discount for one exact institution offer. Uses are reserved before checkout and become redeemed only after verified payment.</p></div></div>
           <form className={styles.form} onSubmit={event=>{event.preventDefault();createDiscount();}}>
-            <label>Institution course offer<select required value={discountForm.offerId} onChange={event=>setDiscountForm(v=>({...v,offerId:event.target.value}))}><option value="">Select course offer</option>{catalog.offers.filter(o=>o.currency==='INR'&&o.offer_status!=='ARCHIVED').map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_name} · {rupees(o.price_paise,o.currency)}</option>)}</select></label>
+            <label>Institution course offer<select required value={discountForm.offerId} onChange={event=>setDiscountForm(v=>({...v,offerId:event.target.value}))}><option value="">Select course offer</option>{currentOffers.filter(o=>o.currency==='INR').map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_name} · Content v{o.content_version_no??'—'} · {rupees(o.price_paise,o.currency)}</option>)}</select></label>
             <div className={styles.inputGrid}><label>Offer code<input required minLength={3} maxLength={40} pattern="[A-Za-z0-9][A-Za-z0-9_-]{2,39}" value={discountForm.code} onChange={event=>setDiscountForm(v=>({...v,code:event.target.value.toUpperCase()}))} placeholder="WELCOME10"/></label><label>Discount type<select value={discountForm.discountType} onChange={event=>setDiscountForm(v=>({...v,discountType:event.target.value}))}><option value="PERCENTAGE">Percentage</option><option value="FLAT">Flat amount</option></select></label>{discountForm.discountType==='PERCENTAGE'?<label>Percentage (%)<input type="number" required min="0.01" max="100" step="0.01" value={discountForm.percentage} onChange={event=>setDiscountForm(v=>({...v,percentage:event.target.value}))}/></label>:<label>Flat discount (₹)<input type="number" required min="0.01" step="0.01" value={discountForm.flatAmountRupees} onChange={event=>setDiscountForm(v=>({...v,flatAmountRupees:event.target.value}))}/></label>}</div>
             <div className={styles.inputGrid}><label>Maximum discount cap (₹, optional)<input type="number" min="0.01" step="0.01" value={discountForm.maxDiscountRupees} onChange={event=>setDiscountForm(v=>({...v,maxDiscountRupees:event.target.value}))} placeholder="No extra cap"/></label><label>Minimum listed price (₹)<input type="number" min="0" step="0.01" value={discountForm.minListedPriceRupees} onChange={event=>setDiscountForm(v=>({...v,minListedPriceRupees:event.target.value}))}/></label><label>Total redemption limit (optional)<input type="number" min="1" step="1" value={discountForm.maxRedemptions} onChange={event=>setDiscountForm(v=>({...v,maxRedemptions:event.target.value}))} placeholder="Unlimited"/></label></div>
             <div className={styles.inputGrid}><label>Uses per purchaser (optional)<input type="number" min="1" step="1" value={discountForm.maxRedemptionsPerPurchaser} onChange={event=>setDiscountForm(v=>({...v,maxRedemptionsPerPurchaser:event.target.value}))} placeholder="Unlimited"/></label><label>Starts at<input required type="datetime-local" value={discountForm.effectiveFrom} onChange={event=>setDiscountForm(v=>({...v,effectiveFrom:event.target.value}))}/></label><label>Ends at (optional)<input type="datetime-local" value={discountForm.effectiveUntil} onChange={event=>setDiscountForm(v=>({...v,effectiveUntil:event.target.value}))}/></label></div>
