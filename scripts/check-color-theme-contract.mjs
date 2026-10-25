@@ -266,6 +266,7 @@ assert(webNotificationCss.includes('html[data-qe-appearance="dark"] .segmented b
 
 /* Admin/HRMS regression coverage for the Oct 2026 theme and content-authoring audit. */
 const adminContentStudio = read('apps/admin/app/content/page.tsx');
+const adminContentController = read('services/api/src/main/java/com/quantaedge/api/AdminContentController.java');
 const adminContentEnglish = read('apps/admin/app/i18n/catalogs/english.json');
 const adminContentHinglish = read('apps/admin/app/i18n/catalogs/hinglish.json');
 const adminPagination = read('apps/admin/app/components/PremiumPagination.tsx');
