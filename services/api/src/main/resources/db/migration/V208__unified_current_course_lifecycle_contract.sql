@@ -1,0 +1,339 @@
+-- V208: one active course-publication contract; preserve, but retire, old pipeline rows.
+--
+-- Logical identity: institution_course_identity
+-- Content graph/version: curriculum_program
+-- Source release: institution_course_release
+-- Destination assignment: institution_course_assignment (ORIGIN or HRMS only)
+-- Institution offer: institution_marketplace_offer
+-- Learner order/access/history: exact offer + exact course graph, with immutable snapshots.
+--
+-- Older rows are not deleted. They are archived/revoked, kept for audit, and excluded from
+-- the resolver used by Marketplace, free enrollment, parent purchases and finance catalog.
+
+ALTER TABLE student_certificate
+  ADD COLUMN IF NOT EXISTS course_identity_id bigint
+    REFERENCES institution_course_identity(id) ON DELETE RESTRICT;
+
+UPDATE student_certificate certificate
+SET course_identity_id = program.course_identity_id
+FROM curriculum_program program
+WHERE certificate.program_id = program.id
+  AND certificate.course_identity_id IS NULL
+  AND program.course_identity_id IS NOT NULL;
+
+CREATE INDEX IF NOT EXISTS idx_student_certificate_course_identity
+  ON student_certificate(course_identity_id, institution_id, student_id);
+
+DO $certificate_identity_requirement$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint
+    WHERE conname = 'ck_student_certificate_has_course_identity'
+      AND conrelid = 'public.student_certificate'::regclass
+  ) THEN
+    ALTER TABLE student_certificate
+      ADD CONSTRAINT ck_student_certificate_has_course_identity
+      CHECK (course_identity_id IS NOT NULL) NOT VALID;
+  END IF;
+END
+$certificate_identity_requirement$;
+
+CREATE OR REPLACE FUNCTION qe_current_course_offer_revision(p_offer_id bigint)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+AS $function$
+  SELECT EXISTS (
+    SELECT 1
+    FROM institution_marketplace_offer offer
+    JOIN institution_course_assignment assignment
+      ON assignment.id = offer.assignment_id
+     AND assignment.institution_id = offer.institution_id
+     AND assignment.status = 'ASSIGNED'
+     AND assignment.assignment_source IN ('ORIGIN','HRMS')
+    JOIN institution_course_release release
+      ON release.id = offer.course_release_id
+     AND release.program_id = offer.course_id
+    JOIN curriculum_program program
+      ON program.id = offer.course_id
+     AND program.status = 'ACTIVE'
+     AND program.code <> 'GENERAL'
+    JOIN institution_course_identity identity
+      ON identity.id = program.course_identity_id
+     AND identity.status = 'ACTIVE'
+     AND identity.source_institution_id = release.source_institution_id
+     AND identity.course_type_code = program.course_type_code
+    JOIN institution_tenant destination
+      ON destination.id = offer.institution_id
+     AND destination.status = 'ACTIVE'
+    WHERE offer.id = p_offer_id
+      AND offer.status <> 'ARCHIVED'
+      AND offer.legacy_migration = false
+      AND release.release_state = 'SHAREABLE'
+      AND release.legacy_migration = false
+      AND (
+        assignment.assignment_source <> 'ORIGIN'
+        OR assignment.institution_id = release.source_institution_id
+      )
+      AND course_marketplace_content_type_ready(program.id)
+      AND course_release_fingerprint_current(
+        release.program_id, release.content_fingerprint::text, release.updated_at
+      )
+      AND NOT EXISTS (
+        SELECT 1
+        FROM institution_course_assignment newer_assignment
+        JOIN institution_course_release newer_release
+          ON newer_release.id = newer_assignment.course_release_id
+        JOIN curriculum_program newer_program
+          ON newer_program.id = newer_release.program_id
+        JOIN institution_course_identity newer_identity
+          ON newer_identity.id = newer_program.course_identity_id
+        WHERE newer_assignment.institution_id = offer.institution_id
+          AND newer_assignment.status = 'ASSIGNED'
+          AND newer_assignment.assignment_source IN ('ORIGIN','HRMS')
+          AND (
+            newer_assignment.assignment_source <> 'ORIGIN'
+            OR newer_assignment.institution_id = newer_release.source_institution_id
+          )
+          AND newer_release.release_state = 'SHAREABLE'
+          AND newer_release.legacy_migration = false
+          AND newer_release.source_institution_id = newer_identity.source_institution_id
+          AND newer_identity.id = identity.id
+          AND newer_identity.status = 'ACTIVE'
+          AND newer_program.status = 'ACTIVE'
+          AND newer_program.code <> 'GENERAL'
+          AND newer_program.course_type_code = newer_identity.course_type_code
+          AND course_marketplace_content_type_ready(newer_program.id)
+          AND course_release_fingerprint_current(
+            newer_release.program_id,
+            newer_release.content_fingerprint::text,
+            newer_release.updated_at
+          )
+          AND (
+            newer_program.content_version_no > program.content_version_no
+            OR (
+              newer_program.content_version_no = program.content_version_no
+              AND (
+                newer_release.release_version > release.release_version
+                OR (
+                  newer_release.release_version = release.release_version
+                  AND newer_release.id > release.id
+                )
+              )
+            )
+          )
+      )
+  )
+$function$;
+
+CREATE OR REPLACE FUNCTION qe_marketplace_offer_publicly_sellable(p_offer_id bigint)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+AS $function$
+  SELECT EXISTS (
+    SELECT 1
+    FROM institution_marketplace_offer offer
+    WHERE offer.id = p_offer_id
+      AND offer.status = 'PUBLISHED'
+      AND offer.legacy_migration = false
+      AND offer.hrms_approved_by_staff_id IS NOT NULL
+      AND offer.hrms_approved_at IS NOT NULL
+      AND offer.hrms_published_by_staff_id IS NOT NULL
+      AND offer.hrms_published_at IS NOT NULL
+      AND qe_current_course_offer_revision(offer.id)
+  )
+$function$;
+
+COMMENT ON FUNCTION qe_current_course_offer_revision(bigint) IS
+  'Canonical resolver for the current, active institution offer revision. Rejects archived/migrated offers, legacy assignments/releases, stale release versions, inactive tenants, unready content and invalid release fingerprints.';
+COMMENT ON FUNCTION qe_marketplace_offer_publicly_sellable(bigint) IS
+  'Canonical learner-facing sales eligibility. Requires the current offer revision and attributable HRMS approval plus publication. Do not reimplement the rule in UI code.';
+
+-- Preserve the old source enum values as historical metadata, but never let them be reused
+-- to create or reactivate an assignment. A legacy row can only be retired to REVOKED.
+CREATE OR REPLACE FUNCTION qe_reject_obsolete_course_assignment_write()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $function$
+BEGIN
+  IF TG_OP = 'UPDATE' AND OLD.assignment_source NOT IN ('ORIGIN','HRMS') THEN
+    IF OLD.status = 'ASSIGNED'
+       AND NEW.status = 'REVOKED'
+       AND NEW.assignment_source = OLD.assignment_source
+       AND (to_jsonb(OLD) - ARRAY['status','revoked_at','revoked_by_staff_id','updated_at'])
+         = (to_jsonb(NEW) - ARRAY['status','revoked_at','revoked_by_staff_id','updated_at']) THEN
+      RETURN NEW;
+    END IF;
+
+    RAISE EXCEPTION
+      'OBSOLETE_COURSE_ASSIGNMENT: legacy assignment rows are historical; create a new ORIGIN or HRMS assignment through the current course lifecycle.'
+      USING ERRCODE = '55000';
+  END IF;
+
+  IF NEW.assignment_source NOT IN ('ORIGIN','HRMS') THEN
+    RAISE EXCEPTION
+      'OBSOLETE_COURSE_ASSIGNMENT_SOURCE: only ORIGIN and HRMS assignments may be created.'
+      USING ERRCODE = '55000';
+  END IF;
+
+  RETURN NEW;
+END
+$function$;
+
+DROP TRIGGER IF EXISTS trg_qe_current_course_assignment_only
+  ON institution_course_assignment;
+CREATE TRIGGER trg_qe_current_course_assignment_only
+  BEFORE INSERT OR UPDATE ON institution_course_assignment
+  FOR EACH ROW EXECUTE FUNCTION qe_reject_obsolete_course_assignment_write();
+
+-- A migrated offer may remain in the database only after being archived. Existing rows are
+-- retained, but this constraint stops new legacy offers and stops a legacy offer being republished.
+DO $legacy_offer_constraint$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint
+    WHERE conname = 'ck_institution_offer_legacy_rows_archived'
+      AND conrelid = 'public.institution_marketplace_offer'::regclass
+  ) THEN
+    ALTER TABLE institution_marketplace_offer
+      ADD CONSTRAINT ck_institution_offer_legacy_rows_archived
+      CHECK (legacy_migration = false OR status = 'ARCHIVED') NOT VALID;
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint
+    WHERE conname = 'ck_institution_offer_current_hrms_publication'
+      AND conrelid = 'public.institution_marketplace_offer'::regclass
+  ) THEN
+    ALTER TABLE institution_marketplace_offer
+      ADD CONSTRAINT ck_institution_offer_current_hrms_publication
+      CHECK (
+        status <> 'PUBLISHED'
+        OR (
+          legacy_migration = false
+          AND hrms_approved_by_staff_id IS NOT NULL
+          AND hrms_approved_at IS NOT NULL
+          AND hrms_published_by_staff_id IS NOT NULL
+          AND hrms_published_at IS NOT NULL
+        )
+      ) NOT VALID;
+  END IF;
+END
+$legacy_offer_constraint$;
+
+-- Record why each visible old offer is being retired before changing its status.
+INSERT INTO institution_course_lifecycle_event(
+  institution_id, course_release_id, assignment_id, offer_id, event_type,
+  details, created_at
+)
+SELECT offer.institution_id, offer.course_release_id, offer.assignment_id, offer.id,
+       'OFFER_ARCHIVED_OBSOLETE_PIPELINE',
+       jsonb_build_object(
+         'migration', 'V208',
+         'previousStatus', offer.status,
+         'legacyMigration', offer.legacy_migration,
+         'reason', 'Offer does not satisfy the single current course lifecycle contract; historical financial references are retained.'
+       ),
+       now()
+FROM institution_marketplace_offer offer
+WHERE offer.status <> 'ARCHIVED'
+  AND (
+    offer.legacy_migration = true
+    OR NOT qe_current_course_offer_revision(offer.id)
+    OR (
+      offer.status = 'PUBLISHED'
+      AND NOT qe_marketplace_offer_publicly_sellable(offer.id)
+    )
+  );
+
+UPDATE institution_marketplace_offer offer
+SET status = 'ARCHIVED',
+    updated_at = now()
+WHERE offer.status <> 'ARCHIVED'
+  AND (
+    offer.legacy_migration = true
+    OR NOT qe_current_course_offer_revision(offer.id)
+    OR (
+      offer.status = 'PUBLISHED'
+      AND NOT qe_marketplace_offer_publicly_sellable(offer.id)
+    )
+  );
+
+-- Mark and audit legacy assignments as unusable. This does not delete order, invoice,
+-- entitlement, attempt, progress, certificate or audit history.
+INSERT INTO institution_course_lifecycle_event(
+  institution_id, course_release_id, assignment_id, event_type, details, created_at
+)
+SELECT assignment.institution_id, assignment.course_release_id, assignment.id,
+       'ASSIGNMENT_REVOKED_OBSOLETE_PIPELINE',
+       jsonb_build_object(
+         'migration', 'V208',
+         'previousSource', assignment.assignment_source,
+         'reason', 'Legacy or migrated release/assignment is not part of the active course lifecycle.'
+       ),
+       now()
+FROM institution_course_assignment assignment
+JOIN institution_course_release release ON release.id = assignment.course_release_id
+WHERE assignment.status = 'ASSIGNED'
+  AND (
+    assignment.assignment_source NOT IN ('ORIGIN','HRMS')
+    OR release.legacy_migration = true
+    OR release.release_state = 'LEGACY_MIGRATED'
+  );
+
+UPDATE institution_course_assignment assignment
+SET status = 'REVOKED',
+    revoked_at = coalesce(assignment.revoked_at, now()),
+    updated_at = now()
+FROM institution_course_release release
+WHERE release.id = assignment.course_release_id
+  AND assignment.status = 'ASSIGNED'
+  AND (
+    assignment.assignment_source NOT IN ('ORIGIN','HRMS')
+    OR release.legacy_migration = true
+    OR release.release_state = 'LEGACY_MIGRATED'
+  );
+
+COMMENT ON TABLE institution_course_identity IS
+  'ACTIVE: permanent logical course identity. Its public_id is the stable public reference; content versions live in curriculum_program.';
+COMMENT ON TABLE curriculum_program IS
+  'ACTIVE: one immutable course content graph/version. Use course_identity_id + content_version_no for the logical course/version relationship.';
+COMMENT ON TABLE institution_course_release IS
+  'ACTIVE: source-owned release workflow for one exact course content graph. A release is usable for Marketplace only after current quality/origin approval and SHAREABLE state.';
+COMMENT ON TABLE institution_course_assignment IS
+  'ACTIVE: destination assignment in the current lifecycle. ORIGIN and HRMS are the only usable sources; older source values are preserved only on revoked historical rows.';
+COMMENT ON TABLE institution_marketplace_offer IS
+  'ACTIVE: one institution-specific listing revision bound to an exact assignment, release and content graph. Use qe_current_course_offer_revision and qe_marketplace_offer_publicly_sellable as the database eligibility contract.';
+COMMENT ON TABLE course_marketplace_offer IS
+  'OBSOLETE FOR LIVE COURSE LIFECYCLE: old global Marketplace offer table. Do not create, edit, or publish offers here. Retained temporarily for historical reconciliation; the sole active offer table is institution_marketplace_offer.';
+COMMENT ON COLUMN institution_marketplace_offer.legacy_migration IS
+  'Historical migration marker. Rows with legacy_migration=true must be ARCHIVED and cannot be published or used by the current course lifecycle.';
+COMMENT ON TABLE student_certificate IS
+  'ACTIVE evidence record: institution-scoped learner achievement tied to a stable course identity and exact curriculum_program content version. Artifact bytes and achievement snapshot remain immutable.';
+
+-- Database-level fence for the obsolete global Marketplace offer table. DELETE remains available
+-- for a separately reviewed retirement phase; active application code must use the institution table.
+CREATE OR REPLACE FUNCTION qe_reject_obsolete_global_marketplace_offer_write()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $function$
+BEGIN
+  RAISE EXCEPTION
+    'OBSOLETE_GLOBAL_MARKETPLACE: course_marketplace_offer is retired; use the HRMS-controlled institution offer lifecycle.'
+    USING ERRCODE = '55000';
+END
+$function$;
+
+DROP TRIGGER IF EXISTS trg_qe_obsolete_global_marketplace_offer_write
+  ON course_marketplace_offer;
+CREATE TRIGGER trg_qe_obsolete_global_marketplace_offer_write
+  BEFORE INSERT OR UPDATE ON course_marketplace_offer
+  FOR EACH ROW EXECUTE FUNCTION qe_reject_obsolete_global_marketplace_offer_write();
+
+INSERT INTO app_metadata(key, value)
+VALUES (
+  'course-lifecycle-active-contract-v208',
+  'ACTIVE: institution_course_identity -> curriculum_program version -> institution_course_release -> institution_course_assignment(ORIGIN|HRMS) -> institution_marketplace_offer -> course_payment_order/entitlement -> learning/assessment -> student_certificate. Obsolete: global course_marketplace_offer; legacy assignment sources; migrated offers/releases. Historical rows are archived/revoked, not deleted.'
+)
+ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
