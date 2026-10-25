@@ -884,8 +884,8 @@ export default function MarketplaceLaunchStepper({
               const previewFingerprintMismatch = Boolean(preview
                 && preview.content_fingerprint !== release.content_fingerprint);
               const previewLoadInProgress = reviewContentLoadingId !== null;
-              const previewNeedsLoading = !preview && release.contentCurrent && qualityReady
-                && !previewLoadInProgress && reviewChapterLoadingId === null && busyKey === null;
+              const previewNeedsLoading = !preview && !previewLoadInProgress
+                && reviewChapterLoadingId === null && busyKey === null;
               const qualityBlocker = !release.contentCurrent
                 ? 'Approval is blocked because this release is not fingerprint-current. Return it for correction, have the source institution correct the content and submit a fresh release.'
                 : !qualityReady
