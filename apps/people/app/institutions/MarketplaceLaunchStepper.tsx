@@ -1043,6 +1043,10 @@ export default function MarketplaceLaunchStepper({
               const reviewNoteLength = (reviewNotes[release.release_id] || '').trim().length;
               const previewFingerprintMismatch = Boolean(preview
                 && preview.content_fingerprint !== release.content_fingerprint);
+              const exactPreviewReady = Boolean(preview
+                && preview.contentCurrent
+                && !previewFingerprintMismatch
+                && preview.courseTypePublishReady === true);
               const previewLoadInProgress = reviewContentLoadingId !== null;
               const previewNeedsLoading = !preview
                 && !previewLoadInProgress && reviewChapterLoadingId === null && busyKey === null;
