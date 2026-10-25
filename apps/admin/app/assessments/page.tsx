@@ -764,117 +764,117 @@ export default function AssessmentsPage(){
         <section ref={importedReviewDialogRef} tabIndex={-1} className={styles.assessmentReviewWorkspace} role="dialog" aria-modal="true" aria-labelledby="imported-review-title">
           <aside className={styles.assessmentReviewSidebar}>
             <div className={styles.reviewSidebarHeader}>
-              <span>ASSESSMENT REVIEW</span>
-              <h2>Question navigator</h2>
-              <p>Draft #{importedReviewId} · {importedReviewItems.length} questions</p>
-              <div className={styles.reviewProgressTrack} role="progressbar" aria-label="Questions approved" aria-valuemin={0} aria-valuemax={importedReviewItems.length} aria-valuenow={importedApprovedCount}>
+              <span>{t('admin.assessments.reviewWorkspaceLabel')}</span>
+              <h2>{t('admin.assessments.questionNavigator')}</h2>
+              <p>{t('admin.assessments.draftQuestionCount',{id:importedReviewId,count:importedReviewItems.length})}</p>
+              <div className={styles.reviewProgressTrack} role="progressbar" aria-label={t('admin.assessments.questionsApproved')} aria-valuemin={0} aria-valuemax={importedReviewItems.length} aria-valuenow={importedApprovedCount}>
                 <span style={{width:(importedReviewItems.length?100*importedApprovedCount/importedReviewItems.length:0)+'%'}}/>
               </div>
-              <div className={styles.reviewProgressLabels}><b>{importedApprovedCount}/{importedReviewItems.length} approved</b><span>{importedReviewItems.length-importedApprovedCount-importedRejectedCount} pending</span></div>
+              <div className={styles.reviewProgressLabels}><b>{t('admin.assessments.approvedQuestionProgress',{approved:importedApprovedCount,total:importedReviewItems.length})}</b><span>{t('admin.assessments.pendingQuestionCount',{count:importedReviewItems.length-importedApprovedCount-importedRejectedCount})}</span></div>
             </div>
             <div className={styles.reviewNavigatorTools}>
-              <input aria-label="Search questions" value={importedReviewSearch} onChange={event=>setImportedReviewSearch(event.target.value)} placeholder="Search question text or number"/>
-              <select aria-label="Filter questions by review status" value={importedReviewFilter} onChange={event=>setImportedReviewFilter(event.target.value as 'ALL'|'PENDING'|'APPROVED'|'REJECTED')}>
-                <option value="ALL">{t('admin.assessments.allStates')}</option><option value="PENDING">Pending review</option><option value="APPROVED">Approved</option><option value="REJECTED">Rejected</option>
+              <input aria-label={t('admin.assessments.searchQuestions')} value={importedReviewSearch} onChange={event=>setImportedReviewSearch(event.target.value)} placeholder={t('admin.assessments.searchQuestionPlaceholder')}/>
+              <select aria-label={t('admin.assessments.filterQuestionStatuses')} value={importedReviewFilter} onChange={event=>setImportedReviewFilter(event.target.value as 'ALL'|'PENDING'|'APPROVED'|'REJECTED')}>
+                <option value="ALL">{t('admin.assessments.allStates')}</option><option value="PENDING">{t('admin.assessments.pendingReview')}</option><option value="APPROVED">{t('admin.assessments.approved')}</option><option value="REJECTED">{t('admin.assessments.rejected')}</option>
               </select>
             </div>
-            <nav className={styles.reviewQuestionNav} aria-label="Questions">
+            <nav className={styles.reviewQuestionNav} aria-label={t('admin.assessments.questions')}>
               {filteredImportedReviewItems.map(item=>{
                 const status=importedQuestionStatus(item.question);
                 const sequence=Number(item.sequenceNo);
                 return <button type="button" key={sequence} className={[styles.reviewQuestionNavItem,selectedImportedReviewItem&&Number(selectedImportedReviewItem.sequenceNo)===sequence?styles.reviewQuestionNavItemActive:''].join(' ')} aria-current={selectedImportedReviewItem&&Number(selectedImportedReviewItem.sequenceNo)===sequence?'true':undefined} onClick={()=>setImportedReviewSequence(sequence)}>
-                  <span>{sequence}</span><b>Q{sequence}</b><small>{status==='APPROVED'?'Approved':status==='REJECTED'?'Rejected':'Pending'}</small>
+                  <span>{sequence}</span><b>Q{sequence}</b><small>{status==='APPROVED'?t('admin.assessments.approved'):status==='REJECTED'?t('admin.assessments.rejected'):t('admin.assessments.pendingReview')}</small>
                 </button>;
               })}
-              {!filteredImportedReviewItems.length&&<p className={styles.reviewNavigatorEmpty}>No questions match this search or status filter.</p>}
+              {!filteredImportedReviewItems.length&&<p className={styles.reviewNavigatorEmpty}>{t('admin.assessments.noQuestionsMatch')}</p>}
             </nav>
           </aside>
           <div className={styles.assessmentReviewMain}>
             <header className={styles.assessmentReviewHeader}>
               <div>
-                <span>IMPORTED DRAFT #{importedReviewId} · {importedReviewStatus}</span>
-                <h1 id="imported-review-title">{activeCourse?.display_name||'Assessment'} · Bilingual question review</h1>
-                <p>Review the exact question and answer before approving. Changes stay in Draft; publishing remains a separate action.</p>
+                <span>{t('admin.assessments.importedDraftStatus',{id:importedReviewId,status:statusText(importedReviewStatus,t)})}</span>
+                <h1 id="imported-review-title">{t('admin.assessments.bilingualQuestionReview',{course:activeCourse?.display_name||t('admin.assessments.assessment')})}</h1>
+                <p>{t('admin.assessments.exactQuestionReviewHelp')}</p>
               </div>
-              <button type="button" className={styles.reviewClose} aria-label="Close full-screen review" onClick={closeImportedReview}>×</button>
+              <button type="button" className={styles.reviewClose} aria-label={t('admin.assessments.closeReview')} onClick={closeImportedReview}>×</button>
             </header>
             {error&&<div className={styles.reviewWorkspaceError} role="alert">{error}</div>}
             {!selectedImportedReviewItem?<div className={styles.reviewWorkspaceEmpty} role="status">No questions are available for this draft. Refresh the question list or close this workspace.</div>:<>
               <div className={styles.assessmentReviewContent}>
                 <div className={styles.reviewQuestionTitleBar}>
-                  <div><span>QUESTION {selectedImportedSequence} OF {importedReviewItems.length}</span><h2>Question {selectedImportedSequence}</h2>
+                  <div><span>{t('admin.assessments.questionPosition',{current:Math.max(0,filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence)+1),total:filteredImportedReviewItems.length})}</span><h2>{t('admin.assessments.questionNumber',{number:selectedImportedSequence})}</h2>
                     <p>{String(selectedImportedQuestion.question_type||'Question')} · {String(selectedImportedQuestion.section_code||'Section not specified')} · {String(selectedImportedReviewItem.maxMarks??1)} mark(s)</p>
                   </div>
                   <span className={[styles.reviewStatusPill,
                     importedQuestionStatus(selectedImportedQuestion)==='APPROVED'?styles.reviewStatusApproved:
                     importedQuestionStatus(selectedImportedQuestion)==='REJECTED'?styles.reviewStatusRejected:styles.reviewStatusPending].join(' ')}>
-                    {importedQuestionStatus(selectedImportedQuestion)==='APPROVED'?'APPROVED':importedQuestionStatus(selectedImportedQuestion)==='REJECTED'?'REJECTED':'PENDING HUMAN REVIEW'}
+                    {importedQuestionStatus(selectedImportedQuestion)==='APPROVED'?t('admin.assessments.approved'):importedQuestionStatus(selectedImportedQuestion)==='REJECTED'?t('admin.assessments.rejected'):t('admin.assessments.pendingReview')}
                   </span>
                 </div>
                 <div className={styles.reviewBilingualGrid}>
                   <section className={styles.reviewLanguagePanel} aria-labelledby="review-english-heading">
-                    <div className={styles.reviewLanguageHeader}><div><span>EN</span><h3 id="review-english-heading">English</h3></div><small>Source / English version</small></div>
+                    <div className={styles.reviewLanguageHeader}><div><span>EN</span><h3 id="review-english-heading">English</h3></div><small>{t('admin.assessments.englishVariant')}</small></div>
                     {localizedValue(selectedImportedQuestion.stimulus_i18n,'en')&&<div className={styles.reviewStimulus}><b>Reading / code stimulus</b><p>{localizedValue(selectedImportedQuestion.stimulus_i18n,'en')}</p></div>}
                     <div className={styles.reviewPrompt}>{importedPrompt(selectedImportedQuestion,'en')||<em>English prompt is not supplied in this package.</em>}</div>
-                    <h4>Answer options</h4>
+                    <h4>{t('admin.assessments.answerOptions')}</h4>
                     {selectedImportedOptions.length?<ol className={styles.reviewOptions}>{selectedImportedOptions.map((option:any,index:number)=>{
                       const key=String(option.key||option.option_key||String.fromCharCode(65+index));
                       const chosen=selectedImportedAnswerKeys.includes(key);
-                      return <li key={key} className={chosen?styles.reviewOptionSelected:''}><span>{key}</span><p>{importedOptionText(option,'en')||'English option text not supplied.'}</p>{chosen&&<b>Current key</b>}</li>;
-                    })}</ol>:<p className={styles.reviewMissingLanguage}>No structured options are present for this question.</p>}
+                      return <li key={key} className={chosen?styles.reviewOptionSelected:''}><span>{key}</span><p>{importedOptionText(option,'en')||'English option text not supplied.'}</p>{chosen&&<b>{t('admin.assessments.currentAnswerKey')}</b>}</li>;
+                    })}</ol>:<p className={styles.reviewMissingLanguage}>{t('admin.assessments.noStructuredOptions')}</p>}
                   </section>
                   <section className={styles.reviewLanguagePanel} aria-labelledby="review-hindi-heading">
-                    <div className={styles.reviewLanguageHeader}><div><span>हि</span><h3 id="review-hindi-heading">हिंदी</h3></div><small>हिंदी संस्करण</small></div>
+                    <div className={styles.reviewLanguageHeader}><div><span>हि</span><h3 id="review-hindi-heading">हिंदी</h3></div><small>{t('admin.assessments.hindiVariant')}</small></div>
                     {localizedValue(selectedImportedQuestion.stimulus_i18n,'hi')&&<div className={styles.reviewStimulus}><b>पठन / कोड सामग्री</b><p>{localizedValue(selectedImportedQuestion.stimulus_i18n,'hi')}</p></div>}
                     <div className={styles.reviewPrompt} lang="hi">{importedPrompt(selectedImportedQuestion,'hi')||<em>इस पैकेज में हिंदी प्रश्न उपलब्ध नहीं है।</em>}</div>
-                    <h4>उत्तर विकल्प</h4>
+                    <h4>{t('admin.assessments.answerOptions')}</h4>
                     {selectedImportedOptions.length?<ol className={styles.reviewOptions} lang="hi">{selectedImportedOptions.map((option:any,index:number)=>{
                       const key=String(option.key||option.option_key||String.fromCharCode(65+index));
                       const chosen=selectedImportedAnswerKeys.includes(key);
-                      return <li key={key} className={chosen?styles.reviewOptionSelected:''}><span>{key}</span><p>{importedOptionText(option,'hi')||<em>हिंदी विकल्प उपलब्ध नहीं है।</em>}</p>{chosen&&<b>वर्तमान कुंजी</b>}</li>;
-                    })}</ol>:<p className={styles.reviewMissingLanguage}>इस प्रश्न के संरचित विकल्प उपलब्ध नहीं हैं।</p>}
+                      return <li key={key} className={chosen?styles.reviewOptionSelected:''}><span>{key}</span><p>{importedOptionText(option,'hi')||<em>हिंदी विकल्प उपलब्ध नहीं है।</em>}</p>{chosen&&<b>{t('admin.assessments.currentAnswerKey')}</b>}</li>;
+                    })}</ol>:<p className={styles.reviewMissingLanguage}>{t('admin.assessments.noStructuredOptions')}</p>}
                   </section>
                 </div>
                 <section className={styles.reviewProvenancePanel} aria-label="Question source provenance">
-                  <h3>Source and provenance</h3>
+                  <h3>{t('admin.assessments.questionProvenance')}</h3>
                   <div className={styles.reviewProvenanceGrid}>
-                    {selectedImportedQuestion.source_title&&<div><span>Source title</span><strong>{String(selectedImportedQuestion.source_title)}</strong></div>}
-                    {selectedImportedQuestion.board&&<div><span>Issuer / board</span><strong>{String(selectedImportedQuestion.board)}</strong></div>}
-                    {selectedImportedQuestion.source_year&&<div><span>Source year</span><strong>{String(selectedImportedQuestion.source_year)}</strong></div>}
-                    {selectedImportedQuestion.source_kind&&<div><span>Source kind</span><strong>{String(selectedImportedQuestion.source_kind)}</strong></div>}
-                    {selectedImportedQuestion.source_id&&<div><span>Source package</span><strong>{String(selectedImportedQuestion.source_id)}</strong></div>}
-                    {selectedImportedSourceLocation&&<div><span>Source location / page</span><strong>{selectedImportedSourceLocation}</strong></div>}
-                    {selectedImportedSourceUrl&&<div><span>Source reference</span><strong><a href={selectedImportedSourceUrl} target="_blank" rel="noreferrer">{String(selectedImportedQuestion.source_ref)}</a></strong></div>}
-                    {selectedImportedQuestion.source_note&&<div className={styles.reviewProvenanceWide}><span>Import note</span><p>{String(selectedImportedQuestion.source_note)}</p></div>}
+                    {selectedImportedQuestion.source_title&&<div><span>{t('admin.assessments.sourceTitle')}</span><strong>{String(selectedImportedQuestion.source_title)}</strong></div>}
+                    {selectedImportedQuestion.board&&<div><span>{t('admin.assessments.sourceBoard')}</span><strong>{String(selectedImportedQuestion.board)}</strong></div>}
+                    {selectedImportedQuestion.source_year&&<div><span>{t('admin.assessments.sourceYear')}</span><strong>{String(selectedImportedQuestion.source_year)}</strong></div>}
+                    {selectedImportedQuestion.source_kind&&<div><span>{t('admin.assessments.sourceKind')}</span><strong>{String(selectedImportedQuestion.source_kind)}</strong></div>}
+                    {selectedImportedQuestion.source_id&&<div><span>{t('admin.assessments.sourcePackage')}</span><strong>{String(selectedImportedQuestion.source_id)}</strong></div>}
+                    {selectedImportedSourceLocation&&<div><span>{t('admin.assessments.sourceLocation')}</span><strong>{selectedImportedSourceLocation}</strong></div>}
+                    {selectedImportedSourceUrl&&<div><span>{t('admin.assessments.sourceReference')}</span><strong><a href={selectedImportedSourceUrl} target="_blank" rel="noreferrer">{String(selectedImportedQuestion.source_ref)}</a></strong></div>}
+                    {selectedImportedQuestion.source_note&&<div className={styles.reviewProvenanceWide}><span>{t('admin.assessments.sourceNote')}</span><p>{String(selectedImportedQuestion.source_note)}</p></div>}
                   </div>
                 </section>
                 <div className={styles.reviewEditingGrid}>
                   <section className={styles.reviewEditorPanel}>
-                    <div className={styles.reviewEditorHeader}><div><span>ANSWER KEY</span><h3>Answer payload</h3></div><b>{String(selectedImportedAnswer.kind||'UNRESOLVED')}</b></div>
-                    <p>Set the authoritative answer key. Option keys are language-independent; the same key is highlighted in both language panels.</p>
+                    <div className={styles.reviewEditorHeader}><div><span>{t('admin.assessments.answerKey')}</span><h3>{t('admin.assessments.answerPayload')}</h3></div><b>{String(selectedImportedAnswer.kind||'UNRESOLVED')}</b></div>
+                    <p>{t('admin.assessments.answerPayloadHelp')}</p>
                     <textarea aria-label="Answer payload JSON" rows={7} spellCheck={false} disabled={importedReviewStatus!=='DRAFT'} value={importedAnswerEdits[selectedImportedSequence]??JSON.stringify(selectedImportedQuestion.answer_payload||{kind:'UNRESOLVED',value:''},null,2)} onChange={event=>setImportedAnswerEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))} placeholder='{"kind":"OPTION","value":"B"} or {"kind":"NUMERIC","value":12,"tolerance":0.1}'/>
-                    <small>Supported kinds include OPTION, MULTI_OPTION, TEXT, NUMERIC, ORDER and MATCH. Approval validates the answer against the saved options.</small>
+                    <small>{t('admin.assessments.answerPayloadKindsHelp')}</small>
                     <label className={styles.reviewNoteField}>
-                      Reviewer correction note
-                      <textarea aria-label="Reviewer correction note" rows={3} maxLength={1000}
+                      {t('admin.assessments.reviewerNote')}
+                      <textarea aria-label={t('admin.assessments.reviewerNote')} rows={3} maxLength={1000}
                         value={importedReviewerNoteEdits[selectedImportedSequence]??''}
                         onChange={event=>setImportedReviewerNoteEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))}
-                        placeholder="Explain precisely what the source author must fix. Required when rejecting."/>
+                        placeholder={t('admin.assessments.reviewerNotePlaceholder')}/>
                     </label>
                     {(selectedImportedQuestion.last_rejection_note||selectedImportedQuestion.human_review_note)&&<div className={styles.reviewPreviousFeedback}>
-                      <b>Previous rejection / review feedback</b>
+                      <b>{t('admin.assessments.previousRejectionReason')}</b>
                       <p>{String(selectedImportedQuestion.last_rejection_note||selectedImportedQuestion.human_review_note)}</p>
                     </div>}
                   </section>
                   <section className={styles.reviewEditorPanel}>
-                    <div className={styles.reviewEditorHeader}><div><span>EXPLANATION · EN</span><h3>English explanation</h3></div></div>
-                    <p>Explain why the reviewed answer is correct. Approval requires an explanation.</p>
-                    <textarea aria-label="English explanation" rows={7} maxLength={700} disabled={importedReviewStatus!=='DRAFT'} value={importedExplanationEdits[selectedImportedSequence]??''} onChange={event=>setImportedExplanationEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))} placeholder="Write the English explanation."/>
+                    <div className={styles.reviewEditorHeader}><div><span>{t('admin.assessments.explanationEnglish')}</span><h3>{t('admin.assessments.englishExplanation')}</h3></div></div>
+                    <p>{t('admin.assessments.explanationHelp')}</p>
+                    <textarea aria-label="English explanation" rows={7} maxLength={700} disabled={importedReviewStatus!=='DRAFT'} value={importedExplanationEdits[selectedImportedSequence]??''} onChange={event=>setImportedExplanationEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))} placeholder={t('admin.assessments.writeEnglishExplanation')}/>
                   </section>
                   <section className={styles.reviewEditorPanel} lang="hi">
-                    <div className={styles.reviewEditorHeader}><div><span>व्याख्या · HI</span><h3>हिंदी में व्याख्या</h3></div></div>
+                    <div className={styles.reviewEditorHeader}><div><span>{t('admin.assessments.explanationHindi')}</span><h3>{t('admin.assessments.hindiExplanation')}</h3></div></div>
                     <p>हिंदी व्याख्या यहाँ लिखें। यह अंग्रेज़ी व्याख्या से अलग सहेजी जाएगी।</p>
-                    <textarea aria-label="Hindi explanation" rows={7} maxLength={700} disabled={importedReviewStatus!=='DRAFT'} value={importedHindiExplanationEdits[selectedImportedSequence]??''} onChange={event=>setImportedHindiExplanationEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))} placeholder="हिंदी में उत्तर की व्याख्या लिखें।"/>
+                    <textarea aria-label="Hindi explanation" rows={7} maxLength={700} disabled={importedReviewStatus!=='DRAFT'} value={importedHindiExplanationEdits[selectedImportedSequence]??''} onChange={event=>setImportedHindiExplanationEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))} placeholder={t('admin.assessments.writeHindiExplanation')}/>
                   </section>
                 </div>
               </div>
@@ -882,16 +882,16 @@ export default function AssessmentsPage(){
                 <div className={styles.reviewFooterNavigation}>
                   <button type="button" className={styles.secondaryButton}
                     disabled={!filteredImportedReviewItems.length||filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence)<=0}
-                    onClick={()=>{const index=filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence);if(index>0)setImportedReviewSequence(Number(filteredImportedReviewItems[index-1].sequenceNo));}}>← Previous</button>
+                    onClick={()=>{const index=filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence);if(index>0)setImportedReviewSequence(Number(filteredImportedReviewItems[index-1].sequenceNo));}}>{t('admin.assessments.previousQuestion')}</button>
                   <span>Question {Math.max(0,filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence)+1)} / {filteredImportedReviewItems.length}</span>
                   <button type="button" className={styles.secondaryButton}
                     disabled={!filteredImportedReviewItems.length||filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence)<0||filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence)>=filteredImportedReviewItems.length-1}
-                    onClick={()=>{const index=filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence);if(index>=0&&index<filteredImportedReviewItems.length-1)setImportedReviewSequence(Number(filteredImportedReviewItems[index+1].sequenceNo));}}>Next →</button>
+                    onClick={()=>{const index=filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence);if(index>=0&&index<filteredImportedReviewItems.length-1)setImportedReviewSequence(Number(filteredImportedReviewItems[index+1].sequenceNo));}}>{t('admin.assessments.nextQuestion')}</button>
                 </div>
                 <div className={styles.reviewFooterActions}>
-                  <button type="button" className={styles.secondaryButton} disabled={packageBusy||importedReviewStatus!=='DRAFT'} onClick={()=>void saveImportedQuestionReview(selectedImportedSequence,'PENDING_HUMAN_REVIEW')}>Save changes</button>
-                  <button type="button" className={styles.secondaryButton} disabled={packageBusy||importedReviewStatus!=='DRAFT'} onClick={()=>void saveImportedQuestionReview(selectedImportedSequence,'REJECTED')}>Reject question</button>
-                  <button type="button" className={styles.primaryButton} disabled={packageBusy||importedReviewStatus!=='DRAFT'} onClick={()=>void saveImportedQuestionReview(selectedImportedSequence,'APPROVED')}>Approve answer</button>
+                  <button type="button" className={styles.secondaryButton} disabled={packageBusy||importedReviewStatus!=='DRAFT'} onClick={()=>void saveImportedQuestionReview(selectedImportedSequence,'PENDING_HUMAN_REVIEW')}>{t('admin.assessments.saveChanges')}</button>
+                  <button type="button" className={styles.secondaryButton} disabled={packageBusy||importedReviewStatus!=='DRAFT'} onClick={()=>void saveImportedQuestionReview(selectedImportedSequence,'REJECTED')}>{t('admin.assessments.rejectQuestion')}</button>
+                  <button type="button" className={styles.primaryButton} disabled={packageBusy||importedReviewStatus!=='DRAFT'} onClick={()=>void saveImportedQuestionReview(selectedImportedSequence,'APPROVED')}>{t('admin.assessments.approveQuestionAndAnswer')}</button>
                 </div>
               </footer>
             </>}
