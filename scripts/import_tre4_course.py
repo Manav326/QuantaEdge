@@ -918,41 +918,51 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                 )
 
             requested_submit_for_review = bool(args.submit_for_review)
-            submit_for_review = False
             submission_deferred = False
+            submit_for_review = False
+            publish_ready = False
             if requested_submit_for_review:
                 cursor.execute("SELECT assessment_only_course_publish_ready(%s)", (course_id,))
                 publish_ready_row = cursor.fetchone()
-                if publish_ready_row and publish_ready_row[0] is True:
-                    # This is the only importer-driven release transition. Tests and packs must
-                    # already have reached PUBLISHED through the normal, audited assessment API.
-                    submit_for_review = True
-                else:
+                publish_ready = bool(publish_ready_row and publish_ready_row[0] is True)
+                if not publish_ready:
                     submission_deferred = True
                     summary["submissionDeferred"] = True
                     summary["submissionDeferralReason"] = (
                         "Release submission was not performed: at least one assessment/test pack is "
-                        "not published or a question/answer review gate is incomplete. The content remains "
-                        "editable in DRAFT. Finish human question/answer review and publish each assessment "
-                        "through the supported Admin Web assessment workflow, then rerun with --submit-for-review."
+                        "not published or a question/answer review gate is incomplete. The release remains "
+                        "DRAFT. Complete human question/answer review and publish each assessment through "
+                        "the supported Admin Web workflow, then rerun with --submit-for-review."
                     )
+                elif release_row is None:
+                    # Persist the first DRAFT release before a later invocation can submit it.
+                    # Never create a release directly in IN_QUALITY_REVIEW in its first transaction.
+                    submission_deferred = True
+                    summary["submissionDeferred"] = True
+                    summary["submissionDeferralReason"] = (
+                        "All content passes the current publish-readiness gate, but this run is creating "
+                        "the first course release. It has been persisted as DRAFT first; rerun this script "
+                        "with --apply --submit-for-review to advance that existing DRAFT release into "
+                        "IN_QUALITY_REVIEW."
+                    )
+                else:
+                    # This is the only importer-driven release transition. Tests and packs must
+                    # already have reached PUBLISHED through the normal, audited assessment API.
+                    submit_for_review = True
 
             release_created = False
             release_submitted = False
             if release_row is None:
-                initial_state = "IN_QUALITY_REVIEW" if submit_for_review else "DRAFT"
                 cursor.execute("""
                     INSERT INTO institution_course_release(
                       source_institution_id,program_id,release_version,release_state,content_fingerprint,
                       submitted_at,submitted_by_institution_admin_id,submitted_by_staff_id,
                       legacy_migration,legacy_migration_note,created_at,updated_at
-                    ) VALUES (%s,%s,1,%s,%s,CASE WHEN %s THEN now() ELSE NULL END,NULL,NULL,
-                              false,NULL,now(),now())
+                    ) VALUES (%s,%s,1,'DRAFT',%s,NULL,NULL,NULL,false,NULL,now(),now())
                     RETURNING id,release_version,release_state,content_fingerprint
-                """, (institution_id, course_id, initial_state, fingerprint, submit_for_review))
+                """, (institution_id, course_id, fingerprint))
                 release_row = cursor.fetchone()
                 release_created = True
-                release_submitted = submit_for_review
             else:
                 release_id, release_version, release_state, saved_fingerprint = release_row
                 if str(release_state) != "DRAFT":
