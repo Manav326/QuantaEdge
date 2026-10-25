@@ -13,7 +13,7 @@ AS $$
       AND coalesce(mode.delivery_mode,'LEARNING_CONTENT')='ASSESSMENT_ONLY'
       THEN coalesce(assessment_only_course_publish_ready(p.id),false)
     WHEN p.course_type_code='K12'
-      AND coalesce(mode.delivery_mode,'LEARNING_CONTENT')<>'ASSESSMENT_ONLY'
+      AND coalesce(mode.delivery_mode,'LEARNING_CONTENT')='LEARNING_CONTENT'
       AND EXISTS (
         SELECT 1
         FROM curriculum_program_subject ps
