@@ -548,7 +548,7 @@ def ensure_course_identity(cursor: Any, institution_id: int, course_id: int) -> 
     stable_key = f"I{institution_id}_TRE4"
     cursor.execute("""
         SELECT p.display_name,p.course_type_code,p.course_identity_id,
-               i.source_institution_id,i.stable_course_key,i.course_type_code
+               i.source_institution_id,i.stable_course_key,i.course_type_code,i.status
         FROM curriculum_program p
         LEFT JOIN institution_course_identity i ON i.id=p.course_identity_id
         WHERE p.id=%s FOR UPDATE OF p
@@ -556,10 +556,12 @@ def ensure_course_identity(cursor: Any, institution_id: int, course_id: int) -> 
     row = cursor.fetchone()
     if not row or row[0] != COURSE_TITLE:
         raise ImportErrorSafe("TRE-4 course identity cannot be reconciled with the expected course.")
-    display_name, course_type, identity_id, owner_id, saved_key, identity_type = row
+    display_name, course_type, identity_id, owner_id, saved_key, identity_type, identity_status = row
     if identity_id is not None:
         if int(owner_id or 0) != institution_id or saved_key != stable_key:
             raise ImportErrorSafe("TRE-4 course is linked to a different source identity; refusing cross-institution mutation.")
+        if identity_status != "ACTIVE":
+            raise ImportErrorSafe("TRE-4 course is linked to an inactive identity; reactivate/reconcile the identity through the HRMS/source-owner workflow before importing.")
         if course_type != "ASSESSMENT" or identity_type != "ASSESSMENT":
             raise ImportErrorSafe("TRE-4 course identity has a conflicting type; reconcile it through the source-owned draft workflow.")
         return int(identity_id)
@@ -926,7 +928,8 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
             course_identity_id = ensure_course_identity(cursor, institution_id, course_id)
             ensure_delivery_mode(cursor, course_id)
             # Lock and validate the release before touching assessments, question snapshots or packs.
-            # The importer is deliberately not a release-submission or publication endpoint.
+            # Import never publishes tests/packs or approves anything. The explicit submit flag can
+            # only request DRAFT -> IN_QUALITY_REVIEW after both database readiness gates pass.
             release_row = lock_latest_draft_release(cursor, institution_id, course_id)
 
             created_assessments: list[int] = []
@@ -1097,7 +1100,7 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                     "sourceArchiveSha256": archive_sha256,
                     "reviewRequired": True,
                     "studentDeliveryAllowed": False,
-                    "submissionGate": "assessment_only_course_publish_ready",
+                    "submissionGate": "assessment_only_course_publish_ready+course_marketplace_content_type_ready",
                 })))
 
             summary.update({
