@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1299,
-    "successful_visual_analyses": 1286,
-    "missing_visual_analyses": 992,
+    "raw_analysis_result_rows": 1301,
+    "successful_visual_analyses": 1288,
+    "missing_visual_analyses": 990,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1005,
+    "unresolved_count": 1003,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -48649,9 +48649,29 @@
       "asset_path": "assets/339772d6270f4243d95bb889c92c61f128992d9cda2e4ea2201ab656f8f82b5f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of a water tank on a hillside with trees and a road nearby.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "water tank",
+          "hillside",
+          "trees",
+          "road",
+          "overhead water tanks",
+          "water supply",
+          "height",
+          "elevation",
+          "easier to drive a nail",
+          "easier to cut an apple"
+        ],
+        "context_relation": "The image is related to the educational content about pressure, winds, storms, and cyclones in Chapter 6 of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the height or elevation of the water tank."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -48667,9 +48687,24 @@
       "asset_path": "assets/665177ffd62b2dd4eb1774fd3f27b5234d20a05271ccb5bb80968207b1131c6e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two test tubes with different colored liquids, one with a yellow liquid and the other with a purple liquid, placed in a stand.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "pressure",
+          "force",
+          "area",
+          "task difficulty"
+        ],
+        "context_relation": "The image illustrates the concept of pressure and force, specifically how the area over which a force is applied affects the resulting pressure.",
+        "limitations": [
+          "The image does not provide specific measurements or numerical data.",
+          "The image does not show the actual application of force or the resulting pressure."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

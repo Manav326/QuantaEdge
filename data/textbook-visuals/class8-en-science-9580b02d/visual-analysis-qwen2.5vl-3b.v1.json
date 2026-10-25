@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1287,
+    "assets_selected": 1288,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "35ff0b921f1e0b0945a8f8df",
-      "e616bcedcee1f19d79e7f4f4"
+      "a35e59c1ad36f15be4fe7003",
+      "894b83b254fd358fb4c14264"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1283,
-    "assets_remaining": 1008,
-    "assets_completion_percent": 56.0,
+    "assets_analyzed": 1285,
+    "assets_remaining": 1006,
+    "assets_completion_percent": 56.1,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1282,
+    "assets_skipped_from_checkpoint": 1283,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40205240019",
-      "checkpointed_at": "2026-10-25T16:41:33Z"
+      "checkpointed_at": "2026-10-25T16:50:36Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40205240019",
-      "checkpointed_at": "2026-10-25T16:42:17Z"
+      "checkpointed_at": "2026-10-25T16:51:21Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40205240019",
-      "checkpointed_at": "2026-10-25T16:43:10Z"
+      "checkpointed_at": "2026-10-25T16:52:15Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -42397,6 +42397,79 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40205240019",
       "checkpointed_at": "2026-10-25T16:49:26Z"
+    },
+    {
+      "asset_id": "a35e59c1ad36f15be4fe7003",
+      "asset_sha256": "339772d6270f4243d95bb889c92c61f128992d9cda2e4ea2201ab656f8f82b5f",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 103,
+      "asset_path": "assets/339772d6270f4243d95bb889c92c61f128992d9cda2e4ea2201ab656f8f82b5f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c296560037a32d1015a66fc65728dd44421b3ac5022037869d5e786288229793",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An illustration of a water tank on a hillside with trees and a road nearby.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "water tank",
+          "hillside",
+          "trees",
+          "road",
+          "overhead water tanks",
+          "water supply",
+          "height",
+          "elevation",
+          "easier to drive a nail",
+          "easier to cut an apple"
+        ],
+        "context_relation": "The image is related to the educational content about pressure, winds, storms, and cyclones in Chapter 6 of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the height or elevation of the water tank."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40205240019",
+      "checkpointed_at": "2026-10-25T16:53:56Z"
+    },
+    {
+      "asset_id": "894b83b254fd358fb4c14264",
+      "asset_sha256": "665177ffd62b2dd4eb1774fd3f27b5234d20a05271ccb5bb80968207b1131c6e",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 103,
+      "asset_path": "assets/665177ffd62b2dd4eb1774fd3f27b5234d20a05271ccb5bb80968207b1131c6e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c296560037a32d1015a66fc65728dd44421b3ac5022037869d5e786288229793",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two test tubes with different colored liquids, one with a yellow liquid and the other with a purple liquid, placed in a stand.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "pressure",
+          "force",
+          "area",
+          "task difficulty"
+        ],
+        "context_relation": "The image illustrates the concept of pressure and force, specifically how the area over which a force is applied affects the resulting pressure.",
+        "limitations": [
+          "The image does not provide specific measurements or numerical data.",
+          "The image does not show the actual application of force or the resulting pressure."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40205240019",
+      "checkpointed_at": "2026-10-25T16:55:36Z"
     }
   ]
 }
