@@ -69,9 +69,14 @@ public class PlatformFinanceController {
       where status in ('ACTIVE','SUSPENDED') order by lower(display_name),id
       """);
     List<Map<String,Object>> offers=jdbc.queryForList("""
-      select o.id as offer_id,o.public_id,o.institution_id,t.display_name as institution_name,
-        p.code as course_code,coalesce(nullif(o.title_override,''),p.display_name) as course_name,
-        o.price_paise,o.currency,o.status as offer_status,
+      select o.id as offer_id,o.public_id,o.institution_id,o.assignment_id,o.course_release_id,
+        t.display_name as institution_name,p.code as course_code,
+        coalesce(nullif(o.title_override,''),p.display_name) as course_name,
+        o.price_paise,o.currency,o.status as offer_status,o.legacy_migration,
+        a.status as assignment_status,a.assignment_source,
+        r.release_version,r.release_state,p.course_identity_id,p.content_version_no,
+        identity.public_id as course_identity_public_id,
+        qe_is_current_institution_offer(o.id) as is_current_offer,
         le.id as legal_entity_id,le.legal_name as legal_seller_name,
         tp.id as latest_tax_profile_id,tp.status as tax_profile_status,tp.tax_treatment,
         (select rp.status from revenue_share_policy rp where rp.institution_offer_id=o.id
@@ -79,6 +84,11 @@ public class PlatformFinanceController {
       from institution_marketplace_offer o
       join institution_tenant t on t.id=o.institution_id
       join curriculum_program p on p.id=o.course_id
+      left join institution_course_assignment a
+        on a.id=o.assignment_id and a.institution_id=o.institution_id
+      left join institution_course_release r
+        on r.id=o.course_release_id and r.program_id=o.course_id
+      left join institution_course_identity identity on identity.id=p.course_identity_id
       left join lateral (
         select tax.id,tax.status,tax.tax_treatment,tax.legal_entity_id
         from course_tax_profile tax where tax.institution_offer_id=o.id
@@ -277,6 +287,7 @@ public class PlatformFinanceController {
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=requireOwner(context);
     long institutionId=offerInstitution(offerId);
+    requireCurrentOffer(offerId);
     long entityId=requiredLong(body,"legalEntityId");
     if(!exists("""
       select exists(select 1 from billing_legal_entity e
@@ -319,6 +330,7 @@ public class PlatformFinanceController {
     int n=jdbc.update("update course_tax_profile set status='PENDING_APPROVAL' where id=? and status='DRAFT'",profileId);
     if(n!=1) throw bad("Only a draft tax profile can be submitted.");
     long offerId=((Number)row.get("institution_offer_id")).longValue();
+    requireCurrentOffer(offerId);
     audit(((Number)row.get("legal_entity_id")).longValue(),offerInstitution(offerId),context,
         "TAX_PROFILE_SUBMITTED","COURSE_TAX_PROFILE",Long.toString(profileId),Map.of());
     return Map.of("id",profileId,"status","PENDING_APPROVAL");
@@ -336,6 +348,7 @@ public class PlatformFinanceController {
     if(row.isEmpty()) throw notFound("Tax profile not found.");
     if(!"PENDING_APPROVAL".equals(String.valueOf(row.get("status")))) throw bad("Submit this tax profile before approval.");
     long offerId=((Number)row.get("institution_offer_id")).longValue(),entityId=((Number)row.get("legal_entity_id")).longValue();
+    requireCurrentOffer(offerId);
     Instant start=asInstant(row.get("effective_from")),end=row.get("effective_until")==null?null:asInstant(row.get("effective_until"));
     if(!exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE')",entityId)) {
       throw bad("Activate the legal seller before approving its tax profile.");
@@ -391,6 +404,7 @@ public class PlatformFinanceController {
     context=requireOwner(context);
     long offerId=requiredLong(body,"institutionOfferId");
     long institutionId=offerInstitution(offerId);
+    requireCurrentOffer(offerId);
     Map<String,Object> offer=one("""
       select o.id,o.price_paise,o.currency,o.status
       from institution_marketplace_offer o
@@ -462,6 +476,7 @@ public class PlatformFinanceController {
       where d.id=?
       """,discountId);
     if(row.isEmpty()) throw notFound("Discount offer not found.");
+    requireCurrentOffer(number(row.get("institution_offer_id")));
     if(!"DRAFT".equals(String.valueOf(row.get("status"))))
       throw bad("Only a draft discount offer can be submitted for approval.");
     int changed=jdbc.update("""
@@ -488,6 +503,7 @@ public class PlatformFinanceController {
       where d.id=? for update of d
       """,discountId);
     if(row.isEmpty()) throw notFound("Discount offer not found.");
+    requireCurrentOffer(number(row.get("institution_offer_id")));
     if(!"PENDING_APPROVAL".equals(String.valueOf(row.get("status"))))
       throw bad("Only a pending discount offer can be approved.");
     // Serialize approvals for the same course offer so two concurrent approvals cannot
@@ -594,6 +610,7 @@ public class PlatformFinanceController {
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=requireOwner(context);
     long institutionId=offerInstitution(offerId);
+    requireCurrentOffer(offerId);
     String currency=optionalText(body.get("currency"))==null?"INR":requiredText(body,"currency").toUpperCase(Locale.ROOT);
     if(!currency.matches("[A-Z]{3}")) throw bad("Currency must be a three-letter ISO code.");
     Instant start=body.get("effectiveFrom")==null?Instant.now():instant(body,"effectiveFrom");
@@ -619,6 +636,7 @@ public class PlatformFinanceController {
     Map<String,Object> policy=one("select institution_offer_id,status from revenue_share_policy where id=?",policyId);
     if(policy.isEmpty()) throw notFound("Revenue-share policy not found.");
     if(!"DRAFT".equals(String.valueOf(policy.get("status")))) throw bad("Only draft policies can be edited.");
+    requireCurrentOffer(((Number)policy.get("institution_offer_id")).longValue());
     if(!(body.get("recipients") instanceof List<?> raw)) throw bad("Recipients must be a list.");
     List<Map<String,Object>> normalized=new ArrayList<>();
     List<RevenueDistributionCalculator.Share> validation=new ArrayList<>();
@@ -664,6 +682,7 @@ public class PlatformFinanceController {
     context=requireOwner(context);
     Map<String,Object> row=one("select institution_offer_id,status from revenue_share_policy where id=?",policyId);
     if(row.isEmpty()) throw notFound("Revenue-share policy not found.");
+    requireCurrentOffer(((Number)row.get("institution_offer_id")).longValue());
     if(count("select count(*) from revenue_share_policy_recipient where policy_id=?",policyId)<1) {
       throw bad("Add at least one institution recipient before submitting this policy.");
     }
@@ -698,6 +717,7 @@ public class PlatformFinanceController {
       .mapToLong(r -> ((Number)r.get("percentage_basis_points")).longValue()).sum();
     if(percentageBasisPoints>10_000) throw bad("The combined percentage allocation cannot exceed 100% of the distributable pool.");
     long offerId=((Number)row.get("institution_offer_id")).longValue();
+    requireCurrentOffer(offerId);
     long sourceInstitution=offerInstitution(offerId);
     Instant start=asInstant(row.get("effective_from")),end=row.get("effective_until")==null?null:asInstant(row.get("effective_until"));
     boolean sellerReady=exists("""
@@ -1062,6 +1082,17 @@ public class PlatformFinanceController {
     Long id=jdbc.queryForObject("select institution_id from institution_marketplace_offer where id=?",Long.class,offerId);
     if(id==null) throw notFound("Course offer not found.");
     return id;
+  }
+
+  /**
+   * Finance may retain historical policies for audit, but new/approved configuration must follow
+   * the same current assignment that HRMS Marketplace and learner discovery use.
+   */
+  private void requireCurrentOffer(long offerId) {
+    if(!Boolean.TRUE.equals(jdbc.queryForObject(
+        "select qe_is_current_institution_offer(?)",Boolean.class,offerId))) {
+      throw bad("This offer is historical or superseded. Configure finance only after creating the offer for the current shareable assignment in HRMS Marketplace.");
+    }
   }
   private boolean exists(String sql,Object... args) { return Boolean.TRUE.equals(jdbc.queryForObject(sql,Boolean.class,args)); }
   private long count(String sql,Object... args) { Long n=jdbc.queryForObject(sql,Long.class,args); return n==null?0L:n; }
