@@ -446,8 +446,8 @@ export default function InstitutionsAdminPage() {
           <section className={styles.panel}>
             <div className={styles.panelHeading}>
               <div>
-                <h3>Course release access</h3>
-                <p>Access is scoped to an assigned course release. Assignment does not publish a Marketplace offer; listing and publication remain a separate HRMS approval workflow.</p>
+                <h3>Courses</h3>
+                <p>One entry per course identity. Assignment and release records stay in the workflow history; Marketplace publication is managed separately.</p>
               </div>
               <button type="button" className={styles.secondary} onClick={()=>setTab('marketplace')} disabled={saving}>Manage releases</button>
             </div>
@@ -458,7 +458,7 @@ export default function InstitutionsAdminPage() {
               </div>
               <div className={styles.readOnlyValues}>
                 {(detail.courses||[]).map(course=><span key={String(course.course_identity_id??course.program_id)} className={styles.valueChip}>
-                  {course.display_name} · Release v{course.release_version} · {course.release_state.replaceAll('_',' ')} · {course.assignment_source==='ORIGIN'?'Source-owned':course.assignment_source==='HRMS'?'HRMS assigned':course.assignment_source==='LEGACY_ENTITLEMENT_MIGRATION'?'Migrated access':course.assignment_source.replaceAll('_',' ')}
+                  {course.display_name} ({course.code}) · {course.release_state.replaceAll('_',' ')} · {course.assignment_source==='ORIGIN'?'Source-owned':course.assignment_source==='HRMS'?'HRMS assigned':course.assignment_source==='LEGACY_ENTITLEMENT_MIGRATION'?'Migrated access':course.assignment_source.replaceAll('_',' ')}
                 </span>)}
                 {!(detail.courses||[]).length?<span className={styles.emptyValue}>No active release assignments. Open Marketplace launch to assign an eligible release.</span>:null}
               </div>
