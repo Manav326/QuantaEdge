@@ -768,7 +768,81 @@ public class CourseMarketplaceLaunchController {
           case "RETURN_TO_DRAFT" -> "OFFER_RETURNED_TO_DRAFT";
           default -> "OFFER_ARCHIVED";
         },context.staffId(),details);
+
+    // Swap the live publication atomically only after the replacement has passed every
+    // HRMS gate and is actually PUBLISHED. Orders, invoices, and access remain bound to
+    // the old offer/course graph and are intentionally not rewritten.
+    List<Long> supersededOfferIds=new ArrayList<>();
+    if("PUBLISH".equals(action)) {
+      List<Map<String,Object>> superseded=jdbc.queryForList("""
+          select previous_offer.id as offer_id,previous_offer.assignment_id,
+            previous_offer.course_release_id
+          from institution_marketplace_offer published_offer
+          join curriculum_program published_program on published_program.id=published_offer.course_id
+          join institution_course_identity published_identity
+            on published_identity.id=published_program.course_identity_id
+          join institution_marketplace_offer previous_offer
+            on previous_offer.institution_id=published_offer.institution_id
+           and previous_offer.id<>published_offer.id
+           and previous_offer.status='PUBLISHED'
+           and previous_offer.legacy_migration=false
+          join institution_course_assignment previous_assignment
+            on previous_assignment.id=previous_offer.assignment_id
+           and previous_assignment.institution_id=previous_offer.institution_id
+           and previous_assignment.status='ASSIGNED'
+           and previous_assignment.assignment_source in ('ORIGIN','HRMS')
+          join institution_course_release previous_release
+            on previous_release.id=previous_offer.course_release_id
+           and previous_release.program_id=previous_offer.course_id
+          join curriculum_program previous_program on previous_program.id=previous_offer.course_id
+          join institution_course_identity previous_identity
+            on previous_identity.id=previous_program.course_identity_id
+          where published_offer.id=? and published_offer.status='PUBLISHED'
+            and published_offer.institution_id=?
+            and published_offer.legacy_migration=false
+            and previous_identity.id=published_identity.id
+            and (
+              previous_program.content_version_no<published_program.content_version_no
+              or (
+                previous_program.content_version_no=published_program.content_version_no
+                and (
+                  previous_release.release_version<
+                    (select current_release.release_version
+                     from institution_course_release current_release
+                     where current_release.id=published_offer.course_release_id)
+                  or (
+                    previous_release.release_version=
+                      (select current_release.release_version
+                       from institution_course_release current_release
+                       where current_release.id=published_offer.course_release_id)
+                    and previous_release.id<published_offer.course_release_id
+                  )
+                )
+              )
+            )
+          order by previous_offer.id
+          for update of previous_offer
+          """,offerId,institutionId);
+      for(Map<String,Object> previous:superseded) {
+        long previousOfferId=number(previous.get("offer_id"));
+        long previousAssignmentId=number(previous.get("assignment_id"));
+        long previousReleaseId=number(previous.get("course_release_id"));
+        int archived=jdbc.update("""
+            update institution_marketplace_offer
+            set status='ARCHIVED',updated_at=now()
+            where id=? and institution_id=? and status='PUBLISHED'
+            """,previousOfferId,institutionId);
+        if(archived==1) {
+          supersededOfferIds.add(previousOfferId);
+          record(institutionId,previousReleaseId,previousAssignmentId,previousOfferId,
+              "OFFER_ARCHIVED_SUPERSEDED",context.staffId(),
+              Map.of("supersededByOfferId",offerId,
+                "reason","A newer content/release version completed HRMS approval and publication."));
+        }
+      }
+    }
     return Map.of("updated",true,"offerId",offerId,"status",next,
+        "supersededOfferIds",supersededOfferIds,
         "message","Marketplace listing status updated.");
   }
 
