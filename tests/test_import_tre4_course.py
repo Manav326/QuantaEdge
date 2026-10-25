@@ -195,7 +195,7 @@ class Tre4ImporterTests(unittest.TestCase):
 
     def test_existing_source_owned_tre_identity_is_reused_without_mutation(self):
         cursor = FakeCursor([
-            ("TRE-4 · Computer Science", "ASSESSMENT", 901, 42, "I42_TRE4", "ASSESSMENT"),
+            ("TRE-4 · Computer Science", "ASSESSMENT", 901, 42, "TRE4", "ASSESSMENT"),
         ])
         identity_id = import_tre4_course.ensure_course_identity(cursor, 42, 777)
         self.assertEqual(identity_id, 901)
