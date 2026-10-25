@@ -48,7 +48,7 @@ $env:TRE4_DATABASE_URL = "postgresql://quantaedge:YOUR_LOCAL_DB_PASSWORD@localho
 python scripts/import_tre4_course.py --archive data/TRE-4_PYQ.zip --apply
 ```
 
-The importer is deliberately DRAFT-only. It locks the latest release and refuses to update content when that release is anything other than `DRAFT`. It cannot submit to HRMS, approve a release, mark an assessment or pack published, create a Marketplace offer, or publish an offer. Use the supported UI/API action for each next state; this prevents a package refresh from skipping an intermediate review gate.
+The importer locks the latest release and refuses to update content when that release is anything other than `DRAFT`. It never publishes assessments/packs or approves a release/offer. Optional `--submit-for-review` can move an **already-persisted** release from `DRAFT` to `IN_QUALITY_REVIEW` only after the database confirms every imported assessment and test pack is `PUBLISHED` and the question/answer review gates pass. The first run always persists a release as `DRAFT`; if this is the first release, re-run with the flag after it exists. HRMS approval, origin approval, assignment distribution and Marketplace offer transitions are never automated by the importer.
 
 The importer also accepts `SPRING_DATASOURCE_URL` (including the `jdbc:postgresql://` prefix). Never commit a database password or put it in this document. The importer requires Flyway V168, V177, V180, V196, V198 and V199 plus the current Marketplace-readiness migrations.
 
@@ -65,29 +65,29 @@ The dry-run JSON reports the course type, delivery mode, hierarchy, each pack co
 | Object | Import-time state | Permitted next step | What must not happen |
 |---|---|---|---|
 | Course record | `ACTIVE` (the structural course record is addressable; this is not release publication) | Remains the course identity used by the assessment catalogue and release workflow | Do not interpret course-record `ACTIVE` as published Marketplace content |
-| Question snapshots | `question_review_status=PENDING_HUMAN_REVIEW` and `answer_review_status=PENDING_HUMAN_REVIEW`; answer payload is `UNRESOLVED` | Human review of source wording/options and authoritative key, then save the supported review statuses | Import does not approve question wording or infer an answer |
+| Question snapshots | `question_review_status=PENDING_HUMAN_REVIEW` and `answer_review_status=PENDING_HUMAN_REVIEW`; answer payload is `UNRESOLVED` | The imported-question review action uses `PENDING_HUMAN_REVIEW`, `APPROVED` or `REJECTED`; approval requires an authoritative answer and explanation | Import does not approve question wording or infer an answer |
 | Assessment/test | `DRAFT` | Use the assessment review/publish workflow; publish only after every question and answer has passed its gates | Import must not set assessment `PUBLISHED` |
 | Test pack | `DRAFT` | The API advances it to `PUBLISHED` only when every included assessment is published | Import must not set pack `PUBLISHED` |
 | Course release | `DRAFT` | Institution Operations submission → `IN_QUALITY_REVIEW` → HRMS quality decision → `QUALITY_APPROVED` → origin-institution approval → `SHAREABLE` | Import must not submit or mark the release `QUALITY_APPROVED`/`SHAREABLE` |
 | Destination assignment | None at import; the source `ORIGIN` assignment is only the source-tenant binding | HRMS assigns a `SHAREABLE` release to a destination institution through its distribution workflow | Do not treat the source binding as cross-institution distribution |
-| Marketplace offer | Not created by this import | HRMS offer workflow: `DRAFT` → `SUBMITTED` → `APPROVED` → `PUBLISHED` | Release approval alone does not publish a Marketplace offer |
+| Marketplace offer | Not created by this import | HRMS offer workflow: `DRAFT` → `IN_REVIEW` → `APPROVED` → `PUBLISHED` | `IN_REVIEW` is the persisted submission state; there is no `SUBMITTED` offer status. Release approval alone does not publish a Marketplace offer |
 | Learner visibility | `false` | Only after the relevant test, release, assignment, entitlement and Marketplace gates pass | No import-time learner visibility |
 
 ### Operator sequence
 
 1. **Import:** run the dry-run, then apply. New questions, assessments, packs and release stay in draft/review-pending states.
 2. **Review and publish tests:** review every question, option and authoritative answer; publish each assessment through the supported assessment lifecycle. Confirm the related pack becomes `PUBLISHED` only through the server gate.
-3. **Submit release:** use Institution Operations → Course Releases to submit the `DRAFT` release. The server validates test publication/readiness and moves it to `IN_QUALITY_REVIEW`.
+3. **Submit release:** use Institution Operations → Course Releases, or re-run the importer with `--apply --submit-for-review` for an existing `DRAFT` release. The script/server validate test publication/readiness and move it to `IN_QUALITY_REVIEW`. A first import always commits `DRAFT` first; the first run cannot also submit it.
 4. **HRMS quality review:** HRMS reviews the frozen submitted fingerprint and either rejects it or advances it to `QUALITY_APPROVED`.
 5. **Origin approval:** the QuantaEdge source-institution approver reviews the quality-approved release and advances it to `SHAREABLE`. Rejection/withdrawal are terminal for that release; edits require a new release/version through the supported workflow.
-6. **Marketplace launch:** HRMS creates/configures the offer and advances it through `DRAFT`, `SUBMITTED`, `APPROVED`, then `PUBLISHED`; assignment, eligibility and price/entitlement checks still apply before a learner can access a test.
+6. **Marketplace launch:** HRMS creates/configures the offer and advances it through `DRAFT` → `IN_REVIEW` → `APPROVED` → `PUBLISHED`; assignment, eligibility and price/entitlement checks still apply before a learner can access a test.
 
 This sequence is intentional. It avoids the “jumping jack” failure mode where importing data appears to complete publication but HRMS has no correctly staged release or offer to review.
 ## HRMS lifecycle and safeguards
 
 Question/answer review and test publication must happen **before** source-release submission: V180 freezes the course graph while the release is `IN_QUALITY_REVIEW`, `QUALITY_APPROVED` or `SHAREABLE`. The supported assessment status transition publishes a test only after its imported question snapshots pass human answer review, and automatically publishes its versioned pack after every pack item is published. The source release submit endpoint also checks the generic published-test-pack gate.
 
-The importer can never submit the release, even if all content currently looks ready. Submission remains an explicit Institution Operations action so the operator can confirm the review package and see the server's readiness result. HRMS reviews the exact submitted fingerprint, then the QuantaEdge source-institution administrator approves the origin release. Only the resulting `SHAREABLE` release can be assigned through the HRMS-controlled distribution workflow.
+The importer can submit only an existing `DRAFT` release when `--submit-for-review` is explicitly supplied and database readiness passes. It cannot approve the release or perform any subsequent HRMS decision. The supported readiness check remains authoritative and the operator can review its result before requesting submission. HRMS reviews the exact submitted fingerprint, then the QuantaEdge source-institution administrator approves the origin release. Only the resulting `SHAREABLE` release can be assigned through the HRMS-controlled distribution workflow.
 
 If an earlier run already left an incomplete release in `IN_QUALITY_REVIEW`, HRMS must **reject** it first. That releases the course graph for correction. Review/publish the questions and packs while editable, then submit a fresh release; do not try to mutate the submitted graph or rerun the import over a frozen release.
 
