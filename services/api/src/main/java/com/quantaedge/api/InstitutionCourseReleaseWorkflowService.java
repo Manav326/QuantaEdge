@@ -57,7 +57,7 @@ public class InstitutionCourseReleaseWorkflowService {
     if("ASSESSMENT_ONLY".equals(deliveryMode)) {
       Boolean ready=jdbc.queryForObject("select assessment_only_course_ready(?)",Boolean.class,programId);
       if(!Boolean.TRUE.equals(ready)) {
-        throw conflict("Assessment-only release requires the three complete, source-verified TRE paper sets. Tests remain draft until question/answer review passes.");
+        throw conflict("Assessment-only release requires a valid source-owned test-pack hierarchy with complete question snapshots. Assessment tests remain draft until question/answer review passes.");
       }
       evidence.put("deliveryMode",deliveryMode);
       evidence.put("assessmentOnlyReady",true);
