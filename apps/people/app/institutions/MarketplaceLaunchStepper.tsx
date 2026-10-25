@@ -344,7 +344,7 @@ export default function MarketplaceLaunchStepper({
   const [k12ReviewSearch,setK12ReviewSearch] = useState('');
   const [reviewContentLoadingId, setReviewContentLoadingId] = useState<number | null>(null);
   const [reviewContentErrors, setReviewContentErrors] = useState<Record<number, string>>({});
-  const [reviewChapters, setReviewChapters] = useState<Record<number, ReleaseReviewChapter>>({});
+  const [reviewChapters, setReviewChapters] = useState<Record<string, ReleaseReviewChapter>>({});
   const [expandedReviewChapters, setExpandedReviewChapters] = useState<Record<number, number | null>>({});
   const [reviewChapterLoadingId, setReviewChapterLoadingId] = useState<number | null>(null);
   const [packageRightsDrafts, setPackageRightsDrafts] = useState<Record<number, PackageRightsDraft>>({});
@@ -485,7 +485,7 @@ export default function MarketplaceLaunchStepper({
   const k12ReviewOpen = k12ReviewTarget !== null;
   const k12ReviewRelease = k12ReviewTarget ? (data?.qualityReviewItems||[]).find(item=>item.release_id===k12ReviewTarget.releaseId) : undefined;
   const k12ReviewPreview = k12ReviewTarget ? reviewContent[k12ReviewTarget.releaseId] : undefined;
-  const k12ReviewChapter = k12ReviewTarget ? reviewChapters[k12ReviewTarget.chapterId] : undefined;
+  const k12ReviewChapter = k12ReviewTarget ? reviewChapters[k12ReviewTarget.releaseId+':'+k12ReviewTarget.chapterId] : undefined;
   const k12ReviewLesson = k12ReviewChapter?.lessons?.find(lesson=>lesson.id===k12ReviewTarget?.lessonId);
   const k12ReviewSearchValue = k12ReviewSearch.trim().toLocaleLowerCase();
   const k12ReviewSubjects = (k12ReviewPreview?.subjects||[]).map(subject=>({
@@ -498,12 +498,12 @@ export default function MarketplaceLaunchStepper({
     setK12ReviewSearch('');
     setK12ReviewTarget({releaseId,chapterId,lessonId:null});
     const release=(data?.qualityReviewItems||[]).find(item=>item.release_id===releaseId);
-    if(release&&!reviewChapters[chapterId])void toggleReviewChapter(release,chapterId);
+    if(release&&!reviewChapters[releaseId+':'+chapterId])void toggleReviewChapter(release,chapterId);
   };
   const selectK12ReviewChapter = (releaseId:number,chapterId:number) => {
     setK12ReviewTarget({releaseId,chapterId,lessonId:null});
     const release=(data?.qualityReviewItems||[]).find(item=>item.release_id===releaseId);
-    if(release&&!reviewChapters[chapterId])void toggleReviewChapter(release,chapterId);
+    if(release&&!reviewChapters[releaseId+':'+chapterId])void toggleReviewChapter(release,chapterId);
   };
   useEffect(()=>{
     if(!k12ReviewOpen)return;
@@ -567,7 +567,8 @@ export default function MarketplaceLaunchStepper({
       setExpandedReviewChapters(previous => ({ ...previous, [release.release_id]: null }));
       return;
     }
-    const cached = reviewChapters[chapterId];
+    const cacheKey=release.release_id+':'+chapterId;
+    const cached = reviewChapters[cacheKey];
     if (cached) {
       setExpandedReviewChapters(previous => ({ ...previous, [release.release_id]: chapterId }));
       return;
@@ -584,7 +585,7 @@ export default function MarketplaceLaunchStepper({
       if (!chapter || !Array.isArray(chapter.lessons)) {
         throw new Error('The selected chapter content is not part of this submitted release.');
       }
-      setReviewChapters(previous => ({ ...previous, [chapterId]: chapter }));
+      setReviewChapters(previous => ({ ...previous, [cacheKey]: chapter }));
       setExpandedReviewChapters(previous => ({ ...previous, [release.release_id]: chapterId }));
       const exactReleaseCurrent = detail.contentCurrent === true
         && detail.content_fingerprint === release.content_fingerprint;
