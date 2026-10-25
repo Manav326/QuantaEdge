@@ -1061,8 +1061,7 @@ export default function MarketplaceLaunchStepper({
                 && !previewFingerprintMismatch
                 && preview.courseTypePublishReady === true);
               const previewLoadInProgress = reviewContentLoadingId !== null;
-              const previewNeedsLoading = !preview
-                && !previewLoadInProgress && reviewChapterLoadingId === null && busyKey === null;
+              const previewNeedsLoading = !preview && !previewLoadInProgress;
               const qualityBlocker = !release.contentCurrent
                 ? 'Approval is blocked because this release is not fingerprint-current. Return it for correction, have the source institution correct the content and submit a fresh release.'
                 : !qualityReady
@@ -1227,7 +1226,7 @@ export default function MarketplaceLaunchStepper({
                         className={styles.actionHint + (!release.contentCurrent || !qualityReady || Boolean(preview && (!preview.contentCurrent || previewFingerprintMismatch)) ? ' ' + styles.actionHintWarning : '')}
                         role="note">
                         <span>{qualityBlocker}</span>
-                        {previewNeedsLoading ? <span>Use the “Load exact submitted content” button above to inspect this release before deciding.</span> : null}
+                        {previewNeedsLoading && reviewChapterLoadingId === null && busyKey === null ? <span>Use the “Load exact submitted content” button above to inspect this release before deciding.</span> : null}
                       </div>
                     ) : null}
                     <div className={styles.qualityActions}>
