@@ -907,23 +907,68 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
 
             cursor.execute("SELECT course_content_fingerprint(%s)", (course_id,))
             fingerprint = str(cursor.fetchone()[0]).strip()
+
+            # Structural package integrity is mandatory even for a DRAFT-only import.
+            cursor.execute("SELECT tre4_source_package_ready(%s)", (course_id,))
+            tre_ready_row = cursor.fetchone()
+            if not tre_ready_row or tre_ready_row[0] is not True:
+                raise ImportErrorSafe(
+                    "TRE source-package readiness failed after import. The transaction will roll back; "
+                    "no incomplete pack graph will be kept."
+                )
+
+            requested_submit_for_review = bool(args.submit_for_review)
+            submit_for_review = False
+            submission_deferred = False
+            if requested_submit_for_review:
+                cursor.execute("SELECT assessment_only_course_publish_ready(%s)", (course_id,))
+                publish_ready_row = cursor.fetchone()
+                if publish_ready_row and publish_ready_row[0] is True:
+                    # This is the only importer-driven release transition. Tests and packs must
+                    # already have reached PUBLISHED through the normal, audited assessment API.
+                    submit_for_review = True
+                else:
+                    submission_deferred = True
+                    summary["submissionDeferred"] = True
+                    summary["submissionDeferralReason"] = (
+                        "Release submission was not performed: at least one assessment/test pack is "
+                        "not published or a question/answer review gate is incomplete. The content remains "
+                        "editable in DRAFT. Finish human question/answer review and publish each assessment "
+                        "through the supported Admin Web assessment workflow, then rerun with --submit-for-review."
+                    )
+
             release_created = False
+            release_submitted = False
             if release_row is None:
-                # Import creates only the first editable draft. No implicit release submission.
+                initial_state = "IN_QUALITY_REVIEW" if submit_for_review else "DRAFT"
                 cursor.execute("""
                     INSERT INTO institution_course_release(
                       source_institution_id,program_id,release_version,release_state,content_fingerprint,
-                      submitted_at,legacy_migration,legacy_migration_note,created_at,updated_at
-                    ) VALUES (%s,%s,1,'DRAFT',%s,NULL,false,NULL,now(),now())
+                      submitted_at,submitted_by_institution_admin_id,submitted_by_staff_id,
+                      legacy_migration,legacy_migration_note,created_at,updated_at
+                    ) VALUES (%s,%s,1,%s,%s,CASE WHEN %s THEN now() ELSE NULL END,NULL,NULL,
+                              false,NULL,now(),now())
                     RETURNING id,release_version,release_state,content_fingerprint
-                """, (institution_id, course_id, fingerprint))
+                """, (institution_id, course_id, initial_state, fingerprint, submit_for_review))
                 release_row = cursor.fetchone()
+                release_created = True
+                release_submitted = submit_for_review
             else:
                 release_id, release_version, release_state, saved_fingerprint = release_row
                 if str(release_state) != "DRAFT":
-                    # Defensive recheck while the row is locked; never advance a lifecycle status here.
                     raise ImportErrorSafe(f"Release {release_id} is {release_state}; only DRAFT releases may be imported.")
-                if str(saved_fingerprint or "").strip() != fingerprint:
+                if submit_for_review:
+                    cursor.execute("""
+                        UPDATE institution_course_release
+                        SET release_state='IN_QUALITY_REVIEW',content_fingerprint=%s,
+                            submitted_at=now(),submitted_by_institution_admin_id=NULL,
+                            submitted_by_staff_id=NULL,updated_at=now()
+                        WHERE id=%s AND source_institution_id=%s AND release_state='DRAFT'
+                    """, (fingerprint, release_id, institution_id))
+                    if cursor.rowcount != 1:
+                        raise ImportErrorSafe("The editable TRE-4 release changed concurrently; retry the import.")
+                    release_submitted = True
+                elif str(saved_fingerprint or "").strip() != fingerprint:
                     cursor.execute("""
                         UPDATE institution_course_release
                         SET content_fingerprint=%s,updated_at=now()
@@ -936,9 +981,11 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                     FROM institution_course_release WHERE id=%s
                 """, (release_id,))
                 release_row = cursor.fetchone()
-            if not release_row or str(release_row[2]) != "DRAFT":
-                raise ImportErrorSafe("TRE-4 import must finish with the course release in DRAFT.")
+            if not release_row:
+                raise ImportErrorSafe("TRE-4 release row is missing after import.")
             release_id, release_version, release_state, _ = release_row
+            if str(release_state) not in ({"DRAFT", "IN_QUALITY_REVIEW"} if release_submitted else {"DRAFT"}):
+                raise ImportErrorSafe("TRE-4 import ended in an unexpected lifecycle state.")
             assignment_id = ensure_source_assignment(cursor, institution_id, int(release_id))
             if created_course:
                 cursor.execute("""
@@ -953,6 +1000,21 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                     "testPackIds": [row["testPackId"] for row in summary["papers"]],
                     "deliveryMode": "ASSESSMENT_ONLY", "source": "scripts/import_tre4_course.py",
                 })))
+            if release_submitted:
+                cursor.execute("""
+                    INSERT INTO institution_course_lifecycle_event(
+                      institution_id,course_release_id,assignment_id,event_type,details
+                    ) VALUES (%s,%s,%s,'RELEASE_SUBMITTED',%s::jsonb)
+                """, (institution_id, release_id, assignment_id, json.dumps({
+                    "courseId": course_id,
+                    "workflow": "TRE-4 import CLI",
+                    "deliveryMode": "ASSESSMENT_ONLY",
+                    "sourceArchiveSha256": archive_sha256,
+                    "reviewRequired": True,
+                    "studentDeliveryAllowed": False,
+                    "submissionGate": "assessment_only_course_publish_ready",
+                })))
+
             summary.update({
                 "applied": True,
                 "institutionId": institution_id,
@@ -970,15 +1032,15 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                 "createdAssessments": created_assessments,
                 "releaseFingerprint": fingerprint,
                 "studentDeliveryAllowed": False,
-                "submittedForReview": False,
+                "submittedForReview": str(release_state) == "IN_QUALITY_REVIEW",
+                "submissionDeferred": submission_deferred,
+                "submissionDeferralReason": summary.get("submissionDeferralReason", ""),
                 "nextStep": (
-                    "1) Human-review every source question and authoritative answer; 2) publish each assessment through the supported assessment workflow; "
-                    "3) verify its test pack reaches PUBLISHED only after all included assessments are published; "
-                    "4) submit the DRAFT course release from Institution Operations, creating IN_QUALITY_REVIEW; "
-                    "5) HRMS performs quality review and moves it to QUALITY_APPROVED; "
-                    "6) the source-institution approver moves it to SHAREABLE; "
-                    "7) HRMS creates and advances the Marketplace offer through DRAFT, SUBMITTED, APPROVED and PUBLISHED. "
-                    "This importer performs none of those transitions."
+                    "1) Human-review every source question and authoritative answer; 2) publish each assessment through the supported, audited assessment API; "
+                    "3) verify each complete pack is PUBLISHED; 4) rerun this script with --apply --submit-for-review to advance the ready DRAFT release to IN_QUALITY_REVIEW; "
+                    "5) HRMS performs quality review and moves it to QUALITY_APPROVED; 6) the source-institution approver moves it to SHAREABLE; "
+                    "7) HRMS creates/configures the Marketplace offer and advances it through DRAFT → IN_REVIEW → APPROVED → PUBLISHED. "
+                    "The script does not invent reviewer approval, publish assessments, perform HRMS decisions, or publish Marketplace offers."
                 ),
             })
     return summary
@@ -991,11 +1053,18 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--inventory", type=Path, help="Use a previously generated tre-question-inventory.json instead of extracting.")
     parser.add_argument("--database-url", help="PostgreSQL URL; otherwise TRE4_DATABASE_URL or SPRING_DATASOURCE_URL is used.")
     parser.add_argument("--apply", action="store_true", help="Commit the classless ASSESSMENT course, versioned test packs, draft tests, questions, and release records. Without this flag, no DB writes occur.")
+    parser.add_argument(
+        "--submit-for-review", action="store_true",
+        help="With --apply, transition the source release DRAFT → IN_QUALITY_REVIEW only when all assessments and complete test packs are already PUBLISHED and every server-side review/readiness gate passes. Does not approve or publish content."
+    )
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
+    if args.submit_for_review and not args.apply:
+        print("ERROR: --submit-for-review requires --apply.", file=sys.stderr)
+        return 2
     try:
         inventory, register = load_inventory(args)
         papers_map = inventory.get("papers")
@@ -1031,6 +1100,8 @@ def main() -> int:
                 for paper in papers
             ],
             "studentDeliveryAllowed": False,
+            "submitForReviewRequested": bool(args.submit_for_review),
+            "submissionWillRequirePublishedAssessmentsAndPacks": True,
         }
         if not args.apply:
             print(json.dumps(plan, ensure_ascii=False, indent=2))
