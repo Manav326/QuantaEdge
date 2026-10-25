@@ -217,6 +217,23 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertIn("'TRE 3.0'::varchar", tre_specific)
         self.assertIn("150", tre_specific)
 
+    def test_marketplace_publish_readiness_is_generic_for_assessment_courses(self):
+        migration = SCRIPT.parents[1] / "services" / "api" / "src" / "main" / "resources" / "db" / "migration" / "V200__generic_assessment_publish_readiness.sql"
+        sql = migration.read_text(encoding="utf-8")
+        function_start = sql.index("CREATE OR REPLACE FUNCTION assessment_only_course_publish_ready")
+        function_end = sql.index("INSERT INTO app_metadata", function_start)
+        publish_ready = sql[function_start:function_end]
+
+        self.assertIn("assessment_only_course_ready(p_program_id)", publish_ready)
+        self.assertIn("pack.status='PUBLISHED'", publish_ready)
+        self.assertIn("pack.status<>'PUBLISHED'", publish_ready)
+        self.assertIn("a.status='PUBLISHED'", publish_ready)
+        self.assertIn("a.status<>'PUBLISHED'", publish_ready)
+        self.assertNotIn("tre4-bpsc", publish_ready)
+        self.assertNotIn("TRE 1.0", publish_ready)
+        self.assertNotIn("TRE 2.0", publish_ready)
+        self.assertNotIn("TRE 3.0", publish_ready)
+
     def test_expected_primary_booklet_counts(self):
         self.assertEqual(import_tre4_course.expected_question_count("TRE 1.0"), 120)
         self.assertEqual(import_tre4_course.expected_question_count("TRE 2.0"), 150)
