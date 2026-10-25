@@ -90,8 +90,6 @@ public class CourseMarketplaceLaunchController {
         courseId,savedFingerprint,result.get("release_updated_at")));
     result.put("contentCurrent",contentCurrent);
     result.put("currentFingerprint",savedFingerprint.trim());
-    result.put("courseTypeReady",Boolean.TRUE.equals(
-        jdbc.queryForObject("select course_marketplace_content_type_ready(?)",Boolean.class,courseId)));
     result.put("assessmentOnlyReady",Boolean.TRUE.equals(
         jdbc.queryForObject("select assessment_only_course_publish_ready(?)",Boolean.class,courseId)));
     result.put("courseTypePublishReady",Boolean.TRUE.equals(
