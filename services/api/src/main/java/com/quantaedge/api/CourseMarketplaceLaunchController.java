@@ -571,6 +571,9 @@ public class CourseMarketplaceLaunchController {
       throw conflict("Only an active institution and active standalone course product can be configured for Marketplace.");
     if(!"SHAREABLE".equals(text(assignment.get("release_state"))))
       throw conflict("The course release must pass origin approval and platform content-quality review before an offer can be drafted.");
+    if(!Boolean.TRUE.equals(jdbc.queryForObject(
+        "select qe_is_current_institution_assignment(?)",Boolean.class,assignmentId)))
+      throw conflict("This assignment has been superseded. Refresh the stepper and configure the current course release instead.");
     Map<String,Object> base=readiness.inspectAssignment(assignmentId,institutionId);
     @SuppressWarnings("unchecked")
     List<Map<String,Object>> checks=(List<Map<String,Object>>)base.get("checks");
@@ -619,6 +622,7 @@ public class CourseMarketplaceLaunchController {
             and status in ('DRAFT','REJECTED','ARCHIVED')
           """,title,description,pricePaise,currency,offerId,institutionId,assignmentId);
     }
+    archiveSafeSupersededOffers(institutionId,number(assignment.get("course_id")),offerId,context.staffId());
     record(institutionId,number(assignment.get("release_id")),assignmentId,offerId,
         "OFFER_DRAFTED",context.staffId(),
         Map.of("pricePaise",pricePaise,"currency",currency,"previousStatus",oldStatus.isBlank()?"NONE":oldStatus));
@@ -784,6 +788,51 @@ public class CourseMarketplaceLaunchController {
         },context.staffId(),details);
     return Map.of("updated",true,"offerId",offerId,"status",next,
         "message","Marketplace listing status updated.");
+  }
+
+  /**
+   * Superseded offers are historical financial references, not disposable rows. Archive only
+   * stale offers that have no unresolved checkout order or pending parent request. Those with
+   * unresolved activity remain stored for reconciliation, while the current-assignment gate keeps
+   * them out of new marketplace discovery and checkout.
+   */
+  private void archiveSafeSupersededOffers(long institutionId,long currentCourseId,long currentOfferId,long staffId) {
+    List<Map<String,Object>> staleOffers=jdbc.queryForList("""
+        select stale.id,stale.assignment_id,stale.course_release_id,stale.status
+        from institution_marketplace_offer stale
+        join curriculum_program stale_program on stale_program.id=stale.course_id
+        join curriculum_program current_program on current_program.id=?
+        where stale.institution_id=? and stale.id<>? and stale.status<>'ARCHIVED'
+          and coalesce(stale_program.course_identity_id,-stale_program.id)
+              =coalesce(current_program.course_identity_id,-current_program.id)
+          and not exists (
+            select 1 from course_payment_order pending_order
+            where pending_order.institution_id=stale.institution_id
+              and pending_order.institution_offer_id=stale.id
+              and pending_order.status in ('CREATING','PENDING')
+          )
+          and not exists (
+            select 1 from parent_course_purchase_request pending_request
+            where pending_request.institution_id=stale.institution_id
+              and pending_request.institution_offer_id=stale.id
+              and pending_request.status='PENDING'
+          )
+        for update of stale
+        """,currentCourseId,institutionId,currentOfferId);
+    for(Map<String,Object> stale:staleOffers) {
+      long staleOfferId=number(stale.get("id"));
+      String previousStatus=text(stale.get("status"));
+      int changed=jdbc.update("""
+          update institution_marketplace_offer set status='ARCHIVED',updated_by_admin_id=null,updated_at=now()
+          where id=? and institution_id=? and status<>'ARCHIVED'
+          """,staleOfferId,institutionId);
+      if(changed==1) {
+        record(institutionId,number(stale.get("course_release_id")),number(stale.get("assignment_id")),staleOfferId,
+            "OFFER_ARCHIVED",staffId,
+            Map.of("reason","SUPERSEDED_OFFER_REPLACED","previousStatus",previousStatus,
+              "replacedByOfferId",currentOfferId));
+      }
+    }
   }
 
   private Map<String,Object> lockAssignment(long institutionId,long assignmentId) {
