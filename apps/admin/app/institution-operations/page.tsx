@@ -49,6 +49,8 @@ type Release = {
   course_code?: string;
   display_name?: string;
   release_version: number;
+  content_version_no: number;
+  course_identity_public_id?: string;
   release_state: string;
   quality_review_notes?: string | null;
   origin_rejection_reason?: string | null;
@@ -347,7 +349,7 @@ function ReleaseList({ releases, loading, busyRelease, onAction, t, canManageRel
       const canApprove = state === 'QUALITY_APPROVED';
       return <article className={styles.releaseCard + (focusCourseId === String(release.course_id) ? ' ' + styles.focused : '')} data-release-course-id={release.course_id} key={release.course_id + ':' + release.release_id}>
         <div className={styles.releaseTitle}>
-          <div><h3>{release.display_name || release.course_code || 'Course'}</h3><p>{release.course_code || ''} · v{release.release_version}</p></div>
+          <div><h3>{release.display_name || release.course_code || 'Course'}</h3><p>{release.course_code || ''} · Content v{release.content_version_no}</p></div>
           <span className={state === 'SHAREABLE' ? styles.activeStatus : styles.status}>{stateLabel(state)}</span>
         </div>
         <ol className={styles.steps}>
