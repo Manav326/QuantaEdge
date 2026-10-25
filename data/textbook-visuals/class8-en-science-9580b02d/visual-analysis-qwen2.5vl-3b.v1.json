@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1299,
+    "assets_selected": 1300,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "aea7db4a2c358f45b70aad03",
-      "19c227fd1fc13adb636a0c58"
+      "35ff0b921f1e0b0945a8f8df"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1295,
     "assets_remaining": 996,
     "assets_completion_percent": 56.5,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 1294,
+    "assets_skipped_from_checkpoint": 1295,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40242884307",
-      "checkpointed_at": "2026-10-25T23:48:16Z"
+      "checkpointed_at": "2026-10-25T23:53:27Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40242884307",
-      "checkpointed_at": "2026-10-25T23:48:41Z"
+      "checkpointed_at": "2026-10-25T23:53:53Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40242884307",
-      "checkpointed_at": "2026-10-25T23:49:11Z"
+      "checkpointed_at": "2026-10-25T23:54:23Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -42092,7 +42092,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40242884307",
-      "checkpointed_at": "2026-10-25T23:49:54Z"
+      "checkpointed_at": "2026-10-25T23:55:05Z"
     },
     {
       "asset_id": "450fc4af3dc870b080bfbe90",
@@ -42397,7 +42397,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40233310877",
+      "run_id": "40242884307",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
       "human_review_required": true,
