@@ -292,6 +292,40 @@ function readableLessonBlock(content: unknown): Array<{label:string;text:string}
   return fields.length?fields:[{label:'Structured content',text:JSON.stringify(content,null,2)}];
 }
 
+
+function hrmsLocalizedText(value: unknown, language: 'en'|'hi'): string {
+  if (typeof value === 'string') return value;
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return '';
+  const variants=value as Record<string, unknown>;
+  const candidate=variants[language] ?? variants[language === 'en' ? 'english' : 'hindi'] ?? variants[language.toUpperCase()];
+  if (typeof candidate === 'string') return candidate;
+  if (candidate && typeof candidate === 'object' && !Array.isArray(candidate)) {
+    const row=candidate as Record<string, unknown>;
+    return String(row.text ?? row.label ?? row.prompt ?? '');
+  }
+  return '';
+}
+function hrmsReviewPrompt(snapshot: Record<string, any>, language: 'en'|'hi'): string {
+  return hrmsLocalizedText(snapshot.prompt_i18n,language) || (language === 'en' ? String(snapshot.prompt || '') : '');
+}
+function hrmsReviewOption(option: Record<string, any>, language: 'en'|'hi'): string {
+  const translated=hrmsLocalizedText(option.text_i18n ?? option.label_i18n ?? option.option_i18n,language);
+  if (translated) return translated;
+  return language === 'en' ? String(option.text ?? option.label ?? '') : '';
+}
+function hrmsReviewAnswerValue(value: unknown): string {
+  if (value === null || value === undefined) return 'Unresolved';
+  if (typeof value === 'string') return value;
+  try { return JSON.stringify(value); } catch { return String(value); }
+}
+function hrmsQuestionReviewStatus(snapshot: Record<string, any>): 'APPROVED'|'REJECTED'|'PENDING_HUMAN_REVIEW' {
+  const question=String(snapshot.question_review_status || 'PENDING_HUMAN_REVIEW').toUpperCase();
+  const answer=String(snapshot.answer_review_status || 'PENDING_HUMAN_REVIEW').toUpperCase();
+  if (question === 'REJECTED' || answer === 'REJECTED') return 'REJECTED';
+  if (question === 'APPROVED' && answer === 'APPROVED') return 'APPROVED';
+  return 'PENDING_HUMAN_REVIEW';
+}
+
 export default function MarketplaceLaunchStepper({
   institutionId,
   institutionName,
@@ -303,6 +337,9 @@ export default function MarketplaceLaunchStepper({
   const [drafts, setDrafts] = useState<Record<number, Draft>>({});
   const [reviewNotes, setReviewNotes] = useState<Record<number, string>>({});
   const [reviewContent, setReviewContent] = useState<Record<number, ReleaseReviewContent>>({});
+  const [assessmentReviewTarget,setAssessmentReviewTarget] = useState<{releaseId:number;assessmentId:number;sequenceNo:number}|null>(null);
+  const [assessmentReviewSearch,setAssessmentReviewSearch] = useState('');
+  const [assessmentReviewStatusFilter,setAssessmentReviewStatusFilter] = useState<'ALL'|'PENDING'|'APPROVED'|'REJECTED'>('ALL');
   const [reviewContentLoadingId, setReviewContentLoadingId] = useState<number | null>(null);
   const [reviewContentErrors, setReviewContentErrors] = useState<Record<number, string>>({});
   const [reviewChapters, setReviewChapters] = useState<Record<number, ReleaseReviewChapter>>({});
@@ -396,6 +433,53 @@ export default function MarketplaceLaunchStepper({
     }
   }
 
+  const assessmentReviewOpen = assessmentReviewTarget !== null;
+  const assessmentReviewContent = assessmentReviewTarget ? reviewContent[assessmentReviewTarget.releaseId] : undefined;
+  const assessmentReviewAssessment = assessmentReviewContent?.assessments?.find(item=>item.assessment_id===assessmentReviewTarget?.assessmentId);
+  const assessmentReviewQuestions = assessmentReviewAssessment?.questions || [];
+  const assessmentReviewSearchText = assessmentReviewSearch.trim().toLocaleLowerCase();
+  const filteredAssessmentReviewQuestions = assessmentReviewQuestions.filter(question=>{
+    const snapshot=question.question_snapshot||{};
+    const status=hrmsQuestionReviewStatus(snapshot);
+    if(assessmentReviewStatusFilter!=='ALL'&&status!==(assessmentReviewStatusFilter==='PENDING'?'PENDING_HUMAN_REVIEW':assessmentReviewStatusFilter))return false;
+    if(!assessmentReviewSearchText)return true;
+    return [question.sequence_no,snapshot.prompt,snapshot.prompt_i18n?.en,snapshot.prompt_i18n?.hi]
+      .some(value=>String(value??'').toLocaleLowerCase().includes(assessmentReviewSearchText));
+  });
+  const activeAssessmentReviewQuestion=filteredAssessmentReviewQuestions.find(question=>question.sequence_no===assessmentReviewTarget?.sequenceNo)
+    ||filteredAssessmentReviewQuestions[0];
+  const activeAssessmentReviewSnapshot=activeAssessmentReviewQuestion?.question_snapshot||{};
+  const activeAssessmentReviewAnswer=activeAssessmentReviewSnapshot.answer_payload||{};
+  const activeAssessmentReviewAnswerKeys=activeAssessmentReviewAnswer.kind==='OPTION'
+    ?[String(activeAssessmentReviewAnswer.value??'')]
+    :activeAssessmentReviewAnswer.kind==='MULTI_OPTION'&&Array.isArray(activeAssessmentReviewAnswer.value)
+      ?activeAssessmentReviewAnswer.value.map((value:unknown)=>String(value))
+      :[];
+  const activeAssessmentReviewStatus=hrmsQuestionReviewStatus(activeAssessmentReviewSnapshot);
+  const approvedAssessmentQuestions=assessmentReviewQuestions.filter(question=>hrmsQuestionReviewStatus(question.question_snapshot||{})==='APPROVED').length;
+  const rejectedAssessmentQuestions=assessmentReviewQuestions.filter(question=>hrmsQuestionReviewStatus(question.question_snapshot||{})==='REJECTED').length;
+  const reviewReleaseQueueItem=assessmentReviewTarget
+    ?(data?.qualityReviewItems||[]).find(release=>release.release_id===assessmentReviewTarget.releaseId)
+    :undefined;
+  const closeAssessmentReview=()=>setAssessmentReviewTarget(null);
+  const openAssessmentReview=(releaseId:number,assessmentId:number,sequenceNo:number)=>{
+    setAssessmentReviewSearch('');
+    setAssessmentReviewStatusFilter('ALL');
+    setAssessmentReviewTarget({releaseId,assessmentId,sequenceNo});
+  };
+
+  useEffect(()=>{
+    if(!assessmentReviewOpen)return;
+    const previousOverflow=document.body.style.overflow;
+    document.body.style.overflow='hidden';
+    const onKeyDown=(event:KeyboardEvent)=>{if(event.key==='Escape')setAssessmentReviewTarget(null);};
+    window.addEventListener('keydown',onKeyDown);
+    return ()=>{
+      document.body.style.overflow=previousOverflow;
+      window.removeEventListener('keydown',onKeyDown);
+    };
+  },[assessmentReviewOpen]);
+
   const counts = useMemo(() => {
     const items = data?.items || [];
     return {
@@ -416,6 +500,7 @@ export default function MarketplaceLaunchStepper({
   const toggleReviewContent = async (release: QualityReviewItem) => {
     const releaseId = release.release_id;
     if (reviewContent[releaseId]) {
+      setAssessmentReviewTarget(current=>current?.releaseId===releaseId?null:current);
       setReviewContent(previous => {
         const next = { ...previous };
         delete next[releaseId];
@@ -972,34 +1057,25 @@ export default function MarketplaceLaunchStepper({
                                   <span>Max score: {assessment.max_score}</span>
                                 </div>
                                 {assessment.source_url && <p style={{ overflowWrap: 'anywhere', fontSize: 12 }}>Source: {assessment.source_url}</p>}
-                                {(assessment.questions || []).map(question => {
-                                  const snapshot = question.question_snapshot || {};
-                                  const promptI18n = snapshot.prompt_i18n || {};
-                                  const options = Array.isArray(snapshot.options) ? snapshot.options : [];
-                                  const answer = snapshot.answer_payload || {};
-                                  const tags = Array.isArray(snapshot.topic_tags) ? snapshot.topic_tags : [];
-                                  return (
-                                    <div key={question.sequence_no} style={{ padding: 10, marginTop: 8, border: '1px solid var(--border, #d7dce2)', borderRadius: 8 }}>
-                                      <strong>Q{question.sequence_no} · {snapshot.question_type || 'Question'} · {question.max_marks} mark(s)</strong>
-                                      {snapshot.prompt && <p style={{ whiteSpace: 'pre-wrap' }}>{snapshot.prompt}</p>}
-                                      {promptI18n.en && promptI18n.en !== snapshot.prompt && <p style={{ whiteSpace: 'pre-wrap' }}><strong>EN:</strong> {promptI18n.en}</p>}
-                                      {promptI18n.hi && <p style={{ whiteSpace: 'pre-wrap' }}><strong>HI:</strong> {promptI18n.hi}</p>}
-                                      {options.length > 0 && <ol type="A">{options.map((option: any, optionIndex: number) => (
-                                        <li key={option.key || option.option_key || optionIndex} style={{ marginBottom: 4 }}>
-                                          {option.text || option.label || option.text_i18n?.en || option.text_i18n?.hi || ''}
-                                          {option.text_i18n?.hi && option.text_i18n?.en && <span> / {option.text_i18n.hi}</span>}
-                                        </li>
-                                      ))}</ol>}
-                                      <p style={{ fontSize: 12, color: 'var(--muted, #667085)' }}>
-                                        Section: {snapshot.section_code || '—'} · Topic tags: {tags.join(', ') || 'not tagged'} · Difficulty: {snapshot.difficulty || 'CORE'}
-                                      </p>
-                                      <p style={{ fontSize: 12 }}>
-                                        Question review: {snapshot.question_review_status || 'PENDING_HUMAN_REVIEW'} · Answer review: {snapshot.answer_review_status || 'PENDING_HUMAN_REVIEW'} · Answer key: {answer.kind || 'UNRESOLVED'} {answer.value === null || answer.value === undefined ? '(unresolved)' : String(answer.value)}
-                                      </p>
-                                      {snapshot.explanation && <p style={{ whiteSpace: 'pre-wrap' }}><strong>Explanation:</strong> {snapshot.explanation}</p>}
+                                {(() => {
+                                  const questions=assessment.questions||[];
+                                  const approved=questions.filter(question=>hrmsQuestionReviewStatus(question.question_snapshot||{})==='APPROVED').length;
+                                  const rejected=questions.filter(question=>hrmsQuestionReviewStatus(question.question_snapshot||{})==='REJECTED').length;
+                                  const firstPending=questions.find(question=>hrmsQuestionReviewStatus(question.question_snapshot||{})==='PENDING_HUMAN_REVIEW');
+                                  const firstSequence=Number(firstPending?.sequence_no||questions[0]?.sequence_no||1);
+                                  return <div className={styles.assessmentReviewLaunch}>
+                                    <div>
+                                      <strong>{questions.length} frozen question snapshots</strong>
+                                      <p>{approved} fully approved · {rejected} rejected · {questions.length-approved-rejected} pending human review</p>
+                                      <small>Open a dedicated read-only workspace to compare both languages, verify the key, explanation and review statuses, and inspect each question before the HRMS quality decision.</small>
                                     </div>
-                                  );
-                                })}
+                                    <button type="button" className={styles.primaryButton}
+                                      disabled={!questions.length}
+                                      onClick={()=>openAssessmentReview(release.release_id,assessment.assessment_id,firstSequence)}>
+                                      Open full-screen bilingual review
+                                    </button>
+                                  </div>;
+                                })()}
                               </details>
                             ))}
                           </>
@@ -1205,6 +1281,122 @@ export default function MarketplaceLaunchStepper({
           <p className={styles.qualityFootnote}>Quality approval does not make the course purchasable by itself. The originating institution must complete release approval; HRMS can then assign the shareable release and continue through the listing checklist.</p>
         </section>
       )}
+
+
+
+      {assessmentReviewOpen&&assessmentReviewTarget&&<div className={styles.hrmsAssessmentReviewBackdrop} role="presentation" onMouseDown={event=>{if(event.target===event.currentTarget)closeAssessmentReview();}}>
+        <section className={styles.hrmsAssessmentReviewWorkspace} role="dialog" aria-modal="true" aria-labelledby="hrms-assessment-review-title">
+          <aside className={styles.hrmsAssessmentReviewSidebar}>
+            <header className={styles.hrmsAssessmentSidebarHeader}>
+              <span>HRMS · RELEASE QUALITY REVIEW</span>
+              <h2>Question navigator</h2>
+              <p>{assessmentReviewAssessment?.title||'Assessment'} · Release #{assessmentReviewTarget.releaseId}</p>
+              <div className={styles.hrmsAssessmentProgress} role="progressbar" aria-label="Questions fully approved in submitted snapshot" aria-valuemin={0} aria-valuemax={assessmentReviewQuestions.length} aria-valuenow={approvedAssessmentQuestions}>
+                <span style={{width:(assessmentReviewQuestions.length?100*approvedAssessmentQuestions/assessmentReviewQuestions.length:0)+'%'}}/>
+              </div>
+              <div className={styles.hrmsAssessmentProgressMeta}><b>{approvedAssessmentQuestions}/{assessmentReviewQuestions.length} fully approved</b><span>{assessmentReviewQuestions.length-approvedAssessmentQuestions-rejectedAssessmentQuestions} pending</span></div>
+            </header>
+            <div className={styles.hrmsAssessmentNavigatorFilters}>
+              <input aria-label="Search bilingual question text" value={assessmentReviewSearch} onChange={event=>setAssessmentReviewSearch(event.target.value)} placeholder="Search question or number"/>
+              <select aria-label="Filter assessment questions by review status" value={assessmentReviewStatusFilter} onChange={event=>setAssessmentReviewStatusFilter(event.target.value as 'ALL'|'PENDING'|'APPROVED'|'REJECTED')}>
+                <option value="ALL">All statuses</option><option value="PENDING">Pending review</option><option value="APPROVED">Approved</option><option value="REJECTED">Rejected</option>
+              </select>
+            </div>
+            <nav className={styles.hrmsAssessmentQuestionNav} aria-label="Submitted assessment questions">
+              {filteredAssessmentReviewQuestions.map(question=>{
+                const status=hrmsQuestionReviewStatus(question.question_snapshot||{});
+                return <button type="button" key={question.sequence_no}
+                  className={[styles.hrmsAssessmentQuestionNavItem,activeAssessmentReviewQuestion?.sequence_no===question.sequence_no?styles.hrmsAssessmentQuestionNavItemActive:''].join(' ')}
+                  aria-current={activeAssessmentReviewQuestion?.sequence_no===question.sequence_no?'true':undefined}
+                  onClick={()=>setAssessmentReviewTarget(current=>current?{...current,sequenceNo:question.sequence_no}:current)}>
+                  <span>{question.sequence_no}</span><b>Q{question.sequence_no}</b><small>{status==='APPROVED'?'Approved':status==='REJECTED'?'Rejected':'Pending'}</small>
+                </button>;
+              })}
+              {!filteredAssessmentReviewQuestions.length&&<p className={styles.hrmsAssessmentNavigatorEmpty}>No questions match the current filters.</p>}
+            </nav>
+          </aside>
+          <div className={styles.hrmsAssessmentReviewMain}>
+            <header className={styles.hrmsAssessmentReviewHeader}>
+              <div>
+                <span>FROZEN SUBMITTED SNAPSHOT · READ ONLY</span>
+                <h1 id="hrms-assessment-review-title">{assessmentReviewContent?.course_name||reviewReleaseQueueItem?.course_name||'Course'} · {assessmentReviewAssessment?.title||'Assessment'}</h1>
+                <p>Release v{assessmentReviewContent?.release_version??reviewReleaseQueueItem?.release_version} · Release #{assessmentReviewTarget.releaseId} · {assessmentReviewAssessment?.status||'Unknown status'} · {assessmentReviewAssessment?.questionCount??assessmentReviewAssessment?.question_count??assessmentReviewQuestions.length} questions</p>
+              </div>
+              <button type="button" className={styles.hrmsAssessmentReviewClose} aria-label="Close bilingual question review" onClick={closeAssessmentReview}>×</button>
+            </header>
+            <div className={styles.hrmsAssessmentFingerprintBar}>
+              <div><strong>Release fingerprint</strong><code>{assessmentReviewContent?.content_fingerprint||'Not available'}</code></div>
+              <span className={assessmentReviewContent?.contentCurrent===true&&assessmentReviewContent?.content_fingerprint===reviewReleaseQueueItem?.content_fingerprint?styles.hrmsAssessmentFingerprintCurrent:styles.hrmsAssessmentFingerprintStale}>
+                {assessmentReviewContent?.contentCurrent===true&&assessmentReviewContent?.content_fingerprint===reviewReleaseQueueItem?.content_fingerprint?'Matches the queued submission':'Fingerprint mismatch — do not approve'}
+              </span>
+            </div>
+            {!activeAssessmentReviewQuestion?<div className={styles.hrmsAssessmentReviewEmpty}>No questions match the current filter. Change the filter or close this review.</div>:<>
+              <div className={styles.hrmsAssessmentReviewContent}>
+                <div className={styles.hrmsAssessmentQuestionTitle}>
+                  <div><span>QUESTION {activeAssessmentReviewQuestion.sequence_no} OF {assessmentReviewQuestions.length}</span><h2>Question {activeAssessmentReviewQuestion.sequence_no}</h2>
+                    <p>{String(activeAssessmentReviewSnapshot.question_type||'Question')} · {String(activeAssessmentReviewSnapshot.section_code||'Section not specified')} · {activeAssessmentReviewQuestion.max_marks} mark(s)</p>
+                  </div>
+                  <span className={[styles.hrmsAssessmentStatusPill,activeAssessmentReviewStatus==='APPROVED'?styles.hrmsAssessmentStatusApproved:activeAssessmentReviewStatus==='REJECTED'?styles.hrmsAssessmentStatusRejected:styles.hrmsAssessmentStatusPending].join(' ')}>
+                    {activeAssessmentReviewStatus==='APPROVED'?'QUESTION + ANSWER APPROVED':activeAssessmentReviewStatus==='REJECTED'?'QUESTION OR ANSWER REJECTED':'PENDING HUMAN REVIEW'}
+                  </span>
+                </div>
+                <div className={styles.hrmsAssessmentBilingualGrid}>
+                  <section className={styles.hrmsAssessmentLanguagePanel} aria-labelledby="hrms-review-english-heading">
+                    <header className={styles.hrmsAssessmentLanguageHeader}><div><span>EN</span><h3 id="hrms-review-english-heading">English</h3></div><small>English source variant</small></header>
+                    {hrmsLocalizedText(activeAssessmentReviewSnapshot.stimulus_i18n,'en')&&<div className={styles.hrmsAssessmentStimulus}><b>Shared question stimulus</b><p>{hrmsLocalizedText(activeAssessmentReviewSnapshot.stimulus_i18n,'en')}</p></div>}
+                    <div className={styles.hrmsAssessmentPrompt}>{hrmsReviewPrompt(activeAssessmentReviewSnapshot,'en')||<em>English prompt is missing in this submitted snapshot.</em>}</div>
+                    <h4>Answer options</h4>
+                    {Array.isArray(activeAssessmentReviewSnapshot.options)&&activeAssessmentReviewSnapshot.options.length>0?<ol className={styles.hrmsAssessmentOptions}>{activeAssessmentReviewSnapshot.options.map((option:Record<string,any>,index:number)=>{
+                      const key=String(option.key||option.option_key||String.fromCharCode(65+index));
+                      const chosen=activeAssessmentReviewAnswerKeys.includes(key);
+                      return <li key={key} className={chosen?styles.hrmsAssessmentOptionSelected:''}><span>{key}</span><p>{hrmsReviewOption(option,'en')||'English option text is missing.'}</p>{chosen&&<b>Answer key</b>}</li>;
+                    })}</ol>:<p className={styles.hrmsAssessmentMissingLanguage}>No structured options are present in this snapshot.</p>}
+                    {hrmsLocalizedText(activeAssessmentReviewSnapshot.explanation_i18n,'en')||activeAssessmentReviewSnapshot.explanation?<section className={styles.hrmsAssessmentExplanation}><b>English explanation</b><p>{hrmsLocalizedText(activeAssessmentReviewSnapshot.explanation_i18n,'en')||String(activeAssessmentReviewSnapshot.explanation||'')}</p></section>:<section className={styles.hrmsAssessmentExplanationMissing}>English explanation is missing.</section>}
+                  </section>
+                  <section className={styles.hrmsAssessmentLanguagePanel} aria-labelledby="hrms-review-hindi-heading" lang="hi">
+                    <header className={styles.hrmsAssessmentLanguageHeader}><div><span>हि</span><h3 id="hrms-review-hindi-heading">हिंदी</h3></div><small>हिंदी संस्करण</small></header>
+                    {hrmsLocalizedText(activeAssessmentReviewSnapshot.stimulus_i18n,'hi')&&<div className={styles.hrmsAssessmentStimulus}><b>साझा प्रश्न सामग्री</b><p>{hrmsLocalizedText(activeAssessmentReviewSnapshot.stimulus_i18n,'hi')}</p></div>}
+                    <div className={styles.hrmsAssessmentPrompt}>{hrmsReviewPrompt(activeAssessmentReviewSnapshot,'hi')||<em>इस सबमिट किए गए संस्करण में हिंदी प्रश्न उपलब्ध नहीं है।</em>}</div>
+                    <h4>उत्तर विकल्प</h4>
+                    {Array.isArray(activeAssessmentReviewSnapshot.options)&&activeAssessmentReviewSnapshot.options.length>0?<ol className={styles.hrmsAssessmentOptions}>{activeAssessmentReviewSnapshot.options.map((option:Record<string,any>,index:number)=>{
+                      const key=String(option.key||option.option_key||String.fromCharCode(65+index));
+                      const chosen=activeAssessmentReviewAnswerKeys.includes(key);
+                      return <li key={key} className={chosen?styles.hrmsAssessmentOptionSelected:''}><span>{key}</span><p>{hrmsReviewOption(option,'hi')||<em>हिंदी विकल्प उपलब्ध नहीं है।</em>}</p>{chosen&&<b>उत्तर कुंजी</b>}</li>;
+                    })}</ol>:<p className={styles.hrmsAssessmentMissingLanguage}>इस स्नैपशॉट में संरचित विकल्प उपलब्ध नहीं हैं।</p>}
+                    {hrmsLocalizedText(activeAssessmentReviewSnapshot.explanation_i18n,'hi')?<section className={styles.hrmsAssessmentExplanation}><b>हिंदी में व्याख्या</b><p>{hrmsLocalizedText(activeAssessmentReviewSnapshot.explanation_i18n,'hi')}</p></section>:<section className={styles.hrmsAssessmentExplanationMissing}>हिंदी व्याख्या उपलब्ध नहीं है।</section>}
+                  </section>
+                </div>
+                <section className={styles.hrmsAssessmentAnswerSummary}>
+                  <div><span>ANSWER KEY · ANSWER_PAYLOAD</span><b>{String(activeAssessmentReviewAnswer.kind||'UNRESOLVED')} · {hrmsReviewAnswerValue(activeAssessmentReviewAnswer.value)}</b></div>
+                  <div><span>REVIEW SNAPSHOT STATES</span><b>Question: {String(activeAssessmentReviewSnapshot.question_review_status||'PENDING_HUMAN_REVIEW')} · Answer: {String(activeAssessmentReviewSnapshot.answer_review_status||'PENDING_HUMAN_REVIEW')}</b></div>
+                  <p>This is the immutable release snapshot currently under HRMS review. HRMS inspection does not edit or approve individual answers; return the release for source correction if an answer or translation is wrong.</p>
+                </section>
+              </div>
+              <footer className={styles.hrmsAssessmentReviewFooter}>
+                <div className={styles.hrmsAssessmentQuestionPaging}>
+                  <button type="button" className={styles.secondaryButton}
+                    disabled={activeAssessmentReviewQuestion.sequence_no===assessmentReviewQuestions[0]?.sequence_no}
+                    onClick={()=>{
+                      const index=assessmentReviewQuestions.findIndex(question=>question.sequence_no===activeAssessmentReviewQuestion.sequence_no);
+                      if(index>0)setAssessmentReviewTarget(current=>current?{...current,sequenceNo:assessmentReviewQuestions[index-1].sequence_no}:current);
+                    }}>← Previous question</button>
+                  <span>Question {activeAssessmentReviewQuestion.sequence_no} / {assessmentReviewQuestions.length}</span>
+                  <button type="button" className={styles.secondaryButton}
+                    disabled={activeAssessmentReviewQuestion.sequence_no===assessmentReviewQuestions[assessmentReviewQuestions.length-1]?.sequence_no}
+                    onClick={()=>{
+                      const index=assessmentReviewQuestions.findIndex(question=>question.sequence_no===activeAssessmentReviewQuestion.sequence_no);
+                      if(index>=0&&index<assessmentReviewQuestions.length-1)setAssessmentReviewTarget(current=>current?{...current,sequenceNo:assessmentReviewQuestions[index+1].sequence_no}:current);
+                    }}>Next question →</button>
+                </div>
+                <div className={styles.hrmsAssessmentQuestionPaging}>
+                  <span>HRMS quality decision remains on the release review page.</span>
+                  <button type="button" className={styles.primaryButton} onClick={closeAssessmentReview}>Return to quality review</button>
+                </div>
+              </footer>
+            </>}
+          </div>
+        </section>
+      </div>}
 
       {!loading && data && (data.availableReleases || []).length > 0 && (
         <section className={styles.availablePanel}>
