@@ -210,6 +210,7 @@ export default function AssessmentsPage(){
   const [packagePreview,setPackagePreview]=useState<any|null>(null);
   const [packageBusy,setPackageBusy]=useState(false);
   const [importedReviewId,setImportedReviewId]=useState<number|null>(null);
+  const requestedPackageReviewRef=useRef('');
   const [importedReviewStatus,setImportedReviewStatus]=useState('DRAFT');
   const [importedReviewItems,setImportedReviewItems]=useState<Array<{sequenceNo:number;maxMarks:number|string;question:any}>>([]);
   const [importedAnswerEdits,setImportedAnswerEdits]=useState<Record<number,string>>({});
@@ -343,6 +344,36 @@ export default function AssessmentsPage(){
     });
     setImportedAnswerEdits(answerValues);setImportedExplanationEdits(explanationValues);
   }
+  useEffect(()=>{
+    const requestedId=String(new URLSearchParams(window.location.search).get('reviewAssessmentId')||'').trim();
+    if(!requestedId||!courseId||loading)return;
+    const requestKey=courseId+':'+requestedId;
+    if(requestedPackageReviewRef.current===requestKey)return;
+    const assessmentId=Number(requestedId);
+    if(!Number.isSafeInteger(assessmentId)||assessmentId<=0){
+      requestedPackageReviewRef.current=requestKey;
+      setError('The requested assessment ID is invalid.');
+      return;
+    }
+    const target=assessments.find(row=>Number(row.assessment_id)===assessmentId);
+    if(!target){
+      if(assessments.length>0){
+        requestedPackageReviewRef.current=requestKey;
+        setError('That test is not in the selected course catalogue. Confirm the course selection and reopen it from Content Studio.');
+      }
+      return;
+    }
+    if(!target.source_package_id){
+      requestedPackageReviewRef.current=requestKey;
+      setError('This test does not have an editable imported question snapshot. Open its details from the assessment catalogue.');
+      return;
+    }
+    requestedPackageReviewRef.current=requestKey;
+    setPackageBusy(true);setError('');setNotice('');
+    void loadImportedPackageQuestions(assessmentId)
+      .catch(cause=>setError(cause instanceof Error?cause.message:'The selected test questions could not be loaded.'))
+      .finally(()=>setPackageBusy(false));
+  },[courseId,loading,assessments,loadImportedPackageQuestions]);
   async function importPackageDraft() {
     if(!courseId){setError('Choose a source course before importing.');return;}
     const pkg=packageObject||parsePackageDraft();if(!pkg)return;
