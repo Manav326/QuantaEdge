@@ -56,6 +56,29 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("Chapter resources", hrms_ui)
         self.assertIn("Lesson questions and answer keys", hrms_ui)
 
+    def test_classless_tre_course_is_routed_to_assessment_workspace(self):
+        content = (ROOT / "apps/admin/app/content/page.tsx").read_text(encoding="utf-8")
+        assessments = (ROOT / "apps/admin/app/assessments/page.tsx").read_text(encoding="utf-8")
+
+        # Content Studio must not promise K-12 chapters/micro-topics for an ASSESSMENT course.
+        self.assertIn("isAssessmentCourse", content)
+        self.assertIn("course_type_code", content)
+        self.assertIn("Tests, test packs and questions", content)
+        self.assertIn("href={'/assessments?courseId='+encodeURIComponent(programFilter)}", content)
+        self.assertIn("This message does not mean the imported questions are missing.", content)
+        # The existing tenant-scoped assessment workspace remains the editor of record.
+        self.assertIn("isAssessmentOnlyCourse", assessments)
+        self.assertIn("course → test packs → assessments → ordered question snapshots", assessments)
+        self.assertIn("/package-questions/", assessments)
+        self.assertIn("!isAssessmentOnlyCourse && (", assessments)
+
+    def test_disabled_hrms_buttons_use_neutral_surface_without_opacity_haze(self):
+        styles = (ROOT / "apps/people/app/people-design-system.css").read_text(encoding="utf-8")
+        self.assertIn(".qe-people-page-slot .qe-people-workspace button:disabled", styles)
+        self.assertIn("var(--qe-color-surface-subtle", styles)
+        self.assertIn("opacity: 1;", styles)
+        self.assertIn("filter: none;", styles)
+
     def test_assessment_analytics_is_course_scoped_and_never_buckets_free_text(self):
         controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/AssessmentController.java").read_text(encoding="utf-8")
         analytics = controller[controller.index('@GetMapping("/admin/assessments/course-analytics")'):controller.index('@PostMapping("/admin/assessments")', controller.index('@GetMapping("/admin/assessments/course-analytics")'))]
