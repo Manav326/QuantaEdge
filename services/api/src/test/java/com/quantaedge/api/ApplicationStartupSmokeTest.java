@@ -96,13 +96,23 @@ class ApplicationStartupSmokeTest {
         and s.program_id is null and s.active=true
       where p.code in ('CLASS_6','CLASS_7','CLASS_8') and p.status='ACTIVE'
     """, Integer.class));
-    assertEquals(3, jdbc.queryForObject("""
+    assertEquals(0, jdbc.queryForObject("""
       select count(*) from curriculum_program p
       join course_marketplace_offer o on o.course_id=p.id
       where p.code in ('CLASS_6','CLASS_7','CLASS_8')
         and p.status='ACTIVE' and o.status='PUBLISHED'
+    """, Integer.class), "The retired global Marketplace table must not expose live course offers.");
+    assertEquals(3, jdbc.queryForObject("""
+      select count(*) from curriculum_program p
+      join course_marketplace_offer o on o.course_id=p.id
+      where p.code in ('CLASS_6','CLASS_7','CLASS_8')
+        and p.status='ACTIVE' and o.status='ARCHIVED'
         and o.price_paise=100000 and o.currency='INR'
-    """, Integer.class), "Each class course must be published at INR 1,000.");
+    """, Integer.class), "Historical global offers must be retained as archived rows.");
+    assertEquals(0, jdbc.queryForObject("""
+      select count(*) from student_course_access_grant
+      where obsolete_at is null or obsolete_reason is null
+    """, Integer.class), "Legacy free-access grants must be marked obsolete.");
     assertTrue(jdbc.queryForObject("select to_regclass('public.student_course_access_grant') is not null", Boolean.class));
     assertEquals(0, jdbc.queryForObject("""
       select count(*) from student_program_enrollment spe
