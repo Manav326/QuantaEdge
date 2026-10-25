@@ -792,10 +792,9 @@ public class CertificateController {
             where e.institution_id=t.id and e.program_id=? and e.status='ACTIVE'
               and e.valid_from<=now() and (e.valid_until is null or e.valid_until>now())
           ) or exists(select 1 from course_purchase cp where cp.institution_id=t.id and cp.student_id=m.student_id and cp.course_id=?)
-            or exists(select 1 from student_course_access_grant g where g.institution_id=t.id and g.student_id=m.student_id and g.course_id=?)
             or exists(select 1 from student_program_enrollment spe where spe.institution_id=t.id and spe.student_id=m.student_id and spe.program_id=? and spe.status='ACTIVE'))
         order by t.id
-        """,studentId,institutionId,requestedCode,requestedCode,courseId,courseId,courseId,courseId,courseId);
+        """,studentId,institutionId,requestedCode,requestedCode,courseId,courseId,courseId,courseId);
     if (issuers.isEmpty()) {
       if (!requestedCode.isEmpty()) {
         throw new ResponseStatusException(HttpStatus.CONFLICT,
