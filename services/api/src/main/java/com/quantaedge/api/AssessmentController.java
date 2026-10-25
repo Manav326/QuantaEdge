@@ -1382,36 +1382,8 @@ public class AssessmentController {
     if ("PUBLISHED".equals(next) && row.get("source_package_id") != null) {
       Long pendingReview = jdbc.queryForObject("""
           select count(*) from assessment_question aq
-          where aq.assessment_id=? and (
-            coalesce(aq.question_snapshot->>'question_review_status','PENDING_HUMAN_REVIEW') <> 'APPROVED'
-            or coalesce((aq.question_snapshot->'answer_payload')->>'kind','UNRESOLVED') in ('','UNRESOLVED')
-            or aq.question_snapshot->'answer_payload' is null
-            or aq.question_snapshot->'answer_payload'->'value' is null
-            or (jsonb_typeof(aq.question_snapshot->'answer_payload'->'value')='string'
-                and btrim(aq.question_snapshot->'answer_payload'->>'value')='')
-            or (
-              coalesce(aq.question_snapshot->'answer_payload'->>'kind','')='OPTION'
-              and not exists (
-                select 1 from jsonb_array_elements(coalesce(aq.question_snapshot->'options','[]'::jsonb)) option_row
-                where coalesce(option_row->>'key',option_row->>'option_key') =
-                  aq.question_snapshot->'answer_payload'->>'value'
-              )
-            )
-            or (
-              coalesce(aq.question_snapshot->'answer_payload'->>'kind','')='MULTI_OPTION'
-              and (
-                jsonb_typeof(aq.question_snapshot->'answer_payload'->'value') <> 'array'
-                or exists (
-                  select 1
-                  from jsonb_array_elements(aq.question_snapshot->'answer_payload'->'value') selected_key
-                  where not exists (
-                    select 1 from jsonb_array_elements(coalesce(aq.question_snapshot->'options','[]'::jsonb)) option_row
-                    where coalesce(option_row->>'key',option_row->>'option_key')=selected_key #>> '{}'
-                  )
-                )
-              )
-            )
-          )
+          where aq.assessment_id=?
+            and not assessment_question_snapshot_publish_ready(aq.question_snapshot)
           """,Long.class,assessmentId);
       if(pendingReview!=null&&pendingReview>0) {
         throw badRequest("This imported source-paper test still has questions or answer keys pending human review. Keep it in Draft until the reviewed answer package is imported.");
