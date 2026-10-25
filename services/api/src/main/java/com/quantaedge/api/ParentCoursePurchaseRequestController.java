@@ -59,6 +59,7 @@ public class ParentCoursePurchaseRequestController {
       join institution_tenant tenant_scope on tenant_scope.id=o.institution_id and tenant_scope.status='ACTIVE'
       join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
       where o.institution_id=? and o.course_id=? and o.status='PUBLISHED' and o.price_paise>0
+         and qe_marketplace_offer_publicly_sellable(o.id)
         and o.hrms_published_by_staff_id is not null
         and release.release_state='SHAREABLE'
         and course_marketplace_content_type_ready(release.program_id)
