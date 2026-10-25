@@ -659,6 +659,7 @@ public class PlatformInstitutionController {
           r.content_fingerprint,r.submitted_at,r.updated_at as release_updated_at,
           p.public_id,p.code as course_code,p.display_name,p.course_type_code,
           coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=p.id),'LEARNING_CONTENT') as delivery_mode,
+          coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=p.id),'LEARNING_CONTENT') as delivery_model,
           (select count(*) from assessment da where da.course_id=p.id and da.assessment_type='PREVIOUS_YEAR_PAPER' and da.status='DRAFT') as draft_assessment_count,
           (select count(*) from assessment da join assessment_question dqa on dqa.assessment_id=da.id
             where da.course_id=p.id and da.assessment_type='PREVIOUS_YEAR_PAPER' and da.status='DRAFT') as draft_assessment_question_count,
