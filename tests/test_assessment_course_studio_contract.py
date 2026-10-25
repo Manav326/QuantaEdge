@@ -82,6 +82,18 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("reviewedContentFingerprint", hrms_ui)
         self.assertIn("reviewedContentFingerprint", (ROOT / "services/api/src/main/java/com/quantaedge/api/PlatformInstitutionController.java").read_text(encoding="utf-8"))
 
+    def test_quality_gate_has_actionable_preview_recovery_without_bypassing_fingerprint(self):
+        hrms_ui = (ROOT / "apps/people/app/institutions/MarketplaceLaunchStepper.tsx").read_text(encoding="utf-8")
+        review_controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/PlatformInstitutionController.java").read_text(encoding="utf-8")
+        self.assertIn("const previewNeedsLoading", hrms_ui)
+        self.assertIn("Load exact submitted content", hrms_ui)
+        self.assertIn("onClick={() => void toggleReviewContent(release)}", hrms_ui)
+        self.assertIn("previewFingerprintMismatch", hrms_ui)
+        self.assertIn("reviewedContentFingerprint", review_controller)
+        self.assertIn("savedFingerprint.equals(reviewedFingerprint)", review_controller)
+        self.assertIn("course_release_fingerprint_current(?,?,?)", review_controller)
+        self.assertIn("if(approved && \"ASSESSMENT_ONLY\".equals(courseDeliveryMode(programId)))", review_controller)
+
     def test_learner_catalogue_exposes_renderer_contract(self):
         controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/StudentProgramController.java").read_text(encoding="utf-8")
         web_courses = (ROOT / "apps/web/app/student/courses/page.tsx").read_text(encoding="utf-8")
