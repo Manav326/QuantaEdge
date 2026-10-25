@@ -845,6 +845,10 @@ export default function AssessmentsPage(){
                     {selectedImportedQuestion.source_year&&<div><span>{t('admin.assessments.sourceYear')}</span><strong>{String(selectedImportedQuestion.source_year)}</strong></div>}
                     {selectedImportedQuestion.source_kind&&<div><span>{t('admin.assessments.sourceKind')}</span><strong>{String(selectedImportedQuestion.source_kind)}</strong></div>}
                     {selectedImportedQuestion.source_id&&<div><span>{t('admin.assessments.sourcePackage')}</span><strong>{String(selectedImportedQuestion.source_id)}</strong></div>}
+                    {selectedImportedQuestion.source_question_number!==null&&selectedImportedQuestion.source_question_number!==undefined&&<div><span>{t('admin.assessments.sourceQuestionNumber')}</span><strong>{String(selectedImportedQuestion.source_question_number)}</strong></div>}
+                    {selectedImportedQuestion.source_status&&<div><span>{t('admin.assessments.sourceStatus')}</span><strong>{String(selectedImportedQuestion.source_status).replaceAll('_',' ')}</strong></div>}
+                    {selectedImportedQuestion.source_exam_date&&<div><span>{t('admin.assessments.sourceExamDate')}</span><strong>{String(selectedImportedQuestion.source_exam_date)}</strong></div>}
+                    {selectedImportedQuestion.source_file_sha256&&<div className={styles.reviewProvenanceWide}><span>{t('admin.assessments.sourceFileSha256')}</span><strong>{String(selectedImportedQuestion.source_file_sha256)}</strong></div>}
                     {selectedImportedSourceLocation&&<div><span>{t('admin.assessments.sourceLocation')}</span><strong>{selectedImportedSourceLocation}</strong></div>}
                     {selectedImportedSourceUrl&&<div><span>{t('admin.assessments.sourceReference')}</span><strong><a href={selectedImportedSourceUrl} target="_blank" rel="noreferrer">{String(selectedImportedQuestion.source_ref)}</a></strong></div>}
                     {selectedImportedQuestion.source_note&&<div className={styles.reviewProvenanceWide}><span>{t('admin.assessments.sourceNote')}</span><p>{String(selectedImportedQuestion.source_note)}</p></div>}
