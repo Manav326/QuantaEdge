@@ -74,7 +74,7 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
 
     def test_disabled_hrms_buttons_use_neutral_surface_without_opacity_haze(self):
         styles = (ROOT / "apps/people/app/people-design-system.css").read_text(encoding="utf-8")
-        self.assertIn(".qe-people-page-slot .qe-people-workspace button:disabled", styles)
+        self.assertIn(".qe-people-workspace .qe-people-page-slot button:disabled", styles)
         self.assertIn("var(--qe-color-surface-subtle", styles)
         self.assertIn("opacity: 1;", styles)
         self.assertIn("filter: none;", styles)
