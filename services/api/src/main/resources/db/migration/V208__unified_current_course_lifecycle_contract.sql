@@ -24,21 +24,45 @@ WHERE certificate.program_id = program.id
 CREATE INDEX IF NOT EXISTS idx_student_certificate_course_identity
   ON student_certificate(course_identity_id, institution_id, student_id);
 
-DO $certificate_identity_requirement$
+-- Enforce the new certificate identity contract for inserts, without blocking
+-- revocation or audit updates to historical certificates that cannot be mapped safely.
+CREATE OR REPLACE FUNCTION qe_require_course_identity_for_new_certificate()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $function$
 BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_constraint
-    WHERE conname = 'ck_student_certificate_has_course_identity'
-      AND conrelid = 'public.student_certificate'::regclass
-  ) THEN
-    ALTER TABLE student_certificate
-      ADD CONSTRAINT ck_student_certificate_has_course_identity
-      CHECK (course_identity_id IS NOT NULL) NOT VALID;
+  IF NEW.program_id IS NULL OR NEW.course_identity_id IS NULL THEN
+    RAISE EXCEPTION
+      'COURSE_IDENTITY_REQUIRED: newly issued certificates must reference a stable course identity and exact content version.'
+      USING ERRCODE = '23514';
   END IF;
-END
-$certificate_identity_requirement$;
 
-CREATE OR REPLACE FUNCTION qe_current_course_offer_revision(p_offer_id bigint)
+  IF NOT EXISTS (
+    SELECT 1
+    FROM curriculum_program program
+    JOIN institution_course_identity identity
+      ON identity.id = program.course_identity_id
+     AND identity.status = 'ACTIVE'
+     AND identity.course_type_code = program.course_type_code
+    WHERE program.id = NEW.program_id
+      AND program.course_identity_id = NEW.course_identity_id
+      AND program.status = 'ACTIVE'
+      AND program.code <> 'GENERAL'
+  ) THEN
+    RAISE EXCEPTION
+      'COURSE_IDENTITY_MISMATCH: certificate course identity does not match an active content version.'
+      USING ERRCODE = '23514';
+  END IF;
+  RETURN NEW;
+END
+$function$;
+
+DROP TRIGGER IF EXISTS trg_qe_certificate_course_identity_insert ON student_certificate;
+CREATE TRIGGER trg_qe_certificate_course_identity_insert
+  BEFORE INSERT ON student_certificate
+  FOR EACH ROW EXECUTE FUNCTION qe_require_course_identity_for_new_certificate();
+
+CREATE OR REPLACE FUNCTION qe_current_course_offer_revisionCREATE OR REPLACE FUNCTION qe_current_course_offer_revision(p_offer_id bigint)
 RETURNS boolean
 LANGUAGE sql
 STABLE
@@ -126,6 +150,9 @@ AS $function$
   )
 $function$;
 
+-- The latest candidate release and the currently live published release are distinct:
+-- a newly shareable release must not hide an older published version before HRMS approves
+-- and publishes the replacement offer. This resolver moves the public listing only at publication.
 CREATE OR REPLACE FUNCTION qe_marketplace_offer_publicly_sellable(p_offer_id bigint)
 RETURNS boolean
 LANGUAGE sql
@@ -134,6 +161,28 @@ AS $function$
   SELECT EXISTS (
     SELECT 1
     FROM institution_marketplace_offer offer
+    JOIN institution_course_assignment assignment
+      ON assignment.id = offer.assignment_id
+     AND assignment.institution_id = offer.institution_id
+     AND assignment.status = 'ASSIGNED'
+     AND assignment.assignment_source IN ('ORIGIN','HRMS')
+    JOIN institution_course_release release
+      ON release.id = offer.course_release_id
+     AND release.program_id = offer.course_id
+     AND release.release_state = 'SHAREABLE'
+     AND release.legacy_migration = false
+    JOIN curriculum_program program
+      ON program.id = offer.course_id
+     AND program.status = 'ACTIVE'
+     AND program.code <> 'GENERAL'
+    JOIN institution_course_identity identity
+      ON identity.id = program.course_identity_id
+     AND identity.status = 'ACTIVE'
+     AND identity.source_institution_id = release.source_institution_id
+     AND identity.course_type_code = program.course_type_code
+    JOIN institution_tenant destination
+      ON destination.id = offer.institution_id
+     AND destination.status = 'ACTIVE'
     WHERE offer.id = p_offer_id
       AND offer.status = 'PUBLISHED'
       AND offer.legacy_migration = false
@@ -141,14 +190,75 @@ AS $function$
       AND offer.hrms_approved_at IS NOT NULL
       AND offer.hrms_published_by_staff_id IS NOT NULL
       AND offer.hrms_published_at IS NOT NULL
-      AND qe_current_course_offer_revision(offer.id)
+      AND (
+        assignment.assignment_source <> 'ORIGIN'
+        OR assignment.institution_id = release.source_institution_id
+      )
+      AND course_marketplace_content_type_ready(program.id)
+      AND course_release_fingerprint_current(
+        release.program_id, release.content_fingerprint::text, release.updated_at
+      )
+      AND NOT EXISTS (
+        SELECT 1
+        FROM institution_marketplace_offer newer_offer
+        JOIN institution_course_assignment newer_assignment
+          ON newer_assignment.id = newer_offer.assignment_id
+         AND newer_assignment.institution_id = newer_offer.institution_id
+         AND newer_assignment.status = 'ASSIGNED'
+         AND newer_assignment.assignment_source IN ('ORIGIN','HRMS')
+        JOIN institution_course_release newer_release
+          ON newer_release.id = newer_offer.course_release_id
+         AND newer_release.program_id = newer_offer.course_id
+         AND newer_release.release_state = 'SHAREABLE'
+         AND newer_release.legacy_migration = false
+        JOIN curriculum_program newer_program
+          ON newer_program.id = newer_offer.course_id
+         AND newer_program.status = 'ACTIVE'
+         AND newer_program.code <> 'GENERAL'
+        JOIN institution_course_identity newer_identity
+          ON newer_identity.id = newer_program.course_identity_id
+         AND newer_identity.status = 'ACTIVE'
+         AND newer_identity.source_institution_id = newer_release.source_institution_id
+         AND newer_identity.course_type_code = newer_program.course_type_code
+        WHERE newer_offer.institution_id = offer.institution_id
+          AND newer_offer.status = 'PUBLISHED'
+          AND newer_offer.legacy_migration = false
+          AND newer_offer.hrms_approved_by_staff_id IS NOT NULL
+          AND newer_offer.hrms_approved_at IS NOT NULL
+          AND newer_offer.hrms_published_by_staff_id IS NOT NULL
+          AND newer_offer.hrms_published_at IS NOT NULL
+          AND newer_identity.id = identity.id
+          AND (
+            newer_assignment.assignment_source <> 'ORIGIN'
+            OR newer_assignment.institution_id = newer_release.source_institution_id
+          )
+          AND course_marketplace_content_type_ready(newer_program.id)
+          AND course_release_fingerprint_current(
+            newer_release.program_id,
+            newer_release.content_fingerprint::text,
+            newer_release.updated_at
+          )
+          AND (
+            newer_program.content_version_no > program.content_version_no
+            OR (
+              newer_program.content_version_no = program.content_version_no
+              AND (
+                newer_release.release_version > release.release_version
+                OR (
+                  newer_release.release_version = release.release_version
+                  AND newer_release.id > release.id
+                )
+              )
+            )
+          )
+      )
   )
 $function$;
 
-COMMENT ON FUNCTION qe_current_course_offer_revision(bigint) IS
+COMMENT ON FUNCTION qe_current_course_offer_revisionCOMMENT ON FUNCTION qe_current_course_offer_revision(bigint) IS
   'Canonical resolver for the current, active institution offer revision. Rejects archived/migrated offers, legacy assignments/releases, stale release versions, inactive tenants, unready content and invalid release fingerprints.';
 COMMENT ON FUNCTION qe_marketplace_offer_publicly_sellable(bigint) IS
-  'Canonical learner-facing sales eligibility. Requires the current offer revision and attributable HRMS approval plus publication. Do not reimplement the rule in UI code.';
+  'Canonical learner-facing sales eligibility. Keeps the previous live offer sellable while a newer version is pending listing approval; swaps only when a newer approved and published offer is eligible. Do not reimplement this rule in UI code.';
 
 -- Preserve the old source enum values as historical metadata, but never let them be reused
 -- to create or reactivate an assignment. A legacy row can only be retired to REVOKED.
@@ -240,7 +350,10 @@ FROM institution_marketplace_offer offer
 WHERE offer.status <> 'ARCHIVED'
   AND (
     offer.legacy_migration = true
-    OR NOT qe_current_course_offer_revision(offer.id)
+    OR (
+      NOT qe_current_course_offer_revision(offer.id)
+      AND NOT qe_marketplace_offer_publicly_sellable(offer.id)
+    )
     OR (
       offer.status = 'PUBLISHED'
       AND NOT qe_marketplace_offer_publicly_sellable(offer.id)
@@ -253,7 +366,10 @@ SET status = 'ARCHIVED',
 WHERE offer.status <> 'ARCHIVED'
   AND (
     offer.legacy_migration = true
-    OR NOT qe_current_course_offer_revision(offer.id)
+    OR (
+      NOT qe_current_course_offer_revision(offer.id)
+      AND NOT qe_marketplace_offer_publicly_sellable(offer.id)
+    )
     OR (
       offer.status = 'PUBLISHED'
       AND NOT qe_marketplace_offer_publicly_sellable(offer.id)
@@ -311,6 +427,48 @@ COMMENT ON COLUMN institution_marketplace_offer.legacy_migration IS
   'Historical migration marker. Rows with legacy_migration=true must be ARCHIVED and cannot be published or used by the current course lifecycle.';
 COMMENT ON TABLE student_certificate IS
   'ACTIVE evidence record: institution-scoped learner achievement tied to a stable course identity and exact curriculum_program content version. Artifact bytes and achievement snapshot remain immutable.';
+
+-- Mark old per-student free grants obsolete. Preserve the records, but no current
+-- authorization path may use or create them. Purchase/enrollment/entitlement records retain
+-- their own independent evidence and are not inferred from this grant table.
+ALTER TABLE student_course_access_grant
+  ADD COLUMN IF NOT EXISTS obsolete_at timestamptz,
+  ADD COLUMN IF NOT EXISTS obsolete_reason text;
+
+UPDATE student_course_access_grant
+SET obsolete_at = coalesce(obsolete_at, now()),
+    obsolete_reason = coalesce(obsolete_reason,
+      'OBSOLETE: prior global-class free access grant; access must now come from current institution enrollment, entitlement, or verified purchase.')
+WHERE obsolete_at IS NULL OR obsolete_reason IS NULL;
+
+COMMENT ON TABLE student_course_access_grant IS
+  'OBSOLETE FOR AUTHORIZATION: historical Class 6-8 free-access grants are retained for audit but cannot grant new learning, tutor, certificate, or commerce access. Use the current institution membership + enrollment/entitlement or verified purchase pipeline.';
+
+CREATE OR REPLACE FUNCTION qe_reject_obsolete_student_course_access_grant_write()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $function$
+BEGIN
+  RAISE EXCEPTION
+    'OBSOLETE_STUDENT_COURSE_ACCESS_GRANT: this legacy grant table is historical only; use current institution enrollment, entitlement, or verified purchase.'
+    USING ERRCODE = '55000';
+END
+$function$;
+
+DROP TRIGGER IF EXISTS trg_qe_obsolete_student_course_access_grant_write ON student_course_access_grant;
+CREATE TRIGGER trg_qe_obsolete_student_course_access_grant_write
+  BEFORE INSERT OR UPDATE ON student_course_access_grant
+  FOR EACH ROW EXECUTE FUNCTION qe_reject_obsolete_student_course_access_grant_write();
+
+-- Retire every row in the superseded global catalogue table before installing its write fence.
+-- The later dependency cleanup may drop it only after all financial/audit references are reconciled.
+UPDATE course_marketplace_offer
+SET status = 'ARCHIVED',
+    updated_at = now()
+WHERE status <> 'ARCHIVED';
+
+COMMENT ON COLUMN course_marketplace_offer.status IS
+  'OBSOLETE TABLE: all global-catalogue offers are archived. Live offers belong only to institution_marketplace_offer and are controlled by HRMS.';
 
 -- Database-level fence for the obsolete global Marketplace offer table. DELETE remains available
 -- for a separately reviewed retirement phase; active application code must use the institution table.
