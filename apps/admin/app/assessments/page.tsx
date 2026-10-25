@@ -856,7 +856,7 @@ export default function AssessmentsPage(){
                     <small>{t('admin.assessments.answerPayloadKindsHelp')}</small>
                     <label className={styles.reviewNoteField}>
                       {t('admin.assessments.reviewerNote')}
-                      <textarea aria-label={t('admin.assessments.reviewerNote')} rows={3} maxLength={1000}
+                      <textarea aria-label={t('admin.assessments.reviewerNote')} rows={3} maxLength={1000} disabled={importedReviewStatus!=='DRAFT'}
                         value={importedReviewerNoteEdits[selectedImportedSequence]??''}
                         onChange={event=>setImportedReviewerNoteEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))}
                         placeholder={t('admin.assessments.reviewerNotePlaceholder')}/>
@@ -873,7 +873,7 @@ export default function AssessmentsPage(){
                   </section>
                   <section className={styles.reviewEditorPanel} lang="hi">
                     <div className={styles.reviewEditorHeader}><div><span>{t('admin.assessments.explanationHindi')}</span><h3>{t('admin.assessments.hindiExplanation')}</h3></div></div>
-                    <p>हिंदी व्याख्या यहाँ लिखें। यह अंग्रेज़ी व्याख्या से अलग सहेजी जाएगी।</p>
+                    <p>{t('admin.assessments.hindiExplanationGuidance')}</p>
                     <textarea aria-label={t('admin.assessments.hindiExplanationAria')} rows={7} maxLength={700} disabled={importedReviewStatus!=='DRAFT'} value={importedHindiExplanationEdits[selectedImportedSequence]??''} onChange={event=>setImportedHindiExplanationEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))} placeholder={t('admin.assessments.writeHindiExplanation')}/>
                   </section>
                 </div>
@@ -883,7 +883,7 @@ export default function AssessmentsPage(){
                   <button type="button" className={styles.secondaryButton}
                     disabled={!filteredImportedReviewItems.length||filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence)<=0}
                     onClick={()=>{const index=filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence);if(index>0)setImportedReviewSequence(Number(filteredImportedReviewItems[index-1].sequenceNo));}}>{t('admin.assessments.previousQuestion')}</button>
-                  <span>Question {Math.max(0,filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence)+1)} / {filteredImportedReviewItems.length}</span>
+                  <span>{t('admin.assessments.questionPosition',{current:Math.max(0,filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence)+1),total:filteredImportedReviewItems.length})}</span>
                   <button type="button" className={styles.secondaryButton}
                     disabled={!filteredImportedReviewItems.length||filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence)<0||filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence)>=filteredImportedReviewItems.length-1}
                     onClick={()=>{const index=filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence);if(index>=0&&index<filteredImportedReviewItems.length-1)setImportedReviewSequence(Number(filteredImportedReviewItems[index+1].sequenceNo));}}>{t('admin.assessments.nextQuestion')}</button>
