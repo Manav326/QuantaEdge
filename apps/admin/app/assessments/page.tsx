@@ -721,7 +721,7 @@ export default function AssessmentsPage(){
             <div className={styles.reviewNavigatorTools}>
               <input aria-label="Search questions" value={importedReviewSearch} onChange={event=>setImportedReviewSearch(event.target.value)} placeholder="Search question text or number"/>
               <select aria-label="Filter questions by review status" value={importedReviewFilter} onChange={event=>setImportedReviewFilter(event.target.value as 'ALL'|'PENDING'|'APPROVED'|'REJECTED')}>
-                <option value="ALL">All statuses</option><option value="PENDING">Pending review</option><option value="APPROVED">Approved</option><option value="REJECTED">Rejected</option>
+                <option value="ALL">{t('admin.assessments.allStates')}</option><option value="PENDING">Pending review</option><option value="APPROVED">Approved</option><option value="REJECTED">Rejected</option>
               </select>
             </div>
             <nav className={styles.reviewQuestionNav} aria-label="Questions">
