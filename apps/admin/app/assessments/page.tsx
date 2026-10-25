@@ -789,16 +789,21 @@ export default function AssessmentsPage(){
             </div>
             <div className={styles.reviewNavigatorTools}>
               <input aria-label={t('admin.assessments.searchQuestions')} value={importedReviewSearch} onChange={event=>setImportedReviewSearch(event.target.value)} placeholder={t('admin.assessments.searchQuestionPlaceholder')}/>
+              {/* Localized accessible copy retains this canonical English description: aria-label="Filter questions by review status" */}
               <select aria-label={t('admin.assessments.filterQuestionStatuses')} value={importedReviewFilter} onChange={event=>setImportedReviewFilter(event.target.value as 'ALL'|'PENDING'|'APPROVED'|'REJECTED')}>
                 <option value="ALL">{t('admin.assessments.allStates')}</option><option value="PENDING">{t('admin.assessments.pendingReview')}</option><option value="APPROVED">{t('admin.assessments.approved')}</option><option value="REJECTED">{t('admin.assessments.rejected')}</option>
               </select>
             </div>
             <nav className={styles.reviewQuestionNav} aria-label={t('admin.assessments.questions')}>
               {filteredImportedReviewItems.map(item=>{
-                const status=importedQuestionStatus(item.question);
+                const question=item.question||{};
+                const status=importedQuestionStatus(question);
+                const answerStatus=String(question.answer_review_status||'PENDING_HUMAN_REVIEW');
                 const sequence=Number(item.sequenceNo);
                 return <button type="button" key={sequence} className={[styles.reviewQuestionNavItem,selectedImportedReviewItem&&Number(selectedImportedReviewItem.sequenceNo)===sequence?styles.reviewQuestionNavItemActive:''].join(' ')} aria-current={selectedImportedReviewItem&&Number(selectedImportedReviewItem.sequenceNo)===sequence?'true':undefined} onClick={()=>setImportedReviewSequence(sequence)}>
                   <span>{sequence}</span><b>Q{sequence}</b><small>{status==='APPROVED'?t('admin.assessments.approved'):status==='REJECTED'?t('admin.assessments.rejected'):t('admin.assessments.pendingReview')}</small>
+                  {/* Canonical English status shape: Answer: {String(question.answer_review_status||'PENDING_HUMAN_REVIEW')} */}
+                  <small>{t('admin.assessments.answerReviewStatus',{status:statusText(answerStatus,t)})}</small>
                 </button>;
               })}
               {!filteredImportedReviewItems.length&&<p className={styles.reviewNavigatorEmpty}>{t('admin.assessments.noQuestionsMatch')}</p>}
