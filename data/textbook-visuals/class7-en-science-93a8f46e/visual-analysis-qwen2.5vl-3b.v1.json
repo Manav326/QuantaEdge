@@ -11,17 +11,17 @@
     "assets_selected": 2262,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "8e09d5b8fb92d244ec7ef1f2",
-      "3ea26ab4b26aefb4f93f284d",
-      "9459107ed06b531106e820d7",
-      "03718ba2359975b98bdebc1b",
-      "25477d9d165b80a701e0e7dd"
+      "5ee56b21f0830e88558f6ff0",
+      "4b1298747dc1ec978a226ae5",
+      "647c2218dab5482dd1c1758e",
+      "bb62f7442817c8c827ab2507",
+      "0e143e54e2f709b8a4e5968d"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2257,
-    "assets_remaining": 5231,
-    "assets_completion_percent": 30.1,
-    "assets_failed": 23,
+    "assets_analyzed": 2258,
+    "assets_remaining": 5230,
+    "assets_completion_percent": 30.2,
+    "assets_failed": 24,
     "assets_skipped_from_checkpoint": 2257,
     "batch_limit": 5,
     "publication_allowed": false
@@ -75365,7 +75365,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40174921246",
+      "run_id": "40205238473",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -78662,7 +78662,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40174921246",
+      "run_id": "40205238473",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -82276,7 +82276,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40174921246",
+      "run_id": "40205238473",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -85169,6 +85169,56 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40174921246",
       "checkpointed_at": "2026-10-25T10:32:11Z"
+    },
+    {
+      "asset_id": "bb62f7442817c8c827ab2507",
+      "asset_sha256": "1dbee68bbd8c65097de826d476321968a5e9e80118093bf12cd8aa7c30e82ccc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/1dbee68bbd8c65097de826d476321968a5e9e80118093bf12cd8aa7c30e82ccc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue dashed circle with a small blue circle inside it.",
+        "visual_type": "equation",
+        "visible_text": [
+          "−",
+          "c"
+        ],
+        "concepts": [
+          "mathematical operations"
+        ],
+        "context_relation": "mathematical",
+        "limitations": [
+          "No additional context provided."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40205238473",
+      "checkpointed_at": "2026-10-25T16:40:02Z"
+    },
+    {
+      "asset_id": "0e143e54e2f709b8a4e5968d",
+      "asset_sha256": "911804fe032ecfbfbaa662e94977b0d6ff58258df2ed7279400d44281e684d63",
+      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/911804fe032ecfbfbaa662e94977b0d6ff58258df2ed7279400d44281e684d63.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40205238473",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }

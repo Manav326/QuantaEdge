@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2280,
-    "successful_visual_analyses": 2257,
-    "missing_visual_analyses": 5208,
-    "failed_visual_analyses": 23,
+    "raw_analysis_result_rows": 2282,
+    "successful_visual_analyses": 2258,
+    "missing_visual_analyses": 5206,
+    "failed_visual_analyses": 24,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5231,
+    "unresolved_count": 5230,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -94817,9 +94817,23 @@
       "asset_path": "assets/1dbee68bbd8c65097de826d476321968a5e9e80118093bf12cd8aa7c30e82ccc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue dashed circle with a small blue circle inside it.",
+        "visual_type": "equation",
+        "visible_text": [
+          "−",
+          "c"
+        ],
+        "concepts": [
+          "mathematical operations"
+        ],
+        "context_relation": "mathematical",
+        "limitations": [
+          "No additional context provided."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -94835,7 +94849,7 @@
       "asset_path": "assets/911804fe032ecfbfbaa662e94977b0d6ff58258df2ed7279400d44281e684d63.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,

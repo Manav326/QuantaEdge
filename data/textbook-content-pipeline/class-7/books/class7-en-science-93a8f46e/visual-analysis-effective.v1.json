@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "370d23120946ebb9c1e039ddacc8df8d979eb247ed93a073a36f2b3e3909ed7c",
+  "raw_analysis_sha256": "6dc3f1c1d44c0948770c70f1e37a02754a08394021c397d2f073f0017c4d14f4",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -118506,7 +118506,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40174921246",
+      "run_id": "40205238473",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -123646,7 +123646,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40174921246",
+      "run_id": "40205238473",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -129340,7 +129340,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40174921246",
+      "run_id": "40205238473",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -133859,6 +133859,76 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bb62f7442817c8c827ab2507",
+      "asset_sha256": "1dbee68bbd8c65097de826d476321968a5e9e80118093bf12cd8aa7c30e82ccc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/1dbee68bbd8c65097de826d476321968a5e9e80118093bf12cd8aa7c30e82ccc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue dashed circle with a small blue circle inside it.",
+        "visual_type": "equation",
+        "visible_text": [
+          "−",
+          "c"
+        ],
+        "concepts": [
+          "mathematical operations"
+        ],
+        "context_relation": "mathematical",
+        "limitations": [
+          "No additional context provided."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40205238473",
+      "checkpointed_at": "2026-10-25T16:40:02Z",
+      "effective_analysis": {
+        "visual_summary": "A blue dashed circle with a small blue circle inside it.",
+        "visual_type": "equation",
+        "visible_text": [
+          "−",
+          "c"
+        ],
+        "concepts": [
+          "mathematical operations"
+        ],
+        "context_relation": "mathematical",
+        "limitations": [
+          "No additional context provided."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0e143e54e2f709b8a4e5968d",
+      "asset_sha256": "911804fe032ecfbfbaa662e94977b0d6ff58258df2ed7279400d44281e684d63",
+      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/911804fe032ecfbfbaa662e94977b0d6ff58258df2ed7279400d44281e684d63.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40205238473",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],
