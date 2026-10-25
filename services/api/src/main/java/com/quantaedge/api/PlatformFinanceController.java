@@ -95,7 +95,7 @@ public class PlatformFinanceController {
         order by tax.version desc limit 1
       ) tp on true
       left join billing_legal_entity le on le.id=tp.legal_entity_id
-      where o.status<>'ARCHIVED' order by t.display_name,p.display_name,o.id
+      order by t.display_name,p.display_name,o.id
       """);
     List<Map<String,Object>> registrations=jdbc.queryForList("""
       select r.id,r.legal_entity_id,r.gstin,r.legal_name_snapshot,r.state_code,r.registration_type,
