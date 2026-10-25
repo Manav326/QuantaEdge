@@ -4081,5 +4081,15 @@
   "admin.assessments.questionNumber": "Question {number}",
   "admin.assessments.approved": "Approved",
   "admin.assessments.rejected": "Rejected",
-  "admin.assessments.assessment": "Assessment"
+  "admin.assessments.assessment": "Assessment",
+  "admin.assessments.reviewQuestionMetadata": "{type} · {section} · {marks} marks",
+  "admin.assessments.defaultQuestionType": "Question",
+  "admin.assessments.unspecifiedSection": "Section specified nahi hai",
+  "admin.assessments.readingCodeStimulus": "Reading / code stimulus",
+  "admin.assessments.englishPromptMissing": "Is package mein English prompt nahi diya gaya hai.",
+  "admin.assessments.englishOptionMissing": "Is option ka English text nahi diya gaya hai.",
+  "admin.assessments.hindiPromptMissing": "Hindi question is package mein available nahi hai.",
+  "admin.assessments.hindiStimulus": "Padhne / code ki samagri",
+  "admin.assessments.reviewerCorrectionNote": "Reviewer correction note",
+  "admin.assessments.previousRejectionFeedback": "Previous rejection / review feedback"
 }
