@@ -320,14 +320,20 @@ public class CourseMarketplaceLaunchController {
         with ranked_assignments as (
           select a.id,a.assigned_at,
             row_number() over (
-              partition by coalesce(p.course_identity_id,-p.id)
+              partition by identity.id
               order by p.content_version_no desc,r.release_version desc,r.id desc,
                 a.assigned_at desc,a.id desc
             ) as identity_rank
           from institution_course_assignment a
           join institution_course_release r on r.id=a.course_release_id
+            and r.legacy_migration=false and r.obsolete_at is null and r.release_state<>'LEGACY_MIGRATED'
           join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+          join institution_course_identity identity
+            on identity.id=p.course_identity_id and identity.status='ACTIVE'
+           and identity.source_institution_id=r.source_institution_id
+           and identity.course_type_code=p.course_type_code
           where a.institution_id=? and a.status='ASSIGNED'
+            and a.assignment_source in ('ORIGIN','HRMS')
             and (a.assignment_source <> 'ORIGIN' or r.release_state='SHAREABLE')
         )
         select id from ranked_assignments where identity_rank=1
@@ -348,9 +354,13 @@ public class CourseMarketplaceLaunchController {
           source.display_name as source_institution_name
         from institution_course_release r
         join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-        left join institution_course_identity identity on identity.id=p.course_identity_id
+        join institution_course_identity identity
+          on identity.id=p.course_identity_id and identity.status='ACTIVE'
+         and identity.source_institution_id=r.source_institution_id
+         and identity.course_type_code=p.course_type_code
         join institution_tenant source on source.id=r.source_institution_id and source.status='ACTIVE'
-        where r.release_state='SHAREABLE' and r.source_institution_id<>?
+        where r.release_state='SHAREABLE' and r.legacy_migration=false and r.obsolete_at is null
+          and r.source_institution_id<>??
           and course_marketplace_content_type_ready(p.id)
           and not exists(select 1 from institution_course_assignment a
             where a.institution_id=? and a.course_release_id=r.id and a.status='ASSIGNED')
@@ -359,7 +369,12 @@ public class CourseMarketplaceLaunchController {
             from institution_course_release newer_r
             join curriculum_program newer_p on newer_p.id=newer_r.program_id
               and newer_p.status='ACTIVE' and newer_p.code<>'GENERAL'
-            where newer_r.release_state='SHAREABLE'
+            join institution_course_identity newer_identity
+              on newer_identity.id=newer_p.course_identity_id and newer_identity.status='ACTIVE'
+             and newer_identity.source_institution_id=newer_r.source_institution_id
+             and newer_identity.course_type_code=newer_p.course_type_code
+            where newer_r.release_state='SHAREABLE' and newer_r.legacy_migration=false
+              and newer_r.obsolete_at is null
               and newer_p.course_identity_id=p.course_identity_id
               and course_marketplace_content_type_ready(newer_p.id)
               and course_release_fingerprint_current(newer_r.program_id,newer_r.content_fingerprint::text,newer_r.updated_at)
@@ -391,7 +406,10 @@ public class CourseMarketplaceLaunchController {
           count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
         from institution_course_release r
         join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-        left join institution_course_identity identity on identity.id=p.course_identity_id
+        join institution_course_identity identity
+          on identity.id=p.course_identity_id and identity.status='ACTIVE'
+         and identity.source_institution_id=r.source_institution_id
+         and identity.course_type_code=p.course_type_code
         join institution_tenant t on t.id=r.source_institution_id and t.status='ACTIVE'
         left join curriculum_program_subject ps on ps.program_id=p.id
         left join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
@@ -399,6 +417,7 @@ public class CourseMarketplaceLaunchController {
         left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
         left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
         where r.source_institution_id=? and r.release_state='IN_QUALITY_REVIEW'
+          and r.legacy_migration=false and r.obsolete_at is null
         group by r.id,r.program_id,r.release_version,r.release_state,r.content_fingerprint,r.updated_at,r.submitted_at,
           p.id,p.code,p.display_name,p.course_type_code,p.content_version_no,
           identity.public_id,identity.stable_course_key,t.id,t.tenant_code,t.display_name
