@@ -1321,7 +1321,7 @@ export default function MarketplaceLaunchStepper({
                   </section>
                 </div>
                 <section className={styles.hrmsAssessmentAnswerSummary}>
-                  <div><span>ANSWER KEY · ANSWER_PAYLOAD</span><b>{String(activeAssessmentReviewAnswer.kind||'UNRESOLVED')} · {hrmsReviewAnswerValue(activeAssessmentReviewAnswer.value)}</b></div>
+                  <div><span>Answer review: ANSWER KEY · ANSWER_PAYLOAD</span><b>{String(activeAssessmentReviewAnswer.kind||'UNRESOLVED')} · {hrmsReviewAnswerValue(activeAssessmentReviewAnswer.value)}</b></div>
                   <div><span>REVIEW SNAPSHOT STATES</span><b>Question: {String(activeAssessmentReviewSnapshot.question_review_status||'PENDING_HUMAN_REVIEW')} · Answer: {String(activeAssessmentReviewSnapshot.answer_review_status||'PENDING_HUMAN_REVIEW')}</b></div>
                   <p>This is the immutable release snapshot currently under HRMS review. HRMS inspection does not edit or approve individual answers; return the release for source correction if an answer or translation is wrong.</p>
                 </section>
@@ -1384,7 +1384,7 @@ export default function MarketplaceLaunchStepper({
           </aside>
           <div className={styles.k12ReviewMain}>
             <header className={styles.k12ReviewHeader}>
-              <div><span>FROZEN SUBMITTED SNAPSHOT · READ ONLY</span><h1 id="k12-review-title">{k12ReviewChapter?.display_name||'Loading chapter content…'}</h1>
+              <div><span>Review chapter content · FROZEN SUBMITTED SNAPSHOT · READ ONLY</span><h1 id="k12-review-title">{k12ReviewChapter?.display_name||'Loading chapter content…'}</h1>
                 <p>{k12ReviewPreview.course_name} · Release v{k12ReviewPreview.release_version} · {k12ReviewChapter?.lesson_count??'—'} lessons · {k12ReviewChapter?.resource_count??'—'} resources</p>
               </div>
               <button type="button" className={styles.k12ReviewClose} aria-label="Close K12 content review" onClick={closeK12Review}>×</button>
