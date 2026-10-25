@@ -75,6 +75,7 @@ fun ParentCourseMarketplaceScreen(
     onDismissRequest: (Long) -> Unit,
     onTransfer: (Long, Long) -> Unit,
     onMyLearning: () -> Unit,
+    onInvoices: () -> Unit,
     onBack: () -> Unit,
     pendingVerification: Boolean = false,
     onRetryVerification: () -> Unit = {}
@@ -157,6 +158,9 @@ fun ParentCourseMarketplaceScreen(
             OutlinedButton(onClick = onRefresh, enabled = !busy && !loading, modifier = Modifier.weight(1f)) {
                 Text(t("Refresh", "रिफ्रेश"))
             }
+        }
+        OutlinedButton(onClick = onInvoices, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+            Text(t("Purchases & invoices", "खरीद और इनवॉइस"))
         }
         if (error.isNotBlank()) Text(error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
         if (status.isNotBlank()) Text(status, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodySmall)
