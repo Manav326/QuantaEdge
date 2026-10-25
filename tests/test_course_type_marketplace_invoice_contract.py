@@ -32,6 +32,33 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
             controller.count("newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'"), 4,
             "Inactive or placeholder course versions must not hide a currently published learner offer.")
 
+    def test_android_marketplace_and_invoice_history_preserve_course_type(self):
+        android_student = (ROOT / "apps/android/app/src/main/java/com/quantaedge/android/ui/StudentMarketplaceScreen.kt").read_text(encoding="utf-8")
+        android_parent = (ROOT / "apps/android/app/src/main/java/com/quantaedge/android/ui/ParentCourseMarketplaceScreen.kt").read_text(encoding="utf-8")
+        android_type = (ROOT / "apps/android/app/src/main/java/com/quantaedge/android/ui/CourseMarketplaceTypePresentation.kt").read_text(encoding="utf-8")
+        android_invoice = (ROOT / "apps/android/app/src/main/java/com/quantaedge/android/ui/CourseInvoiceHistoryScreen.kt").read_text(encoding="utf-8")
+        android_app = (ROOT / "apps/android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt").read_text(encoding="utf-8")
+        navigation = (ROOT / "apps/android/app/src/main/java/com/quantaedge/android/ui/StudentNavigationContract.kt").read_text(encoding="utf-8")
+        provider_paths = (ROOT / "apps/android/app/src/main/res/xml/certificate_file_paths.xml").read_text(encoding="utf-8")
+
+        for screen in (android_student, android_parent):
+            self.assertIn("marketplaceCourseTypeLabel", screen)
+            self.assertIn("marketplaceAssessmentInventorySummary", screen)
+            self.assertIn("onInvoices", screen)
+        self.assertIn('"K12"', android_type)
+        self.assertIn('"COMPETITIVE"', android_type)
+        self.assertIn('"ASSESSMENT"', android_type)
+        self.assertIn("course_type_code", android_invoice)
+        self.assertIn("course_type_code", android_app)
+        self.assertIn("/api/v1/marketplace/family/invoices", android_app)
+        self.assertIn("/api/v1/marketplace/invoices", android_app)
+        self.assertIn("/api/v1/marketplace/family/orders/", android_app)
+        self.assertIn("/api/v1/marketplace/orders/", android_app)
+        self.assertIn("CreateDocument(\"application/pdf\")", android_app)
+        self.assertIn("Intent.ACTION_SEND", android_app)
+        self.assertIn("COURSE_INVOICES", navigation)
+        self.assertIn('path="course-invoices/"', provider_paths)
+
     def test_course_type_is_retained_through_invoice_snapshot_and_history(self):
         financial = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseOrderFinancialService.java").read_text(encoding="utf-8")
         invoices = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseInvoiceController.java").read_text(encoding="utf-8")
