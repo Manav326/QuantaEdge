@@ -117,6 +117,7 @@ AS $function$
       ON assignment.id = offer.assignment_id
      AND assignment.institution_id = offer.institution_id
      AND assignment.status = 'ASSIGNED'
+     AND assignment.obsolete_at IS NULL
      AND assignment.assignment_source IN ('ORIGIN','HRMS')
     JOIN institution_course_release release
       ON release.id = offer.course_release_id
@@ -159,6 +160,7 @@ AS $function$
           ON newer_identity.id = newer_program.course_identity_id
         WHERE newer_assignment.institution_id = offer.institution_id
           AND newer_assignment.status = 'ASSIGNED'
+          AND newer_assignment.obsolete_at IS NULL
           AND newer_assignment.assignment_source IN ('ORIGIN','HRMS')
           AND (
             newer_assignment.assignment_source <> 'ORIGIN'
@@ -222,6 +224,7 @@ AS $function$
      AND destination.status = 'ACTIVE'
     WHERE assignment.id = p_assignment_id
       AND assignment.status = 'ASSIGNED'
+      AND assignment.obsolete_at IS NULL
       AND assignment.assignment_source IN ('ORIGIN','HRMS')
       AND release.release_state = 'SHAREABLE'
       AND release.legacy_migration = false
@@ -245,6 +248,7 @@ AS $function$
           ON newer_identity.id = newer_program.course_identity_id
         WHERE newer_assignment.institution_id = assignment.institution_id
           AND newer_assignment.status = 'ASSIGNED'
+          AND newer_assignment.obsolete_at IS NULL
           AND newer_assignment.assignment_source IN ('ORIGIN','HRMS')
           AND (
             newer_assignment.assignment_source <> 'ORIGIN'
@@ -300,6 +304,7 @@ AS $function$
       ON assignment.id = offer.assignment_id
      AND assignment.institution_id = offer.institution_id
      AND assignment.status = 'ASSIGNED'
+     AND assignment.obsolete_at IS NULL
      AND assignment.assignment_source IN ('ORIGIN','HRMS')
     JOIN institution_course_release release
       ON release.id = offer.course_release_id
@@ -342,6 +347,7 @@ AS $function$
           ON newer_assignment.id = newer_offer.assignment_id
          AND newer_assignment.institution_id = newer_offer.institution_id
          AND newer_assignment.status = 'ASSIGNED'
+         AND newer_assignment.obsolete_at IS NULL
          AND newer_assignment.assignment_source IN ('ORIGIN','HRMS')
         JOIN institution_course_release newer_release
           ON newer_release.id = newer_offer.course_release_id
@@ -427,6 +433,12 @@ BEGIN
   IF NEW.assignment_source NOT IN ('ORIGIN','HRMS') THEN
     RAISE EXCEPTION
       'OBSOLETE_COURSE_ASSIGNMENT_SOURCE: only ORIGIN and HRMS assignments may be created.'
+      USING ERRCODE = '55000';
+  END IF;
+
+  IF NEW.status = 'ASSIGNED' AND (NEW.obsolete_at IS NOT NULL OR NEW.obsolete_reason IS NOT NULL) THEN
+    RAISE EXCEPTION
+      'OBSOLETE_COURSE_ASSIGNMENT: an obsolete assignment cannot be active.'
       USING ERRCODE = '55000';
   END IF;
 
@@ -761,6 +773,7 @@ BEGIN
     WHERE assignment.id = NEW.assignment_id
       AND assignment.institution_id = NEW.institution_id
       AND assignment.status = 'ASSIGNED'
+      AND assignment.obsolete_at IS NULL
       AND assignment.assignment_source IN ('ORIGIN','HRMS')
       AND release.release_state = 'SHAREABLE'
       AND release.legacy_migration = false
@@ -784,6 +797,7 @@ BEGIN
           ON newer_identity.id = newer_program.course_identity_id
         WHERE newer_assignment.institution_id = NEW.institution_id
           AND newer_assignment.status = 'ASSIGNED'
+          AND newer_assignment.obsolete_at IS NULL
           AND newer_assignment.assignment_source IN ('ORIGIN','HRMS')
           AND (
             newer_assignment.assignment_source <> 'ORIGIN'
