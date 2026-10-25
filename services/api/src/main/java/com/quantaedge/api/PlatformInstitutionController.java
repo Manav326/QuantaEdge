@@ -661,7 +661,7 @@ public class PlatformInstitutionController {
           (select count(*) from assessment da where da.course_id=p.id and da.assessment_type='PREVIOUS_YEAR_PAPER' and da.status='DRAFT') as draft_assessment_count,
           (select count(*) from assessment da join assessment_question dqa on dqa.assessment_id=da.id
             where da.course_id=p.id and da.assessment_type='PREVIOUS_YEAR_PAPER' and da.status='DRAFT') as draft_assessment_question_count,
-          assessment_only_course_ready(p.id) as assessment_only_ready,
+          assessment_only_course_publish_ready(p.id) as assessment_only_ready,
           t.id as source_institution_id,t.tenant_code as source_institution_code,
           coalesce(b.display_name,t.display_name) as source_institution_name,
           count(distinct s.id) as active_subject_count,
@@ -716,11 +716,11 @@ public class PlatformInstitutionController {
         throw new ResponseStatusException(HttpStatus.CONFLICT,
             "HRMS must inspect the exact submitted release content and confirm its fingerprint before quality approval.");
     }
-    if("ASSESSMENT_ONLY".equals(courseDeliveryMode(programId))) {
+    if(approved && "ASSESSMENT_ONLY".equals(courseDeliveryMode(programId))) {
       if(!assessmentOnlyCourseReady(programId))
         throw new ResponseStatusException(HttpStatus.CONFLICT,
-            "The assessment-only release must contain a complete source-owned test-pack hierarchy. Assessments remain draft until human review.");
-    } else {
+            "Before approving this frozen release, publish every source-owned test pack and assessment after question/answer review. Reject this release to return it for correction, then resubmit the reviewed content.");
+    } else if(approved) {
       Map<String,Object> readiness=jdbc.queryForMap("""
           select count(distinct s.id) as subject_count,
             count(distinct case when l.id is not null then s.id end) as subjects_with_published_lessons,
@@ -768,7 +768,7 @@ public class PlatformInstitutionController {
   }
 
   private boolean assessmentOnlyCourseReady(long programId) {
-    Boolean ready=jdbc.queryForObject("select assessment_only_course_ready(?)",Boolean.class,programId);
+    Boolean ready=jdbc.queryForObject("select assessment_only_course_publish_ready(?)",Boolean.class,programId);
     return Boolean.TRUE.equals(ready);
   }
 
