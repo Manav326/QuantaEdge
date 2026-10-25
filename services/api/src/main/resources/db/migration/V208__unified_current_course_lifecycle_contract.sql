@@ -778,17 +778,35 @@ RETURNS trigger
 LANGUAGE plpgsql
 AS $function$
 BEGIN
-  IF NEW.status IN ('ARCHIVED','REJECTED') THEN
-    RETURN NEW;
-  END IF;
-
-  IF NEW.obsolete_at IS NOT NULL THEN
+  -- An archived offer revision is historical and immutable, apart from retirement metadata.
+  IF TG_OP = 'UPDATE'
+     AND (OLD.status = 'ARCHIVED' OR OLD.obsolete_at IS NOT NULL) THEN
+    IF NEW.status = 'ARCHIVED'
+       AND NEW.obsolete_at IS NOT NULL
+       AND NEW.obsolete_reason IS NOT NULL
+       AND (to_jsonb(OLD) - ARRAY['status','obsolete_at','obsolete_reason','updated_at'])
+         = (to_jsonb(NEW) - ARRAY['status','obsolete_at','obsolete_reason','updated_at']) THEN
+      RETURN NEW;
+    END IF;
     RAISE EXCEPTION
-      'OBSOLETE_COURSE_OFFER: an archived offer revision is terminal; create a new source release and HRMS-controlled listing instead of reviving it.'
+      'OBSOLETE_COURSE_OFFER: an archived offer revision is terminal and immutable; create a new source release and HRMS-controlled listing.'
       USING ERRCODE = '55000';
   END IF;
 
-  IF NEW.legacy_migration OR NOT EXISTS (
+  IF NEW.status = 'ARCHIVED' THEN
+    IF NEW.obsolete_at IS NULL OR NEW.obsolete_reason IS NULL THEN
+      RAISE EXCEPTION
+        'OBSOLETE_COURSE_OFFER: archiving must record obsolete_at and obsolete_reason.'
+        USING ERRCODE = '23514';
+    END IF;
+    RETURN NEW;
+  END IF;
+
+  IF NEW.status = 'REJECTED' THEN
+    RETURN NEW;
+  END IF;
+
+  IF NEW.obsolete_at IS NOT NULL OR NEW.legacy_migration OR NOT EXISTS (
     SELECT 1
     FROM institution_course_assignment assignment
     JOIN institution_course_release release
@@ -811,12 +829,11 @@ $function$;
 DROP TRIGGER IF EXISTS trg_qe_require_current_course_assignment_for_offer
   ON institution_marketplace_offer;
 CREATE TRIGGER trg_qe_require_current_course_assignment_for_offer
-  BEFORE INSERT OR UPDATE OF status,assignment_id,course_release_id,course_id,institution_id,legacy_migration
-  ON institution_marketplace_offer
+  BEFORE INSERT OR UPDATE ON institution_marketplace_offer
   FOR EACH ROW EXECUTE FUNCTION qe_require_current_course_assignment_for_offer_write();
 
 COMMENT ON FUNCTION qe_require_current_course_assignment_for_offer_write() IS
-  'Database-enforced offer lineage gate for DRAFT/IN_REVIEW/APPROVED/PUBLISHED offers. Archived and rejected history may remain, but a usable offer must attach to the current eligible release assignment.';
+  'Database-enforced offer lineage gate for every offer write. Active revisions must reference the current eligible release; archived revisions are terminal and immutable.';
 
 -- Close only the access rows that depended solely on the retired global free-grant
 -- path. Enrollment history is retained. Real purchases, institution entitlements, existing
