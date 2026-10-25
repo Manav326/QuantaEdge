@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "dd40b8e61dbaabcec2a08dd77dcf0d5a545ae8c174366c63adfde9db0f2aefd1",
+  "raw_analysis_sha256": "29e3bc12698ff940931dfa9ac21cbfb0bedc5500ea4fc1912bd6d8d4e23a538d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40233310877",
-      "checkpointed_at": "2026-10-25T22:41:05Z",
+      "checkpointed_at": "2026-10-25T22:45:17Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40233310877",
-      "checkpointed_at": "2026-10-25T22:41:52Z",
+      "checkpointed_at": "2026-10-25T22:46:07Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57861,7 +57861,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40233310877",
-      "checkpointed_at": "2026-10-25T22:42:49Z",
+      "checkpointed_at": "2026-10-25T22:47:06Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -64566,6 +64566,86 @@
         "context_relation": "Experimental",
         "limitations": [
           "No specific limitations provided."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c2b2e5fd564b4373c697448c",
+      "asset_sha256": "3ab92ff9e87db7fbbdb8c82ca0b5d1b473b794c6f8afffdba1ddec6368099e50",
+      "page_text_context_sha256": "77dac7f858d3c2ad86ca022679a4bf0db50a31cf27b414c0681a8331db1e8f89",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 104,
+      "asset_path": "page-0104.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40233310877",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6063adae8b1a8bdfbcd488fb",
+      "asset_sha256": "4004c08a8b37a53c52e1841d34f9fe652450f33700e29550aea847435d23f674",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/4004c08a8b37a53c52e1841d34f9fe652450f33700e29550aea847435d23f674.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "138180b5c5a208b01601e22239615e5e1561f3ee4a91e52fddddce77e51d1d7b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person pointing upwards with one finger and holding their ear with the other hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "pressure",
+          "directions",
+          "liquids",
+          "container",
+          "fountain",
+          "water",
+          "pipes",
+          "holes",
+          "spurting"
+        ],
+        "context_relation": "The image is related to the text discussing the pressure exerted by liquids in containers and how it can be observed in spurring water from leaking joints or holes in pipes.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the explanation of the spurring water."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40233310877",
+      "checkpointed_at": "2026-10-25T22:53:50Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person pointing upwards with one finger and holding their ear with the other hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "pressure",
+          "directions",
+          "liquids",
+          "container",
+          "fountain",
+          "water",
+          "pipes",
+          "holes",
+          "spurting"
+        ],
+        "context_relation": "The image is related to the text discussing the pressure exerted by liquids in containers and how it can be observed in spurring water from leaking joints or holes in pipes.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the explanation of the spurring water."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
