@@ -1,11 +1,13 @@
 package com.quantaedge.android.ui
 
+import java.util.Locale
+
 /**
  * Shared learner-facing course-type labels for the student and family Marketplace.
  * Course types describe different hierarchies; they must not be inferred from course titles.
  */
 internal fun marketplaceCourseTypeLabel(courseTypeCode: String, hindi: Boolean): String =
-    when (courseTypeCode.trim().uppercase()) {
+    when (courseTypeCode.trim().uppercase(Locale.ROOT)) {
         "K12" -> if (hindi) "विद्यालयी पढ़ाई" else "K–12 learning"
         "COMPETITIVE" -> if (hindi) "प्रतियोगी परीक्षा तैयारी" else "Competitive preparation"
         "ASSESSMENT" -> if (hindi) "परीक्षा एवं टेस्ट" else "Assessment & tests"
