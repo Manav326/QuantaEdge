@@ -302,6 +302,26 @@ BEGIN
       USING ERRCODE = '55000';
   END IF;
 
+  IF NEW.status = 'ASSIGNED' AND NOT EXISTS (
+    SELECT 1
+    FROM institution_course_release release
+    WHERE release.id = NEW.course_release_id
+      AND release.legacy_migration = false
+      AND release.release_state <> 'LEGACY_MIGRATED'
+      AND (
+        (NEW.assignment_source = 'ORIGIN'
+          AND release.source_institution_id = NEW.institution_id)
+        OR
+        (NEW.assignment_source = 'HRMS'
+          AND release.release_state = 'SHAREABLE'
+          AND release.source_institution_id <> NEW.institution_id)
+      )
+  ) THEN
+    RAISE EXCEPTION
+      'CURRENT_COURSE_RELEASE_REQUIRED: origin assignments must belong to the source institution; HRMS assignments require a current shareable release from another institution.'
+      USING ERRCODE = '23514';
+  END IF;
+
   RETURN NEW;
 END
 $function$;
@@ -397,6 +417,41 @@ SET obsolete_at = coalesce(obsolete_at, now()),
     obsolete_reason = coalesce(obsolete_reason,
       'OBSOLETE: release was created by the prior migration pipeline; new assignments require a current source-owned release.')
 WHERE legacy_migration = true OR release_state = 'LEGACY_MIGRATED';
+
+-- Existing migrated releases are mutable only enough to mark them obsolete. No new or updated
+-- row can enter the legacy release state or be used as an active release.
+CREATE OR REPLACE FUNCTION qe_reject_obsolete_course_release_write()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $function$
+BEGIN
+  IF TG_OP = 'UPDATE'
+     AND (OLD.legacy_migration = true OR OLD.release_state = 'LEGACY_MIGRATED') THEN
+    IF NEW.legacy_migration = OLD.legacy_migration
+       AND NEW.release_state = OLD.release_state
+       AND (to_jsonb(OLD) - ARRAY['obsolete_at','obsolete_reason','updated_at'])
+         = (to_jsonb(NEW) - ARRAY['obsolete_at','obsolete_reason','updated_at']) THEN
+      RETURN NEW;
+    END IF;
+    RAISE EXCEPTION
+      'OBSOLETE_COURSE_RELEASE: migrated release rows are historical and may only receive obsolescence metadata.'
+      USING ERRCODE = '55000';
+  END IF;
+
+  IF NEW.legacy_migration = true OR NEW.release_state = 'LEGACY_MIGRATED' THEN
+    RAISE EXCEPTION
+      'OBSOLETE_COURSE_RELEASE: new legacy-migrated releases are not supported by the current course lifecycle.'
+      USING ERRCODE = '55000';
+  END IF;
+
+  RETURN NEW;
+END
+$function$;
+
+DROP TRIGGER IF EXISTS trg_qe_obsolete_course_release_write ON institution_course_release;
+CREATE TRIGGER trg_qe_obsolete_course_release_write
+  BEFORE INSERT OR UPDATE ON institution_course_release
+  FOR EACH ROW EXECUTE FUNCTION qe_reject_obsolete_course_release_write();
 
 -- Mark and audit legacy assignments as unusable. This does not delete order, invoice,
 -- entitlement, attempt, progress, certificate or audit history.
