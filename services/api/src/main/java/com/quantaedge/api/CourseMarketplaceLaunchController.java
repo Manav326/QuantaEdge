@@ -364,7 +364,7 @@ public class CourseMarketplaceLaunchController {
          and identity.course_type_code=p.course_type_code
         join institution_tenant source on source.id=r.source_institution_id and source.status='ACTIVE'
         where r.release_state='SHAREABLE' and r.legacy_migration=false and r.obsolete_at is null
-          and r.source_institution_id<>??
+          and r.source_institution_id<>?
           and course_marketplace_content_type_ready(p.id)
           and not exists(select 1 from institution_course_assignment a
             where a.institution_id=? and a.course_release_id=r.id and a.status='ASSIGNED')
