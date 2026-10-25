@@ -4098,5 +4098,9 @@
   "admin.assessments.englishExplanationAria": "English explanation",
   "admin.assessments.hindiExplanationAria": "Hindi explanation",
   "admin.assessments.questionSourceProvenance": "Question source provenance",
-  "admin.assessments.hindiExplanationGuidance": "The Hindi explanation is saved separately from the English explanation."
+  "admin.assessments.hindiExplanationGuidance": "The Hindi explanation is saved separately from the English explanation.",
+  "admin.assessments.answerPayloadMustBeObject": "Answer payload must be a JSON object.",
+  "admin.assessments.invalidQuestionAnswer": "Question {number}: {reason}",
+  "admin.assessments.questionReviewSaved": "Question {number} marked {status}. {approved} of {total} questions approved.",
+  "admin.assessments.questionReviewSaveFailed": "Question review could not be saved."
 }
