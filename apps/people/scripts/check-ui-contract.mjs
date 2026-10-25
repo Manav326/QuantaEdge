@@ -257,6 +257,11 @@ for (const mode of ['light', 'dark']) {
 assert(financePageTheme.includes('data-qe-invoice-document="true"') && financePageTheme.includes('body:JSON.stringify({designDefinition:design})'), 'Invoice stationery must stay separately authored and PDF rendering must use the selected design definition.');
 assert(financeModuleTheme.includes('--finance-field: var(--qe-people-field') && financeModuleTheme.includes('.table:not(.paperTable)'), 'Finance controls and ledgers must follow HRMS theme tokens without recolouring invoice tables.');
 assert(financeModuleTheme.includes(':is(.primary, .primarySmall, .secondary, .secondarySmall):disabled') && financeModuleTheme.includes('filter: none;'), 'Finance disabled actions must retain readable contrast in both HRMS appearances.');
+const institutionActionStyles = read('apps/people/app/institutions/Institutions.module.css');
+assert(institutionActionStyles.includes('.page :is(.primary,.secondary,.warning,.danger,.quiet):disabled')
+  && institutionActionStyles.includes('var(--qe-people-disabled-surface')
+  && institutionActionStyles.includes('filter:none;'),
+  'Disabled institution actions must use the same solid neutral state and not an opacity haze.');
 const notificationPageTheme = read('apps/people/app/components/NotificationStudio.tsx');
 const notificationModuleTheme = read('apps/people/app/components/NotificationStudio.module.css');
 const rendererTheme = read('apps/people/app/components/RichNotificationRenderer.tsx');
