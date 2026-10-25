@@ -1217,6 +1217,7 @@ export default function MarketplaceLaunchStepper({
                       </div>
                     )}
                     <label className={styles.reviewNote}>Quality review note
+                      <small>A note is required both to approve and to return this release for correction. Use 3–1,000 characters.</small>
                       <textarea rows={2} maxLength={1000} value={reviewNotes[release.release_id] || ''}
                         onChange={event => setReviewNotes(previous => ({ ...previous, [release.release_id]: event.target.value }))}
                         placeholder={assessmentOnly ? 'Record question inventory, source fidelity, answer-key review, section scoring and release fingerprint checks…' : k12Learning ? 'Record what was checked: syllabus coverage, published lessons, content integrity…' : 'Explain the course-type/delivery-mode mismatch and required correction…'} />
