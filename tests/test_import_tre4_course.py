@@ -40,7 +40,7 @@ class Tre4ImporterTests(unittest.TestCase):
         institution_id = import_tre4_course.resolve_quantaedge_source_institution(cursor)
 
         self.assertEqual(institution_id, 42)
-        sql = "\\n".join(statement for statement, _ in cursor.statements)
+        sql = "\n".join(statement for statement, _ in cursor.statements)
         self.assertIn("tenant_code='QUANTA-EDGE'", sql)
         self.assertNotIn("display_name='QuantaEdge'", sql)
 
