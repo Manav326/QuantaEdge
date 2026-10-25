@@ -83,8 +83,10 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
     def test_release_hrms_assignment_origin_approval_and_marketplace_share_type_gate(self):
         root = ROOT
         migration = (root / "services/api/src/main/resources/db/migration/V205__active_course_type_marketplace_readiness.sql").read_text(encoding="utf-8")
-        self.assertIn("type_registry.status <> 'ACTIVE'", migration)
-        self.assertIn("p.status <> 'ACTIVE' OR p.code='GENERAL'", migration)
+        self.assertIn("registered_type.status='ACTIVE'", migration)
+        self.assertIn("identity.status='ACTIVE'", migration)
+        self.assertIn("conflicting_release.source_institution_id<>identity.source_institution_id", migration)
+        self.assertIn("p.status='ACTIVE' AND p.code<>'GENERAL'", migration)
         self.assertIn("p.course_type_code='ASSESSMENT'", migration)
         self.assertIn("coalesce(mode.delivery_mode,'LEARNING_CONTENT')='ASSESSMENT_ONLY'", migration)
         self.assertIn("p.course_type_code='K12'", migration)
