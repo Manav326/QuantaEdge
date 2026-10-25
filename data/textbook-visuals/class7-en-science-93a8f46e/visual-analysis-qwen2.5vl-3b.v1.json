@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2259,
+    "assets_selected": 2261,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "94fcf9ccb3568c860cc07296",
-      "617a7eb962b48f65cc1c1ca8",
-      "85487ee5665b3303ea63a610"
+      "9af34fc1b7f333c1847afcdd",
+      "8e008d4a5483506c987e59b3",
+      "1c05ac75455fb8a4ad4abfee"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2256,
-    "assets_remaining": 5232,
+    "assets_analyzed": 2257,
+    "assets_remaining": 5231,
     "assets_completion_percent": 30.1,
-    "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 2254,
+    "assets_failed": 21,
+    "assets_skipped_from_checkpoint": 2256,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40188596785",
-      "checkpointed_at": "2026-10-25T12:47:12Z"
+      "checkpointed_at": "2026-10-25T12:55:54Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40188596785",
-      "checkpointed_at": "2026-10-25T12:48:14Z"
+      "checkpointed_at": "2026-10-25T12:56:57Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -73845,7 +73845,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40174921246",
+      "run_id": "40188596785",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -74091,19 +74091,41 @@
     {
       "asset_id": "8e008d4a5483506c987e59b3",
       "asset_sha256": "97bd6648de8a2c11e88d5caa2166547f370b3b9ce2f7a7d78d5b0c6d6a63517a",
-      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 61,
       "asset_path": "assets/97bd6648de8a2c11e88d5caa2166547f370b3b9ce2f7a7d78d5b0c6d6a63517a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40174921246",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An elderly craftsperson named Sudarshan discussing metal items with Yashwant and Anandi.",
+        "visual_type": "photo",
+        "visible_text": [
+          "The World of Metals",
+          "4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "flat pans (tawas)"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about metal items from Sudarshan uncle.",
+        "limitations": [
+          "The image does not show the actual ironsmiths or the items they make."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40188596785",
+      "checkpointed_at": "2026-10-25T13:01:34Z"
     },
     {
       "asset_id": "a8b3d999f2844a30ca5d29ef",
@@ -74612,7 +74634,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40174921246",
+      "run_id": "40188596785",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
