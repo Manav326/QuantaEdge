@@ -110,6 +110,7 @@ AS $function$
       AND offer.legacy_migration = false
       AND release.release_state = 'SHAREABLE'
       AND release.legacy_migration = false
+      AND release.obsolete_at IS NULL
       AND (
         assignment.assignment_source <> 'ORIGIN'
         OR assignment.institution_id = release.source_institution_id
@@ -136,6 +137,7 @@ AS $function$
           )
           AND newer_release.release_state = 'SHAREABLE'
           AND newer_release.legacy_migration = false
+          AND newer_release.obsolete_at IS NULL
           AND newer_release.source_institution_id = newer_identity.source_institution_id
           AND newer_identity.id = identity.id
           AND newer_identity.status = 'ACTIVE'
@@ -186,6 +188,7 @@ AS $function$
      AND release.program_id = offer.course_id
      AND release.release_state = 'SHAREABLE'
      AND release.legacy_migration = false
+      AND release.obsolete_at IS NULL
     JOIN curriculum_program program
       ON program.id = offer.course_id
      AND program.status = 'ACTIVE'
@@ -226,6 +229,7 @@ AS $function$
          AND newer_release.program_id = newer_offer.course_id
          AND newer_release.release_state = 'SHAREABLE'
          AND newer_release.legacy_migration = false
+          AND newer_release.obsolete_at IS NULL
         JOIN curriculum_program newer_program
           ON newer_program.id = newer_offer.course_id
          AND newer_program.status = 'ACTIVE'
@@ -307,6 +311,7 @@ BEGIN
     FROM institution_course_release release
     WHERE release.id = NEW.course_release_id
       AND release.legacy_migration = false
+      AND release.obsolete_at IS NULL
       AND release.release_state <> 'LEGACY_MIGRATED'
       AND (
         (NEW.assignment_source = 'ORIGIN'
@@ -571,6 +576,7 @@ BEGIN
       AND assignment.assignment_source IN ('ORIGIN','HRMS')
       AND release.release_state = 'SHAREABLE'
       AND release.legacy_migration = false
+      AND release.obsolete_at IS NULL
       AND (
         assignment.assignment_source <> 'ORIGIN'
         OR assignment.institution_id = release.source_institution_id
@@ -597,6 +603,7 @@ BEGIN
           )
           AND newer_release.release_state = 'SHAREABLE'
           AND newer_release.legacy_migration = false
+          AND newer_release.obsolete_at IS NULL
           AND newer_release.source_institution_id = newer_identity.source_institution_id
           AND newer_identity.id = identity.id
           AND newer_identity.status = 'ACTIVE'
