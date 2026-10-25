@@ -641,7 +641,7 @@ public class GuardianController {
       where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
         and (exists(select 1 from institution_marketplace_offer o
                     where o.institution_id=a.institution_id and o.assignment_id=a.id
-                      and o.course_id=p.id and o.status='PUBLISHED' and o.price_paise=0 and o.currency='INR')
+                      and o.course_id=p.id and o.status='PUBLISHED' and qe_marketplace_offer_publicly_sellable(o.id) and o.price_paise=0 and o.currency='INR')
           or exists(select 1 from student_program_enrollment e
                     where e.institution_id=a.institution_id and e.student_id=? and e.program_id=p.id
                       and e.status in ('ACTIVE','PAUSED'))
