@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1291,
+    "assets_selected": 1293,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "2e14d9abcf63b6d4fa70faad",
-      "101368da3ef9882a8ac66e45"
+      "701f2bd6ae3d1d6a76e23893",
+      "83697c274a8b13e91304fc8d"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1288,
-    "assets_remaining": 1003,
-    "assets_completion_percent": 56.2,
+    "assets_analyzed": 1290,
+    "assets_remaining": 1001,
+    "assets_completion_percent": 56.3,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1286,
+    "assets_skipped_from_checkpoint": 1288,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40220756546",
-      "checkpointed_at": "2026-10-25T19:59:08Z"
+      "checkpointed_at": "2026-10-25T20:07:03Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40220756546",
-      "checkpointed_at": "2026-10-25T19:59:54Z"
+      "checkpointed_at": "2026-10-25T20:07:49Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40220756546",
-      "checkpointed_at": "2026-10-25T20:00:51Z"
+      "checkpointed_at": "2026-10-25T20:08:45Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -42576,6 +42576,80 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40220756546",
       "checkpointed_at": "2026-10-25T20:05:51Z"
+    },
+    {
+      "asset_id": "701f2bd6ae3d1d6a76e23893",
+      "asset_sha256": "c0cb82b43200b748e77f339ebbac5fedab6f95f3d78ae97b4a5267b04c5bf935",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/c0cb82b43200b748e77f339ebbac5fedab6f95f3d78ae97b4a5267b04c5bf935.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "77dac7f858d3c2ad86ca022679a4bf0db50a31cf27b414c0681a8331db1e8f89",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two balloons attached to tubes with water columns, one being filled with water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "What will happen to the",
+          "bulge of the balloon if we",
+          "increase the height of the",
+          "water column?",
+          "More",
+          "Water",
+          "Pour some more water in any one of the pipes",
+          "used in Fig. 6.5. Observe the bulge of the balloon.",
+          "Balloon",
+          "Balloon",
+          "Repeat this process a few time"
+        ],
+        "concepts": [
+          "Water column",
+          "Bulge of the balloon",
+          "Increase in height",
+          "Observation of bulge"
+        ],
+        "context_relation": "Observation and experiment",
+        "limitations": [
+          "No specific experimental setup details provided",
+          "No specific results or outcomes mentioned"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40220756546",
+      "checkpointed_at": "2026-10-25T20:10:31Z"
+    },
+    {
+      "asset_id": "83697c274a8b13e91304fc8d",
+      "asset_sha256": "c18e279a8ccd78ba338d5f73a406ca937896051ce26c709a18ac2fa51bc0cbc4",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/c18e279a8ccd78ba338d5f73a406ca937896051ce26c709a18ac2fa51bc0cbc4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "77dac7f858d3c2ad86ca022679a4bf0db50a31cf27b414c0681a8331db1e8f89",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A bottle filled with water is placed on a table, with water spilling out from the bottom.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a bottle with water spilling out, which is related to the concept of pressure and fluid dynamics.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the question being asked."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40220756546",
+      "checkpointed_at": "2026-10-25T20:12:06Z"
     }
   ]
 }

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1304,
-    "successful_visual_analyses": 1291,
-    "missing_visual_analyses": 987,
+    "raw_analysis_result_rows": 1306,
+    "successful_visual_analyses": 1293,
+    "missing_visual_analyses": 985,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1000,
+    "unresolved_count": 998,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -48823,9 +48823,36 @@
       "asset_path": "assets/c0cb82b43200b748e77f339ebbac5fedab6f95f3d78ae97b4a5267b04c5bf935.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two balloons attached to tubes with water columns, one being filled with water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "What will happen to the",
+          "bulge of the balloon if we",
+          "increase the height of the",
+          "water column?",
+          "More",
+          "Water",
+          "Pour some more water in any one of the pipes",
+          "used in Fig. 6.5. Observe the bulge of the balloon.",
+          "Balloon",
+          "Balloon",
+          "Repeat this process a few time"
+        ],
+        "concepts": [
+          "Water column",
+          "Bulge of the balloon",
+          "Increase in height",
+          "Observation of bulge"
+        ],
+        "context_relation": "Observation and experiment",
+        "limitations": [
+          "No specific experimental setup details provided",
+          "No specific results or outcomes mentioned"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -48841,9 +48868,18 @@
       "asset_path": "assets/c18e279a8ccd78ba338d5f73a406ca937896051ce26c709a18ac2fa51bc0cbc4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A bottle filled with water is placed on a table, with water spilling out from the bottom.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a bottle with water spilling out, which is related to the concept of pressure and fluid dynamics.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the question being asked."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
