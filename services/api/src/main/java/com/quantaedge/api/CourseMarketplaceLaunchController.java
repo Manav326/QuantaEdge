@@ -314,11 +314,21 @@ public class CourseMarketplaceLaunchController {
     authorization.requirePermission(context,"QE_PLATFORM_OWNER");
     assertInstitution(institutionId);
     List<Long> assignments=jdbc.queryForList("""
-        select a.id from institution_course_assignment a
-        join institution_course_release ar on ar.id=a.course_release_id
-        where a.institution_id=? and a.status='ASSIGNED'
-          and (a.assignment_source <> 'ORIGIN' or ar.release_state='SHAREABLE')
-        order by a.assigned_at desc,a.id desc
+        with ranked_assignments as (
+          select a.id,a.assigned_at,
+            row_number() over (
+              partition by coalesce(p.course_identity_id,-p.id)
+              order by p.content_version_no desc,r.release_version desc,r.id desc,
+                a.assigned_at desc,a.id desc
+            ) as identity_rank
+          from institution_course_assignment a
+          join institution_course_release r on r.id=a.course_release_id
+          join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+          where a.institution_id=? and a.status='ASSIGNED'
+            and (a.assignment_source<>'ORIGIN' or r.release_state='SHAREABLE')
+        )
+        select id from ranked_assignments where identity_rank=1
+        order by assigned_at desc,id desc
         """,Long.class,institutionId);
     List<Map<String,Object>> items=new ArrayList<>();
     int readyCount=0;
