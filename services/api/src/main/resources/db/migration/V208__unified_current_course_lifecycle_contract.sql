@@ -63,9 +63,17 @@ BEGIN
       AND program.course_identity_id = NEW.course_identity_id
       AND program.status = 'ACTIVE'
       AND program.code <> 'GENERAL'
+      AND EXISTS (
+        SELECT 1 FROM institution_course_release source_release
+        WHERE source_release.program_id = program.id
+          AND source_release.source_institution_id = identity.source_institution_id
+          AND source_release.legacy_migration = false
+          AND source_release.release_state <> 'LEGACY_MIGRATED'
+          AND source_release.obsolete_at IS NULL
+      )
   ) THEN
     RAISE EXCEPTION
-      'COURSE_IDENTITY_MISMATCH: certificate course identity does not match an active content version.'
+      'COURSE_IDENTITY_MISMATCH: certificate course identity and source release do not match an active content version.'
       USING ERRCODE = '23514';
   END IF;
   RETURN NEW;
@@ -376,11 +384,15 @@ LANGUAGE plpgsql
 AS $function$
 BEGIN
   IF TG_OP = 'UPDATE' AND OLD.assignment_source NOT IN ('ORIGIN','HRMS') THEN
-    IF OLD.status = 'ASSIGNED'
-       AND NEW.status = 'REVOKED'
-       AND NEW.assignment_source = OLD.assignment_source
-       AND (to_jsonb(OLD) - ARRAY['status','revoked_at','revoked_by_staff_id','updated_at','obsolete_at','obsolete_reason'])
-         = (to_jsonb(NEW) - ARRAY['status','revoked_at','revoked_by_staff_id','updated_at','obsolete_at','obsolete_reason']) THEN
+    IF NEW.assignment_source = OLD.assignment_source
+       AND NEW.obsolete_at IS NOT NULL
+       AND NEW.obsolete_reason IS NOT NULL
+       AND (
+         (OLD.status = 'ASSIGNED' AND NEW.status = 'REVOKED')
+         OR (OLD.status = 'REVOKED' AND NEW.status = 'REVOKED')
+       )
+       AND (to_jsonb(OLD) - ARRAY['status','revoked_at','updated_at','obsolete_at','obsolete_reason'])
+         = (to_jsonb(NEW) - ARRAY['status','revoked_at','updated_at','obsolete_at','obsolete_reason']) THEN
       RETURN NEW;
     END IF;
 
@@ -547,8 +559,8 @@ CREATE TRIGGER trg_qe_obsolete_course_release_write
   BEFORE INSERT OR UPDATE ON institution_course_release
   FOR EACH ROW EXECUTE FUNCTION qe_reject_obsolete_course_release_write();
 
--- Mark and audit legacy assignments as unusable. This does not delete order, invoice,
--- entitlement, attempt, progress, certificate or audit history.
+-- Mark/audit active legacy assignments, then add explicit obsolete metadata to every historical
+-- legacy assignment row. Revoked history is marked too; it is not silently left ambiguous.
 INSERT INTO institution_course_lifecycle_event(
   institution_id, course_release_id, assignment_id, event_type, details, created_at
 )
@@ -567,22 +579,24 @@ WHERE assignment.status = 'ASSIGNED'
     assignment.assignment_source NOT IN ('ORIGIN','HRMS')
     OR release.legacy_migration = true
     OR release.release_state = 'LEGACY_MIGRATED'
+    OR release.obsolete_at IS NOT NULL
   );
 
 UPDATE institution_course_assignment assignment
-SET status = 'REVOKED',
-    revoked_at = coalesce(assignment.revoked_at, now()),
+SET status = CASE WHEN assignment.status = 'ASSIGNED' THEN 'REVOKED' ELSE assignment.status END,
+    revoked_at = CASE WHEN assignment.status = 'ASSIGNED'
+      THEN coalesce(assignment.revoked_at, now()) ELSE assignment.revoked_at END,
     obsolete_at = coalesce(assignment.obsolete_at, now()),
     obsolete_reason = coalesce(assignment.obsolete_reason,
-      'OBSOLETE: assignment uses a retired source type or legacy-migrated release; use ORIGIN or HRMS in the current lifecycle.'),
+      'OBSOLETE: assignment uses a retired source type or obsolete/migrated release; use ORIGIN or HRMS in the current lifecycle.'),
     updated_at = now()
 FROM institution_course_release release
 WHERE release.id = assignment.course_release_id
-  AND assignment.status = 'ASSIGNED'
   AND (
     assignment.assignment_source NOT IN ('ORIGIN','HRMS')
     OR release.legacy_migration = true
     OR release.release_state = 'LEGACY_MIGRATED'
+    OR release.obsolete_at IS NOT NULL
   );
 
 COMMENT ON COLUMN institution_course_release.obsolete_at IS
