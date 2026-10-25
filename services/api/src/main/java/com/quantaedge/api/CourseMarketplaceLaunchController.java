@@ -328,7 +328,7 @@ public class CourseMarketplaceLaunchController {
           join institution_course_release r on r.id=a.course_release_id
           join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
           where a.institution_id=? and a.status='ASSIGNED'
-            and (a.assignment_source<>'ORIGIN' or r.release_state='SHAREABLE')
+            and (a.assignment_source <> 'ORIGIN' or r.release_state='SHAREABLE')
         )
         select id from ranked_assignments where identity_rank=1
         order by assigned_at desc,id desc
