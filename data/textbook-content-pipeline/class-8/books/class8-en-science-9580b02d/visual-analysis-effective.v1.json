@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9fc441d5061d2a60cb0a40f820e0509eb55b3ad5f356a9e11afc8b0e012ebd05",
+  "raw_analysis_sha256": "a5b08b8592eeb3179f1e162ad6a059d0890e5c75d1c95a05d42380a393492052",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40183014121",
-      "checkpointed_at": "2026-10-25T10:41:03Z",
+      "checkpointed_at": "2026-10-25T10:47:28Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40183014121",
-      "checkpointed_at": "2026-10-25T10:41:28Z",
+      "checkpointed_at": "2026-10-25T10:47:55Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40183014121",
-      "checkpointed_at": "2026-10-25T10:41:58Z",
+      "checkpointed_at": "2026-10-25T10:48:26Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -63484,6 +63484,138 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "aea7db4a2c358f45b70aad03",
+      "asset_sha256": "b81043cce1b264148610c902170fb2146a3fda67061378309d421d6c9f7953f3",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 101,
+      "asset_path": "page-0101.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "e49a2c7ebfa3c0eb05f66bf35931ba92635bb20b0358303eda5a3efc873edac9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing pressure, winds, storms, and cyclones.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You must have observed fallen leaves on the ground swirling\nin the air or being swept away, and trees swaying or even\nbending when a strong wind blows. Have you ever wondered\nwhy fallen leaves rise in the air or trees sway or bend? Does the\nwind exert force on fallen leaves to make them rise or on t",
+          "Megha and her brother Pawan are going on a picnic. They walk\n    to the picnic spot, carrying identical items in their bags (Fig. 6.1).\n    On the way, Pawan keeps adjusting his bag, and looks\n    uncomfortable. Megha asks, \"Is there a problem with\n    your bag?\" Pawan responds, \"Yes, it is hurting ",
+          "Can the shape or size of the straps really make a\n    difference? Let us try to find out.",
+          "When we carry a bag, we feel its weight because of the force of gravity acting on our shoulders. The\n    weight of the bag with narrow straps acts on a\n    smaller area of our shoulders, whereas the weight of\n    the bag with broad straps is spread out over a larger\n    area. It is due to this reaso",
+          "At this stage, we will consider only those forces which act\n    perpendicular to the surface on which the pressure is to be computed."
+        ],
+        "concepts": [
+          "pressure",
+          "force",
+          "area",
+          "wind",
+          "cyclones",
+          "thunderstorms",
+          "gravity",
+          "straps",
+          "force per unit area"
+        ],
+        "context_relation": "pressure",
+        "limitations": [
+          "The image does not show the actual experiment or the visual representation of the force per unit area."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40183014121",
+      "checkpointed_at": "2026-10-25T10:50:28Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing pressure, winds, storms, and cyclones.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You must have observed fallen leaves on the ground swirling\nin the air or being swept away, and trees swaying or even\nbending when a strong wind blows. Have you ever wondered\nwhy fallen leaves rise in the air or trees sway or bend? Does the\nwind exert force on fallen leaves to make them rise or on t",
+          "Megha and her brother Pawan are going on a picnic. They walk\n    to the picnic spot, carrying identical items in their bags (Fig. 6.1).\n    On the way, Pawan keeps adjusting his bag, and looks\n    uncomfortable. Megha asks, \"Is there a problem with\n    your bag?\" Pawan responds, \"Yes, it is hurting ",
+          "Can the shape or size of the straps really make a\n    difference? Let us try to find out.",
+          "When we carry a bag, we feel its weight because of the force of gravity acting on our shoulders. The\n    weight of the bag with narrow straps acts on a\n    smaller area of our shoulders, whereas the weight of\n    the bag with broad straps is spread out over a larger\n    area. It is due to this reaso",
+          "At this stage, we will consider only those forces which act\n    perpendicular to the surface on which the pressure is to be computed."
+        ],
+        "concepts": [
+          "pressure",
+          "force",
+          "area",
+          "wind",
+          "cyclones",
+          "thunderstorms",
+          "gravity",
+          "straps",
+          "force per unit area"
+        ],
+        "context_relation": "pressure",
+        "limitations": [
+          "The image does not show the actual experiment or the visual representation of the force per unit area."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "450fc4af3dc870b080bfbe90",
+      "asset_sha256": "4125890b31c85eda0c74057d76ff95f07b5e80c516f3232902723aa997cb27c1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 102,
+      "asset_path": "assets/4125890b31c85eda0c74057d76ff95f07b5e80c516f3232902723aa997cb27c1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f3609a74f6b9bc75917f652f29735b6712124160a390320c36e3648f81ded621",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a man and a woman carrying items on their heads.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "carrying items on the head",
+          "comfort in carrying items",
+          "broad straps reducing pressure",
+          "narrow straps increasing pressure",
+          "feeling more comfortable with broad straps",
+          "lifting a water-filled bucket with a broad handle",
+          "carrying loads like pots or vegetable baskets on the head"
+        ],
+        "context_relation": "The image illustrates the concept of carrying items on the head, emphasizing the comfort and pressure reduction provided by broad straps compared to narrow straps.",
+        "limitations": [
+          "The image does not provide specific measurements or comparisons.",
+          "The image does not include any numerical data or measurements.",
+          "The image does not show the exact angle or position of the straps."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40183014121",
+      "checkpointed_at": "2026-10-25T10:51:11Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a man and a woman carrying items on their heads.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "carrying items on the head",
+          "comfort in carrying items",
+          "broad straps reducing pressure",
+          "narrow straps increasing pressure",
+          "feeling more comfortable with broad straps",
+          "lifting a water-filled bucket with a broad handle",
+          "carrying loads like pots or vegetable baskets on the head"
+        ],
+        "context_relation": "The image illustrates the concept of carrying items on the head, emphasizing the comfort and pressure reduction provided by broad straps compared to narrow straps.",
+        "limitations": [
+          "The image does not provide specific measurements or comparisons.",
+          "The image does not include any numerical data or measurements.",
+          "The image does not show the exact angle or position of the straps."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
