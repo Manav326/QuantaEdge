@@ -314,6 +314,11 @@ export default function AssessmentsPage(){
     return [question.prompt,question.prompt_i18n?.en,question.prompt_i18n?.hi,item.sequenceNo]
       .some(value=>String(value??'').toLocaleLowerCase().includes(normalizedReviewSearch));
   });
+  useEffect(()=>{
+    if(importedReviewOpen&&filteredImportedReviewItems.length&&!filteredImportedReviewItems.some(item=>Number(item.sequenceNo)===importedReviewSequence)){
+      setImportedReviewSequence(Number(filteredImportedReviewItems[0].sequenceNo));
+    }
+  },[importedReviewOpen,importedReviewFilter,importedReviewSearch,filteredImportedReviewItems,importedReviewSequence]);
   const selectedImportedReviewItem=filteredImportedReviewItems.find(item=>Number(item.sequenceNo)===importedReviewSequence)||filteredImportedReviewItems[0]||null;
   const selectedImportedQuestion=selectedImportedReviewItem?.question||{};
   const selectedImportedSequence=Number(selectedImportedReviewItem?.sequenceNo||importedReviewSequence);
