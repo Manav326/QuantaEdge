@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2272,
+    "assets_selected": 2273,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "9af34fc1b7f333c1847afcdd",
-      "1c05ac75455fb8a4ad4abfee",
-      "020aaf09aa2a40636a8f6b3d"
+      "8b590005e818fefd62c7b02b",
+      "8e09d5b8fb92d244ec7ef1f2",
+      "3ea26ab4b26aefb4f93f284d"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2268,
-    "assets_remaining": 5220,
+    "assets_analyzed": 2270,
+    "assets_remaining": 5218,
     "assets_completion_percent": 30.3,
-    "assets_failed": 27,
-    "assets_skipped_from_checkpoint": 2267,
+    "assets_failed": 25,
+    "assets_skipped_from_checkpoint": 2268,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40220755062",
-      "checkpointed_at": "2026-10-25T18:52:08Z"
+      "checkpointed_at": "2026-10-25T18:56:45Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40220755062",
-      "checkpointed_at": "2026-10-25T18:52:36Z"
+      "checkpointed_at": "2026-10-25T18:57:13Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -74686,19 +74686,42 @@
     {
       "asset_id": "8b590005e818fefd62c7b02b",
       "asset_sha256": "9db22a86cb4be83678b56b9c24b0efdcd5b1cbf52eeda49f2ce334e6dc38e269",
-      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 61,
       "asset_path": "assets/9db22a86cb4be83678b56b9c24b0efdcd5b1cbf52eeda49f2ce334e6dc38e269.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40205238473",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A conversation between Yashwant and Sudarshan about making items of daily use.",
+        "visual_type": "photo",
+        "visible_text": [
+          "The World of Metals",
+          "4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "Craftspersons",
+          "Metals",
+          "Daily use items",
+          "Ironsmiths",
+          "Sudarshan uncle"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about craftspersons who work with metals.",
+        "limitations": [
+          "The image does not show the actual ironsmiths or the items they make."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40220755062",
+      "checkpointed_at": "2026-10-25T18:57:29Z"
     },
     {
       "asset_id": "8e09d5b8fb92d244ec7ef1f2",
@@ -74711,7 +74734,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40205238473",
+      "run_id": "40220755062",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -74720,19 +74743,46 @@
     {
       "asset_id": "3ea26ab4b26aefb4f93f284d",
       "asset_sha256": "20629b332d0c2806022f415fa52d65b56092c7d9b7287caa0682a227f5518804",
-      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 61,
       "asset_path": "assets/20629b332d0c2806022f415fa52d65b56092c7d9b7287caa0682a227f5518804.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a1562255dc566570fd27125a6283028ae6a99e54bb44f3360fa741a2f2d6da93",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40205238473",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An elderly craftsperson named Sudarshan discussing metal items with Yashwant and Anandi.",
+        "visual_type": "photo",
+        "visible_text": [
+          "The World of Metals",
+          "4      and Non-metals",
+          "Yashwant and Anandi live in a village in Rajasthan. Their school has assigned them a project to learn about craftspersons who work with metals. They decide to visit the local ironsmiths who practise this craft. Yashwant and Anandi request their grandfather to accompany them (Fig. 4.1). They are curi",
+          "Yashwant: Which items do you generally make?",
+          "Sudarshan: Generally, we make items of daily use, such as ﬂat pans (tawas),"
+        ],
+        "concepts": [
+          "craftspersons",
+          "metals",
+          "daily use items",
+          "Rajasthan",
+          "school project",
+          "metal items",
+          "elderly craftsperson",
+          "Sudarshan uncle",
+          "Yashwant and Anandi"
+        ],
+        "context_relation": "Yashwant and Anandi are learning about metal items from Sudarshan uncle.",
+        "limitations": [
+          "The image does not show the actual ironsmiths or the items they make."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40220755062",
+      "checkpointed_at": "2026-10-25T18:59:50Z"
     },
     {
       "asset_id": "33130708baf18e4c18c3030d",
