@@ -528,7 +528,7 @@ export default function AssessmentsPage(){
               const seq=Number(item.sequenceNo),question=item.question||{},options=Array.isArray(question.options)?question.options:[];
               return <article className={styles.testCard} key={seq}>
                 <div className={styles.testBody}>
-                  <div className={styles.testTitle}><h4>Question {seq}</h4><span className={styles.statusDRAFT}>{String(question.question_review_status||'PENDING_HUMAN_REVIEW')}</span></div>
+                  <div className={styles.testTitle}><h4>Question {seq}</h4><span className={styles.statusDRAFT}>Question: {String(question.question_review_status||'PENDING_HUMAN_REVIEW')} · Answer: {String(question.answer_review_status||'PENDING_HUMAN_REVIEW')}</span></div>
                   <p>{String(question.prompt||'Prompt not supplied')}</p>
                   {question.prompt_i18n&&<details><summary>Localized prompt</summary><pre>{JSON.stringify(question.prompt_i18n,null,2)}</pre></details>}
                   {options.length>0&&<ul className={styles.helpNote}>{options.map((option:any,index:number)=><li key={String(option.key||option.option_key||index)}>{String(option.key||option.option_key||'?')}. {String(option.label||option.text||'')}</li>)}</ul>}
