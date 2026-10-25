@@ -241,9 +241,11 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertIn("flyway_schema_history", sql)
         self.assertIn("version='196' AND success=true", sql)
         self.assertIn("p_release_updated_at >= v_v196_cutoff - interval '1 minute'", sql)
-        self.assertIn("course_content_fingerprint(p_program_id)", sql,
-                      "Pre-V196 releases must retain the full stale-fingerprint fallback.")
+        self.assertIn("RETURN false;", sql)
         self.assertIn("V180 makes the corresponding content graph immutable", sql)
+        helper = sql[sql.index("CREATE OR REPLACE FUNCTION course_release_fingerprint_current"):sql.index("COMMENT ON FUNCTION course_release_fingerprint_current")]
+        self.assertNotIn("course_content_fingerprint(", helper,
+                         "Marketplace reads must not rehash pre-V196 graphs.")
 
     def test_expected_primary_booklet_counts(self):
         self.assertEqual(import_tre4_course.expected_question_count("TRE 1.0"), 120)
