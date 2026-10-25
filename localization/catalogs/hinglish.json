@@ -4102,5 +4102,9 @@
   "admin.assessments.answerPayloadMustBeObject": "Answer payload JSON object hona chahiye.",
   "admin.assessments.invalidQuestionAnswer": "Question {number}: {reason}",
   "admin.assessments.questionReviewSaved": "Question {number} ko {status} mark kiya gaya. {total} mein se {approved} questions approved hain.",
-  "admin.assessments.questionReviewSaveFailed": "Question review save nahi ho saka."
+  "admin.assessments.questionReviewSaveFailed": "Question review save nahi ho saka.",
+  "admin.assessments.sourceQuestionNumber": "स्रोत प्रश्न संख्या",
+  "admin.assessments.sourceStatus": "स्रोत सत्यापन स्थिति",
+  "admin.assessments.sourceFileSha256": "स्रोत फ़ाइल SHA-256",
+  "admin.assessments.sourceExamDate": "स्रोत परीक्षा तिथि"
 }
