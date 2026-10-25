@@ -123,28 +123,41 @@ public class AdminContentController {
     authorize(token, context, "CONTENT_VIEW");
     long institutionId = requireInstitution(tenant);
     List<Map<String,Object>> courses=jdbc.queryForList("""
-      select p.id,p.id as course_id,p.public_id,p.public_id_prefix,p.code,p.display_name,
-             p.curriculum_version,p.course_type_code,p.content_version_no,p.course_identity_id,
-             p.supersedes_program_id,c.code as curriculum_class_code,
-             scoped.release_id,scoped.release_version,scoped.release_state,
-             scoped.source_institution_id,
-             case when scoped.source_institution_id=scoped.assigned_institution_id
-               then 'SOURCED' else 'SHARED' end as course_relationship
-      from curriculum_program p
-      left join curriculum_class c on c.id=p.class_id and c.active=true
-      join lateral (
-        select release.id as release_id,release.release_version,release.release_state,
-               release.source_institution_id,assignment.institution_id as assigned_institution_id
-        from institution_course_release release
-        join institution_course_assignment assignment
-          on assignment.course_release_id=release.id and assignment.institution_id=?
-             and assignment.status='ASSIGNED'
-        where release.program_id=p.id
-        order by release.release_version desc,release.id desc
-        limit 1
-      ) scoped on true
-      where p.status='ACTIVE' and p.code<>'GENERAL'
-      order by p.display_name,p.id
+      with scoped_courses as (
+        select p.id,p.id as course_id,p.public_id,p.public_id_prefix,p.code,p.display_name,
+               p.curriculum_version,p.course_type_code,p.content_version_no,p.course_identity_id,
+               p.supersedes_program_id,c.code as curriculum_class_code,
+               scoped.release_id,scoped.release_version,scoped.release_state,
+               scoped.source_institution_id,
+               case when scoped.source_institution_id=scoped.assigned_institution_id
+                 then 'SOURCED' else 'SHARED' end as course_relationship,
+               row_number() over (
+                 partition by coalesce(p.course_identity_id,-p.id)
+                 order by p.content_version_no desc,scoped.release_version desc,
+                   scoped.release_id desc,p.id desc
+               ) as identity_rank
+        from curriculum_program p
+        left join curriculum_class c on c.id=p.class_id and c.active=true
+        join lateral (
+          select release.id as release_id,release.release_version,release.release_state,
+                 release.source_institution_id,assignment.institution_id as assigned_institution_id
+          from institution_course_release release
+          join institution_course_assignment assignment
+            on assignment.course_release_id=release.id and assignment.institution_id=?
+               and assignment.status='ASSIGNED'
+          where release.program_id=p.id
+          order by release.release_version desc,release.id desc
+          limit 1
+        ) scoped on true
+        where p.status='ACTIVE' and p.code<>'GENERAL'
+      )
+      select id,course_id,public_id,public_id_prefix,code,display_name,curriculum_version,
+             course_type_code,content_version_no,course_identity_id,supersedes_program_id,
+             curriculum_class_code,release_id,release_version,release_state,source_institution_id,
+             course_relationship
+      from scoped_courses
+      where identity_rank=1
+      order by display_name,id
       """, institutionId);
     for(Map<String,Object> course:courses) {
       long courseId=((Number)course.get("course_id")).longValue();
