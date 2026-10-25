@@ -504,8 +504,9 @@ export default function MarketplaceLaunchStepper({
     const k12Learning = release.course_type_code === 'K12' && release.delivery_mode === 'LEARNING_CONTENT';
     const preview = reviewContent[release.release_id];
     if (approved && (!preview || !preview.contentCurrent
-      || preview.content_fingerprint !== release.content_fingerprint)) {
-      setError('Open and inspect the exact submitted release content before approving its quality.');
+      || preview.content_fingerprint !== release.content_fingerprint
+      || preview.courseTypePublishReady !== true)) {
+      setError('Open and inspect the exact submitted release content and confirm the canonical course-type readiness gate before approving its quality.');
       return;
     }
     const releaseReady = release.course_type_publish_ready === true;
