@@ -38,6 +38,8 @@ public class StudentProgramController {
       with candidate_programs as (
         select p.id,p.id as course_id,p.public_id,p.public_id_prefix,p.code,p.display_name,
           p.curriculum_version,p.status,p.course_type_code,p.course_identity_id,p.content_version_no,
+          coalesce(identity.stable_course_key,p.code) as course_key,
+          identity.public_id as course_identity_public_id,
           coalesce((select type_registry.layout_schema_version
             from course_type_registry type_registry where type_registry.code=p.course_type_code),'') as layout_schema_version,
           coalesce((select mode.delivery_mode from curriculum_program_delivery_mode mode
@@ -61,6 +63,7 @@ public class StudentProgramController {
           ) as has_access
         from student st
         join curriculum_program p on p.status='ACTIVE'
+        left join institution_course_identity identity on identity.id=p.course_identity_id
         where st.id=? and st.active=true and p.code<>'GENERAL'
           and exists(
             select 1
