@@ -105,6 +105,7 @@ class CourseMarketplaceLaunchReadinessServiceTest {
     assignment.put("course_code","I2_TRE4");
     assignment.put("course_name","TRE-4 · Computer Science");
     assignment.put("course_status","ACTIVE");
+    assignment.put("course_type_code","ASSESSMENT");
     assignment.put("delivery_mode","ASSESSMENT_ONLY");
     assignment.put("subject_count",0L);
     assignment.put("subjects_with_published_lessons",0L);
