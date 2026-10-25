@@ -1099,7 +1099,8 @@ public class AssessmentController {
       if(!(explanation instanceof String txt)||txt.isBlank())
         throw badRequest("Add an explanation before approving this question.");
     }
-    String existingHumanReviewNote=String.valueOf(snapshot.getOrDefault("human_review_note","")).trim();
+    Object previousHumanReviewValue=snapshot.get("human_review_note");
+    String existingHumanReviewNote=previousHumanReviewValue==null?"":String.valueOf(previousHumanReviewValue).trim();
     if(!reviewerNote.isBlank())snapshot.put("human_review_note",reviewerNote);
     else if(!existingHumanReviewNote.isBlank())snapshot.put("human_review_note",existingHumanReviewNote);
     if("REJECTED".equals(reviewStatus))snapshot.put("last_rejection_note",reviewerNote);
