@@ -10,6 +10,7 @@ import { AdminWorkspaceContext } from '../components/AdminWorkspaceContext';
 type Row={class_code:string;class_name:string;program_code?:string|null;program_name?:string|null;subject_code:string;subject_name:string;chapter_id:number|null;chapter_code:string|null;chapter_name:string|null;chapter_description:string|null;chapter_sort_order:number|null;chapter_status:string|null;chapter_active:boolean|null;curriculum_source?:string|null;curriculum_source_url?:string|null;curriculum_source_edition?:string|null;curriculum_source_pages?:string|null;curriculum_source_verified?:boolean;lesson_id:number|null;lesson_code:string|null;lesson_title:string|null;lesson_summary:string|null;estimated_minutes:number|null;lesson_sort_order:number|null;lesson_status:string|null;lesson_active:boolean|null;alignment_source_title?:string|null;alignment_source_url?:string|null;alignment_source_edition?:string|null;alignment_page_range?:string|null;alignment_source_verified?:boolean;block_count:number|null;question_count:number|null};
 type ContentBlock={id?:number;sequence_no:number;block_type:string;content:Record<string,any>;active:boolean};
 type Selection={type:'chapter'|'lesson';id:number};
+type CourseAssessmentRow={assessment_id:number;test_id?:string|null;title:string;description?:string|null;status:string;assessment_type?:string|null;source_exam_cycle?:string|null;source_package_id?:string|null;source_package_version?:string|null;test_pack_code?:string|null;test_pack_version?:string|null;test_pack_title?:string|null;test_pack_status?:string|null;question_count:number;max_score:number;duration_minutes:number;max_attempts:number};
 type VisualCandidate={candidate_id:string;candidate_kind:string;source_book_id:string;source_pdf_sha256:string;source_pdf_page_number:number;suggested_chapter_number?:number|null;suggested_chapter_title?:string|null;chapter_map_review_status?:string|null;source_asset_sha256?:string|null;bbox_pdf_points?:number[]|null;page_text_context:string;image_url:string;source_page_url?:string;publication_allowed:boolean;human_review_required:boolean};
 type VisualCatalog={schema_version:string;book_slug:string;source:{book_id:string;title:string;class:string;subject:string;language:string;edition:string;pdf_sha256:string;page_count:number};summary:{candidate_count:number;publication_allowed:boolean;review_required:boolean};visual_kinds:{id:string;label:string;description?:string}[];candidates:VisualCandidate[]};
 type VisualCatalogIndex={schema_version:string;catalogs:Array<{book_slug:string;catalog_path:string;source_book_id:string;title:string;class:string;subject:string;language:string;edition:string;source_pdf_sha256:string;page_count:number;candidate_count:number;publication_allowed:boolean;review_required:boolean}>};
@@ -326,6 +327,7 @@ export default function ContentStudio(){
   return keys[code]?t(keys[code]):code.replaceAll('_',' ').toLowerCase();
  }
  const [rows,setRows]=useState<Row[]>([]);
+ const [assessmentRows,setAssessmentRows]=useState<CourseAssessmentRow[]>([]);
  const [identity,setIdentity]=useState<any>(null);
  const [questionSummary,setQuestionSummary]=useState<any>(null);
  const [baselineSnapshot,setBaselineSnapshot]=useState('');
@@ -426,13 +428,23 @@ export default function ContentStudio(){
     ? String(requestedProgram)
     : requestedIsExplicit ? '' : String(availablePrograms[0]?.id||availablePrograms[0]?.course_id||'');
   if(!selectedProgram){
-   setProgramFilter('');setRows([]);setQuestionSummary({});setSelected(null);setDetail(null);
+   setProgramFilter('');setRows([]);setAssessmentRows([]);setQuestionSummary({});setSelected(null);setDetail(null);
    setError(requestedIsExplicit
      ? 'The requested course is not assigned to this institution. Select a valid assigned course.'
      : 'No courses are assigned to this institution. Assign a course before managing content.');
    return;
   }
   if(selectedProgram!==programFilter)setProgramFilter(selectedProgram);
+  const selectedCourse=availablePrograms.find((p:any)=>String(p.id||p.course_id)===selectedProgram);
+  if(String(selectedCourse?.course_type_code||'').toUpperCase()==='ASSESSMENT'){
+   const inventory=await api('/api/v1/admin/content/courses/'+encodeURIComponent(selectedProgram)+'/assessment-inventory');
+   setAssessmentRows(Array.isArray(inventory)?inventory:[]);
+   setRows([]);
+   setQuestionSummary({});
+   setSelected(null);setDetail(null);setCreateType(null);
+   return;
+  }
+  setAssessmentRows([]);
   const [data,questionCounts]=await Promise.all([
    api('/api/v1/admin/content?courseId='+encodeURIComponent(selectedProgram)),
    api('/api/v1/admin/content/questions/review-summary?courseId='+encodeURIComponent(selectedProgram))
@@ -892,15 +904,36 @@ export default function ContentStudio(){
        <small>Content version v{activeProgram.content_version_no||1} · Release v{activeProgram.release_version||1} · {activeProgram.release_state||'UNKNOWN'} · Source institution ID {activeProgram.source_institution_id}</small>
       </div>
      ) : null}
-     <div className="qe-library-empty" role="status" style={{padding:24}}>
-      <span className="qe-empty-symbol" aria-hidden="true">◇</span>
-      <strong>Assessment-only hierarchy</strong>
-      <p>Course → test packs → assessments/tests → ordered question snapshots.</p>
-      <p>TRE 1.0, TRE 2.0 and TRE 3.0 are stored as assessment records. From the assessment workspace, open each test’s questions, correct and review answers while the test remains a draft, then publish each test only after human answer review. The backend publishes a pack when all of its tests pass the publication gate.</p>
+     <div className="qe-assessment-course-library">
+      <p style={{margin:'0 0 12px',fontSize:13,color:'var(--admin-muted,#667085)'}}>Course → test packs → assessments/tests → ordered question snapshots. Each source answer must pass human review; saving reviewed answers does not itself publish a test.</p>
+      <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:12}}>
+       <span className="qe-status-pill">{assessmentRows.length} tests</span>
+       <span className="qe-status-pill">{assessmentRows.reduce((sum,row)=>sum+Number(row.question_count||0),0)} question snapshots</span>
+       <span className="qe-status-pill">{assessmentRows.filter(row=>String(row.status).toUpperCase()==='DRAFT').length} draft tests</span>
+      </div>
+      {loading ? <div className="qe-library-empty" role="status"><strong>Loading assessment inventory…</strong></div>
+       : assessmentRows.length===0 ? <div className="qe-library-empty" role="status"><strong>No assessments are recorded for this course.</strong><p>Refresh the course list or inspect the draft import. Do not create K–12 chapters to make an assessment-only course appear.</p><Link href={'/assessments?courseId='+encodeURIComponent(programFilter)} className="qe-primary-button">Open assessment workspace</Link></div>
+       : <div className="qe-curriculum-map">{assessmentRows.map(row=>{
+         const imported=Boolean(row.source_package_id);
+         const canReviewImported=imported&&canReview;
+         const href='/assessments?courseId='+encodeURIComponent(programFilter)+(canReviewImported?'&assessmentId='+encodeURIComponent(String(row.assessment_id)):'');
+         return <article className="qe-chapter-group" key={row.assessment_id}>
+          <div className="qe-chapter-heading" style={{alignItems:'center'}}>
+           <div className="qe-chapter-row" style={{flex:1,cursor:'default'}}>
+            <span className="qe-chapter-glyph">✓</span>
+            <span className="qe-chapter-title"><small>{row.test_pack_title||row.source_exam_cycle||row.source_package_id||row.assessment_type||'ASSESSMENT'}{row.test_pack_version?' · Pack v'+row.test_pack_version:''}{row.test_id?' · '+row.test_id:''}</small><strong>{row.title}</strong><em>{row.description||'Course-level test. Questions stay attached to the source test and are never mapped into school chapters.'}</em></span>
+            <span className="qe-chapter-count">{Number(row.question_count||0)} questions <small>{Number(row.max_score||0)} marks · {Number(row.duration_minutes||0)} min</small></span>
+            <span className={'qe-status-pill '+String(row.status||'DRAFT').toLowerCase()}>{statusLabel(row.status)}{row.test_pack_status?' · pack '+String(row.test_pack_status).toLowerCase():''}</span>
+           </div>
+          </div>
+          <div style={{display:'flex',justifyContent:'flex-end',gap:8,flexWrap:'wrap',padding:'10px 14px',borderTop:'1px solid var(--admin-border,#e2e7ef)'}}>
+           <Link href={href} className="qe-secondary-button">{canReviewImported?'Review questions and answers':'Open assessment workspace'}</Link>
+          </div>
+         </article>;
+       })}</div>}
       {activeProgram?.course_relationship==='SOURCED'&&releaseState==='REJECTED'
-        ? <p>The release was returned for correction. Correct and publish its tests/packs, then submit a fresh release through Institution Operations for HRMS quality review.</p>
-        : null}
-      <Link href={'/assessments?courseId='+encodeURIComponent(programFilter)} className="qe-primary-button">Open this course’s tests and questions</Link>
+       ? <p style={{margin:'12px 0 0',fontSize:12,color:'var(--admin-muted,#667085)'}}>This release was returned for correction. Finish human answer review, publish every test and pack, then submit a fresh release through Institution Operations for HRMS quality review.</p>
+       : null}
      </div>
     </section>
    ) : (
