@@ -60,6 +60,7 @@ type QualityReviewItem = {
   course_type_code: string;
   delivery_mode: string;
   assessment_only_ready: boolean;
+  course_type_publish_ready: boolean;
   assessment_count: number;
   assessment_question_count: number;
 };
@@ -182,6 +183,7 @@ type ReleaseReviewContent = {
   content_fingerprint: string;
   currentFingerprint: string;
   assessmentOnlyReady: boolean;
+  courseTypePublishReady: boolean;
   courseTranslations: Array<Record<string, any>>;
   assessmentCount: number;
   questionCount: number;
@@ -506,11 +508,7 @@ export default function MarketplaceLaunchStepper({
       setError('Open and inspect the exact submitted release content before approving its quality.');
       return;
     }
-    const releaseReady = assessmentOnly
-      ? release.assessment_only_ready === true
-      : k12Learning && release.active_subject_count > 0
-        && release.subjects_with_published_lessons === release.active_subject_count
-        && release.published_chapters > 0 && release.published_lessons > 0;
+    const releaseReady = release.course_type_publish_ready === true;
     if (approved && (!release.contentCurrent || !releaseReady)) {
       setError(assessmentOnly
         ? 'Do not approve this frozen release while any assessment or test pack is still Draft. Reject it for correction, then have the source institution review every question/answer, publish all assessments (which publishes complete packs), and submit a fresh release.'
@@ -876,11 +874,7 @@ export default function MarketplaceLaunchStepper({
             {(data.qualityReviewItems || []).map(release => {
               const assessmentOnly = release.course_type_code === 'ASSESSMENT' && release.delivery_mode === 'ASSESSMENT_ONLY';
               const k12Learning = release.course_type_code === 'K12' && release.delivery_mode === 'LEARNING_CONTENT';
-              const qualityReady = release.contentCurrent && (assessmentOnly
-                ? release.assessment_only_ready === true
-                : k12Learning && release.active_subject_count > 0
-                  && release.subjects_with_published_lessons === release.active_subject_count
-                  && release.published_chapters > 0 && release.published_lessons > 0);
+              const qualityReady = release.contentCurrent && release.course_type_publish_ready === true;
               const preview = reviewContent[release.release_id];
               const reviewNoteLength = (reviewNotes[release.release_id] || '').trim().length;
               const exactPreviewReady = Boolean(preview && preview.contentCurrent
