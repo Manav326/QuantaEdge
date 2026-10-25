@@ -147,6 +147,9 @@ public class InstitutionCourseReleaseWorkflowService {
         "select course_release_fingerprint_current(?,?,?)",Boolean.class,
         courseId,String.valueOf(release.get("content_fingerprint")).trim(),release.get("updated_at"))))
       throw conflict("Course content changed after review. Submit a fresh release.");
+    if(!Boolean.TRUE.equals(jdbc.queryForObject(
+        "select course_marketplace_content_type_ready(?)",Boolean.class,courseId)))
+      throw conflict("The registered course type or delivery mode is no longer active/supported for Marketplace. Correct the course version through the supported lifecycle before origin approval.");
     int changed=jdbc.update("""
         update institution_course_release set release_state='SHAREABLE',
           origin_approved_by_admin_id=?,origin_approved_by_staff_id=?,
