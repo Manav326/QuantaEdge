@@ -871,11 +871,18 @@ public class AssessmentController {
       snapshot.put("difficulty",q.getOrDefault("difficulty","CORE"));
       snapshot.put("exam_format",pkg.get("assessment_type"));
       snapshot.put("source_kind","PORTABLE_PACKAGE");
-      snapshot.put("source_title",source.getOrDefault("paper_title",source.getOrDefault("exam_name","")));
+      Object paperTitle=source.get("paper_title");
+      Object examName=source.get("exam_name");
+      snapshot.put("source_title",paperTitle instanceof String title&&!title.isBlank()?title:(examName==null?"":examName));
       snapshot.put("source_ref",source.getOrDefault("source_url",""));
       snapshot.put("source_year",source.getOrDefault("cycle",""));
       snapshot.put("source_id",packageId);
       snapshot.put("board",source.getOrDefault("issuer",""));
+      snapshot.put("source_status",source.getOrDefault("source_status",""));
+      Object sourceFileSha256=source.get("source_file_sha256");
+      if(sourceFileSha256 instanceof String sha256&&!sha256.isBlank())
+        snapshot.put("source_file_sha256",sha256);
+      if(source.get("exam_date")!=null)snapshot.put("source_exam_date",source.get("exam_date"));
       snapshot.put("native_language_only",Boolean.TRUE.equals(q.get("native_language_only")));
       if(q.containsKey("native_source_language"))snapshot.put("native_source_language",q.get("native_source_language"));
       if(q.containsKey("stimulus_i18n"))snapshot.put("stimulus_i18n",q.get("stimulus_i18n"));
