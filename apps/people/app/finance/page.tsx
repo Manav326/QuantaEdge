@@ -221,7 +221,7 @@ export default function FinancePage(){
       }
     }catch(e){setError(e instanceof Error?e.message:'Finance workspace could not load.');}
     finally{setLoading(false);}
-  },[selectedOfferId,taxForm.offerId,taxForm.legalEntityId,gstEntityId,selectedTemplateId,discountForm.offerId]);
+  },[selectedOfferId,selectedTaxHistoryOfferId,taxForm.offerId,taxForm.legalEntityId,gstEntityId,selectedTemplateId,discountForm.offerId]);
   useEffect(()=>{
     const params=new URLSearchParams(window.location.search);
     const requestedTab=params.get('tab');
