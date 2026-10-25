@@ -209,10 +209,23 @@ export default function FinancePage(){
       } else if(!selectedOfferId&&currentOffers.length) {
         setSelectedOfferId(String(currentOffers[0].offer_id));
       }
+      if(!launchSetup&&!requestedOfferId&&selectedOfferId&&!currentOffers.some(o=>String(o.offer_id)===selectedOfferId))
+        setSelectedOfferId(defaultOffer?String(defaultOffer.offer_id):'');
+      if(!launchSetup&&!requestedOfferId&&taxForm.offerId&&!currentOffers.some(o=>String(o.offer_id)===taxForm.offerId))
+        setTaxForm(v=>({...v,offerId:defaultOffer?String(defaultOffer.offer_id):'',legalEntityId:''}));
+      if(!launchSetup&&!requestedOfferId&&discountForm.offerId&&!currentOffers.some(o=>String(o.offer_id)===discountForm.offerId))
+        setDiscountForm(v=>({...v,offerId:defaultOffer?String(defaultOffer.offer_id):''}));
       if(!launchSetup&&!requestedOfferId&&!discountForm.offerId&&defaultOffer) setDiscountForm(v=>({...v,offerId:String(defaultOffer.offer_id)}));
       if(!launchSetup&&!requestedOfferId&&!taxForm.offerId&&defaultOffer) setTaxForm(v=>({...v,offerId:String(defaultOffer.offer_id)}));
       if(!selectedTaxHistoryOfferId&&c.offers.length) setSelectedTaxHistoryOfferId(String((defaultOffer||c.offers[0]).offer_id));
-      if(!launchSetup&&!requestedOfferId&&!taxForm.legalEntityId&&c.legalEntities.length) setTaxForm(v=>({...v,legalEntityId:String(c.legalEntities[0].id)}));
+      if(!launchSetup&&!requestedOfferId&&!taxForm.legalEntityId&&defaultOffer) {
+        const linkedSeller=(defaultOffer.legal_entity_id
+          ? c.legalEntities.find(e=>e.id===defaultOffer.legal_entity_id&&e.status==='ACTIVE')
+          : undefined)
+          || c.legalEntities.find(e=>e.status==='ACTIVE'&&e.entity_kind==='INSTITUTION'&&e.institution_id===defaultOffer.institution_id)
+          || c.legalEntities.find(e=>e.status==='ACTIVE'&&e.entity_kind==='PLATFORM');
+        if(linkedSeller) setTaxForm(v=>({...v,legalEntityId:String(linkedSeller.id)}));
+      }
       if(!gstEntityId&&c.legalEntities.length) setGstEntityId(String(c.legalEntities[0].id));
       if(!selectedTemplateId&&t.length&&!marketplaceSetupFromUrl.current){
         const first=t[0];setSelectedTemplateId(String(first.id));setSelectedVersionNo(first.version_no||null);
