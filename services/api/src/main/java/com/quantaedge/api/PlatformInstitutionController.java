@@ -605,27 +605,27 @@ public class PlatformInstitutionController {
     }
     if(!enabled) {
       Boolean unresolvedActivity=jdbc.queryForObject("""
-          select exists(
-            select 1
-            from institution_marketplace_offer o
-            where o.institution_id=? and o.course_release_id=?
-              and (
-                exists(select 1 from course_payment_order po
-                  where po.institution_id=o.institution_id
-                    and (po.institution_offer_id=o.id
-                      or (po.institution_offer_id is null and po.course_id=o.course_id))
-                    and po.status in ('CREATING','PENDING'))
-                or exists(select 1 from parent_course_purchase_request pcr
-                  where pcr.institution_id=o.institution_id and pcr.status='PENDING'
-                    and (pcr.institution_offer_id=o.id
-                      or (pcr.institution_offer_id is null and pcr.course_id=o.course_id)))
-              )
+          select
+            exists(
+              select 1
+              from institution_marketplace_offer o
+              where o.institution_id=? and o.course_release_id=?
+                and (
+                  exists(select 1 from course_payment_order po
+                    where po.institution_id=o.institution_id
+                      and (po.institution_offer_id=o.id
+                        or (po.institution_offer_id is null and po.course_id=o.course_id))
+                      and po.status in ('CREATING','PENDING'))
+                  or exists(select 1 from parent_course_purchase_request pcr
+                    where pcr.institution_id=o.institution_id and pcr.status='PENDING'
+                      and (pcr.institution_offer_id=o.id
+                        or (pcr.institution_offer_id is null and pcr.course_id=o.course_id)))
+                )
             )
             or exists(select 1 from institution_marketplace_offer reserved_offer
               join course_discount_redemption red on red.institution_offer_id=reserved_offer.id
                 and red.status='RESERVED'
               where reserved_offer.institution_id=? and reserved_offer.course_release_id=?)
-          )
           """,Boolean.class,institutionId,releaseId,institutionId,releaseId);
       if(Boolean.TRUE.equals(unresolvedActivity)) {
         throw new ResponseStatusException(HttpStatus.CONFLICT,
