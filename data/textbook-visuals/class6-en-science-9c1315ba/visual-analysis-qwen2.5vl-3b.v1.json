@@ -14,14 +14,14 @@
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
       "b90b1ccd2f380e4a35f9f791",
-      "ac3ef67e4ced1dc1152e7b14",
-      "055ba61cf9184b7284850138"
+      "055ba61cf9184b7284850138",
+      "98aeae849beaac2dcbccd6da"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1361,
-    "assets_remaining": 717,
+    "assets_analyzed": 1362,
+    "assets_remaining": 716,
     "assets_completion_percent": 65.5,
-    "assets_failed": 12,
+    "assets_failed": 11,
     "assets_skipped_from_checkpoint": 1361,
     "batch_limit": 5,
     "publication_allowed": false
@@ -463,7 +463,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40190614434",
-      "checkpointed_at": "2026-10-25T12:46:06Z"
+      "checkpointed_at": "2026-10-25T12:59:47Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20140,7 +20140,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40190614434",
-      "checkpointed_at": "2026-10-25T12:47:52Z"
+      "checkpointed_at": "2026-10-25T13:01:34Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23799,7 +23799,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40190614434",
-      "checkpointed_at": "2026-10-25T12:49:23Z"
+      "checkpointed_at": "2026-10-25T13:03:06Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -38044,7 +38044,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40190614434",
-      "checkpointed_at": "2026-10-25T12:57:46Z"
+      "checkpointed_at": "2026-10-25T13:04:21Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -38334,19 +38334,60 @@
     {
       "asset_id": "98aeae849beaac2dcbccd6da",
       "asset_sha256": "e67aee4a0ab20b3bc3c8a161ab57bf391d8f9f746a665a5814c33990294661ba",
-      "page_text_context_sha256": "e73ef118a3b1dd7b0843d64309e63a2c74fec1ef59e38cfea73e98d6f5923798",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 101,
       "asset_path": "assets/e67aee4a0ab20b3bc3c8a161ab57bf391d8f9f746a665a5814c33990294661ba.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e73ef118a3b1dd7b0843d64309e63a2c74fec1ef59e38cfea73e98d6f5923798",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40183012451",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A ruler with both millimeter and inch measurements.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "MM",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "INCH",
+          "6",
+          "5",
+          "4",
+          "3",
+          "2",
+          "1"
+        ],
+        "concepts": [
+          "Measurement",
+          "Ruler",
+          "Millimeter",
+          "Inch",
+          "Centimeter"
+        ],
+        "context_relation": "The ruler is used to measure lengths in both millimeters and inches.",
+        "limitations": [
+          "The ruler is only shown up to 15 cm, not the full 15 cm length."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40190614434",
+      "checkpointed_at": "2026-10-25T13:05:42Z"
     },
     {
       "asset_id": "365a209ce45eddf9fcff46cc",
