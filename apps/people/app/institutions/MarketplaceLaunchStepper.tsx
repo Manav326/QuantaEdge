@@ -92,6 +92,7 @@ type AvailableRelease = {
   release_id: number;
   course_id: number;
   release_version: number;
+  content_version_no: number;
   contentCurrent: boolean;
   course_code: string;
   course_name: string;
@@ -103,6 +104,7 @@ type QualityReviewItem = {
   release_id: number;
   course_id: number;
   release_version: number;
+  content_version_no: number;
   release_state: string;
   content_fingerprint: string;
   contentCurrent: boolean;
@@ -233,6 +235,7 @@ type ReleaseReviewContent = {
   release_id: number;
   course_id: number;
   release_version: number;
+  content_version_no: number;
   release_state: string;
   course_code: string;
   course_name: string;
@@ -1097,8 +1100,8 @@ export default function MarketplaceLaunchStepper({
                 <article className={styles.qualityRow} key={release.release_id}>
                   <div className={styles.availableMark} aria-hidden="true">✓</div>
                   <div className={styles.qualityCopy}>
-                    <strong>{release.course_name} <span>v{release.release_version}</span></strong>
-                    <small>Source: {release.source_institution_name} · {release.source_institution_code} · Release #{release.release_id}</small>
+                    <strong>{release.course_name} <span>Content v{release.content_version_no} · Submission {release.release_version}</span></strong>
+                    <small>Source: {release.source_institution_name} · {release.source_institution_code}</small>
                     <div className={styles.qualityMetrics}>
                       {assessmentOnly ? <>
                         <span>ASSESSMENT_ONLY</span>
@@ -1261,7 +1264,7 @@ export default function MarketplaceLaunchStepper({
             <header className={styles.hrmsAssessmentSidebarHeader}>
               <span>HRMS · RELEASE QUALITY REVIEW</span>
               <h2>Question navigator</h2>
-              <p>{assessmentReviewAssessment?.title||'Assessment'} · Release #{assessmentReviewTarget.releaseId}</p>
+              <p>{assessmentReviewAssessment?.title||'Assessment'} · Content v{assessmentReviewContent?.content_version_no??reviewReleaseQueueItem?.content_version_no}</p>
               <div className={styles.hrmsAssessmentProgress} role="progressbar" aria-label="Questions fully approved in submitted snapshot" aria-valuemin={0} aria-valuemax={assessmentReviewQuestions.length} aria-valuenow={approvedAssessmentQuestions}>
                 <span style={{width:(assessmentReviewQuestions.length?100*approvedAssessmentQuestions/assessmentReviewQuestions.length:0)+'%'}}/>
               </div>
@@ -1291,7 +1294,7 @@ export default function MarketplaceLaunchStepper({
               <div>
                 <span>FROZEN SUBMITTED SNAPSHOT · READ ONLY</span>
                 <h1 id="hrms-assessment-review-title">{assessmentReviewContent?.course_name||reviewReleaseQueueItem?.course_name||'Course'} · {assessmentReviewAssessment?.title||'Assessment'}</h1>
-                <p>Release v{assessmentReviewContent?.release_version??reviewReleaseQueueItem?.release_version} · Release #{assessmentReviewTarget.releaseId} · {assessmentReviewAssessment?.status||'Unknown status'} · {assessmentReviewAssessment?.questionCount??assessmentReviewAssessment?.question_count??assessmentReviewQuestions.length} questions</p>
+                <p>Content v{assessmentReviewContent?.content_version_no??reviewReleaseQueueItem?.content_version_no} · Submission {assessmentReviewContent?.release_version??reviewReleaseQueueItem?.release_version} · {assessmentReviewAssessment?.status||'Unknown status'} · {assessmentReviewAssessment?.questionCount??assessmentReviewAssessment?.question_count??assessmentReviewQuestions.length} questions</p>
               </div>
               <button type="button" className={styles.hrmsAssessmentReviewClose} aria-label="Close bilingual question review" onClick={closeAssessmentReview}>×</button>
             </header>
@@ -1391,7 +1394,7 @@ export default function MarketplaceLaunchStepper({
           <aside className={styles.k12ReviewSidebar}>
             <header className={styles.k12ReviewSidebarHeader}>
               <span>HRMS · K12 RELEASE REVIEW</span><h2>Chapter navigator</h2>
-              <p>{k12ReviewPreview.course_name} · Release #{k12ReviewTarget.releaseId}</p>
+              <p>{k12ReviewPreview.course_name} · Content v{k12ReviewPreview.content_version_no}</p>
               <small>{k12ReviewPreview.lessonCount} lessons · {k12ReviewPreview.lessonBlockCount} blocks · {k12ReviewPreview.lessonQuestionCount} questions</small>
             </header>
             <div className={styles.k12ReviewSidebarTools}><input aria-label="Search subjects and chapters" value={k12ReviewSearch} onChange={event=>setK12ReviewSearch(event.target.value)} placeholder="Find subject or chapter"/></div>
@@ -1407,7 +1410,7 @@ export default function MarketplaceLaunchStepper({
           <div className={styles.k12ReviewMain}>
             <header className={styles.k12ReviewHeader}>
               <div><span>Review chapter content · FROZEN SUBMITTED SNAPSHOT · READ ONLY</span><h1 id="k12-review-title">{k12ReviewChapter?.display_name||'Loading chapter content…'}</h1>
-                <p>{k12ReviewPreview.course_name} · Release v{k12ReviewPreview.release_version} · {k12ReviewChapter?.lesson_count??'—'} lessons · {k12ReviewChapter?.resource_count??'—'} resources</p>
+                <p>{k12ReviewPreview.course_name} · Content v{k12ReviewPreview.content_version_no} · Submission {k12ReviewPreview.release_version} · {k12ReviewChapter?.lesson_count??'—'} lessons · {k12ReviewChapter?.resource_count??'—'} resources</p>
               </div>
               <button type="button" className={styles.k12ReviewClose} aria-label="Close K12 content review" onClick={closeK12Review}>×</button>
             </header>
@@ -1490,7 +1493,7 @@ export default function MarketplaceLaunchStepper({
                 <div className={styles.availableMark} aria-hidden="true">↗</div>
                 <div className={styles.availableCopy}>
                   <strong>{release.course_name}</strong>
-                  <span>{release.course_code} · Release v{release.release_version}</span>
+                  <span>{release.course_code} · Content v{release.content_version_no}</span>
                   <small>Source: {release.source_institution_name} · {release.source_institution_code}</small>
                   {!release.contentCurrent && <small className={styles.availableWarning}>Reviewed content has changed. The source institution must resubmit this release.</small>}
                 </div>
