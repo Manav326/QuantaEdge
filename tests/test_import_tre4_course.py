@@ -407,6 +407,7 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertNotRegex(importer, r"UPDATE\s+assessment\s+SET\s+status\s*=\s*'PUBLISHED'")
         self.assertNotRegex(importer, r"UPDATE\s+course_assessment_pack\s+SET\s+status\s*=\s*'PUBLISHED'")
         self.assertIn("SELECT assessment_only_course_publish_ready(%s)", importer)
+        self.assertIn("SELECT course_marketplace_content_type_ready(%s)", importer)
         self.assertIn("publish_ready = bool(publish_ready_row and publish_ready_row[0] is True)", importer)
         self.assertIn("if submit_for_review:", importer)
         self.assertIn("only DRAFT releases may be imported", importer)
