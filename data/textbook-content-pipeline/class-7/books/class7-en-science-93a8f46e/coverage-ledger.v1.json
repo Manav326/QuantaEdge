@@ -29,12 +29,12 @@
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
     "raw_analysis_result_rows": 2280,
-    "successful_visual_analyses": 2248,
+    "successful_visual_analyses": 2249,
     "missing_visual_analyses": 5208,
-    "failed_visual_analyses": 32,
+    "failed_visual_analyses": 31,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5240,
+    "unresolved_count": 5239,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -60607,9 +60607,31 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An electric cell holder with two wires attached, showing the negative terminal and the wires connected to the cell.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 3.7: (a) An electric cell holder with two wires attached (b) An electric cell inside the cell holder (c) Wires connected to an electric cell using electrical tape",
+          "Insert the cell in the holder such that its negative terminal is towards the spring side of the holder (Fig. 3.7b). In case a cell holder is not",
+          "cell holder is not",
+          "cell holder is not"
+        ],
+        "concepts": [
+          "Electric cell",
+          "Negative terminal",
+          "Wires",
+          "Electrical tape",
+          "Spring",
+          "Cell holder"
+        ],
+        "context_relation": "The image is a diagram explaining the setup of an electric cell holder with wires and a negative terminal.",
+        "limitations": [
+          "The image does not show the actual setup of the electric cell holder.",
+          "The image does not show the wires connected to the cell."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

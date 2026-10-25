@@ -13,15 +13,15 @@
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "79bbc448b9853ba138d248e2",
-      "c85f41bbf274ff0251ebf3e6",
-      "19182aa83463f523d90ed77b"
+      "5abf0bbf91f1337f73719e33",
+      "156c826ab2a2fbe86cb5bfea",
+      "bfd2a5a7d3b8762a333a2b8e"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2246,
-    "assets_remaining": 5242,
+    "assets_analyzed": 2247,
+    "assets_remaining": 5241,
     "assets_completion_percent": 30.0,
-    "assets_failed": 32,
+    "assets_failed": 31,
     "assets_skipped_from_checkpoint": 2246,
     "batch_limit": 5,
     "publication_allowed": false
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40188596785",
-      "checkpointed_at": "2026-10-25T11:54:22Z"
+      "checkpointed_at": "2026-10-25T12:07:35Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40188596785",
-      "checkpointed_at": "2026-10-25T11:55:24Z"
+      "checkpointed_at": "2026-10-25T12:08:37Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -50050,19 +50050,43 @@
     {
       "asset_id": "5abf0bbf91f1337f73719e33",
       "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
-      "page_text_context_sha256": "bf91848654fc480a58ce8de42886315b17b7982bc94ef215a5b7b38008ad358d",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 48,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bf91848654fc480a58ce8de42886315b17b7982bc94ef215a5b7b38008ad358d",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40174921246",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An electric cell holder with two wires attached, showing the negative terminal and the wires connected to the cell.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 3.7: (a) An electric cell holder with two wires attached (b) An electric cell inside the cell holder (c) Wires connected to an electric cell using electrical tape",
+          "Insert the cell in the holder such that its negative terminal is towards the spring side of the holder (Fig. 3.7b). In case a cell holder is not",
+          "cell holder is not",
+          "cell holder is not"
+        ],
+        "concepts": [
+          "Electric cell",
+          "Negative terminal",
+          "Wires",
+          "Electrical tape",
+          "Spring",
+          "Cell holder"
+        ],
+        "context_relation": "The image is a diagram explaining the setup of an electric cell holder with wires and a negative terminal.",
+        "limitations": [
+          "The image does not show the actual setup of the electric cell holder.",
+          "The image does not show the wires connected to the cell."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40188596785",
+      "checkpointed_at": "2026-10-25T12:13:26Z"
     },
     {
       "asset_id": "8af962a30473628319dea907",
@@ -63046,9 +63070,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40174921246",
+      "run_id": "40188596785",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -67369,7 +67393,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40174921246",
+      "run_id": "40188596785",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
