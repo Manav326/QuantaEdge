@@ -60,6 +60,7 @@ type QualityReviewItem = {
   course_type_code: string;
   delivery_mode: string;
   assessment_only_ready: boolean;
+  course_type_publish_ready: boolean;
   assessment_count: number;
   assessment_question_count: number;
 };
@@ -182,6 +183,7 @@ type ReleaseReviewContent = {
   content_fingerprint: string;
   currentFingerprint: string;
   assessmentOnlyReady: boolean;
+  courseTypePublishReady: boolean;
   courseTranslations: Array<Record<string, any>>;
   assessmentCount: number;
   questionCount: number;
@@ -498,22 +500,22 @@ export default function MarketplaceLaunchStepper({
       setError('Add a review note between 3 and 1,000 characters before recording a quality decision.');
       return;
     }
-    const assessmentOnly = release.delivery_mode === 'ASSESSMENT_ONLY' || release.course_type_code === 'ASSESSMENT';
+    const assessmentOnly = release.course_type_code === 'ASSESSMENT' && release.delivery_mode === 'ASSESSMENT_ONLY';
+    const k12Learning = release.course_type_code === 'K12' && release.delivery_mode === 'LEARNING_CONTENT';
     const preview = reviewContent[release.release_id];
     if (approved && (!preview || !preview.contentCurrent
-      || preview.content_fingerprint !== release.content_fingerprint)) {
-      setError('Open and inspect the exact submitted release content before approving its quality.');
+      || preview.content_fingerprint !== release.content_fingerprint
+      || preview.courseTypePublishReady !== true)) {
+      setError('Open and inspect the exact submitted release content and confirm the canonical course-type readiness gate before approving its quality.');
       return;
     }
-    const releaseReady = assessmentOnly
-      ? release.assessment_only_ready === true
-      : release.active_subject_count > 0
-        && release.subjects_with_published_lessons === release.active_subject_count
-        && release.published_chapters > 0 && release.published_lessons > 0;
+    const releaseReady = release.course_type_publish_ready === true;
     if (approved && (!release.contentCurrent || !releaseReady)) {
       setError(assessmentOnly
         ? 'Do not approve this frozen release while any assessment or test pack is still Draft. Reject it for correction, then have the source institution review every question/answer, publish all assessments (which publishes complete packs), and submit a fresh release.'
-        : 'This release is not ready for quality approval. Refresh the checklist and ensure every active subject has published lessons.');
+        : k12Learning
+          ? 'This release is not ready for quality approval. Refresh the checklist and ensure every active subject has published lessons.'
+          : 'This registered course type and delivery mode are not supported for quality approval. The source institution must correct the course/version configuration; the content remains blocked.');
       return;
     }
     setBusyKey('quality-' + release.release_id);
@@ -871,27 +873,24 @@ export default function MarketplaceLaunchStepper({
           </header>
           <div className={styles.qualityList}>
             {(data.qualityReviewItems || []).map(release => {
-              const assessmentOnly = release.delivery_mode === 'ASSESSMENT_ONLY' || release.course_type_code === 'ASSESSMENT';
-              const qualityReady = release.contentCurrent && (assessmentOnly
-                ? release.assessment_only_ready === true
-                : release.active_subject_count > 0
-                  && release.subjects_with_published_lessons === release.active_subject_count
-                  && release.published_chapters > 0 && release.published_lessons > 0);
+              const assessmentOnly = release.course_type_code === 'ASSESSMENT' && release.delivery_mode === 'ASSESSMENT_ONLY';
+              const k12Learning = release.course_type_code === 'K12' && release.delivery_mode === 'LEARNING_CONTENT';
+              const qualityReady = release.contentCurrent && release.course_type_publish_ready === true;
               const preview = reviewContent[release.release_id];
               const reviewNoteLength = (reviewNotes[release.release_id] || '').trim().length;
-              const exactPreviewReady = Boolean(preview && preview.contentCurrent
-                && preview.content_fingerprint === release.content_fingerprint);
               const previewFingerprintMismatch = Boolean(preview
                 && preview.content_fingerprint !== release.content_fingerprint);
               const previewLoadInProgress = reviewContentLoadingId !== null;
-              const previewNeedsLoading = !preview && release.contentCurrent && qualityReady
+              const previewNeedsLoading = !preview
                 && !previewLoadInProgress && reviewChapterLoadingId === null && busyKey === null;
               const qualityBlocker = !release.contentCurrent
                 ? 'Approval is blocked because this release is not fingerprint-current. Return it for correction, have the source institution correct the content and submit a fresh release.'
                 : !qualityReady
                   ? assessmentOnly
                     ? 'Approval is blocked because one or more assessments or test packs are still drafts or their question/answer review is incomplete. Return this release for correction, finish human review and publish every test/pack, then submit a fresh release.'
-                    : 'Approval is blocked until every active mapped subject has published chapter and lesson content.'
+                    : k12Learning
+                      ? 'Approval is blocked until every active mapped subject has published chapter and lesson content.'
+                      : 'Approval is blocked because the registered course type or delivery mode is inactive, mismatched or unsupported.'
                   : busyKey !== null
                     ? 'Another HRMS action is in progress. Wait for it to finish, then retry.'
                     : reviewChapterLoadingId !== null
@@ -906,9 +905,11 @@ export default function MarketplaceLaunchStepper({
                             ? 'The loaded release is not fingerprint-current. Do not approve it; return it for correction, have the source institution submit a fresh release, and review that new submission.'
                             : previewFingerprintMismatch
                               ? 'The loaded preview fingerprint differs from this review-queue entry. Do not approve. Refresh the review queue; if the mismatch persists, return the release for correction and submit a fresh release.'
-                              : reviewNoteLength < 3
-                                ? 'Enter a quality review note of at least 3 characters before approving.'
-                                : '';
+                              : preview.courseTypePublishReady !== true
+                                ? 'The exact release preview is not ready under the active course-type publication gate. Do not approve; return it for correction and submit a release with a supported course type and delivery mode.'
+                                : reviewNoteLength < 3
+                                  ? 'Enter a quality review note of at least 3 characters before approving.'
+                                  : '';
               return (
                 <article className={styles.qualityRow} key={release.release_id}>
                   <div className={styles.availableMark} aria-hidden="true">✓</div>
@@ -921,20 +922,28 @@ export default function MarketplaceLaunchStepper({
                         <span>{release.assessment_count} tests</span>
                         <span>{release.assessment_question_count} questions</span>
                         <span>{release.assessment_only_ready ? 'Assessment hierarchy complete' : 'Assessment hierarchy incomplete'}</span>
-                      </> : <>
+                      </> : k12Learning ? <>
+                        <span>K12 · LEARNING_CONTENT</span>
                         <span>{release.active_subject_count} active subjects</span>
                         <span>{release.subjects_with_published_lessons} with lessons</span>
                         <span>{release.published_chapters} chapters</span>
                         <span>{release.published_lessons} lessons</span>
+                      </> : <>
+                        <span>Unsupported: {release.course_type_code || 'unknown course type'}</span>
+                        <span>Delivery: {release.delivery_mode || 'unknown'}</span>
+                        <span>Release stays blocked</span>
                       </>}
                     </div>
-                    {assessmentOnly && <p>Review the exact submitted test papers, question snapshots, source provenance, answer-review state and scoring rules below. This preview is read-only.</p>}
+                    {assessmentOnly && <p>Review the exact submitted test papers, question snapshots, source provenance, question-review and answer-review states, and scoring rules below. This preview is read-only.</p>}
+                    {!assessmentOnly && !k12Learning && <p className={styles.availableWarning}>This course type/delivery-mode combination is not supported for release review. No quality approval can be recorded until the source configuration is corrected.</p>}
                     {!release.contentCurrent && <p className={styles.availableWarning}>Course content changed after submission. Ask the source institution to submit a fresh release.</p>}
                     <div className={styles.qualityActions}>
-                      <button type="button" className={styles.secondaryButton}
+                      <button type="button" className={preview ? styles.secondaryButton : styles.primaryButton}
                         disabled={reviewContentLoadingId !== null || reviewChapterLoadingId !== null || busyKey !== null}
+                        aria-label={preview ? 'Hide submitted content' : 'Review submitted content before approving'}
+                        aria-describedby={qualityBlocker ? 'quality-blocker-' + release.release_id : undefined}
                         onClick={() => void toggleReviewContent(release)}>
-                        {reviewContentLoadingId === release.release_id ? 'Loading exact release…' : preview ? 'Hide submitted content' : 'Review submitted content'}
+                        {reviewContentLoadingId === release.release_id ? 'Loading exact release…' : preview ? 'Hide submitted content' : 'Load exact submitted content'}
                       </button>
                     </div>
                     {reviewContentErrors[release.release_id] && <p className={styles.availableWarning}>{reviewContentErrors[release.release_id]}</p>}
@@ -947,7 +956,7 @@ export default function MarketplaceLaunchStepper({
                           </span>
                         </div>
                         <p style={{ overflowWrap: 'anywhere', fontSize: 12 }}>Submitted fingerprint: {preview.content_fingerprint}</p>
-                        {preview.delivery_mode === 'ASSESSMENT_ONLY' ? (
+                        {preview.course_type_code === 'ASSESSMENT' && preview.delivery_mode === 'ASSESSMENT_ONLY' ? (
                           <>
                             <p>{preview.assessmentCount} assessments · {preview.questionCount} frozen question snapshots · student publication remains disabled during this review</p>
                             {(preview.assessments || []).map(assessment => (
@@ -985,7 +994,7 @@ export default function MarketplaceLaunchStepper({
                                         Section: {snapshot.section_code || '—'} · Topic tags: {tags.join(', ') || 'not tagged'} · Difficulty: {snapshot.difficulty || 'CORE'}
                                       </p>
                                       <p style={{ fontSize: 12 }}>
-                                        Answer review: {snapshot.question_review_status || 'PENDING_HUMAN_REVIEW'} · Answer key: {answer.kind || 'UNRESOLVED'} {answer.value === null || answer.value === undefined ? '(unresolved)' : String(answer.value)}
+                                        Question review: {snapshot.question_review_status || 'PENDING_HUMAN_REVIEW'} · Answer review: {snapshot.answer_review_status || 'PENDING_HUMAN_REVIEW'} · Answer key: {answer.kind || 'UNRESOLVED'} {answer.value === null || answer.value === undefined ? '(unresolved)' : String(answer.value)}
                                       </p>
                                       {snapshot.explanation && <p style={{ whiteSpace: 'pre-wrap' }}><strong>Explanation:</strong> {snapshot.explanation}</p>}
                                     </div>
@@ -994,7 +1003,7 @@ export default function MarketplaceLaunchStepper({
                               </details>
                             ))}
                           </>
-                        ) : (
+                        ) : preview.course_type_code === 'K12' && preview.delivery_mode === 'LEARNING_CONTENT' ? (
                           <div>
                             <p>{preview.lessonCount} lessons · {preview.lessonBlockCount} teaching blocks · {preview.lessonQuestionCount} lesson questions · {preview.courseResourceCount} resources. Expand a chapter to load its lesson graph and source assets on demand.</p>
                             {(preview.courseTranslations || []).length > 0 && (
@@ -1160,26 +1169,22 @@ export default function MarketplaceLaunchStepper({
                               </section>
                             ))}
                           </div>
+                        ) : (
+                          <p className={styles.availableWarning}>This course type and delivery mode do not have a supported read-only review view. Quality approval is blocked until the source configuration is corrected.</p>
                         )}
                       </div>
                     )}
                     <label className={styles.reviewNote}>Quality review note
                       <textarea rows={2} maxLength={1000} value={reviewNotes[release.release_id] || ''}
                         onChange={event => setReviewNotes(previous => ({ ...previous, [release.release_id]: event.target.value }))}
-                        placeholder={assessmentOnly ? 'Record question inventory, source fidelity, answer review, section scoring and release fingerprint checks…' : 'Record what was checked: syllabus coverage, published lessons, content integrity…'} />
+                        placeholder={assessmentOnly ? 'Record question inventory, source fidelity, answer-key review, section scoring and release fingerprint checks…' : k12Learning ? 'Record what was checked: syllabus coverage, published lessons, content integrity…' : 'Explain the course-type/delivery-mode mismatch and required correction…'} />
                     </label>
                     {qualityBlocker ? (
                       <div id={'quality-blocker-' + release.release_id}
                         className={styles.actionHint + (!release.contentCurrent || !qualityReady || Boolean(preview && (!preview.contentCurrent || previewFingerprintMismatch)) ? ' ' + styles.actionHintWarning : '')}
                         role="note">
                         <span>{qualityBlocker}</span>
-                        {previewNeedsLoading ? (
-                          <button type="button" className={styles.secondaryButton}
-                            disabled={reviewContentLoadingId !== null || reviewChapterLoadingId !== null || busyKey !== null}
-                            onClick={() => void toggleReviewContent(release)}>
-                            Load exact submitted content
-                          </button>
-                        ) : null}
+                        {previewNeedsLoading ? <span>Use the “Load exact submitted content” button above to inspect this release before deciding.</span> : null}
                       </div>
                     ) : null}
                     <div className={styles.qualityActions}>
