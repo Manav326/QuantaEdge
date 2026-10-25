@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5d64b967004ebcb6738d1e665f4ef4ac69d2fc2afb46482a8b3315a98604982f",
+  "raw_analysis_sha256": "067fcdc69c4d243bb41ca9b167fe0288aa8ff287d5a25c90c9820e0897c000de",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -29272,7 +29272,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40150632213",
-      "checkpointed_at": "2026-10-25T02:59:19Z",
+      "checkpointed_at": "2026-10-25T03:05:35Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57795,7 +57795,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40150632213",
-      "checkpointed_at": "2026-10-25T03:00:33Z",
+      "checkpointed_at": "2026-10-25T03:06:32Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -62542,6 +62542,212 @@
         "limitations": [
           "The image does not provide specific values for the weights or the densities of the materials.",
           "The image does not show the actual buoyancy forces acting on the objects."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a70a475e2cd0a309e00b3a2f",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 99,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "fdbde7e53fb0fa5056d2ca2d42bc7f623eb9c68939cb62b612ae1728d407c6fe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Three objects of different materials are placed in water, showing different depths of immersion.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "79",
+          "10. Three objects 1, 2, and 3 of the same size and shape but made",
+          "3    of different materials are placed in the water.",
+          "2                                                            1   They dip to different depths as shown in Fig. 5.17.",
+          "If the weights of the three objects 1, 2, and 3 are",
+          "w1, w2, and w3, respectively, then",
+          "(i) w1 = w2 = w3",
+          "(ii) w1 > w2 > w3"
+        ],
+        "concepts": [
+          "Density",
+          "Buoyancy",
+          "Material properties"
+        ],
+        "context_relation": "The image is a visual representation of a physics concept related to buoyancy and density.",
+        "limitations": [
+          "The image does not show the actual objects or the water, only their positions relative to each other.",
+          "The text provides a question about the relationship between the weights of the objects and their depths in water."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40150632213",
+      "checkpointed_at": "2026-10-25T03:07:19Z",
+      "effective_analysis": {
+        "visual_summary": "Three objects of different materials are placed in water, showing different depths of immersion.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "79",
+          "10. Three objects 1, 2, and 3 of the same size and shape but made",
+          "3    of different materials are placed in the water.",
+          "2                                                            1   They dip to different depths as shown in Fig. 5.17.",
+          "If the weights of the three objects 1, 2, and 3 are",
+          "w1, w2, and w3, respectively, then",
+          "(i) w1 = w2 = w3",
+          "(ii) w1 > w2 > w3"
+        ],
+        "concepts": [
+          "Density",
+          "Buoyancy",
+          "Material properties"
+        ],
+        "context_relation": "The image is a visual representation of a physics concept related to buoyancy and density.",
+        "limitations": [
+          "The image does not show the actual objects or the water, only their positions relative to each other.",
+          "The text provides a question about the relationship between the weights of the objects and their depths in water."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7fb3c4e9a0d63c97e789ace6",
+      "asset_sha256": "9bfa884a2fe83fc788df2e0e861bc42120b175c6fd643a0f4a7111de466d5c8b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 99,
+      "asset_path": "page-0099.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "fdbde7e53fb0fa5056d2ca2d42bc7f623eb9c68939cb62b612ae1728d407c6fe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Three objects of different materials in water, with their weights and depths shown in a diagram.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "10. Three objects 1, 2, and 3 of the same size and shape but made of different materials are placed in the water. They dip to different depths as shown in Fig. 5.17. If the weights of the three objects 1, 2, and 3 are w1, w2, and w3, respectively, then",
+          "(i) w1 = w2 = w3",
+          "(ii) w1 > w2 > w3",
+          "(iii) w2 > w3 > w1",
+          "(iv) w3 > w1 > w2",
+          "Fig. 5.17"
+        ],
+        "concepts": [
+          "weights of objects in water",
+          "depths of objects in water",
+          "different materials",
+          "diagram representation"
+        ],
+        "context_relation": "exploring forces",
+        "limitations": [
+          "no specific limitations mentioned"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40150632213",
+      "checkpointed_at": "2026-10-25T03:11:26Z",
+      "effective_analysis": {
+        "visual_summary": "Three objects of different materials in water, with their weights and depths shown in a diagram.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "10. Three objects 1, 2, and 3 of the same size and shape but made of different materials are placed in the water. They dip to different depths as shown in Fig. 5.17. If the weights of the three objects 1, 2, and 3 are w1, w2, and w3, respectively, then",
+          "(i) w1 = w2 = w3",
+          "(ii) w1 > w2 > w3",
+          "(iii) w2 > w3 > w1",
+          "(iv) w3 > w1 > w2",
+          "Fig. 5.17"
+        ],
+        "concepts": [
+          "weights of objects in water",
+          "depths of objects in water",
+          "different materials",
+          "diagram representation"
+        ],
+        "context_relation": "exploring forces",
+        "limitations": [
+          "no specific limitations mentioned"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8e3a01379942658217317600",
+      "asset_sha256": "30d62fd6b6d97f4f28241a26c705bde940edf88def895290956897f0f74d6621",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 100,
+      "asset_path": "assets/30d62fd6b6d97f4f28241a26c705bde940edf88def895290956897f0f74d6621.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "621906418b19de46342da6d992739c055a601ed772b759e8a147f091bba33328",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a stormy beach scene with people running away from lightning strikes.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Nearby extracted page text (possibly incomplete):",
+          "Pressure, Winds,       6Storms, and Cyclones",
+          "Probe and ponder",
+          "z Why are winds stronger on some days than on others?",
+          "z Why are water tanks usually placed at a height?",
+          "z Can air pressure really crush us?",
+          "z What causes storms and cyclones? If the Earth stopped rotating, would cyclones still form?",
+          "z Share your questions"
+        ],
+        "concepts": [
+          "Storms",
+          "Cyclones",
+          "Wind",
+          "Pressure",
+          "Height",
+          "Earth's rotation"
+        ],
+        "context_relation": "The image is a visual representation of the concepts discussed in the text.",
+        "limitations": [
+          "The image does not provide specific details about the causes of storms and cyclones."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40150632213",
+      "checkpointed_at": "2026-10-25T03:16:10Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a stormy beach scene with people running away from lightning strikes.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Nearby extracted page text (possibly incomplete):",
+          "Pressure, Winds,       6Storms, and Cyclones",
+          "Probe and ponder",
+          "z Why are winds stronger on some days than on others?",
+          "z Why are water tanks usually placed at a height?",
+          "z Can air pressure really crush us?",
+          "z What causes storms and cyclones? If the Earth stopped rotating, would cyclones still form?",
+          "z Share your questions"
+        ],
+        "concepts": [
+          "Storms",
+          "Cyclones",
+          "Wind",
+          "Pressure",
+          "Height",
+          "Earth's rotation"
+        ],
+        "context_relation": "The image is a visual representation of the concepts discussed in the text.",
+        "limitations": [
+          "The image does not provide specific details about the causes of storms and cyclones."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

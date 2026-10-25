@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1273,
-    "successful_visual_analyses": 1261,
-    "missing_visual_analyses": 1018,
+    "raw_analysis_result_rows": 1276,
+    "successful_visual_analyses": 1264,
+    "missing_visual_analyses": 1015,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1030,
+    "unresolved_count": 1027,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -47743,9 +47743,33 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Three objects of different materials are placed in water, showing different depths of immersion.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "79",
+          "10. Three objects 1, 2, and 3 of the same size and shape but made",
+          "3    of different materials are placed in the water.",
+          "2                                                            1   They dip to different depths as shown in Fig. 5.17.",
+          "If the weights of the three objects 1, 2, and 3 are",
+          "w1, w2, and w3, respectively, then",
+          "(i) w1 = w2 = w3",
+          "(ii) w1 > w2 > w3"
+        ],
+        "concepts": [
+          "Density",
+          "Buoyancy",
+          "Material properties"
+        ],
+        "context_relation": "The image is a visual representation of a physics concept related to buoyancy and density.",
+        "limitations": [
+          "The image does not show the actual objects or the water, only their positions relative to each other.",
+          "The text provides a question about the relationship between the weights of the objects and their depths in water."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -47761,9 +47785,30 @@
       "asset_path": "page-0099.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Three objects of different materials in water, with their weights and depths shown in a diagram.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "10. Three objects 1, 2, and 3 of the same size and shape but made of different materials are placed in the water. They dip to different depths as shown in Fig. 5.17. If the weights of the three objects 1, 2, and 3 are w1, w2, and w3, respectively, then",
+          "(i) w1 = w2 = w3",
+          "(ii) w1 > w2 > w3",
+          "(iii) w2 > w3 > w1",
+          "(iv) w3 > w1 > w2",
+          "Fig. 5.17"
+        ],
+        "concepts": [
+          "weights of objects in water",
+          "depths of objects in water",
+          "different materials",
+          "diagram representation"
+        ],
+        "context_relation": "exploring forces",
+        "limitations": [
+          "no specific limitations mentioned"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -47779,9 +47824,34 @@
       "asset_path": "assets/30d62fd6b6d97f4f28241a26c705bde940edf88def895290956897f0f74d6621.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a stormy beach scene with people running away from lightning strikes.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Nearby extracted page text (possibly incomplete):",
+          "Pressure, Winds,       6Storms, and Cyclones",
+          "Probe and ponder",
+          "z Why are winds stronger on some days than on others?",
+          "z Why are water tanks usually placed at a height?",
+          "z Can air pressure really crush us?",
+          "z What causes storms and cyclones? If the Earth stopped rotating, would cyclones still form?",
+          "z Share your questions"
+        ],
+        "concepts": [
+          "Storms",
+          "Cyclones",
+          "Wind",
+          "Pressure",
+          "Height",
+          "Earth's rotation"
+        ],
+        "context_relation": "The image is a visual representation of the concepts discussed in the text.",
+        "limitations": [
+          "The image does not provide specific details about the causes of storms and cyclones."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
