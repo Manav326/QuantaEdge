@@ -769,6 +769,13 @@ public class CourseMarketplaceLaunchController {
         if(Boolean.TRUE.equals(hasPendingParentRequest)) {
           throw conflict("Resolve pending parent purchase requests before archiving this offer. The requests and their audit history will remain intact.");
         }
+        Boolean hasReservedDiscount=jdbc.queryForObject("""
+            select exists(select 1 from course_discount_redemption
+              where institution_offer_id=? and status='RESERVED')
+            """,Boolean.class,offerId);
+        if(Boolean.TRUE.equals(hasReservedDiscount)) {
+          throw conflict("Release or redeem reserved discount uses before archiving this offer. Reservation and redemption history will remain intact.");
+        }
         jdbc.update("""
             update institution_marketplace_offer set status='ARCHIVED',
               updated_by_admin_id=null,updated_at=now()
