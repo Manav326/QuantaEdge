@@ -236,6 +236,25 @@ class ApplicationStartupSmokeTest {
        where p.code='CLASS_6' and p.status='ACTIVE' and p.curriculum_version='CURRENT'
        order by p.id limit 1
        """, Long.class, institutionId);
+    // The controller requires an assignment in the current lifecycle; don't rely on migrated
+    // CLASS_6 assignment/grant rows that V208 deliberately retires.
+    Long releaseVersion = jdbc.queryForObject("""
+      select coalesce(max(release_version),0)+1
+      from institution_course_release
+      where source_institution_id=? and program_id=?
+      """, Long.class, institutionId, courseId);
+    Long releaseId = jdbc.queryForObject("""
+      insert into institution_course_release(
+        source_institution_id,program_id,release_version,release_state,content_fingerprint,
+        legacy_migration,created_at,updated_at)
+      values(?,?,?,'DRAFT',course_content_fingerprint(?),false,now(),now())
+      returning id
+      """, Long.class, institutionId, courseId, releaseVersion, courseId);
+    jdbc.update("""
+      insert into institution_course_assignment(
+        institution_id,course_release_id,status,assignment_source,assigned_at,created_at,updated_at)
+      values(?,?,'ASSIGNED','ORIGIN',now(),now(),now())
+      """, institutionId, releaseId);
     InstitutionTenantContext tenant = new InstitutionTenantContext(institutionId, "QUANTA-EDGE", "QuantaEdge");
     // Authorization is grant-based: seed an explicit test grant rather than relying on a former
     // global ADMIN bypass. This test transaction rolls the temporary staff and grant rows back.
