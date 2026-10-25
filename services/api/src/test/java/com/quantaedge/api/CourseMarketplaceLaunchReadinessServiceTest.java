@@ -76,11 +76,15 @@ class CourseMarketplaceLaunchReadinessServiceTest {
 
     assertEquals("PUBLISHED",result.get("offerStatus"));
     assertEquals("LEGACY_MIGRATED",result.get("releaseState"));
+    verify(jdbc).queryForList(contains("qe_is_current_institution_assignment(a.id)"),any(Object[].class));
     @SuppressWarnings("unchecked")
     java.util.List<java.util.Map<String,Object>> checks=
         (java.util.List<java.util.Map<String,Object>>)result.get("checks");
     assertTrue(checks.stream().anyMatch(check ->
         "CONTENT_REVIEW_CURRENT".equals(check.get("code"))
+            && Boolean.FALSE.equals(check.get("passed"))));
+    assertTrue(checks.stream().anyMatch(check ->
+        "OFFER_TERMS".equals(check.get("code"))
             && Boolean.FALSE.equals(check.get("passed"))));
     verify(jdbc,never()).queryForObject(
         eq("select course_content_fingerprint(?)"),eq(String.class),any(Object[].class));
