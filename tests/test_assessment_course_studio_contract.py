@@ -85,7 +85,7 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
 
         api_content = (ROOT / "services/api/src/main/java/com/quantaedge/api/AdminContentController.java").read_text(encoding="utf-8")
         route_start = api_content.index('@GetMapping("/courses/{courseId}/assessment-inventory")')
-        route_end = api_content.index('  @GetMapping\\n  public List<Map<String, Object>> list(', route_start)
+        route_end = api_content.index('  @GetMapping\n  public List<Map<String, Object>> list(', route_start)
         inventory_route = api_content[route_start:route_end]
         self.assertIn('authorize(token, context, "CONTENT_VIEW")', inventory_route)
         self.assertIn("requireAssignedCourse(courseId,institutionId)", inventory_route)
