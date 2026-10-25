@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""Import TRE-4 source papers into QuantaEdge without skipping lifecycle states.
+"""Import TRE-4 source papers into QuantaEdge while preserving the database lifecycle.
 
 Default mode is a dry run. --apply creates/reuses the source-owned ASSESSMENT course, DRAFT
-assessments, DRAFT test packs and a DRAFT release. This importer never submits, approves, shares,
-offers or publishes content. Question/answer review, assessment publication, release submission,
-HRMS quality approval, origin approval, and Marketplace offer transitions use their own supported
-UI/API actions in order. Existing non-DRAFT releases are immutable to this importer.
+assessments, DRAFT test packs and, on first import, a DRAFT release. The importer never approves
+questions, publishes assessments/packs, approves a release, approves the origin release, or creates
+or publishes a Marketplace offer. With explicit --submit-for-review, it may transition an existing
+DRAFT release to IN_QUALITY_REVIEW only after the database publish-readiness gate passes.
+Question/answer review, assessment publication, HRMS quality approval, origin approval and
+Marketplace offer transitions use their own supported workflows. Existing non-DRAFT releases are
+immutable to this importer.
 """
 from __future__ import annotations
 
