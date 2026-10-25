@@ -123,7 +123,7 @@ public class CourseMarketplaceController {
         where o.institution_id=? and o.status='PUBLISHED'
           and o.hrms_published_by_staff_id is not null
           and release.release_state='SHAREABLE'
-          and release.content_fingerprint=course_content_fingerprint(release.program_id)
+          and case when release.release_state='SHAREABLE' then course_release_fingerprint_current(release.program_id,release.content_fingerprint::text,release.updated_at) else false end
           and not exists (
             select 1
             from institution_marketplace_offer newer_offer
@@ -142,7 +142,7 @@ public class CourseMarketplaceController {
               and newer_offer.status='PUBLISHED'
               and newer_offer.hrms_published_by_staff_id is not null
               and newer_release.release_state='SHAREABLE'
-              and newer_release.content_fingerprint=course_content_fingerprint(newer_release.program_id)
+              and case when newer_release.release_state='SHAREABLE' then course_release_fingerprint_current(newer_release.program_id,newer_release.content_fingerprint::text,newer_release.updated_at) else false end
           )
         order by p.display_name,p.id
         """, institutionId, context.studentId(),
@@ -239,7 +239,7 @@ public class CourseMarketplaceController {
       where o.institution_id=(select institution_id from selected_tenant) and o.status='PUBLISHED'
         and o.hrms_published_by_staff_id is not null
         and release.release_state='SHAREABLE'
-        and release.content_fingerprint=course_content_fingerprint(release.program_id)
+        and case when release.release_state='SHAREABLE' then course_release_fingerprint_current(release.program_id,release.content_fingerprint::text,release.updated_at) else false end
         and not exists (
           select 1
           from institution_marketplace_offer newer_offer
@@ -258,7 +258,7 @@ public class CourseMarketplaceController {
             and newer_offer.status='PUBLISHED'
             and newer_offer.hrms_published_by_staff_id is not null
             and newer_release.release_state='SHAREABLE'
-            and newer_release.content_fingerprint=course_content_fingerprint(newer_release.program_id)
+            and case when newer_release.release_state='SHAREABLE' then course_release_fingerprint_current(newer_release.program_id,newer_release.content_fingerprint::text,newer_release.updated_at) else false end
         )
       order by p.display_name,p.id
       """, institutionId, parentId, parentId, parentId, parentId, parentId, parentId);
@@ -318,7 +318,7 @@ public class CourseMarketplaceController {
         where o.institution_id=? and o.course_id=? and o.status='PUBLISHED'
           and o.hrms_published_by_staff_id is not null
           and r.release_state='SHAREABLE'
-          and r.content_fingerprint=course_content_fingerprint(r.program_id)
+          and case when r.release_state='SHAREABLE' then course_release_fingerprint_current(r.program_id,r.content_fingerprint::text,r.updated_at) else false end
           and not exists (
             select 1
             from institution_marketplace_offer newer_offer
@@ -337,7 +337,7 @@ public class CourseMarketplaceController {
               and newer_offer.status='PUBLISHED'
               and newer_offer.hrms_published_by_staff_id is not null
               and newer_release.release_state='SHAREABLE'
-              and newer_release.content_fingerprint=course_content_fingerprint(newer_release.program_id)
+              and case when newer_release.release_state='SHAREABLE' then course_release_fingerprint_current(newer_release.program_id,newer_release.content_fingerprint::text,newer_release.updated_at) else false end
           )
           and o.price_paise=0 and o.currency='INR'
       )
@@ -716,7 +716,7 @@ public class CourseMarketplaceController {
         where o.institution_id=? and p.id=? and o.status='PUBLISHED'
           and o.hrms_published_by_staff_id is not null
           and release.release_state='SHAREABLE'
-          and release.content_fingerprint=course_content_fingerprint(release.program_id)
+          and case when release.release_state='SHAREABLE' then course_release_fingerprint_current(release.program_id,release.content_fingerprint::text,release.updated_at) else false end
           and not exists (
             select 1
             from institution_marketplace_offer newer_offer
@@ -735,7 +735,7 @@ public class CourseMarketplaceController {
               and newer_offer.status='PUBLISHED'
               and newer_offer.hrms_published_by_staff_id is not null
               and newer_release.release_state='SHAREABLE'
-              and newer_release.content_fingerprint=course_content_fingerprint(newer_release.program_id)
+              and case when newer_release.release_state='SHAREABLE' then course_release_fingerprint_current(newer_release.program_id,newer_release.content_fingerprint::text,newer_release.updated_at) else false end
           )
           and o.price_paise>0
         """, targetStudentId,institutionId,courseId);
@@ -1926,7 +1926,7 @@ public class CourseMarketplaceController {
           where offer.id=? and offer.institution_id=? and offer.course_id=? and offer.status='PUBLISHED'
             and offer.hrms_published_by_staff_id is not null
             and release.release_state='SHAREABLE'
-            and release.content_fingerprint=course_content_fingerprint(release.program_id)
+            and case when release.release_state='SHAREABLE' then course_release_fingerprint_current(release.program_id,release.content_fingerprint::text,release.updated_at) else false end
         )
         """, Boolean.class, ((Number) order.get("institution_offer_id")).longValue(), institutionId,
         ((Number) order.get("course_id")).longValue());
