@@ -439,7 +439,7 @@ export default function ContentStudio(){
    if(String(selectedCourse?.course_type_code||'').toUpperCase()==='ASSESSMENT'){
     setRows([]);setQuestionSummary({});setAssessmentRows([]);setAssessmentTotal(0);
     const params=new URLSearchParams({courseId:selectedProgram,status:'ALL',limit:'100',offset:'0'});
-    const result=await api('/api/v1/admin/assessments?'+params.toString());
+    const result=await api('/api/v1/admin/content/assessment-papers?'+params.toString());
     const items=Array.isArray(result?.items)?result.items:(Array.isArray(result)?result:[]);
     setAssessmentRows(items);
     setAssessmentTotal(Number(result?.total??items.length)||0);
