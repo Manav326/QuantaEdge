@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "230d91f7d68af2825e58ec2cfc0c5dfa687c2edb916764ab8db4670052832309",
+  "raw_analysis_sha256": "1101d9c28961ac344e83682eca170b7d5b22ec2acf1243c76826b596e6f7146e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -29272,7 +29272,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40150632213",
-      "checkpointed_at": "2026-10-25T02:44:00Z",
+      "checkpointed_at": "2026-10-25T02:48:34Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57795,7 +57795,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40150632213",
-      "checkpointed_at": "2026-10-25T02:45:04Z",
+      "checkpointed_at": "2026-10-25T02:49:44Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -62298,6 +62298,104 @@
         "context_relation": "The image is unrelated to the content of the textbook.",
         "limitations": [
           "The image is completely black and does not contain any visible text or content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bfd9bab18e214c87823cfc98",
+      "asset_sha256": "6e9da23f78b65015bb7b0d639bbe4ff26b8c00131234fdbd29fc823c54fed076",
+      "page_text_context_sha256": "653ca2ed52a7d6298e3b1fb4a9b574a4b2c10f83e326b1f5e117b11c5fe3473a",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 98,
+      "asset_path": "page-0098.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40150632213",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a4f2e7aa3f8f20b8af12b8bc",
+      "asset_sha256": "7e525b1dac5e2104ca9e4a1e0ac68d84997fa53308a7fa5788a2e87c604e43aa",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 99,
+      "asset_path": "assets/7e525b1dac5e2104ca9e4a1e0ac68d84997fa53308a7fa5788a2e87c604e43aa.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "fdbde7e53fb0fa5056d2ca2d42bc7f623eb9c68939cb62b612ae1728d407c6fe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A jar with a straw and a note inside it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40150632213",
+      "checkpointed_at": "2026-10-25T02:56:22Z",
+      "effective_analysis": {
+        "visual_summary": "A jar with a straw and a note inside it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d73b661bd62c497e53ba4323",
+      "asset_sha256": "f1dbd005c830d05bf4b249a3ccae8ad2b3d244467c77b946af39d389e9f04f63",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 99,
+      "asset_path": "assets/f1dbd005c830d05bf4b249a3ccae8ad2b3d244467c77b946af39d389e9f04f63.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "fdbde7e53fb0fa5056d2ca2d42bc7f623eb9c68939cb62b612ae1728d407c6fe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a large pink sheet of paper.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the textbook page.",
+          "The image is a cartoon character holding a large pink sheet of paper, which is unrelated to the content of the textbook page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40150632213",
+      "checkpointed_at": "2026-10-25T02:58:10Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a large pink sheet of paper.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the textbook page.",
+          "The image is a cartoon character holding a large pink sheet of paper, which is unrelated to the content of the textbook page."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
