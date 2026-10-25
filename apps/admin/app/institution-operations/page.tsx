@@ -345,7 +345,7 @@ function ReleaseList({ releases, loading, busyRelease, onAction, t, canManageRel
   return <div className={styles.releaseGrid}>
     {releases.map(release => {
       const state = String(release.release_state || 'UNKNOWN').toUpperCase();
-      const canSubmit = ['DRAFT', 'REJECTED', 'WITHDRAWN', 'LEGACY_MIGRATED'].includes(state);
+      const canSubmit = ['DRAFT', 'REJECTED', 'WITHDRAWN'].includes(state);
       const canApprove = state === 'QUALITY_APPROVED';
       return <article className={styles.releaseCard + (focusCourseId === String(release.course_id) ? ' ' + styles.focused : '')} data-release-course-id={release.course_id} key={release.course_id + ':' + release.release_id}>
         <div className={styles.releaseTitle}>
