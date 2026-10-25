@@ -4020,5 +4020,10 @@
   "admin.contentStudio.assessmentQuestionSnapshotCount": "Questions in loaded papers",
   "admin.contentStudio.assessmentQuestionsCount": "{count} questions",
   "admin.contentStudio.assessmentReviewQuestions": "Review questions",
-  "admin.contentStudio.assessmentSourcePackage": "Source package"
+  "admin.contentStudio.assessmentSourcePackage": "Source package",
+  "admin.contentStudio.assessmentDraftReviewHint": "Draft tests still need question and answer review.",
+  "admin.contentStudio.assessmentMarksDuration": "{marks} marks · {minutes} min",
+  "admin.contentStudio.assessmentPackVersion": "Pack v{version}",
+  "admin.assessments.assessmentOnlyCourseDescription": "Assessment-only course: course → test packs → assessments → ordered question snapshots. Use this workspace to inspect imported tests and correct their question/answer review. Publishing remains gated.",
+  "admin.assessments.backToContentStudio": "Back to Content Studio"
 }
