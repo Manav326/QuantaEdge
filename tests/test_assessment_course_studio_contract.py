@@ -70,6 +70,34 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("requireEditableCourse(courseId,tenant)", review_route)
         self.assertIn("source_package_id is not null", review_route)
 
+    def test_portable_question_review_is_full_screen_bilingual_and_saves_bilingual_explanations(self):
+        page = (ROOT / "apps/admin/app/assessments/page.tsx").read_text(encoding="utf-8")
+        styles = (ROOT / "apps/admin/app/assessments/Assessments.module.css").read_text(encoding="utf-8")
+        controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/AssessmentController.java").read_text(encoding="utf-8")
+
+        for token in (
+            "assessmentReviewWorkspace",
+            "reviewBilingualGrid",
+            "importedPrompt(selectedImportedQuestion,'en')",
+            "importedPrompt(selectedImportedQuestion,'hi')",
+            "importedOptionText(option,'en')",
+            "importedOptionText(option,'hi')",
+            "importedHindiExplanationEdits",
+            "aria-label=\"Filter questions by review status\"",
+            "setImportedReviewOpen(true)",
+        ):
+            self.assertIn(token, page)
+        for token in ("position:fixed", "width:100vw", "grid-template-columns:repeat(2,minmax(0,1fr))", ".reviewBilingualGrid", ".assessmentReviewFooter"):
+            self.assertIn(token, styles)
+
+        patch_start = controller.index('@PatchMapping("/admin/assessments/{assessmentId}/package-questions/{sequenceNo}/review")')
+        patch_end = controller.index("  private Map<String,Object> resolvePortableAssessmentTarget", patch_start)
+        review_route = controller[patch_start:patch_end]
+        self.assertIn("snapshot.put(\"explanation_i18n\",normalizedTranslations)", review_route)
+        self.assertIn('snapshot.put("question_review_status",reviewStatus)', review_route)
+        self.assertIn('snapshot.put("answer_review_status",reviewStatus)', review_route)
+        self.assertIn("assessment_question_snapshot_publish_ready", review_route)
+
     def test_assessment_course_creation_is_type_specific_and_tenant_owned(self):
         service = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseAuthoringService.java").read_text(encoding="utf-8")
         self.assertIn('"ASSESSMENT".equals(type)', service)
