@@ -10,7 +10,7 @@ import { AdminWorkspaceContext } from '../components/AdminWorkspaceContext';
 type Row={class_code:string;class_name:string;program_code?:string|null;program_name?:string|null;subject_code:string;subject_name:string;chapter_id:number|null;chapter_code:string|null;chapter_name:string|null;chapter_description:string|null;chapter_sort_order:number|null;chapter_status:string|null;chapter_active:boolean|null;curriculum_source?:string|null;curriculum_source_url?:string|null;curriculum_source_edition?:string|null;curriculum_source_pages?:string|null;curriculum_source_verified?:boolean;lesson_id:number|null;lesson_code:string|null;lesson_title:string|null;lesson_summary:string|null;estimated_minutes:number|null;lesson_sort_order:number|null;lesson_status:string|null;lesson_active:boolean|null;alignment_source_title?:string|null;alignment_source_url?:string|null;alignment_source_edition?:string|null;alignment_page_range?:string|null;alignment_source_verified?:boolean;block_count:number|null;question_count:number|null};
 type ContentBlock={id?:number;sequence_no:number;block_type:string;content:Record<string,any>;active:boolean};
 type Selection={type:'chapter'|'lesson';id:number};
-type CourseAssessmentRow={assessment_id:number;test_id?:string|null;title:string;description?:string|null;status:string;assessment_type?:string|null;source_exam_cycle?:string|null;source_package_id?:string|null;question_count:number;max_score:number;duration_minutes:number;max_attempts:number;subject_name?:string|null;chapter_name?:string|null};
+type CourseAssessmentRow={assessment_id:number;test_id?:string|null;title:string;description?:string|null;status:string;assessment_type?:string|null;source_exam_cycle?:string|null;source_package_id?:string|null;source_package_version?:string|null;test_pack_code?:string|null;test_pack_version?:string|null;test_pack_title?:string|null;test_pack_status?:string|null;question_count:number;max_score:number;duration_minutes:number;max_attempts:number;subject_name?:string|null;chapter_name?:string|null};
 type VisualCandidate={candidate_id:string;candidate_kind:string;source_book_id:string;source_pdf_sha256:string;source_pdf_page_number:number;suggested_chapter_number?:number|null;suggested_chapter_title?:string|null;chapter_map_review_status?:string|null;source_asset_sha256?:string|null;bbox_pdf_points?:number[]|null;page_text_context:string;image_url:string;source_page_url?:string;publication_allowed:boolean;human_review_required:boolean};
 type VisualCatalog={schema_version:string;book_slug:string;source:{book_id:string;title:string;class:string;subject:string;language:string;edition:string;pdf_sha256:string;page_count:number};summary:{candidate_count:number;publication_allowed:boolean;review_required:boolean};visual_kinds:{id:string;label:string;description?:string}[];candidates:VisualCandidate[]};
 type VisualCatalogIndex={schema_version:string;catalogs:Array<{book_slug:string;catalog_path:string;source_book_id:string;title:string;class:string;subject:string;language:string;edition:string;source_pdf_sha256:string;page_count:number;candidate_count:number;publication_allowed:boolean;review_required:boolean}>};
@@ -437,10 +437,8 @@ export default function ContentStudio(){
   if(selectedProgram!==programFilter)setProgramFilter(selectedProgram);
   const selectedCourse=availablePrograms.find((p:any)=>String(p.id||p.course_id)===selectedProgram);
   if(String(selectedCourse?.course_type_code||'').toUpperCase()==='ASSESSMENT'){
-   const assessmentResult=await api('/api/v1/admin/assessments?'+new URLSearchParams({
-     courseId:selectedProgram,status:'ALL',limit:'100',offset:'0'
-   }).toString());
-   setAssessmentRows(Array.isArray(assessmentResult?.items)?assessmentResult.items:[]);
+   const assessmentResult=await api('/api/v1/admin/content/courses/'+encodeURIComponent(selectedProgram)+'/assessment-inventory');
+   setAssessmentRows(Array.isArray(assessmentResult)?assessmentResult:[]);
    setRows([]);
    setQuestionSummary({});
    setSelected(null);setDetail(null);setCreateType(null);
@@ -924,9 +922,9 @@ export default function ContentStudio(){
            <div className="qe-chapter-heading" style={{alignItems:'center'}}>
             <div className="qe-chapter-row" style={{flex:1,cursor:'default'}}>
              <span className="qe-chapter-glyph">✓</span>
-             <span className="qe-chapter-title"><small>{row.source_exam_cycle||row.source_package_id||row.assessment_type||'ASSESSMENT'}{row.test_id?' · '+row.test_id:''}</small><strong>{row.title}</strong><em>{row.description||'Course-level assessment. Question snapshots stay attached to this test and are not re-mapped into chapters.'}</em></span>
+             <span className="qe-chapter-title"><small>{row.test_pack_title||row.source_exam_cycle||row.source_package_id||row.assessment_type||'ASSESSMENT'}{row.test_pack_version?' · Pack v'+row.test_pack_version:''}{row.test_id?' · '+row.test_id:''}</small><strong>{row.title}</strong><em>{row.description||'Course-level assessment. Question snapshots stay attached to this test and are not re-mapped into chapters.'}</em></span>
              <span className="qe-chapter-count">{Number(row.question_count||0)} questions <small>{Number(row.max_score||0)} marks · {Number(row.duration_minutes||0)} min</small></span>
-             <span className={'qe-status-pill '+String(row.status||'DRAFT').toLowerCase()}>{statusLabel(row.status)}</span>
+             <span className={'qe-status-pill '+String(row.status||'DRAFT').toLowerCase()}>{statusLabel(row.status)}{row.test_pack_status?' · pack '+String(row.test_pack_status).toLowerCase():''}</span>
             </div>
            </div>
            <div style={{display:'flex',justifyContent:'flex-end',gap:8,flexWrap:'wrap',padding:'10px 14px',borderTop:'1px solid var(--admin-border,#e2e7ef)'}}>
