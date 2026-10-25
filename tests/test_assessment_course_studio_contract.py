@@ -71,6 +71,7 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("course → test packs → assessments → ordered question snapshots", assessments)
         self.assertIn("/package-questions/", assessments)
         self.assertIn("!isAssessmentOnlyCourse && (", assessments)
+        self.assertIn("{!isAssessmentOnlyCourse && <label>{t('admin.assessments.subject')}", assessments)
 
     def test_disabled_hrms_buttons_use_neutral_surface_without_opacity_haze(self):
         styles = (ROOT / "apps/people/app/people-design-system.css").read_text(encoding="utf-8")
