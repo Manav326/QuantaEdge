@@ -36,6 +36,40 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("course_assessment_pack_item", inventory_route)
         self.assertNotIn("assessment_staff_assignment", inventory_route)
 
+    def test_assessment_only_course_hides_curriculum_controls_and_scopes_imported_review(self):
+        content_page = (ROOT / "apps/admin/app/content/page.tsx").read_text(encoding="utf-8")
+        assessment_page = (ROOT / "apps/admin/app/assessments/page.tsx").read_text(encoding="utf-8")
+        assessment_controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/AssessmentController.java").read_text(encoding="utf-8")
+
+        # Assessment-only courses use their native course → test-pack → assessment
+        # hierarchy and route to the course assessment workspace, not K–12 chapter creation.
+        self.assertRegex(content_page, r"\\{isAssessmentCourse\\s*\\?\\s*\\(")
+        self.assertIn("'/api/v1/admin/content/courses/'+encodeURIComponent(selectedProgram)+'/assessment-inventory'", content_page)
+        self.assertIn("assessmentRows.map", content_page)
+        chapter_create_at = content_page.index("onClick={()=>beginCreate('chapter')}")
+        assessment_branch_at = content_page.rfind("{isAssessmentCourse", 0, chapter_create_at)
+        self.assertGreater(assessment_branch_at, -1)
+        create_branch = content_page[assessment_branch_at:chapter_create_at]
+        self.assertIn("assessmentOpenStudio", create_branch)
+        self.assertIn(": <>", create_branch)
+
+        # No default Maths filter leaks into classless assessment-only queries or UI.
+        self.assertIn("const [subjectCode,setSubjectCode]=useState('')", assessment_page)
+        self.assertIn("if(!isAssessmentOnlyCourse&&subjectCode)params.set('subjectCode',subjectCode);", assessment_page)
+        self.assertRegex(assessment_page, r"\\{\\s*!isAssessmentOnlyCourse\\s*&&\\s*\\(")
+
+        # The Content Studio deep link is server-authorized by the requested course,
+        # tenant and editable-source rules; it does not depend on a grader assignment.
+        self.assertIn("get('reviewAssessmentId')", assessment_page)
+        self.assertIn("loadImportedPackageQuestions(assessmentId)", assessment_page)
+        route_start = assessment_controller.index('@GetMapping("/admin/assessments/{assessmentId}/package-questions")')
+        route_end = assessment_controller.index('@PatchMapping("/admin/assessments/{assessmentId}/package-questions/{sequenceNo}/review")', route_start)
+        review_route = assessment_controller[route_start:route_end]
+        self.assertIn('authorization.requirePermission(context,"CONTENT_REVIEW")', review_route)
+        self.assertIn("requireAssessmentInCourse(assessmentId,courseId,tenant)", review_route)
+        self.assertIn("requireEditableCourse(courseId,tenant)", review_route)
+        self.assertIn("source_package_id is not null", review_route)
+
     def test_assessment_course_creation_is_type_specific_and_tenant_owned(self):
         service = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseAuthoringService.java").read_text(encoding="utf-8")
         self.assertIn('"ASSESSMENT".equals(type)', service)
