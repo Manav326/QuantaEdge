@@ -138,9 +138,14 @@ public class CourseMarketplaceController {
             join curriculum_program newer_program
               on newer_program.id=newer_release.program_id
              and newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'
-             and newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'
              and newer_program.course_identity_id=p.course_identity_id
-             and newer_program.content_version_no>p.content_version_no
+             and (
+               newer_program.content_version_no>p.content_version_no
+               or (newer_program.content_version_no=p.content_version_no and (
+                 newer_release.release_version>release.release_version
+                 or (newer_release.release_version=release.release_version and newer_release.id>release.id)
+               ))
+             )
             where newer_offer.institution_id=o.institution_id
               and newer_offer.status='PUBLISHED'
               and newer_offer.hrms_published_by_staff_id is not null
@@ -259,7 +264,13 @@ public class CourseMarketplaceController {
             on newer_program.id=newer_release.program_id
            and newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'
            and newer_program.course_identity_id=p.course_identity_id
-           and newer_program.content_version_no>p.content_version_no
+             and (
+               newer_program.content_version_no>p.content_version_no
+               or (newer_program.content_version_no=p.content_version_no and (
+                 newer_release.release_version>release.release_version
+                 or (newer_release.release_version=release.release_version and newer_release.id>release.id)
+               ))
+             )
           where newer_offer.institution_id=o.institution_id
             and newer_offer.status='PUBLISHED'
             and newer_offer.hrms_published_by_staff_id is not null
@@ -340,9 +351,14 @@ public class CourseMarketplaceController {
             join curriculum_program newer_program
               on newer_program.id=newer_release.program_id
              and newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'
-             and newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'
              and newer_program.course_identity_id=p.course_identity_id
-             and newer_program.content_version_no>p.content_version_no
+             and (
+               newer_program.content_version_no>p.content_version_no
+               or (newer_program.content_version_no=p.content_version_no and (
+                 newer_release.release_version>release.release_version
+                 or (newer_release.release_version=release.release_version and newer_release.id>release.id)
+               ))
+             )
             where newer_offer.institution_id=o.institution_id
               and newer_offer.status='PUBLISHED'
               and newer_offer.hrms_published_by_staff_id is not null
@@ -742,9 +758,14 @@ public class CourseMarketplaceController {
             join curriculum_program newer_program
               on newer_program.id=newer_release.program_id
              and newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'
-             and newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'
              and newer_program.course_identity_id=p.course_identity_id
-             and newer_program.content_version_no>p.content_version_no
+             and (
+               newer_program.content_version_no>p.content_version_no
+               or (newer_program.content_version_no=p.content_version_no and (
+                 newer_release.release_version>release.release_version
+                 or (newer_release.release_version=release.release_version and newer_release.id>release.id)
+               ))
+             )
             where newer_offer.institution_id=o.institution_id
               and newer_offer.status='PUBLISHED'
               and newer_offer.hrms_published_by_staff_id is not null
