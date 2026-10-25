@@ -164,6 +164,55 @@ public class AssessmentController {
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
+  /**
+   * Minimal, course-scoped inventory for Content Studio. Unlike the grading catalogue below,
+   * this does not filter by grader assignment: course-content reviewers must be able to locate
+   * imported source papers before assigning graders. It deliberately returns no attempt/student data.
+   */
+  @GetMapping("/admin/content/assessment-papers")
+  public Map<String,Object> contentAssessmentPapers(
+      @RequestParam Long courseId,
+      @RequestParam(defaultValue="ALL") String status,
+      @RequestParam(defaultValue="100") Integer limit,
+      @RequestParam(defaultValue="0") Integer offset,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false) InstitutionTenantContext tenant) {
+    requireContentView(context);
+    requireAssignedCourse(courseId,tenant);
+    Boolean assessmentOnly=jdbc.queryForObject("""
+      select exists(
+        select 1 from curriculum_program p
+        join curriculum_program_delivery_mode mode
+          on mode.program_id=p.id and mode.delivery_mode='ASSESSMENT_ONLY'
+        where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+          and p.course_type_code='ASSESSMENT'
+      )
+      """,Boolean.class,courseId);
+    if(!Boolean.TRUE.equals(assessmentOnly))
+      throw badRequest("The assessment-paper inventory is only available for active ASSESSMENT_ONLY courses.");
+
+    String statusFilter=safeText(status,20).toUpperCase(Locale.ROOT);
+    if(statusFilter.isBlank())statusFilter="ALL";
+    if(!Set.of("ALL","DRAFT","PUBLISHED","ARCHIVED").contains(statusFilter))
+      throw badRequest("Choose a valid assessment status.");
+    int rowLimit=Math.max(1,Math.min(limit==null?100:limit,100));
+    int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    List<Map<String,Object>> items=jdbc.queryForList("""
+      select a.id as assessment_id,a.public_id as test_id,a.title,a.status,
+        a.source_package_id,a.duration_minutes,a.negative_marking_fraction,
+        (select count(*) from assessment_question aq where aq.assessment_id=a.id) as question_count
+      from assessment a
+      where a.course_id=? and (?='ALL' or a.status=?)
+      order by a.created_at desc,a.id desc
+      limit ? offset ?
+      """,courseId,statusFilter,statusFilter,rowLimit,rowOffset);
+    Long total=jdbc.queryForObject("""
+      select count(*) from assessment a
+      where a.course_id=? and (?='ALL' or a.status=?)
+      """,Long.class,courseId,statusFilter,statusFilter);
+    return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
+  }
+
   @GetMapping("/admin/assessments")
   public Map<String,Object> adminAssessments(
       @RequestParam(required = false) String classCode,
