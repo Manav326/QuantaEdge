@@ -124,6 +124,8 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
             self.assertIn(f"WHEN '{kind}'", migration)
         self.assertIn("answer_review_status", migration)
         self.assertIn("not assessment_question_snapshot_publish_ready(aq.question_snapshot)", assessment_controller)
+        self.assertIn('select assessment_question_snapshot_publish_ready(?::jsonb)', assessment_controller)
+        self.assertIn('answer.put("kind",kind)', assessment_controller)
         self.assertIn('snapshot.put("answer_review_status",reviewStatus)', assessment_controller)
 
 
