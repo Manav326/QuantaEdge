@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1253,
+    "assets_selected": 1254,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "647d107bb2ac3b8d075f4edc",
-      "20df8e5fc304c9c021f205e2"
+      "c0438d6f57e8814b2c858368",
+      "ecefb66bc1879b7773e8a89e"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1249,
-    "assets_remaining": 1042,
-    "assets_completion_percent": 54.5,
+    "assets_analyzed": 1251,
+    "assets_remaining": 1040,
+    "assets_completion_percent": 54.6,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 1248,
+    "assets_skipped_from_checkpoint": 1249,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40142974307",
-      "checkpointed_at": "2026-10-25T00:41:00Z"
+      "checkpointed_at": "2026-10-25T00:48:37Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40142974307",
-      "checkpointed_at": "2026-10-25T00:41:34Z"
+      "checkpointed_at": "2026-10-25T00:49:11Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40142974307",
-      "checkpointed_at": "2026-10-25T00:42:14Z"
+      "checkpointed_at": "2026-10-25T00:49:50Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -41138,6 +41138,101 @@
       "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "c0438d6f57e8814b2c858368",
+      "asset_sha256": "881ee436f186cfcd9977b4e1581b5dea1bf184ba9ad11b1081f0a7351f0471b7",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 97,
+      "asset_path": "page-0097.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "46ebf104ae108f545fdf5591ffbdc838d65dd58c1c174806d0a366a838a7e5e1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook explaining various types of forces and their examples.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Snapshots",
+          "A force is push or pull on an object resulting from the object’s interaction with another object.",
+          "The SI unit of force is newton and its symbol is N.",
+          "Forces can act with or without contact.",
+          "Muscular force and frictional force are some of the examples of contact forces.",
+          "Magnetic force, gravitational force, and electrostatic force are non-contact forces.",
+          "Force can change an object’s speed, direction of its motion, or both. Force can also change the shape of an object.",
+          "The force which comes into play when an object moves or tries to move over another surface, is called force of friction or simply friction. It acts in a direction opposite to the direction in which the object is moving or trying to move.",
+          "The force exerted by a magnet on another magnet or a magnetic material is called magnetic force.",
+          "The force exerted by a charged body on another charged body or uncharged body is called an electrostatic force.",
+          "The force with which the Earth attracts objects towards itself, is called the gravitational force. It is always an attractive force.",
+          "The force with which the Earth pulls an object towards itself is called the weight of the object. The SI unit of weight is newton (N).",
+          "The mass of an object remains unchanged whereas its weight may vary from place to place.",
+          "When an object is placed in a liquid, the force applied by a liquid on an object in the upward direction is known as upthrust or buoyant force."
+        ],
+        "concepts": [
+          "force",
+          "SI unit of force",
+          "contact forces",
+          "non-contact forces",
+          "friction",
+          "magnetic force",
+          "gravitational force",
+          "electrostatic force",
+          "upthrust",
+          "buoyant force"
+        ],
+        "context_relation": "explaining various types of forces and their examples",
+        "limitations": [
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40142974307",
+      "checkpointed_at": "2026-10-25T00:53:00Z"
+    },
+    {
+      "asset_id": "ecefb66bc1879b7773e8a89e",
+      "asset_sha256": "8db4346157f2bd8cacead143e3fb207ce549c6b35cd4c673c1a6bd51b300807c",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 98,
+      "asset_path": "assets/8db4346157f2bd8cacead143e3fb207ce549c6b35cd4c673c1a6bd51b300807c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "653ca2ed52a7d6298e3b1fb4a9b574a4b2c10f83e326b1f5e117b11c5fe3473a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A ball rolling down a ramp.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "ball",
+          "ramp",
+          "rolling",
+          "speed",
+          "force",
+          "friction",
+          "charged objects",
+          "distance",
+          "rubbing",
+          "woollen cloth",
+          "balloons"
+        ],
+        "context_relation": "The image is related to the concepts of motion, force, and friction.",
+        "limitations": [
+          "The image does not provide specific numerical values or measurements.",
+          "The image does not show the exact conditions or forces involved in the motion of the ball."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40142974307",
+      "checkpointed_at": "2026-10-25T00:54:09Z"
     }
   ]
 }
