@@ -24,6 +24,10 @@ type Offer = {
   course_name: string;
   course_code: string;
   curriculum_version?: string;
+  course_type_code?: string;
+  test_pack_count?: number;
+  assessment_count?: number;
+  assessment_question_count?: number;
   description?: string | null;
   price_paise: number;
   currency: string;
@@ -510,6 +514,10 @@ export default function StudentMarketplacePage() {
                 courseCode={offer.course_code}
                 publicId={offer.public_id}
                 curriculumVersion={offer.curriculum_version}
+                courseTypeCode={offer.course_type_code}
+                testPackCount={offer.test_pack_count}
+                assessmentCount={offer.assessment_count}
+                assessmentQuestionCount={offer.assessment_question_count}
                 language={language}
                 priceLabel={owned ? tx('Owned', 'पहले से उपलब्ध') : validPrice ? offer.price_paise === 0 ? tx('Free', 'निःशुल्क') : money(offer.price_paise) : tx('Unavailable', 'उपलब्ध नहीं')}
                 description={offer.description}
