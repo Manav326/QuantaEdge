@@ -712,6 +712,14 @@ public class PlatformInstitutionController {
         throw new ResponseStatusException(HttpStatus.CONFLICT,
             "HRMS must inspect the exact submitted release content and confirm its fingerprint before quality approval.");
     }
+    if(approved && "ASSESSMENT_ONLY".equals(courseDeliveryMode(programId))) {
+      Boolean assessmentReady=jdbc.queryForObject(
+          "select assessment_only_course_publish_ready(?)",Boolean.class,programId);
+      if(!Boolean.TRUE.equals(assessmentReady)) {
+        throw new ResponseStatusException(HttpStatus.CONFLICT,
+            "Assessment-only quality approval requires every test pack and assessment to be published after question/answer review.");
+      }
+    }
     if(approved) {
       Boolean typeReady=jdbc.queryForObject(
           "select course_marketplace_content_type_ready(?)",Boolean.class,programId);
@@ -737,6 +745,13 @@ public class PlatformInstitutionController {
     audit(reviewer,sourceInstitutionId,"COURSE_RELEASE_QUALITY_REVIEWED","COURSE_RELEASE",
         String.valueOf(releaseId),Map.of("approved",approved,"courseId",programId));
     return Map.of("updated",true,"releaseId",releaseId,"status",next,"qualityReviewNotes",notes);
+  }
+
+  private String courseDeliveryMode(long programId) {
+    List<String> modes=jdbc.queryForList(
+        "select delivery_mode from curriculum_program_delivery_mode where program_id=?",
+        String.class,programId);
+    return modes.isEmpty()?"LEARNING_CONTENT":String.valueOf(modes.getFirst());
   }
 
   private String courseReleaseFingerprint(long programId) {
