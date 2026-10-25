@@ -753,15 +753,19 @@ public class CourseMarketplaceLaunchController {
         if("ARCHIVED".equals(oldStatus)) return Map.of("updated",true,"offerId",offerId,"status","ARCHIVED");
         Boolean hasOpenOrder=jdbc.queryForObject("""
             select exists(select 1 from course_payment_order
-              where institution_id=? and institution_offer_id=? and status in ('CREATING','PENDING'))
-            """,Boolean.class,institutionId,offerId);
+              where institution_id=?
+                and (institution_offer_id=? or (institution_offer_id is null and course_id=?))
+                and status in ('CREATING','PENDING'))
+            """,Boolean.class,institutionId,offerId,number(row.get("course_id")));
         if(Boolean.TRUE.equals(hasOpenOrder)) {
           throw conflict("Resolve or expire every CREATING/PENDING payment order before archiving this offer. Historical verified transactions will remain unchanged.");
         }
         Boolean hasPendingParentRequest=jdbc.queryForObject("""
             select exists(select 1 from parent_course_purchase_request
-              where institution_id=? and institution_offer_id=? and status='PENDING')
-            """,Boolean.class,institutionId,offerId);
+              where institution_id=?
+                and (institution_offer_id=? or (institution_offer_id is null and course_id=?))
+                and status='PENDING')
+            """,Boolean.class,institutionId,offerId,number(row.get("course_id")));
         if(Boolean.TRUE.equals(hasPendingParentRequest)) {
           throw conflict("Resolve pending parent purchase requests before archiving this offer. The requests and their audit history will remain intact.");
         }
