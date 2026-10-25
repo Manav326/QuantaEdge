@@ -123,6 +123,7 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
     def test_typed_answer_review_gate_is_shared_with_assessment_publication(self):
         migration = (ROOT / "services/api/src/main/resources/db/migration/V204__typed_assessment_answer_review_readiness.sql").read_text(encoding="utf-8")
         assessment_controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/AssessmentController.java").read_text(encoding="utf-8")
+        admin_assessments = (ROOT / "apps/admin/app/assessments/page.tsx").read_text(encoding="utf-8")
         self.assertIn("assessment_question_snapshot_publish_ready", migration)
         for kind in ("OPTION", "MULTI_OPTION", "TEXT", "NUMERIC", "ORDER", "MATCH"):
             self.assertIn(f"WHEN '{kind}'", migration)
@@ -131,6 +132,7 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
         self.assertIn('select assessment_question_snapshot_publish_ready(?::jsonb)', assessment_controller)
         self.assertIn('answer.put("kind",kind)', assessment_controller)
         self.assertIn('snapshot.put("answer_review_status",reviewStatus)', assessment_controller)
+        self.assertIn("Answer: {String(question.answer_review_status||'PENDING_HUMAN_REVIEW')}", admin_assessments)
         self.assertIn('String explanation=body.get("explanation")==null?""', assessment_controller)
         self.assertIn('if("APPROVED".equals(reviewStatus)&&explanation.isBlank())', assessment_controller)
         self.assertIn("boolean requiresQuestionAnswerReview", assessment_controller)
