@@ -1080,6 +1080,12 @@ public class AssessmentController {
     snapshot.put("question_review_status",reviewStatus);
     snapshot.put("answer_review_status",reviewStatus);
     String snapshotJson=questionHistory.json(snapshot);
+    if("APPROVED".equals(reviewStatus)) {
+      Boolean publishReady=jdbc.queryForObject(
+          "select assessment_question_snapshot_publish_ready(?::jsonb)",Boolean.class,snapshotJson);
+      if(!Boolean.TRUE.equals(publishReady))
+        throw badRequest("The question does not satisfy the shared publication contract. Check the answer type/value, option references, explanation and both review statuses before approving it.");
+    }
     jdbc.update("update assessment_question set question_snapshot=?::jsonb where id=?",snapshotJson,questionId);
     audit(assessmentId,null,context,null,null,"IMPORTED_QUESTION_REVIEWED",
         "PENDING_HUMAN_REVIEW",reviewStatus,"Reviewed imported question #"+sequenceNo+".");
