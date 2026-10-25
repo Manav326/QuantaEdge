@@ -43,7 +43,7 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
 
         # Assessment-only courses use their native course → test-pack → assessment
         # hierarchy and route to the course assessment workspace, not K–12 chapter creation.
-        self.assertRegex(content_page, r"\\{isAssessmentCourse\\s*\\?\\s*\\(")
+        self.assertIn("{isAssessmentCourse ? (", content_page)
         self.assertIn("'/api/v1/admin/content/courses/'+encodeURIComponent(selectedProgram)+'/assessment-inventory'", content_page)
         self.assertIn("assessmentRows.map", content_page)
         chapter_create_at = content_page.index("onClick={()=>beginCreate('chapter')}")
@@ -56,7 +56,7 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         # No default Maths filter leaks into classless assessment-only queries or UI.
         self.assertIn("const [subjectCode,setSubjectCode]=useState('')", assessment_page)
         self.assertIn("if(!isAssessmentOnlyCourse&&subjectCode)params.set('subjectCode',subjectCode);", assessment_page)
-        self.assertRegex(assessment_page, r"\\{\\s*!isAssessmentOnlyCourse\\s*&&\\s*\\(")
+        self.assertIn("{!isAssessmentOnlyCourse && (", assessment_page)
 
         # The Content Studio deep link is server-authorized by the requested course,
         # tenant and editable-source rules; it does not depend on a grader assignment.
