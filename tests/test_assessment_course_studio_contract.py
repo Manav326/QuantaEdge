@@ -14,6 +14,28 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("/api/v1/admin/assessments/import-package", page)
         self.assertIn("student delivery", page.lower())
 
+    def test_content_studio_exposes_classless_assessment_hierarchy_and_deep_linked_question_review(self):
+        content_page = (ROOT / "apps/admin/app/content/page.tsx").read_text(encoding="utf-8")
+        assessment_page = (ROOT / "apps/admin/app/assessments/page.tsx").read_text(encoding="utf-8")
+        self.assertIn("isAssessmentCourse", content_page)
+        self.assertIn("test packs → assessments/tests → ordered question snapshots", content_page)
+        self.assertIn("/assessments?courseId=", content_page)
+        self.assertIn("reviewAssessmentId", content_page)
+        self.assertIn("source_package_id", content_page)
+        self.assertIn("setAssessmentRows", content_page)
+        self.assertIn("requestedPackageReviewRef", assessment_page)
+        self.assertIn("loadImportedPackageQuestions(assessmentId)", assessment_page)
+        self.assertIn("/package-questions?courseId=", assessment_page)
+
+        api_content = (ROOT / "services/api/src/main/java/com/quantaedge/api/AdminContentController.java").read_text(encoding="utf-8")
+        route_start = api_content.index('@GetMapping("/courses/{courseId}/assessment-inventory")')
+        route_end = api_content.index('  @GetMapping\n  public List<Map<String, Object>> list(', route_start)
+        inventory_route = api_content[route_start:route_end]
+        self.assertIn('authorize(token, context, "CONTENT_VIEW")', inventory_route)
+        self.assertIn("requireAssignedCourse(courseId,institutionId)", inventory_route)
+        self.assertIn("course_assessment_pack_item", inventory_route)
+        self.assertNotIn("assessment_staff_assignment", inventory_route)
+
     def test_assessment_course_creation_is_type_specific_and_tenant_owned(self):
         service = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseAuthoringService.java").read_text(encoding="utf-8")
         self.assertIn('"ASSESSMENT".equals(type)', service)
@@ -85,7 +107,8 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
     def test_quality_gate_has_actionable_preview_recovery_without_bypassing_fingerprint(self):
         hrms_ui = (ROOT / "apps/people/app/institutions/MarketplaceLaunchStepper.tsx").read_text(encoding="utf-8")
         review_controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/PlatformInstitutionController.java").read_text(encoding="utf-8")
-        self.assertIn("const previewNeedsLoading", hrms_ui)
+        self.assertIn("const previewNeedsLoading = !preview && !previewLoadInProgress", hrms_ui)
+        self.assertIn("A note is required both to approve and to return this release for correction", hrms_ui)
         self.assertIn("Load exact submitted content", hrms_ui)
         self.assertIn("onClick={() => void toggleReviewContent(release)}", hrms_ui)
         self.assertIn("previewFingerprintMismatch", hrms_ui)
@@ -149,6 +172,17 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("questions.forEachIndexed", android)
         self.assertIn("One at a time", android)
         self.assertIn("practiceQuestionIndex = (practiceIndex + 1).coerceAtMost(incorrectQuestions.lastIndex)", android)
+
+
+class HrmQualityRecoveryContractTests(unittest.TestCase):
+    def test_recovery_preview_is_available_while_authoritative_gates_remain(self):
+        root = Path(__file__).resolve().parents[1]
+        stepper = (root / "apps/people/app/institutions/MarketplaceLaunchStepper.tsx").read_text(encoding="utf-8")
+        self.assertIn("const previewNeedsLoading = !preview", stepper)
+        self.assertIn("Load exact submitted content", stepper)
+        self.assertIn("release.course_type_publish_ready === true", stepper)
+        self.assertIn("preview.courseTypePublishReady !== true", stepper)
+        self.assertIn("course_release_fingerprint_current(?,?,?)", (root / "services/api/src/main/java/com/quantaedge/api/PlatformInstitutionController.java").read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":
