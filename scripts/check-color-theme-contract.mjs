@@ -294,6 +294,10 @@ assert(adminContentStudio.includes("String(selectedCourse?.course_type_code||'')
 assert(adminContentStudio.includes("!isAssessmentCourse?<label>{t('admin.contentStudio.subject')}") &&
   adminContentStudio.includes('assessmentContentTitle') && adminContentStudio.includes("isAssessmentCourse ? <Link href={assessmentStudioHref"),
   'Assessment-only courses must hide K-12 subject filters/chapter creation and show course-type-specific content navigation.');
+assert(adminAssessmentsPage.includes("loadImportedPackageQuestions(assessmentId)") &&
+  adminAssessmentsPage.includes("requestedReviewRef.current===requestKey") &&
+  !adminAssessmentsPage.includes("assessments.find(item=>Number(item.assessment_id)===assessmentId)"),
+  'Imported question deep links must open by server-authorized course scope, not the grader-filtered assessment catalogue.');
 assert(adminContentEnglish.includes('"admin.contentStudio.courseSubjects": "Subjects with content"') &&
   adminContentEnglish.includes('"admin.contentStudio.databaseRecords": "From this course’s content records"') &&
   adminContentHinglish.includes('"admin.contentStudio.showMicroTopics"') &&
