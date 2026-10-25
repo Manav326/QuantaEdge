@@ -48,7 +48,7 @@ BEGIN
   -- V196 deliberately did not refresh stale reviewed rows. Fail closed without invoking the
   -- expensive graph hash; re-submission computes a current fingerprint and opens a new release.
   RETURN false;
-END
+END;
 $;
 
 COMMENT ON FUNCTION course_release_fingerprint_current(bigint,text,timestamptz) IS
