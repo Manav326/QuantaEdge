@@ -812,13 +812,15 @@ public class CourseMarketplaceLaunchController {
           and not exists (
             select 1 from course_payment_order pending_order
             where pending_order.institution_id=stale.institution_id
-              and pending_order.institution_offer_id=stale.id
+              and (pending_order.institution_offer_id=stale.id
+                or (pending_order.institution_offer_id is null and pending_order.course_id=stale.course_id))
               and pending_order.status in ('CREATING','PENDING')
           )
           and not exists (
             select 1 from parent_course_purchase_request pending_request
             where pending_request.institution_id=stale.institution_id
-              and pending_request.institution_offer_id=stale.id
+              and (pending_request.institution_offer_id=stale.id
+                or (pending_request.institution_offer_id is null and pending_request.course_id=stale.course_id))
               and pending_request.status='PENDING'
           )
         for update of stale
