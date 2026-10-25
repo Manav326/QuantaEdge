@@ -4020,5 +4020,10 @@
   "admin.contentStudio.assessmentQuestionSnapshotCount": "Loaded papers ke questions",
   "admin.contentStudio.assessmentQuestionsCount": "{count} questions",
   "admin.contentStudio.assessmentReviewQuestions": "Questions review karein",
-  "admin.contentStudio.assessmentSourcePackage": "Source package"
+  "admin.contentStudio.assessmentSourcePackage": "Source package",
+  "admin.contentStudio.assessmentDraftReviewHint": "Draft tests ko question aur answer review ki zaroorat hai.",
+  "admin.contentStudio.assessmentMarksDuration": "{marks} marks · {minutes} min",
+  "admin.contentStudio.assessmentPackVersion": "Pack v{version}",
+  "admin.assessments.assessmentOnlyCourseDescription": "Assessment-only course: course → test packs → assessments → ordered question snapshots. Imported tests aur unke question/answer review ko yahan inspect/correct karein. Publishing gated rahega.",
+  "admin.assessments.backToContentStudio": "Content Studio par wapas"
 }
