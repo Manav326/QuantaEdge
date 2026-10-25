@@ -8,7 +8,10 @@
   a dry run only. With -Apply it validates that the database URL targets localhost, asks for
   explicit confirmation, then calls scripts/import_tre4_course.py. The Python importer owns
   the database transaction and checks required migrations, including V199.
-  This script never publishes assessments. -SubmitForReview is a separate opt-in.
+  Import always persists assessments, packs and the first course release in DRAFT. Optional -SubmitForReview
+  asks the importer to advance an already-existing DRAFT release to IN_QUALITY_REVIEW only when the
+  database confirms all question/answer review gates and every assessment/test pack is PUBLISHED.
+  It never marks tests/packs published or approves a release.
 
 .EXAMPLE
   .\scripts\import_tre4_local.ps1
@@ -21,7 +24,8 @@
 
 .EXAMPLE
   .\scripts\import_tre4_local.ps1 -Apply -SubmitForReview
-  Queues the draft release for HRMS quality review; does not approve or publish it.
+  After all assessments and packs were human-reviewed and published through Admin Web, advances an existing DRAFT release to IN_QUALITY_REVIEW. A first import always persists DRAFT first.
+
 #>
 [CmdletBinding()]
 param(
@@ -104,10 +108,6 @@ function Resolve-LocalDatabase {
 }
 
 try {
-    if ($SubmitForReview -and -not $Apply) {
-        Stop-WithMessage "-SubmitForReview requires -Apply."
-    }
-
     $gitCommand = Get-Command git -ErrorAction SilentlyContinue
     if (-not $gitCommand) {
         Stop-WithMessage "Git was not found. Run this script from a QuantaEdge Git checkout."
@@ -187,13 +187,17 @@ try {
     Write-Host "Validating the real source archive (dry run; no database writes)..." -ForegroundColor Cyan
     Invoke-CheckedPython -Arguments @($importer, "--archive", $archiveFullPath, "--register", $sourceRegister)
 
+    if ($SubmitForReview -and -not $Apply) {
+        Stop-WithMessage "-SubmitForReview requires -Apply."
+    }
+
     if (-not $Apply) {
         Write-Host ""
         Write-Host "DRY RUN COMPLETE. No database connection or database writes were performed." -ForegroundColor Green
         Write-Host "To import locally, set TRE4_DATABASE_URL to your localhost PostgreSQL URL and rerun with -Apply."
         Write-Host 'Example: $env:TRE4_DATABASE_URL = "postgresql://quantaedge:YOUR_LOCAL_DB_PASSWORD@localhost:5432/quantaedge"'
         Write-Host ".\scripts\import_tre4_local.ps1 -Apply"
-        Write-Host "Optional review queue submission: add -SubmitForReview. This does not approve or publish the course."
+        Write-Host "The importer defaults to DRAFT. Add -SubmitForReview only after question review and assessment/test-pack publication have completed; readiness is rechecked by the database." 
         return
     }
 
@@ -211,9 +215,9 @@ try {
     Write-Host "Target database: $($database.Host):$($database.Port)/$($database.Database)" -ForegroundColor Yellow
     Write-Host "The importer uses one transaction and refuses to proceed if required migrations/readiness functions are missing."
     if ($SubmitForReview) {
-        Write-Host "Review workflow: the release may be queued as IN_QUALITY_REVIEW; this is NOT approval or publication." -ForegroundColor Yellow
+        Write-Host "Lifecycle guard: DRAFT -> IN_QUALITY_REVIEW is allowed only for an existing DRAFT release when database readiness confirms every assessment and pack is PUBLISHED and question/answer review gates pass. No approval or Marketplace publication is triggered." -ForegroundColor Yellow
     } else {
-        Write-Host "Review workflow: the release will remain a DRAFT. No HRMS review submission will be made."
+        Write-Host "Lifecycle guard: new assessments, test packs and a new course release remain DRAFT. No release submission, approval or Marketplace publication is triggered." -ForegroundColor Yellow
     }
 
     if (-not $Yes) {
@@ -234,8 +238,8 @@ try {
         Write-Host "Applying TRE-4 data to the confirmed local database..." -ForegroundColor Cyan
         Invoke-CheckedPython -Arguments $applyArguments
         Write-Host ""
-        Write-Host "IMPORT SUCCEEDED. Read the JSON report above and verify the draft course under Admin Web / Content Studio." -ForegroundColor Green
-        Write-Host "This script did not publish questions or make the course visible to learners."
+        Write-Host "IMPORT/REQUEST SUCCEEDED. Read the JSON report above for actual assessment, pack and release states. Review/publish tests in Admin Web, then use -SubmitForReview only for the ready DRAFT release." -ForegroundColor Green
+        Write-Host "This script did not publish questions or packs, perform HRMS quality approval, approve the origin release, or publish a Marketplace offer."
     } finally {
         if ($hadPreviousTre4Url) {
             $env:TRE4_DATABASE_URL = $previousTre4Url

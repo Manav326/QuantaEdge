@@ -14,6 +14,62 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("/api/v1/admin/assessments/import-package", page)
         self.assertIn("student delivery", page.lower())
 
+    def test_content_studio_exposes_classless_assessment_hierarchy_and_deep_linked_question_review(self):
+        content_page = (ROOT / "apps/admin/app/content/page.tsx").read_text(encoding="utf-8")
+        assessment_page = (ROOT / "apps/admin/app/assessments/page.tsx").read_text(encoding="utf-8")
+        self.assertIn("isAssessmentCourse", content_page)
+        self.assertIn("test packs → assessments/tests → ordered question snapshots", content_page)
+        self.assertIn("/assessments?courseId=", content_page)
+        self.assertIn("reviewAssessmentId", content_page)
+        self.assertIn("source_package_id", content_page)
+        self.assertIn("setAssessmentRows", content_page)
+        self.assertIn("requestedPackageReviewRef", assessment_page)
+        self.assertIn("loadImportedPackageQuestions(assessmentId)", assessment_page)
+        self.assertIn("/package-questions?courseId=", assessment_page)
+
+        api_content = (ROOT / "services/api/src/main/java/com/quantaedge/api/AdminContentController.java").read_text(encoding="utf-8")
+        route_start = api_content.index('@GetMapping("/courses/{courseId}/assessment-inventory")')
+        route_end = api_content.index('  @GetMapping\n  public List<Map<String, Object>> list(', route_start)
+        inventory_route = api_content[route_start:route_end]
+        self.assertIn('authorize(token, context, "CONTENT_VIEW")', inventory_route)
+        self.assertIn("requireAssignedCourse(courseId,institutionId)", inventory_route)
+        self.assertIn("course_assessment_pack_item", inventory_route)
+        self.assertNotIn("assessment_staff_assignment", inventory_route)
+
+    def test_assessment_only_course_hides_curriculum_controls_and_scopes_imported_review(self):
+        content_page = (ROOT / "apps/admin/app/content/page.tsx").read_text(encoding="utf-8")
+        assessment_page = (ROOT / "apps/admin/app/assessments/page.tsx").read_text(encoding="utf-8")
+        assessment_controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/AssessmentController.java").read_text(encoding="utf-8")
+
+        # Assessment-only courses use their native course → test-pack → assessment
+        # hierarchy and route to the course assessment workspace, not K–12 chapter creation.
+        self.assertIn("{isAssessmentCourse ? (", content_page)
+        self.assertIn("'/api/v1/admin/content/courses/'+encodeURIComponent(selectedProgram)+'/assessment-inventory'", content_page)
+        self.assertIn("assessmentRows.map", content_page)
+        chapter_create_at = content_page.index("onClick={()=>beginCreate('chapter')}")
+        assessment_branch_at = content_page.rfind("{isAssessmentCourse", 0, chapter_create_at)
+        self.assertGreater(assessment_branch_at, -1)
+        create_branch = content_page[assessment_branch_at:chapter_create_at]
+        self.assertIn("assessmentOpenStudio", create_branch)
+        self.assertIn(": <>", create_branch)
+
+        # No default Maths filter leaks into classless assessment-only queries or UI.
+        self.assertIn("const [subjectCode,setSubjectCode]=useState('')", assessment_page)
+        self.assertIn("if(!isAssessmentOnlyCourse&&subjectCode)params.set('subjectCode',subjectCode);", assessment_page)
+        self.assertIn("{!isAssessmentOnlyCourse && (", assessment_page)
+
+        # The Content Studio deep link is server-authorized by the requested course,
+        # tenant and editable-source rules; it does not depend on a grader assignment.
+        self.assertIn("get('reviewAssessmentId')", assessment_page)
+        self.assertIn("loadImportedPackageQuestions(assessmentId)", assessment_page)
+        route_start = assessment_controller.index('@GetMapping("/admin/assessments/{assessmentId}/package-questions")')
+        route_end = assessment_controller.index('@PatchMapping("/admin/assessments/{assessmentId}/package-questions/{sequenceNo}/review")', route_start)
+        review_route = assessment_controller[route_start:route_end]
+        self.assertIn('authorization.requirePermission(context,"CONTENT_REVIEW")', review_route)
+        self.assertIn("requireAssessmentInCourse(assessmentId,courseId,tenant)", review_route)
+        self.assertIn("requireEditableCourse(courseId,tenant)", review_route)
+        self.assertIn("source_package_id is not null", review_route)
+
     def test_assessment_course_creation_is_type_specific_and_tenant_owned(self):
         service = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseAuthoringService.java").read_text(encoding="utf-8")
         self.assertIn('"ASSESSMENT".equals(type)', service)
@@ -85,7 +141,8 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
     def test_quality_gate_has_actionable_preview_recovery_without_bypassing_fingerprint(self):
         hrms_ui = (ROOT / "apps/people/app/institutions/MarketplaceLaunchStepper.tsx").read_text(encoding="utf-8")
         review_controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/PlatformInstitutionController.java").read_text(encoding="utf-8")
-        self.assertIn("const previewNeedsLoading", hrms_ui)
+        self.assertIn("const previewNeedsLoading = !preview && !previewLoadInProgress", hrms_ui)
+        self.assertIn("A note is required both to approve and to return this release for correction", hrms_ui)
         self.assertIn("Load exact submitted content", hrms_ui)
         self.assertIn("onClick={() => void toggleReviewContent(release)}", hrms_ui)
         self.assertIn("previewFingerprintMismatch", hrms_ui)
@@ -149,6 +206,17 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("questions.forEachIndexed", android)
         self.assertIn("One at a time", android)
         self.assertIn("practiceQuestionIndex = (practiceIndex + 1).coerceAtMost(incorrectQuestions.lastIndex)", android)
+
+
+class HrmQualityRecoveryContractTests(unittest.TestCase):
+    def test_recovery_preview_is_available_while_authoritative_gates_remain(self):
+        root = Path(__file__).resolve().parents[1]
+        stepper = (root / "apps/people/app/institutions/MarketplaceLaunchStepper.tsx").read_text(encoding="utf-8")
+        self.assertIn("const previewNeedsLoading = !preview", stepper)
+        self.assertIn("Load exact submitted content", stepper)
+        self.assertIn("release.course_type_publish_ready === true", stepper)
+        self.assertIn("preview.courseTypePublishReady !== true", stepper)
+        self.assertIn("course_release_fingerprint_current(?,?,?)", (root / "services/api/src/main/java/com/quantaedge/api/PlatformInstitutionController.java").read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

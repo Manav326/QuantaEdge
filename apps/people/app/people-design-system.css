@@ -84,7 +84,7 @@ button:disabled,
 [aria-disabled="true"] {
   cursor: not-allowed;
   opacity: 1;
-  filter: saturate(.55);
+  filter: none;
 }
 
 .qe-people-skip-link {
@@ -1551,3 +1551,18 @@ button:disabled,
 .qe-people-login-brand-lockup .qe-brand__logo{max-width:300px;max-height:68px}
 .qe-people-mobile-brand-lockup .qe-brand__logo{max-width:180px;max-height:42px}
 @media(max-width:620px){.qe-people-login-brand-lockup .qe-brand__logo{max-width:230px;max-height:50px}}
+
+
+/* HRMS workflow controls use a clear disabled surface instead of opacity haze.
+   Authored invoice stationery and rich-notification documents keep their own styling. */
+.qe-people-workspace .qe-people-page-slot button:disabled:not([data-qe-invoice-document] *):not([data-qe-authored-notification] *),
+.qe-people-workspace .qe-people-page-slot [role="button"][aria-disabled="true"]:not([data-qe-invoice-document] *):not([data-qe-authored-notification] *) {
+  border-color: var(--qe-color-border, var(--qe-people-line, #d0d5dd));
+  background: var(--qe-color-surface-subtle, var(--qe-people-surface-subtle, #f2f4f7));
+  color: var(--qe-color-text-muted, var(--qe-people-muted, #667085));
+  box-shadow: none;
+  opacity: 1;
+  filter: none;
+  transform: none;
+  cursor: not-allowed;
+}
