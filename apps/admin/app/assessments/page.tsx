@@ -103,14 +103,14 @@ function activateAccessibleReviewDialog(dialog:HTMLElement,onEscape:()=>void):()
   let branch:HTMLElement|null=dialog;
   document.body.style.overflow='hidden';
   while(branch?.parentElement&&branch.parentElement!==document.body){
-    const parent:HTMLElement=branch.parentElement as HTMLElement;
-    for(const sibling of Array.from(parent.children)){
+    const nextAncestor: HTMLElement = branch.parentElement;
+    for(const sibling of Array.from(nextAncestor.children)){
       if(sibling!==branch&&sibling instanceof HTMLElement){
         inertedElements.push({element:sibling,wasInert:sibling.inert});
         sibling.inert=true;
       }
     }
-    branch=parent;
+    branch=nextAncestor;
   }
   const selector='a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
   const focusable=()=>Array.from(dialog.querySelectorAll<HTMLElement>(selector)).filter(el=>!el.hidden&&el.getAttribute('aria-hidden')!=='true');
