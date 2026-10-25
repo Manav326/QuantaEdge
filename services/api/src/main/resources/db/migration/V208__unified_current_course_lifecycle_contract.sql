@@ -115,6 +115,7 @@ AS $function$
      AND destination.status = 'ACTIVE'
     WHERE offer.id = p_offer_id
       AND offer.status <> 'ARCHIVED'
+      AND offer.obsolete_at IS NULL
       AND offer.legacy_migration = false
       AND release.release_state = 'SHAREABLE'
       AND release.legacy_migration = false
@@ -300,6 +301,7 @@ AS $function$
      AND destination.status = 'ACTIVE'
     WHERE offer.id = p_offer_id
       AND offer.status = 'PUBLISHED'
+      AND offer.obsolete_at IS NULL
       AND offer.legacy_migration = false
       AND offer.hrms_approved_by_staff_id IS NOT NULL
       AND offer.hrms_approved_at IS NOT NULL
@@ -338,6 +340,7 @@ AS $function$
          AND newer_identity.course_type_code = newer_program.course_type_code
         WHERE newer_offer.institution_id = offer.institution_id
           AND newer_offer.status = 'PUBLISHED'
+          AND newer_offer.obsolete_at IS NULL
           AND newer_offer.legacy_migration = false
           AND newer_offer.hrms_approved_by_staff_id IS NOT NULL
           AND newer_offer.hrms_approved_at IS NOT NULL
@@ -488,18 +491,21 @@ SELECT offer.institution_id, offer.course_release_id, offer.assignment_id, offer
        ),
        now()
 FROM institution_marketplace_offer offer
-WHERE offer.status <> 'ARCHIVED'
-  AND (
-    offer.legacy_migration = true
-    OR (
-      NOT qe_current_course_offer_revision(offer.id)
-      AND NOT qe_marketplace_offer_publicly_sellable(offer.id)
+WHERE (
+    offer.status <> 'ARCHIVED'
+    AND (
+      offer.legacy_migration = true
+      OR (
+        NOT qe_current_course_offer_revision(offer.id)
+        AND NOT qe_marketplace_offer_publicly_sellable(offer.id)
+      )
+      OR (
+        offer.status = 'PUBLISHED'
+        AND NOT qe_marketplace_offer_publicly_sellable(offer.id)
+      )
     )
-    OR (
-      offer.status = 'PUBLISHED'
-      AND NOT qe_marketplace_offer_publicly_sellable(offer.id)
-    )
-  );
+  )
+  OR (offer.status = 'ARCHIVED' AND offer.obsolete_at IS NULL);
 
 UPDATE institution_marketplace_offer offer
 SET status = 'ARCHIVED',
@@ -507,7 +513,8 @@ SET status = 'ARCHIVED',
     obsolete_reason = coalesce(offer.obsolete_reason,
       'OBSOLETE: offer is not the current eligible revision or is missing required HRMS publication approval; historical transaction references are retained.'),
     updated_at = now()
-WHERE offer.legacy_migration = true
+WHERE offer.status = 'ARCHIVED'
+   OR offer.legacy_migration = true
    OR (
      NOT qe_current_course_offer_revision(offer.id)
      AND NOT qe_marketplace_offer_publicly_sellable(offer.id)
@@ -644,7 +651,8 @@ BEGIN
     RETURN NEW;
   END IF;
 
-  IF NEW.legacy_migration
+  IF NEW.obsolete_at IS NOT NULL
+     OR NEW.legacy_migration
      OR NEW.hrms_approved_by_staff_id IS NULL
      OR NEW.hrms_approved_at IS NULL
      OR NEW.hrms_published_by_staff_id IS NULL
@@ -763,6 +771,12 @@ AS $function$
 BEGIN
   IF NEW.status IN ('ARCHIVED','REJECTED') THEN
     RETURN NEW;
+  END IF;
+
+  IF NEW.obsolete_at IS NOT NULL THEN
+    RAISE EXCEPTION
+      'OBSOLETE_COURSE_OFFER: an archived offer revision is terminal; create a new source release and HRMS-controlled listing instead of reviving it.'
+      USING ERRCODE = '55000';
   END IF;
 
   IF NEW.legacy_migration OR NOT EXISTS (
