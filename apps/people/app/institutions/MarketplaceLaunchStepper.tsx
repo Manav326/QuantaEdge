@@ -483,15 +483,15 @@ export default function MarketplaceLaunchStepper({
   const assessmentReviewContent = assessmentReviewTarget ? reviewContent[assessmentReviewTarget.releaseId] : undefined;
   const assessmentReviewAssessment = assessmentReviewContent?.assessments?.find(item=>item.assessment_id===assessmentReviewTarget?.assessmentId);
   const assessmentReviewQuestions = assessmentReviewAssessment?.questions || [];
-  const assessmentReviewSearchText = assessmentReviewSearch.trim().toLocaleLowerCase();
-  const filteredAssessmentReviewQuestions = assessmentReviewQuestions.filter(question=>{
+  const assessmentReviewSearchText = useMemo(()=>assessmentReviewSearch.trim().toLocaleLowerCase(),[assessmentReviewSearch]);
+  const filteredAssessmentReviewQuestions = useMemo(()=>assessmentReviewQuestions.filter(question=>{
     const snapshot=question.question_snapshot||{};
     const status=hrmsQuestionReviewStatus(snapshot);
     if(assessmentReviewStatusFilter!=='ALL'&&status!==(assessmentReviewStatusFilter==='PENDING'?'PENDING_HUMAN_REVIEW':assessmentReviewStatusFilter))return false;
     if(!assessmentReviewSearchText)return true;
     return [question.sequence_no,snapshot.prompt,snapshot.prompt_i18n?.en,snapshot.prompt_i18n?.hi]
       .some(value=>String(value??'').toLocaleLowerCase().includes(assessmentReviewSearchText));
-  });
+  }),[assessmentReviewQuestions,assessmentReviewSearchText,assessmentReviewStatusFilter]);
   const activeAssessmentReviewQuestion=filteredAssessmentReviewQuestions.find(question=>question.sequence_no===assessmentReviewTarget?.sequenceNo)
     ||filteredAssessmentReviewQuestions[0];
   useEffect(()=>{
@@ -499,7 +499,7 @@ export default function MarketplaceLaunchStepper({
     if(!filteredAssessmentReviewQuestions.some(question=>question.sequence_no===assessmentReviewTarget.sequenceNo)){
       setAssessmentReviewTarget(current=>current?{...current,sequenceNo:filteredAssessmentReviewQuestions[0].sequence_no}:current);
     }
-  },[assessmentReviewTarget?.releaseId,assessmentReviewTarget?.assessmentId,assessmentReviewTarget?.sequenceNo,assessmentReviewSearch,assessmentReviewStatusFilter,assessmentReviewQuestions]);
+  },[assessmentReviewTarget?.releaseId,assessmentReviewTarget?.assessmentId,assessmentReviewTarget?.sequenceNo,filteredAssessmentReviewQuestions]);
   const activeAssessmentReviewSnapshot=activeAssessmentReviewQuestion?.question_snapshot||{};
   const activeAssessmentReviewAnswer=activeAssessmentReviewSnapshot.answer_payload||{};
   const activeAssessmentReviewAnswerKeys=activeAssessmentReviewAnswer.kind==='OPTION'
