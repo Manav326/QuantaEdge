@@ -309,7 +309,9 @@ public class CourseMarketplaceLaunchController {
     assertInstitution(institutionId);
     List<Long> assignments=jdbc.queryForList("""
         select a.id from institution_course_assignment a
+        join institution_course_release ar on ar.id=a.course_release_id
         where a.institution_id=? and a.status='ASSIGNED'
+          and (a.assignment_source <> 'ORIGIN' or ar.release_state='SHAREABLE')
         order by a.assigned_at desc,a.id desc
         """,Long.class,institutionId);
     List<Map<String,Object>> items=new ArrayList<>();
