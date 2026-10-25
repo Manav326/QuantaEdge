@@ -59,6 +59,38 @@ public class ParentCoursePurchaseRequestController {
       join institution_tenant tenant_scope on tenant_scope.id=o.institution_id and tenant_scope.status='ACTIVE'
       join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
       where o.institution_id=? and o.course_id=? and o.status='PUBLISHED' and o.price_paise>0
+        and o.hrms_published_by_staff_id is not null
+        and release.release_state='SHAREABLE'
+        and course_marketplace_content_type_ready(release.program_id)
+        and course_release_fingerprint_current(release.program_id,release.content_fingerprint::text,release.updated_at)
+        and not exists (
+          select 1
+          from institution_marketplace_offer newer_offer
+          join institution_course_assignment newer_assignment
+            on newer_assignment.id=newer_offer.assignment_id
+           and newer_assignment.institution_id=newer_offer.institution_id
+           and newer_assignment.status='ASSIGNED'
+          join institution_course_release newer_release
+            on newer_release.id=newer_offer.course_release_id
+           and newer_release.program_id=newer_offer.course_id
+          join curriculum_program newer_program
+            on newer_program.id=newer_release.program_id
+           and newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'
+           and newer_program.course_identity_id=p.course_identity_id
+           and (
+             newer_program.content_version_no>p.content_version_no
+             or (newer_program.content_version_no=p.content_version_no and (
+               newer_release.release_version>release.release_version
+               or (newer_release.release_version=release.release_version and newer_release.id>release.id)
+             ))
+           )
+          where newer_offer.institution_id=o.institution_id
+            and newer_offer.status='PUBLISHED'
+            and newer_offer.hrms_published_by_staff_id is not null
+            and newer_release.release_state='SHAREABLE'
+            and course_marketplace_content_type_ready(newer_release.program_id)
+            and course_release_fingerprint_current(newer_release.program_id,newer_release.content_fingerprint::text,newer_release.updated_at)
+        )
       """, institutionId, courseId);
     if (publishedOffers.isEmpty()) throw new IllegalArgumentException("This paid course is not currently available to the selected institution.");
     long institutionOfferId = ((Number) publishedOffers.getFirst().get("institution_offer_id")).longValue();
