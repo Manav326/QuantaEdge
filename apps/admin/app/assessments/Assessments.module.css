@@ -105,3 +105,121 @@
 .certificateValid,.certificateRevoked{display:inline-flex;align-items:center;min-height:25px;padding:5px 8px;border-radius:99px;font-size:8px;font-weight:900;letter-spacing:.4px}
 .certificateValid{background:#e7f8ef;color:#176044}.certificateRevoked{background:#fff0ef;color:#9a2828}
 @media(max-width:820px){.certificatePanel{grid-template-columns:1fr}.certificateRecordActions{justify-content:flex-start}}
+
+
+/* Dedicated full-screen portable assessment review workspace */
+.importedReviewLaunch{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:18px;padding:16px;border:1px solid #f0d2bd;border-radius:13px;background:#fffaf6}
+.importedReviewLaunch>div:first-child{display:grid;gap:5px;min-width:0}
+.importedReviewLaunch>div:first-child>span{font-size:8px;font-weight:900;letter-spacing:1.3px;color:#ad4519}
+.importedReviewLaunch h3{margin:0;color:#202e46;font-size:14px}
+.importedReviewLaunch p{margin:0;color:#68758a;font-size:10px;line-height:1.6}
+.importedReviewLaunchActions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.assessmentReviewBackdrop{position:fixed;z-index:1400;inset:0;width:100vw;height:100vh;height:100dvh;overflow:hidden;background:#f4f6fa;color:#202e46}
+.assessmentReviewWorkspace{display:grid;grid-template-columns:276px minmax(0,1fr);width:100%;height:100%;min-height:0;background:#f7f9fc}
+.assessmentReviewSidebar{display:flex;flex-direction:column;min-width:0;min-height:0;background:#172239;color:#fff;border-right:1px solid #29364d}
+.reviewSidebarHeader{padding:23px 18px 15px;border-bottom:1px solid #ffffff1b}
+.reviewSidebarHeader>span,.assessmentReviewHeader>div>span{font-size:9px;font-weight:900;letter-spacing:1.45px;color:#f4b58c}
+.reviewSidebarHeader h2{margin:7px 0 4px;font-size:19px;letter-spacing:-.45px}
+.reviewSidebarHeader p{margin:0;color:#c3ccda;font-size:10px;line-height:1.5}
+.reviewProgressTrack{height:6px;margin-top:15px;border-radius:99px;background:#ffffff20;overflow:hidden}
+.reviewProgressTrack>span{display:block;height:100%;border-radius:inherit;background:#fb923c;transition:width .15s}
+.reviewProgressLabels{display:flex;justify-content:space-between;gap:8px;margin-top:8px;font-size:9px;color:#d5dce7}
+.reviewProgressLabels b{color:#fff}
+.reviewNavigatorTools{display:grid;gap:8px;padding:12px;border-bottom:1px solid #ffffff1b}
+.reviewNavigatorTools input,.reviewNavigatorTools select{width:100%;min-width:0;padding:10px;border:1px solid #ffffff26;border-radius:9px;background:#202e46;color:#fff;font:inherit;font-size:11px;outline-offset:2px}
+.reviewNavigatorTools input::placeholder{color:#abb6c7}
+.reviewQuestionNav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start;gap:6px;padding:10px;overflow-y:auto;overscroll-behavior:contain}
+.reviewQuestionNavItem{display:grid;grid-template-columns:24px minmax(0,1fr);align-items:center;column-gap:6px;row-gap:2px;min-width:0;padding:8px;border:1px solid #ffffff13;border-radius:9px;background:#ffffff08;color:#e1e7f0;text-align:left;cursor:pointer}
+.reviewQuestionNavItem:hover{border-color:#f5b58a;background:#ffffff12}
+.reviewQuestionNavItemActive{border-color:#fb923c;background:#3a2a23;box-shadow:inset 0 0 0 1px #fb923c35}
+.reviewQuestionNavItem>span{grid-row:span 2;display:grid;place-items:center;width:24px;height:24px;border-radius:7px;background:#ffffff12;font-size:10px;font-weight:850}
+.reviewQuestionNavItem>b{overflow:hidden;text-overflow:ellipsis;font-size:10px}
+.reviewQuestionNavItem>small{overflow:hidden;text-overflow:ellipsis;font-size:8px;color:#b8c2d2}
+.reviewQuestionNavItem:has(small){ }
+.reviewNavigatorEmpty{grid-column:1/-1;padding:14px;color:#c5cedb;font-size:11px;line-height:1.6}
+.assessmentReviewMain{display:flex;flex-direction:column;min-width:0;min-height:0;height:100%;overflow:hidden}
+.assessmentReviewHeader{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding:17px clamp(16px,2.2vw,32px);border-bottom:1px solid #e2e7ef;background:#fff}
+.assessmentReviewHeader h1{margin:5px 0 4px;font-size:21px;line-height:1.25;letter-spacing:-.65px;color:#19253c}
+.assessmentReviewHeader p{margin:0;color:#6f7b90;font-size:11px;line-height:1.6}
+.reviewClose{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;border:1px solid #dfe5ed;border-radius:10px;background:#fff;color:#4b596e;font-size:25px;cursor:pointer}
+.reviewClose:hover{border-color:#e69b70;color:#9a3412;background:#fff7f1}
+.reviewWorkspaceError{flex:0 0 auto;margin:10px 18px 0;padding:10px 13px;border:1px solid #f0c1b8;border-radius:9px;background:#fff4f1;color:#9f3324;font-size:11px;line-height:1.55}
+.assessmentReviewContent{flex:1;min-height:0;overflow:auto;padding:clamp(14px,2vw,26px);overscroll-behavior:contain}
+.reviewWorkspaceEmpty{display:grid;place-items:center;flex:1;padding:30px;color:#6f7b90;font-size:13px;text-align:center}
+.reviewQuestionTitleBar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:15px}
+.reviewQuestionTitleBar>div>span{font-size:9px;font-weight:900;letter-spacing:1.2px;color:#b4471a}
+.reviewQuestionTitleBar h2{margin:4px 0;font-size:19px;color:#1f2d44;letter-spacing:-.4px}
+.reviewQuestionTitleBar p{margin:0;color:#7b869a;font-size:10px}
+.reviewStatusPill{display:inline-flex;align-items:center;justify-content:center;padding:7px 10px;border-radius:999px;font-size:9px;font-weight:900;letter-spacing:.4px;white-space:nowrap}
+.reviewStatusPending{background:#fff0e4;color:#9b421a}
+.reviewStatusApproved{background:#e4f8ed;color:#18794e}
+.reviewStatusRejected{background:#fff0ef;color:#a12f2f}
+.reviewBilingualGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:stretch}
+.reviewLanguagePanel{display:flex;flex-direction:column;gap:12px;min-width:0;padding:16px;border:1px solid #dfe5ee;border-radius:13px;background:#fff;box-shadow:0 4px 15px #18243a06}
+.reviewLanguageHeader{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:10px;border-bottom:1px solid #edf0f5}
+.reviewLanguageHeader>div{display:flex;align-items:center;gap:9px;min-width:0}
+.reviewLanguageHeader>div>span{display:grid;place-items:center;width:32px;height:32px;border-radius:9px;background:#fff0e5;color:#a43b14;font-size:10px;font-weight:900}
+.reviewLanguageHeader h3{margin:0;font-size:14px;color:#233149}
+.reviewLanguageHeader>small{font-size:9px;color:#8792a4;text-align:right}
+.reviewPrompt{font-size:14px;line-height:1.85;color:#24334b;white-space:pre-wrap;overflow-wrap:anywhere}
+.reviewPrompt em,.reviewMissingLanguage{color:#9b6a4d;font-size:11px;line-height:1.6;font-style:normal}
+.reviewLanguagePanel h4{margin:0;font-size:10px;letter-spacing:.5px;color:#778398;text-transform:uppercase}
+.reviewStimulus{padding:10px 11px;border:1px solid #d9e5f4;border-radius:9px;background:#f5f9ff}
+.reviewStimulus>b{display:block;margin-bottom:5px;color:#45628e;font-size:9px;font-weight:900}
+.reviewStimulus p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;color:#354964;font-size:11px;line-height:1.7}
+.reviewOptions{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.reviewOptions>li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;align-items:start;gap:8px;padding:9px 10px;border:1px solid #e9edf3;border-radius:9px;background:#fbfcfe}
+.reviewOptions>li>span{display:grid;place-items:center;width:25px;height:25px;border:1px solid #e1e6ee;border-radius:7px;background:#fff;color:#606d82;font-size:10px;font-weight:900}
+.reviewOptions>li>p{margin:3px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;color:#36455d;font-size:11px;line-height:1.65}
+.reviewOptions>li>b{font-size:8px;font-weight:900;color:#9a3412;white-space:nowrap}
+.reviewOptions>li.reviewOptionSelected{border-color:#f0b48e;background:#fff8f2}
+.reviewOptions>li.reviewOptionSelected>span{border-color:#e9a77e;background:#c2410c;color:#fff}
+.reviewEditorPanel{display:flex;flex-direction:column;gap:9px;min-width:0;padding:14px;border:1px solid #dfe5ee;border-radius:12px;background:#fff}
+.reviewEditingGrid{display:grid;grid-template-columns:minmax(240px,1.08fr) repeat(2,minmax(0,1fr));gap:12px;margin-top:14px;align-items:stretch}
+.reviewEditorHeader{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.reviewEditorHeader>div>span{font-size:8px;letter-spacing:1.2px;font-weight:900;color:#b4471a}
+.reviewEditorHeader h3{margin:4px 0 0;font-size:12px;color:#26354d}
+.reviewEditorHeader>b{display:inline-flex;padding:5px 7px;border-radius:7px;background:#f1f4f8;color:#536177;font-size:8px}
+.reviewEditorPanel>p{margin:0;color:#7b869a;font-size:10px;line-height:1.55}
+.reviewEditorPanel textarea{display:block;width:100%;min-width:0;min-height:110px;resize:vertical;border:1px solid #dce2eb;border-radius:9px;padding:10px;background:#fff;color:#26344b;font:11px/1.65 inherit;outline-offset:2px}
+.reviewEditorPanel textarea[spellcheck="false"]{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:11px}
+.reviewEditorPanel textarea:focus{border-color:#f29b6c;outline:2px solid #f29b6c1c}
+.reviewEditorPanel textarea:disabled{background:#f6f7f9;color:#929bad}
+.reviewEditorPanel>small{font-size:9px;line-height:1.55;color:#8490a3}
+.assessmentReviewFooter{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px clamp(14px,2vw,24px);border-top:1px solid #e0e6ef;background:#fff;box-shadow:0 -4px 15px #17223905}
+.reviewFooterNavigation,.reviewFooterActions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.reviewFooterNavigation>span{font-size:10px;font-weight:750;color:#657187;white-space:nowrap}
+.reviewFooterNavigation button,.reviewFooterActions button{min-height:35px}
+.reviewFooterActions{justify-content:flex-end}
+@media(max-width:1100px){
+  .assessmentReviewWorkspace{grid-template-columns:230px minmax(0,1fr)}
+  .reviewEditingGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .reviewEditorPanel:first-child{grid-column:1/-1}
+}
+@media(max-width:760px){
+  .importedReviewLaunch{align-items:stretch;flex-direction:column}
+  .importedReviewLaunchActions{justify-content:flex-start}
+  .assessmentReviewWorkspace{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}
+  .assessmentReviewSidebar{max-height:190px;border-right:0;border-bottom:1px solid #29364d}
+  .reviewSidebarHeader{padding:10px 13px}
+  .reviewSidebarHeader h2{display:inline;margin:0 8px;font-size:14px}
+  .reviewSidebarHeader p{display:none}
+  .reviewProgressTrack{margin-top:8px}
+  .reviewNavigatorTools{grid-template-columns:minmax(0,1fr) minmax(110px,.6fr);padding:8px}
+  .reviewNavigatorTools input,.reviewNavigatorTools select{padding:8px;font-size:10px}
+  .reviewQuestionNav{display:flex;gap:6px;padding:7px;overflow-x:auto;overflow-y:hidden}
+  .reviewQuestionNavItem{flex:0 0 86px;grid-template-columns:20px minmax(0,1fr);padding:6px}
+  .reviewQuestionNavItem>span{width:20px;height:20px}
+  .reviewQuestionNavItem>small{font-size:7px}
+  .assessmentReviewHeader{padding:12px}
+  .assessmentReviewHeader h1{font-size:16px}
+  .assessmentReviewHeader p{font-size:10px}
+  .assessmentReviewContent{padding:12px}
+  .reviewBilingualGrid,.reviewEditingGrid{grid-template-columns:minmax(0,1fr)}
+  .reviewEditorPanel:first-child{grid-column:auto}
+  .reviewLanguagePanel{padding:12px}
+  .reviewQuestionTitleBar{align-items:flex-start;flex-direction:column}
+  .assessmentReviewFooter{align-items:stretch;flex-direction:column;padding:9px}
+  .reviewFooterNavigation,.reviewFooterActions{justify-content:space-between}
+  .reviewFooterActions button{flex:1;white-space:normal;padding:8px}
+}
