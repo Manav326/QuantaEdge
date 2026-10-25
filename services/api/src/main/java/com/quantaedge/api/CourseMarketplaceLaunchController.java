@@ -46,6 +46,10 @@ public class CourseMarketplaceLaunchController {
    * Read-only HRMS preview of the exact release currently in quality review. Assessment
    * questions and answer-review metadata are read from the release's course graph; the source's
    * latest draft is never substituted for the submitted release.
+   *
+   * The release quality decision is submitted separately through PlatformInstitutionController
+   * with reviewedContentFingerprint; this read-only endpoint only returns the fingerprint and
+   * the exact submitted content to compare before making that decision.
    */
   @GetMapping("/{institutionId}/course-releases/{releaseId}/review-content")
   public Map<String,Object> reviewReleaseContent(
