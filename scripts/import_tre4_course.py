@@ -415,21 +415,30 @@ def ensure_schema(cursor: Any) -> None:
                to_regprocedure('public.course_content_fingerprint(bigint)'),
                to_regprocedure('public.assessment_only_course_ready(bigint)'),
                to_regprocedure('public.tre4_source_package_ready(bigint)'),
+               to_regprocedure('public.assessment_only_course_publish_ready(bigint)'),
+               to_regprocedure('public.course_marketplace_content_type_ready(bigint)'),
+               to_regprocedure('public.assessment_question_snapshot_publish_ready(jsonb)'),
                pg_get_functiondef(to_regprocedure('public.assign_assessment_public_id()')),
                pg_get_functiondef(to_regprocedure('public.course_content_fingerprint(bigint)')),
                pg_get_functiondef(to_regprocedure('public.assessment_only_course_ready(bigint)')),
-               pg_get_functiondef(to_regprocedure('public.tre4_source_package_ready(bigint)'))
+               pg_get_functiondef(to_regprocedure('public.tre4_source_package_ready(bigint)')),
+               pg_get_functiondef(to_regprocedure('public.assessment_only_course_publish_ready(bigint)')),
+               pg_get_functiondef(to_regprocedure('public.course_marketplace_content_type_ready(bigint)')),
+               pg_get_functiondef(to_regprocedure('public.assessment_question_snapshot_publish_ready(jsonb)'))
     """)
     row = cursor.fetchone()
     if not row or any(value is None for value in row):
         raise ImportErrorSafe(
-            "Required migrations V168, V177, V180, V198, and V199 are missing. "
+            "Required migrations V168, V177, V180, V198, V199, V200, V202, and V204 are missing. "
             "Start the API against this database and verify Flyway completes before importing."
         )
-    assessment_id_definition = str(row[9] or "")
-    fingerprint_definition = str(row[10] or "")
-    generic_readiness_definition = str(row[11] or "")
-    tre4_readiness_definition = str(row[12] or "")
+    assessment_id_definition = str(row[12] or "")
+    fingerprint_definition = str(row[13] or "")
+    generic_readiness_definition = str(row[14] or "")
+    tre4_readiness_definition = str(row[15] or "")
+    publish_readiness_definition = str(row[16] or "")
+    course_type_readiness_definition = str(row[17] or "")
+    answer_gate_definition = str(row[18] or "")
 
     # V198 is essential: classless ASSESSMENT tests still need their registered course-scoped IDs.
     if "A subjectless assessment requires an assessment-only or competitive course" not in assessment_id_definition:
@@ -458,6 +467,22 @@ def ensure_schema(cursor: Any) -> None:
         raise ImportErrorSafe(
             "Flyway V199 is required: TRE source-package readiness must validate test packs, not school chapters."
         )
+    if "assessment_question_snapshot_publish_ready(aq.question_snapshot)" not in generic_readiness_definition:
+        raise ImportErrorSafe(
+            "Flyway V204 is required: generic assessment readiness must use the typed question/answer review gate."
+        )
+    if "assessment_question_snapshot_publish_ready(aq.question_snapshot)" not in tre4_readiness_definition:
+        raise ImportErrorSafe(
+            "Flyway V204 is required: TRE readiness must use the same typed question/answer review gate."
+        )
+    if "course_marketplace_content_type_ready" not in course_type_readiness_definition or "assessment_only_course_publish_ready" not in course_type_readiness_definition:
+        raise ImportErrorSafe(
+            "Flyway V202 is required: course-type-aware Marketplace readiness must be available for release submission."
+        )
+    if "assessment_question_snapshot_publish_ready" not in answer_gate_definition:
+        raise ImportErrorSafe("Flyway V204 is required: the shared typed assessment question/answer review function is unavailable.")
+    if "assessment_only_course_publish_ready" not in publish_readiness_definition:
+        raise ImportErrorSafe("Flyway V200 is required: generic assessment Marketplace publication readiness is unavailable.")
     if not re.search(
         r"'TRE 3\.0'::varchar,\s*'tre4-bpsc-tre-3-0-computer-science'::varchar,\s*150",
         tre4_readiness_definition,
