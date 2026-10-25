@@ -234,6 +234,17 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertNotIn("TRE 2.0", publish_ready)
         self.assertNotIn("TRE 3.0", publish_ready)
 
+    def test_verified_release_fingerprint_gate_avoids_rehashing_current_releases(self):
+        migration = SCRIPT.parents[1] / "services" / "api" / "src" / "main" / "resources" / "db" / "migration" / "V201__avoid_repeat_fingerprints_for_verified_releases.sql"
+        sql = migration.read_text(encoding="utf-8")
+        self.assertIn("course_release_fingerprint_current", sql)
+        self.assertIn("flyway_schema_history", sql)
+        self.assertIn("version='196' AND success=true", sql)
+        self.assertIn("p_release_updated_at >= v_v196_cutoff - interval '1 minute'", sql)
+        self.assertIn("course_content_fingerprint(p_program_id)", sql,
+                      "Pre-V196 releases must retain the full stale-fingerprint fallback.")
+        self.assertIn("V180 makes the corresponding content graph immutable", sql)
+
     def test_expected_primary_booklet_counts(self):
         self.assertEqual(import_tre4_course.expected_question_count("TRE 1.0"), 120)
         self.assertEqual(import_tre4_course.expected_question_count("TRE 2.0"), 150)
