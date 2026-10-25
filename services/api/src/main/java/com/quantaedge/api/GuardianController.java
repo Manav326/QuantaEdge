@@ -567,6 +567,7 @@ public class GuardianController {
                  and free_assignment.status='ASSIGNED'
                 where free_offer.institution_id=assignment.institution_id
                   and free_offer.course_id=p.id and free_offer.status='PUBLISHED'
+                   and qe_marketplace_offer_publicly_sellable(free_offer.id)
                   and free_offer.price_paise=0 and free_offer.currency='INR') as free_offer
             from curriculum_program p
             join institution_course_assignment assignment on assignment.institution_id=?
@@ -578,7 +579,7 @@ public class GuardianController {
               and (
                 exists(select 1 from institution_marketplace_offer o
                   where o.institution_id=? and o.course_id=p.id and o.assignment_id=assignment.id
-                    and o.status='PUBLISHED')
+                    and o.status='PUBLISHED' and qe_marketplace_offer_publicly_sellable(o.id))
                 or exists(select 1 from student_program_enrollment e
                   where e.institution_id=? and e.student_id=? and e.program_id=p.id
                     and e.status in ('ACTIVE','PAUSED'))
