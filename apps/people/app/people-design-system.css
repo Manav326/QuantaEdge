@@ -1555,8 +1555,8 @@ button:disabled,
 
 /* HRMS workflow controls use a clear disabled surface instead of opacity haze.
    Authored invoice stationery and rich-notification documents keep their own styling. */
-.qe-people-page-slot .qe-people-workspace button:disabled:not([data-qe-invoice-document] *):not([data-qe-authored-notification] *),
-.qe-people-page-slot .qe-people-workspace [role="button"][aria-disabled="true"]:not([data-qe-invoice-document] *):not([data-qe-authored-notification] *) {
+.qe-people-workspace .qe-people-page-slot button:disabled:not([data-qe-invoice-document] *):not([data-qe-authored-notification] *),
+.qe-people-workspace .qe-people-page-slot [role="button"][aria-disabled="true"]:not([data-qe-invoice-document] *):not([data-qe-authored-notification] *) {
   border-color: var(--qe-color-border, var(--qe-people-line, #d0d5dd));
   background: var(--qe-color-surface-subtle, var(--qe-people-surface-subtle, #f2f4f7));
   color: var(--qe-color-text-muted, var(--qe-people-muted, #667085));
