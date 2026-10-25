@@ -584,7 +584,7 @@ public class PlatformInstitutionController {
       if("ASSESSMENT_ONLY".equals(courseDeliveryMode(courseId))) {
         if(!assessmentOnlyCourseReady(courseId))
           throw new ResponseStatusException(HttpStatus.CONFLICT,
-              "The assessment-only release no longer contains the three complete, source-verified TRE paper sets.");
+              "The assessment-only release no longer satisfies the generic published test-pack readiness checks.");
       } else {
         Map<String,Object> contentReadiness=jdbc.queryForMap("""
             select count(distinct s.id) as subject_count,
@@ -715,7 +715,7 @@ public class PlatformInstitutionController {
     if("ASSESSMENT_ONLY".equals(courseDeliveryMode(programId))) {
       if(!assessmentOnlyCourseReady(programId))
         throw new ResponseStatusException(HttpStatus.CONFLICT,
-            "The assessment-only release must contain the three complete, source-verified TRE paper sets. Imported tests remain draft until human review.");
+            "The assessment-only release must contain a complete source-owned test-pack hierarchy. Assessments remain draft until human review.");
     } else {
       Map<String,Object> readiness=jdbc.queryForMap("""
           select count(distinct s.id) as subject_count,
