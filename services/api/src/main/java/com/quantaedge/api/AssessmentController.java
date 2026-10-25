@@ -1012,6 +1012,7 @@ public class AssessmentController {
     }
     if(answer!=null) {
       String kind=String.valueOf(answer.getOrDefault("kind","")).toUpperCase(Locale.ROOT);
+      answer.put("kind",kind);
       Object value=answer.get("value");
       if(!Set.of("OPTION","MULTI_OPTION","TEXT","NUMERIC","ORDER","MATCH").contains(kind)
           && !("UNRESOLVED".equals(kind)&&!"APPROVED".equals(reviewStatus)))
