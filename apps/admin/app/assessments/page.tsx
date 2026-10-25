@@ -799,11 +799,11 @@ export default function AssessmentsPage(){
               <button type="button" className={styles.reviewClose} aria-label={t('admin.assessments.closeReview')} onClick={closeImportedReview}>×</button>
             </header>
             {error&&<div className={styles.reviewWorkspaceError} role="alert">{error}</div>}
-            {!selectedImportedReviewItem?<div className={styles.reviewWorkspaceEmpty} role="status">No questions are available for this draft. Refresh the question list or close this workspace.</div>:<>
+            {!selectedImportedReviewItem?<div className={styles.reviewWorkspaceEmpty} role="status">{t('admin.assessments.noQuestionsInDraft')}</div>:<>
               <div className={styles.assessmentReviewContent}>
                 <div className={styles.reviewQuestionTitleBar}>
                   <div><span>{t('admin.assessments.questionPosition',{current:Math.max(0,filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence)+1),total:filteredImportedReviewItems.length})}</span><h2>{t('admin.assessments.questionNumber',{number:selectedImportedSequence})}</h2>
-                    <p>{String(selectedImportedQuestion.question_type||'Question')} · {String(selectedImportedQuestion.section_code||'Section not specified')} · {String(selectedImportedReviewItem.maxMarks??1)} mark(s)</p>
+                    <p>{t('admin.assessments.reviewQuestionMetadata',{type:selectedImportedQuestion.question_type||t('admin.assessments.defaultQuestionType'),section:selectedImportedQuestion.section_code||t('admin.assessments.unspecifiedSection'),marks:selectedImportedReviewItem.maxMarks??1})}</p>
                   </div>
                   <span className={[styles.reviewStatusPill,
                     importedQuestionStatus(selectedImportedQuestion)==='APPROVED'?styles.reviewStatusApproved:
@@ -814,24 +814,24 @@ export default function AssessmentsPage(){
                 <div className={styles.reviewBilingualGrid}>
                   <section className={styles.reviewLanguagePanel} aria-labelledby="review-english-heading">
                     <div className={styles.reviewLanguageHeader}><div><span>EN</span><h3 id="review-english-heading">English</h3></div><small>{t('admin.assessments.englishVariant')}</small></div>
-                    {localizedValue(selectedImportedQuestion.stimulus_i18n,'en')&&<div className={styles.reviewStimulus}><b>Reading / code stimulus</b><p>{localizedValue(selectedImportedQuestion.stimulus_i18n,'en')}</p></div>}
+                    {localizedValue(selectedImportedQuestion.stimulus_i18n,'en')&&<div className={styles.reviewStimulus}><b>{t('admin.assessments.readingCodeStimulus')}</b><p>{localizedValue(selectedImportedQuestion.stimulus_i18n,'en')}</p></div>}
                     <div className={styles.reviewPrompt}>{importedPrompt(selectedImportedQuestion,'en')||<em>English prompt is not supplied in this package.</em>}</div>
                     <h4>{t('admin.assessments.answerOptions')}</h4>
                     {selectedImportedOptions.length?<ol className={styles.reviewOptions}>{selectedImportedOptions.map((option:any,index:number)=>{
                       const key=String(option.key||option.option_key||String.fromCharCode(65+index));
                       const chosen=selectedImportedAnswerKeys.includes(key);
-                      return <li key={key} className={chosen?styles.reviewOptionSelected:''}><span>{key}</span><p>{importedOptionText(option,'en')||'English option text not supplied.'}</p>{chosen&&<b>{t('admin.assessments.currentAnswerKey')}</b>}</li>;
+                      return <li key={key} className={chosen?styles.reviewOptionSelected:''}><span>{key}</span><p>{importedOptionText(option,'en')||t('admin.assessments.englishOptionMissing')}</p>{chosen&&<b>{t('admin.assessments.currentAnswerKey')}</b>}</li>;
                     })}</ol>:<p className={styles.reviewMissingLanguage}>{t('admin.assessments.noStructuredOptions')}</p>}
                   </section>
                   <section className={styles.reviewLanguagePanel} aria-labelledby="review-hindi-heading">
                     <div className={styles.reviewLanguageHeader}><div><span>हि</span><h3 id="review-hindi-heading">हिंदी</h3></div><small>{t('admin.assessments.hindiVariant')}</small></div>
-                    {localizedValue(selectedImportedQuestion.stimulus_i18n,'hi')&&<div className={styles.reviewStimulus}><b>पठन / कोड सामग्री</b><p>{localizedValue(selectedImportedQuestion.stimulus_i18n,'hi')}</p></div>}
-                    <div className={styles.reviewPrompt} lang="hi">{importedPrompt(selectedImportedQuestion,'hi')||<em>इस पैकेज में हिंदी प्रश्न उपलब्ध नहीं है।</em>}</div>
+                    {localizedValue(selectedImportedQuestion.stimulus_i18n,'hi')&&<div className={styles.reviewStimulus}><b>{t('admin.assessments.hindiStimulus')}</b><p>{localizedValue(selectedImportedQuestion.stimulus_i18n,'hi')}</p></div>}
+                    <div className={styles.reviewPrompt} lang="hi">{importedPrompt(selectedImportedQuestion,'hi')||<em>{t('admin.assessments.hindiPromptMissing')}</em>}</div>
                     <h4>{t('admin.assessments.answerOptions')}</h4>
                     {selectedImportedOptions.length?<ol className={styles.reviewOptions} lang="hi">{selectedImportedOptions.map((option:any,index:number)=>{
                       const key=String(option.key||option.option_key||String.fromCharCode(65+index));
                       const chosen=selectedImportedAnswerKeys.includes(key);
-                      return <li key={key} className={chosen?styles.reviewOptionSelected:''}><span>{key}</span><p>{importedOptionText(option,'hi')||<em>हिंदी विकल्प उपलब्ध नहीं है।</em>}</p>{chosen&&<b>{t('admin.assessments.currentAnswerKey')}</b>}</li>;
+                      return <li key={key} className={chosen?styles.reviewOptionSelected:''}><span>{key}</span><p>{importedOptionText(option,'hi')||<em>{t('admin.assessments.hindiPromptMissing')}</em>}</p>{chosen&&<b>{t('admin.assessments.currentAnswerKey')}</b>}</li>;
                     })}</ol>:<p className={styles.reviewMissingLanguage}>{t('admin.assessments.noStructuredOptions')}</p>}
                   </section>
                 </div>
