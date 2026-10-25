@@ -381,8 +381,8 @@ class Tre4ImporterTests(unittest.TestCase):
     def test_importer_never_publishes_tests_or_packs_directly(self):
         importer = SCRIPT.read_text(encoding="utf-8")
 
-        self.assertNotRegex(importer, r"UPDATE\\s+assessment\\s+SET\\s+status\\s*=\\s*'PUBLISHED'")
-        self.assertNotRegex(importer, r"UPDATE\\s+course_assessment_pack\\s+SET\\s+status\\s*=\\s*'PUBLISHED'")
+        self.assertNotRegex(importer, r"UPDATE\s+assessment\s+SET\s+status\s*=\s*'PUBLISHED'")
+        self.assertNotRegex(importer, r"UPDATE\s+course_assessment_pack\s+SET\s+status\s*=\s*'PUBLISHED')
         self.assertIn("SELECT assessment_only_course_publish_ready(%s)", importer)
         self.assertIn("publish_ready = bool(publish_ready_row and publish_ready_row[0] is True)", importer)
         self.assertIn("if submit_for_review:", importer)
