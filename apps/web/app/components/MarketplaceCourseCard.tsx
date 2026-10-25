@@ -18,6 +18,10 @@ type MarketplaceCourseCardProps = {
   priceLabel: ReactNode;
   description?: string | null;
   subjects?: MarketplaceCourseSubject[];
+  courseTypeCode?: string;
+  testPackCount?: number;
+  assessmentCount?: number;
+  assessmentQuestionCount?: number;
   status?: ReactNode;
   children: ReactNode;
 };
@@ -35,6 +39,10 @@ export default function MarketplaceCourseCard({
   priceLabel,
   description,
   subjects = [],
+  courseTypeCode,
+  testPackCount = 0,
+  assessmentCount = 0,
+  assessmentQuestionCount = 0,
   status,
   children,
 }: MarketplaceCourseCardProps) {
@@ -44,6 +52,19 @@ export default function MarketplaceCourseCard({
     count + (Number.isFinite(Number(subject.lessons)) ? Number(subject.lessons) : 0), 0);
   const hasCoverageCounts = subjects.some(subject =>
     subject.chapters !== undefined || subject.lessons !== undefined);
+  const normalizedCourseType = String(courseTypeCode || '').trim().toUpperCase();
+  const courseTypeLabel = normalizedCourseType === 'ASSESSMENT'
+    ? (language === 'hi' ? 'परीक्षा एवं टेस्ट' : 'Assessment & tests')
+    : normalizedCourseType === 'COMPETITIVE'
+      ? (language === 'hi' ? 'प्रतियोगी परीक्षा तैयारी' : 'Competitive preparation')
+      : normalizedCourseType === 'K12'
+        ? (language === 'hi' ? 'विद्यालयी पढ़ाई' : 'K–12 learning')
+        : '';
+  const safePackCount = Number.isFinite(Number(testPackCount)) ? Math.max(0, Number(testPackCount)) : 0;
+  const safeAssessmentCount = Number.isFinite(Number(assessmentCount)) ? Math.max(0, Number(assessmentCount)) : 0;
+  const safeQuestionCount = Number.isFinite(Number(assessmentQuestionCount)) ? Math.max(0, Number(assessmentQuestionCount)) : 0;
+  const showAssessmentSummary = normalizedCourseType === 'ASSESSMENT'
+    || safePackCount > 0 || safeAssessmentCount > 0 || safeQuestionCount > 0;
   // Never expose the internal CURRENT enum as though it were a user-facing curriculum name.
   const curriculumVersionLabel = !curriculumVersion ? undefined
     : curriculumVersion.trim().toUpperCase() === 'CURRENT'
@@ -59,11 +80,19 @@ export default function MarketplaceCourseCard({
 
       <h2 className={styles.title}>{title}</h2>
 
-      {(courseCode || publicId || curriculumVersion || subjects.length > 0) && (
+      {(courseCode || publicId || curriculumVersion || courseTypeLabel || subjects.length > 0 || showAssessmentSummary) && (
         <div className={styles.metadata}>
           {courseCode && <span className={styles.courseCode}>{courseCode}</span>}
           {publicId && <span className={styles.publicId}>{language === 'hi' ? 'कोर्स ID' : 'Course ID'}: {publicId}</span>}
           {curriculumVersionLabel && <span className={styles.version}>{curriculumVersionLabel}</span>}
+          {courseTypeLabel && <span className={styles.version}>{courseTypeLabel}</span>}
+          {showAssessmentSummary && (
+            <span className={styles.coverage}>
+              {language === 'hi'
+                ? `${safePackCount} test packs · ${safeAssessmentCount} टेस्ट · ${safeQuestionCount} प्रश्न`
+                : `${safePackCount} test packs · ${safeAssessmentCount} tests · ${safeQuestionCount} questions`}
+            </span>
+          )}
           {subjects.length > 0 && (
             <span className={styles.coverage}>
               {language === 'hi'
