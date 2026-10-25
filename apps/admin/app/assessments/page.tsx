@@ -210,6 +210,7 @@ export default function AssessmentsPage(){
   const [packagePreview,setPackagePreview]=useState<any|null>(null);
   const [packageBusy,setPackageBusy]=useState(false);
   const [importedReviewId,setImportedReviewId]=useState<number|null>(null);
+  const requestedReviewRef=useRef('');
   const [importedReviewStatus,setImportedReviewStatus]=useState('DRAFT');
   const [importedReviewItems,setImportedReviewItems]=useState<Array<{sequenceNo:number;maxMarks:number|string;question:any}>>([]);
   const [importedAnswerEdits,setImportedAnswerEdits]=useState<Record<number,string>>({});
@@ -330,7 +331,7 @@ export default function AssessmentsPage(){
       setError(e instanceof Error?e.message:'The assessment package could not be validated.');
     } finally {setPackageBusy(false);}
   }
-  async function loadImportedPackageQuestions(assessmentId:number) {
+  const loadImportedPackageQuestions=useCallback(async(assessmentId:number)=>{
     if(!courseId)return;
     const data=await api('/api/v1/admin/assessments/'+assessmentId+'/package-questions?courseId='+encodeURIComponent(courseId));
     const items=Array.isArray(data?.items)?data.items:[];
@@ -342,7 +343,21 @@ export default function AssessmentsPage(){
       explanationValues[sequence]=String(item.question?.explanation||'');
     });
     setImportedAnswerEdits(answerValues);setImportedExplanationEdits(explanationValues);
-  }
+  },[courseId]);
+
+  useEffect(()=>{
+    const requestedId=new URLSearchParams(window.location.search).get('assessmentId')||'';
+    const assessmentId=Number(requestedId);
+    if(!requestedId||!courseId||loading||!Number.isSafeInteger(assessmentId)||assessmentId<=0)return;
+    const row=assessments.find(item=>Number(item.assessment_id)===assessmentId);
+    if(!row||!row.source_package_id)return;
+    const requestKey=courseId+':'+assessmentId;
+    if(requestedReviewRef.current===requestKey)return;
+    requestedReviewRef.current=requestKey;
+    void loadImportedPackageQuestions(assessmentId).catch(error=>{
+      setError(error instanceof Error?error.message:'The imported questions could not be opened for review.');
+    });
+  },[courseId,loading,assessments,loadImportedPackageQuestions]);
   async function importPackageDraft() {
     if(!courseId){setError('Choose a source course before importing.');return;}
     const pkg=packageObject||parsePackageDraft();if(!pkg)return;
