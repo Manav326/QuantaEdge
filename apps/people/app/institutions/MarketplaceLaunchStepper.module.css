@@ -1462,3 +1462,7 @@
  .k12ReviewLessonHeader{flex-direction:column}
  .k12ReviewFooter{align-items:stretch;flex-direction:column}
 }
+
+.hrmsAssessmentReviewWorkspace:focus,.k12ReviewWorkspace:focus{outline:none}
+.hrmsAssessmentReviewWorkspace :focus-visible,.k12ReviewWorkspace :focus-visible{outline:2px solid var(--qe-color-primary,#e96d22);outline-offset:2px}
+.hrmsAssessmentAnswerSummary a{color:var(--qe-color-primary,#c2410c);overflow-wrap:anywhere}
