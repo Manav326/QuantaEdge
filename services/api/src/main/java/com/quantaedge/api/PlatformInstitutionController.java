@@ -646,7 +646,7 @@ public class PlatformInstitutionController {
           (select count(*) from assessment da join assessment_question dqa on dqa.assessment_id=da.id
             where da.course_id=p.id and da.assessment_type='PREVIOUS_YEAR_PAPER' and da.status='DRAFT') as draft_assessment_question_count,
           assessment_only_course_publish_ready(p.id) as assessment_only_ready,
-          course_marketplace_content_type_ready(p.id) as course_type_ready,
+          course_marketplace_content_type_ready(p.id) as course_type_publish_ready,
           (select registered_type.status from course_type_registry registered_type where registered_type.code=p.course_type_code) as course_type_status,
           t.id as source_institution_id,t.tenant_code as source_institution_code,
           coalesce(b.display_name,t.display_name) as source_institution_name,
