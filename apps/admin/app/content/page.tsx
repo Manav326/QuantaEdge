@@ -10,6 +10,7 @@ import { AdminWorkspaceContext } from '../components/AdminWorkspaceContext';
 type Row={class_code:string;class_name:string;program_code?:string|null;program_name?:string|null;subject_code:string;subject_name:string;chapter_id:number|null;chapter_code:string|null;chapter_name:string|null;chapter_description:string|null;chapter_sort_order:number|null;chapter_status:string|null;chapter_active:boolean|null;curriculum_source?:string|null;curriculum_source_url?:string|null;curriculum_source_edition?:string|null;curriculum_source_pages?:string|null;curriculum_source_verified?:boolean;lesson_id:number|null;lesson_code:string|null;lesson_title:string|null;lesson_summary:string|null;estimated_minutes:number|null;lesson_sort_order:number|null;lesson_status:string|null;lesson_active:boolean|null;alignment_source_title?:string|null;alignment_source_url?:string|null;alignment_source_edition?:string|null;alignment_page_range?:string|null;alignment_source_verified?:boolean;block_count:number|null;question_count:number|null};
 type ContentBlock={id?:number;sequence_no:number;block_type:string;content:Record<string,any>;active:boolean};
 type Selection={type:'chapter'|'lesson';id:number};
+type AssessmentContentRow={assessment_id:number;test_id?:string|null;title:string;status:string;source_package_id?:string|null;question_count:number;max_score?:number;duration_minutes?:number;negative_marking_fraction?:number|null};
 type VisualCandidate={candidate_id:string;candidate_kind:string;source_book_id:string;source_pdf_sha256:string;source_pdf_page_number:number;suggested_chapter_number?:number|null;suggested_chapter_title?:string|null;chapter_map_review_status?:string|null;source_asset_sha256?:string|null;bbox_pdf_points?:number[]|null;page_text_context:string;image_url:string;source_page_url?:string;publication_allowed:boolean;human_review_required:boolean};
 type VisualCatalog={schema_version:string;book_slug:string;source:{book_id:string;title:string;class:string;subject:string;language:string;edition:string;pdf_sha256:string;page_count:number};summary:{candidate_count:number;publication_allowed:boolean;review_required:boolean};visual_kinds:{id:string;label:string;description?:string}[];candidates:VisualCandidate[]};
 type VisualCatalogIndex={schema_version:string;catalogs:Array<{book_slug:string;catalog_path:string;source_book_id:string;title:string;class:string;subject:string;language:string;edition:string;source_pdf_sha256:string;page_count:number;candidate_count:number;publication_allowed:boolean;review_required:boolean}>};
@@ -326,6 +327,7 @@ export default function ContentStudio(){
   return keys[code]?t(keys[code]):code.replaceAll('_',' ').toLowerCase();
  }
  const [rows,setRows]=useState<Row[]>([]);
+ const [assessmentRows,setAssessmentRows]=useState<AssessmentContentRow[]>([]),[assessmentTotal,setAssessmentTotal]=useState(0);
  const [identity,setIdentity]=useState<any>(null);
  const [questionSummary,setQuestionSummary]=useState<any>(null);
  const [baselineSnapshot,setBaselineSnapshot]=useState('');
@@ -413,33 +415,44 @@ export default function ContentStudio(){
   return ()=>{mounted=false};
  },[selected,rows,visualCatalogIndex,visualCatalogSlug]);
  async function load(nextProgram:string=programFilter){setLoading(true);setError('');try{
-  const programRows=await api('/api/v1/admin/content/programs');
-  const availablePrograms=Array.isArray(programRows)?programRows:[];
-  setPrograms(availablePrograms);
-  const requestedFromUrl=typeof window!=='undefined'?(new URLSearchParams(window.location.search).get('courseId')||''): '';
-   const requestedProgram=nextProgram||programFilter||requestedFromUrl;
-   const requestedIsExplicit=Boolean(requestedProgram);
-   const requestedIsAvailable=availablePrograms.some((p:any)=>String(p.id||p.course_id)===String(requestedProgram));
-   // An explicit deep link names one course; never substitute a different course if it
-   // is no longer assigned to this institution.
-   const selectedProgram=requestedIsAvailable
-    ? String(requestedProgram)
-    : requestedIsExplicit ? '' : String(availablePrograms[0]?.id||availablePrograms[0]?.course_id||'');
-  if(!selectedProgram){
-   setProgramFilter('');setRows([]);setQuestionSummary({});setSelected(null);setDetail(null);
-   setError(requestedIsExplicit
-     ? 'The requested course is not assigned to this institution. Select a valid assigned course.'
-     : 'No courses are assigned to this institution. Assign a course before managing content.');
-   return;
-  }
-  if(selectedProgram!==programFilter)setProgramFilter(selectedProgram);
-  const [data,questionCounts]=await Promise.all([
-   api('/api/v1/admin/content?courseId='+encodeURIComponent(selectedProgram)),
-   api('/api/v1/admin/content/questions/review-summary?courseId='+encodeURIComponent(selectedProgram))
-  ]);
-  setRows(Array.isArray(data)?data:[]);
-  setQuestionSummary(questionCounts);
- }catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.contentLibraryLoadFailed'))}finally{setLoading(false)}}
+   const programRows=await api('/api/v1/admin/content/programs');
+   const availablePrograms=Array.isArray(programRows)?programRows:[];
+   setPrograms(availablePrograms);
+   const requestedFromUrl=typeof window!=='undefined'?(new URLSearchParams(window.location.search).get('courseId')||''): '';
+    const requestedProgram=nextProgram||programFilter||requestedFromUrl;
+    const requestedIsExplicit=Boolean(requestedProgram);
+    const requestedIsAvailable=availablePrograms.some((p:any)=>String(p.id||p.course_id)===String(requestedProgram));
+    // An explicit deep link names one course; never substitute a different course if it
+    // is no longer assigned to this institution.
+    const selectedProgram=requestedIsAvailable
+     ? String(requestedProgram)
+     : requestedIsExplicit ? '' : String(availablePrograms[0]?.id||availablePrograms[0]?.course_id||'');
+   if(!selectedProgram){
+    setProgramFilter('');setRows([]);setQuestionSummary({});setAssessmentRows([]);setAssessmentTotal(0);setSelected(null);setDetail(null);
+    setError(requestedIsExplicit
+      ? 'The requested course is not assigned to this institution. Select a valid assigned course.'
+      : 'No courses are assigned to this institution. Assign a course before managing content.');
+    return;
+   }
+   if(selectedProgram!==programFilter)setProgramFilter(selectedProgram);
+   const selectedCourse=availablePrograms.find((p:any)=>String(p.id||p.course_id)===selectedProgram);
+   if(String(selectedCourse?.course_type_code||'').toUpperCase()==='ASSESSMENT'){
+    setRows([]);setQuestionSummary({});setAssessmentRows([]);setAssessmentTotal(0);
+    const params=new URLSearchParams({courseId:selectedProgram,status:'ALL',limit:'100',offset:'0'});
+    const result=await api('/api/v1/admin/assessments?'+params.toString());
+    const items=Array.isArray(result?.items)?result.items:(Array.isArray(result)?result:[]);
+    setAssessmentRows(items);
+    setAssessmentTotal(Number(result?.total??items.length)||0);
+    return;
+   }
+   setAssessmentRows([]);setAssessmentTotal(0);
+   const [data,questionCounts]=await Promise.all([
+    api('/api/v1/admin/content?courseId='+encodeURIComponent(selectedProgram)),
+    api('/api/v1/admin/content/questions/review-summary?courseId='+encodeURIComponent(selectedProgram))
+   ]);
+   setRows(Array.isArray(data)?data:[]);
+   setQuestionSummary(questionCounts);
+  }catch(e){setError(e instanceof Error?e.message:t('admin.contentStudio.contentLibraryLoadFailed'))}finally{setLoading(false)}}
  useEffect(()=>{
   let mounted=true;
   void (async()=>{
@@ -458,6 +471,11 @@ export default function ContentStudio(){
  const classOptions=useMemo(()=>Array.from(new Map(rows.map(r=>[r.class_code,r.class_name])).entries()),[rows]);
  const subjectOptions=useMemo(()=>Array.from(new Map(rows.map(r=>[r.subject_code,r.subject_name])).entries()),[rows]);
  const filtered=useMemo(()=>rows.filter(r=>{if(subjectFilter!=='ALL'&&r.subject_code!==subjectFilter)return false;const term=search.trim().toLocaleLowerCase();return !term||[r.class_name,r.subject_name,r.chapter_name||'',r.lesson_title||'',r.chapter_code||'',r.lesson_code||''].some(v=>v.toLocaleLowerCase().includes(term))}),[rows,subjectFilter,search]);
+ const filteredAssessmentRows=useMemo(()=>assessmentRows.filter(row=>{
+  if(statusFilter!=='ALL'&&String(row.status||'').toUpperCase()!==statusFilter)return false;
+  const term=search.trim().toLocaleLowerCase();
+  return !term||[row.title,row.source_package_id||'',row.status,row.test_id||''].some(value=>String(value).toLocaleLowerCase().includes(term));
+ }),[assessmentRows,statusFilter,search]);
  const groups=useMemo(()=>{const map=new Map<number,Row[]>();filtered.forEach(row=>{if(row.chapter_id===null)return;const g=map.get(row.chapter_id)||[];g.push(row);map.set(row.chapter_id,g)});return Array.from(map.entries()).map(([id,g])=>({id,rows:g,chapter:g[0],lessons:g.filter(r=>r.lesson_id!==null&&(statusFilter==='ALL'||r.lesson_status===statusFilter))})).filter(g=>statusFilter==='ALL'||g.chapter.chapter_status===statusFilter||g.lessons.length>0)},[filtered,statusFilter]);
  const pagedGroups=useMemo(()=>groups.slice(chapterPage*chapterPageSize,(chapterPage+1)*chapterPageSize),[groups,chapterPage,chapterPageSize]);
   useEffect(()=>{setChapterPage(0)},[programFilter,subjectFilter,statusFilter,search]);
@@ -477,6 +495,11 @@ export default function ContentStudio(){
  const permissions=Array.isArray(identity?.permissions)?identity.permissions:[];
  const hasPermission=(permission:string)=>permissions.includes(permission);
  const activeProgram=programs.find((p:any)=>String(p.id||p.course_id)===String(programFilter));
+ const isAssessmentCourse=String(activeProgram?.course_type_code||'').toUpperCase()==='ASSESSMENT';
+ const assessmentStudioHref='/assessments?courseId='+encodeURIComponent(programFilter);
+ const assessmentQuestionCount=assessmentRows.reduce((total,row)=>total+Number(row.question_count||0),0);
+ const draftAssessmentCount=assessmentRows.filter(row=>String(row.status||'').toUpperCase()==='DRAFT').length;
+ const publishedAssessmentCount=assessmentRows.filter(row=>String(row.status||'').toUpperCase()==='PUBLISHED').length;
  const isSourcedCourse=activeProgram?.course_relationship==='SOURCED';
  const releaseState=String(activeProgram?.release_state||'DRAFT').toUpperCase();
  // Released and in-review course graphs are immutable. Source edits must happen in a forked draft,
@@ -865,16 +888,23 @@ export default function ContentStudio(){
    
    {error&&<div className="admin-alert qe-feedback" role="alert"><strong>{t('admin.contentStudio.needsAttention')}</strong><span>{error}</span><button type="button" onClick={()=>setError('')}>{t('admin.contentStudio.dismiss')}</button></div>}{notice&&<div className="admin-notice qe-feedback" role="status"><strong>{t('admin.contentStudio.workspaceUpdate')}</strong><span>{notice}</span><button type="button" onClick={()=>setNotice('')}>{t('admin.contentStudio.dismiss')}</button></div>}
    <section className="qe-stats-grid">
-    <article><span className="qe-stat-icon purple">▦</span><div><small>{t('admin.contentStudio.courseSubjects')}</small><strong>{subjectOptions.length||'—'}</strong><span>{t('admin.contentStudio.databaseRecords')}</span></div></article>
-    <article><span className="qe-stat-icon blue">◇</span><div><small>{t('admin.contentStudio.chaptersTopics')}</small><strong>{uniqueChapters}</strong><span>{t('admin.contentStudio.publishedUnpublished')}</span></div></article>
-    <article><span className="qe-stat-icon green">▤</span><div><small>{t('admin.contentStudio.publishedLessons')}</small><strong>{publishedLessons}</strong><span>{t('admin.contentStudio.availableToEnrolled')}</span></div></article>
-    <article><span className="qe-stat-icon amber">✎</span><div><small>{t('admin.contentStudio.lessonsNeedingAuthoring')}</small><strong>{draftLessons}</strong><span>{t('admin.contentStudio.draftOrReviewTopics')}</span></div></article>
-    <article><span className="qe-stat-icon amber">✓</span><div><small>{t('admin.contentStudio.questionsAwaitingReview')}</small><strong>{activeQuestionsAwaitingReview}</strong><span>{t('admin.contentStudio.activeQuestionCounts',{drafts:activeQuestionDrafts,rejected:activeRejectedQuestions})}</span></div></article>
-   </section>
+     {isAssessmentCourse ? <>
+      <article><span className="qe-stat-icon purple">▦</span><div><small>{t('admin.contentStudio.assessmentPaperCount')}</small><strong>{assessmentTotal}</strong><span>{t('admin.contentStudio.databaseRecords')}</span></div></article>
+      <article><span className="qe-stat-icon blue">◇</span><div><small>{t('admin.contentStudio.assessmentQuestionSnapshotCount')}</small><strong>{assessmentQuestionCount}</strong><span>{t('admin.contentStudio.assessmentLoadedPaperCount',{count:assessmentRows.length})}</span></div></article>
+      <article><span className="qe-stat-icon amber">✎</span><div><small>{t('admin.contentStudio.assessmentDraftCount')}</small><strong>{draftAssessmentCount}</strong><span>{t('admin.contentStudio.draft')}</span></div></article>
+      <article><span className="qe-stat-icon green">✓</span><div><small>{t('admin.contentStudio.assessmentPublishedCount')}</small><strong>{publishedAssessmentCount}</strong><span>{t('admin.contentStudio.published')}</span></div></article>
+     </> : <>
+      <article><span className="qe-stat-icon purple">▦</span><div><small>{t('admin.contentStudio.courseSubjects')}</small><strong>{subjectOptions.length||'—'}</strong><span>{t('admin.contentStudio.databaseRecords')}</span></div></article>
+      <article><span className="qe-stat-icon blue">◇</span><div><small>{t('admin.contentStudio.chaptersTopics')}</small><strong>{uniqueChapters}</strong><span>{t('admin.contentStudio.publishedUnpublished')}</span></div></article>
+      <article><span className="qe-stat-icon green">▤</span><div><small>{t('admin.contentStudio.publishedLessons')}</small><strong>{publishedLessons}</strong><span>{t('admin.contentStudio.availableToEnrolled')}</span></div></article>
+      <article><span className="qe-stat-icon amber">✎</span><div><small>{t('admin.contentStudio.lessonsNeedingAuthoring')}</small><strong>{draftLessons}</strong><span>{t('admin.contentStudio.draftOrReviewTopics')}</span></div></article>
+      <article><span className="qe-stat-icon amber">✓</span><div><small>{t('admin.contentStudio.questionsAwaitingReview')}</small><strong>{activeQuestionsAwaitingReview}</strong><span>{t('admin.contentStudio.activeQuestionCounts',{drafts:activeQuestionDrafts,rejected:activeRejectedQuestions})}</span></div></article>
+     </>}
+    </section>
    <section className="qe-library-panel" id="content-library">
-    <div className="qe-section-head"><div><span className="admin-kicker">{t('admin.contentStudio.curriculumMap')}</span><h2>{t('admin.contentStudio.findChapterOrTopic')}</h2><p>{t('admin.contentStudio.openEditorHint')}</p></div><div className="qe-create-actions"><button type="button" className="qe-secondary-button" disabled={loading||!canCreate} title={!canCreate?t('admin.contentStudio.noCreatePermission'):undefined} onClick={()=>beginCreate('chapter')} >＋ {t('admin.contentStudio.newChapter')}</button><button type="button" className="qe-primary-button" disabled={loading||!canCreate||!rows.some(r=>r.chapter_id!==null)} title={!canCreate?t('admin.contentStudio.noCreatePermission'):undefined} onClick={()=>beginCreate('lesson')} >＋ {t('admin.contentStudio.newMicroTopic')}</button></div></div>
-    {activeProgram?<div role="status" style={{margin:'0 0 14px',padding:'12px 14px',border:'1px solid var(--admin-border,#d8dce5)',borderRadius:10,background:'var(--admin-surface,#fff)',color:'var(--admin-text,#1b2430)'}}>
-      <strong>{activeProgram.course_relationship==='SOURCED'?'SOURCED COURSE':'SHARED COURSE · READ ONLY'}</strong>
+    <div className="qe-section-head"><div><span className="admin-kicker">{isAssessmentCourse?t('admin.contentStudio.assessmentContentTitle'):t('admin.contentStudio.curriculumMap')}</span><h2>{isAssessmentCourse?t('admin.contentStudio.assessmentContentTitle'):t('admin.contentStudio.findChapterOrTopic')}</h2><p>{isAssessmentCourse?t('admin.contentStudio.assessmentContentIntro'):t('admin.contentStudio.openEditorHint')}</p></div><div className="qe-create-actions">{isAssessmentCourse ? <Link href={assessmentStudioHref} className="qe-primary-button">{t('admin.contentStudio.assessmentOpenStudio')}</Link> : <><button type="button" className="qe-secondary-button" disabled={loading||!canCreate} title={!canCreate?t('admin.contentStudio.noCreatePermission'):undefined} onClick={()=>beginCreate('chapter')} >＋ {t('admin.contentStudio.newChapter')}</button><button type="button" className="qe-primary-button" disabled={loading||!canCreate||!rows.some(r=>r.chapter_id!==null)} title={!canCreate?t('admin.contentStudio.noCreatePermission'):undefined} onClick={()=>beginCreate('lesson')} >＋ {t('admin.contentStudio.newMicroTopic')}</button></>}</div></div>
+     {activeProgram?<div role="status" style={{margin:'0 0 14px',padding:'12px 14px',border:'1px solid var(--admin-border,#d8dce5)',borderRadius:10,background:'var(--admin-surface,#fff)',color:'var(--admin-text,#1b2430)'}}>
+      <strong>{isAssessmentCourse ? (activeProgram.course_relationship==='SOURCED'?'SOURCED ASSESSMENT COURSE':'SHARED ASSESSMENT COURSE · READ ONLY') : (activeProgram.course_relationship==='SOURCED'?'SOURCED COURSE':'SHARED COURSE · READ ONLY')}</strong>
       <div style={{marginTop:4,fontSize:13,color:'var(--admin-muted,#64748b)'}}>{activeProgram.course_relationship==='SOURCED'
         ? (isEditableDraft
           ? 'This institution owns the source content. You may edit this draft according to your staff permissions and the normal content-review workflow.'
@@ -886,8 +916,35 @@ export default function ContentStudio(){
        <small>Edits will be isolated in a new version. Nothing is pushed to other institutions before HRMS approval.</small>
       </div>:null}
     </div>:null}
-    <div className="qe-filters"><label>{t('admin.contentStudio.course')}<select value={programFilter} onChange={e=>{const value=e.target.value;setProgramFilter(value);setClassFilter('ALL');setSubjectFilter('ALL');setSelected(null);setDetail(null);setCreateType(null);const url=new URL(window.location.href);url.searchParams.set('courseId',value);window.history.replaceState({},'',url.toString());void load(value)}}>{programs.map((p:any)=><option value={String(p.id||p.course_id)} key={p.id||p.course_id}>{p.display_name} · {p.curriculum_version} · content v{p.content_version_no||1} · {p.course_relationship==='SOURCED'?'Sourced':'Shared (read-only)'}</option>)}</select></label><label>{t('admin.contentStudio.subject')}<select value={subjectFilter} onChange={e=>setSubjectFilter(e.target.value)}><option value="ALL">{t('admin.contentStudio.allSubjects')}</option>{subjectOptions.map(([code,name])=><option key={code} value={code}>{name}</option>)}</select></label><label>{t('admin.contentStudio.status')}<select value={statusFilter} onChange={e=>setStatusFilter(e.target.value)}><option value="ALL">{t('admin.contentStudio.allStatuses')}</option><option value="PUBLISHED">{t('admin.contentStudio.published')}</option><option value="DRAFT">{t('admin.contentStudio.draft')}</option><option value="REVIEW">{t('admin.contentStudio.inReview')}</option><option value="ARCHIVED">{t('admin.contentStudio.archived')}</option></select></label><label className="qe-search-field"><span>{t('admin.contentStudio.search')}</span><input value={search} onChange={e=>setSearch(e.target.value)} placeholder={t('admin.contentStudio.searchPlaceholder')}/></label></div>
-    <div className="qe-curriculum-map">
+    <div className="qe-filters"><label>{t('admin.contentStudio.course')}<select value={programFilter} onChange={e=>{const value=e.target.value;setProgramFilter(value);setClassFilter('ALL');setSubjectFilter('ALL');setSelected(null);setDetail(null);setCreateType(null);setStatusFilter('ALL');setSearch('');const url=new URL(window.location.href);url.searchParams.set('courseId',value);window.history.replaceState({},'',url.toString());void load(value)}}>{programs.map((p:any)=><option value={String(p.id||p.course_id)} key={p.id||p.course_id}>{p.display_name} · {p.curriculum_version} · content v{p.content_version_no||1} · {p.course_relationship==='SOURCED'?'Sourced':'Shared (read-only)'}</option>)}</select></label>{!isAssessmentCourse?<label>{t('admin.contentStudio.subject')}<select value={subjectFilter} onChange={e=>setSubjectFilter(e.target.value)}><option value="ALL">{t('admin.contentStudio.allSubjects')}</option>{subjectOptions.map(([code,name])=><option key={code} value={code}>{name}</option>)}</select></label>:null}<label>{t('admin.contentStudio.status')}<select value={statusFilter} onChange={e=>setStatusFilter(e.target.value)}><option value="ALL">{t('admin.contentStudio.allStatuses')}</option><option value="PUBLISHED">{t('admin.contentStudio.published')}</option><option value="DRAFT">{t('admin.contentStudio.draft')}</option>{!isAssessmentCourse?<option value="REVIEW">{t('admin.contentStudio.inReview')}</option>:null}<option value="ARCHIVED">{t('admin.contentStudio.archived')}</option></select></label><label className="qe-search-field"><span>{t('admin.contentStudio.search')}</span><input value={search} onChange={e=>setSearch(e.target.value)} placeholder={t('admin.contentStudio.searchPlaceholder')}/></label></div>
+    {isAssessmentCourse ? (
+<div className="qe-curriculum-map">
+      {loading&&assessmentRows.length===0?<div className="qe-library-empty"><span className="qe-empty-symbol">◌</span><strong>{t('admin.contentStudio.connectingCurriculum')}</strong><p>{t('admin.contentStudio.loadingContentRecords')}</p></div>:filteredAssessmentRows.length===0?<div className="qe-library-empty"><span className="qe-empty-symbol">⌕</span><strong>{assessmentRows.length?t('admin.contentStudio.assessmentNoMatchingPapers'):t('admin.contentStudio.assessmentNoPapers')}</strong><p>{assessmentRows.length?t('admin.contentStudio.adjustFilters'):t('admin.contentStudio.assessmentNoPapersHelp')}</p><Link href={assessmentStudioHref} className="qe-secondary-button">{t('admin.contentStudio.assessmentOpenStudio')}</Link></div>:<div style={{display:'grid',gap:10,padding:10}}>
+       {filteredAssessmentRows.map(row=>{
+        const canReviewImported=Boolean(row.source_package_id&&hasPermission('CONTENT_REVIEW')&&isEditableDraft);
+        const reviewHref=assessmentStudioHref+(canReviewImported?'&assessmentId='+encodeURIComponent(String(row.assessment_id)):'');
+        return <article key={row.assessment_id} style={{display:'flex',gap:14,alignItems:'flex-start',justifyContent:'space-between',flexWrap:'wrap',padding:'15px 16px',border:'1px solid var(--admin-border,#d8dce5)',borderRadius:12,background:'var(--admin-surface,#fff)',color:'var(--admin-text,#1b2430)'}}>
+         <div style={{display:'grid',gap:6,minWidth:0,flex:'1 1 320px'}}>
+          <strong style={{fontSize:14}}>{row.title||'Untitled assessment'}</strong>
+          <div style={{display:'flex',gap:7,flexWrap:'wrap',fontSize:12,color:'var(--admin-muted,#64748b)'}}>
+           <span>{t('admin.contentStudio.assessmentSourcePackage')}: {row.source_package_id||t('admin.contentStudio.assessmentNoSourcePackage')}</span>
+           <span>·</span><span>{t('admin.contentStudio.assessmentQuestionsCount',{count:Number(row.question_count||0)})}</span>
+           {row.duration_minutes? <><span>·</span><span>{t('admin.contentStudio.assessmentDurationMinutes',{minutes:Number(row.duration_minutes)})}</span></>:null}
+           {row.negative_marking_fraction!==null&&row.negative_marking_fraction!==undefined?<><span>·</span><span>−{Number(row.negative_marking_fraction)}</span></>:null}
+          </div>
+         </div>
+         <div style={{display:'flex',gap:10,alignItems:'center',flexWrap:'wrap'}}>
+          <span className={'qe-status-pill '+String(row.status||'DRAFT').toLowerCase()}>{statusLabel(row.status)}</span>
+          <Link href={reviewHref} className={canReviewImported?'qe-primary-button':'qe-secondary-button'}>{canReviewImported?t('admin.contentStudio.assessmentReviewQuestions'):t('admin.contentStudio.assessmentOpenStudio')}</Link>
+         </div>
+        </article>;
+       })}
+      </div>}
+      {assessmentTotal>assessmentRows.length?<p style={{margin:'0 12px 12px',fontSize:12,color:'var(--admin-muted,#64748b)'}}>{t('admin.contentStudio.assessmentMorePapers',{shown:assessmentRows.length,total:assessmentTotal})}</p>:null}
+     </div>
+     ) : (
+      <>
+<div className="qe-curriculum-map">
      {loading&&rows.length===0?<div className="qe-library-empty"><span className="qe-empty-symbol">◌</span><strong>{t('admin.contentStudio.connectingCurriculum')}</strong><p>{t('admin.contentStudio.loadingContentRecords')}</p></div>:groups.length===0?<div className="qe-library-empty"><span className="qe-empty-symbol">⌕</span><strong>{t('admin.contentStudio.noMatchingContent')}</strong><p>{t('admin.contentStudio.adjustFilters')}</p></div>:pagedGroups.map(group=>{
       const chapter=group.chapter;
       const totalLessons=group.rows.filter(r=>r.lesson_id!==null).length;
@@ -916,6 +973,8 @@ export default function ContentStudio(){
       </article>;
      })}</div><PremiumPagination page={chapterPage} total={groups.length} pageSize={chapterPageSize} onPageChange={setChapterPage} onPageSizeChange={size=>{setChapterPageSize(size);setChapterPage(0);}} itemLabel={t('admin.contentStudio.chaptersPaginationLabel')} />
     <div className="qe-library-foot"><span><b>{t('admin.contentStudio.librarySummary',{chapters:uniqueChapters,lessons:uniqueLessons,published:publishedChapters})}</b></span><span>{t('admin.contentStudio.teachingOrderHint')}</span></div>
+      </>
+     )}
    </section>
    {editorOpen&&(createType||selected)&&<section role="dialog" aria-modal="true" aria-label={createType?(createType==='chapter'?t('admin.contentStudio.createChapterTitle'):t('admin.contentStudio.createMicroTopicTitle')):selected?.type==='chapter'?t('admin.contentStudio.chapterEditor'):t('admin.contentStudio.microTopicEditor')} tabIndex={-1} className={'qe-workspace '+(isEditorView?'qe-workspace-fullscreen':'')} id="editor" ref={workspaceRef}>
     <div className="qe-fullscreen-bar">
