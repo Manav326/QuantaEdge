@@ -133,7 +133,7 @@ public class CourseMarketplaceLaunchReadinessService {
     boolean assessmentOnly="ASSESSMENT".equals(courseTypeCode)
         &&"ASSESSMENT_ONLY".equals(text(row.get("delivery_mode")));
     boolean k12Course="K12".equals(courseTypeCode)
-        &&!"ASSESSMENT_ONLY".equals(text(row.get("delivery_mode")));
+        &&"LEARNING_CONTENT".equals(text(row.get("delivery_mode")));
     boolean requiredContentReady=assessmentOnly
         ? assessmentOnlyCoursePublishReady(courseId)
         : k12Course&&subjectCount>0&&subjectsWithLessons==subjectCount&&chapterCount>0&&lessonCount>0;
@@ -289,7 +289,7 @@ public class CourseMarketplaceLaunchReadinessService {
     boolean assessmentOnly="ASSESSMENT".equals(courseTypeCode)
         &&"ASSESSMENT_ONLY".equals(text(offer.get("delivery_mode")));
     boolean k12Course="K12".equals(courseTypeCode)
-        &&!"ASSESSMENT_ONLY".equals(text(offer.get("delivery_mode")));
+        &&"LEARNING_CONTENT".equals(text(offer.get("delivery_mode")));
     boolean requiredContentReady=assessmentOnly
         ? assessmentOnlyCoursePublishReady(number(offer.get("course_id")))
         : k12Course&&subjectCount>0&&subjectsWithLessons==subjectCount&&chapterCount>0&&lessonCount>0;
