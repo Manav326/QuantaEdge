@@ -287,7 +287,7 @@ assert(adminContentStudio.includes('PremiumPagination') && adminContentStudio.in
   adminContentStudio.includes('editorReturnFocusRef') && adminContentStudio.includes('backToLibraryRef.current?.()'),
   'Content Studio must paginate chapters, expand/collapse child micro-topics and preserve a focused accessible editor flow.');
 assert(adminContentStudio.includes("String(selectedCourse?.course_type_code||'').toUpperCase()==='ASSESSMENT'") &&
-  adminContentStudio.includes("'/api/v1/admin/assessments?'+params.toString()") &&
+  adminContentStudio.includes("'/api/v1/admin/content/assessment-papers?'+params.toString()") &&
   adminContentStudio.includes('filteredAssessmentRows.map') &&
   adminContentStudio.includes("'&assessmentId='+encodeURIComponent(String(row.assessment_id))"),
   'Content Studio must use the assessment hierarchy for classless ASSESSMENT courses and expose each imported test question-review path.');
