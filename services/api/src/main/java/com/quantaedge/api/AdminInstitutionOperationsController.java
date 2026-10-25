@@ -50,27 +50,33 @@ public class AdminInstitutionOperationsController {
             where m.institution_id=? and m.status='ACTIVE') as active_learners,
           (select count(*) from institution_membership m
             where m.institution_id=?) as all_memberships,
-          (select count(*) from institution_course_entitlement e
-            join curriculum_program p on p.id=e.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-            where e.institution_id=? and e.status='ACTIVE' and e.valid_from<=now()
-              and (e.valid_until is null or e.valid_until>now())) as authorized_courses,
+          (select count(distinct coalesce(p.course_identity_id,-p.id))
+            from institution_course_assignment a
+            join institution_course_release r on r.id=a.course_release_id
+            join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+            where a.institution_id=? and a.status='ASSIGNED'
+              and (a.assignment_source<>'ORIGIN' or r.release_state='SHAREABLE')) as authorized_courses,
           (select count(distinct (p.student_id,p.lesson_id)) from institution_membership m
             join student_lesson_progress p on p.student_id=m.student_id
             join lesson l on l.id=p.lesson_id and l.active=true and l.status='PUBLISHED'
             join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true
             join curriculum_subject sub on sub.id=ch.subject_id and sub.active=true
-            join institution_course_entitlement e on e.institution_id=m.institution_id
-              and e.program_id=sub.program_id and e.status='ACTIVE' and e.valid_from<=now()
-              and (e.valid_until is null or e.valid_until>now())
+            join institution_course_assignment a on a.institution_id=m.institution_id and a.status='ASSIGNED'
+            join institution_course_release r on r.id=a.course_release_id
+              and r.program_id=sub.program_id and r.release_state='SHAREABLE'
+            join curriculum_program assigned_program on assigned_program.id=r.program_id
+              and assigned_program.status='ACTIVE' and assigned_program.code<>'GENERAL'
             where m.institution_id=? and m.status='ACTIVE') as lessons_with_activity,
           (select count(distinct (p.student_id,p.lesson_id)) from institution_membership m
             join student_lesson_progress p on p.student_id=m.student_id and p.status='COMPLETED'
             join lesson l on l.id=p.lesson_id and l.active=true and l.status='PUBLISHED'
             join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true
             join curriculum_subject sub on sub.id=ch.subject_id and sub.active=true
-            join institution_course_entitlement e on e.institution_id=m.institution_id
-              and e.program_id=sub.program_id and e.status='ACTIVE' and e.valid_from<=now()
-              and (e.valid_until is null or e.valid_until>now())
+            join institution_course_assignment a on a.institution_id=m.institution_id and a.status='ASSIGNED'
+            join institution_course_release r on r.id=a.course_release_id
+              and r.program_id=sub.program_id and r.release_state='SHAREABLE'
+            join curriculum_program assigned_program on assigned_program.id=r.program_id
+              and assigned_program.status='ACTIVE' and assigned_program.code<>'GENERAL'
             where m.institution_id=? and m.status='ACTIVE') as completed_lessons,
           (select count(*) from institution_billable_event be
             join institution_billing_contract bc on bc.id=be.contract_id
@@ -117,10 +123,10 @@ public class AdminInstitutionOperationsController {
           select l.id from lesson l
           join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true
           join curriculum_subject sub on sub.id=ch.subject_id and sub.active=true
-          join institution_course_entitlement e on e.institution_id=m.institution_id
-            and e.program_id=sub.program_id and e.status='ACTIVE' and e.valid_from<=now()
-            and (e.valid_until is null or e.valid_until>now())
-          join curriculum_program pr on pr.id=e.program_id and pr.status='ACTIVE' and pr.code<>'GENERAL'
+          join institution_course_assignment a on a.institution_id=m.institution_id and a.status='ASSIGNED'
+          join institution_course_release r on r.id=a.course_release_id
+            and r.program_id=sub.program_id and r.release_state='SHAREABLE'
+          join curriculum_program pr on pr.id=r.program_id and pr.status='ACTIVE' and pr.code<>'GENERAL'
           where l.active=true and l.status='PUBLISHED'
         )
         where m.institution_id=?
@@ -154,19 +160,37 @@ public class AdminInstitutionOperationsController {
           InstitutionTenantContext tenant) {
     AuthContext actor=requireEducationStaff(supplied,tenant,"INSTITUTION_REPORTS_VIEW");
     List<Map<String,Object>> courses=jdbc.queryForList("""
-        select p.id as course_id,p.code,p.display_name,
-          e.valid_from as entitlement_start,e.valid_until as entitlement_end,
-          (select count(distinct l.id) from curriculum_subject sub
+        with ranked_assignments as (
+          select a.institution_id,a.id as assignment_id,a.assigned_at,
+            r.id as release_id,r.release_version,r.release_state,
+            p.id as course_id,p.display_name,p.content_version_no,p.course_identity_id,
+            coalesce(identity.stable_course_key,p.code) as code,
+            identity.public_id as course_identity_public_id,
+            row_number() over (
+              partition by coalesce(p.course_identity_id,-p.id)
+              order by p.content_version_no desc,r.release_version desc,r.id desc,
+                a.assigned_at desc,a.id desc
+            ) as identity_rank
+          from institution_course_assignment a
+          join institution_course_release r on r.id=a.course_release_id
+          join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+          left join institution_course_identity identity on identity.id=p.course_identity_id
+          where a.institution_id=? and a.status='ASSIGNED'
+            and (a.assignment_source<>'ORIGIN' or r.release_state='SHAREABLE')
+        )
+        select course_id,code,display_name,assigned_at as entitlement_start,
+          null::timestamptz as entitlement_end,content_version_no,release_id,release_version,
+          release_state,course_identity_public_id,
+          (select count(distinct l.id) from curriculum_program_subject ps
+            join curriculum_subject sub on sub.id=ps.subject_id and sub.class_id=ps.class_id and sub.active=true
             join curriculum_chapter ch on ch.subject_id=sub.id and ch.active=true
             join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
-            where sub.program_id=p.id and sub.active=true) as published_lessons,
+            where ps.program_id=ranked_assignments.course_id) as published_lessons,
           (select count(distinct m.student_id) from institution_membership m
-            where m.institution_id=e.institution_id and m.status='ACTIVE') as institution_learners
-        from institution_course_entitlement e
-        join curriculum_program p on p.id=e.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-        where e.institution_id=? and e.status='ACTIVE' and e.valid_from<=now()
-          and (e.valid_until is null or e.valid_until>now())
-        order by p.display_name,p.code
+            where m.institution_id=ranked_assignments.institution_id and m.status='ACTIVE') as institution_learners
+        from ranked_assignments
+        where identity_rank=1
+        order by display_name,code
         """,tenant.institutionId());
     staffAudit.recordAction(actor,"/api/v1/admin/institution-operations/courses",
         "Viewed authorised institution courses for institutionId="+tenant.institutionId());
