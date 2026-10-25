@@ -473,6 +473,14 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     var marketplaceLoading by remember { mutableStateOf(false) }
     var marketplaceLoadFailed by remember { mutableStateOf(false) }
     var marketplaceBusyCourseId by rememberSaveable { mutableStateOf(0L) }
+    var courseInvoiceRows by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var courseInvoiceLoading by remember { mutableStateOf(false) }
+    var courseInvoiceLoadFailed by remember { mutableStateOf(false) }
+    var courseInvoiceWorkspace by rememberSaveable { mutableStateOf("STUDENT") }
+    var courseInvoiceReturnRoute by rememberSaveable { mutableStateOf(AppRoute.MARKETPLACE) }
+    var courseInvoiceBusyDocumentId by rememberSaveable { mutableStateOf(0L) }
+    var pendingCourseInvoicePdfBytes by remember { mutableStateOf<ByteArray?>(null) }
+    var pendingCourseInvoiceFileName by rememberSaveable { mutableStateOf("course-invoice.pdf") }
     var studentBillingAddresses by remember { mutableStateOf(emptyList<JSONObject>()) }
     var studentBillingAddressesLoading by remember { mutableStateOf(false) }
     var studentBillingAddressesError by remember { mutableStateOf("") }
@@ -659,6 +667,33 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             }
         }
     }
+
+    fun persistPendingCourseInvoicePdf(uri: android.net.Uri?) {
+        val bytes = pendingCourseInvoicePdfBytes
+        if (uri == null || bytes == null) {
+            pendingCourseInvoicePdfBytes = null
+            return
+        }
+        val fileName = pendingCourseInvoiceFileName
+        scope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    context.contentResolver.openOutputStream(uri)?.use { it.write(bytes) }
+                        ?: throw IOException("Invoice PDF could not be saved to the selected location.")
+                }
+                status = if (language == "hi") "इनवॉइस PDF सेव हो गया।" else "Invoice PDF saved successfully."
+            } catch (exception: Exception) {
+                error = exception.message ?: if (language == "hi") "इनवॉइस PDF सेव नहीं हो सका।" else "Invoice PDF could not be saved."
+            } finally {
+                pendingCourseInvoicePdfBytes = null
+                pendingCourseInvoiceFileName = fileName
+            }
+        }
+    }
+
+    val courseInvoicePdfLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("application/pdf")
+    ) { uri -> persistPendingCourseInvoicePdf(uri) }
 
     val resultCertificatePdfLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.CreateDocument("application/pdf")
@@ -1585,6 +1620,125 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         status = ""
         route = AppRoute.MARKETPLACE
         refreshMarketplace()
+    }
+
+    fun courseInvoiceListEndpoint(targetWorkspace: String): String =
+        if (targetWorkspace == "PARENT") "/api/v1/marketplace/family/invoices"
+        else "/api/v1/marketplace/invoices"
+
+    fun courseInvoicePdfEndpoint(targetWorkspace: String, orderId: Long, documentId: Long): String {
+        if (orderId <= 0L || documentId <= 0L) throw IOException("Invoice order or document could not be identified.")
+        return if (targetWorkspace == "PARENT") {
+            "/api/v1/marketplace/family/orders/$orderId/documents/$documentId.pdf"
+        } else {
+            "/api/v1/marketplace/orders/$orderId/documents/$documentId.pdf"
+        }
+    }
+
+    fun refreshCourseInvoices(targetWorkspace: String? = null) {
+        if (targetWorkspace != null) courseInvoiceWorkspace = targetWorkspace
+        courseInvoiceLoading = true
+        courseInvoiceLoadFailed = false
+        runTask {
+            ApiClient.setWorkspace(courseInvoiceWorkspace)
+            try {
+                courseInvoiceRows = ApiClient.getArray(courseInvoiceListEndpoint(courseInvoiceWorkspace)).objectItems()
+            } catch (exception: Exception) {
+                courseInvoiceRows = emptyList()
+                courseInvoiceLoadFailed = true
+                throw exception
+            } finally {
+                courseInvoiceLoading = false
+            }
+        }
+    }
+
+    fun openCourseInvoices(targetWorkspace: String) {
+        error = ""
+        status = ""
+        courseInvoiceReturnRoute = route
+        courseInvoiceWorkspace = targetWorkspace
+        route = AppRoute.COURSE_INVOICES
+        refreshCourseInvoices(targetWorkspace)
+    }
+
+    suspend fun fetchCourseInvoicePdf(orderId: Long, documentId: Long): ByteArray {
+        ApiClient.setWorkspace(courseInvoiceWorkspace)
+        val bytes = ApiClient.getBytes(courseInvoicePdfEndpoint(courseInvoiceWorkspace, orderId, documentId))
+        if (bytes.isEmpty()) throw IOException("The server returned an empty invoice PDF.")
+        return bytes
+    }
+
+    fun safeCourseInvoiceFileName(documentNumber: String, documentId: Long): String {
+        val prefix = documentNumber.trim().replace(Regex("[^A-Za-z0-9_-]"), "-").trim('-')
+            .takeIf { it.isNotBlank() } ?: "course-invoice-$documentId"
+        return "$prefix.pdf"
+    }
+
+    suspend fun cachedCourseInvoiceFile(orderId: Long, documentId: Long, documentNumber: String): java.io.File {
+        val bytes = fetchCourseInvoicePdf(orderId, documentId)
+        val directory = java.io.File(context.cacheDir, "course-invoices")
+        if (!directory.exists() && !directory.mkdirs()) throw IOException("Could not prepare the invoice PDF.")
+        val file = java.io.File(directory, safeCourseInvoiceFileName(documentNumber, documentId))
+        withContext(Dispatchers.IO) { file.writeBytes(bytes) }
+        return file
+    }
+
+    fun openCourseInvoicePdf(orderId: Long, documentId: Long, documentNumber: String) {
+        if (courseInvoiceBusyDocumentId > 0L) return
+        courseInvoiceBusyDocumentId = documentId
+        runTask {
+            try {
+                val file = cachedCourseInvoiceFile(orderId, documentId, documentNumber)
+                val uri = androidx.core.content.FileProvider.getUriForFile(
+                    context, context.packageName + ".fileprovider", file
+                )
+                val intent = Intent(Intent.ACTION_VIEW)
+                    .setDataAndType(uri, "application/pdf")
+                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                context.startActivity(Intent.createChooser(
+                    intent, if (language == "hi") "इनवॉइस PDF खोलें" else "Open invoice PDF"
+                ))
+            } finally {
+                courseInvoiceBusyDocumentId = 0L
+            }
+        }
+    }
+
+    fun saveCourseInvoicePdf(orderId: Long, documentId: Long, documentNumber: String) {
+        if (courseInvoiceBusyDocumentId > 0L) return
+        courseInvoiceBusyDocumentId = documentId
+        runTask {
+            try {
+                pendingCourseInvoicePdfBytes = fetchCourseInvoicePdf(orderId, documentId)
+                pendingCourseInvoiceFileName = safeCourseInvoiceFileName(documentNumber, documentId)
+                courseInvoicePdfLauncher.launch(pendingCourseInvoiceFileName)
+            } finally {
+                courseInvoiceBusyDocumentId = 0L
+            }
+        }
+    }
+
+    fun shareCourseInvoicePdf(orderId: Long, documentId: Long, documentNumber: String) {
+        if (courseInvoiceBusyDocumentId > 0L) return
+        courseInvoiceBusyDocumentId = documentId
+        runTask {
+            try {
+                val file = cachedCourseInvoiceFile(orderId, documentId, documentNumber)
+                val uri = androidx.core.content.FileProvider.getUriForFile(
+                    context, context.packageName + ".fileprovider", file
+                )
+                val intent = Intent(Intent.ACTION_SEND)
+                    .setType("application/pdf")
+                    .putExtra(Intent.EXTRA_STREAM, uri)
+                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                context.startActivity(Intent.createChooser(
+                    intent, if (language == "hi") "इनवॉइस शेयर करें" else "Share invoice"
+                ))
+            } finally {
+                courseInvoiceBusyDocumentId = 0L
+            }
+        }
     }
 
     suspend fun loadParentMarketplaceData() {
@@ -3962,6 +4116,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                 refreshStudentTextbookDocuments()
             }
             AppRoute.PARENT_HOME -> refreshParentData()
+            AppRoute.COURSE_INVOICES -> refreshCourseInvoices()
             AppRoute.PARENT_REPORT -> {
                 val childId = parentReport.optLong("_childId")
                 val child = parentChildren.firstOrNull { it.longAny("id") == childId }
@@ -3986,7 +4141,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     }
 
     fun currentRouteHasSafeReadRetry(): Boolean = route in setOf(
-        AppRoute.STUDENT_HOME, AppRoute.PARENT_HOME, AppRoute.PARENT_REPORT,
+        AppRoute.STUDENT_HOME, AppRoute.PARENT_HOME, AppRoute.PARENT_REPORT, AppRoute.COURSE_INVOICES,
         AppRoute.PARENT_PROFILE, AppRoute.PARENT_CHILD_ARCHIVED, AppRoute.PROFILE,
         AppRoute.ACCOUNT_LIFECYCLE, AppRoute.PROGRESS, AppRoute.SUBJECT_LESSONS,
         AppRoute.DIAGNOSTIC, AppRoute.ASSESSMENTS, AppRoute.ASSESSMENT_RESULTS,
@@ -4008,6 +4163,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             AppRoute.LOGIN -> AppRoute.WELCOME
             AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET, AppRoute.ACCOUNT_SIGNUP -> AppRoute.LOGIN
             AppRoute.CERTIFICATES, AppRoute.LEADERBOARD, AppRoute.ALL_COURSES, AppRoute.MARKETPLACE -> AppRoute.STUDENT_HOME
+            AppRoute.COURSE_INVOICES -> courseInvoiceReturnRoute.takeIf { it != AppRoute.COURSE_INVOICES }
+                ?: if (courseInvoiceWorkspace == "PARENT") AppRoute.PARENT_COURSES else AppRoute.MARKETPLACE
             AppRoute.PARENT_COURSES -> AppRoute.PARENT_HOME
             AppRoute.ACCOUNT_IDENTITY -> if (auth.textAny("role").contains("PARENT", true)) AppRoute.PARENT_PROFILE else AppRoute.PROFILE
             AppRoute.ACCOUNT_LIFECYCLE -> AppRoute.PROFILE
@@ -4680,7 +4837,8 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         onRefresh = ::refreshMarketplace,
                         onAllCourses = ::openAllCourses,
                         pendingVerification = pendingStudentPaymentVerification != null,
-                        onRetryVerification = { retryPendingCoursePayment("STUDENT") }
+                        onRetryVerification = { retryPendingCoursePayment("STUDENT") },
+                        onInvoices = { openCourseInvoices("STUDENT") }
                     )
                     }
                     @Composable
@@ -4766,9 +4924,30 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         },
                         onBack = ::goBack,
                         pendingVerification = pendingParentPaymentVerification != null,
-                        onRetryVerification = { retryPendingCoursePayment("PARENT") }
+                        onRetryVerification = { retryPendingCoursePayment("PARENT") },
+                        onInvoices = { openCourseInvoices("PARENT") }
                     )
                     }
+                    @Composable
+                    fun renderCourseInvoiceHistoryRoute() {
+                        CourseInvoiceHistoryScreen(
+                            invoices = courseInvoiceRows,
+                            workspace = courseInvoiceWorkspace,
+                            language = language,
+                            loading = courseInvoiceLoading,
+                            loadFailed = courseInvoiceLoadFailed,
+                            busyDocumentId = courseInvoiceBusyDocumentId.takeIf { it > 0L },
+                            onRefresh = { refreshCourseInvoices() },
+                            onOpenPdf = ::openCourseInvoicePdf,
+                            onSavePdf = ::saveCourseInvoicePdf,
+                            onSharePdf = ::shareCourseInvoicePdf,
+                            onBack = {
+                                route = courseInvoiceReturnRoute.takeIf { it != AppRoute.COURSE_INVOICES }
+                                    ?: if (courseInvoiceWorkspace == "PARENT") AppRoute.PARENT_COURSES else AppRoute.MARKETPLACE
+                            }
+                        )
+                    }
+
                     @Composable
                     fun renderParentReportRoute() {
                         ParentReportScreen(
@@ -5256,6 +5435,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     AppRoute.PARENT_HOME -> renderParentHomeRoute()
                     AppRoute.ACCOUNT_IDENTITY -> renderAccountIdentityRoute()
                     AppRoute.PARENT_COURSES -> renderParentCoursesRoute()
+                    AppRoute.COURSE_INVOICES -> renderCourseInvoiceHistoryRoute()
                     AppRoute.PARENT_REPORT -> renderParentReportRoute()
                     AppRoute.PARENT_PROFILE -> renderParentProfileRoute()
                     AppRoute.PARENT_CHILD_CREATE -> renderParentChildCreateRoute()
