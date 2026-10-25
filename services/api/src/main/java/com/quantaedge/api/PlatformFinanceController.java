@@ -70,7 +70,11 @@ public class PlatformFinanceController {
       """);
     List<Map<String,Object>> offers=jdbc.queryForList("""
       select o.id as offer_id,o.public_id,o.institution_id,t.display_name as institution_name,
-        p.code as course_code,coalesce(nullif(o.title_override,''),p.display_name) as course_name,
+        identity.public_id as course_identity_public_id,identity.stable_course_key,
+        p.content_version_no,assignment.id as assignment_id,assignment.assignment_source,
+        release.id as release_id,release.release_version,release.release_state,
+        coalesce(identity.stable_course_key,p.code) as course_code,
+        coalesce(nullif(o.title_override,''),p.display_name) as course_name,
         o.price_paise,o.currency,o.status as offer_status,
         le.id as legal_entity_id,le.legal_name as legal_seller_name,
         tp.id as latest_tax_profile_id,tp.status as tax_profile_status,tp.tax_treatment,
@@ -78,14 +82,23 @@ public class PlatformFinanceController {
           order by rp.policy_version desc limit 1) as latest_share_policy_status
       from institution_marketplace_offer o
       join institution_tenant t on t.id=o.institution_id
-      join curriculum_program p on p.id=o.course_id
+      join institution_course_assignment assignment
+        on assignment.id=o.assignment_id and assignment.institution_id=o.institution_id
+       and assignment.status='ASSIGNED' and assignment.assignment_source in ('ORIGIN','HRMS')
+      join institution_course_release release
+        on release.id=o.course_release_id and release.program_id=o.course_id
+       and release.release_state='SHAREABLE' and release.legacy_migration=false
+      join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
+      join institution_course_identity identity
+        on identity.id=p.course_identity_id and identity.status='ACTIVE'
       left join lateral (
         select tax.id,tax.status,tax.tax_treatment,tax.legal_entity_id
         from course_tax_profile tax where tax.institution_offer_id=o.id
         order by tax.version desc limit 1
       ) tp on true
       left join billing_legal_entity le on le.id=tp.legal_entity_id
-      where o.status<>'ARCHIVED' order by t.display_name,p.display_name,o.id
+      where o.status<>'ARCHIVED' and qe_current_course_offer_revision(o.id)
+      order by t.display_name,identity.stable_course_key,p.content_version_no desc,release.release_version desc,o.id
       """);
     List<Map<String,Object>> registrations=jdbc.queryForList("""
       select r.id,r.legal_entity_id,r.gstin,r.legal_name_snapshot,r.state_code,r.registration_type,
