@@ -123,6 +123,7 @@ public class CourseMarketplaceController {
           order by r.requested_at desc,r.id desc limit 1
         ) parent_request on true
         where o.institution_id=? and o.status='PUBLISHED'
+          and qe_marketplace_offer_publicly_sellable(o.id)
           and o.hrms_published_by_staff_id is not null
           and release.release_state='SHAREABLE'
           and course_marketplace_content_type_ready(release.program_id)
@@ -250,6 +251,7 @@ public class CourseMarketplaceController {
       join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
       left join institution_course_identity identity on identity.id=p.course_identity_id
       where o.institution_id=(select institution_id from selected_tenant) and o.status='PUBLISHED'
+        and qe_marketplace_offer_publicly_sellable(o.id)
         and o.hrms_published_by_staff_id is not null
         and release.release_state='SHAREABLE'
         and course_marketplace_content_type_ready(release.program_id)
@@ -338,6 +340,7 @@ public class CourseMarketplaceController {
         join institution_tenant t on t.id=o.institution_id and t.status='ACTIVE'
         join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
         where o.institution_id=? and o.course_id=? and o.status='PUBLISHED'
+          and qe_marketplace_offer_publicly_sellable(o.id)
           and o.hrms_published_by_staff_id is not null
           and r.release_state='SHAREABLE'
           and course_marketplace_content_type_ready(r.program_id)
@@ -745,6 +748,7 @@ public class CourseMarketplaceController {
         join institution_membership member
           on member.student_id=target_student.id and member.institution_id=o.institution_id and member.status='ACTIVE'
         where o.institution_id=? and p.id=? and o.status='PUBLISHED'
+          and qe_marketplace_offer_publicly_sellable(o.id)
           and o.hrms_published_by_staff_id is not null
           and release.release_state='SHAREABLE'
           and course_marketplace_content_type_ready(release.program_id)
@@ -2213,14 +2217,11 @@ public class CourseMarketplaceController {
           select 1 from course_purchase p
           where p.student_id=? and p.institution_id=? and p.course_id=?
           union all
-          select 1 from student_course_access_grant g
-          where g.student_id=? and g.institution_id=? and g.course_id=? and g.grant_reason='LEGACY_CLASS_ENROLLMENT'
-          union all
           select 1 from course_entitlement ce
           where ce.institution_id=? and ce.course_id=? and (ce.holder_student_id=? or ce.holder_user_id=(select user_account_id from student where id=?))
         )
         """, Boolean.class, studentId, institutionId, courseId, studentId, institutionId, courseId,
-        studentId, institutionId, courseId, institutionId, courseId, studentId, studentId);
+        institutionId, courseId, studentId, studentId);
     return Boolean.TRUE.equals(value);
   }
 
@@ -2231,11 +2232,8 @@ public class CourseMarketplaceController {
           where e.student_id=? and e.program_id=? and e.status in ('ACTIVE','PAUSED')
           union all
           select 1 from course_purchase p where p.student_id=? and p.course_id=?
-          union all
-          select 1 from student_course_access_grant g
-          where g.student_id=? and g.course_id=? and g.grant_reason='LEGACY_CLASS_ENROLLMENT'
         )
-        """, Boolean.class, studentId, courseId, studentId, courseId, studentId, courseId);
+        """, Boolean.class, studentId, courseId, studentId, courseId);
     return Boolean.TRUE.equals(value);
   }
 

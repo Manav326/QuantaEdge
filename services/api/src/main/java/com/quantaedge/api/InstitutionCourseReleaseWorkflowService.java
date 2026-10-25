@@ -33,13 +33,23 @@ public class InstitutionCourseReleaseWorkflowService {
       Long actorStaffId, Long actorAdminId) {
     List<Map<String,Object>> owned=jdbc.queryForList("""
         select p.id,p.code,p.display_name,p.status,p.course_type_code,
+          identity.id as course_identity_id,identity.public_id as course_identity_public_id,
+          identity.stable_course_key,
           coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=p.id),'LEARNING_CONTENT') as delivery_model
         from curriculum_program p
+        join institution_course_identity identity
+          on identity.id=p.course_identity_id
+         and identity.status='ACTIVE'
+         and identity.source_institution_id=?
+         and identity.course_type_code=p.course_type_code
         where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
           and exists(select 1 from institution_course_release r
-            where r.program_id=p.id and r.source_institution_id=?)
+            where r.program_id=p.id and r.source_institution_id=?
+              and r.legacy_migration=false
+              and r.release_state<>'LEGACY_MIGRATED'
+              and r.obsolete_at is null)
         for update of p
-        """,programId,institutionId);
+        """,institutionId,programId,institutionId);
     if(owned.isEmpty()) throw new SecurityException("This active course is not owned by the current institution.");
 
     Map<String,Object> evidence=jdbc.queryForMap("""
@@ -81,7 +91,9 @@ public class InstitutionCourseReleaseWorkflowService {
     List<Map<String,Object>> latestRows=jdbc.queryForList("""
         select id,release_version,release_state from institution_course_release
         where source_institution_id=? and program_id=?
-        order by release_version desc limit 1 for update
+          and legacy_migration=false and release_state<>'LEGACY_MIGRATED'
+          and obsolete_at is null
+        order by release_version desc,id desc limit 1 for update
         """,institutionId,programId);
     if(latestRows.isEmpty()) throw new SecurityException("This course has no institution-owned release.");
     Map<String,Object> latest=latestRows.getFirst();
@@ -174,8 +186,15 @@ public class InstitutionCourseReleaseWorkflowService {
             ) as identity_rank
           from institution_course_release r
           join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-          left join institution_course_identity identity on identity.id=p.course_identity_id
+          join institution_course_identity identity
+            on identity.id=p.course_identity_id
+           and identity.status='ACTIVE'
+           and identity.source_institution_id=r.source_institution_id
+           and identity.course_type_code=p.course_type_code
           where r.source_institution_id=?
+            and r.legacy_migration=false
+            and r.release_state<>'LEGACY_MIGRATED'
+            and r.obsolete_at is null
         )
         select release_id,course_id,public_id,course_identity_public_id,course_code,display_name,
           curriculum_version,content_version_no,release_version,release_state,content_fingerprint,
@@ -191,7 +210,10 @@ public class InstitutionCourseReleaseWorkflowService {
     List<Map<String,Object>> rows=jdbc.queryForList("""
         select id,program_id,source_institution_id,release_version,release_state,content_fingerprint,updated_at
         from institution_course_release
-        where id=? and source_institution_id=? for update
+        where id=? and source_institution_id=?
+           and legacy_migration=false and release_state<>'LEGACY_MIGRATED'
+           and obsolete_at is null
+         for update
         """,releaseId,institutionId);
     if(rows.isEmpty()) throw new SecurityException("This course release is not owned by the current institution.");
     return rows.getFirst();

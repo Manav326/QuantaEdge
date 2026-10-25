@@ -93,12 +93,14 @@ class QaTestPackLifecycleIntegrationTest {
       assertEquals(3L, count(jdbc, """
           select count(distinct p.id)
           from curriculum_program p
-          join institution_tenant qe on qe.id=(select id from institution_tenant where tenant_code='QUANTA-EDGE')
-          join institution_course_release r on r.program_id=p.id and r.source_institution_id=qe.id
-          join institution_course_assignment a on a.course_release_id=r.id and a.institution_id=qe.id and a.status='ASSIGNED'
-          join institution_course_entitlement e on e.program_id=p.id and e.institution_id=qe.id and e.status='ACTIVE'
-          where p.code in ('CLASS_6','CLASS_7','CLASS_8') and p.curriculum_version='CURRENT' and p.status='ACTIVE'
-          """), "QuantaEdge continues owning Classes 6/7/8 while run-specific release revisions are installed.");
+          join institution_course_identity identity
+            on identity.id=p.course_identity_id
+          join institution_tenant qe on qe.id=identity.source_institution_id
+          where qe.tenant_code='QUANTA-EDGE' and qe.status='ACTIVE'
+            and identity.status='ACTIVE' and identity.course_type_code=p.course_type_code
+            and p.code in ('CLASS_6','CLASS_7','CLASS_8')
+            and p.curriculum_version='CURRENT' and p.status='ACTIVE'
+          """), "QuantaEdge remains the stable source owner of Classes 6/7/8 independent of retired assignment rows.");
       assertEquals(4L, count(jdbc, "select count(*) from institution_admin_account where qa_test_run_id=?", runA));
       assertEquals(1L, count(jdbc, "select count(*) from staff_account where qa_test_run_id=? and role='CONTENT_REVIEWER'", runA));
       assertEquals(1L, count(jdbc, "select count(*) from staff_account where qa_test_run_id=? and role='ADMIN'", runA));

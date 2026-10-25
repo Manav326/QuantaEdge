@@ -59,6 +59,7 @@ public class ParentCoursePurchaseRequestController {
       join institution_tenant tenant_scope on tenant_scope.id=o.institution_id and tenant_scope.status='ACTIVE'
       join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
       where o.institution_id=? and o.course_id=? and o.status='PUBLISHED' and o.price_paise>0
+         and qe_marketplace_offer_publicly_sellable(o.id)
         and o.hrms_published_by_staff_id is not null
         and release.release_state='SHAREABLE'
         and course_marketplace_content_type_ready(release.program_id)
@@ -99,10 +100,8 @@ public class ParentCoursePurchaseRequestController {
       select exists(select 1 from student_program_enrollment
           where student_id=? and institution_id=? and program_id=? and status in ('ACTIVE','PAUSED'))
         or exists(select 1 from course_purchase where student_id=? and institution_id=? and course_id=?)
-        or exists(select 1 from student_course_access_grant where student_id=? and institution_id=?
-          and course_id=? and grant_reason='LEGACY_CLASS_ENROLLMENT')
-      """, Boolean.class, studentId, institutionId, courseId, studentId, institutionId, courseId,
-        studentId, institutionId, courseId);
+
+      """, Boolean.class, studentId, institutionId, courseId, studentId, institutionId, courseId);
     if (Boolean.TRUE.equals(access)) throw new IllegalArgumentException("You already have access to this course.");
 
     List<Map<String,Object>> guardians = jdbc.queryForList("""
@@ -199,6 +198,7 @@ public class ParentCoursePurchaseRequestController {
       join curriculum_program p on p.id=r.course_id
       join institution_marketplace_offer o on o.id=r.institution_offer_id
         and o.institution_id=r.institution_id and o.status='PUBLISHED'
+        and qe_marketplace_offer_publicly_sellable(o.id)
       join institution_course_assignment assignment
         on assignment.id=o.assignment_id and assignment.institution_id=o.institution_id and assignment.status='ASSIGNED'
       where r.guardian_user_id=? and r.institution_id=? and r.status='PENDING'

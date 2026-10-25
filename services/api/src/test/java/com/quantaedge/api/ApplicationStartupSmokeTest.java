@@ -96,30 +96,44 @@ class ApplicationStartupSmokeTest {
         and s.program_id is null and s.active=true
       where p.code in ('CLASS_6','CLASS_7','CLASS_8') and p.status='ACTIVE'
     """, Integer.class));
-    assertEquals(3, jdbc.queryForObject("""
+    assertEquals(0, jdbc.queryForObject("""
       select count(*) from curriculum_program p
       join course_marketplace_offer o on o.course_id=p.id
       where p.code in ('CLASS_6','CLASS_7','CLASS_8')
         and p.status='ACTIVE' and o.status='PUBLISHED'
+    """, Integer.class), "The retired global Marketplace table must not expose live course offers.");
+    assertEquals(3, jdbc.queryForObject("""
+      select count(*) from curriculum_program p
+      join course_marketplace_offer o on o.course_id=p.id
+      where p.code in ('CLASS_6','CLASS_7','CLASS_8')
+        and p.status='ACTIVE' and o.status='ARCHIVED'
         and o.price_paise=100000 and o.currency='INR'
-    """, Integer.class), "Each class course must be published at INR 1,000.");
+    """, Integer.class), "Historical global offers must be retained as archived rows.");
+    assertEquals(0, jdbc.queryForObject("""
+      select count(*) from student_course_access_grant
+      where obsolete_at is null or obsolete_reason is null
+    """, Integer.class), "Legacy free-access grants must be marked obsolete.");
     assertTrue(jdbc.queryForObject("select to_regclass('public.student_course_access_grant') is not null", Boolean.class));
     assertEquals(0, jdbc.queryForObject("""
       select count(*) from student_program_enrollment spe
       join curriculum_program p on p.id=spe.program_id
-      where p.code in ('CLASS_6','CLASS_7','CLASS_8')
-        and not exists(select 1 from student_course_access_grant g
-          where g.student_id=spe.student_id and g.course_id=spe.program_id
-            and g.grant_reason='LEGACY_CLASS_ENROLLMENT')
+      where spe.status in ('ACTIVE','PAUSED')
+        and p.code in ('CLASS_6','CLASS_7','CLASS_8')
         and not exists(select 1 from course_purchase cp
-          where cp.student_id=spe.student_id and cp.course_id=spe.program_id)
+          where cp.student_id=spe.student_id and cp.institution_id=spe.institution_id
+            and cp.course_id=spe.program_id)
         and not exists(
-          select 1 from institution_membership im
-          join institution_course_entitlement e on e.institution_id=im.institution_id
+          select 1 from institution_course_entitlement e
+          where e.institution_id=spe.institution_id
             and e.program_id=spe.program_id and e.status='ACTIVE'
-          where im.student_id=spe.student_id and im.status='ACTIVE'
         )
-    """, Integer.class), "Every course enrollment must have a documented legacy grant, purchase, or institution entitlement.");
+        and not exists(
+          select 1 from institution_marketplace_offer offer
+          where offer.institution_id=spe.institution_id
+            and offer.course_id=spe.program_id and offer.price_paise=0
+            and qe_marketplace_offer_publicly_sellable(offer.id)
+        )
+    """, Integer.class), "Every active course enrollment must be backed by a current purchase, institution entitlement or current free Marketplace offer.");
   }
 
   @Test
@@ -215,15 +229,32 @@ class ApplicationStartupSmokeTest {
       select id from institution_tenant where tenant_code='QUANTA-EDGE' and status='ACTIVE'
       """, Long.class);
     Long courseId = jdbc.queryForObject("""
-      select p.id
-      from curriculum_program p
-      join institution_course_release release on release.program_id=p.id
-      join institution_course_assignment assignment
-        on assignment.course_release_id=release.id and assignment.institution_id=?
-          and assignment.status='ASSIGNED'
-      where p.code='CLASS_6' and p.status='ACTIVE' and p.curriculum_version='CURRENT'
-      order by p.id limit 1
-      """, Long.class, institutionId);
+       select p.id
+       from curriculum_program p
+       join institution_course_identity identity
+         on identity.id=p.course_identity_id and identity.source_institution_id=? and identity.status='ACTIVE'
+       where p.code='CLASS_6' and p.status='ACTIVE' and p.curriculum_version='CURRENT'
+       order by p.id limit 1
+       """, Long.class, institutionId);
+    // The controller requires an assignment in the current lifecycle; don't rely on migrated
+    // CLASS_6 assignment/grant rows that V208 deliberately retires.
+    Long releaseVersion = jdbc.queryForObject("""
+      select coalesce(max(release_version),0)+1
+      from institution_course_release
+      where source_institution_id=? and program_id=?
+      """, Long.class, institutionId, courseId);
+    Long releaseId = jdbc.queryForObject("""
+      insert into institution_course_release(
+        source_institution_id,program_id,release_version,release_state,content_fingerprint,
+        legacy_migration,created_at,updated_at)
+      values(?,?,?,'DRAFT',course_content_fingerprint(?),false,now(),now())
+      returning id
+      """, Long.class, institutionId, courseId, releaseVersion, courseId);
+    jdbc.update("""
+      insert into institution_course_assignment(
+        institution_id,course_release_id,status,assignment_source,assigned_at,created_at,updated_at)
+      values(?,?,'ASSIGNED','ORIGIN',now(),now(),now())
+      """, institutionId, releaseId);
     InstitutionTenantContext tenant = new InstitutionTenantContext(institutionId, "QUANTA-EDGE", "QuantaEdge");
     // Authorization is grant-based: seed an explicit test grant rather than relying on a former
     // global ADMIN bypass. This test transaction rolls the temporary staff and grant rows back.

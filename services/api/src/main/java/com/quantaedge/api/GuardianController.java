@@ -567,6 +567,7 @@ public class GuardianController {
                  and free_assignment.status='ASSIGNED'
                 where free_offer.institution_id=assignment.institution_id
                   and free_offer.course_id=p.id and free_offer.status='PUBLISHED'
+                   and qe_marketplace_offer_publicly_sellable(free_offer.id)
                   and free_offer.price_paise=0 and free_offer.currency='INR') as free_offer
             from curriculum_program p
             join institution_course_assignment assignment on assignment.institution_id=?
@@ -578,21 +579,19 @@ public class GuardianController {
               and (
                 exists(select 1 from institution_marketplace_offer o
                   where o.institution_id=? and o.course_id=p.id and o.assignment_id=assignment.id
-                    and o.status='PUBLISHED')
+                    and o.status='PUBLISHED' and qe_marketplace_offer_publicly_sellable(o.id))
                 or exists(select 1 from student_program_enrollment e
                   where e.institution_id=? and e.student_id=? and e.program_id=p.id
                     and e.status in ('ACTIVE','PAUSED'))
                 or exists(select 1 from course_purchase cp
                   where cp.institution_id=? and cp.student_id=? and cp.course_id=p.id)
-                or exists(select 1 from student_course_access_grant g
-                  where g.institution_id=? and g.student_id=? and g.course_id=p.id)
                 or exists(select 1 from course_entitlement ce
                   where ce.institution_id=? and ce.course_id=p.id
                     and (ce.holder_student_id=? or ce.holder_user_id=(select user_account_id from student where id=?)))
               )
             order by p.display_name,p.id
             """, institutionId,studentId,institutionId,studentId,institutionId,institutionId,institutionId,studentId,
-                institutionId,studentId,institutionId,studentId,institutionId,studentId,studentId);
+                institutionId,studentId,institutionId,studentId,studentId);
     if(includeSubjects) {
       for(Map<String,Object> program:programs) {
         long courseId=((Number)program.get("id")).longValue();
@@ -642,18 +641,16 @@ public class GuardianController {
       where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
         and (exists(select 1 from institution_marketplace_offer o
                     where o.institution_id=a.institution_id and o.assignment_id=a.id
-                      and o.course_id=p.id and o.status='PUBLISHED' and o.price_paise=0 and o.currency='INR')
+                      and o.course_id=p.id and o.status='PUBLISHED' and qe_marketplace_offer_publicly_sellable(o.id) and o.price_paise=0 and o.currency='INR')
           or exists(select 1 from student_program_enrollment e
                     where e.institution_id=a.institution_id and e.student_id=? and e.program_id=p.id
                       and e.status in ('ACTIVE','PAUSED'))
           or exists(select 1 from course_purchase cp
                     where cp.institution_id=a.institution_id and cp.student_id=? and cp.course_id=p.id)
-          or exists(select 1 from student_course_access_grant g
-                    where g.institution_id=a.institution_id and g.student_id=? and g.course_id=p.id)
           or exists(select 1 from course_entitlement ce
                     where ce.institution_id=a.institution_id and ce.course_id=p.id
                       and (ce.holder_student_id=? or ce.holder_user_id=(select user_account_id from student where id=?))))
-      """,institutionId,courseId,studentId,studentId,studentId,studentId,studentId);
+      """,institutionId,courseId,studentId,studentId,studentId,studentId);
     if(courses.isEmpty()) throw new SecurityException("This course has no published offer or existing entitlement in the selected institution.");
     List<Map<String,Object>> subjects=jdbc.queryForList("""
       select s.id,s.code

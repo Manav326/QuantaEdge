@@ -70,9 +70,13 @@ public class CourseMarketplaceLaunchController {
                    'LEARNING_CONTENT') as delivery_mode
         from institution_course_release r
         join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-        left join institution_course_identity identity on identity.id=p.course_identity_id
+        join institution_course_identity identity
+          on identity.id=p.course_identity_id and identity.status='ACTIVE'
+         and identity.source_institution_id=r.source_institution_id
+         and identity.course_type_code=p.course_type_code
         join institution_tenant t on t.id=r.source_institution_id and t.status='ACTIVE'
         where r.id=? and r.source_institution_id=? and r.release_state='IN_QUALITY_REVIEW'
+          and r.legacy_migration=false and r.obsolete_at is null
         """,releaseId,institutionId);
     if(rows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,
         "The submitted course release is not available in this institution's HRMS quality-review queue.");
@@ -320,14 +324,20 @@ public class CourseMarketplaceLaunchController {
         with ranked_assignments as (
           select a.id,a.assigned_at,
             row_number() over (
-              partition by coalesce(p.course_identity_id,-p.id)
+              partition by identity.id
               order by p.content_version_no desc,r.release_version desc,r.id desc,
                 a.assigned_at desc,a.id desc
             ) as identity_rank
           from institution_course_assignment a
           join institution_course_release r on r.id=a.course_release_id
+            and r.legacy_migration=false and r.obsolete_at is null and r.release_state<>'LEGACY_MIGRATED'
           join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+          join institution_course_identity identity
+            on identity.id=p.course_identity_id and identity.status='ACTIVE'
+           and identity.source_institution_id=r.source_institution_id
+           and identity.course_type_code=p.course_type_code
           where a.institution_id=? and a.status='ASSIGNED'
+            and a.assignment_source in ('ORIGIN','HRMS')
             and (a.assignment_source <> 'ORIGIN' or r.release_state='SHAREABLE')
         )
         select id from ranked_assignments where identity_rank=1
@@ -348,9 +358,13 @@ public class CourseMarketplaceLaunchController {
           source.display_name as source_institution_name
         from institution_course_release r
         join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-        left join institution_course_identity identity on identity.id=p.course_identity_id
+        join institution_course_identity identity
+          on identity.id=p.course_identity_id and identity.status='ACTIVE'
+         and identity.source_institution_id=r.source_institution_id
+         and identity.course_type_code=p.course_type_code
         join institution_tenant source on source.id=r.source_institution_id and source.status='ACTIVE'
-        where r.release_state='SHAREABLE' and r.source_institution_id<>?
+        where r.release_state='SHAREABLE' and r.legacy_migration=false and r.obsolete_at is null
+          and r.source_institution_id<>?
           and course_marketplace_content_type_ready(p.id)
           and not exists(select 1 from institution_course_assignment a
             where a.institution_id=? and a.course_release_id=r.id and a.status='ASSIGNED')
@@ -359,7 +373,12 @@ public class CourseMarketplaceLaunchController {
             from institution_course_release newer_r
             join curriculum_program newer_p on newer_p.id=newer_r.program_id
               and newer_p.status='ACTIVE' and newer_p.code<>'GENERAL'
-            where newer_r.release_state='SHAREABLE'
+            join institution_course_identity newer_identity
+              on newer_identity.id=newer_p.course_identity_id and newer_identity.status='ACTIVE'
+             and newer_identity.source_institution_id=newer_r.source_institution_id
+             and newer_identity.course_type_code=newer_p.course_type_code
+            where newer_r.release_state='SHAREABLE' and newer_r.legacy_migration=false
+              and newer_r.obsolete_at is null
               and newer_p.course_identity_id=p.course_identity_id
               and course_marketplace_content_type_ready(newer_p.id)
               and course_release_fingerprint_current(newer_r.program_id,newer_r.content_fingerprint::text,newer_r.updated_at)
@@ -391,7 +410,10 @@ public class CourseMarketplaceLaunchController {
           count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
         from institution_course_release r
         join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-        left join institution_course_identity identity on identity.id=p.course_identity_id
+        join institution_course_identity identity
+          on identity.id=p.course_identity_id and identity.status='ACTIVE'
+         and identity.source_institution_id=r.source_institution_id
+         and identity.course_type_code=p.course_type_code
         join institution_tenant t on t.id=r.source_institution_id and t.status='ACTIVE'
         left join curriculum_program_subject ps on ps.program_id=p.id
         left join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
@@ -399,6 +421,7 @@ public class CourseMarketplaceLaunchController {
         left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
         left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
         where r.source_institution_id=? and r.release_state='IN_QUALITY_REVIEW'
+          and r.legacy_migration=false and r.obsolete_at is null
         group by r.id,r.program_id,r.release_version,r.release_state,r.content_fingerprint,r.updated_at,r.submitted_at,
           p.id,p.code,p.display_name,p.course_type_code,p.content_version_no,
           identity.public_id,identity.stable_course_key,t.id,t.tenant_code,t.display_name
@@ -576,8 +599,8 @@ public class CourseMarketplaceLaunchController {
     List<Map<String,Object>> checks=(List<Map<String,Object>>)base.get("checks");
     List<String> contentBlockers=new ArrayList<>();
     List<String> courseReadinessCodes=List.of(
-        "INSTITUTION_ACTIVE","COURSE_ACTIVE","CONTENT_QUALITY_REVIEW",
-        "ORIGIN_RELEASE_APPROVAL","ASSIGNMENT_AND_RELEASE",
+        "INSTITUTION_ACTIVE","COURSE_ACTIVE","COURSE_IDENTITY","CURRENT_COURSE_RELEASE",
+        "CONTENT_QUALITY_REVIEW","ORIGIN_RELEASE_APPROVAL","ASSIGNMENT_AND_RELEASE",
         "CONTENT_REVIEW_CURRENT","PUBLISHED_LEARNING_CONTENT","SOURCE_RIGHTS_CLEARANCE");
     for(Map<String,Object> check:checks) {
       if(courseReadinessCodes.contains(text(check.get("code")))
@@ -589,12 +612,14 @@ public class CourseMarketplaceLaunchController {
       throw conflict("Course is not ready for an offer draft. Resolve the following first: "+String.join(" ",contentBlockers));
 
     List<Map<String,Object>> existing=jdbc.queryForList("""
-        select id,status from institution_marketplace_offer
+        select id,status,obsolete_at from institution_marketplace_offer
         where institution_id=? and assignment_id=? for update
         """,institutionId,assignmentId);
     long offerId;
     String oldStatus=existing.isEmpty()?"":text(existing.getFirst().get("status"));
-    if(!existing.isEmpty()&&!List.of("DRAFT","REJECTED","ARCHIVED").contains(oldStatus))
+    if("ARCHIVED".equals(oldStatus) || (!existing.isEmpty() && existing.getFirst().get("obsolete_at")!=null))
+      throw conflict("This listing revision is archived and cannot be reactivated. Create a new source-owned course release, complete HRMS review and then configure its listing.");
+    if(!existing.isEmpty()&&!List.of("DRAFT","REJECTED").contains(oldStatus))
       throw conflict("This offer is already "+oldStatus+". Use its review/publish steps instead of replacing its terms.");
     if(existing.isEmpty()) {
       offerId=jdbc.queryForObject("""
@@ -616,7 +641,7 @@ public class CourseMarketplaceLaunchController {
             rejected_by_admin_id=null,rejected_at=null,rejection_reason=null,
             updated_by_admin_id=null,updated_at=now()
           where id=? and institution_id=? and assignment_id=?
-            and status in ('DRAFT','REJECTED','ARCHIVED')
+            and status in ('DRAFT','REJECTED')
           """,title,description,pricePaise,currency,offerId,institutionId,assignmentId);
     }
     record(institutionId,number(assignment.get("release_id")),assignmentId,offerId,
@@ -749,6 +774,8 @@ public class CourseMarketplaceLaunchController {
         if("ARCHIVED".equals(oldStatus)) return Map.of("updated",true,"offerId",offerId,"status","ARCHIVED");
         jdbc.update("""
             update institution_marketplace_offer set status='ARCHIVED',
+              obsolete_at=coalesce(obsolete_at,now()),
+              obsolete_reason=coalesce(obsolete_reason,'OBSOLETE: listing archived by HRMS; existing financial records are retained.'),
               updated_by_admin_id=null,updated_at=now()
             where id=? and institution_id=? and status=?
             """,offerId,institutionId,oldStatus);
@@ -768,7 +795,83 @@ public class CourseMarketplaceLaunchController {
           case "RETURN_TO_DRAFT" -> "OFFER_RETURNED_TO_DRAFT";
           default -> "OFFER_ARCHIVED";
         },context.staffId(),details);
+
+    // Swap the live publication atomically only after the replacement has passed every
+    // HRMS gate and is actually PUBLISHED. Orders, invoices, and access remain bound to
+    // the old offer/course graph and are intentionally not rewritten.
+    List<Long> supersededOfferIds=new ArrayList<>();
+    if("PUBLISH".equals(action)) {
+      List<Map<String,Object>> superseded=jdbc.queryForList("""
+          select previous_offer.id as offer_id,previous_offer.assignment_id,
+            previous_offer.course_release_id
+          from institution_marketplace_offer published_offer
+          join curriculum_program published_program on published_program.id=published_offer.course_id
+          join institution_course_identity published_identity
+            on published_identity.id=published_program.course_identity_id
+          join institution_marketplace_offer previous_offer
+            on previous_offer.institution_id=published_offer.institution_id
+           and previous_offer.id<>published_offer.id
+           and previous_offer.status='PUBLISHED'
+           and previous_offer.legacy_migration=false
+          join institution_course_assignment previous_assignment
+            on previous_assignment.id=previous_offer.assignment_id
+           and previous_assignment.institution_id=previous_offer.institution_id
+           and previous_assignment.status='ASSIGNED'
+           and previous_assignment.assignment_source in ('ORIGIN','HRMS')
+          join institution_course_release previous_release
+            on previous_release.id=previous_offer.course_release_id
+           and previous_release.program_id=previous_offer.course_id
+          join curriculum_program previous_program on previous_program.id=previous_offer.course_id
+          join institution_course_identity previous_identity
+            on previous_identity.id=previous_program.course_identity_id
+          where published_offer.id=? and published_offer.status='PUBLISHED'
+            and published_offer.institution_id=?
+            and published_offer.legacy_migration=false
+            and previous_identity.id=published_identity.id
+            and (
+              previous_program.content_version_no<published_program.content_version_no
+              or (
+                previous_program.content_version_no=published_program.content_version_no
+                and (
+                  previous_release.release_version<
+                    (select current_release.release_version
+                     from institution_course_release current_release
+                     where current_release.id=published_offer.course_release_id)
+                  or (
+                    previous_release.release_version=
+                      (select current_release.release_version
+                       from institution_course_release current_release
+                       where current_release.id=published_offer.course_release_id)
+                    and previous_release.id<published_offer.course_release_id
+                  )
+                )
+              )
+            )
+          order by previous_offer.id
+          for update of previous_offer
+          """,offerId,institutionId);
+      for(Map<String,Object> previous:superseded) {
+        long previousOfferId=number(previous.get("offer_id"));
+        long previousAssignmentId=number(previous.get("assignment_id"));
+        long previousReleaseId=number(previous.get("course_release_id"));
+        int archived=jdbc.update("""
+            update institution_marketplace_offer
+            set status='ARCHIVED',obsolete_at=coalesce(obsolete_at,now()),
+              obsolete_reason=coalesce(obsolete_reason,'OBSOLETE: superseded by offer '||?::text),
+              updated_at=now()
+            where id=? and institution_id=? and status='PUBLISHED'
+            """,offerId,previousOfferId,institutionId);
+        if(archived==1) {
+          supersededOfferIds.add(previousOfferId);
+          record(institutionId,previousReleaseId,previousAssignmentId,previousOfferId,
+              "OFFER_ARCHIVED_SUPERSEDED",context.staffId(),
+              Map.of("supersededByOfferId",offerId,
+                "reason","A newer content/release version completed HRMS approval and publication."));
+        }
+      }
+    }
     return Map.of("updated",true,"offerId",offerId,"status",next,
+        "supersededOfferIds",supersededOfferIds,
         "message","Marketplace listing status updated.");
   }
 

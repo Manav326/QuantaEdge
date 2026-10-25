@@ -69,9 +69,14 @@ public class InstitutionCourseLifecycleController {
             ) as identity_rank
           from institution_course_assignment a
           join institution_course_release r on r.id=a.course_release_id
+           and r.legacy_migration=false and r.release_state<>'LEGACY_MIGRATED' and r.obsolete_at is null
           join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-          left join institution_course_identity identity on identity.id=p.course_identity_id
+          join institution_course_identity identity
+            on identity.id=p.course_identity_id and identity.status='ACTIVE'
+           and identity.source_institution_id=r.source_institution_id
+           and identity.course_type_code=p.course_type_code
           where a.institution_id=? and a.status='ASSIGNED'
+            and a.assignment_source in ('ORIGIN','HRMS')
             and (a.assignment_source<>'ORIGIN' or r.release_state='SHAREABLE')
         )
         select assignment_id,assignment_source,assignment_status,release_id,release_version,release_state,
@@ -167,10 +172,20 @@ public class InstitutionCourseLifecycleController {
         """,releaseId);
     jdbc.update("""
         update institution_course_release set release_state='WITHDRAWN',
-          withdrawn_by_admin_id=?,withdrawn_at=now(),updated_at=now()
+          withdrawn_by_admin_id=?,withdrawn_at=now(),
+          obsolete_at=coalesce(obsolete_at,now()),
+          obsolete_reason=coalesce(obsolete_reason,'OBSOLETE: source institution withdrew this release; publish a new source release before relisting.'),
+          updated_at=now()
         where id=? and source_institution_id=? and release_state='SHAREABLE'
         """,principal.adminId(),releaseId,principal.institutionId());
-    jdbc.update("update institution_marketplace_offer set status='ARCHIVED',updated_at=now() where course_release_id=? and status<>'ARCHIVED'",releaseId);
+     jdbc.update("""
+         update institution_marketplace_offer
+         set status='ARCHIVED',
+             obsolete_at=coalesce(obsolete_at,now()),
+             obsolete_reason=coalesce(obsolete_reason,'OBSOLETE: source institution withdrew this release; publish a new source release before relisting.'),
+             updated_at=now()
+         where course_release_id=? and status<>'ARCHIVED'
+         """,releaseId);
     jdbc.update("""
         update institution_course_assignment set status='REVOKED',revoked_at=now(),updated_at=now()
         where course_release_id=? and status='ASSIGNED'
@@ -203,10 +218,15 @@ public class InstitutionCourseLifecycleController {
             ) as identity_rank
           from institution_course_assignment a
           join institution_course_release r on r.id=a.course_release_id and r.release_state='SHAREABLE'
+           and r.legacy_migration=false and r.obsolete_at is null
           join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-          left join institution_course_identity identity on identity.id=p.course_identity_id
+          join institution_course_identity identity
+            on identity.id=p.course_identity_id and identity.status='ACTIVE'
+           and identity.source_institution_id=r.source_institution_id
+           and identity.course_type_code=p.course_type_code
           left join institution_marketplace_offer o on o.assignment_id=a.id and o.institution_id=a.institution_id
           where a.institution_id=? and a.status='ASSIGNED'
+            and a.assignment_source in ('ORIGIN','HRMS')
         )
         select assignment_id,assignment_source,assignment_status,release_id,source_institution_id,
           release_version,release_state,course_id,public_id,course_identity_public_id,course_identity_id,
@@ -268,7 +288,9 @@ public class InstitutionCourseLifecycleController {
     List<Map<String,Object>> rows=jdbc.queryForList("""
         select id,program_id,source_institution_id,release_version,release_state,content_fingerprint
         from institution_course_release
-        where id=? and source_institution_id=? for update
+        where id=? and source_institution_id=? and legacy_migration=false
+          and release_state<>'LEGACY_MIGRATED' and obsolete_at is null
+        for update
         """,releaseId,institutionId);
     if(rows.isEmpty()) throw new SecurityException("This course release is not owned by the current institution.");
     return rows.getFirst();

@@ -496,7 +496,7 @@ class AssessmentLifecycleIntegrationTest {
       """, Long.class, institutionId, courseId, courseId, reviewerStaffId, sourceAdminId);
     jdbc.update("""
       insert into institution_course_assignment(institution_id,course_release_id,status,assignment_source)
-      values(?,?,'ASSIGNED','HRMS')
+      values(?,?,'ASSIGNED','ORIGIN')
       """, institutionId, releaseId);
     return new Fixture(studentId, assessmentId, courseId,
         new AuthContext(null, studentId, "STUDENT", "Assessment CI student"),

@@ -374,6 +374,10 @@ class CertificateControllerEligibilityTest {
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenAnswer(invocation -> {
       String sql = invocation.getArgument(0, String.class);
       if (sql.contains("FROM student WHERE id=? AND active=true FOR UPDATE")) return List.of(studentRow);
+      if (sql.contains("select identity.id,identity.public_id::text as public_id")) {
+        return List.of(Map.of("id",12L,"public_id","course-identity-test",
+            "stable_course_key","CLASS_6","content_version_no",1));
+      }
       if (sql.contains("FROM student_assessment_attempt att") && sql.contains("assessment_type")) return List.of(attempt);
       if (sql.contains("SELECT id,status FROM student_certificate WHERE student_id=? AND achievement_key=?")) {
         return List.of();

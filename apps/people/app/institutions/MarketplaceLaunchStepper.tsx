@@ -76,6 +76,8 @@ type LaunchItem = {
   courseId: number;
   courseCode?: string;
   courseIdentityPublicId?: string;
+  contentVersionNo?: number;
+  releaseVersion?: number;
   courseName: string;
   listingTitle?: string;
   description?: string;
@@ -1531,7 +1533,7 @@ export default function MarketplaceLaunchStepper({
             const status = String(item.offerStatus || 'NOT_CONFIGURED').toUpperCase();
             const meter = progress(item);
             const blocker = nextBlocker(item);
-            const editing = !item.offerId || ['DRAFT', 'REJECTED', 'ARCHIVED'].includes(status);
+            const editing = !item.offerId || ['DRAFT', 'REJECTED'].includes(status);
             const canSubmit = Boolean(item.offerId) && item.ready && ['DRAFT', 'REJECTED'].includes(status);
             const canApprove = Boolean(item.offerId) && item.ready && status === 'IN_REVIEW';
             const canPublish = Boolean(item.offerId) && item.ready && status === 'APPROVED';
@@ -1541,7 +1543,7 @@ export default function MarketplaceLaunchStepper({
                 <header className={styles.courseHeader}>
                   <div className={styles.courseIdentity}>
                     <span className={styles.courseMark} aria-hidden="true">QE</span>
-                    <div><h3>{item.courseName}</h3><p>{item.courseCode || 'Course'} · Current assignment</p></div>
+                    <div><h3>{item.courseName}</h3><p>{item.courseCode || 'Course'} · Content v{item.contentVersionNo ?? '—'} · Submission {item.releaseVersion ?? '—'}</p></div>
                   </div>
                   <div className={styles.statusCluster}>
                     <span className={styles.statusPill + ' ' + (status === 'PUBLISHED' ? styles.statusPublished : status === 'NOT_CONFIGURED' ? styles.statusDraft : styles.statusOther)}>{statusText(status)}</span>
@@ -1593,13 +1595,14 @@ export default function MarketplaceLaunchStepper({
                           ) : (
                             <p className={styles.stepHint}>This stage can be evaluated after the draft offer and price exist.</p>
                           )}
+                          {group.key === 'offer' && status === 'ARCHIVED' && <p className={styles.stepHint}>This listing revision is archived and cannot be reactivated. Create a new source-owned course release and complete HRMS review before configuring a new listing.</p>}
                           {group.key === 'offer' && editing && (
                             <div className={styles.offerForm}>
                               <label>Student-facing title<input value={draft.title} maxLength={200} onChange={event => updateDraft(item.assignmentId, { title: event.target.value })} /></label>
                               <label>Price in INR<input type="number" min="0" step="0.01" inputMode="decimal" placeholder="Enter price" value={draft.priceRupees} onChange={event => updateDraft(item.assignmentId, { priceRupees: event.target.value })} /><small>Set ₹0.00 only for a deliberately free course. Currency is locked to INR.</small></label>
                               <label className={styles.descriptionField}>Marketplace description<textarea rows={3} maxLength={5000} value={draft.description} onChange={event => updateDraft(item.assignmentId, { description: event.target.value })} placeholder="Describe the course for prospective learners." /></label>
                               <div className={styles.formActions}>
-                                <button type="button" className={styles.primaryButton} disabled={busyKey !== null || !item.checks.filter(check => ['INSTITUTION_ACTIVE', 'COURSE_ACTIVE', 'CONTENT_QUALITY_REVIEW', 'CONTENT_REVIEW_CURRENT', 'PUBLISHED_LEARNING_CONTENT', 'SOURCE_RIGHTS_CLEARANCE', 'ORIGIN_RELEASE_APPROVAL', 'ASSIGNMENT_AND_RELEASE'].includes(check.code)).every(check => check.passed)} onClick={() => void saveDraft(item)}>
+                                <button type="button" className={styles.primaryButton} disabled={busyKey !== null || !item.checks.filter(check => ['INSTITUTION_ACTIVE', 'COURSE_ACTIVE', 'COURSE_IDENTITY', 'CURRENT_COURSE_RELEASE', 'CONTENT_QUALITY_REVIEW', 'CONTENT_REVIEW_CURRENT', 'PUBLISHED_LEARNING_CONTENT', 'SOURCE_RIGHTS_CLEARANCE', 'ORIGIN_RELEASE_APPROVAL', 'ASSIGNMENT_AND_RELEASE'].includes(check.code)).every(check => check.passed)} onClick={() => void saveDraft(item)}>
                                   {busyKey === 'save-' + item.assignmentId ? 'Saving draft…' : item.offerId ? 'Save draft terms' : 'Create draft offer'}
                                 </button>
                                 <span>Saving a draft never publishes it.</span>

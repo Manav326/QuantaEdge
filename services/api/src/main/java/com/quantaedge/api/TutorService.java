@@ -914,9 +914,6 @@ public class TutorService {
                 and (e.valid_until is null or e.valid_until>now()))
             or exists(select 1 from course_purchase cp
               where cp.institution_id=m.institution_id and cp.student_id=m.student_id and cp.course_id=?)
-            or exists(select 1 from student_course_access_grant g
-              where g.institution_id=m.institution_id and g.student_id=m.student_id
-                and g.course_id=? and g.grant_reason='LEGACY_CLASS_ENROLLMENT')
             or exists(select 1 from student_program_enrollment spe
               join institution_course_assignment assignment
                 on assignment.institution_id=spe.institution_id and assignment.status='ASSIGNED'
@@ -926,7 +923,7 @@ public class TutorService {
                 and spe.program_id=? and spe.status='ACTIVE')
           )
       )
-      """,Boolean.class,studentId,institutionId,programId,programId,programId,programId);
+      """,Boolean.class,studentId,institutionId,programId,programId,programId);
     if(!Boolean.TRUE.equals(allowed)) throw new SecurityException(
         "Tutor course access is not authorised for the selected institution.");
   }

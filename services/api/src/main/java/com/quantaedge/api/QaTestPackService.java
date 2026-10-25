@@ -397,11 +397,17 @@ public class QaTestPackService {
     long quantaEdgeOwnedClassCourses = scalarCount("""
       select count(distinct p.id)
       from curriculum_program p
-      join institution_tenant qe on qe.tenant_code='QUANTA-EDGE' and qe.status='ACTIVE'
-      join institution_course_release r on r.program_id=p.id and r.source_institution_id=qe.id
-      join institution_course_assignment a on a.course_release_id=r.id and a.institution_id=qe.id and a.status='ASSIGNED'
-      join institution_course_entitlement e on e.program_id=p.id and e.institution_id=qe.id and e.status='ACTIVE'
-      where p.code in ('CLASS_6','CLASS_7','CLASS_8') and p.curriculum_version='CURRENT' and p.status='ACTIVE'
+      join institution_course_identity identity
+        on identity.id=p.course_identity_id
+       and identity.status='ACTIVE'
+       and identity.course_type_code=p.course_type_code
+      join institution_tenant qe
+        on qe.id=identity.source_institution_id
+       and qe.tenant_code='QUANTA-EDGE'
+       and qe.status='ACTIVE'
+      where p.code in ('CLASS_6','CLASS_7','CLASS_8')
+        and p.curriculum_version='CURRENT'
+        and p.status='ACTIVE'
       """);
     addCheck(runId, checks, "QUANTAEDGE_OWNS_CLASSES_6_7_8",
         quantaEdgeOwnedClassCourses == 3,
@@ -783,6 +789,32 @@ public class QaTestPackService {
     promoteQaCourseRelease(runId, number(courseGraph.get("release_class6_id")),
         number(courseGraph.get("qaCourseOwnerAdminId")), number(courseGraph.get("qaCourseReviewStaffId")),
         "QA-only course graph completed content setup before explicit distribution.");
+
+    // Assignment is deliberately after release promotion; the DB rejects cross-institution
+    // HRMS assignments while the source release is still DRAFT.
+    Long qaHrmsActorId=number(courseGraph.get("qaHrmsPlatformAdminId"));
+    Long assignmentA=insertCourseAssignment(runId,"course-assignment-class-7-to-a",
+        tenantA,number(courseGraph.get("release_class7_id")),"HRMS",qaHrmsActorId,
+        List.of("institution-QAT"+slug+"A","course-release-class-7"));
+    Long assignmentB=insertCourseAssignment(runId,"course-assignment-class-7-to-b",
+        tenantB,number(courseGraph.get("release_class7_id")),"HRMS",qaHrmsActorId,
+        List.of("institution-QAT"+slug+"B","course-release-class-7"));
+    Long assignmentC=insertCourseAssignment(runId,"course-assignment-class-6-to-c",
+        tenantC,number(courseGraph.get("release_class6_id")),"HRMS",qaHrmsActorId,
+        List.of("institution-QAT"+slug+"C","course-release-class-6"));
+
+    insertInstitutionCourseEntitlement(runId,"course-entitlement-a-class-7",tenantA,qaClass7ProgramId,
+        qaHrmsActorId,"institution-QAT"+slug+"A","course-release-class-7");
+    insertInstitutionCourseEntitlement(runId,"course-entitlement-b-class-7",tenantB,qaClass7ProgramId,
+        qaHrmsActorId,"institution-QAT"+slug+"B","course-release-class-7");
+    insertInstitutionCourseEntitlement(runId,"course-entitlement-c-class-6",tenantC,qaClass6ProgramId,
+        qaHrmsActorId,"institution-QAT"+slug+"C","course-release-class-6");
+
+    Map<String,Object> updatedCourseIds=new LinkedHashMap<>(testCourseIds);
+    updatedCourseIds.put("class7AssignmentAId",assignmentA);
+    updatedCourseIds.put("class7AssignmentBId",assignmentB);
+    updatedCourseIds.put("class6AssignmentCId",assignmentC);
+    courseGraph.put("courseIds",updatedCourseIds);
     Long lesson7Id = number(content7.get("lesson_id"));
     Long question7Id = number(content7.get("question_id"));
     Long lesson6Id = number(content6.get("lesson_id"));
@@ -887,23 +919,6 @@ public class QaTestPackService {
         quantaEdgeId, quantaEdgeOwnerAdmin, reviewerId, qaClass6ProgramId,
         "Run-owned QA release; Class 6 fixture course is owned by QuantaEdge.");
 
-    Long assignmentA = insertCourseAssignment(runId, "course-assignment-class-7-to-a",
-        tenantA, release7, "HRMS", hrmsPlatformAdminId,
-        List.of("institution-QAT" + slug + "A", "course-release-class-7"));
-    Long assignmentB = insertCourseAssignment(runId, "course-assignment-class-7-to-b",
-        tenantB, release7, "HRMS", hrmsPlatformAdminId,
-        List.of("institution-QAT" + slug + "B", "course-release-class-7"));
-    Long assignmentC = insertCourseAssignment(runId, "course-assignment-class-6-to-c",
-        tenantC, release6, "HRMS", hrmsPlatformAdminId,
-        List.of("institution-QAT" + slug + "C", "course-release-class-6"));
-
-    insertInstitutionCourseEntitlement(runId, "course-entitlement-a-class-7", tenantA, qaClass7ProgramId,
-        hrmsPlatformAdminId, "institution-QAT" + slug + "A", "course-release-class-7");
-    insertInstitutionCourseEntitlement(runId, "course-entitlement-b-class-7", tenantB, qaClass7ProgramId,
-        hrmsPlatformAdminId, "institution-QAT" + slug + "B", "course-release-class-7");
-    insertInstitutionCourseEntitlement(runId, "course-entitlement-c-class-6", tenantC, qaClass6ProgramId,
-        hrmsPlatformAdminId, "institution-QAT" + slug + "C", "course-release-class-6");
-
     Map<String,Object> result = new LinkedHashMap<>();
     result.put("release_class7_id", release7);
     result.put("release_class6_id", release6);
@@ -919,9 +934,8 @@ public class QaTestPackService {
         "username", "qa_quantaedge_" + slug.toLowerCase(Locale.ROOT), "password", fixturePassword));
     result.put("qaCourseOwnerAdminId", quantaEdgeOwnerAdmin);
     result.put("qaCourseReviewStaffId", reviewerId);
-    result.put("courseIds", Map.of("class6ProgramId", qaClass6ProgramId, "class7ProgramId", qaClass7ProgramId,
-        "class7AssignmentAId", assignmentA, "class7AssignmentBId", assignmentB,
-        "class6AssignmentCId", assignmentC));
+    result.put("qaHrmsPlatformAdminId", hrmsPlatformAdminId);
+    result.put("courseIds", Map.of("class6ProgramId", qaClass6ProgramId, "class7ProgramId", qaClass7ProgramId));
     return result;
   }
 
@@ -929,12 +943,12 @@ public class QaTestPackService {
     List<Long> ids = jdbc.queryForList("""
       select p.id
       from curriculum_program p
-      join institution_course_release r on r.program_id=p.id and r.source_institution_id=?
-      join institution_course_assignment a on a.course_release_id=r.id and a.institution_id=? and a.status='ASSIGNED'
-      join institution_course_entitlement e on e.program_id=p.id and e.institution_id=? and e.status='ACTIVE'
+      join institution_course_identity identity
+        on identity.id=p.course_identity_id and identity.source_institution_id=? and identity.status='ACTIVE'
+       and identity.course_type_code=p.course_type_code
       where p.code=? and p.curriculum_version='CURRENT' and p.status='ACTIVE'
-      order by p.id limit 1
-      """, Long.class, quantaEdgeId, quantaEdgeId, quantaEdgeId, courseCode);
+      order by p.content_version_no desc,p.id desc limit 1
+      """, Long.class, quantaEdgeId, courseCode);
     if (ids.isEmpty()) throw new IllegalStateException("QuantaEdge does not own an active assigned " + courseCode + " course.");
     return ids.getFirst();
   }
@@ -944,12 +958,11 @@ public class QaTestPackService {
     Long owned = jdbc.queryForObject("""
       select count(distinct p.id)
       from curriculum_program p
-      join institution_course_release r on r.program_id=p.id and r.source_institution_id=?
-      join institution_course_assignment a on a.course_release_id=r.id and a.institution_id=? and a.status='ASSIGNED'
-      join institution_course_entitlement e on e.program_id=p.id and e.institution_id=? and e.status='ACTIVE'
+      join institution_course_identity identity
+        on identity.id=p.course_identity_id and identity.source_institution_id=?
+       and identity.status='ACTIVE' and identity.course_type_code=p.course_type_code
       where p.id in (?,?,?) and p.status='ACTIVE'
-      """, Long.class, quantaEdgeId, quantaEdgeId, quantaEdgeId,
-        class6ProgramId, class7ProgramId, class8ProgramId);
+      """, Long.class, quantaEdgeId, class6ProgramId, class7ProgramId, class8ProgramId);
     if (owned == null || owned != 3L) throw new IllegalStateException("QuantaEdge must remain the active owner of Classes 6, 7 and 8.");
   }
 

@@ -502,7 +502,7 @@ export default function ContentStudio(){
  const canReview=hasPermission('CONTENT_REVIEW')&&isEditableDraft;
  const canPublishPermission=hasPermission('CONTENT_PUBLISH')&&isEditableDraft;
  const canForkVersion=Boolean(isSourcedCourse
-  && ['SHAREABLE','WITHDRAWN','LEGACY_MIGRATED'].includes(releaseState)
+  && ['SHAREABLE','WITHDRAWN'].includes(releaseState)
   && hasPermission('CONTENT_CREATE')&&hasPermission('CONTENT_EDIT'));
  async function createDraftVersion(){
   const sourceCourseId=Number(programFilter);
