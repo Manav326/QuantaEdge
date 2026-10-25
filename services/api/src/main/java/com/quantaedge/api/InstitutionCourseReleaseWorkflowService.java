@@ -160,13 +160,30 @@ public class InstitutionCourseReleaseWorkflowService {
 
   public List<Map<String,Object>> listSourceReleases(long institutionId) {
     return jdbc.queryForList("""
-        select r.id as release_id,r.program_id as course_id,p.public_id,p.code as course_code,
-          p.display_name,p.curriculum_version,r.release_version,r.release_state,r.content_fingerprint,
-          r.legacy_migration,r.submitted_at,r.quality_reviewed_at,r.quality_review_notes,
-          r.origin_approved_at,r.shareable_at,r.origin_rejection_reason
-        from institution_course_release r join curriculum_program p on p.id=r.program_id
-        where r.source_institution_id=?
-        order by r.program_id,r.release_version desc,r.id desc
+        with source_releases as (
+          select r.id as release_id,r.program_id as course_id,p.public_id,
+            identity.public_id as course_identity_public_id,
+            coalesce(identity.stable_course_key,p.code) as course_code,
+            p.display_name,p.curriculum_version,p.content_version_no,
+            r.release_version,r.release_state,r.content_fingerprint,
+            r.legacy_migration,r.submitted_at,r.quality_reviewed_at,r.quality_review_notes,
+            r.origin_approved_at,r.shareable_at,r.origin_rejection_reason,
+            row_number() over (
+              partition by coalesce(p.course_identity_id,-p.id)
+              order by p.content_version_no desc,r.release_version desc,r.id desc
+            ) as identity_rank
+          from institution_course_release r
+          join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+          left join institution_course_identity identity on identity.id=p.course_identity_id
+          where r.source_institution_id=?
+        )
+        select release_id,course_id,public_id,course_identity_public_id,course_code,display_name,
+          curriculum_version,content_version_no,release_version,release_state,content_fingerprint,
+          legacy_migration,submitted_at,quality_reviewed_at,quality_review_notes,
+          origin_approved_at,shareable_at,origin_rejection_reason
+        from source_releases
+        where identity_rank=1
+        order by display_name,course_code
         """,institutionId);
   }
 
