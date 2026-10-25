@@ -83,7 +83,8 @@ textarea {
 button:disabled,
 [aria-disabled="true"] {
   cursor: not-allowed;
-  opacity: .62;
+  opacity: 1;
+  filter: saturate(.55);
 }
 
 .qe-people-skip-link {
@@ -1372,7 +1373,12 @@ button:disabled,
 }
 
 .qe-people-button:disabled {
-  opacity: .62;
+  border-color: var(--qe-people-disabled-border, var(--line));
+  background: var(--qe-people-disabled-surface, var(--paper));
+  color: var(--qe-people-disabled-ink, var(--muted));
+  box-shadow: none;
+  opacity: 1;
+  filter: none;
   cursor: not-allowed;
 }
 
