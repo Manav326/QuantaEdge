@@ -163,8 +163,9 @@ export default function AssessmentsPage(){
   const tRef=useRef(t);
   useEffect(()=>{tRef.current=t;},[t]);
   const { courses, courseId, activeCourse, loadingCourses, courseError, selectCourse } = useAdminCourseScope();
+  const isAssessmentOnlyCourse=String(activeCourse?.course_type_code||'').toUpperCase()==='ASSESSMENT';
   const [classCode,setClassCode]=useState('');
-  const [subjectCode,setSubjectCode]=useState('maths');
+  const [subjectCode,setSubjectCode]=useState('');
   const [subjectOptions,setSubjectOptions]=useState<Array<{code:string;name:string}>>([]);
   const [chapterId,setChapterId]=useState('');
   const [statusFilter,setStatusFilter]=useState('ALL');
@@ -222,7 +223,7 @@ export default function AssessmentsPage(){
     if(!courseId){setAssessments([]);setAssessmentTotal(0);setChapters([]);setLoading(courses.length===0);return;}
     setLoading(true);setError('');
     try{
-      const params=new URLSearchParams({classCode,subjectCode,courseId,status:statusFilter,limit:String(assessmentPageSize),offset:String(assessmentPage*assessmentPageSize)});
+      const params=new URLSearchParams({classCode,subjectCode:isAssessmentOnlyCourse?'':subjectCode,courseId,status:statusFilter,limit:String(assessmentPageSize),offset:String(assessmentPage*assessmentPageSize)});
       const [assessmentRows,staffRows,contentRows]=await Promise.all([
         api('/api/v1/admin/assessments?'+params.toString()),
         api('/api/v1/admin/assessment-staff'),
@@ -245,7 +246,7 @@ export default function AssessmentsPage(){
        if(nextSubjects.length&&!nextSubjects.some(item=>item.code===subjectCode))setSubjectCode(nextSubjects[0].code);
     }catch(e){setError(e instanceof Error?e.message:tRef.current('admin.assessments.loadFailed'));}
     finally{setLoading(false);}
-  },[classCode,subjectCode,courseId,courses.length,statusFilter,assessmentPage,assessmentPageSize]);
+  },[classCode,subjectCode,isAssessmentOnlyCourse,courseId,courses.length,statusFilter,assessmentPage,assessmentPageSize]);
 
   const loadBank=useCallback(async(nextPage=bankPage,nextPageSize=bankPageSize)=>{
     if(!courseId){setBank([]);setBankTotal(0);setBankLoading(false);return;}
@@ -484,7 +485,7 @@ export default function AssessmentsPage(){
   return <main className="admin-shell">
     <AdminSidebar active="assessments" variant="content"/>
     <section className={'admin-main '+styles.page}>
-      <header className="admin-top"><div><span className="admin-kicker">{t('admin.assessments.eyebrow')}</span><h1>{t('admin.assessments.title')}</h1><p>{t('admin.assessments.description')}</p></div>{activeTab!=='analytics'&&<button type="button" className="admin-refresh" onClick={()=>activeTab==='author'?void loadAssessments():void loadQueue()}>↻</button>}</header>
+      <header className="admin-top"><div><span className="admin-kicker">{t('admin.assessments.eyebrow')}</span><h1>{t('admin.assessments.title')}</h1><p>{isAssessmentOnlyCourse?'Assessment-only course: course → test packs → assessments → ordered question snapshots. Use this workspace to inspect imported tests and correct their question/answer review. Publishing remains gated.':t('admin.assessments.description')}</p></div><div style={{display:"flex",gap:8,alignItems:"center",flexWrap:"wrap"}}><Link className="button button-dark" href={'/content?courseId='+encodeURIComponent(courseId)}>Back to Content Studio</Link>{activeTab!=='analytics'&&<button type="button" className="admin-refresh" onClick={()=>activeTab==='author'?void loadAssessments():void loadQueue()}>↻</button>}</div></header>
       <section className={styles.hero}>
         <div className={styles.heroIcon}>✓</div><div><span>{t('admin.assessments.heroEyebrow')}</span><h2>{t('admin.assessments.heroTitle')}</h2><p>{t('admin.assessments.heroDescription')}</p></div>
         <div className={styles.heroStats}><strong>{assessmentTotal}</strong><small>{t('admin.assessments.testsInFilter')}</small><strong>{assessments.reduce((sum,a)=>sum+Number(a.review_count||0),0)}</strong><small>{t('admin.assessments.attemptsAwaiting')}</small></div>
@@ -548,7 +549,9 @@ export default function AssessmentsPage(){
             })}</div>
           </div>}
         </section>
-        <section className={styles.panel}>
+        {!isAssessmentOnlyCourse && (
+          <>
+<section className={styles.panel}>
           <div className={styles.panelHeading}><div><span>{t('admin.assessments.step01')}</span><h2>{t('admin.assessments.chooseCurriculum')}</h2><p>{t('admin.assessments.chooseCurriculumDescription')}</p></div><b>01</b></div>
           <div className={styles.fields}>
             <AdminCourseSelector courses={courses} courseId={courseId} loading={loadingCourses} label={t('admin.assessments.course')} placeholder={loadingCourses?t('admin.assessments.chooseCurriculum'):t('admin.assessments.noCoursesAssigned')} onChange={value=>{if(selectCourse(value)){setChapterId('');setBank([]);setBankTotal(0);setBankPage(0);setSelectedQuestionIds([]);setAssessmentPage(0);setQueuePage(0);setReview(null);}}} disabled={Boolean(courseError)} />
@@ -575,7 +578,9 @@ export default function AssessmentsPage(){
           </div>
           <div className={styles.submitBar}><p>{t('admin.assessments.selectedQuestionsSummary',{count:selectedQuestionIds.length})}</p><button className={styles.primaryButton} type="button" onClick={()=>void createAssessment()} disabled={busy||!courseId||!title.trim()||selectedQuestionIds.length===0}>{busy?'Saving…':t('admin.assessments.createDraftTest')}</button></div>
         </section>
-        <section className={styles.panel}>
+                  </>
+        )}
+<section className={styles.panel}>
           <div className={styles.panelHeading}><div><span>{t('admin.assessments.governance')}</span><h2>{t('admin.assessments.testCatalogue')}</h2><p>{t('admin.assessments.catalogueDescription')}</p></div><select className={styles.filter} value={statusFilter} onChange={e=>{setStatusFilter(e.target.value);setAssessmentPage(0)}}><option value="ALL">{t('admin.assessments.allStatuses')}</option><option value="DRAFT">{t('admin.assessments.draftsOnly')}</option><option value="PUBLISHED">{t('admin.assessments.publishedOnly')}</option><option value="ARCHIVED">{t('admin.assessments.archivedOnly')}</option></select></div>
           <div className={styles.fields+' '+styles.compactFields}><AdminCourseSelector courses={courses} courseId={courseId} loading={loadingCourses} label={t('admin.assessments.course')} placeholder={t('admin.assessments.noCoursesAssigned')} onChange={value=>{if(selectCourse(value)){setAssessmentPage(0);setQueuePage(0);setReview(null);}}} disabled={Boolean(courseError)} /><label>{t('admin.assessments.subject')}<select value={subjectCode} onChange={e=>{setSubjectCode(e.target.value);setAssessmentPage(0)}} disabled={!subjectOptions.length}>{subjectOptions.map(subject=><option key={subject.code} value={subject.code}>{subject.name}</option>)}</select></label></div>
           {loading?<p className={styles.empty}>{t('admin.assessments.loadingTests')}</p>:assessments.length===0?<div className={styles.empty}><b>{t('admin.assessments.noAssessmentsFilter')}</b><span>{t('admin.assessments.createDraftHint')}</span></div>:<div className={styles.testList}>{assessments.map(row=><article className={styles.testCard} key={row.assessment_id}>
