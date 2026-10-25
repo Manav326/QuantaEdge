@@ -2,6 +2,7 @@
 .page button,.page input,.page select{font:inherit}
 .page button{cursor:pointer}
 .page button:disabled{opacity:1;filter:saturate(.55);cursor:not-allowed;box-shadow:none}
+.page :is(.primary,.secondary,.warning,.danger,.quiet):disabled{border-color:var(--qe-people-disabled-border,#d0d5dd);background:var(--qe-people-disabled-surface,#f2f4f7);color:var(--qe-people-disabled-ink,#667085);opacity:1;filter:none;cursor:not-allowed;box-shadow:none}
 .pageHeader{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
 .pageHeader h1{margin:8px 0;font-size:clamp(27px,3vw,38px);letter-spacing:-1.5px;line-height:1.08}
 .pageHeader p,.panel>p,.panelHeading p,.detailHeader p{color:var(--muted);font-size:12px;line-height:1.7;margin:0;max-width:750px}
