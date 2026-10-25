@@ -590,6 +590,16 @@ public class PlatformInstitutionController {
     if(sourceInstitutionId==institutionId)
       throw new IllegalArgumentException("The origin institution already owns this course release; cross-institution assignment is for destination institutions.");
     if(enabled) {
+      Boolean retiredOffer=jdbc.queryForObject("""
+          select exists(
+            select 1 from institution_marketplace_offer
+            where institution_id=? and course_release_id=?
+              and (status='ARCHIVED' or obsolete_at is not null)
+          )
+          """,Boolean.class,institutionId,releaseId);
+      if(Boolean.TRUE.equals(retiredOffer))
+        throw new ResponseStatusException(HttpStatus.CONFLICT,
+            "This release already has an archived Marketplace listing. Create and approve a new source release before assigning it again.");
       long courseId=((Number)release.get("program_id")).longValue();
       String savedFingerprint=String.valueOf(release.get("content_fingerprint")).trim();
       if(!Boolean.TRUE.equals(jdbc.queryForObject(
