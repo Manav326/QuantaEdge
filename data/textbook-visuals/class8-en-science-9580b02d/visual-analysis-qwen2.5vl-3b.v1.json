@@ -14,13 +14,13 @@
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "4fdef3a69f918bffeb046522",
-      "19c227fd1fc13adb636a0c58"
+      "35ff0b921f1e0b0945a8f8df",
+      "50ad9b07522858e9eda7ab39"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1290,
-    "assets_remaining": 1001,
-    "assets_completion_percent": 56.3,
+    "assets_analyzed": 1291,
+    "assets_remaining": 1000,
+    "assets_completion_percent": 56.4,
     "assets_failed": 13,
     "assets_skipped_from_checkpoint": 1290,
     "batch_limit": 5,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40233310877",
-      "checkpointed_at": "2026-10-25T22:19:35Z"
+      "checkpointed_at": "2026-10-25T22:31:47Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40233310877",
-      "checkpointed_at": "2026-10-25T22:20:23Z"
+      "checkpointed_at": "2026-10-25T22:32:36Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40233310877",
-      "checkpointed_at": "2026-10-25T22:21:21Z"
+      "checkpointed_at": "2026-10-25T22:33:35Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -42346,7 +42346,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40220756546",
+      "run_id": "40233310877",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
       "human_review_required": true,
@@ -42650,6 +42650,32 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40220756546",
       "checkpointed_at": "2026-10-25T20:12:06Z"
+    },
+    {
+      "asset_id": "50ad9b07522858e9eda7ab39",
+      "asset_sha256": "89a401bc092af65432e6250d1d2f89972eb0f89e245471f591ea64ccf067740c",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 104,
+      "asset_path": "assets/89a401bc092af65432e6250d1d2f89972eb0f89e245471f591ea64ccf067740c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "77dac7f858d3c2ad86ca022679a4bf0db50a31cf27b414c0681a8331db1e8f89",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a person thinking with one hand on the chin and the other hand on the hip.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a cartoon-style illustration of a person thinking, possibly related to educational content about thinking or problem-solving.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40233310877",
+      "checkpointed_at": "2026-10-25T22:39:47Z"
     }
   ]
 }
