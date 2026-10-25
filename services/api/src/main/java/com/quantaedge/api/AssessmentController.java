@@ -1074,7 +1074,11 @@ public class AssessmentController {
         ?String.valueOf(answer.get("value")):null);
     proposed.put("explanation",snapshot.getOrDefault("explanation",""));
     snapshot.put("proposed_answer",proposed);
+    // TRE/import snapshots track the question review and answer-key review separately.
+    // This endpoint validates the authoritative answer and explanation as part of the same
+    // reviewer decision, so keep both snapshot status fields synchronized with that decision.
     snapshot.put("question_review_status",reviewStatus);
+    snapshot.put("answer_review_status",reviewStatus);
     String snapshotJson=questionHistory.json(snapshot);
     jdbc.update("update assessment_question set question_snapshot=?::jsonb where id=?",snapshotJson,questionId);
     audit(assessmentId,null,context,null,null,"IMPORTED_QUESTION_REVIEWED",
