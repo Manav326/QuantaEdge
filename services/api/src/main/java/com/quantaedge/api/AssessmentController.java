@@ -985,14 +985,20 @@ public class AssessmentController {
       throw badRequest("Review status must be APPROVED, REJECTED, or PENDING_HUMAN_REVIEW.");
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select aq.id,aq.question_snapshot::text as question_snapshot,a.source_package_id,a.status,
+        p.course_type_code,coalesce(mode.delivery_mode,'LEARNING_CONTENT') as delivery_mode,
         exists(select 1 from student_assessment_attempt att where att.assessment_id=a.id and att.status<>'ABANDONED') as has_attempts
-      from assessment_question aq join assessment a on a.id=aq.assessment_id
+      from assessment_question aq
+      join assessment a on a.id=aq.assessment_id
+      join curriculum_program p on p.id=a.course_id
+      left join curriculum_program_delivery_mode mode on mode.program_id=p.id
       where aq.assessment_id=? and aq.sequence_no=? and a.course_id=?
       """,assessmentId,sequenceNo,courseId);
     if(rows.isEmpty())throw notFound("Imported assessment question",sequenceNo);
     Map<String,Object> row=rows.getFirst();
-    if(row.get("source_package_id")==null)
-      throw badRequest("This review endpoint is only for questions imported from a portable package.");
+    boolean assessmentOnlyCourse = "ASSESSMENT".equals(String.valueOf(row.get("course_type_code")))
+        && "ASSESSMENT_ONLY".equals(String.valueOf(row.get("delivery_mode")));
+    if(row.get("source_package_id")==null && !assessmentOnlyCourse)
+      throw badRequest("This review endpoint is for portable-package questions or tests belonging to an ASSESSMENT_ONLY course.");
     if(!"DRAFT".equals(String.valueOf(row.get("status")))||Boolean.TRUE.equals(row.get("has_attempts")))
       throw new ResponseStatusException(HttpStatus.CONFLICT,
           "This assessment is no longer an untouched draft. Import a new package version to preserve historical attempt snapshots.");
@@ -1004,7 +1010,10 @@ public class AssessmentController {
       throw badRequest("answerPayload must be an object containing kind and value.");
     if(body.containsKey("answerPayload"))snapshot.put("answer_payload",answer);
     if(body.containsKey("explanation")) {
-      String explanation=requiredText(body.get("explanation"),"Explanation",700);
+      String explanation=body.get("explanation")==null?"":String.valueOf(body.get("explanation")).trim();
+      if(explanation.length()>700)throw badRequest("Explanation must be at most 700 characters.");
+      if("APPROVED".equals(reviewStatus)&&explanation.isBlank())
+        throw badRequest("Add an explanation before approving this question.");
       snapshot.put("explanation",explanation);
       Map<String,Object> proposed=stringMapOrEmpty(snapshot.get("proposed_answer"));
       proposed.put("explanation",explanation);
@@ -1012,6 +1021,7 @@ public class AssessmentController {
     }
     if(answer!=null) {
       String kind=String.valueOf(answer.getOrDefault("kind","")).toUpperCase(Locale.ROOT);
+      answer.put("kind",kind);
       Object value=answer.get("value");
       if(!Set.of("OPTION","MULTI_OPTION","TEXT","NUMERIC","ORDER","MATCH").contains(kind)
           && !("UNRESOLVED".equals(kind)&&!"APPROVED".equals(reviewStatus)))
@@ -1074,13 +1084,25 @@ public class AssessmentController {
         ?String.valueOf(answer.get("value")):null);
     proposed.put("explanation",snapshot.getOrDefault("explanation",""));
     snapshot.put("proposed_answer",proposed);
+    // TRE/import snapshots track the question review and answer-key review separately.
+    // This endpoint validates the authoritative answer and explanation as part of the same
+    // reviewer decision, so keep both snapshot status fields synchronized with that decision.
     snapshot.put("question_review_status",reviewStatus);
+    snapshot.put("answer_review_status",reviewStatus);
     String snapshotJson=questionHistory.json(snapshot);
+    if("APPROVED".equals(reviewStatus)) {
+      Boolean publishReady=jdbc.queryForObject(
+          "select assessment_question_snapshot_publish_ready(?::jsonb)",Boolean.class,snapshotJson);
+      if(!Boolean.TRUE.equals(publishReady))
+        throw badRequest("The question does not satisfy the shared publication contract. Check the answer type/value, option references, explanation and both review statuses before approving it.");
+    }
     jdbc.update("update assessment_question set question_snapshot=?::jsonb where id=?",snapshotJson,questionId);
-    audit(assessmentId,null,context,null,null,"IMPORTED_QUESTION_REVIEWED",
-        "PENDING_HUMAN_REVIEW",reviewStatus,"Reviewed imported question #"+sequenceNo+".");
+    String reviewAuditAction=row.get("source_package_id")!=null
+        ?"IMPORTED_QUESTION_REVIEWED":"ASSESSMENT_ONLY_QUESTION_REVIEWED";
+    audit(assessmentId,null,context,null,null,reviewAuditAction,
+        "PENDING_HUMAN_REVIEW",reviewStatus,"Reviewed assessment question #"+sequenceNo+".");
     staffAudit.recordAction(context,"/api/v1/admin/assessments/"+assessmentId+"/package-questions/"+sequenceNo+"/review",
-        "Reviewed imported question #"+sequenceNo+" as "+reviewStatus+".");
+        "Reviewed assessment question #"+sequenceNo+" as "+reviewStatus+".");
     Map<String,Object> result=new LinkedHashMap<>();
     result.put("assessmentId",assessmentId);result.put("sequenceNo",sequenceNo);
     result.put("reviewStatus",reviewStatus);
@@ -1361,13 +1383,16 @@ public class AssessmentController {
     else authorization.requirePermission(context, "CONTENT_EDIT");
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select a.id,a.title,a.status,a.is_generated,a.subject_id,a.chapter_id,a.source_package_id,
+             p.course_type_code,coalesce(mode.delivery_mode,'LEARNING_CONTENT') as delivery_mode,
              s.code as subject_code,c.code as class_code,
              count(aq.id) as question_count
       from assessment a
+      join curriculum_program p on p.id=a.course_id
+      left join curriculum_program_delivery_mode mode on mode.program_id=p.id
       left join curriculum_subject s on s.id=a.subject_id
       left join curriculum_class c on c.id=s.class_id
       left join assessment_question aq on aq.assessment_id=a.id
-      where a.id=? and a.course_id=? group by a.id,s.code,c.code
+      where a.id=? and a.course_id=? group by a.id,s.code,c.code,p.course_type_code,mode.delivery_mode
       """, assessmentId,courseId);
     if (rows.isEmpty()) throw notFound("Assessment", assessmentId);
     Map<String, Object> row = rows.getFirst();
@@ -1375,42 +1400,17 @@ public class AssessmentController {
     if ("PUBLISHED".equals(next) && ((Number) row.get("question_count")).intValue() < 1) {
       throw badRequest("Add at least one question before publishing this test.");
     }
-    if ("PUBLISHED".equals(next) && row.get("source_package_id") != null) {
+    boolean assessmentOnlyCourse = "ASSESSMENT".equals(String.valueOf(row.get("course_type_code")))
+        && "ASSESSMENT_ONLY".equals(String.valueOf(row.get("delivery_mode")));
+    boolean requiresQuestionAnswerReview = row.get("source_package_id") != null || assessmentOnlyCourse;
+    if ("PUBLISHED".equals(next) && requiresQuestionAnswerReview) {
       Long pendingReview = jdbc.queryForObject("""
           select count(*) from assessment_question aq
-          where aq.assessment_id=? and (
-            coalesce(aq.question_snapshot->>'question_review_status','PENDING_HUMAN_REVIEW') <> 'APPROVED'
-            or coalesce((aq.question_snapshot->'answer_payload')->>'kind','UNRESOLVED') in ('','UNRESOLVED')
-            or aq.question_snapshot->'answer_payload' is null
-            or aq.question_snapshot->'answer_payload'->'value' is null
-            or (jsonb_typeof(aq.question_snapshot->'answer_payload'->'value')='string'
-                and btrim(aq.question_snapshot->'answer_payload'->>'value')='')
-            or (
-              coalesce(aq.question_snapshot->'answer_payload'->>'kind','')='OPTION'
-              and not exists (
-                select 1 from jsonb_array_elements(coalesce(aq.question_snapshot->'options','[]'::jsonb)) option_row
-                where coalesce(option_row->>'key',option_row->>'option_key') =
-                  aq.question_snapshot->'answer_payload'->>'value'
-              )
-            )
-            or (
-              coalesce(aq.question_snapshot->'answer_payload'->>'kind','')='MULTI_OPTION'
-              and (
-                jsonb_typeof(aq.question_snapshot->'answer_payload'->'value') <> 'array'
-                or exists (
-                  select 1
-                  from jsonb_array_elements(aq.question_snapshot->'answer_payload'->'value') selected_key
-                  where not exists (
-                    select 1 from jsonb_array_elements(coalesce(aq.question_snapshot->'options','[]'::jsonb)) option_row
-                    where coalesce(option_row->>'key',option_row->>'option_key')=selected_key #>> '{}'
-                  )
-                )
-              )
-            )
-          )
+          where aq.assessment_id=?
+            and not assessment_question_snapshot_publish_ready(aq.question_snapshot)
           """,Long.class,assessmentId);
       if(pendingReview!=null&&pendingReview>0) {
-        throw badRequest("This imported source-paper test still has questions or answer keys pending human review. Keep it in Draft until the reviewed answer package is imported.");
+        throw badRequest("This test still has questions or answer keys that have not passed human review. Keep it in Draft until every question and answer satisfies the shared publication contract.");
       }
     }
     if (Boolean.TRUE.equals(row.get("is_generated"))) {
