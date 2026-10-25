@@ -21,6 +21,7 @@ type LaunchItem = {
   listingTitle?: string;
   description?: string;
   offerStatus: string;
+  marketplaceVisible?: boolean;
   pricePaise?: number | null;
   currency?: string;
   ready: boolean;
@@ -398,7 +399,8 @@ export default function MarketplaceLaunchStepper({
     return {
       total: items.length,
       ready: items.filter(item => item.ready && item.offerStatus === 'APPROVED').length,
-      published: items.filter(item => item.offerStatus === 'PUBLISHED').length,
+      published: items.filter(item => item.marketplaceVisible === true).length,
+      publishedStatus: items.filter(item => item.offerStatus === 'PUBLISHED').length,
     };
   }, [data]);
 
@@ -510,7 +512,7 @@ export default function MarketplaceLaunchStepper({
         && release.published_chapters > 0 && release.published_lessons > 0;
     if (approved && (!release.contentCurrent || !releaseReady)) {
       setError(assessmentOnly
-        ? 'This assessment-only release is not ready. Confirm the exact TRE source papers and question inventory are complete, then refresh the review.'
+        ? 'Do not approve this frozen release while any assessment or test pack is still Draft. Reject it for correction, then have the source institution review every question/answer, publish all assessments (which publishes complete packs), and submit a fresh release.'
         : 'This release is not ready for quality approval. Refresh the checklist and ensure every active subject has published lessons.');
       return;
     }
@@ -781,8 +783,13 @@ export default function MarketplaceLaunchStepper({
         <div className={styles.summaryStats}>
           <div><strong>{loading ? '—' : counts.total}</strong><span>Assigned courses</span></div>
           <div><strong>{loading ? '—' : counts.ready}</strong><span>Ready to publish</span></div>
-          <div><strong>{loading ? '—' : counts.published}</strong><span>Currently published</span></div>
+          <div><strong>{loading ? '—' : counts.published}</strong><span>Currently published to learners</span></div>
         </div>
+        {!loading && counts.publishedStatus > counts.published && (
+          <p className={styles.summaryHint}>
+            {counts.publishedStatus} offers still carry a PUBLISHED status, but {counts.publishedStatus - counts.published} are not currently discoverable by learners. Check the release-quality, origin-approval, current-fingerprint, and newer-version gates below; loading this checklist does not change any publication status.
+          </p>
+        )}
       </div>
 
       {!loading && data && (data.coursePackageImports || []).length > 0 && (
@@ -882,7 +889,7 @@ export default function MarketplaceLaunchStepper({
                         <span>ASSESSMENT_ONLY</span>
                         <span>{release.assessment_count} tests</span>
                         <span>{release.assessment_question_count} questions</span>
-                        <span>{release.assessment_only_ready ? 'TRE inventory complete' : 'TRE inventory incomplete'}</span>
+                        <span>{release.assessment_only_ready ? 'Assessment hierarchy complete' : 'Assessment hierarchy incomplete'}</span>
                       </> : <>
                         <span>{release.active_subject_count} active subjects</span>
                         <span>{release.subjects_with_published_lessons} with lessons</span>

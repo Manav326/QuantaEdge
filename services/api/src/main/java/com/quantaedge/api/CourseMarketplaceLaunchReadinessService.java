@@ -48,9 +48,9 @@ public class CourseMarketplaceLaunchReadinessService {
   public Map<String,Object> inspectAssignment(long assignmentId,long institutionScope) {
     List<Map<String,Object>> rows=jdbc.queryForList("""
         select a.id as assignment_id,a.institution_id,a.status as assignment_status,
-          r.id as release_id,r.release_state,r.content_fingerprint,
+          r.id as release_id,r.release_state,r.content_fingerprint,r.updated_at as release_updated_at,
           t.display_name as institution_name,t.status as institution_status,
-          p.id as course_id,p.code as course_code,p.display_name as course_name,p.status as course_status,
+          p.id as course_id,p.code as course_code,p.display_name as course_name,p.status as course_status,p.course_type_code,
           coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=p.id),'LEARNING_CONTENT') as delivery_mode,
           (select count(distinct ps.subject_id)
              from curriculum_program_subject ps join curriculum_subject s
@@ -114,24 +114,38 @@ public class CourseMarketplaceLaunchReadinessService {
         "The institution needs an active assignment to a platform-reviewed, origin-approved SHAREABLE course release.");
     long courseId=number(row.get("course_id"));
     String savedFingerprint=text(row.get("content_fingerprint"));
-    boolean contentUnchanged=!savedFingerprint.isBlank()&&savedFingerprint.equals(contentFingerprint(courseId));
+    // Origin assignments and legacy releases are not eligible for listing until their lifecycle
+    // gates pass. Defer the full graph hash until HRMS quality approval; the dedicated quality
+    // review queue still verifies the submitted fingerprint before a reviewer can approve it.
+    boolean fingerprintApplicable=List.of("QUALITY_APPROVED","SHAREABLE").contains(releaseState);
+    boolean contentUnchanged=fingerprintApplicable
+        &&contentFingerprintMatches(courseId,savedFingerprint,row.get("release_updated_at"));
     add(checks,"CONTENT_REVIEW_CURRENT","Reviewed course content is current",contentUnchanged,
-        "The course content has changed since quality review or has no reviewed fingerprint. Resubmit the release for platform quality review.");
+        fingerprintApplicable
+            ? "The course content has changed since quality review or has no reviewed fingerprint. Resubmit the release for platform quality review."
+            : "This release has not completed HRMS quality approval. Content-fingerprint comparison is deferred until quality review passes.");
     addPackageRightsCheck(checks,courseId);
     long subjectCount=number(row.get("subject_count"));
     long subjectsWithLessons=number(row.get("subjects_with_published_lessons"));
     long chapterCount=number(row.get("published_chapter_count"));
     long lessonCount=number(row.get("published_lesson_count"));
-    boolean assessmentOnly="ASSESSMENT_ONLY".equals(text(row.get("delivery_mode")));
+    String courseTypeCode=text(row.get("course_type_code"));
+    boolean assessmentOnly="ASSESSMENT".equals(courseTypeCode)
+        &&"ASSESSMENT_ONLY".equals(text(row.get("delivery_mode")));
+    boolean k12Course="K12".equals(courseTypeCode)
+        &&"LEARNING_CONTENT".equals(text(row.get("delivery_mode")));
     boolean requiredContentReady=assessmentOnly
         ? assessmentOnlyCoursePublishReady(courseId)
-        : subjectCount>0&&subjectsWithLessons==subjectCount&&chapterCount>0&&lessonCount>0;
+        : k12Course&&subjectCount>0&&subjectsWithLessons==subjectCount&&chapterCount>0&&lessonCount>0;
     add(checks,"PUBLISHED_LEARNING_CONTENT",
-        assessmentOnly?"All three source-paper tests are published and reviewed":"Every active mapped subject has published lessons",
+        assessmentOnly?"All test-pack assessments are published and reviewed"
+            : k12Course?"Every active mapped subject has published lessons":"Course-type Marketplace readiness is not supported",
         requiredContentReady,
         assessmentOnly
-            ? "Publish all three source-paper tests after human review of questions and answer keys before listing this course."
-            : "Publish reviewed lessons in every active subject mapped to this course before listing it.");
+            ? "Publish every assessment in every test pack after human review of questions and answer keys before listing this course."
+            : k12Course
+                ? "Publish reviewed lessons in every active subject mapped to this course."
+                : "Keep this course unlisted until its registered hierarchy has a complete importer and server-side publication-readiness contract.");
     add(checks,"OFFER_TERMS","Marketplace offer is configured",false,
         "Create a draft marketplace offer and explicitly set its listing title, description and INR price.");
     List<String> blockers=checks.stream().filter(check->!Boolean.TRUE.equals(check.get("passed")))
@@ -161,9 +175,34 @@ public class CourseMarketplaceLaunchReadinessService {
     List<Map<String,Object>> rows = jdbc.queryForList("""
         select o.id as offer_id,o.institution_id,o.assignment_id,o.course_release_id,o.course_id,
           o.title_override,o.description,o.price_paise,o.currency,o.status as offer_status,
+          o.hrms_published_by_staff_id,
+          not exists (
+            select 1
+            from institution_marketplace_offer newer_offer
+            join institution_course_assignment newer_assignment
+              on newer_assignment.id=newer_offer.assignment_id
+             and newer_assignment.institution_id=newer_offer.institution_id
+             and newer_assignment.status='ASSIGNED'
+            join institution_course_release newer_release
+              on newer_release.id=newer_offer.course_release_id
+             and newer_release.program_id=newer_offer.course_id
+            join curriculum_program newer_program
+              on newer_program.id=newer_release.program_id
+             and newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'
+             and newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'
+             and newer_program.course_identity_id=p.course_identity_id
+             and newer_program.content_version_no>p.content_version_no
+            where newer_offer.institution_id=o.institution_id
+              and newer_offer.status='PUBLISHED'
+              and newer_offer.hrms_published_by_staff_id is not null
+              and newer_release.release_state='SHAREABLE'
+              and course_marketplace_content_type_ready(newer_program.id)
+              and course_release_fingerprint_current(newer_release.program_id,newer_release.content_fingerprint::text,newer_release.updated_at)
+          ) as current_offer_version,
           t.display_name as institution_name,t.status as institution_status,
-          a.status as assignment_status,r.release_state,r.content_fingerprint,
-          p.status as course_status,p.code as course_code,p.display_name as course_name,
+          a.status as assignment_status,r.release_state,r.content_fingerprint,r.updated_at as release_updated_at,
+          p.status as course_status,p.code as course_code,p.display_name as course_name,p.course_type_code,
+          course_marketplace_content_type_ready(p.id) as course_type_publish_ready,
           coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=p.id),'LEARNING_CONTENT') as delivery_mode,
           (select count(distinct ps.subject_id)
              from curriculum_program_subject ps
@@ -231,25 +270,39 @@ public class CourseMarketplaceLaunchReadinessService {
         "The institution needs an active assignment to a platform-reviewed, origin-approved SHAREABLE course release.");
     long courseId = number(offer.get("course_id"));
     String savedFingerprint = text(offer.get("content_fingerprint"));
-    boolean contentUnchanged = !savedFingerprint.isBlank()
-        && savedFingerprint.equals(contentFingerprint(courseId));
+    // Fingerprints are only authoritative after HRMS quality approval. Legacy-migrated,
+    // draft, and in-review releases already fail the preceding lifecycle gate, so recomputing
+    // a full content graph fingerprint here adds no publication safety and can exhaust database
+    // memory for large historical K-12 courses.
+    boolean fingerprintApplicable = List.of("QUALITY_APPROVED","SHAREABLE").contains(releaseState);
+    boolean contentUnchanged = fingerprintApplicable
+        && contentFingerprintMatches(courseId,savedFingerprint,offer.get("release_updated_at"));
     add(checks,"CONTENT_REVIEW_CURRENT","Reviewed course content is current",contentUnchanged,
-        "The course content has changed since quality review or has no reviewed fingerprint. Resubmit the release for platform quality review.");
+        fingerprintApplicable
+            ? "The course content has changed since quality review or has no reviewed fingerprint. Resubmit the release for platform quality review."
+            : "This release has not completed HRMS quality approval. Content-fingerprint comparison is deferred until quality review passes.");
     addPackageRightsCheck(checks,courseId);
     long subjectCount = number(offer.get("subject_count"));
     long subjectsWithLessons = number(offer.get("subjects_with_published_lessons"));
     long chapterCount = number(offer.get("published_chapter_count"));
     long lessonCount = number(offer.get("published_lesson_count"));
-    boolean assessmentOnly="ASSESSMENT_ONLY".equals(text(offer.get("delivery_mode")));
+    String courseTypeCode=text(offer.get("course_type_code"));
+    boolean assessmentOnly="ASSESSMENT".equals(courseTypeCode)
+        &&"ASSESSMENT_ONLY".equals(text(offer.get("delivery_mode")));
+    boolean k12Course="K12".equals(courseTypeCode)
+        &&"LEARNING_CONTENT".equals(text(offer.get("delivery_mode")));
     boolean requiredContentReady=assessmentOnly
         ? assessmentOnlyCoursePublishReady(number(offer.get("course_id")))
-        : subjectCount > 0 && subjectsWithLessons == subjectCount && chapterCount > 0 && lessonCount > 0;
+        : k12Course&&subjectCount>0&&subjectsWithLessons==subjectCount&&chapterCount>0&&lessonCount>0;
     add(checks,"PUBLISHED_LEARNING_CONTENT",
-        assessmentOnly?"All three source-paper tests are published and reviewed":"Every active mapped subject has published lessons",
+        assessmentOnly?"All test-pack assessments are published and reviewed"
+            : k12Course?"Every active mapped subject has published lessons":"Course-type Marketplace readiness is not supported",
         requiredContentReady,
         assessmentOnly
-            ? "Publish all three source-paper tests after human review of questions and answer keys before listing this course."
-            : "Publish reviewed lessons in every active subject mapped to this course before listing it.");
+            ? "Publish every assessment in every test pack after human review of questions and answer keys before listing this course."
+            : k12Course
+                ? "Publish reviewed lessons in every active subject mapped to this course."
+                : "Keep this course unlisted until its registered hierarchy has a complete importer and server-side publication-readiness contract.");
 
     String courseName = text(offer.get("title_override")).isBlank()
         ? text(offer.get("course_name")) : text(offer.get("title_override"));
@@ -304,6 +357,17 @@ public class CourseMarketplaceLaunchReadinessService {
     result.put("pricePaise",pricePaise);
     result.put("currency",currency);
     result.put("ready",blockers.isEmpty());
+    result.put("marketplaceVisible",
+        "PUBLISHED".equals(text(offer.get("offer_status")))
+            &&offer.get("hrms_published_by_staff_id") instanceof Number
+            &&"ACTIVE".equals(text(offer.get("institution_status")))
+            &&"ACTIVE".equals(text(offer.get("course_status")))
+            &&!"GENERAL".equalsIgnoreCase(text(offer.get("course_code")))
+            &&"ASSIGNED".equals(text(offer.get("assignment_status")))
+            &&"SHAREABLE".equals(releaseState)
+            &&contentUnchanged
+            &&Boolean.TRUE.equals(offer.get("current_offer_version"))
+            &&Boolean.TRUE.equals(offer.get("course_type_publish_ready")));
     result.put("checks",checks);
     result.put("blockingIssues",blockers);
     result.put("message",blockers.isEmpty()
@@ -609,6 +673,19 @@ public class CourseMarketplaceLaunchReadinessService {
   public boolean contentFingerprintMatches(long programId,String savedFingerprint) {
     return savedFingerprint!=null&&!savedFingerprint.isBlank()
         &&savedFingerprint.trim().equals(contentFingerprint(programId));
+  }
+
+  /**
+   * Validate with the release verification marker when possible. V180 freezes the graph once it
+   * enters review; V196 refreshed current fingerprints and updated_at. Older rows fall back to
+   * the canonical full comparison so pre-existing stale releases remain blocked.
+   */
+  public boolean contentFingerprintMatches(long programId,String savedFingerprint,Object releaseUpdatedAt) {
+    if(savedFingerprint==null||savedFingerprint.isBlank()||releaseUpdatedAt==null)return false;
+    Boolean matches=jdbc.queryForObject(
+        "select course_release_fingerprint_current(?,?,?)",Boolean.class,
+        programId,savedFingerprint.trim(),releaseUpdatedAt);
+    return Boolean.TRUE.equals(matches);
   }
 
   private String contentFingerprint(long programId) {

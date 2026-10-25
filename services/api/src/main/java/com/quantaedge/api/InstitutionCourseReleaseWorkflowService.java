@@ -55,9 +55,9 @@ public class InstitutionCourseReleaseWorkflowService {
         """,programId);
     String deliveryMode=String.valueOf(owned.getFirst().get("delivery_model"));
     if("ASSESSMENT_ONLY".equals(deliveryMode)) {
-      Boolean ready=jdbc.queryForObject("select assessment_only_course_ready(?)",Boolean.class,programId);
+      Boolean ready=jdbc.queryForObject("select assessment_only_course_publish_ready(?)",Boolean.class,programId);
       if(!Boolean.TRUE.equals(ready)) {
-        throw conflict("Assessment-only release requires the three complete, source-verified TRE paper sets. Tests remain draft until question/answer review passes.");
+        throw conflict("Before submitting an assessment-only release, finish human question/answer review and publish every assessment and its complete test pack. The release graph freezes once HRMS quality review starts; complete test review first, then submit the release.");
       }
       evidence.put("deliveryMode",deliveryMode);
       evidence.put("assessmentOnlyReady",true);
@@ -131,7 +131,9 @@ public class InstitutionCourseReleaseWorkflowService {
     if(!"QUALITY_APPROVED".equals(String.valueOf(release.get("release_state"))))
       throw conflict("Platform content-quality review must pass before origin-institution approval.");
     long courseId=((Number)release.get("program_id")).longValue();
-    if(!String.valueOf(release.get("content_fingerprint")).trim().equals(contentFingerprint(courseId)))
+    if(!Boolean.TRUE.equals(jdbc.queryForObject(
+        "select course_release_fingerprint_current(?,?,?)",Boolean.class,
+        courseId,String.valueOf(release.get("content_fingerprint")).trim(),release.get("updated_at"))))
       throw conflict("Course content changed after review. Submit a fresh release.");
     int changed=jdbc.update("""
         update institution_course_release set release_state='SHAREABLE',
@@ -159,7 +161,7 @@ public class InstitutionCourseReleaseWorkflowService {
 
   private Map<String,Object> loadOriginRelease(long releaseId,long institutionId) {
     List<Map<String,Object>> rows=jdbc.queryForList("""
-        select id,program_id,source_institution_id,release_version,release_state,content_fingerprint
+        select id,program_id,source_institution_id,release_version,release_state,content_fingerprint,updated_at
         from institution_course_release
         where id=? and source_institution_id=? for update
         """,releaseId,institutionId);

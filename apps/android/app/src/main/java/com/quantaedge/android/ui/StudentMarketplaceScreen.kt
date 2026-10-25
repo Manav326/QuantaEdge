@@ -42,6 +42,7 @@ fun StudentMarketplaceScreen(
     onAskParent: (Long) -> Unit,
     onRefresh: () -> Unit,
     onAllCourses: () -> Unit,
+    onInvoices: () -> Unit,
     pendingVerification: Boolean = false,
     onRetryVerification: () -> Unit = {}
 ) {
@@ -90,8 +91,11 @@ fun StudentMarketplaceScreen(
             )
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedButton(onClick = onAllCourses, enabled = !busy) { Text(if (hi) "आपके courses" else "Your courses") }
+            OutlinedButton(onClick = onAllCourses, enabled = !busy, modifier = Modifier.weight(1f)) { Text(if (hi) "आपके courses" else "Your courses") }
             OutlinedButton(onClick = onRefresh, enabled = !busy) { Text("↻") }
+        }
+        OutlinedButton(onClick = onInvoices, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+            Text(if (hi) "इनवॉइस और भुगतान" else "Invoices & payments")
         }
         OutlinedTextField(
             value = discountCode,
@@ -170,6 +174,11 @@ fun StudentMarketplaceScreen(
         offers.forEach { offer ->
             val id = offer.optLong("course_id", offer.optLong("courseId"))
             val title = offer.optString("title").ifBlank { offer.optString("course_name", "Course") }
+            val courseTypeCode = offer.optString("course_type_code").trim().uppercase(Locale.ROOT)
+            val courseTypeLabel = marketplaceCourseTypeLabel(courseTypeCode, hi)
+            val publishedPackCount = offer.optInt("test_pack_count", 0).coerceAtLeast(0)
+            val publishedTestCount = offer.optInt("assessment_count", 0).coerceAtLeast(0)
+            val publishedQuestionCount = offer.optInt("assessment_question_count", 0).coerceAtLeast(0)
             val pricePaise = offer.optLong("price_paise", -1L)
             val currency = offer.optString("currency", "INR")
             val owned = offer.optBoolean("has_access") || offer.optBoolean("purchased")
@@ -181,8 +190,12 @@ fun StudentMarketplaceScreen(
                     Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                             Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                            Text(offer.optString("curriculum_version").ifBlank { offer.optString("course_code") },
+                            Text(offer.optString("course_code").ifBlank { offer.optString("curriculum_version") },
                                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            if (courseTypeLabel.isNotBlank()) {
+                                Text(courseTypeLabel, style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.primary)
+                            }
                         }
                         Text(
                             when {
@@ -199,6 +212,12 @@ fun StudentMarketplaceScreen(
                         )
                     }
                     offer.optString("description").takeIf { it.isNotBlank() }?.let { Text(it, style = MaterialTheme.typography.bodyMedium) }
+                    if (courseTypeCode == "ASSESSMENT") {
+                        Text(marketplaceAssessmentInventorySummary(
+                            hi, publishedPackCount, publishedTestCount, publishedQuestionCount),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
                     if (subjects.isNotEmpty()) {
                         Text((if (hi) "विषय: " else "Subjects: ") +
                             subjects.joinToString(" · ") { it.optString("subject_name", it.optString("subject_code")) },

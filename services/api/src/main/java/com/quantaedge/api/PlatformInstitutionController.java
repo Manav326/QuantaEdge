@@ -563,7 +563,7 @@ public class PlatformInstitutionController {
     if(!(raw instanceof Boolean enabled)) throw new IllegalArgumentException("The enabled field must be true or false.");
     List<Map<String,Object>> releases=jdbc.queryForList("""
         select r.id,r.program_id,r.source_institution_id,r.release_version,r.release_state,
-          r.content_fingerprint,p.code,p.display_name
+          r.content_fingerprint,r.updated_at,p.code,p.display_name
         from institution_course_release r
         join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
         where r.id=?
@@ -578,13 +578,15 @@ public class PlatformInstitutionController {
     if(enabled) {
       long courseId=((Number)release.get("program_id")).longValue();
       String savedFingerprint=String.valueOf(release.get("content_fingerprint")).trim();
-      if(!savedFingerprint.equals(courseReleaseFingerprint(courseId)))
+      if(!Boolean.TRUE.equals(jdbc.queryForObject(
+          "select course_release_fingerprint_current(?,?,?)",Boolean.class,
+          courseId,savedFingerprint,release.get("updated_at"))))
         throw new ResponseStatusException(HttpStatus.CONFLICT,
             "Course content changed after quality review. The source institution must submit a fresh release before HRMS can assign it.");
       if("ASSESSMENT_ONLY".equals(courseDeliveryMode(courseId))) {
         if(!assessmentOnlyCourseReady(courseId))
           throw new ResponseStatusException(HttpStatus.CONFLICT,
-              "The assessment-only release no longer contains the three complete, source-verified TRE paper sets.");
+              "The assessment-only release no longer satisfies the generic published test-pack readiness checks.");
       } else {
         Map<String,Object> contentReadiness=jdbc.queryForMap("""
             select count(distinct s.id) as subject_count,
@@ -659,7 +661,7 @@ public class PlatformInstitutionController {
           (select count(*) from assessment da where da.course_id=p.id and da.assessment_type='PREVIOUS_YEAR_PAPER' and da.status='DRAFT') as draft_assessment_count,
           (select count(*) from assessment da join assessment_question dqa on dqa.assessment_id=da.id
             where da.course_id=p.id and da.assessment_type='PREVIOUS_YEAR_PAPER' and da.status='DRAFT') as draft_assessment_question_count,
-          assessment_only_course_ready(p.id) as assessment_only_ready,
+          assessment_only_course_publish_ready(p.id) as assessment_only_ready,
           t.id as source_institution_id,t.tenant_code as source_institution_code,
           coalesce(b.display_name,t.display_name) as source_institution_name,
           count(distinct s.id) as active_subject_count,
@@ -692,7 +694,7 @@ public class PlatformInstitutionController {
     String notes=body.get("notes")==null?"":String.valueOf(body.get("notes")).trim();
     if(notes.length()<3||notes.length()>1000) throw new IllegalArgumentException("Quality review notes must be 3–1,000 characters.");
     List<Map<String,Object>> releases=jdbc.queryForList("""
-        select r.id,r.source_institution_id,r.program_id,r.release_state,r.content_fingerprint,
+        select r.id,r.source_institution_id,r.program_id,r.release_state,r.content_fingerprint,r.updated_at,
           r.release_version,p.code,p.display_name
         from institution_course_release r join curriculum_program p on p.id=r.program_id
         where r.id=? for update of r
@@ -703,7 +705,9 @@ public class PlatformInstitutionController {
       throw new ResponseStatusException(HttpStatus.CONFLICT,"Only a release awaiting content-quality review can be reviewed.");
     long programId=((Number)release.get("program_id")).longValue();
     String savedFingerprint=String.valueOf(release.get("content_fingerprint")).trim();
-    if(!savedFingerprint.equals(courseReleaseFingerprint(programId)))
+    if(!Boolean.TRUE.equals(jdbc.queryForObject(
+        "select course_release_fingerprint_current(?,?,?)",Boolean.class,
+        programId,savedFingerprint,release.get("updated_at"))))
       throw new ResponseStatusException(HttpStatus.CONFLICT,"Course content changed after submission. The origin institution must submit a fresh release.");
     if(approved) {
       String reviewedFingerprint=body.get("reviewedContentFingerprint")==null
@@ -712,11 +716,11 @@ public class PlatformInstitutionController {
         throw new ResponseStatusException(HttpStatus.CONFLICT,
             "HRMS must inspect the exact submitted release content and confirm its fingerprint before quality approval.");
     }
-    if("ASSESSMENT_ONLY".equals(courseDeliveryMode(programId))) {
+    if(approved && "ASSESSMENT_ONLY".equals(courseDeliveryMode(programId))) {
       if(!assessmentOnlyCourseReady(programId))
         throw new ResponseStatusException(HttpStatus.CONFLICT,
-            "The assessment-only release must contain the three complete, source-verified TRE paper sets. Imported tests remain draft until human review.");
-    } else {
+            "Before approving this frozen release, publish every source-owned test pack and assessment after question/answer review. Reject this release to return it for correction, then resubmit the reviewed content.");
+    } else if(approved) {
       Map<String,Object> readiness=jdbc.queryForMap("""
           select count(distinct s.id) as subject_count,
             count(distinct case when l.id is not null then s.id end) as subjects_with_published_lessons,
@@ -764,7 +768,7 @@ public class PlatformInstitutionController {
   }
 
   private boolean assessmentOnlyCourseReady(long programId) {
-    Boolean ready=jdbc.queryForObject("select assessment_only_course_ready(?)",Boolean.class,programId);
+    Boolean ready=jdbc.queryForObject("select assessment_only_course_publish_ready(?)",Boolean.class,programId);
     return Boolean.TRUE.equals(ready);
   }
 

@@ -41,14 +41,16 @@ From the repository root, first run the dry-run. It validates source counts, sou
 python scripts/import_tre4_course.py --archive data/TRE-4_PYQ.zip
 ```
 
-After reviewing the dry-run output and confirming the required migrations are applied, set the local API PostgreSQL URL in the current PowerShell session and apply:
+After reviewing the dry-run output and confirming the required migrations are applied, set the local API PostgreSQL URL in the current PowerShell session and apply the import **without** queueing the release yet:
 
 ```powershell
 $env:TRE4_DATABASE_URL = "postgresql://quantaedge:YOUR_LOCAL_DB_PASSWORD@localhost:5432/quantaedge"
-python scripts/import_tre4_course.py --archive data/TRE-4_PYQ.zip --apply --submit-for-review
+python scripts/import_tre4_course.py --archive data/TRE-4_PYQ.zip --apply
 ```
 
-The importer also accepts `SPRING_DATASOURCE_URL` (including the `jdbc:postgresql://` prefix). Never commit a database password or put it in this document. The importer requires Flyway V168, V177, V180, V196, V198 and V199; the assessment-only readiness function must validate the pack-to-test mapping and all 150 TRE 3.0 questions.
+The importer also accepts `SPRING_DATASOURCE_URL` (including the `jdbc:postgresql://` prefix). Never commit a database password or put it in this document. The importer requires Flyway V168, V177, V180, V196, V198 and V199 plus the current Marketplace-readiness migrations.
+
+**Do not submit this release while the imported questions still have unresolved answers.** The source-owned course graph is frozen when a release enters HRMS quality review. If `--submit-for-review` is explicitly requested before every answer is reviewed and every assessment/test pack is published, the importer now commits the imported content as an editable `DRAFT` and reports `submissionDeferred: true` instead of freezing an incomplete graph.
 
 ## What the script writes
 
@@ -59,13 +61,18 @@ The dry-run JSON reports the course type, delivery mode, hierarchy, each pack co
 ## Where it appears after import
 
 - **Admin Web — Content Studio / course selector:** the source-owned course is listed under QuantaEdge's institution once created; the imported tests can be inspected in the course-scoped assessment catalogue.
-- **Institution Operations → Course Releases:** the source release is shown as `DRAFT` when imported without `--submit-for-review`.
-- **HRMS Marketplace launch stepper — content-quality review:** with `--submit-for-review`, a structurally ready release is queued as `IN_QUALITY_REVIEW` for HRMS review.
+- **Institution Operations → Course Releases:** the source release remains `DRAFT` while its questions and answer keys are being reviewed.
+- **Admin assessment course/test management:** review every imported question, option and authoritative answer; then publish each assessment. The API automatically marks a pack `PUBLISHED` only when all of its included assessments are published.
+- **Institution Operations → Course Releases:** submit only after all three assessments and their packs are published and reviewed. The submitted course release is then frozen for HRMS quality review.
 - **Learner Marketplace:** not immediately. HRMS content-quality approval, QuantaEdge origin-institution approval, destination assignment when applicable, and HRMS offer approval/publication must complete first. Even then, each imported test stays learner-hidden until its questions/answers pass human review and its test publication gate passes.
 
 ## HRMS lifecycle and safeguards
 
-`--submit-for-review` submits the structurally complete release into `IN_QUALITY_REVIEW`; it does **not** approve, make it shareable or publish any assessment. HRMS must approve the exact submitted fingerprint, then the QuantaEdge source-institution administrator approves the origin release. Only the resulting `SHAREABLE` release can be assigned through the HRMS-controlled distribution workflow. These are separate from question-answer review and student test publication.
+Question/answer review and test publication must happen **before** source-release submission: V180 freezes the course graph while the release is `IN_QUALITY_REVIEW`, `QUALITY_APPROVED` or `SHAREABLE`. The supported assessment status transition publishes a test only after its imported question snapshots pass human answer review, and automatically publishes its versioned pack after every pack item is published. The source release submit endpoint also checks the generic published-test-pack gate.
+
+`--submit-for-review` is a request, not permission to bypass that order. If TRE-specific inventory checks pass but assessments/packs are not yet publish-ready, the importer keeps the content and release editable in `DRAFT`, reports `submissionDeferred: true`, and explains the required next step. Once all assessments/packs are published, submit the release through Institution Operations. HRMS reviews the exact submitted fingerprint, then the QuantaEdge source-institution administrator approves the origin release. Only the resulting `SHAREABLE` release can be assigned through the HRMS-controlled distribution workflow.
+
+If an earlier run already left an incomplete release in `IN_QUALITY_REVIEW`, HRMS must **reject** it first. That releases the course graph for correction. Review/publish the questions and packs while editable, then submit a fresh release; do not try to mutate the submitted graph or rerun the import over a frozen release.
 
 V199 deliberately separates two checks. The shared `assessment_only_course_ready` gate validates the generic `ASSESSMENT` hierarchy (active source identity, `ASSESSMENT_ONLY` delivery, source-owned packs, valid pack-to-assessment links, non-empty question snapshots, and published-question review/answer gates) without any TRE-specific count. The importer separately calls `tre4_source_package_ready`, which verifies the exact TRE 1.0/2.0/3.0 packs, package hashes, links and 120/150/150 question counts before submitting this TRE release. Other `ASSESSMENT` courses are therefore not constrained to BPSC/TRE counts. Neither gate relies on school-class, subject or chapter mapping. V196 includes pack and pack-item rows in the canonical course fingerprint, preserving stale-release rejection if any content changes after submission.
 

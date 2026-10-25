@@ -57,7 +57,7 @@ public class CourseMarketplaceLaunchController {
     assertInstitution(institutionId);
     List<Map<String,Object>> rows=jdbc.queryForList("""
         select r.id as release_id,r.program_id as course_id,r.release_version,r.release_state,
-          r.content_fingerprint,r.submitted_at,p.code as course_code,p.display_name as course_name,
+          r.content_fingerprint,r.updated_at as release_updated_at,r.submitted_at,p.code as course_code,p.display_name as course_name,
           p.course_type_code,t.id as source_institution_id,t.tenant_code as source_institution_code,
           t.display_name as source_institution_name,
           coalesce((select mode.delivery_mode from curriculum_program_delivery_mode mode where mode.program_id=p.id),
@@ -85,13 +85,13 @@ public class CourseMarketplaceLaunchController {
             "The requested chapter is not part of this submitted release.");
     }
     String savedFingerprint=text(result.get("content_fingerprint"));
-    String currentFingerprint=jdbc.queryForObject(
-        "select course_content_fingerprint(?)",String.class,courseId);
-    boolean contentCurrent=savedFingerprint.equals(currentFingerprint==null?"":currentFingerprint.trim());
+    boolean contentCurrent=Boolean.TRUE.equals(jdbc.queryForObject(
+        "select course_release_fingerprint_current(?,?,?)",Boolean.class,
+        courseId,savedFingerprint,result.get("release_updated_at")));
     result.put("contentCurrent",contentCurrent);
-    result.put("currentFingerprint",currentFingerprint==null?"":currentFingerprint.trim());
+    result.put("currentFingerprint",savedFingerprint.trim());
     result.put("assessmentOnlyReady",Boolean.TRUE.equals(
-        jdbc.queryForObject("select assessment_only_course_ready(?)",Boolean.class,courseId)));
+        jdbc.queryForObject("select assessment_only_course_publish_ready(?)",Boolean.class,courseId)));
     result.put("courseTranslations",jdbc.queryForList("""
         select language,display_name,source_language,source_hash,version_no,
                translation_status,translation_method,quality_notes
@@ -309,7 +309,9 @@ public class CourseMarketplaceLaunchController {
     assertInstitution(institutionId);
     List<Long> assignments=jdbc.queryForList("""
         select a.id from institution_course_assignment a
+        join institution_course_release ar on ar.id=a.course_release_id
         where a.institution_id=? and a.status='ASSIGNED'
+          and (a.assignment_source <> 'ORIGIN' or ar.release_state='SHAREABLE')
         order by a.assigned_at desc,a.id desc
         """,Long.class,institutionId);
     List<Map<String,Object>> items=new ArrayList<>();
@@ -321,7 +323,7 @@ public class CourseMarketplaceLaunchController {
     }
     List<Map<String,Object>> availableReleases=jdbc.queryForList("""
         select r.id as release_id,r.program_id as course_id,r.release_version,r.content_fingerprint,
-          p.code as course_code,p.display_name as course_name,
+          r.updated_at as release_updated_at,p.code as course_code,p.display_name as course_name,
           source.id as source_institution_id,source.tenant_code as source_institution_code,
           source.display_name as source_institution_name
         from institution_course_release r
@@ -334,15 +336,15 @@ public class CourseMarketplaceLaunchController {
         """,institutionId,institutionId);
     for(Map<String,Object> release:availableReleases) {
       release.put("contentCurrent",readiness.contentFingerprintMatches(
-          number(release.get("course_id")),text(release.get("content_fingerprint"))));
+          number(release.get("course_id")),text(release.get("content_fingerprint")),release.get("release_updated_at")));
     }
     List<Map<String,Object>> qualityReviewItems=jdbc.queryForList("""
         select r.id as release_id,r.program_id as course_id,r.release_version,r.release_state,
-          r.content_fingerprint,r.submitted_at,p.code as course_code,p.display_name as course_name,
+          r.content_fingerprint,r.updated_at as release_updated_at,r.submitted_at,p.code as course_code,p.display_name as course_name,
           p.course_type_code,
           coalesce((select mode.delivery_mode from curriculum_program_delivery_mode mode where mode.program_id=p.id),
                    'LEARNING_CONTENT') as delivery_mode,
-          assessment_only_course_ready(p.id) as assessment_only_ready,
+          assessment_only_course_publish_ready(p.id) as assessment_only_ready,
           (select count(*) from assessment a where a.course_id=p.id) as assessment_count,
           (select count(*) from assessment_question aq join assessment a on a.id=aq.assessment_id where a.course_id=p.id) as assessment_question_count,
           t.id as source_institution_id,t.tenant_code as source_institution_code,
@@ -359,13 +361,13 @@ public class CourseMarketplaceLaunchController {
         left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
         left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
         where r.source_institution_id=? and r.release_state='IN_QUALITY_REVIEW'
-        group by r.id,r.program_id,r.release_version,r.release_state,r.content_fingerprint,r.submitted_at,
+        group by r.id,r.program_id,r.release_version,r.release_state,r.content_fingerprint,r.updated_at,r.submitted_at,
           p.id,p.code,p.display_name,p.course_type_code,t.id,t.tenant_code,t.display_name
         order by r.submitted_at,r.id
         """,institutionId);
     for(Map<String,Object> release:qualityReviewItems) {
       release.put("contentCurrent",readiness.contentFingerprintMatches(
-          number(release.get("course_id")),text(release.get("content_fingerprint"))));
+          number(release.get("course_id")),text(release.get("content_fingerprint")),release.get("release_updated_at")));
     }
     Map<String,Object> result=new LinkedHashMap<>();
     result.put("institutionId",institutionId);

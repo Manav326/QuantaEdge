@@ -111,7 +111,16 @@ public class FiscalDocumentRenderer {
       if(!buyerGstin.isBlank()) draw(g,Font.PLAIN,12,"GSTIN: "+buyerGstin,78,407,495,MUTED);
       String beneficiary=value(recipient,"beneficiaryName","");
       draw(g,Font.BOLD,16,value(transaction,"courseTitle","Course access"),650,313,500,INK);
-      draw(g,Font.PLAIN,12,"Order: "+value(transaction,"orderReference",""),650,339,500,MUTED);
+      String courseTypeCode=value(transaction,"courseTypeCode","").toUpperCase(Locale.ROOT);
+      String courseTypeLabel=switch(courseTypeCode) {
+        case "K12" -> "K–12 learning";
+        case "COMPETITIVE" -> "Competitive preparation";
+        case "ASSESSMENT" -> "Assessment & tests";
+        default -> "";
+      };
+      String orderLabel="Order: "+value(transaction,"orderReference","");
+      if(!courseTypeLabel.isBlank())orderLabel="Course type: "+courseTypeLabel+" · "+orderLabel;
+      draw(g,Font.PLAIN,12,orderLabel,650,339,500,MUTED);
       if(!beneficiary.isBlank()) draw(g,Font.PLAIN,12,"Learner / beneficiary: "+beneficiary,650,363,500,MUTED);
       draw(g,Font.PLAIN,12,"Institution: "+value(transaction,"institutionName",""),650,387,500,MUTED);
       draw(g,Font.PLAIN,12,"Payment reference: "+value(transaction,"paymentReference",""),650,411,500,MUTED);

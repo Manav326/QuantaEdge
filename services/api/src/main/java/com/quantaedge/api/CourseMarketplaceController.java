@@ -87,7 +87,13 @@ public class CourseMarketplaceController {
     List<Map<String, Object>> offers = jdbc.queryForList("""
         select p.id as course_id, p.public_id, p.code as course_code,
           coalesce(nullif(o.title_override,''),p.display_name) as title,
-          p.display_name as course_name, p.curriculum_version,
+          p.display_name as course_name, p.curriculum_version,p.course_type_code,
+          (select count(*) from course_assessment_pack pack
+            where pack.course_id=p.id and pack.status='PUBLISHED') as test_pack_count,
+          (select count(*) from assessment a
+            where a.course_id=p.id and a.status='PUBLISHED') as assessment_count,
+          (select count(*) from assessment_question aq join assessment a on a.id=aq.assessment_id
+            where a.course_id=p.id and a.status='PUBLISHED') as assessment_question_count,
           o.description, o.price_paise, o.currency, o.status as offer_status,
           (exists(select 1 from student_program_enrollment e
             where e.institution_id=? and e.student_id=? and e.program_id=p.id
@@ -117,7 +123,8 @@ public class CourseMarketplaceController {
         where o.institution_id=? and o.status='PUBLISHED'
           and o.hrms_published_by_staff_id is not null
           and release.release_state='SHAREABLE'
-          and release.content_fingerprint=course_content_fingerprint(release.program_id)
+          and course_marketplace_content_type_ready(release.program_id)
+          and case when release.release_state='SHAREABLE' then course_release_fingerprint_current(release.program_id,release.content_fingerprint::text,release.updated_at) else false end
           and not exists (
             select 1
             from institution_marketplace_offer newer_offer
@@ -130,13 +137,16 @@ public class CourseMarketplaceController {
              and newer_release.program_id=newer_offer.course_id
             join curriculum_program newer_program
               on newer_program.id=newer_release.program_id
+             and newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'
+             and newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'
              and newer_program.course_identity_id=p.course_identity_id
              and newer_program.content_version_no>p.content_version_no
             where newer_offer.institution_id=o.institution_id
               and newer_offer.status='PUBLISHED'
               and newer_offer.hrms_published_by_staff_id is not null
               and newer_release.release_state='SHAREABLE'
-              and newer_release.content_fingerprint=course_content_fingerprint(newer_release.program_id)
+              and course_marketplace_content_type_ready(newer_release.program_id)
+              and case when newer_release.release_state='SHAREABLE' then course_release_fingerprint_current(newer_release.program_id,newer_release.content_fingerprint::text,newer_release.updated_at) else false end
           )
         order by p.display_name,p.id
         """, institutionId, context.studentId(),
@@ -175,8 +185,14 @@ public class CourseMarketplaceController {
       with selected_tenant as (select ?::bigint as institution_id)
       select p.id as course_id,p.public_id,p.code as course_code,
         coalesce(nullif(o.title_override,''),p.display_name) as title,
-        p.display_name as course_name,p.curriculum_version,o.description,
-        o.price_paise,o.currency,o.status as offer_status,
+        p.display_name as course_name,p.curriculum_version,p.course_type_code,
+        (select count(*) from course_assessment_pack pack
+          where pack.course_id=p.id and pack.status='PUBLISHED') as test_pack_count,
+        (select count(*) from assessment a
+          where a.course_id=p.id and a.status='PUBLISHED') as assessment_count,
+        (select count(*) from assessment_question aq join assessment a on a.id=aq.assessment_id
+          where a.course_id=p.id and a.status='PUBLISHED') as assessment_question_count,
+        o.description,o.price_paise,o.currency,o.status as offer_status,
         (exists(select 1 from course_entitlement ce
           where ce.institution_id=(select institution_id from selected_tenant)
             and ce.course_id=p.id and ce.holder_user_id=?)
@@ -227,7 +243,8 @@ public class CourseMarketplaceController {
       where o.institution_id=(select institution_id from selected_tenant) and o.status='PUBLISHED'
         and o.hrms_published_by_staff_id is not null
         and release.release_state='SHAREABLE'
-        and release.content_fingerprint=course_content_fingerprint(release.program_id)
+        and course_marketplace_content_type_ready(release.program_id)
+        and case when release.release_state='SHAREABLE' then course_release_fingerprint_current(release.program_id,release.content_fingerprint::text,release.updated_at) else false end
         and not exists (
           select 1
           from institution_marketplace_offer newer_offer
@@ -240,13 +257,15 @@ public class CourseMarketplaceController {
            and newer_release.program_id=newer_offer.course_id
           join curriculum_program newer_program
             on newer_program.id=newer_release.program_id
+           and newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'
            and newer_program.course_identity_id=p.course_identity_id
            and newer_program.content_version_no>p.content_version_no
           where newer_offer.institution_id=o.institution_id
             and newer_offer.status='PUBLISHED'
             and newer_offer.hrms_published_by_staff_id is not null
             and newer_release.release_state='SHAREABLE'
-            and newer_release.content_fingerprint=course_content_fingerprint(newer_release.program_id)
+            and course_marketplace_content_type_ready(newer_release.program_id)
+            and case when newer_release.release_state='SHAREABLE' then course_release_fingerprint_current(newer_release.program_id,newer_release.content_fingerprint::text,newer_release.updated_at) else false end
         )
       order by p.display_name,p.id
       """, institutionId, parentId, parentId, parentId, parentId, parentId, parentId);
@@ -306,7 +325,8 @@ public class CourseMarketplaceController {
         where o.institution_id=? and o.course_id=? and o.status='PUBLISHED'
           and o.hrms_published_by_staff_id is not null
           and r.release_state='SHAREABLE'
-          and r.content_fingerprint=course_content_fingerprint(r.program_id)
+          and course_marketplace_content_type_ready(r.program_id)
+          and case when r.release_state='SHAREABLE' then course_release_fingerprint_current(r.program_id,r.content_fingerprint::text,r.updated_at) else false end
           and not exists (
             select 1
             from institution_marketplace_offer newer_offer
@@ -319,13 +339,16 @@ public class CourseMarketplaceController {
              and newer_release.program_id=newer_offer.course_id
             join curriculum_program newer_program
               on newer_program.id=newer_release.program_id
+             and newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'
+             and newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'
              and newer_program.course_identity_id=p.course_identity_id
              and newer_program.content_version_no>p.content_version_no
             where newer_offer.institution_id=o.institution_id
               and newer_offer.status='PUBLISHED'
               and newer_offer.hrms_published_by_staff_id is not null
               and newer_release.release_state='SHAREABLE'
-              and newer_release.content_fingerprint=course_content_fingerprint(newer_release.program_id)
+              and course_marketplace_content_type_ready(newer_release.program_id)
+              and case when newer_release.release_state='SHAREABLE' then course_release_fingerprint_current(newer_release.program_id,newer_release.content_fingerprint::text,newer_release.updated_at) else false end
           )
           and o.price_paise=0 and o.currency='INR'
       )
@@ -704,7 +727,8 @@ public class CourseMarketplaceController {
         where o.institution_id=? and p.id=? and o.status='PUBLISHED'
           and o.hrms_published_by_staff_id is not null
           and release.release_state='SHAREABLE'
-          and release.content_fingerprint=course_content_fingerprint(release.program_id)
+          and course_marketplace_content_type_ready(release.program_id)
+          and case when release.release_state='SHAREABLE' then course_release_fingerprint_current(release.program_id,release.content_fingerprint::text,release.updated_at) else false end
           and not exists (
             select 1
             from institution_marketplace_offer newer_offer
@@ -717,13 +741,16 @@ public class CourseMarketplaceController {
              and newer_release.program_id=newer_offer.course_id
             join curriculum_program newer_program
               on newer_program.id=newer_release.program_id
+             and newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'
+             and newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'
              and newer_program.course_identity_id=p.course_identity_id
              and newer_program.content_version_no>p.content_version_no
             where newer_offer.institution_id=o.institution_id
               and newer_offer.status='PUBLISHED'
               and newer_offer.hrms_published_by_staff_id is not null
               and newer_release.release_state='SHAREABLE'
-              and newer_release.content_fingerprint=course_content_fingerprint(newer_release.program_id)
+              and course_marketplace_content_type_ready(newer_release.program_id)
+              and case when newer_release.release_state='SHAREABLE' then course_release_fingerprint_current(newer_release.program_id,newer_release.content_fingerprint::text,newer_release.updated_at) else false end
           )
           and o.price_paise>0
         """, targetStudentId,institutionId,courseId);
@@ -1914,7 +1941,8 @@ public class CourseMarketplaceController {
           where offer.id=? and offer.institution_id=? and offer.course_id=? and offer.status='PUBLISHED'
             and offer.hrms_published_by_staff_id is not null
             and release.release_state='SHAREABLE'
-            and release.content_fingerprint=course_content_fingerprint(release.program_id)
+            and course_marketplace_content_type_ready(release.program_id)
+            and case when release.release_state='SHAREABLE' then course_release_fingerprint_current(release.program_id,release.content_fingerprint::text,release.updated_at) else false end
         )
         """, Boolean.class, ((Number) order.get("institution_offer_id")).longValue(), institutionId,
         ((Number) order.get("course_id")).longValue());

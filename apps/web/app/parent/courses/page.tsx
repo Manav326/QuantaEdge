@@ -16,7 +16,9 @@ import { formatUserTimestamp } from '../../components/formatUserTimestamp';
 type Child = { id: number; display_name: string; class_code?: string; board?: string };
 type Course = {
   course_id: number; public_id?: string; title: string; course_name: string; course_code: string;
-  curriculum_version?: string; description?: string | null; price_paise: number; currency: string;
+  curriculum_version?: string; course_type_code?: string; test_pack_count?: number;
+  assessment_count?: number; assessment_question_count?: number;
+  description?: string | null; price_paise: number; currency: string;
   owned_by_parent?: boolean; owned_by_child?: boolean; owned_child_ids?: string | null;
   transferable_by_parent?: boolean;
   subjects?: Array<{ subject_code?: string; subject_name?: string; chapters?: number; lessons?: number }>;
@@ -528,6 +530,10 @@ export default function ParentCoursesPage() {
                 courseCode={course.course_code}
                 publicId={course.public_id}
                 curriculumVersion={course.curriculum_version}
+                courseTypeCode={course.course_type_code}
+                testPackCount={course.test_pack_count}
+                assessmentCount={course.assessment_count}
+                assessmentQuestionCount={course.assessment_question_count}
                 language={english ? 'en' : 'hi'}
                 priceLabel={ownedByParent && !isFree
                   ? (english ? 'Owned by you' : 'आपके पास उपलब्ध')

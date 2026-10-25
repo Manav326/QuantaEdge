@@ -33,6 +33,18 @@ type Course = {
 };
 type Metric = { id: number; data?: any; error?: boolean };
 
+function isAssessmentCourse(course: Course) {
+  return course.course_type_code === 'ASSESSMENT' && course.delivery_mode === 'ASSESSMENT_ONLY';
+}
+
+function isK12Course(course: Course) {
+  return course.course_type_code === 'K12' && course.delivery_mode !== 'ASSESSMENT_ONLY';
+}
+
+function isSupportedLearnerCourse(course: Course) {
+  return isAssessmentCourse(course) || isK12Course(course);
+}
+
 async function responseJson(response: Response): Promise<any> {
   const body = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(body.message || body.detail || body.error || 'This request could not be completed.');
@@ -59,24 +71,28 @@ export default function StudentCoursesPage() {
       const all = Array.isArray(rows) ? rows as Course[] : [];
       setCourses(all);
       const owned = all.filter(course => course.is_enrolled === true || course.enrolled === true || course.paused === true);
-      const serverActive = owned.find(course => course.is_enrolled === true || course.enrolled === true);
+      const focusableOwned = owned.filter(isSupportedLearnerCourse);
+      const serverActive = focusableOwned.find(course => course.is_enrolled === true || course.enrolled === true);
       let savedFocus = 0;
       try { savedFocus = Number(window.localStorage.getItem('qe:student:activeCourseId') || 0); } catch {}
       const requestedFocus = typeof window !== 'undefined'
         ? Number(new URLSearchParams(window.location.search).get('focus') || 0) : 0;
-      const requested = owned.find(course =>
+      const requested = focusableOwned.find(course =>
         Number(course.id || course.course_id) === requestedFocus
       );
-      const saved = owned.find(course => Number(course.id || course.course_id) === savedFocus);
-      const selected = requested || saved || serverActive || owned[0] || null;
+      const saved = focusableOwned.find(course => Number(course.id || course.course_id) === savedFocus);
+      const selected = requested || saved || serverActive || focusableOwned[0] || null;
       const selectedId = selected ? Number(selected.id || selected.course_id) : null;
       setActiveCourseId(selectedId && Number.isSafeInteger(selectedId) ? selectedId : null);
 
       const results = await Promise.all(owned.map(async course => {
         const id = Number(course.id || course.course_id);
         if (!Number.isSafeInteger(id) || id <= 0) return null;
-        if (course.course_type_code === 'ASSESSMENT' || course.delivery_mode === 'ASSESSMENT_ONLY') {
+        if (isAssessmentCourse(course)) {
           return { id, data: { assessmentOnly: true } };
+        }
+        if (!isK12Course(course)) {
+          return { id, error: true, data: { unsupportedCourseType: true } };
         }
         try {
           const data = await responseJson(await apiFetch('/api/v1/students/me?courseId=' + encodeURIComponent(String(id)), {
@@ -113,11 +129,18 @@ export default function StudentCoursesPage() {
       setError('That course is not included in your account.');
       return;
     }
+    const selected = courses.find(course => Number(course.id || course.course_id) === courseId);
+    if (!selected) {
+      setError('That course is not included in your account.');
+      return;
+    }
+    if (!isSupportedLearnerCourse(selected)) {
+      setError('This course type is not supported in the learner experience yet. It cannot be opened as a K–12 lesson course or an assessment test course.');
+      return;
+    }
     setBusyCourseId(courseId);
     setError('');
     try {
-      const selected = courses.find(course => Number(course.id || course.course_id) === courseId);
-      if (!selected) throw new Error('That course is not included in your account.');
       // Focus changes independently of enrollment. Only reactivate a legacy paused row.
       if (!(selected.is_enrolled === true || selected.enrolled === true)) {
         await responseJson(await apiFetch('/api/v1/students/me/programs/id/' + encodeURIComponent(String(courseId)) + '/enroll', {
@@ -130,8 +153,7 @@ export default function StudentCoursesPage() {
       setActiveCourseId(courseId);
       try { window.localStorage.setItem('qe:student:activeCourseId', String(courseId)); } catch { /* storage is optional */ }
       if (navigate) {
-        const assessmentCourse = selected.course_type_code === 'ASSESSMENT' || selected.delivery_mode === 'ASSESSMENT_ONLY';
-        const destination = assessmentCourse ? '/student/tests?courseId=' : '/student/learn?courseId=';
+        const destination = isAssessmentCourse(selected) ? '/student/tests?courseId=' : '/student/learn?courseId=';
         router.push(destination + encodeURIComponent(String(selected.public_id || courseId)));
       }
     } catch (e: any) {
@@ -175,7 +197,9 @@ export default function StudentCoursesPage() {
           {owned.map(course => {
             const id = Number(course.id || course.course_id);
             const active = id === activeCourseId;
-            const assessmentCourse = course.course_type_code === 'ASSESSMENT' || course.delivery_mode === 'ASSESSMENT_ONLY';
+            const assessmentCourse = isAssessmentCourse(course);
+            const k12Course = isK12Course(course);
+            const unsupportedCourse = !assessmentCourse && !k12Course;
             const metric = progress[id];
             const stats = metric?.data?.lessonStats || {};
             const total = Number(stats.total_lessons || stats.totalLessons || 0);
@@ -185,12 +209,14 @@ export default function StudentCoursesPage() {
               <article className={styles.courseCard} key={id}>
                 <div className={styles.cardHeader}>
                   <span className={styles.mark} aria-hidden="true">✦</span>
-                  <span className={active ? styles.activeBadge : styles.enrolledBadge}>{active ? 'Learning now' : 'Enrolled'}</span>
+                  <span className={unsupportedCourse ? styles.enrolledBadge : active ? styles.activeBadge : styles.enrolledBadge}>{unsupportedCourse ? 'Not yet supported' : active ? 'Learning now' : 'Enrolled'}</span>
                 </div>
                 <h2>{course.display_name}</h2>
                 <p className={styles.meta}>{course.curriculum_version || course.code}</p>
                 {assessmentCourse ? (
                   <p className={styles.meta}>Test packs, attempts and results are available in this course.</p>
+                ) : unsupportedCourse ? (
+                  <p className={styles.meta}>This registered course type needs its own learner experience before it can be opened.</p>
                 ) : total > 0 ? (
                   <div className={styles.progress}>
                     <div className={styles.progressLabels}><span>{completed} of {total} lessons</span><strong>{Math.round(percent)}%</strong></div>
@@ -206,7 +232,7 @@ export default function StudentCoursesPage() {
                       <span aria-hidden="true">→</span>
                     </Link>
                   </div>
-                ) : (
+                ) : k12Course ? (
                   <div className={styles.subjectList}>
                     <div className={styles.subjectHeading}>Subjects</div>
                     {(course.subjects || []).length === 0 ? <p className={styles.meta}>Subjects will appear when available.</p> :
@@ -217,8 +243,13 @@ export default function StudentCoursesPage() {
                         </Link>
                       ))}
                   </div>
+                ) : (
+                  <div className={styles.subjectList}>
+                    <div className={styles.subjectHeading}>Course availability</div>
+                    <p className={styles.meta}>This course remains in your records, but its registered hierarchy is not yet supported by the learner app. No K–12 lessons or assessment tests were opened.</p>
+                  </div>
                 )}
-                {!active && (
+                {!active && !unsupportedCourse && (
                   <button className={styles.secondaryButton} type="button" disabled={busyCourseId !== null}
                     onClick={() => void activateCourse(id)}>
                     {busyCourseId === id ? 'Switching course…' : 'Focus on this course'}
