@@ -20,6 +20,8 @@ type Course = {
   id: number;
   course_id?: number;
   public_id?: string;
+  course_identity_public_id?: string;
+  course_key?: string;
   code: string;
   display_name: string;
   curriculum_version?: string;
@@ -212,7 +214,7 @@ export default function StudentCoursesPage() {
                   <span className={unsupportedCourse ? styles.enrolledBadge : active ? styles.activeBadge : styles.enrolledBadge}>{unsupportedCourse ? 'Not yet supported' : active ? 'Learning now' : 'Enrolled'}</span>
                 </div>
                 <h2>{course.display_name}</h2>
-                <p className={styles.meta}>{course.curriculum_version || course.code}</p>
+                <p className={styles.meta}>{course.course_key || course.curriculum_version || course.code}</p>
                 {assessmentCourse ? (
                   <p className={styles.meta}>Test packs, attempts and results are available in this course.</p>
                 ) : unsupportedCourse ? (
