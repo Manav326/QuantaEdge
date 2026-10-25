@@ -275,6 +275,7 @@ const adminResourcesCss = read('apps/admin/app/resources/Resources.module.css');
 const adminQuestionsPage = read('apps/admin/app/questions/page.tsx');
 const adminCertificatesCss = read('apps/admin/app/certificates/Certificates.module.css');
 const adminAssessmentsCss = read('apps/admin/app/assessments/Assessments.module.css');
+const adminAssessmentsPage = read('apps/admin/app/assessments/page.tsx');
 const adminClassesCss = read('apps/admin/app/classes/Classes.module.css');
 const adminEmployees = read('apps/admin/app/employees/page.tsx');
 const adminNotificationStudio = read('apps/admin/app/components/NotificationStudio.tsx');
