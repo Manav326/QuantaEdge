@@ -175,29 +175,7 @@ public class CourseMarketplaceLaunchReadinessService {
         select o.id as offer_id,o.institution_id,o.assignment_id,o.course_release_id,o.course_id,
           o.title_override,o.description,o.price_paise,o.currency,o.status as offer_status,
           o.hrms_published_by_staff_id,
-          not exists (
-            select 1
-            from institution_marketplace_offer newer_offer
-            join institution_course_assignment newer_assignment
-              on newer_assignment.id=newer_offer.assignment_id
-             and newer_assignment.institution_id=newer_offer.institution_id
-             and newer_assignment.status='ASSIGNED'
-            join institution_course_release newer_release
-              on newer_release.id=newer_offer.course_release_id
-             and newer_release.program_id=newer_offer.course_id
-            join curriculum_program newer_program
-              on newer_program.id=newer_release.program_id
-             and newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'
-             and newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'
-             and newer_program.course_identity_id=p.course_identity_id
-             and newer_program.content_version_no>p.content_version_no
-            where newer_offer.institution_id=o.institution_id
-              and newer_offer.status='PUBLISHED'
-              and newer_offer.hrms_published_by_staff_id is not null
-              and newer_release.release_state='SHAREABLE'
-              and course_marketplace_content_type_ready(newer_program.id)
-              and course_release_fingerprint_current(newer_release.program_id,newer_release.content_fingerprint::text,newer_release.updated_at)
-          ) as current_offer_version,
+          qe_is_current_institution_assignment(a.id) as current_offer_version,
           t.display_name as institution_name,t.status as institution_status,
           a.status as assignment_status,r.release_state,r.content_fingerprint,r.updated_at as release_updated_at,
           p.status as course_status,coalesce(identity.stable_course_key,p.code) as course_code,
@@ -309,10 +287,14 @@ public class CourseMarketplaceLaunchReadinessService {
         ? text(offer.get("course_name")) : text(offer.get("title_override"));
     long pricePaise = number(offer.get("price_paise"));
     String currency = text(offer.get("currency")).toUpperCase(Locale.ROOT);
+    boolean currentAssignment = Boolean.TRUE.equals(offer.get("current_offer_version"));
+    boolean offerTermsValid = !courseName.isBlank() && !text(offer.get("description")).isBlank()
+        && pricePaise >= 0 && "INR".equals(currency);
     add(checks,"OFFER_TERMS","Offer title, description, price and currency are valid",
-        !courseName.isBlank() && !text(offer.get("description")).isBlank()
-            && pricePaise >= 0 && "INR".equals(currency),
-        "Set a non-blank listing title and description, and an explicit non-negative INR price. Use zero only for an intentionally free offer.");
+        currentAssignment && offerTermsValid,
+        !currentAssignment
+            ? "This offer is linked to a superseded or non-current assignment. Create or configure the offer from the current HRMS Marketplace stepper."
+            : "Set a non-blank listing title and description, and an explicit non-negative INR price. Use zero only for an intentionally free offer.");
 
     if (pricePaise > 0) {
       boolean paymentReady = !razorpayKeyId.isBlank() && !razorpayKeySecret.isBlank();
