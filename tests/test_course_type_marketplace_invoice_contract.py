@@ -116,7 +116,9 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
         self.assertIn("preview.courseTypePublishReady !== true", hrms_ui)
         # New importer refuses to run without the same active-type contract.
         self.assertIn("Flyway V205 is required", importer)
-        self.assertIn("type_registry.status <> 'ACTIVE'", importer)
+        self.assertIn("registered_type.status='ACTIVE'", importer)
+        self.assertIn("conflicting_release.source_institution_id<>identity.source_institution_id", importer)
+        self.assertIn("SELECT course_marketplace_content_type_ready(%s)", importer)
 
     def test_typed_answer_review_gate_is_shared_with_assessment_publication(self):
         migration = (ROOT / "services/api/src/main/resources/db/migration/V204__typed_assessment_answer_review_readiness.sql").read_text(encoding="utf-8")
