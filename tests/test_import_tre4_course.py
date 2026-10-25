@@ -343,24 +343,47 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertEqual(import_tre4_course.sha256_json(first), import_tre4_course.sha256_json(second))
 
 
-    def test_importer_locks_only_the_latest_editable_draft_release(self):
+    def test_importer_locks_latest_draft_and_checks_all_graph_freeze_gates(self):
         draft = (77, 2, "DRAFT", "a" * 64)
-        cursor = FakeCursor([draft])
+        cursor = FakeCursor([draft, None, None])
 
         result = import_tre4_course.lock_latest_draft_release(cursor, 42, 777)
 
         self.assertEqual(result, draft)
-        self.assertEqual(len(cursor.statements), 1)
+        self.assertEqual(len(cursor.statements), 3)
         self.assertIn("FOR UPDATE", cursor.statements[0][0])
         self.assertIn("ORDER BY release_version DESC,id DESC", cursor.statements[0][0])
+        self.assertIn("IN_QUALITY_REVIEW", cursor.statements[1][0])
+        self.assertIn("hrms_published_by_staff_id", cursor.statements[2][0])
 
-    def test_importer_refuses_to_modify_any_non_draft_release(self):
+    def test_importer_refuses_to_modify_any_non_draft_latest_release(self):
         for state in ("IN_QUALITY_REVIEW", "QUALITY_APPROVED", "SHAREABLE", "REJECTED", "WITHDRAWN", "LEGACY_MIGRATED"):
             with self.subTest(state=state):
                 cursor = FakeCursor([(77, 2, state, "a" * 64)])
                 with self.assertRaisesRegex(import_tre4_course.ImportErrorSafe, state):
                     import_tre4_course.lock_latest_draft_release(cursor, 42, 777)
                 self.assertEqual(len(cursor.statements), 1)
+
+    def test_importer_refuses_frozen_course_graph_even_when_latest_release_is_draft(self):
+        cursor = FakeCursor([
+            (88, 3, "DRAFT", "a" * 64),
+            (44, "SHAREABLE"),
+        ])
+
+        with self.assertRaisesRegex(import_tre4_course.ImportErrorSafe, "immutable because release 44 is SHAREABLE"):
+            import_tre4_course.lock_latest_draft_release(cursor, 42, 777)
+        self.assertEqual(len(cursor.statements), 2)
+
+    def test_importer_refuses_published_marketplace_graph_even_when_latest_release_is_draft(self):
+        cursor = FakeCursor([
+            (88, 3, "DRAFT", "a" * 64),
+            None,
+            (501, "PUBLISHED"),
+        ])
+
+        with self.assertRaisesRegex(import_tre4_course.ImportErrorSafe, "offer 501 has reached published state/history"):
+            import_tre4_course.lock_latest_draft_release(cursor, 42, 777)
+        self.assertEqual(len(cursor.statements), 3)
 
     def test_release_is_created_as_draft_before_any_submission(self):
         importer = SCRIPT.read_text(encoding="utf-8")
