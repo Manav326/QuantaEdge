@@ -82,6 +82,31 @@ function parseAnswerPayload(value:any):any {
   }
   return {};
 }
+function activateAccessibleReviewDialog(dialog:HTMLElement,onEscape:()=>void):()=>void {
+  const previousOverflow=document.body.style.overflow;
+  const previousFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
+  document.body.style.overflow='hidden';
+  const selector='a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+  const focusable=()=>Array.from(dialog.querySelectorAll<HTMLElement>(selector)).filter(el=>!el.hidden&&el.getAttribute('aria-hidden')!=='true');
+  const frame=window.requestAnimationFrame(()=>{(focusable()[0]||dialog).focus();});
+  const onKeyDown=(event:KeyboardEvent)=>{
+    if(event.key==='Escape'){event.preventDefault();onEscape();return;}
+    if(event.key!=='Tab')return;
+    const items=focusable();
+    if(!items.length){event.preventDefault();dialog.focus();return;}
+    const first=items[0],last=items[items.length-1];
+    if(event.shiftKey&&(document.activeElement===first||!dialog.contains(document.activeElement))){event.preventDefault();last.focus();}
+    else if(!event.shiftKey&&(document.activeElement===last||!dialog.contains(document.activeElement))){event.preventDefault();first.focus();}
+  };
+  window.addEventListener('keydown',onKeyDown);
+  return ()=>{
+    window.cancelAnimationFrame(frame);
+    window.removeEventListener('keydown',onKeyDown);
+    document.body.style.overflow=previousOverflow;
+    if(previousFocus?.isConnected)previousFocus.focus();
+  };
+}
+
 
 function CourseAnalyticsPanel({courseId,activeCourse,courseError}:{courseId:string;activeCourse:any;courseError:string}) {
   const {locale}=useContext(AdminWorkspaceContext);
@@ -257,6 +282,7 @@ export default function AssessmentsPage(){
   const [importedHindiExplanationEdits,setImportedHindiExplanationEdits]=useState<Record<number,string>>({});
   const [importedReviewerNoteEdits,setImportedReviewerNoteEdits]=useState<Record<number,string>>({});
   const [importedReviewOpen,setImportedReviewOpen]=useState(false);
+  const importedReviewDialogRef=useRef<HTMLElement|null>(null);
   const [importedReviewSequence,setImportedReviewSequence]=useState(1);
   const [importedReviewFilter,setImportedReviewFilter]=useState<'ALL'|'PENDING'|'APPROVED'|'REJECTED'>('ALL');
   const [importedReviewSearch,setImportedReviewSearch]=useState('');
@@ -451,14 +477,9 @@ export default function AssessmentsPage(){
   }
   useEffect(()=>{
     if(!importedReviewOpen)return;
-    const previousOverflow=document.body.style.overflow;
-    document.body.style.overflow='hidden';
-    const onKeyDown=(event:KeyboardEvent)=>{if(event.key==='Escape')closeImportedReview();};
-    window.addEventListener('keydown',onKeyDown);
-    return ()=>{
-      document.body.style.overflow=previousOverflow;
-      window.removeEventListener('keydown',onKeyDown);
-    };
+    const dialog=importedReviewDialogRef.current;
+    if(!dialog)return;
+    return activateAccessibleReviewDialog(dialog,closeImportedReview);
   },[importedReviewOpen]);
 
   async function importPackageDraft() {
@@ -719,7 +740,7 @@ export default function AssessmentsPage(){
 
 
       {importedReviewOpen&&importedReviewId!==null&&<div className={styles.assessmentReviewBackdrop} role="presentation" onMouseDown={event=>{if(event.target===event.currentTarget)closeImportedReview();}}>
-        <section className={styles.assessmentReviewWorkspace} role="dialog" aria-modal="true" aria-labelledby="imported-review-title">
+        <section ref={importedReviewDialogRef} tabIndex={-1} className={styles.assessmentReviewWorkspace} role="dialog" aria-modal="true" aria-labelledby="imported-review-title">
           <aside className={styles.assessmentReviewSidebar}>
             <div className={styles.reviewSidebarHeader}>
               <span>ASSESSMENT REVIEW</span>
