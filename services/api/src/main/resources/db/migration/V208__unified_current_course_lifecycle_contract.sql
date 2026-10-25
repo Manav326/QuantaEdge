@@ -460,7 +460,8 @@ BEGIN
       AND release.release_state <> 'LEGACY_MIGRATED'
       AND (
         (NEW.assignment_source = 'ORIGIN'
-          AND release.source_institution_id = NEW.institution_id)
+          AND release.source_institution_id = NEW.institution_id
+          AND release.release_state <> 'WITHDRAWN')
         OR
         (NEW.assignment_source = 'HRMS'
           AND release.release_state = 'SHAREABLE'
@@ -566,11 +567,31 @@ WHERE offer.status = 'ARCHIVED'
    );
 
 -- Explicitly mark migrated releases as obsolete, retaining their original content graph.
-UPDATE institution_course_release
-SET obsolete_at = coalesce(obsolete_at, now()),
-    obsolete_reason = coalesce(obsolete_reason,
-      'OBSOLETE: release was created by the prior migration pipeline; new assignments require a current source-owned release.')
-WHERE legacy_migration = true OR release_state = 'LEGACY_MIGRATED';
+UPDATE institution_course_release retired_release
+SET obsolete_at = coalesce(retired_release.obsolete_at, now()),
+    obsolete_reason = coalesce(retired_release.obsolete_reason,
+      CASE
+        WHEN retired_release.legacy_migration = true
+          OR retired_release.release_state = 'LEGACY_MIGRATED'
+          THEN 'OBSOLETE: release was created by the prior migration pipeline; new assignments require a current source-owned release.'
+        WHEN retired_release.release_state = 'WITHDRAWN'
+          THEN 'OBSOLETE: source institution withdrew this release; relisting requires a new source release.'
+        ELSE 'OBSOLETE: release does not have one active source-owned course identity matching its source institution and course type.'
+      END)
+WHERE retired_release.legacy_migration = true
+   OR retired_release.release_state IN ('LEGACY_MIGRATED','WITHDRAWN')
+   OR NOT EXISTS (
+     SELECT 1
+     FROM curriculum_program program
+     JOIN institution_course_identity identity
+       ON identity.id = program.course_identity_id
+      AND identity.status = 'ACTIVE'
+      AND identity.source_institution_id = retired_release.source_institution_id
+      AND identity.course_type_code = program.course_type_code
+     WHERE program.id = retired_release.program_id
+       AND program.status = 'ACTIVE'
+       AND program.code <> 'GENERAL'
+   );
 
 -- Existing migrated releases are mutable only enough to mark them obsolete. No new or updated
 -- row can enter the legacy release state or be used as an active release.
@@ -579,6 +600,15 @@ RETURNS trigger
 LANGUAGE plpgsql
 AS $function$
 BEGIN
+  IF TG_OP = 'UPDATE' AND OLD.obsolete_at IS NOT NULL THEN
+    IF (to_jsonb(OLD) - ARRAY['updated_at']) = (to_jsonb(NEW) - ARRAY['updated_at']) THEN
+      RETURN NEW;
+    END IF;
+    RAISE EXCEPTION
+      'OBSOLETE_COURSE_RELEASE: an obsolete release is terminal; create a new source-owned release instead of editing or reactivating it.'
+      USING ERRCODE = '55000';
+  END IF;
+
   IF TG_OP = 'UPDATE'
      AND (OLD.legacy_migration = true OR OLD.release_state = 'LEGACY_MIGRATED') THEN
     IF NEW.legacy_migration = OLD.legacy_migration

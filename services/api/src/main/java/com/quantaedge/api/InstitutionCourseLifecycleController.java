@@ -172,7 +172,10 @@ public class InstitutionCourseLifecycleController {
         """,releaseId);
     jdbc.update("""
         update institution_course_release set release_state='WITHDRAWN',
-          withdrawn_by_admin_id=?,withdrawn_at=now(),updated_at=now()
+          withdrawn_by_admin_id=?,withdrawn_at=now(),
+          obsolete_at=coalesce(obsolete_at,now()),
+          obsolete_reason=coalesce(obsolete_reason,'OBSOLETE: source institution withdrew this release; publish a new source release before relisting.'),
+          updated_at=now()
         where id=? and source_institution_id=? and release_state='SHAREABLE'
         """,principal.adminId(),releaseId,principal.institutionId());
      jdbc.update("""
