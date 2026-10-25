@@ -889,7 +889,7 @@ export default function MarketplaceLaunchStepper({
                         <span>ASSESSMENT_ONLY</span>
                         <span>{release.assessment_count} tests</span>
                         <span>{release.assessment_question_count} questions</span>
-                        <span>{release.assessment_only_ready ? 'TRE inventory complete' : 'TRE inventory incomplete'}</span>
+                        <span>{release.assessment_only_ready ? 'Assessment hierarchy complete' : 'Assessment hierarchy incomplete'}</span>
                       </> : <>
                         <span>{release.active_subject_count} active subjects</span>
                         <span>{release.subjects_with_published_lessons} with lessons</span>
