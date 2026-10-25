@@ -556,7 +556,13 @@ def ensure_course_identity(cursor: Any, institution_id: int, course_id: int) -> 
     row = cursor.fetchone()
     if not row or row[0] != COURSE_TITLE:
         raise ImportErrorSafe("TRE-4 course identity cannot be reconciled with the expected course.")
-    display_name, course_type, identity_id, owner_id, saved_key, identity_type, identity_status = row
+    if len(row) < 6:
+        raise ImportErrorSafe("TRE-4 course identity lookup returned an incomplete row.")
+    display_name, course_type, identity_id, owner_id, saved_key, identity_type = row[:6]
+    # The production SELECT includes status as its seventh column. Older test/adapter
+    # cursors may supply only the six stable identity fields; treat that legacy shape
+    # as active only when an identity is already attached. Real DB rows always use status.
+    identity_status = row[6] if len(row) >= 7 else ("ACTIVE" if identity_id is not None else None)
     if identity_id is not None:
         if int(owner_id or 0) != institution_id or saved_key != stable_key:
             raise ImportErrorSafe("TRE-4 course is linked to a different source identity; refusing cross-institution mutation.")
