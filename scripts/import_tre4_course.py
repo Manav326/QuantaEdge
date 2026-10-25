@@ -481,15 +481,15 @@ def ensure_schema(cursor: Any) -> None:
         )
     if "registered_type.status='ACTIVE'" not in course_type_readiness_definition or "identity.status='ACTIVE'" not in course_type_readiness_definition:
         raise ImportErrorSafe(
-            "Flyway V205 is required: Marketplace readiness must require an active registered type and active source-owned course identity."
+            "Flyway V204 is required: Marketplace readiness must require an active registered type and active source-owned course identity."
         )
     if "conflicting_release.source_institution_id<>identity.source_institution_id" not in course_type_readiness_definition:
         raise ImportErrorSafe(
-            "Flyway V205 is required: Marketplace readiness must reject courses whose release ownership conflicts with the source institution identity."
+            "Flyway V204 is required: Marketplace readiness must reject courses whose release ownership conflicts with the source institution identity."
         )
     if "p.course_type_code='ASSESSMENT'" not in course_type_readiness_definition or "p.course_type_code='K12'" not in course_type_readiness_definition:
         raise ImportErrorSafe(
-            "Flyway V205 is required: Marketplace readiness must use the registered course type, not infer the hierarchy from legacy tables."
+            "Flyway V204 is required: Marketplace readiness must use the registered course type, not infer the hierarchy from legacy tables."
         )
     if "assessment_question_snapshot_publish_ready" not in answer_gate_definition:
         raise ImportErrorSafe("Flyway V204 is required: the shared typed assessment question/answer review function is unavailable.")
@@ -891,7 +891,7 @@ def lock_latest_draft_release(cursor: Any, institution_id: int, course_id: int) 
     cursor.execute("""
         SELECT id,status
         FROM institution_marketplace_offer
-        WHERE course_id=%s AND (status='PUBLISHED' OR hrms_published_by_staff_id IS NOT NULL)
+        WHERE course_id=%s AND (status='PUBLISHED' OR published_at IS NOT NULL OR published_by_admin_id IS NOT NULL)
         ORDER BY updated_at DESC,id DESC
         LIMIT 1 FOR UPDATE
     """, (course_id,))
