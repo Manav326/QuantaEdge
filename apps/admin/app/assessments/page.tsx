@@ -46,6 +46,43 @@ function referenceAnswerText(value:any,t:Translator){
   try{return JSON.stringify(parsed,null,2)}catch{return String(parsed)}
 }
 
+
+type AssessmentLanguage = 'en'|'hi';
+type ImportedReviewStatus = 'APPROVED'|'REJECTED'|'PENDING_HUMAN_REVIEW';
+function localizedValue(value:any,language:AssessmentLanguage):string {
+  if(typeof value==='string')return value;
+  if(!value||typeof value!=='object'||Array.isArray(value))return '';
+  const candidate=value[language]??value[language==='en'?'english':'hindi']??value[language.toUpperCase()];
+  if(typeof candidate==='string')return candidate;
+  if(candidate&&typeof candidate==='object')return String(candidate.text??candidate.label??candidate.prompt??'');
+  return '';
+}
+function importedPrompt(question:any,language:AssessmentLanguage):string {
+  return localizedValue(question?.prompt_i18n,language)||(language==='en'?String(question?.prompt||''):'');
+}
+function importedOptionText(option:any,language:AssessmentLanguage):string {
+  const localized=localizedValue(option?.text_i18n??option?.label_i18n??option?.option_i18n,language);
+  if(localized)return localized;
+  return language==='en'?String(option?.label??option?.text??''):'';
+}
+function importedQuestionStatus(question:any):ImportedReviewStatus {
+  const questionStatus=String(question?.question_review_status||'PENDING_HUMAN_REVIEW').toUpperCase();
+  const answerStatus=String(question?.answer_review_status||'PENDING_HUMAN_REVIEW').toUpperCase();
+  if(questionStatus==='REJECTED'||answerStatus==='REJECTED')return 'REJECTED';
+  if(questionStatus==='APPROVED'&&answerStatus==='APPROVED')return 'APPROVED';
+  return 'PENDING_HUMAN_REVIEW';
+}
+function parseAnswerPayload(value:any):any {
+  if(value&&typeof value==='object'&&!Array.isArray(value))return value;
+  if(typeof value==='string') {
+    try {
+      const parsed=JSON.parse(value);
+      return parsed&&typeof parsed==='object'&&!Array.isArray(parsed)?parsed:{};
+    } catch { return {}; }
+  }
+  return {};
+}
+
 function CourseAnalyticsPanel({courseId,activeCourse,courseError}:{courseId:string;activeCourse:any;courseError:string}) {
   const {locale}=useContext(AdminWorkspaceContext);
   const isEnglish=locale==='english';
@@ -217,9 +254,35 @@ export default function AssessmentsPage(){
   const [importedReviewItems,setImportedReviewItems]=useState<Array<{sequenceNo:number;maxMarks:number|string;question:any}>>([]);
   const [importedAnswerEdits,setImportedAnswerEdits]=useState<Record<number,string>>({});
   const [importedExplanationEdits,setImportedExplanationEdits]=useState<Record<number,string>>({});
+  const [importedHindiExplanationEdits,setImportedHindiExplanationEdits]=useState<Record<number,string>>({});
+  const [importedReviewOpen,setImportedReviewOpen]=useState(false);
+  const [importedReviewSequence,setImportedReviewSequence]=useState(1);
+  const [importedReviewFilter,setImportedReviewFilter]=useState<'ALL'|'PENDING'|'APPROVED'|'REJECTED'>('ALL');
+  const [importedReviewSearch,setImportedReviewSearch]=useState('');
 
   const eligibleStaff=staff.filter(s=>s.can_grade);
   const filteredBank=bank;
+  const importedApprovedCount=importedReviewItems.filter(item=>importedQuestionStatus(item.question)==='APPROVED').length;
+  const importedRejectedCount=importedReviewItems.filter(item=>importedQuestionStatus(item.question)==='REJECTED').length;
+  const normalizedReviewSearch=importedReviewSearch.trim().toLocaleLowerCase();
+  const filteredImportedReviewItems=importedReviewItems.filter(item=>{
+    const status=importedQuestionStatus(item.question);
+    if(importedReviewFilter!=='ALL'&&status!==(importedReviewFilter==='PENDING'?'PENDING_HUMAN_REVIEW':importedReviewFilter))return false;
+    if(!normalizedReviewSearch)return true;
+    const question=item.question||{};
+    return [question.prompt,question.prompt_i18n?.en,question.prompt_i18n?.hi,item.sequenceNo]
+      .some(value=>String(value??'').toLocaleLowerCase().includes(normalizedReviewSearch));
+  });
+  const selectedImportedReviewItem=filteredImportedReviewItems.find(item=>Number(item.sequenceNo)===importedReviewSequence)||filteredImportedReviewItems[0]||null;
+  const selectedImportedQuestion=selectedImportedReviewItem?.question||{};
+  const selectedImportedSequence=Number(selectedImportedReviewItem?.sequenceNo||importedReviewSequence);
+  const selectedImportedOptions=Array.isArray(selectedImportedQuestion.options)?selectedImportedQuestion.options:[];
+  const selectedImportedAnswer=parseAnswerPayload(importedAnswerEdits[selectedImportedSequence]??selectedImportedQuestion.answer_payload);
+  const selectedImportedAnswerKeys=selectedImportedAnswer.kind==='OPTION'
+    ?[String(selectedImportedAnswer.value??'')]
+    :selectedImportedAnswer.kind==='MULTI_OPTION'&&Array.isArray(selectedImportedAnswer.value)
+      ?selectedImportedAnswer.value.map((value:any)=>String(value))
+      :[];
 
   const loadAssessments=useCallback(async()=>{
     if(!courseId){setAssessments([]);setAssessmentTotal(0);setChapters([]);setLoading(courses.length===0);return;}
@@ -334,18 +397,27 @@ export default function AssessmentsPage(){
       setError(e instanceof Error?e.message:'The assessment package could not be validated.');
     } finally {setPackageBusy(false);}
   }
-  async function loadImportedPackageQuestions(assessmentId:number) {
+  async function loadImportedPackageQuestions(assessmentId:number,focusSequenceNo?:number) {
     if(!courseId)return;
     const data=await api('/api/v1/admin/assessments/'+assessmentId+'/package-questions?courseId='+encodeURIComponent(courseId));
     const items=Array.isArray(data?.items)?data.items:[];
     setImportedReviewId(assessmentId);setImportedReviewItems(items);setImportedReviewStatus(String(data?.status||'DRAFT'));
-    const answerValues:Record<number,string>={},explanationValues:Record<number,string>={};
+    const answerValues:Record<number,string>={},explanationValues:Record<number,string>={},hindiExplanationValues:Record<number,string>={};
     items.forEach((item:any)=>{
-      const sequence=Number(item.sequenceNo);
-      answerValues[sequence]=JSON.stringify(item.question?.answer_payload||{kind:'UNRESOLVED',value:''},null,2);
-      explanationValues[sequence]=String(item.question?.explanation||'');
+      const sequence=Number(item.sequenceNo),question=item.question||{},translations=question.explanation_i18n||{};
+      answerValues[sequence]=JSON.stringify(question.answer_payload||{kind:'UNRESOLVED',value:''},null,2);
+      explanationValues[sequence]=String(translations.en||question.explanation||'');
+      hindiExplanationValues[sequence]=String(translations.hi||'');
     });
-    setImportedAnswerEdits(answerValues);setImportedExplanationEdits(explanationValues);
+    setImportedAnswerEdits(answerValues);
+    setImportedExplanationEdits(explanationValues);
+    setImportedHindiExplanationEdits(hindiExplanationValues);
+    const firstPending=items.find((item:any)=>importedQuestionStatus(item.question)!=='APPROVED'&&importedQuestionStatus(item.question)!=='REJECTED');
+    const selectedSequence=focusSequenceNo&&items.some((item:any)=>Number(item.sequenceNo)===focusSequenceNo)
+      ?focusSequenceNo:Number(firstPending?.sequenceNo||items[0]?.sequenceNo||1);
+    setImportedReviewSequence(selectedSequence);
+    setImportedReviewFilter('ALL');
+    setImportedReviewOpen(true);
   }
   useEffect(()=>{
     const requestedId=String(new URLSearchParams(window.location.search).get('reviewAssessmentId')||'').trim();
@@ -367,6 +439,25 @@ export default function AssessmentsPage(){
       .catch(cause=>setError(cause instanceof Error?cause.message:'The selected test questions could not be loaded.'))
       .finally(()=>setPackageBusy(false));
   },[courseId,loading,assessments,loadImportedPackageQuestions]);
+  function closeImportedReview() {
+    setImportedReviewOpen(false);
+    const url=new URL(window.location.href);
+    url.searchParams.delete('reviewAssessmentId');
+    window.history.replaceState({},'',url.pathname+url.search+url.hash);
+    requestedPackageReviewRef.current='';
+  }
+  useEffect(()=>{
+    if(!importedReviewOpen)return;
+    const previousOverflow=document.body.style.overflow;
+    document.body.style.overflow='hidden';
+    const onKeyDown=(event:KeyboardEvent)=>{if(event.key==='Escape')closeImportedReview();};
+    window.addEventListener('keydown',onKeyDown);
+    return ()=>{
+      document.body.style.overflow=previousOverflow;
+      window.removeEventListener('keydown',onKeyDown);
+    };
+  },[importedReviewOpen]);
+
   async function importPackageDraft() {
     if(!courseId){setError('Choose a source course before importing.');return;}
     const pkg=packageObject||parsePackageDraft();if(!pkg)return;
@@ -400,12 +491,18 @@ export default function AssessmentsPage(){
     }
     setPackageBusy(true);setError('');setNotice('');
     try {
-      const payload={reviewStatus,answerPayload,explanation:importedExplanationEdits[sequenceNo]||''};
+      const explanation=importedExplanationEdits[sequenceNo]||'';
+      const explanationI18n={en:explanation,hi:importedHindiExplanationEdits[sequenceNo]||''};
+      const payload={reviewStatus,answerPayload,explanation,explanationI18n};
       const result=await api('/api/v1/admin/assessments/'+importedReviewId+'/package-questions/'+sequenceNo+'/review?courseId='+encodeURIComponent(courseId),{
         method:'PATCH',body:JSON.stringify(payload)
       });
       setNotice('Question '+sequenceNo+' marked '+reviewStatus+'. '+result.approvedQuestionCount+' of '+result.questionCount+' questions approved.');
-      await loadImportedPackageQuestions(importedReviewId);
+      const nextUnresolved=importedReviewItems.find(item=>Number(item.sequenceNo)>sequenceNo&&
+        importedQuestionStatus(item.question)!=='APPROVED'&&importedQuestionStatus(item.question)!=='REJECTED')
+        ||importedReviewItems.find(item=>Number(item.sequenceNo)!==sequenceNo&&
+          importedQuestionStatus(item.question)!=='APPROVED'&&importedQuestionStatus(item.question)!=='REJECTED');
+      await loadImportedPackageQuestions(importedReviewId,reviewStatus==='PENDING_HUMAN_REVIEW'?sequenceNo:Number(nextUnresolved?.sequenceNo||sequenceNo));
       await loadAssessments();
     } catch(e) {
       setError(e instanceof Error?e.message:'Question review could not be saved.');
@@ -545,31 +642,14 @@ export default function AssessmentsPage(){
               ?<ol className={styles.helpNote}>{packagePreview.issues.map((issue:string,index:number)=><li key={index}>{issue}</li>)}</ol>
               :<p className={styles.helpNote}>Structural checks passed. The server allocates database IDs and saves immutable question snapshots. Answers remain under human review.</p>}
           </div>}
-          {importedReviewId&&<div className={styles.bank}>
-            <div className={styles.panelHeading}><div><span>IMPORTED DRAFT #{importedReviewId}</span><h3>Review questions and answer keys</h3><p>Check each answer and explanation. The test cannot publish while questions remain unresolved or unapproved.</p></div><button type="button" className={styles.secondaryButton} disabled={packageBusy} onClick={()=>void loadImportedPackageQuestions(importedReviewId)}>Refresh</button></div>
-            <p className={styles.helpNote}>{importedReviewItems.filter(item=>item.question?.question_review_status==='APPROVED').length} of {importedReviewItems.length} approved. {importedReviewStatus==='DRAFT'?'Review is editable only while the test is a draft with no learner attempts.':'This test is '+importedReviewStatus+'; question snapshots are read-only to protect learner history.'}</p>
-            <div className={styles.testList}>{importedReviewItems.map(item=>{
-              const seq=Number(item.sequenceNo),question=item.question||{},options=Array.isArray(question.options)?question.options:[];
-              return <article className={styles.testCard} key={seq}>
-                <div className={styles.testBody}>
-                  <div className={styles.testTitle}><h4>Question {seq}</h4><span className={styles.statusDRAFT}>{String(question.question_review_status||'PENDING_HUMAN_REVIEW')}</span></div>
-                  <p>{String(question.prompt||'Prompt not supplied')}</p>
-                  {question.prompt_i18n&&<details><summary>Localized prompt</summary><pre>{JSON.stringify(question.prompt_i18n,null,2)}</pre></details>}
-                  {options.length>0&&<ul className={styles.helpNote}>{options.map((option:any,index:number)=><li key={String(option.key||option.option_key||index)}>{String(option.key||option.option_key||'?')}. {String(option.label||option.text||'')}</li>)}</ul>}
-                  <label className={styles.wide}>Answer payload JSON
-                    <textarea rows={3} spellCheck={false} disabled={importedReviewStatus!=='DRAFT'} value={importedAnswerEdits[seq]??JSON.stringify(question.answer_payload||{kind:'UNRESOLVED',value:''},null,2)} onChange={event=>setImportedAnswerEdits(current=>({...current,[seq]:event.target.value}))} placeholder='{"kind":"OPTION","value":"B"} or {"kind":"NUMERIC","value":12,"tolerance":0.1}'/>
-                  </label>
-                  <label className={styles.wide}>Explanation
-                    <textarea rows={3} disabled={importedReviewStatus!=='DRAFT'} value={importedExplanationEdits[seq]??String(question.explanation||'')} onChange={event=>setImportedExplanationEdits(current=>({...current,[seq]:event.target.value}))} placeholder="Explain why this answer is correct."/>
-                  </label>
-                  <div className={styles.testActions}>
-                    <button type="button" className={styles.secondaryButton} disabled={packageBusy||importedReviewStatus!=='DRAFT'} onClick={()=>void saveImportedQuestionReview(seq,'PENDING_HUMAN_REVIEW')}>Save changes</button>
-                    <button type="button" className={styles.secondaryButton} disabled={packageBusy||importedReviewStatus!=='DRAFT'} onClick={()=>void saveImportedQuestionReview(seq,'REJECTED')}>Reject question</button>
-                    <button type="button" className={styles.primaryButton} disabled={packageBusy||importedReviewStatus!=='DRAFT'} onClick={()=>void saveImportedQuestionReview(seq,'APPROVED')}>Approve answer</button>
-                  </div>
-                </div>
-              </article>;
-            })}</div>
+          {importedReviewId!==null&&importedReviewItems.length>0&&<div className={styles.importedReviewLaunch}>
+            <div><span>IMPORTED DRAFT #{importedReviewId}</span><h3>Question review workspace</h3>
+              <p>{importedApprovedCount} of {importedReviewItems.length} questions fully approved · {importedRejectedCount} rejected · {importedReviewItems.length-importedApprovedCount-importedRejectedCount} pending. Review English and Hindi together in the full-screen workspace.</p>
+            </div>
+            <div className={styles.importedReviewLaunchActions}>
+              <button type="button" className={styles.secondaryButton} disabled={packageBusy} onClick={()=>void loadImportedPackageQuestions(importedReviewId)}>Refresh questions</button>
+              <button type="button" className={styles.primaryButton} onClick={()=>setImportedReviewOpen(true)}>Open full-screen review</button>
+            </div>
           </div>}
         </section>
         {!isAssessmentOnlyCourse && (
@@ -624,6 +704,118 @@ export default function AssessmentsPage(){
           onPageChange={setQueuePage} onPageSizeChange={size=>{setQueuePageSize(size);setQueuePage(0);}}
           itemLabel="submitted tests" loading={loading} />
       </section>:<CourseAnalyticsPanel courseId={courseId} activeCourse={activeCourse} courseError={courseError}/>}
+
+
+      {importedReviewOpen&&importedReviewId!==null&&<div className={styles.assessmentReviewBackdrop} role="presentation" onMouseDown={event=>{if(event.target===event.currentTarget)closeImportedReview();}}>
+        <section className={styles.assessmentReviewWorkspace} role="dialog" aria-modal="true" aria-labelledby="imported-review-title">
+          <aside className={styles.assessmentReviewSidebar}>
+            <div className={styles.reviewSidebarHeader}>
+              <span>ASSESSMENT REVIEW</span>
+              <h2>Question navigator</h2>
+              <p>Draft #{importedReviewId} · {importedReviewItems.length} questions</p>
+              <div className={styles.reviewProgressTrack} role="progressbar" aria-label="Questions approved" aria-valuemin={0} aria-valuemax={importedReviewItems.length} aria-valuenow={importedApprovedCount}>
+                <span style={{width:(importedReviewItems.length?100*importedApprovedCount/importedReviewItems.length:0)+'%'}}/>
+              </div>
+              <div className={styles.reviewProgressLabels}><b>{importedApprovedCount}/{importedReviewItems.length} approved</b><span>{importedReviewItems.length-importedApprovedCount-importedRejectedCount} pending</span></div>
+            </div>
+            <div className={styles.reviewNavigatorTools}>
+              <input aria-label="Search questions" value={importedReviewSearch} onChange={event=>setImportedReviewSearch(event.target.value)} placeholder="Search question text or number"/>
+              <select aria-label="Filter questions by review status" value={importedReviewFilter} onChange={event=>setImportedReviewFilter(event.target.value as 'ALL'|'PENDING'|'APPROVED'|'REJECTED')}>
+                <option value="ALL">All statuses</option><option value="PENDING">Pending review</option><option value="APPROVED">Approved</option><option value="REJECTED">Rejected</option>
+              </select>
+            </div>
+            <nav className={styles.reviewQuestionNav} aria-label="Questions">
+              {filteredImportedReviewItems.map(item=>{
+                const status=importedQuestionStatus(item.question);
+                const sequence=Number(item.sequenceNo);
+                return <button type="button" key={sequence} className={[styles.reviewQuestionNavItem,selectedImportedReviewItem&&Number(selectedImportedReviewItem.sequenceNo)===sequence?styles.reviewQuestionNavItemActive:''].join(' ')} aria-current={selectedImportedReviewItem&&Number(selectedImportedReviewItem.sequenceNo)===sequence?'true':undefined} onClick={()=>setImportedReviewSequence(sequence)}>
+                  <span>{sequence}</span><b>Q{sequence}</b><small>{status==='APPROVED'?'Approved':status==='REJECTED'?'Rejected':'Pending'}</small>
+                </button>;
+              })}
+              {!filteredImportedReviewItems.length&&<p className={styles.reviewNavigatorEmpty}>No questions match this search or status filter.</p>}
+            </nav>
+          </aside>
+          <div className={styles.assessmentReviewMain}>
+            <header className={styles.assessmentReviewHeader}>
+              <div>
+                <span>IMPORTED DRAFT #{importedReviewId} · {importedReviewStatus}</span>
+                <h1 id="imported-review-title">{activeCourse?.display_name||'Assessment'} · Bilingual question review</h1>
+                <p>Review the exact question and answer before approving. Changes stay in Draft; publishing remains a separate action.</p>
+              </div>
+              <button type="button" className={styles.reviewClose} aria-label="Close full-screen review" onClick={closeImportedReview}>×</button>
+            </header>
+            {error&&<div className={styles.reviewWorkspaceError} role="alert">{error}</div>}
+            {!selectedImportedReviewItem?<div className={styles.reviewWorkspaceEmpty} role="status">No questions are available for this draft. Refresh the question list or close this workspace.</div>:<>
+              <div className={styles.assessmentReviewContent}>
+                <div className={styles.reviewQuestionTitleBar}>
+                  <div><span>QUESTION {selectedImportedSequence} OF {importedReviewItems.length}</span><h2>Question {selectedImportedSequence}</h2>
+                    <p>{String(selectedImportedQuestion.question_type||'Question')} · {String(selectedImportedQuestion.section_code||'Section not specified')} · {String(selectedImportedReviewItem.maxMarks??1)} mark(s)</p>
+                  </div>
+                  <span className={[styles.reviewStatusPill,
+                    importedQuestionStatus(selectedImportedQuestion)==='APPROVED'?styles.reviewStatusApproved:
+                    importedQuestionStatus(selectedImportedQuestion)==='REJECTED'?styles.reviewStatusRejected:styles.reviewStatusPending].join(' ')}>
+                    {importedQuestionStatus(selectedImportedQuestion)==='APPROVED'?'APPROVED':importedQuestionStatus(selectedImportedQuestion)==='REJECTED'?'REJECTED':'PENDING HUMAN REVIEW'}
+                  </span>
+                </div>
+                <div className={styles.reviewBilingualGrid}>
+                  <section className={styles.reviewLanguagePanel} aria-labelledby="review-english-heading">
+                    <div className={styles.reviewLanguageHeader}><div><span>EN</span><h3 id="review-english-heading">English</h3></div><small>Source / English version</small></div>
+                    {localizedValue(selectedImportedQuestion.stimulus_i18n,'en')&&<div className={styles.reviewStimulus}><b>Reading / code stimulus</b><p>{localizedValue(selectedImportedQuestion.stimulus_i18n,'en')}</p></div>}
+                    <div className={styles.reviewPrompt}>{importedPrompt(selectedImportedQuestion,'en')||<em>English prompt is not supplied in this package.</em>}</div>
+                    <h4>Answer options</h4>
+                    {selectedImportedOptions.length?<ol className={styles.reviewOptions}>{selectedImportedOptions.map((option:any,index:number)=>{
+                      const key=String(option.key||option.option_key||String.fromCharCode(65+index));
+                      const chosen=selectedImportedAnswerKeys.includes(key);
+                      return <li key={key} className={chosen?styles.reviewOptionSelected:''}><span>{key}</span><p>{importedOptionText(option,'en')||'English option text not supplied.'}</p>{chosen&&<b>Current key</b>}</li>;
+                    })}</ol>:<p className={styles.reviewMissingLanguage}>No structured options are present for this question.</p>}
+                  </section>
+                  <section className={styles.reviewLanguagePanel} aria-labelledby="review-hindi-heading">
+                    <div className={styles.reviewLanguageHeader}><div><span>हि</span><h3 id="review-hindi-heading">हिंदी</h3></div><small>हिंदी संस्करण</small></div>
+                    {localizedValue(selectedImportedQuestion.stimulus_i18n,'hi')&&<div className={styles.reviewStimulus}><b>पठन / कोड सामग्री</b><p>{localizedValue(selectedImportedQuestion.stimulus_i18n,'hi')}</p></div>}
+                    <div className={styles.reviewPrompt} lang="hi">{importedPrompt(selectedImportedQuestion,'hi')||<em>इस पैकेज में हिंदी प्रश्न उपलब्ध नहीं है।</em>}</div>
+                    <h4>उत्तर विकल्प</h4>
+                    {selectedImportedOptions.length?<ol className={styles.reviewOptions} lang="hi">{selectedImportedOptions.map((option:any,index:number)=>{
+                      const key=String(option.key||option.option_key||String.fromCharCode(65+index));
+                      const chosen=selectedImportedAnswerKeys.includes(key);
+                      return <li key={key} className={chosen?styles.reviewOptionSelected:''}><span>{key}</span><p>{importedOptionText(option,'hi')||<em>हिंदी विकल्प उपलब्ध नहीं है।</em>}</p>{chosen&&<b>वर्तमान कुंजी</b>}</li>;
+                    })}</ol>:<p className={styles.reviewMissingLanguage}>इस प्रश्न के संरचित विकल्प उपलब्ध नहीं हैं।</p>}
+                  </section>
+                </div>
+                <div className={styles.reviewEditingGrid}>
+                  <section className={styles.reviewEditorPanel}>
+                    <div className={styles.reviewEditorHeader}><div><span>ANSWER KEY</span><h3>Answer payload</h3></div><b>{String(selectedImportedAnswer.kind||'UNRESOLVED')}</b></div>
+                    <p>Set the authoritative answer key. Option keys are language-independent; the same key is highlighted in both language panels.</p>
+                    <textarea aria-label="Answer payload JSON" rows={7} spellCheck={false} disabled={importedReviewStatus!=='DRAFT'} value={importedAnswerEdits[selectedImportedSequence]??JSON.stringify(selectedImportedQuestion.answer_payload||{kind:'UNRESOLVED',value:''},null,2)} onChange={event=>setImportedAnswerEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))} placeholder='{"kind":"OPTION","value":"B"} or {"kind":"NUMERIC","value":12,"tolerance":0.1}'/>
+                    <small>Supported kinds include OPTION, MULTI_OPTION, TEXT, NUMERIC, ORDER and MATCH. Approval validates the answer against the saved options.</small>
+                  </section>
+                  <section className={styles.reviewEditorPanel}>
+                    <div className={styles.reviewEditorHeader}><div><span>EXPLANATION · EN</span><h3>English explanation</h3></div></div>
+                    <p>Explain why the reviewed answer is correct. Approval requires an explanation.</p>
+                    <textarea aria-label="English explanation" rows={7} maxLength={700} disabled={importedReviewStatus!=='DRAFT'} value={importedExplanationEdits[selectedImportedSequence]??''} onChange={event=>setImportedExplanationEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))} placeholder="Write the English explanation."/>
+                  </section>
+                  <section className={styles.reviewEditorPanel} lang="hi">
+                    <div className={styles.reviewEditorHeader}><div><span>व्याख्या · HI</span><h3>हिंदी में व्याख्या</h3></div></div>
+                    <p>हिंदी व्याख्या यहाँ लिखें। यह अंग्रेज़ी व्याख्या से अलग सहेजी जाएगी।</p>
+                    <textarea aria-label="Hindi explanation" rows={7} maxLength={700} disabled={importedReviewStatus!=='DRAFT'} value={importedHindiExplanationEdits[selectedImportedSequence]??''} onChange={event=>setImportedHindiExplanationEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))} placeholder="हिंदी में उत्तर की व्याख्या लिखें।"/>
+                  </section>
+                </div>
+              </div>
+              <footer className={styles.assessmentReviewFooter}>
+                <div className={styles.reviewFooterNavigation}>
+                  <button type="button" className={styles.secondaryButton} disabled={!importedReviewItems.length||selectedImportedSequence<=Number(importedReviewItems[0]?.sequenceNo||1)} onClick={()=>setImportedReviewSequence(selectedImportedSequence-1)}>← Previous</button>
+                  <span>Question {selectedImportedSequence} / {importedReviewItems.length}</span>
+                  <button type="button" className={styles.secondaryButton} disabled={!importedReviewItems.length||selectedImportedSequence>=Number(importedReviewItems[importedReviewItems.length-1]?.sequenceNo||importedReviewItems.length)} onClick={()=>setImportedReviewSequence(selectedImportedSequence+1)}>Next →</button>
+                </div>
+                <div className={styles.reviewFooterActions}>
+                  <button type="button" className={styles.secondaryButton} disabled={packageBusy||importedReviewStatus!=='DRAFT'} onClick={()=>void saveImportedQuestionReview(selectedImportedSequence,'PENDING_HUMAN_REVIEW')}>Save changes</button>
+                  <button type="button" className={styles.secondaryButton} disabled={packageBusy||importedReviewStatus!=='DRAFT'} onClick={()=>void saveImportedQuestionReview(selectedImportedSequence,'REJECTED')}>Reject question</button>
+                  <button type="button" className={styles.primaryButton} disabled={packageBusy||importedReviewStatus!=='DRAFT'} onClick={()=>void saveImportedQuestionReview(selectedImportedSequence,'APPROVED')}>Approve answer</button>
+                </div>
+              </footer>
+            </>}
+          </div>
+        </section>
+      </div>}
 
       {review&&<div className={styles.modalBackdrop} role="presentation" onMouseDown={e=>{if(e.target===e.currentTarget)setReview(null);}}>
         <section className={styles.reviewModal} role="dialog" aria-modal="true" aria-labelledby="review-title">
