@@ -45,6 +45,7 @@ assert(appearanceProvider.includes("qe.people.appearance-mode.v1") && appearance
 assert(appearanceProvider.includes('PeopleAppearanceToggle') && appearanceProvider.includes('prefers-color-scheme'), 'HRMS appearance controls must support accessible mode selection and OS theme changes.');
 assert(!/\/api\/v1\/institution\/public\/branding|logoUrl|appIconUrl|themeTokens/i.test(appearanceProvider + appearanceStyles), 'HRMS appearance must not fetch or depend on tenant logo URLs or institution theme tokens.');
 assert(appearanceStyles.includes('--qe-people-brand: #f97316') && appearanceStyles.includes('--qe-people-brand-strong: #c2410c'), 'HRMS light theme must preserve canonical QuantaEdge orange branding.');
+assert(appearanceStyles.includes('--qe-people-disabled-surface') && appearanceStyles.includes('--qe-people-disabled-ink') && appearanceStyles.includes('--qe-people-disabled-border'), 'Disabled controls must have explicit light/dark contrast tokens instead of appearing partially rendered.');
 assert(appearanceStyles.includes('html[data-qe-people-appearance="dark"]') && appearanceStyles.includes(':focus-visible') && appearanceStyles.includes('prefers-reduced-motion'), 'HRMS dark theme must retain semantic surfaces, visible focus, and reduced-motion support.');
 assert(sessionBoundary.includes('Do not replace the HRMS workspace with a full-screen gate on client-side') && !sessionBoundary.includes('setReady(false)'), 'HRMS session checks must not unmount the whole workspace on every route change.');
 assert(workspace.includes('key={pathname}') && !workspace.includes('router.refresh()'), 'HRMS navigation and logout must keep the shared shell mounted and avoid unnecessary route refreshes.');
@@ -86,6 +87,7 @@ for (const exportName of [
 assert(components.includes("'primary' | 'secondary' | 'neutral' | 'danger'"), 'Shared People buttons must include the semantic variants.');
 assert(components.includes('loading = false') && components.includes('disabled={disabled || loading}'), 'Shared People buttons must expose safe loading/disabled behavior.');
 assert(styles.includes('.qe-people-button--neutral') && styles.includes('.qe-people-button-spinner'), 'Shared People button variants and loading indicator styles must exist.');
+assert(styles.includes('.qe-people-button:disabled') && styles.includes('var(--qe-people-disabled-surface') && styles.includes('opacity: 1;'), 'Shared disabled buttons must switch to the explicit neutral surface without opacity haze.');
 
 const routePages = [
   ['/', 'apps/people/app/page.tsx'],
@@ -224,6 +226,7 @@ const financePageTheme = read('apps/people/app/finance/page.tsx');
 const financeModuleTheme = read('apps/people/app/finance/Finance.module.css');
 assert(financePageTheme.includes("['overview','Overview'") && financePageTheme.includes("['documents','Issued documents'") && financePageTheme.includes("['studio','Invoice Design Studio'"), 'Finance route must retain its in-page billing, document and design subpages.');
 const marketplaceLaunchFinance = read('apps/people/app/institutions/MarketplaceLaunchStepper.tsx');
+const marketplaceLaunchStyles = read('apps/people/app/institutions/MarketplaceLaunchStepper.module.css');
 assert(marketplaceLaunchFinance.includes('financeSetupHref(item, invoiceSetupTarget(item))') && marketplaceLaunchFinance.includes("setup: 'marketplace'") && marketplaceLaunchFinance.includes("params.set('offerId', String(item.offerId))"), 'Marketplace invoice/revenue-share actions must deep-link to Finance with the exact course offer context.');
 assert(marketplaceLaunchFinance.includes("href=\"/institutions#hrms-integrations-heading\"") && marketplaceLaunchFinance.includes("blockerHref(item, blocker)") && marketplaceLaunchFinance.includes("SOURCE_RIGHTS_CLEARANCE', 'ORIGIN_RELEASE_APPROVAL"), 'Launch blockers must route to shared integrations, source rights, or the right release owner rather than generic Finance.');
 assert(marketplaceLaunchFinance.includes("href={financeSetupHref(item, sellerSetupTarget(item))}") && marketplaceLaunchFinance.includes("financeSetupHref(item, 'entities')") && marketplaceLaunchFinance.includes("financeSetupHref(item, 'tax')"), 'Seller/tax links must preserve the exact course offer context.');
@@ -241,6 +244,8 @@ assert(institutionAdminWorkspace.includes('/api/v1/admin/institution-operations/
   'Institution reports, roster and release handoff must be in Admin; learner join links must remain HRMS-only.');
 assert(guidedCourseCreator.includes("'/api/v1/admin/content/courses'") && guidedCourseCreator.includes("router.push('/content?courseId='"), 'Guided course creation must open Content Studio in the newly created course context.');
 assert(hrmsCourseHandoff.includes('NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN') && hrmsCourseHandoff.includes("'/institution-operations?'"), 'HRMS release blockers must hand the authorised actor into the Admin institution workflow, never the learner portal.');
+assert(hrmsCourseHandoff.includes('qualityBlocker') && hrmsCourseHandoff.includes('Return this release for correction') && hrmsCourseHandoff.includes('exactPreviewReady'), 'Disabled quality approval must explain the release-readiness blocker and require an exact reviewed fingerprint.');
+assert(marketplaceLaunchStyles.includes('.actionHintWarning') && marketplaceLaunchStyles.includes('.primaryButton:disabled') && marketplaceLaunchStyles.includes('opacity: 1;'), 'Marketplace launch buttons must use a distinct readable disabled style and expose quality gate hints.');
 const financeSetupContract = read('apps/people/app/finance/page.tsx');
 assert(financeSetupContract.includes("setTaxForm(v=>({...v,offerId:requestedOfferId,legalEntityId:linkedSeller?String(linkedSeller.id):''}))") && financeSetupContract.includes("setDiscountForm(v=>({...v,offerId:requestedOfferId}))"), 'Launch-linked Finance forms must use the exact selected offer instead of a first-catalogue default.');
 assert(financeSetupContract.includes('Legal seller &amp; GST') && financeSetupContract.includes('Offer tax profile') && financeSetupContract.includes('Discount rules · optional'), 'Guided finance setup must follow the same sequence and keep unplanned discounts optional.');
@@ -251,6 +256,7 @@ for (const mode of ['light', 'dark']) {
 }
 assert(financePageTheme.includes('data-qe-invoice-document="true"') && financePageTheme.includes('body:JSON.stringify({designDefinition:design})'), 'Invoice stationery must stay separately authored and PDF rendering must use the selected design definition.');
 assert(financeModuleTheme.includes('--finance-field: var(--qe-people-field') && financeModuleTheme.includes('.table:not(.paperTable)'), 'Finance controls and ledgers must follow HRMS theme tokens without recolouring invoice tables.');
+assert(financeModuleTheme.includes(':is(.primary, .primarySmall, .secondary, .secondarySmall):disabled') && financeModuleTheme.includes('filter: none;'), 'Finance disabled actions must retain readable contrast in both HRMS appearances.');
 const notificationPageTheme = read('apps/people/app/components/NotificationStudio.tsx');
 const notificationModuleTheme = read('apps/people/app/components/NotificationStudio.module.css');
 const rendererTheme = read('apps/people/app/components/RichNotificationRenderer.tsx');
