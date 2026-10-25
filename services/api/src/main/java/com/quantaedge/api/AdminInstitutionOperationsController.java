@@ -63,7 +63,7 @@ public class AdminInstitutionOperationsController {
             join curriculum_subject sub on sub.id=ch.subject_id and sub.active=true
             join institution_course_assignment a on a.institution_id=m.institution_id and a.status='ASSIGNED'
             join institution_course_release r on r.id=a.course_release_id
-              and r.program_id=sub.program_id and r.release_state='SHAREABLE'
+              and r.program_id=sub.program_id
             join curriculum_program assigned_program on assigned_program.id=r.program_id
               and assigned_program.status='ACTIVE' and assigned_program.code<>'GENERAL'
             where m.institution_id=? and m.status='ACTIVE') as lessons_with_activity,
@@ -74,7 +74,7 @@ public class AdminInstitutionOperationsController {
             join curriculum_subject sub on sub.id=ch.subject_id and sub.active=true
             join institution_course_assignment a on a.institution_id=m.institution_id and a.status='ASSIGNED'
             join institution_course_release r on r.id=a.course_release_id
-              and r.program_id=sub.program_id and r.release_state='SHAREABLE'
+              and r.program_id=sub.program_id
             join curriculum_program assigned_program on assigned_program.id=r.program_id
               and assigned_program.status='ACTIVE' and assigned_program.code<>'GENERAL'
             where m.institution_id=? and m.status='ACTIVE') as completed_lessons,
@@ -125,7 +125,7 @@ public class AdminInstitutionOperationsController {
           join curriculum_subject sub on sub.id=ch.subject_id and sub.active=true
           join institution_course_assignment a on a.institution_id=m.institution_id and a.status='ASSIGNED'
           join institution_course_release r on r.id=a.course_release_id
-            and r.program_id=sub.program_id and r.release_state='SHAREABLE'
+            and r.program_id=sub.program_id
           join curriculum_program pr on pr.id=r.program_id and pr.status='ACTIVE' and pr.code<>'GENERAL'
           where l.active=true and l.status='PUBLISHED'
         )
