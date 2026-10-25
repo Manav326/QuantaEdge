@@ -88,7 +88,7 @@ assert(components.includes("'primary' | 'secondary' | 'neutral' | 'danger'"), 'S
 assert(components.includes('loading = false') && components.includes('disabled={disabled || loading}'), 'Shared People buttons must expose safe loading/disabled behavior.');
 assert(styles.includes('.qe-people-button--neutral') && styles.includes('.qe-people-button-spinner'), 'Shared People button variants and loading indicator styles must exist.');
 assert(styles.includes('.qe-people-button:disabled') && styles.includes('var(--qe-people-disabled-surface') && styles.includes('opacity: 1;'), 'Shared disabled buttons must switch to the explicit neutral surface without opacity haze.');
-assert(styles.includes('.qe-people-page-slot .qe-people-workspace button:disabled') && styles.includes('var(--qe-color-surface-subtle') && styles.includes('filter: none;'), 'All HRMS workflow buttons must use a readable neutral disabled surface while preserving authored invoice and notification documents.');
+assert(styles.includes('.qe-people-workspace .qe-people-page-slot button:disabled') && styles.includes('var(--qe-color-surface-subtle') && styles.includes('filter: none;'), 'All HRMS workflow buttons must use a readable neutral disabled surface while preserving authored invoice and notification documents.');
 
 const routePages = [
   ['/', 'apps/people/app/page.tsx'],
