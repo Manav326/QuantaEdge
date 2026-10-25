@@ -85,6 +85,13 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn('"studentIdentifiersIncluded",false', analytics)
         self.assertNotIn('ans.response_payload::text as response', analytics)
 
+    def test_hrms_marketplace_queue_exposes_release_fingerprint_state(self):
+        controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseMarketplaceLaunchController.java").read_text(encoding="utf-8")
+        self.assertIn("p.course_type_code", controller)
+        self.assertIn("as delivery_mode", controller)
+        self.assertIn("r.updated_at as release_updated_at", controller)
+        self.assertIn('release.put("contentCurrent",readiness.contentFingerprintMatches(', controller)
+
     def test_hrms_can_preview_exact_assessment_release_before_quality_decision(self):
         controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseMarketplaceLaunchController.java").read_text(encoding="utf-8")
         hrms_ui = (ROOT / "apps/people/app/institutions/MarketplaceLaunchStepper.tsx").read_text(encoding="utf-8")
@@ -103,7 +110,8 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
     def test_quality_gate_has_actionable_preview_recovery_without_bypassing_fingerprint(self):
         hrms_ui = (ROOT / "apps/people/app/institutions/MarketplaceLaunchStepper.tsx").read_text(encoding="utf-8")
         review_controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/PlatformInstitutionController.java").read_text(encoding="utf-8")
-        self.assertIn("const previewNeedsLoading", hrms_ui)
+        self.assertIn("const previewNeedsLoading = !preview && !previewLoadInProgress", hrms_ui)
+        self.assertNotIn("!preview && release.contentCurrent && qualityReady", hrms_ui)
         self.assertIn("Load exact submitted content", hrms_ui)
         self.assertIn("onClick={() => void toggleReviewContent(release)}", hrms_ui)
         self.assertIn("previewFingerprintMismatch", hrms_ui)
