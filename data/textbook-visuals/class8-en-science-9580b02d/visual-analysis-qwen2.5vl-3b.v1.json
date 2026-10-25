@@ -14,14 +14,14 @@
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "4fdef3a69f918bffeb046522",
-      "19c227fd1fc13adb636a0c58"
+      "35ff0b921f1e0b0945a8f8df",
+      "e616bcedcee1f19d79e7f4f4"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1282,
-    "assets_remaining": 1009,
+    "assets_analyzed": 1283,
+    "assets_remaining": 1008,
     "assets_completion_percent": 56.0,
-    "assets_failed": 12,
+    "assets_failed": 13,
     "assets_skipped_from_checkpoint": 1282,
     "batch_limit": 5,
     "publication_allowed": false
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40205240019",
-      "checkpointed_at": "2026-10-25T16:30:00Z"
+      "checkpointed_at": "2026-10-25T16:41:33Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40205240019",
-      "checkpointed_at": "2026-10-25T16:30:44Z"
+      "checkpointed_at": "2026-10-25T16:42:17Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40205240019",
-      "checkpointed_at": "2026-10-25T16:31:37Z"
+      "checkpointed_at": "2026-10-25T16:43:10Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -42334,6 +42334,69 @@
       "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "35ff0b921f1e0b0945a8f8df",
+      "asset_sha256": "17660b7f37dd3b6003520efe3ae1e2c53163ffffee0702f7e058a857644b72fe",
+      "page_text_context_sha256": "f3609a74f6b9bc75917f652f29735b6712124160a390320c36e3648f81ded621",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 102,
+      "asset_path": "page-0102.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40205240019",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "e616bcedcee1f19d79e7f4f4",
+      "asset_sha256": "ca6af3abe1c290e009ce1eda94e20d089841cafdd10e3829a530e1ba0b872e06",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 103,
+      "asset_path": "assets/ca6af3abe1c290e009ce1eda94e20d089841cafdd10e3829a530e1ba0b872e06.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c296560037a32d1015a66fc65728dd44421b3ac5022037869d5e786288229793",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person in a purple shirt with one hand on their hip and the other hand open.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "83",
+          "What can you conclude from your observations in Table 6.1?",
+          "We conclude that when the area over which a force applied is smaller, the resulting pressure is higher, making it easier to do certain tasks. This is why it is easier to drive a nail using its pointed end, and it is easier to cut an apple with the sharp edge of a knife.",
+          "You must have seen overhead water tanks (Fig. 6.4) in your locality, or on the rooftops of houses used for water supply. Why are these tanks always placed at a height",
+          "83"
+        ],
+        "concepts": [
+          "Pressure",
+          "Winds",
+          "Storms",
+          "Cyclones",
+          "Table 6.1",
+          "Driving a nail",
+          "Cutting an apple",
+          "Overhead water tanks",
+          "Rooftops of houses",
+          "Height"
+        ],
+        "context_relation": "The image is related to the educational content about pressure, winds, storms, and cyclones.",
+        "limitations": [
+          "The image does not provide specific details about the content of Table 6.1 or the figure 6.4."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40205240019",
+      "checkpointed_at": "2026-10-25T16:49:26Z"
     }
   ]
 }

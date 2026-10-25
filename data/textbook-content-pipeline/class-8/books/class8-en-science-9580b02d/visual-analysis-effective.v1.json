@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "40e223c03d7750b88e7a61fe42ad01618f386152839265344cadf5261a46485b",
+  "raw_analysis_sha256": "c5acf8dc89d21c186eec0a5af85fce6ef251804df549b70dad57d99a2a4680ad",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40205240019",
-      "checkpointed_at": "2026-10-25T16:30:00Z",
+      "checkpointed_at": "2026-10-25T16:41:33Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40205240019",
-      "checkpointed_at": "2026-10-25T16:30:44Z",
+      "checkpointed_at": "2026-10-25T16:42:17Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57861,7 +57861,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40205240019",
-      "checkpointed_at": "2026-10-25T16:31:37Z",
+      "checkpointed_at": "2026-10-25T16:43:10Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -63895,6 +63895,102 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "35ff0b921f1e0b0945a8f8df",
+      "asset_sha256": "17660b7f37dd3b6003520efe3ae1e2c53163ffffee0702f7e058a857644b72fe",
+      "page_text_context_sha256": "f3609a74f6b9bc75917f652f29735b6712124160a390320c36e3648f81ded621",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 102,
+      "asset_path": "page-0102.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40205240019",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e616bcedcee1f19d79e7f4f4",
+      "asset_sha256": "ca6af3abe1c290e009ce1eda94e20d089841cafdd10e3829a530e1ba0b872e06",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 103,
+      "asset_path": "assets/ca6af3abe1c290e009ce1eda94e20d089841cafdd10e3829a530e1ba0b872e06.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c296560037a32d1015a66fc65728dd44421b3ac5022037869d5e786288229793",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person in a purple shirt with one hand on their hip and the other hand open.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "83",
+          "What can you conclude from your observations in Table 6.1?",
+          "We conclude that when the area over which a force applied is smaller, the resulting pressure is higher, making it easier to do certain tasks. This is why it is easier to drive a nail using its pointed end, and it is easier to cut an apple with the sharp edge of a knife.",
+          "You must have seen overhead water tanks (Fig. 6.4) in your locality, or on the rooftops of houses used for water supply. Why are these tanks always placed at a height",
+          "83"
+        ],
+        "concepts": [
+          "Pressure",
+          "Winds",
+          "Storms",
+          "Cyclones",
+          "Table 6.1",
+          "Driving a nail",
+          "Cutting an apple",
+          "Overhead water tanks",
+          "Rooftops of houses",
+          "Height"
+        ],
+        "context_relation": "The image is related to the educational content about pressure, winds, storms, and cyclones.",
+        "limitations": [
+          "The image does not provide specific details about the content of Table 6.1 or the figure 6.4."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40205240019",
+      "checkpointed_at": "2026-10-25T16:49:26Z",
+      "effective_analysis": {
+        "visual_summary": "A person in a purple shirt with one hand on their hip and the other hand open.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "83",
+          "What can you conclude from your observations in Table 6.1?",
+          "We conclude that when the area over which a force applied is smaller, the resulting pressure is higher, making it easier to do certain tasks. This is why it is easier to drive a nail using its pointed end, and it is easier to cut an apple with the sharp edge of a knife.",
+          "You must have seen overhead water tanks (Fig. 6.4) in your locality, or on the rooftops of houses used for water supply. Why are these tanks always placed at a height",
+          "83"
+        ],
+        "concepts": [
+          "Pressure",
+          "Winds",
+          "Storms",
+          "Cyclones",
+          "Table 6.1",
+          "Driving a nail",
+          "Cutting an apple",
+          "Overhead water tanks",
+          "Rooftops of houses",
+          "Height"
+        ],
+        "context_relation": "The image is related to the educational content about pressure, winds, storms, and cyclones.",
+        "limitations": [
+          "The image does not provide specific details about the content of Table 6.1 or the figure 6.4."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
