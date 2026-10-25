@@ -891,7 +891,7 @@ def lock_latest_draft_release(cursor: Any, institution_id: int, course_id: int) 
     cursor.execute("""
         SELECT id,status
         FROM institution_marketplace_offer
-        WHERE course_id=%s AND (status='PUBLISHED' OR published_at IS NOT NULL OR published_by_admin_id IS NOT NULL)
+        WHERE course_id=%s AND (status='PUBLISHED' OR hrms_published_by_staff_id IS NOT NULL)
         ORDER BY updated_at DESC,id DESC
         LIMIT 1 FOR UPDATE
     """, (course_id,))
