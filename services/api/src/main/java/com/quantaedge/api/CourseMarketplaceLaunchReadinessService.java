@@ -134,9 +134,8 @@ public class CourseMarketplaceLaunchReadinessService {
         &&"ASSESSMENT_ONLY".equals(text(row.get("delivery_mode")));
     boolean k12Course="K12".equals(courseTypeCode)
         &&"LEARNING_CONTENT".equals(text(row.get("delivery_mode")));
-    boolean requiredContentReady=assessmentOnly
-        ? assessmentOnlyCoursePublishReady(courseId)
-        : k12Course&&subjectCount>0&&subjectsWithLessons==subjectCount&&chapterCount>0&&lessonCount>0;
+    boolean requiredContentReady=Boolean.TRUE.equals(jdbc.queryForObject(
+        "select course_marketplace_content_type_ready(?)",Boolean.class,courseId));
     add(checks,"PUBLISHED_LEARNING_CONTENT",
         assessmentOnly?"All test-pack assessments are published and reviewed"
             : k12Course?"Every active mapped subject has published lessons":"Course-type Marketplace readiness is not supported",
@@ -291,9 +290,8 @@ public class CourseMarketplaceLaunchReadinessService {
         &&"ASSESSMENT_ONLY".equals(text(offer.get("delivery_mode")));
     boolean k12Course="K12".equals(courseTypeCode)
         &&"LEARNING_CONTENT".equals(text(offer.get("delivery_mode")));
-    boolean requiredContentReady=assessmentOnly
-        ? assessmentOnlyCoursePublishReady(number(offer.get("course_id")))
-        : k12Course&&subjectCount>0&&subjectsWithLessons==subjectCount&&chapterCount>0&&lessonCount>0;
+    boolean requiredContentReady=Boolean.TRUE.equals(jdbc.queryForObject(
+        "select course_marketplace_content_type_ready(?)",Boolean.class,number(offer.get("course_id"))));
     add(checks,"PUBLISHED_LEARNING_CONTENT",
         assessmentOnly?"All test-pack assessments are published and reviewed"
             : k12Course?"Every active mapped subject has published lessons":"Course-type Marketplace readiness is not supported",
@@ -691,11 +689,6 @@ public class CourseMarketplaceLaunchReadinessService {
   private String contentFingerprint(long programId) {
     String value=jdbc.queryForObject("select course_content_fingerprint(?)",String.class,programId);
     return value==null?"d41d8cd98f00b204e9800998ecf8427e":value.trim();
-  }
-
-  private boolean assessmentOnlyCoursePublishReady(long programId) {
-    Boolean ready=jdbc.queryForObject("select assessment_only_course_publish_ready(?)",Boolean.class,programId);
-    return Boolean.TRUE.equals(ready);
   }
 
   private static long percentageOf(long amountPaise,int basisPoints) {
