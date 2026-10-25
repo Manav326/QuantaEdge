@@ -885,7 +885,7 @@ export default function AssessmentsPage(){
                         onChange={event=>setImportedReviewerNoteEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))}
                         placeholder={t('admin.assessments.reviewerNotePlaceholder')}/>
                     </label>
-                    {(selectedImportedQuestion.last_rejection_note||selectedImportedQuestion.human_review_note)&&<div className={styles.reviewPreviousFeedback}>
+                    {(selectedImportedQuestion.last_rejection_note||(importedQuestionStatus(selectedImportedQuestion)==='REJECTED'&&selectedImportedQuestion.human_review_note))&&<div className={styles.reviewPreviousFeedback}>
                       <b>{t('admin.assessments.previousRejectionReason')}</b>
                       <p>{String(selectedImportedQuestion.last_rejection_note||selectedImportedQuestion.human_review_note)}</p>
                     </div>}
