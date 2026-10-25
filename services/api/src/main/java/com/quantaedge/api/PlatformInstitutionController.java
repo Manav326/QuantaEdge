@@ -734,17 +734,6 @@ public class PlatformInstitutionController {
     return value==null?"d41d8cd98f00b204e9800998ecf8427e":value.trim();
   }
 
-  private String courseDeliveryMode(long programId) {
-    return jdbc.queryForObject("""
-        select coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=?),'LEARNING_CONTENT')
-        """,String.class,programId);
-  }
-
-  private boolean assessmentOnlyCourseReady(long programId) {
-    Boolean ready=jdbc.queryForObject("select assessment_only_course_publish_ready(?)",Boolean.class,programId);
-    return Boolean.TRUE.equals(ready);
-  }
-
   @PutMapping("/{institutionId}/branding")
   @Transactional
   public Map<String,Object> updateBranding(
