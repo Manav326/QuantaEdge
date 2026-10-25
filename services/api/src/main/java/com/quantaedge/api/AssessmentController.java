@@ -1010,7 +1010,10 @@ public class AssessmentController {
       throw badRequest("answerPayload must be an object containing kind and value.");
     if(body.containsKey("answerPayload"))snapshot.put("answer_payload",answer);
     if(body.containsKey("explanation")) {
-      String explanation=requiredText(body.get("explanation"),"Explanation",700);
+      String explanation=body.get("explanation")==null?"":String.valueOf(body.get("explanation")).trim();
+      if(explanation.length()>700)throw badRequest("Explanation must be at most 700 characters.");
+      if("APPROVED".equals(reviewStatus)&&explanation.isBlank())
+        throw badRequest("Add an explanation before approving this question.");
       snapshot.put("explanation",explanation);
       Map<String,Object> proposed=stringMapOrEmpty(snapshot.get("proposed_answer"));
       proposed.put("explanation",explanation);
