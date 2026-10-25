@@ -620,8 +620,13 @@ public class PlatformInstitutionController {
                     and (pcr.institution_offer_id=o.id
                       or (pcr.institution_offer_id is null and pcr.course_id=o.course_id)))
               )
+            )
+            or exists(select 1 from institution_marketplace_offer reserved_offer
+              join course_discount_redemption red on red.institution_offer_id=reserved_offer.id
+                and red.status='RESERVED'
+              where reserved_offer.institution_id=? and reserved_offer.course_release_id=?)
           )
-          """,Boolean.class,institutionId,releaseId);
+          """,Boolean.class,institutionId,releaseId,institutionId,releaseId);
       if(Boolean.TRUE.equals(unresolvedActivity)) {
         throw new ResponseStatusException(HttpStatus.CONFLICT,
             "Resolve open payment orders and pending parent purchase requests before unassigning this release. Historical purchases, invoices and entitlements will be preserved.");
