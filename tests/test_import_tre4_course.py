@@ -430,7 +430,7 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertIn("status IN ('DRAFT','IN_REVIEW','APPROVED','PUBLISHED','REJECTED','ARCHIVED')", releases_and_offers)
         self.assertIn('next="IN_REVIEW"', offer_controller)
         typed_readiness_v204 = (root / "services/api/src/main/resources/db/migration/V204__typed_assessment_answer_review_readiness.sql").read_text(encoding="utf-8")
-        marketplace_readiness_v205 = (root / "services/api/src/main/resources/db/migration/V205__course_type_readiness_ownership_guard.sql").read_text(encoding="utf-8")
+        marketplace_readiness_v205 = (root / "services/api/src/main/resources/db/migration/V205__active_course_type_marketplace_readiness.sql").read_text(encoding="utf-8")
         importer = SCRIPT.read_text(encoding="utf-8")
         self.assertIn("assessment_question_snapshot_publish_ready(aq.question_snapshot)", typed_readiness_v204)
         self.assertIn("registered_type.status='ACTIVE'", marketplace_readiness_v205)
