@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "fa234d808c8abcb9d93f745281378894aaea094e6ebdba83d3162d1b1bb0e6c2",
+  "raw_analysis_sha256": "1256dbbe46c9288b99dbde9f3fbd03e8ab5e7c685c723f626a34e2aa1c7acce3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40142974307",
-      "checkpointed_at": "2026-10-25T00:18:50Z",
+      "checkpointed_at": "2026-10-25T00:29:44Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40142974307",
-      "checkpointed_at": "2026-10-25T00:19:24Z",
+      "checkpointed_at": "2026-10-25T00:30:17Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57837,7 +57837,7 @@
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_type": "diagram",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -57851,22 +57851,21 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force",
-          "living beings"
+          "muscular force"
         ],
         "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The image does not provide specific details about the forces acting on the objects in the diagram."
+          "The image does not provide specific details about the types of forces or the physical properties of the objects."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40142974307",
-      "checkpointed_at": "2026-10-25T00:22:34Z",
+      "checkpointed_at": "2026-10-25T00:30:57Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_type": "diagram",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -57880,12 +57879,11 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force",
-          "living beings"
+          "muscular force"
         ],
         "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The image does not provide specific details about the forces acting on the objects in the diagram."
+          "The image does not provide specific details about the types of forces or the physical properties of the objects."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -61110,21 +61108,77 @@
     {
       "asset_id": "d65482e79397897103b91e37",
       "asset_sha256": "65c51f27904e7b83882c88c21a5a5c6ed996f5f0303a999f2ff929b86d9f7883",
-      "page_text_context_sha256": "f3c1b2f43ada4151a60b916f5c82eed799f0ccb2a4a433435669d7a50b7e53bc",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 95,
       "asset_path": "page-0095.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "f3c1b2f43ada4151a60b916f5c82eed799f0ccb2a4a433435669d7a50b7e53bc",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40134224881",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A step further section explaining mass and weight measurements.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You can repeat Activities 5.10 to 5.12 for the mass scale shown on the left side on the spring balance (Fig. 5.13) to measure the mass of an object.",
+          "The mass of an object can be measured indirectly by measuring its weight (using a spring balance) or by comparing its weight with the weight of an object of a known mass (using a beam balance). Since the weight of an object remains almost the same everywhere on the Earth, so for all practical purpos",
+          "As we have learnt earlier (in the chapter 'Materials Around Us' in Curiosity, Grade 6), mass is the amount of matter in an object and is measured in grams (g) or kilograms (kg). Its value remains the same at every place. Weight, on the other hand, is the gravitational force with which the Earth (or ",
+          "The following table illustrates that although the mass of an object remains the same, its weight is different on the Earth, the Moon, and other planets.",
+          "In everyday life, particularly for the goods we commonly use, we are more interested in the amount of matter in an object (its mass), rather than the force applied by the Earth upon it (its weight). However, though while the units of mass are used, instead of the term mass, the term weight is typica"
+        ],
+        "concepts": [
+          "mass",
+          "weight",
+          "gravitational force",
+          "gravitational acceleration",
+          "spring balance",
+          "beam balance",
+          "curiosity",
+          "grade 6",
+          "materials around us"
+        ],
+        "context_relation": "exploring forces",
+        "limitations": [
+          "the image does not provide specific details about the spring balance or beam balance used in the activities",
+          "the image does not show the spring balance or beam balance used in the activities",
+          "the image does not show the spring balance or beam balance used in the activities"
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40142974307",
+      "checkpointed_at": "2026-10-25T00:34:14Z",
+      "effective_analysis": {
+        "visual_summary": "A step further section explaining mass and weight measurements.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You can repeat Activities 5.10 to 5.12 for the mass scale shown on the left side on the spring balance (Fig. 5.13) to measure the mass of an object.",
+          "The mass of an object can be measured indirectly by measuring its weight (using a spring balance) or by comparing its weight with the weight of an object of a known mass (using a beam balance). Since the weight of an object remains almost the same everywhere on the Earth, so for all practical purpos",
+          "As we have learnt earlier (in the chapter 'Materials Around Us' in Curiosity, Grade 6), mass is the amount of matter in an object and is measured in grams (g) or kilograms (kg). Its value remains the same at every place. Weight, on the other hand, is the gravitational force with which the Earth (or ",
+          "The following table illustrates that although the mass of an object remains the same, its weight is different on the Earth, the Moon, and other planets.",
+          "In everyday life, particularly for the goods we commonly use, we are more interested in the amount of matter in an object (its mass), rather than the force applied by the Earth upon it (its weight). However, though while the units of mass are used, instead of the term mass, the term weight is typica"
+        ],
+        "concepts": [
+          "mass",
+          "weight",
+          "gravitational force",
+          "gravitational acceleration",
+          "spring balance",
+          "beam balance",
+          "curiosity",
+          "grade 6",
+          "materials around us"
+        ],
+        "context_relation": "exploring forces",
+        "limitations": [
+          "the image does not provide specific details about the spring balance or beam balance used in the activities",
+          "the image does not show the spring balance or beam balance used in the activities",
+          "the image does not show the spring balance or beam balance used in the activities"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -61760,6 +61814,72 @@
         "context_relation": "The image is related to the educational content about forces in physics.",
         "limitations": [
           "The image does not provide specific details about the force being discussed."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "35da741a8695076dae9bec5f",
+      "asset_sha256": "591183d1f5a73064169edb62a8be62c28a1b0375f0e1833f82c35e36e81981e2",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 97,
+      "asset_path": "assets/591183d1f5a73064169edb62a8be62c28a1b0375f0e1833f82c35e36e81981e2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "46ebf104ae108f545fdf5591ffbdc838d65dd58c1c174806d0a366a838a7e5e1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a student holding a book and a pencil, with a backpack on.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "A force is push or pull on an object resulting from the object’s interaction with another object.",
+          "The SI unit of force is newton and its symbol is N.",
+          "Forces can act with or without contact.",
+          "Muscular force and frictional force are some of the examples of contact forces.",
+          "Magnetic force, gravitational force, and electrostatic force are non-contact forces.",
+          "Force can change an object’s speed, direction of its motion, or both."
+        ],
+        "concepts": [
+          "force",
+          "SI unit of force",
+          "contact forces",
+          "non-contact forces",
+          "force effects"
+        ],
+        "context_relation": "The image is related to the educational content about forces in physics.",
+        "limitations": [
+          "The image does not provide specific examples or diagrams of forces."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40142974307",
+      "checkpointed_at": "2026-10-25T00:35:32Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a student holding a book and a pencil, with a backpack on.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "A force is push or pull on an object resulting from the object’s interaction with another object.",
+          "The SI unit of force is newton and its symbol is N.",
+          "Forces can act with or without contact.",
+          "Muscular force and frictional force are some of the examples of contact forces.",
+          "Magnetic force, gravitational force, and electrostatic force are non-contact forces.",
+          "Force can change an object’s speed, direction of its motion, or both."
+        ],
+        "concepts": [
+          "force",
+          "SI unit of force",
+          "contact forces",
+          "non-contact forces",
+          "force effects"
+        ],
+        "context_relation": "The image is related to the educational content about forces in physics.",
+        "limitations": [
+          "The image does not provide specific examples or diagrams of forces."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

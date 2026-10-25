@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1258,
-    "successful_visual_analyses": 1248,
-    "missing_visual_analyses": 1033,
-    "failed_visual_analyses": 10,
+    "raw_analysis_result_rows": 1259,
+    "successful_visual_analyses": 1250,
+    "missing_visual_analyses": 1032,
+    "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1043,
+    "unresolved_count": 1041,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -44764,7 +44764,7 @@
       "correction_status": "NONE",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_type": "diagram",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -44778,12 +44778,11 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force",
-          "living beings"
+          "muscular force"
         ],
         "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The image does not provide specific details about the forces acting on the objects in the diagram."
+          "The image does not provide specific details about the types of forces or the physical properties of the objects."
         ]
       },
       "chapter_id": null,
@@ -46831,9 +46830,36 @@
       "asset_path": "page-0095.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A step further section explaining mass and weight measurements.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "You can repeat Activities 5.10 to 5.12 for the mass scale shown on the left side on the spring balance (Fig. 5.13) to measure the mass of an object.",
+          "The mass of an object can be measured indirectly by measuring its weight (using a spring balance) or by comparing its weight with the weight of an object of a known mass (using a beam balance). Since the weight of an object remains almost the same everywhere on the Earth, so for all practical purpos",
+          "As we have learnt earlier (in the chapter 'Materials Around Us' in Curiosity, Grade 6), mass is the amount of matter in an object and is measured in grams (g) or kilograms (kg). Its value remains the same at every place. Weight, on the other hand, is the gravitational force with which the Earth (or ",
+          "The following table illustrates that although the mass of an object remains the same, its weight is different on the Earth, the Moon, and other planets.",
+          "In everyday life, particularly for the goods we commonly use, we are more interested in the amount of matter in an object (its mass), rather than the force applied by the Earth upon it (its weight). However, though while the units of mass are used, instead of the term mass, the term weight is typica"
+        ],
+        "concepts": [
+          "mass",
+          "weight",
+          "gravitational force",
+          "gravitational acceleration",
+          "spring balance",
+          "beam balance",
+          "curiosity",
+          "grade 6",
+          "materials around us"
+        ],
+        "context_relation": "exploring forces",
+        "limitations": [
+          "the image does not provide specific details about the spring balance or beam balance used in the activities",
+          "the image does not show the spring balance or beam balance used in the activities",
+          "the image does not show the spring balance or beam balance used in the activities"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -47245,9 +47271,31 @@
       "asset_path": "assets/591183d1f5a73064169edb62a8be62c28a1b0375f0e1833f82c35e36e81981e2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a student holding a book and a pencil, with a backpack on.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "A force is push or pull on an object resulting from the object’s interaction with another object.",
+          "The SI unit of force is newton and its symbol is N.",
+          "Forces can act with or without contact.",
+          "Muscular force and frictional force are some of the examples of contact forces.",
+          "Magnetic force, gravitational force, and electrostatic force are non-contact forces.",
+          "Force can change an object’s speed, direction of its motion, or both."
+        ],
+        "concepts": [
+          "force",
+          "SI unit of force",
+          "contact forces",
+          "non-contact forces",
+          "force effects"
+        ],
+        "context_relation": "The image is related to the educational content about forces in physics.",
+        "limitations": [
+          "The image does not provide specific examples or diagrams of forces."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
