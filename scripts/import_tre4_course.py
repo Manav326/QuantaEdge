@@ -1024,9 +1024,21 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                         "IN_QUALITY_REVIEW."
                     )
                 else:
-                    # This is the only importer-driven release transition. Tests and packs must
-                    # already have reached PUBLISHED through the normal, audited assessment API.
-                    submit_for_review = True
+                    # Match the same active-type, institution-identity and release-ownership gate
+                    # used by source release submission, HRMS assignment and Marketplace.
+                    cursor.execute("SELECT course_marketplace_content_type_ready(%s)", (course_id,))
+                    type_ready_row = cursor.fetchone()
+                    if type_ready_row and type_ready_row[0] is True:
+                        # Assessments/packs reached PUBLISHED only through the normal, audited API.
+                        submit_for_review = True
+                    else:
+                        submission_deferred = True
+                        summary["submissionDeferred"] = True
+                        summary["submissionDeferralReason"] = (
+                            "Release submission was not performed because the canonical course-type/ownership readiness "
+                            "gate failed. Verify the course type is ACTIVE, the institution-owned identity matches it, "
+                            "and every release belongs to the source institution. No lifecycle state was advanced."
+                        )
 
             release_created = False
             release_submitted = False
