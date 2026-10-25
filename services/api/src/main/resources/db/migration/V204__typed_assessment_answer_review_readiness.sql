@@ -11,7 +11,7 @@ LANGUAGE sql
 IMMUTABLE
 PARALLEL SAFE
 AS $qe_assessment_snapshot_ready$
-  SELECT CASE
+  SELECT COALESCE(CASE
     WHEN p_snapshot IS NULL OR jsonb_typeof(p_snapshot) IS DISTINCT FROM 'object' THEN false
     WHEN coalesce(p_snapshot->>'question_review_status','PENDING_HUMAN_REVIEW') <> 'APPROVED' THEN false
     WHEN coalesce(
@@ -72,7 +72,7 @@ AS $qe_assessment_snapshot_ready$
           AND jsonb_array_length(p_snapshot->'answer_payload'->'value') > 0)
       ELSE false
     END
-  END;
+  END, false);
 $qe_assessment_snapshot_ready$;
 
 COMMENT ON FUNCTION assessment_question_snapshot_publish_ready(jsonb) IS
