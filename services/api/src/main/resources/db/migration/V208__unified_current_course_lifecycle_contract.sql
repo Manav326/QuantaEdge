@@ -167,6 +167,95 @@ AS $function$
   )
 $function$;
 
+-- Canonical pre-offer resolver. An assignment ID supplied directly to HRMS cannot be used
+-- to create or revive an offer for an older release that the HRMS list no longer displays.
+CREATE OR REPLACE FUNCTION qe_current_course_release_assignment(p_assignment_id bigint)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+AS $function$
+  SELECT EXISTS (
+    SELECT 1
+    FROM institution_course_assignment assignment
+    JOIN institution_course_release release
+      ON release.id = assignment.course_release_id
+    JOIN curriculum_program program
+      ON program.id = release.program_id
+     AND program.status = 'ACTIVE'
+     AND program.code <> 'GENERAL'
+    JOIN institution_course_identity identity
+      ON identity.id = program.course_identity_id
+     AND identity.status = 'ACTIVE'
+     AND identity.source_institution_id = release.source_institution_id
+     AND identity.course_type_code = program.course_type_code
+    JOIN institution_tenant destination
+      ON destination.id = assignment.institution_id
+     AND destination.status = 'ACTIVE'
+    WHERE assignment.id = p_assignment_id
+      AND assignment.status = 'ASSIGNED'
+      AND assignment.assignment_source IN ('ORIGIN','HRMS')
+      AND release.release_state = 'SHAREABLE'
+      AND release.legacy_migration = false
+      AND release.obsolete_at IS NULL
+      AND (
+        assignment.assignment_source <> 'ORIGIN'
+        OR assignment.institution_id = release.source_institution_id
+      )
+      AND course_marketplace_content_type_ready(program.id)
+      AND course_release_fingerprint_current(
+        release.program_id, release.content_fingerprint::text, release.updated_at
+      )
+      AND NOT EXISTS (
+        SELECT 1
+        FROM institution_course_assignment newer_assignment
+        JOIN institution_course_release newer_release
+          ON newer_release.id = newer_assignment.course_release_id
+        JOIN curriculum_program newer_program
+          ON newer_program.id = newer_release.program_id
+        JOIN institution_course_identity newer_identity
+          ON newer_identity.id = newer_program.course_identity_id
+        WHERE newer_assignment.institution_id = assignment.institution_id
+          AND newer_assignment.status = 'ASSIGNED'
+          AND newer_assignment.assignment_source IN ('ORIGIN','HRMS')
+          AND (
+            newer_assignment.assignment_source <> 'ORIGIN'
+            OR newer_assignment.institution_id = newer_release.source_institution_id
+          )
+          AND newer_release.release_state = 'SHAREABLE'
+          AND newer_release.legacy_migration = false
+          AND newer_release.obsolete_at IS NULL
+          AND newer_release.source_institution_id = newer_identity.source_institution_id
+          AND newer_identity.id = identity.id
+          AND newer_identity.status = 'ACTIVE'
+          AND newer_program.status = 'ACTIVE'
+          AND newer_program.code <> 'GENERAL'
+          AND newer_program.course_type_code = newer_identity.course_type_code
+          AND course_marketplace_content_type_ready(newer_program.id)
+          AND course_release_fingerprint_current(
+            newer_release.program_id,
+            newer_release.content_fingerprint::text,
+            newer_release.updated_at
+          )
+          AND (
+            newer_program.content_version_no > program.content_version_no
+            OR (
+              newer_program.content_version_no = program.content_version_no
+              AND (
+                newer_release.release_version > release.release_version
+                OR (
+                  newer_release.release_version = release.release_version
+                  AND newer_release.id > release.id
+                )
+              )
+            )
+          )
+      )
+  )
+$function$;
+
+COMMENT ON FUNCTION qe_current_course_release_assignment(bigint) IS
+  'Current source release resolver for the pre-offer workflow. Requires an active matching course identity, an assigned ORIGIN/HRMS row, a SHAREABLE nonlegacy release, current content fingerprint, content-type readiness and no newer eligible assigned release.';
+
 -- The latest candidate release and the currently live published release are distinct:
 -- a newly shareable release must not hide an older published version before HRMS approves
 -- and publishes the replacement offer. This resolver moves the public listing only at publication.
@@ -650,6 +739,47 @@ CREATE TRIGGER trg_qe_validate_published_course_offer
 
 COMMENT ON FUNCTION qe_validate_published_course_offer_write() IS
   'Database-enforced publication gate: active tenant, active identity, eligible assignment, newest shareable nonlegacy release, course-type readiness, current fingerprint and HRMS approval/publication attribution.';
+
+-- Database-level lineage gate for draft offers as well as published offers. It prevents
+-- a caller from passing an old assignment ID and creating a stale DRAFT outside the HRMS list.
+CREATE OR REPLACE FUNCTION qe_require_current_course_assignment_for_offer_write()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $function$
+BEGIN
+  IF NEW.status IN ('ARCHIVED','REJECTED') THEN
+    RETURN NEW;
+  END IF;
+
+  IF NEW.legacy_migration OR NOT EXISTS (
+    SELECT 1
+    FROM institution_course_assignment assignment
+    JOIN institution_course_release release
+      ON release.id = assignment.course_release_id
+    WHERE assignment.id = NEW.assignment_id
+      AND assignment.institution_id = NEW.institution_id
+      AND assignment.course_release_id = NEW.course_release_id
+      AND release.program_id = NEW.course_id
+      AND qe_current_course_release_assignment(assignment.id)
+  ) THEN
+    RAISE EXCEPTION
+      'CURRENT_COURSE_RELEASE_REQUIRED: an offer may only attach to the newest eligible release assignment for this institution.'
+      USING ERRCODE = '23514';
+  END IF;
+
+  RETURN NEW;
+END
+$function$;
+
+DROP TRIGGER IF EXISTS trg_qe_require_current_course_assignment_for_offer
+  ON institution_marketplace_offer;
+CREATE TRIGGER trg_qe_require_current_course_assignment_for_offer
+  BEFORE INSERT OR UPDATE OF status,assignment_id,course_release_id,course_id,institution_id,legacy_migration
+  ON institution_marketplace_offer
+  FOR EACH ROW EXECUTE FUNCTION qe_require_current_course_assignment_for_offer_write();
+
+COMMENT ON FUNCTION qe_require_current_course_assignment_for_offer_write() IS
+  'Database-enforced offer lineage gate for DRAFT/IN_REVIEW/APPROVED/PUBLISHED offers. Archived and rejected history may remain, but a usable offer must attach to the current eligible release assignment.';
 
 -- Mark old per-student free grants obsolete. Preserve the records, but no current
 -- authorization path may use or create them. Purchase/enrollment/entitlement records retain
