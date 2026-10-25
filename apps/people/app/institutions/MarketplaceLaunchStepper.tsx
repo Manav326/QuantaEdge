@@ -1168,6 +1168,7 @@ export default function MarketplaceLaunchStepper({
                         onChange={event => setReviewNotes(previous => ({ ...previous, [release.release_id]: event.target.value }))}
                         placeholder={assessmentOnly ? 'Record question inventory, source fidelity, answer review, section scoring and release fingerprint checks…' : 'Record what was checked: syllabus coverage, published lessons, content integrity…'} />
                     </label>
+                    {reviewNoteLength < 3 ? <p className={styles.actionHint} role="note">Enter a quality review note of at least 3 characters. A note is required both to approve and to return this release for correction.</p> : null}
                     {qualityBlocker ? (
                       <div id={'quality-blocker-' + release.release_id}
                         className={styles.actionHint + (!release.contentCurrent || !qualityReady || Boolean(preview && (!preview.contentCurrent || previewFingerprintMismatch)) ? ' ' + styles.actionHintWarning : '')}
