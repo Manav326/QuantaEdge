@@ -13,6 +13,7 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
         self.assertIn("p.course_type_code='ASSESSMENT'", sql)
         self.assertIn("assessment_only_course_publish_ready(p.id)", sql)
         self.assertIn("p.course_type_code='K12'", sql)
+        self.assertIn("coalesce(mode.delivery_mode,'LEARNING_CONTENT')='LEARNING_CONTENT'", sql)
         self.assertIn("curriculum_program_subject ps", sql)
         self.assertIn("s.active=true", sql)
         self.assertIn("ch.content_status='PUBLISHED'", sql)
