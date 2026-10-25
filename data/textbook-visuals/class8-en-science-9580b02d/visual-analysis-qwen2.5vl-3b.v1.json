@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1290,
+    "assets_selected": 1291,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "35ff0b921f1e0b0945a8f8df",
-      "77ac090a207d8271dff38a48"
+      "2e14d9abcf63b6d4fa70faad",
+      "101368da3ef9882a8ac66e45"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1286,
-    "assets_remaining": 1005,
-    "assets_completion_percent": 56.1,
+    "assets_analyzed": 1288,
+    "assets_remaining": 1003,
+    "assets_completion_percent": 56.2,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1285,
+    "assets_skipped_from_checkpoint": 1286,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40220756546",
-      "checkpointed_at": "2026-10-25T19:51:33Z"
+      "checkpointed_at": "2026-10-25T19:59:08Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40220756546",
-      "checkpointed_at": "2026-10-25T19:52:19Z"
+      "checkpointed_at": "2026-10-25T19:59:54Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40220756546",
-      "checkpointed_at": "2026-10-25T19:53:13Z"
+      "checkpointed_at": "2026-10-25T20:00:51Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -42499,6 +42499,83 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40220756546",
       "checkpointed_at": "2026-10-25T19:57:56Z"
+    },
+    {
+      "asset_id": "2e14d9abcf63b6d4fa70faad",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 103,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c296560037a32d1015a66fc65728dd44421b3ac5022037869d5e786288229793",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a black page with no visible content.",
+        "limitations": [
+          "The image is a black page with no visible content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40220756546",
+      "checkpointed_at": "2026-10-25T20:01:09Z"
+    },
+    {
+      "asset_id": "101368da3ef9882a8ac66e45",
+      "asset_sha256": "bcc3407c605512e56aa9e8acff1c62880818bc3957fa8efc9ce7bfd2884b713b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 103,
+      "asset_path": "page-0103.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "c296560037a32d1015a66fc65728dd44421b3ac5022037869d5e786288229793",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing pressure and its effects, including an illustration of an overhead water tank and a diagram of two pipes with balloons attached to them.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "What can you conclude from your observations in Table 6.1?",
+          "We conclude that when the area over which a force applied is smaller, the resulting pressure is higher, making it easier to do certain tasks. This is why it is easier to drive a nail using its pointed end, and it is easier to cut an apple with the sharp edge of a knife.",
+          "You must have seen overhead water tanks (Fig. 6.4) in your locality, or on the rooftops of houses used for water supply. Why are these tanks always placed at a height?",
+          "Do liquids also exert pressure?",
+          "Let us find out by conducting the following activity.",
+          "Activity 6.1: Let us try and find out",
+          "- Take two transparent glass or plastic pipes of the same length (about 25 cm), but of different diameters, as shown in Fig. 6.5.",
+          "- Take two good-quality rubber balloons. Attach them to one end of each pipe.",
+          "- Clamp the pipes on a stand as shown in Fig. 6.5.",
+          "- Now, fill both the pipes with water up to the same level about halfway.",
+          "- Observe what happens to the balloons.",
+          "- Do both balloons bulge? Do they bulge to the same extent?",
+          "What can you infer from this activity? You must have observed that the two balloons bulge to the same extent. Why is it so? Notice that because of the different diameters, the weight of water in the two pipes is different. However, the bulge in both the balloons is the same. This means that the weig",
+          "Could it be that the water column is exerting pressure? Yes, it is the pressure exerted by the water column which is responsible for the bulge. That is why equal water column heights produce equal bulges in the balloons, despite their different diameters."
+        ],
+        "concepts": [
+          "Pressure",
+          "Overhead water tanks",
+          "Diameter of pipes",
+          "Bulge in balloons",
+          "Pressure exerted by water column"
+        ],
+        "context_relation": "The page discusses the relationship between pressure, diameter of pipes, and the bulge in balloons, using an experiment to illustrate these concepts.",
+        "limitations": [
+          "The page does not provide specific measurements or calculations for the pressure or the bulge in the balloons."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40220756546",
+      "checkpointed_at": "2026-10-25T20:05:51Z"
     }
   ]
 }
