@@ -114,9 +114,16 @@ public class CourseMarketplaceLaunchReadinessService {
         "The institution needs an active assignment to a platform-reviewed, origin-approved SHAREABLE course release.");
     long courseId=number(row.get("course_id"));
     String savedFingerprint=text(row.get("content_fingerprint"));
-    boolean contentUnchanged=!savedFingerprint.isBlank()&&savedFingerprint.equals(contentFingerprint(courseId));
+    // Origin assignments and legacy releases are not eligible for listing until their lifecycle
+    // gates pass. Defer the full graph hash until HRMS quality approval; the dedicated quality
+    // review queue still verifies the submitted fingerprint before a reviewer can approve it.
+    boolean fingerprintApplicable=List.of("QUALITY_APPROVED","SHAREABLE").contains(releaseState);
+    boolean contentUnchanged=fingerprintApplicable&&!savedFingerprint.isBlank()
+        &&savedFingerprint.equals(contentFingerprint(courseId));
     add(checks,"CONTENT_REVIEW_CURRENT","Reviewed course content is current",contentUnchanged,
-        "The course content has changed since quality review or has no reviewed fingerprint. Resubmit the release for platform quality review.");
+        fingerprintApplicable
+            ? "The course content has changed since quality review or has no reviewed fingerprint. Resubmit the release for platform quality review."
+            : "This release has not completed HRMS quality approval. Content-fingerprint comparison is deferred until quality review passes.");
     addPackageRightsCheck(checks,courseId);
     long subjectCount=number(row.get("subject_count"));
     long subjectsWithLessons=number(row.get("subjects_with_published_lessons"));
