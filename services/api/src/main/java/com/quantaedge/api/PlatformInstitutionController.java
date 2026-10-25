@@ -662,7 +662,7 @@ public class PlatformInstitutionController {
         left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
         left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
         where r.release_state='IN_QUALITY_REVIEW'
-        group by r.id,r.program_id,r.release_version,r.release_state,r.content_fingerprint,r.submitted_at,
+        group by r.id,r.program_id,r.release_version,r.release_state,r.content_fingerprint,r.submitted_at,r.updated_at,
           p.public_id,p.code,p.display_name,t.id,t.tenant_code,b.display_name,t.display_name
         order by r.submitted_at,r.id
         """);
