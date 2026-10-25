@@ -27,37 +27,38 @@ BEGIN
     RETURN NEW;
   END IF;
 
-  IF TG_OP='UPDATE' AND TG_TABLE_NAME='institution_course_identity'
-     AND OLD.stable_course_key IS DISTINCT FROM NEW.stable_course_key
-     AND (to_jsonb(OLD) - ARRAY['stable_course_key','updated_at'])
-       = (to_jsonb(NEW) - ARRAY['stable_course_key','updated_at']) THEN
-    v_prefix := 'I'||OLD.source_institution_id::text||'_';
+  IF TG_OP='UPDATE' AND TG_TABLE_NAME='institution_course_identity' THEN
+    IF OLD.stable_course_key IS DISTINCT FROM NEW.stable_course_key
+       AND (to_jsonb(OLD) - ARRAY['stable_course_key','updated_at'])
+         = (to_jsonb(NEW) - ARRAY['stable_course_key','updated_at']) THEN
+      v_prefix := 'I'||OLD.source_institution_id::text||'_';
 
-    SELECT CASE
-      WHEN left(root.code,length(v_prefix))=v_prefix
-        THEN substr(root.code,length(v_prefix)+1)
-      ELSE root.code
-    END
-    INTO v_canonical_key
-    FROM curriculum_program root
-    WHERE root.course_identity_id=OLD.id
-    ORDER BY root.content_version_no,root.id
-    LIMIT 1;
+      SELECT CASE
+        WHEN left(root.code,length(v_prefix))=v_prefix
+          THEN substr(root.code,length(v_prefix)+1)
+        ELSE root.code
+      END
+      INTO v_canonical_key
+      FROM curriculum_program root
+      WHERE root.course_identity_id=OLD.id
+      ORDER BY root.content_version_no,root.id
+      LIMIT 1;
 
-    IF v_canonical_key IS NOT NULL
-       AND NEW.stable_course_key=v_canonical_key
-       AND (
-         OLD.stable_course_key LIKE 'legacy-program-%'
-         OR OLD.stable_course_key=v_prefix||v_canonical_key
-       )
-       AND NOT EXISTS (
-         SELECT 1
-         FROM institution_course_identity other
-         WHERE other.source_institution_id=OLD.source_institution_id
-           AND other.stable_course_key=NEW.stable_course_key
-           AND other.id<>OLD.id
-       ) THEN
-      RETURN NEW;
+      IF v_canonical_key IS NOT NULL
+         AND NEW.stable_course_key=v_canonical_key
+         AND (
+           OLD.stable_course_key LIKE 'legacy-program-%'
+           OR OLD.stable_course_key=v_prefix||v_canonical_key
+         )
+         AND NOT EXISTS (
+           SELECT 1
+           FROM institution_course_identity other
+           WHERE other.source_institution_id=OLD.source_institution_id
+             AND other.stable_course_key=NEW.stable_course_key
+             AND other.id<>OLD.id
+         ) THEN
+        RETURN NEW;
+      END IF;
     END IF;
   END IF;
 
