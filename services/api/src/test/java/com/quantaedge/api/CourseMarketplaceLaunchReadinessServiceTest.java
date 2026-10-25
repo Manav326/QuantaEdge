@@ -86,4 +86,46 @@ class CourseMarketplaceLaunchReadinessServiceTest {
         eq("select course_content_fingerprint(?)"),eq(String.class),any(Object[].class));
   }
 
+
+  @Test
+  void originAssignmentForLegacyOrInReviewReleaseDefersContentFingerprint() {
+    JdbcTemplate jdbc=mock(JdbcTemplate.class);
+    CourseMarketplaceLaunchReadinessService service=
+        new CourseMarketplaceLaunchReadinessService(jdbc,new ObjectMapper(),"","","");
+    java.util.Map<String,Object> assignment=new java.util.HashMap<>();
+    assignment.put("assignment_id",10L);
+    assignment.put("institution_id",2L);
+    assignment.put("assignment_status","ASSIGNED");
+    assignment.put("release_id",10L);
+    assignment.put("release_state","IN_QUALITY_REVIEW");
+    assignment.put("content_fingerprint","submitted-fingerprint");
+    assignment.put("institution_name","Quanta Edge");
+    assignment.put("institution_status","ACTIVE");
+    assignment.put("course_id",14L);
+    assignment.put("course_code","I2_TRE4");
+    assignment.put("course_name","TRE-4 · Computer Science");
+    assignment.put("course_status","ACTIVE");
+    assignment.put("delivery_mode","ASSESSMENT_ONLY");
+    assignment.put("subject_count",0L);
+    assignment.put("subjects_with_published_lessons",0L);
+    assignment.put("published_chapter_count",0L);
+    assignment.put("published_lesson_count",0L);
+    assignment.put("offer_id",null);
+    when(jdbc.queryForList(contains("from institution_course_assignment a"),any(Object[].class)))
+        .thenReturn(java.util.List.of(assignment));
+
+    java.util.Map<String,Object> result=service.inspectAssignment(10L,2L);
+
+    assertEquals("NOT_CONFIGURED",result.get("offerStatus"));
+    assertEquals("IN_QUALITY_REVIEW",result.get("releaseState"));
+    @SuppressWarnings("unchecked")
+    java.util.List<java.util.Map<String,Object>> checks=
+        (java.util.List<java.util.Map<String,Object>>)result.get("checks");
+    assertTrue(checks.stream().anyMatch(check ->
+        "CONTENT_REVIEW_CURRENT".equals(check.get("code"))
+            && Boolean.FALSE.equals(check.get("passed"))));
+    verify(jdbc,never()).queryForObject(
+        eq("select course_content_fingerprint(?)"),eq(String.class),any(Object[].class));
+  }
+
 }
