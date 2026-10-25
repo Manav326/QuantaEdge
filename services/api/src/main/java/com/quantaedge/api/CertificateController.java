@@ -721,6 +721,14 @@ public class CertificateController {
           and identity.status='ACTIVE'
         where program.id=? and program.status='ACTIVE' and program.code<>'GENERAL'
           and identity.course_type_code=program.course_type_code
+           and exists (
+             select 1 from institution_course_release source_release
+             where source_release.program_id=program.id
+               and source_release.source_institution_id=identity.source_institution_id
+               and source_release.legacy_migration=false
+               and source_release.release_state<>'LEGACY_MIGRATED'
+               and source_release.obsolete_at is null
+           )
         """, courseId);
     if (courseIdentityRows.size() != 1) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
