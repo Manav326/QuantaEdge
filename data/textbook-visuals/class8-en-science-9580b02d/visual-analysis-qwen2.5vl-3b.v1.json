@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1284,
+    "assets_selected": 1285,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "aea7db4a2c358f45b70aad03",
-      "2e9840e3e6b46ddb2fc50f23"
+      "1848f8a552881235cabbc2b5"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1280,
-    "assets_remaining": 1011,
+    "assets_analyzed": 1281,
+    "assets_remaining": 1010,
     "assets_completion_percent": 55.9,
     "assets_failed": 9,
-    "assets_skipped_from_checkpoint": 1279,
+    "assets_skipped_from_checkpoint": 1280,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40188597850",
-      "checkpointed_at": "2026-10-25T12:33:48Z"
+      "checkpointed_at": "2026-10-25T12:38:02Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40188597850",
-      "checkpointed_at": "2026-10-25T12:34:22Z"
+      "checkpointed_at": "2026-10-25T12:38:37Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40188597850",
-      "checkpointed_at": "2026-10-25T12:35:02Z"
+      "checkpointed_at": "2026-10-25T12:39:17Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -42092,7 +42092,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40188597850",
-      "checkpointed_at": "2026-10-25T12:35:59Z"
+      "checkpointed_at": "2026-10-25T12:40:13Z"
     },
     {
       "asset_id": "450fc4af3dc870b080bfbe90",
@@ -42274,6 +42274,35 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40188597850",
       "checkpointed_at": "2026-10-25T12:37:03Z"
+    },
+    {
+      "asset_id": "1848f8a552881235cabbc2b5",
+      "asset_sha256": "4cda45cd561e64772e72ccffc0301e9ff258a077ba2474791a95b08cc342ee17",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 102,
+      "asset_path": "assets/4cda45cd561e64772e72ccffc0301e9ff258a077ba2474791a95b08cc342ee17.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f3609a74f6b9bc75917f652f29735b6712124160a390320c36e3648f81ded621",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration showing a hand holding a red apple over a plate, while another hand holds a knife above the apple, suggesting the act of cutting the apple.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the visible text.",
+        "limitations": [
+          "The image does not contain any text or information that can be directly related to the visible text.",
+          "The image is a simple cartoon illustration and does not provide any specific context or relation to the visible text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40188597850",
+      "checkpointed_at": "2026-10-25T12:41:23Z"
     }
   ]
 }

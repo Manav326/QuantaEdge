@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3d4df17a8a6b2d2d6cf2dc5e3a71ba449626b2a18a71acb283379f6c649fcfd4",
+  "raw_analysis_sha256": "f00e14bc47aaa7cd6c210f7546872cd2f337456b69e984c08602fd72ae6e3a75",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40188597850",
-      "checkpointed_at": "2026-10-25T12:33:48Z",
+      "checkpointed_at": "2026-10-25T12:38:02Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40188597850",
-      "checkpointed_at": "2026-10-25T12:34:22Z",
+      "checkpointed_at": "2026-10-25T12:38:37Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40188597850",
-      "checkpointed_at": "2026-10-25T12:35:02Z",
+      "checkpointed_at": "2026-10-25T12:39:17Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -63535,7 +63535,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40188597850",
-      "checkpointed_at": "2026-10-25T12:35:59Z",
+      "checkpointed_at": "2026-10-25T12:40:13Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing pressure, winds, storms, and cyclones.",
         "visual_type": "page_with_multiple_visuals",
@@ -63831,6 +63831,48 @@
         "concepts": [],
         "context_relation": "The image is unrelated to the text about buckets and straps.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1848f8a552881235cabbc2b5",
+      "asset_sha256": "4cda45cd561e64772e72ccffc0301e9ff258a077ba2474791a95b08cc342ee17",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 102,
+      "asset_path": "assets/4cda45cd561e64772e72ccffc0301e9ff258a077ba2474791a95b08cc342ee17.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f3609a74f6b9bc75917f652f29735b6712124160a390320c36e3648f81ded621",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration showing a hand holding a red apple over a plate, while another hand holds a knife above the apple, suggesting the act of cutting the apple.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the visible text.",
+        "limitations": [
+          "The image does not contain any text or information that can be directly related to the visible text.",
+          "The image is a simple cartoon illustration and does not provide any specific context or relation to the visible text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40188597850",
+      "checkpointed_at": "2026-10-25T12:41:23Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration showing a hand holding a red apple over a plate, while another hand holds a knife above the apple, suggesting the act of cutting the apple.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the visible text.",
+        "limitations": [
+          "The image does not contain any text or information that can be directly related to the visible text.",
+          "The image is a simple cartoon illustration and does not provide any specific context or relation to the visible text."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
