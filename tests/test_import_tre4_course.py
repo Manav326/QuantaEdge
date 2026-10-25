@@ -401,6 +401,7 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertIn("status IN ('DRAFT','PUBLISHED','ARCHIVED')", packs)
         self.assertIn('Set.of("DRAFT", "PUBLISHED", "ARCHIVED")', assessment_controller)
         self.assertIn('Set.of("APPROVED","REJECTED","PENDING_HUMAN_REVIEW")', assessment_controller)
+        self.assertIn('snapshot.put("answer_review_status",reviewStatus)', assessment_controller)
         self.assertIn('String next=approved?"QUALITY_APPROVED":"REJECTED"', hrms_controller)
         self.assertIn("status IN ('DRAFT','IN_REVIEW','APPROVED','PUBLISHED','REJECTED','ARCHIVED')", releases_and_offers)
         self.assertIn('next="IN_REVIEW"', offer_controller)
