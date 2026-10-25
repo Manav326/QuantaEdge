@@ -397,11 +397,17 @@ public class QaTestPackService {
     long quantaEdgeOwnedClassCourses = scalarCount("""
       select count(distinct p.id)
       from curriculum_program p
-      join institution_tenant qe on qe.tenant_code='QUANTA-EDGE' and qe.status='ACTIVE'
-      join institution_course_release r on r.program_id=p.id and r.source_institution_id=qe.id
-      join institution_course_assignment a on a.course_release_id=r.id and a.institution_id=qe.id and a.status='ASSIGNED'
-      join institution_course_entitlement e on e.program_id=p.id and e.institution_id=qe.id and e.status='ACTIVE'
-      where p.code in ('CLASS_6','CLASS_7','CLASS_8') and p.curriculum_version='CURRENT' and p.status='ACTIVE'
+      join institution_course_identity identity
+        on identity.id=p.course_identity_id
+       and identity.status='ACTIVE'
+       and identity.course_type_code=p.course_type_code
+      join institution_tenant qe
+        on qe.id=identity.source_institution_id
+       and qe.tenant_code='QUANTA-EDGE'
+       and qe.status='ACTIVE'
+      where p.code in ('CLASS_6','CLASS_7','CLASS_8')
+        and p.curriculum_version='CURRENT'
+        and p.status='ACTIVE'
       """);
     addCheck(runId, checks, "QUANTAEDGE_OWNS_CLASSES_6_7_8",
         quantaEdgeOwnedClassCourses == 3,
