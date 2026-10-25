@@ -14,13 +14,13 @@
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "d55b4af2d39033d603cae25d",
-      "e03a02c3fc37627f873ab044"
+      "aea7db4a2c358f45b70aad03",
+      "d21ad85620346b3587278e16"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1277,
-    "assets_remaining": 1014,
-    "assets_completion_percent": 55.7,
+    "assets_analyzed": 1278,
+    "assets_remaining": 1013,
+    "assets_completion_percent": 55.8,
     "assets_failed": 9,
     "assets_skipped_from_checkpoint": 1277,
     "batch_limit": 5,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40188597850",
-      "checkpointed_at": "2026-10-25T12:11:43Z"
+      "checkpointed_at": "2026-10-25T12:22:45Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40188597850",
-      "checkpointed_at": "2026-10-25T12:12:18Z"
+      "checkpointed_at": "2026-10-25T12:23:20Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38421,7 +38421,7 @@
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_type": "diagram",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -38435,19 +38435,18 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force",
-          "living beings"
+          "muscular force"
         ],
         "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The image does not provide specific details about the forces acting on the objects in the diagram."
+          "The image does not provide specific details about the types of forces or the physical properties of the objects."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40188597850",
-      "checkpointed_at": "2026-10-25T12:15:30Z"
+      "checkpointed_at": "2026-10-25T12:24:00Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -42066,7 +42065,7 @@
           "You must have observed fallen leaves on the ground swirling\nin the air or being swept away, and trees swaying or even\nbending when a strong wind blows. Have you ever wondered\nwhy fallen leaves rise in the air or trees sway or bend? Does the\nwind exert force on fallen leaves to make them rise or on t",
           "Megha and her brother Pawan are going on a picnic. They walk\n    to the picnic spot, carrying identical items in their bags (Fig. 6.1).\n    On the way, Pawan keeps adjusting his bag, and looks\n    uncomfortable. Megha asks, \"Is there a problem with\n    your bag?\" Pawan responds, \"Yes, it is hurting ",
           "Can the shape or size of the straps really make a\n    difference? Let us try to find out.",
-          "When we carry a bag, we feel its weight because\n    of the force of gravity acting on our shoulders. The\n    weight of the bag with narrow straps acts on a\n    smaller area of our shoulders, whereas the weight of\n    the bag with broad straps is spread out over a larger\n    area. It is due to this r",
+          "When we carry a bag, we feel its weight because of the force of gravity acting on our shoulders. The\n    weight of the bag with narrow straps acts on a\n    smaller area of our shoulders, whereas the weight of\n    the bag with broad straps is spread out over a larger\n    area. It is due to this reaso",
           "At this stage, we will consider only those forces which act\n    perpendicular to the surface on which the pressure is to be computed."
         ],
         "concepts": [
@@ -42078,22 +42077,18 @@
           "thunderstorms",
           "gravity",
           "straps",
-          "weight",
-          "force of gravity",
-          "area of force",
-          "perpendicular to the surface",
-          "pressure to be computed"
+          "force per unit area"
         ],
         "context_relation": "pressure",
         "limitations": [
-          "The image does not provide specific formulas or equations."
+          "The image does not show the actual experiment or the visual representation of the force per unit area."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40183014121",
-      "checkpointed_at": "2026-10-25T10:56:33Z"
+      "run_id": "40188597850",
+      "checkpointed_at": "2026-10-25T12:27:27Z"
     },
     {
       "asset_id": "450fc4af3dc870b080bfbe90",
@@ -42191,6 +42186,32 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40183014121",
       "checkpointed_at": "2026-10-25T10:57:10Z"
+    },
+    {
+      "asset_id": "d21ad85620346b3587278e16",
+      "asset_sha256": "3c2ebebedf2aa83d39264c7aa8221ac35b6fafecfc93247364450943865971ce",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 102,
+      "asset_path": "assets/3c2ebebedf2aa83d39264c7aa8221ac35b6fafecfc93247364450943865971ce.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f3609a74f6b9bc75917f652f29735b6712124160a390320c36e3648f81ded621",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon scientist wearing goggles and a lab coat, giving a thumbs-up gesture.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about buckets and handles.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40188597850",
+      "checkpointed_at": "2026-10-25T12:28:32Z"
     }
   ]
 }
