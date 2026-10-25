@@ -4,6 +4,23 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { apiFetch } from '../components/apiClient';
 import styles from './MarketplaceLaunchStepper.module.css';
 
+function formatReviewSourceLocation(value:unknown):string {
+  if(value===null||value===undefined||value==='')return '';
+  if(typeof value==='string'||typeof value==='number')return String(value);
+  if(Array.isArray(value))return value.map(formatReviewSourceLocation).filter(Boolean).join(' · ');
+  if(typeof value==='object')return Object.entries(value as Record<string,unknown>)
+    .filter(([,item])=>item!==null&&item!==undefined&&item!=='')
+    .map(([key,item])=>key.replaceAll('_',' ')+': '+(typeof item==='object'?formatReviewSourceLocation(item):String(item)))
+    .join(' · ');
+  return String(value);
+}
+function safeReviewReference(value:unknown):string {
+  try {
+    const url=new URL(String(value||''));
+    return url.protocol==='https:'||url.protocol==='http:'?url.href:'';
+  } catch { return ''; }
+}
+
 function activateAccessibleReviewDialog(dialog:HTMLElement,onEscape:()=>void):()=>void {
   const previousOverflow=document.body.style.overflow;
   const previousFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
@@ -1303,6 +1320,16 @@ export default function MarketplaceLaunchStepper({
                   <div><span>ANSWER KEY · ANSWER_PAYLOAD</span><b>{String(activeAssessmentReviewAnswer.kind||'UNRESOLVED')} · {hrmsReviewAnswerValue(activeAssessmentReviewAnswer.value)}</b></div>
                   <div><span>REVIEW SNAPSHOT STATES</span><b>Question: {String(activeAssessmentReviewSnapshot.question_review_status||'PENDING_HUMAN_REVIEW')} · Answer: {String(activeAssessmentReviewSnapshot.answer_review_status||'PENDING_HUMAN_REVIEW')}</b></div>
                   <p>This is the immutable release snapshot currently under HRMS review. HRMS inspection does not edit or approve individual answers; return the release for source correction if an answer or translation is wrong.</p>
+                </section>
+                <section className={styles.hrmsAssessmentAnswerSummary} aria-label="Question source provenance">
+                  <div><span>QUESTION SOURCE</span><b>{String(activeAssessmentReviewSnapshot.source_title||'Source not recorded')}</b></div>
+                  <div><span>ISSUER / BOARD</span><b>{String(activeAssessmentReviewSnapshot.board||'Not recorded')}</b></div>
+                  <div><span>SOURCE YEAR</span><b>{String(activeAssessmentReviewSnapshot.source_year||'Not recorded')}</b></div>
+                  <div><span>SOURCE LOCATION / PAGE</span><b>{formatReviewSourceLocation(activeAssessmentReviewSnapshot.source_location)||'Not recorded'}</b></div>
+                  <div><span>SOURCE PACKAGE</span><b>{String(activeAssessmentReviewSnapshot.source_id||'Not recorded')}</b></div>
+                  {safeReviewReference(activeAssessmentReviewSnapshot.source_ref)&&<div><span>SOURCE REFERENCE</span><b><a href={safeReviewReference(activeAssessmentReviewSnapshot.source_ref)} target="_blank" rel="noreferrer">{String(activeAssessmentReviewSnapshot.source_ref)}</a></b></div>}
+                  {activeAssessmentReviewSnapshot.source_note&&<div><span>IMPORT NOTE</span><b>{String(activeAssessmentReviewSnapshot.source_note)}</b></div>}
+                  {(activeAssessmentReviewSnapshot.last_rejection_note||(activeAssessmentReviewStatus==='REJECTED'&&activeAssessmentReviewSnapshot.human_review_note))&&<div><span>SOURCE REVIEW FEEDBACK</span><b>{String(activeAssessmentReviewSnapshot.last_rejection_note||activeAssessmentReviewSnapshot.human_review_note)}</b></div>}
                 </section>
               </div>
               <footer className={styles.hrmsAssessmentReviewFooter}>
