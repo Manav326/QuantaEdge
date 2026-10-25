@@ -1,8 +1,33 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { apiFetch } from '../components/apiClient';
 import styles from './MarketplaceLaunchStepper.module.css';
+
+function activateAccessibleReviewDialog(dialog:HTMLElement,onEscape:()=>void):()=>void {
+  const previousOverflow=document.body.style.overflow;
+  const previousFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
+  document.body.style.overflow='hidden';
+  const selector='a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+  const focusable=()=>Array.from(dialog.querySelectorAll<HTMLElement>(selector)).filter(el=>!el.hidden&&el.getAttribute('aria-hidden')!=='true');
+  const frame=window.requestAnimationFrame(()=>{(focusable()[0]||dialog).focus();});
+  const onKeyDown=(event:KeyboardEvent)=>{
+    if(event.key==='Escape'){event.preventDefault();onEscape();return;}
+    if(event.key!=='Tab')return;
+    const items=focusable();
+    if(!items.length){event.preventDefault();dialog.focus();return;}
+    const first=items[0],last=items[items.length-1];
+    if(event.shiftKey&&(document.activeElement===first||!dialog.contains(document.activeElement))){event.preventDefault();last.focus();}
+    else if(!event.shiftKey&&(document.activeElement===last||!dialog.contains(document.activeElement))){event.preventDefault();first.focus();}
+  };
+  window.addEventListener('keydown',onKeyDown);
+  return ()=>{
+    window.cancelAnimationFrame(frame);
+    window.removeEventListener('keydown',onKeyDown);
+    document.body.style.overflow=previousOverflow;
+    if(previousFocus?.isConnected)previousFocus.focus();
+  };
+}
 
 type LaunchCheck = {
   code: string;
@@ -338,6 +363,8 @@ export default function MarketplaceLaunchStepper({
   const [reviewNotes, setReviewNotes] = useState<Record<number, string>>({});
   const [reviewContent, setReviewContent] = useState<Record<number, ReleaseReviewContent>>({});
   const [assessmentReviewTarget,setAssessmentReviewTarget] = useState<{releaseId:number;assessmentId:number;sequenceNo:number}|null>(null);
+  const assessmentReviewDialogRef=useRef<HTMLElement|null>(null);
+  const k12ReviewDialogRef=useRef<HTMLElement|null>(null);
   const [assessmentReviewSearch,setAssessmentReviewSearch] = useState('');
   const [assessmentReviewStatusFilter,setAssessmentReviewStatusFilter] = useState<'ALL'|'PENDING'|'APPROVED'|'REJECTED'>('ALL');
   const [k12ReviewTarget,setK12ReviewTarget] = useState<{releaseId:number;chapterId:number;lessonId:number|null}|null>(null);
@@ -478,14 +505,9 @@ export default function MarketplaceLaunchStepper({
 
   useEffect(()=>{
     if(!assessmentReviewOpen)return;
-    const previousOverflow=document.body.style.overflow;
-    document.body.style.overflow='hidden';
-    const onKeyDown=(event:KeyboardEvent)=>{if(event.key==='Escape')setAssessmentReviewTarget(null);};
-    window.addEventListener('keydown',onKeyDown);
-    return ()=>{
-      document.body.style.overflow=previousOverflow;
-      window.removeEventListener('keydown',onKeyDown);
-    };
+    const dialog=assessmentReviewDialogRef.current;
+    if(!dialog)return;
+    return activateAccessibleReviewDialog(dialog,closeAssessmentReview);
   },[assessmentReviewOpen]);
 
   const k12ReviewOpen = k12ReviewTarget !== null;
@@ -513,14 +535,9 @@ export default function MarketplaceLaunchStepper({
   };
   useEffect(()=>{
     if(!k12ReviewOpen)return;
-    const previousOverflow=document.body.style.overflow;
-    document.body.style.overflow='hidden';
-    const onKeyDown=(event:KeyboardEvent)=>{if(event.key==='Escape')setK12ReviewTarget(null);};
-    window.addEventListener('keydown',onKeyDown);
-    return ()=>{
-      document.body.style.overflow=previousOverflow;
-      window.removeEventListener('keydown',onKeyDown);
-    };
+    const dialog=k12ReviewDialogRef.current;
+    if(!dialog)return;
+    return activateAccessibleReviewDialog(dialog,closeK12Review);
   },[k12ReviewOpen]);
 
   const counts = useMemo(() => {
@@ -1201,7 +1218,7 @@ export default function MarketplaceLaunchStepper({
 
 
       {assessmentReviewOpen&&assessmentReviewTarget&&<div className={styles.hrmsAssessmentReviewBackdrop} role="presentation" onMouseDown={event=>{if(event.target===event.currentTarget)closeAssessmentReview();}}>
-        <section className={styles.hrmsAssessmentReviewWorkspace} role="dialog" aria-modal="true" aria-labelledby="hrms-assessment-review-title">
+        <section ref={assessmentReviewDialogRef} tabIndex={-1} className={styles.hrmsAssessmentReviewWorkspace} role="dialog" aria-modal="true" aria-labelledby="hrms-assessment-review-title">
           <aside className={styles.hrmsAssessmentReviewSidebar}>
             <header className={styles.hrmsAssessmentSidebarHeader}>
               <span>HRMS · RELEASE QUALITY REVIEW</span>
@@ -1316,7 +1333,7 @@ export default function MarketplaceLaunchStepper({
 
 
       {k12ReviewOpen&&k12ReviewTarget&&k12ReviewPreview&&k12ReviewRelease&&<div className={styles.k12ReviewBackdrop} role="presentation" onMouseDown={event=>{if(event.target===event.currentTarget)closeK12Review();}}>
-        <section className={styles.k12ReviewWorkspace} role="dialog" aria-modal="true" aria-labelledby="k12-review-title">
+        <section ref={k12ReviewDialogRef} tabIndex={-1} className={styles.k12ReviewWorkspace} role="dialog" aria-modal="true" aria-labelledby="k12-review-title">
           <aside className={styles.k12ReviewSidebar}>
             <header className={styles.k12ReviewSidebarHeader}>
               <span>HRMS · K12 RELEASE REVIEW</span><h2>Chapter navigator</h2>
