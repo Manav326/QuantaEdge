@@ -134,10 +134,10 @@ public class CourseMarketplaceLaunchReadinessService {
         ? assessmentOnlyCoursePublishReady(courseId)
         : subjectCount>0&&subjectsWithLessons==subjectCount&&chapterCount>0&&lessonCount>0;
     add(checks,"PUBLISHED_LEARNING_CONTENT",
-        assessmentOnly?"All three source-paper tests are published and reviewed":"Every active mapped subject has published lessons",
+        assessmentOnly?"All test-pack assessments are published and reviewed":"Every active mapped subject has published lessons",
         requiredContentReady,
         assessmentOnly
-            ? "Publish all three source-paper tests after human review of questions and answer keys before listing this course."
+            ? "Publish every assessment in every test pack after human review of questions and answer keys before listing this course."
             : "Publish reviewed lessons in every active subject mapped to this course before listing it.");
     add(checks,"OFFER_TERMS","Marketplace offer is configured",false,
         "Create a draft marketplace offer and explicitly set its listing title, description and INR price.");
