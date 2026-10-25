@@ -225,7 +225,8 @@ export default function AssessmentsPage(){
     if(!courseId){setAssessments([]);setAssessmentTotal(0);setChapters([]);setLoading(courses.length===0);return;}
     setLoading(true);setError('');
     try{
-      const params=new URLSearchParams({classCode,courseId,status:statusFilter,limit:String(assessmentPageSize),offset:String(assessmentPage*assessmentPageSize)});\n      if(!isAssessmentOnlyCourse&&subjectCode)params.set('subjectCode',subjectCode);
+      const params=new URLSearchParams({classCode,courseId,status:statusFilter,limit:String(assessmentPageSize),offset:String(assessmentPage*assessmentPageSize)});
+      if(!isAssessmentOnlyCourse&&subjectCode)params.set('subjectCode',subjectCode);
       const [assessmentRows,staffRows,contentRows]=await Promise.all([
         api('/api/v1/admin/assessments?'+params.toString()),
         api('/api/v1/admin/assessment-staff'),
