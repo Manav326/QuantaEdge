@@ -288,16 +288,24 @@ assert(adminContentStudio.includes('PremiumPagination') && adminContentStudio.in
   adminContentStudio.includes('editorReturnFocusRef') && adminContentStudio.includes('backToLibraryRef.current?.()'),
   'Content Studio must paginate chapters, expand/collapse child micro-topics and preserve a focused accessible editor flow.');
 assert(adminContentStudio.includes("String(selectedCourse?.course_type_code||'').toUpperCase()==='ASSESSMENT'") &&
-  adminContentStudio.includes("'/api/v1/admin/content/assessment-papers?'+params.toString()") &&
-  adminContentStudio.includes('filteredAssessmentRows.map') &&
-  adminContentStudio.includes("'&assessmentId='+encodeURIComponent(String(row.assessment_id))"),
-  'Content Studio must use the assessment hierarchy for classless ASSESSMENT courses and expose each imported test question-review path.');
-assert(adminContentStudio.includes("!isAssessmentCourse?<label>{t('admin.contentStudio.subject')}") &&
-  adminContentStudio.includes('assessmentContentTitle') && adminContentStudio.includes("isAssessmentCourse ? <Link href={assessmentStudioHref"),
+  adminContentStudio.includes("'/api/v1/admin/content/courses/'+encodeURIComponent(selectedProgram)+'/assessment-inventory'") &&
+  adminContentStudio.includes('assessmentRows.map') &&
+  adminContentStudio.includes("'&reviewAssessmentId='+encodeURIComponent(String(row.assessment_id))") &&
+  adminContentController.includes('@GetMapping("/courses/{courseId}/assessment-inventory")'),
+  'Content Studio must use the tenant-scoped assessment inventory and expose each imported test question-review path.');
+assert(adminContentStudio.includes("!isAssessmentCourse") &&
+  adminContentStudio.includes('assessmentContentTitle') &&
+  adminContentStudio.includes("isAssessmentCourse ? <Link href={'/assessments?courseId='") &&
+  adminContentStudio.includes("isAssessmentCourse ? (") &&
+  adminContentStudio.includes("beginCreate('chapter')") &&
+  adminAssessmentsPage.includes("!isAssessmentOnlyCourse && (") &&
+  adminAssessmentsPage.includes("subjectCode,setSubjectCode]=useState('')"),
   'Assessment-only courses must hide K-12 subject filters/chapter creation and show course-type-specific content navigation.');
 assert(adminAssessmentsPage.includes("loadImportedPackageQuestions(assessmentId)") &&
-  adminAssessmentsPage.includes("requestedReviewRef.current===requestKey") &&
-  !adminAssessmentsPage.includes("assessments.find(item=>Number(item.assessment_id)===assessmentId)"),
+  adminAssessmentsPage.includes("requestedPackageReviewRef.current===requestKey") &&
+  adminAssessmentsPage.includes("get('reviewAssessmentId')") &&
+  adminAssessmentsPage.includes("requireEditableCourse") &&
+  adminAssessmentsPage.includes("/package-questions?courseId="),
   'Imported question deep links must open by server-authorized course scope, not the grader-filtered assessment catalogue.');
 assert(adminContentEnglish.includes('"admin.contentStudio.courseSubjects": "Subjects with content"') &&
   adminContentEnglish.includes('"admin.contentStudio.databaseRecords": "From this course’s content records"') &&
