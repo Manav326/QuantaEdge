@@ -781,6 +781,55 @@ CREATE TRIGGER trg_qe_require_current_course_assignment_for_offer
 COMMENT ON FUNCTION qe_require_current_course_assignment_for_offer_write() IS
   'Database-enforced offer lineage gate for DRAFT/IN_REVIEW/APPROVED/PUBLISHED offers. Archived and rejected history may remain, but a usable offer must attach to the current eligible release assignment.';
 
+-- Close only the access rows that depended solely on the retired global free-grant
+-- path. Enrollment history is retained. Real purchases, institution entitlements, existing
+-- course entitlements, and current explicitly free institution listings continue to authorize.
+UPDATE student_program_enrollment enrollment
+SET status='ENDED',
+    ended_at=coalesce(enrollment.ended_at,now()),
+    updated_at=now()
+WHERE enrollment.status IN ('ACTIVE','PAUSED')
+  AND EXISTS (
+    SELECT 1
+    FROM student_course_access_grant legacy_grant
+    WHERE legacy_grant.student_id=enrollment.student_id
+      AND legacy_grant.institution_id=enrollment.institution_id
+      AND legacy_grant.course_id=enrollment.program_id
+      AND legacy_grant.grant_reason='LEGACY_CLASS_ENROLLMENT'
+  )
+  AND NOT EXISTS (
+    SELECT 1 FROM course_purchase purchase
+    WHERE purchase.student_id=enrollment.student_id
+      AND purchase.institution_id=enrollment.institution_id
+      AND purchase.course_id=enrollment.program_id
+  )
+  AND NOT EXISTS (
+    SELECT 1 FROM institution_course_entitlement entitlement
+    WHERE entitlement.institution_id=enrollment.institution_id
+      AND entitlement.program_id=enrollment.program_id
+      AND entitlement.status='ACTIVE'
+      AND entitlement.valid_from<=now()
+      AND (entitlement.valid_until IS NULL OR entitlement.valid_until>now())
+  )
+  AND NOT EXISTS (
+    SELECT 1 FROM course_entitlement entitlement
+    WHERE entitlement.institution_id=enrollment.institution_id
+      AND entitlement.course_id=enrollment.program_id
+      AND (
+        entitlement.holder_student_id=enrollment.student_id
+        OR entitlement.holder_user_id=(
+          SELECT student.user_account_id FROM student WHERE student.id=enrollment.student_id
+        )
+      )
+  )
+  AND NOT EXISTS (
+    SELECT 1 FROM institution_marketplace_offer offer
+    WHERE offer.institution_id=enrollment.institution_id
+      AND offer.course_id=enrollment.program_id
+      AND offer.price_paise=0
+      AND qe_marketplace_offer_publicly_sellable(offer.id)
+  );
+
 -- Mark old per-student free grants obsolete. Preserve the records, but no current
 -- authorization path may use or create them. Purchase/enrollment/entitlement records retain
 -- their own independent evidence and are not inferred from this grant table.
