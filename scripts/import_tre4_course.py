@@ -545,7 +545,9 @@ def get_or_create_course(cursor: Any, institution_id: int) -> tuple[int, str, bo
 
 def ensure_course_identity(cursor: Any, institution_id: int, course_id: int) -> int:
     """Attach the TRE4 course to its source-owned identity before content import."""
-    stable_key = f"I{institution_id}_TRE4"
+    # Stable identity key is source-scoped and independent of the version-graph code.
+    # The curriculum_program code remains institution-prefixed and may gain a version suffix.
+    stable_key = COURSE_CODE_SUFFIX
     cursor.execute("""
         SELECT p.display_name,p.course_type_code,p.course_identity_id,
                i.source_institution_id,i.stable_course_key,i.course_type_code,i.status
