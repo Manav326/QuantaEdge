@@ -85,6 +85,7 @@ class CourseMarketplaceTenantScopeTest {
     Object[] catalogueArgs = args.getAllValues().get(sql.getAllValues().indexOf(catalogueSql));
     assertTrue(catalogueSql.contains("where o.institution_id=? and o.status='PUBLISHED'"));
     assertTrue(catalogueSql.contains("assignment.status='ASSIGNED'"));
+    assertTrue(catalogueSql.contains("qe_is_current_institution_assignment(assignment.id)"));
     assertTrue(catalogueSql.contains("tenant_scope.status='ACTIVE'"));
     assertTrue(catalogueSql.contains("o.hrms_published_by_staff_id is not null"));
     assertTrue(catalogueSql.contains("release.release_state='SHAREABLE'"));
