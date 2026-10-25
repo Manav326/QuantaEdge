@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d09eeb14d266fd5430f1537d4202a65796ff4793cd53846e0200683c309bafa3",
+  "raw_analysis_sha256": "85907b5a0dbda2e454be4d7a910cb4bd16622352a4fb1823c37bb5330b401bb2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -29388,7 +29388,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40233308114",
-      "checkpointed_at": "2026-10-25T22:25:12Z",
+      "checkpointed_at": "2026-10-25T22:34:39Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -35001,7 +35001,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40233308114",
-      "checkpointed_at": "2026-10-25T22:26:22Z",
+      "checkpointed_at": "2026-10-25T22:35:48Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57357,7 +57357,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40233308114",
-      "checkpointed_at": "2026-10-25T22:27:22Z",
+      "checkpointed_at": "2026-10-25T22:36:47Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -67008,7 +67008,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40233308114",
-      "checkpointed_at": "2026-10-25T22:28:11Z",
+      "checkpointed_at": "2026-10-25T22:37:37Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -69510,7 +69510,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40031105894",
+      "run_id": "40233308114",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
