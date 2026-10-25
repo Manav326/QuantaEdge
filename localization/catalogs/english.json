@@ -4106,5 +4106,6 @@
   "admin.assessments.sourceQuestionNumber": "Source question number",
   "admin.assessments.sourceStatus": "Source verification status",
   "admin.assessments.sourceFileSha256": "Source file SHA-256",
-  "admin.assessments.sourceExamDate": "Source exam date"
+  "admin.assessments.sourceExamDate": "Source exam date",
+  "admin.assessments.answerReviewStatus": "Answer review: {status}"
 }

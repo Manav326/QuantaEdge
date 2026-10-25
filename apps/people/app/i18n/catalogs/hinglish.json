@@ -4106,5 +4106,6 @@
   "admin.assessments.sourceQuestionNumber": "स्रोत प्रश्न संख्या",
   "admin.assessments.sourceStatus": "स्रोत सत्यापन स्थिति",
   "admin.assessments.sourceFileSha256": "स्रोत फ़ाइल SHA-256",
-  "admin.assessments.sourceExamDate": "स्रोत परीक्षा तिथि"
+  "admin.assessments.sourceExamDate": "स्रोत परीक्षा तिथि",
+  "admin.assessments.answerReviewStatus": "उत्तर समीक्षा: {status}"
 }
