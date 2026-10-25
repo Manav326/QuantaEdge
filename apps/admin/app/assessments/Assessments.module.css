@@ -223,3 +223,20 @@
   .reviewFooterNavigation,.reviewFooterActions{justify-content:space-between}
   .reviewFooterActions button{flex:1;white-space:normal;padding:8px}
 }
+
+.reviewProvenancePanel{display:grid;gap:10px;margin-top:14px;padding:14px;border:1px solid #dfe5ee;border-radius:12px;background:#fff}
+.reviewProvenancePanel>h3{margin:0;color:#25344b;font-size:12px}
+.reviewProvenanceGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.reviewProvenanceGrid>div{display:grid;align-content:start;gap:4px;min-width:0;padding:9px;border-radius:8px;background:#f7f9fc}
+.reviewProvenanceGrid span{font-size:9px;font-weight:800;color:#79859a;text-transform:uppercase;letter-spacing:.35px}
+.reviewProvenanceGrid strong,.reviewProvenanceGrid p,.reviewProvenanceGrid a{font-size:10px;color:#35445c;overflow-wrap:anywhere;white-space:pre-wrap}
+.reviewProvenanceGrid p{margin:0;line-height:1.5}
+.reviewProvenanceWide{grid-column:1/-1}
+.reviewNoteField{display:grid;gap:6px;margin-top:2px;color:#35445c;font-size:10px;font-weight:800}
+.reviewNoteField textarea{width:100%;min-width:0;resize:vertical;border:1px solid #dce2eb;border-radius:9px;padding:10px;background:#fff;color:#26344b;font:inherit;line-height:1.6}
+.reviewPreviousFeedback{padding:10px;border:1px solid #f0c1b8;border-radius:9px;background:#fff4f1}
+.reviewPreviousFeedback b{color:#9f3324;font-size:10px}
+.reviewPreviousFeedback p{margin:5px 0 0;color:#6b3030;font-size:11px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
+.assessmentReviewWorkspace:focus{outline:none}
+.assessmentReviewWorkspace :focus-visible{outline:2px solid #fb923c;outline-offset:2px}
+@media(max-width:760px){.reviewProvenanceGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
