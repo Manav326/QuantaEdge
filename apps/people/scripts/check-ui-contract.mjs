@@ -88,6 +88,7 @@ assert(components.includes("'primary' | 'secondary' | 'neutral' | 'danger'"), 'S
 assert(components.includes('loading = false') && components.includes('disabled={disabled || loading}'), 'Shared People buttons must expose safe loading/disabled behavior.');
 assert(styles.includes('.qe-people-button--neutral') && styles.includes('.qe-people-button-spinner'), 'Shared People button variants and loading indicator styles must exist.');
 assert(styles.includes('.qe-people-button:disabled') && styles.includes('var(--qe-people-disabled-surface') && styles.includes('opacity: 1;'), 'Shared disabled buttons must switch to the explicit neutral surface without opacity haze.');
+assert(styles.includes('.qe-people-workspace .qe-people-page-slot button:disabled') && styles.includes('var(--qe-color-surface-subtle') && styles.includes('filter: none;'), 'All HRMS workflow buttons must use a readable neutral disabled surface while preserving authored invoice and notification documents.');
 
 const routePages = [
   ['/', 'apps/people/app/page.tsx'],
@@ -245,6 +246,7 @@ assert(institutionAdminWorkspace.includes('/api/v1/admin/institution-operations/
 assert(guidedCourseCreator.includes("'/api/v1/admin/content/courses'") && guidedCourseCreator.includes("router.push('/content?courseId='"), 'Guided course creation must open Content Studio in the newly created course context.');
 assert(hrmsCourseHandoff.includes('NEXT_PUBLIC_EDUCATION_ADMIN_ORIGIN') && hrmsCourseHandoff.includes("'/institution-operations?'"), 'HRMS release blockers must hand the authorised actor into the Admin institution workflow, never the learner portal.');
 assert(hrmsCourseHandoff.includes('qualityBlocker') && hrmsCourseHandoff.includes('Return this release for correction') && hrmsCourseHandoff.includes('exactPreviewReady'), 'Disabled quality approval must explain the release-readiness blocker and require an exact reviewed fingerprint.');
+assert(hrmsCourseHandoff.includes("'Load exact submitted content'") && hrmsCourseHandoff.includes('const previewNeedsLoading = !preview'), 'Exact-content inspection must remain an explicit available action even when other release-readiness gates are blocked.');
 assert(marketplaceLaunchStyles.includes('.actionHintWarning') && marketplaceLaunchStyles.includes('.primaryButton:disabled') && marketplaceLaunchStyles.includes('opacity: 1;'), 'Marketplace launch buttons must use a distinct readable disabled style and expose quality gate hints.');
 const financeSetupContract = read('apps/people/app/finance/page.tsx');
 assert(financeSetupContract.includes("setTaxForm(v=>({...v,offerId:requestedOfferId,legalEntityId:linkedSeller?String(linkedSeller.id):''}))") && financeSetupContract.includes("setDiscountForm(v=>({...v,offerId:requestedOfferId}))"), 'Launch-linked Finance forms must use the exact selected offer instead of a first-catalogue default.');
