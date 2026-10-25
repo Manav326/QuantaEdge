@@ -1311,3 +1311,154 @@
   .hrmsAssessmentQuestionPaging{justify-content:space-between}
   .hrmsAssessmentQuestionPaging>button{flex:1;white-space:normal}
 }
+
+
+/* Structured K12 quality review: compact release directory and full-screen chapter inspector */
+.k12ReviewOverview{display:grid;gap:14px}
+.k12ReviewSummary{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.k12ReviewSummary>div{display:grid;gap:4px;min-width:0;padding:11px;border:1px solid var(--qe-color-border,#d7dee8);border-radius:10px;background:var(--qe-color-surface-elevated,#fbfcfe)}
+.k12ReviewSummary strong{font-size:20px;line-height:1.1;letter-spacing:-.5px;color:var(--qe-color-text,#192538)}
+.k12ReviewSummary span{font-size:9px;color:var(--qe-color-text-muted,#687489)}
+.k12ReviewIntro{margin:0;font-size:11px;line-height:1.6;color:var(--qe-color-text-muted,#687489)}
+.k12TranslationSummary,.k12ReviewTranslations{border:1px solid var(--qe-color-border,#d7dee8);border-radius:10px;background:var(--qe-color-surface,#fff)}
+.k12TranslationSummary>summary,.k12ReviewTranslations>summary{padding:10px 12px;cursor:pointer;font-size:11px;font-weight:800;color:var(--qe-color-text,#192538)}
+.k12TranslationSummary>div,.k12ReviewTranslations>div{padding:0 12px 10px}
+.k12TranslationSummary p,.k12ReviewTranslations p{margin:5px 0;font-size:10px;line-height:1.5;color:var(--qe-color-text-muted,#687489)}
+.k12SubjectDirectory{border:1px solid var(--qe-color-border,#d7dee8);border-radius:12px;background:var(--qe-color-surface,#fff);overflow:hidden}
+.k12SubjectDirectory>header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;background:var(--qe-color-surface-elevated,#fafbfd);border-bottom:1px solid var(--qe-color-border-subtle,#e2e8ef)}
+.k12SubjectDirectory>header h4{margin:0;font-size:13px;color:var(--qe-color-text,#192538)}
+.k12SubjectDirectory>header>div>span{display:block;margin-top:4px;font-size:9px;color:var(--qe-color-text-muted,#687489)}
+.k12SubjectDirectory>header details>summary{font-size:10px;cursor:pointer;font-weight:750}
+.k12ChapterDirectory{display:grid}
+.k12ChapterRow{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 15px;border-bottom:1px solid var(--qe-color-border-subtle,#e8edf3)}
+.k12ChapterRow:last-child{border-bottom:0}
+.k12ChapterCopy{display:grid;gap:4px;min-width:0}
+.k12ChapterCopy>strong{font-size:11px;color:var(--qe-color-text,#26344b)}
+.k12ChapterCopy>span,.k12ChapterCopy>small{font-size:9px;line-height:1.5;color:var(--qe-color-text-muted,#687489);overflow-wrap:anywhere}
+.k12ChapterCopy>a{font-size:10px;color:var(--qe-color-primary,#c2410c);overflow-wrap:anywhere}
+.k12ReviewBackdrop{position:fixed;z-index:1700;inset:0;width:100vw;height:100vh;height:100dvh;overflow:hidden;background:#f4f6fa;color:#192538}
+.k12ReviewWorkspace{display:grid;grid-template-columns:285px minmax(0,1fr);height:100%;width:100%;min-height:0;background:#f7f9fc}
+.k12ReviewSidebar{display:flex;flex-direction:column;min-width:0;min-height:0;background:#172239;color:#fff;border-right:1px solid #29364d}
+.k12ReviewSidebarHeader{display:grid;gap:6px;padding:20px 16px 14px;border-bottom:1px solid #ffffff1b}
+.k12ReviewSidebarHeader>span,.k12ReviewHeader>div>span{font-size:9px;font-weight:900;letter-spacing:1.25px;color:#f4b58c}
+.k12ReviewSidebarHeader h2{margin:0;font-size:19px}
+.k12ReviewSidebarHeader p,.k12ReviewSidebarHeader small{margin:0;color:#c3ccda;font-size:10px;line-height:1.5;overflow-wrap:anywhere}
+.k12ReviewSidebarTools{padding:10px;border-bottom:1px solid #ffffff1b}
+.k12ReviewSidebarTools input{width:100%;padding:9px 10px;border:1px solid #ffffff26;border-radius:9px;background:#202e46;color:#fff;font:inherit;font-size:11px}
+.k12ReviewSidebarTools input::placeholder{color:#abb6c7}
+.k12ReviewChapterNav{overflow-y:auto;overscroll-behavior:contain;padding:10px}
+.k12ReviewChapterNav>section{margin-bottom:14px}
+.k12ReviewChapterNav>section>h3{display:flex;justify-content:space-between;gap:8px;margin:0 0 6px;padding:5px 3px;color:#fff;font-size:10px}
+.k12ReviewChapterNav>section>h3>small{color:#c3ccda}
+.k12ReviewChapterNavItem{display:grid;gap:4px;width:100%;padding:9px;margin:4px 0;border:1px solid #ffffff12;border-radius:8px;background:#ffffff07;color:#e1e7f0;text-align:left;cursor:pointer}
+.k12ReviewChapterNavItem:hover{border-color:#f5b58a;background:#ffffff12}
+.k12ReviewChapterNavItemActive{border-color:#fb923c;background:#3a2a23;box-shadow:inset 0 0 0 1px #fb923c35}
+.k12ReviewChapterNavItem>b{font-size:10px;line-height:1.45}
+.k12ReviewChapterNavItem>small{font-size:8px;color:#b8c2d2}
+.k12ReviewEmptyNote{font-size:11px;color:#c3ccda}
+.k12ReviewMain{display:flex;flex-direction:column;height:100%;min-width:0;min-height:0;overflow:hidden}
+.k12ReviewHeader{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:15px clamp(14px,2vw,28px);border-bottom:1px solid #e2e7ef;background:#fff}
+.k12ReviewHeader h1{margin:5px 0;font-size:20px;line-height:1.25;color:#19253c;letter-spacing:-.5px}
+.k12ReviewHeader p{margin:0;font-size:10px;line-height:1.55;color:#6f7b90}
+.k12ReviewClose{display:grid;place-items:center;flex:0 0 36px;width:36px;height:36px;border:1px solid #dfe5ed;border-radius:9px;background:#fff;color:#4b596e;font-size:24px;cursor:pointer}
+.k12ReviewFingerprint{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px clamp(14px,2vw,28px);border-bottom:1px solid #e2e7ef;background:#fff}
+.k12ReviewFingerprint>div{display:grid;gap:4px;min-width:0}
+.k12ReviewFingerprint strong{font-size:9px;color:#6f7b90}
+.k12ReviewFingerprint code{font-size:9px;overflow-wrap:anywhere;word-break:break-all;color:#455168}
+.k12ReviewFingerprintCurrent,.k12ReviewFingerprintStale{display:inline-flex;flex:0 0 auto;padding:6px 9px;border-radius:99px;font-size:9px;font-weight:850}
+.k12ReviewFingerprintCurrent{background:#e4f8ed;color:#18794e}
+.k12ReviewFingerprintStale{background:#fff0ef;color:#a12f2f}
+.k12ReviewError{margin:10px 15px 0;padding:9px 12px;border:1px solid #f0c1b8;border-radius:9px;background:#fff4f1;color:#9f3324;font-size:10px}
+.k12ReviewContent{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:clamp(12px,1.7vw,22px)}
+.k12ReviewLoading{display:grid;place-items:center;flex:1;padding:30px;text-align:center;color:#6f7b90;font-size:12px}
+.k12ReviewProvenance{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.k12ReviewProvenance>div{display:grid;align-content:start;gap:6px;padding:12px;border:1px solid #dfe5ee;border-radius:10px;background:#fff;min-width:0}
+.k12ReviewProvenance>div>span{font-size:8px;letter-spacing:1px;font-weight:900;color:#b4471a}
+.k12ReviewProvenance strong{font-size:11px;overflow-wrap:anywhere}
+.k12ReviewProvenance p{margin:0;font-size:10px;line-height:1.55;color:#6f7b90;overflow-wrap:anywhere}
+.k12ReviewProvenance a{font-size:10px;overflow-wrap:anywhere;color:#b4471a}
+.k12ReviewTranslations{margin-top:10px;background:#fff}
+.k12ReviewLessonLayout{display:grid;grid-template-columns:minmax(200px,.34fr) minmax(0,1fr);gap:12px;margin-top:12px;align-items:start}
+.k12ReviewLessonNav{position:sticky;top:0;display:grid;gap:5px;max-height:66vh;overflow:auto;padding:10px;border:1px solid #dfe5ee;border-radius:11px;background:#fff}
+.k12ReviewLessonNav>header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:3px 2px 8px;border-bottom:1px solid #edf0f5}
+.k12ReviewLessonNav>header>strong{font-size:11px}
+.k12ReviewLessonNav>header>span{font-size:9px;color:#6f7b90}
+.k12ReviewLessonNavItem{display:grid;gap:4px;width:100%;padding:9px;border:1px solid #edf0f5;border-radius:8px;background:#fff;text-align:left;cursor:pointer}
+.k12ReviewLessonNavItem:hover{background:#fff8f2;border-color:#efc2a7}
+.k12ReviewLessonNavItemActive{background:#fff0e5;border-color:#e7a77e;box-shadow:inset 0 0 0 1px #f3dac9}
+.k12ReviewLessonNavItem>b{font-size:10px;line-height:1.45;color:#27354c}
+.k12ReviewLessonNavItem>small{font-size:8px;color:#7b869a}
+.k12ReviewLessonDetail{display:grid;gap:12px;min-width:0}
+.k12ReviewLessonWelcome{display:grid;gap:6px;place-content:center;min-height:220px;padding:20px;border:1px dashed #cbd4e0;border-radius:12px;background:#fff;text-align:center}
+.k12ReviewLessonWelcome h3{margin:0;font-size:14px}
+.k12ReviewLessonWelcome p{margin:0;color:#6f7b90;font-size:11px;line-height:1.65}
+.k12ReviewLessonHeader{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:13px;border:1px solid #dfe5ee;border-radius:11px;background:#fff}
+.k12ReviewLessonHeader>div>span{font-size:8px;font-weight:900;letter-spacing:1.1px;color:#b4471a}
+.k12ReviewLessonHeader h2{margin:5px 0 0;font-size:15px;color:#233149}
+.k12ReviewLessonHeader>span{font-size:8px;font-weight:900;padding:6px 8px;border-radius:99px;white-space:nowrap}
+.k12ReviewLessonMeta{font-size:10px;line-height:1.5;color:#6f7b90}
+.k12ReviewBilingualGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.k12ReviewBilingualGrid>section{display:grid;align-content:start;gap:8px;min-width:0;padding:13px;border:1px solid #dfe5ee;border-radius:11px;background:#fff}
+.k12ReviewBilingualGrid>section>header{display:flex;align-items:center;gap:8px;padding-bottom:8px;border-bottom:1px solid #edf0f5}
+.k12ReviewBilingualGrid>section>header>b{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:#fff0e5;color:#a43b14;font-size:10px}
+.k12ReviewBilingualGrid>section>header>strong{font-size:12px}
+.k12ReviewBilingualGrid>section>p{margin:0;font-size:11px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;color:#35445b}
+.k12ReviewBilingualGrid details,.k12ReviewBlockTranslation{padding:8px;border:1px solid #e7ebf1;border-radius:8px}
+.k12ReviewBilingualGrid details>summary{font-size:10px;cursor:pointer;font-weight:750}
+.k12ReviewDetailSection{display:grid;gap:8px;padding:13px;border:1px solid #dfe5ee;border-radius:11px;background:#fff}
+.k12ReviewDetailSection>header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:8px;border-bottom:1px solid #edf0f5}
+.k12ReviewDetailSection>header>h3{margin:0;font-size:12px}
+.k12ReviewDetailSection>header>span{padding:4px 7px;border-radius:7px;background:#f1f4f8;color:#536177;font-size:9px;font-weight:850}
+.k12ReviewBlock{border:1px solid #e4e9f0;border-radius:9px;overflow:hidden}
+.k12ReviewBlock>summary{padding:10px;background:#fafbfd;font-size:10px;font-weight:750;cursor:pointer}
+.k12ReviewBlockContent{display:grid;gap:10px;padding:12px}
+.k12ReviewBlockContent>div>b{font-size:10px;color:#536177}
+.k12ReviewBlockContent>div>p{margin:4px 0 0;font-size:11px;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}
+.k12ReviewAsset{padding:10px;border-top:1px solid #edf0f5}
+.k12ReviewAsset img{display:block;max-width:100%;max-height:420px;object-fit:contain;border:1px solid #e2e7ef;border-radius:8px;background:#fff}
+.k12ReviewAsset p{font-size:10px;line-height:1.6;overflow-wrap:anywhere}
+.k12ReviewBlockTranslation{margin:0 10px 10px}
+.k12ReviewBlockTranslation>summary{cursor:pointer;font-size:10px;font-weight:750}
+.k12ReviewBlockTranslation pre,.k12ReviewQuestion pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:10px}
+.k12ReviewQuestion{display:grid;gap:6px;padding:11px;border:1px solid #e4e9f0;border-radius:9px}
+.k12ReviewQuestion>div{display:flex;justify-content:space-between;gap:8px}
+.k12ReviewQuestion>div>b{font-size:10px}
+.k12ReviewQuestion>div>span{font-size:9px;color:#6f7b90}
+.k12ReviewQuestion>p{margin:0;font-size:11px;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}
+.k12ReviewQuestion ol{margin:0;padding-left:24px;font-size:10px;line-height:1.65}
+.k12ReviewQuestion details>summary{margin:6px 0;cursor:pointer;font-size:10px;font-weight:750}
+.k12ReviewQuestion details section{padding:8px;border-top:1px solid #edf0f5}
+.k12ReviewQuestion details section p{white-space:pre-wrap;overflow-wrap:anywhere;font-size:10px;line-height:1.6}
+.k12ReviewResource{display:grid;gap:5px;padding:11px;border:1px solid #e4e9f0;border-radius:9px}
+.k12ReviewResource>div{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.k12ReviewResource>div>b{font-size:10px}
+.k12ReviewResource>div>span,.k12ReviewResource p,.k12ReviewResource>a,.k12ReviewResource code{font-size:9px;line-height:1.6;overflow-wrap:anywhere}
+.k12ReviewResource p{margin:0;color:#6f7b90}
+.k12ReviewNoResources{font-size:11px;color:#6f7b90}
+.k12ReviewFooter{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;border-top:1px solid #e0e6ef;background:#fff}
+.k12ReviewFooter>span{font-size:10px;line-height:1.55;color:#6f7b90}
+@media(max-width:1200px){.k12ReviewSummary{grid-template-columns:repeat(3,minmax(0,1fr))}.k12ReviewWorkspace{grid-template-columns:245px minmax(0,1fr)}.k12ReviewLessonLayout{grid-template-columns:minmax(170px,.38fr) minmax(0,1fr)}}
+@media(max-width:760px){
+ .k12ReviewSummary{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .k12ChapterRow{align-items:flex-start;flex-direction:column}
+ .k12ChapterRow>.secondaryButton{width:100%}
+ .k12ReviewWorkspace{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}
+ .k12ReviewSidebar{max-height:210px;border-right:0;border-bottom:1px solid #29364d}
+ .k12ReviewSidebarHeader{padding:9px 12px;gap:4px}
+ .k12ReviewSidebarHeader h2{display:inline;margin-left:8px;font-size:14px}
+ .k12ReviewSidebarHeader p{display:none}
+ .k12ReviewSidebarTools{padding:7px}
+ .k12ReviewChapterNav{display:flex;gap:6px;padding:6px;overflow-x:auto;overflow-y:hidden}
+ .k12ReviewChapterNav>section{display:flex;gap:5px;flex:0 0 auto;margin:0}
+ .k12ReviewChapterNav>section>h3{display:none}
+ .k12ReviewChapterNavItem{flex:0 0 170px;align-self:stretch;margin:0}
+ .k12ReviewHeader{padding:11px}
+ .k12ReviewHeader h1{font-size:16px}
+ .k12ReviewFingerprint{align-items:flex-start;flex-direction:column;padding:9px 11px}
+ .k12ReviewContent{padding:10px}
+ .k12ReviewProvenance,.k12ReviewBilingualGrid,.k12ReviewLessonLayout{grid-template-columns:minmax(0,1fr)}
+ .k12ReviewLessonNav{position:static;max-height:170px}
+ .k12ReviewLessonNavItem{padding:7px}
+ .k12ReviewLessonHeader{flex-direction:column}
+ .k12ReviewFooter{align-items:stretch;flex-direction:column}
+}
