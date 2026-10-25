@@ -878,10 +878,10 @@ export default function ContentStudio(){
    
    {error&&<div className="admin-alert qe-feedback" role="alert"><strong>{t('admin.contentStudio.needsAttention')}</strong><span>{error}</span><button type="button" onClick={()=>setError('')}>{t('admin.contentStudio.dismiss')}</button></div>}{notice&&<div className="admin-notice qe-feedback" role="status"><strong>{t('admin.contentStudio.workspaceUpdate')}</strong><span>{notice}</span><button type="button" onClick={()=>setNotice('')}>{t('admin.contentStudio.dismiss')}</button></div>}
    {isAssessmentCourse ? (
-    <section className="qe-stats-grid" aria-label="Assessment course inventory">
-     <article><span className="qe-stat-icon purple">▤</span><div><small>Tests / assessments</small><strong>{assessmentRows.length}</strong><span>Course-level tests</span></div></article>
-     <article><span className="qe-stat-icon blue">#</span><div><small>Question snapshots</small><strong>{assessmentRows.reduce((total,row)=>total+Number(row.question_count||0),0)}</strong><span>Imported test questions</span></div></article>
-     <article><span className="qe-stat-icon amber">✎</span><div><small>Draft tests</small><strong>{assessmentRows.filter(row=>String(row.status).toUpperCase()==='DRAFT').length}</strong><span>Require answer review</span></div></article>
+    <section className="qe-stats-grid" aria-label={t('admin.contentStudio.assessmentContentTitle')}>
+     <article><span className="qe-stat-icon purple">▤</span><div><small>{t('admin.contentStudio.assessmentPaperCount')}</small><strong>{assessmentRows.length}</strong><span>{t('admin.contentStudio.assessmentContentTitle')}</span></div></article>
+     <article><span className="qe-stat-icon blue">#</span><div><small>{t('admin.contentStudio.assessmentQuestionSnapshotCount')}</small><strong>{assessmentRows.reduce((total,row)=>total+Number(row.question_count||0),0)}</strong><span>{t('admin.contentStudio.assessmentLoadedPaperCount',{count:assessmentRows.length})}</span></div></article>
+     <article><span className="qe-stat-icon amber">✎</span><div><small>{t('admin.contentStudio.assessmentDraftCount')}</small><strong>{assessmentRows.filter(row=>String(row.status).toUpperCase()==='DRAFT').length}</strong><span>Require answer review</span></div></article>
     </section>
    ) : (
    <section className="qe-stats-grid">
@@ -893,8 +893,8 @@ export default function ContentStudio(){
    </section>
    )}
    <section className="qe-library-panel" id="content-library">
-    <div className="qe-section-head"><div><span className="admin-kicker">{isAssessmentCourse?'ASSESSMENT COURSE':'CURRICULUM MAP'}</span><h2>{isAssessmentCourse?'Test packs and questions':t('admin.contentStudio.findChapterOrTopic')}</h2><p>{isAssessmentCourse?'TRE-4 uses a classless hierarchy: test packs → assessments/tests → ordered question snapshots. It does not have K–12 chapters or micro-topics.':t('admin.contentStudio.openEditorHint')}</p></div><div className="qe-create-actions">{isAssessmentCourse
-      ? <Link href={'/assessments?courseId='+encodeURIComponent(programFilter)} className="qe-primary-button">Open tests and question review</Link>
+    <div className="qe-section-head"><div><span className="admin-kicker">{isAssessmentCourse?t('admin.contentStudio.assessmentContentTitle'):'CURRICULUM MAP'}</span><h2>{isAssessmentCourse?t('admin.contentStudio.assessmentContentTitle'):t('admin.contentStudio.findChapterOrTopic')}</h2><p>{isAssessmentCourse?t('admin.contentStudio.assessmentContentIntro'):t('admin.contentStudio.openEditorHint')}</p></div><div className="qe-create-actions">{isAssessmentCourse
+      ? <Link href={'/assessments?courseId='+encodeURIComponent(programFilter)} className="qe-primary-button">{t('admin.contentStudio.assessmentOpenStudio')}</Link>
       : <><button type="button" className="qe-secondary-button" disabled={loading||!canCreate} title={!canCreate?t('admin.contentStudio.noCreatePermission'):undefined} onClick={()=>beginCreate('chapter')} >＋ {t('admin.contentStudio.newChapter')}</button><button type="button" className="qe-primary-button" disabled={loading||!canCreate||!rows.some(r=>r.chapter_id!==null)} title={!canCreate?t('admin.contentStudio.noCreatePermission'):undefined} onClick={()=>beginCreate('lesson')} >＋ {t('admin.contentStudio.newMicroTopic')}</button></>}</div></div>
     {activeProgram?<div role="status" style={{margin:'0 0 14px',padding:'12px 14px',border:'1px solid var(--admin-border,#d8dce5)',borderRadius:10,background:'var(--admin-surface,#fff)',color:'var(--admin-text,#1b2430)'}}>
       <strong>{activeProgram.course_relationship==='SOURCED'?'SOURCED COURSE':'SHARED COURSE · READ ONLY'}</strong>
@@ -911,9 +911,9 @@ export default function ContentStudio(){
     </div>:null}
     {isAssessmentCourse ? (
      <div className="qe-assessment-course-library">
-      <p style={{margin:'0 0 12px',color:'var(--admin-muted,#667085)',fontSize:13}}>This course uses test packs and ordered assessment question snapshots, not K–12 chapters or micro-topics. Open a test to inspect source questions and review answer keys. Saving a question review does not publish the test.</p>
-      {loading ? <div className="qe-library-empty" role="status"><strong>Loading assessments…</strong></div>
-        : assessmentRows.length===0 ? <div className="qe-library-empty"><strong>No assessments are recorded for this course.</strong><p>Refresh the course list or use the assessment import workflow. Do not create K–12 chapters to make a classless assessment course appear.</p><Link className="qe-primary-button" href={'/assessments?courseId='+encodeURIComponent(programFilter)}>Open assessment workspace</Link></div>
+      <p style={{margin:'0 0 12px',color:'var(--admin-muted,#667085)',fontSize:13}}>{t('admin.contentStudio.assessmentContentIntro')}</p>
+      {loading ? <div className="qe-library-empty" role="status"><strong>{t('admin.contentStudio.loadingContentRecords')}</strong></div>
+        : assessmentRows.length===0 ? <div className="qe-library-empty"><strong>{t('admin.contentStudio.assessmentNoPapers')}</strong><p>{t('admin.contentStudio.assessmentNoPapersHelp')}</p><Link className="qe-primary-button" href={'/assessments?courseId='+encodeURIComponent(programFilter)}>Open assessment workspace</Link></div>
         : <div className="qe-curriculum-map">{assessmentRows.map(row=>{
           const imported=Boolean(row.source_package_id);
           const canReviewImported=imported&&canReview&&isEditableDraft;
@@ -922,7 +922,7 @@ export default function ContentStudio(){
            <div className="qe-chapter-heading" style={{alignItems:'center'}}>
             <div className="qe-chapter-row" style={{flex:1,cursor:'default'}}>
              <span className="qe-chapter-glyph">✓</span>
-             <span className="qe-chapter-title"><small>{row.test_pack_title||row.source_exam_cycle||row.source_package_id||row.assessment_type||'ASSESSMENT'}{row.test_pack_version?' · Pack v'+row.test_pack_version:''}{row.test_id?' · '+row.test_id:''}</small><strong>{row.title}</strong><em>{row.description||'Course-level assessment. Question snapshots stay attached to this test and are not re-mapped into chapters.'}</em></span>
+             <span className="qe-chapter-title"><small>{row.test_pack_title||row.source_exam_cycle||row.source_package_id||row.assessment_type||t('admin.contentStudio.assessmentNoSourcePackage')}{row.test_pack_version?' · Pack v'+row.test_pack_version:''}{row.test_id?' · '+row.test_id:''}</small><strong>{row.title}</strong><em>{row.description||t('admin.contentStudio.assessmentContentIntro')}</em></span>
              <span className="qe-chapter-count">{Number(row.question_count||0)} questions <small>{Number(row.max_score||0)} marks · {Number(row.duration_minutes||0)} min</small></span>
              <span className={'qe-status-pill '+String(row.status||'DRAFT').toLowerCase()}>{statusLabel(row.status)}{row.test_pack_status?' · pack '+String(row.test_pack_status).toLowerCase():''}</span>
             </div>
