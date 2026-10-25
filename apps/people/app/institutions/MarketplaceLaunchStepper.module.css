@@ -346,6 +346,11 @@
 }
 
 .actionHint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 14px;
   margin: 8px 0 0;
   padding: 9px 11px;
   border: 1px solid var(--qe-color-border-subtle, #dfe5ed);
@@ -354,6 +359,15 @@
   color: var(--qe-color-text-muted, #687489);
   font-size: 11px;
   line-height: 1.55;
+}
+
+.actionHint > span {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.actionHint > button {
+  flex: 0 0 auto;
 }
 
 .actionHintWarning {
@@ -1050,6 +1064,15 @@
 }
 
 @media (max-width: 760px) {
+  .actionHint {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .actionHint > button {
+    width: 100%;
+  }
+
   .hero {
     padding: 17px;
     flex-wrap: wrap;
