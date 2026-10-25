@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2263,
+    "assets_selected": 2268,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "a8b604a149ae56a085aef68a",
-      "6f55fb9c1ad2af3533fd2c9c",
-      "d9b4f85e20bdc33b42d18fee",
-      "9d7b12b56e2c6f1bc3ddbedc",
-      "6ef6156428617e07587ac1f1"
+      "463542d4277119b7abc93e3a",
+      "28dd5d9a4eede770b0f64bfd",
+      "8604e838b1f1e41398ca72dd",
+      "1554b4067d24673fc7b88fc2",
+      "84735088773d234ece91acf3"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2263,
-    "assets_remaining": 5225,
+    "assets_analyzed": 2264,
+    "assets_remaining": 5224,
     "assets_completion_percent": 30.2,
-    "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 2258,
+    "assets_failed": 28,
+    "assets_skipped_from_checkpoint": 2263,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -85458,6 +85458,114 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40205238473",
       "checkpointed_at": "2026-10-25T16:52:41Z"
+    },
+    {
+      "asset_id": "463542d4277119b7abc93e3a",
+      "asset_sha256": "9da1131a9fc292d3136221b7019504c8f518903a373f291928e0f50e571ec04e",
+      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/9da1131a9fc292d3136221b7019504c8f518903a373f291928e0f50e571ec04e.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40205238473",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "28dd5d9a4eede770b0f64bfd",
+      "asset_sha256": "fe754650e5aff6abf9bb776cb50acfb98081ac2681caae4c7a6924d16c9b5e81",
+      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/fe754650e5aff6abf9bb776cb50acfb98081ac2681caae4c7a6924d16c9b5e81.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40205238473",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "8604e838b1f1e41398ca72dd",
+      "asset_sha256": "9a1609e389e1a65fb5b703a02f715cda169f71e82c53a7d91a27d68ac48d21e7",
+      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/9a1609e389e1a65fb5b703a02f715cda169f71e82c53a7d91a27d68ac48d21e7.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40205238473",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "1554b4067d24673fc7b88fc2",
+      "asset_sha256": "6817daa0a14637952e674be78e163a1c1b4bd77e2bf65aa6609a64d598f53563",
+      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/6817daa0a14637952e674be78e163a1c1b4bd77e2bf65aa6609a64d598f53563.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40205238473",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "84735088773d234ece91acf3",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the effects of air and water on other metals, with a demonstration activity suggested by the teacher.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "51",
+          "4.3 Eﬀect of Air and Water on Other",
+          "Metals",
+          "Activity 4.6: Let us investigate (demonstration activity)",
+          "Non-metals",
+          "The teacher may demonstrate this activity.",
+          "Caution— It is advisable"
+        ],
+        "concepts": [
+          "Effects of air and water on other metals",
+          "Demonstration activity",
+          "Teacher's guidance"
+        ],
+        "context_relation": "The page is discussing a demonstration activity related to the effects of air and water on other metals.",
+        "limitations": [
+          "The page does not provide specific details about the demonstration activity."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40205238473",
+      "checkpointed_at": "2026-10-25T17:06:52Z"
     }
   ]
 }
