@@ -73,6 +73,8 @@ public class PlatformFinanceController {
         identity.public_id as course_identity_public_id,identity.stable_course_key,
         p.content_version_no,assignment.id as assignment_id,assignment.assignment_source,
         release.id as release_id,release.release_version,release.release_state,
+        qe_current_course_offer_revision(o.id) as current_candidate,
+        qe_marketplace_offer_publicly_sellable(o.id) as publicly_sellable,
         coalesce(identity.stable_course_key,p.code) as course_code,
         coalesce(nullif(o.title_override,''),p.display_name) as course_name,
         o.price_paise,o.currency,o.status as offer_status,
@@ -97,7 +99,7 @@ public class PlatformFinanceController {
         order by tax.version desc limit 1
       ) tp on true
       left join billing_legal_entity le on le.id=tp.legal_entity_id
-      where o.status<>'ARCHIVED' and qe_current_course_offer_revision(o.id)
+      where o.status<>'ARCHIVED' and (qe_current_course_offer_revision(o.id) or qe_marketplace_offer_publicly_sellable(o.id))
       order by t.display_name,identity.stable_course_key,p.content_version_no desc,release.release_version desc,o.id
       """);
     List<Map<String,Object>> registrations=jdbc.queryForList("""
