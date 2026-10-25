@@ -994,14 +994,19 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
             if requested_submit_for_review:
                 cursor.execute("SELECT assessment_only_course_publish_ready(%s)", (course_id,))
                 publish_ready_row = cursor.fetchone()
-                publish_ready = bool(publish_ready_row and publish_ready_row[0] is True)
+                assessment_publish_ready = bool(publish_ready_row and publish_ready_row[0] is True)
+                cursor.execute("SELECT course_marketplace_content_type_ready(%s)", (course_id,))
+                course_type_ready_row = cursor.fetchone()
+                course_type_ready = bool(course_type_ready_row and course_type_ready_row[0] is True)
+                publish_ready = assessment_publish_ready and course_type_ready
                 if not publish_ready:
                     submission_deferred = True
                     summary["submissionDeferred"] = True
                     summary["submissionDeferralReason"] = (
                         "Release submission was not performed: at least one assessment/test pack is "
-                        "not published or a question/answer review gate is incomplete. The release remains "
-                        "DRAFT. Complete human question/answer review and publish each assessment through "
+                        "not published, a question/answer review gate is incomplete, or the registered "
+                        "course type/source identity/delivery mode fails Marketplace readiness. The release remains "
+                        "DRAFT. Complete human question/answer review, correct any course registration mismatch, and publish each assessment through "
                         "the supported Admin Web workflow, then rerun with --submit-for-review."
                     )
                 elif release_row is None:
