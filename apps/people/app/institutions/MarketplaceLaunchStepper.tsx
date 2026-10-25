@@ -450,6 +450,12 @@ export default function MarketplaceLaunchStepper({
   });
   const activeAssessmentReviewQuestion=filteredAssessmentReviewQuestions.find(question=>question.sequence_no===assessmentReviewTarget?.sequenceNo)
     ||filteredAssessmentReviewQuestions[0];
+  useEffect(()=>{
+    if(!assessmentReviewTarget||!filteredAssessmentReviewQuestions.length)return;
+    if(!filteredAssessmentReviewQuestions.some(question=>question.sequence_no===assessmentReviewTarget.sequenceNo)){
+      setAssessmentReviewTarget(current=>current?{...current,sequenceNo:filteredAssessmentReviewQuestions[0].sequence_no}:current);
+    }
+  },[assessmentReviewTarget?.releaseId,assessmentReviewTarget?.assessmentId,assessmentReviewTarget?.sequenceNo,assessmentReviewSearch,assessmentReviewStatusFilter,assessmentReviewQuestions]);
   const activeAssessmentReviewSnapshot=activeAssessmentReviewQuestion?.question_snapshot||{};
   const activeAssessmentReviewAnswer=activeAssessmentReviewSnapshot.answer_payload||{};
   const activeAssessmentReviewAnswerKeys=activeAssessmentReviewAnswer.kind==='OPTION'
