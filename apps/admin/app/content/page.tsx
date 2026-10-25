@@ -881,7 +881,7 @@ export default function ContentStudio(){
     <section className="qe-stats-grid" aria-label={t('admin.contentStudio.assessmentContentTitle')}>
      <article><span className="qe-stat-icon purple">▤</span><div><small>{t('admin.contentStudio.assessmentPaperCount')}</small><strong>{assessmentRows.length}</strong><span>{t('admin.contentStudio.assessmentContentTitle')}</span></div></article>
      <article><span className="qe-stat-icon blue">#</span><div><small>{t('admin.contentStudio.assessmentQuestionSnapshotCount')}</small><strong>{assessmentRows.reduce((total,row)=>total+Number(row.question_count||0),0)}</strong><span>{t('admin.contentStudio.assessmentLoadedPaperCount',{count:assessmentRows.length})}</span></div></article>
-     <article><span className="qe-stat-icon amber">✎</span><div><small>{t('admin.contentStudio.assessmentDraftCount')}</small><strong>{assessmentRows.filter(row=>String(row.status).toUpperCase()==='DRAFT').length}</strong><span>Require answer review</span></div></article>
+     <article><span className="qe-stat-icon amber">✎</span><div><small>{t('admin.contentStudio.assessmentDraftCount')}</small><strong>{assessmentRows.filter(row=>String(row.status).toUpperCase()==='DRAFT').length}</strong><span>{t('admin.contentStudio.assessmentDraftReviewHint')}</span></div></article>
     </section>
    ) : (
    <section className="qe-stats-grid">
@@ -922,8 +922,8 @@ export default function ContentStudio(){
            <div className="qe-chapter-heading" style={{alignItems:'center'}}>
             <div className="qe-chapter-row" style={{flex:1,cursor:'default'}}>
              <span className="qe-chapter-glyph">✓</span>
-             <span className="qe-chapter-title"><small>{row.test_pack_title||row.source_exam_cycle||row.source_package_id||row.assessment_type||t('admin.contentStudio.assessmentNoSourcePackage')}{row.test_pack_version?' · Pack v'+row.test_pack_version:''}{row.test_id?' · '+row.test_id:''}</small><strong>{row.title}</strong><em>{row.description||t('admin.contentStudio.assessmentContentIntro')}</em></span>
-             <span className="qe-chapter-count">{Number(row.question_count||0)} questions <small>{Number(row.max_score||0)} marks · {Number(row.duration_minutes||0)} min</small></span>
+             <span className="qe-chapter-title"><small>{row.test_pack_title||row.source_exam_cycle||row.source_package_id||row.assessment_type||t('admin.contentStudio.assessmentNoSourcePackage')}{row.test_pack_version?' · '+t('admin.contentStudio.assessmentPackVersion',{version:row.test_pack_version}):''}{row.test_id?' · '+row.test_id:''}</small><strong>{row.title}</strong><em>{row.description||t('admin.contentStudio.assessmentContentIntro')}</em></span>
+             <span className="qe-chapter-count">{t('admin.contentStudio.assessmentQuestionsCount',{count:Number(row.question_count||0)})} <small>{t('admin.contentStudio.assessmentMarksDuration',{marks:Number(row.max_score||0),minutes:Number(row.duration_minutes||0)})}</small></span>
              <span className={'qe-status-pill '+String(row.status||'DRAFT').toLowerCase()}>{statusLabel(row.status)}{row.test_pack_status?' · pack '+String(row.test_pack_status).toLowerCase():''}</span>
             </div>
            </div>
