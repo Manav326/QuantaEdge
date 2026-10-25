@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
     "raw_analysis_result_rows": 1286,
-    "successful_visual_analyses": 1275,
+    "successful_visual_analyses": 1277,
     "missing_visual_analyses": 1005,
-    "failed_visual_analyses": 11,
+    "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1016,
+    "unresolved_count": 1014,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -44764,7 +44764,7 @@
       "correction_status": "NONE",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_type": "diagram",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -44778,12 +44778,11 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force",
-          "living beings"
+          "muscular force"
         ],
         "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The image does not provide specific details about the forces acting on the objects in the diagram."
+          "The image does not provide specific details about the types of forces or the physical properties of the objects."
         ]
       },
       "chapter_id": null,
@@ -47404,9 +47403,34 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook explaining forces, including types of forces (contact and non-contact), SI unit of force (newton), and examples of forces.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "77",
+          "Snapshots",
+          "A force is push or pull on an object resulting from the object’s interaction with another object.",
+          "The SI unit of force is newton and its symbol is N.",
+          "Forces can act with or without contact.",
+          "Muscular force and frictional force are some of the examples of contact forces.",
+          "Magnetic force, gravitational force, and electrostatic force are non-contact forces.",
+          "Force can change an object’s speed, direction of its motion, or both."
+        ],
+        "concepts": [
+          "forces",
+          "SI unit of force",
+          "contact forces",
+          "non-contact forces",
+          "examples of forces"
+        ],
+        "context_relation": "The page is discussing the definition, types, and effects of forces.",
+        "limitations": [
+          "The page does not contain any diagrams, charts, or illustrations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -47611,9 +47635,50 @@
       "asset_path": "page-0098.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Questions about forces and motion, including whether a force is required to change speed, friction affecting speed, and the lack of force between charged objects.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "2. State whether the following statements are True or False.",
+          "(i) A force is always required to change the speed of motion of an object.",
+          "(ii) Due to friction, the speed of the ball rolling on a flat ground increases.",
+          "(iii) There is no force between two charged objects placed at a small distance apart.",
+          "3. Two balloons rubbed with a woollen cloth are brought near each other. What would happen and why?",
+          "4. When you drop a coin in a glass of water, it sinks, but when you place a bigger wooden block in water, it floats. Explain.",
+          "5. If a ball is thrown upwards, it slows down, stops momentarily, and then falls back to the ground. Name the forces acting on the ball and specify their directions.",
+          "(i) During its upward motion",
+          "(ii) During its downward motion",
+          "(iii) At its topmost position",
+          "6. A ball is released from the point P and moves along an inclined plane and then along a horizontal surface as shown in the Fig. 5.16. It comes to stop at the point A on the horizontal surface. Think of a way so that when the ball is released from the same point P, it stops (i) before the point A (",
+          "7. Why do we sometimes slip on smooth surfaces like ice or polished floors? Explain.",
+          "8. Is any force being applied to an object in a non-uniform motion?",
+          "9. The weight of an object on the Moon becomes one-sixth of its weight on the Earth. What causes this change? Does the mass of the object also become one-sixth of its mass on the Earth?"
+        ],
+        "concepts": [
+          "forces",
+          "motion",
+          "friction",
+          "charged objects",
+          "buoyancy",
+          "gravity",
+          "incline",
+          "non-uniform motion",
+          "weight",
+          "mass",
+          "Moon",
+          "Earth"
+        ],
+        "context_relation": "text",
+        "limitations": [
+          "The image does not contain any equations or formulas.",
+          "The image does not contain any charts or graphs.",
+          "The image does not contain any maps or diagrams.",
+          "The image does not contain any illustrations or cartoons.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
