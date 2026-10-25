@@ -563,7 +563,7 @@ public class PlatformInstitutionController {
     if(!(raw instanceof Boolean enabled)) throw new IllegalArgumentException("The enabled field must be true or false.");
     List<Map<String,Object>> releases=jdbc.queryForList("""
         select r.id,r.program_id,r.source_institution_id,r.release_version,r.release_state,
-          r.content_fingerprint,p.code,p.display_name
+          r.content_fingerprint,r.updated_at,p.code,p.display_name
         from institution_course_release r
         join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
         where r.id=?
@@ -578,7 +578,9 @@ public class PlatformInstitutionController {
     if(enabled) {
       long courseId=((Number)release.get("program_id")).longValue();
       String savedFingerprint=String.valueOf(release.get("content_fingerprint")).trim();
-      if(!savedFingerprint.equals(courseReleaseFingerprint(courseId)))
+      if(!Boolean.TRUE.equals(jdbc.queryForObject(
+          "select course_release_fingerprint_current(?,?,?)",Boolean.class,
+          courseId,savedFingerprint,release.get("updated_at"))))
         throw new ResponseStatusException(HttpStatus.CONFLICT,
             "Course content changed after quality review. The source institution must submit a fresh release before HRMS can assign it.");
       if("ASSESSMENT_ONLY".equals(courseDeliveryMode(courseId))) {
@@ -692,7 +694,7 @@ public class PlatformInstitutionController {
     String notes=body.get("notes")==null?"":String.valueOf(body.get("notes")).trim();
     if(notes.length()<3||notes.length()>1000) throw new IllegalArgumentException("Quality review notes must be 3–1,000 characters.");
     List<Map<String,Object>> releases=jdbc.queryForList("""
-        select r.id,r.source_institution_id,r.program_id,r.release_state,r.content_fingerprint,
+        select r.id,r.source_institution_id,r.program_id,r.release_state,r.content_fingerprint,r.updated_at,
           r.release_version,p.code,p.display_name
         from institution_course_release r join curriculum_program p on p.id=r.program_id
         where r.id=? for update of r
@@ -703,7 +705,9 @@ public class PlatformInstitutionController {
       throw new ResponseStatusException(HttpStatus.CONFLICT,"Only a release awaiting content-quality review can be reviewed.");
     long programId=((Number)release.get("program_id")).longValue();
     String savedFingerprint=String.valueOf(release.get("content_fingerprint")).trim();
-    if(!savedFingerprint.equals(courseReleaseFingerprint(programId)))
+    if(!Boolean.TRUE.equals(jdbc.queryForObject(
+        "select course_release_fingerprint_current(?,?,?)",Boolean.class,
+        programId,savedFingerprint,release.get("updated_at"))))
       throw new ResponseStatusException(HttpStatus.CONFLICT,"Course content changed after submission. The origin institution must submit a fresh release.");
     if(approved) {
       String reviewedFingerprint=body.get("reviewedContentFingerprint")==null
