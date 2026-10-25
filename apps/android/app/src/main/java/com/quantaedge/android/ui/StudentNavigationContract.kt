@@ -22,7 +22,7 @@ internal fun databaseLessonIdFromArtifactId(artifactId: String): Long? {
 }
 
 internal enum class AppRoute {
-    WELCOME, LOGIN, PARENT_SIGNUP, PARENT_RESET, ACCOUNT_SIGNUP, STUDENT_HOME, ALL_COURSES, MARKETPLACE, PARENT_HOME, PARENT_COURSES, PARENT_REPORT, PARENT_PROFILE, ACCOUNT_IDENTITY,
+    WELCOME, LOGIN, PARENT_SIGNUP, PARENT_RESET, ACCOUNT_SIGNUP, STUDENT_HOME, ALL_COURSES, MARKETPLACE, PARENT_HOME, PARENT_COURSES, PARENT_REPORT, PARENT_PROFILE, COURSE_INVOICES, ACCOUNT_IDENTITY,
     PARENT_CHILD_CREATE, PARENT_CHILD_MANAGE, PARENT_CHILD_ARCHIVED, ACCOUNT_LIFECYCLE, SUBJECT_LESSONS, LESSON, PRACTICE,
     DIAGNOSTIC, ASSESSMENTS, ASSESSMENT_ATTEMPT, ASSESSMENT_RESULTS, ASSESSMENT_REVIEW, RESOURCES,
     DOCUMENT_READER, PROFILE, PROGRESS, TUTOR, CLASSES, RECORDING_PLAYER, CERTIFICATES, LEADERBOARD
@@ -36,7 +36,7 @@ internal object StudentNavigationContract {
 
     fun studentGroupForRoute(destination: AppRoute, lastStudentNavGroup: String): String = when (destination) {
         AppRoute.STUDENT_HOME -> "today"
-        AppRoute.ALL_COURSES, AppRoute.MARKETPLACE -> "courses"
+        AppRoute.ALL_COURSES, AppRoute.MARKETPLACE, AppRoute.COURSE_INVOICES -> "courses"
         AppRoute.SUBJECT_LESSONS, AppRoute.LESSON, AppRoute.TUTOR, AppRoute.CLASSES,
         AppRoute.RECORDING_PLAYER -> "learn"
         AppRoute.PRACTICE, AppRoute.DIAGNOSTIC, AppRoute.ASSESSMENTS, AppRoute.ASSESSMENT_ATTEMPT,
@@ -54,7 +54,7 @@ internal object StudentNavigationContract {
     fun parentGroupForRoute(destination: AppRoute, selectedParentGroup: String): String = when (destination) {
         AppRoute.PARENT_PROFILE, AppRoute.ACCOUNT_IDENTITY -> "profile"
         AppRoute.PARENT_CHILD_CREATE, AppRoute.PARENT_CHILD_MANAGE, AppRoute.PARENT_CHILD_ARCHIVED -> "children"
-        AppRoute.PARENT_HOME, AppRoute.PARENT_COURSES, AppRoute.PARENT_REPORT ->
+        AppRoute.PARENT_HOME, AppRoute.PARENT_COURSES, AppRoute.PARENT_REPORT, AppRoute.COURSE_INVOICES ->
             selectedParentGroup.takeIf { it in parentGroupIds } ?: "family"
         // These routes are outside parent navigation and are only passed while the
         // top-level shell is composing around sign-in or a role transition.
