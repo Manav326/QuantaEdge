@@ -134,6 +134,8 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
             "Submitted release fingerprint",
             "Read-only inspection of the frozen release",
             "toggleReviewChapter(release,chapterId)",
+            "const cacheKey=release.release_id+':'+chapterId",
+            "reviewChapters[k12ReviewTarget.releaseId+':'+k12ReviewTarget.chapterId]",
             "reviewedContentFingerprint",
         ):
             self.assertIn(token, hrms_page)
