@@ -174,10 +174,6 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("practiceQuestionIndex = (practiceIndex + 1).coerceAtMost(incorrectQuestions.lastIndex)", android)
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class HrmQualityRecoveryContractTests(unittest.TestCase):
     def test_recovery_preview_is_available_while_authoritative_gates_remain(self):
         root = Path(__file__).resolve().parents[1]
@@ -187,3 +183,7 @@ class HrmQualityRecoveryContractTests(unittest.TestCase):
         self.assertIn("release.course_type_publish_ready === true", stepper)
         self.assertIn("preview.courseTypePublishReady !== true", stepper)
         self.assertIn("course_release_fingerprint_current(?,?,?)", (root / "services/api/src/main/java/com/quantaedge/api/PlatformInstitutionController.java").read_text(encoding="utf-8"))
+
+
+if __name__ == "__main__":
+    unittest.main()
