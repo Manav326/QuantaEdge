@@ -1327,6 +1327,7 @@ export default function MarketplaceLaunchStepper({
                   <div><span>SOURCE YEAR</span><b>{String(activeAssessmentReviewSnapshot.source_year||'Not recorded')}</b></div>
                   <div><span>SOURCE LOCATION / PAGE</span><b>{formatReviewSourceLocation(activeAssessmentReviewSnapshot.source_location)||'Not recorded'}</b></div>
                   <div><span>SOURCE PACKAGE</span><b>{String(activeAssessmentReviewSnapshot.source_id||'Not recorded')}</b></div>
+                  {activeAssessmentReviewSnapshot.source_package_sha256&&<div><span>SOURCE PACKAGE SHA-256</span><b>{String(activeAssessmentReviewSnapshot.source_package_sha256)}</b></div>}
                   {safeReviewReference(activeAssessmentReviewSnapshot.source_ref)&&<div><span>SOURCE REFERENCE</span><b><a href={safeReviewReference(activeAssessmentReviewSnapshot.source_ref)} target="_blank" rel="noreferrer">{String(activeAssessmentReviewSnapshot.source_ref)}</a></b></div>}
                   {activeAssessmentReviewSnapshot.source_note&&<div><span>IMPORT NOTE</span><b>{String(activeAssessmentReviewSnapshot.source_note)}</b></div>}
                   {(activeAssessmentReviewSnapshot.last_rejection_note||(activeAssessmentReviewStatus==='REJECTED'&&activeAssessmentReviewSnapshot.human_review_note))&&<div><span>SOURCE REVIEW FEEDBACK</span><b>{String(activeAssessmentReviewSnapshot.last_rejection_note||activeAssessmentReviewSnapshot.human_review_note)}</b></div>}
