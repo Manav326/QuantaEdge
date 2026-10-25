@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "51fa2dd8cd29ced0c58ce6d34b9e99fb48ce0e1f2fc2fd3c5044d2a558911f03",
+  "raw_analysis_sha256": "973a55c1fe8e85868c31cc04da7ed2e0bc8b26b95a46373f59285851d2127fba",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40242884307",
-      "checkpointed_at": "2026-10-25T23:43:12Z",
+      "checkpointed_at": "2026-10-25T23:48:16Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40242884307",
-      "checkpointed_at": "2026-10-25T23:43:39Z",
+      "checkpointed_at": "2026-10-25T23:48:41Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40242884307",
-      "checkpointed_at": "2026-10-25T23:44:09Z",
+      "checkpointed_at": "2026-10-25T23:49:11Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -63508,7 +63508,7 @@
           "You must have observed fallen leaves on the ground swirling\nin the air or being swept away, and trees swaying or even\nbending when a strong wind blows. Have you ever wondered\nwhy fallen leaves rise in the air or trees sway or bend? Does the\nwind exert force on fallen leaves to make them rise or on t",
           "Megha and her brother Pawan are going on a picnic. They walk\n    to the picnic spot, carrying identical items in their bags (Fig. 6.1).\n    On the way, Pawan keeps adjusting his bag, and looks\n    uncomfortable. Megha asks, \"Is there a problem with\n    your bag?\" Pawan responds, \"Yes, it is hurting ",
           "Can the shape or size of the straps really make a\n    difference? Let us try to find out.",
-          "When we carry a bag, we feel its weight because of the force of gravity acting on our shoulders. The\n    weight of the bag with narrow straps acts on a\n    smaller area of our shoulders, whereas the weight of\n    the bag with broad straps is spread out over a larger\n    area. It is due to this reaso",
+          "When we carry a bag, we feel its weight because\n    of the force of gravity acting on our shoulders. The\n    weight of the bag with narrow straps acts on a\n    smaller area of our shoulders, whereas the weight of\n    the bag with broad straps is spread out over a larger\n    area. It is due to this r",
           "At this stage, we will consider only those forces which act\n    perpendicular to the surface on which the pressure is to be computed."
         ],
         "concepts": [
@@ -63520,18 +63520,22 @@
           "thunderstorms",
           "gravity",
           "straps",
-          "force per unit area"
+          "weight",
+          "force of gravity",
+          "area of force",
+          "perpendicular to the surface",
+          "pressure to be computed"
         ],
         "context_relation": "pressure",
         "limitations": [
-          "The image does not show the actual experiment or the visual representation of the force per unit area."
+          "The image does not provide specific formulas or equations."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40242884307",
-      "checkpointed_at": "2026-10-25T23:46:10Z",
+      "checkpointed_at": "2026-10-25T23:49:54Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing pressure, winds, storms, and cyclones.",
         "visual_type": "page_with_multiple_visuals",
@@ -63539,7 +63543,7 @@
           "You must have observed fallen leaves on the ground swirling\nin the air or being swept away, and trees swaying or even\nbending when a strong wind blows. Have you ever wondered\nwhy fallen leaves rise in the air or trees sway or bend? Does the\nwind exert force on fallen leaves to make them rise or on t",
           "Megha and her brother Pawan are going on a picnic. They walk\n    to the picnic spot, carrying identical items in their bags (Fig. 6.1).\n    On the way, Pawan keeps adjusting his bag, and looks\n    uncomfortable. Megha asks, \"Is there a problem with\n    your bag?\" Pawan responds, \"Yes, it is hurting ",
           "Can the shape or size of the straps really make a\n    difference? Let us try to find out.",
-          "When we carry a bag, we feel its weight because of the force of gravity acting on our shoulders. The\n    weight of the bag with narrow straps acts on a\n    smaller area of our shoulders, whereas the weight of\n    the bag with broad straps is spread out over a larger\n    area. It is due to this reaso",
+          "When we carry a bag, we feel its weight because\n    of the force of gravity acting on our shoulders. The\n    weight of the bag with narrow straps acts on a\n    smaller area of our shoulders, whereas the weight of\n    the bag with broad straps is spread out over a larger\n    area. It is due to this r",
           "At this stage, we will consider only those forces which act\n    perpendicular to the surface on which the pressure is to be computed."
         ],
         "concepts": [
@@ -63551,11 +63555,15 @@
           "thunderstorms",
           "gravity",
           "straps",
-          "force per unit area"
+          "weight",
+          "force of gravity",
+          "area of force",
+          "perpendicular to the surface",
+          "pressure to be computed"
         ],
         "context_relation": "pressure",
         "limitations": [
-          "The image does not show the actual experiment or the visual representation of the force per unit area."
+          "The image does not provide specific formulas or equations."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -63932,21 +63940,59 @@
     {
       "asset_id": "19c227fd1fc13adb636a0c58",
       "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
-      "page_text_context_sha256": "f3609a74f6b9bc75917f652f29735b6712124160a390320c36e3648f81ded621",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 102,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f3609a74f6b9bc75917f652f29735b6712124160a390320c36e3648f81ded621",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40233310877",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational illustration explaining the comfort of carrying a bag with broad straps compared to narrow straps.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Broad straps reduce the pressure exerted by the bag on our shoulders as compared to narrow straps. Therefore, we feel more comfortable carrying a bag with broad straps.",
+          "Can you now understand why it feels easier to lift a water-filled bucket with a broad handle than with a narrow handle (Fig. 6.2)? Similarly, we have seen that when people carry loads like pots or vegetable baskets on their heads, they",
+          "Fig. 6.2: Buckets with broad and narrow handles"
+        ],
+        "concepts": [
+          "Comfort in carrying bags",
+          "Pressure exerted by straps",
+          "Easier lifting of buckets with broad handles",
+          "Carrying loads on the head"
+        ],
+        "context_relation": "The image is an educational illustration explaining the comfort of carrying a bag with broad straps compared to narrow straps.",
+        "limitations": [
+          "The image does not show the actual lifting of the buckets or the headcarrying of loads."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40242884307",
+      "checkpointed_at": "2026-10-25T23:52:43Z",
+      "effective_analysis": {
+        "visual_summary": "An educational illustration explaining the comfort of carrying a bag with broad straps compared to narrow straps.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Broad straps reduce the pressure exerted by the bag on our shoulders as compared to narrow straps. Therefore, we feel more comfortable carrying a bag with broad straps.",
+          "Can you now understand why it feels easier to lift a water-filled bucket with a broad handle than with a narrow handle (Fig. 6.2)? Similarly, we have seen that when people carry loads like pots or vegetable baskets on their heads, they",
+          "Fig. 6.2: Buckets with broad and narrow handles"
+        ],
+        "concepts": [
+          "Comfort in carrying bags",
+          "Pressure exerted by straps",
+          "Easier lifting of buckets with broad handles",
+          "Carrying loads on the head"
+        ],
+        "context_relation": "The image is an educational illustration explaining the comfort of carrying a bag with broad straps compared to narrow straps.",
+        "limitations": [
+          "The image does not show the actual lifting of the buckets or the headcarrying of loads."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {

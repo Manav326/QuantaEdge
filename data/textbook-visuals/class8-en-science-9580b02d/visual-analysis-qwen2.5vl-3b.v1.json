@@ -15,13 +15,13 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "aea7db4a2c358f45b70aad03",
-      "4fdef3a69f918bffeb046522"
+      "19c227fd1fc13adb636a0c58"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1294,
-    "assets_remaining": 997,
+    "assets_analyzed": 1295,
+    "assets_remaining": 996,
     "assets_completion_percent": 56.5,
-    "assets_failed": 13,
+    "assets_failed": 12,
     "assets_skipped_from_checkpoint": 1294,
     "batch_limit": 5,
     "publication_allowed": false
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40242884307",
-      "checkpointed_at": "2026-10-25T23:43:12Z"
+      "checkpointed_at": "2026-10-25T23:48:16Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40242884307",
-      "checkpointed_at": "2026-10-25T23:43:39Z"
+      "checkpointed_at": "2026-10-25T23:48:41Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40242884307",
-      "checkpointed_at": "2026-10-25T23:44:09Z"
+      "checkpointed_at": "2026-10-25T23:49:11Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -42065,7 +42065,7 @@
           "You must have observed fallen leaves on the ground swirling\nin the air or being swept away, and trees swaying or even\nbending when a strong wind blows. Have you ever wondered\nwhy fallen leaves rise in the air or trees sway or bend? Does the\nwind exert force on fallen leaves to make them rise or on t",
           "Megha and her brother Pawan are going on a picnic. They walk\n    to the picnic spot, carrying identical items in their bags (Fig. 6.1).\n    On the way, Pawan keeps adjusting his bag, and looks\n    uncomfortable. Megha asks, \"Is there a problem with\n    your bag?\" Pawan responds, \"Yes, it is hurting ",
           "Can the shape or size of the straps really make a\n    difference? Let us try to find out.",
-          "When we carry a bag, we feel its weight because of the force of gravity acting on our shoulders. The\n    weight of the bag with narrow straps acts on a\n    smaller area of our shoulders, whereas the weight of\n    the bag with broad straps is spread out over a larger\n    area. It is due to this reaso",
+          "When we carry a bag, we feel its weight because\n    of the force of gravity acting on our shoulders. The\n    weight of the bag with narrow straps acts on a\n    smaller area of our shoulders, whereas the weight of\n    the bag with broad straps is spread out over a larger\n    area. It is due to this r",
           "At this stage, we will consider only those forces which act\n    perpendicular to the surface on which the pressure is to be computed."
         ],
         "concepts": [
@@ -42077,18 +42077,22 @@
           "thunderstorms",
           "gravity",
           "straps",
-          "force per unit area"
+          "weight",
+          "force of gravity",
+          "area of force",
+          "perpendicular to the surface",
+          "pressure to be computed"
         ],
         "context_relation": "pressure",
         "limitations": [
-          "The image does not show the actual experiment or the visual representation of the force per unit area."
+          "The image does not provide specific formulas or equations."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40242884307",
-      "checkpointed_at": "2026-10-25T23:46:10Z"
+      "checkpointed_at": "2026-10-25T23:49:54Z"
     },
     {
       "asset_id": "450fc4af3dc870b080bfbe90",
@@ -42348,19 +42352,39 @@
     {
       "asset_id": "19c227fd1fc13adb636a0c58",
       "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
-      "page_text_context_sha256": "f3609a74f6b9bc75917f652f29735b6712124160a390320c36e3648f81ded621",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 102,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f3609a74f6b9bc75917f652f29735b6712124160a390320c36e3648f81ded621",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40233310877",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational illustration explaining the comfort of carrying a bag with broad straps compared to narrow straps.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Broad straps reduce the pressure exerted by the bag on our shoulders as compared to narrow straps. Therefore, we feel more comfortable carrying a bag with broad straps.",
+          "Can you now understand why it feels easier to lift a water-filled bucket with a broad handle than with a narrow handle (Fig. 6.2)? Similarly, we have seen that when people carry loads like pots or vegetable baskets on their heads, they",
+          "Fig. 6.2: Buckets with broad and narrow handles"
+        ],
+        "concepts": [
+          "Comfort in carrying bags",
+          "Pressure exerted by straps",
+          "Easier lifting of buckets with broad handles",
+          "Carrying loads on the head"
+        ],
+        "context_relation": "The image is an educational illustration explaining the comfort of carrying a bag with broad straps compared to narrow straps.",
+        "limitations": [
+          "The image does not show the actual lifting of the buckets or the headcarrying of loads."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40242884307",
+      "checkpointed_at": "2026-10-25T23:52:43Z"
     },
     {
       "asset_id": "35ff0b921f1e0b0945a8f8df",

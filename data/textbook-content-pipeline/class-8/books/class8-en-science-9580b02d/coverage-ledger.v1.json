@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
     "raw_analysis_result_rows": 1311,
-    "successful_visual_analyses": 1298,
+    "successful_visual_analyses": 1299,
     "missing_visual_analyses": 980,
-    "failed_visual_analyses": 13,
+    "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 993,
+    "unresolved_count": 992,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -48311,7 +48311,7 @@
           "You must have observed fallen leaves on the ground swirling\nin the air or being swept away, and trees swaying or even\nbending when a strong wind blows. Have you ever wondered\nwhy fallen leaves rise in the air or trees sway or bend? Does the\nwind exert force on fallen leaves to make them rise or on t",
           "Megha and her brother Pawan are going on a picnic. They walk\n    to the picnic spot, carrying identical items in their bags (Fig. 6.1).\n    On the way, Pawan keeps adjusting his bag, and looks\n    uncomfortable. Megha asks, \"Is there a problem with\n    your bag?\" Pawan responds, \"Yes, it is hurting ",
           "Can the shape or size of the straps really make a\n    difference? Let us try to find out.",
-          "When we carry a bag, we feel its weight because of the force of gravity acting on our shoulders. The\n    weight of the bag with narrow straps acts on a\n    smaller area of our shoulders, whereas the weight of\n    the bag with broad straps is spread out over a larger\n    area. It is due to this reaso",
+          "When we carry a bag, we feel its weight because\n    of the force of gravity acting on our shoulders. The\n    weight of the bag with narrow straps acts on a\n    smaller area of our shoulders, whereas the weight of\n    the bag with broad straps is spread out over a larger\n    area. It is due to this r",
           "At this stage, we will consider only those forces which act\n    perpendicular to the surface on which the pressure is to be computed."
         ],
         "concepts": [
@@ -48323,11 +48323,15 @@
           "thunderstorms",
           "gravity",
           "straps",
-          "force per unit area"
+          "weight",
+          "force of gravity",
+          "area of force",
+          "perpendicular to the surface",
+          "pressure to be computed"
         ],
         "context_relation": "pressure",
         "limitations": [
-          "The image does not show the actual experiment or the visual representation of the force per unit area."
+          "The image does not provide specific formulas or equations."
         ]
       },
       "chapter_id": null,
@@ -48593,9 +48597,27 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An educational illustration explaining the comfort of carrying a bag with broad straps compared to narrow straps.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Broad straps reduce the pressure exerted by the bag on our shoulders as compared to narrow straps. Therefore, we feel more comfortable carrying a bag with broad straps.",
+          "Can you now understand why it feels easier to lift a water-filled bucket with a broad handle than with a narrow handle (Fig. 6.2)? Similarly, we have seen that when people carry loads like pots or vegetable baskets on their heads, they",
+          "Fig. 6.2: Buckets with broad and narrow handles"
+        ],
+        "concepts": [
+          "Comfort in carrying bags",
+          "Pressure exerted by straps",
+          "Easier lifting of buckets with broad handles",
+          "Carrying loads on the head"
+        ],
+        "context_relation": "The image is an educational illustration explaining the comfort of carrying a bag with broad straps compared to narrow straps.",
+        "limitations": [
+          "The image does not show the actual lifting of the buckets or the headcarrying of loads."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
