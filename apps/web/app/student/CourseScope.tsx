@@ -18,6 +18,8 @@ export type EnrolledCourse = {
   id: number;
   course_id?: number;
   public_id?: string;
+  course_identity_public_id?: string;
+  course_key?: string;
   code?: string;
   display_name: string;
   curriculum_version?: string;
@@ -47,7 +49,9 @@ export function useStudentCourseScope(requestedCourseId: string | number | null 
   const matchesRequestedCourse = useCallback((course: EnrolledCourse) => {
     if (!hasRequestedCourse) return false;
     if (/^\d+$/.test(requestedText)) return Number(course.id || course.course_id) === Number(requestedText);
-    return String(course.public_id || '').toUpperCase() === requestedText.toUpperCase()
+    return String(course.course_identity_public_id || '').toUpperCase() === requestedText.toUpperCase()
+      || String(course.course_key || '').toUpperCase() === requestedText.toUpperCase()
+      || String(course.public_id || '').toUpperCase() === requestedText.toUpperCase()
       || String(course.code || '').toUpperCase() === requestedText.toUpperCase();
   }, [hasRequestedCourse, requestedText]);
 
@@ -227,7 +231,7 @@ export function PrimaryCoursePicker({
       <select value={courseId === null ? '' : String(courseId)} onChange={event => onChange(event.target.value)}>
         {courses.map(course => (
           <option key={course.id} value={String(course.id)}>
-            {course.display_name || course.code || 'Course'}{course.public_id ? ' · ' + course.public_id : ''}
+            {course.display_name || course.course_key || course.code || 'Course'}{course.course_key ? ' · ' + course.course_key : ''}
           </option>
         ))}
       </select>
