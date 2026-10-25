@@ -89,7 +89,7 @@ class CourseMarketplaceTenantScopeTest {
     assertTrue(catalogueSql.contains("o.hrms_published_by_staff_id is not null"));
     assertTrue(catalogueSql.contains("release.release_state='SHAREABLE'"));
     assertTrue(catalogueSql.contains("course_release_fingerprint_current(release.program_id,release.content_fingerprint::text,release.updated_at)"));
-    assertTrue(catalogueSql.contains("course_marketplace_content_type_ready(p.id)"));
+    assertTrue(catalogueSql.contains("course_marketplace_content_type_ready(release.program_id)"));
     assertTrue(catalogueSql.contains("newer_release.release_state='SHAREABLE'"));
     assertTrue(!catalogueSql.contains("not exists(select 1 from institution_membership"));
     assertTrue(List.of(catalogueArgs).contains(17L));
