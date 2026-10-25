@@ -479,6 +479,14 @@ def ensure_schema(cursor: Any) -> None:
         raise ImportErrorSafe(
             "Flyway V202 is required: course-type-aware Marketplace readiness must be available for release submission."
         )
+    if "type_registry.status <> 'ACTIVE'" not in course_type_readiness_definition:
+        raise ImportErrorSafe(
+            "Flyway V205 is required: Marketplace readiness must reject inactive course types and unsupported type/delivery-mode combinations."
+        )
+    if "p.course_type_code='ASSESSMENT'" not in course_type_readiness_definition or "p.course_type_code='K12'" not in course_type_readiness_definition:
+        raise ImportErrorSafe(
+            "Flyway V205 is required: Marketplace readiness must use the registered course type, not infer the hierarchy from legacy tables."
+        )
     if "assessment_question_snapshot_publish_ready" not in answer_gate_definition:
         raise ImportErrorSafe("Flyway V204 is required: the shared typed assessment question/answer review function is unavailable.")
     if "assessment_only_course_publish_ready" not in publish_readiness_definition:
