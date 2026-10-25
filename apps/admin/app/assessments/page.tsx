@@ -529,9 +529,9 @@ export default function AssessmentsPage(){
     let answerPayload:any;
     try {
       answerPayload=JSON.parse(importedAnswerEdits[sequenceNo]||'{}');
-      if(!answerPayload||typeof answerPayload!=='object'||Array.isArray(answerPayload))throw new Error('Answer payload must be a JSON object.');
+      if(!answerPayload||typeof answerPayload!=='object'||Array.isArray(answerPayload))throw new Error(tRef.current('admin.assessments.answerPayloadMustBeObject'));
     } catch(e) {
-      setError(e instanceof Error?'Question '+sequenceNo+': '+e.message:'Answer payload JSON is invalid.');
+      setError(tRef.current('admin.assessments.invalidQuestionAnswer',{number:sequenceNo,reason:e instanceof Error?e.message:tRef.current('admin.assessments.answerPayloadMustBeObject')}));
       return;
     }
     const reviewerNote=(importedReviewerNoteEdits[sequenceNo]||'').trim();
@@ -551,7 +551,9 @@ export default function AssessmentsPage(){
       const result=await api('/api/v1/admin/assessments/'+importedReviewId+'/package-questions/'+sequenceNo+'/review?courseId='+encodeURIComponent(courseId),{
         method:'PATCH',body:JSON.stringify(payload)
       });
-      setNotice('Question '+sequenceNo+' marked '+reviewStatus+'. '+result.approvedQuestionCount+' of '+result.questionCount+' questions approved.');
+      setNotice(tRef.current('admin.assessments.questionReviewSaved',{
+        number:sequenceNo,status:statusText(reviewStatus,t),approved:result.approvedQuestionCount,total:result.questionCount
+      }));
       const nextUnresolved=importedReviewItems.find(item=>Number(item.sequenceNo)>sequenceNo&&
         importedQuestionStatus(item.question)!=='APPROVED'&&importedQuestionStatus(item.question)!=='REJECTED')
         ||importedReviewItems.find(item=>Number(item.sequenceNo)!==sequenceNo&&
@@ -559,7 +561,7 @@ export default function AssessmentsPage(){
       await loadImportedPackageQuestions(importedReviewId,reviewStatus==='PENDING_HUMAN_REVIEW'?sequenceNo:Number(nextUnresolved?.sequenceNo||sequenceNo));
       await loadAssessments();
     } catch(e) {
-      setError(e instanceof Error?e.message:'Question review could not be saved.');
+      setError(e instanceof Error?e.message:tRef.current('admin.assessments.questionReviewSaveFailed'));
     } finally {setPackageBusy(false);}
   }
 
