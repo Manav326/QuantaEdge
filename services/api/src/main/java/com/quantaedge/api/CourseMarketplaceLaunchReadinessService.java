@@ -84,7 +84,8 @@ public class CourseMarketplaceLaunchReadinessService {
              join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
              join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
             where ps.program_id=p.id) as published_lesson_count,
-          o.id as offer_id
+          o.id as offer_id,
+          qe_current_course_release_assignment(a.id) as current_release_assignment
         from institution_course_assignment a
         join institution_course_release r on r.id=a.course_release_id
         join curriculum_program p on p.id=r.program_id
@@ -108,6 +109,9 @@ public class CourseMarketplaceLaunchReadinessService {
     add(checks,"COURSE_IDENTITY","Course has one active, type-matched source identity",
         identityContractMatches(row),
         "This course version is missing its active stable course identity or the identity source/type does not match the release. Re-create the course through the current source-owned workflow; legacy/orphan courses cannot be published.");
+    add(checks,"CURRENT_COURSE_RELEASE","Assignment points to the newest eligible release",
+        Boolean.TRUE.equals(row.get("current_release_assignment")),
+        "This assignment is not the newest eligible release for this course identity. Use the current HRMS assignment instead of creating an offer against an older release.");
     String releaseState=text(row.get("release_state"));
     boolean qualityApproved=List.of("QUALITY_APPROVED","SHAREABLE").contains(releaseState);
     add(checks,"CONTENT_QUALITY_REVIEW","HRMS content-quality review is complete",qualityApproved,
@@ -167,6 +171,7 @@ public class CourseMarketplaceLaunchReadinessService {
     result.put("contentVersionNo",number(row.get("content_version_no")));
     result.put("courseCode",text(row.get("course_code")));
     result.put("courseIdentityPublicId",text(row.get("course_identity_public_id")));
+    result.put("currentReleaseAssignment",Boolean.TRUE.equals(row.get("current_release_assignment")));
     result.put("releaseState",text(row.get("release_state")));
     result.put("institutionId",institutionScope);
     result.put("institutionName",text(row.get("institution_name")));
