@@ -49,7 +49,7 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
         self.assertIn('"COMPETITIVE"', android_type)
         self.assertIn('"ASSESSMENT"', android_type)
         self.assertIn("course_type_code", android_invoice)
-        self.assertIn("course_type_code", android_app)
+        self.assertIn("courseInvoiceRows", android_app)
         self.assertIn("/api/v1/marketplace/family/invoices", android_app)
         self.assertIn("/api/v1/marketplace/invoices", android_app)
         self.assertIn("/api/v1/marketplace/family/orders/", android_app)
