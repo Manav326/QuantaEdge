@@ -100,10 +100,8 @@ public class ParentCoursePurchaseRequestController {
       select exists(select 1 from student_program_enrollment
           where student_id=? and institution_id=? and program_id=? and status in ('ACTIVE','PAUSED'))
         or exists(select 1 from course_purchase where student_id=? and institution_id=? and course_id=?)
-        or exists(select 1 from student_course_access_grant where student_id=? and institution_id=?
-          and course_id=? and grant_reason='LEGACY_CLASS_ENROLLMENT')
-      """, Boolean.class, studentId, institutionId, courseId, studentId, institutionId, courseId,
-        studentId, institutionId, courseId);
+
+      """, Boolean.class, studentId, institutionId, courseId, studentId, institutionId, courseId);
     if (Boolean.TRUE.equals(access)) throw new IllegalArgumentException("You already have access to this course.");
 
     List<Map<String,Object>> guardians = jdbc.queryForList("""
