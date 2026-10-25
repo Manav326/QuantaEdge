@@ -32,7 +32,7 @@ public class InstitutionCourseReleaseWorkflowService {
   public Map<String,Object> submitRelease(long programId, long institutionId,
       Long actorStaffId, Long actorAdminId) {
     List<Map<String,Object>> owned=jdbc.queryForList("""
-        select p.id,p.code,p.display_name,p.status,
+        select p.id,p.code,p.display_name,p.status,p.course_type_code,
           coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=p.id),'LEARNING_CONTENT') as delivery_model
         from curriculum_program p
         where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
@@ -53,12 +53,22 @@ public class InstitutionCourseReleaseWorkflowService {
         left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
         where ps.program_id=?
         """,programId);
+    String courseType=String.valueOf(owned.getFirst().get("course_type_code"));
     String deliveryMode=String.valueOf(owned.getFirst().get("delivery_model"));
-    if("ASSESSMENT_ONLY".equals(deliveryMode)) {
-      Boolean ready=jdbc.queryForObject("select assessment_only_course_publish_ready(?)",Boolean.class,programId);
-      if(!Boolean.TRUE.equals(ready)) {
-        throw conflict("Before submitting an assessment-only release, finish human question/answer review and publish every assessment and its complete test pack. The release graph freezes once HRMS quality review starts; complete test review first, then submit the release.");
-      }
+    boolean assessmentOnly="ASSESSMENT".equals(courseType)&&"ASSESSMENT_ONLY".equals(deliveryMode);
+    boolean k12Learning="K12".equals(courseType)&&"LEARNING_CONTENT".equals(deliveryMode);
+    if(!assessmentOnly&&!k12Learning) {
+      throw conflict("This course type/delivery-mode combination is not supported for release submission. Correct the registered course type or delivery mode before submitting.");
+    }
+    Boolean typeReady=jdbc.queryForObject(
+        "select course_marketplace_content_type_ready(?)",Boolean.class,programId);
+    if(!Boolean.TRUE.equals(typeReady)) {
+      throw conflict(assessmentOnly
+          ? "Before submitting an assessment-only release, finish human question/answer review and publish every assessment and its complete test pack. The release graph freezes once HRMS quality review starts; complete test review first, then submit the release."
+          : "Every mapped active K12 subject must have published, content-reviewed lesson content before release review.");
+    }
+    if(assessmentOnly) {
+      evidence.put("courseTypeCode",courseType);
       evidence.put("deliveryMode",deliveryMode);
       evidence.put("assessmentOnlyReady",true);
     } else {
@@ -66,8 +76,10 @@ public class InstitutionCourseReleaseWorkflowService {
       long coveredSubjects=number(evidence.get("subjects_with_published_lessons"));
       if(subjectCount==0||coveredSubjects!=subjectCount||number(evidence.get("published_chapters"))==0
           ||number(evidence.get("published_lessons"))==0) {
-        throw conflict("Every mapped active subject must have published, content-reviewed lesson content before release review.");
+        throw conflict("Every mapped active K12 subject must have published, content-reviewed lesson content before release review.");
       }
+      evidence.put("courseTypeCode",courseType);
+      evidence.put("deliveryMode",deliveryMode);
     }
 
     List<Map<String,Object>> latestRows=jdbc.queryForList("""
