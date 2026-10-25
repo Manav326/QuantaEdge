@@ -60,14 +60,17 @@ public class CourseMarketplaceLaunchController {
     authorization.requirePermission(context,"QE_PLATFORM_OWNER");
     assertInstitution(institutionId);
     List<Map<String,Object>> rows=jdbc.queryForList("""
-        select r.id as release_id,r.program_id as course_id,r.release_version,r.release_state,
-          r.content_fingerprint,r.updated_at as release_updated_at,r.submitted_at,p.code as course_code,p.display_name as course_name,
+        select r.id as release_id,r.program_id as course_id,r.release_version,r.release_state,p.content_version_no,
+          identity.public_id::text as course_identity_public_id,
+          r.content_fingerprint,r.updated_at as release_updated_at,r.submitted_at,
+          coalesce(identity.stable_course_key,p.code) as course_code,p.display_name as course_name,
           p.course_type_code,t.id as source_institution_id,t.tenant_code as source_institution_code,
           t.display_name as source_institution_name,
           coalesce((select mode.delivery_mode from curriculum_program_delivery_mode mode where mode.program_id=p.id),
                    'LEARNING_CONTENT') as delivery_mode
         from institution_course_release r
         join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        left join institution_course_identity identity on identity.id=p.course_identity_id
         join institution_tenant t on t.id=r.source_institution_id and t.status='ACTIVE'
         where r.id=? and r.source_institution_id=? and r.release_state='IN_QUALITY_REVIEW'
         """,releaseId,institutionId);
@@ -338,12 +341,14 @@ public class CourseMarketplaceLaunchController {
       if(Boolean.TRUE.equals(item.get("ready"))) readyCount++;
     }
     List<Map<String,Object>> availableReleases=jdbc.queryForList("""
-        select r.id as release_id,r.program_id as course_id,r.release_version,r.content_fingerprint,
-          r.updated_at as release_updated_at,p.code as course_code,p.display_name as course_name,
+        select r.id as release_id,r.program_id as course_id,r.release_version,p.content_version_no,
+          r.content_fingerprint,r.updated_at as release_updated_at,
+          coalesce(identity.stable_course_key,p.code) as course_code,p.display_name as course_name,
           source.id as source_institution_id,source.tenant_code as source_institution_code,
           source.display_name as source_institution_name
         from institution_course_release r
         join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        left join institution_course_identity identity on identity.id=p.course_identity_id
         join institution_tenant source on source.id=r.source_institution_id and source.status='ACTIVE'
         where r.release_state='SHAREABLE' and r.source_institution_id<>?
           and course_marketplace_content_type_ready(p.id)
@@ -368,8 +373,10 @@ public class CourseMarketplaceLaunchController {
           number(release.get("course_id")),text(release.get("content_fingerprint")),release.get("release_updated_at")));
     }
     List<Map<String,Object>> qualityReviewItems=jdbc.queryForList("""
-        select r.id as release_id,r.program_id as course_id,r.release_version,r.release_state,
-          r.content_fingerprint,r.updated_at as release_updated_at,r.submitted_at,p.code as course_code,p.display_name as course_name,
+        select r.id as release_id,r.program_id as course_id,r.release_version,r.release_state,p.content_version_no,
+          identity.public_id::text as course_identity_public_id,
+          r.content_fingerprint,r.updated_at as release_updated_at,r.submitted_at,
+          coalesce(identity.stable_course_key,p.code) as course_code,p.display_name as course_name,
           p.course_type_code,
           coalesce((select mode.delivery_mode from curriculum_program_delivery_mode mode where mode.program_id=p.id),
                    'LEARNING_CONTENT') as delivery_mode,
@@ -384,6 +391,7 @@ public class CourseMarketplaceLaunchController {
           count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
         from institution_course_release r
         join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        left join institution_course_identity identity on identity.id=p.course_identity_id
         join institution_tenant t on t.id=r.source_institution_id and t.status='ACTIVE'
         left join curriculum_program_subject ps on ps.program_id=p.id
         left join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
@@ -392,7 +400,8 @@ public class CourseMarketplaceLaunchController {
         left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
         where r.source_institution_id=? and r.release_state='IN_QUALITY_REVIEW'
         group by r.id,r.program_id,r.release_version,r.release_state,r.content_fingerprint,r.updated_at,r.submitted_at,
-          p.id,p.code,p.display_name,p.course_type_code,t.id,t.tenant_code,t.display_name
+          p.id,p.code,p.display_name,p.course_type_code,p.content_version_no,
+          identity.public_id,identity.stable_course_key,t.id,t.tenant_code,t.display_name
         order by r.submitted_at,r.id
         """,institutionId);
     for(Map<String,Object> release:qualityReviewItems) {
