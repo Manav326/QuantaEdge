@@ -201,6 +201,7 @@ public class CourseMarketplaceLaunchReadinessService {
           t.display_name as institution_name,t.status as institution_status,
           a.status as assignment_status,r.release_state,r.content_fingerprint,r.updated_at as release_updated_at,
           p.status as course_status,p.code as course_code,p.display_name as course_name,p.course_type_code,
+          identity.public_id::text as course_identity_public_id,
           course_marketplace_content_type_ready(p.id) as course_type_publish_ready,
           coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=p.id),'LEARNING_CONTENT') as delivery_mode,
           (select count(distinct ps.subject_id)
@@ -236,6 +237,7 @@ public class CourseMarketplaceLaunchReadinessService {
         join institution_course_assignment a on a.id=o.assignment_id and a.institution_id=o.institution_id
         join institution_course_release r on r.id=o.course_release_id and r.program_id=o.course_id
         join curriculum_program p on p.id=o.course_id
+        left join institution_course_identity identity on identity.id=p.course_identity_id
         where o.id=?
         """, offerId);
     if (rows.isEmpty()) throw new IllegalArgumentException("The marketplace offer was not found.");
@@ -348,7 +350,9 @@ public class CourseMarketplaceLaunchReadinessService {
     result.put("institutionId",institutionId);
     result.put("institutionName",text(offer.get("institution_name")));
     result.put("courseId",courseId);
+    result.put("courseCode",text(offer.get("course_code")));
     result.put("courseName",courseName);
+    result.put("courseIdentityPublicId",text(offer.get("course_identity_public_id")));
     result.put("listingTitle",courseName);
     result.put("description",text(offer.get("description")));
     result.put("offerStatus",text(offer.get("offer_status")));
