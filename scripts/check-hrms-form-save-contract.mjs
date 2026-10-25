@@ -74,11 +74,11 @@ assert.ok(institutions.includes('!profileChanged') && institutions.includes('!br
   'Institution profile, branding and billing must disable unchanged saves.');
 assert.ok(institutions.includes("Number(billing.unitPriceRupees)!==(Number(detail?.unit_price_paise||0)/100)"),
   'Equivalent rupee values must not be treated as a changed billing contract.');
-assert.ok(institutions.includes('Course release access') &&
+assert.ok(institutions.includes('<h3>Courses</h3>') &&
   institutions.includes("onClick={()=>setTab('marketplace')}") &&
   !institutions.includes("'/courses/'+course.id") &&
   !institutions.includes('saveCourseAuthorisation'),
-  'Institution settings must show release-scoped access and route assignment changes through Marketplace launch instead of the retired program-level entitlement route.');
+  'Institution settings must show the canonical course list and route assignment changes through Marketplace launch instead of the retired program-level entitlement route.');
 const qa = people('qa/page.tsx');
 assert.ok(qa.includes('idempotencyKey.trim()') && qa.includes('people.qa.installSuccess'),
   'QA installs must keep their server-backed idempotency key and explicit install outcome.');
