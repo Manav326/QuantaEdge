@@ -612,12 +612,14 @@ public class CourseMarketplaceLaunchController {
       throw conflict("Course is not ready for an offer draft. Resolve the following first: "+String.join(" ",contentBlockers));
 
     List<Map<String,Object>> existing=jdbc.queryForList("""
-        select id,status from institution_marketplace_offer
+        select id,status,obsolete_at from institution_marketplace_offer
         where institution_id=? and assignment_id=? for update
         """,institutionId,assignmentId);
     long offerId;
     String oldStatus=existing.isEmpty()?"":text(existing.getFirst().get("status"));
-    if(!existing.isEmpty()&&!List.of("DRAFT","REJECTED","ARCHIVED").contains(oldStatus))
+    if("ARCHIVED".equals(oldStatus) || (!existing.isEmpty() && existing.getFirst().get("obsolete_at")!=null))
+      throw conflict("This listing revision is archived and cannot be reactivated. Create a new source-owned course release, complete HRMS review and then configure its listing.");
+    if(!existing.isEmpty()&&!List.of("DRAFT","REJECTED").contains(oldStatus))
       throw conflict("This offer is already "+oldStatus+". Use its review/publish steps instead of replacing its terms.");
     if(existing.isEmpty()) {
       offerId=jdbc.queryForObject("""
@@ -639,7 +641,7 @@ public class CourseMarketplaceLaunchController {
             rejected_by_admin_id=null,rejected_at=null,rejection_reason=null,
             updated_by_admin_id=null,updated_at=now()
           where id=? and institution_id=? and assignment_id=?
-            and status in ('DRAFT','REJECTED','ARCHIVED')
+            and status in ('DRAFT','REJECTED')
           """,title,description,pricePaise,currency,offerId,institutionId,assignmentId);
     }
     record(institutionId,number(assignment.get("release_id")),assignmentId,offerId,
