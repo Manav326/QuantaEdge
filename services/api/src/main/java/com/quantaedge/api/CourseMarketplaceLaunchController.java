@@ -693,6 +693,7 @@ public class CourseMarketplaceLaunchController {
     long assignmentId=number(row.get("assignment_id"));
     long releaseId=number(row.get("course_release_id"));
     String next;
+    Map<String,Object> archiveChanges=Map.of();
     switch(action) {
       case "SUBMIT" -> {
         if(!List.of("DRAFT","REJECTED").contains(oldStatus))
@@ -750,7 +751,6 @@ public class CourseMarketplaceLaunchController {
         next="DRAFT";
       }
       case "ARCHIVE" -> {
-        if("ARCHIVED".equals(oldStatus)) return Map.of("updated",true,"offerId",offerId,"status","ARCHIVED");
         Boolean hasOpenOrder=jdbc.queryForObject("""
             select exists(select 1 from course_payment_order
               where institution_id=?
@@ -776,11 +776,14 @@ public class CourseMarketplaceLaunchController {
         if(Boolean.TRUE.equals(hasReservedDiscount)) {
           throw conflict("Release or redeem reserved discount uses before archiving this offer. Reservation and redemption history will remain intact.");
         }
-        jdbc.update("""
-            update institution_marketplace_offer set status='ARCHIVED',
-              updated_by_admin_id=null,updated_at=now()
-            where id=? and institution_id=? and status=?
-            """,offerId,institutionId,oldStatus);
+        if(!"ARCHIVED".equals(oldStatus)) {
+          jdbc.update("""
+              update institution_marketplace_offer set status='ARCHIVED',
+                updated_by_admin_id=null,updated_at=now()
+              where id=? and institution_id=? and status=?
+              """,offerId,institutionId,oldStatus);
+        }
+        archiveChanges=retireOfferFinancialConfiguration(offerId,context.staffId());
         next="ARCHIVED";
       }
       default -> throw new IllegalArgumentException("Unsupported Marketplace launch transition.");
@@ -789,12 +792,15 @@ public class CourseMarketplaceLaunchController {
     details.put("from",oldStatus);details.put("to",next);details.put("action",action);
     details.put("pricePaise",number(row.get("price_paise")));details.put("currency",text(row.get("currency")));
     if(reason!=null)details.put("reason",reason);
+    details.putAll(archiveChanges);
     record(institutionId,releaseId,assignmentId,offerId,
         switch(action) {
           case "SUBMIT" -> "OFFER_SUBMITTED";
           case "APPROVE" -> "OFFER_APPROVED";
           case "PUBLISH" -> "OFFER_PUBLISHED";
           case "RETURN_TO_DRAFT" -> "OFFER_RETURNED_TO_DRAFT";
+          case "ARCHIVE" -> "ARCHIVED".equals(oldStatus)
+              ? "STALE_FINANCIAL_CONFIGURATION_RETIRED" : "OFFER_ARCHIVED";
           default -> "OFFER_ARCHIVED";
         },context.staffId(),details);
     return Map.of("updated",true,"offerId",offerId,"status",next,
@@ -813,9 +819,18 @@ public class CourseMarketplaceLaunchController {
         from institution_marketplace_offer stale
         join curriculum_program stale_program on stale_program.id=stale.course_id
         join curriculum_program current_program on current_program.id=?
-        where stale.institution_id=? and stale.id<>? and stale.status<>'ARCHIVED'
+        where stale.institution_id=? and stale.id<>?
           and coalesce(stale_program.course_identity_id,-stale_program.id)
               =coalesce(current_program.course_identity_id,-current_program.id)
+          and (
+            stale.status<>'ARCHIVED'
+            or exists(select 1 from course_tax_profile tp where tp.institution_offer_id=stale.id
+              and tp.status in ('DRAFT','PENDING_APPROVAL','APPROVED'))
+            or exists(select 1 from revenue_share_policy rp where rp.institution_offer_id=stale.id
+              and rp.status in ('DRAFT','PENDING_APPROVAL','APPROVED'))
+            or exists(select 1 from course_discount_offer d where d.institution_offer_id=stale.id
+              and d.status in ('DRAFT','PENDING_APPROVAL','APPROVED'))
+          )
           and not exists (
             select 1 from course_payment_order pending_order
             where pending_order.institution_id=stale.institution_id
@@ -844,29 +859,36 @@ public class CourseMarketplaceLaunchController {
           update institution_marketplace_offer set status='ARCHIVED',updated_by_admin_id=null,updated_at=now()
           where id=? and institution_id=? and status<>'ARCHIVED'
           """,staleOfferId,institutionId);
-      if(changed==1) {
-        // Retire obsolete offer-specific configuration without deleting its approved history.
-        int taxProfilesRetired=jdbc.update("""
-            update course_tax_profile set status='RETIRED'
-            where institution_offer_id=? and status in ('DRAFT','PENDING_APPROVAL','APPROVED')
-            """,staleOfferId);
-        int sharePoliciesRetired=jdbc.update("""
-            update revenue_share_policy set status='RETIRED'
-            where institution_offer_id=? and status in ('DRAFT','PENDING_APPROVAL','APPROVED')
-            """,staleOfferId);
-        int discountsRetired=jdbc.update("""
-            update course_discount_offer set status='RETIRED',retired_by_staff_id=?,retired_at=now(),updated_at=now()
-            where institution_offer_id=? and status in ('DRAFT','PENDING_APPROVAL','APPROVED')
-            """,staffId,staleOfferId);
+      if(changed==1 || "ARCHIVED".equals(previousStatus)) {
+        Map<String,Object> retired=retireOfferFinancialConfiguration(staleOfferId,staffId);
+        Map<String,Object> details=new LinkedHashMap<>(retired);
+        details.put("reason","SUPERSEDED_OFFER_REPLACED");
+        details.put("previousStatus",previousStatus);
+        details.put("replacedByOfferId",currentOfferId);
         record(institutionId,number(stale.get("course_release_id")),number(stale.get("assignment_id")),staleOfferId,
-            "OFFER_ARCHIVED",staffId,
-            Map.of("reason","SUPERSEDED_OFFER_REPLACED","previousStatus",previousStatus,
-              "replacedByOfferId",currentOfferId,
-              "retiredTaxProfiles",taxProfilesRetired,
-              "retiredSharePolicies",sharePoliciesRetired,
-              "retiredDiscountOffers",discountsRetired));
+            changed==1?"OFFER_ARCHIVED":"STALE_FINANCIAL_CONFIGURATION_RETIRED",staffId,details);
       }
     }
+  }
+
+  private Map<String,Object> retireOfferFinancialConfiguration(long offerId,long staffId) {
+    int taxProfilesRetired=jdbc.update("""
+        update course_tax_profile set status='RETIRED'
+        where institution_offer_id=? and status in ('DRAFT','PENDING_APPROVAL','APPROVED')
+        """,offerId);
+    int sharePoliciesRetired=jdbc.update("""
+        update revenue_share_policy set status='RETIRED'
+        where institution_offer_id=? and status in ('DRAFT','PENDING_APPROVAL','APPROVED')
+        """,offerId);
+    int discountsRetired=jdbc.update("""
+        update course_discount_offer set status='RETIRED',retired_by_staff_id=?,retired_at=now(),updated_at=now()
+        where institution_offer_id=? and status in ('DRAFT','PENDING_APPROVAL','APPROVED')
+        """,staffId,offerId);
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("retiredTaxProfiles",taxProfilesRetired);
+    result.put("retiredSharePolicies",sharePoliciesRetired);
+    result.put("retiredDiscountOffers",discountsRetired);
+    return result;
   }
 
   private Map<String,Object> lockAssignment(long institutionId,long assignmentId) {
