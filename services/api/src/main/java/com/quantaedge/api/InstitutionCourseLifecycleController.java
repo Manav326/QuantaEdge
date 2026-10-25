@@ -55,15 +55,32 @@ public class InstitutionCourseLifecycleController {
   public List<Map<String,Object>> courses(HttpServletRequest request) {
     InstitutionAuthService.InstitutionPrincipal principal=requirePrincipal(request);
     List<Map<String,Object>> rows=jdbc.queryForList("""
-        select a.id as assignment_id,a.assignment_source,a.status as assignment_status,
-          r.id as release_id,r.release_version,r.release_state,r.legacy_migration,
-          r.quality_reviewed_at,r.quality_review_notes,r.origin_approved_at,
-          p.id as course_id,p.public_id,p.code as course_code,p.display_name,p.curriculum_version,p.class_id
-        from institution_course_assignment a
-        join institution_course_release r on r.id=a.course_release_id
-        join curriculum_program p on p.id=r.program_id
-        where a.institution_id=? and a.status='ASSIGNED'
-        order by p.display_name,p.id,r.release_version desc,a.id
+        with ranked_assignments as (
+          select a.id as assignment_id,a.assignment_source,a.status as assignment_status,
+            r.id as release_id,r.release_version,r.release_state,r.legacy_migration,
+            r.quality_reviewed_at,r.quality_review_notes,r.origin_approved_at,
+            p.id as course_id,p.public_id,p.display_name,p.curriculum_version,p.class_id,
+            p.content_version_no,p.course_identity_id,identity.public_id as course_identity_public_id,
+            coalesce(identity.stable_course_key,p.code) as course_code,
+            row_number() over (
+              partition by coalesce(p.course_identity_id,-p.id)
+              order by p.content_version_no desc,r.release_version desc,r.id desc,
+                a.assigned_at desc,a.id desc
+            ) as identity_rank
+          from institution_course_assignment a
+          join institution_course_release r on r.id=a.course_release_id
+          join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+          left join institution_course_identity identity on identity.id=p.course_identity_id
+          where a.institution_id=? and a.status='ASSIGNED'
+            and (a.assignment_source<>'ORIGIN' or r.release_state='SHAREABLE')
+        )
+        select assignment_id,assignment_source,assignment_status,release_id,release_version,release_state,
+          legacy_migration,quality_reviewed_at,quality_review_notes,origin_approved_at,course_id,public_id,
+          course_identity_public_id,course_identity_id,course_code,display_name,curriculum_version,class_id,
+          content_version_no
+        from ranked_assignments
+        where identity_rank=1
+        order by display_name,course_code
         """,principal.institutionId());
     for(Map<String,Object> row:rows) {
       long courseId=((Number)row.get("course_id")).longValue();
@@ -171,17 +188,33 @@ public class InstitutionCourseLifecycleController {
   public List<Map<String,Object>> courseAssignments(HttpServletRequest request) {
     InstitutionAuthService.InstitutionPrincipal principal=requirePrincipal(request);
     return jdbc.queryForList("""
-        select a.id as assignment_id,a.assignment_source,a.status as assignment_status,
-          a.course_release_id as release_id,r.source_institution_id,r.release_version,r.release_state,
-          p.id as course_id,p.public_id,p.code as course_code,p.display_name,p.curriculum_version,
-          o.id as offer_id,o.status as offer_status,o.price_paise,o.currency,o.title_override,o.description,
-          o.approved_at,o.published_at
-        from institution_course_assignment a
-        join institution_course_release r on r.id=a.course_release_id and r.release_state='SHAREABLE'
-        join curriculum_program p on p.id=r.program_id and p.status='ACTIVE'
-        left join institution_marketplace_offer o on o.assignment_id=a.id and o.institution_id=a.institution_id
-        where a.institution_id=? and a.status='ASSIGNED'
-        order by p.display_name,p.id,r.release_version desc
+        with ranked_assignments as (
+          select a.id as assignment_id,a.assignment_source,a.status as assignment_status,
+            a.course_release_id as release_id,r.source_institution_id,r.release_version,r.release_state,
+            p.id as course_id,p.public_id,p.display_name,p.curriculum_version,p.content_version_no,
+            p.course_identity_id,identity.public_id as course_identity_public_id,
+            coalesce(identity.stable_course_key,p.code) as course_code,
+            o.id as offer_id,o.status as offer_status,o.price_paise,o.currency,o.title_override,o.description,
+            o.approved_at,o.published_at,
+            row_number() over (
+              partition by coalesce(p.course_identity_id,-p.id)
+              order by p.content_version_no desc,r.release_version desc,r.id desc,
+                a.assigned_at desc,a.id desc
+            ) as identity_rank
+          from institution_course_assignment a
+          join institution_course_release r on r.id=a.course_release_id and r.release_state='SHAREABLE'
+          join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+          left join institution_course_identity identity on identity.id=p.course_identity_id
+          left join institution_marketplace_offer o on o.assignment_id=a.id and o.institution_id=a.institution_id
+          where a.institution_id=? and a.status='ASSIGNED'
+        )
+        select assignment_id,assignment_source,assignment_status,release_id,source_institution_id,
+          release_version,release_state,course_id,public_id,course_identity_public_id,course_identity_id,
+          course_code,display_name,curriculum_version,content_version_no,offer_id,offer_status,
+          price_paise,currency,title_override,description,approved_at,published_at
+        from ranked_assignments
+        where identity_rank=1
+        order by display_name,course_code
         """,principal.institutionId());
   }
 
