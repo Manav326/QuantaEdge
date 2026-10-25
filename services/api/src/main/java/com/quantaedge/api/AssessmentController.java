@@ -873,7 +873,7 @@ public class AssessmentController {
       snapshot.put("source_kind","PORTABLE_PACKAGE");
       Object paperTitle=source.get("paper_title");
       Object examName=source.get("exam_name");
-      snapshot.put("source_title",paperTitle instanceof String title&&!title.isBlank()?title:(examName==null?"":examName));
+      snapshot.put("source_title",paperTitle instanceof String paperTitleText&&!paperTitleText.isBlank()?paperTitleText:(examName==null?"":examName));
       snapshot.put("source_ref",source.getOrDefault("source_url",""));
       snapshot.put("source_year",source.getOrDefault("cycle",""));
       snapshot.put("source_id",packageId);
