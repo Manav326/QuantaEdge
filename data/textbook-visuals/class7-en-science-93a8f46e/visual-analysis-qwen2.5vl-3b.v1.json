@@ -11,16 +11,16 @@
     "assets_selected": 2245,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "9459107ed06b531106e820d7",
-      "03718ba2359975b98bdebc1b",
-      "25477d9d165b80a701e0e7dd",
-      "5ee56b21f0830e88558f6ff0",
-      "4b1298747dc1ec978a226ae5"
+      "647c2218dab5482dd1c1758e",
+      "c78b8a2183ff5514a758b8e7",
+      "76bfba5e8fad9be9e6a0a921",
+      "a71fe3c974fe7e0983f4f7d8",
+      "10c024aaf8eff93eef758797"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2240,
-    "assets_remaining": 5248,
-    "assets_completion_percent": 29.9,
+    "assets_analyzed": 2244,
+    "assets_remaining": 5244,
+    "assets_completion_percent": 30.0,
     "assets_failed": 36,
     "assets_skipped_from_checkpoint": 2240,
     "batch_limit": 5,
@@ -81917,7 +81917,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40123281939",
+      "run_id": "40174921246",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -84625,6 +84625,191 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40123281939",
       "checkpointed_at": "2026-10-24T21:26:43Z"
+    },
+    {
+      "asset_id": "c78b8a2183ff5514a758b8e7",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 70,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "99164189d212906e693acf4173dfd96e26c4ac89a9d93bc77611637895b192a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An experiment involving iron nails in different environments.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "What can you conclude from this experiment?",
+          "It is observed in glass bottles A and B that the iron nails do not show any brown deposits.",
+          "What does this observation indicate?",
+          "This indicates that brown deposits or discolouration on the iron nails do not develop when the iron nail is kept in dry air alone (bottle A) or water alone (bottle B).",
+          "However, in glass bottle C, the iron nail shows the presence of brown deposits."
+        ],
+        "concepts": [
+          "Iron nails",
+          "Brown deposits",
+          "Dry air",
+          "Water",
+          "Experiment"
+        ],
+        "context_relation": "The experiment aims to determine the effect of different environments on the formation of brown deposits on iron nails.",
+        "limitations": [
+          "The experiment does not specify the duration of the experiment.",
+          "The experiment does not specify the temperature or humidity levels in the environments."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40174921246",
+      "checkpointed_at": "2026-10-25T10:25:25Z"
+    },
+    {
+      "asset_id": "76bfba5e8fad9be9e6a0a921",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 70,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "99164189d212906e693acf4173dfd96e26c4ac89a9d93bc77611637895b192a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An experiment involving iron nails in different environments.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "What can you conclude from this experiment?",
+          "It is observed in glass bottles A and B that the iron nails do not show any brown deposits.",
+          "What does this observation indicate?",
+          "This indicates that brown deposits or discolouration on the iron nails do not develop when the iron nail is kept in dry air alone (bottle A) or water alone (bottle B). However, in glass bottle C, the iron nail shows the presence of brown deposits."
+        ],
+        "concepts": [
+          "Iron nails",
+          "Brown deposits",
+          "Dry air",
+          "Water",
+          "Experiment"
+        ],
+        "context_relation": "Observation and conclusion",
+        "limitations": [
+          "The experiment does not specify the duration of the experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40174921246",
+      "checkpointed_at": "2026-10-25T10:25:57Z"
+    },
+    {
+      "asset_id": "a71fe3c974fe7e0983f4f7d8",
+      "asset_sha256": "fc55f7c8754599549dbbcac4fb87679706ce9249c7f97f584fbaa78d175d01db",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 70,
+      "asset_path": "page-0070.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "99164189d212906e693acf4173dfd96e26c4ac89a9d93bc77611637895b192a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram of an iron pillar with a question about rusting.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The Iron Pillar (Delhi)",
+          "FASCINATING FACTS",
+          "The wonder of ancient Indian metallurgy!",
+          "The Iron Pillar of Delhi was made in the time of Chandragupta II more than 1600 years ago. It is about 8 metres high and weighs more than 6000 kilograms. What is interesting about this iron pillar is that despite all these years of facing winds, rainfall, and intense weather, it has barely any rust.",
+          "In other words, it has been made in a way that it resists rusting. This tells us about the skills that were developed in metal technology in India."
+        ],
+        "concepts": [
+          "rusting",
+          "corrosion",
+          "metal technology",
+          "Indian metallurgy"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing the rusting of iron and its prevention.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the conclusions drawn from it."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40174921246",
+      "checkpointed_at": "2026-10-25T10:29:58Z"
+    },
+    {
+      "asset_id": "10c024aaf8eff93eef758797",
+      "asset_sha256": "23bc697c2cfd81232ae0a333d59eee671d679253ec3924a1c81ceb2157af6220",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/23bc697c2cfd81232ae0a333d59eee671d679253ec3924a1c81ceb2157af6220.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A paper airplane in mid-flight, with a trail of smoke or vapor behind it.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "51",
+          "4.3 Eﬀect of Air and Water on Other",
+          "Metals",
+          "Activity 4.6: Let us investigate (demonstration activity)",
+          "Non-metals",
+          "The teacher may demonstrate this activity.",
+          "Caution— It is advisable",
+          "to",
+          "use",
+          "a",
+          "safe",
+          "environment",
+          "when",
+          "conducting",
+          "such",
+          "activities.",
+          "Ensure",
+          "that",
+          "the",
+          "activity",
+          "is",
+          "conducted",
+          "in",
+          "a",
+          "controlled",
+          "environment.",
+          "Use",
+          "appropriate",
+          "safety",
+          "equipment"
+        ],
+        "concepts": [
+          "Effect of Air and Water on Other Metals",
+          "Demonstration Activity",
+          "Non-metals",
+          "Safe Environment",
+          "Safety Equipment",
+          "Safety Guidelines"
+        ],
+        "context_relation": "The image is a visual representation of the activity described in the text.",
+        "limitations": [
+          "The image does not provide specific details about the activity or the demonstration."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40174921246",
+      "checkpointed_at": "2026-10-25T10:32:11Z"
     }
   ]
 }
