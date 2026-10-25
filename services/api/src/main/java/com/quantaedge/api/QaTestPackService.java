@@ -929,12 +929,12 @@ public class QaTestPackService {
     List<Long> ids = jdbc.queryForList("""
       select p.id
       from curriculum_program p
-      join institution_course_release r on r.program_id=p.id and r.source_institution_id=?
-      join institution_course_assignment a on a.course_release_id=r.id and a.institution_id=? and a.status='ASSIGNED'
-      join institution_course_entitlement e on e.program_id=p.id and e.institution_id=? and e.status='ACTIVE'
+      join institution_course_identity identity
+        on identity.id=p.course_identity_id and identity.source_institution_id=? and identity.status='ACTIVE'
+       and identity.course_type_code=p.course_type_code
       where p.code=? and p.curriculum_version='CURRENT' and p.status='ACTIVE'
-      order by p.id limit 1
-      """, Long.class, quantaEdgeId, quantaEdgeId, quantaEdgeId, courseCode);
+      order by p.content_version_no desc,p.id desc limit 1
+      """, Long.class, quantaEdgeId, courseCode);
     if (ids.isEmpty()) throw new IllegalStateException("QuantaEdge does not own an active assigned " + courseCode + " course.");
     return ids.getFirst();
   }
@@ -944,12 +944,11 @@ public class QaTestPackService {
     Long owned = jdbc.queryForObject("""
       select count(distinct p.id)
       from curriculum_program p
-      join institution_course_release r on r.program_id=p.id and r.source_institution_id=?
-      join institution_course_assignment a on a.course_release_id=r.id and a.institution_id=? and a.status='ASSIGNED'
-      join institution_course_entitlement e on e.program_id=p.id and e.institution_id=? and e.status='ACTIVE'
+      join institution_course_identity identity
+        on identity.id=p.course_identity_id and identity.source_institution_id=?
+       and identity.status='ACTIVE' and identity.course_type_code=p.course_type_code
       where p.id in (?,?,?) and p.status='ACTIVE'
-      """, Long.class, quantaEdgeId, quantaEdgeId, quantaEdgeId,
-        class6ProgramId, class7ProgramId, class8ProgramId);
+      """, Long.class, quantaEdgeId, class6ProgramId, class7ProgramId, class8ProgramId);
     if (owned == null || owned != 3L) throw new IllegalStateException("QuantaEdge must remain the active owner of Classes 6, 7 and 8.");
   }
 
