@@ -639,7 +639,9 @@ public class PlatformInstitutionController {
     return jdbc.queryForList("""
         select r.id as release_id,r.program_id as course_id,r.release_version,r.release_state,
           r.content_fingerprint,r.submitted_at,p.public_id,p.code as course_code,p.display_name,
+          p.course_type_code,
           coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=p.id),'LEARNING_CONTENT') as delivery_model,
+          course_marketplace_content_type_ready(p.id) as course_type_publish_ready,
           (select count(*) from assessment da where da.course_id=p.id and da.assessment_type='PREVIOUS_YEAR_PAPER' and da.status='DRAFT') as draft_assessment_count,
           (select count(*) from assessment da join assessment_question dqa on dqa.assessment_id=da.id
             where da.course_id=p.id and da.assessment_type='PREVIOUS_YEAR_PAPER' and da.status='DRAFT') as draft_assessment_question_count,
