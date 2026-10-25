@@ -88,6 +88,7 @@ public class StudentProgramController {
                and published_release.program_id=offer.course_id
               where offer.institution_id=? and offer.course_id=p.id
                 and offer.status='PUBLISHED'
+                and qe_marketplace_offer_publicly_sellable(offer.id)
                 and offer.hrms_published_by_staff_id is not null
                 and published_release.release_state='SHAREABLE'
                 and course_marketplace_content_type_ready(published_release.program_id)
@@ -264,6 +265,7 @@ public class StudentProgramController {
             on release.id=offer.course_release_id and release.program_id=offer.course_id
           where offer.institution_id=? and offer.course_id=? and offer.status='PUBLISHED'
             and offer.price_paise=0 and offer.currency='INR'
+            and qe_marketplace_offer_publicly_sellable(offer.id)
         )
       """, Boolean.class, context.studentId(), courseId, institutionId,
           context.studentId(), courseId, institutionId,
