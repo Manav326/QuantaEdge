@@ -210,6 +210,7 @@ export default function AssessmentsPage(){
   const [packagePreview,setPackagePreview]=useState<any|null>(null);
   const [packageBusy,setPackageBusy]=useState(false);
   const [importedReviewId,setImportedReviewId]=useState<number|null>(null);
+  const requestedReviewRef=useRef('');
   const [importedReviewStatus,setImportedReviewStatus]=useState('DRAFT');
   const [importedReviewItems,setImportedReviewItems]=useState<Array<{sequenceNo:number;maxMarks:number|string;question:any}>>([]);
   const [importedAnswerEdits,setImportedAnswerEdits]=useState<Record<number,string>>({});
@@ -330,7 +331,7 @@ export default function AssessmentsPage(){
       setError(e instanceof Error?e.message:'The assessment package could not be validated.');
     } finally {setPackageBusy(false);}
   }
-  async function loadImportedPackageQuestions(assessmentId:number) {
+  const loadImportedPackageQuestions=useCallback(async(assessmentId:number)=>{
     if(!courseId)return;
     const data=await api('/api/v1/admin/assessments/'+assessmentId+'/package-questions?courseId='+encodeURIComponent(courseId));
     const items=Array.isArray(data?.items)?data.items:[];
@@ -342,7 +343,28 @@ export default function AssessmentsPage(){
       explanationValues[sequence]=String(item.question?.explanation||'');
     });
     setImportedAnswerEdits(answerValues);setImportedExplanationEdits(explanationValues);
-  }
+  },[courseId]);
+
+  useEffect(()=>{
+    const requestedId=String(new URLSearchParams(window.location.search).get('assessmentId')||'').trim();
+    if(!requestedId||!courseId||loading)return;
+    const requestKey=courseId+':'+requestedId;
+    if(requestedReviewRef.current===requestKey)return;
+    const assessmentId=Number(requestedId);
+    if(!Number.isSafeInteger(assessmentId)||assessmentId<=0){
+      requestedReviewRef.current=requestKey;
+      setError('The requested assessment ID is invalid.');
+      return;
+    }
+    // The review endpoint revalidates that this imported test belongs to the assigned, source-owned course.
+    // Do not rely on the regular teacher catalogue, which filters items by grading assignment.
+    requestedReviewRef.current=requestKey;
+    setPackageBusy(true);setError('');setNotice('');
+    void loadImportedPackageQuestions(assessmentId)
+      .catch(cause=>setError(cause instanceof Error?cause.message:'The selected test questions could not be loaded.'))
+      .finally(()=>setPackageBusy(false));
+  },[courseId,loading,loadImportedPackageQuestions]);
+
   async function importPackageDraft() {
     if(!courseId){setError('Choose a source course before importing.');return;}
     const pkg=packageObject||parsePackageDraft();if(!pkg)return;
