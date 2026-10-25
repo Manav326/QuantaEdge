@@ -691,11 +691,6 @@ public class CourseMarketplaceLaunchReadinessService {
     return value==null?"d41d8cd98f00b204e9800998ecf8427e":value.trim();
   }
 
-  private boolean assessmentOnlyCoursePublishReady(long programId) {
-    Boolean ready=jdbc.queryForObject("select assessment_only_course_publish_ready(?)",Boolean.class,programId);
-    return Boolean.TRUE.equals(ready);
-  }
-
   private static long percentageOf(long amountPaise,int basisPoints) {
     return BigDecimal.valueOf(amountPaise).multiply(BigDecimal.valueOf(basisPoints))
         .divide(BASIS_POINTS,0,RoundingMode.HALF_UP).longValueExact();
