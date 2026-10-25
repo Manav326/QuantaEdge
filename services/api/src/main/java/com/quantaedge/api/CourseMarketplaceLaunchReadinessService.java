@@ -48,9 +48,15 @@ public class CourseMarketplaceLaunchReadinessService {
   public Map<String,Object> inspectAssignment(long assignmentId,long institutionScope) {
     List<Map<String,Object>> rows=jdbc.queryForList("""
         select a.id as assignment_id,a.institution_id,a.status as assignment_status,
-          r.id as release_id,r.release_state,r.content_fingerprint,r.updated_at as release_updated_at,
+          r.id as release_id,r.release_version,r.source_institution_id as release_source_institution_id,
+          r.release_state,r.content_fingerprint,r.updated_at as release_updated_at,
           t.display_name as institution_name,t.status as institution_status,
-          p.id as course_id,p.code as course_code,p.display_name as course_name,p.status as course_status,p.course_type_code,
+          p.id as course_id,coalesce(identity.stable_course_key,p.code) as course_code,
+          p.display_name as course_name,p.content_version_no,p.status as course_status,p.course_type_code,
+          identity.id as course_identity_id,identity.public_id::text as course_identity_public_id,
+          identity.status as course_identity_status,
+          identity.source_institution_id as course_identity_source_institution_id,
+          identity.course_type_code as identity_course_type_code,
           coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=p.id),'LEARNING_CONTENT') as delivery_mode,
           (select count(distinct ps.subject_id)
              from curriculum_program_subject ps join curriculum_subject s
@@ -83,6 +89,7 @@ public class CourseMarketplaceLaunchReadinessService {
         join institution_course_release r on r.id=a.course_release_id
         join curriculum_program p on p.id=r.program_id
         join institution_tenant t on t.id=a.institution_id
+        left join institution_course_identity identity on identity.id=p.course_identity_id
         left join institution_marketplace_offer o on o.institution_id=a.institution_id
           and o.assignment_id=a.id
         where a.id=? and a.institution_id=?
@@ -98,6 +105,9 @@ public class CourseMarketplaceLaunchReadinessService {
     add(checks,"COURSE_ACTIVE","Course is active",
         "ACTIVE".equals(text(row.get("course_status")))&&!"GENERAL".equalsIgnoreCase(text(row.get("course_code"))),
         "The course must be an active, independently selectable course product.");
+    add(checks,"COURSE_IDENTITY","Course has one active, type-matched source identity",
+        identityContractMatches(row),
+        "This course version is missing its active stable course identity or the identity source/type does not match the release. Re-create the course through the current source-owned workflow; legacy/orphan courses cannot be published.");
     String releaseState=text(row.get("release_state"));
     boolean qualityApproved=List.of("QUALITY_APPROVED","SHAREABLE").contains(releaseState);
     add(checks,"CONTENT_QUALITY_REVIEW","HRMS content-quality review is complete",qualityApproved,
@@ -153,6 +163,10 @@ public class CourseMarketplaceLaunchReadinessService {
     result.put("assignmentId",assignmentId);
     result.put("offerId",null);
     result.put("releaseId",number(row.get("release_id")));
+    result.put("releaseVersion",number(row.get("release_version")));
+    result.put("contentVersionNo",number(row.get("content_version_no")));
+    result.put("courseCode",text(row.get("course_code")));
+    result.put("courseIdentityPublicId",text(row.get("course_identity_public_id")));
     result.put("releaseState",text(row.get("release_state")));
     result.put("institutionId",institutionScope);
     result.put("institutionName",text(row.get("institution_name")));
@@ -177,10 +191,14 @@ public class CourseMarketplaceLaunchReadinessService {
           o.hrms_published_by_staff_id,
           qe_current_course_offer_revision(o.id) as current_offer_version,
           t.display_name as institution_name,t.status as institution_status,
-          a.status as assignment_status,r.release_state,r.content_fingerprint,r.updated_at as release_updated_at,
+          a.status as assignment_status,r.release_version,r.source_institution_id as release_source_institution_id,
+          r.release_state,r.content_fingerprint,r.updated_at as release_updated_at,
           p.status as course_status,coalesce(identity.stable_course_key,p.code) as course_code,
-          p.display_name as course_name,p.course_type_code,
-          identity.public_id::text as course_identity_public_id,
+          p.display_name as course_name,p.content_version_no,p.course_type_code,
+          identity.id as course_identity_id,identity.public_id::text as course_identity_public_id,
+          identity.status as course_identity_status,
+          identity.source_institution_id as course_identity_source_institution_id,
+          identity.course_type_code as identity_course_type_code,
           course_marketplace_content_type_ready(p.id) as course_type_publish_ready,
           coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=p.id),'LEARNING_CONTENT') as delivery_mode,
           (select count(distinct ps.subject_id)
@@ -234,6 +252,9 @@ public class CourseMarketplaceLaunchReadinessService {
         "ACTIVE".equals(text(offer.get("course_status")))
             && !"GENERAL".equalsIgnoreCase(text(offer.get("course_code"))),
         "The course must be an active, independently selectable course product.");
+    add(checks,"COURSE_IDENTITY","Course has one active, type-matched source identity",
+        identityContractMatches(offer),
+        "This course version is missing its active stable course identity or the identity source/type does not match the release. Re-create the course through the current source-owned workflow; legacy/orphan courses cannot be published.");
     add(checks,"CURRENT_OFFER_REVISION","Offer belongs to the current eligible release",
         Boolean.TRUE.equals(offer.get("current_offer_version")),
         "This offer is obsolete or no longer points to the current eligible release. Use the current HRMS assignment and create or configure its offer instead.");
@@ -328,6 +349,10 @@ public class CourseMarketplaceLaunchReadinessService {
     result.put("assignmentId",number(offer.get("assignment_id")));
     result.put("offerId",offerId);
     result.put("releaseId",number(offer.get("course_release_id")));
+    result.put("releaseVersion",number(offer.get("release_version")));
+    result.put("contentVersionNo",number(offer.get("content_version_no")));
+    result.put("courseCode",text(offer.get("course_code")));
+    result.put("courseIdentityPublicId",text(offer.get("course_identity_public_id")));
     result.put("releaseState",text(offer.get("release_state")));
     result.put("institutionId",institutionId);
     result.put("institutionName",text(offer.get("institution_name")));
@@ -737,6 +762,19 @@ public class CourseMarketplaceLaunchReadinessService {
     } catch(IllegalArgumentException ex) {
       return false;
     }
+  }
+
+  private static boolean identityContractMatches(Map<String,Object> row) {
+    Object identityId=row.get("course_identity_id");
+    Object identitySource=row.get("course_identity_source_institution_id");
+    Object releaseSource=row.get("release_source_institution_id");
+    return identityId instanceof Number
+        && "ACTIVE".equals(text(row.get("course_identity_status")))
+        && identitySource instanceof Number
+        && releaseSource instanceof Number
+        && ((Number)identitySource).longValue()==((Number)releaseSource).longValue()
+        && !text(row.get("identity_course_type_code")).isBlank()
+        && text(row.get("identity_course_type_code")).equals(text(row.get("course_type_code")));
   }
 
   private static void add(List<Map<String,Object>> checks,String code,String label,boolean passed,String message) {
