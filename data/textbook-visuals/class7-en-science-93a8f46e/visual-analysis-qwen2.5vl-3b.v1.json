@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2262,
+    "assets_selected": 2263,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "5ee56b21f0830e88558f6ff0",
-      "4b1298747dc1ec978a226ae5",
-      "647c2218dab5482dd1c1758e",
-      "bb62f7442817c8c827ab2507",
-      "0e143e54e2f709b8a4e5968d"
+      "a8b604a149ae56a085aef68a",
+      "6f55fb9c1ad2af3533fd2c9c",
+      "d9b4f85e20bdc33b42d18fee",
+      "9d7b12b56e2c6f1bc3ddbedc",
+      "6ef6156428617e07587ac1f1"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2258,
-    "assets_remaining": 5230,
+    "assets_analyzed": 2263,
+    "assets_remaining": 5225,
     "assets_completion_percent": 30.2,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 2257,
+    "assets_skipped_from_checkpoint": 2258,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -85219,6 +85219,245 @@
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "a8b604a149ae56a085aef68a",
+      "asset_sha256": "8abe2b98c5485c7d11dc493c054ad20ff7e1353956309b316649b1d0541446ac",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/8abe2b98c5485c7d11dc493c054ad20ff7e1353956309b316649b1d0541446ac.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the effects of air and water on other metals, with a demonstration activity suggested by the teacher.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "51",
+          "4.3 Eﬀect of Air and Water on Other",
+          "Metals",
+          "Activity 4.6: Let us investigate (demonstration activity)",
+          "Non-metals",
+          "The teacher may demonstrate this activity.",
+          "Caution— It is advisable",
+          "to"
+        ],
+        "concepts": [
+          "Effects of air and water on other metals",
+          "Demonstration activity",
+          "Non-metals",
+          "Teacher's advice"
+        ],
+        "context_relation": "The text is discussing a demonstration activity related to the effects of air and water on other metals.",
+        "limitations": [
+          "The text does not provide specific details about the demonstration activity."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40205238473",
+      "checkpointed_at": "2026-10-25T16:45:06Z"
+    },
+    {
+      "asset_id": "6f55fb9c1ad2af3533fd2c9c",
+      "asset_sha256": "9657383adcbb231c21c5985fee291c921cc34338d6a5220073cb3c7cfb9a10db",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/9657383adcbb231c21c5985fee291c921cc34338d6a5220073cb3c7cfb9a10db.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the effects of air and water on other metals, including a demonstration activity.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "51",
+          "4.3 Eﬀect of Air and Water on Other Metals",
+          "Activity 4.6: Let us investigate (demonstration activity)",
+          "Non-metals",
+          "The teacher may demonstrate this activity.",
+          "Caution— It is advisable",
+          "and"
+        ],
+        "concepts": [
+          "Effects of air and water on other metals",
+          "Demonstration activity",
+          "Non-metals",
+          "Teacher demonstration"
+        ],
+        "context_relation": "The page is discussing a demonstration activity related to the effects of air and water on other metals.",
+        "limitations": [
+          "The page does not provide specific details about the demonstration activity."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40205238473",
+      "checkpointed_at": "2026-10-25T16:46:55Z"
+    },
+    {
+      "asset_id": "d9b4f85e20bdc33b42d18fee",
+      "asset_sha256": "a2048a5d2af1c24ace659033fa3558e80d060e28d9f8bf50743ba06581d0df7c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/a2048a5d2af1c24ace659033fa3558e80d060e28d9f8bf50743ba06581d0df7c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scroll with text about the effect of air and water on other metals.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "51",
+          "4.3 Eﬀect of Air and Water on Other",
+          "Metals",
+          "Activity 4.6: Let us investigate (demonstration activity)",
+          "Non-metals",
+          "The teacher may demonstrate this activity.",
+          "Caution— It is advisable"
+        ],
+        "concepts": [
+          "Effect of Air and Water on Other Metals",
+          "Demonstration Activity",
+          "Non-metals",
+          "Teacher Demonstration"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "The image does not show any specific experiment or demonstration."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40205238473",
+      "checkpointed_at": "2026-10-25T16:48:41Z"
+    },
+    {
+      "asset_id": "9d7b12b56e2c6f1bc3ddbedc",
+      "asset_sha256": "3390a20c7c0060fcdd33432e6a328f9d878155f830fdf4300360c17b468d1e4f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/3390a20c7c0060fcdd33432e6a328f9d878155f830fdf4300360c17b468d1e4f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scroll with text on it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "51",
+          "4.3 Eﬀect of Air and Water on Other",
+          "Metals",
+          "Activity 4.6: Let us investigate (demonstration activity)",
+          "Non-metals",
+          "The teacher may demonstrate this activity.",
+          "Caution— It is advisable"
+        ],
+        "concepts": [
+          "Effect of Air and Water on Other Metals",
+          "Demonstration Activity",
+          "Non-metals",
+          "Teacher Demonstration",
+          "Caution"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "No specific image details provided."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40205238473",
+      "checkpointed_at": "2026-10-25T16:50:26Z"
+    },
+    {
+      "asset_id": "6ef6156428617e07587ac1f1",
+      "asset_sha256": "d7390babd22c2dd8db9ced56cb1beee095caff7e1de7e75a88442d0d6fc44c51",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 71,
+      "asset_path": "assets/d7390babd22c2dd8db9ced56cb1beee095caff7e1de7e75a88442d0d6fc44c51.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A flame and smoke in a dark environment.",
+        "visual_type": "photo",
+        "visible_text": [
+          "51",
+          "4.3 Eﬀect of Air and Water on Other",
+          "Metals",
+          "Activity 4.6: Let us investigate (demonstration activity)",
+          "Non-metals",
+          "The teacher may demonstrate this activity.",
+          "Caution— It is advisable",
+          "to",
+          "use",
+          "a",
+          "safe",
+          "environment",
+          "when",
+          "conducting",
+          "such",
+          "experiments.",
+          "Ensure",
+          "that",
+          "the",
+          "flammable",
+          "materials",
+          "are",
+          "handled",
+          "with",
+          "care.",
+          "Do",
+          "not",
+          "touch",
+          "the",
+          "flame"
+        ],
+        "concepts": [
+          "Experiment",
+          "Safety",
+          "Flame",
+          "Smoke",
+          "Non-metals",
+          "Metals",
+          "Demonstration",
+          "Caution",
+          "Environment",
+          "Handling",
+          "Flammable",
+          "Materials",
+          "Fire Extinguisher"
+        ],
+        "context_relation": "The image is a visual representation of a demonstration activity related to the effects of air and water on other metals, emphasizing the importance of safety precautions.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the demonstration."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40205238473",
+      "checkpointed_at": "2026-10-25T16:52:41Z"
     }
   ]
 }
