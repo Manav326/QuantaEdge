@@ -1015,6 +1015,22 @@ public class AssessmentController {
       if("APPROVED".equals(reviewStatus)&&explanation.isBlank())
         throw badRequest("Add an explanation before approving this question.");
       snapshot.put("explanation",explanation);
+      if(body.containsKey("explanationI18n")) {
+        Map<String,Object> suppliedTranslations=stringMap(body.get("explanationI18n"));
+        if(suppliedTranslations==null)
+          throw badRequest("explanationI18n must be an object containing optional en and hi strings.");
+        Map<String,Object> normalizedTranslations=new LinkedHashMap<>();
+        for(String language:List.of("en","hi")) {
+          Object rawTranslation=suppliedTranslations.get(language);
+          if(rawTranslation!=null&&!(rawTranslation instanceof String))
+            throw badRequest("Explanation translations must be text.");
+          String translated=rawTranslation==null?"":((String)rawTranslation).trim();
+          if(translated.length()>700)
+            throw badRequest("Each explanation translation must be at most 700 characters.");
+          if(!translated.isBlank())normalizedTranslations.put(language,translated);
+        }
+        snapshot.put("explanation_i18n",normalizedTranslations);
+      }
       Map<String,Object> proposed=stringMapOrEmpty(snapshot.get("proposed_answer"));
       proposed.put("explanation",explanation);
       snapshot.put("proposed_answer",proposed);
