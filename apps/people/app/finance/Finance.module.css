@@ -108,6 +108,16 @@
 .page :is(.secondary, .secondarySmall):is(:hover, :focus-visible) {
   background: var(--finance-hover); border-color: var(--qe-people-focus, #c2410c); color: var(--finance-ink);
 }
+
+.page :is(.primary, .primarySmall, .secondary, .secondarySmall):disabled {
+  background: var(--finance-subtle);
+  border-color: var(--finance-line);
+  color: var(--finance-muted);
+  box-shadow: none;
+  opacity: 1;
+  filter: none;
+  cursor: not-allowed;
+}
 .page :is(button, input, select, textarea):focus-visible { outline: 2px solid var(--qe-people-focus, #c2410c); outline-offset: 2px; }
 .page :is(.form label, .panel > label, .wideLabel, .designControls label, .recipientEditor label, .einvoiceReview label, .refundForm label, .paymentFilters label) { color: var(--finance-ink); }
 .page :is(input:not([type="checkbox"]):not([type="radio"]):not([type="color"]), select, textarea) {
