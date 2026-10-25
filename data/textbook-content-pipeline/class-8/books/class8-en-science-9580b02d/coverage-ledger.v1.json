@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1264,
-    "successful_visual_analyses": 1254,
-    "missing_visual_analyses": 1027,
-    "failed_visual_analyses": 10,
+    "raw_analysis_result_rows": 1273,
+    "successful_visual_analyses": 1261,
+    "missing_visual_analyses": 1018,
+    "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1037,
+    "unresolved_count": 1030,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -8666,41 +8666,9 @@
       "asset_path": "page-0006.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
-      "effective_analysis": {
-        "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
-          "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
-          "In some activities Safety first, has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
-          "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
-          "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
-        ],
-        "concepts": [
-          "open-ended questions",
-          "thought-provoking questions",
-          "critical thinking",
-          "curiosity",
-          "science",
-          "teamwork",
-          "inclusive nature",
-          "special needs",
-          "peer interactions",
-          "assessing understanding",
-          "analyzing concepts",
-          "safety precautions",
-          "fascinating facts",
-          "interesting observations",
-          "scientific principles",
-          "real-life applications"
-        ],
-        "context_relation": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
-        "limitations": [
-          "The image does not provide specific examples or details about the questions or activities mentioned."
-        ]
-      },
+      "effective_analysis": null,
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -26973,8 +26941,8 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Acknowledgments for the book's contributors and staff.",
+        "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
           "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
@@ -26982,20 +26950,19 @@
           "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
         ],
         "concepts": [
-          "Acknowledgment",
-          "Textbook",
+          "Acknowledgments",
           "Contributors",
-          "Roles",
-          "Freelance Language Editor",
-          "APC office",
-          "Administrative staff",
-          "Publication Division",
-          "Contractual",
-          "Proofreaders"
+          "Staff",
+          "Textbook",
+          "Editing",
+          "Support",
+          "Publication",
+          "Commitment"
         ],
-        "context_relation": "Acknowledgment and appreciation for contributors and their roles in the publication of a textbook.",
+        "context_relation": "The text is a page from a book or document that lists acknowledgments and thanks to various contributors and staff involved in the publication of a textbook.",
         "limitations": [
-          "No specific visual elements are described."
+          "The text does not provide specific details about the book's content or the subjects it covers.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "chapter_id": null,
@@ -44764,7 +44731,7 @@
       "correction_status": "NONE",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "diagram",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -44778,7 +44745,8 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force"
+          "muscular force",
+          "living beings"
         ],
         "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
@@ -47514,9 +47482,33 @@
       "asset_path": "assets/3b537a9d3310de67dc825c7be29787e0b0bd769d0472fdb64e3308559b5a9a11.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A group of five people standing in a line, with one person pointing upwards and the others holding various items.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "2. State whether the following statements are True or False.",
+          "(i) A force is always required to change the speed of motion of an object.",
+          "(ii) Due to friction, the speed of the ball rolling on a flat ground increases.",
+          "(iii) There is no force between two charged objects placed at a small distance apart.",
+          "3. Two balloons rubbed with a woollen cloth are brought near",
+          "Nearby extracted page text (possibly incomplete):"
+        ],
+        "concepts": [
+          "force",
+          "speed",
+          "friction",
+          "charged objects",
+          "balloons",
+          "woollen cloth"
+        ],
+        "context_relation": "The image is not directly related to the text in the page.",
+        "limitations": [
+          "The image does not provide specific information about the text.",
+          "The image is a cartoon and may not represent the exact content of the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -47532,9 +47524,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -47550,9 +47551,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the content of the textbook.",
+        "limitations": [
+          "The image is completely black and does not contain any visible text or content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -47568,7 +47578,7 @@
       "asset_path": "page-0098.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -47586,9 +47596,16 @@
       "asset_path": "assets/7e525b1dac5e2104ca9e4a1e0ac68d84997fa53308a7fa5788a2e87c604e43aa.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A jar with a straw and a note inside it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -47604,9 +47621,19 @@
       "asset_path": "assets/f1dbd005c830d05bf4b249a3ccae8ad2b3d244467c77b946af39d389e9f04f63.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a large pink sheet of paper.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the textbook page.",
+          "The image is a cartoon character holding a large pink sheet of paper, which is unrelated to the content of the textbook page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -47622,9 +47649,18 @@
       "asset_path": "assets/2fcf568c5c4b5b4d3a84649843def519f05386554f7fc33e67bbb1fe9a8f9488.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a large green octagonal object.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or labels that can be used to infer the context or relation to the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -47640,9 +47676,16 @@
       "asset_path": "assets/0743d85a1d99d2c3dc89e9b948b35ac950db62df0f9a4aec99250c9f94065756.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a large yellow signboard.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text provided.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -47658,9 +47701,33 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Three objects of different materials are placed in water, showing different depths of immersion.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "79",
+          "10. Three objects 1, 2, and 3 of the same size and shape but made",
+          "3    of different materials are placed in the water.",
+          "2                                                            1   They dip to different depths as shown in Fig. 5.17.",
+          "If the weights of the three objects 1, 2, and 3 are",
+          "w1, w2, and w3, respectively, then",
+          "(i) w1 = w2 = w3",
+          "(ii) w1 > w2 > w3"
+        ],
+        "concepts": [
+          "Density",
+          "Buoyancy",
+          "Material properties"
+        ],
+        "context_relation": "The image represents a scenario where the buoyancy of different materials in water is being compared.",
+        "limitations": [
+          "The image does not provide specific values for the weights or the densities of the materials.",
+          "The image does not show the actual buoyancy forces acting on the objects."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

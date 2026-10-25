@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "42e419f6410d057d569697ff2ba0063a27d96f2d28495cfb28f416ae74df330b",
+  "raw_analysis_sha256": "5d64b967004ebcb6738d1e665f4ef4ac69d2fc2afb46482a8b3315a98604982f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1780,87 +1780,21 @@
     {
       "asset_id": "2b71f040b18c02e306e02930",
       "asset_sha256": "e8fbcc2e3740a10eb93aae2a7cb2846d41998124e60b373dcb3a85844c542ab4",
+      "page_text_context_sha256": "e99913a243f7d3f79adc5ec4d75cda2a6cf084135ae7627267fb6ecf642f4fbb",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 6,
       "asset_path": "page-0006.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "e99913a243f7d3f79adc5ec4d75cda2a6cf084135ae7627267fb6ecf642f4fbb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
-          "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
-          "In some activities Safety first, has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
-          "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
-          "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
-        ],
-        "concepts": [
-          "open-ended questions",
-          "thought-provoking questions",
-          "critical thinking",
-          "curiosity",
-          "science",
-          "teamwork",
-          "inclusive nature",
-          "special needs",
-          "peer interactions",
-          "assessing understanding",
-          "analyzing concepts",
-          "safety precautions",
-          "fascinating facts",
-          "interesting observations",
-          "scientific principles",
-          "real-life applications"
-        ],
-        "context_relation": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
-        "limitations": [
-          "The image does not provide specific examples or details about the questions or activities mentioned."
-        ]
-      },
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40150632213",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40142974307",
-      "checkpointed_at": "2026-10-25T00:48:37Z",
-      "effective_analysis": {
-        "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
-          "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
-          "In some activities Safety first, has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
-          "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
-          "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
-        ],
-        "concepts": [
-          "open-ended questions",
-          "thought-provoking questions",
-          "critical thinking",
-          "curiosity",
-          "science",
-          "teamwork",
-          "inclusive nature",
-          "special needs",
-          "peer interactions",
-          "assessing understanding",
-          "analyzing concepts",
-          "safety precautions",
-          "fascinating facts",
-          "interesting observations",
-          "scientific principles",
-          "real-life applications"
-        ],
-        "context_relation": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
-        "limitations": [
-          "The image does not provide specific examples or details about the questions or activities mentioned."
-        ]
-      },
-      "checkpoint_fingerprint_status": "MATCHED",
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     },
     {
@@ -28856,9 +28790,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40142974307",
+      "run_id": "40150632213",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -29310,8 +29244,8 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Acknowledgments for the book's contributors and staff.",
+        "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
           "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
@@ -29319,30 +29253,29 @@
           "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
         ],
         "concepts": [
-          "Acknowledgment",
-          "Textbook",
+          "Acknowledgments",
           "Contributors",
-          "Roles",
-          "Freelance Language Editor",
-          "APC office",
-          "Administrative staff",
-          "Publication Division",
-          "Contractual",
-          "Proofreaders"
+          "Staff",
+          "Textbook",
+          "Editing",
+          "Support",
+          "Publication",
+          "Commitment"
         ],
-        "context_relation": "Acknowledgment and appreciation for contributors and their roles in the publication of a textbook.",
+        "context_relation": "The text is a page from a book or document that lists acknowledgments and thanks to various contributors and staff involved in the publication of a textbook.",
         "limitations": [
-          "No specific visual elements are described."
+          "The text does not provide specific details about the book's content or the subjects it covers.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40142974307",
-      "checkpointed_at": "2026-10-25T00:49:11Z",
+      "run_id": "40150632213",
+      "checkpointed_at": "2026-10-25T02:59:19Z",
       "effective_analysis": {
-        "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Acknowledgments for the book's contributors and staff.",
+        "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
           "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
@@ -29350,20 +29283,19 @@
           "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
         ],
         "concepts": [
-          "Acknowledgment",
-          "Textbook",
+          "Acknowledgments",
           "Contributors",
-          "Roles",
-          "Freelance Language Editor",
-          "APC office",
-          "Administrative staff",
-          "Publication Division",
-          "Contractual",
-          "Proofreaders"
+          "Staff",
+          "Textbook",
+          "Editing",
+          "Support",
+          "Publication",
+          "Commitment"
         ],
-        "context_relation": "Acknowledgment and appreciation for contributors and their roles in the publication of a textbook.",
+        "context_relation": "The text is a page from a book or document that lists acknowledgments and thanks to various contributors and staff involved in the publication of a textbook.",
         "limitations": [
-          "No specific visual elements are described."
+          "The text does not provide specific details about the book's content or the subjects it covers.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -32392,9 +32324,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40142974307",
+      "run_id": "40150632213",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -38234,9 +38166,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40142974307",
+      "run_id": "40150632213",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -38526,7 +38458,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40142974307",
+      "run_id": "40150632213",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -45062,9 +44994,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40142974307",
+      "run_id": "40150632213",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -45744,9 +45676,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40142974307",
+      "run_id": "40150632213",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -57384,9 +57316,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40142974307",
+      "run_id": "40150632213",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -57837,7 +57769,7 @@
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "diagram",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -57851,7 +57783,8 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force"
+          "muscular force",
+          "living beings"
         ],
         "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
@@ -57861,11 +57794,11 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40142974307",
-      "checkpointed_at": "2026-10-25T00:49:50Z",
+      "run_id": "40150632213",
+      "checkpointed_at": "2026-10-25T03:00:33Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "diagram",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -57879,7 +57812,8 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force"
+          "muscular force",
+          "living beings"
         ],
         "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
@@ -58828,9 +58762,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40142974307",
+      "run_id": "40150632213",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -60472,7 +60406,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40142974307",
+      "run_id": "40150632213",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -62052,7 +61986,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40142974307",
+      "run_id": "40150632213",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -62214,6 +62148,400 @@
         "limitations": [
           "The image does not provide specific numerical values or measurements.",
           "The image does not show the exact conditions or forces involved in the motion of the ball."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bc966d914e35c1984a6b53b9",
+      "asset_sha256": "3b537a9d3310de67dc825c7be29787e0b0bd769d0472fdb64e3308559b5a9a11",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 98,
+      "asset_path": "assets/3b537a9d3310de67dc825c7be29787e0b0bd769d0472fdb64e3308559b5a9a11.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "653ca2ed52a7d6298e3b1fb4a9b574a4b2c10f83e326b1f5e117b11c5fe3473a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of five people standing in a line, with one person pointing upwards and the others holding various items.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "2. State whether the following statements are True or False.",
+          "(i) A force is always required to change the speed of motion of an object.",
+          "(ii) Due to friction, the speed of the ball rolling on a flat ground increases.",
+          "(iii) There is no force between two charged objects placed at a small distance apart.",
+          "3. Two balloons rubbed with a woollen cloth are brought near",
+          "Nearby extracted page text (possibly incomplete):"
+        ],
+        "concepts": [
+          "force",
+          "speed",
+          "friction",
+          "charged objects",
+          "balloons",
+          "woollen cloth"
+        ],
+        "context_relation": "The image is not directly related to the text in the page.",
+        "limitations": [
+          "The image does not provide specific information about the text.",
+          "The image is a cartoon and may not represent the exact content of the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40150632213",
+      "checkpointed_at": "2026-10-25T02:47:01Z",
+      "effective_analysis": {
+        "visual_summary": "A group of five people standing in a line, with one person pointing upwards and the others holding various items.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "2. State whether the following statements are True or False.",
+          "(i) A force is always required to change the speed of motion of an object.",
+          "(ii) Due to friction, the speed of the ball rolling on a flat ground increases.",
+          "(iii) There is no force between two charged objects placed at a small distance apart.",
+          "3. Two balloons rubbed with a woollen cloth are brought near",
+          "Nearby extracted page text (possibly incomplete):"
+        ],
+        "concepts": [
+          "force",
+          "speed",
+          "friction",
+          "charged objects",
+          "balloons",
+          "woollen cloth"
+        ],
+        "context_relation": "The image is not directly related to the text in the page.",
+        "limitations": [
+          "The image does not provide specific information about the text.",
+          "The image is a cartoon and may not represent the exact content of the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "32e5e17c13bfac27128daf93",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 98,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "653ca2ed52a7d6298e3b1fb4a9b574a4b2c10f83e326b1f5e117b11c5fe3473a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40150632213",
+      "checkpointed_at": "2026-10-25T02:47:18Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8815a532bc2c619b77b21760",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 98,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "653ca2ed52a7d6298e3b1fb4a9b574a4b2c10f83e326b1f5e117b11c5fe3473a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the content of the textbook.",
+        "limitations": [
+          "The image is completely black and does not contain any visible text or content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40150632213",
+      "checkpointed_at": "2026-10-25T02:47:35Z",
+      "effective_analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the content of the textbook.",
+        "limitations": [
+          "The image is completely black and does not contain any visible text or content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bfd9bab18e214c87823cfc98",
+      "asset_sha256": "6e9da23f78b65015bb7b0d639bbe4ff26b8c00131234fdbd29fc823c54fed076",
+      "page_text_context_sha256": "653ca2ed52a7d6298e3b1fb4a9b574a4b2c10f83e326b1f5e117b11c5fe3473a",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 98,
+      "asset_path": "page-0098.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40150632213",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a4f2e7aa3f8f20b8af12b8bc",
+      "asset_sha256": "7e525b1dac5e2104ca9e4a1e0ac68d84997fa53308a7fa5788a2e87c604e43aa",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 99,
+      "asset_path": "assets/7e525b1dac5e2104ca9e4a1e0ac68d84997fa53308a7fa5788a2e87c604e43aa.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "fdbde7e53fb0fa5056d2ca2d42bc7f623eb9c68939cb62b612ae1728d407c6fe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A jar with a straw and a note inside it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40150632213",
+      "checkpointed_at": "2026-10-25T02:56:22Z",
+      "effective_analysis": {
+        "visual_summary": "A jar with a straw and a note inside it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d73b661bd62c497e53ba4323",
+      "asset_sha256": "f1dbd005c830d05bf4b249a3ccae8ad2b3d244467c77b946af39d389e9f04f63",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 99,
+      "asset_path": "assets/f1dbd005c830d05bf4b249a3ccae8ad2b3d244467c77b946af39d389e9f04f63.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "fdbde7e53fb0fa5056d2ca2d42bc7f623eb9c68939cb62b612ae1728d407c6fe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a large pink sheet of paper.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the textbook page.",
+          "The image is a cartoon character holding a large pink sheet of paper, which is unrelated to the content of the textbook page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40150632213",
+      "checkpointed_at": "2026-10-25T02:58:10Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a large pink sheet of paper.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the content of the textbook page.",
+          "The image is a cartoon character holding a large pink sheet of paper, which is unrelated to the content of the textbook page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1a931cee59c6cce72562dcd9",
+      "asset_sha256": "2fcf568c5c4b5b4d3a84649843def519f05386554f7fc33e67bbb1fe9a8f9488",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 99,
+      "asset_path": "assets/2fcf568c5c4b5b4d3a84649843def519f05386554f7fc33e67bbb1fe9a8f9488.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "fdbde7e53fb0fa5056d2ca2d42bc7f623eb9c68939cb62b612ae1728d407c6fe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a large green octagonal object.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or labels that can be used to infer the context or relation to the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40150632213",
+      "checkpointed_at": "2026-10-25T03:02:15Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a large green octagonal object.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or labels that can be used to infer the context or relation to the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c525f03acab99ca43b6d4efc",
+      "asset_sha256": "0743d85a1d99d2c3dc89e9b948b35ac950db62df0f9a4aec99250c9f94065756",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 99,
+      "asset_path": "assets/0743d85a1d99d2c3dc89e9b948b35ac950db62df0f9a4aec99250c9f94065756.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "fdbde7e53fb0fa5056d2ca2d42bc7f623eb9c68939cb62b612ae1728d407c6fe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a large yellow signboard.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40150632213",
+      "checkpointed_at": "2026-10-25T03:03:52Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a large yellow signboard.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text provided.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e3111282e7e52ec5f1dc09c9",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 99,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "fdbde7e53fb0fa5056d2ca2d42bc7f623eb9c68939cb62b612ae1728d407c6fe",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Three objects of different materials are placed in water, showing different depths of immersion.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "79",
+          "10. Three objects 1, 2, and 3 of the same size and shape but made",
+          "3    of different materials are placed in the water.",
+          "2                                                            1   They dip to different depths as shown in Fig. 5.17.",
+          "If the weights of the three objects 1, 2, and 3 are",
+          "w1, w2, and w3, respectively, then",
+          "(i) w1 = w2 = w3",
+          "(ii) w1 > w2 > w3"
+        ],
+        "concepts": [
+          "Density",
+          "Buoyancy",
+          "Material properties"
+        ],
+        "context_relation": "The image represents a scenario where the buoyancy of different materials in water is being compared.",
+        "limitations": [
+          "The image does not provide specific values for the weights or the densities of the materials.",
+          "The image does not show the actual buoyancy forces acting on the objects."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40150632213",
+      "checkpointed_at": "2026-10-25T03:04:40Z",
+      "effective_analysis": {
+        "visual_summary": "Three objects of different materials are placed in water, showing different depths of immersion.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 5 — Exploring Forces",
+          "79",
+          "10. Three objects 1, 2, and 3 of the same size and shape but made",
+          "3    of different materials are placed in the water.",
+          "2                                                            1   They dip to different depths as shown in Fig. 5.17.",
+          "If the weights of the three objects 1, 2, and 3 are",
+          "w1, w2, and w3, respectively, then",
+          "(i) w1 = w2 = w3",
+          "(ii) w1 > w2 > w3"
+        ],
+        "concepts": [
+          "Density",
+          "Buoyancy",
+          "Material properties"
+        ],
+        "context_relation": "The image represents a scenario where the buoyancy of different materials in water is being compared.",
+        "limitations": [
+          "The image does not provide specific values for the weights or the densities of the materials.",
+          "The image does not show the actual buoyancy forces acting on the objects."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
