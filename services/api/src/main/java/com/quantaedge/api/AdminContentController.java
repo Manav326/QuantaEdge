@@ -126,6 +126,8 @@ public class AdminContentController {
       with scoped_courses as (
         select p.id,p.id as course_id,p.public_id,p.public_id_prefix,p.code,p.display_name,
                p.curriculum_version,p.course_type_code,p.content_version_no,p.course_identity_id,
+               coalesce(identity.stable_course_key,p.code) as course_key,
+               identity.public_id as course_identity_public_id,
                p.supersedes_program_id,c.code as curriculum_class_code,
                scoped.release_id,scoped.release_version,scoped.release_state,
                scoped.source_institution_id,
@@ -137,6 +139,7 @@ public class AdminContentController {
                    scoped.release_id desc,p.id desc
                ) as identity_rank
         from curriculum_program p
+        left join institution_course_identity identity on identity.id=p.course_identity_id
         left join curriculum_class c on c.id=p.class_id and c.active=true
         join lateral (
           select release.id as release_id,release.release_version,release.release_state,
@@ -152,9 +155,9 @@ public class AdminContentController {
         where p.status='ACTIVE' and p.code<>'GENERAL'
       )
       select id,course_id,public_id,public_id_prefix,code,display_name,curriculum_version,
-             course_type_code,content_version_no,course_identity_id,supersedes_program_id,
-             curriculum_class_code,release_id,release_version,release_state,source_institution_id,
-             course_relationship
+             course_type_code,content_version_no,course_identity_id,course_key,course_identity_public_id,
+             supersedes_program_id,curriculum_class_code,release_id,release_version,release_state,
+             source_institution_id,course_relationship
       from scoped_courses
       where identity_rank=1
       order by display_name,id
