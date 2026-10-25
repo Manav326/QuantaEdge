@@ -275,6 +275,7 @@ const adminResourcesCss = read('apps/admin/app/resources/Resources.module.css');
 const adminQuestionsPage = read('apps/admin/app/questions/page.tsx');
 const adminCertificatesCss = read('apps/admin/app/certificates/Certificates.module.css');
 const adminAssessmentsCss = read('apps/admin/app/assessments/Assessments.module.css');
+const adminAssessmentsPage = read('apps/admin/app/assessments/page.tsx');
 const adminClassesCss = read('apps/admin/app/classes/Classes.module.css');
 const adminEmployees = read('apps/admin/app/employees/page.tsx');
 const adminNotificationStudio = read('apps/admin/app/components/NotificationStudio.tsx');
@@ -286,6 +287,18 @@ assert(adminContentStudio.includes('PremiumPagination') && adminContentStudio.in
   adminContentStudio.includes('expandedChapters') && adminContentStudio.includes('role="dialog" aria-modal="true"') &&
   adminContentStudio.includes('editorReturnFocusRef') && adminContentStudio.includes('backToLibraryRef.current?.()'),
   'Content Studio must paginate chapters, expand/collapse child micro-topics and preserve a focused accessible editor flow.');
+assert(adminContentStudio.includes("String(selectedCourse?.course_type_code||'').toUpperCase()==='ASSESSMENT'") &&
+  adminContentStudio.includes("'/api/v1/admin/content/assessment-papers?'+params.toString()") &&
+  adminContentStudio.includes('filteredAssessmentRows.map') &&
+  adminContentStudio.includes("'&assessmentId='+encodeURIComponent(String(row.assessment_id))"),
+  'Content Studio must use the assessment hierarchy for classless ASSESSMENT courses and expose each imported test question-review path.');
+assert(adminContentStudio.includes("!isAssessmentCourse?<label>{t('admin.contentStudio.subject')}") &&
+  adminContentStudio.includes('assessmentContentTitle') && adminContentStudio.includes("isAssessmentCourse ? <Link href={assessmentStudioHref"),
+  'Assessment-only courses must hide K-12 subject filters/chapter creation and show course-type-specific content navigation.');
+assert(adminAssessmentsPage.includes("loadImportedPackageQuestions(assessmentId)") &&
+  adminAssessmentsPage.includes("requestedReviewRef.current===requestKey") &&
+  !adminAssessmentsPage.includes("assessments.find(item=>Number(item.assessment_id)===assessmentId)"),
+  'Imported question deep links must open by server-authorized course scope, not the grader-filtered assessment catalogue.');
 assert(adminContentEnglish.includes('"admin.contentStudio.courseSubjects": "Subjects with content"') &&
   adminContentEnglish.includes('"admin.contentStudio.databaseRecords": "From this course’s content records"') &&
   adminContentHinglish.includes('"admin.contentStudio.showMicroTopics"') &&
