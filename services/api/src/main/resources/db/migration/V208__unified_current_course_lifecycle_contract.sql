@@ -430,6 +430,18 @@ BEGIN
       USING ERRCODE = '55000';
   END IF;
 
+  IF NEW.status = 'ASSIGNED' AND EXISTS (
+    SELECT 1
+    FROM institution_marketplace_offer old_offer
+    WHERE old_offer.institution_id = NEW.institution_id
+      AND old_offer.assignment_id = NEW.id
+      AND (old_offer.status = 'ARCHIVED' OR old_offer.obsolete_at IS NOT NULL)
+  ) THEN
+    RAISE EXCEPTION
+      'OBSOLETE_COURSE_ASSIGNMENT: this release already has an archived listing. Publish a new source-owned release before assigning it again.'
+      USING ERRCODE = '55000';
+  END IF;
+
   IF NEW.status = 'ASSIGNED' AND NOT EXISTS (
     SELECT 1
     FROM institution_course_release release
