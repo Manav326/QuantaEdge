@@ -916,7 +916,7 @@ export default function ContentStudio(){
         : assessmentRows.length===0 ? <div className="qe-library-empty"><strong>No assessments are recorded for this course.</strong><p>Refresh the course list or use the assessment import workflow. Do not create K–12 chapters to make a classless assessment course appear.</p><Link className="qe-primary-button" href={'/assessments?courseId='+encodeURIComponent(programFilter)}>Open assessment workspace</Link></div>
         : <div className="qe-curriculum-map">{assessmentRows.map(row=>{
           const imported=Boolean(row.source_package_id);
-          const canReviewImported=imported&&canReview;
+          const canReviewImported=imported&&canReview&&isEditableDraft;
           const href='/assessments?courseId='+encodeURIComponent(programFilter)+(canReviewImported?'&reviewAssessmentId='+encodeURIComponent(String(row.assessment_id)):'');
           return <article className="qe-chapter-group" key={row.assessment_id}>
            <div className="qe-chapter-heading" style={{alignItems:'center'}}>
