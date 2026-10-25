@@ -878,25 +878,38 @@ export default function MarketplaceLaunchStepper({
               const qualityReady = release.contentCurrent && release.course_type_publish_ready === true;
               const preview = reviewContent[release.release_id];
               const reviewNoteLength = (reviewNotes[release.release_id] || '').trim().length;
-              const exactPreviewReady = Boolean(preview && preview.contentCurrent
-                && preview.content_fingerprint === release.content_fingerprint);
+              const previewFingerprintMismatch = Boolean(preview
+                && preview.content_fingerprint !== release.content_fingerprint);
+              const previewLoadInProgress = reviewContentLoadingId !== null;
+              const previewNeedsLoading = !preview && release.contentCurrent && qualityReady
+                && !previewLoadInProgress && reviewChapterLoadingId === null && busyKey === null;
               const qualityBlocker = !release.contentCurrent
-                ? 'Approval is blocked because the submitted content no longer matches its reviewed fingerprint. The source institution must submit a fresh release.'
+                ? 'Approval is blocked because this release is not fingerprint-current. Return it for correction, have the source institution correct the content and submit a fresh release.'
                 : !qualityReady
                   ? assessmentOnly
                     ? 'Approval is blocked because one or more assessments or test packs are still drafts or their question/answer review is incomplete. Return this release for correction, finish human review and publish every test/pack, then submit a fresh release.'
                     : k12Learning
                       ? 'Approval is blocked until every active mapped subject has published chapter and lesson content.'
-                      : 'Approval is blocked because this registered course type and delivery mode do not have an eligible release-readiness contract.'
-                  : !exactPreviewReady
-                    ? 'Review the exact submitted release content first. Approval requires its fingerprint to match the submitted version.'
-                    : reviewNoteLength < 3
-                      ? 'Enter a quality review note of at least 3 characters before approving.'
-                      : reviewChapterLoadingId !== null
-                        ? 'Wait for the selected chapter review to finish loading.'
-                        : busyKey !== null
-                          ? 'Another HRMS action is in progress. Wait for it to finish, then retry.'
-                          : '';
+                      : 'Approval is blocked because the registered course type or delivery mode is inactive, mismatched or unsupported.'
+                  : busyKey !== null
+                    ? 'Another HRMS action is in progress. Wait for it to finish, then retry.'
+                    : reviewChapterLoadingId !== null
+                      ? 'Wait for the selected chapter review to finish loading.'
+                      : previewLoadInProgress
+                        ? reviewContentLoadingId === release.release_id
+                          ? 'The exact submitted release is loading. Keep this panel open and wait for the preview to finish.'
+                          : 'Another release preview is loading. Wait for it to finish before starting another preview.'
+                        : !preview
+                          ? 'Approval stays locked until you load and inspect the exact submitted release snapshot. Loading it does not approve or publish the course.'
+                          : !preview.contentCurrent
+                            ? 'The loaded release is not fingerprint-current. Do not approve it; return it for correction, have the source institution submit a fresh release, and review that new submission.'
+                            : previewFingerprintMismatch
+                              ? 'The loaded preview fingerprint differs from this review-queue entry. Do not approve. Refresh the review queue; if the mismatch persists, return the release for correction and submit a fresh release.'
+                              : preview.courseTypePublishReady !== true
+                                ? 'The exact release preview is not ready under the active course-type publication gate. Do not approve; return it for correction and submit a release with a supported course type and delivery mode.'
+                                : reviewNoteLength < 3
+                                  ? 'Enter a quality review note of at least 3 characters before approving.'
+                                  : '';
               return (
                 <article className={styles.qualityRow} key={release.release_id}>
                   <div className={styles.availableMark} aria-hidden="true">✓</div>
@@ -1164,9 +1177,20 @@ export default function MarketplaceLaunchStepper({
                         onChange={event => setReviewNotes(previous => ({ ...previous, [release.release_id]: event.target.value }))}
                         placeholder={assessmentOnly ? 'Record question inventory, source fidelity, answer-key review, section scoring and release fingerprint checks…' : k12Learning ? 'Record what was checked: syllabus coverage, published lessons, content integrity…' : 'Explain the course-type/delivery-mode mismatch and required correction…'} />
                     </label>
-                    {qualityBlocker ? <p id={'quality-blocker-' + release.release_id}
-                      className={styles.actionHint + (!release.contentCurrent || !qualityReady ? ' ' + styles.actionHintWarning : '')}
-                      role="note">{qualityBlocker}</p> : null}
+                    {qualityBlocker ? (
+                      <div id={'quality-blocker-' + release.release_id}
+                        className={styles.actionHint + (!release.contentCurrent || !qualityReady || Boolean(preview && (!preview.contentCurrent || previewFingerprintMismatch)) ? ' ' + styles.actionHintWarning : '')}
+                        role="note">
+                        <span>{qualityBlocker}</span>
+                        {previewNeedsLoading ? (
+                          <button type="button" className={styles.secondaryButton}
+                            disabled={reviewContentLoadingId !== null || reviewChapterLoadingId !== null || busyKey !== null}
+                            onClick={() => void toggleReviewContent(release)}>
+                            Load exact submitted content
+                          </button>
+                        ) : null}
+                      </div>
+                    ) : null}
                     <div className={styles.qualityActions}>
                       <button type="button" className={styles.primaryButton}
                         aria-describedby={qualityBlocker ? 'quality-blocker-' + release.release_id : undefined}
