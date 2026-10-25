@@ -28,6 +28,9 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
         self.assertIn("course_marketplace_content_type_ready(release.program_id)", controller)
         self.assertIn("course_marketplace_content_type_ready(r.program_id)", controller)
         self.assertIn("course_marketplace_content_type_ready(newer_release.program_id)", controller)
+        self.assertGreaterEqual(
+            controller.count("newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'"), 4,
+            "Inactive or placeholder course versions must not hide a currently published learner offer.")
 
     def test_course_type_is_retained_through_invoice_snapshot_and_history(self):
         financial = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseOrderFinancialService.java").read_text(encoding="utf-8")
