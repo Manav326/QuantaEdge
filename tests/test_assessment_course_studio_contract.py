@@ -120,6 +120,28 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("course_release_fingerprint_current(?,?,?)", controller)
         self.assertIn("reviewedContentFingerprint", controller)
 
+    def test_hrms_k12_quality_review_uses_structured_chapter_and_lesson_workspace(self):
+        hrms_page = (ROOT / "apps/people/app/institutions/MarketplaceLaunchStepper.tsx").read_text(encoding="utf-8")
+        hrms_styles = (ROOT / "apps/people/app/institutions/MarketplaceLaunchStepper.module.css").read_text(encoding="utf-8")
+        controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseMarketplaceLaunchController.java").read_text(encoding="utf-8")
+        for token in (
+            "k12ReviewBackdrop",
+            "Open chapter review",
+            "k12ReviewChapterNav",
+            "k12ReviewLessonNav",
+            "k12ReviewBilingualGrid",
+            "k12ReviewDetailSection",
+            "Submitted release fingerprint",
+            "Read-only inspection of the frozen release",
+            "toggleReviewChapter(release,chapterId)",
+            "reviewedContentFingerprint",
+        ):
+            self.assertIn(token, hrms_page)
+        for token in ("position:fixed", "width:100vw", ".k12ReviewWorkspace", ".k12ReviewLessonLayout", ".k12ReviewBilingualGrid"):
+            self.assertIn(token, hrms_styles)
+        self.assertIn("course_release_fingerprint_current(?,?,?)", controller)
+        self.assertIn("reviewedContentFingerprint", controller)
+
     def test_assessment_course_creation_is_type_specific_and_tenant_owned(self):
         service = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseAuthoringService.java").read_text(encoding="utf-8")
         self.assertIn('"ASSESSMENT".equals(type)', service)
