@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "40ca6821db30a7359684d12ce8bd0d4989ca0717d39341ff0cff77219e289b3d",
+  "raw_analysis_sha256": "72fdcef0fd9583cab01e915548b07334325c9c3479a600461cec37e86f8d34ff",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40169037462",
-      "checkpointed_at": "2026-10-25T07:34:19Z",
+      "checkpointed_at": "2026-10-25T07:47:01Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40169037462",
-      "checkpointed_at": "2026-10-25T07:35:06Z",
+      "checkpointed_at": "2026-10-25T07:47:47Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57861,7 +57861,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40169037462",
-      "checkpointed_at": "2026-10-25T07:36:02Z",
+      "checkpointed_at": "2026-10-25T07:48:42Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -62380,7 +62380,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40150632213",
+      "run_id": "40169037462",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -63006,6 +63006,50 @@
         "context_relation": "The image is related to the textbook content about pressure, winds, storms, and cyclones.",
         "limitations": [
           "The image does not provide specific details about the questions or answers."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "449378e8ae8b35bb20697194",
+      "asset_sha256": "62f39e628fd1251f8db4487be3e1e922fd959fb3d79358ca0411075f9d87c73d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 100,
+      "asset_path": "assets/62f39e628fd1251f8db4487be3e1e922fd959fb3d79358ca0411075f9d87c73d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "621906418b19de46342da6d992739c055a601ed772b759e8a147f091bba33328",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A QR code with the text '0877CH06' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0877CH06"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code is likely related to the content of the textbook, possibly a question or exercise.",
+        "limitations": [
+          "The image does not provide specific content or questions from the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40169037462",
+      "checkpointed_at": "2026-10-25T07:55:20Z",
+      "effective_analysis": {
+        "visual_summary": "A QR code with the text '0877CH06' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0877CH06"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code is likely related to the content of the textbook, possibly a question or exercise.",
+        "limitations": [
+          "The image does not provide specific content or questions from the textbook."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

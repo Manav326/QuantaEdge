@@ -14,13 +14,13 @@
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "e03a02c3fc37627f873ab044",
-      "20df8e5fc304c9c021f205e2"
+      "bfd9bab18e214c87823cfc98",
+      "449378e8ae8b35bb20697194"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1265,
-    "assets_remaining": 1026,
-    "assets_completion_percent": 55.2,
+    "assets_analyzed": 1266,
+    "assets_remaining": 1025,
+    "assets_completion_percent": 55.3,
     "assets_failed": 11,
     "assets_skipped_from_checkpoint": 1265,
     "batch_limit": 5,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40169037462",
-      "checkpointed_at": "2026-10-25T07:34:19Z"
+      "checkpointed_at": "2026-10-25T07:47:01Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40169037462",
-      "checkpointed_at": "2026-10-25T07:35:06Z"
+      "checkpointed_at": "2026-10-25T07:47:47Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40169037462",
-      "checkpointed_at": "2026-10-25T07:36:02Z"
+      "checkpointed_at": "2026-10-25T07:48:42Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -41344,7 +41344,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40150632213",
+      "run_id": "40169037462",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -41748,6 +41748,36 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40150632213",
       "checkpointed_at": "2026-10-25T03:24:02Z"
+    },
+    {
+      "asset_id": "449378e8ae8b35bb20697194",
+      "asset_sha256": "62f39e628fd1251f8db4487be3e1e922fd959fb3d79358ca0411075f9d87c73d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 100,
+      "asset_path": "assets/62f39e628fd1251f8db4487be3e1e922fd959fb3d79358ca0411075f9d87c73d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "621906418b19de46342da6d992739c055a601ed772b759e8a147f091bba33328",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A QR code with the text '0877CH06' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0877CH06"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code is likely related to the content of the textbook, possibly a question or exercise.",
+        "limitations": [
+          "The image does not provide specific content or questions from the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40169037462",
+      "checkpointed_at": "2026-10-25T07:55:20Z"
     }
   ]
 }

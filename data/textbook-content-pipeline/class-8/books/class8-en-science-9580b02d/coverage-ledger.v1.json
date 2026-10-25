@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1279,
-    "successful_visual_analyses": 1268,
-    "missing_visual_analyses": 1012,
+    "raw_analysis_result_rows": 1280,
+    "successful_visual_analyses": 1269,
+    "missing_visual_analyses": 1011,
     "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1023,
+    "unresolved_count": 1022,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -48016,9 +48016,20 @@
       "asset_path": "assets/62f39e628fd1251f8db4487be3e1e922fd959fb3d79358ca0411075f9d87c73d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A QR code with the text '0877CH06' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0877CH06"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code is likely related to the content of the textbook, possibly a question or exercise.",
+        "limitations": [
+          "The image does not provide specific content or questions from the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
