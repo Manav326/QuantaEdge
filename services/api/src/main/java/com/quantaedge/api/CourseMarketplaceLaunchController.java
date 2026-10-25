@@ -332,6 +332,7 @@ public class CourseMarketplaceLaunchController {
         join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
         join institution_tenant source on source.id=r.source_institution_id and source.status='ACTIVE'
         where r.release_state='SHAREABLE' and r.source_institution_id<>?
+          and course_marketplace_content_type_ready(p.id)
           and not exists(select 1 from institution_course_assignment a
             where a.institution_id=? and a.course_release_id=r.id and a.status='ASSIGNED')
         order by p.display_name,source.display_name,r.release_version desc,r.id desc
