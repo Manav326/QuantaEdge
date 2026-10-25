@@ -252,6 +252,9 @@ function priceText(paise?: number | null) {
   if (paise === null || paise === undefined) return 'Price not set';
   return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(paise / 100);
 }
+function normalizeFingerprint(value: unknown): string {
+  return String(value ?? '').trim().toLowerCase();
+}
 function statusText(status: string) {
   return status.replaceAll('_', ' ').toLowerCase().replace(/\b[a-z]/g, value => value.toUpperCase());
 }
@@ -463,7 +466,7 @@ export default function MarketplaceLaunchStepper({
       setReviewChapters(previous => ({ ...previous, [chapterId]: chapter }));
       setExpandedReviewChapters(previous => ({ ...previous, [release.release_id]: chapterId }));
       const exactReleaseCurrent = detail.contentCurrent === true
-        && detail.content_fingerprint === release.content_fingerprint;
+        && normalizeFingerprint(detail.content_fingerprint) === normalizeFingerprint(release.content_fingerprint);
       setReviewContent(previous => {
         const existing=previous[release.release_id];
         if(!existing) return previous;
@@ -501,7 +504,7 @@ export default function MarketplaceLaunchStepper({
     const assessmentOnly = release.delivery_mode === 'ASSESSMENT_ONLY' || release.course_type_code === 'ASSESSMENT';
     const preview = reviewContent[release.release_id];
     if (approved && (!preview || !preview.contentCurrent
-      || preview.content_fingerprint !== release.content_fingerprint)) {
+      || normalizeFingerprint(preview.content_fingerprint) !== normalizeFingerprint(release.content_fingerprint))) {
       setError('Open and inspect the exact submitted release content before approving its quality.');
       return;
     }
@@ -879,7 +882,6 @@ export default function MarketplaceLaunchStepper({
                   && release.published_chapters > 0 && release.published_lessons > 0);
               const preview = reviewContent[release.release_id];
               const reviewNoteLength = (reviewNotes[release.release_id] || '').trim().length;
-              const normalizeFingerprint = (value: unknown) => String(value ?? '').trim().toLowerCase();
               const previewFingerprint = normalizeFingerprint(preview?.content_fingerprint);
               const submittedFingerprint = normalizeFingerprint(release.content_fingerprint);
               const exactPreviewReady = Boolean(preview && preview.contentCurrent
