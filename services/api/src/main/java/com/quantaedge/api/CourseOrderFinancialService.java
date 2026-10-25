@@ -97,6 +97,15 @@ public class CourseOrderFinancialService {
     final OffsetDateTime effectiveAt=asOf;
     if(listedPricePaise<=0) throw new IllegalArgumentException("A paid course needs a positive listed price.");
     if(!"INR".equalsIgnoreCase(currency)) throw new IllegalArgumentException("Financial checkout currently supports INR only.");
+    List<Map<String,Object>> products=jdbc.queryForList("""
+      select p.id as course_id,p.code as course_code,p.course_type_code
+      from institution_marketplace_offer o
+      join curriculum_program p on p.id=o.course_id
+      where o.id=? and o.institution_id=? and o.course_id=p.id
+      """,offerId,institutionId);
+    if(products.size()!=1) throw new IllegalStateException(
+        "The institution offer does not resolve to exactly one course product. No checkout snapshot was created.");
+    Map<String,Object> product=products.getFirst();
     String normalizedCode=normalizeDiscountCode(requestedDiscountCode);
     Long discountOfferId=null;
     long discountPaise=0L;
@@ -334,7 +343,12 @@ public class CourseOrderFinancialService {
     taxSnapshot.put("outputTaxPaise",quote.outputTaxPaise());
     taxSnapshot.put("customerPayablePaise",quote.customerPayablePaise());
     taxSnapshot.put("components",taxComponents);
+    taxSnapshot.put("courseId",number(product.get("course_id")));
+    taxSnapshot.put("courseCode",string(product.get("course_code")));
+    taxSnapshot.put("courseTypeCode",string(product.get("course_type_code")));
     taxSnapshot.put("courseTitle",courseTitle);
+    // Tax treatment and SAC remain the explicit approved HRMS offer/tax-profile decision;
+    // course type is immutable invoice provenance, not an implicit tax-rate selector.
     taxSnapshot.put("institutionId",institutionId);
     taxSnapshot.put("institutionOfferId",offerId);
     taxSnapshot.put("institutionName",institutionName(institutionId));
@@ -628,6 +642,8 @@ public class CourseOrderFinancialService {
     transaction.put("coursePaymentOrderId",orderId);
     transaction.put("orderReference","QE-ORDER-"+orderId);
     transaction.put("courseId",number(order.get("course_id")));
+    transaction.put("courseCode",value(taxSnapshot,"courseCode",""));
+    transaction.put("courseTypeCode",value(taxSnapshot,"courseTypeCode",""));
     transaction.put("courseTitle",value(taxSnapshot,"courseTitle","Course access"));
     transaction.put("institutionId",number(taxSnapshot.get("institutionId")));
     transaction.put("institutionName",value(taxSnapshot,"institutionName",""));
