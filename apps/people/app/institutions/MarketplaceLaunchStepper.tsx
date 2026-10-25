@@ -1533,7 +1533,7 @@ export default function MarketplaceLaunchStepper({
             const status = String(item.offerStatus || 'NOT_CONFIGURED').toUpperCase();
             const meter = progress(item);
             const blocker = nextBlocker(item);
-            const editing = !item.offerId || ['DRAFT', 'REJECTED', 'ARCHIVED'].includes(status);
+            const editing = !item.offerId || ['DRAFT', 'REJECTED'].includes(status);
             const canSubmit = Boolean(item.offerId) && item.ready && ['DRAFT', 'REJECTED'].includes(status);
             const canApprove = Boolean(item.offerId) && item.ready && status === 'IN_REVIEW';
             const canPublish = Boolean(item.offerId) && item.ready && status === 'APPROVED';
@@ -1595,6 +1595,7 @@ export default function MarketplaceLaunchStepper({
                           ) : (
                             <p className={styles.stepHint}>This stage can be evaluated after the draft offer and price exist.</p>
                           )}
+                          {group.key === 'offer' && status === 'ARCHIVED' && <p className={styles.stepHint}>This listing revision is archived and cannot be reactivated. Create a new source-owned course release and complete HRMS review before configuring a new listing.</p>}
                           {group.key === 'offer' && editing && (
                             <div className={styles.offerForm}>
                               <label>Student-facing title<input value={draft.title} maxLength={200} onChange={event => updateDraft(item.assignmentId, { title: event.target.value })} /></label>
