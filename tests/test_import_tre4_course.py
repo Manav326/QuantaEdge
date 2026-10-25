@@ -362,18 +362,49 @@ class Tre4ImporterTests(unittest.TestCase):
                     import_tre4_course.lock_latest_draft_release(cursor, 42, 777)
                 self.assertEqual(len(cursor.statements), 1)
 
-    def test_importer_never_shortcuts_course_release_lifecycle(self):
+    def test_release_is_created_as_draft_before_any_submission(self):
         importer = SCRIPT.read_text(encoding="utf-8")
 
-        self.assertNotIn("--submit-for-review", importer)
-        self.assertNotIn("SET release_state='IN_QUALITY_REVIEW'", importer)
+        self.assertIn("--submit-for-review", importer)
+        self.assertIn("SET release_state='IN_QUALITY_REVIEW'", importer)
+        self.assertIn("VALUES (%s,%s,1,'DRAFT',%s,NULL,NULL,NULL,false,NULL,now(),now())", importer)
         self.assertNotIn('initial_state = "IN_QUALITY_REVIEW"', importer)
-        self.assertIn("VALUES (%s,%s,1,'DRAFT',%s,NULL,false,NULL,now(),now())", importer)
-        self.assertIn('"submittedForReview": False', importer)
+        self.assertNotIn("release_state='IN_QUALITY_REVIEW' if", importer)
+        self.assertIn('elif release_row is None:', importer)
+        self.assertIn("first course release", importer)
+        self.assertIn('"submittedForReview": str(release_state) == "IN_QUALITY_REVIEW"', importer)
         self.assertIn('"assessmentStatus": assessment_state', importer)
         self.assertIn('"testPackStatus": pack_state', importer)
         self.assertIn("questionReviewStatusCounts", importer)
         self.assertIn("answerReviewStatusCounts", importer)
+
+    def test_importer_never_publishes_tests_or_packs_directly(self):
+        importer = SCRIPT.read_text(encoding="utf-8")
+
+        self.assertNotRegex(importer, r"UPDATE\\s+assessment\\s+SET\\s+status\\s*=\\s*'PUBLISHED'")
+        self.assertNotRegex(importer, r"UPDATE\\s+course_assessment_pack\\s+SET\\s+status\\s*=\\s*'PUBLISHED'")
+        self.assertIn("SELECT assessment_only_course_publish_ready(%s)", importer)
+        self.assertIn("publish_ready = bool(publish_ready_row and publish_ready_row[0] is True)", importer)
+        self.assertIn("if submit_for_review:", importer)
+        self.assertIn("only DRAFT releases may be imported", importer)
+
+    def test_status_vocabulary_matches_schema_and_supported_workflows(self):
+        root = SCRIPT.parents[1]
+        releases_and_offers = (root / "services/api/src/main/resources/db/migration/V125__institution_course_releases_and_tenant_offers.sql").read_text(encoding="utf-8")
+        packs = (root / "services/api/src/main/resources/db/migration/V177__course_type_registry_and_assessment_packs.sql").read_text(encoding="utf-8")
+        assessment_controller = (root / "services/api/src/main/java/com/quantaedge/api/AssessmentController.java").read_text(encoding="utf-8")
+        hrms_controller = (root / "services/api/src/main/java/com/quantaedge/api/PlatformInstitutionController.java").read_text(encoding="utf-8")
+        offer_controller = (root / "services/api/src/main/java/com/quantaedge/api/CourseMarketplaceLaunchController.java").read_text(encoding="utf-8")
+
+        self.assertIn("'DRAFT','IN_QUALITY_REVIEW','QUALITY_APPROVED','SHAREABLE'", releases_and_offers)
+        self.assertIn("'LEGACY_MIGRATED','WITHDRAWN','REJECTED'", releases_and_offers)
+        self.assertIn("status IN ('DRAFT','PUBLISHED','ARCHIVED')", packs)
+        self.assertIn('Set.of("DRAFT", "PUBLISHED", "ARCHIVED")', assessment_controller)
+        self.assertIn('Set.of("APPROVED","REJECTED","PENDING_HUMAN_REVIEW")', assessment_controller)
+        self.assertIn('String next=approved?"QUALITY_APPROVED":"REJECTED"', hrms_controller)
+        self.assertIn("status IN ('DRAFT','IN_REVIEW','APPROVED','PUBLISHED','REJECTED','ARCHIVED')", releases_and_offers)
+        self.assertIn('next="IN_REVIEW"', offer_controller)
+        self.assertNotIn('next="SUBMITTED"', offer_controller)
 
 
 
