@@ -512,7 +512,7 @@ export default function MarketplaceLaunchStepper({
         && release.published_chapters > 0 && release.published_lessons > 0;
     if (approved && (!release.contentCurrent || !releaseReady)) {
       setError(assessmentOnly
-        ? 'This assessment-only release is not ready. Confirm every test pack has the expected assessments, question snapshots, and reviewed answer keys, then refresh the review.'
+        ? 'Do not approve this frozen release while any assessment or test pack is still Draft. Reject it for correction, then have the source institution review every question/answer, publish all assessments (which publishes complete packs), and submit a fresh release.'
         : 'This release is not ready for quality approval. Refresh the checklist and ensure every active subject has published lessons.');
       return;
     }
