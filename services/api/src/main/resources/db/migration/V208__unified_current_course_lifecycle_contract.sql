@@ -413,6 +413,15 @@ BEGIN
   IF NEW.status = 'ASSIGNED' AND NOT EXISTS (
     SELECT 1
     FROM institution_course_release release
+    JOIN curriculum_program program
+      ON program.id = release.program_id
+     AND program.status = 'ACTIVE'
+     AND program.code <> 'GENERAL'
+    JOIN institution_course_identity identity
+      ON identity.id = program.course_identity_id
+     AND identity.status = 'ACTIVE'
+     AND identity.source_institution_id = release.source_institution_id
+     AND identity.course_type_code = program.course_type_code
     WHERE release.id = NEW.course_release_id
       AND release.legacy_migration = false
       AND release.obsolete_at IS NULL
