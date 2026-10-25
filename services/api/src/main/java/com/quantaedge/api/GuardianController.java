@@ -205,9 +205,10 @@ public class GuardianController {
     return jdbc.queryForList("""
       select st.id,st.public_id,st.display_name,st.class_code,cc.display_name as class_name,st.board,st.language,
              slc.username as login_username,gs.relationship,gs.consent_status,
-             coalesce((select string_agg(distinct p.display_name,', ' order by p.display_name)
+             coalesce((select string_agg(distinct coalesce(identity.display_name,p.display_name),', ' order by coalesce(identity.display_name,p.display_name))
                  from student_program_enrollment spe
                  join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+                 left join institution_course_identity identity on identity.id=p.course_identity_id
                  join institution_course_assignment assignment on assignment.institution_id=spe.institution_id and assignment.status='ASSIGNED'
                  join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
                  where spe.student_id=st.id and spe.institution_id=? and spe.status in ('ACTIVE','PAUSED')),'') as course_names
@@ -346,13 +347,29 @@ public class GuardianController {
       """,institutionId,studentId);
 
     List<Map<String,Object>> enrolledCourses=jdbc.queryForList("""
-      select distinct p.id as course_id,p.display_name as course_name,p.code as course_code,spe.status as enrollment_status
-      from student_program_enrollment spe
-      join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-      join institution_course_assignment assignment on assignment.institution_id=spe.institution_id and assignment.status='ASSIGNED'
-      join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
-      where spe.student_id=? and spe.institution_id=? and spe.status in ('ACTIVE','PAUSED')
-      order by p.display_name,p.id
+      with enrolled_versions as (
+        select p.id as course_id,p.display_name as course_name,
+          coalesce(identity.stable_course_key,p.code) as course_code,
+          identity.public_id as course_identity_public_id,p.content_version_no,
+          spe.status as enrollment_status,
+          row_number() over (
+            partition by coalesce(p.course_identity_id,-p.id)
+            order by case when spe.status='ACTIVE' then 0 else 1 end,
+              p.content_version_no desc,p.id desc
+          ) as identity_rank
+        from student_program_enrollment spe
+        join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        left join institution_course_identity identity on identity.id=p.course_identity_id
+        join institution_course_assignment assignment
+          on assignment.institution_id=spe.institution_id and assignment.status='ASSIGNED'
+        join institution_course_release release
+          on release.id=assignment.course_release_id and release.program_id=p.id
+        where spe.student_id=? and spe.institution_id=? and spe.status in ('ACTIVE','PAUSED')
+      )
+      select course_id,course_name,course_code,course_identity_public_id,enrollment_status
+      from enrolled_versions
+      where identity_rank=1
+      order by course_name,course_code
       """,studentId,institutionId);
     if(enrolledCourses.isEmpty()) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
@@ -464,9 +481,10 @@ public class GuardianController {
   private Map<String,Object> childProfileResponse(long studentId,long institutionId) {
     return jdbc.queryForMap("""
       select st.id,st.public_id,st.display_name,st.class_code,st.board,st.language,
-        coalesce((select string_agg(distinct p.display_name,', ' order by p.display_name)
+        coalesce((select string_agg(distinct coalesce(identity.display_name,p.display_name),', ' order by coalesce(identity.display_name,p.display_name))
                  from student_program_enrollment spe
                  join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+                 left join institution_course_identity identity on identity.id=p.course_identity_id
                  join institution_course_assignment assignment on assignment.institution_id=spe.institution_id and assignment.status='ASSIGNED'
                  join institution_course_release release on release.id=assignment.course_release_id and release.program_id=p.id
                  where spe.student_id=st.id and spe.institution_id=? and spe.status in ('ACTIVE','PAUSED')),'') as course_names
