@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2292,
-    "successful_visual_analyses": 2264,
-    "missing_visual_analyses": 5196,
-    "failed_visual_analyses": 28,
+    "raw_analysis_result_rows": 2297,
+    "successful_visual_analyses": 2267,
+    "missing_visual_analyses": 5191,
+    "failed_visual_analyses": 30,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5224,
+    "unresolved_count": 5221,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -95212,9 +95212,30 @@
       "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the effects of air and water on other metals, including a demonstration activity.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "51",
+          "4.3 Eﬀect of Air and Water on Other",
+          "Metals",
+          "Activity 4.6: Let us investigate (demonstration activity)",
+          "Non-metals",
+          "The teacher may demonstrate this activity.",
+          "Caution— It is advisable"
+        ],
+        "concepts": [
+          "Effects of air and water on other metals",
+          "Demonstration activity",
+          "Non-metals"
+        ],
+        "context_relation": "The page discusses a demonstration activity related to the effects of air and water on other metals, specifically non-metals.",
+        "limitations": [
+          "The page does not provide specific details about the demonstration activity."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -95230,9 +95251,32 @@
       "asset_path": "assets/eec433d5bcf4d4d164aa53169bd33518ac33429dbcd2e441905c05903b92815f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A glass plate with two strips of colored tape on it.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "51",
+          "4.3 Eﬀect of Air and Water on Other",
+          "Activity 4.6: Let us investigate (demonstration activity)",
+          "Non-metals",
+          "The teacher may demonstrate this activity.",
+          "Caution— It is advisable",
+          "51"
+        ],
+        "concepts": [
+          "Effect of Air and Water on Other Metals",
+          "Demonstration Activity",
+          "Non-metals",
+          "Teacher Demonstration",
+          "Caution"
+        ],
+        "context_relation": "The image is a visual representation of an educational activity related to the effects of air and water on other metals.",
+        "limitations": [
+          "The image does not provide specific details about the demonstration activity."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -95248,7 +95292,7 @@
       "asset_path": "assets/c5a86d1602638760ddec7eb1dd18beb3fedc4873b6825ad3bf7c9f0baf9c17e8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -95266,7 +95310,7 @@
       "asset_path": "assets/c5a86d1602638760ddec7eb1dd18beb3fedc4873b6825ad3bf7c9f0baf9c17e8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -95284,9 +95328,29 @@
       "asset_path": "assets/e92f2b5e87e622674af5750af3939ce9505f216b9cdadea83d5d2eec8ebb3a03.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A demonstration activity involving metals and air/water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "4.3 Eﬀect of Air and Water on Other Metals",
+          "Activity 4.6: Let us investigate (demonstration activity)",
+          "Non-metals",
+          "The teacher may demonstrate this activity.",
+          "Caution— It is advisable"
+        ],
+        "concepts": [
+          "Effect of Air and Water on Metals",
+          "Demonstration Activity",
+          "Non-metals",
+          "Teacher Demonstration"
+        ],
+        "context_relation": "The image is a part of an educational textbook page discussing a demonstration activity related to the effect of air and water on metals.",
+        "limitations": [
+          "The image does not provide specific details about the demonstration activity."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
