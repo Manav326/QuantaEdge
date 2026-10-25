@@ -48,7 +48,7 @@ public class CourseMarketplaceLaunchReadinessService {
   public Map<String,Object> inspectAssignment(long assignmentId,long institutionScope) {
     List<Map<String,Object>> rows=jdbc.queryForList("""
         select a.id as assignment_id,a.institution_id,a.status as assignment_status,
-          r.id as release_id,r.release_state,r.content_fingerprint,
+          r.id as release_id,r.release_state,r.content_fingerprint,r.updated_at as release_updated_at,
           t.display_name as institution_name,t.status as institution_status,
           p.id as course_id,p.code as course_code,p.display_name as course_name,p.status as course_status,
           coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=p.id),'LEARNING_CONTENT') as delivery_mode,
@@ -118,8 +118,8 @@ public class CourseMarketplaceLaunchReadinessService {
     // gates pass. Defer the full graph hash until HRMS quality approval; the dedicated quality
     // review queue still verifies the submitted fingerprint before a reviewer can approve it.
     boolean fingerprintApplicable=List.of("QUALITY_APPROVED","SHAREABLE").contains(releaseState);
-    boolean contentUnchanged=fingerprintApplicable&&!savedFingerprint.isBlank()
-        &&savedFingerprint.equals(contentFingerprint(courseId));
+    boolean contentUnchanged=fingerprintApplicable
+        &&contentFingerprintMatches(courseId,savedFingerprint,row.get("release_updated_at"));
     add(checks,"CONTENT_REVIEW_CURRENT","Reviewed course content is current",contentUnchanged,
         fingerprintApplicable
             ? "The course content has changed since quality review or has no reviewed fingerprint. Resubmit the release for platform quality review."
@@ -169,7 +169,7 @@ public class CourseMarketplaceLaunchReadinessService {
         select o.id as offer_id,o.institution_id,o.assignment_id,o.course_release_id,o.course_id,
           o.title_override,o.description,o.price_paise,o.currency,o.status as offer_status,
           t.display_name as institution_name,t.status as institution_status,
-          a.status as assignment_status,r.release_state,r.content_fingerprint,
+          a.status as assignment_status,r.release_state,r.content_fingerprint,r.updated_at as release_updated_at,
           p.status as course_status,p.code as course_code,p.display_name as course_name,
           coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=p.id),'LEARNING_CONTENT') as delivery_mode,
           (select count(distinct ps.subject_id)
@@ -243,8 +243,8 @@ public class CourseMarketplaceLaunchReadinessService {
     // a full content graph fingerprint here adds no publication safety and can exhaust database
     // memory for large historical K-12 courses.
     boolean fingerprintApplicable = List.of("QUALITY_APPROVED","SHAREABLE").contains(releaseState);
-    boolean contentUnchanged = fingerprintApplicable && !savedFingerprint.isBlank()
-        && savedFingerprint.equals(contentFingerprint(courseId));
+    boolean contentUnchanged = fingerprintApplicable
+        && contentFingerprintMatches(courseId,savedFingerprint,offer.get("release_updated_at"));
     add(checks,"CONTENT_REVIEW_CURRENT","Reviewed course content is current",contentUnchanged,
         fingerprintApplicable
             ? "The course content has changed since quality review or has no reviewed fingerprint. Resubmit the release for platform quality review."
@@ -623,6 +623,19 @@ public class CourseMarketplaceLaunchReadinessService {
   public boolean contentFingerprintMatches(long programId,String savedFingerprint) {
     return savedFingerprint!=null&&!savedFingerprint.isBlank()
         &&savedFingerprint.trim().equals(contentFingerprint(programId));
+  }
+
+  /**
+   * Validate with the release verification marker when possible. V180 freezes the graph once it
+   * enters review; V196 refreshed current fingerprints and updated_at. Older rows fall back to
+   * the canonical full comparison so pre-existing stale releases remain blocked.
+   */
+  public boolean contentFingerprintMatches(long programId,String savedFingerprint,Object releaseUpdatedAt) {
+    if(savedFingerprint==null||savedFingerprint.isBlank()||releaseUpdatedAt==null)return false;
+    Boolean matches=jdbc.queryForObject(
+        "select course_release_fingerprint_current(?,?,?)",Boolean.class,
+        programId,savedFingerprint.trim(),releaseUpdatedAt);
+    return Boolean.TRUE.equals(matches);
   }
 
   private String contentFingerprint(long programId) {
