@@ -911,7 +911,8 @@ export default function ContentStudio(){
     </div>:null}
     {isAssessmentCourse ? (
      <div className="qe-assessment-course-library">
-      <p style={{margin:'0 0 12px',color:'var(--admin-muted,#667085)',fontSize:13}}>{t('admin.contentStudio.assessmentContentIntro')}</p>
+      <p style={{margin:'0 0 8px',color:'var(--admin-muted,#667085)',fontSize:13}}>{t('admin.contentStudio.assessmentContentIntro')}</p>
+      <p style={{margin:'0 0 12px',color:'var(--admin-muted,#667085)',fontSize:12}}>Hierarchy: <strong>test packs → assessments/tests → ordered question snapshots</strong>. Every imported question and answer remains review-gated; publishing is a separate lifecycle step.</p>
       {loading ? <div className="qe-library-empty" role="status"><strong>{t('admin.contentStudio.loadingContentRecords')}</strong></div>
         : assessmentRows.length===0 ? <div className="qe-library-empty"><strong>{t('admin.contentStudio.assessmentNoPapers')}</strong><p>{t('admin.contentStudio.assessmentNoPapersHelp')}</p><Link className="qe-primary-button" href={'/assessments?courseId='+encodeURIComponent(programFilter)}>Open assessment workspace</Link></div>
         : <div className="qe-curriculum-map">{assessmentRows.map(row=>{
