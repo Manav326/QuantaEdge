@@ -70,9 +70,13 @@ public class CourseMarketplaceLaunchController {
                    'LEARNING_CONTENT') as delivery_mode
         from institution_course_release r
         join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-        left join institution_course_identity identity on identity.id=p.course_identity_id
+        join institution_course_identity identity
+          on identity.id=p.course_identity_id and identity.status='ACTIVE'
+         and identity.source_institution_id=r.source_institution_id
+         and identity.course_type_code=p.course_type_code
         join institution_tenant t on t.id=r.source_institution_id and t.status='ACTIVE'
         where r.id=? and r.source_institution_id=? and r.release_state='IN_QUALITY_REVIEW'
+          and r.legacy_migration=false and r.obsolete_at is null
         """,releaseId,institutionId);
     if(rows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,
         "The submitted course release is not available in this institution's HRMS quality-review queue.");
