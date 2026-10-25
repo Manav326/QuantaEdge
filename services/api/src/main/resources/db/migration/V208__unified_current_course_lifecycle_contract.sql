@@ -25,6 +25,26 @@ ALTER TABLE course_marketplace_offer
   ADD COLUMN IF NOT EXISTS obsolete_at timestamptz,
   ADD COLUMN IF NOT EXISTS obsolete_reason text;
 
+-- Replace the original assignment source check. Legacy source values remain
+-- allowed only on revoked historical rows; active assignments are exclusively ORIGIN or HRMS.
+DO $drop_old_assignment_source_check$
+DECLARE old_constraint record;
+BEGIN
+  FOR old_constraint IN
+    SELECT conname
+    FROM pg_constraint
+    WHERE conrelid = 'public.institution_course_assignment'::regclass
+      AND contype = 'c'
+      AND pg_get_constraintdef(oid) ILIKE '%assignment_source%'
+  LOOP
+    EXECUTE format(
+      'ALTER TABLE public.institution_course_assignment DROP CONSTRAINT %I',
+      old_constraint.conname
+    );
+  END LOOP;
+END
+$drop_old_assignment_source_check$;
+
 ALTER TABLE student_certificate
   ADD COLUMN IF NOT EXISTS course_identity_id bigint
     REFERENCES institution_course_identity(id) ON DELETE RESTRICT;
@@ -614,6 +634,12 @@ WHERE release.id = assignment.course_release_id
     OR release.release_state = 'LEGACY_MIGRATED'
     OR release.obsolete_at IS NOT NULL
   );
+
+ALTER TABLE institution_course_assignment
+  ADD CONSTRAINT ck_institution_course_assignment_current_source
+  CHECK (status <> 'ASSIGNED' OR assignment_source IN ('ORIGIN','HRMS')) NOT VALID;
+ALTER TABLE institution_course_assignment
+  VALIDATE CONSTRAINT ck_institution_course_assignment_current_source;
 
 COMMENT ON COLUMN institution_course_release.obsolete_at IS
   'Set when a release is retired from the active pipeline; content graph and learner history remain preserved.';
