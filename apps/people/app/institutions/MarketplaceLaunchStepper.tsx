@@ -340,6 +340,8 @@ export default function MarketplaceLaunchStepper({
   const [assessmentReviewTarget,setAssessmentReviewTarget] = useState<{releaseId:number;assessmentId:number;sequenceNo:number}|null>(null);
   const [assessmentReviewSearch,setAssessmentReviewSearch] = useState('');
   const [assessmentReviewStatusFilter,setAssessmentReviewStatusFilter] = useState<'ALL'|'PENDING'|'APPROVED'|'REJECTED'>('ALL');
+  const [k12ReviewTarget,setK12ReviewTarget] = useState<{releaseId:number;chapterId:number;lessonId:number|null}|null>(null);
+  const [k12ReviewSearch,setK12ReviewSearch] = useState('');
   const [reviewContentLoadingId, setReviewContentLoadingId] = useState<number | null>(null);
   const [reviewContentErrors, setReviewContentErrors] = useState<Record<number, string>>({});
   const [reviewChapters, setReviewChapters] = useState<Record<number, ReleaseReviewChapter>>({});
@@ -479,6 +481,41 @@ export default function MarketplaceLaunchStepper({
       window.removeEventListener('keydown',onKeyDown);
     };
   },[assessmentReviewOpen]);
+
+  const k12ReviewOpen = k12ReviewTarget !== null;
+  const k12ReviewRelease = k12ReviewTarget ? (data?.qualityReviewItems||[]).find(item=>item.release_id===k12ReviewTarget.releaseId) : undefined;
+  const k12ReviewPreview = k12ReviewTarget ? reviewContent[k12ReviewTarget.releaseId] : undefined;
+  const k12ReviewChapter = k12ReviewTarget ? reviewChapters[k12ReviewTarget.chapterId] : undefined;
+  const k12ReviewLesson = k12ReviewChapter?.lessons?.find(lesson=>lesson.id===k12ReviewTarget?.lessonId);
+  const k12ReviewSearchValue = k12ReviewSearch.trim().toLocaleLowerCase();
+  const k12ReviewSubjects = (k12ReviewPreview?.subjects||[]).map(subject=>({
+    ...subject,
+    chapters:(subject.chapters||[]).filter(chapter=>!k12ReviewSearchValue
+      || [chapter.display_name,chapter.code,subject.display_name,subject.code].some(value=>String(value||'').toLocaleLowerCase().includes(k12ReviewSearchValue)))
+  })).filter(subject=>subject.chapters.length>0);
+  const closeK12Review = () => setK12ReviewTarget(null);
+  const openK12Review = (releaseId:number,chapterId:number) => {
+    setK12ReviewSearch('');
+    setK12ReviewTarget({releaseId,chapterId,lessonId:null});
+    const release=(data?.qualityReviewItems||[]).find(item=>item.release_id===releaseId);
+    if(release&&!reviewChapters[chapterId])void toggleReviewChapter(release,chapterId);
+  };
+  const selectK12ReviewChapter = (releaseId:number,chapterId:number) => {
+    setK12ReviewTarget({releaseId,chapterId,lessonId:null});
+    const release=(data?.qualityReviewItems||[]).find(item=>item.release_id===releaseId);
+    if(release&&!reviewChapters[chapterId])void toggleReviewChapter(release,chapterId);
+  };
+  useEffect(()=>{
+    if(!k12ReviewOpen)return;
+    const previousOverflow=document.body.style.overflow;
+    document.body.style.overflow='hidden';
+    const onKeyDown=(event:KeyboardEvent)=>{if(event.key==='Escape')setK12ReviewTarget(null);};
+    window.addEventListener('keydown',onKeyDown);
+    return ()=>{
+      document.body.style.overflow=previousOverflow;
+      window.removeEventListener('keydown',onKeyDown);
+    };
+  },[k12ReviewOpen]);
 
   const counts = useMemo(() => {
     const items = data?.items || [];
@@ -1080,171 +1117,43 @@ export default function MarketplaceLaunchStepper({
                             ))}
                           </>
                         ) : preview.course_type_code === 'K12' && preview.delivery_mode === 'LEARNING_CONTENT' ? (
-                          <div>
-                            <p>{preview.lessonCount} lessons · {preview.lessonBlockCount} teaching blocks · {preview.lessonQuestionCount} lesson questions · {preview.courseResourceCount} resources. Expand a chapter to load its lesson graph and source assets on demand.</p>
-                            {(preview.courseTranslations || []).length > 0 && (
-                              <div style={{margin:'10px 0',padding:10,border:'1px solid var(--border, #d7dce2)',borderRadius:8}}>
-                                <strong>Course translations</strong>
-                                {preview.courseTranslations.map((translation,ti)=>(
-                                  <p key={String(translation.language)+'-'+String(translation.version_no)+'-'+ti} style={{fontSize:12,margin:'5px 0'}}>
-                                    {String(translation.language).toUpperCase()} · {translation.translation_status} v{translation.version_no}: {translation.display_name}
-                                  </p>
-                                ))}
-                              </div>
-                            )}
-                            {(preview.subjects || []).map(subject => (
-                              <section key={subject.id} style={{ marginBottom: 16, borderTop: '1px solid var(--border, #d7dce2)', paddingTop: 12 }}>
-                                <h4 style={{ margin: '0 0 8px' }}>{subject.display_name} <span style={{ fontSize: 12, fontWeight: 400 }}>({subject.code})</span></h4>
-                                {(subject.translations || []).length > 0 && (
-                                  <div style={{fontSize:12,margin:'4px 0 8px',color:'var(--muted, #667085)'}}>
-                                    {(subject.translations || []).map((translation,ti)=>(
-                                      <p key={String(translation.language)+'-'+String(translation.version_no)+'-'+ti} style={{margin:'3px 0'}}>
-                                        {String(translation.language).toUpperCase()} · {translation.translation_status} v{translation.version_no}: {translation.display_name}
-                                      </p>
-                                    ))}
-                                  </div>
-                                )}
-                                {(subject.chapters || []).map(chapter => {
-                                  const chapterContent = reviewChapters[chapter.id];
-                                  const expanded = expandedReviewChapters[release.release_id] === chapter.id;
-                                  return (
-                                    <div key={chapter.id} style={{ margin: '8px 0', padding: 12, border: '1px solid var(--border, #d7dce2)', borderRadius: 8 }}>
-                                      <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap' }}>
-                                        <div>
-                                          <strong>{chapter.display_name}</strong> <span style={{ fontSize: 12, color: 'var(--muted, #667085)' }}>· {chapter.content_status} · {chapter.lesson_count} lessons · {chapter.lesson_block_count} blocks · {chapter.lesson_question_count} questions · {chapter.resource_count} resources</span>
-                                          {(chapter.translations || []).length > 0 && (
-                                            <p style={{margin:'4px 0',fontSize:12,color:'var(--muted, #667085)'}}>
-                                              {(chapter.translations || []).map((translation,ti)=>(
-                                                <span key={String(translation.language)+'-'+String(translation.version_no)+'-'+ti}>
-                                                  {ti>0?' · ':''}{String(translation.language).toUpperCase()} · {translation.translation_status} v{translation.version_no}: {translation.display_name}
-                                                </span>
-                                              ))}
-                                            </p>
-                                          )}
-                                          <p style={{ margin: '4px 0', fontSize: 12, color: 'var(--muted, #667085)' }}>
-                                            Source: {chapter.curriculum_source || 'not recorded'} · Verified: {chapter.curriculum_source_verified ? 'yes' : 'no'}
-                                            {chapter.curriculum_source_pages ? ' · Pages: ' + chapter.curriculum_source_pages : ''}
-                                          </p>
-                                          {chapter.curriculum_source_url && <a href={chapter.curriculum_source_url} target="_blank" rel="noreferrer" style={{ fontSize: 12, overflowWrap: 'anywhere' }}>Open chapter source reference</a>}
-                                        </div>
-                                        <button type="button" className={styles.secondaryButton}
-                                          disabled={reviewChapterLoadingId !== null || busyKey !== null}
-                                          aria-expanded={expanded}
-                                          onClick={() => void toggleReviewChapter(release, chapter.id)}>
-                                          {reviewChapterLoadingId === chapter.id ? 'Loading chapter…' : expanded ? 'Hide chapter content' : chapterContent ? 'Show chapter content' : 'Review chapter content'}
-                                        </button>
+                          <div className={styles.k12ReviewOverview}>
+                            <div className={styles.k12ReviewSummary}>
+                              <div><strong>{preview.subjects?.length||0}</strong><span>Subjects</span></div>
+                              <div><strong>{preview.subjects?.reduce((sum,subject)=>sum+(subject.chapters||[]).length,0)||0}</strong><span>Chapters</span></div>
+                              <div><strong>{preview.lessonCount}</strong><span>Lessons</span></div>
+                              <div><strong>{preview.lessonBlockCount}</strong><span>Teaching blocks</span></div>
+                              <div><strong>{preview.lessonQuestionCount}</strong><span>Lesson questions</span></div>
+                              <div><strong>{preview.courseResourceCount}</strong><span>Resources</span></div>
+                            </div>
+                            <p className={styles.k12ReviewIntro}>Inspect the submitted release by subject, chapter and lesson in a dedicated read-only workspace. Bilingual variants, teaching blocks, lesson questions, answer keys and resources are grouped inside each chapter instead of repeating the entire structure inline.</p>
+                            {(preview.courseTranslations||[]).length>0&&<details className={styles.k12TranslationSummary}>
+                              <summary>Course language variants · {preview.courseTranslations.length}</summary>
+                              <div>{preview.courseTranslations.map((translation,ti)=><p key={String(translation.language)+'-'+String(translation.version_no)+'-'+ti}><b>{String(translation.language).toUpperCase()}</b> · {translation.translation_status} v{translation.version_no} · {translation.display_name}</p>)}</div>
+                            </details>}
+                            {(preview.subjects||[]).map(subject=>(
+                              <section className={styles.k12SubjectDirectory} key={subject.id}>
+                                <header><div><h4>{subject.display_name}</h4><span>{subject.code} · {subject.chapters?.length||0} chapters</span></div>
+                                  {(subject.translations||[]).length>0&&<details><summary>Translations ({subject.translations.length})</summary>{subject.translations.map((translation,ti)=><p key={String(translation.language)+'-'+String(translation.version_no)+'-'+ti}>{String(translation.language).toUpperCase()} · {translation.translation_status} v{translation.version_no}: {translation.display_name}</p>)}</details>}
+                                </header>
+                                <div className={styles.k12ChapterDirectory}>
+                                  {(subject.chapters||[]).map(chapter=>(
+                                    <article className={styles.k12ChapterRow} key={chapter.id}>
+                                      <div className={styles.k12ChapterCopy}>
+                                        <strong>{chapter.display_name}</strong>
+                                        <span>{chapter.content_status} · {chapter.lesson_count} lessons · {chapter.lesson_block_count} blocks · {chapter.lesson_question_count} questions · {chapter.resource_count} resources</span>
+                                        <small>Source: {chapter.curriculum_source||'not recorded'} · Source verified: {chapter.curriculum_source_verified?'Yes':'No'}{chapter.curriculum_source_pages?' · Pages: '+chapter.curriculum_source_pages:''}</small>
+                                        {(chapter.translations||[]).length>0&&<small>{chapter.translations.map((translation,ti)=>(ti?' · ':'')+String(translation.language).toUpperCase()+' v'+translation.version_no+': '+translation.display_name).join('')}</small>}
+                                        {chapter.curriculum_source_url&&<a href={chapter.curriculum_source_url} target="_blank" rel="noreferrer">Open source reference ↗</a>}
                                       </div>
-                                      {expanded && chapterContent && (
-                                        <div style={{ marginTop: 12 }}>
-                                          {(chapterContent.lessons || []).length === 0 && <p>No lesson rows are attached to this chapter.</p>}
-                                          {(chapterContent.lessons || []).map(lesson => (
-                                            <details key={lesson.id} style={{ borderTop: '1px solid var(--border, #d7dce2)', padding: '10px 0' }}>
-                                              <summary style={{ cursor: 'pointer', fontWeight: 600 }}>
-                                                {lesson.sort_order}. {lesson.title} · {lesson.status} · {(lesson.blocks || []).length} blocks · {(lesson.questions || []).length} questions
-                                              </summary>
-                                              <div style={{ marginTop: 8 }}>
-                                                <p style={{ whiteSpace: 'pre-wrap' }}>{lesson.summary || 'No lesson summary'}</p>
-                                                <p style={{ fontSize: 12, color: 'var(--muted, #667085)' }}>
-                                                  Code: {lesson.code} · Estimated time: {lesson.estimated_minutes} min · Active: {lesson.active ? 'yes' : 'no'}
-                                                  {lesson.objective_title ? ' · Objective: ' + lesson.objective_title : ''}
-                                                </p>
-                                                {(lesson.objectiveTranslations || []).length > 0 && (
-                                                  <div style={{margin:'8px 0',padding:8,border:'1px solid var(--border, #d7dce2)',borderRadius:6}}>
-                                                    <strong>Learning objective translations</strong>
-                                                    {(lesson.objectiveTranslations || []).map((translation,ti)=>(
-                                                      <p key={String(translation.language)+'-'+String(translation.version_no)+'-'+ti} style={{margin:'5px 0',fontSize:12,whiteSpace:'pre-wrap'}}>
-                                                        {String(translation.language).toUpperCase()} · {translation.translation_status} v{translation.version_no}: {translation.title || ''}{translation.description ? ' — '+translation.description : ''}
-                                                      </p>
-                                                    ))}
-                                                  </div>
-                                                )}
-                                                {(lesson.translations || []).length > 0 && (
-                                                  <div style={{ margin: '8px 0', padding: 8, background: 'var(--surface-muted, #f7f8fa)', borderRadius: 6 }}>
-                                                    <strong>Lesson translations</strong>
-                                                    {lesson.translations.map((translation, ti) => (
-                                                      <p key={String(translation.language) + '-' + String(translation.version_no) + '-' + ti} style={{ margin: '6px 0', fontSize: 12, whiteSpace: 'pre-wrap' }}>
-                                                        {String(translation.language).toUpperCase()} · {translation.translation_status} v{translation.version_no}: {translation.title || ''}{translation.summary ? ' — ' + translation.summary : ''}
-                                                      </p>
-                                                    ))}
-                                                  </div>
-                                                )}
-                                                <h5 style={{ margin: '12px 0 6px' }}>Teaching blocks</h5>
-                                                {(lesson.blocks || []).map(block => (
-                                                  <details key={block.id} style={{ margin: '6px 0', padding: 8, border: '1px solid var(--border, #d7dce2)', borderRadius: 6 }}>
-                                                    <summary style={{ cursor: 'pointer' }}>Block {block.sequence_no} · {block.block_type}{block.asset_title ? ' · ' + block.asset_title : ''}</summary>
-                                                    <div style={{padding:'8px 10px',borderRadius:6,background:'var(--surface-muted, #f7f8fa)'}}>
-                                                      {readableLessonBlock(block.content).map((field,fieldIndex)=>(
-                                                        <div key={field.label+'-'+fieldIndex} style={{marginBottom:fieldIndex===readableLessonBlock(block.content).length-1?0:8}}>
-                                                          <strong style={{fontSize:12}}>{field.label}</strong>
-                                                          <p style={{margin:'3px 0 0',whiteSpace:'pre-wrap',overflowWrap:'anywhere',fontSize:13}}>{field.text}</p>
-                                                        </div>
-                                                      ))}
-                                                    </div>
-                                                    {block.asset_url && (
-                                                      <div style={{marginTop:8}}>
-                                                        {/^https:\/\//i.test(block.asset_url) && ['IMAGE','DIAGRAM'].includes(String(block.asset_type||'').toUpperCase()) && (
-                                                          <img src={block.asset_url} alt={block.asset_alt||block.asset_title||'Course visual under review'}
-                                                            loading="lazy" referrerPolicy="no-referrer"
-                                                            style={{display:'block',maxWidth:'100%',maxHeight:420,objectFit:'contain',border:'1px solid var(--border, #d7dce2)',borderRadius:8,background:'#fff'}} />
-                                                        )}
-                                                        <p style={{fontSize:12}}>Asset: <a href={block.asset_url} target="_blank" rel="noreferrer">{block.asset_title || block.asset_url}</a> · {block.asset_type || 'file'} · {block.asset_status || 'unknown status'}{block.asset_alt ? ' · Alt: ' + block.asset_alt : ''}</p>
-                                                      </div>
-                                                    )}
-                                                    <details style={{marginTop:8}}>
-                                                      <summary style={{cursor:'pointer',fontSize:12}}>Inspect raw block JSON</summary>
-                                                      <pre style={{whiteSpace:'pre-wrap',overflowWrap:'anywhere',fontSize:12,padding:8}}>{JSON.stringify(block.content,null,2)}</pre>
-                                                    </details>
-                                                    {(block.translations || []).map((translation, ti) => (
-                                                      <div key={String(translation.language) + '-' + String(translation.version_no) + '-' + ti} style={{ marginTop: 8 }}>
-                                                        <strong>{String(translation.language).toUpperCase()} block translation · {translation.translation_status} v{translation.version_no}</strong>
-                                                        <pre style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', fontSize: 12 }}>{JSON.stringify(translation.content, null, 2)}</pre>
-                                                      </div>
-                                                    ))}
-                                                  </details>
-                                                ))}
-                                                <h5 style={{ margin: '12px 0 6px' }}>Lesson questions and answer keys</h5>
-                                                {(lesson.questions || []).map(question => (
-                                                  <div key={question.id} style={{ margin: '6px 0', padding: 8, border: '1px solid var(--border, #d7dce2)', borderRadius: 6 }}>
-                                                    <strong>{question.question_type} · {question.difficulty} · active: {question.active ? 'yes' : 'no'}</strong>
-                                                    <p style={{ whiteSpace: 'pre-wrap' }}>{question.prompt}</p>
-                                                    {question.explanation && <p style={{ whiteSpace: 'pre-wrap' }}>Explanation: {question.explanation}</p>}
-                                                    <ol type="A">{(question.options || []).map(option => (
-                                                      <li key={option.option_key} style={{ marginBottom: 3 }}>
-                                                        {option.label} {option.is_correct ? '✓ Answer key' : ''}
-                                                      </li>
-                                                    ))}</ol>
-                                                    {(question.translations || []).map((translation, ti) => (
-                                                      <details key={String(translation.language) + '-' + String(translation.version_no) + '-' + ti} style={{ marginTop: 6 }}>
-                                                        <summary>{String(translation.language).toUpperCase()} question translation · {translation.translation_status} v{translation.version_no}</summary>
-                                                        <p style={{ whiteSpace: 'pre-wrap' }}>{translation.prompt}</p>
-                                                        {translation.explanation && <p style={{ whiteSpace: 'pre-wrap' }}>Explanation: {translation.explanation}</p>}
-                                                        <pre style={{ whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', fontSize: 12 }}>{JSON.stringify(translation.options || [], null, 2)}</pre>
-                                                      </details>
-                                                    ))}
-                                                  </div>
-                                                ))}
-                                              </div>
-                                            </details>
-                                          ))}
-                                          <h5 style={{ margin: '14px 0 6px' }}>Chapter resources</h5>
-                                          {(chapterContent.resources || []).length === 0 && <p>No resources are assigned to this chapter.</p>}
-                                          {(chapterContent.resources || []).map(resource => (
-                                            <div key={resource.assignment_id} style={{ padding: 8, margin: '6px 0', border: '1px solid var(--border, #d7dce2)', borderRadius: 6 }}>
-                                              <strong>{resource.title}</strong> · {resource.resource_type} · {resource.resource_status} · Assignment: {resource.assignment_status}
-                                              <p style={{ fontSize: 12, margin: '4px 0' }}>{resource.description || ''} · {resource.language} · {resource.source_kind} · {resource.version_no ? 'v' + resource.version_no : ''}</p>
-                                              {resource.external_url && <a href={resource.external_url} target="_blank" rel="noreferrer" style={{ fontSize: 12, overflowWrap: 'anywhere' }}>Open external resource</a>}
-                                              {resource.source_reference && <p style={{ fontSize: 12 }}>Source reference: {resource.source_reference}</p>}
-                                              {resource.sha256 && <p style={{ fontSize: 12 }}>SHA-256: {resource.sha256}</p>}
-                                            </div>
-                                          ))}
-                                        </div>
-                                      )}
-                                    </div>
-                                  );
-                                })}
+                                      <button type="button" className={styles.secondaryButton} disabled={reviewChapterLoadingId!==null||busyKey!==null} onClick={()=>openK12Review(release.release_id,chapter.id)}>Open chapter review</button>
+                                    </article>
+                                  ))}
+                                </div>
                               </section>
                             ))}
                           </div>
+
                         ) : (
                           <p className={styles.availableWarning}>This course type and delivery mode do not have a supported read-only review view. Quality approval is blocked until the source configuration is corrected.</p>
                         )}
@@ -1393,6 +1302,98 @@ export default function MarketplaceLaunchStepper({
                   <button type="button" className={styles.primaryButton} onClick={closeAssessmentReview}>Return to quality review</button>
                 </div>
               </footer>
+            </>}
+          </div>
+        </section>
+      </div>}
+
+
+      {k12ReviewOpen&&k12ReviewTarget&&k12ReviewPreview&&k12ReviewRelease&&<div className={styles.k12ReviewBackdrop} role="presentation" onMouseDown={event=>{if(event.target===event.currentTarget)closeK12Review();}}>
+        <section className={styles.k12ReviewWorkspace} role="dialog" aria-modal="true" aria-labelledby="k12-review-title">
+          <aside className={styles.k12ReviewSidebar}>
+            <header className={styles.k12ReviewSidebarHeader}>
+              <span>HRMS · K12 RELEASE REVIEW</span><h2>Chapter navigator</h2>
+              <p>{k12ReviewPreview.course_name} · Release #{k12ReviewTarget.releaseId}</p>
+              <small>{k12ReviewPreview.lessonCount} lessons · {k12ReviewPreview.lessonBlockCount} blocks · {k12ReviewPreview.lessonQuestionCount} questions</small>
+            </header>
+            <div className={styles.k12ReviewSidebarTools}><input aria-label="Search subjects and chapters" value={k12ReviewSearch} onChange={event=>setK12ReviewSearch(event.target.value)} placeholder="Find subject or chapter"/></div>
+            <nav className={styles.k12ReviewChapterNav} aria-label="Course subjects and chapters">
+              {k12ReviewSubjects.map(subject=><section key={subject.id}><h3>{subject.display_name} <small>{subject.chapters.length}</small></h3>
+                {subject.chapters.map(chapter=><button key={chapter.id} type="button" className={[styles.k12ReviewChapterNavItem,k12ReviewTarget.chapterId===chapter.id?styles.k12ReviewChapterNavItemActive:''].join(' ')} aria-current={k12ReviewTarget.chapterId===chapter.id?'true':undefined} onClick={()=>selectK12ReviewChapter(k12ReviewTarget.releaseId,chapter.id)}>
+                  <b>{chapter.display_name}</b><small>{chapter.lesson_count} lessons · {chapter.lesson_question_count} questions</small>
+                </button>)}
+              </section>)}
+              {!k12ReviewSubjects.length&&<p className={styles.k12ReviewEmptyNote}>No chapters match your search.</p>}
+            </nav>
+          </aside>
+          <div className={styles.k12ReviewMain}>
+            <header className={styles.k12ReviewHeader}>
+              <div><span>FROZEN SUBMITTED SNAPSHOT · READ ONLY</span><h1 id="k12-review-title">{k12ReviewChapter?.display_name||'Loading chapter content…'}</h1>
+                <p>{k12ReviewPreview.course_name} · Release v{k12ReviewPreview.release_version} · {k12ReviewChapter?.lesson_count??'—'} lessons · {k12ReviewChapter?.resource_count??'—'} resources</p>
+              </div>
+              <button type="button" className={styles.k12ReviewClose} aria-label="Close K12 content review" onClick={closeK12Review}>×</button>
+            </header>
+            <div className={styles.k12ReviewFingerprint}>
+              <div><strong>Submitted release fingerprint</strong><code>{k12ReviewPreview.content_fingerprint}</code></div>
+              <span className={k12ReviewPreview.contentCurrent&&k12ReviewPreview.content_fingerprint===k12ReviewRelease.content_fingerprint?styles.k12ReviewFingerprintCurrent:styles.k12ReviewFingerprintStale}>{k12ReviewPreview.contentCurrent&&k12ReviewPreview.content_fingerprint===k12ReviewRelease.content_fingerprint?'Matches submitted release':'Fingerprint mismatch — do not approve'}</span>
+            </div>
+            {reviewContentErrors[k12ReviewTarget.releaseId]&&<div className={styles.k12ReviewError} role="alert">{reviewContentErrors[k12ReviewTarget.releaseId]}</div>}
+            {!k12ReviewChapter?<div className={styles.k12ReviewLoading} role="status">{reviewChapterLoadingId!==null?'Loading the exact submitted chapter…':'Chapter details have not loaded yet. Select the chapter again or refresh the release preview.'}</div>:<>
+              <div className={styles.k12ReviewContent}>
+                <section className={styles.k12ReviewProvenance}>
+                  <div><span>SUBMITTED SOURCE</span><strong>{k12ReviewChapter.curriculum_source||'No source recorded'}</strong>
+                    <p>Source verification: {k12ReviewChapter.curriculum_source_verified?'Verified':'Not verified'}{k12ReviewChapter.curriculum_source_pages?' · Pages: '+k12ReviewChapter.curriculum_source_pages:''}</p>
+                    {k12ReviewChapter.curriculum_source_url&&<a href={k12ReviewChapter.curriculum_source_url} target="_blank" rel="noreferrer">Open source reference ↗</a>}
+                  </div>
+                  <div><span>CHAPTER STATUS</span><strong>{k12ReviewChapter.content_status}</strong><p>{k12ReviewChapter.lessons?.length||0} lessons · {k12ReviewChapter.lesson_block_count} teaching blocks · {k12ReviewChapter.lesson_question_count} questions · {k12ReviewChapter.resources?.length||0} resources</p></div>
+                </section>
+                {(k12ReviewChapter.translations||[]).length>0&&<details className={styles.k12ReviewTranslations}><summary>Chapter language variants · {k12ReviewChapter.translations.length}</summary><div>{k12ReviewChapter.translations.map((translation,ti)=><p key={String(translation.language)+'-'+String(translation.version_no)+'-'+ti}><b>{String(translation.language).toUpperCase()}</b> · {translation.translation_status} v{translation.version_no}: {translation.display_name}</p>)}</div></details>}
+                <div className={styles.k12ReviewLessonLayout}>
+                  <nav className={styles.k12ReviewLessonNav} aria-label="Lessons in selected chapter">
+                    <header><strong>Lessons</strong><span>{k12ReviewChapter.lessons?.length||0}</span></header>
+                    {(k12ReviewChapter.lessons||[]).map(lesson=><button type="button" key={lesson.id} className={[styles.k12ReviewLessonNavItem,k12ReviewTarget.lessonId===lesson.id?styles.k12ReviewLessonNavItemActive:''].join(' ')} aria-current={k12ReviewTarget.lessonId===lesson.id?'true':undefined} onClick={()=>setK12ReviewTarget(current=>current?{...current,lessonId:lesson.id}:current)}>
+                      <b>{lesson.sort_order}. {lesson.title}</b><small>{lesson.status} · {lesson.blocks?.length||0} blocks · {lesson.questions?.length||0} questions</small>
+                    </button>)}
+                  </nav>
+                  <section className={styles.k12ReviewLessonDetail}>
+                    {!k12ReviewLesson?<div className={styles.k12ReviewLessonWelcome}><h3>Select a lesson to inspect</h3><p>Review language variants, learning objectives, teaching blocks, questions, answer keys and translations one lesson at a time.</p></div>:<>
+                      <header className={styles.k12ReviewLessonHeader}><div><span>LESSON {k12ReviewLesson.sort_order} · {k12ReviewLesson.code}</span><h2>{k12ReviewLesson.title}</h2></div><span className={k12ReviewLesson.active&&k12ReviewLesson.status==='PUBLISHED'?styles.k12ReviewFingerprintCurrent:styles.k12ReviewFingerprintStale}>{k12ReviewLesson.status} · {k12ReviewLesson.active?'Active':'Inactive'}</span></header>
+                      <div className={styles.k12ReviewLessonMeta}>Estimated time: {k12ReviewLesson.estimated_minutes} min{k12ReviewLesson.objective_title?' · Objective: '+k12ReviewLesson.objective_title:''}{k12ReviewLesson.objective_code?' · '+k12ReviewLesson.objective_code:''}</div>
+                      <div className={styles.k12ReviewBilingualGrid}>
+                        <section lang="en"><header><b>EN</b><strong>English</strong></header><p>{(k12ReviewLesson.translations||[]).find(translation=>String(translation.language).toLowerCase()==='en')?.summary||k12ReviewLesson.summary||'No English summary supplied.'}</p>
+                          {(k12ReviewLesson.objectiveTranslations||[]).filter(translation=>String(translation.language).toLowerCase()==='en').map((translation,ti)=><p key={ti}><b>Objective:</b> {translation.title||''}{translation.description?' — '+translation.description:''}</p>)}
+                          {(k12ReviewLesson.translations||[]).filter(translation=>String(translation.language).toLowerCase()==='en').map((translation,ti)=><details key={String(translation.language)+'-'+ti}><summary>Title / summary variant · v{translation.version_no}</summary><p>{translation.title}</p><p>{translation.summary}</p></details>)}
+                        </section>
+                        <section lang="hi"><header><b>हि</b><strong>हिंदी</strong></header><p>{(k12ReviewLesson.translations||[]).find(translation=>String(translation.language).toLowerCase()==='hi')?.summary||'हिंदी सारांश उपलब्ध नहीं है।'}</p>
+                          {(k12ReviewLesson.objectiveTranslations||[]).filter(translation=>String(translation.language).toLowerCase()==='hi').map((translation,ti)=><p key={ti}><b>सीखने का उद्देश्य:</b> {translation.title||''}{translation.description?' — '+translation.description:''}</p>)}
+                          {(k12ReviewLesson.translations||[]).filter(translation=>String(translation.language).toLowerCase()==='hi').map((translation,ti)=><details key={String(translation.language)+'-'+ti}><summary>शीर्षक / सारांश · v{translation.version_no}</summary><p>{translation.title}</p><p>{translation.summary}</p></details>)}
+                        </section>
+                      </div>
+                      <section className={styles.k12ReviewDetailSection}><header><h3>Teaching blocks</h3><span>{k12ReviewLesson.blocks?.length||0}</span></header>
+                        {(k12ReviewLesson.blocks||[]).map(block=><details key={block.id} className={styles.k12ReviewBlock}><summary>Block {block.sequence_no} · {block.block_type}{block.asset_title?' · '+block.asset_title:''}</summary>
+                          <div className={styles.k12ReviewBlockContent}>{readableLessonBlock(block.content).map((field,fieldIndex)=><div key={field.label+'-'+fieldIndex}><b>{field.label}</b><p>{field.text}</p></div>)}</div>
+                          {block.asset_url&&<div className={styles.k12ReviewAsset}>{/^https:\/\//i.test(block.asset_url)&&['IMAGE','DIAGRAM'].includes(String(block.asset_type||'').toUpperCase())&&<img src={block.asset_url} alt={block.asset_alt||block.asset_title||'Submitted lesson visual'} loading="lazy" referrerPolicy="no-referrer"/>}<p>Asset: <a href={block.asset_url} target="_blank" rel="noreferrer">{block.asset_title||block.asset_url}</a> · {block.asset_type||'file'} · {block.asset_status||'unknown status'}{block.asset_alt?' · Alt: '+block.asset_alt:''}</p></div>}
+                          {(block.translations||[]).length>0&&<details className={styles.k12ReviewBlockTranslation}><summary>Block translations · {block.translations.length}</summary>{block.translations.map((translation,ti)=><div key={String(translation.language)+'-'+String(translation.version_no)+'-'+ti}><b>{String(translation.language).toUpperCase()} · {translation.translation_status} v{translation.version_no}</b><pre>{JSON.stringify(translation.content,null,2)}</pre></div>)}</details>}
+                        </details>)}
+                      </section>
+                      <section className={styles.k12ReviewDetailSection}><header><h3>Lesson questions and answer keys</h3><span>{k12ReviewLesson.questions?.length||0}</span></header>
+                        {(k12ReviewLesson.questions||[]).map(question=><article key={question.id} className={styles.k12ReviewQuestion}>
+                          <div><b>{question.question_type} · {question.difficulty}</b><span>{question.active?'Active':'Inactive'}</span></div><p>{question.prompt}</p>{question.explanation&&<p><b>Explanation:</b> {question.explanation}</p>}
+                          <ol type="A">{(question.options||[]).map(option=><li key={option.option_key}>{option.label}{option.is_correct?' · ✓ Answer key':''}</li>)}</ol>
+                          {(question.translations||[]).length>0&&<details><summary>Question translations · {question.translations.length}</summary>{question.translations.map((translation,ti)=><section key={String(translation.language)+'-'+ti} lang={String(translation.language).toLowerCase()==='hi'?'hi':undefined}><b>{String(translation.language).toUpperCase()} · {translation.translation_status} v{translation.version_no}</b><p>{translation.prompt}</p>{translation.explanation&&<p>Explanation: {translation.explanation}</p>}<pre>{JSON.stringify(translation.options||[],null,2)}</pre></section>)}</details>}
+                        </article>)}
+                      </section>
+                    </>}
+                  </section>
+                </div>
+                <section className={styles.k12ReviewDetailSection}><header><h3>Chapter resources</h3><span>{k12ReviewChapter.resources?.length||0}</span></header>
+                  {(k12ReviewChapter.resources||[]).length===0?<p className={styles.k12ReviewNoResources}>No resources are assigned to this chapter.</p>:(k12ReviewChapter.resources||[]).map(resource=><article className={styles.k12ReviewResource} key={resource.assignment_id}>
+                    <div><b>{resource.title}</b><span>{resource.resource_type} · {resource.resource_status} · Assignment {resource.assignment_status}</span></div><p>{resource.description||''} · {resource.language} · {resource.source_kind} · {resource.version_no?'v'+resource.version_no:''}</p>
+                    {resource.external_url&&<a href={resource.external_url} target="_blank" rel="noreferrer">Open external resource ↗</a>}{resource.source_reference&&<p>Source reference: {resource.source_reference}</p>}{resource.sha256&&<code>SHA-256: {resource.sha256}</code>}
+                  </article>)}
+                </section>
+              </div>
+              <footer className={styles.k12ReviewFooter}><span>Read-only inspection of the frozen release · Quality approval is recorded separately below.</span><button type="button" className={styles.primaryButton} onClick={closeK12Review}>Return to quality review</button></footer>
             </>}
           </div>
         </section>
