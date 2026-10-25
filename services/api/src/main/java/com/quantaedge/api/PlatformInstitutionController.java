@@ -190,6 +190,20 @@ public class PlatformInstitutionController {
         left join institution_branding branding on branding.institution_id=origin.id
         left join curriculum_class c on c.id=p.class_id and c.active=true
         where r.release_state='SHAREABLE'
+          and course_marketplace_content_type_ready(p.id)
+          and course_release_fingerprint_current(r.program_id,r.content_fingerprint::text,r.updated_at)
+          and not exists(
+            select 1
+            from institution_course_release newer_r
+            join curriculum_program newer_p on newer_p.id=newer_r.program_id
+              and newer_p.status='ACTIVE' and newer_p.code<>'GENERAL'
+            where newer_r.release_state='SHAREABLE'
+              and newer_p.course_identity_id=p.course_identity_id
+              and course_marketplace_content_type_ready(newer_p.id)
+              and course_release_fingerprint_current(newer_r.program_id,newer_r.content_fingerprint::text,newer_r.updated_at)
+              and (newer_p.content_version_no>p.content_version_no
+                or (newer_p.id=p.id and newer_r.release_version>r.release_version))
+          )
         order by p.display_name,p.code,r.release_version desc
         """);
   }
@@ -1200,10 +1214,12 @@ public class PlatformInstitutionController {
         select t.id,t.tenant_code,t.display_name,t.legal_name,t.status,t.created_at,t.activated_at,
           coalesce(b.display_name,t.display_name) as brand_display_name,b.version as branding_version,
           (select count(*) from institution_membership m where m.institution_id=t.id and m.status='ACTIVE') as active_memberships,
-          (select count(*) from institution_course_entitlement e
-            join curriculum_program p on p.id=e.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-            where e.institution_id=t.id and e.status='ACTIVE' and e.valid_from<=now()
-              and (e.valid_until is null or e.valid_until>now())) as authorized_courses,
+          (select count(distinct coalesce(p.course_identity_id,-p.id))
+            from institution_course_assignment a
+            join institution_course_release r on r.id=a.course_release_id
+            join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+            where a.institution_id=t.id and a.status='ASSIGNED'
+              and (a.assignment_source<>'ORIGIN' or r.release_state='SHAREABLE')) as authorized_courses,
           (select count(*) from institution_billable_event be
             join institution_billing_contract c on c.id=be.contract_id
             where be.institution_id=t.id and be.event_type='CHARGE'
@@ -1223,16 +1239,31 @@ public class PlatformInstitutionController {
 
   private List<Map<String,Object>> institutionCourses(long institutionId) {
     return jdbc.queryForList("""
-        select p.id as program_id,p.code,p.display_name,e.status as entitlement_status,
-          e.valid_from,e.valid_until,
-          (select count(distinct l.id) from curriculum_subject sub
+        with assigned_courses as (
+          select a.id as assignment_id,a.assignment_source,a.assigned_at,
+            r.id as release_id,r.release_version,r.release_state,
+            p.id as program_id,p.code,p.display_name,p.course_identity_id,p.content_version_no,
+            row_number() over (
+              partition by coalesce(p.course_identity_id,-p.id)
+              order by p.content_version_no desc,r.release_version desc,r.id desc,
+                a.assigned_at desc,a.id desc
+            ) as identity_rank
+          from institution_course_assignment a
+          join institution_course_release r on r.id=a.course_release_id
+          join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+          where a.institution_id=? and a.status='ASSIGNED'
+            and (a.assignment_source<>'ORIGIN' or r.release_state='SHAREABLE')
+        )
+        select assignment_id,assignment_source,assigned_at,release_id,release_version,release_state,
+          program_id,code,display_name,course_identity_id,content_version_no,
+          (select count(distinct l.id) from curriculum_program_subject ps
+            join curriculum_subject sub on sub.id=ps.subject_id and sub.class_id=ps.class_id and sub.active=true
             join curriculum_chapter ch on ch.subject_id=sub.id and ch.active=true
             join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
-            where sub.program_id=p.id and sub.active=true) as published_lessons
-        from institution_course_entitlement e
-        join curriculum_program p on p.id=e.program_id
-        where e.institution_id=?
-        order by p.display_name,p.code
+            where ps.program_id=assigned_courses.program_id) as published_lessons
+        from assigned_courses
+        where identity_rank=1
+        order by display_name,code
         """,institutionId);
   }
 
