@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5ebe51025a040608548f9c508d63839100760e730764371baf18c7f769d25ae1",
+  "raw_analysis_sha256": "058edb42c800cdb374eb3c5d62ef4fff61000cee630dcb319858b08233b37220",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40183014121",
-      "checkpointed_at": "2026-10-25T10:51:56Z",
+      "checkpointed_at": "2026-10-25T10:54:54Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40183014121",
-      "checkpointed_at": "2026-10-25T10:52:22Z",
+      "checkpointed_at": "2026-10-25T10:55:20Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40183014121",
-      "checkpointed_at": "2026-10-25T10:52:53Z",
+      "checkpointed_at": "2026-10-25T10:55:51Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -63535,7 +63535,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40183014121",
-      "checkpointed_at": "2026-10-25T10:53:36Z",
+      "checkpointed_at": "2026-10-25T10:56:33Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing pressure, winds, storms, and cyclones.",
         "visual_type": "page_with_multiple_visuals",
@@ -63661,6 +63661,56 @@
         "concepts": [],
         "context_relation": "The image is related to the educational content about the comfort of carrying a bag with broad straps compared to narrow straps.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0dd4333cdd1ff35d90fdc2ab",
+      "asset_sha256": "47f798806c88d66eae362059ca368c8a44bba5394614436f037928908eba6440",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 102,
+      "asset_path": "assets/47f798806c88d66eae362059ca368c8a44bba5394614436f037928908eba6440.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f3609a74f6b9bc75917f652f29735b6712124160a390320c36e3648f81ded621",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A metal bucket with a handle, showing its structure and design.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "metal bucket",
+          "handle",
+          "structure",
+          "design"
+        ],
+        "context_relation": "The image is related to the educational content about the comfort of carrying a bag with broad straps compared to narrow straps.",
+        "limitations": [
+          "The image does not provide specific details about the bucket's material or size."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40183014121",
+      "checkpointed_at": "2026-10-25T10:57:10Z",
+      "effective_analysis": {
+        "visual_summary": "A metal bucket with a handle, showing its structure and design.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "metal bucket",
+          "handle",
+          "structure",
+          "design"
+        ],
+        "context_relation": "The image is related to the educational content about the comfort of carrying a bag with broad straps compared to narrow straps.",
+        "limitations": [
+          "The image does not provide specific details about the bucket's material or size."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
