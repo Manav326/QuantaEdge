@@ -198,6 +198,7 @@ public class ParentCoursePurchaseRequestController {
       join curriculum_program p on p.id=r.course_id
       join institution_marketplace_offer o on o.id=r.institution_offer_id
         and o.institution_id=r.institution_id and o.status='PUBLISHED'
+        and qe_marketplace_offer_publicly_sellable(o.id)
       join institution_course_assignment assignment
         on assignment.id=o.assignment_id and assignment.institution_id=o.institution_id and assignment.status='ASSIGNED'
       where r.guardian_user_id=? and r.institution_id=? and r.status='PENDING'
