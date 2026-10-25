@@ -47,8 +47,9 @@ BEGIN
 
   -- V196 deliberately did not refresh stale reviewed rows. Fail closed without invoking the
   -- expensive graph hash; re-submission computes a current fingerprint and opens a new release.
+  RETURN false;
 END
-$$;
+$;
 
 COMMENT ON FUNCTION course_release_fingerprint_current(bigint,text,timestamptz) IS
   'Trusts canonical fingerprints refreshed by V196 or stored by later validated release transitions because V180 freezes released course graphs. Pre-V196 rows left untouched by V196 fail closed and require fresh source submission rather than triggering a potentially memory-heavy legacy hash.';
