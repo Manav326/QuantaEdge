@@ -194,6 +194,7 @@ public class CourseMarketplaceLaunchReadinessService {
               and newer_offer.status='PUBLISHED'
               and newer_offer.hrms_published_by_staff_id is not null
               and newer_release.release_state='SHAREABLE'
+              and course_marketplace_content_type_ready(newer_program.id)
               and course_release_fingerprint_current(newer_release.program_id,newer_release.content_fingerprint::text,newer_release.updated_at)
           ) as current_offer_version,
           t.display_name as institution_name,t.status as institution_status,
