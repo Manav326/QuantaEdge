@@ -249,6 +249,11 @@ fun ParentCourseMarketplaceScreen(
                 offers.forEach { offer ->
                     val courseId = offer.qeLong("course_id", "courseId", "id")
                     val title = offer.qeText("title", "course_name", "display_name").ifBlank { t("Course", "कोर्स") }
+                    val courseTypeCode = offer.qeText("course_type_code").uppercase(Locale.ROOT)
+                    val courseTypeLabel = marketplaceCourseTypeLabel(courseTypeCode, language == "hi")
+                    val publishedPackCount = offer.optInt("test_pack_count", 0).coerceAtLeast(0)
+                    val publishedTestCount = offer.optInt("assessment_count", 0).coerceAtLeast(0)
+                    val publishedQuestionCount = offer.optInt("assessment_question_count", 0).coerceAtLeast(0)
                     val price = offer.optLong("price_paise", 0L)
                     val ownedByParent = offer.optBoolean("owned_by_parent")
                     val ownedByChild = offer.optBoolean("owned_by_child")
@@ -260,6 +265,10 @@ fun ParentCourseMarketplaceScreen(
                                     Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                                     Text(offer.qeText("course_code").ifBlank { offer.qeText("curriculum_version") },
                                         style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                    if (courseTypeLabel.isNotBlank()) {
+                                        Text(courseTypeLabel, style = MaterialTheme.typography.labelMedium,
+                                            color = MaterialTheme.colorScheme.primary)
+                                    }
                                 }
                                 Text(if (ownedByParent || ownedByChild) t("Owned", "उपलब्ध")
                                     else if (price == 0L) t("Free", "निःशुल्क") else courseMoney(price),
@@ -269,6 +278,12 @@ fun ParentCourseMarketplaceScreen(
                             }
                             offer.qeText("description").takeIf { it.isNotBlank() }?.let {
                                 Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                            if (courseTypeCode == "ASSESSMENT") {
+                                Text(marketplaceAssessmentInventorySummary(
+                                    language == "hi", publishedPackCount, publishedTestCount, publishedQuestionCount),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                             if (ownedByParent) {
                                 Text(t("You already own this course. Transfer it from the section below instead of paying again.",
