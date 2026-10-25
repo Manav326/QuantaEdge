@@ -56,6 +56,24 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("Chapter resources", hrms_ui)
         self.assertIn("Lesson questions and answer keys", hrms_ui)
 
+    def test_quality_queue_returns_fingerprint_current_and_course_type_contract(self):
+        controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/PlatformInstitutionController.java").read_text(encoding="utf-8")
+        self.assertIn("r.updated_at as release_updated_at", controller)
+        self.assertIn("p.course_type_code", controller)
+        self.assertIn("as delivery_mode", controller)
+        self.assertIn('release.put("contentCurrent",contentCurrent)', controller)
+        self.assertIn("course_release_fingerprint_current(?,?,?)", controller)
+        self.assertNotIn("as delivery_model", controller)
+
+    def test_content_studio_routes_assessment_only_course_to_test_editor(self):
+        page = (ROOT / "apps/admin/app/content/page.tsx").read_text(encoding="utf-8")
+        self.assertIn("isAssessmentCourse", page)
+        self.assertIn("ASSESSMENT", page)
+        self.assertIn("Course → test packs → assessments/tests → ordered question snapshots", page)
+        self.assertIn("Open this course’s tests and questions", page)
+        self.assertIn("href={'/assessments?courseId='+encodeURIComponent(programFilter)}", page)
+        self.assertIn("{isAssessmentCourse ? (", page)
+
     def test_assessment_analytics_is_course_scoped_and_never_buckets_free_text(self):
         controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/AssessmentController.java").read_text(encoding="utf-8")
         analytics = controller[controller.index('@GetMapping("/admin/assessments/course-analytics")'):controller.index('@PostMapping("/admin/assessments")', controller.index('@GetMapping("/admin/assessments/course-analytics")'))]
@@ -89,6 +107,8 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("Load exact submitted content", hrms_ui)
         self.assertIn("onClick={() => void toggleReviewContent(release)}", hrms_ui)
         self.assertIn("previewFingerprintMismatch", hrms_ui)
+        self.assertIn("normalizeFingerprint", hrms_ui)
+        self.assertIn("Load exact submitted content", hrms_ui)
         self.assertIn("reviewedContentFingerprint", review_controller)
         self.assertIn("savedFingerprint.equals(reviewedFingerprint)", review_controller)
         self.assertIn("course_release_fingerprint_current(?,?,?)", review_controller)
