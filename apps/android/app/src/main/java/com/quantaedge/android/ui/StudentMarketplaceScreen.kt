@@ -42,6 +42,7 @@ fun StudentMarketplaceScreen(
     onAskParent: (Long) -> Unit,
     onRefresh: () -> Unit,
     onAllCourses: () -> Unit,
+    onInvoices: () -> Unit,
     pendingVerification: Boolean = false,
     onRetryVerification: () -> Unit = {}
 ) {
@@ -90,8 +91,11 @@ fun StudentMarketplaceScreen(
             )
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedButton(onClick = onAllCourses, enabled = !busy) { Text(if (hi) "आपके courses" else "Your courses") }
+            OutlinedButton(onClick = onAllCourses, enabled = !busy, modifier = Modifier.weight(1f)) { Text(if (hi) "आपके courses" else "Your courses") }
             OutlinedButton(onClick = onRefresh, enabled = !busy) { Text("↻") }
+        }
+        OutlinedButton(onClick = onInvoices, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+            Text(if (hi) "इनवॉइस और भुगतान" else "Invoices & payments")
         }
         OutlinedTextField(
             value = discountCode,
