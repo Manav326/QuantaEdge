@@ -654,10 +654,11 @@ public class PlatformInstitutionController {
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     AuthContext owner=requirePlatformOwner(context);
     audit(owner,null,"COURSE_RELEASE_REVIEW_QUEUE_VIEWED","COURSE_RELEASE",null,Map.of());
-    return jdbc.queryForList("""
+    List<Map<String,Object>> releases=jdbc.queryForList("""
         select r.id as release_id,r.program_id as course_id,r.release_version,r.release_state,
-          r.content_fingerprint,r.submitted_at,p.public_id,p.code as course_code,p.display_name,
-          coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=p.id),'LEARNING_CONTENT') as delivery_model,
+          r.content_fingerprint,r.submitted_at,r.updated_at as release_updated_at,
+          p.public_id,p.code as course_code,p.display_name,p.course_type_code,
+          coalesce((select delivery_mode from curriculum_program_delivery_mode where program_id=p.id),'LEARNING_CONTENT') as delivery_mode,
           (select count(*) from assessment da where da.course_id=p.id and da.assessment_type='PREVIOUS_YEAR_PAPER' and da.status='DRAFT') as draft_assessment_count,
           (select count(*) from assessment da join assessment_question dqa on dqa.assessment_id=da.id
             where da.course_id=p.id and da.assessment_type='PREVIOUS_YEAR_PAPER' and da.status='DRAFT') as draft_assessment_question_count,
@@ -677,10 +678,21 @@ public class PlatformInstitutionController {
         left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
         left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
         where r.release_state='IN_QUALITY_REVIEW'
-        group by r.id,r.program_id,r.release_version,r.release_state,r.content_fingerprint,r.submitted_at,
-          p.public_id,p.code,p.display_name,t.id,t.tenant_code,b.display_name,t.display_name
+        group by r.id,r.program_id,r.release_version,r.release_state,r.content_fingerprint,r.submitted_at,r.updated_at,
+          p.public_id,p.code,p.display_name,p.course_type_code,t.id,t.tenant_code,b.display_name,t.display_name
         order by r.submitted_at,r.id
         """);
+    // Do not recompute large content graphs on every queue read. V201 trusts validated post-V196
+    // release fingerprints and fails closed for older rows that require a fresh submission.
+    for(Map<String,Object> release:releases) {
+      long courseId=number(release.get("course_id"));
+      String fingerprint=text(release.get("content_fingerprint")).trim();
+      boolean contentCurrent=Boolean.TRUE.equals(jdbc.queryForObject(
+          "select course_release_fingerprint_current(?,?,?)",Boolean.class,
+          courseId,fingerprint,release.get("release_updated_at")));
+      release.put("contentCurrent",contentCurrent);
+    }
+    return releases;
   }
 
   @PostMapping("/course-releases/{releaseId}/quality-review")
