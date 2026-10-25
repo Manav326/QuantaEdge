@@ -815,7 +815,7 @@ export default function AssessmentsPage(){
                   <section className={styles.reviewLanguagePanel} aria-labelledby="review-english-heading">
                     <div className={styles.reviewLanguageHeader}><div><span>EN</span><h3 id="review-english-heading">English</h3></div><small>{t('admin.assessments.englishVariant')}</small></div>
                     {localizedValue(selectedImportedQuestion.stimulus_i18n,'en')&&<div className={styles.reviewStimulus}><b>{t('admin.assessments.readingCodeStimulus')}</b><p>{localizedValue(selectedImportedQuestion.stimulus_i18n,'en')}</p></div>}
-                    <div className={styles.reviewPrompt}>{importedPrompt(selectedImportedQuestion,'en')||<em>English prompt is not supplied in this package.</em>}</div>
+                    <div className={styles.reviewPrompt}>{importedPrompt(selectedImportedQuestion,'en')||<em>{t('admin.assessments.englishPromptMissing')}</em>}</div>
                     <h4>{t('admin.assessments.answerOptions')}</h4>
                     {selectedImportedOptions.length?<ol className={styles.reviewOptions}>{selectedImportedOptions.map((option:any,index:number)=>{
                       const key=String(option.key||option.option_key||String.fromCharCode(65+index));
@@ -831,11 +831,11 @@ export default function AssessmentsPage(){
                     {selectedImportedOptions.length?<ol className={styles.reviewOptions} lang="hi">{selectedImportedOptions.map((option:any,index:number)=>{
                       const key=String(option.key||option.option_key||String.fromCharCode(65+index));
                       const chosen=selectedImportedAnswerKeys.includes(key);
-                      return <li key={key} className={chosen?styles.reviewOptionSelected:''}><span>{key}</span><p>{importedOptionText(option,'hi')||<em>{t('admin.assessments.hindiPromptMissing')}</em>}</p>{chosen&&<b>{t('admin.assessments.currentAnswerKey')}</b>}</li>;
+                      return <li key={key} className={chosen?styles.reviewOptionSelected:''}><span>{key}</span><p>{importedOptionText(option,'hi')||<em>{t('admin.assessments.hindiOptionMissing')}</em>}</p>{chosen&&<b>{t('admin.assessments.currentAnswerKey')}</b>}</li>;
                     })}</ol>:<p className={styles.reviewMissingLanguage}>{t('admin.assessments.noStructuredOptions')}</p>}
                   </section>
                 </div>
-                <section className={styles.reviewProvenancePanel} aria-label="Question source provenance">
+                <section className={styles.reviewProvenancePanel} aria-label={t('admin.assessments.questionSourceProvenance')}>
                   <h3>{t('admin.assessments.questionProvenance')}</h3>
                   <div className={styles.reviewProvenanceGrid}>
                     {selectedImportedQuestion.source_title&&<div><span>{t('admin.assessments.sourceTitle')}</span><strong>{String(selectedImportedQuestion.source_title)}</strong></div>}
@@ -852,7 +852,7 @@ export default function AssessmentsPage(){
                   <section className={styles.reviewEditorPanel}>
                     <div className={styles.reviewEditorHeader}><div><span>{t('admin.assessments.answerKey')}</span><h3>{t('admin.assessments.answerPayload')}</h3></div><b>{String(selectedImportedAnswer.kind||'UNRESOLVED')}</b></div>
                     <p>{t('admin.assessments.answerPayloadHelp')}</p>
-                    <textarea aria-label="Answer payload JSON" rows={7} spellCheck={false} disabled={importedReviewStatus!=='DRAFT'} value={importedAnswerEdits[selectedImportedSequence]??JSON.stringify(selectedImportedQuestion.answer_payload||{kind:'UNRESOLVED',value:''},null,2)} onChange={event=>setImportedAnswerEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))} placeholder='{"kind":"OPTION","value":"B"} or {"kind":"NUMERIC","value":12,"tolerance":0.1}'/>
+                    <textarea aria-label={t('admin.assessments.answerPayloadJson')} rows={7} spellCheck={false} disabled={importedReviewStatus!=='DRAFT'} value={importedAnswerEdits[selectedImportedSequence]??JSON.stringify(selectedImportedQuestion.answer_payload||{kind:'UNRESOLVED',value:''},null,2)} onChange={event=>setImportedAnswerEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))} placeholder={t('admin.assessments.answerPayloadExample')}/>
                     <small>{t('admin.assessments.answerPayloadKindsHelp')}</small>
                     <label className={styles.reviewNoteField}>
                       {t('admin.assessments.reviewerNote')}
@@ -869,12 +869,12 @@ export default function AssessmentsPage(){
                   <section className={styles.reviewEditorPanel}>
                     <div className={styles.reviewEditorHeader}><div><span>{t('admin.assessments.explanationEnglish')}</span><h3>{t('admin.assessments.englishExplanation')}</h3></div></div>
                     <p>{t('admin.assessments.explanationHelp')}</p>
-                    <textarea aria-label="English explanation" rows={7} maxLength={700} disabled={importedReviewStatus!=='DRAFT'} value={importedExplanationEdits[selectedImportedSequence]??''} onChange={event=>setImportedExplanationEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))} placeholder={t('admin.assessments.writeEnglishExplanation')}/>
+                    <textarea aria-label={t('admin.assessments.englishExplanationAria')} rows={7} maxLength={700} disabled={importedReviewStatus!=='DRAFT'} value={importedExplanationEdits[selectedImportedSequence]??''} onChange={event=>setImportedExplanationEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))} placeholder={t('admin.assessments.writeEnglishExplanation')}/>
                   </section>
                   <section className={styles.reviewEditorPanel} lang="hi">
                     <div className={styles.reviewEditorHeader}><div><span>{t('admin.assessments.explanationHindi')}</span><h3>{t('admin.assessments.hindiExplanation')}</h3></div></div>
                     <p>हिंदी व्याख्या यहाँ लिखें। यह अंग्रेज़ी व्याख्या से अलग सहेजी जाएगी।</p>
-                    <textarea aria-label="Hindi explanation" rows={7} maxLength={700} disabled={importedReviewStatus!=='DRAFT'} value={importedHindiExplanationEdits[selectedImportedSequence]??''} onChange={event=>setImportedHindiExplanationEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))} placeholder={t('admin.assessments.writeHindiExplanation')}/>
+                    <textarea aria-label={t('admin.assessments.hindiExplanationAria')} rows={7} maxLength={700} disabled={importedReviewStatus!=='DRAFT'} value={importedHindiExplanationEdits[selectedImportedSequence]??''} onChange={event=>setImportedHindiExplanationEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))} placeholder={t('admin.assessments.writeHindiExplanation')}/>
                   </section>
                 </div>
               </div>
