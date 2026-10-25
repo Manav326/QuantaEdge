@@ -355,19 +355,9 @@ export default function AssessmentsPage(){
       setError('The requested assessment ID is invalid.');
       return;
     }
-    const target=assessments.find(row=>Number(row.assessment_id)===assessmentId);
-    if(!target){
-      if(assessments.length>0){
-        requestedPackageReviewRef.current=requestKey;
-        setError('That test is not in the selected course catalogue. Confirm the course selection and reopen it from Content Studio.');
-      }
-      return;
-    }
-    if(!target.source_package_id){
-      requestedPackageReviewRef.current=requestKey;
-      setError('This test does not have an editable imported question snapshot. Open its details from the assessment catalogue.');
-      return;
-    }
+    // The normal teacher catalogue intentionally filters tests to assigned graders.
+    // Content Studio's review link therefore resolves directly through the source-owned,
+    // tenant/course-scoped question-review endpoint, which revalidates the assessment ID.
     requestedPackageReviewRef.current=requestKey;
     setPackageBusy(true);setError('');setNotice('');
     void loadImportedPackageQuestions(assessmentId)
