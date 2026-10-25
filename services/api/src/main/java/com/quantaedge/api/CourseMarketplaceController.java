@@ -2217,14 +2217,11 @@ public class CourseMarketplaceController {
           select 1 from course_purchase p
           where p.student_id=? and p.institution_id=? and p.course_id=?
           union all
-          select 1 from student_course_access_grant g
-          where g.student_id=? and g.institution_id=? and g.course_id=? and g.grant_reason='LEGACY_CLASS_ENROLLMENT'
-          union all
           select 1 from course_entitlement ce
           where ce.institution_id=? and ce.course_id=? and (ce.holder_student_id=? or ce.holder_user_id=(select user_account_id from student where id=?))
         )
         """, Boolean.class, studentId, institutionId, courseId, studentId, institutionId, courseId,
-        studentId, institutionId, courseId, institutionId, courseId, studentId, studentId);
+        institutionId, courseId, studentId, studentId);
     return Boolean.TRUE.equals(value);
   }
 
@@ -2235,11 +2232,8 @@ public class CourseMarketplaceController {
           where e.student_id=? and e.program_id=? and e.status in ('ACTIVE','PAUSED')
           union all
           select 1 from course_purchase p where p.student_id=? and p.course_id=?
-          union all
-          select 1 from student_course_access_grant g
-          where g.student_id=? and g.course_id=? and g.grant_reason='LEGACY_CLASS_ENROLLMENT'
         )
-        """, Boolean.class, studentId, courseId, studentId, courseId, studentId, courseId);
+        """, Boolean.class, studentId, courseId, studentId, courseId);
     return Boolean.TRUE.equals(value);
   }
 
