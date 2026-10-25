@@ -82,6 +82,20 @@ function parseAnswerPayload(value:any):any {
   }
   return {};
 }
+function formatReviewSourceLocation(value:unknown):string {
+  if(value===null||value===undefined||value==='')return '';
+  if(typeof value==='string'||typeof value==='number')return String(value);
+  if(Array.isArray(value))return value.map(formatReviewSourceLocation).filter(Boolean).join(' · ');
+  if(typeof value==='object')return Object.entries(value as Record<string,unknown>)
+    .filter(([,item])=>item!==null&&item!==undefined&&item!=='')
+    .map(([key,item])=>key.replaceAll('_',' ')+': '+(typeof item==='object'?formatReviewSourceLocation(item):String(item)))
+    .join(' · ');
+  return String(value);
+}
+function safeReviewSourceUrl(value:unknown):string {
+  try {const url=new URL(String(value||''));return url.protocol==='https:'||url.protocol==='http:'?url.href:'';}
+  catch{return '';}
+}
 function activateAccessibleReviewDialog(dialog:HTMLElement,onEscape:()=>void):()=>void {
   const previousOverflow=document.body.style.overflow;
   const previousFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
@@ -303,6 +317,8 @@ export default function AssessmentsPage(){
   const selectedImportedReviewItem=filteredImportedReviewItems.find(item=>Number(item.sequenceNo)===importedReviewSequence)||filteredImportedReviewItems[0]||null;
   const selectedImportedQuestion=selectedImportedReviewItem?.question||{};
   const selectedImportedSequence=Number(selectedImportedReviewItem?.sequenceNo||importedReviewSequence);
+  const selectedImportedSourceLocation=formatReviewSourceLocation(selectedImportedQuestion.source_location);
+  const selectedImportedSourceUrl=safeReviewSourceUrl(selectedImportedQuestion.source_ref);
   const selectedImportedOptions=Array.isArray(selectedImportedQuestion.options)?selectedImportedQuestion.options:[];
   const selectedImportedAnswer=parseAnswerPayload(importedAnswerEdits[selectedImportedSequence]??selectedImportedQuestion.answer_payload);
   const selectedImportedAnswerKeys=selectedImportedAnswer.kind==='OPTION'
@@ -814,6 +830,19 @@ export default function AssessmentsPage(){
                     })}</ol>:<p className={styles.reviewMissingLanguage}>इस प्रश्न के संरचित विकल्प उपलब्ध नहीं हैं।</p>}
                   </section>
                 </div>
+                <section className={styles.reviewProvenancePanel} aria-label="Question source provenance">
+                  <h3>Source and provenance</h3>
+                  <div className={styles.reviewProvenanceGrid}>
+                    {selectedImportedQuestion.source_title&&<div><span>Source title</span><strong>{String(selectedImportedQuestion.source_title)}</strong></div>}
+                    {selectedImportedQuestion.board&&<div><span>Issuer / board</span><strong>{String(selectedImportedQuestion.board)}</strong></div>}
+                    {selectedImportedQuestion.source_year&&<div><span>Source year</span><strong>{String(selectedImportedQuestion.source_year)}</strong></div>}
+                    {selectedImportedQuestion.source_kind&&<div><span>Source kind</span><strong>{String(selectedImportedQuestion.source_kind)}</strong></div>}
+                    {selectedImportedQuestion.source_id&&<div><span>Source package</span><strong>{String(selectedImportedQuestion.source_id)}</strong></div>}
+                    {selectedImportedSourceLocation&&<div><span>Source location / page</span><strong>{selectedImportedSourceLocation}</strong></div>}
+                    {selectedImportedSourceUrl&&<div><span>Source reference</span><strong><a href={selectedImportedSourceUrl} target="_blank" rel="noreferrer">{String(selectedImportedQuestion.source_ref)}</a></strong></div>}
+                    {selectedImportedQuestion.source_note&&<div className={styles.reviewProvenanceWide}><span>Import note</span><p>{String(selectedImportedQuestion.source_note)}</p></div>}
+                  </div>
+                </section>
                 <div className={styles.reviewEditingGrid}>
                   <section className={styles.reviewEditorPanel}>
                     <div className={styles.reviewEditorHeader}><div><span>ANSWER KEY</span><h3>Answer payload</h3></div><b>{String(selectedImportedAnswer.kind||'UNRESOLVED')}</b></div>
