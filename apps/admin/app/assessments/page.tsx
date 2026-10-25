@@ -99,7 +99,19 @@ function safeReviewSourceUrl(value:unknown):string {
 function activateAccessibleReviewDialog(dialog:HTMLElement,onEscape:()=>void):()=>void {
   const previousOverflow=document.body.style.overflow;
   const previousFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
+  const inertedElements:Array<{element:HTMLElement;wasInert:boolean}>=[];
+  let branch:HTMLElement|null=dialog;
   document.body.style.overflow='hidden';
+  while(branch?.parentElement&&branch.parentElement!==document.body){
+    const parent=branch.parentElement;
+    for(const sibling of Array.from(parent.children)){
+      if(sibling!==branch&&sibling instanceof HTMLElement){
+        inertedElements.push({element:sibling,wasInert:sibling.inert});
+        sibling.inert=true;
+      }
+    }
+    branch=parent;
+  }
   const selector='a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
   const focusable=()=>Array.from(dialog.querySelectorAll<HTMLElement>(selector)).filter(el=>!el.hidden&&el.getAttribute('aria-hidden')!=='true');
   const frame=window.requestAnimationFrame(()=>{(focusable()[0]||dialog).focus();});
@@ -117,6 +129,7 @@ function activateAccessibleReviewDialog(dialog:HTMLElement,onEscape:()=>void):()
     window.cancelAnimationFrame(frame);
     window.removeEventListener('keydown',onKeyDown);
     document.body.style.overflow=previousOverflow;
+    for(const entry of inertedElements)entry.element.inert=entry.wasInert;
     if(previousFocus?.isConnected)previousFocus.focus();
   };
 }
