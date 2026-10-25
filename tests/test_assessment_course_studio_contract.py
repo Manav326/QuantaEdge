@@ -108,6 +108,7 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         hrms_ui = (ROOT / "apps/people/app/institutions/MarketplaceLaunchStepper.tsx").read_text(encoding="utf-8")
         review_controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/PlatformInstitutionController.java").read_text(encoding="utf-8")
         self.assertIn("const previewNeedsLoading = !preview && !previewLoadInProgress", hrms_ui)
+        self.assertIn("A note is required both to approve and to return this release for correction", hrms_ui)
         self.assertIn("Load exact submitted content", hrms_ui)
         self.assertIn("onClick={() => void toggleReviewContent(release)}", hrms_ui)
         self.assertIn("previewFingerprintMismatch", hrms_ui)
