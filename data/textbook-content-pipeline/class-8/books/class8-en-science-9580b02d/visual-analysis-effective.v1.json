@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1256dbbe46c9288b99dbde9f3fbd03e8ab5e7c685c723f626a34e2aa1c7acce3",
+  "raw_analysis_sha256": "5e478483c7931972d3718977c8df1d30a1a0af59155170af17e46e4003aa15f9",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40142974307",
-      "checkpointed_at": "2026-10-25T00:29:44Z",
+      "checkpointed_at": "2026-10-25T00:36:30Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40142974307",
-      "checkpointed_at": "2026-10-25T00:30:17Z",
+      "checkpointed_at": "2026-10-25T00:37:04Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40142974307",
-      "checkpointed_at": "2026-10-25T00:30:57Z",
+      "checkpointed_at": "2026-10-25T00:37:44Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -61118,14 +61118,39 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A step further section explaining mass and weight measurements.",
+        "visual_summary": "A page from a textbook discussing mass and weight, including a table comparing the mass and weight of an object on different planets.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "You can repeat Activities 5.10 to 5.12 for the mass scale shown on the left side on the spring balance (Fig. 5.13) to measure the mass of an object.",
-          "The mass of an object can be measured indirectly by measuring its weight (using a spring balance) or by comparing its weight with the weight of an object of a known mass (using a beam balance). Since the weight of an object remains almost the same everywhere on the Earth, so for all practical purpos",
-          "As we have learnt earlier (in the chapter 'Materials Around Us' in Curiosity, Grade 6), mass is the amount of matter in an object and is measured in grams (g) or kilograms (kg). Its value remains the same at every place. Weight, on the other hand, is the gravitational force with which the Earth (or ",
-          "The following table illustrates that although the mass of an object remains the same, its weight is different on the Earth, the Moon, and other planets.",
-          "In everyday life, particularly for the goods we commonly use, we are more interested in the amount of matter in an object (its mass), rather than the force applied by the Earth upon it (its weight). However, though while the units of mass are used, instead of the term mass, the term weight is typica"
+          "Chapter 5 — Exploring Forces",
+          "75",
+          "You can repeat Activities 5.10 to 5.12 for the mass scale shown",
+          "on the left side on the spring balance (Fig. 5.13) to measure the",
+          "mass of an object.",
+          "A step further",
+          "The mass of an object can be measured indirectly by measuring its",
+          "weight (using a spring balance) or by comparing its weight with the",
+          "weight of an object of a known mass (using a beam balance). Since",
+          "the weight of an object remains almost the same everywhere on the",
+          "Earth, so for all practical purposes it is acceptable to weigh an object",
+          "to find its mass.",
+          "As we have learnt earlier (in the chapter 'Materials",
+          "Around Us' in Curiosity, Grade 6), mass is the amount",
+          "of matter in an object and is measured in grams (g)",
+          "or kilograms (kg). Its value remains the same at every",
+          "place. Weight, on the other hand, is the gravitational force",
+          "with which the Earth (or another planet) pulls an object. Since",
+          "gravitational force can vary very slightly from place to place on",
+          "the Earth (and can be very different on different planets), weight",
+          "can change, but mass does not.",
+          "A step further",
+          "The following table illustrates that although the mass of an object",
+          "remains the same, its weight is different on the Earth, the Moon, and",
+          "other planets.",
+          "Mass of",
+          "the object",
+          "1 kg",
+          "1 kg",
+          "1 kg"
         ],
         "concepts": [
           "mass",
@@ -61140,25 +61165,50 @@
         ],
         "context_relation": "exploring forces",
         "limitations": [
-          "the image does not provide specific details about the spring balance or beam balance used in the activities",
-          "the image does not show the spring balance or beam balance used in the activities",
-          "the image does not show the spring balance or beam balance used in the activities"
+          "the image does not show the spring balance or beam balance",
+          "the image does not show the wheat bag or its weight",
+          "the image does not show the mass scale or its units"
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40142974307",
-      "checkpointed_at": "2026-10-25T00:34:14Z",
+      "checkpointed_at": "2026-10-25T00:38:46Z",
       "effective_analysis": {
-        "visual_summary": "A step further section explaining mass and weight measurements.",
+        "visual_summary": "A page from a textbook discussing mass and weight, including a table comparing the mass and weight of an object on different planets.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
-          "You can repeat Activities 5.10 to 5.12 for the mass scale shown on the left side on the spring balance (Fig. 5.13) to measure the mass of an object.",
-          "The mass of an object can be measured indirectly by measuring its weight (using a spring balance) or by comparing its weight with the weight of an object of a known mass (using a beam balance). Since the weight of an object remains almost the same everywhere on the Earth, so for all practical purpos",
-          "As we have learnt earlier (in the chapter 'Materials Around Us' in Curiosity, Grade 6), mass is the amount of matter in an object and is measured in grams (g) or kilograms (kg). Its value remains the same at every place. Weight, on the other hand, is the gravitational force with which the Earth (or ",
-          "The following table illustrates that although the mass of an object remains the same, its weight is different on the Earth, the Moon, and other planets.",
-          "In everyday life, particularly for the goods we commonly use, we are more interested in the amount of matter in an object (its mass), rather than the force applied by the Earth upon it (its weight). However, though while the units of mass are used, instead of the term mass, the term weight is typica"
+          "Chapter 5 — Exploring Forces",
+          "75",
+          "You can repeat Activities 5.10 to 5.12 for the mass scale shown",
+          "on the left side on the spring balance (Fig. 5.13) to measure the",
+          "mass of an object.",
+          "A step further",
+          "The mass of an object can be measured indirectly by measuring its",
+          "weight (using a spring balance) or by comparing its weight with the",
+          "weight of an object of a known mass (using a beam balance). Since",
+          "the weight of an object remains almost the same everywhere on the",
+          "Earth, so for all practical purposes it is acceptable to weigh an object",
+          "to find its mass.",
+          "As we have learnt earlier (in the chapter 'Materials",
+          "Around Us' in Curiosity, Grade 6), mass is the amount",
+          "of matter in an object and is measured in grams (g)",
+          "or kilograms (kg). Its value remains the same at every",
+          "place. Weight, on the other hand, is the gravitational force",
+          "with which the Earth (or another planet) pulls an object. Since",
+          "gravitational force can vary very slightly from place to place on",
+          "the Earth (and can be very different on different planets), weight",
+          "can change, but mass does not.",
+          "A step further",
+          "The following table illustrates that although the mass of an object",
+          "remains the same, its weight is different on the Earth, the Moon, and",
+          "other planets.",
+          "Mass of",
+          "the object",
+          "1 kg",
+          "1 kg",
+          "1 kg"
         ],
         "concepts": [
           "mass",
@@ -61173,9 +61223,9 @@
         ],
         "context_relation": "exploring forces",
         "limitations": [
-          "the image does not provide specific details about the spring balance or beam balance used in the activities",
-          "the image does not show the spring balance or beam balance used in the activities",
-          "the image does not show the spring balance or beam balance used in the activities"
+          "the image does not show the spring balance or beam balance",
+          "the image does not show the wheat bag or its weight",
+          "the image does not show the mass scale or its units"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -61880,6 +61930,72 @@
         "context_relation": "The image is related to the educational content about forces in physics.",
         "limitations": [
           "The image does not provide specific examples or diagrams of forces."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dabb0957da9dfcddcce945a3",
+      "asset_sha256": "d1f9742286aa4fa788b1d28ab5e1d27c46f01b73ae7062b6fa62d33aeaa010b1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 97,
+      "asset_path": "assets/d1f9742286aa4fa788b1d28ab5e1d27c46f01b73ae7062b6fa62d33aeaa010b1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "46ebf104ae108f545fdf5591ffbdc838d65dd58c1c174806d0a366a838a7e5e1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a student raising her hand in class, possibly to answer a question.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "A force is push or pull on an object resulting from the object’s interaction with another object.",
+          "The SI unit of force is newton and its symbol is N.",
+          "Forces can act with or without contact.",
+          "Muscular force and frictional force are some of the examples of contact forces.",
+          "Magnetic force, gravitational force, and electrostatic force are non-contact forces.",
+          "Force can change an object’s speed, direction of its motion, or both."
+        ],
+        "concepts": [
+          "Forces",
+          "SI unit of force",
+          "Contact forces",
+          "Non-contact forces",
+          "Effects of force"
+        ],
+        "context_relation": "The image is related to the textbook content about forces, specifically the types and effects of forces.",
+        "limitations": [
+          "The image does not provide specific examples or explanations for the concepts listed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40142974307",
+      "checkpointed_at": "2026-10-25T00:40:03Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a student raising her hand in class, possibly to answer a question.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "A force is push or pull on an object resulting from the object’s interaction with another object.",
+          "The SI unit of force is newton and its symbol is N.",
+          "Forces can act with or without contact.",
+          "Muscular force and frictional force are some of the examples of contact forces.",
+          "Magnetic force, gravitational force, and electrostatic force are non-contact forces.",
+          "Force can change an object’s speed, direction of its motion, or both."
+        ],
+        "concepts": [
+          "Forces",
+          "SI unit of force",
+          "Contact forces",
+          "Non-contact forces",
+          "Effects of force"
+        ],
+        "context_relation": "The image is related to the textbook content about forces, specifically the types and effects of forces.",
+        "limitations": [
+          "The image does not provide specific examples or explanations for the concepts listed."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
