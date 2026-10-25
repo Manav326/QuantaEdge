@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
-      "b90b1ccd2f380e4a35f9f791",
-      "055ba61cf9184b7284850138",
-      "2185c15c0a88a108ea516878"
+      "7648bdfd0ca00b2a9aab1c0d",
+      "264647961a857697afa5e279",
+      "b90b1ccd2f380e4a35f9f791"
     ],
     "assets_eligible": 2078,
     "assets_analyzed": 1360,
@@ -438,11 +438,14 @@
           "Foundational and Preparatory Stages",
           "Analytical, descriptive, and narrative capabilities",
           "Transformative learning culture",
+          "Appropriate textbooks",
+          "Curricular areas",
           "Classroom arrangement",
           "Teacher preparation",
+          "Conceptual connections",
           "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving a transformative learning culture.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving the policy's goals.",
         "limitations": [
           "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
         ]
@@ -450,8 +453,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40150629987",
-      "checkpointed_at": "2026-10-25T02:52:55Z"
+      "run_id": "40169035227",
+      "checkpointed_at": "2026-10-25T06:38:03Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20112,12 +20115,10 @@
           "DES",
           "Coimbatore",
           "Amrita Vishwa Vidyapeetham",
+          "Development Sector Professional",
           "Freelance Editor",
           "Proofreader",
-          "DTP Cell",
-          "Publication Division",
-          "Contractual",
-          "Final shape"
+          "Publication Division"
         ],
         "context_relation": "acknowledgements",
         "limitations": [
@@ -20128,8 +20129,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40150629987",
-      "checkpointed_at": "2026-10-25T02:54:17Z"
+      "run_id": "40169035227",
+      "checkpointed_at": "2026-10-25T06:43:00Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -21411,7 +21412,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40150629987",
+      "run_id": "40169035227",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -22010,7 +22011,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40150629987",
+      "run_id": "40169035227",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -23740,7 +23741,7 @@
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
         "visible_text": [
-          "Presence/ absence of flowers",
+          "Presence/absence of flowers",
           "Hard/soft stem",
           "Eating habits",
           "Place they live",
@@ -23779,16 +23780,16 @@
           "features of plants",
           "nature walk"
         ],
-        "context_relation": "exploration",
+        "context_relation": "The text is a part of a larger educational content, specifically a textbook discussing the criteria for grouping plants and animals.",
         "limitations": [
-          "The image does not provide specific details about the criteria for grouping plants and animals."
+          "The text does not provide specific examples or instructions for the activities mentioned."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40150629987",
-      "checkpointed_at": "2026-10-25T02:55:26Z"
+      "run_id": "40169035227",
+      "checkpointed_at": "2026-10-25T06:57:51Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
