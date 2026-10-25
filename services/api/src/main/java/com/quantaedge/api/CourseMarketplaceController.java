@@ -124,6 +124,7 @@ public class CourseMarketplaceController {
         ) parent_request on true
         where o.institution_id=? and o.status='PUBLISHED'
           and o.hrms_published_by_staff_id is not null
+          and qe_is_current_institution_assignment(assignment.id)
           and release.release_state='SHAREABLE'
           and course_marketplace_content_type_ready(release.program_id)
           and case when release.release_state='SHAREABLE' then course_release_fingerprint_current(release.program_id,release.content_fingerprint::text,release.updated_at) else false end
@@ -251,6 +252,7 @@ public class CourseMarketplaceController {
       left join institution_course_identity identity on identity.id=p.course_identity_id
       where o.institution_id=(select institution_id from selected_tenant) and o.status='PUBLISHED'
         and o.hrms_published_by_staff_id is not null
+        and qe_is_current_institution_assignment(assignment.id)
         and release.release_state='SHAREABLE'
         and course_marketplace_content_type_ready(release.program_id)
         and case when release.release_state='SHAREABLE' then course_release_fingerprint_current(release.program_id,release.content_fingerprint::text,release.updated_at) else false end
@@ -339,6 +341,7 @@ public class CourseMarketplaceController {
         join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
         where o.institution_id=? and o.course_id=? and o.status='PUBLISHED'
           and o.hrms_published_by_staff_id is not null
+          and qe_is_current_institution_assignment(a.id)
           and r.release_state='SHAREABLE'
           and course_marketplace_content_type_ready(r.program_id)
           and case when r.release_state='SHAREABLE' then course_release_fingerprint_current(r.program_id,r.content_fingerprint::text,r.updated_at) else false end
@@ -746,6 +749,7 @@ public class CourseMarketplaceController {
           on member.student_id=target_student.id and member.institution_id=o.institution_id and member.status='ACTIVE'
         where o.institution_id=? and p.id=? and o.status='PUBLISHED'
           and o.hrms_published_by_staff_id is not null
+          and qe_is_current_institution_assignment(assignment.id)
           and release.release_state='SHAREABLE'
           and course_marketplace_content_type_ready(release.program_id)
           and case when release.release_state='SHAREABLE' then course_release_fingerprint_current(release.program_id,release.content_fingerprint::text,release.updated_at) else false end
