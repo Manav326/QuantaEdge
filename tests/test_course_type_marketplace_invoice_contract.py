@@ -132,7 +132,7 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
         self.assertIn('answer.put("kind",kind)', assessment_controller)
         self.assertIn('snapshot.put("answer_review_status",reviewStatus)', assessment_controller)
         self.assertIn("boolean requiresQuestionAnswerReview", assessment_controller)
-        self.assertIn('&& assessmentOnlyCourse', assessment_controller)
+        self.assertIn('&& !assessmentOnlyCourse', assessment_controller)
         self.assertIn('portable-package questions or tests belonging to an ASSESSMENT_ONLY course', assessment_controller)
 
 
