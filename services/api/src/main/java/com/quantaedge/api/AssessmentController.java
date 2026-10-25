@@ -983,6 +983,11 @@ public class AssessmentController {
     String reviewStatus=requiredText(body.get("reviewStatus"),"Review status",24).toUpperCase(Locale.ROOT);
     if(!Set.of("APPROVED","REJECTED","PENDING_HUMAN_REVIEW").contains(reviewStatus))
       throw badRequest("Review status must be APPROVED, REJECTED, or PENDING_HUMAN_REVIEW.");
+    String reviewerNote=body.get("reviewerNote")==null?"":String.valueOf(body.get("reviewerNote")).trim();
+    if(reviewerNote.length()>1000)
+      throw badRequest("Reviewer note must be at most 1,000 characters.");
+    if("REJECTED".equals(reviewStatus)&&reviewerNote.length()<3)
+      throw badRequest("Provide a clear correction reason of at least 3 characters before rejecting this question.");
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select aq.id,aq.question_snapshot::text as question_snapshot,a.source_package_id,a.status,
         p.course_type_code,coalesce(mode.delivery_mode,'LEARNING_CONTENT') as delivery_mode,
@@ -1094,6 +1099,10 @@ public class AssessmentController {
       if(!(explanation instanceof String txt)||txt.isBlank())
         throw badRequest("Add an explanation before approving this question.");
     }
+    String existingHumanReviewNote=String.valueOf(snapshot.getOrDefault("human_review_note","")).trim();
+    if(!reviewerNote.isBlank())snapshot.put("human_review_note",reviewerNote);
+    else if(!existingHumanReviewNote.isBlank())snapshot.put("human_review_note",existingHumanReviewNote);
+    if("REJECTED".equals(reviewStatus))snapshot.put("last_rejection_note",reviewerNote);
     Map<String,Object> proposed=stringMapOrEmpty(snapshot.get("proposed_answer"));
     proposed.put("review_status",reviewStatus);
     proposed.put("option_key",answer!=null&&"OPTION".equals(String.valueOf(answer.get("kind")))
@@ -1116,7 +1125,8 @@ public class AssessmentController {
     String reviewAuditAction=row.get("source_package_id")!=null
         ?"IMPORTED_QUESTION_REVIEWED":"ASSESSMENT_ONLY_QUESTION_REVIEWED";
     audit(assessmentId,null,context,null,null,reviewAuditAction,
-        "PENDING_HUMAN_REVIEW",reviewStatus,"Reviewed assessment question #"+sequenceNo+".");
+        "PENDING_HUMAN_REVIEW",reviewStatus,"Reviewed assessment question #"+sequenceNo+"."
+            +(reviewerNote.isBlank()?"":" Reviewer correction note: "+reviewerNote));
     staffAudit.recordAction(context,"/api/v1/admin/assessments/"+assessmentId+"/package-questions/"+sequenceNo+"/review",
         "Reviewed assessment question #"+sequenceNo+" as "+reviewStatus+".");
     Map<String,Object> result=new LinkedHashMap<>();
