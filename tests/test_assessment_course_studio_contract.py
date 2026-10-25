@@ -27,6 +27,15 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("loadImportedPackageQuestions(assessmentId)", assessment_page)
         self.assertIn("/package-questions?courseId=", assessment_page)
 
+        api_content = (ROOT / "services/api/src/main/java/com/quantaedge/api/AdminContentController.java").read_text(encoding="utf-8")
+        route_start = api_content.index('@GetMapping("/courses/{courseId}/assessment-inventory")')
+        route_end = api_content.index('  @GetMapping\\n  public List<Map<String, Object>> list(', route_start)
+        inventory_route = api_content[route_start:route_end]
+        self.assertIn('authorize(token, context, "CONTENT_VIEW")', inventory_route)
+        self.assertIn("requireAssignedCourse(courseId,institutionId)", inventory_route)
+        self.assertIn("course_assessment_pack_item", inventory_route)
+        self.assertNotIn("assessment_staff_assignment", inventory_route)
+
     def test_assessment_course_creation_is_type_specific_and_tenant_owned(self):
         service = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseAuthoringService.java").read_text(encoding="utf-8")
         self.assertIn('"ASSESSMENT".equals(type)', service)
