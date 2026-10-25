@@ -585,15 +585,13 @@ public class GuardianController {
                     and e.status in ('ACTIVE','PAUSED'))
                 or exists(select 1 from course_purchase cp
                   where cp.institution_id=? and cp.student_id=? and cp.course_id=p.id)
-                or exists(select 1 from student_course_access_grant g
-                  where g.institution_id=? and g.student_id=? and g.course_id=p.id)
                 or exists(select 1 from course_entitlement ce
                   where ce.institution_id=? and ce.course_id=p.id
                     and (ce.holder_student_id=? or ce.holder_user_id=(select user_account_id from student where id=?)))
               )
             order by p.display_name,p.id
             """, institutionId,studentId,institutionId,studentId,institutionId,institutionId,institutionId,studentId,
-                institutionId,studentId,institutionId,studentId,institutionId,studentId,studentId);
+                institutionId,studentId,institutionId,studentId,studentId);
     if(includeSubjects) {
       for(Map<String,Object> program:programs) {
         long courseId=((Number)program.get("id")).longValue();
@@ -649,12 +647,10 @@ public class GuardianController {
                       and e.status in ('ACTIVE','PAUSED'))
           or exists(select 1 from course_purchase cp
                     where cp.institution_id=a.institution_id and cp.student_id=? and cp.course_id=p.id)
-          or exists(select 1 from student_course_access_grant g
-                    where g.institution_id=a.institution_id and g.student_id=? and g.course_id=p.id)
           or exists(select 1 from course_entitlement ce
                     where ce.institution_id=a.institution_id and ce.course_id=p.id
                       and (ce.holder_student_id=? or ce.holder_user_id=(select user_account_id from student where id=?))))
-      """,institutionId,courseId,studentId,studentId,studentId,studentId,studentId);
+      """,institutionId,courseId,studentId,studentId,studentId,studentId);
     if(courses.isEmpty()) throw new SecurityException("This course has no published offer or existing entitlement in the selected institution.");
     List<Map<String,Object>> subjects=jdbc.queryForList("""
       select s.id,s.code
