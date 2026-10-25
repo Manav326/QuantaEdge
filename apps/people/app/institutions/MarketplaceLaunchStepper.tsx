@@ -525,7 +525,7 @@ export default function MarketplaceLaunchStepper({
         body: JSON.stringify({
           approved,
           notes,
-          ...(approved ? { reviewedContentFingerprint: preview?.content_fingerprint } : {}),
+          ...(approved ? { reviewedContentFingerprint: String(preview?.content_fingerprint ?? '').trim().toLowerCase() } : {}),
         }),
       });
       setNotice(approved
@@ -879,10 +879,13 @@ export default function MarketplaceLaunchStepper({
                   && release.published_chapters > 0 && release.published_lessons > 0);
               const preview = reviewContent[release.release_id];
               const reviewNoteLength = (reviewNotes[release.release_id] || '').trim().length;
+              const normalizeFingerprint = (value: unknown) => String(value ?? '').trim().toLowerCase();
+              const previewFingerprint = normalizeFingerprint(preview?.content_fingerprint);
+              const submittedFingerprint = normalizeFingerprint(release.content_fingerprint);
               const exactPreviewReady = Boolean(preview && preview.contentCurrent
-                && preview.content_fingerprint === release.content_fingerprint);
+                && previewFingerprint && previewFingerprint === submittedFingerprint);
               const previewFingerprintMismatch = Boolean(preview
-                && preview.content_fingerprint !== release.content_fingerprint);
+                && (!previewFingerprint || !submittedFingerprint || previewFingerprint !== submittedFingerprint));
               const previewLoadInProgress = reviewContentLoadingId !== null;
               const previewNeedsLoading = !preview && release.contentCurrent && qualityReady
                 && !previewLoadInProgress && reviewChapterLoadingId === null && busyKey === null;
