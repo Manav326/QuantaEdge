@@ -477,6 +477,7 @@ export default function ContentStudio(){
  const permissions=Array.isArray(identity?.permissions)?identity.permissions:[];
  const hasPermission=(permission:string)=>permissions.includes(permission);
  const activeProgram=programs.find((p:any)=>String(p.id||p.course_id)===String(programFilter));
+ const isAssessmentCourse=String(activeProgram?.course_type_code||'').toUpperCase()==='ASSESSMENT';
  const isSourcedCourse=activeProgram?.course_relationship==='SOURCED';
  const releaseState=String(activeProgram?.release_state||'DRAFT').toUpperCase();
  // Released and in-review course graphs are immutable. Source edits must happen in a forked draft,
@@ -864,6 +865,46 @@ export default function ContentStudio(){
    <nav className="admin-mobile-nav" aria-label={t('admin.contentStudio.adminNavigation')}><Link href="/">{t('admin.contentStudio.overview')}</Link><Link className="active" href="/content">{t('admin.contentStudio.pageTitle')}</Link><Link href="/structured-lesson-preview" >{t('admin.contentStudio.structuredPreview')}</Link><Link href="/students">{t('admin.contentStudio.students')}</Link><Link href="/parents">{t('admin.contentStudio.families')}</Link></nav>
    
    {error&&<div className="admin-alert qe-feedback" role="alert"><strong>{t('admin.contentStudio.needsAttention')}</strong><span>{error}</span><button type="button" onClick={()=>setError('')}>{t('admin.contentStudio.dismiss')}</button></div>}{notice&&<div className="admin-notice qe-feedback" role="status"><strong>{t('admin.contentStudio.workspaceUpdate')}</strong><span>{notice}</span><button type="button" onClick={()=>setNotice('')}>{t('admin.contentStudio.dismiss')}</button></div>}
+   {isAssessmentCourse ? (
+    <section className="qe-library-panel" id="content-library">
+     <div className="qe-section-head">
+      <div>
+       <span className="admin-kicker">ASSESSMENT COURSE</span>
+       <h2>Tests, test packs and questions</h2>
+       <p>This course uses its own assessment hierarchy, not school chapters or micro-topics. Use the course-scoped Assessments workspace to inspect tests and review question answers.</p>
+      </div>
+     </div>
+     <div className="qe-filters">
+      <label>{t('admin.contentStudio.course')}
+       <select value={programFilter} onChange={e=>{const value=e.target.value;setProgramFilter(value);setClassFilter('ALL');setSubjectFilter('ALL');setSelected(null);setDetail(null);setCreateType(null);const url=new URL(window.location.href);url.searchParams.set('courseId',value);window.history.replaceState({},'',url.toString());void load(value)}}>
+        {programs.map((p:any)=><option value={String(p.id||p.course_id)} key={p.id||p.course_id}>{p.display_name} · {p.curriculum_version} · content v{p.content_version_no||1} · {p.course_relationship==='SOURCED'?'Sourced':'Shared (read-only)'}</option>)}
+       </select>
+      </label>
+     </div>
+     {activeProgram ? (
+      <div role="status" style={{margin:'0 0 14px',padding:'12px 14px',border:'1px solid var(--admin-border,#d8dce5)',borderRadius:10,background:'var(--admin-surface,#fff)',color:'var(--admin-text,#1b2430)'}}>
+       <strong>{activeProgram.course_relationship==='SOURCED'?'SOURCED ASSESSMENT COURSE':'SHARED ASSESSMENT COURSE · READ ONLY'}</strong>
+       <p style={{margin:'5px 0',fontSize:13,color:'var(--admin-muted,#64748b)'}}>
+        {activeProgram.course_relationship==='SOURCED'&&isEditableDraft
+          ? 'This institution owns the source content. Correct test questions and answer keys through the existing course-scoped assessment editor.'
+          : 'This release cannot be edited in place. Content changes must use the source-owned draft/version lifecycle and return through HRMS review.'}
+       </p>
+       <small>Content version v{activeProgram.content_version_no||1} · Release v{activeProgram.release_version||1} · {activeProgram.release_state||'UNKNOWN'} · Source institution ID {activeProgram.source_institution_id}</small>
+      </div>
+     ) : null}
+     <div className="qe-library-empty" role="status" style={{padding:24}}>
+      <span className="qe-empty-symbol" aria-hidden="true">◇</span>
+      <strong>Assessment-only hierarchy</strong>
+      <p>Course → test packs → assessments/tests → ordered question snapshots.</p>
+      <p>TRE 1.0, TRE 2.0 and TRE 3.0 are stored as assessment records. From the assessment workspace, open each test’s questions, correct and review answers while the test remains a draft, then publish each test only after human answer review. The backend publishes a pack when all of its tests pass the publication gate.</p>
+      {activeProgram?.course_relationship==='SOURCED'&&releaseState==='REJECTED'
+        ? <p>The release was returned for correction. Correct and publish its tests/packs, then submit a fresh release through Institution Operations for HRMS quality review.</p>
+        : null}
+      <Link href={'/assessments?courseId='+encodeURIComponent(programFilter)} className="qe-primary-button">Open this course’s tests and questions</Link>
+     </div>
+    </section>
+   ) : (
+   <>
    <section className="qe-stats-grid">
     <article><span className="qe-stat-icon purple">▦</span><div><small>{t('admin.contentStudio.courseSubjects')}</small><strong>{subjectOptions.length||'—'}</strong><span>{t('admin.contentStudio.databaseRecords')}</span></div></article>
     <article><span className="qe-stat-icon blue">◇</span><div><small>{t('admin.contentStudio.chaptersTopics')}</small><strong>{uniqueChapters}</strong><span>{t('admin.contentStudio.publishedUnpublished')}</span></div></article>
@@ -917,6 +958,8 @@ export default function ContentStudio(){
      })}</div><PremiumPagination page={chapterPage} total={groups.length} pageSize={chapterPageSize} onPageChange={setChapterPage} onPageSizeChange={size=>{setChapterPageSize(size);setChapterPage(0);}} itemLabel={t('admin.contentStudio.chaptersPaginationLabel')} />
     <div className="qe-library-foot"><span><b>{t('admin.contentStudio.librarySummary',{chapters:uniqueChapters,lessons:uniqueLessons,published:publishedChapters})}</b></span><span>{t('admin.contentStudio.teachingOrderHint')}</span></div>
    </section>
+   </>
+   )}
    {editorOpen&&(createType||selected)&&<section role="dialog" aria-modal="true" aria-label={createType?(createType==='chapter'?t('admin.contentStudio.createChapterTitle'):t('admin.contentStudio.createMicroTopicTitle')):selected?.type==='chapter'?t('admin.contentStudio.chapterEditor'):t('admin.contentStudio.microTopicEditor')} tabIndex={-1} className={'qe-workspace '+(isEditorView?'qe-workspace-fullscreen':'')} id="editor" ref={workspaceRef}>
     <div className="qe-fullscreen-bar">
      <div><strong>{createType?(createType==='chapter'?t('admin.contentStudio.createChapterTitle'):t('admin.contentStudio.createMicroTopicTitle')):selected?.type==='chapter'?t('admin.contentStudio.chapterEditor'):t('admin.contentStudio.microTopicEditor')}</strong><p>{selected&&detail?t('admin.contentStudio.workspaceSelectedContext',{classCode:detail.class_code,subject:detail.subject_name,chapter:selected.type==='chapter'?detail.chapter_name:detail.chapter_name+' / '+(form.title||detail.lesson_title)}):t('admin.contentStudio.workspaceIntro')}</p></div>
