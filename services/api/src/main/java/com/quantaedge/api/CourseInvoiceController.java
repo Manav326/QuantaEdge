@@ -44,6 +44,7 @@ public class CourseInvoiceController {
         d.issued_at,d.currency,d.taxable_value_paise,d.discount_value_paise,d.tax_value_paise,
         d.total_value_paise,d.amount_paid_paise,
         coalesce(nullif(offer.title_override,''),p.display_name) as course_title,
+        p.code as course_code,p.course_type_code,
         true as pdf_available
       from course_payment_order o
       join fiscal_document d on (d.id=o.fiscal_document_id or d.original_document_id=o.fiscal_document_id)
