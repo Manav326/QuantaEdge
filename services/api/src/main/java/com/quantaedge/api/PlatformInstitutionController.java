@@ -577,10 +577,15 @@ public class PlatformInstitutionController {
     if(!(raw instanceof Boolean enabled)) throw new IllegalArgumentException("The enabled field must be true or false.");
     List<Map<String,Object>> releases=jdbc.queryForList("""
         select r.id,r.program_id,r.source_institution_id,r.release_version,r.release_state,
-          r.content_fingerprint,r.updated_at,p.code,p.display_name
+          r.content_fingerprint,r.updated_at,r.legacy_migration,r.obsolete_at,p.code,p.display_name
         from institution_course_release r
         join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
-        where r.id=?
+        join institution_course_identity identity
+          on identity.id=p.course_identity_id and identity.status='ACTIVE'
+         and identity.source_institution_id=r.source_institution_id
+         and identity.course_type_code=p.course_type_code
+        where r.id=? and r.legacy_migration=false
+          and r.release_state<>'LEGACY_MIGRATED' and r.obsolete_at is null
         """,releaseId);
     if(releases.isEmpty()) throw new IllegalArgumentException("The course release is unavailable.");
     Map<String,Object> release=releases.getFirst();
@@ -681,7 +686,11 @@ public class PlatformInstitutionController {
           count(distinct case when l.id is not null then s.id end) as subjects_with_published_lessons,
           count(distinct ch.id) as published_chapters,count(distinct l.id) as published_lessons
         from institution_course_release r
-        join curriculum_program p on p.id=r.program_id and p.status='ACTIVE'
+        join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        join institution_course_identity identity
+          on identity.id=p.course_identity_id and identity.status='ACTIVE'
+         and identity.source_institution_id=r.source_institution_id
+         and identity.course_type_code=p.course_type_code
         join institution_tenant t on t.id=r.source_institution_id and t.status='ACTIVE'
         left join institution_branding b on b.institution_id=t.id
         left join curriculum_program_subject ps on ps.program_id=p.id
@@ -690,6 +699,7 @@ public class PlatformInstitutionController {
         left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
         left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
         where r.release_state='IN_QUALITY_REVIEW'
+          and r.legacy_migration=false and r.obsolete_at is null
         group by r.id,r.program_id,r.release_version,r.release_state,r.content_fingerprint,r.submitted_at,r.updated_at,
           p.public_id,p.code,p.display_name,t.id,t.tenant_code,b.display_name,t.display_name
         order by r.submitted_at,r.id
@@ -720,8 +730,15 @@ public class PlatformInstitutionController {
     List<Map<String,Object>> releases=jdbc.queryForList("""
         select r.id,r.source_institution_id,r.program_id,r.release_state,r.content_fingerprint,r.updated_at,
           r.release_version,p.code,p.display_name
-        from institution_course_release r join curriculum_program p on p.id=r.program_id
-        where r.id=? for update of r
+        from institution_course_release r
+        join curriculum_program p on p.id=r.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        join institution_course_identity identity
+          on identity.id=p.course_identity_id and identity.status='ACTIVE'
+         and identity.source_institution_id=r.source_institution_id
+         and identity.course_type_code=p.course_type_code
+        where r.id=? and r.legacy_migration=false
+          and r.release_state<>'LEGACY_MIGRATED' and r.obsolete_at is null
+        for update of r
         """,releaseId);
     if(releases.isEmpty()) throw new IllegalArgumentException("The course release is unavailable.");
     Map<String,Object> release=releases.getFirst();
