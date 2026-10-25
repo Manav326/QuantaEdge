@@ -339,6 +339,18 @@ public class CourseMarketplaceLaunchController {
           and course_marketplace_content_type_ready(p.id)
           and not exists(select 1 from institution_course_assignment a
             where a.institution_id=? and a.course_release_id=r.id and a.status='ASSIGNED')
+          and not exists(
+            select 1
+            from institution_course_release newer_r
+            join curriculum_program newer_p on newer_p.id=newer_r.program_id
+              and newer_p.status='ACTIVE' and newer_p.code<>'GENERAL'
+            where newer_r.release_state='SHAREABLE'
+              and newer_p.course_identity_id=p.course_identity_id
+              and course_marketplace_content_type_ready(newer_p.id)
+              and course_release_fingerprint_current(newer_r.program_id,newer_r.content_fingerprint::text,newer_r.updated_at)
+              and (newer_p.content_version_no>p.content_version_no
+                or (newer_p.id=p.id and newer_r.release_version>r.release_version))
+          )
         order by p.display_name,source.display_name,r.release_version desc,r.id desc
         """,institutionId,institutionId);
     for(Map<String,Object> release:availableReleases) {
