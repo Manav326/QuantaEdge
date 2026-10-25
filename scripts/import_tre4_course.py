@@ -868,25 +868,46 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                 ORDER BY release_version DESC,id DESC LIMIT 1 FOR UPDATE
             """, (institution_id, course_id))
             release_row = cursor.fetchone()
-            if args.submit_for_review:
+            requested_submit_for_review = bool(args.submit_for_review)
+            submit_for_review = requested_submit_for_review
+            submission_deferred = False
+            if requested_submit_for_review:
                 cursor.execute("SELECT tre4_source_package_ready(%s)", (course_id,))
                 ready_row = cursor.fetchone()
                 if not ready_row or ready_row[0] is not True:
-                    raise ImportErrorSafe("TRE source-package readiness (including generic ASSESSMENT pack integrity) failed; the release cannot be queued for HRMS review.")
+                    raise ImportErrorSafe("TRE source-package readiness (including generic ASSESSMENT pack integrity) failed; the import cannot be submitted.")
+                cursor.execute("SELECT assessment_only_course_publish_ready(%s)", (course_id,))
+                publish_row = cursor.fetchone()
+                publish_ready = bool(publish_row and publish_row[0] is True)
+                if not publish_ready:
+                    existing_state = str(release_row[2]) if release_row else ""
+                    if existing_state in {"IN_QUALITY_REVIEW", "QUALITY_APPROVED", "SHAREABLE", "LEGACY_MIGRATED", "WITHDRAWN"}:
+                        raise ImportErrorSafe(
+                            f"The existing release is {existing_state} while assessment tests/packs are not publish-ready. "
+                            "Do not change the frozen course graph. HRMS must reject an incomplete in-review release first; "
+                            "then review the question/answer keys, publish all tests/packs, and submit a fresh release."
+                        )
+                    submit_for_review = False
+                    submission_deferred = True
+                    summary["submissionDeferred"] = True
+                    summary["submissionDeferralReason"] = (
+                        "Assessment questions/answer keys must pass human review and every assessment/test pack must be published "
+                        "before release submission. The imported course and draft test packs were committed in DRAFT so they remain editable."
+                    )
             release_created = False
             release_submitted = False
             if release_row is None:
-                initial_state = "IN_QUALITY_REVIEW" if args.submit_for_review else "DRAFT"
+                initial_state = "IN_QUALITY_REVIEW" if submit_for_review else "DRAFT"
                 cursor.execute("""
                     INSERT INTO institution_course_release(
                       source_institution_id,program_id,release_version,release_state,content_fingerprint,
                       submitted_at,legacy_migration,legacy_migration_note,created_at,updated_at
                     ) VALUES (%s,%s,1,%s,%s,CASE WHEN %s THEN now() ELSE NULL END,false,NULL,now(),now())
                     RETURNING id,release_version,release_state,content_fingerprint
-                """, (institution_id, course_id, initial_state, fingerprint, args.submit_for_review))
+                """, (institution_id, course_id, initial_state, fingerprint, submit_for_review))
                 release_row = cursor.fetchone()
                 release_created = True
-                release_submitted = args.submit_for_review
+                release_submitted = submit_for_review
             else:
                 release_id, release_version, release_state, saved_fingerprint = release_row
                 if str(saved_fingerprint).strip() != fingerprint and release_state != "DRAFT":
@@ -899,7 +920,7 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                         f"Latest course release is {release_state}; create a new release through the Institution workflow before retrying."
                     )
                 if release_state == "DRAFT":
-                    if args.submit_for_review:
+                    if submit_for_review:
                         cursor.execute("""
                             SELECT tre4_source_package_ready(%s)
                         """, (course_id,))
@@ -967,10 +988,13 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                 "createdAssessments": created_assessments,
                 "releaseFingerprint": fingerprint,
                 "studentDeliveryAllowed": False,
+                "submittedForReview": str(release_state) == "IN_QUALITY_REVIEW",
+                "submissionDeferred": submission_deferred,
+                "submissionDeferralReason": summary.get("submissionDeferralReason", ""),
                 "nextStep": (
                     "HRMS quality review, then QuantaEdge origin approval, then HRMS can assign the SHAREABLE release."
                     if str(release_state) == "IN_QUALITY_REVIEW"
-                    else "Submit the source release for HRMS quality review; draft assessments remain hidden from learners."
+                    else "Complete human review of every question and answer key, publish all three assessments (which publishes their complete test packs), then submit the editable course release for HRMS quality review."
                 ),
             })
     return summary
