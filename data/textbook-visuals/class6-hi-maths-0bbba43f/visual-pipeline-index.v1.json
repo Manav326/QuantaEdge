@@ -1,0 +1,28 @@
+{
+  "schema_version": "quantaedge.textbook-content-pipeline-index.v1",
+  "architecture_version": "8-layer-resumable-v1",
+  "class": 6,
+  "book_slug": "class6-hi-maths-0bbba43f",
+  "source_book_id": "ncert-c6-hindi-fhgp1",
+  "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+  "layers": {
+    "1": "COMPLETE",
+    "2": "COMPLETE",
+    "3": "COMPLETE",
+    "4": "RUNNING",
+    "5": "RUNNING",
+    "6": "NOT_STARTED",
+    "7": "NOT_STARTED",
+    "8": "NOT_STARTED"
+  },
+  "inventory_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "tag": "inventory-layer1-class6-class6-hi-maths-0bbba43f-shaf815150b18a0-run-40413122029",
+    "tar_sha256": "260e303fcb4783d7c93001fa8a278e2e169a5ad7df780d9155b2a043a0385208"
+  },
+  "analysis_path": "data/textbook-visuals/class6-hi-maths-0bbba43f/visual-analysis-qwen2.5vl-3b.v1.json",
+  "effective_analysis_path": "data/textbook-content-pipeline/class-6/books/class6-hi-maths-0bbba43f/visual-analysis-effective.v1.json",
+  "coverage_ledger_path": "data/textbook-content-pipeline/class-6/books/class6-hi-maths-0bbba43f/coverage-ledger.v1.json",
+  "publication_allowed": false,
+  "human_review_required": true
+}
