@@ -356,30 +356,49 @@ export default function ParentCoursesPage() {
     } finally { setBusy(''); }
   }
 
-  async function reconcilePayment(draft: VerifyDraft) {
+  async function reconcilePayment(input: VerifyDraft | VerifyDraft[]) {
+    const attempts = Array.isArray(input) ? input : [input];
     setBusy('verify');
     setError('');
     setNotice('');
-    savePendingVerify(draft);
+    let accessGranted = false;
+    const unresolvedMessages: string[] = [];
     try {
-      const result = await readJson(await apiFetch('/api/v1/marketplace/family/orders/' + draft.localOrderId + '/reconcile', {
-        method: 'POST', credentials: 'same-origin',
-        headers: { 'Content-Type': 'application/json' }, body: '{}',
-      }));
-      if (String(result.status || '').toUpperCase() === 'VERIFIED' || result.entitled === true) {
-        clearPendingVerify(draft.localOrderId);
+      for (const draft of attempts) {
+        savePendingVerify(draft);
+        try {
+          const result = await readJson(await apiFetch('/api/v1/marketplace/family/orders/' + draft.localOrderId + '/reconcile', {
+            method: 'POST', credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' }, body: '{}',
+          }));
+          if (String(result.status || '').toUpperCase() === 'VERIFIED' || result.entitled === true) {
+            clearPendingVerify(draft.localOrderId);
+            accessGranted = true;
+            continue;
+          }
+          if (result.canRetryCheckout === true) {
+            clearPendingVerify(draft.localOrderId);
+            continue;
+          }
+          savePendingVerify(draft);
+          unresolvedMessages.push(localizeMarketplaceError(result.message, language,
+            'Payment status is still being reconciled. Do not pay again while verification is pending.',
+            'भुगतान की जाँच जारी है। पुष्टि पूरी होने तक दोबारा भुगतान न करें।'));
+        } catch (e) {
+          savePendingVerify(draft);
+          unresolvedMessages.push(localizeMarketplaceError(e, language,
+            'Payment status could not be reconciled. Keep this order and retry verification; do not pay again.',
+            'भुगतान की स्थिति की पुष्टि नहीं हो सकी। यही order सुरक्षित रखें और फिर जाँचें; दोबारा भुगतान न करें।'));
+        }
+      }
+      if (accessGranted) {
         setNotice(english ? 'Payment verified. Course access has been updated.' : 'भुगतान सत्यापित। कोर्स की पहुँच अपडेट हो गई है।');
-        await load();
-        return;
+      } else {
+        setError(unresolvedMessages[0] || (english
+          ? 'Previous payment attempts were confirmed unpaid. You can now start checkout again.'
+          : 'पिछले भुगतान पूरे नहीं हुए। अब आप checkout दोबारा शुरू कर सकते हैं।'));
       }
-      if (result.canRetryCheckout === true) {
-        clearPendingVerify(draft.localOrderId);
-      }
-      setError(localizeMarketplaceError(result.message, language, 'Payment status is still being reconciled. Do not pay again while verification is pending.', 'भुगतान की जाँच जारी है। पुष्टि पूरी होने तक दोबारा भुगतान न करें।'));
       await load();
-    } catch (e) {
-      savePendingVerify(draft);
-      setError(localizeMarketplaceError(e, language, 'Payment status could not be reconciled. Keep this order and retry verification; do not pay again.', 'भुगतान की स्थिति की पुष्टि नहीं हो सकी। यही order सुरक्षित रखें और फिर जाँचें; दोबारा भुगतान न करें।'));
     } finally {
       setBusy('');
     }
