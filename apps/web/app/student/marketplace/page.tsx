@@ -49,7 +49,25 @@ type PurchaseRequestStatus = {
   price_paise: number;
   currency: string;
 };
-type VerifyDraft = { courseId: number; localOrderId: number; paymentId: string; orderId: string; signature: string };
+type VerifyDraft = {
+  courseId: number; localOrderId: number; paymentId: string; orderId: string; signature: string;
+  courseIdentityKey?: string; courseTitle?: string; studentId?: number; beneficiaryName?: string;
+  recipientType?: string; amountPaise?: number;
+};
+type PendingVerifyGroup = { key: string; drafts: VerifyDraft[] };
+function scopedPendingVerifyStorageKey(base: string, institutionCode: string | null | undefined, userId: number) {
+  const tenant = String(institutionCode || 'default').trim().toUpperCase().replace(/[^A-Z0-9_-]/g, '_') || 'DEFAULT';
+  return `${base}:${tenant}:user:${userId}`;
+}
+function groupPendingVerifyDrafts(drafts: VerifyDraft[]): PendingVerifyGroup[] {
+  const grouped = new Map<string, VerifyDraft[]>();
+  for (const draft of drafts) {
+    const identity = draft.courseIdentityKey || `course:${draft.courseId}`;
+    const key = `${identity}:student:${draft.studentId ?? 'self'}`;
+    grouped.set(key, [...(grouped.get(key) || []), draft]);
+  }
+  return [...grouped.entries()].map(([key, values]) => ({ key, drafts: values }));
+}
 const PENDING_VERIFY_STORAGE_KEY = 'qe:marketplace:pending-payment:student';
 
 function parsePendingVerifyDrafts(raw: string | null): VerifyDraft[] {
@@ -65,6 +83,12 @@ function parsePendingVerifyDrafts(raw: string | null): VerifyDraft[] {
         paymentId: String(value?.paymentId || ''),
         orderId: String(value?.orderId || ''),
         signature: String(value?.signature || ''),
+        ...(String(value?.courseIdentityKey || '').trim() ? { courseIdentityKey: String(value.courseIdentityKey).trim() } : {}),
+        ...(String(value?.courseTitle || '').trim() ? { courseTitle: String(value.courseTitle).trim() } : {}),
+        ...(Number.isSafeInteger(Number(value?.studentId)) && Number(value?.studentId) > 0 ? { studentId: Number(value.studentId) } : {}),
+        ...(String(value?.beneficiaryName || '').trim() ? { beneficiaryName: String(value.beneficiaryName).trim() } : {}),
+        ...(String(value?.recipientType || '').trim() ? { recipientType: String(value.recipientType).trim() } : {}),
+        ...(Number.isSafeInteger(Number(value?.amountPaise)) && Number(value?.amountPaise) >= 0 ? { amountPaise: Number(value.amountPaise) } : {}),
       };
       const hasPaymentCallback = draft.paymentId.length > 0 || draft.signature.length > 0;
       const callbackIsValid = !hasPaymentCallback ||
@@ -132,10 +156,13 @@ export default function StudentMarketplacePage() {
   const [discountCode, setDiscountCode] = useState('');
   const [status, setStatus] = useState('');
   const [pendingVerifies, setPendingVerifies] = useState<VerifyDraft[]>([]);
+  const [pendingRecoveryReady, setPendingRecoveryReady] = useState(false);
   const pendingVerifiesRef = useRef<VerifyDraft[]>([]);
+  const pendingVerifyStorageKeyRef = useRef<string | null>(null);
   const readPendingVerifies = useCallback((): VerifyDraft[] => {
     try {
-      const raw = window.sessionStorage.getItem(PENDING_VERIFY_STORAGE_KEY);
+      const key = pendingVerifyStorageKeyRef.current;
+      const raw = key ? window.sessionStorage.getItem(key) : null;
       return raw ? parsePendingVerifyDrafts(raw) : pendingVerifiesRef.current;
     } catch {
       return pendingVerifiesRef.current;
@@ -145,7 +172,10 @@ export default function StudentMarketplacePage() {
     const next = [...readPendingVerifies().filter(item => item.localOrderId !== draft.localOrderId), draft];
     pendingVerifiesRef.current = next;
     setPendingVerifies(next);
-    try { window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(next)); } catch {
+    try {
+      const key = pendingVerifyStorageKeyRef.current;
+      if (key) window.sessionStorage.setItem(key, JSON.stringify(next));
+    } catch {
       // In-memory recovery still works if browser storage is disabled.
     }
   }, [readPendingVerifies]);
@@ -154,8 +184,10 @@ export default function StudentMarketplacePage() {
     pendingVerifiesRef.current = next;
     setPendingVerifies(next);
     try {
-      if (next.length) window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(next));
-      else window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY);
+      const key = pendingVerifyStorageKeyRef.current;
+      if (!key) return;
+      if (next.length) window.sessionStorage.setItem(key, JSON.stringify(next));
+      else window.sessionStorage.removeItem(key);
     } catch {
       // In-memory state remains authoritative for this page.
     }
@@ -218,21 +250,99 @@ export default function StudentMarketplacePage() {
 
   useEffect(() => { void loadOffers(); void loadPurchaseRequests(); }, [loadOffers, loadPurchaseRequests]);
 
-  // Keep the signed checkout response for this tab so a refresh/deployment cannot
-  // erase the only data that can safely verify a payment already made by the learner.
+  // Recover only orders returned for this authenticated account and institution.
+  // The old workspace-wide storage key is deliberately not read: it can belong to a previous login.
   useEffect(() => {
-    try {
-      const saved = window.sessionStorage.getItem(PENDING_VERIFY_STORAGE_KEY);
-      if (!saved) return;
-      const drafts = parsePendingVerifyDrafts(saved);
-      pendingVerifiesRef.current = drafts;
-      setPendingVerifies(drafts);
-      if (drafts.length) window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(drafts));
-      else window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY);
-    } catch {
-      // Storage may be disabled by the browser; in-page retry still works.
+    if (isResolving) {
+      setPendingRecoveryReady(false);
+      return;
     }
-  }, []);
+    let cancelled = false;
+    const previousStorageKey = pendingVerifyStorageKeyRef.current;
+    pendingVerifyStorageKeyRef.current = null;
+    setPendingRecoveryReady(false);
+    void (async () => {
+      try {
+        if (institutionContextRequested && !brand?.institutionCode) {
+          pendingVerifiesRef.current = [];
+          setPendingVerifies([]);
+          return;
+        }
+        const session = await readJson(await apiFetch('/api/v1/auth/me', {
+          credentials: 'same-origin', cache: 'no-store',
+          headers: { 'X-QE-Workspace': 'STUDENT' },
+        }));
+        const userId = Number(session.userId);
+        if (session.role !== 'STUDENT' || !Number.isSafeInteger(userId) || userId <= 0) {
+          throw new Error('The signed-in student identity could not be verified.');
+        }
+        const storageKey = scopedPendingVerifyStorageKey(PENDING_VERIFY_STORAGE_KEY, brand?.institutionCode, userId);
+        const accountChanged = previousStorageKey !== null && previousStorageKey !== storageKey;
+        if (accountChanged) {
+          pendingVerifiesRef.current = [];
+          setPendingVerifies([]);
+        }
+        pendingVerifyStorageKeyRef.current = storageKey;
+        let cached: VerifyDraft[] = [];
+        try { cached = parsePendingVerifyDrafts(window.sessionStorage.getItem(storageKey)); } catch { /* Session storage is optional. */ }
+        const current = accountChanged ? [] : pendingVerifiesRef.current;
+        let serverLoaded = false;
+        let serverDrafts: VerifyDraft[] = [];
+        try {
+          const rows = await readJson(await apiFetch('/api/v1/marketplace/orders/pending', {
+            credentials: 'same-origin', cache: 'no-store',
+            headers: { 'X-QE-Workspace': 'STUDENT', 'Accept': 'application/json' },
+          }));
+          if (Array.isArray(rows)) {
+            serverLoaded = true;
+            serverDrafts = parsePendingVerifyDrafts(JSON.stringify(rows.map((row: any) => ({
+              courseId: row.course_id, localOrderId: row.local_order_id,
+              paymentId: '', orderId: row.provider_order_id, signature: '',
+              courseIdentityKey: row.course_identity_key, courseTitle: row.course_title,
+              studentId: row.student_id, beneficiaryName: row.beneficiary_name,
+              recipientType: row.recipient_type, amountPaise: row.amount_paise,
+            }))));
+          }
+        } catch {
+          // Scoped cache remains available if the order-recovery endpoint is temporarily offline.
+        }
+        if (cancelled) return;
+        const localById = new Map<number, VerifyDraft>();
+        for (const draft of [...cached, ...current]) localById.set(draft.localOrderId, draft);
+        let merged: VerifyDraft[];
+        if (serverLoaded) {
+          const serverIds = new Set(serverDrafts.map(draft => draft.localOrderId));
+          merged = serverDrafts.map(remote => {
+            const local = localById.get(remote.localOrderId);
+            return local ? { ...remote, paymentId: local.paymentId, signature: local.signature } : remote;
+          });
+          // Preserve an order created in this page while the initial server query was in flight.
+          for (const draft of current) {
+            if (!serverIds.has(draft.localOrderId)) merged.push(draft);
+          }
+        } else {
+          const unique = new Map<number, VerifyDraft>();
+          for (const draft of [...cached, ...current]) unique.set(draft.localOrderId, draft);
+          merged = [...unique.values()];
+        }
+        pendingVerifiesRef.current = merged;
+        setPendingVerifies(merged);
+        try {
+          if (merged.length) window.sessionStorage.setItem(storageKey, JSON.stringify(merged));
+          else window.sessionStorage.removeItem(storageKey);
+        } catch { /* In-memory recovery remains available if storage is disabled. */ }
+      } catch {
+        if (!cancelled) {
+          pendingVerifyStorageKeyRef.current = null;
+          pendingVerifiesRef.current = [];
+          setPendingVerifies([]);
+        }
+      } finally {
+        if (!cancelled) setPendingRecoveryReady(true);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [brand?.institutionCode, institutionContextRequested, isResolving]);
 
   const verifyPurchase = useCallback(async (draft: VerifyDraft) => {
     setVerifying(true);
@@ -263,35 +373,55 @@ export default function StudentMarketplacePage() {
     }
   }, [loadOffers, loadPurchaseRequests, router, english, savePendingVerify, clearPendingVerify]);
 
-  const reconcilePurchase = useCallback(async (draft: VerifyDraft) => {
+  const reconcilePurchase = useCallback(async (input: VerifyDraft | VerifyDraft[]) => {
+    const attempts = Array.isArray(input) ? input : [input];
     setVerifying(true);
     setStatus('');
-    savePendingVerify(draft);
+    let grantedCourseId: number | null = null;
+    const unresolvedMessages: string[] = [];
     try {
-      const result = await readJson(await apiFetch('/api/v1/marketplace/orders/' + draft.localOrderId + '/reconcile', {
-        method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: '{}',
-      }));
-      if (String(result.status || '').toUpperCase() === 'VERIFIED' || result.entitled === true) {
-        clearPendingVerify(draft.localOrderId);
+      for (const draft of attempts) {
+        savePendingVerify(draft);
+        try {
+          const result = await readJson(await apiFetch('/api/v1/marketplace/orders/' + draft.localOrderId + '/reconcile', {
+            method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: '{}',
+          }));
+          if (String(result.status || '').toUpperCase() === 'VERIFIED' || result.entitled === true) {
+            clearPendingVerify(draft.localOrderId);
+            grantedCourseId = draft.courseId;
+            continue;
+          }
+          if (result.canRetryCheckout === true) {
+            clearPendingVerify(draft.localOrderId);
+            continue;
+          }
+          savePendingVerify(draft);
+          unresolvedMessages.push(localizeMarketplaceError(result.message, language,
+            'Payment status is still being reconciled. Do not pay again while verification is pending.',
+            'भुगतान की जाँच अभी जारी है। पुष्टि पूरी होने तक दोबारा भुगतान न करें।'));
+        } catch (error: any) {
+          savePendingVerify(draft);
+          unresolvedMessages.push(localizeMarketplaceError(error?.message, language,
+            'Payment status could not be reconciled. Keep this order and retry verification; do not pay again.',
+            'भुगतान की स्थिति की पुष्टि नहीं हो सकी। यही order सुरक्षित रखें और फिर जाँचें; दोबारा भुगतान न करें।'));
+        }
+      }
+      if (grantedCourseId !== null) {
         setStatus(tx('Payment verified. Your course is now in All Courses.', 'भुगतान सत्यापित हो गया। आपका कोर्स All Courses में उपलब्ध है।'));
         await loadOffers();
         await loadPurchaseRequests();
-        router.push('/student/courses?focus=' + encodeURIComponent(String(draft.courseId)));
+        router.push('/student/courses?focus=' + encodeURIComponent(String(grantedCourseId)));
         return;
       }
-      if (result.canRetryCheckout === true) {
-        clearPendingVerify(draft.localOrderId);
-      }
-      setStatus(localizeMarketplaceError(result.message, language, 'Payment status is still being reconciled. Do not pay again while verification is pending.', 'भुगतान की जाँच अभी जारी है। पुष्टि पूरी होने तक दोबारा भुगतान न करें।'));
+      setStatus(unresolvedMessages[0] || tx(
+        'The previous attempts were confirmed unpaid. You can now start checkout again.',
+        'पिछले भुगतान पूरे नहीं हुए। अब आप checkout दोबारा शुरू कर सकते हैं।'));
       await loadOffers();
-    } catch (error: any) {
-      savePendingVerify(draft);
-      setStatus(localizeMarketplaceError(error?.message, language, 'Payment status could not be reconciled. Keep this order and retry verification; do not pay again.', 'भुगतान की स्थिति की पुष्टि नहीं हो सकी। यही order सुरक्षित रखें और फिर जाँचें; दोबारा भुगतान न करें।'));
     } finally {
       setVerifying(false);
       setBusyCourseId(null);
     }
-  }, [loadOffers, loadPurchaseRequests, router, english, savePendingVerify, clearPendingVerify]);
+  }, [loadOffers, loadPurchaseRequests, router, language, tx, savePendingVerify, clearPendingVerify]);
 
   function requestCheckout(courseId: number) {
     if (billingAddressesLoading) {
@@ -496,15 +626,21 @@ export default function StudentMarketplacePage() {
           </div>
         </section>
       )}
-      {pendingVerifies.map(draft => (
-        <section className={styles.verifyCard} key={draft.localOrderId} aria-label={tx("Retry payment verification", "भुगतान की पुष्टि फिर करें")}>
-          <div><strong>{tx('Payment verification pending — course #{id}', 'भुगतान की पुष्टि बाकी — कोर्स #{id}', {id:draft.courseId})}</strong>
-            <p>{tx('This saved order can be reconciled independently. Other courses remain available to purchase.', 'इस सुरक्षित order की अलग से जाँच हो सकती है। अन्य कोर्स खरीदने के लिए उपलब्ध हैं।')}</p></div>
-          <button type="button" disabled={verifying} onClick={() => void reconcilePurchase(draft)}>
-            {verifying ? tx('Verifying…', 'जाँच हो रही है…') : tx('Retry verification', 'फिर सत्यापित करें')}
-          </button>
-        </section>
-      ))}
+      {pendingRecoveryReady && groupPendingVerifyDrafts(pendingVerifies).map(group => {
+        const draft = group.drafts[0];
+        return (
+          <section className={styles.verifyCard} key={group.key} aria-label={tx("Retry payment verification", "भुगतान की पुष्टि फिर करें")}>
+            <div><strong>{draft.courseTitle || tx('Course payment needs verification', 'कोर्स भुगतान की पुष्टि बाकी है')}</strong>
+              {draft.beneficiaryName && <small>{tx('For {name}', '{name} के लिए', {name:draft.beneficiaryName})}</small>}
+              <p>{group.drafts.length > 1
+                ? tx('We found {count} saved payment attempts for this course. We will check each attempt. Do not pay again.', 'इस कोर्स के {count} पुराने भुगतान प्रयास मिले। हम हर प्रयास की जाँच करेंगे। दोबारा भुगतान न करें।', {count:group.drafts.length})
+                : tx('We will check this saved payment. Do not start another checkout while its status is being confirmed.', 'इस सुरक्षित भुगतान की जाँच होगी। स्थिति की पुष्टि तक नया checkout शुरू न करें।')}</p></div>
+            <button type="button" disabled={verifying} onClick={() => void reconcilePurchase(group.drafts)}>
+              {verifying ? tx('Checking payment…', 'भुगतान जाँचा जा रहा है…') : tx('Check payment status', 'भुगतान की स्थिति जाँचें')}
+            </button>
+          </section>
+        );
+      })}
 
       {loading && <div className={styles.stateCard} role="status">{tx('Loading course offers…', 'कोर्स ऑफर लोड हो रहे हैं…')}</div>}
       {!loading && loadError && (
