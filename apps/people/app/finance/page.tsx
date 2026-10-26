@@ -250,7 +250,7 @@ export default function FinancePage(){
     try{
       const p=await api<PolicyDetail>(BASE+'/revenue-share/policies/'+id);
       setPolicyDetail(p);
-      setSelectedOfferId(String(p.institution_offer_id));
+      const offerId=String(p.institution_offer_id);setSelectedOfferId(offerId);setTaxForm(v=>({...v,offerId,legalEntityId:''}));setDiscountForm(v=>({...v,offerId}));
       setRecipients((p.recipients||[]).map(r=>({
         institutionId:String(r.institution_id),calculationType:r.calculation_type as 'PERCENTAGE'|'FLAT',
         percentage:r.percentage_basis_points==null?'':String(r.percentage_basis_points/100),
@@ -855,7 +855,7 @@ export default function FinancePage(){
           <form className={styles.form} onSubmit={createTaxProfile}>
             <label>Course offer<select required value={taxForm.offerId} onChange={e=>selectWorkflowOffer(e.target.value)}><option value="">Select offer</option>{catalog.offers.filter(o=>o.current_candidate||o.publicly_sellable).map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_code} · v{o.content_version_no} · release {o.release_version}</option>)}</select></label>
             {catalog.offers.length===0&&<p className={styles.empty}>No current course offer exists yet. <a href="/institutions">Open HRMS Course launch</a>, complete content and source approval, then create the listing draft with its title, description and INR price. The offer will appear here once that draft exists. Obsolete legacy offers are intentionally not selectable.</p>}
-            <label>Legal seller<select required value={taxForm.legalEntityId} onChange={e=>setTaxForm(v=>({...v,legalEntityId:e.target.value}))}><option value="">Select legal entity</option>{catalog.legalEntities.map(e=><option key={e.id} value={e.id}>{e.legal_name} · {e.status}</option>)}</select></label>
+            <label>Legal seller<select required value={taxForm.legalEntityId} onChange={e=>setTaxForm(v=>({...v,legalEntityId:e.target.value}))}><option value="">Select legal seller</option>{catalog.legalEntities.filter(e=>e.entity_kind==='PLATFORM'||(e.entity_kind==='INSTITUTION'&&e.institution_id===selectedOffer?.institution_id)).map(e=><option key={e.id} value={e.id}>{e.legal_name} · {e.status}</option>)}</select></label>
             <label>Service classification / SAC<input value={taxForm.serviceClassificationCode} onChange={e=>setTaxForm(v=>({...v,serviceClassificationCode:e.target.value}))} placeholder="Enter CA-approved code"/></label>
             <label>Tax treatment<select value={taxForm.taxTreatment} onChange={e=>setTaxForm(v=>({...v,taxTreatment:e.target.value}))}><option value="TAXABLE">Taxable</option><option value="EXEMPT">Exempt</option><option value="NIL_RATED">Nil-rated</option><option value="NON_GST">Non-GST</option><option value="COMPOSITION">Composition treatment</option></select></label>
             {taxForm.taxTreatment==='TAXABLE'&&<div className={styles.inputGrid}><label>GST rate (%)<input required type="number" min="0.01" max="100" step="0.01" value={taxForm.gstPercent} onChange={e=>setTaxForm(v=>({...v,gstPercent:e.target.value}))}/></label><label>Cess rate (%)<input type="number" min="0" max="100" step="0.01" value={taxForm.cessPercent} onChange={e=>setTaxForm(v=>({...v,cessPercent:e.target.value}))}/></label></div>}
