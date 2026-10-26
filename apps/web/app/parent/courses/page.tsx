@@ -355,6 +355,7 @@ export default function ParentCoursesPage() {
         setError(localizeMarketplaceError(body.message, language,
           'The original order is still being reconciled. Retry verification for that order; do not pay again.',
           'पुराने order की जाँच अभी जारी है। उसी order को फिर सत्यापित करें; दोबारा भुगतान न करें।'));
+        setBusy('');
         return;
       }
       if (!body.orderId || !Number.isSafeInteger(Number(body.localOrderId)) || Number(body.localOrderId) <= 0
