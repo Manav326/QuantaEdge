@@ -626,15 +626,21 @@ export default function StudentMarketplacePage() {
           </div>
         </section>
       )}
-      {pendingVerifies.map(draft => (
-        <section className={styles.verifyCard} key={draft.localOrderId} aria-label={tx("Retry payment verification", "भुगतान की पुष्टि फिर करें")}>
-          <div><strong>{tx('Payment verification pending — course #{id}', 'भुगतान की पुष्टि बाकी — कोर्स #{id}', {id:draft.courseId})}</strong>
-            <p>{tx('This saved order can be reconciled independently. Other courses remain available to purchase.', 'इस सुरक्षित order की अलग से जाँच हो सकती है। अन्य कोर्स खरीदने के लिए उपलब्ध हैं।')}</p></div>
-          <button type="button" disabled={verifying} onClick={() => void reconcilePurchase(draft)}>
-            {verifying ? tx('Verifying…', 'जाँच हो रही है…') : tx('Retry verification', 'फिर सत्यापित करें')}
-          </button>
-        </section>
-      ))}
+      {pendingRecoveryReady && groupPendingVerifyDrafts(pendingVerifies).map(group => {
+        const draft = group.drafts[0];
+        return (
+          <section className={styles.verifyCard} key={group.key} aria-label={tx("Retry payment verification", "भुगतान की पुष्टि फिर करें")}>
+            <div><strong>{draft.courseTitle || tx('Course payment needs verification', 'कोर्स भुगतान की पुष्टि बाकी है')}</strong>
+              {draft.beneficiaryName && <small>{tx('For {name}', '{name} के लिए', {name:draft.beneficiaryName})}</small>}
+              <p>{group.drafts.length > 1
+                ? tx('We found {count} saved payment attempts for this course. We will check each attempt. Do not pay again.', 'इस कोर्स के {count} पुराने भुगतान प्रयास मिले। हम हर प्रयास की जाँच करेंगे। दोबारा भुगतान न करें।', {count:group.drafts.length})
+                : tx('We will check this saved payment. Do not start another checkout while its status is being confirmed.', 'इस सुरक्षित भुगतान की जाँच होगी। स्थिति की पुष्टि तक नया checkout शुरू न करें।')}</p></div>
+            <button type="button" disabled={verifying} onClick={() => void reconcilePurchase(group.drafts)}>
+              {verifying ? tx('Checking payment…', 'भुगतान जाँचा जा रहा है…') : tx('Check payment status', 'भुगतान की स्थिति जाँचें')}
+            </button>
+          </section>
+        );
+      })}
 
       {loading && <div className={styles.stateCard} role="status">{tx('Loading course offers…', 'कोर्स ऑफर लोड हो रहे हैं…')}</div>}
       {!loading && loadError && (
