@@ -33,10 +33,10 @@ class CourseVersionForkIntegrationTest {
         on identity.id=p.course_identity_id and identity.status='ACTIVE'
        and identity.source_institution_id=r.source_institution_id
        and identity.course_type_code=p.course_type_code
-      where p.code='CLASS_6' and p.status='ACTIVE'
+      where identity.stable_course_key='CLASS_6' and p.status='ACTIVE'
         and r.release_state in ('SHAREABLE','WITHDRAWN')
         and r.legacy_migration=false and r.obsolete_at is null
-      order by r.release_version desc,p.id desc limit 1
+      order by p.content_version_no desc,r.release_version desc,p.id desc,r.id desc limit 1
       """, sourceInstitutionId);
     long sourceId = ((Number) source.get("course_id")).longValue();
     long identityId = ((Number) source.get("course_identity_id")).longValue();
@@ -132,10 +132,10 @@ class CourseVersionForkIntegrationTest {
         on identity.id=p.course_identity_id and identity.status='ACTIVE'
        and identity.source_institution_id=r.source_institution_id
        and identity.course_type_code=p.course_type_code
-      where p.code='CLASS_6' and p.status='ACTIVE'
+      where identity.stable_course_key='CLASS_6' and p.status='ACTIVE'
         and r.release_state in ('SHAREABLE','WITHDRAWN')
         and r.legacy_migration=false and r.obsolete_at is null
-      order by r.release_version desc,p.id desc limit 1
+      order by p.content_version_no desc,r.release_version desc,p.id desc,r.id desc limit 1
       """, sourceInstitutionId);
     long sourceId=((Number)source.get("course_id")).longValue();
     int oldVersion=((Number)source.get("content_version_no")).intValue();
@@ -164,7 +164,8 @@ class CourseVersionForkIntegrationTest {
         on identity.id=p.course_identity_id and identity.status='ACTIVE'
        and identity.source_institution_id=?
        and identity.course_type_code=p.course_type_code
-      where p.code='CLASS_6' and p.status='ACTIVE' and p.code<>'GENERAL'
+      where identity.stable_course_key='CLASS_6' and p.status='ACTIVE' and p.code<>'GENERAL'
+      order by p.content_version_no desc,p.id desc limit 1
       """,Long.class,sourceInstitutionId);
     Boolean currentReleaseExists=jdbc.queryForObject("""
       select exists(
