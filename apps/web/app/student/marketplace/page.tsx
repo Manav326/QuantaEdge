@@ -239,7 +239,7 @@ export default function StudentMarketplacePage() {
     setStatus('');
     savePendingVerify(draft);
     try {
-      await readJson(await apiFetch('/api/v1/marketplace/orders/' + draft.localOrderId + '/verify', {
+      const verification = await readJson(await apiFetch('/api/v1/marketplace/orders/' + draft.localOrderId + '/verify', {
         method: 'POST',
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
@@ -250,7 +250,11 @@ export default function StudentMarketplacePage() {
         }),
       }));
       clearPendingVerify(draft.localOrderId);
-      setStatus(tx('Payment verified. Your course is now in All Courses.', 'भुगतान सत्यापित हो गया। आपका कोर्स All Courses में उपलब्ध है।'));
+      setStatus(verification.financeReconciliationRequired === true
+        ? tx('Payment confirmed and course access granted. Invoice and revenue-share finalization is still being reconciled; do not pay again.',
+            'भुगतान की पुष्टि हो गई और कोर्स की पहुँच मिल गई है। इनवॉइस और revenue-share का अंतिम मिलान अभी जारी है; दोबारा भुगतान न करें।')
+        : String(verification.message || '').trim() ||
+          tx('Payment verified. Your course is now in All Courses.', 'भुगतान सत्यापित हो गया। आपका कोर्स All Courses में उपलब्ध है।'));
       await loadOffers();
       await loadPurchaseRequests();
       router.push('/student/courses?focus=' + encodeURIComponent(String(draft.courseId)));
