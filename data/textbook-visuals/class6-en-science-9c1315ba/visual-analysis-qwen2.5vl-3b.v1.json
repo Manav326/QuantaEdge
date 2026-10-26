@@ -8,14 +8,19 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1369,
-    "assets_processed_this_run": 5,
+    "assets_selected": 1374,
+    "assets_processed_this_run": 10,
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
+      "7648bdfd0ca00b2a9aab1c0d",
+      "264647961a857697afa5e279",
       "b90b1ccd2f380e4a35f9f791",
-      "055ba61cf9184b7284850138",
-      "2185c15c0a88a108ea516878"
+      "9f232483ce16973cb62998c9",
+      "01128e1da549b4881f224152",
+      "071b9ffb6e11765d8d17e2bf",
+      "ac3ef67e4ced1dc1152e7b14",
+      "055ba61cf9184b7284850138"
     ],
     "assets_eligible": 2078,
     "assets_analyzed": 1364,
@@ -23,7 +28,7 @@
     "assets_completion_percent": 65.6,
     "assets_failed": 11,
     "assets_skipped_from_checkpoint": 1364,
-    "batch_limit": 5,
+    "batch_limit": 10,
     "publication_allowed": false
   },
   "results": [
@@ -434,24 +439,29 @@
           "National Education Policy 2020",
           "National Curriculum Framework for School Education (NCF-SE) 2023",
           "pañchakośhas",
-          "Middle Stage",
           "Foundational and Preparatory Stages",
-          "Analytical, descriptive, and narrative capabilities",
-          "Transformative learning culture",
-          "Classroom arrangement",
-          "Teacher preparation",
-          "Curricular Area Groups"
+          "Middle Stage",
+          "Secondary Stages",
+          "holistic development",
+          "transformative learning culture",
+          "appropriate textbooks",
+          "curricular areas",
+          "content and pedagogy",
+          "classroom arrangement",
+          "teacher preparation",
+          "conceptual connections",
+          "National Council of Educational Research and Training"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving a transformative learning culture.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving a holistic educational development.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
+          "The foreword does not provide specific details about the content of the textbooks or the curricular areas."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40380864418",
-      "checkpointed_at": "2026-10-26T20:01:58Z"
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:39:33Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20116,20 +20126,19 @@
           "Proofreader",
           "DTP Cell",
           "Publication Division",
-          "Contractual",
-          "Final shape"
+          "Contractual"
         ],
         "context_relation": "acknowledgements",
         "limitations": [
-          "No specific limitations mentioned.",
+          "The image may be a full page, not a cropped figure.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40380864418",
-      "checkpointed_at": "2026-10-26T20:03:21Z"
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:43:30Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -21411,7 +21420,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40380864418",
+      "run_id": "40413122029",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -22010,9 +22019,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40380864418",
+      "run_id": "40413122029",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -23771,24 +23780,24 @@
           "colour",
           "size",
           "arrangement",
+          "height",
+          "types of stem",
           "herbs",
           "shrubs",
           "trees",
-          "height",
-          "types of stem",
-          "features of plants",
-          "nature walk"
+          "nature walk",
+          "observations"
         ],
-        "context_relation": "exploration",
+        "context_relation": "The text is a part of a larger educational content, specifically discussing the criteria for grouping plants and animals.",
         "limitations": [
-          "The image does not provide specific details about the criteria for grouping plants and animals."
+          "The text does not provide specific examples or details for each criterion."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40380864418",
-      "checkpointed_at": "2026-10-26T20:04:29Z"
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:55:36Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -34070,7 +34079,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40380864418",
+      "run_id": "40413122029",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -34990,7 +34999,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40380864418",
+      "run_id": "40413122029",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -37233,7 +37242,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40380864418",
+      "run_id": "40413122029",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -37354,9 +37363,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40380864418",
+      "run_id": "40413122029",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -38024,7 +38033,7 @@
           "Handspans",
           "Length of the table"
         ],
-        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
+        "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans.",
         "limitations": [
           "The table does not provide the actual length of the table."
         ]
@@ -38032,8 +38041,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40380864418",
-      "checkpointed_at": "2026-10-26T20:05:28Z"
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:14:18Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
