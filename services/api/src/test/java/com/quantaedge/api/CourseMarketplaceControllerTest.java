@@ -69,6 +69,19 @@ class CourseMarketplaceControllerTest {
   }
 
   @Test
+  void staleCheckoutIsResolvedOnlyWhenExactSavedOrderIsVerifiedAndEntitled() {
+    assertTrue(CourseMarketplaceController.reconciliationConfirmsExistingOrderVerified(
+        Map.of("status", "VERIFIED", "entitled", true)));
+    assertFalse(CourseMarketplaceController.reconciliationConfirmsExistingOrderVerified(
+        Map.of("status", "VERIFIED", "entitled", false)));
+    assertFalse(CourseMarketplaceController.reconciliationConfirmsExistingOrderVerified(
+        Map.of("status", "PAYMENT_PROCESSING", "entitled", false)));
+    assertFalse(CourseMarketplaceController.reconciliationConfirmsExistingOrderVerified(
+        Map.of("status", "AWAITING_PAYMENT", "canRetryCheckout", true)));
+    assertFalse(CourseMarketplaceController.reconciliationConfirmsExistingOrderVerified(null));
+  }
+
+  @Test
   void onlyLegacyOrdersWithNoDiscountFactsCanBeRepairedAutomatically() {
     Map<String,Object> legacy = new LinkedHashMap<>();
     legacy.put("discount_reference", null);
