@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "bbd77f66e60d35da60e67a170cafa4657831a6fe12f6227703281c215c152d45",
+  "raw_analysis_sha256": "b15701da7c6602306a171609b0c1e04a39c966ed0c7274a5f0e37013bbc14b84",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40242884307",
-      "checkpointed_at": "2026-10-25T23:53:27Z",
+      "checkpointed_at": "2026-10-25T23:57:37Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40242884307",
-      "checkpointed_at": "2026-10-25T23:53:53Z",
+      "checkpointed_at": "2026-10-25T23:58:04Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40242884307",
-      "checkpointed_at": "2026-10-25T23:54:23Z",
+      "checkpointed_at": "2026-10-25T23:58:35Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -63535,7 +63535,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40242884307",
-      "checkpointed_at": "2026-10-25T23:55:05Z",
+      "checkpointed_at": "2026-10-25T23:59:18Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing pressure, winds, storms, and cyclones.",
         "visual_type": "page_with_multiple_visuals",
@@ -64672,21 +64672,85 @@
     {
       "asset_id": "c2b2e5fd564b4373c697448c",
       "asset_sha256": "3ab92ff9e87db7fbbdb8c82ca0b5d1b473b794c6f8afffdba1ddec6368099e50",
-      "page_text_context_sha256": "77dac7f858d3c2ad86ca022679a4bf0db50a31cf27b414c0681a8331db1e8f89",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 104,
       "asset_path": "page-0104.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "77dac7f858d3c2ad86ca022679a4bf0db50a31cf27b414c0681a8331db1e8f89",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40233310877",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a balloon with a water column and a question about the effect of increasing the height of the water column on the balloon's bulge.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 6.6: Higher heights of water column\nproduce bigger bulge of the balloon",
+          "What will happen to the\nbulge of the balloon if we\nincrease the height of the\nwater column?",
+          "Pour some more water in any one of the pipes\nused in Fig. 6.5. Observe the bulge of the balloon. Repeat this process a few times, adding more\nwater each time and noting the extent of bulge as\nshown in Fig. 6.6.",
+          "Do you see any relation between the amount\nof bulge of the rubber balloon and the height of\nthe water column in the pipe? You must have\nobserved that the bulge of the balloon increases\nas the height of the water column increases.",
+          "Thus, as the height of the water column in the pipe increases,\nthe pressure at the bottom of the pipe also increases, which causes\nthe balloon to bulge more. So, we can say that the pressure exerted\nby a liquid in a vessel depends on the height of its column. This\nis the reason why overhead tanks ar",
+          "Suppose you are living on the second floor of a three-storeyed\nbuilding and an overhead water tank is placed on the top floor.\nWill you or your friend on the first floor receive a more powerful\nstream of tap water? Give reasons.",
+          "Do liquids also exert pressure on the walls of the container?\nLet us find out by conducting the following activity.",
+          "Activity 6.2: Let us find out",
+          "• Take a used plastic bottle and remove its cap. Make\nfour small holes near the bottom around the sides\nusing a needle or a nail. Make sure that the holes are at\nthe same height from the bottom as shown in Fig. 6.7.\n(If you find it difficult to make a hole, you can slightly\nheat the needle and poke ",
+          "• Seal the holes with a tape and fill the bottle with water.",
+          "• Now, remove the tape from all holes at the same time.",
+          "• What do you observe?"
+        ],
+        "concepts": [
+          "pressure",
+          "liquid",
+          "balloon",
+          "water column",
+          "overhead tanks",
+          "pressure in taps",
+          "pressure on walls of container"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the relationship between the height of a water column and the pressure exerted on a balloon, as well as the pressure exerted on the walls of a container.",
+        "limitations": [
+          "The image does not provide specific measurements or calculations.",
+          "The image does not show the actual experiment being conducted."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40242884307",
+      "checkpointed_at": "2026-10-26T00:01:24Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a balloon with a water column and a question about the effect of increasing the height of the water column on the balloon's bulge.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 6.6: Higher heights of water column\nproduce bigger bulge of the balloon",
+          "What will happen to the\nbulge of the balloon if we\nincrease the height of the\nwater column?",
+          "Pour some more water in any one of the pipes\nused in Fig. 6.5. Observe the bulge of the balloon. Repeat this process a few times, adding more\nwater each time and noting the extent of bulge as\nshown in Fig. 6.6.",
+          "Do you see any relation between the amount\nof bulge of the rubber balloon and the height of\nthe water column in the pipe? You must have\nobserved that the bulge of the balloon increases\nas the height of the water column increases.",
+          "Thus, as the height of the water column in the pipe increases,\nthe pressure at the bottom of the pipe also increases, which causes\nthe balloon to bulge more. So, we can say that the pressure exerted\nby a liquid in a vessel depends on the height of its column. This\nis the reason why overhead tanks ar",
+          "Suppose you are living on the second floor of a three-storeyed\nbuilding and an overhead water tank is placed on the top floor.\nWill you or your friend on the first floor receive a more powerful\nstream of tap water? Give reasons.",
+          "Do liquids also exert pressure on the walls of the container?\nLet us find out by conducting the following activity.",
+          "Activity 6.2: Let us find out",
+          "• Take a used plastic bottle and remove its cap. Make\nfour small holes near the bottom around the sides\nusing a needle or a nail. Make sure that the holes are at\nthe same height from the bottom as shown in Fig. 6.7.\n(If you find it difficult to make a hole, you can slightly\nheat the needle and poke ",
+          "• Seal the holes with a tape and fill the bottle with water.",
+          "• Now, remove the tape from all holes at the same time.",
+          "• What do you observe?"
+        ],
+        "concepts": [
+          "pressure",
+          "liquid",
+          "balloon",
+          "water column",
+          "overhead tanks",
+          "pressure in taps",
+          "pressure on walls of container"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the relationship between the height of a water column and the pressure exerted on a balloon, as well as the pressure exerted on the walls of a container.",
+        "limitations": [
+          "The image does not provide specific measurements or calculations.",
+          "The image does not show the actual experiment being conducted."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
