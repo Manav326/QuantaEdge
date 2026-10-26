@@ -17,6 +17,10 @@ Every application surface must identify the same domain entity consistently. Do 
 9. **UI contract**: user-facing lists group by logical entity identity; detail/edit/review screens may show meaningful business keys and content versions, but not raw database row numbers. If a workflow sequence is useful, label it accurately (for example, “Submission 2”), not “Course 2.”
 10. **API contract**: include stable public IDs and scoped business keys when clients need to retain a reference across requests. Return version and workflow metadata as separate named fields; do not overload a single \`id\` or \`version\` field with multiple meanings.
 
+## Mandatory implementation companion
+
+All coding agents must read the repository-root `AGENTS.md` and the mandatory [Course identity and commerce contract](course-identity-and-commerce-contract.md) before changing a course, release, offer, checkout, payment, enrollment or learning-history path. The contract defines the ownership key, upgrade behavior, immutable transaction facts and required negative cases.
+
 ## Course identity mapping
 
 | Field | Meaning | Stable across a content fork? | User-facing use |
@@ -36,7 +40,10 @@ Every application surface must identify the same domain entity consistently. Do 
 - Content versions and release submissions remain separate for auditing and approval. Their presence must not create duplicate course cards.
 - A newer content version is a new immutable graph linked to the same logical course identity. Re-submitting the same graph creates a new release submission sequence, not a new content version.
 - A course identity does not imply publication. Marketplace discovery still requires a current, shareable release, a valid current fingerprint, an active institution assignment, a ready registered course type, and explicit HRMS publication.
-- Learner access and history are version-specific unless an explicit, audited transfer policy says otherwise. Deduplicating cards must not rewrite or silently transfer enrolments, purchases, attempts, results, or certificates.
+- **Purchase ownership and access are keyed to the stable logical course identity plus institution and holder, not to a version row or Marketplace offer.** Publishing content v2 must not create a second billable product for a learner who owns content v1.
+- The exact purchase/order, invoice, tax/share/discount snapshots, payment provider IDs and source `course_id`/offer revision remain immutable transaction history; they are never rewritten to a new offer to repair an identity mismatch.
+- Learner progress, assessment attempts/results and certificates retain their version provenance. A newer content graph must use an explicit, validated mapping to show carried-forward progress; do not move or delete historical learning records to make identities line up.
+- A destination institution is an independent access/billing scope even when it shares the same source course identity. A different `course_identity_id` must never be merged based on names, titles, class labels or price.
 - The HRMS launch workflow should show one current course card per identity. Assignment/release IDs are implementation details; their lifecycle can be inspected in audit history.
 
 ## Required review question
