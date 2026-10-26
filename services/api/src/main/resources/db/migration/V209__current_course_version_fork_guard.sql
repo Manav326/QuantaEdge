@@ -1,6 +1,25 @@
 -- V209: close direct-SQL version-fork bypasses using the current source-owned pipeline.
 -- V208 is already merged and must remain immutable for Flyway checksum validation.
 
+-- A WITHDRAWN release is not live/sellable, but its immutable graph remains a valid
+-- source for the next version. V208 marked these rows obsolete for discovery; clear only that
+-- specific retirement reason when the source identity is still valid. Legacy/orphan rows stay obsolete.
+UPDATE institution_course_release release
+SET obsolete_at = NULL,
+    obsolete_reason = NULL,
+    updated_at = now()
+FROM curriculum_program program
+JOIN institution_course_identity identity
+  ON identity.id = program.course_identity_id
+ AND identity.status = 'ACTIVE'
+ AND identity.course_type_code = program.course_type_code
+WHERE program.id = release.program_id
+  AND identity.source_institution_id = release.source_institution_id
+  AND release.release_state = 'WITHDRAWN'
+  AND release.legacy_migration = false
+  AND release.obsolete_reason =
+    'OBSOLETE: source institution withdrew this release; relisting requires a new source release.';
+
 -- Versioning has one source: only a current nonlegacy released graph may be forked.
 -- The version service and UI validate this too; this trigger closes the direct-SQL function path.
 CREATE OR REPLACE FUNCTION qe_validate_current_course_version_fork_source()
