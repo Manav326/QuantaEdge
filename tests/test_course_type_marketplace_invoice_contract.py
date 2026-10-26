@@ -22,12 +22,28 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
         self.assertNotIn("tre4-bpsc", sql)
         self.assertNotIn("TRE 1.0", sql)
 
-    def test_learner_listing_checkout_and_payment_verification_use_type_gate(self):
+    def test_learner_listing_and_checkout_use_type_gate_while_verification_uses_saved_identity(self):
         controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseMarketplaceController.java").read_text(encoding="utf-8")
-        self.assertGreaterEqual(controller.count("course_marketplace_content_type_ready("), 9)
-        self.assertIn("course_marketplace_content_type_ready(release.program_id)", controller)
-        self.assertIn("course_marketplace_content_type_ready(r.program_id)", controller)
-        self.assertIn("course_marketplace_content_type_ready(newer_release.program_id)", controller)
+        verification_start = controller.index("private Map<String,Object> verifyOrderInternal(")
+        verification_end = controller.find("\n  private ", verification_start + 1)
+        self.assertGreater(verification_end, verification_start, "Payment verification method boundary must remain explicit.")
+        checkout_paths = controller[:verification_start]
+        verification = controller[verification_start:verification_end]
+
+        # New listings/checkouts must use the shared course-type gate. Historical payment
+        # verification deliberately uses the saved order's immutable offer/course identity,
+        # because later publication changes must not invalidate a payment already in flight.
+        self.assertGreaterEqual(checkout_paths.count("course_marketplace_content_type_ready("), 8)
+        self.assertIn("course_marketplace_content_type_ready(release.program_id)", checkout_paths)
+        self.assertIn("course_marketplace_content_type_ready(r.program_id)", checkout_paths)
+        self.assertIn("course_marketplace_content_type_ready(newer_release.program_id)", checkout_paths)
+        self.assertNotIn("course_marketplace_content_type_ready(", verification)
+        self.assertIn("originalOfferMatchesOrder", verification)
+        self.assertIn("offer.id=? and offer.institution_id=? and offer.course_id=?", verification)
+        self.assertIn("identity.course_type_code=program.course_type_code", verification)
+        self.assertIn("identity.source_institution_id=release.source_institution_id", verification)
+        self.assertNotIn("offer.status='PUBLISHED'", verification)
+        self.assertNotIn("release.release_state='SHAREABLE'", verification)
         self.assertGreaterEqual(
             controller.count("newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'"), 4,
             "Inactive or placeholder course versions must not hide a currently published learner offer.")
