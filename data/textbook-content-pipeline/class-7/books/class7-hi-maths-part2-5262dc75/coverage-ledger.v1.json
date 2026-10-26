@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 1757,
     "eligible_visual_asset_rows": 1757,
-    "raw_analysis_result_rows": 20,
-    "successful_visual_analyses": 9,
-    "missing_visual_analyses": 1737,
-    "failed_visual_analyses": 11,
+    "raw_analysis_result_rows": 30,
+    "successful_visual_analyses": 16,
+    "missing_visual_analyses": 1727,
+    "failed_visual_analyses": 14,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1748,
+    "unresolved_count": 1741,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -6823,9 +6823,16 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6841,7 +6848,7 @@
       "asset_path": "page-0007.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -6859,9 +6866,34 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook listing names of individuals involved in educational administration and governance.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "राष्ट्रीय पाठ्यक्रम और शिक्षण अधिगम",
+          "सामग्री समिति (एन.एस.टी.सी.)",
+          "1. महेश चंद्र पंत, कुलाधिपति, राष्ट्रीय शैक्षिक योजना एवं प्रशासन संस्थाथान (अध्यक्ष)",
+          "2. मञ्जुल भार्गव, आचार्य, प्रिंसटन विश्वविद्यालय (सह-अध्यक्ष)",
+          "3. सुधा मूर्तति, प्रतिष्ठित लेखिका एवं शिक्षाविद",
+          "4. बिबेक देबरॉय, अध्यक्ष, प्रधानमंत्री की आर्थिक सलाहकार परिषद (ई.ए.सी.-पी.एम.)",
+          "5. शेखर मांडे, पूर्व महानिदशेक, सी.एस.आई.आर. एवं प्रतिष्ठित आचार्य, सावित्रीबाई फुले पुणे विश्वविद्यालय, पुणे",
+          "6. सुजाता रामदोरई, आचार्य"
+        ],
+        "concepts": [
+          "Educational Administration",
+          "Governing Bodies",
+          "Educational Institutions",
+          "Educational Policy",
+          "Educational Governance"
+        ],
+        "context_relation": "The page is part of a textbook discussing the educational administration and governance bodies.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any specific information about the individuals listed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6877,9 +6909,33 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Page from a textbook listing names of individuals associated with educational institutions and roles.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "राष्ट्रीय पाठ्यक्रम और शिक्षण अधिगम",
+          "सामग्री समिति (एन.एस.टी.सी.)",
+          "1. महेश चंद्र पंत, कुलाधिपति, राष्ट्रीय शैक्षिक योजना एवं प्रशासन संस्थाथान (अध्यक्ष)",
+          "2. मञ्जुल भार्गव, आचार्य, प्रिंसटन विश्वविद्यालय (सह-अध्यक्ष)",
+          "3. सुधा मूर्तति, प्रतिष्ठित लेखिका एवं शिक्षाविद",
+          "4. बिबेक देबरॉय, अध्यक्ष, प्रधानमंत्री की आर्थिक सलाहकार परिषद (ई.ए.सी.-पी.एम.)",
+          "5. शेखर मांडे, पूर्व महानिदशेक, सी.एस.आई.आर. एवं प्रतिष्ठित आचार्य, सावित्रीबाई फुले पुणे विश्वविद्यालय, पुणे",
+          "6. सुजाता रामदोरई, आचार्य"
+        ],
+        "concepts": [
+          "Educational Institutions",
+          "Roles in Education",
+          "Academic Positions",
+          "Educational Leadership"
+        ],
+        "context_relation": "The page lists names of individuals associated with educational institutions and their roles.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any specific information about the educational content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6895,7 +6951,7 @@
       "asset_path": "page-0008.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -6913,9 +6969,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6931,9 +6996,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6949,7 +7023,7 @@
       "asset_path": "page-0009.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -6967,9 +7041,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6985,9 +7068,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

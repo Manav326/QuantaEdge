@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-hindi-ghgp2",
   "source_pdf_sha256": "647c89e1be4181c18b6b8376bc5d4901462faded6fa28ddde2bcb49f047383d5",
   "raw_analysis_path": "data/textbook-visuals/class7-hi-maths-part2-5262dc75/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2fd89e2e6bafe39a2dd80a814191be024bb7b1034924fa38aad80a2fe7a1122f",
+  "raw_analysis_sha256": "3a6064266a4c63b798c54a5dd35e0aba0005cd761edf21cb9b53246e336618bb",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-hi-maths-part2-5262dc75/visual-analysis-corrections.v1.json",
@@ -658,6 +658,404 @@
         "limitations": [
           "unclear text content",
           "no visible objects or figures"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e6cac52b5756d5145a899b36",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-hindi-ghgp2",
+      "source_pdf_sha256": "647c89e1be4181c18b6b8376bc5d4901462faded6fa28ddde2bcb49f047383d5",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "55efc6f4d5528665806df3548e58d64db029377e64c4a3fcd6692c7230d65425",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:26:16Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c49eeefd679d2e8105c68697",
+      "asset_sha256": "fe7f7a876d0b3b16bb89c3c429c3dce82f7641d9ca58be8d223a6bc3007356d0",
+      "page_text_context_sha256": "55efc6f4d5528665806df3548e58d64db029377e64c4a3fcd6692c7230d65425",
+      "source_book_id": "ncert-c7-hindi-ghgp2",
+      "source_pdf_sha256": "647c89e1be4181c18b6b8376bc5d4901462faded6fa28ddde2bcb49f047383d5",
+      "source_pdf_page_number": 7,
+      "asset_path": "page-0007.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3c2e16839e780b875468f587",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-hindi-ghgp2",
+      "source_pdf_sha256": "647c89e1be4181c18b6b8376bc5d4901462faded6fa28ddde2bcb49f047383d5",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6560324ec766d88ee49a38f68d0c7cf6d5f5986f596bfd6db2875402cd662570",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook listing names of individuals involved in educational administration and governance.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "राष्ट्रीय पाठ्यक्रम और शिक्षण अधिगम",
+          "सामग्री समिति (एन.एस.टी.सी.)",
+          "1. महेश चंद्र पंत, कुलाधिपति, राष्ट्रीय शैक्षिक योजना एवं प्रशासन संस्थाथान (अध्यक्ष)",
+          "2. मञ्जुल भार्गव, आचार्य, प्रिंसटन विश्वविद्यालय (सह-अध्यक्ष)",
+          "3. सुधा मूर्तति, प्रतिष्ठित लेखिका एवं शिक्षाविद",
+          "4. बिबेक देबरॉय, अध्यक्ष, प्रधानमंत्री की आर्थिक सलाहकार परिषद (ई.ए.सी.-पी.एम.)",
+          "5. शेखर मांडे, पूर्व महानिदशेक, सी.एस.आई.आर. एवं प्रतिष्ठित आचार्य, सावित्रीबाई फुले पुणे विश्वविद्यालय, पुणे",
+          "6. सुजाता रामदोरई, आचार्य"
+        ],
+        "concepts": [
+          "Educational Administration",
+          "Governing Bodies",
+          "Educational Institutions",
+          "Educational Policy",
+          "Educational Governance"
+        ],
+        "context_relation": "The page is part of a textbook discussing the educational administration and governance bodies.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any specific information about the individuals listed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:32:35Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook listing names of individuals involved in educational administration and governance.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "राष्ट्रीय पाठ्यक्रम और शिक्षण अधिगम",
+          "सामग्री समिति (एन.एस.टी.सी.)",
+          "1. महेश चंद्र पंत, कुलाधिपति, राष्ट्रीय शैक्षिक योजना एवं प्रशासन संस्थाथान (अध्यक्ष)",
+          "2. मञ्जुल भार्गव, आचार्य, प्रिंसटन विश्वविद्यालय (सह-अध्यक्ष)",
+          "3. सुधा मूर्तति, प्रतिष्ठित लेखिका एवं शिक्षाविद",
+          "4. बिबेक देबरॉय, अध्यक्ष, प्रधानमंत्री की आर्थिक सलाहकार परिषद (ई.ए.सी.-पी.एम.)",
+          "5. शेखर मांडे, पूर्व महानिदशेक, सी.एस.आई.आर. एवं प्रतिष्ठित आचार्य, सावित्रीबाई फुले पुणे विश्वविद्यालय, पुणे",
+          "6. सुजाता रामदोरई, आचार्य"
+        ],
+        "concepts": [
+          "Educational Administration",
+          "Governing Bodies",
+          "Educational Institutions",
+          "Educational Policy",
+          "Educational Governance"
+        ],
+        "context_relation": "The page is part of a textbook discussing the educational administration and governance bodies.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any specific information about the individuals listed."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "31971d5fcc1be05a3745b4e8",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-hindi-ghgp2",
+      "source_pdf_sha256": "647c89e1be4181c18b6b8376bc5d4901462faded6fa28ddde2bcb49f047383d5",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6560324ec766d88ee49a38f68d0c7cf6d5f5986f596bfd6db2875402cd662570",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page from a textbook listing names of individuals associated with educational institutions and roles.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "राष्ट्रीय पाठ्यक्रम और शिक्षण अधिगम",
+          "सामग्री समिति (एन.एस.टी.सी.)",
+          "1. महेश चंद्र पंत, कुलाधिपति, राष्ट्रीय शैक्षिक योजना एवं प्रशासन संस्थाथान (अध्यक्ष)",
+          "2. मञ्जुल भार्गव, आचार्य, प्रिंसटन विश्वविद्यालय (सह-अध्यक्ष)",
+          "3. सुधा मूर्तति, प्रतिष्ठित लेखिका एवं शिक्षाविद",
+          "4. बिबेक देबरॉय, अध्यक्ष, प्रधानमंत्री की आर्थिक सलाहकार परिषद (ई.ए.सी.-पी.एम.)",
+          "5. शेखर मांडे, पूर्व महानिदशेक, सी.एस.आई.आर. एवं प्रतिष्ठित आचार्य, सावित्रीबाई फुले पुणे विश्वविद्यालय, पुणे",
+          "6. सुजाता रामदोरई, आचार्य"
+        ],
+        "concepts": [
+          "Educational Institutions",
+          "Roles in Education",
+          "Academic Positions",
+          "Educational Leadership"
+        ],
+        "context_relation": "The page lists names of individuals associated with educational institutions and their roles.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any specific information about the educational content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:34:24Z",
+      "effective_analysis": {
+        "visual_summary": "Page from a textbook listing names of individuals associated with educational institutions and roles.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "राष्ट्रीय पाठ्यक्रम और शिक्षण अधिगम",
+          "सामग्री समिति (एन.एस.टी.सी.)",
+          "1. महेश चंद्र पंत, कुलाधिपति, राष्ट्रीय शैक्षिक योजना एवं प्रशासन संस्थाथान (अध्यक्ष)",
+          "2. मञ्जुल भार्गव, आचार्य, प्रिंसटन विश्वविद्यालय (सह-अध्यक्ष)",
+          "3. सुधा मूर्तति, प्रतिष्ठित लेखिका एवं शिक्षाविद",
+          "4. बिबेक देबरॉय, अध्यक्ष, प्रधानमंत्री की आर्थिक सलाहकार परिषद (ई.ए.सी.-पी.एम.)",
+          "5. शेखर मांडे, पूर्व महानिदशेक, सी.एस.आई.आर. एवं प्रतिष्ठित आचार्य, सावित्रीबाई फुले पुणे विश्वविद्यालय, पुणे",
+          "6. सुजाता रामदोरई, आचार्य"
+        ],
+        "concepts": [
+          "Educational Institutions",
+          "Roles in Education",
+          "Academic Positions",
+          "Educational Leadership"
+        ],
+        "context_relation": "The page lists names of individuals associated with educational institutions and their roles.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any specific information about the educational content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "882cab5ca30e03ddd0ae590d",
+      "asset_sha256": "fe6e4a5a28a88cf01565cfda4222887a08524a677ab010f073cedf5aa11a8aad",
+      "page_text_context_sha256": "6560324ec766d88ee49a38f68d0c7cf6d5f5986f596bfd6db2875402cd662570",
+      "source_book_id": "ncert-c7-hindi-ghgp2",
+      "source_pdf_sha256": "647c89e1be4181c18b6b8376bc5d4901462faded6fa28ddde2bcb49f047383d5",
+      "source_pdf_page_number": 8,
+      "asset_path": "page-0008.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3842b4c149b771c06b253a63",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-hindi-ghgp2",
+      "source_pdf_sha256": "647c89e1be4181c18b6b8376bc5d4901462faded6fa28ddde2bcb49f047383d5",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2874b46af91aea43c5f14cdb17c2f272caa46591653682fe16bd9a2041f44ed1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:39:17Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1aec1eacd31c407e52ebbf93",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-hindi-ghgp2",
+      "source_pdf_sha256": "647c89e1be4181c18b6b8376bc5d4901462faded6fa28ddde2bcb49f047383d5",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2874b46af91aea43c5f14cdb17c2f272caa46591653682fe16bd9a2041f44ed1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:39:38Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d4fd742d635dd4c696002fc2",
+      "asset_sha256": "1f03b26eb8aeb10201ab640b92811ef5f3cb33861feac64127f9d92e5d43d047",
+      "page_text_context_sha256": "2874b46af91aea43c5f14cdb17c2f272caa46591653682fe16bd9a2041f44ed1",
+      "source_book_id": "ncert-c7-hindi-ghgp2",
+      "source_pdf_sha256": "647c89e1be4181c18b6b8376bc5d4901462faded6fa28ddde2bcb49f047383d5",
+      "source_pdf_page_number": 9,
+      "asset_path": "page-0009.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9908808ed032414c20d87d8d",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-hindi-ghgp2",
+      "source_pdf_sha256": "647c89e1be4181c18b6b8376bc5d4901462faded6fa28ddde2bcb49f047383d5",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4723c343f43dcd54e56afe2259b3e41ea0e3cfa89d43a9811ed434c51547063e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:44:32Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "603c6ee98e400586620e64bc",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-hindi-ghgp2",
+      "source_pdf_sha256": "647c89e1be4181c18b6b8376bc5d4901462faded6fa28ddde2bcb49f047383d5",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4723c343f43dcd54e56afe2259b3e41ea0e3cfa89d43a9811ed434c51547063e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:44:55Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
