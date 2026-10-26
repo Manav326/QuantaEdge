@@ -8,26 +8,26 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2325,
+    "assets_selected": 2332,
     "assets_processed_this_run": 10,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "884424876ad3838bbdddc3ed",
-      "f94de497b2dc6dc6c6d1eaab",
-      "b195764e9da49fb0b3b274da",
-      "1f7339eec6863bf5b6826f47",
-      "f63e68db59553b9769935ab8",
-      "137d9710274e6d30a3b01c04",
-      "266aa75db0e8f2a64ff2cb0e"
+      "e5306b7cc0f61fd786f233c5",
+      "1cc25a4278abce347a199c6b",
+      "c832e9fbd8beb3a77c22cc75",
+      "bdfcadca2a9ac89e04dacffd",
+      "12525e3d7b15835a716ef76a",
+      "e210beec8fa4e1a7800ef087",
+      "c43f36caa199694d182bd2a0"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2322,
-    "assets_remaining": 5166,
-    "assets_completion_percent": 31.0,
+    "assets_analyzed": 2329,
+    "assets_remaining": 5159,
+    "assets_completion_percent": 31.1,
     "assets_failed": 26,
-    "assets_skipped_from_checkpoint": 2315,
+    "assets_skipped_from_checkpoint": 2322,
     "batch_limit": 10,
     "publication_allowed": false
   },
@@ -9999,7 +9999,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:44:54Z"
+      "checkpointed_at": "2026-10-26T23:51:59Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13499,7 +13499,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:45:27Z"
+      "checkpointed_at": "2026-10-26T23:52:28Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82467,7 +82467,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:46:07Z"
+      "checkpointed_at": "2026-10-26T23:53:06Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -87850,6 +87850,249 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
       "checkpointed_at": "2026-10-26T23:51:07Z"
+    },
+    {
+      "asset_id": "e5306b7cc0f61fd786f233c5",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6bd441fb87e80e68026ee792a3fa29fb3aa8446a8370d8d377345683a5f7beaf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the reaction of sulfur with oxygen to form sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "You would observe that it is acidic in nature (Fig. 4.7d).",
+          "On burning sulfur in air (oxygen), sulfur dioxide gas is formed.",
+          "On dissolving sulfur dioxide gas in water, sulfurous acid is formed."
+        ],
+        "concepts": [
+          "Reaction of sulfur with oxygen",
+          "Formation of sulfur dioxide gas",
+          "Dissolution of sulfur dioxide gas in water",
+          "Formation of sulfurous acid"
+        ],
+        "context_relation": "The image illustrates the chemical reaction between sulfur and oxygen, leading to the formation of sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "limitations": [
+          "The image does not show the actual reaction process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:53:18Z"
+    },
+    {
+      "asset_id": "1cc25a4278abce347a199c6b",
+      "asset_sha256": "a9913d7882ad969f4b5ff9f8195e13f67853bf0d375ce5a57e90ee43add7e248",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/a9913d7882ad969f4b5ff9f8195e13f67853bf0d375ce5a57e90ee43add7e248.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6bd441fb87e80e68026ee792a3fa29fb3aa8446a8370d8d377345683a5f7beaf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the reaction of sulfur with oxygen to form sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "You would observe that it is acidic in nature (Fig. 4.7d).",
+          "On burning sulfur in air (oxygen), sulfur dioxide gas is formed.",
+          "On dissolving sulfur dioxide gas in water, sulfurous acid is formed."
+        ],
+        "concepts": [
+          "Reaction of sulfur with oxygen",
+          "Formation of sulfur dioxide gas",
+          "Dissolution of sulfur dioxide gas in water",
+          "Formation of sulfurous acid"
+        ],
+        "context_relation": "The image illustrates the chemical reaction between sulfur and oxygen, leading to the formation of sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "limitations": [
+          "The image does not provide specific details about the reaction conditions or the properties of the resulting sulfurous acid."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:54:03Z"
+    },
+    {
+      "asset_id": "c832e9fbd8beb3a77c22cc75",
+      "asset_sha256": "bdfc0f305118f049db23ae722986374b8eb0181d7949b8bc6a867121ce4757b7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/bdfc0f305118f049db23ae722986374b8eb0181d7949b8bc6a867121ce4757b7.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6bd441fb87e80e68026ee792a3fa29fb3aa8446a8370d8d377345683a5f7beaf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:54:37Z"
+    },
+    {
+      "asset_id": "bdfcadca2a9ac89e04dacffd",
+      "asset_sha256": "9654e2394fd4b8d502c02013160d615a02ed6a7604f08ff4fe7d26c27080161f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/9654e2394fd4b8d502c02013160d615a02ed6a7604f08ff4fe7d26c27080161f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6bd441fb87e80e68026ee792a3fa29fb3aa8446a8370d8d377345683a5f7beaf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the reaction of sulfur with oxygen to form sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "You would observe that it is acidic in nature (Fig. 4.7d).",
+          "On burning sulfur in air (oxygen), sulfur dioxide gas is formed.",
+          "On dissolving sulfur dioxide gas in water, sulfurous acid is formed."
+        ],
+        "concepts": [
+          "Reaction of sulfur with oxygen",
+          "Formation of sulfur dioxide gas",
+          "Dissolution of sulfur dioxide gas in water",
+          "Formation of sulfurous acid"
+        ],
+        "context_relation": "The image illustrates the chemical reaction between sulfur and oxygen, leading to the formation of sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "limitations": [
+          "The image does not provide specific details about the reaction conditions or the physical appearance of the products."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:55:19Z"
+    },
+    {
+      "asset_id": "12525e3d7b15835a716ef76a",
+      "asset_sha256": "ea8772e4d2bb8c4bb4167724b987976d80f97165b180521ba6f473783e4b7881",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/ea8772e4d2bb8c4bb4167724b987976d80f97165b180521ba6f473783e4b7881.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6bd441fb87e80e68026ee792a3fa29fb3aa8446a8370d8d377345683a5f7beaf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:55:54Z"
+    },
+    {
+      "asset_id": "e210beec8fa4e1a7800ef087",
+      "asset_sha256": "225d6d30ff1f426ea535e0e7cf09b3366d37a1f949250a725acfe7810c2c5fc1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/225d6d30ff1f426ea535e0e7cf09b3366d37a1f949250a725acfe7810c2c5fc1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6bd441fb87e80e68026ee792a3fa29fb3aa8446a8370d8d377345683a5f7beaf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the reaction of sulfur with oxygen to form sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "You would observe that it is acidic in nature (Fig. 4.7d).",
+          "On burning sulfur in air (oxygen), sulfur dioxide gas is formed.",
+          "On dissolving sulfur dioxide gas in water, sulfurous acid is formed."
+        ],
+        "concepts": [
+          "Reaction of sulfur with oxygen",
+          "Formation of sulfur dioxide gas",
+          "Formation of sulfurous acid"
+        ],
+        "context_relation": "The image shows the chemical reaction between sulfur and oxygen, leading to the formation of sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "limitations": [
+          "The image does not show the actual reaction process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:56:36Z"
+    },
+    {
+      "asset_id": "c43f36caa199694d182bd2a0",
+      "asset_sha256": "225d6d30ff1f426ea535e0e7cf09b3366d37a1f949250a725acfe7810c2c5fc1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/225d6d30ff1f426ea535e0e7cf09b3366d37a1f949250a725acfe7810c2c5fc1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6bd441fb87e80e68026ee792a3fa29fb3aa8446a8370d8d377345683a5f7beaf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the reaction of sulfur with oxygen to form sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "53",
+          "Blue litmus paper",
+          "Red litmus paper",
+          "Sulfur",
+          "Air (oxygen)",
+          "Sulfur dioxide gas",
+          "Sulfurous acid",
+          "Water"
+        ],
+        "concepts": [
+          "Reaction of sulfur with oxygen",
+          "Formation of sulfur dioxide gas",
+          "Dissolution of sulfur dioxide gas in water",
+          "Formation of sulfurous acid"
+        ],
+        "context_relation": "The image illustrates the chemical reaction between sulfur and oxygen, leading to the formation of sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "limitations": [
+          "The image does not provide specific details about the reaction conditions or the physical appearance of the products."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:56:48Z"
     }
   ]
 }
