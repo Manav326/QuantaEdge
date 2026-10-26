@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1300,
+    "assets_selected": 1302,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "eec9fbd50bcdb479f93d3cec",
-      "e2c20b2f04e1555647ed988e"
+      "5fe81f050ff2581408f795ca",
+      "b39874b32ad382ea536f63d5"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1297,
-    "assets_remaining": 994,
-    "assets_completion_percent": 56.6,
-    "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1295,
+    "assets_analyzed": 1298,
+    "assets_remaining": 993,
+    "assets_completion_percent": 56.7,
+    "assets_failed": 14,
+    "assets_skipped_from_checkpoint": 1297,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40277348694",
-      "checkpointed_at": "2026-10-26T07:38:33Z"
+      "checkpointed_at": "2026-10-26T07:44:32Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40277348694",
-      "checkpointed_at": "2026-10-26T07:39:16Z"
+      "checkpointed_at": "2026-10-26T07:45:15Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40277348694",
-      "checkpointed_at": "2026-10-26T07:40:08Z"
+      "checkpointed_at": "2026-10-26T07:46:08Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -42909,6 +42909,63 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40277348694",
       "checkpointed_at": "2026-10-26T07:43:23Z"
+    },
+    {
+      "asset_id": "5fe81f050ff2581408f795ca",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "138180b5c5a208b01601e22239615e5e1561f3ee4a91e52fddddce77e51d1d7b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Observation of water flowing out from holes in a container, indicating pressure on the sides.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "85",
+          "You observe water flowing out through the holes on the sides of the bottle. What can you infer from this observation?",
+          "It indicates that water also exerts pressure on the sides of a container. Therefore, we can conclude that liquids exert pressure not only at the bottom of the container, but also on its sides. In fact liquids exert pressure in all directions.",
+          "You must have seen water spurting out like a fountain from leaking joints or holes in water pipes. Can you explain why this happens?"
+        ],
+        "concepts": [
+          "Pressure",
+          "Liquids",
+          "Pressure on sides of a container",
+          "Pressure in all directions",
+          "Water spurting out"
+        ],
+        "context_relation": "Observation and explanation of pressure in liquids",
+        "limitations": [
+          "No specific image provided, only text description."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40277348694",
+      "checkpointed_at": "2026-10-26T07:46:46Z"
+    },
+    {
+      "asset_id": "b39874b32ad382ea536f63d5",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "page_text_context_sha256": "138180b5c5a208b01601e22239615e5e1561f3ee4a91e52fddddce77e51d1d7b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40277348694",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
