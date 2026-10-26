@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2310,
-    "successful_visual_analyses": 2278,
-    "missing_visual_analyses": 5178,
+    "raw_analysis_result_rows": 2318,
+    "successful_visual_analyses": 2286,
+    "missing_visual_analyses": 5170,
     "failed_visual_analyses": 32,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5210,
+    "unresolved_count": 5202,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -95818,9 +95818,16 @@
       "asset_path": "assets/9b125de85ad388db6efd7abd940521c9d19963bf8caf72b81c5eec90dfe6b284.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A coiled rope-like structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the discussion of substances that do not behave like metals.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -95836,9 +95843,33 @@
       "asset_path": "assets/ef908502a4b2968ab2af361ea1ef2a22282c7e71ee4eefbf01a7b00a86d93649.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the behavior of substances that do not behave like metals, specifically focusing on sodium and its reaction with oxygen and water.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Do you know that sodium is a metal which is stored in kerosene because it reacts vigorously with oxygen and water. A lot of heat is generated in the reaction. Storing sodium in kerosene prevents its exposure to moisture and air. Can you predict the nature of its oxide?",
+          "Let us now discuss some substances that do not behave like metals.",
+          "4.4 Substances that Behave Differently from",
+          "metal"
+        ],
+        "concepts": [
+          "sodium",
+          "metal",
+          "kerosene",
+          "reactivity",
+          "heat generation",
+          "oxide",
+          "substances",
+          "metallic behavior",
+          "reactivity with oxygen and water"
+        ],
+        "context_relation": "The page is discussing the behavior of substances that do not behave like metals, specifically focusing on sodium and its reaction with oxygen and water.",
+        "limitations": [
+          "The page does not provide specific details about the nature of sodium's oxide."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -95854,9 +95885,34 @@
       "asset_path": "assets/9657383adcbb231c21c5985fee291c921cc34338d6a5220073cb3c7cfb9a10db.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the behavior of substances that do not behave like metals, specifically focusing on sodium and its reaction with oxygen and water.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Do you know that sodium is a metal which is stored in kerosene because it reacts vigorously with oxygen and water. A lot of heat is generated in the reaction. Storing sodium in kerosene prevents its exposure to moisture and air. Can you predict the nature of its oxide?",
+          "Let us now discuss some substances that do not behave like metals.",
+          "4.4 Substances that Behave Differently from"
+        ],
+        "concepts": [
+          "metal",
+          "kerosene",
+          "react",
+          "oxygen",
+          "water",
+          "heat",
+          "oxide",
+          "substances",
+          "metallic behavior",
+          "reactivity",
+          "reactivity with oxygen and water"
+        ],
+        "context_relation": "The text is discussing the behavior of substances that do not behave like metals, specifically focusing on sodium and its reaction with oxygen and water.",
+        "limitations": [
+          "The text does not provide specific details about the nature of sodium's oxide."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -95872,9 +95928,34 @@
       "asset_path": "assets/a6d565de4d71a96450d19211dffb364db6978aa6596a8f2c92ab4917437b669e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A long horizontal line with a small rectangular box on the left side.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Do you know that sodium is a metal which is stored in kerosene because it reacts vigorously with oxygen and water. A lot of heat is generated in the reaction. Storing sodium in kerosene prevents its exposure to moisture and air. Can you predict the nature of its oxide?",
+          "Let us now discuss some substances that do not behave like metals.",
+          "4.4 Substances that Behave Differently from"
+        ],
+        "concepts": [
+          "Sodium",
+          "Kerosene",
+          "Oxide",
+          "Metal",
+          "Reaction",
+          "Heat",
+          "Moisture",
+          "Air",
+          "Substances",
+          "Behavior",
+          "Diﬀ erently"
+        ],
+        "context_relation": "The text is discussing the behavior of sodium and substances that do not behave like metals.",
+        "limitations": [
+          "The image does not provide any visual representation of the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -95890,9 +95971,16 @@
       "asset_path": "assets/0bdb68c03f412fc57a2c712ce1eae24b6be56d136eabde1f4c59f557307dc6a0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A scroll with a metal scroll holder, possibly representing a historical or literary document.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text discussing substances that behave differently from metals.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -95908,9 +95996,29 @@
       "asset_path": "assets/91d050c7f5353140938fe906feba2483a6592adb1dbf420a7543551813675019.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a metal object with a cylindrical shape and a conical top, possibly a metal rod or a cylindrical container.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "metal",
+          "kerosene",
+          "reactivity",
+          "heat generation",
+          "moisture",
+          "air",
+          "oxide",
+          "substances",
+          "metallic behavior",
+          "non-metallic behavior"
+        ],
+        "context_relation": "The image is related to the discussion of substances that do not behave like metals, specifically focusing on the behavior of sodium and its oxide.",
+        "limitations": [
+          "The image does not provide specific details about the metal or its properties."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -95926,9 +96034,29 @@
       "asset_path": "assets/93334eca6b3843383677f823cee84d031e0418db99c82d8ca67f18b041fd6800.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An illustration of a metal rod with a small bowl at the end, possibly representing a chemical reaction or a scientific concept.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "metal",
+          "kerosene",
+          "reactivity",
+          "heat generation",
+          "moisture",
+          "air",
+          "oxide",
+          "substances",
+          "metallic behavior",
+          "chemical reaction"
+        ],
+        "context_relation": "The image is related to the discussion of substances that do not behave like metals, specifically focusing on the reactivity of sodium and its storage in kerosene to prevent reaction with oxygen and water.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reaction or the nature of the oxide."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -95944,9 +96072,32 @@
       "asset_path": "assets/908fb83da727c55280af20aeb902765d1255ea96b5db1a3a25af52c232e5d466.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the behavior of substances that do not behave like metals, specifically focusing on sodium and its reaction with oxygen and water.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Do you know that sodium is a metal which is stored in kerosene because it reacts vigorously with oxygen and water. A lot of heat is generated in the reaction. Storing sodium in kerosene prevents its exposure to moisture and air. Can you predict the nature of its oxide?",
+          "Let us now discuss some substances that do not behave like metals.",
+          "4.4 Substances that Behave Differently from"
+        ],
+        "concepts": [
+          "sodium",
+          "metal",
+          "kerosene",
+          "reaction",
+          "heat",
+          "oxide",
+          "substances",
+          "behavior",
+          "metal"
+        ],
+        "context_relation": "The page is discussing the behavior of substances that do not behave like metals, specifically focusing on sodium and its reaction with oxygen and water.",
+        "limitations": [
+          "The page does not provide specific details about the nature of sodium's oxide."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
