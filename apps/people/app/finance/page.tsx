@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type
 import styles from './Finance.module.css';
 
 type Institution = { id:number; tenant_code:string; display_name:string; status:string };
-type LegalEntity = { id:number; entity_kind:string; institution_id?:number|null; institution_name?:string|null; legal_name:string; trade_name?:string|null; invoice_series_code?:string; einvoice_applicability?:'UNREVIEWED'|'NOT_REQUIRED'|'REQUIRED'; einvoice_applicability_reviewed_at?:string|null; einvoice_applicability_review_note?:string|null; status:string; active_gst_registrations?:number };
+type LegalEntity = { id:number; entity_kind:string; institution_id?:number|null; institution_name?:string|null; legal_name:string; trade_name?:string|null; contact_email?:string|null; contact_phone?:string|null; registered_address_json?:string|null; invoice_series_code?:string; einvoice_applicability?:'UNREVIEWED'|'NOT_REQUIRED'|'REQUIRED'; einvoice_applicability_reviewed_at?:string|null; einvoice_applicability_review_note?:string|null; status:string; active_gst_registrations?:number };
 type Offer = { offer_id:number; institution_id:number; institution_name:string; course_identity_public_id:string; stable_course_key:string; course_code:string; course_name:string; content_version_no:number; assignment_id:number; assignment_source:string; release_id:number; release_version:number; release_state:string; current_candidate:boolean; publicly_sellable:boolean; price_paise:number; currency:string; offer_status:string; legal_entity_id?:number|null; legal_seller_name?:string|null; latest_tax_profile_id?:number|null; tax_profile_status?:string|null; tax_treatment?:string|null; latest_share_policy_status?:string|null };
 type Registration = { id:number; legal_entity_id:number; legal_entity_name:string; gstin:string; state_code:string; status:string; effective_from:string };
 type Catalog = { institutions:Institution[]; legalEntities:LegalEntity[]; offers:Offer[]; registrations:Registration[] };
@@ -100,6 +100,8 @@ function parseRupeesPaise(raw:string):number|null{
 function parseDesign(value?:string|null):Design{
   try { const raw=value?JSON.parse(value):{}; return {...DEFAULT_DESIGN,...raw}; } catch { return {...DEFAULT_DESIGN}; }
 }
+const parseAddress=(value?:string|null):Record<string,string>=>{try{const raw=value?JSON.parse(value):{};return raw&&typeof raw==='object'&&!Array.isArray(raw)?raw as Record<string,string>:{};}catch{return {};}};
+const addressText=(value?:string|null)=>{const a=parseAddress(value);return [a.line1,a.city,a.state,a.postalCode].filter(Boolean).join(', ')};
 
 export default function FinancePage(){
   const [tab,setTab]=useState<FinanceTab>('overview');
@@ -155,7 +157,8 @@ export default function FinancePage(){
   const [selectedPolicyId,setSelectedPolicyId]=useState('');
   const [policyDetail,setPolicyDetail]=useState<PolicyDetail|null>(null);
   const [recipients,setRecipients]=useState<RecipientDraft[]>([]);
-  const [entityForm,setEntityForm]=useState({entityKind:'PLATFORM',institutionId:'',legalName:'',tradeName:'',contactEmail:'',addressLine:'',city:'',state:'',postalCode:'',invoiceSeriesCode:'QE'});
+  const [entityForm,setEntityForm]=useState({entityKind:'PLATFORM',institutionId:'',legalName:'',tradeName:'',contactEmail:'',contactPhone:'',addressLine:'',city:'',state:'',postalCode:'',invoiceSeriesCode:'QE'});
+  const [editingCoreEntityId,setEditingCoreEntityId]=useState<number|null>(null);
   const [gstEntityId,setGstEntityId]=useState('');
   const [editingEntityId,setEditingEntityId]=useState<number|null>(null);
   const [gstForm,setGstForm]=useState({gstin:'',legalName:'',stateCode:'',effectiveFrom:new Date().toISOString().slice(0,10),addressLine:'',city:'',state:'',postalCode:''});
@@ -273,16 +276,15 @@ export default function FinancePage(){
   const selectedTemplate=useMemo(()=>templates.find(t=>String(t.id)===selectedTemplateId),[templates,selectedTemplateId]);
   const designUnchanged=Boolean(selectedTemplate)&&JSON.stringify(design)===JSON.stringify(parseDesign(selectedTemplate?.design_definition_json));
 
-  const createEntity=async(event:FormEvent)=>{
+  const saveEntity=async(event:FormEvent)=>{
     event.preventDefault();
-    const saved=await action(async()=>api(BASE+'/legal-entities',{method:'POST',body:JSON.stringify({
-      entityKind:entityForm.entityKind,institutionId:entityForm.entityKind==='INSTITUTION'?Number(entityForm.institutionId):null,
-      legalName:entityForm.legalName,tradeName:entityForm.tradeName,contactEmail:entityForm.contactEmail,
-      invoiceSeriesCode:entityForm.invoiceSeriesCode,
-      registeredAddress:{line1:entityForm.addressLine,city:entityForm.city,state:entityForm.state,postalCode:entityForm.postalCode,country:'India'}
-    })}), 'Legal entity saved as draft.');
-    if(saved)setEntityForm({entityKind:'PLATFORM',institutionId:'',legalName:'',tradeName:'',contactEmail:'',addressLine:'',city:'',state:'',postalCode:'',invoiceSeriesCode:'QE'});
+    const body={legalName:entityForm.legalName,tradeName:entityForm.tradeName,contactEmail:entityForm.contactEmail,contactPhone:entityForm.contactPhone,
+      invoiceSeriesCode:entityForm.invoiceSeriesCode,registeredAddress:{line1:entityForm.addressLine,city:entityForm.city,state:entityForm.state,postalCode:entityForm.postalCode,country:'India'}};
+    const editing=editingCoreEntityId;
+    const saved=await action(()=>editing?api(BASE+'/legal-entities/'+editing,{method:'PUT',body:JSON.stringify(body)}):api(BASE+'/legal-entities',{method:'POST',body:JSON.stringify({...body,entityKind:entityForm.entityKind,institutionId:entityForm.entityKind==='INSTITUTION'?Number(entityForm.institutionId):null})}),editing?'Legal entity details updated.':'Legal entity saved as draft.');
+    if(saved){setEditingCoreEntityId(null);setEntityForm({entityKind:'PLATFORM',institutionId:'',legalName:'',tradeName:'',contactEmail:'',contactPhone:'',addressLine:'',city:'',state:'',postalCode:'',invoiceSeriesCode:'QE'});}
   };
+  const editEntityDetails=(e:LegalEntity)=>{const a=parseAddress(e.registered_address_json);setEntityForm({entityKind:e.entity_kind,institutionId:e.institution_id?String(e.institution_id):'',legalName:e.legal_name,tradeName:e.trade_name||'',contactEmail:e.contact_email||'',contactPhone:e.contact_phone||'',addressLine:a.line1||'',city:a.city||'',state:a.state||'',postalCode:a.postalCode||'',invoiceSeriesCode:e.invoice_series_code||'QE'});setEditingCoreEntityId(e.id);setEditingEntityId(null);setError('');setNotice('');};
   const saveInvoiceSeries=(entity:LegalEntity)=>{
     const series=(seriesDrafts[String(entity.id)]??entity.invoice_series_code??'QE').trim().toUpperCase();
     if(!/^[A-Z0-9_-]{1,3}$/.test(series)){setError('Invoice series prefix must be 1–3 uppercase letters, digits, underscores or hyphens.');return;}
@@ -717,8 +719,8 @@ export default function FinancePage(){
   };
   const activeDraft=selectedTemplate?.version_status==='DRAFT' || !selectedTemplate;
   const tabs:[typeof tab,string,string][]=[
-    ['overview','Overview','▦'],['entities','Legal entities & GST','⌂'],['tax','Tax profiles','%'],
-    ['distribution','Revenue distribution','↗'],['discounts','Discount codes','%'],['studio','Invoice Design Studio','▤'],
+    ['overview','Overview','▦'],['entities','Seller & GST','⌂'],['tax','Tax profile','%'],
+    ['distribution','Revenue share','↗'],['studio','Invoice design','▤'],['discounts','Discount codes','%'],
     ['payments','Payments & reconciliation','↻'],['documents','Issued documents','▣']
   ];
   // Render the same selected design on two workspace surfaces. The design and PDF
@@ -784,22 +786,24 @@ export default function FinancePage(){
         </div>
       </section>}
       {tab==='entities'&&<section className={styles.twoCol}>
-        <div className={styles.panel}><h2>Legal entities</h2><p>Create the real legal supplier record. It remains a draft until HRMS review.</p>
-          <form className={styles.form} onSubmit={createEntity}>
-            <label>Entity scope<select value={entityForm.entityKind} onChange={e=>setEntityForm(v=>({...v,entityKind:e.target.value}))}><option value="PLATFORM">Platform legal entity</option><option value="INSTITUTION">Institution legal entity</option></select></label>
-            {entityForm.entityKind==='INSTITUTION'&&<label>Institution<select required value={entityForm.institutionId} onChange={e=>setEntityForm(v=>({...v,institutionId:e.target.value}))}><option value="">Select institution</option>{catalog.institutions.map(i=><option key={i.id} value={i.id}>{i.display_name} · {i.tenant_code}</option>)}</select></label>}
+        <div className={styles.panel}><h2>{editingCoreEntityId?'Edit legal entity':'Legal entities'}</h2><p>{editingCoreEntityId?'Edit draft details before activating the supplier. Core details lock after activation.':'Create the legal supplier record, then verify its details before activation.'}</p>
+          <form className={styles.form} onSubmit={saveEntity}>
+            <label>Entity scope<select disabled={editingCoreEntityId!==null} value={entityForm.entityKind} onChange={e=>setEntityForm(v=>({...v,entityKind:e.target.value}))}><option value="PLATFORM">Platform legal entity</option><option value="INSTITUTION">Institution legal entity</option></select></label>
+            {entityForm.entityKind==='INSTITUTION'&&<label>Institution<select disabled={editingCoreEntityId!==null} required value={entityForm.institutionId} onChange={e=>setEntityForm(v=>({...v,institutionId:e.target.value}))}><option value="">Select institution</option>{catalog.institutions.map(i=><option key={i.id} value={i.id}>{i.display_name} · {i.tenant_code}</option>)}</select></label>}
             <label>Legal name<input required value={entityForm.legalName} onChange={e=>setEntityForm(v=>({...v,legalName:e.target.value}))}/></label>
             <label>Trade name<input value={entityForm.tradeName} onChange={e=>setEntityForm(v=>({...v,tradeName:e.target.value}))}/></label>
             <label>Finance contact email<input type="email" value={entityForm.contactEmail} onChange={e=>setEntityForm(v=>({...v,contactEmail:e.target.value}))}/></label>
-            <label>Invoice series prefix<input required minLength={1} maxLength={16} pattern="[A-Za-z0-9_-]{1,3}" value={entityForm.invoiceSeriesCode} onChange={e=>setEntityForm(v=>({...v,invoiceSeriesCode:e.target.value.toUpperCase()}))}/><small>Printed in the official invoice number, e.g. QE/26-27/000001 (max 16 characters).</small></label>
+            <label>Finance contact phone<input type="tel" value={entityForm.contactPhone} onChange={e=>setEntityForm(v=>({...v,contactPhone:e.target.value}))}/></label>
+            <label>Invoice series prefix<input required minLength={1} maxLength={3} pattern="[A-Za-z0-9_-]{1,3}" value={entityForm.invoiceSeriesCode} onChange={e=>setEntityForm(v=>({...v,invoiceSeriesCode:e.target.value.toUpperCase()}))}/><small>Printed in the official invoice number, e.g. QE/26-27/000001 (max 16 characters).</small></label>
             <label>Registered address line<input required value={entityForm.addressLine} onChange={e=>setEntityForm(v=>({...v,addressLine:e.target.value}))}/></label>
             <div className={styles.inputGrid}><label>City<input required value={entityForm.city} onChange={e=>setEntityForm(v=>({...v,city:e.target.value}))}/></label><label>State<input required value={entityForm.state} onChange={e=>setEntityForm(v=>({...v,state:e.target.value}))}/></label><label>PIN code<input required value={entityForm.postalCode} onChange={e=>setEntityForm(v=>({...v,postalCode:e.target.value}))}/></label></div>
-            <button className={styles.primary} disabled={busy}>Save legal entity draft</button>
+            <div className={styles.buttonStack}><button className={styles.primary} disabled={busy}>{editingCoreEntityId?'Save legal entity changes':'Save legal entity draft'}</button>{editingCoreEntityId!==null&&<button type="button" className={styles.secondary} onClick={()=>{setEditingCoreEntityId(null);setEntityForm({entityKind:'PLATFORM',institutionId:'',legalName:'',tradeName:'',contactEmail:'',contactPhone:'',addressLine:'',city:'',state:'',postalCode:'',invoiceSeriesCode:'QE'});}}>Cancel</button>}</div>
           </form>
           <div className={styles.entityList}>{catalog.legalEntities.map(e=><article key={e.id} className={styles.entityRow}>
             <div className={styles.entitySummary}>
-              <b>{e.legal_name}</b><span>{e.entity_kind==='INSTITUTION'?e.institution_name:'Platform'} · {e.status}</span>
-              <small>{e.active_gst_registrations||0} verified registration(s)</small>
+              <b>{e.legal_name}</b><span>{e.entity_kind==='INSTITUTION'?e.institution_name:'Platform legal entity'} · {e.status}</span>
+              {e.trade_name&&<small>Trade name: {e.trade_name}</small>}{e.contact_email&&<small>Finance email: {e.contact_email}</small>}{e.contact_phone&&<small>Finance phone: {e.contact_phone}</small>}
+              <small>Registered address: {addressText(e.registered_address_json)||'Not recorded'}</small><small>{e.active_gst_registrations||0} verified GST registration(s)</small>
               <small>Invoice series: <b>{e.invoice_series_code||'QE'}</b></small>
               <small>e-Invoice: <b>{e.einvoice_applicability||'UNREVIEWED'}</b>{e.einvoice_applicability_reviewed_at ? ' · reviewed '+new Date(e.einvoice_applicability_reviewed_at).toLocaleString() : ''}</small>
             </div>
@@ -809,6 +813,7 @@ export default function FinancePage(){
                 <button className={styles.secondarySmall} disabled={busy||((einvoiceDrafts[String(e.id)]??e.einvoice_applicability??'UNREVIEWED')===(e.einvoice_applicability??'UNREVIEWED')&&(einvoiceNotes[String(e.id)]??e.einvoice_applicability_review_note??'').trim()===(e.einvoice_applicability_review_note??'').trim())} onClick={()=>saveEinvoiceApplicability(e)}>Save e-Invoice review</button>
                 <button className={styles.secondarySmall} disabled={busy} onClick={()=>setEditingEntityId(null)}>Done</button>
               </> : <>
+                {e.status==='DRAFT'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>editEntityDetails(e)}>Edit details</button>}
                 <button className={styles.secondarySmall} disabled={busy} onClick={()=>{setEditingEntityId(e.id);setSeriesDrafts(v=>({...v,[String(e.id)]:e.invoice_series_code||'QE'}));setEinvoiceDrafts(v=>({...v,[String(e.id)]:e.einvoice_applicability||'UNREVIEWED'}));setEinvoiceNotes(v=>({...v,[String(e.id)]:e.einvoice_applicability_review_note||''}));}}>Edit settings</button>
                 {e.status==='DRAFT'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void action(()=>api(BASE+'/legal-entities/'+e.id+'/activate',{method:'POST'}),'Legal entity activated after HRMS review.')}>Activate</button>}
               </>}
