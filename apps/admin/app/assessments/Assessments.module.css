@@ -114,7 +114,7 @@
 .importedReviewLaunch h3{margin:0;color:#202e46;font-size:14px}
 .importedReviewLaunch p{margin:0;color:#68758a;font-size:10px;line-height:1.6}
 .importedReviewLaunchActions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.assessmentReviewBackdrop{position:fixed;z-index:1400;inset:0;width:100vw;height:100vh;height:100dvh;overflow:hidden;background:#f4f6fa;color:#202e46}
+.assessmentReviewBackdrop{position:fixed;z-index:1400;inset:0;width:auto;height:auto;overflow:hidden;background:#f4f6fa;color:#202e46}
 .assessmentReviewWorkspace{display:grid;grid-template-columns:276px minmax(0,1fr);width:100%;height:100%;min-height:0;background:#f7f9fc}
 .assessmentReviewSidebar{display:flex;flex-direction:column;min-width:0;min-height:0;background:#172239;color:#fff;border-right:1px solid #29364d}
 .reviewSidebarHeader{padding:23px 18px 15px;border-bottom:1px solid #ffffff1b}
@@ -134,15 +134,15 @@
 .reviewQuestionNavItemActive{border-color:#fb923c;background:#3a2a23;box-shadow:inset 0 0 0 1px #fb923c35}
 .reviewQuestionNavItem>span{grid-row:span 2;display:grid;place-items:center;width:24px;height:24px;border-radius:7px;background:#ffffff12;font-size:10px;font-weight:850}
 .reviewQuestionNavItem>b{overflow:hidden;text-overflow:ellipsis;font-size:10px}
-.reviewQuestionNavItem>small{overflow:hidden;text-overflow:ellipsis;font-size:8px;color:#b8c2d2}
+.reviewQuestionNavItem>small{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-break:normal;font-size:8px;color:#b8c2d2}
 .reviewQuestionNavItem:has(small){ }
 .reviewNavigatorEmpty{grid-column:1/-1;padding:14px;color:#c5cedb;font-size:11px;line-height:1.6}
 .assessmentReviewMain{display:flex;flex-direction:column;min-width:0;min-height:0;height:100%;overflow:hidden}
 .assessmentReviewHeader{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding:17px clamp(16px,2.2vw,32px);border-bottom:1px solid #e2e7ef;background:#fff}
 .assessmentReviewHeader h1{margin:5px 0 4px;font-size:21px;line-height:1.25;letter-spacing:-.65px;color:#19253c}
 .assessmentReviewHeader p{margin:0;color:#6f7b90;font-size:11px;line-height:1.6}
-.reviewClose{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;border:1px solid #dfe5ed;border-radius:10px;background:#fff;color:#4b596e;font-size:25px;cursor:pointer}
-.reviewClose:hover{border-color:#e69b70;color:#9a3412;background:#fff7f1}
+.reviewClose{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;border:1px solid var(--qe-review-border,#dfe5ed);border-radius:10px;background:var(--qe-review-surface-raised,#fff);color:var(--qe-review-text,#4b596e);font-size:25px;cursor:pointer}
+.reviewClose:hover{border-color:#e69b70;color:var(--qe-color-primary-text,#9a3412);background:var(--qe-review-surface-subtle,#fff7f1)}
 .reviewWorkspaceError{flex:0 0 auto;margin:10px 18px 0;padding:10px 13px;border:1px solid #f0c1b8;border-radius:9px;background:#fff4f1;color:#9f3324;font-size:11px;line-height:1.55}
 .assessmentReviewContent{flex:1;min-height:0;overflow:auto;padding:clamp(14px,2vw,26px);overscroll-behavior:contain}
 .reviewWorkspaceEmpty{display:grid;place-items:center;flex:1;padding:30px;color:#6f7b90;font-size:13px;text-align:center}
@@ -238,5 +238,69 @@
 .reviewPreviousFeedback b{color:#9f3324;font-size:10px}
 .reviewPreviousFeedback p{margin:5px 0 0;color:#6b3030;font-size:11px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
 .assessmentReviewWorkspace:focus{outline:none}
+
+/* Keep the review workspace within the shared shell and use its active appearance tokens. */
+.assessmentReviewBackdrop{
+  --qe-review-background:var(--qe-color-background,#f4f6fa);
+  --qe-review-surface:var(--qe-color-surface,#fff);
+  --qe-review-surface-raised:var(--qe-color-surface-elevated,#fff);
+  --qe-review-surface-subtle:var(--qe-color-surface-subtle,#f7f9fc);
+  --qe-review-text:var(--qe-color-text,#202e46);
+  --qe-review-muted:var(--qe-color-text-muted,#68758a);
+  --qe-review-border:var(--qe-color-border-subtle,#dfe5ee);
+  background:var(--qe-review-background);
+  color:var(--qe-review-text);
+}
+.assessmentReviewWorkspace{background:var(--qe-review-background)}
+.assessmentReviewHeader,.assessmentReviewFooter,.reviewLanguagePanel,.reviewEditorPanel,.reviewProvenancePanel{
+  background:var(--qe-review-surface);
+  color:var(--qe-review-text);
+  border-color:var(--qe-review-border);
+}
+.assessmentReviewHeader h1,.reviewQuestionTitleBar h2,.reviewLanguageHeader h3,
+.reviewOptions>li>p,.reviewEditorHeader h3,.reviewNoteField,
+.reviewProvenanceGrid strong,.reviewProvenanceGrid p,.reviewProvenanceGrid a{
+  color:var(--qe-review-text);
+}
+.assessmentReviewHeader p,.reviewQuestionTitleBar p,.reviewLanguageHeader>small,
+.reviewEditorPanel>p,.reviewEditorPanel>small,.reviewFooterNavigation>span,
+.reviewProvenanceGrid span{
+  color:var(--qe-review-muted);
+}
+.reviewStimulus,.reviewOptions>li,.reviewEditorHeader>b,.reviewProvenanceGrid>div{
+  background:var(--qe-review-surface-subtle);
+  border-color:var(--qe-review-border);
+}
+.reviewStimulus p{color:var(--qe-review-text)}
+.reviewStimulus>b{color:var(--qe-review-muted)}
+.reviewOptions>li>span{
+  background:var(--qe-review-surface-raised);
+  color:var(--qe-review-muted);
+  border-color:var(--qe-review-border);
+}
+.reviewOptions>li.reviewOptionSelected{
+  background:var(--qe-color-primary-container,#fff8f2);
+  border-color:var(--qe-color-primary,#f0b48e);
+}
+.reviewEditorPanel textarea,.reviewNoteField textarea{
+  background:var(--qe-review-surface-raised);
+  color:var(--qe-review-text);
+  border-color:var(--qe-review-border);
+}
+.reviewEditorPanel textarea:disabled{
+  background:var(--qe-review-surface-subtle);
+  color:var(--qe-review-muted);
+}
+.reviewClose,.secondaryButton{
+  background:var(--qe-review-surface-raised);
+  color:var(--qe-review-text);
+  border-color:var(--qe-review-border);
+}
+.secondaryButton:hover{
+  background:var(--qe-review-surface-subtle);
+  color:var(--qe-color-primary-text,#9a3412);
+}
+.reviewProvenanceGrid>div{border-color:var(--qe-review-border)}
+
 .assessmentReviewWorkspace :focus-visible{outline:2px solid #fb923c;outline-offset:2px}
 @media(max-width:760px){.reviewProvenanceGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
