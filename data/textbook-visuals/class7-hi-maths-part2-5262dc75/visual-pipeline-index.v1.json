@@ -1,0 +1,28 @@
+{
+  "schema_version": "quantaedge.textbook-content-pipeline-index.v1",
+  "architecture_version": "8-layer-resumable-v1",
+  "class": 7,
+  "book_slug": "class7-hi-maths-part2-5262dc75",
+  "source_book_id": "ncert-c7-hindi-ghgp2",
+  "source_pdf_sha256": "647c89e1be4181c18b6b8376bc5d4901462faded6fa28ddde2bcb49f047383d5",
+  "layers": {
+    "1": "COMPLETE",
+    "2": "COMPLETE",
+    "3": "COMPLETE",
+    "4": "RUNNING",
+    "5": "RUNNING",
+    "6": "NOT_STARTED",
+    "7": "NOT_STARTED",
+    "8": "NOT_STARTED"
+  },
+  "inventory_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "tag": "inventory-layer1-class7-class7-hi-maths-part2-5262dc75-sha647c89e1be41-run-40413122029",
+    "tar_sha256": "c90aaa805d3c4109a57cc568e6ee46527e0fc1e3c2eedb76d8943a3f1ef40cc9"
+  },
+  "analysis_path": "data/textbook-visuals/class7-hi-maths-part2-5262dc75/visual-analysis-qwen2.5vl-3b.v1.json",
+  "effective_analysis_path": "data/textbook-content-pipeline/class-7/books/class7-hi-maths-part2-5262dc75/visual-analysis-effective.v1.json",
+  "coverage_ledger_path": "data/textbook-content-pipeline/class-7/books/class7-hi-maths-part2-5262dc75/coverage-ledger.v1.json",
+  "publication_allowed": false,
+  "human_review_required": true
+}
