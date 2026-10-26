@@ -10,7 +10,10 @@ ALTER TABLE course_payment_order
       institution_id IS NOT NULL
       AND institution_offer_id IS NOT NULL
       AND course_identity_id IS NOT NULL
+      AND offer_price_paise IS NOT NULL
       AND listed_price_paise IS NOT NULL
+      AND taxable_value_paise IS NOT NULL
+      AND output_tax_paise IS NOT NULL
       AND tax_profile_id IS NOT NULL
       AND revenue_share_policy_id IS NOT NULL
       AND tax_calculation_snapshot IS NOT NULL
@@ -44,6 +47,28 @@ ALTER TABLE course_payment_order
       AND jsonb_typeof(discount_snapshot) = 'object'
       AND discount_snapshot ? 'discountPaise'
       AND discount_snapshot->>'discountPaise' IS NOT DISTINCT FROM discount_amount_paise::text
+      AND (
+        (
+          discount_offer_id IS NULL
+          AND discount_amount_paise = 0
+          AND discount_reference IS NULL
+          AND tax_calculation_snapshot->>'discountOfferId' IS NOT DISTINCT FROM '0'
+          AND tax_calculation_snapshot->>'discountCode' IS NULL
+          AND discount_snapshot->>'discountType' IS NOT DISTINCT FROM 'NONE'
+          AND NOT (discount_snapshot ? 'discountOfferId')
+          AND NOT (discount_snapshot ? 'code')
+        )
+        OR
+        (
+          discount_offer_id IS NOT NULL
+          AND discount_amount_paise > 0
+          AND discount_reference IS NOT NULL
+          AND tax_calculation_snapshot->>'discountOfferId' IS NOT DISTINCT FROM discount_offer_id::text
+          AND discount_snapshot->>'discountOfferId' IS NOT DISTINCT FROM discount_offer_id::text
+          AND tax_calculation_snapshot->>'discountCode' IS NOT DISTINCT FROM discount_reference
+          AND discount_snapshot->>'code' IS NOT DISTINCT FROM discount_reference
+        )
+      )
     )
   ) NOT VALID;
 
