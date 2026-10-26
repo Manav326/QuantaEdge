@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
-      "b90b1ccd2f380e4a35f9f791",
-      "055ba61cf9184b7284850138",
-      "2185c15c0a88a108ea516878"
+      "7648bdfd0ca00b2a9aab1c0d",
+      "264647961a857697afa5e279",
+      "b90b1ccd2f380e4a35f9f791"
     ],
     "assets_eligible": 2078,
     "assets_analyzed": 1364,
@@ -434,36 +434,27 @@
           "National Education Policy 2020",
           "National Curriculum Framework for School Education (NCF-SE) 2023",
           "pañchakośhas",
-          "Foundational and Preparatory Stages",
           "Middle Stage",
-          "Secondary Stages",
+          "Foundational and Preparatory Stages",
           "Analytical, descriptive, and narrative capabilities",
-          "Challenges and opportunities",
-          "Diverse curriculum",
-          "Three languages",
-          "Science, Mathematics, Social Sciences",
-          "Art Education",
-          "Physical Education and Well-being",
-          "Vocational Education",
           "Transformative learning culture",
           "Appropriate textbooks",
           "Curricular areas",
-          "Direct instruction",
-          "Opportunities for exploration and inquiry",
-          "Classroom arrangement"
+          "Classroom arrangement",
+          "Teacher preparation",
+          "Conceptual connections",
+          "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving the policy's goals.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving the policy's goals.",
         "limitations": [
-          "The foreword does not provide specific details about the textbooks or their content.",
-          "The foreword does not mention the exact number of subjects covered in the curriculum.",
-          "The foreword does not describe the specific challenges and opportunities that students will face in the Middle Stage."
+          "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40322828027",
-      "checkpointed_at": "2026-10-26T13:36:58Z"
+      "run_id": "40380864418",
+      "checkpointed_at": "2026-10-26T19:00:01Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20124,23 +20115,22 @@
           "DES",
           "Coimbatore",
           "Amrita Vishwa Vidyapeetham",
+          "Development Sector Professional",
           "Freelance Editor",
           "Proofreader",
-          "DTP Cell",
-          "Publication Division",
-          "Contractual"
+          "Publication Division"
         ],
         "context_relation": "acknowledgements",
         "limitations": [
-          "The image may be a full page, not a cropped figure.",
+          "No specific limitations mentioned.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40322828027",
-      "checkpointed_at": "2026-10-26T13:38:44Z"
+      "run_id": "40380864418",
+      "checkpointed_at": "2026-10-26T19:04:51Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -21422,7 +21412,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40322828027",
+      "run_id": "40380864418",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -22021,9 +22011,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40322828027",
+      "run_id": "40380864418",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -23772,7 +23762,6 @@
           "grouping",
           "plants",
           "animals",
-          "criteria",
           "features",
           "stems",
           "leaves",
@@ -23788,18 +23777,19 @@
           "trees",
           "height",
           "types of stem",
-          "features of plants"
+          "features of plants",
+          "nature walk"
         ],
-        "context_relation": "The text is a part of a larger educational content, specifically discussing the criteria for grouping plants and animals.",
+        "context_relation": "The text is a part of a larger educational content, specifically a textbook discussing the criteria for grouping plants and animals.",
         "limitations": [
-          "The text does not provide specific examples or details for each criterion."
+          "The text does not provide specific examples or instructions for the activities mentioned."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40322828027",
-      "checkpointed_at": "2026-10-26T13:40:17Z"
+      "run_id": "40380864418",
+      "checkpointed_at": "2026-10-26T19:19:28Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
