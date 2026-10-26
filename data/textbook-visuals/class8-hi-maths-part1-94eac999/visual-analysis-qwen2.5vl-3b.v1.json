@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 7,
+    "assets_selected": 10,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "65ccfad2d2c4e2121f490159",
-      "02b5b42f0629753c8c98507a",
-      "3bc001ce226e39fae3a0006a",
-      "a303017bbd3aee95d73b16bf",
-      "6a38e573bfab03b3552785f9"
+      "2f5ba9918496ce7b45a43755",
+      "f99efea0b48b28cd13d5a48e",
+      "5c5366207463885cf6134f2d",
+      "eb14c6b7f0d2eeef281c6dec",
+      "96aaf6eb27b83f23eb455293"
     ],
     "assets_eligible": 1946,
-    "assets_analyzed": 5,
-    "assets_remaining": 1941,
-    "assets_completion_percent": 0.3,
-    "assets_failed": 5,
-    "assets_skipped_from_checkpoint": 2,
+    "assets_analyzed": 9,
+    "assets_remaining": 1937,
+    "assets_completion_percent": 0.5,
+    "assets_failed": 6,
+    "assets_skipped_from_checkpoint": 5,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -257,6 +257,170 @@
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "2f5ba9918496ce7b45a43755",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-hindi-hhgp1",
+      "source_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+      "source_pdf_page_number": 3,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "17e8658b92a37ba4d5f7756c11b6342ba8108c9c0520ee6a17f02b78f9e004ae",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:09:14Z"
+    },
+    {
+      "asset_id": "f99efea0b48b28cd13d5a48e",
+      "asset_sha256": "de23b08587783c2086c056baac7341af6bba5cda3dcdebe2518a1c7bb4a9e331",
+      "page_text_context_sha256": "17e8658b92a37ba4d5f7756c11b6342ba8108c9c0520ee6a17f02b78f9e004ae",
+      "source_book_id": "ncert-c8-hindi-hhgp1",
+      "source_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+      "source_pdf_page_number": 3,
+      "asset_path": "page-0003.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "5c5366207463885cf6134f2d",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-hindi-hhgp1",
+      "source_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+      "source_pdf_page_number": 4,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9331550c879aa0a4f49155b74122f40526fa33d526d1ad7778c183c8b56d6a9b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, textured background with a white border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "हैैं। अत: यह आशा की जाती है  कि          विद्यार्           थी उनसे  आसानी से जुड़ सकेेंंगे। पुस्‍तक   विद्यार््थ       थियोोंं को",
+          "अपने आस-पास के पैटर््न देखने  एवं तलाशने और गणितीय अवधारणाओं को स्वयं खोजने   हेतु",
+          "प्रोत््‍  ससाहित करने  के प्रयास करती है। विषय-सामग्रीग्री गणित  को अन्य विषय  क्षेत्ररोंं, जैसे—  विज्ञान     ,",
+          "सामाजिक   विज्ञान     के साथ-साथ अन्य मिश्रित  विषयोों    (क्रॉस कटिंग थीम््स), जैसे—  पर््ययावरण",
+          "शिक्षाा, मूल्य शिक्षाा, समावेशी शिक्षाा, भारतीय   ज्ञान    पद्धति  (आई.के.एस.) से एकीकृत करने  का",
+          "प्रयत्‍न करती है। अधिकांश  स््थथानोों  पर अवधारणा किसी कहानी अथवा पहेली से"
+        ],
+        "concepts": [
+          "textbook",
+          "educational content",
+          "visual representation",
+          "red textured background",
+          "white border",
+          "page with multiple visuals"
+        ],
+        "context_relation": "The image is a visual representation of a textbook page.",
+        "limitations": [
+          "The image does not provide specific details about the content of the textbook page.",
+          "The image does not show any specific formulas, quantities, or relationships."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:15:43Z"
+    },
+    {
+      "asset_id": "eb14c6b7f0d2eeef281c6dec",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-hindi-hhgp1",
+      "source_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+      "source_pdf_page_number": 4,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9331550c879aa0a4f49155b74122f40526fa33d526d1ad7778c183c8b56d6a9b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, textured, and irregularly shaped object that appears to be a splash or a smear of paint.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or information related to the visible text.",
+        "limitations": [
+          "The image is a single object with no clear context or relationship to the visible text.",
+          "The image does not contain any numerical data or formulas.",
+          "The image does not depict any specific educational content or learning material."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:15:56Z"
+    },
+    {
+      "asset_id": "96aaf6eb27b83f23eb455293",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-hindi-hhgp1",
+      "source_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+      "source_pdf_page_number": 4,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9331550c879aa0a4f49155b74122f40526fa33d526d1ad7778c183c8b56d6a9b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the integration of mathematics with other subjects like science, social science, and cross-cutting themes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "हैैं। अत: यह आशा की जाती है  कि          विद्यार्           थी उनसे  आसानी से जुड़ सकेेंगे। पुस्‍तक   विद्यार््थ       थियोोंं को",
+          "अपने आस-पास के पैटर््न देखने  एवं तलाशने और गणितीय अवधारणाओं को स्वयं खोजने   हेतु",
+          "प्रोत््‍  ससाहित करने  के प्रयास करती है। विषय-सामग्रीग्री गणित  को अन्य विषय  क्षेत्ररोंं, जैसे—  विज्ञान     ,",
+          "सामाजिक   विज्ञान     के साथ-साथ अन्य मिश्रित  विषयोों    (क्रॉस कटिंग थीम््स), जैसे—  पर््ययावरण",
+          "शिक्षाा, मूल्य शिक्षाा, समावेशी शिक्षाा, भारतीय   ज्ञान    पद्धति  (आई.के.एस.) से एकीकृत करने  का",
+          "प्रयत्‍न करती है। अधिकांश  स््थथानोों  पर अवधारणा किसी कहानी अथवा पहेली से"
+        ],
+        "concepts": [
+          "integration of mathematics with other subjects",
+          "cross-cutting themes",
+          "science",
+          "social science",
+          "cross-cutting themes",
+          "environmental science",
+          "education",
+          "value education",
+          "inclusive education",
+          "Indian Knowledge System"
+        ],
+        "context_relation": "The text discusses the integration of mathematics with other subjects, including science, social science, and cross-cutting themes, to create a holistic educational experience.",
+        "limitations": [
+          "The text does not provide specific examples or details about the integration process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:17:57Z"
     }
   ]
 }

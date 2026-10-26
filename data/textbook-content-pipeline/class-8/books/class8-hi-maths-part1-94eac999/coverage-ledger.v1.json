@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 2,
     "inventory_asset_rows": 1946,
     "eligible_visual_asset_rows": 1946,
-    "raw_analysis_result_rows": 10,
-    "successful_visual_analyses": 5,
-    "missing_visual_analyses": 1936,
-    "failed_visual_analyses": 5,
+    "raw_analysis_result_rows": 15,
+    "successful_visual_analyses": 9,
+    "missing_visual_analyses": 1931,
+    "failed_visual_analyses": 6,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1943,
+    "unresolved_count": 1939,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -6429,9 +6429,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6447,7 +6456,7 @@
       "asset_path": "page-0003.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -6465,9 +6474,33 @@
       "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red, textured background with a white border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "हैैं। अत: यह आशा की जाती है  कि          विद्यार्           थी उनसे  आसानी से जुड़ सकेेंंगे। पुस्‍तक   विद्यार््थ       थियोोंं को",
+          "अपने आस-पास के पैटर््न देखने  एवं तलाशने और गणितीय अवधारणाओं को स्वयं खोजने   हेतु",
+          "प्रोत््‍  ससाहित करने  के प्रयास करती है। विषय-सामग्रीग्री गणित  को अन्य विषय  क्षेत्ररोंं, जैसे—  विज्ञान     ,",
+          "सामाजिक   विज्ञान     के साथ-साथ अन्य मिश्रित  विषयोों    (क्रॉस कटिंग थीम््स), जैसे—  पर््ययावरण",
+          "शिक्षाा, मूल्य शिक्षाा, समावेशी शिक्षाा, भारतीय   ज्ञान    पद्धति  (आई.के.एस.) से एकीकृत करने  का",
+          "प्रयत्‍न करती है। अधिकांश  स््थथानोों  पर अवधारणा किसी कहानी अथवा पहेली से"
+        ],
+        "concepts": [
+          "textbook",
+          "educational content",
+          "visual representation",
+          "red textured background",
+          "white border",
+          "page with multiple visuals"
+        ],
+        "context_relation": "The image is a visual representation of a textbook page.",
+        "limitations": [
+          "The image does not provide specific details about the content of the textbook page.",
+          "The image does not show any specific formulas, quantities, or relationships."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6483,9 +6516,20 @@
       "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red, textured, and irregularly shaped object that appears to be a splash or a smear of paint.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or information related to the visible text.",
+        "limitations": [
+          "The image is a single object with no clear context or relationship to the visible text.",
+          "The image does not contain any numerical data or formulas.",
+          "The image does not depict any specific educational content or learning material."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6501,9 +6545,36 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the integration of mathematics with other subjects like science, social science, and cross-cutting themes.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "हैैं। अत: यह आशा की जाती है  कि          विद्यार्           थी उनसे  आसानी से जुड़ सकेेंगे। पुस्‍तक   विद्यार््थ       थियोोंं को",
+          "अपने आस-पास के पैटर््न देखने  एवं तलाशने और गणितीय अवधारणाओं को स्वयं खोजने   हेतु",
+          "प्रोत््‍  ससाहित करने  के प्रयास करती है। विषय-सामग्रीग्री गणित  को अन्य विषय  क्षेत्ररोंं, जैसे—  विज्ञान     ,",
+          "सामाजिक   विज्ञान     के साथ-साथ अन्य मिश्रित  विषयोों    (क्रॉस कटिंग थीम््स), जैसे—  पर््ययावरण",
+          "शिक्षाा, मूल्य शिक्षाा, समावेशी शिक्षाा, भारतीय   ज्ञान    पद्धति  (आई.के.एस.) से एकीकृत करने  का",
+          "प्रयत्‍न करती है। अधिकांश  स््थथानोों  पर अवधारणा किसी कहानी अथवा पहेली से"
+        ],
+        "concepts": [
+          "integration of mathematics with other subjects",
+          "cross-cutting themes",
+          "science",
+          "social science",
+          "cross-cutting themes",
+          "environmental science",
+          "education",
+          "value education",
+          "inclusive education",
+          "Indian Knowledge System"
+        ],
+        "context_relation": "The text discusses the integration of mathematics with other subjects, including science, social science, and cross-cutting themes, to create a holistic educational experience.",
+        "limitations": [
+          "The text does not provide specific examples or details about the integration process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
