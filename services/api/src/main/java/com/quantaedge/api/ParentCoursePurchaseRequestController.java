@@ -98,8 +98,8 @@ public class ParentCoursePurchaseRequestController {
 
     Boolean access = jdbc.queryForObject("""
       select exists(select 1 from student_program_enrollment
-          where student_id=? and institution_id=? and program_id=? and status in ('ACTIVE','PAUSED'))
-        or exists(select 1 from course_purchase where student_id=? and institution_id=? and course_id=?)
+          where student_id=? and institution_id=? and qe_same_logical_course(program_id,?) and status in ('ACTIVE','PAUSED'))
+        or exists(select 1 from course_purchase where student_id=? and institution_id=? and qe_same_logical_course(course_id,?))
 
       """, Boolean.class, studentId, institutionId, courseId, studentId, institutionId, courseId);
     if (Boolean.TRUE.equals(access)) throw new IllegalArgumentException("You already have access to this course.");
