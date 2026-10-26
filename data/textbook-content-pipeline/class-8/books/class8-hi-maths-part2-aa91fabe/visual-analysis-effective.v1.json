@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-hindi-hhgp2",
   "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
   "raw_analysis_path": "data/textbook-visuals/class8-hi-maths-part2-aa91fabe/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1082f558af8c610a6e3b319d2c080eed97d5869aabe82d09bcd7dc2225886eea",
+  "raw_analysis_sha256": "048190d99b0eedbb2243a799e6cbe79e560a222f51bfb7fa33b4b0027a36fe73",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-hi-maths-part2-aa91fabe/visual-analysis-corrections.v1.json",
@@ -451,6 +451,166 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d2091bc12f7e93b73cb62c8a",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 4,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "22430d3fce7a72717f148cd23d5c72c2cf7d4937ab53e948492907032f77aa1d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in a textbook.",
+        "limitations": [
+          "No visible text or images present on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:16:41Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in a textbook.",
+        "limitations": [
+          "No visible text or images present on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b83546dbc354b67fe8198be7",
+      "asset_sha256": "1b9ee0cf3dd353115186d9012883ac95fdd00d0a4d5e328076f40d7cbbc1b816",
+      "page_text_context_sha256": "22430d3fce7a72717f148cd23d5c72c2cf7d4937ab53e948492907032f77aa1d",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 4,
+      "asset_path": "page-0004.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6c9cb7e3efbee234992e4e2d",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4c6e17a8b0daa187ee3def943f9e9a06584d49581b7c17604f80ca3cb6f0b197",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, textured, abstract shape on a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a red, textured shape on a white background.",
+        "limitations": [
+          "The image does not contain any text or visible elements that can be analyzed for content or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:22:02Z",
+      "effective_analysis": {
+        "visual_summary": "A red, textured, abstract shape on a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a red, textured shape on a white background.",
+        "limitations": [
+          "The image does not contain any text or visible elements that can be analyzed for content or context."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "702fb57fb60c210f9a142103",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4c6e17a8b0daa187ee3def943f9e9a06584d49581b7c17604f80ca3cb6f0b197",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, textured, abstract shape on a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a red, textured shape on a white background.",
+        "limitations": [
+          "The image does not contain any text or visible elements that can be analyzed for content or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:22:16Z",
+      "effective_analysis": {
+        "visual_summary": "A red, textured, abstract shape on a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a red, textured shape on a white background.",
+        "limitations": [
+          "The image does not contain any text or visible elements that can be analyzed for content or context."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e0f96d51063f9aad92bf846b",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "4c6e17a8b0daa187ee3def943f9e9a06584d49581b7c17604f80ca3cb6f0b197",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],
