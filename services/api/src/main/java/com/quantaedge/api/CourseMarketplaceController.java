@@ -1433,6 +1433,58 @@ public class CourseMarketplaceController {
     return verifyOrderInternal(localOrderId, request, null, context.userId(), requireTenant(tenant).institutionId());
   }
 
+  /**
+   * Return unresolved payment attempts only for the authenticated learner and active institution.
+   * Browser storage is a callback cache; this server-side list is the ownership source of truth.
+   */
+  @GetMapping("/orders/pending")
+  public List<Map<String,Object>> listPendingStudentOrders(
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    context=authorization.requireStudent(context);
+    return listPendingCourseOrders(requireTenant(tenant).institutionId(),context.studentId(),null);
+  }
+
+  /** A parent recovers only orders purchased by that parent, including purchases for linked children. */
+  @GetMapping("/family/orders/pending")
+  public List<Map<String,Object>> listPendingFamilyOrders(
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    context=authorization.requireParent(context);
+    return listPendingCourseOrders(requireTenant(tenant).institutionId(),null,context.userId());
+  }
+
+  private List<Map<String,Object>> listPendingCourseOrders(
+      long institutionId,Long studentId,Long purchaserUserId) {
+    return jdbc.queryForList("""
+      select o.id as local_order_id,o.student_id,o.purchaser_user_id,o.recipient_type,o.course_id,
+        coalesce(identity.public_id::text,identity.stable_course_key,p.public_id::text) as course_identity_key,
+        p.public_id as course_public_id,
+        coalesce(nullif(saved_offer.title_override,''),p.display_name) as course_title,
+        st.display_name as beneficiary_name,
+        o.status,o.offer_price_paise as amount_paise,o.currency,o.provider_order_id,o.institution_offer_id
+      from course_payment_order o
+      join curriculum_program p on p.id=o.course_id
+      left join institution_course_identity identity
+        on identity.id=coalesce(o.course_identity_id,p.course_identity_id)
+      left join institution_marketplace_offer saved_offer
+        on saved_offer.id=o.institution_offer_id and saved_offer.institution_id=o.institution_id
+          and saved_offer.course_id=o.course_id
+      left join student st on st.id=o.student_id
+      where o.institution_id=? and o.status in ('PENDING','EXPIRED')
+        and o.failure_code is distinct from 'PROVIDER_CONFIRMED_UNPAID'
+        and o.provider_order_id ~ '^order_[A-Za-z0-9]+$'
+        and (
+          (cast(? as bigint) is not null and o.student_id=? and o.purchaser_user_id is null)
+          or (cast(? as bigint) is not null and o.purchaser_user_id=?)
+        )
+      order by o.created_at desc,o.id desc
+      limit 100
+      """,institutionId,studentId,studentId,purchaserUserId,purchaserUserId);
+  }
+
   /** Reconcile a saved student order directly with Razorpay when a checkout callback is missing. */
   @PostMapping("/orders/{localOrderId}/reconcile")
   public Map<String, Object> reconcileOrder(
@@ -1562,8 +1614,8 @@ public class CourseMarketplaceController {
           to_char(created_at at time zone 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"') as order_created_at_iso
         from course_payment_order
         where id=? and institution_id=?
-          and ((? is not null and student_id=? and purchaser_user_id is null)
-            or (? is not null and purchaser_user_id=?))
+          and ((cast(? as bigint) is not null and student_id=? and purchaser_user_id is null)
+            or (cast(? as bigint) is not null and purchaser_user_id=?))
         """, localOrderId, institutionId, callerStudentId, callerStudentId, callerUserId, callerUserId);
     if (rows.isEmpty()) throw new SecurityException("This payment order is not available to this account.");
     Map<String,Object> order = rows.getFirst();
@@ -1649,7 +1701,6 @@ public class CourseMarketplaceController {
     if ("paid".equalsIgnoreCase(providerOrder.path("status").asText(""))
         || providerOrder.path("amount_paid").asLong(0) >= expectedAmount) {
       String message="Razorpay reports this order as paid, but the exact matching payment is not available. Do not pay again; finance/engineering must reconcile the provider references.";
-      if (!includeProviderDiagnostics) throw new IllegalStateException(message);
       Map<String,Object> result=new LinkedHashMap<>();
       result.put("status","RECONCILIATION_REQUIRED");
       result.put("entitled",false);
@@ -1657,19 +1708,40 @@ public class CourseMarketplaceController {
       result.put("orderId",localOrderId);
       result.put("courseId",courseId);
       result.put("message",message);
-      result.putAll(providerPaymentDiagnostics(providerOrder,items,providerOrderId,expectedAmount,expectedCurrency));
+      if (includeProviderDiagnostics) {
+        result.putAll(providerPaymentDiagnostics(providerOrder,items,providerOrderId,expectedAmount,expectedCurrency));
+      }
       return result;
     }
 
+    String providerStatus=providerOrder.path("status").asText("").toLowerCase(Locale.ROOT);
+    boolean providerAllowsRetry=!paymentInProgress
+        && Set.of("created","attempted").contains(providerStatus)
+        && providerOrder.path("amount_paid").asLong(0)<expectedAmount;
+    if (providerAllowsRetry) {
+      // Expire only after the exact provider order confirms there is no paid/in-flight payment.
+      // This stops safe-to-retry attempts being repopulated after every refresh.
+      jdbc.update("""
+        update course_payment_order
+        set status=case when status='PENDING' then 'EXPIRED' else status end,
+            failure_code='PROVIDER_CONFIRMED_UNPAID',updated_at=now()
+        where id=? and institution_id=? and status in ('PENDING','EXPIRED')
+          and provider_order_id=?
+        """,localOrderId,institutionId,providerOrderId);
+    }
+
     Map<String,Object> result = new LinkedHashMap<>();
-    result.put("status", paymentInProgress ? "PAYMENT_PROCESSING" : "AWAITING_PAYMENT");
+    result.put("status", paymentInProgress ? "PAYMENT_PROCESSING"
+        : providerAllowsRetry ? "AWAITING_PAYMENT" : "RECONCILIATION_REQUIRED");
     result.put("entitled", false);
-    result.put("canRetryCheckout", !paymentInProgress);
+    result.put("canRetryCheckout", providerAllowsRetry);
     result.put("orderId", localOrderId);
     result.put("courseId", courseId);
     result.put("message", paymentInProgress
         ? "Razorpay is still processing the payment. Retry verification shortly; do not pay again."
-        : "No authorised or captured payment was found for this order. It is safe to retry checkout; a new Razorpay order will be created.");
+        : providerAllowsRetry
+            ? "Razorpay confirms this saved attempt is unpaid. The same attempt is closed; you may start a new checkout."
+            : "Razorpay has not confirmed that this order is safely unpaid. Keep this order and ask support to reconcile it; do not pay again.");
     if (includeProviderDiagnostics) {
       result.putAll(providerPaymentDiagnostics(providerOrder, items, providerOrderId, expectedAmount, expectedCurrency));
     }
@@ -2167,8 +2239,8 @@ public class CourseMarketplaceController {
           revenue_share_policy_snapshot::text as revenue_share_policy_snapshot_json
         from course_payment_order
         where id=? and institution_id=?
-          and ((? is not null and student_id=? and purchaser_user_id is null)
-            or (? is not null and purchaser_user_id=?))
+          and ((cast(? as bigint) is not null and student_id=? and purchaser_user_id is null)
+            or (cast(? as bigint) is not null and purchaser_user_id=?))
         """, localOrderId, institutionId, callerStudentId, callerStudentId, callerUserId, callerUserId);
     if (rows.isEmpty()) throw new SecurityException("This payment order is not available to this account.");
     Map<String, Object> order = rows.getFirst();
