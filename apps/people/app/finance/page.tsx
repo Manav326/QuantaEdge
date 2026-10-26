@@ -558,6 +558,20 @@ export default function FinancePage(){
     try{const rows=await api<any[]>(BASE+'/offers/'+offerId+'/tax-profiles');setTaxProfiles(v=>({...v,[offerId]:rows}));return rows;}
     catch(e){setError(e instanceof Error?e.message:'Tax profiles could not load.');return [];}
   };
+  const approveTaxProfile=async(id:number,offerId:string)=>{
+    setError('');
+    try{
+      const latest=await api<any[]>(BASE+'/offers/'+offerId+'/tax-profiles');
+      setTaxProfiles(v=>({...v,[offerId]:latest}));
+      const profile=latest.find(row=>Number(row.id)===id);
+      const status=String(profile?.status||'NOT_FOUND').trim().toUpperCase();
+      if(!profile||status!=='PENDING_APPROVAL'){
+        setError('Tax profile #'+id+' is currently '+status+'. Refresh saved profiles and use the action matching its current status.');return;
+      }
+      const ok=await action(()=>api(BASE+'/tax-profiles/'+id+'/approve',{method:'POST'}),'Tax profile approved.');
+      if(ok)await loadTaxProfiles(offerId);
+    }catch(error){setError(error instanceof Error?error.message:'Tax profile status could not be refreshed before approval.');}
+  };
   const submitTaxProfile=async(id:number,offerId:string)=>{
     const ok=await action(()=>api(BASE+'/tax-profiles/'+id+'/submit',{method:'POST'}),'Tax profile submitted for HRMS approval.');
     if(ok)await loadTaxProfiles(offerId);
@@ -862,7 +876,7 @@ export default function FinancePage(){
           </form>
         </div>
         <div className={styles.panel}><h2>Saved tax profiles</h2><label>Course offer<select value={taxForm.offerId} onChange={e=>setTaxForm(v=>({...v,offerId:e.target.value}))}>{catalog.offers.map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_code} · Content v{o.content_version_no} · Submission {o.release_version} · {offerLifecycleLabel(o)}</option>)}</select></label>
-          {(taxProfiles[taxForm.offerId]||[]).map(p=><article className={styles.policyRow} key={p.id}><div><b>Version {p.version} · {p.tax_treatment}</b><span>{p.status} · GST {Number(p.gst_rate_basis_points)/100}%</span></div>{p.status==='DRAFT'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void submitTaxProfile(Number(p.id),taxForm.offerId)}>Submit</button>}{p.status==='PENDING_APPROVAL'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void action(()=>api(BASE+'/tax-profiles/'+p.id+'/approve',{method:'POST'}),'Tax profile approved.')}>Approve</button>}</article>)}
+          {(taxProfiles[taxForm.offerId]||[]).map(p=><article className={styles.policyRow} key={p.id}><div><b>Version {p.version} · {p.tax_treatment}</b><span>{p.status} · GST {Number(p.gst_rate_basis_points)/100}%</span></div>{p.status==='DRAFT'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void submitTaxProfile(Number(p.id),taxForm.offerId)}>Submit</button>}{p.status==='PENDING_APPROVAL'&&<button type="button" className={styles.secondarySmall} disabled={busy} onClick={()=>void approveTaxProfile(Number(p.id),taxForm.offerId)}>Approve</button>}</article>)}
           {!taxProfiles[taxForm.offerId]?.length&&<p className={styles.empty}>No tax profile saved for this offer yet.</p>}
           <p className={styles.note}>Approval requires an active legal seller. Taxable treatment also requires an active, HRMS-verified GST registration for the effective date.</p>
         </div>
