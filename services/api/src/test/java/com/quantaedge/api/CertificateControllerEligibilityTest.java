@@ -42,6 +42,52 @@ class CertificateControllerEligibilityTest {
   }
 
   @Test
+  void draftOnlyCourseVersionCannotIssueASubjectCertificate() {
+    Map<String,Object> studentRow=new LinkedHashMap<>();
+    studentRow.put("id",81L);
+    studentRow.put("display_name","Test Learner");
+    studentRow.put("class_code","6");
+    studentRow.put("language","en");
+
+    Map<String,Object> achievement=new LinkedHashMap<>();
+    achievement.put("recipient_name","Test Learner");
+    achievement.put("class_code","6");
+    achievement.put("source_class_code","6");
+    achievement.put("subject_id",601L);
+    achievement.put("program_id",12L);
+    achievement.put("course_name","Draft-only course");
+    achievement.put("subject_code","science");
+    achievement.put("subject_name","Science");
+    achievement.put("total_lessons",1L);
+    achievement.put("completed_lessons",1L);
+
+    when(jdbc.queryForList(anyString(),any(Object[].class))).thenAnswer(invocation->{
+      String sql=invocation.getArgument(0,String.class);
+      if(sql.contains("FROM student WHERE id=? AND active=true FOR UPDATE")) return List.of(studentRow);
+      if(sql.contains("FROM student_certificate")&&sql.contains("achievement_key=?")) return List.of();
+      if(sql.contains("COUNT(DISTINCT l.id)")&&sql.contains("completed_lessons")) return List.of(achievement);
+      if(sql.contains("select identity.id,identity.public_id::text as public_id")) return List.of();
+      return List.of();
+    });
+
+    org.springframework.web.server.ResponseStatusException ex=assertThrows(
+        org.springframework.web.server.ResponseStatusException.class,
+        ()->controller.issueCertificate(
+            new CertificateController.IssueRequest("SUBJECT_COMPLETION","science",null,
+                "CLASSIC","en",12L),
+            student,TEST_TENANT));
+
+    assertTrue(ex.getReason().contains("eligible released identity"));
+    ArgumentCaptor<String> sql=ArgumentCaptor.forClass(String.class);
+    verify(jdbc,org.mockito.Mockito.atLeastOnce()).queryForList(sql.capture(),any(Object[].class));
+    assertTrue(sql.getAllValues().stream().anyMatch(value->
+        value.contains("source_release.release_state in ('SHAREABLE','WITHDRAWN')")
+            &&value.contains("source_release.obsolete_at is null")));
+    verify(jdbc,org.mockito.Mockito.never()).update(
+        org.mockito.ArgumentMatchers.contains("INSERT INTO student_certificate"),any(Object[].class));
+  }
+
+  @Test
   void certificateDynamicSubjectNamesRemainExactlyAsStoredInEitherLanguage() {
     assertEquals("Science", controller.subjectNameAsStored("science", "Science"));
     assertEquals("विज्ञान", controller.subjectNameAsStored("science", "विज्ञान"));

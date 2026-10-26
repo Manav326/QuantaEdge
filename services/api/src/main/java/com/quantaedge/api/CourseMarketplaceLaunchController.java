@@ -877,7 +877,8 @@ public class CourseMarketplaceLaunchController {
 
   private Map<String,Object> lockAssignment(long institutionId,long assignmentId) {
     List<Map<String,Object>> rows=jdbc.queryForList("""
-        select a.id,a.institution_id,a.course_release_id,a.status as assignment_status,
+        select a.id as assignment_id,a.id,a.institution_id,
+          a.course_release_id,r.id as release_id,a.status as assignment_status,
           r.program_id as course_id,r.release_state,r.content_fingerprint,
           p.status as course_status,p.code as course_code,p.display_name as course_name,
           t.status as institution_status

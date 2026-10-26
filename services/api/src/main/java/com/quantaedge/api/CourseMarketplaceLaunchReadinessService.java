@@ -260,7 +260,7 @@ public class CourseMarketplaceLaunchReadinessService {
     add(checks,"COURSE_IDENTITY","Course has one active, type-matched source identity",
         identityContractMatches(offer),
         "This course version is missing its active stable course identity or the identity source/type does not match the release. Re-create the course through the current source-owned workflow; legacy/orphan courses cannot be published.");
-    add(checks,"CURRENT_OFFER_REVISION","Offer belongs to the current eligible release",
+    add(checks,"CURRENT_COURSE_RELEASE","Assignment/offer points to the newest eligible release",
         Boolean.TRUE.equals(offer.get("current_offer_version")),
         "This offer is obsolete or no longer points to the current eligible release. Use the current HRMS assignment and create or configure its offer instead.");
     String releaseState=text(offer.get("release_state"));
@@ -739,23 +739,28 @@ public class CourseMarketplaceLaunchReadinessService {
       order by imported_package.imported_at desc,imported_package.id desc
       limit 1
       """,courseId);
-    if(rows.isEmpty())return;
+    if(rows.isEmpty()) {
+      add(checks,"SOURCE_RIGHTS_CLEARANCE","Imported package rights review is not applicable",
+          true,
+          "No imported Course Studio package is associated with this course identity. Source ownership, content quality, and publication approval checks still apply.");
+      return;
+    }
     Map<String,Object> row=rows.getFirst();
     String status=text(row.get("source_rights_status"));
     boolean cleared=isVerifiedPackageRightsClearance(status,
         text(row.get("rights_evidence_url")),row.get("rights_reviewed_by_staff_id"),
         row.get("rights_reviewed_at"),text(row.get("rights_review_notes")));
     String message=cleared
-        ?"HRMS recorded a cleared rights decision with reviewer attribution, notes, and valid HTTPS evidence."
+        ?"HRMS recorded public-distribution clearance with reviewer attribution, notes, and valid HTTPS evidence."
         :"Package "+text(row.get("package_id"))+" version "+text(row.get("package_version"))
             +" has rights state "+(status.isBlank()?"UNCONFIRMED":status)
-            +" without a complete evidence-backed HRMS review. HRMS must record a cleared decision, reviewer attribution, notes, and valid HTTPS evidence before Marketplace distribution.";
-    add(checks,"SOURCE_RIGHTS_CLEARANCE","Course package distribution rights are cleared",cleared,message);
+            +" without evidence-backed public-redistribution clearance. Internal-use-only permission is insufficient for Marketplace distribution; HRMS must record CLEARED_FOR_PUBLIC_REPOSITORY with reviewer attribution, notes, and valid HTTPS evidence.";
+    add(checks,"SOURCE_RIGHTS_CLEARANCE","Course package public-distribution rights are cleared",cleared,message);
   }
 
   static boolean isVerifiedPackageRightsClearance(
       String status,String evidenceUrl,Object reviewerId,Object reviewedAt,String reviewNotes) {
-    if(!List.of("CLEARED_FOR_INTERNAL_USE","CLEARED_FOR_PUBLIC_REPOSITORY").contains(status)
+    if(!List.of("CLEARED_FOR_PUBLIC_REPOSITORY").contains(status)
         ||!(reviewerId instanceof Number reviewer&&reviewer.longValue()>0L)
         ||reviewedAt==null||reviewNotes==null||reviewNotes.trim().length()<5) {
       return false;
