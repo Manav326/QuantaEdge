@@ -301,6 +301,18 @@
   color:var(--qe-color-primary-text,#9a3412);
 }
 .reviewProvenanceGrid>div{border-color:var(--qe-review-border)}
+.reviewQuestionTitleBar>div>span,.reviewEditorHeader>div>span,.reviewOptions>li>b{
+  color:var(--qe-color-primary-text,#b0561c);
+}
+.reviewPrompt em,.reviewMissingLanguage{color:var(--qe-color-primary-text,#9b6a4d)}
+.reviewLanguagePanel h4,.reviewEditorHeader>b,.reviewWorkspaceEmpty{color:var(--qe-review-muted)}
+.reviewLanguageHeader{border-bottom-color:var(--qe-review-border)}
+.reviewWorkspaceError,.reviewPreviousFeedback{
+  background:var(--qe-color-error-container,#fff4f1);
+  border-color:var(--qe-color-error,#f0c1b8);
+}
+.reviewWorkspaceError,.reviewPreviousFeedback b{color:var(--qe-color-error,#9f3324)}
+.reviewPreviousFeedback p{color:var(--qe-review-text)}
 
 .assessmentReviewWorkspace :focus-visible{outline:2px solid #fb923c;outline-offset:2px}
 @media(max-width:760px){.reviewProvenanceGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
