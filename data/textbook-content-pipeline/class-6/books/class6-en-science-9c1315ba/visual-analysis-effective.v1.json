@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1e7fbfd81e596e517f4aa23cd3b15d19acc23dece7a3c4a127846682743ee683",
+  "raw_analysis_sha256": "2ab04435e1382dbc13e8d9d8773410165924e80d20469027879fc0c645e76ffe",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40277344414",
-      "checkpointed_at": "2026-10-26T07:13:26Z",
+      "checkpointed_at": "2026-10-26T07:26:43Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -29442,7 +29442,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40277344414",
-      "checkpointed_at": "2026-10-26T07:14:44Z",
+      "checkpointed_at": "2026-10-26T07:28:02Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -57315,7 +57315,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40277344414",
-      "checkpointed_at": "2026-10-26T07:15:39Z",
+      "checkpointed_at": "2026-10-26T07:28:57Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66932,7 +66932,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "An educational page about Oral Rehydration Solution (ORS) and its preparation.",
+        "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
         "visible_text": [
           "Make your own ORS!",
@@ -66951,15 +66951,14 @@
           "Diarrhoea",
           "Health Centres",
           "Preparation of ORS",
-          "Water Solubility",
           "Gases in Water",
-          "Survival of Animals and Plants",
+          "Solubility",
           "Density",
-          "Comparing Density"
+          "Survival of Animals and Plants"
         ],
-        "context_relation": "Introduction to ORS and its preparation, followed by a question about the solubility of gases in water and the importance of ORS in maintaining water balance in the body.",
+        "context_relation": "Explanation and activity related to ORS and its properties",
         "limitations": [
-          "The text does not provide specific instructions for preparing ORS or explaining the solubility of gases in water.",
+          "No specific limitations mentioned",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -66967,9 +66966,9 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40277344414",
-      "checkpointed_at": "2026-10-26T07:20:15Z",
+      "checkpointed_at": "2026-10-26T07:29:43Z",
       "effective_analysis": {
-        "visual_summary": "An educational page about Oral Rehydration Solution (ORS) and its preparation.",
+        "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
         "visible_text": [
           "Make your own ORS!",
@@ -66988,15 +66987,14 @@
           "Diarrhoea",
           "Health Centres",
           "Preparation of ORS",
-          "Water Solubility",
           "Gases in Water",
-          "Survival of Animals and Plants",
+          "Solubility",
           "Density",
-          "Comparing Density"
+          "Survival of Animals and Plants"
         ],
-        "context_relation": "Introduction to ORS and its preparation, followed by a question about the solubility of gases in water and the importance of ORS in maintaining water balance in the body.",
+        "context_relation": "Explanation and activity related to ORS and its properties",
         "limitations": [
-          "The text does not provide specific instructions for preparing ORS or explaining the solubility of gases in water.",
+          "No specific limitations mentioned",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -68216,7 +68214,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40233308114",
+      "run_id": "40277344414",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
