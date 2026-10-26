@@ -1702,6 +1702,17 @@ public class CourseMarketplaceController {
       return result;
     }
 
+    if (!paymentInProgress && "PENDING".equals(state)) {
+      // Provider state is conclusive: no captured, authorized, created or processing payment
+      // exists for this exact saved order. Close only this attempt so it cannot repopulate the
+      // retry list on every refresh. Webhook/HRMS can still reconcile a later provider event.
+      jdbc.update("""
+        update course_payment_order
+        set status='EXPIRED',failure_code='PROVIDER_CONFIRMED_UNPAID',updated_at=now()
+        where id=? and institution_id=? and status='PENDING' and provider_order_id=?
+        """,localOrderId,institutionId,providerOrderId);
+    }
+
     Map<String,Object> result = new LinkedHashMap<>();
     result.put("status", paymentInProgress ? "PAYMENT_PROCESSING" : "AWAITING_PAYMENT");
     result.put("entitled", false);
