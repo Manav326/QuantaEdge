@@ -8,26 +8,26 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 23,
+    "assets_selected": 32,
     "assets_processed_this_run": 10,
     "assets_processed_ids": [
-      "3f447fffefe03c9b58047cb6",
-      "a37c810c30cdb026fb6735ba",
-      "f0da89a5acd83634470fb7d8",
-      "65a27fd0d3aa22e01070613d",
-      "973b18c01060c26a11fb4411",
-      "d3c992f160569bb85bfb25eb",
-      "39a6d32b22a686320ae4bd74",
-      "6f3018768717389416d69bc4",
-      "50c36595a62a176b63cae910",
-      "acbcac2ac750593ccf06d0e1"
+      "ba8879e49e29dba0026d4a72",
+      "b05f060c9ff456a92493464b",
+      "a1abb392dc67f88b1274e64a",
+      "905e7d8e43624fd65220bf39",
+      "8130ff9fb7ba4690094e7f48",
+      "0810cf5f89a0e85a80011398",
+      "46d806030a7fd1e23f3cd2df",
+      "d79d483f8af5ca75e2f8c939",
+      "47de8dbe8ffbe22196ce0b05",
+      "a892e38974551a299f75e2ca"
     ],
     "assets_eligible": 2177,
-    "assets_analyzed": 22,
-    "assets_remaining": 2155,
-    "assets_completion_percent": 1.0,
+    "assets_analyzed": 32,
+    "assets_remaining": 2145,
+    "assets_completion_percent": 1.5,
     "assets_failed": 8,
-    "assets_skipped_from_checkpoint": 13,
+    "assets_skipped_from_checkpoint": 22,
     "batch_limit": 10,
     "publication_allowed": false
   },
@@ -805,6 +805,299 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
       "checkpointed_at": "2026-10-26T23:09:43Z"
+    },
+    {
+      "asset_id": "ba8879e49e29dba0026d4a72",
+      "asset_sha256": "41fc2f7c1af34a765ecafa7cbabd09e6016935473dd09d0fffdf287c98245c63",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/41fc2f7c1af34a765ecafa7cbabd09e6016935473dd09d0fffdf287c98245c63.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon diver swimming underwater with bubbles.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a diver, likely used for educational purposes.",
+        "limitations": [
+          "The image does not provide specific information about the educational content.",
+          "The image is a cartoon and may not represent real-life scenarios accurately."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:10:28Z"
+    },
+    {
+      "asset_id": "b05f060c9ff456a92493464b",
+      "asset_sha256": "e6e693c229be6a7f5debd1df1ab61b1cda75d8cdca8c9db179710d9739c2c6d0",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/e6e693c229be6a7f5debd1df1ab61b1cda75d8cdca8c9db179710d9739c2c6d0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon scientist holding a beaker with a blue liquid.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "beaker",
+          "blue liquid"
+        ],
+        "context_relation": "The image is related to the theme of educational content, specifically about educational materials and resources.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or resources."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:11:09Z"
+    },
+    {
+      "asset_id": "a1abb392dc67f88b1274e64a",
+      "asset_sha256": "c83186e567a8b85afd1ce47d485fd6ff1745276f960417038f38a318c8e00462",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/c83186e567a8b85afd1ce47d485fd6ff1745276f960417038f38a318c8e00462.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank white page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for educational content to be filled with text or images.",
+        "limitations": [
+          "The page is blank and requires content to be added.",
+          "The page is a full page, not a cropped figure."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:11:51Z"
+    },
+    {
+      "asset_id": "905e7d8e43624fd65220bf39",
+      "asset_sha256": "c632ee2769000d74063337a9c1de2b9f45819fcbccff5830fdc0b20b61ad4b27",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/c632ee2769000d74063337a9c1de2b9f45819fcbccff5830fdc0b20b61ad4b27.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a magnifying glass, possibly investigating or examining something.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be related to the theme of curiosity and discovery, as suggested by the text in the image.",
+        "limitations": [
+          "The image does not provide specific details about the educational content it represents."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:12:31Z"
+    },
+    {
+      "asset_id": "8130ff9fb7ba4690094e7f48",
+      "asset_sha256": "8eb93678c0bcd14df1ede16b02ad0ea11e78e4ed80c8e16a1d236d1a36142e44",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/8eb93678c0bcd14df1ede16b02ad0ea11e78e4ed80c8e16a1d236d1a36142e44.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a magnifying glass, possibly examining something closely.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image likely represents a scene where someone is using a magnifying glass to examine something, possibly for educational or investigative purposes.",
+        "limitations": [
+          "The image does not provide specific details about the context or the person's actions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:13:11Z"
+    },
+    {
+      "asset_id": "0810cf5f89a0e85a80011398",
+      "asset_sha256": "0211109f0932c8a1af3d8c4cdc1fffef3c744b5ab708e1de2127077e639cc9be",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/0211109f0932c8a1af3d8c4cdc1fffef3c744b5ab708e1de2127077e639cc9be.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cloud-like shape with a light blue interior and a darker blue outline.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a cloud-like shape, possibly representing a cloud or a cloud-like object.",
+        "limitations": [
+          "The image does not contain any text or labels that can be read or interpreted."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:13:51Z"
+    },
+    {
+      "asset_id": "46d806030a7fd1e23f3cd2df",
+      "asset_sha256": "a345d0af8afc74dd8aca9a0e88a267143f80311a35d469e7f77cdd5e08df7a5b",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/a345d0af8afc74dd8aca9a0e88a267143f80311a35d469e7f77cdd5e08df7a5b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank white page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for educational content to be filled with text or images.",
+        "limitations": [
+          "The page is blank and requires content to be added.",
+          "The page is not a diagram, chart, graph, table, map, cartoon, photo, illustration, equation, or page with multiple visuals."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:14:33Z"
+    },
+    {
+      "asset_id": "d79d483f8af5ca75e2f8c939",
+      "asset_sha256": "8f2975950b9fc206f947875578f0969f9f1d822fc0ed7941393568948cb1ecc9",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/8f2975950b9fc206f947875578f0969f9f1d822fc0ed7941393568948cb1ecc9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character in a wheelchair holding binoculars.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a character in a wheelchair, which is likely part of an educational content about accessibility or inclusivity.",
+        "limitations": [
+          "The image does not provide specific information about the educational content it is intended to represent."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:15:13Z"
+    },
+    {
+      "asset_id": "47de8dbe8ffbe22196ce0b05",
+      "asset_sha256": "1dd68e96ad4071f13630b49969cd18ad9776b444b14a6e882b01cd1852da274d",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/1dd68e96ad4071f13630b49969cd18ad9776b444b14a6e882b01cd1852da274d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank white page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely part of a textbook or educational material.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:15:52Z"
+    },
+    {
+      "asset_id": "a892e38974551a299f75e2ca",
+      "asset_sha256": "6caaf5407bc3053870f3a2f5365dc895612061fb83456559bd1b8924bdf9517c",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/6caaf5407bc3053870f3a2f5365dc895612061fb83456559bd1b8924bdf9517c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon scientist working at a globe-shaped desk with various laboratory equipment.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "laboratory equipment",
+          "desk",
+          "globe",
+          "work"
+        ],
+        "context_relation": "The image represents a scientist working in a laboratory setting.",
+        "limitations": [
+          "The image does not provide specific details about the scientist's work or the laboratory equipment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:16:33Z"
     }
   ]
 }

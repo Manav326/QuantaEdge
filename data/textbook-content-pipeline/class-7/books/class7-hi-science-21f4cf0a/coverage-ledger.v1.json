@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2177,
     "eligible_visual_asset_rows": 2177,
-    "raw_analysis_result_rows": 30,
-    "successful_visual_analyses": 22,
-    "missing_visual_analyses": 2147,
+    "raw_analysis_result_rows": 40,
+    "successful_visual_analyses": 32,
+    "missing_visual_analyses": 2137,
     "failed_visual_analyses": 8,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 2155,
+    "unresolved_count": 2145,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -7357,9 +7357,19 @@
       "asset_path": "assets/41fc2f7c1af34a765ecafa7cbabd09e6016935473dd09d0fffdf287c98245c63.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon diver swimming underwater with bubbles.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a diver, likely used for educational purposes.",
+        "limitations": [
+          "The image does not provide specific information about the educational content.",
+          "The image is a cartoon and may not represent real-life scenarios accurately."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7375,9 +7385,22 @@
       "asset_path": "assets/e6e693c229be6a7f5debd1df1ab61b1cda75d8cdca8c9db179710d9739c2c6d0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon scientist holding a beaker with a blue liquid.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "beaker",
+          "blue liquid"
+        ],
+        "context_relation": "The image is related to the theme of educational content, specifically about educational materials and resources.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or resources."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7393,9 +7416,19 @@
       "asset_path": "assets/c83186e567a8b85afd1ce47d485fd6ff1745276f960417038f38a318c8e00462.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank white page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for educational content to be filled with text or images.",
+        "limitations": [
+          "The page is blank and requires content to be added.",
+          "The page is a full page, not a cropped figure."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7411,9 +7444,18 @@
       "asset_path": "assets/c632ee2769000d74063337a9c1de2b9f45819fcbccff5830fdc0b20b61ad4b27.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a magnifying glass, possibly investigating or examining something.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be related to the theme of curiosity and discovery, as suggested by the text in the image.",
+        "limitations": [
+          "The image does not provide specific details about the educational content it represents."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7429,9 +7471,18 @@
       "asset_path": "assets/8eb93678c0bcd14df1ede16b02ad0ea11e78e4ed80c8e16a1d236d1a36142e44.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person holding a magnifying glass, possibly examining something closely.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image likely represents a scene where someone is using a magnifying glass to examine something, possibly for educational or investigative purposes.",
+        "limitations": [
+          "The image does not provide specific details about the context or the person's actions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7447,9 +7498,18 @@
       "asset_path": "assets/0211109f0932c8a1af3d8c4cdc1fffef3c744b5ab708e1de2127077e639cc9be.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cloud-like shape with a light blue interior and a darker blue outline.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a cloud-like shape, possibly representing a cloud or a cloud-like object.",
+        "limitations": [
+          "The image does not contain any text or labels that can be read or interpreted."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7465,9 +7525,19 @@
       "asset_path": "assets/a345d0af8afc74dd8aca9a0e88a267143f80311a35d469e7f77cdd5e08df7a5b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank white page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for educational content to be filled with text or images.",
+        "limitations": [
+          "The page is blank and requires content to be added.",
+          "The page is not a diagram, chart, graph, table, map, cartoon, photo, illustration, equation, or page with multiple visuals."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7483,9 +7553,18 @@
       "asset_path": "assets/8f2975950b9fc206f947875578f0969f9f1d822fc0ed7941393568948cb1ecc9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character in a wheelchair holding binoculars.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a character in a wheelchair, which is likely part of an educational content about accessibility or inclusivity.",
+        "limitations": [
+          "The image does not provide specific information about the educational content it is intended to represent."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7501,9 +7580,18 @@
       "asset_path": "assets/1dd68e96ad4071f13630b49969cd18ad9776b444b14a6e882b01cd1852da274d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank white page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely part of a textbook or educational material.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7519,9 +7607,24 @@
       "asset_path": "assets/6caaf5407bc3053870f3a2f5365dc895612061fb83456559bd1b8924bdf9517c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon scientist working at a globe-shaped desk with various laboratory equipment.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "laboratory equipment",
+          "desk",
+          "globe",
+          "work"
+        ],
+        "context_relation": "The image represents a scientist working in a laboratory setting.",
+        "limitations": [
+          "The image does not provide specific details about the scientist's work or the laboratory equipment."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

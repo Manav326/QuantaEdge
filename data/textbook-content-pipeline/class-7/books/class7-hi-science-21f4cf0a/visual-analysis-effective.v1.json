@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-hindi-ghcu1",
   "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
   "raw_analysis_path": "data/textbook-visuals/class7-hi-science-21f4cf0a/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7e9593954649c32322bb26d11d04b9e5593e1be94f57c903b8c91a676ac55d65",
+  "raw_analysis_sha256": "2688535ab3778d80914ee8c71dc66e13559ae6944cf68a23b197b158ce61108f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-hi-science-21f4cf0a/visual-analysis-corrections.v1.json",
@@ -1088,6 +1088,432 @@
         "limitations": [
           "The image does not contain any text or information.",
           "The frame is empty and requires content to be added."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ba8879e49e29dba0026d4a72",
+      "asset_sha256": "41fc2f7c1af34a765ecafa7cbabd09e6016935473dd09d0fffdf287c98245c63",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/41fc2f7c1af34a765ecafa7cbabd09e6016935473dd09d0fffdf287c98245c63.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon diver swimming underwater with bubbles.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a diver, likely used for educational purposes.",
+        "limitations": [
+          "The image does not provide specific information about the educational content.",
+          "The image is a cartoon and may not represent real-life scenarios accurately."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:10:28Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon diver swimming underwater with bubbles.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a diver, likely used for educational purposes.",
+        "limitations": [
+          "The image does not provide specific information about the educational content.",
+          "The image is a cartoon and may not represent real-life scenarios accurately."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b05f060c9ff456a92493464b",
+      "asset_sha256": "e6e693c229be6a7f5debd1df1ab61b1cda75d8cdca8c9db179710d9739c2c6d0",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/e6e693c229be6a7f5debd1df1ab61b1cda75d8cdca8c9db179710d9739c2c6d0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon scientist holding a beaker with a blue liquid.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "beaker",
+          "blue liquid"
+        ],
+        "context_relation": "The image is related to the theme of educational content, specifically about educational materials and resources.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or resources."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:11:09Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon scientist holding a beaker with a blue liquid.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "beaker",
+          "blue liquid"
+        ],
+        "context_relation": "The image is related to the theme of educational content, specifically about educational materials and resources.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or resources."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a1abb392dc67f88b1274e64a",
+      "asset_sha256": "c83186e567a8b85afd1ce47d485fd6ff1745276f960417038f38a318c8e00462",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/c83186e567a8b85afd1ce47d485fd6ff1745276f960417038f38a318c8e00462.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank white page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for educational content to be filled with text or images.",
+        "limitations": [
+          "The page is blank and requires content to be added.",
+          "The page is a full page, not a cropped figure."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:11:51Z",
+      "effective_analysis": {
+        "visual_summary": "A blank white page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for educational content to be filled with text or images.",
+        "limitations": [
+          "The page is blank and requires content to be added.",
+          "The page is a full page, not a cropped figure."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "905e7d8e43624fd65220bf39",
+      "asset_sha256": "c632ee2769000d74063337a9c1de2b9f45819fcbccff5830fdc0b20b61ad4b27",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/c632ee2769000d74063337a9c1de2b9f45819fcbccff5830fdc0b20b61ad4b27.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a magnifying glass, possibly investigating or examining something.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be related to the theme of curiosity and discovery, as suggested by the text in the image.",
+        "limitations": [
+          "The image does not provide specific details about the educational content it represents."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:12:31Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a magnifying glass, possibly investigating or examining something.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be related to the theme of curiosity and discovery, as suggested by the text in the image.",
+        "limitations": [
+          "The image does not provide specific details about the educational content it represents."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8130ff9fb7ba4690094e7f48",
+      "asset_sha256": "8eb93678c0bcd14df1ede16b02ad0ea11e78e4ed80c8e16a1d236d1a36142e44",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/8eb93678c0bcd14df1ede16b02ad0ea11e78e4ed80c8e16a1d236d1a36142e44.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a magnifying glass, possibly examining something closely.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image likely represents a scene where someone is using a magnifying glass to examine something, possibly for educational or investigative purposes.",
+        "limitations": [
+          "The image does not provide specific details about the context or the person's actions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:13:11Z",
+      "effective_analysis": {
+        "visual_summary": "A person holding a magnifying glass, possibly examining something closely.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image likely represents a scene where someone is using a magnifying glass to examine something, possibly for educational or investigative purposes.",
+        "limitations": [
+          "The image does not provide specific details about the context or the person's actions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0810cf5f89a0e85a80011398",
+      "asset_sha256": "0211109f0932c8a1af3d8c4cdc1fffef3c744b5ab708e1de2127077e639cc9be",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/0211109f0932c8a1af3d8c4cdc1fffef3c744b5ab708e1de2127077e639cc9be.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cloud-like shape with a light blue interior and a darker blue outline.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a cloud-like shape, possibly representing a cloud or a cloud-like object.",
+        "limitations": [
+          "The image does not contain any text or labels that can be read or interpreted."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:13:51Z",
+      "effective_analysis": {
+        "visual_summary": "A cloud-like shape with a light blue interior and a darker blue outline.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a cloud-like shape, possibly representing a cloud or a cloud-like object.",
+        "limitations": [
+          "The image does not contain any text or labels that can be read or interpreted."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "46d806030a7fd1e23f3cd2df",
+      "asset_sha256": "a345d0af8afc74dd8aca9a0e88a267143f80311a35d469e7f77cdd5e08df7a5b",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/a345d0af8afc74dd8aca9a0e88a267143f80311a35d469e7f77cdd5e08df7a5b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank white page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for educational content to be filled with text or images.",
+        "limitations": [
+          "The page is blank and requires content to be added.",
+          "The page is not a diagram, chart, graph, table, map, cartoon, photo, illustration, equation, or page with multiple visuals."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:14:33Z",
+      "effective_analysis": {
+        "visual_summary": "A blank white page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for educational content to be filled with text or images.",
+        "limitations": [
+          "The page is blank and requires content to be added.",
+          "The page is not a diagram, chart, graph, table, map, cartoon, photo, illustration, equation, or page with multiple visuals."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d79d483f8af5ca75e2f8c939",
+      "asset_sha256": "8f2975950b9fc206f947875578f0969f9f1d822fc0ed7941393568948cb1ecc9",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/8f2975950b9fc206f947875578f0969f9f1d822fc0ed7941393568948cb1ecc9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character in a wheelchair holding binoculars.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a character in a wheelchair, which is likely part of an educational content about accessibility or inclusivity.",
+        "limitations": [
+          "The image does not provide specific information about the educational content it is intended to represent."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:15:13Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character in a wheelchair holding binoculars.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a character in a wheelchair, which is likely part of an educational content about accessibility or inclusivity.",
+        "limitations": [
+          "The image does not provide specific information about the educational content it is intended to represent."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "47de8dbe8ffbe22196ce0b05",
+      "asset_sha256": "1dd68e96ad4071f13630b49969cd18ad9776b444b14a6e882b01cd1852da274d",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/1dd68e96ad4071f13630b49969cd18ad9776b444b14a6e882b01cd1852da274d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank white page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely part of a textbook or educational material.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:15:52Z",
+      "effective_analysis": {
+        "visual_summary": "A blank white page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely part of a textbook or educational material.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a892e38974551a299f75e2ca",
+      "asset_sha256": "6caaf5407bc3053870f3a2f5365dc895612061fb83456559bd1b8924bdf9517c",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/6caaf5407bc3053870f3a2f5365dc895612061fb83456559bd1b8924bdf9517c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon scientist working at a globe-shaped desk with various laboratory equipment.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "laboratory equipment",
+          "desk",
+          "globe",
+          "work"
+        ],
+        "context_relation": "The image represents a scientist working in a laboratory setting.",
+        "limitations": [
+          "The image does not provide specific details about the scientist's work or the laboratory equipment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:16:33Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon scientist working at a globe-shaped desk with various laboratory equipment.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "laboratory equipment",
+          "desk",
+          "globe",
+          "work"
+        ],
+        "context_relation": "The image represents a scientist working in a laboratory setting.",
+        "limitations": [
+          "The image does not provide specific details about the scientist's work or the laboratory equipment."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
