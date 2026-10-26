@@ -1,0 +1,28 @@
+{
+  "schema_version": "quantaedge.textbook-content-pipeline-index.v1",
+  "architecture_version": "8-layer-resumable-v1",
+  "class": 7,
+  "book_slug": "class7-hi-science-21f4cf0a",
+  "source_book_id": "ncert-c7-hindi-ghcu1",
+  "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+  "layers": {
+    "1": "COMPLETE",
+    "2": "COMPLETE",
+    "3": "COMPLETE",
+    "4": "RUNNING",
+    "5": "RUNNING",
+    "6": "NOT_STARTED",
+    "7": "NOT_STARTED",
+    "8": "NOT_STARTED"
+  },
+  "inventory_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "tag": "inventory-layer1-class7-class7-hi-science-21f4cf0a-shae07265037e14-run-40413122029",
+    "tar_sha256": "f12767fad1e961889e8522a589b62ca3e3816410174cf63e0e2d26d4b0d3c766"
+  },
+  "analysis_path": "data/textbook-visuals/class7-hi-science-21f4cf0a/visual-analysis-qwen2.5vl-3b.v1.json",
+  "effective_analysis_path": "data/textbook-content-pipeline/class-7/books/class7-hi-science-21f4cf0a/visual-analysis-effective.v1.json",
+  "coverage_ledger_path": "data/textbook-content-pipeline/class-7/books/class7-hi-science-21f4cf0a/coverage-ledger.v1.json",
+  "publication_allowed": false,
+  "human_review_required": true
+}

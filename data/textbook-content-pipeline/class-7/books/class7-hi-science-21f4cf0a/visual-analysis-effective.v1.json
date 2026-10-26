@@ -1,0 +1,435 @@
+{
+  "schema_version": "quantaedge.visual-analysis-effective.v1",
+  "source_book_id": "ncert-c7-hindi-ghcu1",
+  "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+  "raw_analysis_path": "data/textbook-visuals/class7-hi-science-21f4cf0a/visual-analysis-qwen2.5vl-3b.v1.json",
+  "raw_analysis_sha256": "c3f57b51ebd4bdf82eddf289196fd42c4c703b3f66a64a67e3bc5125fa121112",
+  "model": "qwen2.5vl:3b",
+  "prompt_version": "visual-analysis-prompt-v2",
+  "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-hi-science-21f4cf0a/visual-analysis-corrections.v1.json",
+  "corrections_applied_count": 0,
+  "results": [
+    {
+      "asset_id": "d33f1a2772481b5dc091ed7b",
+      "asset_sha256": "a0af4ce76f0909ae7a97d6a5466bec009ea80435818d2c554586d65825c49f01",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/a0af4ce76f0909ae7a97d6a5466bec009ea80435818d2c554586d65825c49f01.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ceb7c7ec869d445deced7fc9455f9f2b6568d547cc2bdfec915b9f7c16c832b9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A QR code with the number 0778.",
+        "visual_type": "other",
+        "visible_text": [
+          "0778"
+        ],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:37:01Z",
+      "effective_analysis": {
+        "visual_summary": "A QR code with the number 0778.",
+        "visual_type": "other",
+        "visible_text": [
+          "0778"
+        ],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f4789701fe3e36c6a4869fe3",
+      "asset_sha256": "7bfa76162f627e7c5e8c2a0d5cd7d7e91b204403f2f440c0291c288a351038cd",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/7bfa76162f627e7c5e8c2a0d5cd7d7e91b204403f2f440c0291c288a351038cd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ceb7c7ec869d445deced7fc9455f9f2b6568d547cc2bdfec915b9f7c16c832b9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A colorful illustration of children and adults engaging in various activities in a garden or park setting, including gardening, feeding fish, and interacting with nature.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "gardening",
+          "feeding fish",
+          "interacting with nature",
+          "community activity"
+        ],
+        "context_relation": "The image depicts a community activity where children and adults are involved in gardening and feeding fish, promoting a sense of community and environmental awareness.",
+        "limitations": [
+          "The image does not provide specific details about the educational content being taught."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:38:50Z",
+      "effective_analysis": {
+        "visual_summary": "A colorful illustration of children and adults engaging in various activities in a garden or park setting, including gardening, feeding fish, and interacting with nature.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "gardening",
+          "feeding fish",
+          "interacting with nature",
+          "community activity"
+        ],
+        "context_relation": "The image depicts a community activity where children and adults are involved in gardening and feeding fish, promoting a sense of community and environmental awareness.",
+        "limitations": [
+          "The image does not provide specific details about the educational content being taught."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f040a6a297ea2ac1d202b60e",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ceb7c7ec869d445deced7fc9455f9f2b6568d547cc2bdfec915b9f7c16c832b9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided in the image.",
+        "limitations": [
+          "No visible text or images present in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:41:31Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided in the image.",
+        "limitations": [
+          "No visible text or images present in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6df6eb0b7bb2ee4acff1cc28",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ceb7c7ec869d445deced7fc9455f9f2b6568d547cc2bdfec915b9f7c16c832b9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No visible content to analyze.",
+        "limitations": [
+          "No visible content to analyze."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:44:04Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No visible content to analyze.",
+        "limitations": [
+          "No visible content to analyze."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3e256ab2244ead8900c20232",
+      "asset_sha256": "8b34c7db76cb5565faf07d8f33f34811bfcd676dfe63dbb66ad3734e2a9eaab5",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 1,
+      "asset_path": "page-0001.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "ceb7c7ec869d445deced7fc9455f9f2b6568d547cc2bdfec915b9f7c16c832b9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The cover of a textbook for Class 7 in Hindi, featuring children engaging in various activities such as planting, playing, and observing nature.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "जिज्ञासा",
+          "कक्षा 7 के लिए विज्ञान की पाठ्यपुस्तक",
+          "0778",
+          "NATIONAL COUNCIL OF EDUCATIONAL RESEARCH AND TRAINING",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Class 7",
+          "Hindi",
+          "Science",
+          "Activities",
+          "Nature Observation",
+          "Planting",
+          "Playing"
+        ],
+        "context_relation": "The cover of a textbook for Class 7 in Hindi, focusing on science and nature activities.",
+        "limitations": [
+          "The image does not provide specific details about the activities or content of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:45:37Z",
+      "effective_analysis": {
+        "visual_summary": "The cover of a textbook for Class 7 in Hindi, featuring children engaging in various activities such as planting, playing, and observing nature.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "जिज्ञासा",
+          "कक्षा 7 के लिए विज्ञान की पाठ्यपुस्तक",
+          "0778",
+          "NATIONAL COUNCIL OF EDUCATIONAL RESEARCH AND TRAINING",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Class 7",
+          "Hindi",
+          "Science",
+          "Activities",
+          "Nature Observation",
+          "Planting",
+          "Playing"
+        ],
+        "context_relation": "The cover of a textbook for Class 7 in Hindi, focusing on science and nature activities.",
+        "limitations": [
+          "The image does not provide specific details about the activities or content of the textbook."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f73d6655b0c77e7143efafe3",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 2,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "55951b3dea7a9ae6632d9e3af00d6c80a915202817f8c1510f178652e14b6175",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:45:48Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e93adbee11e41d0683845e78",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 2,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "55951b3dea7a9ae6632d9e3af00d6c80a915202817f8c1510f178652e14b6175",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear text content",
+          "no visible objects or figures"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:45:58Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear text content",
+          "no visible objects or figures"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6a69cff73b0ee39e441bd76e",
+      "asset_sha256": "17ee5105ccf85443fd2d772040486fa897d68742e2dade06fab484195c2cc2ea",
+      "page_text_context_sha256": "55951b3dea7a9ae6632d9e3af00d6c80a915202817f8c1510f178652e14b6175",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 2,
+      "asset_path": "page-0002.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "16aa9d665d68d6b6e8897911",
+      "asset_sha256": "3f943fc7dcb12098fdb7716fe9ca6b80b5f7f213f0e4a5a39cb5a19e3a01c07a",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 3,
+      "asset_path": "assets/3f943fc7dcb12098fdb7716fe9ca6b80b5f7f213f0e4a5a39cb5a19e3a01c07a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6633d5bbb41a53b4ec72d887ea017233fcbcc5a2ef6fbd670e64a310de225888",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope with a loop, possibly used as a symbol or illustration in the text.",
+        "limitations": [
+          "The image does not provide specific information about the text or its context. It is a simple illustration of a rope with a loop."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:49:15Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope with a loop, possibly used as a symbol or illustration in the text.",
+        "limitations": [
+          "The image does not provide specific information about the text or its context. It is a simple illustration of a rope with a loop."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dc1268c3c6f09cd0e79e5641",
+      "asset_sha256": "0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 3,
+      "asset_path": "assets/0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6633d5bbb41a53b4ec72d887ea017233fcbcc5a2ef6fbd670e64a310de225888",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope with a ring, possibly used as a symbol or illustration in the text.",
+        "limitations": [
+          "The image does not provide specific information about the text or its context. The visible text is incomplete and does not provide a clear understanding of the image's purpose or the content it is meant to represent."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:50:01Z",
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope with a ring, possibly used as a symbol or illustration in the text.",
+        "limitations": [
+          "The image does not provide specific information about the text or its context. The visible text is incomplete and does not provide a clear understanding of the image's purpose or the content it is meant to represent."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    }
+  ],
+  "human_review_required": true,
+  "publication_allowed": false
+}
