@@ -850,7 +850,7 @@ public class CourseMarketplaceController {
         long currentOfferId=((Number)offer.get("institution_offer_id")).longValue();
         Object savedOfferRaw=previous.get("institution_offer_id");
         if(!(savedOfferRaw instanceof Number n) || n.longValue()!=currentOfferId) {
-          expireSupersededUnpaidOrder(previous,institutionId,currentOfferId,targetStudentId);
+          expireSupersededUnpaidOrder(previous,institutionId,targetStudentId);
           throw new IllegalStateException("The previous checkout was confirmed unpaid and expired. Start a fresh checkout for the current offer.");
         }
         requireSameBillingAddressChoice(previous,buyerSnapshot);
@@ -884,7 +884,7 @@ public class CourseMarketplaceController {
           : purchaserUserId!=null && priorPayerRaw instanceof Number n && n.longValue()==purchaserUserId.longValue();
       if (!sameOffer || !samePayer) {
         // Never return another payer's checkout or an old offer's price/order to this request.
-        expireSupersededUnpaidOrder(prior,institutionId,currentOfferId,targetStudentId);
+        expireSupersededUnpaidOrder(prior,institutionId,targetStudentId);
       } else if ("PENDING".equals(priorStatus)) {
         requireSameBillingAddressChoice(prior,buyerSnapshot);
         if (!hasLockedFinancialSnapshots(prior)) {
@@ -961,7 +961,7 @@ public class CourseMarketplaceController {
         boolean sameRacedPayer=racedPayerRaw==null ? purchaserUserId==null
             : purchaserUserId!=null && racedPayerRaw instanceof Number payer && payer.longValue()==purchaserUserId.longValue();
         if(!(racedOfferRaw instanceof Number n) || n.longValue()!=currentOfferId || !sameRacedPayer) {
-          expireSupersededUnpaidOrder(racedOrder,institutionId,currentOfferId,targetStudentId);
+          expireSupersededUnpaidOrder(racedOrder,institutionId,targetStudentId);
           throw new IllegalStateException("The earlier checkout was confirmed unpaid and expired. Start a fresh checkout for the current offer.");
         }
         requireSameBillingAddressChoice(racedOrder,buyerSnapshot);
@@ -1224,7 +1224,7 @@ public class CourseMarketplaceController {
 
   /** Expire a superseded offer only when the provider proves the exact saved order is unpaid. */
   private void expireSupersededUnpaidOrder(
-      Map<String,Object> prior,long institutionId,long currentOfferId,long targetStudentId) {
+      Map<String,Object> prior,long institutionId,long targetStudentId) {
     Object rawOfferId=prior.get("institution_offer_id");
     Object rawOrderId=prior.get("id");
     if(!(rawOfferId instanceof Number savedOffer) || savedOffer.longValue()<=0
@@ -1258,6 +1258,13 @@ public class CourseMarketplaceController {
             String.valueOf(reconciliation.getOrDefault("status","")));
       } catch(RuntimeException reconciliationFailure) {
         // Keep the fail-closed decision below. This is not proof that payment failed.
+      }
+      if(!reconciledVerified) {
+        Boolean nowVerified=jdbc.queryForObject("""
+          select exists(select 1 from course_payment_order
+            where id=? and institution_id=? and status='VERIFIED')
+          """,Boolean.class,savedOrder.longValue(),institutionId);
+        reconciledVerified=Boolean.TRUE.equals(nowVerified);
       }
       if(reconciledVerified) {
         throw new org.springframework.web.server.ResponseStatusException(
@@ -2087,7 +2094,7 @@ public class CourseMarketplaceController {
           left join institution_course_identity identity on identity.id=program.course_identity_id
           where offer.id=? and offer.institution_id=? and offer.course_id=?
             and offer.hrms_published_by_staff_id is not null
-            and (? is null or program.course_identity_id=?)
+            and (cast(? as bigint) is null or program.course_identity_id=cast(? as bigint))
             and (program.course_identity_id is null or (
               identity.source_institution_id=release.source_institution_id
               and identity.course_type_code=program.course_type_code
