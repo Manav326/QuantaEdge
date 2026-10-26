@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1379,
-    "successful_visual_analyses": 1367,
-    "missing_visual_analyses": 699,
+    "raw_analysis_result_rows": 1380,
+    "successful_visual_analyses": 1368,
+    "missing_visual_analyses": 698,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 711,
+    "unresolved_count": 710,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -52261,9 +52261,30 @@
       "asset_path": "page-0141.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook about temperature and its measurement, featuring a cartoon illustration of two children and a QR code.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "7 Temperature and its Measurement",
+          "Wrong measurements are worse than no measurements at all.",
+          "— Anna Mani",
+          "Lambok and his elder sister Phiban live in Shillong. One day they came home from school. Their parents were away at work and Lambok complained that he was feeling feverish. Phiban touched his forehead and felt that he might be having a fever. To confirm this, she took out the thermometer kept in the",
+          "Can it always be correctly judged, that a person has fever, only by touching the person?"
+        ],
+        "concepts": [
+          "temperature",
+          "measurement",
+          "fever",
+          "thermometer"
+        ],
+        "context_relation": "The page is discussing the topic of temperature and its measurement, with a focus on the correct way to measure fever using a thermometer.",
+        "limitations": [
+          "The page does not provide specific instructions on how to use a thermometer to measure fever.",
+          "The page does not provide a detailed explanation of the correct way to use a thermometer to measure fever."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

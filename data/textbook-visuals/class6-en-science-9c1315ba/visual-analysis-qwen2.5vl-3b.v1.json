@@ -15,11 +15,11 @@
       "73d7871359ba2e1d3fe3cfeb",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "a14a3c2709d921232dcb91ac"
+      "d2ecacf8f4985e6313f7bb77"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1363,
-    "assets_remaining": 715,
+    "assets_analyzed": 1364,
+    "assets_remaining": 714,
     "assets_completion_percent": 65.6,
     "assets_failed": 12,
     "assets_skipped_from_checkpoint": 1363,
@@ -451,7 +451,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40277344414",
-      "checkpointed_at": "2026-10-26T07:36:01Z"
+      "checkpointed_at": "2026-10-26T07:47:19Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20129,7 +20129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40277344414",
-      "checkpointed_at": "2026-10-26T07:37:19Z"
+      "checkpointed_at": "2026-10-26T07:48:37Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37984,7 +37984,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40277344414",
-      "checkpointed_at": "2026-10-26T07:38:14Z"
+      "checkpointed_at": "2026-10-26T07:49:32Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44144,7 +44144,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40277344414",
-      "checkpointed_at": "2026-10-26T07:39:00Z"
+      "checkpointed_at": "2026-10-26T07:50:18Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -45800,6 +45800,46 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40233308114",
       "checkpointed_at": "2026-10-25T22:49:17Z"
+    },
+    {
+      "asset_id": "d2ecacf8f4985e6313f7bb77",
+      "asset_sha256": "6ddb37d6e0e8fdcf40ec447529f477cb1274cb38d98f59e11bcf2f2229d5d3bc",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 141,
+      "asset_path": "page-0141.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "1f13ef9b0a40cb8c5f04991fffb586942ce905c550c0b95905540e5d0bc64c30",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook about temperature and its measurement, featuring a cartoon illustration of two children and a QR code.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "7 Temperature and its Measurement",
+          "Wrong measurements are worse than no measurements at all.",
+          "— Anna Mani",
+          "Lambok and his elder sister Phiban live in Shillong. One day they came home from school. Their parents were away at work and Lambok complained that he was feeling feverish. Phiban touched his forehead and felt that he might be having a fever. To confirm this, she took out the thermometer kept in the",
+          "Can it always be correctly judged, that a person has fever, only by touching the person?"
+        ],
+        "concepts": [
+          "temperature",
+          "measurement",
+          "fever",
+          "thermometer"
+        ],
+        "context_relation": "The page is discussing the topic of temperature and its measurement, with a focus on the correct way to measure fever using a thermometer.",
+        "limitations": [
+          "The page does not provide specific instructions on how to use a thermometer to measure fever.",
+          "The page does not provide a detailed explanation of the correct way to use a thermometer to measure fever."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40277344414",
+      "checkpointed_at": "2026-10-26T07:54:28Z"
     }
   ]
 }
