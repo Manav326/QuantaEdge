@@ -563,8 +563,8 @@ public class CourseOrderFinancialService {
   }
 
   /**
-   * Call inside the payment-verification database transaction only after the provider confirms
-   * the exact order/payment/amount/currency is captured.
+   * Finalize the fiscal document and revenue-share allocations in a separate transaction after
+   * course access is already committed. Failure here must not undo an exact captured payment's access.
    */
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public FinalizedSale finalizeCapturedSale(long localOrderId,String paymentId,long capturedAmountPaise) {
