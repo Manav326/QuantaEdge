@@ -8,26 +8,26 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 25,
+    "assets_selected": 33,
     "assets_processed_this_run": 10,
     "assets_processed_ids": [
-      "a647717be27116131f44a296",
-      "4f21a2123ea4506172f7ba2b",
-      "688c326fb69236541c6797df",
-      "67ea3e718b3abf9100db9823",
-      "4ce4c9f1955b2628485fea98",
-      "2c98cbc1ad21811d74ca8b20",
-      "dd9f9e19eb5a5aa840f11b89",
-      "5f04c218a5b3affd7e99a374",
-      "a6248b5784aad84d26bba32c",
-      "54a3eec4f9b68bf42a65f2ee"
+      "7126a0c7c226b3343121e731",
+      "f03d10be3e8016aa7a9ee958",
+      "fa3a37bdca3cc1c6a62b41ea",
+      "6013dc0b147cc358936ace64",
+      "d170efe19b83e45bc3c8e8b2",
+      "2781dcfd37990515912eda46",
+      "01e26a19256e475ef4b1a88f",
+      "0802c72ea9154e78b5874368",
+      "02b79aa6448e4e2a8dca8f43",
+      "6324b9ea4b1698d71630584d"
     ],
     "assets_eligible": 1727,
-    "assets_analyzed": 23,
-    "assets_remaining": 1704,
-    "assets_completion_percent": 1.3,
-    "assets_failed": 7,
-    "assets_skipped_from_checkpoint": 15,
+    "assets_analyzed": 31,
+    "assets_remaining": 1696,
+    "assets_completion_percent": 1.8,
+    "assets_failed": 8,
+    "assets_skipped_from_checkpoint": 23,
     "batch_limit": 10,
     "publication_allowed": false
   },
@@ -826,6 +826,306 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
       "checkpointed_at": "2026-10-26T23:27:02Z"
+    },
+    {
+      "asset_id": "7126a0c7c226b3343121e731",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1dd7c1919dfe9a58ed82b906b2782843d49c2a6b63705120470cfe34fcd3e452",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely blank and lacks any visible content or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:27:29Z"
+    },
+    {
+      "asset_id": "f03d10be3e8016aa7a9ee958",
+      "asset_sha256": "3174778ddd12fe4852429e2107b712c04888e8b75efec29396e10c41b8ed2664",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 7,
+      "asset_path": "page-0007.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "1dd7c1919dfe9a58ed82b906b2782843d49c2a6b63705120470cfe34fcd3e452",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with a pink watercolor background and a thank you note to contributors.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "of Grade 8 mathematics concepts, this textbook aims to captivate young\nminds and set them on a lifelong journey mathematical discovery.\nI once again thank all the writers of and contributors of this textbook\nfor their valuable contributions and service to the nation’s mathematics\nteachers, learners ",
+          "Ashutosh Wazalwar\nProfessor and Academic Convener\nDepartment of Education in\nScience and Mathematics\nNational Council of Educational\nResearch and Training"
+        ],
+        "concepts": [
+          "mathematics concepts",
+          "textbook",
+          "writers",
+          "contributors",
+          "mathematics teachers",
+          "learners",
+          "enthusiasts",
+          "comments",
+          "suggestions",
+          "exercises",
+          "activities",
+          "tasks",
+          "teaching",
+          "learning",
+          "future editions",
+          "Ashutosh Wazalwar",
+          "Professor and Academic Convener",
+          "Department of Education in Science and Mathematics",
+          "National Council of Educational Research and Training"
+        ],
+        "context_relation": "acknowledgment and invitation for feedback",
+        "limitations": [
+          "text is in English",
+          "page is from a textbook",
+          "thank you note to contributors",
+          "invitation for comments and suggestions",
+          "mention of exercises, activities, and tasks",
+          "mention of Ashutosh Wazalwar",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:31:56Z"
+    },
+    {
+      "asset_id": "fa3a37bdca3cc1c6a62b41ea",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "acfb720ba3b469ff7e26eedc526cd9ac6e023d8d165582e32c7747a91a113da9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, textured, abstract shape that resembles a wave or a splash.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be an abstract illustration or design, possibly used as a background or decorative element in the context of the page.",
+        "limitations": [
+          "The image does not contain any text or specific information that can be used to infer the context or purpose of the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:32:15Z"
+    },
+    {
+      "asset_id": "6013dc0b147cc358936ace64",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "acfb720ba3b469ff7e26eedc526cd9ac6e023d8d165582e32c7747a91a113da9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, textured, abstract shape that resembles a wave or a splash.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be an abstract illustration or design, possibly unrelated to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The visible text is incomplete and does not provide any meaningful information about the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:32:26Z"
+    },
+    {
+      "asset_id": "d170efe19b83e45bc3c8e8b2",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "acfb720ba3b469ff7e26eedc526cd9ac6e023d8d165582e32c7747a91a113da9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "NATIONAL SYLLABUS AND TEACHING LEARNING MATERIAL COMMITTEE (NSTC)",
+        "limitations": [
+          "No visible text or images on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:32:47Z"
+    },
+    {
+      "asset_id": "2781dcfd37990515912eda46",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "acfb720ba3b469ff7e26eedc526cd9ac6e023d8d165582e32c7747a91a113da9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be blank or contains no visible content.",
+        "limitations": [
+          "The page is completely black and contains no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:33:07Z"
+    },
+    {
+      "asset_id": "01e26a19256e475ef4b1a88f",
+      "asset_sha256": "321a55976b1b4754d084fc2d0b3195af663877b1b8bad39a787890a3844d344d",
+      "page_text_context_sha256": "acfb720ba3b469ff7e26eedc526cd9ac6e023d8d165582e32c7747a91a113da9",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 8,
+      "asset_path": "page-0008.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "0802c72ea9154e78b5874368",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a2010b99f87d0b32b34c9cbb3244b5c7c5aaff30d283cc5dbf5ee9dcdd139cd1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, textured, and irregularly shaped object that appears to be a splash or a smear of paint.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or information related to the textbook.",
+        "limitations": [
+          "The image is a single object with no additional context or information provided.",
+          "The image does not contain any text or labels that can be analyzed for content or meaning."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:38:25Z"
+    },
+    {
+      "asset_id": "02b79aa6448e4e2a8dca8f43",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a2010b99f87d0b32b34c9cbb3244b5c7c5aaff30d283cc5dbf5ee9dcdd139cd1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, textured, abstract shape that resembles a wave or a splash.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a design element or a decorative background.",
+        "limitations": [
+          "The image does not contain any text or information that can be analyzed for educational content. It is purely abstract and does not represent any specific concept or data."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:38:35Z"
+    },
+    {
+      "asset_id": "6324b9ea4b1698d71630584d",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a2010b99f87d0b32b34c9cbb3244b5c7c5aaff30d283cc5dbf5ee9dcdd139cd1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:38:53Z"
     }
   ]
 }
