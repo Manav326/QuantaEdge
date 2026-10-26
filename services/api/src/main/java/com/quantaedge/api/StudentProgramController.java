@@ -247,13 +247,13 @@ public class StudentProgramController {
     Boolean hasAuthorisedEnrolment = jdbc.queryForObject("""
       select
         exists(select 1 from student_program_enrollment e
-          where e.student_id=? and e.program_id=? and e.institution_id=?
+          where e.student_id=? and qe_same_logical_course(e.program_id,?) and e.institution_id=?
             and e.status in ('ACTIVE','PAUSED'))
         or exists(select 1 from course_purchase cp
-          where cp.student_id=? and cp.course_id=? and cp.institution_id=?)
+          where cp.student_id=? and qe_same_logical_course(cp.course_id,?) and cp.institution_id=?)
 
         or exists(select 1 from course_entitlement ce
-          where ce.institution_id=? and ce.course_id=?
+          where ce.institution_id=? and qe_same_logical_course(ce.course_id,?)
             and (ce.holder_student_id=? or ce.holder_user_id=(select user_account_id from student where id=?)))
         or exists(
           select 1
