@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2337,
-    "successful_visual_analyses": 2311,
-    "missing_visual_analyses": 5151,
+    "raw_analysis_result_rows": 2344,
+    "successful_visual_analyses": 2318,
+    "missing_visual_analyses": 5144,
     "failed_visual_analyses": 26,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5177,
+    "unresolved_count": 5170,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -96939,9 +96939,40 @@
       "asset_path": "page-0072.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Instructions for an experiment involving sulfur.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 4.7(a): Deflagrating spoon",
+          "Fig. 4.7(b): Improvised deflagrating spoon",
+          "Fig. 4.7(c): Burning of sulfur",
+          "Activity 4.7: Let us experiment (demonstration activity)",
+          "The teacher may demonstrate this activity.",
+          "Caution - This activity must be performed in a fume hood or well-ventilated area. Burning sulfur produces gases, which can be harmful if inhaled.",
+          "Take a small amount of powdered sulfur in a deflagrating spoon (it is a long-handled metal spoon used in experiments to safely heat and burn substances Fig. 4.7a). If a deflagrating spoon is not available, you may take a metallic cap of any bottle, wrap a metallic wire around it and give it the shap",
+          "Heat it on a flame, and as soon as the sulfur starts burning, introduce the deflagrating spoon into a gas jar or glass tumbler (Fig. 4.7c). Cover the gas jar or glass tumbler with a lid to ensure that the gas produced does not escape.",
+          "Remove the lid after 3–4 minutes and take out the deflagrating spoon. Add a small quantity of water into the gas jar, quickly place the lid back and shake it so that the gas dissolves.",
+          "Again, recall the chapter 'Exploring Substances: Acidic, Basic, and Neutral'. Using an acid-base indicator, check whether the solution obtained after the addition of water to the gas jar is acidic or basic or neutral.",
+          "What do you observe?"
+        ],
+        "concepts": [
+          "Deflagrating spoon",
+          "Sulfur",
+          "Gas jar",
+          "Acid-base indicator",
+          "Fume hood",
+          "Well-ventilated area",
+          "Burning sulfur",
+          "Exploring Substances: Acidic, Basic, and Neutral"
+        ],
+        "context_relation": "The image is a page from a textbook that provides instructions for an experiment involving sulfur. The experiment involves heating sulfur in a deflagrating spoon and observing the reaction in a gas jar.",
+        "limitations": [
+          "The image does not provide specific instructions for the experiment, only general guidelines.",
+          "The image does not show the actual experiment, only the instructions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -96957,9 +96988,18 @@
       "asset_path": "assets/23bc697c2cfd81232ae0a333d59eee671d679253ec3924a1c81ceb2157af6220.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A paper airplane with a trail of smoke or vapor coming out of its rear end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a paper airplane, possibly used to illustrate a concept related to paper airplanes or aerodynamics.",
+        "limitations": [
+          "The image does not provide specific details about the concept it is illustrating, and the visible text is incomplete or not relevant to the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -96975,9 +97015,29 @@
       "asset_path": "assets/1dbee68bbd8c65097de826d476321968a5e9e80118093bf12cd8aa7c30e82ccc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the reaction of sulfur with oxygen to form sulfur dioxide gas, which then dissolves in water to form sulfurous acid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Sulfur",
+          "Oxygen",
+          "Sulfur dioxide gas",
+          "Water",
+          "Sulfurous acid"
+        ],
+        "concepts": [
+          "Reaction of sulfur with oxygen",
+          "Formation of sulfur dioxide gas",
+          "Dissolution of sulfur dioxide gas in water",
+          "Formation of sulfurous acid"
+        ],
+        "context_relation": "The diagram illustrates the chemical reaction between sulfur and oxygen, leading to the formation of sulfur dioxide gas, which then dissolves in water to form sulfurous acid.",
+        "limitations": [
+          "The diagram does not show the physical appearance of the substances involved."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -96993,9 +97053,26 @@
       "asset_path": "assets/8ed76a5d2f0901f83b19d929f7519a713d5c21b94800fa2ebb6d9dd316f50e46.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the reaction of sulfur with oxygen to form sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "You would observe that it is acidic in nature (Fig. 4.7d).",
+          "On burning sulfur in air (oxygen), sulfur dioxide gas is formed.",
+          "On dissolving sulfur dioxide gas in water, sulfurous acid is formed."
+        ],
+        "concepts": [
+          "Reaction of sulfur with oxygen",
+          "Formation of sulfur dioxide gas",
+          "Formation of sulfurous acid"
+        ],
+        "context_relation": "The image illustrates the chemical reaction between sulfur and oxygen, leading to the formation of sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "limitations": [
+          "The image does not provide specific details about the reaction conditions or the physical appearance of the products."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -97011,9 +97088,26 @@
       "asset_path": "assets/57afb9b2b5d1e47567aca27d4de6f2a3c5f06ee6c7eb0f2df60e2d496e5adb81.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the reaction of sulfur with oxygen to form sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "You would observe that it is acidic in nature (Fig. 4.7d).",
+          "On burning sulfur in air (oxygen), sulfur dioxide gas is formed.",
+          "On dissolving sulfur dioxide gas in water, sulfurous acid is formed."
+        ],
+        "concepts": [
+          "Reaction of sulfur with oxygen",
+          "Formation of sulfur dioxide gas",
+          "Formation of sulfurous acid"
+        ],
+        "context_relation": "The image illustrates the chemical reaction between sulfur and oxygen, leading to the formation of sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "limitations": [
+          "The image does not provide specific details about the reaction conditions or the physical appearance of the products."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -97029,9 +97123,26 @@
       "asset_path": "assets/af5716e40093702793fb07ee63b419432aa89f1be717be7d023dd98ebc1acbc2.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the reaction of sulfur with oxygen to form sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "You would observe that it is acidic in nature (Fig. 4.7d).",
+          "On burning sulfur in air (oxygen), sulfur dioxide gas is formed.",
+          "On dissolving sulfur dioxide gas in water, sulfurous acid is formed."
+        ],
+        "concepts": [
+          "Reaction of sulfur with oxygen",
+          "Formation of sulfur dioxide gas",
+          "Formation of sulfurous acid"
+        ],
+        "context_relation": "The image illustrates the chemical reaction between sulfur and oxygen, leading to the formation of sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "limitations": [
+          "The image does not provide specific details about the reaction conditions or the physical appearance of the products."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -97047,9 +97158,27 @@
       "asset_path": "assets/28185bd67572624d9e9a00bbbbc9077c687c9865491a3f1fb54c833369849c87.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the reaction of sulfur with oxygen to form sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "You would observe that it is acidic in nature (Fig. 4.7d).",
+          "On burning sulfur in air (oxygen), sulfur dioxide gas is formed.",
+          "On dissolving sulfur dioxide gas in water, sulfurous acid is formed."
+        ],
+        "concepts": [
+          "Reaction of sulfur with oxygen",
+          "Formation of sulfur dioxide gas",
+          "Dissolution of sulfur dioxide gas in water",
+          "Formation of sulfurous acid"
+        ],
+        "context_relation": "The image illustrates the chemical reaction between sulfur and oxygen, leading to the formation of sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "limitations": [
+          "The image does not provide specific details about the reaction conditions or the physical appearance of the products."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
