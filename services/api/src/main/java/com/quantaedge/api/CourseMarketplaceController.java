@@ -1161,6 +1161,26 @@ public class CourseMarketplaceController {
     return snapshot;
   }
 
+  /**
+   * Test-mode recovery may use a legacy profile snapshot without a billing-address-book ID,
+   * but only when the exact beneficiary/purchaser resolves and all invoice-required address
+   * fields exist. Live checkout continues to require an address-book row.
+   */
+  private void requireCompleteLegacyRecoveryBillingAddress(Map<String,Object> snapshot) {
+    if(!hasCompleteLegacyRecoveryBillingAddress(snapshot)) {
+      throw new IllegalArgumentException("A complete postal address is required to recover the legacy test order.");
+    }
+  }
+
+  static boolean hasCompleteLegacyRecoveryBillingAddress(Map<String,Object> snapshot) {
+    if(snapshot==null||!(snapshot.get("billingAddress") instanceof Map<?,?> address)) return false;
+    for(String required:List.of("line1","city","state","postalCode")) {
+      Object value=address.get(required);
+      if(value==null||String.valueOf(value).isBlank()) return false;
+    }
+    return true;
+  }
+
   private void requireCompleteBillingSnapshot(Map<String,Object> snapshot) {
     if(snapshot.get("billingAddressId")==null) {
       throw new IllegalArgumentException("Add a complete billing address in My Profile before paying for a course.");
@@ -1744,7 +1764,7 @@ public class CourseMarketplaceController {
       }
       try {
         buyerSnapshot=billingProfileSnapshot(buyerAccountId,beneficiaryId.longValue(),null);
-        requireCompleteBillingSnapshot(buyerSnapshot);
+        requireCompleteLegacyRecoveryBillingAddress(buyerSnapshot);
       } catch(RuntimeException billingProfileFailure) {
         throw new org.springframework.web.server.ResponseStatusException(
             org.springframework.http.HttpStatus.CONFLICT,
