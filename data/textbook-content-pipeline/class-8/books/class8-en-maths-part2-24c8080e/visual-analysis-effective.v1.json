@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hegp2",
   "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
   "raw_analysis_path": "data/textbook-visuals/class8-en-maths-part2-24c8080e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3288f1d8414e6ae77d22a6de181a2dcd989252e5300f0107d7020338a19d54b1",
+  "raw_analysis_sha256": "819b770a7a86229461def4671eb9fcf8323ed2a087fc638d81a7ad74f51218eb",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-maths-part2-24c8080e/visual-analysis-corrections.v1.json",
@@ -332,6 +332,444 @@
         "context_relation": "The page is likely a blank or introductory page in a textbook.",
         "limitations": [
           "The page is completely black and lacks any visible content or text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6665af9eaba3003805e13005",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 3,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a9619a969696393f173e99204c8b113023d7f6d32893f58bf154d936fa43a601",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Foreword of a textbook discussing the National Education Policy (NEP) 2020 and its aims.",
+        "limitations": [
+          "No visible text or images on the page.",
+          "No specific content or information provided in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:03:37Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Foreword of a textbook discussing the National Education Policy (NEP) 2020 and its aims.",
+        "limitations": [
+          "No visible text or images on the page.",
+          "No specific content or information provided in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4ce0a9b4e0025f8c49d83f21",
+      "asset_sha256": "064f862ecfb3ac3a33f466e32189ca13514597a8080ab1801a4afa9af7bf8275",
+      "page_text_context_sha256": "a9619a969696393f173e99204c8b113023d7f6d32893f58bf154d936fa43a601",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 3,
+      "asset_path": "page-0003.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d60559adf9e57948aa214323",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 4,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "baaa5a924a722c50c7a7b0a0a84b9d5779a5cec1a50f3ea02465f3bd788cbe31",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, abstract, splatter-like pattern that occupies the entire page.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of an abstract pattern, possibly used as a background or design element in the textbook.",
+        "limitations": [
+          "The image does not contain any text or specific content related to the textbook's educational content.",
+          "The pattern is abstract and does not convey any specific information or concept related to the textbook's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:08:53Z",
+      "effective_analysis": {
+        "visual_summary": "A red, abstract, splatter-like pattern that occupies the entire page.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of an abstract pattern, possibly used as a background or design element in the textbook.",
+        "limitations": [
+          "The image does not contain any text or specific content related to the textbook's educational content.",
+          "The pattern is abstract and does not convey any specific information or concept related to the textbook's content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "80762096b486b2ab4d7ebadb",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 4,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "baaa5a924a722c50c7a7b0a0a84b9d5779a5cec1a50f3ea02465f3bd788cbe31",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, abstract, brushstroke-like pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of an abstract pattern, possibly used as a background or design element in the textbook.",
+        "limitations": [
+          "The image does not contain any text or specific information that can be analyzed for educational content editing. It is purely abstract and does not represent any specific concept or data."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:09:03Z",
+      "effective_analysis": {
+        "visual_summary": "A red, abstract, brushstroke-like pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of an abstract pattern, possibly used as a background or design element in the textbook.",
+        "limitations": [
+          "The image does not contain any text or specific information that can be analyzed for educational content editing. It is purely abstract and does not represent any specific concept or data."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e374b385d94fa01a12a0a520",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 4,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "baaa5a924a722c50c7a7b0a0a84b9d5779a5cec1a50f3ea02465f3bd788cbe31",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is blank and does not contain any visual or textual information.",
+        "limitations": [
+          "The page is completely blank and lacks any visual or textual content.",
+          "The page does not provide any information or context for an educational content editor to analyze."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:09:22Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is blank and does not contain any visual or textual information.",
+        "limitations": [
+          "The page is completely blank and lacks any visual or textual content.",
+          "The page does not provide any information or context for an educational content editor to analyze."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2ae0265b7a2b07bd55f49b55",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 4,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "baaa5a924a722c50c7a7b0a0a84b9d5779a5cec1a50f3ea02465f3bd788cbe31",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "no specific context provided",
+        "limitations": [
+          "unclear content",
+          "no visible text or images"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:09:37Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "no specific context provided",
+        "limitations": [
+          "unclear content",
+          "no visible text or images"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "da1f2557af6948107d752d5a",
+      "asset_sha256": "1266cfa9512d53045e00fa753796be9745355cb9d21eb3f2588a90861c3eb8ef",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 4,
+      "asset_path": "page-0004.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "baaa5a924a722c50c7a7b0a0a84b9d5779a5cec1a50f3ea02465f3bd788cbe31",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of critical thinking and real-world contexts in mathematics education.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "ask questions, think critically, and understand mathematical concepts\nthrough real-world contexts.",
+          "The textbook strives to inspire students to observe and explore\npatterns around them and to discover mathematical ideas on their own.\nIts content is carefully structured to support a joyful and progressive\nunderstanding of increasingly complex concepts, helping students\ntransition smoothly into more",
+          "However, in addition to this textbook, students at this stage should\nalso be encouraged to explore various other learning resources. School\nlibraries play a crucial role in making such resources available. Besides,\nthe role of parents and teachers will also be invaluable in guiding and\nencouraging s",
+          "With this, I express my gratitude to all those who have been\ninvolved in the development of this textbook, and hope that it will\nmeet the expectations of all stakeholders. At the same time, I also invite\nsuggestions and feedback from all its users for further improvement in\nthe coming years.",
+          "Dinesh Prasad Saklani\nDirector\nNational Council of Educational\nResearch and Training",
+          "New Delhi\nDecember 2025"
+        ],
+        "concepts": [
+          "critical thinking",
+          "real-world contexts",
+          "mathematics education",
+          "inspiration",
+          "joyful and progressive understanding",
+          "complex concepts",
+          "advanced learning",
+          "subject areas",
+          "Science and Social Science",
+          "cross-cutting themes",
+          "environmental education",
+          "value education",
+          "inclusive education",
+          "Indian Knowledge Systems (IKS)",
+          "story or puzzle",
+          "relevance and importance",
+          "learning resources",
+          "school libraries",
+          "parents and teachers",
+          "guiding and encouraging students"
+        ],
+        "context_relation": "The page discusses the importance of critical thinking and real-world contexts in mathematics education, and how the textbook aims to inspire students to explore these concepts.",
+        "limitations": [
+          "The page does not provide specific examples or details about the textbook's content or structure.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:14:22Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of critical thinking and real-world contexts in mathematics education.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "ask questions, think critically, and understand mathematical concepts\nthrough real-world contexts.",
+          "The textbook strives to inspire students to observe and explore\npatterns around them and to discover mathematical ideas on their own.\nIts content is carefully structured to support a joyful and progressive\nunderstanding of increasingly complex concepts, helping students\ntransition smoothly into more",
+          "However, in addition to this textbook, students at this stage should\nalso be encouraged to explore various other learning resources. School\nlibraries play a crucial role in making such resources available. Besides,\nthe role of parents and teachers will also be invaluable in guiding and\nencouraging s",
+          "With this, I express my gratitude to all those who have been\ninvolved in the development of this textbook, and hope that it will\nmeet the expectations of all stakeholders. At the same time, I also invite\nsuggestions and feedback from all its users for further improvement in\nthe coming years.",
+          "Dinesh Prasad Saklani\nDirector\nNational Council of Educational\nResearch and Training",
+          "New Delhi\nDecember 2025"
+        ],
+        "concepts": [
+          "critical thinking",
+          "real-world contexts",
+          "mathematics education",
+          "inspiration",
+          "joyful and progressive understanding",
+          "complex concepts",
+          "advanced learning",
+          "subject areas",
+          "Science and Social Science",
+          "cross-cutting themes",
+          "environmental education",
+          "value education",
+          "inclusive education",
+          "Indian Knowledge Systems (IKS)",
+          "story or puzzle",
+          "relevance and importance",
+          "learning resources",
+          "school libraries",
+          "parents and teachers",
+          "guiding and encouraging students"
+        ],
+        "context_relation": "The page discusses the importance of critical thinking and real-world contexts in mathematics education, and how the textbook aims to inspire students to explore these concepts.",
+        "limitations": [
+          "The page does not provide specific examples or details about the textbook's content or structure.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0da3eecd78e413fed58450d9",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "86e118e44daaf37afaba8cedc5dd590d13e305889403e86600b9d43b024e6121",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, abstract, and irregularly shaped object that appears to be a splash or a wave.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about the book.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:14:34Z",
+      "effective_analysis": {
+        "visual_summary": "A red, abstract, and irregularly shaped object that appears to be a splash or a wave.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about the book.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dac497cdbae82ad622426862",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "86e118e44daaf37afaba8cedc5dd590d13e305889403e86600b9d43b024e6121",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Red splash or smudge on a white background.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:14:40Z",
+      "effective_analysis": {
+        "visual_summary": "Red splash or smudge on a white background.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "acfba8fdc7a26aade238f629",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "86e118e44daaf37afaba8cedc5dd590d13e305889403e86600b9d43b024e6121",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is a blank page with no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:14:57Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is a blank page with no visible text or images."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
