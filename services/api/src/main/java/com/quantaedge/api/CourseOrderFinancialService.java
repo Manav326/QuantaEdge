@@ -566,7 +566,7 @@ public class CourseOrderFinancialService {
    * Call inside the payment-verification database transaction only after the provider confirms
    * the exact order/payment/amount/currency is captured.
    */
-  @Transactional
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public FinalizedSale finalizeCapturedSale(long localOrderId,String paymentId,long capturedAmountPaise) {
     List<Map<String,Object>> orders=jdbc.queryForList("""
       select id,student_id,purchaser_user_id,target_student_id,recipient_type,course_id,institution_id,
@@ -708,6 +708,15 @@ public class CourseOrderFinancialService {
           verified,distribution,taxSnapshot,buyerSnapshot,currency,orderId);
       fiscalDocumentId=invoice.fiscalDocumentId();documentNumber=invoice.documentNumber();
     }
+    int finalizedOrderRows=jdbc.update("""
+      update course_payment_order
+      set status='VERIFIED',fiscal_document_id=?,failure_code=null,
+        verified_at=coalesce(verified_at,now()),captured_amount_paise=?,captured_at=coalesce(captured_at,now()),updated_at=now()
+      where id=? and provider_payment_id=? and offer_price_paise=?
+        and status in ('PENDING','EXPIRED','VERIFIED')
+      """,fiscalDocumentId,capturedAmountPaise,orderId,paymentId,capturedAmountPaise);
+    if(finalizedOrderRows!=1)
+      throw new IllegalStateException("The fiscal document was not linked to the exact captured course order.");
     return new FinalizedSale(fiscalDocumentId,documentNumber,
         distribution.totalInstitutionAllocatedPaise(),distribution.platformRemainderPaise());
   }
