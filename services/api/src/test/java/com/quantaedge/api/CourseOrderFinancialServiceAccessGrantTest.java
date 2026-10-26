@@ -79,6 +79,8 @@ class CourseOrderFinancialServiceAccessGrantTest {
     assertEquals(122L, grant.targetStudentId());
     assertEquals(Long.valueOf(1L), grant.purchaserUserId());
     assertEquals("CHILD", grant.recipientType());
+    service.markParentPurchaseRequestPurchased(
+        grant.purchaserUserId(),grant.targetStudentId(),grant.institutionId(),grant.courseId());
     verify(jdbc).update(contains("update parent_course_purchase_request"), any(Object[].class));
   }
 
