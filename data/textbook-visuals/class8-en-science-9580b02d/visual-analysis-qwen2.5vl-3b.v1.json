@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
-      "f492c50e9c7d7ef8d140ae06",
-      "aea7db4a2c358f45b70aad03",
-      "4fdef3a69f918bffeb046522"
+      "aa8a149fa698d13f05cfdb3e",
+      "9c98ea470aafbf3dbbeffd67",
+      "7bceb11bef609f2404522955"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1295,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40252444999",
-      "checkpointed_at": "2026-10-26T01:45:55Z"
+      "checkpointed_at": "2026-10-26T01:32:04Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40252444999",
-      "checkpointed_at": "2026-10-26T01:46:22Z"
+      "checkpointed_at": "2026-10-26T01:32:30Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38445,8 +38445,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40252444999",
-      "checkpointed_at": "2026-10-26T01:46:53Z"
+      "run_id": "40242884307",
+      "checkpointed_at": "2026-10-25T23:58:35Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -39067,7 +39067,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40252444999",
+      "run_id": "40242884307",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -40128,7 +40128,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40252444999",
+      "run_id": "40242884307",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -42065,7 +42065,7 @@
           "You must have observed fallen leaves on the ground swirling\nin the air or being swept away, and trees swaying or even\nbending when a strong wind blows. Have you ever wondered\nwhy fallen leaves rise in the air or trees sway or bend? Does the\nwind exert force on fallen leaves to make them rise or on t",
           "Megha and her brother Pawan are going on a picnic. They walk\n    to the picnic spot, carrying identical items in their bags (Fig. 6.1).\n    On the way, Pawan keeps adjusting his bag, and looks\n    uncomfortable. Megha asks, \"Is there a problem with\n    your bag?\" Pawan responds, \"Yes, it is hurting ",
           "Can the shape or size of the straps really make a\n    difference? Let us try to find out.",
-          "When we carry a bag, we feel its weight because of the force of gravity acting on our shoulders. The\n    weight of the bag with narrow straps acts on a\n    smaller area of our shoulders, whereas the weight of\n    the bag with broad straps is spread out over a larger\n    area. It is due to this reaso",
+          "When we carry a bag, we feel its weight because\n    of the force of gravity acting on our shoulders. The\n    weight of the bag with narrow straps acts on a\n    smaller area of our shoulders, whereas the weight of\n    the bag with broad straps is spread out over a larger\n    area. It is due to this r",
           "At this stage, we will consider only those forces which act\n    perpendicular to the surface on which the pressure is to be computed."
         ],
         "concepts": [
@@ -42077,18 +42077,22 @@
           "thunderstorms",
           "gravity",
           "straps",
-          "force per unit area"
+          "weight",
+          "force of gravity",
+          "area of force",
+          "perpendicular to the surface",
+          "pressure to be computed"
         ],
         "context_relation": "pressure",
         "limitations": [
-          "The image does not show the actual experiment or the visual representation of the force per unit area."
+          "The image does not provide specific formulas or equations."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40252444999",
-      "checkpointed_at": "2026-10-26T01:48:56Z"
+      "run_id": "40242884307",
+      "checkpointed_at": "2026-10-25T23:59:18Z"
     },
     {
       "asset_id": "450fc4af3dc870b080bfbe90",
@@ -42339,7 +42343,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40252444999",
+      "run_id": "40242884307",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
