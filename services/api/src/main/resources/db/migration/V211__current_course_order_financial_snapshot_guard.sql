@@ -21,24 +21,25 @@ ALTER TABLE course_payment_order
       AND tax_calculation_snapshot ? 'taxableValuePaise'
       AND tax_calculation_snapshot ? 'outputTaxPaise'
       AND tax_calculation_snapshot ? 'discountPaise'
-      AND tax_calculation_snapshot->>'customerPayablePaise' = offer_price_paise::text
-      AND tax_calculation_snapshot->>'listedPricePaise' = listed_price_paise::text
-      AND tax_calculation_snapshot->>'taxProfileId' = tax_profile_id::text
-      AND tax_calculation_snapshot->>'taxableValuePaise' = taxable_value_paise::text
-      AND tax_calculation_snapshot->>'outputTaxPaise' = output_tax_paise::text
-      AND tax_calculation_snapshot->>'discountPaise' = discount_amount_paise::text
+      AND tax_calculation_snapshot->>'customerPayablePaise' IS NOT DISTINCT FROM offer_price_paise::text
+      AND tax_calculation_snapshot->>'listedPricePaise' IS NOT DISTINCT FROM listed_price_paise::text
+      AND tax_calculation_snapshot->>'taxProfileId' IS NOT DISTINCT FROM tax_profile_id::text
+      AND tax_calculation_snapshot->>'taxableValuePaise' IS NOT DISTINCT FROM taxable_value_paise::text
+      AND tax_calculation_snapshot->>'outputTaxPaise' IS NOT DISTINCT FROM output_tax_paise::text
+      AND tax_calculation_snapshot->>'discountPaise' IS NOT DISTINCT FROM discount_amount_paise::text
       AND revenue_share_policy_snapshot IS NOT NULL
       AND jsonb_typeof(revenue_share_policy_snapshot) = 'object'
       AND revenue_share_policy_snapshot ? 'policyId'
       AND jsonb_typeof(revenue_share_policy_snapshot->'recipients') = 'array'
-      AND revenue_share_policy_snapshot->>'policyId' = revenue_share_policy_id::text
+      AND jsonb_array_length(revenue_share_policy_snapshot->'recipients') > 0
+      AND revenue_share_policy_snapshot->>'policyId' IS NOT DISTINCT FROM revenue_share_policy_id::text
       AND buyer_snapshot IS NOT NULL
       AND jsonb_typeof(buyer_snapshot) = 'object'
       AND buyer_snapshot <> '{}'::jsonb
       AND discount_snapshot IS NOT NULL
       AND jsonb_typeof(discount_snapshot) = 'object'
       AND discount_snapshot ? 'discountPaise'
-      AND discount_snapshot->>'discountPaise' = discount_amount_paise::text
+      AND discount_snapshot->>'discountPaise' IS NOT DISTINCT FROM discount_amount_paise::text
     )
   ) NOT VALID;
 
