@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-hindi-hhgp1",
   "source_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
   "raw_analysis_path": "data/textbook-visuals/class8-hi-maths-part1-94eac999/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c58afc133a7532d731d6bb67dec17a27e4cb5e4d81dc60c973d7f6099ba2b42f",
+  "raw_analysis_sha256": "ead5aef0c4a10a3652a68b832dc69f94ce1a8eb93d6d94dd6e5d8284cfa132bd",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-hi-maths-part1-94eac999/visual-analysis-corrections.v1.json",
@@ -952,6 +952,216 @@
         "context_relation": "educational content",
         "limitations": [
           "No specific visual elements are described."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a91ecbf45382c91a28c24308",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-hindi-hhgp1",
+      "source_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9e013c538c48b23d77233a29c3006e438a388cac1f8940384268fd15edc71af9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:33:50Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "44f00bf0322a2370c36393eb",
+      "asset_sha256": "4cc77570f539fd9459556557bb5e247461c8c41afcc1ea3d9d119d9c3961b97b",
+      "page_text_context_sha256": "9e013c538c48b23d77233a29c3006e438a388cac1f8940384268fd15edc71af9",
+      "source_book_id": "ncert-c8-hindi-hhgp1",
+      "source_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+      "source_pdf_page_number": 6,
+      "asset_path": "page-0006.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "96f45faebbc426ca408bf89b",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-hindi-hhgp1",
+      "source_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "45aa705d163f169cb5dce936ac9c7f9e604abd4d5eee41e425fc60e44704575f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Red ink splatter across the page.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "अंंततः इस पाठ््यपुुस्तक का   उद्देेश्य केेवल एक पाठ््यपुुस्तक सेे कहींं अधि�क हैै। यह गणि�तीीय",
+          "खोज और अन्वेेषण    वि�श्‍‍व का एक पासपोोर्टट हैै। इसकाा कक्षाा और घर, दोनोंं जगह उपयोोग कि�या जा",
+          "सकता   हैै। हम आशा  करतेे       हैंंं कि� यह वि�द्याार्याार्थि�ियों को  अपनेे   स्वयंं केे गणि�तीीय रोमांं2च पर  नि�कलनेे   केे",
+          "लि�ए सशक्‍  बनानेे  मेंं प्रोत्साहि�त   करेेगी  एवंं उन्हेंं प्रत्येेक वस्तुु  मेंं गणि�त   केे सौंंदर्यय और प्रासंंगि�कता",
+          "को   देेखनेे      मेंं सहाायता  करेेगी। अपनेे  रुचि�कर दृष्‍टि�िNकोण और कक्षाा 8 की  गणि�त  अवधारणााओंं केे",
+          "व्यापक व्याख्या  केे साथ इस पाठ््यपुुस्तक का   उद"
+        ],
+        "concepts": [
+          "red ink splatter",
+          "educational content",
+          "textbook visual",
+          "unclear text",
+          "red ink",
+          "page with multiple visuals"
+        ],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear text",
+          "red ink splatter",
+          "unclear concepts"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:40:19Z",
+      "effective_analysis": {
+        "visual_summary": "Red ink splatter across the page.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "अंंततः इस पाठ््यपुुस्तक का   उद्देेश्य केेवल एक पाठ््यपुुस्तक सेे कहींं अधि�क हैै। यह गणि�तीीय",
+          "खोज और अन्वेेषण    वि�श्‍‍व का एक पासपोोर्टट हैै। इसकाा कक्षाा और घर, दोनोंं जगह उपयोोग कि�या जा",
+          "सकता   हैै। हम आशा  करतेे       हैंंं कि� यह वि�द्याार्याार्थि�ियों को  अपनेे   स्वयंं केे गणि�तीीय रोमांं2च पर  नि�कलनेे   केे",
+          "लि�ए सशक्‍  बनानेे  मेंं प्रोत्साहि�त   करेेगी  एवंं उन्हेंं प्रत्येेक वस्तुु  मेंं गणि�त   केे सौंंदर्यय और प्रासंंगि�कता",
+          "को   देेखनेे      मेंं सहाायता  करेेगी। अपनेे  रुचि�कर दृष्‍टि�िNकोण और कक्षाा 8 की  गणि�त  अवधारणााओंं केे",
+          "व्यापक व्याख्या  केे साथ इस पाठ््यपुुस्तक का   उद"
+        ],
+        "concepts": [
+          "red ink splatter",
+          "educational content",
+          "textbook visual",
+          "unclear text",
+          "red ink",
+          "page with multiple visuals"
+        ],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear text",
+          "red ink splatter",
+          "unclear concepts"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d5f22109a4917326d61ceac2",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-hindi-hhgp1",
+      "source_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "45aa705d163f169cb5dce936ac9c7f9e604abd4d5eee41e425fc60e44704575f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Red ink splatter across a white background.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:40:24Z",
+      "effective_analysis": {
+        "visual_summary": "Red ink splatter across a white background.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "11b4d7105811ec5c404df3b0",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-hindi-hhgp1",
+      "source_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "45aa705d163f169cb5dce936ac9c7f9e604abd4d5eee41e425fc60e44704575f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear text content",
+          "no visible images or diagrams"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:40:58Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear text content",
+          "no visible images or diagrams"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
