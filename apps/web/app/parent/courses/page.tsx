@@ -311,6 +311,36 @@ export default function ParentCoursesPage() {
         headers: { 'Content-Type': 'application/json', 'Idempotency-Key': crypto.randomUUID() },
         body: JSON.stringify({ recipientType, studentId: recipientType === 'CHILD' ? studentId : undefined, discountCode: discountCode.trim() || null, billingAddressId }),
       }));
+      const orderStatus = String(body.status || '').toUpperCase();
+      if (body.entitled === true || orderStatus === 'VERIFIED' || orderStatus === 'PAYMENT_VERIFIED_ACCESS_GRANTED') {
+        const recoveredLocalOrderId = Number(body.localOrderId ?? body.orderId);
+        if (Number.isSafeInteger(recoveredLocalOrderId) && recoveredLocalOrderId > 0) {
+          clearPendingVerify(recoveredLocalOrderId);
+        }
+        setNotice(english
+          ? 'The existing payment was reconciled. Course access has been updated.'
+          : 'मौजूदा भुगतान सत्यापित हो गया। कोर्स की पहुँच अपडेट हो गई है।');
+        await load();
+        return;
+      }
+      if (orderStatus === 'RECONCILIATION_REQUIRED') {
+        const recoveredLocalOrderId = Number(body.localOrderId);
+        const savedProviderOrderId = String(body.providerOrderId || '');
+        if (Number.isSafeInteger(recoveredLocalOrderId) && recoveredLocalOrderId > 0 &&
+            /^order_[A-Za-z0-9]+$/.test(savedProviderOrderId)) {
+          savePendingVerify({
+            courseId,
+            localOrderId: recoveredLocalOrderId,
+            paymentId: '',
+            orderId: savedProviderOrderId,
+            signature: '',
+          });
+        }
+        setError(localizeMarketplaceError(body.message, language,
+          'The original order is still being reconciled. Retry verification for that order; do not pay again.',
+          'पुराने order की जाँच अभी जारी है। उसी order को फिर सत्यापित करें; दोबारा भुगतान न करें।'));
+        return;
+      }
       if (!body.orderId || !Number.isSafeInteger(Number(body.localOrderId)) || Number(body.localOrderId) <= 0
           || !body.keyId || !Number.isFinite(Number(body.amount)) || Number(body.amount) <= 0 || body.currency !== 'INR') {
         throw new Error(english ? 'The course order could not be prepared. Please retry.' : 'कोर्स का order तैयार नहीं हो सका। फिर प्रयास करें।');
