@@ -739,7 +739,11 @@ public class CourseMarketplaceLaunchReadinessService {
       order by imported_package.imported_at desc,imported_package.id desc
       limit 1
       """,courseId);
-    if(rows.isEmpty())return;
+    if(rows.isEmpty()) {
+      add(checks,"SOURCE_RIGHTS_CLEARANCE","Source-package rights review",
+          true,"Not applicable: no imported Course Studio package is linked to this course identity.");
+      return;
+    }
     Map<String,Object> row=rows.getFirst();
     String status=text(row.get("source_rights_status"));
     boolean cleared=isVerifiedPackageRightsClearance(status,
