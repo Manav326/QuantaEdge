@@ -20,6 +20,60 @@ WHERE program.id = release.program_id
   AND release.obsolete_reason =
     'OBSOLETE: source institution withdrew this release; relisting requires a new source release.';
 
+-- Reject a version fork at the first INSERT, before the existing fork function clones a large
+-- course graph. Event-level validation below is a second fence, not the first point of failure.
+CREATE OR REPLACE FUNCTION qe_require_current_course_version_source()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $function$
+BEGIN
+  IF NEW.supersedes_program_id IS NULL THEN
+    RETURN NEW;
+  END IF;
+
+  IF NEW.course_identity_id IS NULL OR NEW.content_version_no IS NULL OR NOT EXISTS (
+    SELECT 1
+    FROM curriculum_program source_program
+    JOIN institution_course_identity identity
+      ON identity.id = source_program.course_identity_id
+     AND identity.status = 'ACTIVE'
+     AND identity.course_type_code = source_program.course_type_code
+    WHERE source_program.id = NEW.supersedes_program_id
+      AND source_program.course_identity_id = NEW.course_identity_id
+      AND source_program.status = 'ACTIVE'
+      AND source_program.code <> 'GENERAL'
+      AND source_program.content_version_no = NEW.content_version_no - 1
+      AND NOT EXISTS (
+        SELECT 1 FROM curriculum_program later_version
+        WHERE later_version.course_identity_id = NEW.course_identity_id
+          AND later_version.content_version_no >= NEW.content_version_no
+      )
+      AND EXISTS (
+        SELECT 1
+        FROM institution_course_release source_release
+        WHERE source_release.program_id = source_program.id
+          AND source_release.source_institution_id = identity.source_institution_id
+          AND source_release.legacy_migration = false
+          AND source_release.obsolete_at IS NULL
+          AND source_release.release_state IN ('SHAREABLE','WITHDRAWN')
+      )
+  ) THEN
+    RAISE EXCEPTION
+      'CURRENT_COURSE_VERSION_SOURCE_REQUIRED: a new course version must supersede the latest active content version with a valid nonlegacy SHAREABLE or WITHDRAWN source release.'
+      USING ERRCODE = '23514';
+  END IF;
+  RETURN NEW;
+END
+$function$;
+
+DROP TRIGGER IF EXISTS trg_qe_current_course_version_source ON curriculum_program;
+CREATE TRIGGER trg_qe_current_course_version_source
+  BEFORE INSERT ON curriculum_program
+  FOR EACH ROW EXECUTE FUNCTION qe_require_current_course_version_source();
+
+COMMENT ON FUNCTION qe_require_current_course_version_source() IS
+  'Rejects legacy/orphan/stale version sources before cloning child content; only the latest active version with a nonlegacy SHAREABLE or WITHDRAWN source release may be forked.';
+
 -- Versioning has one source: only a current nonlegacy released graph may be forked.
 -- The version service and UI validate this too; this trigger closes the direct-SQL function path.
 CREATE OR REPLACE FUNCTION qe_validate_current_course_version_fork_source()
