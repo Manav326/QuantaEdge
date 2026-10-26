@@ -13,10 +13,31 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.Instant;
 import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 class CourseMarketplaceLaunchReadinessServiceTest {
+  @Test
+  void internalUseOnlyRightsDoNotAuthorizeMarketplaceDistribution() {
+    assertFalse(CourseMarketplaceLaunchReadinessService.isVerifiedPackageRightsClearance(
+        "CLEARED_FOR_INTERNAL_USE","https://rights.example.org/evidence",44L,
+        Instant.parse("2026-10-26T00:00:00Z"),
+        "Approved for internal use only."));
+  }
+
+  @Test
+  void publicRedistributionRightsRequireReviewerNotesAndHttpsEvidence() {
+    assertTrue(CourseMarketplaceLaunchReadinessService.isVerifiedPackageRightsClearance(
+        "CLEARED_FOR_PUBLIC_REPOSITORY","https://rights.example.org/evidence",44L,
+        Instant.parse("2026-10-26T00:00:00Z"),
+        "Approved for public redistribution."));
+    assertFalse(CourseMarketplaceLaunchReadinessService.isVerifiedPackageRightsClearance(
+        "CLEARED_FOR_PUBLIC_REPOSITORY","http://rights.example.org/evidence",44L,
+        Instant.parse("2026-10-26T00:00:00Z"),
+        "Approved for public redistribution."));
+  }
+
   @Test
   void publishedSellerTemplateCanSatisfyFallbackForItsInstitution() {
     JdbcTemplate jdbc=mock(JdbcTemplate.class);
