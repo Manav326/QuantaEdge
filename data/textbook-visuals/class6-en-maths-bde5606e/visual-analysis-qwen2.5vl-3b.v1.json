@@ -8,26 +8,26 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 47,
+    "assets_selected": 50,
     "assets_processed_this_run": 10,
     "assets_processed_ids": [
       "de5158b9db979a97ca7a8cac",
       "72ea2ce87986317ba317f097",
-      "ccc0904f51cc94809f00ef03",
-      "4cc0fdd4feec9fe76f2b12e0",
-      "ab3ea2c4f4cfa5aea88e09d2",
-      "1651f2094d2ed13cc947e70c",
-      "305a2e6cf8ce7776e69d6f87",
       "48ffd19b5ddcd710eee90800",
-      "c9682a447d6e57f8b7b41415",
-      "6d8384e24df5c48fb76b7565"
+      "b12ac170e8a54884cb052686",
+      "b19b0cb5f6953b432b6b2f90",
+      "ab6b0e3edeefaab294d2bcbb",
+      "2cedcc09a433db7c6f70c99c",
+      "beaaf00a3fe7ac1631d0c14b",
+      "afa774c07b76777f8603c6ae",
+      "c44b6b56a8656ec5e3cb9e40"
     ],
     "assets_eligible": 6328,
-    "assets_analyzed": 40,
-    "assets_remaining": 6288,
-    "assets_completion_percent": 0.6,
-    "assets_failed": 35,
-    "assets_skipped_from_checkpoint": 37,
+    "assets_analyzed": 45,
+    "assets_remaining": 6283,
+    "assets_completion_percent": 0.7,
+    "assets_failed": 37,
+    "assets_skipped_from_checkpoint": 40,
     "batch_limit": 10,
     "publication_allowed": false
   },
@@ -858,7 +858,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:21:43Z"
+      "checkpointed_at": "2026-10-26T23:27:01Z"
     },
     {
       "asset_id": "5741b6286dd632c1737e611f",
@@ -1130,7 +1130,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:22:21Z"
+      "checkpointed_at": "2026-10-26T23:27:39Z"
     },
     {
       "asset_id": "d05c93257e48b3dd2492f1a1",
@@ -2298,7 +2298,8 @@
         ],
         "context_relation": "educational content",
         "limitations": [
-          "The text does not provide specific examples or activities for creating a fertile environment for mathematical thinking.",
+          "The text does not provide specific examples or exercises.",
+          "The text does not include figures or diagrams.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -2306,7 +2307,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:26:10Z"
+      "checkpointed_at": "2026-10-26T23:28:14Z"
     },
     {
       "asset_id": "c9682a447d6e57f8b7b41415",
@@ -2341,6 +2342,201 @@
       "error": "Unsupported vision media type 'image/jpx'; use JPEG, PNG, or WebP assets.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "b12ac170e8a54884cb052686",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9a061c09b702b972e7775525147907156cb2aa9e07d89898d8973cb7e70a546e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:28:21Z"
+    },
+    {
+      "asset_id": "b19b0cb5f6953b432b6b2f90",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9a061c09b702b972e7775525147907156cb2aa9e07d89898d8973cb7e70a546e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and no text or images are visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:28:29Z"
+    },
+    {
+      "asset_id": "ab6b0e3edeefaab294d2bcbb",
+      "asset_sha256": "9092b1804472c2149a13652f7e9e30147e3cd542d3db65deb8abb68efe0a797e",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 16,
+      "asset_path": "page-0016.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "9a061c09b702b972e7775525147907156cb2aa9e07d89898d8973cb7e70a546e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the use of icons to mark problems in a book, emphasizing the importance of posing problems and encouraging exploration and discussion in the classroom.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "To support you in posing problems, all the problems or questions\nin this book are marked using the icon          . This icon is an indicator\nof a potential opportunity to start off a process of problem solving\nand exploration in the classroom. You will find some of the problems\nlabelled ‘Math Talk’.",
+          "Summary of Key points",
+          "Time for Exploration",
+          "1. It is important to routinely pose new problems, questions, patterns,\nor challenges to the students and give them sufficient time to play\nwith, discuss, and work on them, individually and in groups."
+        ],
+        "concepts": [
+          "exploration",
+          "problem-solving",
+          "mathematical thinking",
+          "procedural fluency",
+          "reading",
+          "interpretation",
+          "open-ended problems",
+          "new treatments",
+          "understanding",
+          "reflection",
+          "classroom discussion",
+          "summarisation",
+          "seeking",
+          "understanding something"
+        ],
+        "context_relation": "exploration and problem-solving",
+        "limitations": [
+          "limited to the text provided",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:30:27Z"
+    },
+    {
+      "asset_id": "2cedcc09a433db7c6f70c99c",
+      "asset_sha256": "8fde114254d2d9a633185b1886acb01925723810d45ca1d21db8d1a2a3ba8ec3",
+      "page_text_context_sha256": "1fdafd1e5db4c0b1b6c192b238b7477a055fc0c22a043797767dd87867872333",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 17,
+      "asset_path": "assets/8fde114254d2d9a633185b1886acb01925723810d45ca1d21db8d1a2a3ba8ec3.jpx",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Unsupported vision media type 'image/jpx'; use JPEG, PNG, or WebP assets.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "beaaf00a3fe7ac1631d0c14b",
+      "asset_sha256": "3a469f5ec97bbf4403afdf297faa7fff7ce1b7a9e6d7ef62f9cfc24d597d3ce8",
+      "page_text_context_sha256": "1fdafd1e5db4c0b1b6c192b238b7477a055fc0c22a043797767dd87867872333",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 17,
+      "asset_path": "assets/3a469f5ec97bbf4403afdf297faa7fff7ce1b7a9e6d7ef62f9cfc24d597d3ce8.jpx",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Unsupported vision media type 'image/jpx'; use JPEG, PNG, or WebP assets.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "afa774c07b76777f8603c6ae",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 17,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1fdafd1e5db4c0b1b6c192b238b7477a055fc0c22a043797767dd87867872333",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:30:34Z"
+    },
+    {
+      "asset_id": "c44b6b56a8656ec5e3cb9e40",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 17,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1fdafd1e5db4c0b1b6c192b238b7477a055fc0c22a043797767dd87867872333",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:30:40Z"
     }
   ]
 }

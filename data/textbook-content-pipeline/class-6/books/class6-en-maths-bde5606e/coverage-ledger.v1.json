@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 6328,
     "eligible_visual_asset_rows": 6328,
-    "raw_analysis_result_rows": 78,
-    "successful_visual_analyses": 43,
-    "missing_visual_analyses": 6250,
-    "failed_visual_analyses": 35,
+    "raw_analysis_result_rows": 85,
+    "successful_visual_analyses": 48,
+    "missing_visual_analyses": 6243,
+    "failed_visual_analyses": 37,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6285,
+    "unresolved_count": 6280,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -17279,7 +17279,8 @@
         ],
         "context_relation": "educational content",
         "limitations": [
-          "The text does not provide specific examples or activities for creating a fertile environment for mathematical thinking.",
+          "The text does not provide specific examples or exercises.",
+          "The text does not include figures or diagrams.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -17334,9 +17335,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17352,9 +17362,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and no text or images are visible."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17370,9 +17389,39 @@
       "asset_path": "page-0016.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the use of icons to mark problems in a book, emphasizing the importance of posing problems and encouraging exploration and discussion in the classroom.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "To support you in posing problems, all the problems or questions\nin this book are marked using the icon          . This icon is an indicator\nof a potential opportunity to start off a process of problem solving\nand exploration in the classroom. You will find some of the problems\nlabelled ‘Math Talk’.",
+          "Summary of Key points",
+          "Time for Exploration",
+          "1. It is important to routinely pose new problems, questions, patterns,\nor challenges to the students and give them sufficient time to play\nwith, discuss, and work on them, individually and in groups."
+        ],
+        "concepts": [
+          "exploration",
+          "problem-solving",
+          "mathematical thinking",
+          "procedural fluency",
+          "reading",
+          "interpretation",
+          "open-ended problems",
+          "new treatments",
+          "understanding",
+          "reflection",
+          "classroom discussion",
+          "summarisation",
+          "seeking",
+          "understanding something"
+        ],
+        "context_relation": "exploration and problem-solving",
+        "limitations": [
+          "limited to the text provided",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17388,7 +17437,7 @@
       "asset_path": "assets/8fde114254d2d9a633185b1886acb01925723810d45ca1d21db8d1a2a3ba8ec3.jpx",
       "media_type": "image/jpx",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -17406,7 +17455,7 @@
       "asset_path": "assets/3a469f5ec97bbf4403afdf297faa7fff7ce1b7a9e6d7ef62f9cfc24d597d3ce8.jpx",
       "media_type": "image/jpx",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -17424,9 +17473,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17442,9 +17500,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
