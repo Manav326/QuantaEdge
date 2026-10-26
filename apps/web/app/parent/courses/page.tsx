@@ -231,20 +231,14 @@ export default function ParentCoursesPage() {
     setBusy('verify');
     setError('');
     setNotice('');
-    setPendingVerify(draft);
-    try {
-      window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(draft));
-    } catch {
-      // The in-page retry remains available if browser storage is blocked.
-    }
+    savePendingVerify(draft);
     try {
       await readJson(await apiFetch('/api/v1/marketplace/family/orders/' + draft.localOrderId + '/verify', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ paymentId: draft.paymentId, orderId: draft.orderId, signature: draft.signature }),
       }));
-      setPendingVerify(null);
-      try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
+      clearPendingVerify(draft.localOrderId);
       setNotice(english ? 'Payment verified. Course access has been updated.' : 'भुगतान सत्यापित। कोर्स की पहुँच अपडेट हो गई है।');
       await load();
     } catch (e) {
@@ -256,32 +250,25 @@ export default function ParentCoursesPage() {
     setBusy('verify');
     setError('');
     setNotice('');
-    setPendingVerify(draft);
-    try {
-      window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(draft));
-    } catch {
-      // In-page recovery remains available if browser storage is blocked.
-    }
+    savePendingVerify(draft);
     try {
       const result = await readJson(await apiFetch('/api/v1/marketplace/family/orders/' + draft.localOrderId + '/reconcile', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' }, body: '{}',
       }));
       if (String(result.status || '').toUpperCase() === 'VERIFIED' || result.entitled === true) {
-        setPendingVerify(null);
-        try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
+        clearPendingVerify(draft.localOrderId);
         setNotice(english ? 'Payment verified. Course access has been updated.' : 'भुगतान सत्यापित। कोर्स की पहुँच अपडेट हो गई है।');
         await load();
         return;
       }
       if (result.canRetryCheckout === true) {
-        setPendingVerify(null);
-        try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
+        clearPendingVerify(draft.localOrderId);
       }
       setError(localizeMarketplaceError(result.message, language, 'Payment status is still being reconciled. Do not pay again while verification is pending.', 'भुगतान की जाँच जारी है। पुष्टि पूरी होने तक दोबारा भुगतान न करें।'));
       await load();
     } catch (e) {
-      setPendingVerify(draft);
+      savePendingVerify(draft);
       setError(localizeMarketplaceError(e, language, 'Payment status could not be reconciled. Keep this order and retry verification; do not pay again.', 'भुगतान की स्थिति की पुष्टि नहीं हो सकी। यही order सुरक्षित रखें और फिर जाँचें; दोबारा भुगतान न करें।'));
     } finally {
       setBusy('');
@@ -341,9 +328,7 @@ export default function ParentCoursesPage() {
         orderId: String(body.orderId),
         signature: '',
       };
-      setPendingVerify(recoverableDraft);
-      try { window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(recoverableDraft)); }
-      catch { /* Keep in-memory recovery when session storage is blocked. */ }
+      savePendingVerify(recoverableDraft);
       await ensureRazorpayCheckout();
       const RazorpayCtor = window.Razorpay;
       if (!RazorpayCtor) throw new Error(english ? 'Payment checkout is not available. Please retry.' : 'भुगतान checkout उपलब्ध नहीं है। फिर प्रयास करें।');
@@ -365,12 +350,10 @@ export default function ParentCoursesPage() {
           };
           if (!draft.paymentId || !draft.orderId || !draft.signature || draft.orderId !== body.orderId) {
             setError(english ? 'The payment confirmation did not match this order. Reconcile this order before starting another checkout.' : 'भुगतान की पुष्टि इस order से मेल नहीं खाती। नया checkout शुरू करने से पहले इसी order की जाँच करें।');
-            setPendingVerify(recoverableDraft);
-            try { window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(recoverableDraft)); } catch { /* Keep in-memory draft. */ }
+            savePendingVerify(recoverableDraft);
             setBusy('');
             return;
           }
-          setPendingVerify(draft);
           void verifyPayment(draft);
         },
         modal: { ondismiss: () => setBusy('') },
@@ -526,7 +509,7 @@ export default function ParentCoursesPage() {
                   {request.requested_at && <small><LocaleText hinglish="अनुरोध भेजा गया" english="Requested" /> · {formatUserTimestamp(request.requested_at, language)}</small>}
                 </div>
                 <div className="parent-courses-page__request-actions">
-                  <button type="button" className="button button-dark button-small" disabled={busy !== '' || (Number(request.price_paise) > 0 && false)}
+                  <button type="button" className="button button-dark button-small" disabled={busy !== '' || (false)}
                     onClick={() => {
                       const kid = children.find(child => child.id === request.student_id);
                       if (!kid) { setError(english ? 'This child is no longer linked to your account.' : 'यह बच्चा अब आपके खाते से लिंक नहीं है।'); return; }
@@ -617,7 +600,7 @@ export default function ParentCoursesPage() {
                     </select>
                   </label>
                   <button className="button button-light button-small" type="button"
-                    disabled={busy !== '' || (!isFree && pendingVerify !== null) || ownedByParent || !selectedChild || selectedChildAlreadyOwns}
+                    disabled={busy !== '' || ownedByParent || !selectedChild || selectedChildAlreadyOwns}
                     onClick={() => isFree ? void addFreeCourse(course.course_id, 'CHILD', selectedChild) : void requestPaidCheckout(course.course_id, 'CHILD', selectedChild)}>
                     {busy === 'checkout-' + course.course_id + '-CHILD-' + selectedChild || busy === 'free-' + course.course_id + '-CHILD-' + selectedChild
                       ? (english ? 'Working…' : 'प्रक्रिया जारी…')
