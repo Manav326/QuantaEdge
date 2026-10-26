@@ -260,7 +260,7 @@ public class CourseMarketplaceLaunchReadinessService {
     add(checks,"COURSE_IDENTITY","Course has one active, type-matched source identity",
         identityContractMatches(offer),
         "This course version is missing its active stable course identity or the identity source/type does not match the release. Re-create the course through the current source-owned workflow; legacy/orphan courses cannot be published.");
-    add(checks,"CURRENT_OFFER_REVISION","Offer belongs to the current eligible release",
+    add(checks,"CURRENT_COURSE_RELEASE","Assignment/offer points to the newest eligible release",
         Boolean.TRUE.equals(offer.get("current_offer_version")),
         "This offer is obsolete or no longer points to the current eligible release. Use the current HRMS assignment and create or configure its offer instead.");
     String releaseState=text(offer.get("release_state"));
@@ -739,7 +739,12 @@ public class CourseMarketplaceLaunchReadinessService {
       order by imported_package.imported_at desc,imported_package.id desc
       limit 1
       """,courseId);
-    if(rows.isEmpty())return;
+    if(rows.isEmpty()) {
+      add(checks,"SOURCE_RIGHTS_CLEARANCE","Course package distribution rights are cleared",
+          true,
+          "Not applicable: this course identity has no imported Course Studio package ledger. Source ownership, content quality, and publication approval checks still apply.");
+      return;
+    }
     Map<String,Object> row=rows.getFirst();
     String status=text(row.get("source_rights_status"));
     boolean cleared=isVerifiedPackageRightsClearance(status,
