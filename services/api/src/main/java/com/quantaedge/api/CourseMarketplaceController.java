@@ -1750,6 +1750,11 @@ public class CourseMarketplaceController {
       }
       Long buyerAccountId=order.get("purchaser_user_id") instanceof Number purchaser
           ? purchaser.longValue() : null;
+      if(buyerAccountId==null&&"CHILD".equalsIgnoreCase(String.valueOf(order.get("recipient_type")))) {
+        throw new org.springframework.web.server.ResponseStatusException(
+            org.springframework.http.HttpStatus.CONFLICT,
+            "The parent purchaser identity is missing from this child checkout. Finance must resolve ownership before recovery.");
+      }
       if(buyerAccountId==null) {
         List<Map<String,Object>> linkedAccounts=jdbc.queryForList("""
             select user_account_id from student where id=? and active=true
