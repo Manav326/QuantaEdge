@@ -233,13 +233,19 @@ export default function ParentCoursesPage() {
     setNotice('');
     savePendingVerify(draft);
     try {
-      await readJson(await apiFetch('/api/v1/marketplace/family/orders/' + draft.localOrderId + '/verify', {
+      const verification = await readJson(await apiFetch('/api/v1/marketplace/family/orders/' + draft.localOrderId + '/verify', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ paymentId: draft.paymentId, orderId: draft.orderId, signature: draft.signature }),
       }));
       clearPendingVerify(draft.localOrderId);
-      setNotice(english ? 'Payment verified. Course access has been updated.' : 'भुगतान सत्यापित। कोर्स की पहुँच अपडेट हो गई है।');
+      setNotice(verification.financeReconciliationRequired === true
+        ? english
+          ? 'Payment confirmed and course access granted. Invoice and revenue-share finalization is still being reconciled; do not pay again.'
+          : 'भुगतान की पुष्टि हो गई और कोर्स की पहुँच मिल गई है। इनवॉइस और revenue-share का अंतिम मिलान अभी जारी है; दोबारा भुगतान न करें।'
+        : String(verification.message || '').trim() || (english
+          ? 'Payment verified. Course access has been updated.'
+          : 'भुगतान सत्यापित। कोर्स की पहुँच अपडेट हो गई है।'));
       await load();
     } catch (e) {
       setError(localizeMarketplaceError(e, language, 'Payment verification could not be completed. Retry verification before paying again.', 'भुगतान की पुष्टि पूरी नहीं हो सकी। दोबारा भुगतान करने से पहले इसी order की पुष्टि फिर करें।'));
