@@ -239,11 +239,6 @@ export default function StudentMarketplacePage() {
     setStatus('');
     savePendingVerify(draft);
     try {
-      window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(draft));
-    } catch {
-      // Keep the in-memory retry state even when session storage is unavailable.
-    }
-    try {
       await readJson(await apiFetch('/api/v1/marketplace/orders/' + draft.localOrderId + '/verify', {
         method: 'POST',
         credentials: 'same-origin',
@@ -255,7 +250,6 @@ export default function StudentMarketplacePage() {
         }),
       }));
       clearPendingVerify(draft.localOrderId);
-      try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
       setStatus(tx('Payment verified. Your course is now in All Courses.', 'भुगतान सत्यापित हो गया। आपका कोर्स All Courses में उपलब्ध है।'));
       await loadOffers();
       await loadPurchaseRequests();
@@ -272,7 +266,7 @@ export default function StudentMarketplacePage() {
   const reconcilePurchase = useCallback(async (draft: VerifyDraft) => {
     setVerifying(true);
     setStatus('');
-    setPendingVerify(draft);
+    savePendingVerify(draft);
     try {
       window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(draft));
     } catch {
@@ -284,7 +278,6 @@ export default function StudentMarketplacePage() {
       }));
       if (String(result.status || '').toUpperCase() === 'VERIFIED' || result.entitled === true) {
         clearPendingVerify(draft.localOrderId);
-        try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
         setStatus(tx('Payment verified. Your course is now in All Courses.', 'भुगतान सत्यापित हो गया। आपका कोर्स All Courses में उपलब्ध है।'));
         await loadOffers();
         await loadPurchaseRequests();
@@ -292,13 +285,12 @@ export default function StudentMarketplacePage() {
         return;
       }
       if (result.canRetryCheckout === true) {
-        setPendingVerify(null);
-        try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
+        clearPendingVerify(draft.localOrderId);
       }
       setStatus(localizeMarketplaceError(result.message, language, 'Payment status is still being reconciled. Do not pay again while verification is pending.', 'भुगतान की जाँच अभी जारी है। पुष्टि पूरी होने तक दोबारा भुगतान न करें।'));
       await loadOffers();
     } catch (error: any) {
-      setPendingVerify(draft);
+      savePendingVerify(draft);
       setStatus(localizeMarketplaceError(error?.message, language, 'Payment status could not be reconciled. Keep this order and retry verification; do not pay again.', 'भुगतान की स्थिति की पुष्टि नहीं हो सकी। यही order सुरक्षित रखें और फिर जाँचें; दोबारा भुगतान न करें।'));
     } finally {
       setVerifying(false);
@@ -360,9 +352,7 @@ export default function StudentMarketplacePage() {
         orderId: String(order.orderId),
         signature: '',
       };
-      setPendingVerify(recoverableDraft);
-      try { window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(recoverableDraft)); }
-      catch { /* In-page recovery still works when storage is disabled. */ }
+      savePendingVerify(recoverableDraft);
       await ensureRazorpayCheckout(english);
       const RazorpayCtor = window.Razorpay;
       if (!RazorpayCtor) throw new Error(tx('Payment checkout is not available. Please retry.', 'भुगतान checkout उपलब्ध नहीं है। फिर प्रयास करें।'));
@@ -385,7 +375,6 @@ export default function StudentMarketplacePage() {
           if (!draft.paymentId || !draft.orderId || !draft.signature || draft.orderId !== order.orderId) {
             setStatus(tx('The payment confirmation did not match this order. Reconcile this order before starting another checkout.', 'भुगतान की पुष्टि इस order से मेल नहीं खाती। नया checkout शुरू करने से पहले इसी order की जाँच करें।'));
             savePendingVerify(recoverableDraft);
-            try { window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(recoverableDraft)); } catch { /* Keep in-memory draft. */ }
             setBusyCourseId(null);
             return;
           }
