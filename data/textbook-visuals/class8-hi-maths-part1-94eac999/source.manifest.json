@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "extractor_version": "quantaedge-pymupdf-text-v1",
+  "created_at_utc": "2026-10-21T08:53:33.429428+00:00",
+  "bundle_file": "ncert-c8-hindi-hhgp1--whole-book.pdf.json",
+  "asset_pdf_filename": "ncert-c8-hindi-hhgp1--whole-book.pdf",
+  "asset_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+  "original_book_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+  "book_id": "ncert-c8-hindi-hhgp1",
+  "title": "Ganita Prakash Part-I (Hindi)",
+  "source_title": "Ganita Prakash Part-I (Hindi)",
+  "source_url": "https://ncert.nic.in/textbook.php?hhgp1=0-7",
+  "edition": "UNVERIFIED: official NCERT bundle; dated imprint not detected automatically",
+  "subject": "Mathematics",
+  "class": "8",
+  "language": "hindi",
+  "scope": "SUBJECT_BOOK",
+  "chapter_title": null,
+  "source_page_start": 1,
+  "page_count": 200,
+  "completed_pages": 200,
+  "pages_newly_extracted": 200,
+  "status_counts": {
+    "TEXT_EXTRACTED_REQUIRES_CONTENT_REVIEW": 195,
+    "NO_DEVANAGARI_REVIEW": 1,
+    "NO_EXTRACTABLE_TEXT_REVIEW": 2,
+    "LOW_TEXT_REVIEW": 2
+  },
+  "content_state": "DRAFT_EXTRACTION_ONLY_REQUIRES_REVIEW",
+  "text_jsonl": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7.jsonl",
+  "published": false
+}
