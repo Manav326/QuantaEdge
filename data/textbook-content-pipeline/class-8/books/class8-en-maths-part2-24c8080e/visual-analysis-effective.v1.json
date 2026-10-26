@@ -1,0 +1,343 @@
+{
+  "schema_version": "quantaedge.visual-analysis-effective.v1",
+  "source_book_id": "ncert-c8-english-hegp2",
+  "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+  "raw_analysis_path": "data/textbook-visuals/class8-en-maths-part2-24c8080e/visual-analysis-qwen2.5vl-3b.v1.json",
+  "raw_analysis_sha256": "3288f1d8414e6ae77d22a6de181a2dcd989252e5300f0107d7020338a19d54b1",
+  "model": "qwen2.5vl:3b",
+  "prompt_version": "visual-analysis-prompt-v2",
+  "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-maths-part2-24c8080e/visual-analysis-corrections.v1.json",
+  "corrections_applied_count": 0,
+  "results": [
+    {
+      "asset_id": "272b757e4b53ec152a293ffa",
+      "asset_sha256": "02f621e949d0a5075be2d44d9daf5f80559b407c10f417f47d0fc725a00458b0",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/02f621e949d0a5075be2d44d9daf5f80559b407c10f417f47d0fc725a00458b0.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b9ce1e7003da06c31cb985740f65a14d422356e89d03d74d2cea2dfb81753fe3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "QR code with a logo and text.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "0889"
+        ],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "No specific content related to the textbook is visible in the image. The QR code and logo are the main elements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:38:19Z",
+      "effective_analysis": {
+        "visual_summary": "QR code with a logo and text.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "0889"
+        ],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "No specific content related to the textbook is visible in the image. The QR code and logo are the main elements."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "055780a8b5f2c285a99b3b24",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "b9ce1e7003da06c31cb985740f65a14d422356e89d03d74d2cea2dfb81753fe3",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e764522b7dfad962cd767c91",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "page_text_context_sha256": "b9ce1e7003da06c31cb985740f65a14d422356e89d03d74d2cea2dfb81753fe3",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "00b9583e0480020ca7822587",
+      "asset_sha256": "7288aa00c0e19b1343c00e5ae48035df3de66a4c01952b027c3c40ac8112da58",
+      "page_text_context_sha256": "b9ce1e7003da06c31cb985740f65a14d422356e89d03d74d2cea2dfb81753fe3",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 1,
+      "asset_path": "page-0001.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2604903d1b3db18334c51dad",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 2,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f3b17ce2e9185bcbdb0781ea4e23c783c5dcf1dc9aec04a274206151fc47cee9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "No visible content on the page.",
+          "No visible text or images to analyze."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:55:40Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "No visible content on the page.",
+          "No visible text or images to analyze."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b02b7e029788bd53fa394903",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 2,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f3b17ce2e9185bcbdb0781ea4e23c783c5dcf1dc9aec04a274206151fc47cee9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:55:58Z",
+      "effective_analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b38156f115380cd49f21748e",
+      "asset_sha256": "d290ed7e432b9691cc71e07382534e54ca2bb9ce864d4e700c28f4ca2ae1b69c",
+      "page_text_context_sha256": "f3b17ce2e9185bcbdb0781ea4e23c783c5dcf1dc9aec04a274206151fc47cee9",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 2,
+      "asset_path": "page-0002.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e69f8d3d5576dce5d3fc9f03",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 3,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a9619a969696393f173e99204c8b113023d7f6d32893f58bf154d936fa43a601",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Red ink splatter across the page, obscuring text.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The text is partially obscured by the red ink splatter.",
+        "limitations": [
+          "The text is unreadable due to the red ink splatter."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:02:37Z",
+      "effective_analysis": {
+        "visual_summary": "Red ink splatter across the page, obscuring text.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The text is partially obscured by the red ink splatter.",
+        "limitations": [
+          "The text is unreadable due to the red ink splatter."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "60b6eba513b32c21446e4d59",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 3,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a9619a969696393f173e99204c8b113023d7f6d32893f58bf154d936fa43a601",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, abstract, and irregularly shaped splash or blotch on a white background.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a visual element in a document or textbook, possibly serving as a decorative or transitional element.",
+        "limitations": [
+          "The image does not contain any text or information that can be directly related to the content of the textbook.",
+          "The abstract nature of the image makes it difficult to determine its exact purpose or function within the document."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:02:49Z",
+      "effective_analysis": {
+        "visual_summary": "A red, abstract, and irregularly shaped splash or blotch on a white background.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a visual element in a document or textbook, possibly serving as a decorative or transitional element.",
+        "limitations": [
+          "The image does not contain any text or information that can be directly related to the content of the textbook.",
+          "The abstract nature of the image makes it difficult to determine its exact purpose or function within the document."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6bcc4d483f74b618fc9fed04",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 3,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a9619a969696393f173e99204c8b113023d7f6d32893f58bf154d936fa43a601",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or introductory page in a textbook.",
+        "limitations": [
+          "The page is completely black and lacks any visible content or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:03:07Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or introductory page in a textbook.",
+        "limitations": [
+          "The page is completely black and lacks any visible content or text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    }
+  ],
+  "human_review_required": true,
+  "publication_allowed": false
+}

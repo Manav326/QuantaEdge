@@ -1,0 +1,28 @@
+{
+  "schema_version": "quantaedge.textbook-content-pipeline-index.v1",
+  "architecture_version": "8-layer-resumable-v1",
+  "class": 8,
+  "book_slug": "class8-en-maths-part2-24c8080e",
+  "source_book_id": "ncert-c8-english-hegp2",
+  "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+  "layers": {
+    "1": "COMPLETE",
+    "2": "COMPLETE",
+    "3": "COMPLETE",
+    "4": "RUNNING",
+    "5": "RUNNING",
+    "6": "NOT_STARTED",
+    "7": "NOT_STARTED",
+    "8": "NOT_STARTED"
+  },
+  "inventory_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "tag": "inventory-layer1-class8-class8-en-maths-part2-24c8080e-sha933b00b2ae40-run-40413122029",
+    "tar_sha256": "b4d57b9cea09f9d9b966cb1355e0e7f4d96431100a3a5d5e4a9564042ef215ff"
+  },
+  "analysis_path": "data/textbook-visuals/class8-en-maths-part2-24c8080e/visual-analysis-qwen2.5vl-3b.v1.json",
+  "effective_analysis_path": "data/textbook-content-pipeline/class-8/books/class8-en-maths-part2-24c8080e/visual-analysis-effective.v1.json",
+  "coverage_ledger_path": "data/textbook-content-pipeline/class-8/books/class8-en-maths-part2-24c8080e/coverage-ledger.v1.json",
+  "publication_allowed": false,
+  "human_review_required": true
+}
