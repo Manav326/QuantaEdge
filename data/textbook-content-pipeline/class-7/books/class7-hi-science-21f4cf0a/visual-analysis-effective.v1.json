@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-hindi-ghcu1",
   "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
   "raw_analysis_path": "data/textbook-visuals/class7-hi-science-21f4cf0a/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "2688535ab3778d80914ee8c71dc66e13559ae6944cf68a23b197b158ce61108f",
+  "raw_analysis_sha256": "e27098a85adf3c26a357bb6860d7ce05fb35388b35684b54d277e24607c0ebdf",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-hi-science-21f4cf0a/visual-analysis-corrections.v1.json",
@@ -1514,6 +1514,362 @@
         "context_relation": "The image represents a scientist working in a laboratory setting.",
         "limitations": [
           "The image does not provide specific details about the scientist's work or the laboratory equipment."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5b7a463a3fd1dd844f44851c",
+      "asset_sha256": "622f1ada3b04d9879057a691088566ac29720e33d1f984df7e27ad5cfe3d0347",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/622f1ada3b04d9879057a691088566ac29720e33d1f984df7e27ad5cfe3d0347.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon scientist working at a globe-shaped desk with a notebook, test tubes, and a globe.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "desk",
+          "notebook",
+          "test tubes",
+          "globe"
+        ],
+        "context_relation": "The image represents a scientist working in a laboratory setting.",
+        "limitations": [
+          "The image does not provide specific details about the scientist's work or the laboratory environment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:17:22Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon scientist working at a globe-shaped desk with a notebook, test tubes, and a globe.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "desk",
+          "notebook",
+          "test tubes",
+          "globe"
+        ],
+        "context_relation": "The image represents a scientist working in a laboratory setting.",
+        "limitations": [
+          "The image does not provide specific details about the scientist's work or the laboratory environment."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5e0fa6323d32e8d3c6926a5c",
+      "asset_sha256": "56822b7639b98d76090d0b4a600cf2426033545dd9812bef41441feafb709d32",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/56822b7639b98d76090d0b4a600cf2426033545dd9812bef41441feafb709d32.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank white page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for educational content to be filled with text or images.",
+        "limitations": [
+          "The page is blank and requires content to be added.",
+          "The page is not a diagram, chart, graph, table, map, cartoon, photo, illustration, equation, or page with multiple visuals."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:18:01Z",
+      "effective_analysis": {
+        "visual_summary": "A blank white page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for educational content to be filled with text or images.",
+        "limitations": [
+          "The page is blank and requires content to be added.",
+          "The page is not a diagram, chart, graph, table, map, cartoon, photo, illustration, equation, or page with multiple visuals."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "123e1fbee6fa1bfd84dd1dfe",
+      "asset_sha256": "6a0b3c78cf48995be5f653d8b3e0b9bdc4685c8a3c2ecfbcbe3506879715bb67",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/6a0b3c78cf48995be5f653d8b3e0b9bdc4685c8a3c2ecfbcbe3506879715bb67.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon scientist holding a test tube.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a scientist conducting an experiment.",
+        "limitations": [
+          "The image does not provide specific details about the experiment being conducted."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:18:40Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon scientist holding a test tube.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a scientist conducting an experiment.",
+        "limitations": [
+          "The image does not provide specific details about the experiment being conducted."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "26b103243846b6935d30ab8f",
+      "asset_sha256": "a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border and a black outline.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "No visible text or images on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:18:51Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border and a black outline.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "No visible text or images on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "97276ac430f1bd8305768225",
+      "asset_sha256": "a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for educational content to be filled with text or images.",
+        "limitations": [
+          "The page is blank and requires content to be added.",
+          "The page does not provide any specific information or context for the content editor to work with."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:18:59Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for educational content to be filled with text or images.",
+        "limitations": [
+          "The page is blank and requires content to be added.",
+          "The page does not provide any specific information or context for the content editor to work with."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "aa7435262c5307cff872c24d",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bdc355973ec9913e12062269",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fa0fa5663c40617ea88d36f3",
+      "asset_sha256": "5ea874de5e5d2992e65e2b090a298eed3be332b4b05599aaf4a5a22e79c5022c",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "page-0006.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "734a8c5fe527cfe1341c0a55",
+      "asset_sha256": "f6300f6d7833c0c599b3ba3d867e164ac85e99d8e71d49962f96fd81accf3696",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/f6300f6d7833c0c599b3ba3d867e164ac85e99d8e71d49962f96fd81accf3696.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5b036bc7946280f2658d2014564845af6d35ec6996ad1c853809ba2f45f50207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope, possibly used as a teaching aid or a part of a diagram.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond the rope itself."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:25:10Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope, possibly used as a teaching aid or a part of a diagram.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond the rope itself."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "89d5708c829cb7ecbe154f0d",
+      "asset_sha256": "bf6d8ea7766255d593fd597c9e29b2eb615f574817eea3a81c89b0b7125cb2fa",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/bf6d8ea7766255d593fd597c9e29b2eb615f574817eea3a81c89b0b7125cb2fa.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5b036bc7946280f2658d2014564845af6d35ec6996ad1c853809ba2f45f50207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope with a loop, possibly used as a symbol or icon.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond its visual representation of a rope with a loop."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:25:55Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope with a loop, possibly used as a symbol or icon.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond its visual representation of a rope with a loop."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

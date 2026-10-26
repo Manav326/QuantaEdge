@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2177,
     "eligible_visual_asset_rows": 2177,
-    "raw_analysis_result_rows": 40,
-    "successful_visual_analyses": 32,
-    "missing_visual_analyses": 2137,
-    "failed_visual_analyses": 8,
+    "raw_analysis_result_rows": 50,
+    "successful_visual_analyses": 39,
+    "missing_visual_analyses": 2127,
+    "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 2145,
+    "unresolved_count": 2138,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -7640,9 +7640,24 @@
       "asset_path": "assets/622f1ada3b04d9879057a691088566ac29720e33d1f984df7e27ad5cfe3d0347.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon scientist working at a globe-shaped desk with a notebook, test tubes, and a globe.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "desk",
+          "notebook",
+          "test tubes",
+          "globe"
+        ],
+        "context_relation": "The image represents a scientist working in a laboratory setting.",
+        "limitations": [
+          "The image does not provide specific details about the scientist's work or the laboratory environment."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7658,9 +7673,19 @@
       "asset_path": "assets/56822b7639b98d76090d0b4a600cf2426033545dd9812bef41441feafb709d32.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank white page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for educational content to be filled with text or images.",
+        "limitations": [
+          "The page is blank and requires content to be added.",
+          "The page is not a diagram, chart, graph, table, map, cartoon, photo, illustration, equation, or page with multiple visuals."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7676,9 +7701,18 @@
       "asset_path": "assets/6a0b3c78cf48995be5f653d8b3e0b9bdc4685c8a3c2ecfbcbe3506879715bb67.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon scientist holding a test tube.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a scientist conducting an experiment.",
+        "limitations": [
+          "The image does not provide specific details about the experiment being conducted."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7694,9 +7728,18 @@
       "asset_path": "assets/a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border and a black outline.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "No visible text or images on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7712,9 +7755,19 @@
       "asset_path": "assets/a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for educational content to be filled with text or images.",
+        "limitations": [
+          "The page is blank and requires content to be added.",
+          "The page does not provide any specific information or context for the content editor to work with."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7730,7 +7783,7 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -7748,7 +7801,7 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -7766,7 +7819,7 @@
       "asset_path": "page-0006.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -7784,9 +7837,18 @@
       "asset_path": "assets/f6300f6d7833c0c599b3ba3d867e164ac85e99d8e71d49962f96fd81accf3696.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope, possibly used as a teaching aid or a part of a diagram.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond the rope itself."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7802,9 +7864,18 @@
       "asset_path": "assets/bf6d8ea7766255d593fd597c9e29b2eb615f574817eea3a81c89b0b7125cb2fa.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope with a loop, possibly used as a symbol or icon.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond its visual representation of a rope with a loop."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
