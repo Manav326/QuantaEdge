@@ -1,40 +1,7 @@
 name: Process Class 6–8 Textbooks in English and Hindi
 
 on:
-  push:
-    paths:
-      - ".github/workflows/textbook-visual-candidates-v3.yml"
-      - "tests/test_workflow_resume_entrypoints.py"
-      - "scripts/plan_textbook_layer45_matrix.py"
-      - "tests/test_plan_textbook_layer45_matrix.py"
-      - ".github/workflows/textbook-extraction-pilot.yml"
-      - "scripts/prepare_visual_candidates_v3.py"
-      - "scripts/prepare_visual_candidate_batch.py"
-      - "scripts/select_textbook_visual_sources.py"
-      - "scripts/validate_textbook_extraction_artifacts.py"
-      - "tests/test_prepare_visual_candidates_v3.py"
-      - "tests/test_prepare_visual_candidate_batch.py"
-      - "tests/test_select_textbook_visual_sources.py"
-      - "tests/test_validate_textbook_extraction_artifacts.py"
-      - "scripts/build_visual_lesson_attachment_manifest.py"
-      - "tests/test_build_visual_lesson_attachment_manifest.py"
-      - "tests/test_textbook_visual_end_to_end_contract.py"
-      - "scripts/update_visual_catalog_index.py"
-      - "tests/test_update_visual_catalog_index.py"
-      - "data/textbook-visual-candidates-v3/catalogs/**"
-      - "data/textbook-visual-candidates-v3/index.v1.json"
-      - "data/textbook-visual-candidates-v3/**"
-      - "apps/admin/app/content/page.tsx"
-      - "services/api/src/main/java/com/quantaedge/api/AdminContentController.java"
-      - "services/api/src/test/java/com/quantaedge/api/AdminContentControllerTest.java"
-      - "scripts/extract_visual_asset_inventory.py"
-      - "tests/test_extract_visual_asset_inventory.py"
-      - "scripts/analyze_visual_inventory_with_ollama.py"
-      - "tests/test_analyze_visual_inventory_with_ollama.py"
-      - "docs/textbook-pipeline-resume-runbook.md"
-      - "scripts/quantaedge_textbook_pipeline.py"
-      - "tests/test_quantaedge_textbook_pipeline.py"
-      - "data/textbook-content-pipeline/**/visual-analysis-corrections.v1.json"
+  # Deliberate dispatch only: ordinary commits must never start costly textbook processing.
   workflow_dispatch:
     inputs:
       class_no:
