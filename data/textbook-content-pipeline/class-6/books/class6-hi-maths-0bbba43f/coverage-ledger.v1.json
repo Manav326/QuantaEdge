@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 5189,
     "eligible_visual_asset_rows": 5189,
-    "raw_analysis_result_rows": 20,
-    "successful_visual_analyses": 9,
-    "missing_visual_analyses": 5169,
-    "failed_visual_analyses": 11,
+    "raw_analysis_result_rows": 30,
+    "successful_visual_analyses": 14,
+    "missing_visual_analyses": 5159,
+    "failed_visual_analyses": 16,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5180,
+    "unresolved_count": 5175,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -12101,7 +12101,7 @@
       "asset_path": "page-0004.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -12119,9 +12119,22 @@
       "asset_path": "assets/9fbd3b21a14dbb9efb66023da999953ddf34661e7c1e7805b74fa7a8df0ca1a5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue background with intricate gold and white floral patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "floral patterns",
+          "gold and white",
+          "blue background"
+        ],
+        "context_relation": "The image is a decorative element in the educational content.",
+        "limitations": [
+          "No specific text or labels are present in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12137,9 +12150,26 @@
       "asset_path": "assets/c6bdf0eac231e4a8caaf23fd36fe9b492f184468791b3fcab65963e312859cd9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue and gold patterned fabric with intricate designs.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "fabric",
+          "pattern",
+          "design",
+          "blue",
+          "gold",
+          "intricate",
+          "designs"
+        ],
+        "context_relation": "The image is a visual representation of a fabric pattern, likely used as an educational illustration.",
+        "limitations": [
+          "The image does not provide specific details about the fabric's use or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12155,7 +12185,7 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -12173,7 +12203,7 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -12191,7 +12221,7 @@
       "asset_path": "page-0005.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -12209,9 +12239,22 @@
       "asset_path": "assets/9985840a107a31deb877a74529f71a88a26a2aca60252b74b40d91be1d92c6d5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue background with intricate gold and white floral patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "blue background",
+          "intricate patterns",
+          "gold and white floral designs"
+        ],
+        "context_relation": "The image is a decorative element, possibly used as a header or footer for educational content.",
+        "limitations": [
+          "No specific text or labels are present in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12227,7 +12270,7 @@
       "asset_path": "assets/0149131d0aa0deeefd1b98bfc38ba39ee15a05bef071f5144cf59a858582897e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -12245,9 +12288,35 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of new perspectives and courage in solving complex problems.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "अनसुलझे प्रश्नों के लिए नए विचाारों और एक सााहसी नई पीढ़ी की आवश्यश्यकता होगी ताकि",
+          "इन रोमाांचक समस्याओं को समझाा  जाा सके और हल कियाा  जाा सके।",
+          "दुनिया के सबसे बड़े समस्या समााधाानकर्ताओं और वर्तमाान पीढ़ी के सबसे रचनाातमक मस्तिष्कों में से एक विश्‍व प्रसिद्ध गणितज्ञ मञ्जुल भार्गव हैं।",
+          "उन्होंने गणित में मौलिक प्रकृति की दशकों पुराानी और कुछ माामलों में सदियों पुराानी समस्याओं काा समााधाान कियाा है, विशेष रूप से संख्या सिद्धांत, बीजगणित, प्रतिनिधित्व सिद्धांत (Representation Theory) और अंकगणितीय ज्यामिति के क्ेत्र में।",
+          "गणित में अपने अग्रणी अन्‍वेेषण के काारण वे वर्ष 201"
+        ],
+        "concepts": [
+          "complex problems",
+          "new perspectives",
+          "courage",
+          "solving problems",
+          "mathematicians",
+          "mathematics",
+          "number theory",
+          "algebra",
+          "representation theory",
+          "geometry"
+        ],
+        "context_relation": "The text discusses the importance of new perspectives and courage in solving complex mathematical problems.",
+        "limitations": [
+          "The text does not provide specific examples or solutions to the problems mentioned."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12263,9 +12332,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
