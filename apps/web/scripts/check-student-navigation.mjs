@@ -206,6 +206,16 @@ assert.ok(parentMarketplacePage.includes("'/api/v1/marketplace/family/orders/' +
   parentMarketplacePage.includes('window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(next))') &&
   parentMarketplacePage.indexOf('savePendingVerify(recoverableDraft)') < parentMarketplacePage.indexOf('await ensureRazorpayCheckout()'),
   'Parent web checkout must persist each order before opening Razorpay and retain its recovery draft.');
+assert.ok(marketplacePage.includes('pendingVerifies.map') &&
+  marketplacePage.includes('const [pendingVerifies, setPendingVerifies]') &&
+  !marketplacePage.includes('pendingVerify !== null') &&
+  !marketplacePage.includes('if (pendingVerify)'),
+  'A student pending payment must be tracked per order and must not globally disable unrelated course purchases.');
+assert.ok(parentMarketplacePage.includes('pendingVerifies.map') &&
+  parentMarketplacePage.includes('const [pendingVerifies, setPendingVerifies]') &&
+  !parentMarketplacePage.includes('pendingVerify !== null') &&
+  !parentMarketplacePage.includes('if (pendingVerify)'),
+  'A parent pending payment must be tracked per order and must not globally disable unrelated course purchases.');
 assert.ok(courseMarketplaceApi.includes('@PostMapping("/orders/{localOrderId}/reconcile")') &&
   courseMarketplaceApi.includes('@PostMapping("/family/orders/{localOrderId}/reconcile")') &&
   courseMarketplaceApi.includes('inspectProviderOrderForNewAttempt'),
