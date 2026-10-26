@@ -1411,7 +1411,6 @@ public class CourseMarketplaceController {
 
   /** Verify checkout signature and reconcile the payment against Razorpay before granting access. */
   @PostMapping("/orders/{localOrderId}/verify")
-  @Transactional
   public Map<String, Object> verifyOrder(
       @PathVariable long localOrderId,
       @RequestBody VerifyCoursePaymentRequest request,
@@ -1424,7 +1423,6 @@ public class CourseMarketplaceController {
 
   /** Parent checkout verification is bound to the purchaser identity, never to a client-supplied learner. */
   @PostMapping("/family/orders/{localOrderId}/verify")
-  @Transactional
   public Map<String, Object> verifyFamilyOrder(
       @PathVariable long localOrderId,
       @RequestBody VerifyCoursePaymentRequest request,
@@ -1437,7 +1435,6 @@ public class CourseMarketplaceController {
 
   /** Reconcile a saved student order directly with Razorpay when a checkout callback is missing. */
   @PostMapping("/orders/{localOrderId}/reconcile")
-  @Transactional
   public Map<String, Object> reconcileOrder(
       @PathVariable long localOrderId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
@@ -1449,7 +1446,6 @@ public class CourseMarketplaceController {
 
   /** Parent reconciliation stays bound to the authenticated purchaser and their institution. */
   @PostMapping("/family/orders/{localOrderId}/reconcile")
-  @Transactional
   public Map<String, Object> reconcileFamilyOrder(
       @PathVariable long localOrderId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context,
@@ -1475,7 +1471,6 @@ public class CourseMarketplaceController {
    * Platform-owner entry point used by HRMS Payments & Reconciliation. The purchaser/beneficiary
    * IDs are loaded from the persisted order, never accepted from the caller.
    */
-  @Transactional
   public Map<String, Object> reconcileOrderForHrms(long localOrderId, AuthContext context) {
     authorization.requirePermission(context, "QE_PLATFORM_OWNER");
     List<Map<String,Object>> rows = jdbc.queryForList("""
@@ -1508,7 +1503,6 @@ public class CourseMarketplaceController {
    * Razorpay order ID; the webhook payload never supplies price, buyer, institution or entitlement.
    * Existing server-side provider lookups and captured-payment checks remain authoritative.
    */
-  @Transactional
   public Map<String,Object> reconcileOrderFromProviderEvent(String providerOrderId) {
     if(providerOrderId==null||!providerOrderId.matches("order_[A-Za-z0-9]+"))
       return Map.of("status","UNMATCHED","message","The provider event has no valid saved Razorpay order reference.");
@@ -2162,7 +2156,7 @@ public class CourseMarketplaceController {
     List<Map<String, Object>> rows = jdbc.queryForList("""
         select id,student_id,purchaser_user_id,target_student_id,recipient_type,course_id,
           institution_id,institution_offer_id,course_identity_id,identity_contract_version,offer_price_paise,currency,provider_order_id,provider_payment_id,status,
-          tax_profile_id,revenue_share_policy_id,
+          tax_profile_id,revenue_share_policy_id,buyer_snapshot::text as buyer_snapshot_json,
           tax_calculation_snapshot::text as tax_calculation_snapshot_json,
           revenue_share_policy_snapshot::text as revenue_share_policy_snapshot_json
         from course_payment_order
@@ -2183,7 +2177,6 @@ public class CourseMarketplaceController {
     if (!List.of("PENDING", "EXPIRED").contains(state)) {
       throw new IllegalArgumentException("This payment order is no longer payable.");
     }
-    requireLockedFinancialSnapshotsForVerification(order);
     // Payment verification belongs to the exact historical offer on the saved order.
     // A later offer revision may archive this offer or withdraw its release while a valid
     // Razorpay payment is still settling. Current publication/fingerprint gates protect NEW
@@ -2245,6 +2238,17 @@ public class CourseMarketplaceController {
     }
     requireStudentMembership(targetStudentId,institutionId);
 
+    boolean financeSnapshotsReady=hasLockedFinancialSnapshots(order)
+        && order.get("buyer_snapshot_json")!=null
+        && !"{}".equals(String.valueOf(order.get("buyer_snapshot_json")).trim())
+        && !"null".equalsIgnoreCase(String.valueOf(order.get("buyer_snapshot_json")).trim());
+    // Never capture an authorization without the locked financial contract. If Razorpay has
+    // already captured the exact payment, access is granted first and finance can reconcile later.
+    if ("authorized".equalsIgnoreCase(payment.path("status").asText("")) && !financeSnapshotsReady) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          HttpStatus.CONFLICT,
+          "Razorpay has authorised this payment, but the saved financial contract is incomplete. It has not been captured by this retry; do not pay again. Reconcile this same order.");
+    }
     // Razorpay can return a successful checkout in the authorised state when automatic
     // capture is delayed or unavailable. Capture only after the signed callback, exact
     // persisted order, amount/currency and entitlement prerequisites have been checked.
@@ -2279,91 +2283,56 @@ public class CourseMarketplaceController {
           "The payment is not captured for this exact course order. Retry verification; do not start another checkout.");
     }
 
-    Long purchaseId;
-    try {
-      purchaseId = jdbc.queryForObject("""
-          insert into course_purchase(
-            student_id,course_id,order_id,provider_payment_id,amount_paise,currency,purchaser_user_id,
-            institution_id,institution_offer_id,course_identity_id,identity_contract_version
-          ) values(?,?,?,?,?,?,?,?,?,?,?) returning id
-          """, Long.class, targetStudentId, courseId, localOrderId,
-          paymentId, expectedAmount, expectedCurrency, purchaserUserId, institutionId,
-          ((Number) order.get("institution_offer_id")).longValue(),
-          order.get("course_identity_id") instanceof Number identity ? identity.longValue() : null,
-          order.get("identity_contract_version") instanceof Number contractVersion ? contractVersion.intValue() : 0);
-    } catch (DuplicateKeyException ex) {
-      // A concurrent payment or retry must never mint a second ownership record.
-      List<Map<String,Object>> prior = jdbc.queryForList("""
-        select id,provider_payment_id from course_purchase
-        where institution_id=? and (order_id=? or (student_id=? and course_id=?))
-        order by id limit 1
-        """, institutionId, localOrderId, targetStudentId, courseId);
-      if (prior.isEmpty() || !paymentId.equals(String.valueOf(prior.getFirst().get("provider_payment_id")))) {
-        throw new IllegalStateException("This learner already has a purchase for the course. Contact support before retrying.", ex);
+    CourseOrderFinancialService.CapturedAccessGrant accessGrant =
+        courseOrderFinancialService.grantAccessForCapturedPayment(
+            localOrderId,orderId,paymentId,signature,expectedAmount);
+
+    CourseOrderFinancialService.FinalizedSale finalizedSale=null;
+    boolean financePending=true;
+    if(financeSnapshotsReady) {
+      try {
+        finalizedSale=courseOrderFinancialService.finalizeCapturedSale(localOrderId,paymentId,expectedAmount);
+        int finalizedRows=jdbc.update("""
+            update course_payment_order set status='VERIFIED',fiscal_document_id=?,failure_code=null,updated_at=now()
+            where id=? and institution_id=? and status in ('PENDING','EXPIRED')
+              and provider_payment_id=? and captured_amount_paise=?
+            """,finalizedSale.fiscalDocumentId(),localOrderId,institutionId,paymentId,expectedAmount);
+        financePending=finalizedRows!=1;
+      } catch(RuntimeException financeFailure) {
+        // Access was committed in its own transaction after exact provider confirmation.
+        // Invoice/share failure must not convert a successful payment into an inaccessible course.
+        financePending=true;
       }
-      purchaseId = ((Number) prior.getFirst().get("id")).longValue();
     }
 
-    Long entitlementOwnerUser = purchaserUserId != null && "STUDENT".equals(recipientType)
-        ? purchaserUserId : null;
-    jdbc.update("""
-        insert into course_entitlement(
-          course_id,source_purchase_id,holder_user_id,holder_student_id,granted_by_user_id,institution_id,
-          course_identity_id,identity_contract_version
-        ) values(?,?,?,?,?,?,?,?)
-        on conflict(source_purchase_id) do nothing
-        """, courseId, purchaseId, entitlementOwnerUser, targetStudentId, purchaserUserId, institutionId,
-        order.get("course_identity_id") instanceof Number identity ? identity.longValue() : null,
-        order.get("identity_contract_version") instanceof Number contractVersion ? contractVersion.intValue() : 0);
-
-    // Course membership is switched server-side. A parent's self-purchase stays owned
-    // by that parent and is assigned to their personal learning profile until transferred.
-    // Purchase/transfer activates access to this course without changing other enrollments.
-    jdbc.update("""
-        insert into student_program_enrollment(student_id,program_id,institution_id,status,enrolled_at,ended_at,created_at,updated_at)
-        values(?,?,?,'ACTIVE',now(),null,now(),now())
-        on conflict(institution_id,student_id,program_id) do update
-          set status='ACTIVE',
-            enrolled_at=case when student_program_enrollment.status='ACTIVE'
-              then student_program_enrollment.enrolled_at else now() end,
-            ended_at=null,updated_at=now()
-        """, targetStudentId, courseId, institutionId);
-    jdbc.update("""
-        insert into student_track_enrollment(student_id,subject_id,institution_id,status)
-        select ?,s.id,?,'ACTIVE'
-        from curriculum_program_subject ps
-        join curriculum_program course_scope_program on course_scope_program.id=ps.program_id and course_scope_program.status='ACTIVE'
-        join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
-          and (s.program_id=ps.program_id or (s.program_id is null and course_scope_program.class_id=s.class_id and ps.class_id=s.class_id))
-        where ps.program_id=?
-        on conflict(institution_id,student_id,subject_id) do update
-          set status='ACTIVE',updated_at=now()
-        """, targetStudentId, institutionId, courseId);
-
-    if (purchaserUserId != null && "CHILD".equals(recipientType)) {
-      jdbc.update("""
-        update parent_course_purchase_request
-        set status='PURCHASED',resolved_at=now(),resolved_by_user_id=?,updated_at=now()
-        where guardian_user_id=? and student_id=? and institution_id=? and course_id=? and status='PENDING'
-        """, purchaserUserId, purchaserUserId, targetStudentId, institutionId, courseId);
+    if(financePending) {
+      Map<String,Object> result=new LinkedHashMap<>();
+      result.put("status","PAYMENT_VERIFIED_ACCESS_GRANTED");
+      result.put("entitled",true);
+      result.put("canRetryCheckout",false);
+      result.put("orderId",localOrderId);
+      result.put("courseId",courseId);
+      result.put("studentId",accessGrant.targetStudentId());
+      result.put("purchasedFor","CHILD".equals(accessGrant.recipientType())?"CHILD"
+          :accessGrant.purchaserUserId()==null?"LEARNER":"PARENT");
+      result.put("transferable",accessGrant.purchaserUserId()!=null
+          &&"STUDENT".equals(accessGrant.recipientType()));
+      result.put("financeReconciliationRequired",true);
+      result.put("message","Payment confirmed and course access granted. Invoice and revenue-share finalization is still being reconciled; do not pay again.");
+      return result;
     }
-    CourseOrderFinancialService.FinalizedSale finalizedSale =
-        courseOrderFinancialService.finalizeCapturedSale(localOrderId,paymentId,expectedAmount);
-    int finalizedRows=jdbc.update("""
-        update course_payment_order set status='VERIFIED',provider_payment_id=?,provider_signature=?,
-          verified_at=now(),captured_amount_paise=?,captured_at=now(),fiscal_document_id=?,updated_at=now()
-        where id=? and institution_id=? and status in ('PENDING','EXPIRED')
-        """, paymentId, signature, expectedAmount, finalizedSale.fiscalDocumentId(),localOrderId,institutionId);
-    if(finalizedRows!=1) throw new IllegalStateException("The course order changed while finalizing its fiscal document.");
-    Map<String,Object> result = new LinkedHashMap<>(verifiedResult(localOrderId, courseId));
-    result.put("purchasedFor", "CHILD".equals(recipientType) ? "CHILD"
-        : purchaserUserId == null ? "LEARNER" : "PARENT");
-    result.put("studentId", targetStudentId);
+
+    Map<String, Object> result = new LinkedHashMap<>(verifiedResult(localOrderId, courseId));
+    result.put("purchasedFor", "CHILD".equals(accessGrant.recipientType()) ? "CHILD"
+        : accessGrant.purchaserUserId() == null ? "LEARNER" : "PARENT");
+    result.put("studentId", accessGrant.targetStudentId());
     result.put("invoiceDocumentId", finalizedSale.fiscalDocumentId());
     result.put("invoiceNumber", finalizedSale.documentNumber());
     result.put("institutionSharePaise", finalizedSale.allocatedToInstitutionsPaise());
     result.put("platformRemainderPaise", finalizedSale.platformRemainderPaise());
-    result.put("transferable", purchaserUserId != null && "STUDENT".equals(recipientType));
+    result.put("transferable", accessGrant.purchaserUserId()!=null
+        && "STUDENT".equals(accessGrant.recipientType()));
+    result.put("financeReconciliationRequired", false);
     return result;
   }
 
