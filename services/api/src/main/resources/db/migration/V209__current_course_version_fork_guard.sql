@@ -27,11 +27,22 @@ RETURNS trigger
 LANGUAGE plpgsql
 AS $function$
 BEGIN
+  IF NEW.content_version_no IS NULL OR NEW.content_version_no < 1 THEN
+    RAISE EXCEPTION
+      'COURSE_VERSION_NUMBER_REQUIRED: new course graphs require a positive content version number.'
+      USING ERRCODE = '23514';
+  END IF;
+
   IF NEW.supersedes_program_id IS NULL THEN
+    IF NEW.content_version_no > 1 THEN
+      RAISE EXCEPTION
+        'COURSE_VERSION_SOURCE_REQUIRED: content versions after v1 must reference their exact superseded course graph.'
+        USING ERRCODE = '23514';
+    END IF;
     RETURN NEW;
   END IF;
 
-  IF NEW.course_identity_id IS NULL OR NEW.content_version_no IS NULL OR NOT EXISTS (
+  IF NEW.course_identity_id IS NULL OR NOT EXISTS (
     SELECT 1
     FROM curriculum_program source_program
     JOIN institution_course_identity identity
