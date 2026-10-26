@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gegp1",
   "source_pdf_sha256": "066775a2d0cd300d0cf629e59bcd54fae094511461ab3210ce4ce2cfbc789314",
   "raw_analysis_path": "data/textbook-visuals/class7-en-maths-part1-d75e5b97/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "80a5b26ac2f31589ffdfa653f850f261f1def7eca7515705970f5edfda607efa",
+  "raw_analysis_sha256": "311d151d2d5de9b34b2dc825bafa5cc840cff45fe110d2386143148c89a38655",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-maths-part1-d75e5b97/visual-analysis-corrections.v1.json",
@@ -1720,6 +1720,698 @@
         "context_relation": "acknowledgment of support and guidance from various stakeholders in the development of the textbook",
         "limitations": [
           "unclear content due to the black page"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "16b63be392f5b5cadd3efb10",
+      "asset_sha256": "267955ecfeeecaec63c453c848e5d56825d916b0e7f8e54cbddf81f356798eec",
+      "source_book_id": "ncert-c7-english-gegp1",
+      "source_pdf_sha256": "066775a2d0cd300d0cf629e59bcd54fae094511461ab3210ce4ce2cfbc789314",
+      "source_pdf_page_number": 10,
+      "asset_path": "page-0010.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "b1b516aee2b7a357a6a610e9c04fa238ce7235849d948611c1915dd85f1089b4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Acknowledgment page for a textbook.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "ACKNOWLEDGEMENTS",
+          "The National Council of Educational Research and Training (NCERT) acknowledges the guidance and support of the esteemed Chairperson and members of the Curricular Area Group (CAG): Mathematics and other concerned CAGs for their guidelines on cross-cutting themes in developing this textbook.",
+          "During the development of this textbook, various workshops were organised and subject experts in Mathematics from different Institutions were invited.",
+          "The NCERT acknowledges the valuable views and inputs given by subject experts—Shailesh A. Shirali, Director, Teacher Education Program, a Valley School, KFI; Sadik Ali Shaikh, Head, Department of Mathematics, Maulana Azad College of Arts, Science and Commerce, Aurangabad, Maharashtra; Jaspal Kaur, T",
+          "The Council acknowledges the efforts of Nidhi M. Shastri and Bhawana Upadhyay from the Programme Office.",
+          "The page number design draws inspiration from the Prime Climb game by Math For Love. The Council acknowledges Chaitanya Dev and Ramu MS for providing the pictures of the Decimal Coinage stamps.",
+          "The Council acknowledges the academic and administrative support of Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi.",
+          "The Council appreciates the contributions of Sushmita Joshi, Senior Research Associate; Manju Mhar, Senior Research Associate; Department of Education in Science and Mathematics, NCERT, for providing support in the development of the textbook.",
+          "The contribution of Ilma Nasir, Editor (contractual); Aastha Sharma, Editorial Assistant (contractual); Adiba Tasneem, Jatinder Kumar and Talha Faisal Khan, Proofreaders (contractual), Publication Division is also appreciated. The NCERT gratefully acknowledges the contributions of Pawan Kumar Barria"
+        ],
+        "concepts": [
+          "National Council of Educational Research and Training (NCERT)",
+          "Chairperson",
+          "Curricular Area Group (CAG)",
+          "Mathematics",
+          "Subject experts",
+          "Workshops",
+          "Textbook development",
+          "NCERT",
+          "Programme Office",
+          "Decimal Coinage stamps",
+          "Prime Climb game",
+          "Math For Love",
+          "Department of Education in Science and Mathematics",
+          "Publication Division",
+          "DTP Cell",
+          "DTP Operator"
+        ],
+        "context_relation": "acknowledgment",
+        "limitations": [
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:27:40Z",
+      "effective_analysis": {
+        "visual_summary": "Acknowledgment page for a textbook.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "ACKNOWLEDGEMENTS",
+          "The National Council of Educational Research and Training (NCERT) acknowledges the guidance and support of the esteemed Chairperson and members of the Curricular Area Group (CAG): Mathematics and other concerned CAGs for their guidelines on cross-cutting themes in developing this textbook.",
+          "During the development of this textbook, various workshops were organised and subject experts in Mathematics from different Institutions were invited.",
+          "The NCERT acknowledges the valuable views and inputs given by subject experts—Shailesh A. Shirali, Director, Teacher Education Program, a Valley School, KFI; Sadik Ali Shaikh, Head, Department of Mathematics, Maulana Azad College of Arts, Science and Commerce, Aurangabad, Maharashtra; Jaspal Kaur, T",
+          "The Council acknowledges the efforts of Nidhi M. Shastri and Bhawana Upadhyay from the Programme Office.",
+          "The page number design draws inspiration from the Prime Climb game by Math For Love. The Council acknowledges Chaitanya Dev and Ramu MS for providing the pictures of the Decimal Coinage stamps.",
+          "The Council acknowledges the academic and administrative support of Sunita Farkya, Professor and Head, DESM, NCERT, New Delhi.",
+          "The Council appreciates the contributions of Sushmita Joshi, Senior Research Associate; Manju Mhar, Senior Research Associate; Department of Education in Science and Mathematics, NCERT, for providing support in the development of the textbook.",
+          "The contribution of Ilma Nasir, Editor (contractual); Aastha Sharma, Editorial Assistant (contractual); Adiba Tasneem, Jatinder Kumar and Talha Faisal Khan, Proofreaders (contractual), Publication Division is also appreciated. The NCERT gratefully acknowledges the contributions of Pawan Kumar Barria"
+        ],
+        "concepts": [
+          "National Council of Educational Research and Training (NCERT)",
+          "Chairperson",
+          "Curricular Area Group (CAG)",
+          "Mathematics",
+          "Subject experts",
+          "Workshops",
+          "Textbook development",
+          "NCERT",
+          "Programme Office",
+          "Decimal Coinage stamps",
+          "Prime Climb game",
+          "Math For Love",
+          "Department of Education in Science and Mathematics",
+          "Publication Division",
+          "DTP Cell",
+          "DTP Operator"
+        ],
+        "context_relation": "acknowledgment",
+        "limitations": [
+          "No specific limitations mentioned.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dab3bf60a49dce2d51001ffc",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gegp1",
+      "source_pdf_sha256": "066775a2d0cd300d0cf629e59bcd54fae094511461ab3210ce4ce2cfbc789314",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "381faef3e8163c7f7320d145fc82fb16a6efe591259c62eb93a275456c646cdc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:27:53Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7653c083f5c25232cc3d5f6a",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gegp1",
+      "source_pdf_sha256": "066775a2d0cd300d0cf629e59bcd54fae094511461ab3210ce4ce2cfbc789314",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "381faef3e8163c7f7320d145fc82fb16a6efe591259c62eb93a275456c646cdc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:28:05Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4e9be77d2941741a9a459dd8",
+      "asset_sha256": "0f959ca2028afc7f5cfdfd832cec13f8a45f6c4acd70e8bd617179074ab00c54",
+      "source_book_id": "ncert-c7-english-gegp1",
+      "source_pdf_sha256": "066775a2d0cd300d0cf629e59bcd54fae094511461ab3210ce4ce2cfbc789314",
+      "source_pdf_page_number": 11,
+      "asset_path": "page-0011.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "381faef3e8163c7f7320d145fc82fb16a6efe591259c62eb93a275456c646cdc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Note to the Teacher section of a mathematics textbook.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "NOTE TO THE TEACHER",
+          "We hope that this book, Ganita Prakash, will serve as a strong support and",
+          "guide to you in achieving the exciting task that you have before you: that of",
+          "passing on the joy of learning the beautiful subject of Mathematics to the next",
+          "generation.",
+          "This task calls for providing a fertile environment that allows for the",
+          "flowering of mathematical thinking in the minds of students. Classrooms,",
+          "where students just listen and write down whatever is being told to them or",
+          "written on the board, are deficient in the conditions required for learning",
+          "mathematics. Instead, classro",
+          "Students should also be posing problems to each other and discussing possible",
+          "solutions with each other. In fact, these are the very conditions that have",
+          "led to the development of the entire field of mathematics so far, and so one",
+          "cannot expect students to pick up mathematical thinking and understanding",
+          "without these conditions.",
+          "Fortunately, it is not difficult to create such conditions in the classroom. It",
+          "just requires an interesting question, problem, pattern, or challenge to be",
+          "thrown open to the students on a regular basis, and sufficient time to be given",
+          "to them to play with, discuss, and work on it as a class or in pairs or groups.",
+          "Along with it, an environment that accepts mistakes and acknowledges",
+          "their importance in learning needs to be nurtured.",
+          "While creating the spark for initiating mathematical thinking in",
+          "classrooms is not difficult, sustaining it may be challenging and may involve",
+          "efforts from your side. Nevertheless, even if just the first part of throwing",
+          "open a question, problem, pattern, or challenge is done at least once or twice",
+          "a week, accompanied by sufficient waiting time from your side for students",
+          "to play, discuss, and work on it, it can have a great positive impact on how the",
+          "students view and approach mathematics.",
+          "It should be noted that this positive impact will not happen overnight. That",
+          "takes time and depends on various factors such as the number of opportunities"
+        ],
+        "concepts": [
+          "Note to the Teacher",
+          "Ganita Prakash",
+          "Mathematics",
+          "Classrooms",
+          "Mathematical thinking",
+          "Problem solving",
+          "Patience",
+          "Encouragement",
+          "Owl mascot"
+        ],
+        "context_relation": "The note to the teacher provides guidance and advice for educators on how to create a conducive environment for students to develop mathematical thinking and problem-solving skills.",
+        "limitations": [
+          "The note does not provide specific strategies or activities for teaching mathematics.",
+          "The note does not include examples or exercises for students to practice the concepts.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:31:52Z",
+      "effective_analysis": {
+        "visual_summary": "Note to the Teacher section of a mathematics textbook.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "NOTE TO THE TEACHER",
+          "We hope that this book, Ganita Prakash, will serve as a strong support and",
+          "guide to you in achieving the exciting task that you have before you: that of",
+          "passing on the joy of learning the beautiful subject of Mathematics to the next",
+          "generation.",
+          "This task calls for providing a fertile environment that allows for the",
+          "flowering of mathematical thinking in the minds of students. Classrooms,",
+          "where students just listen and write down whatever is being told to them or",
+          "written on the board, are deficient in the conditions required for learning",
+          "mathematics. Instead, classro",
+          "Students should also be posing problems to each other and discussing possible",
+          "solutions with each other. In fact, these are the very conditions that have",
+          "led to the development of the entire field of mathematics so far, and so one",
+          "cannot expect students to pick up mathematical thinking and understanding",
+          "without these conditions.",
+          "Fortunately, it is not difficult to create such conditions in the classroom. It",
+          "just requires an interesting question, problem, pattern, or challenge to be",
+          "thrown open to the students on a regular basis, and sufficient time to be given",
+          "to them to play with, discuss, and work on it as a class or in pairs or groups.",
+          "Along with it, an environment that accepts mistakes and acknowledges",
+          "their importance in learning needs to be nurtured.",
+          "While creating the spark for initiating mathematical thinking in",
+          "classrooms is not difficult, sustaining it may be challenging and may involve",
+          "efforts from your side. Nevertheless, even if just the first part of throwing",
+          "open a question, problem, pattern, or challenge is done at least once or twice",
+          "a week, accompanied by sufficient waiting time from your side for students",
+          "to play, discuss, and work on it, it can have a great positive impact on how the",
+          "students view and approach mathematics.",
+          "It should be noted that this positive impact will not happen overnight. That",
+          "takes time and depends on various factors such as the number of opportunities"
+        ],
+        "concepts": [
+          "Note to the Teacher",
+          "Ganita Prakash",
+          "Mathematics",
+          "Classrooms",
+          "Mathematical thinking",
+          "Problem solving",
+          "Patience",
+          "Encouragement",
+          "Owl mascot"
+        ],
+        "context_relation": "The note to the teacher provides guidance and advice for educators on how to create a conducive environment for students to develop mathematical thinking and problem-solving skills.",
+        "limitations": [
+          "The note does not provide specific strategies or activities for teaching mathematics.",
+          "The note does not include examples or exercises for students to practice the concepts.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d7b7c1d8f694434fa3702156",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gegp1",
+      "source_pdf_sha256": "066775a2d0cd300d0cf629e59bcd54fae094511461ab3210ce4ce2cfbc789314",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "661e7c8c92fc33a4d527aba7dedcd95aa00efdcac636430bfc97dc8a5ed2cc09",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of providing sufficient problems for students to develop their mathematical thinking and understanding of concepts, while also emphasizing the need for students to engage in exploratory problems to strengthen procedural fluency and promote problem-solving skills.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "To develop students’ mathematical thinking and understanding of concepts, a sufficient number of problems are given. Trying to “cover” all of them must not happen at the cost of students not getting to spend quality time on playing with and discussing them.",
+          "It is important to understand that the exploratory problems are not only for promoting problem solving skills; they also serve in strengthening procedural fluency when children start engaging in exploration.",
+          "Efforts must be made in making students independent learners. One essential aspect required for this is an ability to re"
+        ],
+        "concepts": [
+          "mathematical thinking",
+          "understanding of concepts",
+          "procedural fluency",
+          "problem-solving skills",
+          "exploratory problems",
+          "independent learners"
+        ],
+        "context_relation": "The text discusses the importance of providing sufficient problems for students to develop their mathematical thinking and understanding, while also emphasizing the need for students to engage in exploratory problems to strengthen procedural fluency and promote problem-solving skills.",
+        "limitations": [
+          "The text does not provide specific examples or illustrations to support the points made."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:32:30Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of providing sufficient problems for students to develop their mathematical thinking and understanding of concepts, while also emphasizing the need for students to engage in exploratory problems to strengthen procedural fluency and promote problem-solving skills.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "To develop students’ mathematical thinking and understanding of concepts, a sufficient number of problems are given. Trying to “cover” all of them must not happen at the cost of students not getting to spend quality time on playing with and discussing them.",
+          "It is important to understand that the exploratory problems are not only for promoting problem solving skills; they also serve in strengthening procedural fluency when children start engaging in exploration.",
+          "Efforts must be made in making students independent learners. One essential aspect required for this is an ability to re"
+        ],
+        "concepts": [
+          "mathematical thinking",
+          "understanding of concepts",
+          "procedural fluency",
+          "problem-solving skills",
+          "exploratory problems",
+          "independent learners"
+        ],
+        "context_relation": "The text discusses the importance of providing sufficient problems for students to develop their mathematical thinking and understanding, while also emphasizing the need for students to engage in exploratory problems to strengthen procedural fluency and promote problem-solving skills.",
+        "limitations": [
+          "The text does not provide specific examples or illustrations to support the points made."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5b9a59bbbb0f9bfe44aa34df",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gegp1",
+      "source_pdf_sha256": "066775a2d0cd300d0cf629e59bcd54fae094511461ab3210ce4ce2cfbc789314",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "661e7c8c92fc33a4d527aba7dedcd95aa00efdcac636430bfc97dc8a5ed2cc09",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:32:42Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "79f44ec75458f717ea82ebf2",
+      "asset_sha256": "f443fc3646bda2fd22a47e766634b1b2e532bbae7e0134126dd7b8d48122bf6b",
+      "source_book_id": "ncert-c7-english-gegp1",
+      "source_pdf_sha256": "066775a2d0cd300d0cf629e59bcd54fae094511461ab3210ce4ce2cfbc789314",
+      "source_pdf_page_number": 12,
+      "asset_path": "page-0012.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "661e7c8c92fc33a4d527aba7dedcd95aa00efdcac636430bfc97dc8a5ed2cc09",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of exploratory problems in developing students' mathematical thinking and understanding of concepts.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "To develop students’ mathematical thinking and understanding of",
+          "concepts, a sufficient number of problems are given. Trying to “cover” all",
+          "of them must not happen at the cost of students not getting to spend quality",
+          "time on playing with and discussing them.",
+          "It is important to understand that the exploratory problems are not",
+          "only for promoting problem solving skills; they also serve in strengthening",
+          "procedural fluency when children start engaging in exploration.",
+          "Efforts must be made in making students independent learners. One",
+          "essential aspect required for this is an ability to read and understand",
+          "mathematical text. To promote this skill, students should be encouraged to",
+          "read the book by themselves and in groups. Give opportunities to them to",
+          "interpret what they read and express it to others. This will also address the",
+          "big problem that students face in speaking mathematics and interpreting",
+          "word problems.",
+          "This book contains a number of open-ended problems. It also contains",
+          "new treatments of certain concepts. If you are not able to solve them or",
+          "follow some of them immediately, it is perfectly okay! Not everyone knows",
+          "everything. Along with trying to understand and reflect upon such content,",
+          "it will be very useful to take it to the classroom and open it up for discussion.",
+          "After the discussion, things that are clear and those that are not yet clear",
+          "can be clearly summarised. This process itself can throw a lot of light on the",
+          "content.",
+          "In these discussions, you can participate as a fellow seeker, and when",
+          "students see a teacher seek and think to understand something, it sets a",
+          "wonderful example for them.",
+          "It is hoped that you and your students will have a great and fruitful time",
+          "using this book!",
+          "Summary of Key Points",
+          "Time for Exploration",
+          "1. It is important to routinely pose new problems, questions, patterns, or"
+        ],
+        "concepts": [
+          "mathematical thinking",
+          "understanding of concepts",
+          "exploratory problems",
+          "problem solving skills",
+          "procedural fluency",
+          "independent learners",
+          "reading and understanding mathematical text",
+          "open-ended problems",
+          "new treatments of certain concepts",
+          "discussions",
+          "environment that accepts mistakes and acknowledges their importance in learning",
+          "culture where students pose problems to each other",
+          "ways to approach the problems",
+          "exploratory problems in the book",
+          "problem solving",
+          "procedural fluency when children start engaging in exploration"
+        ],
+        "context_relation": "The page discusses the importance of exploratory problems in developing students' mathematical thinking and understanding of concepts.",
+        "limitations": [
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:36:25Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of exploratory problems in developing students' mathematical thinking and understanding of concepts.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "To develop students’ mathematical thinking and understanding of",
+          "concepts, a sufficient number of problems are given. Trying to “cover” all",
+          "of them must not happen at the cost of students not getting to spend quality",
+          "time on playing with and discussing them.",
+          "It is important to understand that the exploratory problems are not",
+          "only for promoting problem solving skills; they also serve in strengthening",
+          "procedural fluency when children start engaging in exploration.",
+          "Efforts must be made in making students independent learners. One",
+          "essential aspect required for this is an ability to read and understand",
+          "mathematical text. To promote this skill, students should be encouraged to",
+          "read the book by themselves and in groups. Give opportunities to them to",
+          "interpret what they read and express it to others. This will also address the",
+          "big problem that students face in speaking mathematics and interpreting",
+          "word problems.",
+          "This book contains a number of open-ended problems. It also contains",
+          "new treatments of certain concepts. If you are not able to solve them or",
+          "follow some of them immediately, it is perfectly okay! Not everyone knows",
+          "everything. Along with trying to understand and reflect upon such content,",
+          "it will be very useful to take it to the classroom and open it up for discussion.",
+          "After the discussion, things that are clear and those that are not yet clear",
+          "can be clearly summarised. This process itself can throw a lot of light on the",
+          "content.",
+          "In these discussions, you can participate as a fellow seeker, and when",
+          "students see a teacher seek and think to understand something, it sets a",
+          "wonderful example for them.",
+          "It is hoped that you and your students will have a great and fruitful time",
+          "using this book!",
+          "Summary of Key Points",
+          "Time for Exploration",
+          "1. It is important to routinely pose new problems, questions, patterns, or"
+        ],
+        "concepts": [
+          "mathematical thinking",
+          "understanding of concepts",
+          "exploratory problems",
+          "problem solving skills",
+          "procedural fluency",
+          "independent learners",
+          "reading and understanding mathematical text",
+          "open-ended problems",
+          "new treatments of certain concepts",
+          "discussions",
+          "environment that accepts mistakes and acknowledges their importance in learning",
+          "culture where students pose problems to each other",
+          "ways to approach the problems",
+          "exploratory problems in the book",
+          "problem solving",
+          "procedural fluency when children start engaging in exploration"
+        ],
+        "context_relation": "The page discusses the importance of exploratory problems in developing students' mathematical thinking and understanding of concepts.",
+        "limitations": [
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0a4f91ea175e0f31fa62fa50",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gegp1",
+      "source_pdf_sha256": "066775a2d0cd300d0cf629e59bcd54fae094511461ab3210ce4ce2cfbc789314",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4ae3561519d0ed06e409592d5ddfbfbeeb7f2db6769210a93da6df1ca2c61687",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:36:38Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6df59114233624a78f0d13bb",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gegp1",
+      "source_pdf_sha256": "066775a2d0cd300d0cf629e59bcd54fae094511461ab3210ce4ce2cfbc789314",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4ae3561519d0ed06e409592d5ddfbfbeeb7f2db6769210a93da6df1ca2c61687",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:36:51Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "29c9b7d8d835e9f4844eba84",
+      "asset_sha256": "7fbad628a2424d5ec514c6293286e685ec1da962318f221b7c30362015aaac40",
+      "source_book_id": "ncert-c7-english-gegp1",
+      "source_pdf_sha256": "066775a2d0cd300d0cf629e59bcd54fae094511461ab3210ce4ce2cfbc789314",
+      "source_pdf_page_number": 13,
+      "asset_path": "page-0013.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "4ae3561519d0ed06e409592d5ddfbfbeeb7f2db6769210a93da6df1ca2c61687",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing reading and understanding content, with a focus on encouraging students to read and discuss the material.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "2.  Trying to ‘cover’ all the problems in the book must not happen at the cost of students not getting to spend quality time on playing with, discussing, and solving them.",
+          "Reading",
+          "1.  Encourage students to read the book by themselves and in groups.",
+          "2.  Give opportunities to them to interpret what they read and to express it to others.",
+          "Right of Not Knowing!",
+          "1.  It is perfectly okay if some of the content is not understood immediately. Along with trying to understand and reflect upon such content, it can also be taken to the classroom and opened up for discussion. After the discussion, things that are clear and those that are not yet clear can be clearl",
+          "2.  Learning is a continual process. Indeed, there is so much in mathematics that is still not known and requires further exploration!"
+        ],
+        "concepts": [
+          "Reading",
+          "Understanding",
+          "Discussion",
+          "Right of Not Knowing",
+          "Continual Process",
+          "Mathematics"
+        ],
+        "context_relation": "The page discusses strategies for teaching and learning, emphasizing the importance of encouraging students to read and discuss the material, and acknowledging that some content may not be understood immediately.",
+        "limitations": [
+          "The page does not provide specific examples or activities for implementing the strategies discussed.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:39:56Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing reading and understanding content, with a focus on encouraging students to read and discuss the material.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "2.  Trying to ‘cover’ all the problems in the book must not happen at the cost of students not getting to spend quality time on playing with, discussing, and solving them.",
+          "Reading",
+          "1.  Encourage students to read the book by themselves and in groups.",
+          "2.  Give opportunities to them to interpret what they read and to express it to others.",
+          "Right of Not Knowing!",
+          "1.  It is perfectly okay if some of the content is not understood immediately. Along with trying to understand and reflect upon such content, it can also be taken to the classroom and opened up for discussion. After the discussion, things that are clear and those that are not yet clear can be clearl",
+          "2.  Learning is a continual process. Indeed, there is so much in mathematics that is still not known and requires further exploration!"
+        ],
+        "concepts": [
+          "Reading",
+          "Understanding",
+          "Discussion",
+          "Right of Not Knowing",
+          "Continual Process",
+          "Mathematics"
+        ],
+        "context_relation": "The page discusses strategies for teaching and learning, emphasizing the importance of encouraging students to read and discuss the material, and acknowledging that some content may not be understood immediately.",
+        "limitations": [
+          "The page does not provide specific examples or activities for implementing the strategies discussed.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
