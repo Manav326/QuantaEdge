@@ -90,6 +90,10 @@ class CourseMarketplaceTenantScopeTest {
     assertTrue(catalogueSql.contains("release.release_state='SHAREABLE'"));
     assertTrue(catalogueSql.contains("course_release_fingerprint_current(release.program_id,release.content_fingerprint::text,release.updated_at)"));
     assertTrue(catalogueSql.contains("course_marketplace_content_type_ready(release.program_id)"));
+    assertTrue(catalogueSql.contains("qe_same_logical_course(e.program_id,p.id)"),
+        "A learner who owns an earlier content version must not be offered a second purchase.");
+    assertTrue(catalogueSql.contains("qe_same_logical_course(cp.course_id,p.id)"),
+        "Purchase history must be compared by stable logical course identity.");
     assertTrue(catalogueSql.contains("newer_release.release_state='SHAREABLE'"));
     assertTrue(!catalogueSql.contains("not exists(select 1 from institution_membership"));
     assertTrue(List.of(catalogueArgs).contains(17L));
