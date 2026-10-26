@@ -848,6 +848,7 @@ export default function FinancePage(){
       </section>}
       {tab==='tax'&&<section className={styles.twoCol}>
         <div className={styles.panel}><h2>Offer tax profile</h2><p>Enter only the service classification and rates approved for this exact seller and sale. No default GST rate is preselected.</p>
+          {catalog && catalog.offers.length===0 && <p className={styles.empty}>No course offer is available to configure yet. Create the listing draft in HRMS course launch after the course identity, current release, rights, and quality checks pass. <a href="/institutions">Open HRMS course launch</a>.</p>}
           <form className={styles.form} onSubmit={createTaxProfile}>
             <label>Course offer<select required value={taxForm.offerId} onChange={e=>setTaxForm(v=>({...v,offerId:e.target.value}))}><option value="">Select offer</option>{catalog.offers.map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_code} · Content v{o.content_version_no} · Submission {o.release_version} · {offerLifecycleLabel(o)} · {o.offer_status}</option>)}</select></label>
             <label>Legal seller<select required value={taxForm.legalEntityId} onChange={e=>setTaxForm(v=>({...v,legalEntityId:e.target.value}))}><option value="">Select legal entity</option>{catalog.legalEntities.map(e=><option key={e.id} value={e.id}>{e.legal_name} · {e.status}</option>)}</select></label>
