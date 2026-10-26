@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 22,
+    "assets_selected": 26,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "a91ecbf45382c91a28c24308",
-      "44f00bf0322a2370c36393eb",
-      "96f45faebbc426ca408bf89b",
-      "d5f22109a4917326d61ceac2",
-      "11b4d7105811ec5c404df3b0"
+      "d5cf9a3c25605afba2a1273d",
+      "37c22923229fd1286a5c4eb4",
+      "7c109bd99e69fbc52b38c74d",
+      "cf661714386782d6cebacb32",
+      "eef36990c83b54d152a9016a"
     ],
     "assets_eligible": 1946,
-    "assets_analyzed": 21,
-    "assets_remaining": 1925,
-    "assets_completion_percent": 1.1,
-    "assets_failed": 9,
-    "assets_skipped_from_checkpoint": 17,
+    "assets_analyzed": 24,
+    "assets_remaining": 1922,
+    "assets_completion_percent": 1.2,
+    "assets_failed": 11,
+    "assets_skipped_from_checkpoint": 21,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -836,6 +836,124 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413175682",
       "checkpointed_at": "2026-10-26T23:40:58Z"
+    },
+    {
+      "asset_id": "d5cf9a3c25605afba2a1273d",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-hindi-hhgp1",
+      "source_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "45aa705d163f169cb5dce936ac9c7f9e604abd4d5eee41e425fc60e44704575f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:41:40Z"
+    },
+    {
+      "asset_id": "37c22923229fd1286a5c4eb4",
+      "asset_sha256": "e49962b3ba09393f5cee69d198a566c8da3c4a66a96c33597f7c2c69aeb60148",
+      "page_text_context_sha256": "45aa705d163f169cb5dce936ac9c7f9e604abd4d5eee41e425fc60e44704575f",
+      "source_book_id": "ncert-c8-hindi-hhgp1",
+      "source_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+      "source_pdf_page_number": 7,
+      "asset_path": "page-0007.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "7c109bd99e69fbc52b38c74d",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "page_text_context_sha256": "5c243f5a9a0451cde3f9d344206e229875443bd166445af5d32ca04290c7a255",
+      "source_book_id": "ncert-c8-hindi-hhgp1",
+      "source_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "cf661714386782d6cebacb32",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-hindi-hhgp1",
+      "source_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5c243f5a9a0451cde3f9d344206e229875443bd166445af5d32ca04290c7a255",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Red ink splatter across the page.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear content or message due to the visual"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:48:55Z"
+    },
+    {
+      "asset_id": "eef36990c83b54d152a9016a",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-hindi-hhgp1",
+      "source_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5c243f5a9a0451cde3f9d344206e229875443bd166445af5d32ca04290c7a255",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:49:28Z"
     }
   ]
 }
