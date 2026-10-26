@@ -162,7 +162,7 @@ jobs:
   prepare:
     needs: [plan]
     if: needs.plan.result == 'success' && needs.plan.outputs.matrix != '[]'
-    name: Prepare full bilingual Class ${{ matrix.class_no }} candidate set - ${{ matrix.book_slug }} Prepare full bilingual Class ${{ matrix.class_no }} candidate set
+    name: Prepare full bilingual Class ${{ matrix.class_no }} candidate set - ${{ matrix.book_slug }}
     outputs:
       yielded: ${{ steps.layer45_run.outputs.yielded || 'false' }}
     strategy:
