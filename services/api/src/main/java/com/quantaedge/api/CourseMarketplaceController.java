@@ -1679,7 +1679,7 @@ public class CourseMarketplaceController {
           coalesce(nullif(o.title_override,''),p.display_name) as course_title
         from institution_marketplace_offer o
         join curriculum_program p on p.id=o.course_id
-        where o.id=? and o.institution_id=? and o.course_id=? and o.status='PUBLISHED'
+        where o.id=? and o.institution_id=? and o.course_id=?
         """,offerId,institutionId,((Number)order.get("course_id")).longValue());
     if(offers.size()!=1) {
       throw new org.springframework.web.server.ResponseStatusException(
@@ -1713,19 +1713,59 @@ public class CourseMarketplaceController {
       throw new IllegalStateException("The saved order creation time is invalid; historical financial terms cannot be resolved.",exception);
     }
     Object buyerRaw=order.get("buyer_snapshot_json");
-    if(buyerRaw==null||String.valueOf(buyerRaw).isBlank()||"{}".equals(String.valueOf(buyerRaw).trim())) {
-      throw new org.springframework.web.server.ResponseStatusException(
-          org.springframework.http.HttpStatus.CONFLICT,
-          "The original buyer/billing snapshot is missing. It cannot be replaced with today's profile; finance must review this order.");
-    }
     Map<String,Object> buyerSnapshot;
-    try {
-      buyerSnapshot=objectMapper.readValue(String.valueOf(buyerRaw),
-          new com.fasterxml.jackson.core.type.TypeReference<Map<String,Object>>(){});
-    } catch(Exception exception) {
-      throw new org.springframework.web.server.ResponseStatusException(
-          org.springframework.http.HttpStatus.CONFLICT,
-          "The original buyer/billing snapshot cannot be read safely. Finance must review this order.",exception);
+    boolean reconstructedBuyerSnapshot=false;
+    if(buyerRaw==null||String.valueOf(buyerRaw).isBlank()
+        ||"{}".equals(String.valueOf(buyerRaw).trim())
+        ||"null".equalsIgnoreCase(String.valueOf(buyerRaw).trim())) {
+      if(!mayReconstructMissingBuyerSnapshotForTestMode(order,isRazorpayTestModeKey(keyId))) {
+        throw new org.springframework.web.server.ResponseStatusException(
+            org.springframework.http.HttpStatus.CONFLICT,
+            "The original buyer/billing snapshot is missing. Automatic reconstruction is restricted to test-mode orders with no discount facts; finance must review this order.");
+      }
+      if(!(order.get("student_id") instanceof Number beneficiaryId)) {
+        throw new org.springframework.web.server.ResponseStatusException(
+            org.springframework.http.HttpStatus.CONFLICT,
+            "The saved order has no beneficiary identity for a test-mode billing snapshot recovery.");
+      }
+      Long buyerAccountId=order.get("purchaser_user_id") instanceof Number purchaser
+          ? purchaser.longValue() : null;
+      if(buyerAccountId==null) {
+        List<Map<String,Object>> linkedAccounts=jdbc.queryForList("""
+            select user_account_id from student where id=? and active=true
+            """,beneficiaryId.longValue());
+        if(linkedAccounts.size()!=1
+            ||!(linkedAccounts.getFirst().get("user_account_id") instanceof Number linkedUser)) {
+          throw new org.springframework.web.server.ResponseStatusException(
+              org.springframework.http.HttpStatus.CONFLICT,
+              "The original student checkout cannot be linked to one active purchaser account. Finance must review this order.");
+        }
+        buyerAccountId=linkedUser.longValue();
+      }
+      try {
+        buyerSnapshot=billingProfileSnapshot(buyerAccountId,beneficiaryId.longValue(),null);
+        requireCompleteBillingSnapshot(buyerSnapshot);
+      } catch(RuntimeException billingProfileFailure) {
+        throw new org.springframework.web.server.ResponseStatusException(
+            org.springframework.http.HttpStatus.CONFLICT,
+            "The legacy test order has no complete active billing profile to reconstruct its buyer snapshot. Complete the purchaser billing profile before HRMS retries reconciliation.",
+            billingProfileFailure);
+      }
+      buyerSnapshot.put("snapshotRecovery",Map.of(
+          "mode","TEST_MODE_HRMS_RECONCILIATION",
+          "source","CURRENT_ACTIVE_BILLING_PROFILE",
+          "reconstructedAt",java.time.OffsetDateTime.now(java.time.ZoneOffset.UTC).toString(),
+          "historicalBuyerSnapshotAvailable",false));
+      reconstructedBuyerSnapshot=true;
+    } else {
+      try {
+        buyerSnapshot=objectMapper.readValue(String.valueOf(buyerRaw),
+            new com.fasterxml.jackson.core.type.TypeReference<Map<String,Object>>(){});
+      } catch(Exception exception) {
+        throw new org.springframework.web.server.ResponseStatusException(
+            org.springframework.http.HttpStatus.CONFLICT,
+            "The original buyer/billing snapshot cannot be read safely. Finance must review this order.",exception);
+      }
     }
     Object addressRaw=buyerSnapshot.get("billingAddress");
     if(!(addressRaw instanceof Map<?,?> address)) {
@@ -1799,17 +1839,24 @@ public class CourseMarketplaceController {
     recovery.put("originalOrderCreatedAt",createdAt.toString());
     recovery.put("reconstructedAt",java.time.OffsetDateTime.now(java.time.ZoneOffset.UTC).toString());
     recovery.put("basis",repairBasis);
-    recovery.put("validation","Exact saved provider order amount/currency; no discount facts; original buyer snapshot preserved.");
+    recovery.put("buyerSnapshotSource",reconstructedBuyerSnapshot
+        ? "CURRENT_ACTIVE_BILLING_PROFILE_TEST_MODE_RECOVERY" : "ORIGINAL_ORDER_SNAPSHOT");
+    recovery.put("validation","Exact saved provider order amount/currency; no discount facts; "
+        +(reconstructedBuyerSnapshot
+            ? "current active purchaser billing profile was used only for TEST-mode recovery."
+            : "original buyer snapshot preserved."));
     recovery.put("testModeOnly",true);
     taxSnapshot.put("snapshotRecovery",recovery);
     shareSnapshot.put("snapshotRecovery",recovery);
     String taxJson;
     String shareJson;
     String discountJson;
+    String buyerJson;
     try {
       taxJson=objectMapper.writeValueAsString(taxSnapshot);
       shareJson=objectMapper.writeValueAsString(shareSnapshot);
       discountJson=objectMapper.writeValueAsString(snapshot.discountSnapshot());
+      buyerJson=objectMapper.writeValueAsString(buyerSnapshot);
     } catch(JsonProcessingException exception) {
       throw new IllegalStateException("The validated financial recovery snapshots could not be serialized.",exception);
     }
@@ -1818,20 +1865,21 @@ public class CourseMarketplaceController {
           listed_price_paise=?,discount_offer_id=null,discount_amount_paise=0,discount_reference=null,
           discount_snapshot=?::jsonb,tax_profile_id=?,taxable_value_paise=?,output_tax_paise=?,
           tax_calculation_snapshot=?::jsonb,revenue_share_policy_id=?,revenue_share_policy_snapshot=?::jsonb,
-          updated_at=now()
+          buyer_snapshot=?::jsonb,updated_at=now()
         where id=? and institution_id=? and status in ('PENDING','EXPIRED')
           and provider_order_id=? and offer_price_paise=? and upper(currency)=upper(?)
           and discount_offer_id is null and coalesce(discount_amount_paise,0)=0
           and nullif(btrim(discount_reference),'') is null
+          and (buyer_snapshot is null or buyer_snapshot='{}'::jsonb or buyer_snapshot=?::jsonb)
           and (tax_profile_id is null or revenue_share_policy_id is null or not (
             tax_calculation_snapshot ? 'customerPayablePaise'
             and tax_calculation_snapshot ? 'taxProfileId'
             and revenue_share_policy_snapshot ? 'policyId'
-            and revenue_share_policy_snapshot ? 'recipients'))
+            and jsonb_typeof(revenue_share_policy_snapshot->'recipients')='array'))
         """,snapshot.listedPricePaise(),discountJson,snapshot.taxProfileId(),
         snapshot.taxableValuePaise(),snapshot.outputTaxPaise(),taxJson,
-        snapshot.revenueSharePolicyId(),shareJson,orderId,institutionId,
-        String.valueOf(order.get("provider_order_id")),savedPayable,savedCurrency);
+        snapshot.revenueSharePolicyId(),shareJson,buyerJson,orderId,institutionId,
+        String.valueOf(order.get("provider_order_id")),savedPayable,savedCurrency,buyerJson);
     if(updated!=1) {
       throw new org.springframework.web.server.ResponseStatusException(
           org.springframework.http.HttpStatus.CONFLICT,
@@ -1842,6 +1890,20 @@ public class CourseMarketplaceController {
 
   static boolean isRazorpayTestModeKey(String keyId) {
     return keyId!=null && keyId.trim().matches("^rzp_test_[A-Za-z0-9]+$");
+  }
+
+  /**
+   * The current billing address may stand in for missing historical buyer facts only for a
+   * test-mode legacy order with no discount facts. Live orders and discounted sales are never
+   * reconstructed from mutable current profile data.
+   */
+  static boolean mayReconstructMissingBuyerSnapshotForTestMode(
+      Map<String,Object> order,boolean testMode) {
+    if(!testMode||order==null||!hasNoDiscountFacts(order)) return false;
+    Object raw=order.get("buyer_snapshot_json");
+    return raw==null||String.valueOf(raw).isBlank()
+        ||"{}".equals(String.valueOf(raw).trim())
+        ||"null".equalsIgnoreCase(String.valueOf(raw).trim());
   }
 
   private Map<String,Object> providerPaymentDiagnostics(
