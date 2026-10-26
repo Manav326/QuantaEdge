@@ -11,16 +11,16 @@
     "assets_selected": 2291,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "aaac5bc43b143dcf6f9454ed",
-      "f7152a969f5d53cdb48fb17e",
-      "61f62c81d1cc65e877782dbc",
-      "69883c015cbfe046373e1e90",
-      "c973477a8cf682ca3f4db4ca"
+      "29c388b0161ccfef7bc70795",
+      "31799bfc832653ad96d51e7a",
+      "3e5f2690a39600293bea07b1",
+      "cb8980e629e9baa567aaf305",
+      "eb0689e2b6fd957746c0a575"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2286,
-    "assets_remaining": 5202,
-    "assets_completion_percent": 30.5,
+    "assets_analyzed": 2289,
+    "assets_remaining": 5199,
+    "assets_completion_percent": 30.6,
     "assets_failed": 32,
     "assets_skipped_from_checkpoint": 2286,
     "batch_limit": 5,
@@ -85857,7 +85857,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40252443393",
+      "run_id": "40277346366",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -86038,7 +86038,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40252443393",
+      "run_id": "40277346366",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -86485,6 +86485,104 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40252443393",
       "checkpointed_at": "2026-10-26T03:21:32Z"
+    },
+    {
+      "asset_id": "3e5f2690a39600293bea07b1",
+      "asset_sha256": "8735b77f04352779a083a0a05dc890b0e0bfaacc9be919c6a3b58086d1f3939b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/8735b77f04352779a083a0a05dc890b0e0bfaacc9be919c6a3b58086d1f3939b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3a8a26fd2f994b5fe96973ee6baef181b01066aa9e73a939c7f33ee3e6ce602",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a green and white object with a hook-like structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40277346366",
+      "checkpointed_at": "2026-10-26T08:05:20Z"
+    },
+    {
+      "asset_id": "cb8980e629e9baa567aaf305",
+      "asset_sha256": "26c8c9f5311c0d87c22e22a6a45f5455b069cf9c963adbed3bce9191c9211d7d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/26c8c9f5311c0d87c22e22a6a45f5455b069cf9c963adbed3bce9191c9211d7d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3a8a26fd2f994b5fe96973ee6baef181b01066aa9e73a939c7f33ee3e6ce602",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the behavior of sodium and its oxide, emphasizing the need to store sodium in kerosene to prevent reactions with oxygen and water.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Do you know that sodium is a metal which is stored in kerosene because it reacts vigorously with oxygen and water. A lot of heat is generated in the reaction. Storing sodium in kerosene prevents its exposure to moisture and air. Can you predict the nature of its oxide?",
+          "Let us now discuss some substances that do not behave like metals.",
+          "4.4 Substances that Behave Differently from"
+        ],
+        "concepts": [
+          "sodium",
+          "kerosene",
+          "reactivity",
+          "heat generation",
+          "oxide",
+          "metal",
+          "substances",
+          "behavior",
+          "diﬀ erent"
+        ],
+        "context_relation": "The page discusses the behavior of sodium and its oxide, emphasizing the need to store sodium in kerosene to prevent reactions with oxygen and water.",
+        "limitations": [
+          "The page does not provide specific details about the nature of sodium's oxide."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40277346366",
+      "checkpointed_at": "2026-10-26T08:07:09Z"
+    },
+    {
+      "asset_id": "eb0689e2b6fd957746c0a575",
+      "asset_sha256": "b6b8a5270961b50b5462fdc77ce57ee7513d7bb1710e2c133bbe61d56e098d77",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/b6b8a5270961b50b5462fdc77ce57ee7513d7bb1710e2c133bbe61d56e098d77.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3a8a26fd2f994b5fe96973ee6baef181b01066aa9e73a939c7f33ee3e6ce602",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A long, thin, black rod with a greenish object at the bottom.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Educational content related to chemistry and metal behavior",
+        "limitations": [
+          "No specific text or labels are provided in the image.",
+          "The image does not contain any equations or formulas.",
+          "The image does not depict any specific chemical reaction or process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40277346366",
+      "checkpointed_at": "2026-10-26T08:08:44Z"
     }
   ]
 }

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "cd83368d67cecc028f9f3398508da48e71e8551e17ada79ecbf1764e5a7ac64a",
+  "raw_analysis_sha256": "82991bcc01fd98a856bd9eacdb3911df304e4d0e762e8f4403ea7c4cb341d15c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -134918,7 +134918,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40252443393",
+      "run_id": "40277346366",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -135202,7 +135202,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40252443393",
+      "run_id": "40277346366",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -135898,6 +135898,154 @@
         "context_relation": "The page is discussing the behavior of substances that do not behave like metals, specifically focusing on sodium and its reaction with oxygen and water.",
         "limitations": [
           "The page does not provide specific details about the nature of sodium's oxide."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3e5f2690a39600293bea07b1",
+      "asset_sha256": "8735b77f04352779a083a0a05dc890b0e0bfaacc9be919c6a3b58086d1f3939b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/8735b77f04352779a083a0a05dc890b0e0bfaacc9be919c6a3b58086d1f3939b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3a8a26fd2f994b5fe96973ee6baef181b01066aa9e73a939c7f33ee3e6ce602",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a green and white object with a hook-like structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40277346366",
+      "checkpointed_at": "2026-10-26T08:05:20Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a green and white object with a hook-like structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cb8980e629e9baa567aaf305",
+      "asset_sha256": "26c8c9f5311c0d87c22e22a6a45f5455b069cf9c963adbed3bce9191c9211d7d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/26c8c9f5311c0d87c22e22a6a45f5455b069cf9c963adbed3bce9191c9211d7d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3a8a26fd2f994b5fe96973ee6baef181b01066aa9e73a939c7f33ee3e6ce602",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the behavior of sodium and its oxide, emphasizing the need to store sodium in kerosene to prevent reactions with oxygen and water.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Do you know that sodium is a metal which is stored in kerosene because it reacts vigorously with oxygen and water. A lot of heat is generated in the reaction. Storing sodium in kerosene prevents its exposure to moisture and air. Can you predict the nature of its oxide?",
+          "Let us now discuss some substances that do not behave like metals.",
+          "4.4 Substances that Behave Differently from"
+        ],
+        "concepts": [
+          "sodium",
+          "kerosene",
+          "reactivity",
+          "heat generation",
+          "oxide",
+          "metal",
+          "substances",
+          "behavior",
+          "diﬀ erent"
+        ],
+        "context_relation": "The page discusses the behavior of sodium and its oxide, emphasizing the need to store sodium in kerosene to prevent reactions with oxygen and water.",
+        "limitations": [
+          "The page does not provide specific details about the nature of sodium's oxide."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40277346366",
+      "checkpointed_at": "2026-10-26T08:07:09Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the behavior of sodium and its oxide, emphasizing the need to store sodium in kerosene to prevent reactions with oxygen and water.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Do you know that sodium is a metal which is stored in kerosene because it reacts vigorously with oxygen and water. A lot of heat is generated in the reaction. Storing sodium in kerosene prevents its exposure to moisture and air. Can you predict the nature of its oxide?",
+          "Let us now discuss some substances that do not behave like metals.",
+          "4.4 Substances that Behave Differently from"
+        ],
+        "concepts": [
+          "sodium",
+          "kerosene",
+          "reactivity",
+          "heat generation",
+          "oxide",
+          "metal",
+          "substances",
+          "behavior",
+          "diﬀ erent"
+        ],
+        "context_relation": "The page discusses the behavior of sodium and its oxide, emphasizing the need to store sodium in kerosene to prevent reactions with oxygen and water.",
+        "limitations": [
+          "The page does not provide specific details about the nature of sodium's oxide."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "eb0689e2b6fd957746c0a575",
+      "asset_sha256": "b6b8a5270961b50b5462fdc77ce57ee7513d7bb1710e2c133bbe61d56e098d77",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/b6b8a5270961b50b5462fdc77ce57ee7513d7bb1710e2c133bbe61d56e098d77.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3a8a26fd2f994b5fe96973ee6baef181b01066aa9e73a939c7f33ee3e6ce602",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A long, thin, black rod with a greenish object at the bottom.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Educational content related to chemistry and metal behavior",
+        "limitations": [
+          "No specific text or labels are provided in the image.",
+          "The image does not contain any equations or formulas.",
+          "The image does not depict any specific chemical reaction or process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40277346366",
+      "checkpointed_at": "2026-10-26T08:08:44Z",
+      "effective_analysis": {
+        "visual_summary": "A long, thin, black rod with a greenish object at the bottom.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Educational content related to chemistry and metal behavior",
+        "limitations": [
+          "No specific text or labels are provided in the image.",
+          "The image does not contain any equations or formulas.",
+          "The image does not depict any specific chemical reaction or process."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
