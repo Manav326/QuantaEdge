@@ -1,0 +1,273 @@
+{
+  "schema_version": "quantaedge.visual-analysis.v1",
+  "analysis_status": "DRAFT_VISION_ANALYSIS_ONLY",
+  "source_inventory": "visual-inventory.v1.json",
+  "source_book_id": "ncert-c6-hindi-fhcu1",
+  "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+  "model_provider": "ollama_local",
+  "model": "qwen2.5vl:3b",
+  "prompt_version": "visual-analysis-prompt-v2",
+  "summary": {
+    "assets_selected": 10,
+    "assets_processed_this_run": 10,
+    "assets_processed_ids": [
+      "ab33202203be03dde0a9ef0b",
+      "090c7c6e4fa75fba9d21a151",
+      "6e266e0ef8fd4b79ffe95de2",
+      "3bbb6204d27582b9a7a66e63",
+      "c200782cf967907d2dc18590",
+      "aba2922b694d55737d646b01",
+      "75ab63b0a03c01f0b07f54d1",
+      "a7886636aac4d51e34409e7c",
+      "d2e31466bb36169562767a93",
+      "4318a60a9dff8b828886642e"
+    ],
+    "assets_eligible": 2017,
+    "assets_analyzed": 5,
+    "assets_remaining": 2012,
+    "assets_completion_percent": 0.2,
+    "assets_failed": 5,
+    "assets_skipped_from_checkpoint": 0,
+    "batch_limit": 10,
+    "publication_allowed": false
+  },
+  "results": [
+    {
+      "asset_id": "ab33202203be03dde0a9ef0b",
+      "asset_sha256": "be9986f0445b09101f6c8c8e3bb6207c57be83da199ece8b8dc2a58aa3eac4d0",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/be9986f0445b09101f6c8c8e3bb6207c57be83da199ece8b8dc2a58aa3eac4d0.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2e6b72b2827d4b26d6cc477deef558f097cfad7a86fe27f8acd05deb6d235968",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A QR code with the text '0678' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0678"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code is likely related to educational content, possibly a link to a resource or information for students in Class 6.",
+        "limitations": [
+          "The QR code does not provide specific information about the content or subject matter."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:39:34Z"
+    },
+    {
+      "asset_id": "090c7c6e4fa75fba9d21a151",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "2e6b72b2827d4b26d6cc477deef558f097cfad7a86fe27f8acd05deb6d235968",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "6e266e0ef8fd4b79ffe95de2",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "page_text_context_sha256": "2e6b72b2827d4b26d6cc477deef558f097cfad7a86fe27f8acd05deb6d235968",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "3bbb6204d27582b9a7a66e63",
+      "asset_sha256": "72551692c64367cb8db35dfedd9457b93f7413b9022b18481b19486536b8a49b",
+      "page_text_context_sha256": "2e6b72b2827d4b26d6cc477deef558f097cfad7a86fe27f8acd05deb6d235968",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 1,
+      "asset_path": "page-0001.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "c200782cf967907d2dc18590",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 2,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cc527f105d2a46eab61ceec04435bf8c0e99fdd4ffda3ce57dffb247becc2360",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:57:03Z"
+    },
+    {
+      "asset_id": "aba2922b694d55737d646b01",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 2,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cc527f105d2a46eab61ceec04435bf8c0e99fdd4ffda3ce57dffb247becc2360",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:57:30Z"
+    },
+    {
+      "asset_id": "75ab63b0a03c01f0b07f54d1",
+      "asset_sha256": "c58c401cf6f498d83c2542d7aabbe6bbcd1ce41b11531f7ecf99ccaec874b99e",
+      "page_text_context_sha256": "cc527f105d2a46eab61ceec04435bf8c0e99fdd4ffda3ce57dffb247becc2360",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 2,
+      "asset_path": "page-0002.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "a7886636aac4d51e34409e7c",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 3,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9855e7f8a10a608daabbf2f2c75d23953087862195cf0825fb2b94093c3213c5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing national education policy and its objectives.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "आमुख",
+          "रााष्ट्रीय शिक्षा नीति (एन.ई.पी.) 2020 एक परिवर्तनकाारी पााठ्यचर्या और शैक्षणिक संरचना की अनुशंसा करती है जिसके मूल में भारतीय संस्कृति, सभ्यता और भारतीय ज्ञान परंपरा निहित है। यह नीति विद्यार्थियों को इक्कीसवीं सदी की संभावना और चुनौतियों के साथ रचनातमक रूप से जुड़ने के लिए ततयाार करती है। नई शिक्ष",
+          "नई शिक्षा नीति में निहितत चुनौतियों और सुझावों को आधार बनाते हुए विद्यालयी शिक्षा के लिए निर्मित राष्ट्रीय पााठ्यचर्या की रूपरेखा (एन.सी.एफ.एस.ई.) 2023 में सभी स्तरों के पााठ्यचर्या के ततयाार किया गया है। राष्ट्रीय पााठ्यचर्या 2023 काा"
+        ],
+        "concepts": [
+          "National Education Policy",
+          "National Curriculum",
+          "Objective of National Education Policy",
+          "National Curriculum 2023"
+        ],
+        "context_relation": "The page discusses the objectives and structure of the National Education Policy and the National Curriculum for the year 2023.",
+        "limitations": [
+          "The page does not provide specific details about the policy or curriculum.",
+          "The page does not include any visual aids or diagrams."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:05:45Z"
+    },
+    {
+      "asset_id": "d2e31466bb36169562767a93",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "page_text_context_sha256": "9855e7f8a10a608daabbf2f2c75d23953087862195cf0825fb2b94093c3213c5",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 3,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "4318a60a9dff8b828886642e",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 3,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9855e7f8a10a608daabbf2f2c75d23953087862195cf0825fb2b94093c3213c5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:08:07Z"
+    }
+  ]
+}

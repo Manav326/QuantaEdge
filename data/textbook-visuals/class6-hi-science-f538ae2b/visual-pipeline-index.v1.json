@@ -1,0 +1,28 @@
+{
+  "schema_version": "quantaedge.textbook-content-pipeline-index.v1",
+  "architecture_version": "8-layer-resumable-v1",
+  "class": 6,
+  "book_slug": "class6-hi-science-f538ae2b",
+  "source_book_id": "ncert-c6-hindi-fhcu1",
+  "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+  "layers": {
+    "1": "COMPLETE",
+    "2": "COMPLETE",
+    "3": "COMPLETE",
+    "4": "RUNNING",
+    "5": "RUNNING",
+    "6": "NOT_STARTED",
+    "7": "NOT_STARTED",
+    "8": "NOT_STARTED"
+  },
+  "inventory_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "tag": "inventory-layer1-class6-class6-hi-science-f538ae2b-shaaf6c738eed25-run-40413122029",
+    "tar_sha256": "a0cd421f435a97e7fbae0771b31da61dce91e9b84ba33789fca1ed1c92571ddf"
+  },
+  "analysis_path": "data/textbook-visuals/class6-hi-science-f538ae2b/visual-analysis-qwen2.5vl-3b.v1.json",
+  "effective_analysis_path": "data/textbook-content-pipeline/class-6/books/class6-hi-science-f538ae2b/visual-analysis-effective.v1.json",
+  "coverage_ledger_path": "data/textbook-content-pipeline/class-6/books/class6-hi-science-f538ae2b/coverage-ledger.v1.json",
+  "publication_allowed": false,
+  "human_review_required": true
+}
