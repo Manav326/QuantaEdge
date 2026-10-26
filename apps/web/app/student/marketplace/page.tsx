@@ -133,23 +133,23 @@ export default function StudentMarketplacePage() {
   const [status, setStatus] = useState('');
   const [pendingVerifies, setPendingVerifies] = useState<VerifyDraft[]>([]);
   const pendingVerifiesRef = useRef<VerifyDraft[]>([]);
-  function readPendingVerifies(): VerifyDraft[] {
+  const readPendingVerifies = useCallback((): VerifyDraft[] => {
     try {
       const raw = window.sessionStorage.getItem(PENDING_VERIFY_STORAGE_KEY);
       return raw ? parsePendingVerifyDrafts(raw) : pendingVerifiesRef.current;
     } catch {
       return pendingVerifiesRef.current;
     }
-  }
-  function savePendingVerify(draft: VerifyDraft) {
+  }, []);
+  const savePendingVerify = useCallback((draft: VerifyDraft) => {
     const next = [...readPendingVerifies().filter(item => item.localOrderId !== draft.localOrderId), draft];
     pendingVerifiesRef.current = next;
     setPendingVerifies(next);
     try { window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(next)); } catch {
       // In-memory recovery still works if browser storage is disabled.
     }
-  }
-  function clearPendingVerify(localOrderId: number) {
+  }, [readPendingVerifies]);
+  const clearPendingVerify = useCallback((localOrderId: number) => {
     const next = readPendingVerifies().filter(item => item.localOrderId !== localOrderId);
     pendingVerifiesRef.current = next;
     setPendingVerifies(next);
@@ -159,7 +159,7 @@ export default function StudentMarketplacePage() {
     } catch {
       // In-memory state remains authoritative for this page.
     }
-  }
+  }, [readPendingVerifies]);
   const [verifying, setVerifying] = useState(false);
   const [purchaseRequests, setPurchaseRequests] = useState<PurchaseRequestStatus[]>([]);
   const [billingAddresses, setBillingAddresses] = useState<BillingAddressRecord[]>([]);
@@ -261,7 +261,7 @@ export default function StudentMarketplacePage() {
       setVerifying(false);
       setBusyCourseId(null);
     }
-  }, [loadOffers, loadPurchaseRequests, router, english]);
+  }, [loadOffers, loadPurchaseRequests, router, english, savePendingVerify, clearPendingVerify]);
 
   const reconcilePurchase = useCallback(async (draft: VerifyDraft) => {
     setVerifying(true);
@@ -291,7 +291,7 @@ export default function StudentMarketplacePage() {
       setVerifying(false);
       setBusyCourseId(null);
     }
-  }, [loadOffers, loadPurchaseRequests, router, english]);
+  }, [loadOffers, loadPurchaseRequests, router, english, savePendingVerify, clearPendingVerify]);
 
   function requestCheckout(courseId: number) {
     if (billingAddressesLoading) {
