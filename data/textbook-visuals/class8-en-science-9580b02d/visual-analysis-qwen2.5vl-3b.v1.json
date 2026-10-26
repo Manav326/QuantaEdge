@@ -14,14 +14,14 @@
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "c2b2e5fd564b4373c697448c",
-      "b39874b32ad382ea536f63d5"
+      "ef23832285296eafbc08c48d",
+      "868ab7ba1ff6b9bd6235ecc8"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1298,
-    "assets_remaining": 993,
+    "assets_analyzed": 1299,
+    "assets_remaining": 992,
     "assets_completion_percent": 56.7,
-    "assets_failed": 14,
+    "assets_failed": 15,
     "assets_skipped_from_checkpoint": 1298,
     "batch_limit": 5,
     "publication_allowed": false
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40322832924",
-      "checkpointed_at": "2026-10-26T13:59:24Z"
+      "checkpointed_at": "2026-10-26T14:14:10Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40322832924",
-      "checkpointed_at": "2026-10-26T14:00:11Z"
+      "checkpointed_at": "2026-10-26T14:14:59Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40322832924",
-      "checkpointed_at": "2026-10-26T14:01:09Z"
+      "checkpointed_at": "2026-10-26T14:15:59Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -42966,6 +42966,49 @@
       "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "ef23832285296eafbc08c48d",
+      "asset_sha256": "4f0696a6dd790a5a7e48152276a28832f0d15a024fa430c4531dbe85b014ada8",
+      "page_text_context_sha256": "138180b5c5a208b01601e22239615e5e1561f3ee4a91e52fddddce77e51d1d7b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 105,
+      "asset_path": "page-0105.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40322832924",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "868ab7ba1ff6b9bd6235ecc8",
+      "asset_sha256": "6b948df3560bf2a987b62115c73a00525449adf3e02d3465b6e1ff805504676d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 106,
+      "asset_path": "assets/6b948df3560bf2a987b62115c73a00525449adf3e02d3465b6e1ff805504676d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f6aa5ef1687b0f686accb8b7d47e4aae62249fc3a024613b31f9b4b79cfe6f9b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person is holding a stick over a table with a folded chart paper sheet on it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a step in a process where a person is lifting a folded chart paper sheet using a stick.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40322832924",
+      "checkpointed_at": "2026-10-26T14:22:33Z"
     }
   ]
 }
