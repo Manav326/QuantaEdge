@@ -60,7 +60,7 @@ class CourseOrderFinancialServiceAccessGrantTest {
     verify(jdbc).update(contains("insert into course_entitlement"), any(Object[].class));
     verify(jdbc).update(contains("insert into student_program_enrollment"), any(Object[].class));
     verify(jdbc).update(contains("insert into student_track_enrollment"), any(Object[].class));
-    verify(jdbc).update(contains("failure_code='FINANCIAL_RECONCILIATION_REQUIRED'"), any(Object[].class));
+    verify(jdbc, never()).update(contains("update course_payment_order"), any(Object[].class));
   }
 
   @Test
@@ -100,7 +100,7 @@ class CourseOrderFinancialServiceAccessGrantTest {
         .getMethod("grantAccessForCapturedPayment", long.class, String.class, String.class, String.class, long.class)
         .getAnnotation(Transactional.class);
     Transactional financeTx = CourseOrderFinancialService.class
-        .getMethod("finalizeCapturedSale", long.class, String.class, long.class)
+        .getMethod("finalizeCapturedSale", long.class, String.class, String.class, long.class)
         .getAnnotation(Transactional.class);
 
     assertNotNull(accessTx);
