@@ -12,16 +12,16 @@
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
+      "a2890b3458baf46be1b64d1a",
       "35f32b476dc5977bc161e8e8",
-      "f492c50e9c7d7ef8d140ae06",
-      "aea7db4a2c358f45b70aad03",
-      "35ff0b921f1e0b0945a8f8df"
+      "fc310253031bd2210d27a7e7",
+      "414a0224c90f14c01c7da9e7"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1295,
     "assets_remaining": 996,
     "assets_completion_percent": 56.5,
-    "assets_failed": 11,
+    "assets_failed": 10,
     "assets_skipped_from_checkpoint": 1295,
     "batch_limit": 5,
     "publication_allowed": false
@@ -1188,8 +1188,8 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
+        "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
           "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
@@ -1199,32 +1199,35 @@
         ],
         "concepts": [
           "open-ended questions",
-          "thought-provoking questions",
           "critical thinking",
           "curiosity",
-          "science",
           "teamwork",
-          "inclusive nature",
-          "special needs",
+          "inclusive education",
+          "safety precautions",
           "peer interactions",
           "assessing understanding",
           "analyzing concepts",
-          "safety precautions",
-          "fascinating facts",
-          "interesting observations",
+          "challenging ideas",
+          "additional information",
+          "interesting facts",
+          "engaging materials",
+          "Ever heard of",
+          "A step further",
+          "advanced concepts",
           "scientific principles",
           "real-life applications"
         ],
-        "context_relation": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
+        "context_relation": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "limitations": [
-          "The image does not provide specific examples or details about the questions or activities mentioned."
+          "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40252444999",
-      "checkpointed_at": "2026-10-26T01:50:55Z"
+      "run_id": "40277348694",
+      "checkpointed_at": "2026-10-26T06:15:04Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -19840,9 +19843,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40252444999",
+      "run_id": "40277348694",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -20139,8 +20142,8 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_summary": "Acknowledgments for the book's contributors and staff.",
+        "visual_type": "uncertain",
         "visible_text": [
           "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
           "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
@@ -20148,27 +20151,28 @@
           "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
         ],
         "concepts": [
-          "Acknowledgment",
-          "Textbook",
+          "Acknowledgments",
           "Contributors",
-          "Roles",
-          "Freelance Language Editor",
-          "APC office",
-          "Administrative staff",
+          "Staff",
+          "Textbook",
+          "Editing",
+          "Publication",
+          "DTP Cell",
           "Publication Division",
           "Contractual",
           "Proofreaders"
         ],
-        "context_relation": "Acknowledgment and appreciation for contributors and their roles in the publication of a textbook.",
+        "context_relation": "Acknowledgments for the book's contributors and staff.",
         "limitations": [
-          "No specific visual elements are described."
+          "No specific visual elements are described.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40252444999",
-      "checkpointed_at": "2026-10-26T01:51:21Z"
+      "run_id": "40277348694",
+      "checkpointed_at": "2026-10-26T06:24:15Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -22087,9 +22091,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40252444999",
+      "run_id": "40277348694",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -25815,19 +25819,69 @@
     {
       "asset_id": "414a0224c90f14c01c7da9e7",
       "asset_sha256": "1761250e3638b8d78afcfeb39f22e48c7a9779867144f2a78a883846e69523e6",
-      "page_text_context_sha256": "032c6eed1c82529ac5069b065ea38e9e1b34e749c2628fa7298def792e22ffec",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 40,
       "asset_path": "page-0040.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "032c6eed1c82529ac5069b065ea38e9e1b34e749c2628fa7298def792e22ffec",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40252444999",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page from a textbook discussing the impact of microorganisms on Earth's environment and their role in biogas production.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Now, think what would have happened if microorganisms did not exist on Earth?",
+          "A step further",
+          "Microbes as a source of biogas",
+          "Many microorganisms, like bacteria and fungi, live in an oxygen-free environment. Some of these bacteria have the ability to decompose plant and animal waste present in the environment or household wastewater. During the process, they release a mixture of gases called biogas primarily composed of ca",
+          "Ananda Mohan Chakrabarty (1938-2020) was a scientist who studied bacteria. In 1971, he developed a special bacterium that could break down oil spills, helping to clean the environment. His discovery received a patent in 1980. Patent is a copyright given to a person so that no one else can copy, use ",
+          "How does the diversity of microorganisms help in our kitchen?",
+          "2.4.2 Microorganisms and food",
+          "Let us try to understand by performing activities in the kitchen.",
+          "Activity 2.8: Let us perform",
+          "Take two bowls A and B.",
+          "In each, take 200 g of flour (atta or maida) and add a pinch of sugar.",
+          "Now, in bowl A, add a small amount of yeast powder and mix it well with the flour.",
+          "In bowl B, do not add any yeast, so that we can compare the results of the two bowls.",
+          "Knead the flour of the two bowls with warm water to make soft dough (Fig. 2.11).",
+          "Fig. 2.11: Change in the volume of flour after addition of yeast, sugar, and warm water"
+        ],
+        "concepts": [
+          "microorganisms",
+          "biogas",
+          "environmental problems",
+          "patent",
+          "microbes",
+          "environmental protection",
+          "microorganisms in the kitchen",
+          "yeast",
+          "flour",
+          "yeast powder",
+          "warm water",
+          "dough",
+          "bowl",
+          "activity",
+          "microorganisms in the kitchen",
+          "yeast in the kitchen",
+          "flour in the kitchen",
+          "yeast powder in the kitchen",
+          "warm water in the kitchen",
+          "dough in the kitchen"
+        ],
+        "context_relation": "The page discusses the impact of microorganisms on Earth's environment and their role in biogas production, as well as how microorganisms can be used to solve environmental problems. It also provides an activity for students to perform in the kitchen to understand the role of microorganisms in food preparation.",
+        "limitations": [
+          "The page does not provide specific examples of microorganisms that can be used to solve environmental problems.",
+          "The page does not provide specific examples of microorganisms that can be used in the kitchen.",
+          "The page does not provide specific examples of microorganisms that can be used to solve environmental problems in the kitchen."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40277348694",
+      "checkpointed_at": "2026-10-26T06:34:08Z"
     },
     {
       "asset_id": "712649a3e1f8116f4b3f65c9",
