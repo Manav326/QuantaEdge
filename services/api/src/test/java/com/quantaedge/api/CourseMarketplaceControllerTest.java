@@ -60,6 +60,44 @@ class CourseMarketplaceControllerTest {
   }
 
   @Test
+  void missingLegacyBuyerSnapshotCanOnlyUseActiveBillingProfileInTestModeWithoutDiscounts() {
+    Map<String,Object> order = new LinkedHashMap<>();
+    order.put("buyer_snapshot_json", "{}");
+    order.put("discount_reference", null);
+    order.put("discount_offer_id", null);
+    order.put("discount_amount_paise", 0L);
+    order.put("discount_snapshot_json", "{\"snapshotVersion\":1,\"discountType\":\"NONE\",\"discountPaise\":0}");
+
+    assertTrue(CourseMarketplaceController.mayReconstructMissingBuyerSnapshotForTestMode(order, true));
+    assertFalse(CourseMarketplaceController.mayReconstructMissingBuyerSnapshotForTestMode(order, false));
+
+    order.put("discount_reference", "SAVE10");
+    assertFalse(CourseMarketplaceController.mayReconstructMissingBuyerSnapshotForTestMode(order, true));
+    order.put("discount_reference", null);
+
+    order.put("buyer_snapshot_json", "{\"legalName\":\"Saved Buyer\"}");
+    assertFalse(CourseMarketplaceController.mayReconstructMissingBuyerSnapshotForTestMode(order, true));
+  }
+
+  @Test
+  void legacyTestRecoveryAllowsLegacyProfileWithoutAddressBookIdOnlyWhenPostalAddressIsComplete() {
+    Map<String,Object> snapshot = new LinkedHashMap<>();
+    snapshot.put("billingAddress", Map.of(
+        "line1", "12 Test Road",
+        "city", "Patna",
+        "state", "Bihar",
+        "postalCode", "800001"));
+    assertTrue(CourseMarketplaceController.hasCompleteLegacyRecoveryBillingAddress(snapshot));
+
+    snapshot.put("billingAddress", Map.of(
+        "line1", "12 Test Road",
+        "city", "Patna",
+        "state", "Bihar"));
+    assertFalse(CourseMarketplaceController.hasCompleteLegacyRecoveryBillingAddress(snapshot));
+    assertFalse(CourseMarketplaceController.hasCompleteLegacyRecoveryBillingAddress(Map.of()));
+  }
+
+  @Test
   void legacyIncompleteOrderMayOnlyBeRepairedWhenProviderConfirmsRetryIsSafe() {
     assertTrue(CourseMarketplaceController.providerConfirmsRetryIsSafe("RETRYABLE"));
     assertFalse(CourseMarketplaceController.providerConfirmsRetryIsSafe("PAID"));

@@ -169,6 +169,14 @@ public class CoursePaymentWebhookController {
         copyIfPresent(result,eventDetails,"invoiceNumber","invoiceNumber");
         if("VERIFIED".equals(state))
           return new Outcome("PROCESSED","Provider event matched the saved order and server-side reconciliation confirmed capture. Existing purchase, invoice and entitlement were finalized idempotently.",eventDetails);
+        if("PAYMENT_VERIFIED_ACCESS_GRANTED".equals(state)) {
+          eventDetails.put("accessGranted",Boolean.TRUE.equals(result.get("entitled")));
+          eventDetails.put("financeReconciliationRequired",Boolean.TRUE.equals(result.get("financeReconciliationRequired")));
+          eventDetails.put("reconciliationStatus",state);
+          return new Outcome("RECONCILIATION_REQUIRED",
+              "Razorpay confirmed the captured payment and course access was granted. Invoice/revenue-share bookkeeping still needs HRMS reconciliation; do not ask the learner to pay again.",
+              eventDetails);
+        }
         if("UNMATCHED".equals(state)) return new Outcome("UNMATCHED",safe(result.get("message"),1000),eventDetails);
         eventDetails.put("reconciliationStatus",state);
         return new Outcome("RECONCILIATION_REQUIRED",
