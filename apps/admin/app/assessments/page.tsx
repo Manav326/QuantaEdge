@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { createPortal } from 'react-dom';
 import { getUiLocaleLanguage } from '../i18n/catalog';
 import AdminSidebar from '../components/AdminSidebar';
 import { AdminWorkspaceContext } from '../components/AdminWorkspaceContext';
@@ -250,6 +252,7 @@ function CourseAnalyticsPanel({courseId,activeCourse,courseError}:{courseId:stri
 }
 
 export default function AssessmentsPage(){
+  const router=useRouter();
   const {locale}=useContext(AdminWorkspaceContext);
   const t=useUiTranslation();
   const tRef=useRef(t);
@@ -311,6 +314,7 @@ export default function AssessmentsPage(){
   const [importedHindiExplanationEdits,setImportedHindiExplanationEdits]=useState<Record<number,string>>({});
   const [importedReviewerNoteEdits,setImportedReviewerNoteEdits]=useState<Record<number,string>>({});
   const [importedReviewOpen,setImportedReviewOpen]=useState(false);
+  const [reviewViewportInsets,setReviewViewportInsets]=useState({top:0,bottom:0});
   const importedReviewDialogRef=useRef<HTMLElement|null>(null);
   const [importedReviewSequence,setImportedReviewSequence]=useState(1);
   const [importedReviewFilter,setImportedReviewFilter]=useState<'ALL'|'PENDING'|'APPROVED'|'REJECTED'>('ALL');
@@ -507,10 +511,31 @@ export default function AssessmentsPage(){
   function closeImportedReview() {
     setImportedReviewOpen(false);
     const url=new URL(window.location.href);
+    const launchedFromContentStudio=url.searchParams.has('reviewAssessmentId');
+    requestedPackageReviewRef.current='';
+    if(launchedFromContentStudio&&courseId){
+      router.replace('/content?courseId='+encodeURIComponent(courseId));
+      return;
+    }
     url.searchParams.delete('reviewAssessmentId');
     window.history.replaceState({},'',url.pathname+url.search+url.hash);
-    requestedPackageReviewRef.current='';
   }
+  useEffect(()=>{
+    if(!importedReviewOpen)return;
+    const updateInsets=()=>{
+      const header=document.querySelector('.qe-admin-global-header');
+      const headerBottom=header instanceof HTMLElement?Math.max(0,header.getBoundingClientRect().bottom):0;
+      const mobileNav=document.querySelector('.qe-admin-mobile-nav');
+      const navRect=mobileNav instanceof HTMLElement?mobileNav.getBoundingClientRect():null;
+      const bottom=navRect&&navRect.height>0&&navRect.top<window.innerHeight
+        ?Math.max(0,window.innerHeight-navRect.top):0;
+      setReviewViewportInsets(current=>current.top===headerBottom&&current.bottom===bottom
+        ?current:{top:headerBottom,bottom});
+    };
+    updateInsets();
+    window.addEventListener('resize',updateInsets);
+    return ()=>window.removeEventListener('resize',updateInsets);
+  },[importedReviewOpen]);
   useEffect(()=>{
     if(!importedReviewOpen)return;
     const dialog=importedReviewDialogRef.current;
@@ -777,7 +802,8 @@ export default function AssessmentsPage(){
       </section>:<CourseAnalyticsPanel courseId={courseId} activeCourse={activeCourse} courseError={courseError}/>}
 
 
-      {importedReviewOpen&&importedReviewId!==null&&<div className={styles.assessmentReviewBackdrop} role="presentation" onMouseDown={event=>{if(event.target===event.currentTarget)closeImportedReview();}}>
+      {importedReviewOpen&&importedReviewId!==null&&typeof document!=='undefined'&&createPortal(
+        <div className={styles.assessmentReviewBackdrop} style={{top:reviewViewportInsets.top,bottom:reviewViewportInsets.bottom}} role="presentation" onMouseDown={event=>{if(event.target===event.currentTarget)closeImportedReview();}}>
         <section ref={importedReviewDialogRef} tabIndex={-1} className={styles.assessmentReviewWorkspace} role="dialog" aria-modal="true" aria-labelledby="imported-review-title">
           <aside className={styles.assessmentReviewSidebar}>
             <div className={styles.reviewSidebarHeader}>
@@ -923,7 +949,9 @@ export default function AssessmentsPage(){
             </>}
           </div>
         </section>
-      </div>}
+      </div>,
+        document.body
+      )}
 
       {review&&<div className={styles.modalBackdrop} role="presentation" onMouseDown={e=>{if(e.target===e.currentTarget)setReview(null);}}>
         <section className={styles.reviewModal} role="dialog" aria-modal="true" aria-labelledby="review-title">
