@@ -80,7 +80,7 @@ function parsePendingVerifyDrafts(raw: string | null): VerifyDraft[] {
     return [];
   }
 }
-type CheckoutResponse = { orderId: string; localOrderId: number; amount: number; currency: string; keyId: string; description?: string; listedPricePaise?: number; discountPaise?: number; discountCode?: string | null };
+type CheckoutResponse = { orderId: string; localOrderId: number; amount: number; currency: string; keyId: string; description?: string; listedPricePaise?: number; discountPaise?: number; discountCode?: string | null; status?: string; entitled?: boolean; courseId?: number; providerOrderId?: string; message?: string };
 
 declare global {
   interface Window {
@@ -333,6 +333,37 @@ export default function StudentMarketplacePage() {
         },
         body: JSON.stringify({ discountCode: discountCode.trim() || null, billingAddressId }),
       })) as CheckoutResponse;
+      const orderStatus = String(order.status || '').toUpperCase();
+      const recoveredCourseId = Number(order.courseId) > 0 ? Number(order.courseId) : courseId;
+      if (order.entitled === true || orderStatus === 'VERIFIED' || orderStatus === 'PAYMENT_VERIFIED_ACCESS_GRANTED') {
+        const recoveredLocalOrderId = Number(order.localOrderId ?? order.orderId);
+        if (Number.isSafeInteger(recoveredLocalOrderId) && recoveredLocalOrderId > 0) {
+          clearPendingVerify(recoveredLocalOrderId);
+        }
+        setStatus(tx('The existing payment was reconciled. Your course is now available in All Courses.', 'मौजूदा भुगतान सत्यापित हो गया। आपका कोर्स All Courses में उपलब्ध है।'));
+        await loadOffers();
+        await loadPurchaseRequests();
+        router.push('/student/courses?focus=' + encodeURIComponent(String(recoveredCourseId)));
+        return;
+      }
+      if (orderStatus === 'RECONCILIATION_REQUIRED') {
+        const recoveredLocalOrderId = Number(order.localOrderId);
+        const savedProviderOrderId = String(order.providerOrderId || '');
+        if (Number.isSafeInteger(recoveredLocalOrderId) && recoveredLocalOrderId > 0 &&
+            /^order_[A-Za-z0-9]+$/.test(savedProviderOrderId)) {
+          savePendingVerify({
+            courseId: recoveredCourseId,
+            localOrderId: recoveredLocalOrderId,
+            paymentId: '',
+            orderId: savedProviderOrderId,
+            signature: '',
+          });
+        }
+        setStatus(localizeMarketplaceError(order.message, language,
+          'The original order is still being reconciled. Retry verification for that order; do not pay again.',
+          'पुराने order की जाँच अभी जारी है। उसी order को फिर सत्यापित करें; दोबारा भुगतान न करें।'));
+        return;
+      }
       if (!order.orderId || !Number.isSafeInteger(Number(order.localOrderId)) || Number(order.localOrderId) <= 0 ||
           !order.keyId || !Number.isFinite(Number(order.amount)) || Number(order.amount) <= 0 || order.currency !== 'INR') {
         throw new Error(tx('The course order could not be prepared. Please retry.', 'कोर्स का order तैयार नहीं हो सका। फिर प्रयास करें।'));
