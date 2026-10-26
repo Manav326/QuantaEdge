@@ -850,7 +850,7 @@ public class CourseMarketplaceController {
         long currentOfferId=((Number)offer.get("institution_offer_id")).longValue();
         Object savedOfferRaw=previous.get("institution_offer_id");
         if(!(savedOfferRaw instanceof Number n) || n.longValue()!=currentOfferId) {
-          expireSupersededUnpaidOrder(previous,institutionId,currentOfferId);
+          expireSupersededUnpaidOrder(previous,institutionId,targetStudentId);
           throw new IllegalStateException("The previous checkout was confirmed unpaid and expired. Start a fresh checkout for the current offer.");
         }
         requireSameBillingAddressChoice(previous,buyerSnapshot);
@@ -884,7 +884,7 @@ public class CourseMarketplaceController {
           : purchaserUserId!=null && priorPayerRaw instanceof Number n && n.longValue()==purchaserUserId.longValue();
       if (!sameOffer || !samePayer) {
         // Never return another payer's checkout or an old offer's price/order to this request.
-        expireSupersededUnpaidOrder(prior,institutionId,currentOfferId);
+        expireSupersededUnpaidOrder(prior,institutionId,targetStudentId);
       } else if ("PENDING".equals(priorStatus)) {
         requireSameBillingAddressChoice(prior,buyerSnapshot);
         if (!hasLockedFinancialSnapshots(prior)) {
@@ -961,7 +961,7 @@ public class CourseMarketplaceController {
         boolean sameRacedPayer=racedPayerRaw==null ? purchaserUserId==null
             : purchaserUserId!=null && racedPayerRaw instanceof Number payer && payer.longValue()==purchaserUserId.longValue();
         if(!(racedOfferRaw instanceof Number n) || n.longValue()!=currentOfferId || !sameRacedPayer) {
-          expireSupersededUnpaidOrder(racedOrder,institutionId,currentOfferId);
+          expireSupersededUnpaidOrder(racedOrder,institutionId,targetStudentId);
           throw new IllegalStateException("The earlier checkout was confirmed unpaid and expired. Start a fresh checkout for the current offer.");
         }
         requireSameBillingAddressChoice(racedOrder,buyerSnapshot);
@@ -1223,7 +1223,8 @@ public class CourseMarketplaceController {
   }
 
   /** Expire a superseded offer only when the provider proves the exact saved order is unpaid. */
-  private void expireSupersededUnpaidOrder(Map<String,Object> prior,long institutionId,long currentOfferId) {
+  private void expireSupersededUnpaidOrder(
+      Map<String,Object> prior,long institutionId,long targetStudentId) {
     Object rawOfferId=prior.get("institution_offer_id");
     Object rawOrderId=prior.get("id");
     if(!(rawOfferId instanceof Number savedOffer) || savedOffer.longValue()<=0
@@ -1233,6 +1234,7 @@ public class CourseMarketplaceController {
           org.springframework.http.HttpStatus.CONFLICT,
           "A previous checkout exists for this course identity, but it cannot be safely replaced automatically. Do not pay again; reconcile the saved order first.");
     }
+
     String providerState;
     try {
       providerState=inspectProviderOrderForNewAttempt(prior);
@@ -1241,16 +1243,48 @@ public class CourseMarketplaceController {
           org.springframework.http.HttpStatus.CONFLICT,
           "The previous checkout could not be safely replaced because its payment status could not be confirmed. Do not pay again; reconcile the saved order first.");
     }
+
+    // Reuse the existing reconciler as the authority when the lightweight provider check is ambiguous.
+    // It confirms the exact saved order, amount and currency, and reports whether a retry is safe.
+    if(!providerConfirmsRetryIsSafe(providerState)) {
+      Long originalPayerUserId = prior.get("purchaser_user_id") instanceof Number payer
+          ? payer.longValue() : null;
+      boolean reconciledVerified=false;
+      boolean reconciledRetrySafe=false;
+      try {
+        Map<String,Object> reconciliation = reconcileOrderInternal(
+            savedOrder.longValue(), targetStudentId, originalPayerUserId, institutionId);
+        reconciledVerified = reconciliationConfirmsExistingOrderVerified(reconciliation);
+        reconciledRetrySafe = reconciliationConfirmsCheckoutRetryIsSafe(reconciliation);
+      } catch(RuntimeException reconciliationFailure) {
+        // An exception is not proof that payment failed; retain the fail-closed decision below.
+      }
+      if(!reconciledVerified) {
+        Boolean nowVerified=jdbc.queryForObject("""
+          select exists(select 1 from course_payment_order
+            where id=? and institution_id=? and status='VERIFIED')
+          """,Boolean.class,savedOrder.longValue(),institutionId);
+        reconciledVerified=Boolean.TRUE.equals(nowVerified);
+      }
+      if(reconciledVerified) {
+        throw new org.springframework.web.server.ResponseStatusException(
+            org.springframework.http.HttpStatus.CONFLICT,
+            "The previous checkout has now been reconciled and verified. Refresh your courses; do not buy this course again.");
+      }
+      if(reconciledRetrySafe) providerState="RETRYABLE";
+    }
+
     if("PAID".equals(providerState)) {
       throw new org.springframework.web.server.ResponseStatusException(
           org.springframework.http.HttpStatus.CONFLICT,
-          "A previous checkout for this course was reported paid. Do not pay again; reconcile that exact order before continuing.");
+          "A previous checkout for this course was reported paid. Automatic reconciliation did not complete; do not pay again. The saved order requires finance review.");
     }
     if(!providerConfirmsRetryIsSafe(providerState)) {
       throw new org.springframework.web.server.ResponseStatusException(
           org.springframework.http.HttpStatus.CONFLICT,
-          "A previous checkout may still be processing. Do not pay again until its saved order is reconciled.");
+          "The previous checkout is not yet confirmed unpaid. Its saved order was checked for reconciliation, but the provider state remains ambiguous. Do not pay again; finance must review the saved order.");
     }
+
     int changed=jdbc.update("""
         update course_payment_order
         set status='EXPIRED',failure_code='COURSE_OFFER_SUPERSEDED_UNPAID',updated_at=now()
@@ -1975,6 +2009,19 @@ public class CourseMarketplaceController {
     return "RETRYABLE".equals(providerState);
   }
 
+  static boolean reconciliationConfirmsExistingOrderVerified(Map<String,Object> reconciliation) {
+    return reconciliation != null
+        && "VERIFIED".equalsIgnoreCase(String.valueOf(reconciliation.getOrDefault("status","")))
+        && Boolean.TRUE.equals(reconciliation.get("entitled"));
+  }
+
+  static boolean reconciliationConfirmsCheckoutRetryIsSafe(Map<String,Object> reconciliation) {
+    return reconciliation != null
+        && "AWAITING_PAYMENT".equalsIgnoreCase(String.valueOf(reconciliation.getOrDefault("status","")))
+        && Boolean.FALSE.equals(reconciliation.get("entitled"))
+        && Boolean.TRUE.equals(reconciliation.get("canRetryCheckout"));
+  }
+
   private String inspectProviderOrderForNewAttempt(Map<String,Object> localOrder) {
     String providerOrderId = String.valueOf(localOrder.get("provider_order_id"));
     if (!providerOrderId.matches("order_[A-Za-z0-9]+")) return "IN_FLIGHT";
@@ -2041,25 +2088,38 @@ public class CourseMarketplaceController {
       throw new IllegalArgumentException("This payment order is no longer payable.");
     }
     requireLockedFinancialSnapshotsForVerification(order);
-    Boolean offerStillPublished = jdbc.queryForObject("""
+    // Payment verification belongs to the exact historical offer on the saved order.
+    // A later offer revision may archive this offer or withdraw its release while a valid
+    // Razorpay payment is still settling. Current publication/fingerprint gates protect NEW
+    // checkouts; they must not invalidate an already-created transaction's immutable terms.
+    Object savedIdentityId = order.get("course_identity_id");
+    Boolean originalOfferMatchesOrder = jdbc.queryForObject("""
         select exists(
-          select 1 from institution_marketplace_offer offer
+          select 1
+          from institution_marketplace_offer offer
           join institution_course_assignment assignment
-            on assignment.id=offer.assignment_id and assignment.institution_id=offer.institution_id
-            and assignment.status='ASSIGNED'
+            on assignment.id=offer.assignment_id
+           and assignment.institution_id=offer.institution_id
           join institution_course_release release
-            on release.id=offer.course_release_id and release.program_id=offer.course_id
-          join institution_tenant tenant_scope on tenant_scope.id=offer.institution_id and tenant_scope.status='ACTIVE'
-          where offer.id=? and offer.institution_id=? and offer.course_id=? and offer.status='PUBLISHED'
+            on release.id=offer.course_release_id
+           and release.program_id=offer.course_id
+          join institution_tenant tenant_scope
+            on tenant_scope.id=offer.institution_id and tenant_scope.status='ACTIVE'
+          join curriculum_program program on program.id=offer.course_id
+          left join institution_course_identity identity on identity.id=program.course_identity_id
+          where offer.id=? and offer.institution_id=? and offer.course_id=?
             and offer.hrms_published_by_staff_id is not null
-            and release.release_state='SHAREABLE'
-            and course_marketplace_content_type_ready(release.program_id)
-            and case when release.release_state='SHAREABLE' then course_release_fingerprint_current(release.program_id,release.content_fingerprint::text,release.updated_at) else false end
+            and (cast(? as bigint) is null or program.course_identity_id=cast(? as bigint))
+            and (program.course_identity_id is null or (
+              identity.source_institution_id=release.source_institution_id
+              and identity.course_type_code=program.course_type_code
+            ))
         )
-        """, Boolean.class, ((Number) order.get("institution_offer_id")).longValue(), institutionId,
-        ((Number) order.get("course_id")).longValue());
-    if (!Boolean.TRUE.equals(offerStillPublished)) {
-      throw new IllegalArgumentException("The institution's offer is no longer published. No course access was granted; contact the institution about the captured payment.");
+        """, Boolean.class,
+        ((Number) order.get("institution_offer_id")).longValue(), institutionId,
+        ((Number) order.get("course_id")).longValue(), savedIdentityId, savedIdentityId);
+    if (!Boolean.TRUE.equals(originalOfferMatchesOrder)) {
+      throw new IllegalArgumentException("The saved checkout is not linked to its original institutional offer. No new payment was taken; finance must reconcile the saved order.");
     }
     String expectedOrderId = String.valueOf(order.get("provider_order_id"));
     if (!expectedOrderId.equals(orderId)) {

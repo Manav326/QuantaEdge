@@ -197,11 +197,25 @@ assert.ok(coursePage.includes("'/api/v1/students/me/programs/id/'"), 'Switching 
 assert.ok(marketplacePage.includes("'/api/v1/marketplace/courses/'") && marketplacePage.includes("'/api/v1/marketplace/orders/'"),
   'Marketplace checkout must use server-created Razorpay orders and server-side payment verification.');
 assert.ok(marketplacePage.includes("'/api/v1/marketplace/orders/' + draft.localOrderId + '/reconcile'") &&
-  marketplacePage.includes('sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(recoverableDraft)'),
-  'Student web checkout must save the order before opening Razorpay and reconcile it when the callback is lost.');
+  marketplacePage.includes('savePendingVerify(recoverableDraft)') &&
+  marketplacePage.includes('window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(next))') &&
+  marketplacePage.indexOf('savePendingVerify(recoverableDraft)') < marketplacePage.indexOf('await ensureRazorpayCheckout(english)'),
+  'Student web checkout must persist each order before opening Razorpay and retain its recovery draft.');
 assert.ok(parentMarketplacePage.includes("'/api/v1/marketplace/family/orders/' + draft.localOrderId + '/reconcile'") &&
-  parentMarketplacePage.includes('sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(recoverableDraft)'),
-  'Parent web checkout must save the order before opening Razorpay and reconcile it when the callback is lost.');
+  parentMarketplacePage.includes('savePendingVerify(recoverableDraft)') &&
+  parentMarketplacePage.includes('window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(next))') &&
+  parentMarketplacePage.indexOf('savePendingVerify(recoverableDraft)') < parentMarketplacePage.indexOf('await ensureRazorpayCheckout()'),
+  'Parent web checkout must persist each order before opening Razorpay and retain its recovery draft.');
+assert.ok(marketplacePage.includes('pendingVerifies.map') &&
+  marketplacePage.includes('const [pendingVerifies, setPendingVerifies]') &&
+  !marketplacePage.includes('pendingVerify !== null') &&
+  !marketplacePage.includes('if (pendingVerify)'),
+  'A student pending payment must be tracked per order and must not globally disable unrelated course purchases.');
+assert.ok(parentMarketplacePage.includes('pendingVerifies.map') &&
+  parentMarketplacePage.includes('const [pendingVerifies, setPendingVerifies]') &&
+  !parentMarketplacePage.includes('pendingVerify !== null') &&
+  !parentMarketplacePage.includes('if (pendingVerify)'),
+  'A parent pending payment must be tracked per order and must not globally disable unrelated course purchases.');
 assert.ok(courseMarketplaceApi.includes('@PostMapping("/orders/{localOrderId}/reconcile")') &&
   courseMarketplaceApi.includes('@PostMapping("/family/orders/{localOrderId}/reconcile")') &&
   courseMarketplaceApi.includes('inspectProviderOrderForNewAttempt'),

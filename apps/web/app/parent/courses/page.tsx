@@ -3,7 +3,7 @@
 
 import { apiFetch } from '../../components/apiClient';
 import Link from 'next/link';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import { tenantPrimaryColor, useTenantBranding } from '../../components/TenantBrandingProvider';
@@ -35,6 +35,35 @@ type Entitlement = {
 type VerifyDraft = { courseId: number; localOrderId: number; paymentId: string; orderId: string; signature: string };
 type PaidCheckoutIntent = { courseId: number; recipientType: 'SELF' | 'CHILD'; studentId?: number };
 const PENDING_VERIFY_STORAGE_KEY = 'qe:marketplace:pending-payment:parent';
+
+function parsePendingVerifyDrafts(raw: string | null): VerifyDraft[] {
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    const values = Array.isArray(parsed) ? parsed : [parsed]; // Accept the old single-order format.
+    const unique = new Map<number, VerifyDraft>();
+    for (const value of values) {
+      const draft: VerifyDraft = {
+        courseId: Number(value?.courseId),
+        localOrderId: Number(value?.localOrderId),
+        paymentId: String(value?.paymentId || ''),
+        orderId: String(value?.orderId || ''),
+        signature: String(value?.signature || ''),
+      };
+      const hasPaymentCallback = draft.paymentId.length > 0 || draft.signature.length > 0;
+      const callbackIsValid = !hasPaymentCallback ||
+        (/^pay_[A-Za-z0-9]+$/.test(draft.paymentId) && /^[A-Fa-f0-9]{64}$/.test(draft.signature));
+      if (Number.isSafeInteger(draft.courseId) && draft.courseId > 0
+          && Number.isSafeInteger(draft.localOrderId) && draft.localOrderId > 0
+          && /^order_[A-Za-z0-9]+$/.test(draft.orderId) && callbackIsValid) {
+        unique.set(draft.localOrderId, draft);
+      }
+    }
+    return [...unique.values()];
+  } catch {
+    return [];
+  }
+}
 
 declare global {
   interface Window {
@@ -89,7 +118,35 @@ export default function ParentCoursesPage() {
   const [busy, setBusy] = useState('');
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
-  const [pendingVerify, setPendingVerify] = useState<VerifyDraft | null>(null);
+  const [pendingVerifies, setPendingVerifies] = useState<VerifyDraft[]>([]);
+  const pendingVerifiesRef = useRef<VerifyDraft[]>([]);
+  const readPendingVerifies = useCallback((): VerifyDraft[] => {
+    try {
+      const raw = window.sessionStorage.getItem(PENDING_VERIFY_STORAGE_KEY);
+      return raw ? parsePendingVerifyDrafts(raw) : pendingVerifiesRef.current;
+    } catch {
+      return pendingVerifiesRef.current;
+    }
+  }, []);
+  const savePendingVerify = useCallback((draft: VerifyDraft) => {
+    const next = [...readPendingVerifies().filter(item => item.localOrderId !== draft.localOrderId), draft];
+    pendingVerifiesRef.current = next;
+    setPendingVerifies(next);
+    try { window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(next)); } catch {
+      // In-memory recovery still works if browser storage is disabled.
+    }
+  }, [readPendingVerifies]);
+  const clearPendingVerify = useCallback((localOrderId: number) => {
+    const next = readPendingVerifies().filter(item => item.localOrderId !== localOrderId);
+    pendingVerifiesRef.current = next;
+    setPendingVerifies(next);
+    try {
+      if (next.length) window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(next));
+      else window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY);
+    } catch {
+      // In-memory state remains authoritative for this page.
+    }
+  }, [readPendingVerifies]);
   const [billingAddresses, setBillingAddresses] = useState<BillingAddressRecord[]>([]);
   const [billingAddressesLoading, setBillingAddressesLoading] = useState(true);
   const [checkoutIntent, setCheckoutIntent] = useState<PaidCheckoutIntent | null>(null);
@@ -156,24 +213,11 @@ export default function ParentCoursesPage() {
     try {
       const saved = window.sessionStorage.getItem(PENDING_VERIFY_STORAGE_KEY);
       if (!saved) return;
-      const value = JSON.parse(saved) as Partial<VerifyDraft>;
-      const draft: VerifyDraft = {
-        courseId: Number(value.courseId),
-        localOrderId: Number(value.localOrderId),
-        paymentId: String(value.paymentId || ''),
-        orderId: String(value.orderId || ''),
-        signature: String(value.signature || ''),
-      };
-      const hasPaymentCallback = draft.paymentId.length > 0 || draft.signature.length > 0;
-      const callbackIsValid = !hasPaymentCallback ||
-        (/^pay_[A-Za-z0-9]+$/.test(draft.paymentId) && /^[A-Fa-f0-9]{64}$/.test(draft.signature));
-      if (Number.isSafeInteger(draft.courseId) && draft.courseId > 0
-          && Number.isSafeInteger(draft.localOrderId) && draft.localOrderId > 0
-          && /^order_[A-Za-z0-9]+$/.test(draft.orderId) && callbackIsValid) {
-        setPendingVerify(draft);
-      } else {
-        window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY);
-      }
+      const drafts = parsePendingVerifyDrafts(saved);
+      pendingVerifiesRef.current = drafts;
+      setPendingVerifies(drafts);
+      if (drafts.length) window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(drafts));
+      else window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY);
     } catch {
       // Keep the checkout usable if browser session storage is unavailable.
     }
@@ -187,20 +231,14 @@ export default function ParentCoursesPage() {
     setBusy('verify');
     setError('');
     setNotice('');
-    setPendingVerify(draft);
-    try {
-      window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(draft));
-    } catch {
-      // The in-page retry remains available if browser storage is blocked.
-    }
+    savePendingVerify(draft);
     try {
       await readJson(await apiFetch('/api/v1/marketplace/family/orders/' + draft.localOrderId + '/verify', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ paymentId: draft.paymentId, orderId: draft.orderId, signature: draft.signature }),
       }));
-      setPendingVerify(null);
-      try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
+      clearPendingVerify(draft.localOrderId);
       setNotice(english ? 'Payment verified. Course access has been updated.' : 'भुगतान सत्यापित। कोर्स की पहुँच अपडेट हो गई है।');
       await load();
     } catch (e) {
@@ -212,32 +250,25 @@ export default function ParentCoursesPage() {
     setBusy('verify');
     setError('');
     setNotice('');
-    setPendingVerify(draft);
-    try {
-      window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(draft));
-    } catch {
-      // In-page recovery remains available if browser storage is blocked.
-    }
+    savePendingVerify(draft);
     try {
       const result = await readJson(await apiFetch('/api/v1/marketplace/family/orders/' + draft.localOrderId + '/reconcile', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' }, body: '{}',
       }));
       if (String(result.status || '').toUpperCase() === 'VERIFIED' || result.entitled === true) {
-        setPendingVerify(null);
-        try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
+        clearPendingVerify(draft.localOrderId);
         setNotice(english ? 'Payment verified. Course access has been updated.' : 'भुगतान सत्यापित। कोर्स की पहुँच अपडेट हो गई है।');
         await load();
         return;
       }
       if (result.canRetryCheckout === true) {
-        setPendingVerify(null);
-        try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
+        clearPendingVerify(draft.localOrderId);
       }
       setError(localizeMarketplaceError(result.message, language, 'Payment status is still being reconciled. Do not pay again while verification is pending.', 'भुगतान की जाँच जारी है। पुष्टि पूरी होने तक दोबारा भुगतान न करें।'));
       await load();
     } catch (e) {
-      setPendingVerify(draft);
+      savePendingVerify(draft);
       setError(localizeMarketplaceError(e, language, 'Payment status could not be reconciled. Keep this order and retry verification; do not pay again.', 'भुगतान की स्थिति की पुष्टि नहीं हो सकी। यही order सुरक्षित रखें और फिर जाँचें; दोबारा भुगतान न करें।'));
     } finally {
       setBusy('');
@@ -267,12 +298,6 @@ export default function ParentCoursesPage() {
   }
 
   async function startPaidCheckout(courseId: number, recipientType: 'SELF' | 'CHILD', studentId: number | undefined, billingAddressId: number) {
-    if (pendingVerify) {
-      setError(english
-        ? 'A previous payment still needs verification. Retry verification before starting another checkout.'
-        : 'पिछले भुगतान की पुष्टि बाकी है। नया भुगतान शुरू करने से पहले फिर से सत्यापित करें।');
-      return;
-    }
     if (!Number.isSafeInteger(courseId) || courseId <= 0 || busy) return;
     if (recipientType === 'CHILD' && (!studentId || studentId <= 0)) {
       setError(english ? 'Choose a child first.' : 'पहले बच्चे का चयन करें।');
@@ -303,9 +328,7 @@ export default function ParentCoursesPage() {
         orderId: String(body.orderId),
         signature: '',
       };
-      setPendingVerify(recoverableDraft);
-      try { window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(recoverableDraft)); }
-      catch { /* Keep in-memory recovery when session storage is blocked. */ }
+      savePendingVerify(recoverableDraft);
       await ensureRazorpayCheckout();
       const RazorpayCtor = window.Razorpay;
       if (!RazorpayCtor) throw new Error(english ? 'Payment checkout is not available. Please retry.' : 'भुगतान checkout उपलब्ध नहीं है। फिर प्रयास करें।');
@@ -327,12 +350,10 @@ export default function ParentCoursesPage() {
           };
           if (!draft.paymentId || !draft.orderId || !draft.signature || draft.orderId !== body.orderId) {
             setError(english ? 'The payment confirmation did not match this order. Reconcile this order before starting another checkout.' : 'भुगतान की पुष्टि इस order से मेल नहीं खाती। नया checkout शुरू करने से पहले इसी order की जाँच करें।');
-            setPendingVerify(recoverableDraft);
-            try { window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(recoverableDraft)); } catch { /* Keep in-memory draft. */ }
+            savePendingVerify(recoverableDraft);
             setBusy('');
             return;
           }
-          setPendingVerify(draft);
           void verifyPayment(draft);
         },
         modal: { ondismiss: () => setBusy('') },
@@ -443,7 +464,7 @@ export default function ParentCoursesPage() {
           <input id="qe-parent-discount-code" autoComplete="off" maxLength={40}
             value={discountCode} onChange={event=>setDiscountCode(event.target.value.toUpperCase())}
             placeholder={english?"Enter a code supplied by your institution":"आपकी संस्था द्वारा दिया गया code डालें"}
-            disabled={busy!==''||!!pendingVerify}/>
+            disabled={busy!==''}/>
           <p><LocaleText hinglish="कोड केवल उसी course और institution पर लागू होगा जिसके लिए HRMS ने approval दिया है। कीमत और tax की गणना server पर होती है।"
             english="Codes apply only to the course and institution approved by HRMS. The server calculates the discount, payable amount and tax." /></p>
         </section>
@@ -466,12 +487,12 @@ export default function ParentCoursesPage() {
             }}
           />
         )}
-        {pendingVerify && <section className="parent-courses-page__verify">
-          <div><strong><LocaleText hinglish="भुगतान पुष्टि बाकी है" english="Payment verification is pending" /></strong>
-            <p><LocaleText hinglish="दोबारा भुगतान न करें। इसी order की पुष्टि फिर से करें।" english="Do not pay again. Retry verification for this same order." /></p></div>
+        {pendingVerifies.map(draft => <section className="parent-courses-page__verify" key={draft.localOrderId}>
+          <div><strong><LocaleText hinglish={`भुगतान पुष्टि बाकी है — कोर्स #${draft.courseId}`} english={`Payment verification pending — course #${draft.courseId}`} /></strong>
+            <p><LocaleText hinglish="इस order की अलग से जाँच हो सकती है। अन्य कोर्स खरीदने के लिए उपलब्ध हैं।" english="This saved order can be reconciled independently. Other courses remain available to purchase." /></p></div>
           <button className="button button-dark button-small" type="button" disabled={busy !== ''}
-            onClick={() => void reconcilePayment(pendingVerify)}><LocaleText hinglish="फिर से सत्यापित करें" english="Retry verification" /></button>
-        </section>}
+            onClick={() => void reconcilePayment(draft)}><LocaleText hinglish="फिर से सत्यापित करें" english="Retry verification" /></button>
+        </section>)}
 
         <section className="parent-courses-page__section">
           <div className="parent-courses-page__section-heading">
@@ -488,7 +509,7 @@ export default function ParentCoursesPage() {
                   {request.requested_at && <small><LocaleText hinglish="अनुरोध भेजा गया" english="Requested" /> · {formatUserTimestamp(request.requested_at, language)}</small>}
                 </div>
                 <div className="parent-courses-page__request-actions">
-                  <button type="button" className="button button-dark button-small" disabled={busy !== '' || (Number(request.price_paise) > 0 && pendingVerify !== null)}
+                  <button type="button" className="button button-dark button-small" disabled={busy !== ''}
                     onClick={() => {
                       const kid = children.find(child => child.id === request.student_id);
                       if (!kid) { setError(english ? 'This child is no longer linked to your account.' : 'यह बच्चा अब आपके खाते से लिंक नहीं है।'); return; }
@@ -560,7 +581,7 @@ export default function ParentCoursesPage() {
               >
                 <div className="parent-courses-page__buy-actions">
                   <button className="button button-dark button-small" type="button"
-                    disabled={busy !== '' || (!isFree && pendingVerify !== null) || ownedByParent}
+                    disabled={busy !== '' || ownedByParent}
                     onClick={() => isFree ? void addFreeCourse(course.course_id, 'SELF') : void requestPaidCheckout(course.course_id, 'SELF')}>
                     {busy === 'checkout-' + course.course_id + '-SELF-self' || busy === 'free-' + course.course_id + '-SELF-self'
                       ? (english ? 'Working…' : 'प्रक्रिया जारी…')
@@ -579,7 +600,7 @@ export default function ParentCoursesPage() {
                     </select>
                   </label>
                   <button className="button button-light button-small" type="button"
-                    disabled={busy !== '' || (!isFree && pendingVerify !== null) || ownedByParent || !selectedChild || selectedChildAlreadyOwns}
+                    disabled={busy !== '' || ownedByParent || !selectedChild || selectedChildAlreadyOwns}
                     onClick={() => isFree ? void addFreeCourse(course.course_id, 'CHILD', selectedChild) : void requestPaidCheckout(course.course_id, 'CHILD', selectedChild)}>
                     {busy === 'checkout-' + course.course_id + '-CHILD-' + selectedChild || busy === 'free-' + course.course_id + '-CHILD-' + selectedChild
                       ? (english ? 'Working…' : 'प्रक्रिया जारी…')
