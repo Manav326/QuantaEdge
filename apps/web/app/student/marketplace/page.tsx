@@ -273,7 +273,11 @@ export default function StudentMarketplacePage() {
       }));
       if (String(result.status || '').toUpperCase() === 'VERIFIED' || result.entitled === true) {
         clearPendingVerify(draft.localOrderId);
-        setStatus(tx('Payment verified. Your course is now in All Courses.', 'भुगतान सत्यापित हो गया। आपका कोर्स All Courses में उपलब्ध है।'));
+        setStatus(result.financeReconciliationRequired === true
+          ? tx('Payment confirmed and course access granted. Invoice and revenue-share finalization is still being reconciled; do not pay again.',
+              'भुगतान की पुष्टि हो गई और कोर्स की पहुँच मिल गई है। इनवॉइस और revenue-share का अंतिम मिलान अभी जारी है; दोबारा भुगतान न करें।')
+          : String(result.message || '').trim() ||
+            tx('Payment verified. Your course is now in All Courses.', 'भुगतान सत्यापित हो गया। आपका कोर्स All Courses में उपलब्ध है।'));
         await loadOffers();
         await loadPurchaseRequests();
         router.push('/student/courses?focus=' + encodeURIComponent(String(draft.courseId)));
@@ -340,7 +344,11 @@ export default function StudentMarketplacePage() {
         if (Number.isSafeInteger(recoveredLocalOrderId) && recoveredLocalOrderId > 0) {
           clearPendingVerify(recoveredLocalOrderId);
         }
-        setStatus(tx('The existing payment was reconciled. Your course is now available in All Courses.', 'मौजूदा भुगतान सत्यापित हो गया। आपका कोर्स All Courses में उपलब्ध है।'));
+        setStatus(order.financeReconciliationRequired === true
+          ? tx('Payment confirmed and course access granted. Invoice and revenue-share finalization is still being reconciled; do not pay again.',
+              'भुगतान की पुष्टि हो गई और कोर्स की पहुँच मिल गई है। इनवॉइस और revenue-share का अंतिम मिलान अभी जारी है; दोबारा भुगतान न करें।')
+          : String(order.message || '').trim() ||
+            tx('The existing payment was reconciled. Your course is now available in All Courses.', 'मौजूदा भुगतान सत्यापित हो गया। आपका कोर्स All Courses में उपलब्ध है।'));
         await loadOffers();
         await loadPurchaseRequests();
         router.push('/student/courses?focus=' + encodeURIComponent(String(recoveredCourseId)));
