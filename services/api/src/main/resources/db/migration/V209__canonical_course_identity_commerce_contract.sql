@@ -351,19 +351,19 @@ $function$;
 
 DROP TRIGGER IF EXISTS trg_qe_course_payment_order_identity_unique ON course_payment_order;
 CREATE TRIGGER trg_qe_course_payment_order_identity_unique
-BEFORE INSERT OR UPDATE OF course_id,course_identity_id,identity_contract_version,status,institution_id,v_student_id
+BEFORE INSERT OR UPDATE OF course_id,course_identity_id,identity_contract_version,status,institution_id,student_id
 ON course_payment_order
 FOR EACH ROW EXECUTE FUNCTION qe_guard_logical_course_commerce_uniqueness();
 
 DROP TRIGGER IF EXISTS trg_qe_course_purchase_identity_unique ON course_purchase;
 CREATE TRIGGER trg_qe_course_purchase_identity_unique
-BEFORE INSERT OR UPDATE OF course_id,course_identity_id,identity_contract_version,institution_id,v_student_id,purchaser_user_id
+BEFORE INSERT OR UPDATE OF course_id,course_identity_id,identity_contract_version,institution_id,student_id,purchaser_user_id
 ON course_purchase
 FOR EACH ROW EXECUTE FUNCTION qe_guard_logical_course_commerce_uniqueness();
 
 DROP TRIGGER IF EXISTS trg_qe_course_entitlement_identity_unique ON course_entitlement;
 CREATE TRIGGER trg_qe_course_entitlement_identity_unique
-BEFORE INSERT OR UPDATE OF course_id,course_identity_id,identity_contract_version,institution_id,v_holder_user_id,v_holder_student_id,source_purchase_id
+BEFORE INSERT OR UPDATE OF course_id,course_identity_id,identity_contract_version,institution_id,holder_user_id,holder_student_id,source_purchase_id
 ON course_entitlement
 FOR EACH ROW EXECUTE FUNCTION qe_guard_logical_course_commerce_uniqueness();
 
