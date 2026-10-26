@@ -847,6 +847,12 @@ public class CourseMarketplaceController {
         throw new IllegalArgumentException("This idempotency key was already used with a different offer code. Start a new checkout request.");
       String previousStatus = String.valueOf(previous.get("status"));
       if ("PENDING".equals(previousStatus)) {
+        long currentOfferId=((Number)offer.get("institution_offer_id")).longValue();
+        Object savedOfferRaw=previous.get("institution_offer_id");
+        if(!(savedOfferRaw instanceof Number n) || n.longValue()!=currentOfferId) {
+          expireSupersededUnpaidOrder(previous,institutionId,currentOfferId);
+          throw new IllegalStateException("The previous checkout was confirmed unpaid and expired. Start a fresh checkout for the current offer.");
+        }
         requireSameBillingAddressChoice(previous,buyerSnapshot);
         if (!hasLockedFinancialSnapshots(previous)) {
           repairLegacyPendingOrderSnapshots(previous,institutionId,
@@ -1488,7 +1494,7 @@ public class CourseMarketplaceController {
     requireConfigured();
     List<Map<String,Object>> rows = jdbc.queryForList("""
         select id,student_id,purchaser_user_id,target_student_id,recipient_type,course_id,
-          institution_id,institution_offer_id,offer_price_paise,currency,provider_order_id,provider_payment_id,status,
+          institution_id,institution_offer_id,course_identity_id,identity_contract_version,offer_price_paise,currency,provider_order_id,provider_payment_id,status,
           listed_price_paise,discount_offer_id,discount_amount_paise,discount_reference,
           discount_snapshot::text as discount_snapshot_json,
           tax_profile_id,revenue_share_policy_id,taxable_value_paise,output_tax_paise,
@@ -2009,7 +2015,7 @@ public class CourseMarketplaceController {
     }
     List<Map<String, Object>> rows = jdbc.queryForList("""
         select id,student_id,purchaser_user_id,target_student_id,recipient_type,course_id,
-          institution_id,institution_offer_id,offer_price_paise,currency,provider_order_id,provider_payment_id,status,
+          institution_id,institution_offer_id,course_identity_id,identity_contract_version,offer_price_paise,currency,provider_order_id,provider_payment_id,status,
           tax_profile_id,revenue_share_policy_id,
           tax_calculation_snapshot::text as tax_calculation_snapshot_json,
           revenue_share_policy_snapshot::text as revenue_share_policy_snapshot_json
