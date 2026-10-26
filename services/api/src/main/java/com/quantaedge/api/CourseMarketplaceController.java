@@ -1244,19 +1244,20 @@ public class CourseMarketplaceController {
           "The previous checkout could not be safely replaced because its payment status could not be confirmed. Do not pay again; reconcile the saved order first.");
     }
 
-    // A stale offer can have a captured or authorised payment even though the local callback
-    // never completed. Reconcile that exact saved order before deciding it is safe to replace.
-    // Reconciliation uses the persisted buyer/beneficiary, never the current caller's payer.
+    // Reuse the existing reconciler as the authority when the lightweight provider check is ambiguous.
+    // It confirms the exact saved order, amount and currency, and reports whether a retry is safe.
     if(!providerConfirmsRetryIsSafe(providerState)) {
       Long originalPayerUserId = prior.get("purchaser_user_id") instanceof Number payer
           ? payer.longValue() : null;
       boolean reconciledVerified=false;
+      boolean reconciledRetrySafe=false;
       try {
         Map<String,Object> reconciliation = reconcileOrderInternal(
             savedOrder.longValue(), targetStudentId, originalPayerUserId, institutionId);
         reconciledVerified = reconciliationConfirmsExistingOrderVerified(reconciliation);
+        reconciledRetrySafe = reconciliationConfirmsCheckoutRetryIsSafe(reconciliation);
       } catch(RuntimeException reconciliationFailure) {
-        // Keep the fail-closed decision below. This is not proof that payment failed.
+        // An exception is not proof that payment failed; retain the fail-closed decision below.
       }
       if(!reconciledVerified) {
         Boolean nowVerified=jdbc.queryForObject("""
@@ -1270,18 +1271,9 @@ public class CourseMarketplaceController {
             org.springframework.http.HttpStatus.CONFLICT,
             "The previous checkout has now been reconciled and verified. Refresh your courses; do not buy this course again.");
       }
+      if(reconciledRetrySafe) providerState="RETRYABLE";
     }
 
-    if("PAID".equals(providerState)) {
-      throw new org.springframework.web.server.ResponseStatusException(
-          org.springframework.http.HttpStatus.CONFLICT,
-          "A previous checkout for this course was reported paid. Automatic reconciliation did not complete; do not pay again. The saved order requires finance review.");
-    }
-    if(!providerConfirmsRetryIsSafe(providerState)) {
-      throw new org.springframework.web.server.ResponseStatusException(
-          org.springframework.http.HttpStatus.CONFLICT,
-          "The previous checkout is not yet confirmed unpaid. Its saved order was checked for reconciliation, but the provider state remains ambiguous. Do not pay again; finance must review the saved order.");
-    }
     int changed=jdbc.update("""
         update course_payment_order
         set status='EXPIRED',failure_code='COURSE_OFFER_SUPERSEDED_UNPAID',updated_at=now()
@@ -2010,6 +2002,13 @@ public class CourseMarketplaceController {
     return reconciliation != null
         && "VERIFIED".equalsIgnoreCase(String.valueOf(reconciliation.getOrDefault("status","")))
         && Boolean.TRUE.equals(reconciliation.get("entitled"));
+  }
+
+  static boolean reconciliationConfirmsCheckoutRetryIsSafe(Map<String,Object> reconciliation) {
+    return reconciliation != null
+        && "AWAITING_PAYMENT".equalsIgnoreCase(String.valueOf(reconciliation.getOrDefault("status","")))
+        && Boolean.FALSE.equals(reconciliation.get("entitled"))
+        && Boolean.TRUE.equals(reconciliation.get("canRetryCheckout"));
   }
 
   private String inspectProviderOrderForNewAttempt(Map<String,Object> localOrder) {
