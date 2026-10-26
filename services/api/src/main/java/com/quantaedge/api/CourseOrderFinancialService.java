@@ -545,21 +545,18 @@ public class CourseOrderFinancialService {
       on conflict(institution_id,student_id,subject_id) do update
         set status='ACTIVE',updated_at=now()
       """,targetStudentId,institutionId,courseId);
-    if(purchaserUserId!=null&&"CHILD".equals(recipientType)) {
-      jdbc.update("""
-        update parent_course_purchase_request
-        set status='PURCHASED',resolved_at=now(),resolved_by_user_id=?,updated_at=now()
-        where guardian_user_id=? and student_id=? and institution_id=? and course_id=? and status='PENDING'
-        """,purchaserUserId,purchaserUserId,targetStudentId,institutionId,courseId);
-    }
-    int updated=jdbc.update("""
-      update course_payment_order set provider_payment_id=?,provider_signature=?,
-        captured_amount_paise=?,captured_at=coalesce(captured_at,now()),
-        failure_code='FINANCIAL_RECONCILIATION_REQUIRED',updated_at=now()
-      where id=? and institution_id=? and status in ('PENDING','EXPIRED')
-      """,paymentId,signature,capturedAmountPaise,localOrderId,institutionId);
-    if(updated!=1) throw new IllegalStateException("The captured course payment was verified but the access grant could not be committed; retry verification for this same order.");
     return new CapturedAccessGrant(purchaseId,courseId,institutionId,targetStudentId,purchaserUserId,recipientType);
+  }
+
+  /** Parent request housekeeping is separate so it can never roll back paid course access. */
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  public void markParentPurchaseRequestPurchased(
+      long purchaserUserId,long targetStudentId,long institutionId,long courseId) {
+    jdbc.update("""
+      update parent_course_purchase_request
+      set status='PURCHASED',resolved_at=now(),resolved_by_user_id=?,updated_at=now()
+      where guardian_user_id=? and student_id=? and institution_id=? and course_id=? and status='PENDING'
+      """,purchaserUserId,purchaserUserId,targetStudentId,institutionId,courseId);
   }
 
   /**
@@ -567,7 +564,7 @@ public class CourseOrderFinancialService {
    * course access is already committed. Failure here must not undo an exact captured payment's access.
    */
   @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public FinalizedSale finalizeCapturedSale(long localOrderId,String paymentId,long capturedAmountPaise) {
+  public FinalizedSale finalizeCapturedSale(long localOrderId,String paymentId,String signature,long capturedAmountPaise) {
     List<Map<String,Object>> orders=jdbc.queryForList("""
       select id,student_id,purchaser_user_id,target_student_id,recipient_type,course_id,institution_id,
         institution_offer_id,offer_price_paise,currency,listed_price_paise,discount_offer_id,discount_reference,
@@ -710,11 +707,13 @@ public class CourseOrderFinancialService {
     }
     int finalizedOrderRows=jdbc.update("""
       update course_payment_order
-      set status='VERIFIED',fiscal_document_id=?,failure_code=null,
+      set status='VERIFIED',provider_payment_id=?,provider_signature=?,fiscal_document_id=?,failure_code=null,
         verified_at=coalesce(verified_at,now()),captured_amount_paise=?,captured_at=coalesce(captured_at,now()),updated_at=now()
-      where id=? and provider_payment_id=? and offer_price_paise=?
+      where id=? and institution_id=? and offer_price_paise=?
+        and (provider_payment_id is null or provider_payment_id=?)
         and status in ('PENDING','EXPIRED','VERIFIED')
-      """,fiscalDocumentId,capturedAmountPaise,orderId,paymentId,capturedAmountPaise);
+      """,paymentId,signature,fiscalDocumentId,capturedAmountPaise,orderId,
+        number(order.get("institution_id")),capturedAmountPaise,paymentId);
     if(finalizedOrderRows!=1)
       throw new IllegalStateException("The fiscal document was not linked to the exact captured course order.");
     return new FinalizedSale(fiscalDocumentId,documentNumber,
