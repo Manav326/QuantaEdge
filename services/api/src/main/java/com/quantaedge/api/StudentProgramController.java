@@ -45,20 +45,20 @@ public class StudentProgramController {
           coalesce((select mode.delivery_mode from curriculum_program_delivery_mode mode
             where mode.program_id=p.id),'LEARNING_CONTENT') as delivery_mode,
           exists(select 1 from student_program_enrollment spe
-            where spe.institution_id=? and spe.student_id=st.id and qe_same_logical_course(spe.program_id,p.id)
+            where spe.institution_id=? and spe.student_id=st.id and spe.program_id=p.id
               and spe.status='ACTIVE') as enrolled,
           exists(select 1 from student_program_enrollment spe
-            where spe.institution_id=? and spe.student_id=st.id and qe_same_logical_course(spe.program_id,p.id)
+            where spe.institution_id=? and spe.student_id=st.id and spe.program_id=p.id
               and spe.status='PAUSED') as paused,
           exists(select 1 from course_purchase purchase
-            where purchase.institution_id=? and purchase.student_id=st.id and qe_same_logical_course(purchase.course_id,p.id)) as purchased,
+            where purchase.institution_id=? and purchase.student_id=st.id and purchase.course_id=p.id) as purchased,
           (exists(select 1 from student_program_enrollment access_enrollment
               where access_enrollment.institution_id=? and access_enrollment.student_id=st.id
-                and qe_same_logical_course(access_enrollment.program_id,p.id) and access_enrollment.status in ('ACTIVE','PAUSED'))
+                and access_enrollment.program_id=p.id and access_enrollment.status in ('ACTIVE','PAUSED'))
             or exists(select 1 from course_purchase access_purchase
               where access_purchase.institution_id=? and access_purchase.student_id=st.id and access_purchase.course_id=p.id)
             or exists(select 1 from course_entitlement access_entitlement
-              where access_entitlement.institution_id=? and qe_same_logical_course(access_entitlement.course_id,p.id)
+              where access_entitlement.institution_id=? and access_entitlement.course_id=p.id
                 and (access_entitlement.holder_student_id=st.id or access_entitlement.holder_user_id=st.user_account_id))
           ) as has_access
         from student st
@@ -129,7 +129,7 @@ public class StudentProgramController {
               where spe.institution_id=? and spe.student_id=st.id and spe.program_id=p.id
                 and spe.status in ('ACTIVE','PAUSED'))
             or exists(select 1 from course_purchase purchase
-              where purchase.institution_id=? and purchase.student_id=st.id and qe_same_logical_course(purchase.course_id,p.id))
+              where purchase.institution_id=? and purchase.student_id=st.id and purchase.course_id=p.id)
             or exists(select 1 from course_entitlement ce
               where ce.institution_id=? and ce.course_id=p.id
                 and (ce.holder_student_id=st.id or ce.holder_user_id=st.user_account_id))
