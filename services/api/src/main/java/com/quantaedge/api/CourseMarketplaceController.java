@@ -1475,7 +1475,7 @@ public class CourseMarketplaceController {
     authorization.requirePermission(context, "QE_PLATFORM_OWNER");
     List<Map<String,Object>> rows = jdbc.queryForList("""
         select id,student_id,purchaser_user_id,institution_id,course_id,status
-        from course_payment_order where id=? for update
+        from course_payment_order where id=?
         """, localOrderId);
     if (rows.isEmpty()) throw new IllegalArgumentException("Course payment order not found.");
     Map<String,Object> order = rows.getFirst();
@@ -1508,7 +1508,7 @@ public class CourseMarketplaceController {
       return Map.of("status","UNMATCHED","message","The provider event has no valid saved Razorpay order reference.");
     List<Map<String,Object>> rows=jdbc.queryForList("""
         select id,student_id,purchaser_user_id,institution_id,course_id,status
-        from course_payment_order where provider_order_id=? for update
+        from course_payment_order where provider_order_id=?
         """,providerOrderId);
     if(rows.isEmpty())
       return Map.of("status","UNMATCHED","message","No QuantaEdge course order references this Razorpay order. Finance must investigate.");
@@ -1564,7 +1564,6 @@ public class CourseMarketplaceController {
         where id=? and institution_id=?
           and ((? is not null and student_id=? and purchaser_user_id is null)
             or (? is not null and purchaser_user_id=?))
-        for update
         """, localOrderId, institutionId, callerStudentId, callerStudentId, callerUserId, callerUserId);
     if (rows.isEmpty()) throw new SecurityException("This payment order is not available to this account.");
     Map<String,Object> order = rows.getFirst();
@@ -2170,7 +2169,6 @@ public class CourseMarketplaceController {
         where id=? and institution_id=?
           and ((? is not null and student_id=? and purchaser_user_id is null)
             or (? is not null and purchaser_user_id=?))
-        for update
         """, localOrderId, institutionId, callerStudentId, callerStudentId, callerUserId, callerUserId);
     if (rows.isEmpty()) throw new SecurityException("This payment order is not available to this account.");
     Map<String, Object> order = rows.getFirst();
@@ -2299,12 +2297,7 @@ public class CourseMarketplaceController {
     if(financeSnapshotsReady) {
       try {
         finalizedSale=courseOrderFinancialService.finalizeCapturedSale(localOrderId,paymentId,expectedAmount);
-        int finalizedRows=jdbc.update("""
-            update course_payment_order set status='VERIFIED',fiscal_document_id=?,failure_code=null,updated_at=now()
-            where id=? and institution_id=? and status in ('PENDING','EXPIRED')
-              and provider_payment_id=? and captured_amount_paise=?
-            """,finalizedSale.fiscalDocumentId(),localOrderId,institutionId,paymentId,expectedAmount);
-        financePending=finalizedRows!=1;
+        financePending=false;
       } catch(RuntimeException financeFailure) {
         // Access was committed in its own transaction after exact provider confirmation.
         // Invoice/share failure must not convert a successful payment into an inaccessible course.
