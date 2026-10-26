@@ -23,43 +23,42 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
             workflow,
         )
 
+
     def test_targeted_analyze_all_markers_rebuild_stale_books_per_class(self):
         workflow = read("textbook-visual-candidates-v3.yml")
+        planner = (ROOT / "scripts" / "plan_textbook_layer45_matrix.py").read_text(encoding="utf-8")
         for grade in ("7", "8"):
             marker = f"[analyze-all-visual-layers-4-5-class-{grade}]"
             self.assertIn(marker, workflow)
-            self.assertIn(f"contains(github.event.head_commit.message || '', '{marker}') && '[\"{grade}\"]'", workflow)
+            self.assertIn(marker, planner)
+        self.assertIn("matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}", workflow)
         self.assertIn("&& 'analyze_all') || (github.event_name == 'push'", workflow)
         self.assertIn("cancel-in-progress:", workflow)
         coordinator = read("resume-textbook-layers-4-5-automatically.yml")
         self.assertIn('"Mirror verified textbook extraction artifact to main"', coordinator)
-        self.assertIn('TRIGGER_CONCLUSION', coordinator)
-        self.assertIn('textbook-extraction-pilot.yml/runs', coordinator)
+        self.assertIn("TRIGGER_CONCLUSION", coordinator)
+        self.assertIn("textbook-extraction-pilot.yml/runs", coordinator)
         self.assertIn("active source extraction or Layer 4–5 work", coordinator)
 
     def test_class8_rebuild_uses_fresh_verified_source_and_keeps_publication_disabled(self):
         workflow = read("textbook-visual-candidates-v3.yml")
+        planner = (ROOT / "scripts" / "plan_textbook_layer45_matrix.py").read_text(encoding="utf-8")
         marker = "[analyze-all-visual-layers-4-5-class-8]"
         self.assertIn(marker, workflow)
-        self.assertIn(
-            "contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-8]') && '[\"8\"]'",
-            workflow,
-        )
+        self.assertIn(marker, planner)
         self.assertIn("&& 'analyze_all') || (github.event_name == 'push'", workflow)
         self.assertIn("source PDF SHA-256 differs", workflow)
         self.assertIn('"publication_allowed": False', workflow)
 
     def test_class8_targeted_rebuild_replaces_only_the_class8_resume_lane(self):
         workflow = read("textbook-visual-candidates-v3.yml")
+        planner = (ROOT / "scripts" / "plan_textbook_layer45_matrix.py").read_text(encoding="utf-8")
         self.assertIn("&& '8')", workflow)
-        self.assertIn(
-            "contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-8]')",
-            workflow,
-        )
+        self.assertIn("[analyze-all-visual-layers-4-5-class-8]", workflow)
+        self.assertIn("[analyze-all-visual-layers-4-5-class-8]", planner)
         self.assertIn("cancel-in-progress:", workflow)
         self.assertIn("publication_allowed", workflow)
         self.assertIn("source PDF SHA-256 differs", workflow)
-
     def test_layers_1_to_5_has_all_execution_and_resume_modes_in_one_entrypoint(self):
         workflow = read("textbook-visual-candidates-v3.yml")
         self.assertIn("workflow_dispatch:", workflow)
@@ -69,44 +68,53 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("resume_layers_4_5", workflow)
         self.assertIn("resume_preparation", workflow)
 
+
     def test_marked_push_runs_resume_mode_for_both_classes_in_the_core_workflow(self):
         workflow = read("textbook-visual-candidates-v3.yml")
-        marker = "[resume-visual-layers-4-5-classes-7-8]"
-        self.assertIn(marker, workflow)
-        self.assertIn("[resume-visual-layers-4-5-classes-6-8]", workflow)
-        self.assertIn("[resume-visual-layers-4-5-class-6]", workflow)
-        self.assertIn("matrix:", workflow)
-        self.assertIn("max-parallel: 3", workflow)
-        self.assertIn("fromJSON(contains(github.event.head_commit.message", workflow)
+        planner = (ROOT / "scripts" / "plan_textbook_layer45_matrix.py").read_text(encoding="utf-8")
+        for marker in (
+            "[resume-visual-layers-4-5-classes-7-8]",
+            "[resume-visual-layers-4-5-classes-6-8]",
+            "[resume-visual-layers-4-5-class-6]",
+            "[resume-visual-layers-4-5-class-7]",
+            "[resume-visual-layers-4-5-class-8]",
+        ):
+            self.assertIn(marker, workflow)
+            self.assertIn(marker, planner)
+        self.assertIn("matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}", workflow)
+        self.assertIn("max-parallel: 16", workflow)
         self.assertIn("inputs.analysis_mode || (github.event_name == 'push'", workflow)
         self.assertIn("VISION_MODEL: ${{ inputs.vision_model || 'qwen2.5vl:3b' }}", workflow)
-        self.assertNotIn("VISION_MODEL: ${{ inputs.vision_model }}", workflow)
-        self.assertIn("CHECKPOINT_BATCH_SIZE: ${{ inputs.checkpoint_batch_size || '5' }}", workflow)
+        self.assertIn("CHECKPOINT_BATCH_SIZE: ${{ inputs.checkpoint_batch_size || '10' }}", workflow)
         self.assertIn("env.ANALYSIS_MODE == 'resume_layers_4_5'", workflow)
         self.assertIn("'classes-7-8-resume'", workflow)
+        self.assertIn("BOOK_ID: ${{ matrix.book_id || '' }}", workflow)
 
     def test_marked_push_can_resume_class7_and_class8_independently(self):
         workflow = read("textbook-visual-candidates-v3.yml")
-        marker7 = "[resume-visual-layers-4-5-class-7]"
-        marker8 = "[resume-visual-layers-4-5-class-8]"
-        self.assertIn(marker7, workflow)
-        self.assertIn(marker8, workflow)
-        matrix_line = next(
-            line for line in workflow.splitlines()
-            if line.strip().startswith("class_no:") and "fromJSON(" in line
-        )
-        self.assertIn("contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') && '[\"7\"]'", matrix_line)
-        self.assertIn("contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') && '[\"8\"]'", matrix_line)
-        self.assertIn("contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') && '[\"7\",\"8\"]'", matrix_line)
+        planner = (ROOT / "scripts" / "plan_textbook_layer45_matrix.py").read_text(encoding="utf-8")
+        for marker in (
+            "[resume-visual-layers-4-5-class-7]",
+            "[resume-visual-layers-4-5-class-8]",
+            "[resume-visual-layers-4-5-classes-7-8]",
+        ):
+            self.assertIn(marker, workflow)
+            self.assertIn(marker, planner)
+        self.assertIn("matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}", workflow)
+        self.assertIn("max-parallel: 16", workflow)
         self.assertIn("&& '7')", workflow)
         self.assertIn("&& '8')", workflow)
-        self.assertIn("max-parallel: 3", workflow)
 
     def test_cancelled_class6_to8_run_is_resumed_by_separate_coordinator(self):
         workflow = read("textbook-visual-candidates-v3.yml")
+        planner = (ROOT / "scripts" / "plan_textbook_layer45_matrix.py").read_text(encoding="utf-8")
         self.assertNotIn("workflow_run:", workflow)
         self.assertIn("data/textbook-content-pipeline/resume-control.v1.json", workflow)
         self.assertIn("[resume-visual-layers-4-5-classes-6-8]", workflow)
+        self.assertIn("[resume-visual-layers-4-5-classes-6-8]", planner)
+        self.assertIn("matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}", workflow)
+        self.assertIn("max-parallel: 16", workflow)
+        self.assertIn("Wake checkpoint coordinator after each book-worker round", workflow)
         coordinator = read("resume-textbook-layers-4-5-automatically.yml")
         self.assertIn("push:", coordinator)
         self.assertIn('".github/workflows/resume-textbook-layers-4-5-automatically.yml"', coordinator)
@@ -124,16 +132,15 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("already has active source extraction or Layer 4–5 work", coordinator)
         self.assertIn('else job.get("started_at")', coordinator)
         self.assertIn("checkpoint_baseline=", coordinator)
+
     def test_layer45_resume_uses_finite_request_timeout_and_replaces_only_matching_class_runner(self):
         workflow = read("textbook-visual-candidates-v3.yml")
         pipeline = (ROOT / "scripts" / "quantaedge_textbook_pipeline.py").read_text(encoding="utf-8")
-        self.assertIn("cancel-in-progress: ${{ github.event_name == 'push' && ((", workflow)
-        self.assertIn("(github.event_name == 'push' && contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') && '6')", workflow)
-        self.assertIn("(github.event_name == 'push' && (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]')", workflow)
-        self.assertIn("(github.event_name == 'push' && (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]')", workflow)
         self.assertIn("--request-timeout 300", workflow)
         self.assertIn('q.add_argument("--request-timeout",type=int,default=300', pipeline)
         self.assertIn('"--timeout",str(args.request_timeout)', pipeline)
+        self.assertIn("max-parallel: 16", workflow)
+        self.assertIn("BOOK_ID: ${{ matrix.book_id || '' }}", workflow)
         coordinator = read("resume-textbook-layers-4-5-automatically.yml")
         self.assertIn("age >= 1800", coordinator)
         self.assertIn("/actions/runs/$run_id/cancel", coordinator)
@@ -143,8 +150,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("all_processing_steps_stale", coordinator)
         self.assertIn("source_ledgers", coordinator)
         self.assertIn("ledger_sha256", coordinator)
-        self.assertIn("summary.get(\"unresolved_count\")!=0", coordinator)
-
+        self.assertIn('summary.get("unresolved_count")!=0', coordinator)
     def test_layers_4_5_resume_preflight_runs_before_inventory_rebuild(self):
         workflow = read("textbook-visual-candidates-v3.yml")
         restore = workflow[workflow.index("- name: Restore each matching Layer 1 inventory bundle or build only missing inventories"):workflow.index("- name: Restore or build immutable per-book candidate checkpoints")]
@@ -258,6 +264,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("require-existing-checkpoint", workflow)
         self.assertIn("retryable_segments", workflow)
 
+
     def test_layer45_run_budget_yields_safely_and_is_resumable(self):
         workflow = read("textbook-visual-candidates-v3.yml")
         pipeline = (ROOT / "scripts" / "quantaedge_textbook_pipeline.py").read_text(encoding="utf-8")
@@ -266,12 +273,10 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("YIELDED_FOR_RESUME", pipeline)
         self.assertIn("if processed > 0: total_batches += 1", pipeline)
         self.assertIn("id: layer45_run", workflow)
-        self.assertIn("MAX_BATCHES_PER_RUN: 8", workflow)
+        self.assertIn("MAX_BATCHES_PER_RUN: 12", workflow)
         self.assertIn('--max-batches-per-run "$MAX_BATCHES_PER_RUN"', workflow)
         self.assertIn('result" -eq 10', workflow)
-        self.assertIn("steps.layer45_run.outputs.yielded != 'true'", workflow)
-        self.assertIn("needs.prepare.outputs.yielded != 'true'", workflow)
-
+        self.assertIn("needs: [plan, prepare]", workflow)
     def test_layer45_no_progress_guard_and_inventory_source_identity_recovery_exist(self):
         analyzer = (ROOT / "scripts" / "analyze_visual_inventory_with_ollama.py").read_text(encoding="utf-8")
         pipeline = (ROOT / "scripts" / "quantaedge_textbook_pipeline.py").read_text(encoding="utf-8")

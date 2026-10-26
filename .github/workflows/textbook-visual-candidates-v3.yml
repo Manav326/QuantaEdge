@@ -5,6 +5,8 @@ on:
     paths:
       - ".github/workflows/textbook-visual-candidates-v3.yml"
       - "tests/test_workflow_resume_entrypoints.py"
+      - "scripts/plan_textbook_layer45_matrix.py"
+      - "tests/test_plan_textbook_layer45_matrix.py"
       - ".github/workflows/textbook-extraction-pilot.yml"
       - "scripts/prepare_visual_candidates_v3.py"
       - "scripts/prepare_visual_candidate_batch.py"
@@ -53,11 +55,11 @@ on:
         type: string
         default: "qwen2.5vl:3b"
       checkpoint_batch_size:
-        description: "Assets per durable Git/GHCR savepoint; 5 reduces repeated Layer 5 rebuilds while keeping interrupted work bounded"
+        description: "Assets per durable Git/GHCR savepoint; 10 reduces per-batch rebuild overhead while preserving resumability"
         required: true
         type: choice
-        options: ["1", "2", "5"]
-        default: "5"
+        options: ["5", "10"]
+        default: "10"
 
   workflow_call:
     inputs:
@@ -88,6 +90,42 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'push' && ((contains(github.event.head_commit.message || '', '[cancel-layer45-matrix]') && contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]')) || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') || contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-8]')) }}
 
 jobs:
+  plan:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'workflow_call' ||
+      (github.event_name == 'push' &&
+        !contains(github.event.head_commit.message || '', '[cancel-layer45-matrix]') &&
+        (
+          contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') ||
+          contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') ||
+          contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') ||
+          contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') ||
+          contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]') ||
+          contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-7]') ||
+          contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-8]')
+        ))
+    name: Plan source-bound Layer 4–5 workers
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.plan_matrix.outputs.matrix }}
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Plan one runner per whole book on resume
+        id: plan_matrix
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          HEAD_MESSAGE: ${{ github.event.head_commit.message || '' }}
+          INPUT_CLASS_NO: ${{ inputs.class_no || '' }}
+          INPUT_ANALYSIS_MODE: ${{ inputs.analysis_mode || '' }}
+        run: python scripts/plan_textbook_layer45_matrix.py --github-output "$GITHUB_OUTPUT"
+
   validate:
     if: github.event_name == 'push' && !(contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]') || contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-8]'))
     name: Validate additive v3 preparation scripts
@@ -104,9 +142,10 @@ jobs:
       - name: Install extraction dependency
         run: python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
       - name: Compile preparation and validation scripts
-        run: python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/prepare_visual_candidate_batch.py scripts/select_textbook_visual_sources.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py
+        run: python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/prepare_visual_candidate_batch.py scripts/select_textbook_visual_sources.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py scripts/plan_textbook_layer45_matrix.py
       - name: Test source selection, extraction integrity and candidate preparation
         run: |
+          python -m unittest discover -s tests -p "test_plan_textbook_layer45_matrix.py" -v
           python -m unittest discover -s tests -p "test_select_textbook_visual_sources.py" -v
           python -m unittest discover -s tests -p "test_validate_textbook_extraction_artifacts.py" -v
           python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
@@ -121,23 +160,24 @@ jobs:
           python -m unittest discover -s tests -p "test_prepare_visual_candidate_batch.py" -v
 
   prepare:
-    if: (github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call' || (github.event_name == 'push' && (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]') || contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-8]')))) && !(github.event_name == 'push' && contains(github.event.head_commit.message || '', '[cancel-layer45-matrix]'))
-    name: Prepare full bilingual Class ${{ matrix.class_no }} candidate set
+    needs: [plan]
+    if: needs.plan.result == 'success' && needs.plan.outputs.matrix != '[]'
+    name: Prepare full bilingual Class ${{ matrix.class_no }} candidate set - ${{ matrix.book_slug }} Prepare full bilingual Class ${{ matrix.class_no }} candidate set
     outputs:
       yielded: ${{ steps.layer45_run.outputs.yielded || 'false' }}
     strategy:
       fail-fast: false
-      max-parallel: 3
-      matrix:
-        class_no: ${{ fromJSON(contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') && '["6"]' || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') && '["7"]' || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') && '["8"]' || contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-7]') && '["7"]' || contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-8]') && '["8"]' || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') && '["7","8"]' || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]') && '["6","7","8"]' || format('["{0}"]', inputs.class_no)) }}
+      max-parallel: 16
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
     runs-on: ubuntu-latest
     timeout-minutes: 360
     env:
       CLASS_NO: ${{ matrix.class_no || inputs.class_no }}
+      BOOK_ID: ${{ matrix.book_id || '' }}
       ANALYSIS_MODE: ${{ inputs.analysis_mode || (github.event_name == 'push' && (contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[analyze-all-visual-layers-4-5-class-8]')) && 'analyze_all') || (github.event_name == 'push' && (contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') || contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]')) && 'resume_layers_4_5') }}
       VISION_MODEL: ${{ inputs.vision_model || 'qwen2.5vl:3b' }}
-      CHECKPOINT_BATCH_SIZE: ${{ inputs.checkpoint_batch_size || '5' }}
-      MAX_BATCHES_PER_RUN: 8
+      CHECKPOINT_BATCH_SIZE: ${{ inputs.checkpoint_batch_size || '10' }}
+      MAX_BATCHES_PER_RUN: 12
     steps:
       - name: Checkout main with write permission for review metadata
         uses: actions/checkout@v4
@@ -157,7 +197,7 @@ jobs:
           [[ "$CLASS_NO" == "6" || "$CLASS_NO" == "7" || "$CLASS_NO" == "8" ]] || { echo "Only Class 6, Class 7 or Class 8 is supported."; exit 2; }
           [[ "$ANALYSIS_MODE" == "prepare_only" || "$ANALYSIS_MODE" == "analyze_all" || "$ANALYSIS_MODE" == "resume_preparation" || "$ANALYSIS_MODE" == "resume_layers_4_5" ]] || { echo "Invalid analysis_mode"; exit 2; }
           [[ -n "$VISION_MODEL" ]] || { echo "vision_model must be non-empty"; exit 2; }
-          [[ "$CHECKPOINT_BATCH_SIZE" == "1" || "$CHECKPOINT_BATCH_SIZE" == "2" || "$CHECKPOINT_BATCH_SIZE" == "5" ]] || { echo "Invalid checkpoint_batch_size"; exit 2; }
+          [[ "$CHECKPOINT_BATCH_SIZE" == "5" || "$CHECKPOINT_BATCH_SIZE" == "10" ]] || { echo "Invalid checkpoint_batch_size"; exit 2; }
           python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
           python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/prepare_visual_candidate_batch.py scripts/select_textbook_visual_sources.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py scripts/analyze_visual_inventory_with_ollama.py scripts/quantaedge_textbook_pipeline.py
           python -m unittest discover -s tests -p "test_select_textbook_visual_sources.py" -v
@@ -181,6 +221,7 @@ jobs:
         shell: bash
         env:
           GHCR_OWNER: ${{ github.repository_owner }}
+          BOOK_ID: ${{ matrix.book_id || '' }}
         run: |
           set -euo pipefail
           owner="$(printf '%s' "$GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
@@ -210,11 +251,14 @@ jobs:
           selection = json.loads(Path(selection_arg).read_text(encoding="utf-8"))
           root = Path(root_arg)
           repo = Path(repo_arg)
+          target_book_id = os.environ.get("BOOK_ID", "").strip()
           manifest_dir = repo / "data" / "textbook-extractions" / f"class-{class_no}" / language / "pages"
           if not manifest_dir.is_dir():
               raise SystemExit(f"Committed extracted pages are missing: {manifest_dir}. Run the extraction pilot and mirror its verified artifact first.")
           for source in selection.get("sources", []):
               book_id = source["book_id"]
+              if target_book_id and book_id != target_book_id:
+                  continue
               book_dir = root / source["book_slug"]
               book_dir.mkdir(parents=True, exist_ok=False)
               pdf_path = book_dir / "source.pdf"
@@ -276,8 +320,18 @@ jobs:
           expected_total = expected_per_language * 2
           if len(all_sources) != expected_total or len({x["book_slug"] for x in all_sources}) != expected_total:
               raise SystemExit(f"Expected {expected_total} unique Class {grade} source books across English and Hindi; found {len(all_sources)}.")
-          (root / "selected-sources.json").write_text(json.dumps({"class": grade, "sources": all_sources, "publication_allowed": False, "review_required": True}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-          print(json.dumps({"class": grade, "selected_source_count": len(all_sources), "maths_books_per_language": 1 if grade == 6 else 2, "science_books_per_language": 1, "languages": ["english", "hindi"], "publication_allowed": False}, indent=2))
+          full_selection = {"class": grade, "sources": all_sources, "publication_allowed": False, "review_required": True}
+          (root / "selected-sources-all.json").write_text(json.dumps(full_selection, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          target_book_id = __import__("os").environ.get("BOOK_ID", "").strip()
+          if target_book_id:
+              selected_sources = [source for source in all_sources if source.get("book_id") == target_book_id]
+              if len(selected_sources) != 1:
+                  raise SystemExit(f"Worker must select exactly one book_id={target_book_id}; found {len(selected_sources)}.")
+          else:
+              selected_sources = all_sources
+          worker_selection = dict(full_selection, sources=selected_sources)
+          (root / "selected-sources.json").write_text(json.dumps(worker_selection, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          print(json.dumps({"class": grade, "full_class_source_count": len(all_sources), "selected_worker_source_count": len(selected_sources), "target_book_id": target_book_id or None, "maths_books_per_language": 1 if grade == 6 else 2, "science_books_per_language": 1, "languages": ["english", "hindi"], "publication_allowed": False}, indent=2))
           PY
           echo "VISUAL_SOURCE_ROOT=$source_root" >> "$GITHUB_ENV"
 
@@ -663,63 +717,6 @@ jobs:
             fi
           fi
 
-      - name: Record this class completion with Layer 5 evidence for automatic resume
-        if: success() && env.ANALYSIS_MODE == 'resume_layers_4_5' && steps.layer45_run.outputs.yielded != 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-          python - <<'PY'
-          import hashlib, json, os
-          from datetime import datetime, timezone
-          from pathlib import Path
-          root = Path(os.environ['GITHUB_WORKSPACE'])
-          control_path = root / 'data/textbook-content-pipeline/resume-control.v1.json'
-          state = json.loads(control_path.read_text(encoding='utf-8'))
-          if state.get('schema_version') != 'quantaedge.textbook-layer45-resume-control.v1' or state.get('active') is not True:
-              print('No active automatic Layer 4–5 resume state; completion marker not needed.')
-              raise SystemExit(0)
-          grade = int(os.environ['CLASS_NO'])
-          if grade not in state.get('classes', []):
-              raise SystemExit(f'Class {grade} is not part of the active resume scope.')
-          selection_path = Path(os.environ['VISUAL_SOURCE_ROOT']) / 'selected-sources.json'
-          selection = json.loads(selection_path.read_text(encoding='utf-8'))
-          if int(selection.get('class', -1)) != grade:
-              raise SystemExit('Selected source manifest class does not match the running class.')
-          sources = selection.get('sources')
-          if not isinstance(sources, list) or not sources:
-              raise SystemExit(f'Class {grade}: selected whole-book source set is empty.')
-          evidence = []
-          for source in sources:
-              slug = source['book_slug']
-              ledger_path = root / 'data' / 'textbook-content-pipeline' / f'class-{grade}' / 'books' / slug / 'coverage-ledger.v1.json'
-              if not ledger_path.is_file():
-                  raise SystemExit(f'Class {grade} book {slug}: Layer 5 coverage ledger is missing.')
-              raw = ledger_path.read_bytes()
-              ledger = json.loads(raw.decode('utf-8'))
-              summary = ledger.get('summary') or {}
-              identity = ledger.get('source') or {}
-              if (ledger.get('schema_version') != 'quantaedge.textbook-coverage-ledger.v1'
-                  or ledger.get('ledger_status') != 'COMPLETE'
-                  or summary.get('unresolved_count') != 0
-                  or identity.get('source_book_id') != source.get('book_id')
-                  or str(identity.get('source_pdf_sha256') or '').lower() != str(source.get('sha256') or '').lower()):
-                  raise SystemExit(f'Class {grade} book {slug}: Layer 5 evidence is incomplete or source-mismatched.')
-              evidence.append({'source_book_id': source['book_id'], 'source_pdf_sha256': source['sha256'], 'ledger_path': ledger_path.relative_to(root).as_posix(), 'ledger_sha256': hashlib.sha256(raw).hexdigest()})
-          marker = root / 'data' / 'textbook-content-pipeline' / 'resume-control' / 'completed' / f'class-{grade}.v1.json'
-          marker.parent.mkdir(parents=True, exist_ok=True)
-          marker.write_text(json.dumps({'schema_version': 'quantaedge.textbook-layer45-class-completion.v1', 'class_no': grade, 'status': 'COMPLETE', 'completed_at': datetime.now(timezone.utc).isoformat(), 'source_scope': 'all selected NCERT whole-book sources for this class', 'source_ledgers': evidence}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-          print(json.dumps({'class_no': grade, 'completion_marker': marker.relative_to(root).as_posix(), 'books_verified': len(evidence), 'all_ledgers_complete': True}))
-          PY
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/textbook-content-pipeline/resume-control/completed/class-"$CLASS_NO".v1.json
-          if git diff --cached --quiet; then
-            echo 'Class $CLASS_NO completion evidence is already current.'
-            exit 0
-          fi
-          git commit -m "status(content): Class $CLASS_NO Layer 5 evidence complete"
-          git pull --rebase origin main
-          git push origin HEAD:main
       - name: Stop Ollama container
         if: always() && (env.ANALYSIS_MODE == 'analyze_all' || env.ANALYSIS_MODE == 'resume_layers_4_5')
         run: docker rm -f quantaedge-ollama >/dev/null 2>&1 || true
@@ -735,89 +732,181 @@ jobs:
             echo "- All generated data remains review-only; publication_allowed=false."
           } >> "$GITHUB_STEP_SUMMARY"
 
-  finalize-resume:
-    name: Record completed class checkpoints
-    needs: prepare
+  record-completed-class-markers:
+    name: Verify all whole-book Layer 5 ledgers and record class completion
+    needs: [plan, prepare]
     if: >-
       always() &&
-      needs.prepare.result == 'success' &&
-      needs.prepare.outputs.yielded != 'true' &&
+      needs.plan.result == 'success' &&
       (
-        (github.event_name == 'push' && (
+        (github.event_name == 'push' && !contains(github.event.head_commit.message || '', '[cancel-layer45-matrix]') && (
           contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]') ||
           contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') ||
           contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') ||
           contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') ||
           contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]')
         )) ||
-        (github.event_name == 'workflow_dispatch' && inputs.analysis_mode == 'resume_layers_4_5')
+        (github.event_name == 'workflow_dispatch' && inputs.analysis_mode == 'resume_layers_4_5') ||
+        (github.event_name == 'workflow_call' && inputs.analysis_mode == 'resume_layers_4_5')
       )
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    env:
-      RESUME_SCOPE: ${{ (github.event_name == 'push' && contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]') && 'all') || (github.event_name == 'push' && contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') && '7-8') || (github.event_name == 'push' && contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') && '6') || (github.event_name == 'push' && contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') && '7') || (github.event_name == 'push' && contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]') && '8') || (github.event_name == 'workflow_dispatch' && inputs.analysis_mode == 'resume_layers_4_5' && inputs.class_no) || 'none' }}
     steps:
-      - name: Checkout main for durable completion marker
+      - name: Checkout main after all book workers settle
         uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 0
           persist-credentials: true
-      - name: Record class completion only after every selected book has a COMPLETE ledger
+      - name: Verify current ledgers and write only complete class markers
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import json, os
+          import hashlib, json
           from datetime import datetime, timezone
           from pathlib import Path
-          root = Path("data/textbook-content-pipeline")
-          control_path = root / "resume-control.v1.json"
+          from scripts.plan_textbook_layer45_matrix import BOOKS
+
+          root = Path.cwd()
+          data_root = root / "data" / "textbook-content-pipeline"
+          control_path = data_root / "resume-control.v1.json"
           state = json.loads(control_path.read_text(encoding="utf-8"))
           if state.get("schema_version") != "quantaedge.textbook-layer45-resume-control.v1":
               raise SystemExit("Resume control schema mismatch; refusing to write completion markers.")
           if state.get("active") is not True:
-              print("Automatic resume is inactive; not writing a completion marker.")
+              print("Automatic resume is inactive; nothing to aggregate.")
               raise SystemExit(0)
-          scope = os.environ.get("RESUME_SCOPE", "none")
-          grades = [6, 7, 8] if scope == "all" else [int(scope)] if scope in {"6", "7", "8"} else []
-          if not grades:
-              print("This workflow invocation does not own Class 6–8 resume completion state.")
-              raise SystemExit(0)
-          scope = os.environ.get("RESUME_SCOPE", "none")
-          grades = [6, 7, 8] if scope == "all" else [7, 8] if scope == "7-8" else [int(scope)] if scope in {"6", "7", "8"} else []
-          if not grades:
-              print("This invocation does not own Class 6–8 resume completion state.")
-              raise SystemExit(0)
-          for grade in grades:
-              marker = root / "resume-control" / "completed" / f"class-{grade}.v1.json"
+
+          completed_dir = data_root / "resume-control" / "completed"
+          completed_dir.mkdir(parents=True, exist_ok=True)
+          class_complete = {}
+          for grade in (6, 7, 8):
+              sources = [item for item in BOOKS if item["class_no"] == str(grade)]
+              expected_count = 4 if grade == 6 else 6
+              if len(sources) != expected_count:
+                  raise SystemExit(f"Planner source contract mismatch for Class {grade}: {len(sources)} books.")
+              evidence, missing = [], []
+              for source in sources:
+                  ledger_path = data_root / f"class-{grade}" / "books" / source["book_slug"] / "coverage-ledger.v1.json"
+                  index_path = root / "data" / "textbook-visuals" / source["book_slug"] / "visual-pipeline-index.v1.json"
+                  try:
+                      raw = ledger_path.read_bytes()
+                      ledger = json.loads(raw.decode("utf-8"))
+                      index = json.loads(index_path.read_text(encoding="utf-8"))
+                  except (OSError, UnicodeError, json.JSONDecodeError):
+                      missing.append(source["book_slug"] + ": ledger or index missing/unreadable")
+                      continue
+                  summary = ledger.get("summary") or {}
+                  identity = ledger.get("source") or {}
+                  expected_sha = str(index.get("source_pdf_sha256") or "").lower()
+                  valid = (
+                      ledger.get("schema_version") == "quantaedge.textbook-coverage-ledger.v1"
+                      and ledger.get("ledger_status") == "COMPLETE"
+                      and summary.get("unresolved_count") == 0
+                      and identity.get("source_book_id") == source["book_id"]
+                      and bool(expected_sha)
+                      and str(identity.get("source_pdf_sha256") or "").lower() == expected_sha
+                      and index.get("source_book_id") == source["book_id"]
+                      and str(index.get("source_pdf_sha256") or "").lower() == expected_sha
+                      and index.get("layers", {}).get("5") == "COMPLETE"
+                      and str(index.get("coverage_ledger_path") or "") == ledger_path.relative_to(root).as_posix()
+                  )
+                  if not valid:
+                      missing.append(source["book_slug"] + ": source-bound Layer 5 evidence incomplete or mismatched")
+                      continue
+                  evidence.append({
+                      "source_book_id": source["book_id"],
+                      "source_pdf_sha256": expected_sha,
+                      "ledger_path": ledger_path.relative_to(root).as_posix(),
+                      "ledger_sha256": hashlib.sha256(raw).hexdigest(),
+                  })
+              marker = completed_dir / f"class-{grade}.v1.json"
+              if missing:
+                  marker.unlink(missing_ok=True)
+                  class_complete[str(grade)] = False
+                  print(json.dumps({"class_no": grade, "status": "IN_PROGRESS", "incomplete_books": missing}))
+                  continue
+              previous = {}
               try:
-                  evidence = json.loads(marker.read_text(encoding="utf-8"))
-              except (OSError, json.JSONDecodeError) as exc:
-                  raise SystemExit(f"Class {grade}: evidence-bound completion marker is missing; automatic resume remains active.") from exc
-              if (evidence.get("schema_version") != "quantaedge.textbook-layer45-class-completion.v1"
-                  or evidence.get("class_no") != grade
-                  or evidence.get("status") != "COMPLETE"
-                  or not isinstance(evidence.get("source_ledgers"), list)
-                  or not evidence["source_ledgers"]):
-                  raise SystemExit(f"Class {grade}: completion marker does not contain valid Layer 5 evidence.")
-          if scope == "all":
+                  previous = json.loads(marker.read_text(encoding="utf-8"))
+              except (OSError, json.JSONDecodeError):
+                  pass
+              completed_at = previous.get("completed_at") if previous.get("source_ledgers") == evidence else None
+              marker_value = {
+                  "schema_version": "quantaedge.textbook-layer45-class-completion.v1",
+                  "class_no": grade,
+                  "status": "COMPLETE",
+                  "completed_at": completed_at or datetime.now(timezone.utc).isoformat(),
+                  "source_scope": "all selected NCERT whole-book sources for this class",
+                  "source_ledgers": evidence,
+              }
+              marker.write_text(json.dumps(marker_value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+              class_complete[str(grade)] = True
+              print(json.dumps({"class_no": grade, "status": "COMPLETE", "books_verified": len(evidence)}))
+
+          if all(class_complete.get(str(grade)) is True for grade in (6, 7, 8)):
               state["active"] = False
               state["status"] = "COMPLETE"
               state["completed_at"] = datetime.now(timezone.utc).isoformat()
-              control_path.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          else:
+              state["active"] = True
+              state["status"] = "IN_PROGRESS"
+          control_path.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           PY
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/textbook-content-pipeline/resume-control.v1.json data/textbook-content-pipeline/resume-control/completed/
+          git add -A data/textbook-content-pipeline/resume-control.v1.json data/textbook-content-pipeline/resume-control/completed
           if git diff --cached --quiet; then
-            echo "Class completion markers are already current."
+            echo "No class completion evidence changed."
             exit 0
           fi
-          git commit -m "status(content): mark Layer 5 complete for resume scope $RESUME_SCOPE"
+          git commit -m "status(content): reconcile whole-book Layer 5 completion evidence"
           git pull --rebase origin main
           git push origin HEAD:main
+
+  wake-resume-coordinator:
+    name: Wake checkpoint coordinator after each book-worker round
+    needs: [plan, prepare, record-completed-class-markers]
+    if: >-
+      always() &&
+      needs.plan.result == 'success' &&
+      (
+        (github.event_name == 'push' && !contains(github.event.head_commit.message || '', '[cancel-layer45-matrix]') && (
+          contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]') ||
+          contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-7-8]') ||
+          contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-6]') ||
+          contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-7]') ||
+          contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-class-8]')
+        )) ||
+        (github.event_name == 'workflow_dispatch' && inputs.analysis_mode == 'resume_layers_4_5') ||
+        (github.event_name == 'workflow_call' && inputs.analysis_mode == 'resume_layers_4_5')
+      )
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Dispatch coordinator to reconcile the latest persisted checkpoint round
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPOSITORY: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          code="$(curl --retry 3 --retry-all-errors --retry-delay 2 -sS -o "$RUNNER_TEMP/coordinator-dispatch.json" -w '%{http_code}' \
+            -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/$GH_REPOSITORY/actions/workflows/resume-textbook-layers-4-5-automatically.yml/dispatches" \
+            -d '{"ref":"main"}')"
+          if [[ "$code" != "204" ]]; then
+            cat "$RUNNER_TEMP/coordinator-dispatch.json"
+            echo "Checkpoint coordinator dispatch failed (HTTP $code)." >&2
+            exit 1
+          fi
+          echo "Checkpoint coordinator explicitly queued after the worker round."
 
   rebuild-correction-coverage:
     if: github.event_name == 'push' && contains(toJson(github.event.commits), 'visual-analysis-corrections.v1.json')

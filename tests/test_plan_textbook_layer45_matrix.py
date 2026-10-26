@@ -8,7 +8,6 @@ class TextbookLayer45MatrixTests(unittest.TestCase):
         planned = plan_matrix("push", "[resume-visual-layers-4-5-classes-6-8]")
         self.assertEqual(16, len(planned))
         self.assertEqual(16, len({(x["class_no"], x["book_id"]) for x in planned}))
-        self.assertEqual({4: 6}, {}) if False else None
         self.assertEqual(4, sum(x["class_no"] == "6" for x in planned))
         self.assertEqual(6, sum(x["class_no"] == "7" for x in planned))
         self.assertEqual(6, sum(x["class_no"] == "8" for x in planned))
