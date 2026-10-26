@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-hindi-ghcu1",
   "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
   "raw_analysis_path": "data/textbook-visuals/class7-hi-science-21f4cf0a/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e27098a85adf3c26a357bb6860d7ce05fb35388b35684b54d277e24607c0ebdf",
+  "raw_analysis_sha256": "a2267b14445defa69eee074c47bdf503d77ca99a797546310669c9172dbdf4e8",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-hi-science-21f4cf0a/visual-analysis-corrections.v1.json",
@@ -1870,6 +1870,394 @@
         "context_relation": "The image is a visual representation of a rope with a loop, possibly used as a symbol or icon.",
         "limitations": [
           "The image does not provide any specific information or context beyond its visual representation of a rope with a loop."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "42201554dc8f120d457eb810",
+      "asset_sha256": "2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5b036bc7946280f2658d2014564845af6d35ec6996ad1c853809ba2f45f50207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope with a spiral pattern.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:26:09Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope with a spiral pattern.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4ad8a62cb5935b878d7b9623",
+      "asset_sha256": "492106d78406c86daf92a723fdeb67b71a7a6a57c03c65ace992fba85922119f",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/492106d78406c86daf92a723fdeb67b71a7a6a57c03c65ace992fba85922119f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5b036bc7946280f2658d2014564845af6d35ec6996ad1c853809ba2f45f50207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope with a spiral pattern.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:26:52Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope with a spiral pattern.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9b7b413343d6fc838b7088ed",
+      "asset_sha256": "9366a50c8ca006af15c939b4053c572e048bc4fc5a9ae81d48fe95b3a46e9619",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/9366a50c8ca006af15c939b4053c572e048bc4fc5a9ae81d48fe95b3a46e9619.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5b036bc7946280f2658d2014564845af6d35ec6996ad1c853809ba2f45f50207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A spiral or helical structure with a yellow and black color scheme.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a helical structure.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:27:33Z",
+      "effective_analysis": {
+        "visual_summary": "A spiral or helical structure with a yellow and black color scheme.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a helical structure.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "01d78044eaa723e7b97570eb",
+      "asset_sha256": "9366a50c8ca006af15c939b4053c572e048bc4fc5a9ae81d48fe95b3a46e9619",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/9366a50c8ca006af15c939b4053c572e048bc4fc5a9ae81d48fe95b3a46e9619.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5b036bc7946280f2658d2014564845af6d35ec6996ad1c853809ba2f45f50207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A spiral or helical structure, possibly representing a rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a helical structure, likely used as an illustration for educational content.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:27:37Z",
+      "effective_analysis": {
+        "visual_summary": "A spiral or helical structure, possibly representing a rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a helical structure, likely used as an illustration for educational content.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1b167b489153df960618005e",
+      "asset_sha256": "0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5b036bc7946280f2658d2014564845af6d35ec6996ad1c853809ba2f45f50207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope with a ring, possibly used as a symbol or an illustration in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond its visual representation of a rope with a ring."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:27:48Z",
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope with a ring, possibly used as a symbol or an illustration in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond its visual representation of a rope with a ring."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "82a1f81561dcf1355d8e0116",
+      "asset_sha256": "8791dcdbdf0b49952ba1722bbe779449fb6033f1bd9b4db9ce7b90611f66a012",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/8791dcdbdf0b49952ba1722bbe779449fb6033f1bd9b4db9ce7b90611f66a012.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5b036bc7946280f2658d2014564845af6d35ec6996ad1c853809ba2f45f50207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person climbing a ladder.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a person climbing a ladder, which is likely used to illustrate a concept or question related to the text provided.",
+        "limitations": [
+          "The image does not provide specific details about the text or concepts it is meant to represent."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:28:31Z",
+      "effective_analysis": {
+        "visual_summary": "A person climbing a ladder.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a person climbing a ladder, which is likely used to illustrate a concept or question related to the text provided.",
+        "limitations": [
+          "The image does not provide specific details about the text or concepts it is meant to represent."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bff334a4642960b7b49122d6",
+      "asset_sha256": "c858757ff9d396ed18961b007893af2dee9f1d49eda491898adb4754ee0ccf6d",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/c858757ff9d396ed18961b007893af2dee9f1d49eda491898adb4754ee0ccf6d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5b036bc7946280f2658d2014564845af6d35ec6996ad1c853809ba2f45f50207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl climbing a rope ladder with ice blocks in front of her.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a climbing activity.",
+        "limitations": [
+          "The image does not provide specific details about the activity or the girl's actions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:29:12Z",
+      "effective_analysis": {
+        "visual_summary": "A girl climbing a rope ladder with ice blocks in front of her.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a climbing activity.",
+        "limitations": [
+          "The image does not provide specific details about the activity or the girl's actions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "33640fb9edb8d690e5ccc5c5",
+      "asset_sha256": "c1b54390518ee1fead1a4834fb751f03c373926a962292b8fffbe1ee7f1122a1",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/c1b54390518ee1fead1a4834fb751f03c373926a962292b8fffbe1ee7f1122a1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5b036bc7946280f2658d2014564845af6d35ec6996ad1c853809ba2f45f50207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope, possibly used as a metaphor or symbol in the educational content.",
+        "limitations": [
+          "The image does not provide specific information about the educational content or the context it is used in."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:29:53Z",
+      "effective_analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope, possibly used as a metaphor or symbol in the educational content.",
+        "limitations": [
+          "The image does not provide specific information about the educational content or the context it is used in."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ede4e3346d095c50d1483962",
+      "asset_sha256": "8361c7c9fdb0097a4032ab6a02d7f35d8c0ca01b1f251232aa611f81fb1872d3",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/8361c7c9fdb0097a4032ab6a02d7f35d8c0ca01b1f251232aa611f81fb1872d3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5b036bc7946280f2658d2014564845af6d35ec6996ad1c853809ba2f45f50207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a spiral pattern.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope with a spiral pattern.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:30:31Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a spiral pattern.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope with a spiral pattern.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ada1c9247abd931daf689e49",
+      "asset_sha256": "ba9666f1861772e441d1cdb86105e3be35ff1cd21edd4bc474863e0c5cf50922",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/ba9666f1861772e441d1cdb86105e3be35ff1cd21edd4bc474863e0c5cf50922.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5b036bc7946280f2658d2014564845af6d35ec6996ad1c853809ba2f45f50207",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a book and standing inside a large nut.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "character holding book",
+          "character standing inside nut",
+          "cartoon illustration"
+        ],
+        "context_relation": "The image is a visual representation of a character holding a book and standing inside a nut, which is likely used as an educational tool to illustrate a concept or question.",
+        "limitations": [
+          "The image does not provide specific details about the educational content it represents."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:31:14Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a book and standing inside a large nut.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "character holding book",
+          "character standing inside nut",
+          "cartoon illustration"
+        ],
+        "context_relation": "The image is a visual representation of a character holding a book and standing inside a nut, which is likely used as an educational tool to illustrate a concept or question.",
+        "limitations": [
+          "The image does not provide specific details about the educational content it represents."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
