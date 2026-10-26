@@ -112,6 +112,17 @@ class CourseVersionForkIntegrationTest {
         'uq_course_entitlement_identity_user_v1'
       )
       """),"The canonical commerce identity uniqueness indexes must be installed.");
+    assertEquals(6L,count("""
+      select count(*) from pg_trigger
+      where not tgisinternal and tgname in (
+        'trg_course_payment_order_identity_consistency',
+        'trg_course_purchase_identity_consistency',
+        'trg_course_entitlement_identity_consistency',
+        'trg_qe_course_payment_order_identity_unique',
+        'trg_qe_course_purchase_identity_unique',
+        'trg_qe_course_entitlement_identity_unique'
+      )
+      """),"The database must validate identity consistency and guard logical ownership writes.");
     assertEquals("DRAFT",jdbc.queryForObject("select release_state from institution_course_release where id=?",String.class,releaseId));
     assertEquals("ASSIGNED",jdbc.queryForObject("select status from institution_course_assignment where id=?",String.class,assignmentId));
     assertEquals(0L,count("""
