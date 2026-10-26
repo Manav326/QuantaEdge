@@ -12,10 +12,10 @@
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
-      "a2890b3458baf46be1b64d1a",
       "35f32b476dc5977bc161e8e8",
-      "fc310253031bd2210d27a7e7",
-      "414a0224c90f14c01c7da9e7"
+      "0037fd56b1a6a076dd9cad41",
+      "aa8a149fa698d13f05cfdb3e",
+      "9c98ea470aafbf3dbbeffd67"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1298,
@@ -1188,7 +1188,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
+        "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
         "visible_text": [
           "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
@@ -1202,22 +1202,19 @@
           "critical thinking",
           "curiosity",
           "teamwork",
-          "inclusive education",
-          "safety precautions",
+          "inclusive nature",
+          "special needs",
           "peer interactions",
+          "understanding concepts",
           "assessing understanding",
           "analyzing concepts",
-          "challenging ideas",
-          "additional information",
-          "interesting facts",
-          "engaging materials",
-          "Ever heard of",
-          "A step further",
-          "advanced concepts",
+          "safety precautions",
+          "fascinating facts",
+          "interesting observations",
           "scientific principles",
           "real-life applications"
         ],
-        "context_relation": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
+        "context_relation": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "limitations": [
           "The image does not provide specific examples or details about the open-ended questions or the activities in the textbook.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -1227,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40322832924",
-      "checkpointed_at": "2026-10-26T12:43:36Z"
+      "checkpointed_at": "2026-10-26T13:04:21Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20156,15 +20153,13 @@
           "Staff",
           "Textbook",
           "Editing",
+          "Support",
           "Publication",
-          "DTP Cell",
-          "Publication Division",
-          "Contractual",
-          "Proofreaders"
+          "Commitment"
         ],
-        "context_relation": "Acknowledgments for the book's contributors and staff.",
+        "context_relation": "The text is a page from a book or document that lists acknowledgments and thanks to various contributors and staff involved in the publication of a textbook.",
         "limitations": [
-          "No specific visual elements are described.",
+          "The text does not provide specific details about the book's content or the subjects it covers.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -20172,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40322832924",
-      "checkpointed_at": "2026-10-26T12:53:01Z"
+      "checkpointed_at": "2026-10-26T13:05:08Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -26012,7 +26007,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40277348694",
+      "run_id": "40322832924",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -30199,7 +30194,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40277348694",
+      "run_id": "40322832924",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -30643,7 +30638,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40277348694",
+      "run_id": "40322832924",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
