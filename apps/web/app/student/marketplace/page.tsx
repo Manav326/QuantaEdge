@@ -80,7 +80,7 @@ function parsePendingVerifyDrafts(raw: string | null): VerifyDraft[] {
     return [];
   }
 }
-type CheckoutResponse = { orderId: string; localOrderId: number; amount: number; currency: string; keyId: string; description?: string; listedPricePaise?: number; discountPaise?: number; discountCode?: string | null; status?: string; entitled?: boolean; courseId?: number; providerOrderId?: string; message?: string };
+type CheckoutResponse = { orderId: string; localOrderId: number; amount: number; currency: string; keyId: string; description?: string; listedPricePaise?: number; discountPaise?: number; discountCode?: string | null; status?: string; entitled?: boolean; courseId?: number; providerOrderId?: string; message?: string; financeReconciliationRequired?: boolean; canRetryCheckout?: boolean; automaticReconciliationAttempted?: boolean; errorCategory?: string };
 
 declare global {
   interface Window {
