@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type
 import styles from './Finance.module.css';
 
 type Institution = { id:number; tenant_code:string; display_name:string; status:string };
-type LegalEntity = { id:number; entity_kind:string; institution_id?:number|null; institution_name?:string|null; legal_name:string; trade_name?:string|null; invoice_series_code?:string; einvoice_applicability?:'UNREVIEWED'|'NOT_REQUIRED'|'REQUIRED'; einvoice_applicability_reviewed_at?:string|null; einvoice_applicability_review_note?:string|null; status:string; active_gst_registrations?:number };
+type LegalEntity = { id:number; entity_kind:string; institution_id?:number|null; institution_name?:string|null; legal_name:string; trade_name?:string|null; contact_email?:string|null; contact_phone?:string|null; registered_address_json?:string|null; invoice_series_code?:string; einvoice_applicability?:'UNREVIEWED'|'NOT_REQUIRED'|'REQUIRED'; einvoice_applicability_reviewed_at?:string|null; einvoice_applicability_review_note?:string|null; status:string; active_gst_registrations?:number };
 type Offer = { offer_id:number; institution_id:number; institution_name:string; course_identity_public_id:string; stable_course_key:string; course_code:string; course_name:string; content_version_no:number; assignment_id:number; assignment_source:string; release_id:number; release_version:number; release_state:string; current_candidate:boolean; publicly_sellable:boolean; price_paise:number; currency:string; offer_status:string; legal_entity_id?:number|null; legal_seller_name?:string|null; latest_tax_profile_id?:number|null; tax_profile_status?:string|null; tax_treatment?:string|null; latest_share_policy_status?:string|null };
 type Registration = { id:number; legal_entity_id:number; legal_entity_name:string; gstin:string; state_code:string; status:string; effective_from:string };
 type Catalog = { institutions:Institution[]; legalEntities:LegalEntity[]; offers:Offer[]; registrations:Registration[] };
@@ -100,6 +100,8 @@ function parseRupeesPaise(raw:string):number|null{
 function parseDesign(value?:string|null):Design{
   try { const raw=value?JSON.parse(value):{}; return {...DEFAULT_DESIGN,...raw}; } catch { return {...DEFAULT_DESIGN}; }
 }
+const parseAddress=(value?:string|null):Record<string,string>=>{try{const raw=value?JSON.parse(value):{};return raw&&typeof raw==='object'&&!Array.isArray(raw)?raw as Record<string,string>:{};}catch{return {};}};
+const addressText=(value?:string|null)=>{const a=parseAddress(value);return [a.line1,a.city,a.state,a.postalCode].filter(Boolean).join(', ')};
 
 export default function FinancePage(){
   const [tab,setTab]=useState<FinanceTab>('overview');
@@ -155,7 +157,8 @@ export default function FinancePage(){
   const [selectedPolicyId,setSelectedPolicyId]=useState('');
   const [policyDetail,setPolicyDetail]=useState<PolicyDetail|null>(null);
   const [recipients,setRecipients]=useState<RecipientDraft[]>([]);
-  const [entityForm,setEntityForm]=useState({entityKind:'PLATFORM',institutionId:'',legalName:'',tradeName:'',contactEmail:'',addressLine:'',city:'',state:'',postalCode:'',invoiceSeriesCode:'QE'});
+  const [entityForm,setEntityForm]=useState({entityKind:'PLATFORM',institutionId:'',legalName:'',tradeName:'',contactEmail:'',contactPhone:'',addressLine:'',city:'',state:'',postalCode:'',invoiceSeriesCode:'QE'});
+  const [editingCoreEntityId,setEditingCoreEntityId]=useState<number|null>(null);
   const [gstEntityId,setGstEntityId]=useState('');
   const [editingEntityId,setEditingEntityId]=useState<number|null>(null);
   const [gstForm,setGstForm]=useState({gstin:'',legalName:'',stateCode:'',effectiveFrom:new Date().toISOString().slice(0,10),addressLine:'',city:'',state:'',postalCode:''});
@@ -189,13 +192,9 @@ export default function FinancePage(){
       const requestedOfferExists=Boolean(requestedOfferId&&requestedOffer);
       if(requestedOfferId&&!requestedOfferExists){
         setError('The course offer linked from Institution Marketplace Control was not found in Finance. Refresh the launch checklist. No other course offer is selected automatically.');
-        if(launchSetup){
-          setSelectedOfferId('');
-          setTaxForm(v=>({...v,offerId:'',legalEntityId:''}));
-          setDiscountForm(v=>({...v,offerId:''}));
-        } else if(!selectedOfferId&&c.offers.length) {
-          setSelectedOfferId(String(c.offers[0].offer_id));
-        }
+        setSelectedOfferId('');
+        setTaxForm(v=>({...v,offerId:'',legalEntityId:''}));
+        setDiscountForm(v=>({...v,offerId:''}));
         launchOfferIdFromUrl.current=null;
         marketplaceSetupFromUrl.current=false;
         setMarketplaceSetupContext(null);
@@ -208,17 +207,6 @@ export default function FinancePage(){
         setSelectedOfferId(requestedOfferId);
         setTaxForm(v=>({...v,offerId:requestedOfferId,legalEntityId:linkedSeller?String(linkedSeller.id):''}));
         setDiscountForm(v=>({...v,offerId:requestedOfferId}));
-      } else if(!selectedOfferId&&c.offers.length) {
-        setSelectedOfferId(String(c.offers[0].offer_id));
-      }
-      if(!launchSetup&&!requestedOfferId&&!discountForm.offerId&&c.offers.length) setDiscountForm(v=>({...v,offerId:String(c.offers[0].offer_id)}));
-      if(!launchSetup&&!requestedOfferId&&!taxForm.offerId&&c.offers.length) setTaxForm(v=>({...v,offerId:String(c.offers[0].offer_id)}));
-      if(!launchSetup&&!requestedOfferId&&!taxForm.legalEntityId&&c.legalEntities.length) setTaxForm(v=>({...v,legalEntityId:String(c.legalEntities[0].id)}));
-      if(!gstEntityId&&c.legalEntities.length) setGstEntityId(String(c.legalEntities[0].id));
-      if(!selectedTemplateId&&t.length&&!marketplaceSetupFromUrl.current){
-        const first=t[0];setSelectedTemplateId(String(first.id));setSelectedVersionNo(first.version_no||null);
-        setTemplateScope(first.scope);setTemplateEntityId(first.legal_entity_id?String(first.legal_entity_id):'');
-        setTemplateName(first.internal_name);setDesign(parseDesign(first.design_definition_json));
       }
     }catch(e){setError(e instanceof Error?e.message:'Finance workspace could not load.');}
     finally{setLoading(false);}
@@ -260,7 +248,7 @@ export default function FinancePage(){
     try{
       const p=await api<PolicyDetail>(BASE+'/revenue-share/policies/'+id);
       setPolicyDetail(p);
-      setSelectedOfferId(String(p.institution_offer_id));
+      const offerId=String(p.institution_offer_id);selectWorkflowOffer(offerId,true);
       setRecipients((p.recipients||[]).map(r=>({
         institutionId:String(r.institution_id),calculationType:r.calculation_type as 'PERCENTAGE'|'FLAT',
         percentage:r.percentage_basis_points==null?'':String(r.percentage_basis_points/100),
@@ -269,22 +257,31 @@ export default function FinancePage(){
     }catch(e){setError(e instanceof Error?e.message:'Policy detail could not load.');}
   };
   const selectedOffer=useMemo(()=>catalog?.offers.find(o=>String(o.offer_id)===selectedOfferId),[catalog,selectedOfferId]);
-  const contextualOffer=marketplaceSetupContext?.offerId
-    ? catalog?.offers.find(o=>String(o.offer_id)===marketplaceSetupContext.offerId)
-    : selectedOffer;
+  const contextualOffer=selectedOffer;
+  const selectWorkflowOffer=(offerId:string,preservePolicy=false)=>{
+    const offer=catalog?.offers.find(row=>String(row.offer_id)===offerId);
+    const seller=!offer?undefined:offer.legal_entity_id!=null
+      ?catalog?.legalEntities.find(e=>e.id===offer.legal_entity_id)
+      :catalog?.legalEntities.find(e=>e.status==='ACTIVE'&&e.entity_kind==='INSTITUTION'&&e.institution_id===offer.institution_id)
+        ||catalog?.legalEntities.find(e=>e.status==='ACTIVE'&&e.entity_kind==='PLATFORM');
+    const sellerId=seller?String(seller.id):'';
+    setSelectedOfferId(offerId);setTaxForm(v=>({...v,offerId,legalEntityId:sellerId,serviceClassificationCode:v.offerId===offerId?v.serviceClassificationCode:'',gstPercent:v.offerId===offerId?v.gstPercent:'',cessPercent:v.offerId===offerId?v.cessPercent:''}));
+    setDiscountForm(v=>({...v,offerId,code:v.offerId===offerId?v.code:''}));setGstEntityId(sellerId);
+    if(templateScope==='SELLER')setTemplateEntityId(sellerId);
+    if(!preservePolicy){setSelectedPolicyId('');setPolicyDetail(null);setRecipients([]);}
+  };
   const selectedTemplate=useMemo(()=>templates.find(t=>String(t.id)===selectedTemplateId),[templates,selectedTemplateId]);
   const designUnchanged=Boolean(selectedTemplate)&&JSON.stringify(design)===JSON.stringify(parseDesign(selectedTemplate?.design_definition_json));
 
-  const createEntity=async(event:FormEvent)=>{
+  const saveEntity=async(event:FormEvent)=>{
     event.preventDefault();
-    const saved=await action(async()=>api(BASE+'/legal-entities',{method:'POST',body:JSON.stringify({
-      entityKind:entityForm.entityKind,institutionId:entityForm.entityKind==='INSTITUTION'?Number(entityForm.institutionId):null,
-      legalName:entityForm.legalName,tradeName:entityForm.tradeName,contactEmail:entityForm.contactEmail,
-      invoiceSeriesCode:entityForm.invoiceSeriesCode,
-      registeredAddress:{line1:entityForm.addressLine,city:entityForm.city,state:entityForm.state,postalCode:entityForm.postalCode,country:'India'}
-    })}), 'Legal entity saved as draft.');
-    if(saved)setEntityForm({entityKind:'PLATFORM',institutionId:'',legalName:'',tradeName:'',contactEmail:'',addressLine:'',city:'',state:'',postalCode:'',invoiceSeriesCode:'QE'});
+    const body={legalName:entityForm.legalName,tradeName:entityForm.tradeName,contactEmail:entityForm.contactEmail,contactPhone:entityForm.contactPhone,
+      invoiceSeriesCode:entityForm.invoiceSeriesCode,registeredAddress:{line1:entityForm.addressLine,city:entityForm.city,state:entityForm.state,postalCode:entityForm.postalCode,country:'India'}};
+    const editing=editingCoreEntityId;
+    const saved=await action(()=>editing?api(BASE+'/legal-entities/'+editing,{method:'PUT',body:JSON.stringify(body)}):api(BASE+'/legal-entities',{method:'POST',body:JSON.stringify({...body,entityKind:entityForm.entityKind,institutionId:entityForm.entityKind==='INSTITUTION'?Number(entityForm.institutionId):null})}),editing?'Legal entity details updated.':'Legal entity saved as draft.');
+    if(saved){setEditingCoreEntityId(null);setEntityForm({entityKind:'PLATFORM',institutionId:'',legalName:'',tradeName:'',contactEmail:'',contactPhone:'',addressLine:'',city:'',state:'',postalCode:'',invoiceSeriesCode:'QE'});}
   };
+  const editEntityDetails=(e:LegalEntity)=>{const a=parseAddress(e.registered_address_json);setEntityForm({entityKind:e.entity_kind,institutionId:e.institution_id?String(e.institution_id):'',legalName:e.legal_name,tradeName:e.trade_name||'',contactEmail:e.contact_email||'',contactPhone:e.contact_phone||'',addressLine:a.line1||'',city:a.city||'',state:a.state||'',postalCode:a.postalCode||'',invoiceSeriesCode:e.invoice_series_code||'QE'});setEditingCoreEntityId(e.id);setEditingEntityId(null);setError('');setNotice('');};
   const saveInvoiceSeries=(entity:LegalEntity)=>{
     const series=(seriesDrafts[String(entity.id)]??entity.invoice_series_code??'QE').trim().toUpperCase();
     if(!/^[A-Z0-9_-]{1,3}$/.test(series)){setError('Invoice series prefix must be 1–3 uppercase letters, digits, underscores or hyphens.');return;}
@@ -558,6 +555,20 @@ export default function FinancePage(){
     try{const rows=await api<any[]>(BASE+'/offers/'+offerId+'/tax-profiles');setTaxProfiles(v=>({...v,[offerId]:rows}));return rows;}
     catch(e){setError(e instanceof Error?e.message:'Tax profiles could not load.');return [];}
   };
+  const approveTaxProfile=async(id:number,offerId:string)=>{
+    setError('');
+    try{
+      const latest=await api<any[]>(BASE+'/offers/'+offerId+'/tax-profiles');
+      setTaxProfiles(v=>({...v,[offerId]:latest}));
+      const profile=latest.find(row=>Number(row.id)===id);
+      const status=String(profile?.status||'NOT_FOUND').trim().toUpperCase();
+      if(!profile||status!=='PENDING_APPROVAL'){
+        setError('Tax profile #'+id+' is currently '+status+'. Refresh saved profiles and use the action matching its current status.');return;
+      }
+      const ok=await action(()=>api(BASE+'/tax-profiles/'+id+'/approve',{method:'POST'}),'Tax profile approved.');
+      if(ok)await loadTaxProfiles(offerId);
+    }catch(error){setError(error instanceof Error?error.message:'Tax profile status could not be refreshed before approval.');}
+  };
   const submitTaxProfile=async(id:number,offerId:string)=>{
     const ok=await action(()=>api(BASE+'/tax-profiles/'+id+'/submit',{method:'POST'}),'Tax profile submitted for HRMS approval.');
     if(ok)await loadTaxProfiles(offerId);
@@ -705,8 +716,8 @@ export default function FinancePage(){
   };
   const activeDraft=selectedTemplate?.version_status==='DRAFT' || !selectedTemplate;
   const tabs:[typeof tab,string,string][]=[
-    ['overview','Overview','▦'],['entities','Legal entities & GST','⌂'],['tax','Tax profiles','%'],
-    ['distribution','Revenue distribution','↗'],['discounts','Discount codes','%'],['studio','Invoice Design Studio','▤'],
+    ['overview','Overview','▦'],['entities','Seller & GST','⌂'],['tax','Tax profile','%'],
+    ['distribution','Revenue share','↗'],['studio','Invoice design','▤'],['discounts','Discount codes','%'],
     ['payments','Payments & reconciliation','↻'],['documents','Issued documents','▣']
   ];
   // Render the same selected design on two workspace surfaces. The design and PDF
@@ -731,36 +742,23 @@ export default function FinancePage(){
     </header>
     {error&&<div className={styles.alertError} role="alert">{error}</div>}
     {notice&&<div className={styles.alertSuccess} role="status">{notice}</div>}
-    {marketplaceSetupContext&&<section className={styles.marketplaceSetupGuide} aria-labelledby="marketplace-finance-setup-heading">
-      <div className={styles.marketplaceSetupHeader}>
-        <div>
-          <span className={styles.eyebrow}>INSTITUTION MARKETPLACE CONTROL</span>
-          <h2 id="marketplace-finance-setup-heading">Finish course launch setup</h2>
-          <p>You're configuring <strong>{contextualOffer?.course_name||marketplaceSetupContext.courseName||'this course'}</strong> for <strong>{contextualOffer?.institution_name||(marketplaceSetupContext.institutionId?'institution #'+marketplaceSetupContext.institutionId:'your institution')}</strong>. The selected course offer is carried into the configuration below.</p>
-        </div>
-        {marketplaceSetupContext.offerId&&<span className={styles.marketplaceSetupOfferTag}>Offer #{marketplaceSetupContext.offerId}</span>}
-      </div>
+    {catalog&&(marketplaceSetupContext||['overview','entities','tax','distribution','discounts','studio'].includes(tab))&&<section className={styles.marketplaceSetupGuide} aria-labelledby="marketplace-finance-setup-heading">
+      <div className={styles.marketplaceSetupHeader}><div><span className={styles.eyebrow}>HRMS · COURSE FINANCE</span>
+        <h2 id="marketplace-finance-setup-heading">{marketplaceSetupContext?'Finish course launch setup':'Configure course launch finance'}</h2>
+        <p>{marketplaceSetupContext?(selectedOffer?<>Configuring <strong>{selectedOffer.course_name}</strong> for <strong>{selectedOffer.institution_name}</strong>.</>:<>Select the course offer to continue setup for <strong>{marketplaceSetupContext.courseName||'this course'}</strong>{marketplaceSetupContext.institutionId?<> at institution #{marketplaceSetupContext.institutionId}</>:null}.</>):<>Select the exact course once, then follow the steps in order. Settings stay bound to this offer.</>}</p></div>
+        <span className={styles.marketplaceSetupOfferTag}>{contextualOffer?contextualOffer.course_code+' · v'+contextualOffer.content_version_no:'Select an offer'}</span></div>
+      <div className={styles.marketplaceSetupOfferSelector}><label>Course offer<select value={selectedOfferId} onChange={event=>selectWorkflowOffer(event.target.value)}>
+        <option value="">Select a current course offer</option>{catalog.offers.filter(o=>o.current_candidate||o.publicly_sellable).map(o=><option key={o.offer_id} value={String(o.offer_id)}>{o.institution_name} · {o.course_name} · v{o.content_version_no}</option>)}
+      </select></label><p>{selectedOffer?<>Selected: <strong>{selectedOffer.course_name}</strong> · {selectedOffer.institution_name} · {selectedOffer.price_paise>0?rupees(selectedOffer.price_paise,selectedOffer.currency):'Free course'}.</>:'No course is preselected.'}</p></div>
       <div className={styles.marketplaceSetupSteps}>
-        <a className={styles.marketplaceSetupStep} href="/institutions#hrms-integrations-heading">
-          <span className={styles.marketplaceSetupStepNumber}>01</span><span className={styles.marketplaceSetupStepCopy}><strong>Payment integration</strong><small>For paid courses only. HRMS checks central Razorpay configuration and webhook readiness.</small></span><span className={styles.marketplaceSetupStepAction}>Open HRMS setup ↗</span>
-        </a>
-        <button type="button" className={tab==='entities'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('entities')} aria-current={tab==='entities'?'step':undefined}>
-          <span className={styles.marketplaceSetupStepNumber}>02</span><span className={styles.marketplaceSetupStepCopy}><strong>Legal seller &amp; GST</strong><small>Activate the seller linked to this offer; verify its registration and record the e-invoice applicability review.</small></span><span className={styles.marketplaceSetupStepAction}>{tab==='entities'?'Current step':'Open'}</span>
-        </button>
-        <button type="button" className={tab==='tax'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('tax')} aria-current={tab==='tax'?'step':undefined}>
-          <span className={styles.marketplaceSetupStepNumber}>03</span><span className={styles.marketplaceSetupStepCopy}><strong>Offer tax profile</strong><small>Use this exact offer and the CA-reviewed classification; submit and approve the effective tax treatment.</small></span><span className={styles.marketplaceSetupStepAction}>{tab==='tax'?'Current step':'Open'}</span>
-        </button>
-        <button type="button" className={tab==='studio'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('studio')} aria-current={tab==='studio'?'step':undefined}>
-          <span className={styles.marketplaceSetupStepNumber}>04</span><span className={styles.marketplaceSetupStepCopy}><strong>Invoice template</strong><small>Choose platform or seller scope. Approve and publish the template; saving a draft is not enough.</small></span><span className={styles.marketplaceSetupStepAction}>{tab==='studio'?'Current step':'Open'}</span>
-        </button>
-        <button type="button" className={tab==='distribution'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('distribution')} aria-current={tab==='distribution'?'step':undefined}>
-          <span className={styles.marketplaceSetupStepNumber}>05</span><span className={styles.marketplaceSetupStepCopy}><strong>Revenue share</strong><small>Use this exact offer, add recipient institutions, then submit and approve the policy within the after-tax pool.</small></span><span className={styles.marketplaceSetupStepAction}>{tab==='distribution'?'Current step':'Open'}</span>
-        </button>
-        <button type="button" className={tab==='discounts'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('discounts')} aria-current={tab==='discounts'?'step':undefined}>
-          <span className={styles.marketplaceSetupStepNumber}>06</span><span className={styles.marketplaceSetupStepCopy}><strong>Discount rules · optional</strong><small>Only configure these if discount codes are planned. No discount codes means no extra setup.</small></span><span className={styles.marketplaceSetupStepAction}>{tab==='discounts'?'Current step':'Open'}</span>
-        </button>
+        <a className={styles.marketplaceSetupStep} href="/institutions#hrms-integrations-heading"><span className={styles.marketplaceSetupStepNumber}>01</span><span className={styles.marketplaceSetupStepCopy}><strong>Payments</strong><small>Razorpay / webhook for paid courses</small></span></a>
+        <button type="button" className={tab==='entities'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('entities')}><span className={styles.marketplaceSetupStepNumber}>02</span><span className={styles.marketplaceSetupStepCopy}><strong>Seller &amp; GST</strong><small>Legal details, GST and e-invoice review</small></span></button>
+        <button type="button" className={tab==='tax'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('tax')}><span className={styles.marketplaceSetupStepNumber}>03</span><span className={styles.marketplaceSetupStepCopy}><strong>Tax profile</strong><small>Classification and effective rates</small></span></button>
+        <button type="button" className={tab==='distribution'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('distribution')}><span className={styles.marketplaceSetupStepNumber}>04</span><span className={styles.marketplaceSetupStepCopy}><strong>Revenue share</strong><small>Approve after-tax allocation</small></span></button>
+        <button type="button" className={tab==='studio'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('studio')}><span className={styles.marketplaceSetupStepNumber}>05</span><span className={styles.marketplaceSetupStepCopy}><strong>Invoice design</strong><small>Approve and publish a template</small></span></button>
+        <button type="button" className={tab==='discounts'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('discounts')}><span className={styles.marketplaceSetupStepNumber}>06</span><span className={styles.marketplaceSetupStepCopy}><strong>Discounts · optional</strong><small>Approve codes before use</small></span></button>
       </div>
-      <p className={styles.marketplaceSetupNote}><strong>When finished:</strong> the server validates the saved state. Return to Institution Marketplace Control and refresh; financial setup does not publish the course. Existing course access is unchanged while a listing is prepared.</p>
+      <p className={styles.marketplaceSetupNote}>HRMS rechecks saved finance state for launch readiness. Finance setup does not publish the course.</p>
     </section>}
     <nav className={styles.tabs} aria-label="Finance workspace">
       {tabs.map(([key,label,icon])=><button key={key} className={tab===key?styles.tabActive:styles.tab}
@@ -785,22 +783,24 @@ export default function FinancePage(){
         </div>
       </section>}
       {tab==='entities'&&<section className={styles.twoCol}>
-        <div className={styles.panel}><h2>Legal entities</h2><p>Create the real legal supplier record. It remains a draft until HRMS review.</p>
-          <form className={styles.form} onSubmit={createEntity}>
-            <label>Entity scope<select value={entityForm.entityKind} onChange={e=>setEntityForm(v=>({...v,entityKind:e.target.value}))}><option value="PLATFORM">Platform legal entity</option><option value="INSTITUTION">Institution legal entity</option></select></label>
-            {entityForm.entityKind==='INSTITUTION'&&<label>Institution<select required value={entityForm.institutionId} onChange={e=>setEntityForm(v=>({...v,institutionId:e.target.value}))}><option value="">Select institution</option>{catalog.institutions.map(i=><option key={i.id} value={i.id}>{i.display_name} · {i.tenant_code}</option>)}</select></label>}
+        <div className={styles.panel}><h2>{editingCoreEntityId?'Edit legal entity':'Legal entities'}</h2><p>{editingCoreEntityId?'Edit draft details before activating the supplier. Core details lock after activation.':'Create the legal supplier record, then verify its details before activation.'}</p>
+          <form className={styles.form} onSubmit={saveEntity}>
+            <label>Entity scope<select disabled={editingCoreEntityId!==null} value={entityForm.entityKind} onChange={e=>setEntityForm(v=>({...v,entityKind:e.target.value}))}><option value="PLATFORM">Platform legal entity</option><option value="INSTITUTION">Institution legal entity</option></select></label>
+            {entityForm.entityKind==='INSTITUTION'&&<label>Institution<select disabled={editingCoreEntityId!==null} required value={entityForm.institutionId} onChange={e=>setEntityForm(v=>({...v,institutionId:e.target.value}))}><option value="">Select institution</option>{catalog.institutions.map(i=><option key={i.id} value={i.id}>{i.display_name} · {i.tenant_code}</option>)}</select></label>}
             <label>Legal name<input required value={entityForm.legalName} onChange={e=>setEntityForm(v=>({...v,legalName:e.target.value}))}/></label>
             <label>Trade name<input value={entityForm.tradeName} onChange={e=>setEntityForm(v=>({...v,tradeName:e.target.value}))}/></label>
             <label>Finance contact email<input type="email" value={entityForm.contactEmail} onChange={e=>setEntityForm(v=>({...v,contactEmail:e.target.value}))}/></label>
-            <label>Invoice series prefix<input required minLength={1} maxLength={16} pattern="[A-Za-z0-9_-]{1,3}" value={entityForm.invoiceSeriesCode} onChange={e=>setEntityForm(v=>({...v,invoiceSeriesCode:e.target.value.toUpperCase()}))}/><small>Printed in the official invoice number, e.g. QE/26-27/000001 (max 16 characters).</small></label>
+            <label>Finance contact phone<input type="tel" value={entityForm.contactPhone} onChange={e=>setEntityForm(v=>({...v,contactPhone:e.target.value}))}/></label>
+            <label>Invoice series prefix<input required minLength={1} maxLength={3} pattern="[A-Za-z0-9_-]{1,3}" value={entityForm.invoiceSeriesCode} onChange={e=>setEntityForm(v=>({...v,invoiceSeriesCode:e.target.value.toUpperCase()}))}/><small>Printed in the official invoice number, e.g. QE/26-27/000001 (max 16 characters).</small></label>
             <label>Registered address line<input required value={entityForm.addressLine} onChange={e=>setEntityForm(v=>({...v,addressLine:e.target.value}))}/></label>
             <div className={styles.inputGrid}><label>City<input required value={entityForm.city} onChange={e=>setEntityForm(v=>({...v,city:e.target.value}))}/></label><label>State<input required value={entityForm.state} onChange={e=>setEntityForm(v=>({...v,state:e.target.value}))}/></label><label>PIN code<input required value={entityForm.postalCode} onChange={e=>setEntityForm(v=>({...v,postalCode:e.target.value}))}/></label></div>
-            <button className={styles.primary} disabled={busy}>Save legal entity draft</button>
+            <div className={styles.buttonStack}><button className={styles.primary} disabled={busy}>{editingCoreEntityId?'Save legal entity changes':'Save legal entity draft'}</button>{editingCoreEntityId!==null&&<button type="button" className={styles.secondary} onClick={()=>{setEditingCoreEntityId(null);setEntityForm({entityKind:'PLATFORM',institutionId:'',legalName:'',tradeName:'',contactEmail:'',contactPhone:'',addressLine:'',city:'',state:'',postalCode:'',invoiceSeriesCode:'QE'});}}>Cancel</button>}</div>
           </form>
           <div className={styles.entityList}>{catalog.legalEntities.map(e=><article key={e.id} className={styles.entityRow}>
             <div className={styles.entitySummary}>
-              <b>{e.legal_name}</b><span>{e.entity_kind==='INSTITUTION'?e.institution_name:'Platform'} · {e.status}</span>
-              <small>{e.active_gst_registrations||0} verified registration(s)</small>
+              <b>{e.legal_name}</b><span>{e.entity_kind==='INSTITUTION'?e.institution_name:'Platform legal entity'} · {e.status}</span>
+              {e.trade_name&&<small>Trade name: {e.trade_name}</small>}{e.contact_email&&<small>Finance email: {e.contact_email}</small>}{e.contact_phone&&<small>Finance phone: {e.contact_phone}</small>}
+              <small>Registered address: {addressText(e.registered_address_json)||'Not recorded'}</small><small>{e.active_gst_registrations||0} verified GST registration(s)</small>
               <small>Invoice series: <b>{e.invoice_series_code||'QE'}</b></small>
               <small>e-Invoice: <b>{e.einvoice_applicability||'UNREVIEWED'}</b>{e.einvoice_applicability_reviewed_at ? ' · reviewed '+new Date(e.einvoice_applicability_reviewed_at).toLocaleString() : ''}</small>
             </div>
@@ -810,6 +810,7 @@ export default function FinancePage(){
                 <button className={styles.secondarySmall} disabled={busy||((einvoiceDrafts[String(e.id)]??e.einvoice_applicability??'UNREVIEWED')===(e.einvoice_applicability??'UNREVIEWED')&&(einvoiceNotes[String(e.id)]??e.einvoice_applicability_review_note??'').trim()===(e.einvoice_applicability_review_note??'').trim())} onClick={()=>saveEinvoiceApplicability(e)}>Save e-Invoice review</button>
                 <button className={styles.secondarySmall} disabled={busy} onClick={()=>setEditingEntityId(null)}>Done</button>
               </> : <>
+                {e.status==='DRAFT'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>editEntityDetails(e)}>Edit details</button>}
                 <button className={styles.secondarySmall} disabled={busy} onClick={()=>{setEditingEntityId(e.id);setSeriesDrafts(v=>({...v,[String(e.id)]:e.invoice_series_code||'QE'}));setEinvoiceDrafts(v=>({...v,[String(e.id)]:e.einvoice_applicability||'UNREVIEWED'}));setEinvoiceNotes(v=>({...v,[String(e.id)]:e.einvoice_applicability_review_note||''}));}}>Edit settings</button>
                 {e.status==='DRAFT'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void action(()=>api(BASE+'/legal-entities/'+e.id+'/activate',{method:'POST'}),'Legal entity activated after HRMS review.')}>Activate</button>}
               </>}
@@ -849,9 +850,9 @@ export default function FinancePage(){
       {tab==='tax'&&<section className={styles.twoCol}>
         <div className={styles.panel}><h2>Offer tax profile</h2><p>Enter only the service classification and rates approved for this exact seller and sale. No default GST rate is preselected.</p>
           <form className={styles.form} onSubmit={createTaxProfile}>
-            <label>Course offer<select required value={taxForm.offerId} onChange={e=>setTaxForm(v=>({...v,offerId:e.target.value}))}><option value="">Select offer</option>{catalog.offers.map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_code} · Content v{o.content_version_no} · Submission {o.release_version} · {offerLifecycleLabel(o)} · {o.offer_status}</option>)}</select></label>
+            <label>Course offer<select required value={taxForm.offerId} onChange={e=>selectWorkflowOffer(e.target.value)}><option value="">Select offer</option>{catalog.offers.filter(o=>o.current_candidate||o.publicly_sellable).map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_code} · v{o.content_version_no} · release {o.release_version}</option>)}</select></label>
             {catalog.offers.length===0&&<p className={styles.empty}>No current course offer exists yet. <a href="/institutions">Open HRMS Course launch</a>, complete content and source approval, then create the listing draft with its title, description and INR price. The offer will appear here once that draft exists. Obsolete legacy offers are intentionally not selectable.</p>}
-            <label>Legal seller<select required value={taxForm.legalEntityId} onChange={e=>setTaxForm(v=>({...v,legalEntityId:e.target.value}))}><option value="">Select legal entity</option>{catalog.legalEntities.map(e=><option key={e.id} value={e.id}>{e.legal_name} · {e.status}</option>)}</select></label>
+            <label>Legal seller<select required value={taxForm.legalEntityId} onChange={e=>setTaxForm(v=>({...v,legalEntityId:e.target.value}))}><option value="">Select legal seller</option>{catalog.legalEntities.filter(e=>e.entity_kind==='PLATFORM'||(e.entity_kind==='INSTITUTION'&&e.institution_id===selectedOffer?.institution_id)).map(e=><option key={e.id} value={e.id}>{e.legal_name} · {e.status}</option>)}</select></label>
             <label>Service classification / SAC<input value={taxForm.serviceClassificationCode} onChange={e=>setTaxForm(v=>({...v,serviceClassificationCode:e.target.value}))} placeholder="Enter CA-approved code"/></label>
             <label>Tax treatment<select value={taxForm.taxTreatment} onChange={e=>setTaxForm(v=>({...v,taxTreatment:e.target.value}))}><option value="TAXABLE">Taxable</option><option value="EXEMPT">Exempt</option><option value="NIL_RATED">Nil-rated</option><option value="NON_GST">Non-GST</option><option value="COMPOSITION">Composition treatment</option></select></label>
             {taxForm.taxTreatment==='TAXABLE'&&<div className={styles.inputGrid}><label>GST rate (%)<input required type="number" min="0.01" max="100" step="0.01" value={taxForm.gstPercent} onChange={e=>setTaxForm(v=>({...v,gstPercent:e.target.value}))}/></label><label>Cess rate (%)<input type="number" min="0" max="100" step="0.01" value={taxForm.cessPercent} onChange={e=>setTaxForm(v=>({...v,cessPercent:e.target.value}))}/></label></div>}
@@ -861,15 +862,15 @@ export default function FinancePage(){
             <button className={styles.primary} disabled={busy}>Save draft and submit for review</button>
           </form>
         </div>
-        <div className={styles.panel}><h2>Saved tax profiles</h2><label>Course offer<select value={taxForm.offerId} onChange={e=>setTaxForm(v=>({...v,offerId:e.target.value}))}>{catalog.offers.map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_code} · Content v{o.content_version_no} · Submission {o.release_version} · {offerLifecycleLabel(o)}</option>)}</select></label>
-          {(taxProfiles[taxForm.offerId]||[]).map(p=><article className={styles.policyRow} key={p.id}><div><b>Version {p.version} · {p.tax_treatment}</b><span>{p.status} · GST {Number(p.gst_rate_basis_points)/100}%</span></div>{p.status==='DRAFT'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void submitTaxProfile(Number(p.id),taxForm.offerId)}>Submit</button>}{p.status==='PENDING_APPROVAL'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void action(()=>api(BASE+'/tax-profiles/'+p.id+'/approve',{method:'POST'}),'Tax profile approved.')}>Approve</button>}</article>)}
+        <div className={styles.panel}><h2>Saved tax profiles</h2><label>Course offer<select value={taxForm.offerId} onChange={e=>selectWorkflowOffer(e.target.value)}><option value="">Select offer</option>{catalog.offers.filter(o=>o.current_candidate||o.publicly_sellable).map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_code} · v{o.content_version_no} · release {o.release_version}</option>)}</select></label>
+          {(taxProfiles[taxForm.offerId]||[]).map(p=><article className={styles.policyRow} key={p.id}><div><b>Version {p.version} · {p.tax_treatment}</b><span>{p.status} · GST {Number(p.gst_rate_basis_points)/100}%</span></div>{p.status==='DRAFT'&&<button className={styles.secondarySmall} disabled={busy} onClick={()=>void submitTaxProfile(Number(p.id),taxForm.offerId)}>Submit</button>}{p.status==='PENDING_APPROVAL'&&<button type="button" className={styles.secondarySmall} disabled={busy} onClick={()=>void approveTaxProfile(Number(p.id),taxForm.offerId)}>Approve</button>}</article>)}
           {!taxProfiles[taxForm.offerId]?.length&&<p className={styles.empty}>No tax profile saved for this offer yet.</p>}
           <p className={styles.note}>Approval requires an active legal seller. Taxable treatment also requires an active, HRMS-verified GST registration for the effective date.</p>
         </div>
       </section>}
       {tab==='distribution'&&<section className={styles.stack}>
         <section className={styles.panel}><div className={styles.panelHead}><div><h2>Institution revenue-share policies</h2><p>Shares are calculated from actual captured consideration minus the invoice's approved output-tax amount—not list price.</p></div><button className={styles.primary} disabled={busy||!selectedOfferId} onClick={createPolicy}>＋ New policy</button></div>
-          <label className={styles.wideLabel}>Course offer<select value={selectedOfferId} onChange={e=>setSelectedOfferId(e.target.value)}><option value="">Select offer</option>{catalog.offers.map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_name} · {offerLifecycleLabel(o)} ({o.offer_status})</option>)}</select></label>
+          <label className={styles.wideLabel}>Course offer<select value={selectedOfferId} onChange={e=>selectWorkflowOffer(e.target.value)}><option value="">Select offer</option>{catalog.offers.filter(o=>o.current_candidate||o.publicly_sellable).map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_name}</option>)}</select></label>
           {catalog.offers.length===0&&<p className={styles.empty}><a href="/institutions">Open HRMS Course launch</a> and create the course’s listing draft first. Revenue-share policies bind to an exact offer revision, never to an unlaunched course identity.</p>}
           {policies.length?<div className={styles.policyTableWrap}><table className={styles.table}><thead><tr><th>Course / institution</th><th>Version</th><th>Status</th><th>Recipients</th><th>Action</th></tr></thead><tbody>{policies.map(p=><tr key={p.id}><td><b>{p.course_name}</b><small>{p.institution_name}</small></td><td>v{p.policy_version}</td><td><span className={styles.status}>{p.status}</span></td><td>{p.recipient_count}</td><td><button className={styles.secondarySmall} onClick={()=>void loadPolicy(String(p.id))}>Open</button></td></tr>)}</tbody></table></div>:<p className={styles.empty}>No revenue-share policies have been created.</p>}
         </section>
@@ -890,7 +891,7 @@ export default function FinancePage(){
         <section className={styles.panel}>
           <div className={styles.panelHead}><div><h2>Course offer discount codes</h2><p>HRMS approves a versioned percentage or flat discount for one exact institution offer. Uses are reserved before checkout and become redeemed only after verified payment.</p></div></div>
           <form className={styles.form} onSubmit={event=>{event.preventDefault();createDiscount();}}>
-            <label>Institution course offer<select required value={discountForm.offerId} onChange={event=>setDiscountForm(v=>({...v,offerId:event.target.value}))}><option value="">Select course offer</option>{catalog.offers.filter(o=>o.currency==='INR'&&o.offer_status!=='ARCHIVED').map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_name} · {offerLifecycleLabel(o)} · {rupees(o.price_paise,o.currency)}</option>)}</select></label>
+            <label>Institution course offer<select required value={discountForm.offerId} onChange={event=>selectWorkflowOffer(event.target.value)}><option value="">Select course offer</option>{catalog.offers.filter(o=>o.currency==='INR'&&(o.current_candidate||o.publicly_sellable)).map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_name} · {rupees(o.price_paise,o.currency)}</option>)}</select></label>
             <div className={styles.inputGrid}><label>Offer code<input required minLength={3} maxLength={40} pattern="[A-Za-z0-9][A-Za-z0-9_-]{2,39}" value={discountForm.code} onChange={event=>setDiscountForm(v=>({...v,code:event.target.value.toUpperCase()}))} placeholder="WELCOME10"/></label><label>Discount type<select value={discountForm.discountType} onChange={event=>setDiscountForm(v=>({...v,discountType:event.target.value}))}><option value="PERCENTAGE">Percentage</option><option value="FLAT">Flat amount</option></select></label>{discountForm.discountType==='PERCENTAGE'?<label>Percentage (%)<input type="number" required min="0.01" max="100" step="0.01" value={discountForm.percentage} onChange={event=>setDiscountForm(v=>({...v,percentage:event.target.value}))}/></label>:<label>Flat discount (₹)<input type="number" required min="0.01" step="0.01" value={discountForm.flatAmountRupees} onChange={event=>setDiscountForm(v=>({...v,flatAmountRupees:event.target.value}))}/></label>}</div>
             <div className={styles.inputGrid}><label>Maximum discount cap (₹, optional)<input type="number" min="0.01" step="0.01" value={discountForm.maxDiscountRupees} onChange={event=>setDiscountForm(v=>({...v,maxDiscountRupees:event.target.value}))} placeholder="No extra cap"/></label><label>Minimum listed price (₹)<input type="number" min="0" step="0.01" value={discountForm.minListedPriceRupees} onChange={event=>setDiscountForm(v=>({...v,minListedPriceRupees:event.target.value}))}/></label><label>Total redemption limit (optional)<input type="number" min="1" step="1" value={discountForm.maxRedemptions} onChange={event=>setDiscountForm(v=>({...v,maxRedemptions:event.target.value}))} placeholder="Unlimited"/></label></div>
             <div className={styles.inputGrid}><label>Uses per purchaser (optional)<input type="number" min="1" step="1" value={discountForm.maxRedemptionsPerPurchaser} onChange={event=>setDiscountForm(v=>({...v,maxRedemptionsPerPurchaser:event.target.value}))} placeholder="Unlimited"/></label><label>Starts at<input required type="datetime-local" value={discountForm.effectiveFrom} onChange={event=>setDiscountForm(v=>({...v,effectiveFrom:event.target.value}))}/></label><label>Ends at (optional)<input type="datetime-local" value={discountForm.effectiveUntil} onChange={event=>setDiscountForm(v=>({...v,effectiveUntil:event.target.value}))}/></label></div>
