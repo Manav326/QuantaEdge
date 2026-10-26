@@ -17,9 +17,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
@@ -435,6 +437,129 @@ public class CourseOrderFinancialService {
         code_snapshot,discount_amount_paise,status
       ) values(?,?,?,?,?,?,'RESERVED')
       """,discountOfferId,localOrderId,purchaserUserAccountId,institutionOfferId,normalized,discountAmountPaise);
+  }
+
+  /**
+   * Commit paid course access independently of invoice/share bookkeeping. Caller must have
+   * verified the exact Razorpay order/payment/amount/currency and the target learner's institution
+   * membership before calling this method. A later fiscal failure must never roll back access.
+   */
+  public record CapturedAccessGrant(long purchaseId,long courseId,long institutionId,
+      long targetStudentId,Long purchaserUserId,String recipientType) {}
+
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  public CapturedAccessGrant grantAccessForCapturedPayment(
+      long localOrderId,String providerOrderId,String paymentId,String signature,long capturedAmountPaise) {
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select id,student_id,purchaser_user_id,recipient_type,course_id,institution_id,
+        institution_offer_id,course_identity_id,identity_contract_version,offer_price_paise,
+        currency,provider_order_id,provider_payment_id,status
+      from course_payment_order where id=? for update
+      """,localOrderId);
+    if(rows.isEmpty()) throw new IllegalStateException("The saved course order no longer exists.");
+    Map<String,Object> order=rows.getFirst();
+    long targetStudentId=number(order.get("student_id"));
+    long courseId=number(order.get("course_id"));
+    long institutionId=number(order.get("institution_id"));
+    String currency=string(order.get("currency")).toUpperCase(Locale.ROOT);
+    String status=string(order.get("status"));
+    String savedOrderId=string(order.get("provider_order_id"));
+    String savedPaymentId=string(order.get("provider_payment_id"));
+    if(!providerOrderId.equals(savedOrderId)
+        ||number(order.get("offer_price_paise"))!=capturedAmountPaise
+        ||!currency.equals("INR")
+        ||!currency.equalsIgnoreCase(string(order.get("currency")))) {
+      throw new IllegalStateException("The captured payment no longer matches this exact saved course order.");
+    }
+    if(!savedPaymentId.isBlank()&&!savedPaymentId.equals(paymentId))
+      throw new IllegalStateException("A different provider payment is already linked to this course order.");
+    if(!List.of("PENDING","EXPIRED","VERIFIED").contains(status))
+      throw new IllegalStateException("The course order is not in a state that can grant paid access.");
+    if(order.get("institution_offer_id")==null)
+      throw new IllegalStateException("The saved order has no institution-specific offer.");
+    Long purchaserUserId=order.get("purchaser_user_id")==null?null:number(order.get("purchaser_user_id"));
+    String recipientType=string(order.get("recipient_type"));
+    long purchaseId;
+    List<Map<String,Object>> existingForOrder=jdbc.queryForList("""
+      select id,provider_payment_id from course_purchase
+      where institution_id=? and order_id=?
+      """,institutionId,localOrderId);
+    if(!existingForOrder.isEmpty()) {
+      Map<String,Object> existing=existingForOrder.getFirst();
+      if(!paymentId.equals(string(existing.get("provider_payment_id"))))
+        throw new IllegalStateException("This course order is already linked to a different purchase payment.");
+      purchaseId=number(existing.get("id"));
+    } else {
+      try {
+        purchaseId=jdbc.queryForObject("""
+          insert into course_purchase(
+            student_id,course_id,order_id,provider_payment_id,amount_paise,currency,purchaser_user_id,
+            institution_id,institution_offer_id,course_identity_id,identity_contract_version
+          ) values(?,?,?,?,?,?,?,?,?,?,?) returning id
+          """,Long.class,targetStudentId,courseId,localOrderId,paymentId,capturedAmountPaise,currency,
+          purchaserUserId,institutionId,number(order.get("institution_offer_id")),
+          order.get("course_identity_id") instanceof Number identity?identity.longValue():null,
+          order.get("identity_contract_version") instanceof Number version?version.intValue():0);
+      } catch(DuplicateKeyException duplicate) {
+        List<Map<String,Object>> prior=jdbc.queryForList("""
+          select id,provider_payment_id from course_purchase
+          where institution_id=? and (order_id=? or (student_id=? and course_id=?))
+          order by id limit 1
+          """,institutionId,localOrderId,targetStudentId,courseId);
+        if(prior.isEmpty()||!paymentId.equals(string(prior.getFirst().get("provider_payment_id"))))
+          throw new IllegalStateException("This learner's ownership already has a different recorded purchase. Finance must resolve the duplicate charge; the saved order remains auditable.",duplicate);
+        purchaseId=number(prior.getFirst().get("id"));
+      }
+    }
+
+    Long entitlementOwnerUser=purchaserUserId!=null&&"STUDENT".equals(recipientType)?purchaserUserId:null;
+    jdbc.update("""
+      insert into course_entitlement(
+        course_id,source_purchase_id,holder_user_id,holder_student_id,granted_by_user_id,institution_id,
+        course_identity_id,identity_contract_version
+      ) values(?,?,?,?,?,?,?,?)
+      on conflict(source_purchase_id) do nothing
+      """,courseId,purchaseId,entitlementOwnerUser,targetStudentId,purchaserUserId,institutionId,
+      order.get("course_identity_id") instanceof Number identity?identity.longValue():null,
+      order.get("identity_contract_version") instanceof Number version?version.intValue():0);
+    jdbc.update("""
+      insert into student_program_enrollment(
+        student_id,program_id,institution_id,status,enrolled_at,ended_at,created_at,updated_at
+      ) values(?,?,?,'ACTIVE',now(),null,now(),now())
+      on conflict(institution_id,student_id,program_id) do update
+        set status='ACTIVE',
+          enrolled_at=case when student_program_enrollment.status='ACTIVE'
+            then student_program_enrollment.enrolled_at else now() end,
+          ended_at=null,updated_at=now()
+      """,targetStudentId,courseId,institutionId);
+    jdbc.update("""
+      insert into student_track_enrollment(student_id,subject_id,institution_id,status)
+      select ?,s.id,?,'ACTIVE'
+      from curriculum_program_subject ps
+      join curriculum_program course_scope_program
+        on course_scope_program.id=ps.program_id and course_scope_program.status='ACTIVE'
+      join curriculum_subject s on s.id=ps.subject_id and s.class_id=ps.class_id and s.active=true
+        and (s.program_id=ps.program_id or
+          (s.program_id is null and course_scope_program.class_id=s.class_id and ps.class_id=s.class_id))
+      where ps.program_id=?
+      on conflict(institution_id,student_id,subject_id) do update
+        set status='ACTIVE',updated_at=now()
+      """,targetStudentId,institutionId,courseId);
+    if(purchaserUserId!=null&&"CHILD".equals(recipientType)) {
+      jdbc.update("""
+        update parent_course_purchase_request
+        set status='PURCHASED',resolved_at=now(),resolved_by_user_id=?,updated_at=now()
+        where guardian_user_id=? and student_id=? and institution_id=? and course_id=? and status='PENDING'
+        """,purchaserUserId,purchaserUserId,targetStudentId,institutionId,courseId);
+    }
+    int updated=jdbc.update("""
+      update course_payment_order set status='VERIFIED',provider_payment_id=?,provider_signature=?,
+        verified_at=coalesce(verified_at,now()),captured_amount_paise=?,captured_at=coalesce(captured_at,now()),
+        failure_code='FINANCIAL_RECONCILIATION_REQUIRED',updated_at=now()
+      where id=? and institution_id=? and status in ('PENDING','EXPIRED','VERIFIED')
+      """,paymentId,signature,capturedAmountPaise,localOrderId,institutionId);
+    if(updated!=1) throw new IllegalStateException("The captured course payment was verified but the access grant could not be committed; retry verification for this same order.");
+    return new CapturedAccessGrant(purchaseId,courseId,institutionId,targetStudentId,purchaserUserId,recipientType);
   }
 
   /**
