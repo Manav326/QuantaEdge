@@ -268,11 +268,6 @@ export default function StudentMarketplacePage() {
     setStatus('');
     savePendingVerify(draft);
     try {
-      window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(draft));
-    } catch {
-      // In-page recovery remains available if browser storage is blocked.
-    }
-    try {
       const result = await readJson(await apiFetch('/api/v1/marketplace/orders/' + draft.localOrderId + '/reconcile', {
         method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: '{}',
       }));
