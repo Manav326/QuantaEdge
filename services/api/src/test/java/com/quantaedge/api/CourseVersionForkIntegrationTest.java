@@ -88,6 +88,30 @@ class CourseVersionForkIntegrationTest {
     assertTrue(((Number)created.get("contentVersionNo")).intValue()>oldVersion);
     assertEquals(sourceId,jdbc.queryForObject("select supersedes_program_id from curriculum_program where id=?",Long.class,newCourseId));
     assertEquals(identityId,jdbc.queryForObject("select course_identity_id from curriculum_program where id=?",Long.class,newCourseId));
+    assertTrue(Boolean.TRUE.equals(jdbc.queryForObject(
+        "select qe_same_logical_course(?,?)",Boolean.class,sourceId,newCourseId)),
+        "Two immutable content graphs for the same identity must resolve as one logical course.");
+    Long distinctIdentityCourseId=jdbc.queryForObject("""
+      select p.id from curriculum_program p
+      join institution_course_identity other_identity on other_identity.id=p.course_identity_id
+      where other_identity.source_institution_id=? and other_identity.id<>?
+        and p.status='ACTIVE' and p.code<>'GENERAL'
+      order by p.id limit 1
+      """,Long.class,sourceInstitutionId,identityId);
+    assertNotNull(distinctIdentityCourseId,"The lifecycle fixture must contain a second logical course.");
+    assertTrue(Boolean.FALSE.equals(jdbc.queryForObject(
+        "select qe_same_logical_course(?,?)",Boolean.class,sourceId,distinctIdentityCourseId)),
+        "Different logical course identities must never merge because their content looks similar.");
+    assertEquals(5L,count("""
+      select count(*) from pg_indexes
+      where schemaname='public' and indexname in (
+        'uq_course_payment_order_identity_open_v1',
+        'uq_course_payment_order_identity_idempotency_v1',
+        'uq_course_purchase_identity_student_v1',
+        'uq_course_entitlement_identity_student_v1',
+        'uq_course_entitlement_identity_user_v1'
+      )
+      """),"The canonical commerce identity uniqueness indexes must be installed.");
     assertEquals("DRAFT",jdbc.queryForObject("select release_state from institution_course_release where id=?",String.class,releaseId));
     assertEquals("ASSIGNED",jdbc.queryForObject("select status from institution_course_assignment where id=?",String.class,assignmentId));
     assertEquals(0L,count("""
