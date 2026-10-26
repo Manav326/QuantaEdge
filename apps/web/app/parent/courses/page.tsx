@@ -616,12 +616,25 @@ export default function ParentCoursesPage() {
             }}
           />
         )}
-        {pendingVerifies.map(draft => <section className="parent-courses-page__verify" key={draft.localOrderId}>
-          <div><strong><LocaleText hinglish={`भुगतान पुष्टि बाकी है — कोर्स #${draft.courseId}`} english={`Payment verification pending — course #${draft.courseId}`} /></strong>
-            <p><LocaleText hinglish="इस order की अलग से जाँच हो सकती है। अन्य कोर्स खरीदने के लिए उपलब्ध हैं।" english="This saved order can be reconciled independently. Other courses remain available to purchase." /></p></div>
-          <button className="button button-dark button-small" type="button" disabled={busy !== ''}
-            onClick={() => void reconcilePayment(draft)}><LocaleText hinglish="फिर से सत्यापित करें" english="Retry verification" /></button>
-        </section>)}
+        {pendingRecoveryReady && groupPendingVerifyDrafts(pendingVerifies).map(group => {
+          const draft = group.drafts[0];
+          return <section className="parent-courses-page__verify" key={group.key}>
+            <div><strong>{draft.courseTitle || (english ? 'Course payment needs verification' : 'कोर्स भुगतान की पुष्टि बाकी है')}</strong>
+              {draft.beneficiaryName && <small>{english ? `For ${draft.beneficiaryName}` : `${draft.beneficiaryName} के लिए`}</small>}
+              <p>{group.drafts.length > 1
+                ? (english
+                    ? `We found ${group.drafts.length} saved payment attempts for this course and learner. We will check each one. Do not pay again.`
+                    : `इस कोर्स और विद्यार्थी के ${group.drafts.length} पुराने भुगतान प्रयास मिले। हम हर प्रयास की जाँच करेंगे। दोबारा भुगतान न करें।`)
+                : (english
+                    ? 'We will check this saved payment. Do not start another checkout while its status is being confirmed.'
+                    : 'इस सुरक्षित भुगतान की जाँच होगी। स्थिति की पुष्टि तक नया checkout शुरू न करें।')}</p></div>
+            <button className="button button-dark button-small" type="button" disabled={busy !== ''}
+              onClick={() => void reconcilePayment(group.drafts)}>
+              {busy === 'verify' ? (english ? 'Checking payment…' : 'भुगतान जाँचा जा रहा है…')
+                : (english ? 'Check payment status' : 'भुगतान की स्थिति जाँचें')}
+            </button>
+          </section>;
+        })}
 
         <section className="parent-courses-page__section">
           <div className="parent-courses-page__section-heading">
