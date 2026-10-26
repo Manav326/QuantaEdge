@@ -11,16 +11,16 @@
     "assets_selected": 2300,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "f7152a969f5d53cdb48fb17e",
-      "61f62c81d1cc65e877782dbc",
-      "69883c015cbfe046373e1e90",
-      "c973477a8cf682ca3f4db4ca",
-      "29c388b0161ccfef7bc70795"
+      "31799bfc832653ad96d51e7a",
+      "89b49a75160e470bc8fb15ac",
+      "189e72a771fce5a6d34ecc62",
+      "ef75954332ed5fa62dfb9bed",
+      "619879886706ca0b26598a12"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2295,
-    "assets_remaining": 5193,
-    "assets_completion_percent": 30.6,
+    "assets_analyzed": 2299,
+    "assets_remaining": 5189,
+    "assets_completion_percent": 30.7,
     "assets_failed": 31,
     "assets_skipped_from_checkpoint": 2295,
     "batch_limit": 5,
@@ -86066,7 +86066,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40277346366",
+      "run_id": "40380867946",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -86811,6 +86811,129 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40277346366",
       "checkpointed_at": "2026-10-26T08:14:51Z"
+    },
+    {
+      "asset_id": "89b49a75160e470bc8fb15ac",
+      "asset_sha256": "b4e682f10c9cf4b08731b77da08d38ab4e1fdda675acf408eda24a3c13f7ae56",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/b4e682f10c9cf4b08731b77da08d38ab4e1fdda675acf408eda24a3c13f7ae56.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3a8a26fd2f994b5fe96973ee6baef181b01066aa9e73a939c7f33ee3e6ce602",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a blue object with a blurred background.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Do you know that sodium is a metal which is stored in kerosene because it reacts vigorously with oxygen and water. A lot of heat is generated in the reaction. Storing sodium in kerosene prevents its exposure to moisture and air. Can you predict the nature of its oxide?",
+          "Let us now discuss some substances that do not behave like metals.",
+          "4.4 Substances that Behave Differently from"
+        ],
+        "concepts": [
+          "Sodium",
+          "Kerosene",
+          "Oxide",
+          "Heat generation",
+          "Moisture",
+          "Air",
+          "Substances",
+          "Behavior",
+          "Metals"
+        ],
+        "context_relation": "The image is a close-up of a blue object, possibly a part of a larger object or scene, with a blurred background. The text discusses the properties and behavior of sodium, its storage, and substances that do not behave like metals.",
+        "limitations": [
+          "The image does not provide specific details about the blue object."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40380867946",
+      "checkpointed_at": "2026-10-26T20:49:49Z"
+    },
+    {
+      "asset_id": "189e72a771fce5a6d34ecc62",
+      "asset_sha256": "c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3a8a26fd2f994b5fe96973ee6baef181b01066aa9e73a939c7f33ee3e6ce602",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a close-up of a twisted rope or cord, which is not directly related to the text about sodium and its oxide."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40380867946",
+      "checkpointed_at": "2026-10-26T20:50:03Z"
+    },
+    {
+      "asset_id": "ef75954332ed5fa62dfb9bed",
+      "asset_sha256": "c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3a8a26fd2f994b5fe96973ee6baef181b01066aa9e73a939c7f33ee3e6ce602",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a coiled rope or cable, possibly made of metal or a similar material.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40380867946",
+      "checkpointed_at": "2026-10-26T20:50:10Z"
+    },
+    {
+      "asset_id": "619879886706ca0b26598a12",
+      "asset_sha256": "c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 72,
+      "asset_path": "assets/c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b3a8a26fd2f994b5fe96973ee6baef181b01066aa9e73a939c7f33ee3e6ce602",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a coiled rope or cable, possibly made of metal or a similar material.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40380867946",
+      "checkpointed_at": "2026-10-26T20:50:16Z"
     }
   ]
 }
