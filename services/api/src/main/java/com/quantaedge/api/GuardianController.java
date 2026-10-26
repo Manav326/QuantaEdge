@@ -643,12 +643,12 @@ public class GuardianController {
                     where o.institution_id=a.institution_id and o.assignment_id=a.id
                       and o.course_id=p.id and o.status='PUBLISHED' and qe_marketplace_offer_publicly_sellable(o.id) and o.price_paise=0 and o.currency='INR')
           or exists(select 1 from student_program_enrollment e
-                    where e.institution_id=a.institution_id and e.student_id=? and e.program_id=p.id
+                    where e.institution_id=a.institution_id and e.student_id=? and qe_same_logical_course(e.program_id,p.id)
                       and e.status in ('ACTIVE','PAUSED'))
           or exists(select 1 from course_purchase cp
-                    where cp.institution_id=a.institution_id and cp.student_id=? and cp.course_id=p.id)
+                    where cp.institution_id=a.institution_id and cp.student_id=? and qe_same_logical_course(cp.course_id,p.id))
           or exists(select 1 from course_entitlement ce
-                    where ce.institution_id=a.institution_id and ce.course_id=p.id
+                    where ce.institution_id=a.institution_id and qe_same_logical_course(ce.course_id,p.id)
                       and (ce.holder_student_id=? or ce.holder_user_id=(select user_account_id from student where id=?))))
       """,institutionId,courseId,studentId,studentId,studentId,studentId);
     if(courses.isEmpty()) throw new SecurityException("This course has no published offer or existing entitlement in the selected institution.");
