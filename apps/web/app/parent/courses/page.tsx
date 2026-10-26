@@ -143,10 +143,13 @@ export default function ParentCoursesPage() {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [pendingVerifies, setPendingVerifies] = useState<VerifyDraft[]>([]);
+  const [pendingRecoveryReady, setPendingRecoveryReady] = useState(false);
   const pendingVerifiesRef = useRef<VerifyDraft[]>([]);
+  const pendingVerifyStorageKeyRef = useRef<string | null>(null);
   const readPendingVerifies = useCallback((): VerifyDraft[] => {
     try {
-      const raw = window.sessionStorage.getItem(PENDING_VERIFY_STORAGE_KEY);
+      const key = pendingVerifyStorageKeyRef.current;
+      const raw = key ? window.sessionStorage.getItem(key) : null;
       return raw ? parsePendingVerifyDrafts(raw) : pendingVerifiesRef.current;
     } catch {
       return pendingVerifiesRef.current;
@@ -156,7 +159,10 @@ export default function ParentCoursesPage() {
     const next = [...readPendingVerifies().filter(item => item.localOrderId !== draft.localOrderId), draft];
     pendingVerifiesRef.current = next;
     setPendingVerifies(next);
-    try { window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(next)); } catch {
+    try {
+      const key = pendingVerifyStorageKeyRef.current;
+      if (key) window.sessionStorage.setItem(key, JSON.stringify(next));
+    } catch {
       // In-memory recovery still works if browser storage is disabled.
     }
   }, [readPendingVerifies]);
@@ -165,8 +171,10 @@ export default function ParentCoursesPage() {
     pendingVerifiesRef.current = next;
     setPendingVerifies(next);
     try {
-      if (next.length) window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(next));
-      else window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY);
+      const key = pendingVerifyStorageKeyRef.current;
+      if (!key) return;
+      if (next.length) window.sessionStorage.setItem(key, JSON.stringify(next));
+      else window.sessionStorage.removeItem(key);
     } catch {
       // In-memory state remains authoritative for this page.
     }
