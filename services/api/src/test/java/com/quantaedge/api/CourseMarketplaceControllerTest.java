@@ -107,6 +107,19 @@ class CourseMarketplaceControllerTest {
   }
 
   @Test
+  void automaticPaidOrderRecoveryOnlyCompletesWhenTheExistingOrderGrantsAccess() {
+    assertTrue(CourseMarketplaceController.reconciliationConfirmsExistingOrderEntitlement(
+        Map.of("status", "VERIFIED", "entitled", true)));
+    assertTrue(CourseMarketplaceController.reconciliationConfirmsExistingOrderEntitlement(
+        Map.of("status", "PAYMENT_VERIFIED_ACCESS_GRANTED", "entitled", true)));
+    assertFalse(CourseMarketplaceController.reconciliationConfirmsExistingOrderEntitlement(
+        Map.of("status", "RECONCILIATION_REQUIRED", "entitled", false)));
+    assertFalse(CourseMarketplaceController.reconciliationConfirmsExistingOrderEntitlement(
+        Map.of("status", "AWAITING_PAYMENT", "entitled", true)));
+    assertFalse(CourseMarketplaceController.reconciliationConfirmsExistingOrderEntitlement(null));
+  }
+
+  @Test
   void staleCheckoutIsResolvedOnlyWhenExactSavedOrderIsVerifiedAndEntitled() {
     assertTrue(CourseMarketplaceController.reconciliationConfirmsExistingOrderVerified(
         Map.of("status", "VERIFIED", "entitled", true)));
