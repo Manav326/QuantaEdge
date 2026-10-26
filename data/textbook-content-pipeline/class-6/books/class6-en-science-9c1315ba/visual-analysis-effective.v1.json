@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5981a213636a3540f91a67af960e42557227a0ff9df9a46d0bf662a1d89c0e09",
+  "raw_analysis_sha256": "4497b9256b66ce2fb85821304a8be3c5fda11f023b05a2518873a8e28f0a768c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40277344414",
-      "checkpointed_at": "2026-10-26T06:48:07Z",
+      "checkpointed_at": "2026-10-26T07:02:19Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -29442,7 +29442,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40277344414",
-      "checkpointed_at": "2026-10-26T06:49:25Z",
+      "checkpointed_at": "2026-10-26T07:03:36Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -57304,7 +57304,7 @@
         "concepts": [
           "Measurement of Length and Motion",
           "Handspans",
-          "Units of Measurement"
+          "Length of the table"
         ],
         "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
@@ -57315,7 +57315,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40277344414",
-      "checkpointed_at": "2026-10-26T07:01:02Z",
+      "checkpointed_at": "2026-10-26T07:04:32Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -57339,7 +57339,7 @@
         "concepts": [
           "Measurement of Length and Motion",
           "Handspans",
-          "Units of Measurement"
+          "Length of the table"
         ],
         "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
@@ -58528,7 +58528,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40252441751",
+      "run_id": "40277344414",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -60510,7 +60510,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40252441751",
+      "run_id": "40277344414",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
