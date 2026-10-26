@@ -612,6 +612,11 @@ public class CoursePaymentOperationsController {
         eventType="RECONCILIATION_SUCCEEDED";
         code="PAYMENT_VERIFIED";
         message="Provider payment is captured and the existing course order is verified. Review its invoice and entitlement references.";
+      } else if("PAYMENT_VERIFIED_ACCESS_GRANTED".equals(outcome)
+          && Boolean.TRUE.equals(result.get("financeReconciliationRequired"))) {
+        eventType="COURSE_ACCESS_GRANTED_FINANCE_PENDING";
+        code="ACCESS_GRANTED_FINANCE_RECONCILIATION_PENDING";
+        message=text(result.get("message"));
       } else if("RECONCILIATION_REQUIRED".equals(outcome)) {
         eventType="RECONCILIATION_FAILED";
         code="PROVIDER_PAID_NO_EXACT_PAYMENT";
