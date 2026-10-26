@@ -374,6 +374,7 @@ export default function StudentMarketplacePage() {
         setStatus(localizeMarketplaceError(order.message, language,
           'The original order is still being reconciled. Retry verification for that order; do not pay again.',
           'पुराने order की जाँच अभी जारी है। उसी order को फिर सत्यापित करें; दोबारा भुगतान न करें।'));
+        setBusyCourseId(null);
         return;
       }
       if (!order.orderId || !Number.isSafeInteger(Number(order.localOrderId)) || Number(order.localOrderId) <= 0 ||
