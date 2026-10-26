@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2177,
     "eligible_visual_asset_rows": 2177,
-    "raw_analysis_result_rows": 80,
-    "successful_visual_analyses": 66,
-    "missing_visual_analyses": 2097,
+    "raw_analysis_result_rows": 90,
+    "successful_visual_analyses": 76,
+    "missing_visual_analyses": 2087,
     "failed_visual_analyses": 14,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 2111,
+    "unresolved_count": 2101,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -8676,9 +8676,18 @@
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish color and a dark, possibly black, end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a twisted rope or cord, likely used as an illustration or example in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the context or usage of the rope/cord in the educational content. The image is a standalone illustration without any additional context or information provided in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -8694,9 +8703,19 @@
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish color and a dark, possibly black, end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope or cord, likely used as an illustration or example in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the context or content of the textbook it is related to.",
+          "The image is a single object and does not represent any specific concept or relationship within the textbook content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -8712,9 +8731,19 @@
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish color and a dark, possibly black, end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope or cord, likely used as an illustration or example in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the context or content of the textbook it is related to.",
+          "The image is a single object and does not represent any specific concept or relationship within the textbook content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -8730,9 +8759,19 @@
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish color and a dark, possibly black, end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope or cord, likely used as an illustration or example in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the context or content of the textbook it is related to.",
+          "The image is a single object and does not represent any specific concept or relationship within the textbook content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -8748,9 +8787,19 @@
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish color and a dark, possibly black, end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope or cord, likely used as an illustration or example in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the context or content of the textbook it is related to.",
+          "The image is a single object and does not represent any specific concept or relationship within the textbook content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -8766,9 +8815,19 @@
       "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish color and a dark, possibly black, end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope or cord, likely used as an illustration or example in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the context or content of the textbook it is related to.",
+          "The image is a single object and does not represent any specific concept or relationship within the textbook content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -8784,9 +8843,18 @@
       "asset_path": "assets/a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -8802,9 +8870,18 @@
       "asset_path": "assets/a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -8820,9 +8897,32 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook listing the members of the National Council for Educational Research and Training (NCERT).",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "राष्ट्रीय पाठ्यक्रम और शिक्षण अधिगम सामग्रीरी समिति",
+          "(एन.एस.टीी.सीी.)",
+          "1. महेश चंद्र पंत, कुलाधिपति, राष्ट्रीय शैक्षिक योजना एवं प्रशासन संस््थान (अध््यक्ष)",
+          "2. मञ्जजुल भार््गव, आचार््य, प््रििंंसटन विश्‍वविद्यालय (सह-अध््यक्ष)",
+          "3. सुुधा मूर््तति, प्रतिष््‍ठठित लेखिका एवं शिक्षाविद्",
+          "4. बिबेक देबरॉय, अध््यक्ष, प्रधानमंत्री की आर््थथिक सलाहकार परिषद् (ई.ए.सीी.-पीी.एम.)",
+          "5. शेखर मांडे,  पूर््व महानिदेशक, सीी.एस.आई.आर., विशिष्‍ट प्ाध््ययाापक, सावित्रीबाई फुुले पुुणे वि�श्‍‍ववि�द्यालय, पुुणेे",
+          "6. सुुजाता रामदोरई, आचार््य, ब््रिटिश कोलंबिया विश्‍वविद्ालय, कनाडा"
+        ],
+        "concepts": [
+          "National Council for Educational Research and Training (NCERT)",
+          "Members of NCERT",
+          "Educational Research and Training"
+        ],
+        "context_relation": "The image is a page from a textbook listing the members of the National Council for Educational Research and Training (NCERT).",
+        "limitations": [
+          "The image does not contain any visual elements other than the text.",
+          "The text is in Hindi and does not provide any visual information."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -8838,9 +8938,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

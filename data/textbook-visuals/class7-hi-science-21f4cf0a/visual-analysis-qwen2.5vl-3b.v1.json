@@ -8,26 +8,26 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 69,
+    "assets_selected": 76,
     "assets_processed_this_run": 10,
     "assets_processed_ids": [
-      "f2cc0e14839702a66da27cb7",
-      "5f0b1301d1999d756df213d3",
-      "7884cfa5d63e73fa64114624",
-      "bf5f6de8cc8dc17f819d3c48",
-      "38c74815cdd9000cb6ecb75e",
-      "6c31f82349e4df4efda93ae2",
-      "0191b8a91d2565a75240119c",
-      "4ae0bf81b5ec6722d06a38c0",
-      "364b0e2cb652c86c713ac5db",
-      "f7a99cb1eb487aa6b8dce907"
+      "23e7c68211e216b536d061e3",
+      "45cf941502a309816203875f",
+      "52a15bac5031039eeae7ebe3",
+      "44fd4748f4dd5e9f8240e9c1",
+      "07c9db81677e61eb9d6b8ee9",
+      "ce11d71c8e784a11ebb8caa5",
+      "7ee26f82aef710b8a814d431",
+      "455f2b8414bdc6b01b218b30",
+      "393c75da76ef59e68866eb97",
+      "a8bad105de0d8d98e7e12119"
     ],
     "assets_eligible": 2177,
-    "assets_analyzed": 66,
-    "assets_remaining": 2111,
-    "assets_completion_percent": 3.0,
+    "assets_analyzed": 76,
+    "assets_remaining": 2101,
+    "assets_completion_percent": 3.5,
     "assets_failed": 14,
-    "assets_skipped_from_checkpoint": 59,
+    "assets_skipped_from_checkpoint": 66,
     "batch_limit": 10,
     "publication_allowed": false
   },
@@ -2162,6 +2162,305 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
       "checkpointed_at": "2026-10-26T23:43:08Z"
+    },
+    {
+      "asset_id": "23e7c68211e216b536d061e3",
+      "asset_sha256": "2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "244ea3791d5f41c3630be1833364464b2351806b3f4628e0032bf25d4f2c45da",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish color and a dark, possibly black, end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a twisted rope or cord, likely used as an illustration or example in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the context or usage of the rope/cord in the educational content. The image is a standalone illustration without any additional context or information provided in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:43:30Z"
+    },
+    {
+      "asset_id": "45cf941502a309816203875f",
+      "asset_sha256": "2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "244ea3791d5f41c3630be1833364464b2351806b3f4628e0032bf25d4f2c45da",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish color and a dark, possibly black, end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope or cord, likely used as an illustration or example in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the context or content of the textbook it is related to.",
+          "The image is a single object and does not represent any specific concept or relationship within the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:43:37Z"
+    },
+    {
+      "asset_id": "52a15bac5031039eeae7ebe3",
+      "asset_sha256": "2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "244ea3791d5f41c3630be1833364464b2351806b3f4628e0032bf25d4f2c45da",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish color and a dark, possibly black, end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope or cord, likely used as an illustration or example in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the context or content of the textbook it is related to.",
+          "The image is a single object and does not represent any specific concept or relationship within the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:43:45Z"
+    },
+    {
+      "asset_id": "44fd4748f4dd5e9f8240e9c1",
+      "asset_sha256": "2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "244ea3791d5f41c3630be1833364464b2351806b3f4628e0032bf25d4f2c45da",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish color and a dark, possibly black, end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope or cord, likely used as an illustration or example in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the context or content of the textbook it is related to.",
+          "The image is a single object and does not represent any specific concept or relationship within the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:43:53Z"
+    },
+    {
+      "asset_id": "07c9db81677e61eb9d6b8ee9",
+      "asset_sha256": "2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "244ea3791d5f41c3630be1833364464b2351806b3f4628e0032bf25d4f2c45da",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish color and a dark, possibly black, end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope or cord, likely used as an illustration or example in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the context or content of the textbook it is related to.",
+          "The image is a single object and does not represent any specific concept or relationship within the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:44:01Z"
+    },
+    {
+      "asset_id": "ce11d71c8e784a11ebb8caa5",
+      "asset_sha256": "2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "244ea3791d5f41c3630be1833364464b2351806b3f4628e0032bf25d4f2c45da",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope or cord, possibly made of metal or synthetic material, with a yellowish color and a dark, possibly black, end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope or cord, likely used as an illustration or example in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the context or content of the textbook it is related to.",
+          "The image is a single object and does not represent any specific concept or relationship within the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:44:09Z"
+    },
+    {
+      "asset_id": "7ee26f82aef710b8a814d431",
+      "asset_sha256": "a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "244ea3791d5f41c3630be1833364464b2351806b3f4628e0032bf25d4f2c45da",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:44:26Z"
+    },
+    {
+      "asset_id": "455f2b8414bdc6b01b218b30",
+      "asset_sha256": "a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "244ea3791d5f41c3630be1833364464b2351806b3f4628e0032bf25d4f2c45da",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:44:35Z"
+    },
+    {
+      "asset_id": "393c75da76ef59e68866eb97",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "244ea3791d5f41c3630be1833364464b2351806b3f4628e0032bf25d4f2c45da",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook listing the members of the National Council for Educational Research and Training (NCERT).",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "राष्ट्रीय पाठ्यक्रम और शिक्षण अधिगम सामग्रीरी समिति",
+          "(एन.एस.टीी.सीी.)",
+          "1. महेश चंद्र पंत, कुलाधिपति, राष्ट्रीय शैक्षिक योजना एवं प्रशासन संस््थान (अध््यक्ष)",
+          "2. मञ्जजुल भार््गव, आचार््य, प््रििंंसटन विश्‍वविद्यालय (सह-अध््यक्ष)",
+          "3. सुुधा मूर््तति, प्रतिष््‍ठठित लेखिका एवं शिक्षाविद्",
+          "4. बिबेक देबरॉय, अध््यक्ष, प्रधानमंत्री की आर््थथिक सलाहकार परिषद् (ई.ए.सीी.-पीी.एम.)",
+          "5. शेखर मांडे,  पूर््व महानिदेशक, सीी.एस.आई.आर., विशिष्‍ट प्ाध््ययाापक, सावित्रीबाई फुुले पुुणे वि�श्‍‍ववि�द्यालय, पुुणेे",
+          "6. सुुजाता रामदोरई, आचार््य, ब््रिटिश कोलंबिया विश्‍वविद्ालय, कनाडा"
+        ],
+        "concepts": [
+          "National Council for Educational Research and Training (NCERT)",
+          "Members of NCERT",
+          "Educational Research and Training"
+        ],
+        "context_relation": "The image is a page from a textbook listing the members of the National Council for Educational Research and Training (NCERT).",
+        "limitations": [
+          "The image does not contain any visual elements other than the text.",
+          "The text is in Hindi and does not provide any visual information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:45:38Z"
+    },
+    {
+      "asset_id": "a8bad105de0d8d98e7e12119",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "244ea3791d5f41c3630be1833364464b2351806b3f4628e0032bf25d4f2c45da",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:45:51Z"
     }
   ]
 }
