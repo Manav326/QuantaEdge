@@ -849,12 +849,32 @@ public class CourseMarketplaceController {
         """, targetStudentId, institutionId, courseId, idempotencyKey, purchaserUserId);
     if (!keyedOrders.isEmpty()) {
       Map<String, Object> previous = keyedOrders.getFirst();
-      String previousCode=previous.get("discount_reference")==null?null:String.valueOf(previous.get("discount_reference"));
-      String requestedCode=normalizeDiscountCodeForRequest(requestedDiscountCode);
-      if(!java.util.Objects.equals(previousCode,requestedCode))
-        throw new IllegalArgumentException("This idempotency key was already used with a different offer code. Start a new checkout request.");
       String previousStatus = String.valueOf(previous.get("status"));
       if ("PENDING".equals(previousStatus)) {
+        // A reused idempotency key may arrive after the provider paid the saved order or while
+        // its state is ambiguous. Resolve those states before comparing mutable request fields.
+        String providerState;
+        try {
+          providerState=inspectProviderOrderForNewAttempt(previous);
+        } catch(RuntimeException providerFailure) {
+          LOGGER.warn("Provider status could not be confirmed for idempotent course order {}.",
+              previous.get("id"),providerFailure);
+          return pendingOrderRecoveryResponse(previous,courseId,
+              "The saved order's payment state could not be confirmed. Retry verification for that order; do not pay again.",
+              false);
+        }
+        if("PAID".equals(providerState)) {
+          return reconcilePaidExistingOrder(previous,courseId,targetStudentId,purchaserUserId,institutionId);
+        }
+        if(!"RETRYABLE".equals(providerState)) {
+          return pendingOrderRecoveryResponse(previous,courseId,
+              "The previous payment is still processing or needs reconciliation. Keep this order and retry verification; do not pay again.",
+              false);
+        }
+        String previousCode=previous.get("discount_reference")==null?null:String.valueOf(previous.get("discount_reference"));
+        String requestedCode=normalizeDiscountCodeForRequest(requestedDiscountCode);
+        if(!java.util.Objects.equals(previousCode,requestedCode))
+          throw new IllegalArgumentException("This idempotency key was already used with a different offer code. Start a new checkout request.");
         long currentOfferId=((Number)offer.get("institution_offer_id")).longValue();
         Object savedOfferRaw=previous.get("institution_offer_id");
         if(!(savedOfferRaw instanceof Number n) || n.longValue()!=currentOfferId) {
@@ -867,6 +887,10 @@ public class CourseMarketplaceController {
       } else if ("CREATING".equals(previousStatus)) {
         throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.");
       } else {
+        String previousCode=previous.get("discount_reference")==null?null:String.valueOf(previous.get("discount_reference"));
+        String requestedCode=normalizeDiscountCodeForRequest(requestedDiscountCode);
+        if(!java.util.Objects.equals(previousCode,requestedCode))
+          throw new IllegalArgumentException("This idempotency key was already used with a different offer code. Start a new checkout request.");
         throw new IllegalArgumentException("This checkout request has already ended. Start a new checkout from the marketplace.");
       }
     }
@@ -1355,31 +1379,103 @@ public class CourseMarketplaceController {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
           "The previous course checkout is not ready. Retry verification; do not pay again.");
     }
-    requireSameBillingAddressChoice(order,buyerSnapshot);
-    String storedCode=order.get("discount_reference")==null?null:String.valueOf(order.get("discount_reference"));
-    if(!discountCodeMatchesForRetry(storedCode,requestedDiscountCode)) {
-      throw new ResponseStatusException(HttpStatus.CONFLICT,
-          "A checkout already exists with a different locked offer code. Reconcile that exact order before switching codes; do not pay again.");
+
+    // Provider truth takes precedence over the request's current billing address or coupon input:
+    // once paid, recovery must use the immutable buyer/discount facts saved on the original order.
+    String providerState;
+    try {
+      providerState=inspectProviderOrderForNewAttempt(order);
+    } catch(RuntimeException providerFailure) {
+      LOGGER.warn("Provider status could not be confirmed for pending course order {}.",
+          order.get("id"),providerFailure);
+      return pendingOrderRecoveryResponse(order,courseId,
+          "The saved order's payment state could not be confirmed. Keep this order and retry verification; do not pay again.",
+          false);
     }
+    if("PAID".equals(providerState)) {
+      return reconcilePaidExistingOrder(order,courseId,targetStudentId,purchaserUserId,institutionId);
+    }
+    if(!"RETRYABLE".equals(providerState)) {
+      return pendingOrderRecoveryResponse(order,courseId,
+          "The previous payment is still processing or needs reconciliation. Keep this order and retry verification; do not pay again.",
+          false);
+    }
+
+    String storedCode=order.get("discount_reference")==null?null:String.valueOf(order.get("discount_reference"));
+    try {
+      requireSameBillingAddressChoice(order,buyerSnapshot);
+      if(!discountCodeMatchesForRetry(storedCode,requestedDiscountCode)) {
+        throw new ResponseStatusException(HttpStatus.CONFLICT,
+            "A checkout already exists with a different locked offer code. Reconcile that exact order before switching codes; do not pay again.");
+      }
+    } catch(RuntimeException requestMismatch) {
+      // The provider may settle between the first status read and validating today's request.
+      // Never let a changed address/coupon hide a payment that has already completed.
+      try {
+        String currentState=inspectProviderOrderForNewAttempt(order);
+        if("PAID".equals(currentState)) {
+          return reconcilePaidExistingOrder(order,courseId,targetStudentId,purchaserUserId,institutionId);
+        }
+        if(!"RETRYABLE".equals(currentState)) {
+          return pendingOrderRecoveryResponse(order,courseId,
+              "The previous payment state changed while retrying. Keep this order and retry verification; do not pay again.",
+              false);
+        }
+      } catch(RuntimeException providerFailure) {
+        LOGGER.warn("Provider status became uncertain while validating retry for order {}.",
+            order.get("id"),providerFailure);
+        return pendingOrderRecoveryResponse(order,courseId,
+            "The saved order's payment state could not be confirmed. Keep this order and retry verification; do not pay again.",
+            false);
+      }
+      throw requestMismatch;
+    }
+
     if(!hasLockedFinancialSnapshots(order)) {
       try {
         repairLegacyPendingOrderSnapshots(order,institutionId,currentOfferId,listedPricePaise,
             currency,title,buyerSnapshot,requestedDiscountCode);
       } catch(RuntimeException repairFailure) {
-        // The provider can settle between the first read and legacy repair's read. If Razorpay
+        // The provider can settle between the status read and legacy snapshot repair. If Razorpay
         // now says paid, route to the reconciler rather than exposing the old generic checkout error.
         try {
-          if("PAID".equals(inspectProviderOrderForNewAttempt(order))) {
+          String currentState=inspectProviderOrderForNewAttempt(order);
+          if("PAID".equals(currentState)) {
             return reconcilePaidExistingOrder(order,courseId,targetStudentId,purchaserUserId,institutionId);
           }
+          if(!"RETRYABLE".equals(currentState)) {
+            return pendingOrderRecoveryResponse(order,courseId,
+                "The previous payment state changed while recovering this order. Keep the saved order and retry verification; do not pay again.",
+                false);
+          }
         } catch(RuntimeException secondProviderFailure) {
-          repairFailure.addSuppressed(secondProviderFailure);
+          LOGGER.warn("Provider status became uncertain during financial snapshot repair for order {}.",
+              order.get("id"),secondProviderFailure);
+          return pendingOrderRecoveryResponse(order,courseId,
+              "The saved order's payment state could not be confirmed. Keep this order and retry verification; do not pay again.",
+              false);
         }
         throw repairFailure;
       }
     }
     return checkoutResponse(order,courseId,title,institutionDisplayName,
         targetStudentId,purchaserUserId,institutionId);
+  }
+
+  private Map<String,Object> pendingOrderRecoveryResponse(
+      Map<String,Object> order,long courseId,String message,boolean reconciliationAttempted) {
+    Map<String,Object> result=new LinkedHashMap<>();
+    Object localId=order.get("id");
+    String providerId=order.get("provider_order_id")==null?"":String.valueOf(order.get("provider_order_id"));
+    result.put("status","RECONCILIATION_REQUIRED");
+    result.put("entitled",false);
+    result.put("canRetryCheckout",false);
+    if(localId instanceof Number number) result.put("localOrderId",number.longValue());
+    if(providerId.matches("order_[A-Za-z0-9]+")) result.put("providerOrderId",providerId);
+    result.put("courseId",courseId);
+    result.put("automaticReconciliationAttempted",reconciliationAttempted);
+    result.put("message",message);
+    return result;
   }
 
   private Map<String, Object> checkoutResponse(
