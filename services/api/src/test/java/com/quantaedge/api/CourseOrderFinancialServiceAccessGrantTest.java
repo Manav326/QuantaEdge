@@ -3,6 +3,7 @@ package com.quantaedge.api;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.contains;
@@ -55,7 +56,7 @@ class CourseOrderFinancialServiceAccessGrantTest {
     assertEquals(6L, grant.courseId());
     assertEquals(2L, grant.institutionId());
     assertEquals(122L, grant.targetStudentId());
-    assertEquals(null, grant.purchaserUserId());
+    assertNull(grant.purchaserUserId());
     verify(jdbc).update(contains("insert into course_entitlement"), any(Object[].class));
     verify(jdbc).update(contains("insert into student_program_enrollment"), any(Object[].class));
     verify(jdbc).update(contains("insert into student_track_enrollment"), any(Object[].class));
@@ -76,7 +77,7 @@ class CourseOrderFinancialServiceAccessGrantTest {
         service.grantAccessForCapturedPayment(5L, "order_123", "pay_456", "b".repeat(64), 100000L);
 
     assertEquals(122L, grant.targetStudentId());
-    assertEquals(1L, grant.purchaserUserId());
+    assertEquals(Long.valueOf(1L), grant.purchaserUserId());
     assertEquals("CHILD", grant.recipientType());
     verify(jdbc).update(contains("update parent_course_purchase_request"), any(Object[].class));
   }
