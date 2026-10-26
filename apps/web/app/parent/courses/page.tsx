@@ -32,7 +32,25 @@ type Entitlement = {
   entitlement_id: number; course_id: number; course_name: string; current_learner_name: string;
   holder_student_id: number; transfer_count: number;
 };
-type VerifyDraft = { courseId: number; localOrderId: number; paymentId: string; orderId: string; signature: string };
+type VerifyDraft = {
+  courseId: number; localOrderId: number; paymentId: string; orderId: string; signature: string;
+  courseIdentityKey?: string; courseTitle?: string; studentId?: number; beneficiaryName?: string;
+  recipientType?: string; amountPaise?: number;
+};
+type PendingVerifyGroup = { key: string; drafts: VerifyDraft[] };
+function scopedPendingVerifyStorageKey(base: string, institutionCode: string | null | undefined, userId: number) {
+  const tenant = String(institutionCode || 'default').trim().toUpperCase().replace(/[^A-Z0-9_-]/g, '_') || 'DEFAULT';
+  return `${base}:${tenant}:user:${userId}`;
+}
+function groupPendingVerifyDrafts(drafts: VerifyDraft[]): PendingVerifyGroup[] {
+  const grouped = new Map<string, VerifyDraft[]>();
+  for (const draft of drafts) {
+    const identity = draft.courseIdentityKey || `course:${draft.courseId}`;
+    const key = `${identity}:student:${draft.studentId ?? 'unknown'}`;
+    grouped.set(key, [...(grouped.get(key) || []), draft]);
+  }
+  return [...grouped.entries()].map(([key, values]) => ({ key, drafts: values }));
+}
 type PaidCheckoutIntent = { courseId: number; recipientType: 'SELF' | 'CHILD'; studentId?: number };
 const PENDING_VERIFY_STORAGE_KEY = 'qe:marketplace:pending-payment:parent';
 
@@ -49,6 +67,12 @@ function parsePendingVerifyDrafts(raw: string | null): VerifyDraft[] {
         paymentId: String(value?.paymentId || ''),
         orderId: String(value?.orderId || ''),
         signature: String(value?.signature || ''),
+        ...(String(value?.courseIdentityKey || '').trim() ? { courseIdentityKey: String(value.courseIdentityKey).trim() } : {}),
+        ...(String(value?.courseTitle || '').trim() ? { courseTitle: String(value.courseTitle).trim() } : {}),
+        ...(Number.isSafeInteger(Number(value?.studentId)) && Number(value?.studentId) > 0 ? { studentId: Number(value.studentId) } : {}),
+        ...(String(value?.beneficiaryName || '').trim() ? { beneficiaryName: String(value.beneficiaryName).trim() } : {}),
+        ...(String(value?.recipientType || '').trim() ? { recipientType: String(value.recipientType).trim() } : {}),
+        ...(Number.isSafeInteger(Number(value?.amountPaise)) && Number(value?.amountPaise) >= 0 ? { amountPaise: Number(value.amountPaise) } : {}),
       };
       const hasPaymentCallback = draft.paymentId.length > 0 || draft.signature.length > 0;
       const callbackIsValid = !hasPaymentCallback ||
