@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 5,
+    "assets_selected": 6,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "b53dc42068e357c12d6bcabb",
-      "9c98d4cf7e27634bb83539b6",
-      "e0762d27d9512ae22b92f9b9",
-      "3af42b953f506d36e6cd3a64",
-      "cd7a6a4089aa238cc4d1cc61"
+      "430aa19c24de1dd926bfa19d",
+      "91138dd9548a3ce696135628",
+      "fd564518482c59d298f27e35",
+      "5fe7d12d1a8c5fb1a09df45f",
+      "23eead23db7141b0adc9e5e7"
     ],
     "assets_eligible": 1156,
-    "assets_analyzed": 1,
-    "assets_remaining": 1155,
-    "assets_completion_percent": 0.1,
-    "assets_failed": 4,
-    "assets_skipped_from_checkpoint": 0,
+    "assets_analyzed": 4,
+    "assets_remaining": 1152,
+    "assets_completion_percent": 0.3,
+    "assets_failed": 6,
+    "assets_skipped_from_checkpoint": 1,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -122,6 +122,125 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413175682",
       "checkpointed_at": "2026-10-26T22:54:46Z"
+    },
+    {
+      "asset_id": "430aa19c24de1dd926bfa19d",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 2,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "37ca5c44e2937c4c5182116490617c82b23acaf4e0943bb24dc82a952c49edff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "No visible text or images are present on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T22:55:16Z"
+    },
+    {
+      "asset_id": "91138dd9548a3ce696135628",
+      "asset_sha256": "e7abbc4d763de445bb199b0a76ceb6d899fb48426a6a7cfac92c26eaacfb0c07",
+      "page_text_context_sha256": "37ca5c44e2937c4c5182116490617c82b23acaf4e0943bb24dc82a952c49edff",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 2,
+      "asset_path": "page-0002.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "fd564518482c59d298f27e35",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 3,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2f4bba8e635f0f8d67a4024bb1b789ae8cd61f720f2ebcdf48504a7f46431f26",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, textured horizontal line across the page.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The red line appears to be a design element or a visual separator on the page.",
+        "limitations": [
+          "The visible text is not readable or relevant to the image.",
+          "The image does not provide any specific information or data points."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:02:01Z"
+    },
+    {
+      "asset_id": "5fe7d12d1a8c5fb1a09df45f",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 3,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2f4bba8e635f0f8d67a4024bb1b789ae8cd61f720f2ebcdf48504a7f46431f26",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, textured horizontal line across the page.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The red line appears to be a design element or a visual separator on the page.",
+        "limitations": [
+          "The visible text is not readable or relevant to the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:02:14Z"
+    },
+    {
+      "asset_id": "23eead23db7141b0adc9e5e7",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "2f4bba8e635f0f8d67a4024bb1b789ae8cd61f720f2ebcdf48504a7f46431f26",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 3,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
