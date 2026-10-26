@@ -1474,6 +1474,7 @@ public class CourseMarketplaceController {
           and saved_offer.course_id=o.course_id
       left join student st on st.id=o.student_id
       where o.institution_id=? and o.status in ('PENDING','EXPIRED')
+        and o.failure_code is distinct from 'PROVIDER_CONFIRMED_UNPAID'
         and o.provider_order_id ~ '^order_[A-Za-z0-9]+
   @PostMapping("/orders/{localOrderId}/reconcile")
   public Map<String, Object> reconcileOrder(
