@@ -294,7 +294,7 @@ type Draft = { title: string; description: string; priceRupees: string };
 
 const GROUPS = [
   { key: 'course', number: '01', title: 'Course content, rights & quality', subtitle: 'The course is active, imported source rights are cleared where applicable, mapped subjects have published learning content, and HRMS quality review is complete.', codes: ['INSTITUTION_ACTIVE', 'COURSE_ACTIVE', 'CONTENT_QUALITY_REVIEW', 'CONTENT_REVIEW_CURRENT', 'PUBLISHED_LEARNING_CONTENT', 'SOURCE_RIGHTS_CLEARANCE'] },
-  { key: 'release', number: '02', title: 'Origin approval & assignment', subtitle: 'The source institution approves the reviewed release, then HRMS assigns that exact shareable release to this institution.', codes: ['ORIGIN_RELEASE_APPROVAL', 'ASSIGNMENT_AND_RELEASE'] },
+  { key: 'release', number: '02', title: 'Origin approval & assignment', subtitle: 'The source institution approves the reviewed release, then HRMS assigns that exact shareable release to this institution.', codes: ['CURRENT_COURSE_RELEASE', 'ORIGIN_RELEASE_APPROVAL', 'ASSIGNMENT_AND_RELEASE'] },
   { key: 'offer', number: '03', title: 'Listing details', subtitle: 'Set the student-facing title, description, currency and explicit price.', codes: ['OFFER_TERMS'] },
   { key: 'payment', number: '04', title: 'Payment setup', subtitle: 'Paid courses require working Razorpay credentials and the signed course-payment webhook.', codes: ['RAZORPAY_CREDENTIALS', 'RAZORPAY_WEBHOOK'] },
   { key: 'seller', number: '05', title: 'Seller & tax', subtitle: 'Approve the seller and tax treatment, GST registration where required, and e-invoice applicability.', codes: ['APPROVED_TAX_PROFILE', 'EINVOICE_REVIEW', 'TAX_CALCULATION', 'GST_REGISTRATION'] },
@@ -1613,7 +1613,7 @@ export default function MarketplaceLaunchStepper({
                           {group.key === 'seller' && shouldShowSellerSetupLink(item) && <a className={styles.actionLink} href={financeSetupHref(item, sellerSetupTarget(item))}>Open seller &amp; tax setup <span aria-hidden="true">↗</span></a>}
                           {group.key === 'invoice' && shouldShowInvoiceSetupLink(item) && <a className={styles.actionLink} href={financeSetupHref(item, invoiceSetupTarget(item))}>{invoiceSetupLabel(item)} <span aria-hidden="true">↗</span></a>}
                           {group.key === 'course' && !item.ready && blocker && ['CONTENT_QUALITY_REVIEW', 'CONTENT_REVIEW_CURRENT', 'PUBLISHED_LEARNING_CONTENT'].includes(blocker.code) && <p className={styles.stepHint}>Resolve this in the course release / content-quality workflow, then refresh this checklist.</p>}
-                          {group.key === 'release' && !item.ready && item.checks.some(check => !check.passed && ['ORIGIN_RELEASE_APPROVAL', 'ASSIGNMENT_AND_RELEASE'].includes(check.code)) && sourceReleaseHref(item) && <a className={styles.actionLink} href={sourceReleaseHref(item)!}>Open Institution in Admin <span aria-hidden="true">↗</span></a>}
+                          {group.key === 'release' && !item.ready && item.checks.some(check => !check.passed && ['CURRENT_COURSE_RELEASE', 'ORIGIN_RELEASE_APPROVAL', 'ASSIGNMENT_AND_RELEASE'].includes(check.code)) && sourceReleaseHref(item) && <a className={styles.actionLink} href={sourceReleaseHref(item)!}>Open Institution in Admin <span aria-hidden="true">↗</span></a>}
                         </div>
                       </section>
                     );
