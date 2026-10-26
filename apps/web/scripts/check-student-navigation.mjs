@@ -198,24 +198,35 @@ assert.ok(marketplacePage.includes("'/api/v1/marketplace/courses/'") && marketpl
   'Marketplace checkout must use server-created Razorpay orders and server-side payment verification.');
 assert.ok(marketplacePage.includes("'/api/v1/marketplace/orders/' + draft.localOrderId + '/reconcile'") &&
   marketplacePage.includes('savePendingVerify(recoverableDraft)') &&
-  marketplacePage.includes('window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(next))') &&
+  marketplacePage.includes('window.sessionStorage.setItem(key, JSON.stringify(next))') &&
+  marketplacePage.includes("'/api/v1/marketplace/orders/pending'") &&
+  marketplacePage.includes('scopedPendingVerifyStorageKey(PENDING_VERIFY_STORAGE_KEY, brand?.institutionCode, userId)') &&
   marketplacePage.indexOf('savePendingVerify(recoverableDraft)') < marketplacePage.indexOf('await ensureRazorpayCheckout(english)'),
-  'Student web checkout must persist each order before opening Razorpay and retain its recovery draft.');
+  'Student web checkout must keep its callback in account/tenant-scoped storage and reload only its own server-confirmed pending orders.');
 assert.ok(parentMarketplacePage.includes("'/api/v1/marketplace/family/orders/' + draft.localOrderId + '/reconcile'") &&
   parentMarketplacePage.includes('savePendingVerify(recoverableDraft)') &&
-  parentMarketplacePage.includes('window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(next))') &&
+  parentMarketplacePage.includes('window.sessionStorage.setItem(key, JSON.stringify(next))') &&
+  parentMarketplacePage.includes("'/api/v1/marketplace/family/orders/pending'") &&
+  parentMarketplacePage.includes('scopedPendingVerifyStorageKey(PENDING_VERIFY_STORAGE_KEY, brand?.institutionCode, userId)') &&
   parentMarketplacePage.indexOf('savePendingVerify(recoverableDraft)') < parentMarketplacePage.indexOf('await ensureRazorpayCheckout()'),
-  'Parent web checkout must persist each order before opening Razorpay and retain its recovery draft.');
-assert.ok(marketplacePage.includes('pendingVerifies.map') &&
+  'Parent web checkout must keep its callback in account/tenant-scoped storage and reload only its own server-confirmed pending orders.');
+assert.ok(marketplacePage.includes('groupPendingVerifyDrafts(pendingVerifies).map') &&
   marketplacePage.includes('const [pendingVerifies, setPendingVerifies]') &&
+  marketplacePage.includes('reconcilePurchase(group.drafts)') &&
   !marketplacePage.includes('pendingVerify !== null') &&
   !marketplacePage.includes('if (pendingVerify)'),
-  'A student pending payment must be tracked per order and must not globally disable unrelated course purchases.');
-assert.ok(parentMarketplacePage.includes('pendingVerifies.map') &&
+  'Student pending attempts must be grouped by logical course and checked together without blocking unrelated purchases.');
+assert.ok(parentMarketplacePage.includes('groupPendingVerifyDrafts(pendingVerifies).map') &&
   parentMarketplacePage.includes('const [pendingVerifies, setPendingVerifies]') &&
+  parentMarketplacePage.includes('reconcilePayment(group.drafts)') &&
   !parentMarketplacePage.includes('pendingVerify !== null') &&
   !parentMarketplacePage.includes('if (pendingVerify)'),
-  'A parent pending payment must be tracked per order and must not globally disable unrelated course purchases.');
+  'Parent pending attempts must be grouped by logical course and beneficiary and checked together.');
+assert.ok(courseMarketplaceApi.includes('@GetMapping("/orders/pending")') &&
+  courseMarketplaceApi.includes('@GetMapping("/family/orders/pending")') &&
+  courseMarketplaceApi.includes('cast(? as bigint) is not null') &&
+  courseMarketplaceApi.includes("failure_code='PROVIDER_CONFIRMED_UNPAID'"),
+  'Pending recovery must use typed PostgreSQL parameters, tenant/user ownership filters, and not resurrect provider-confirmed unpaid attempts.');
 assert.ok(courseMarketplaceApi.includes('@PostMapping("/orders/{localOrderId}/reconcile")') &&
   courseMarketplaceApi.includes('@PostMapping("/family/orders/{localOrderId}/reconcile")') &&
   courseMarketplaceApi.includes('inspectProviderOrderForNewAttempt'),
