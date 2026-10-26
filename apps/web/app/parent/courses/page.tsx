@@ -120,23 +120,23 @@ export default function ParentCoursesPage() {
   const [notice, setNotice] = useState('');
   const [pendingVerifies, setPendingVerifies] = useState<VerifyDraft[]>([]);
   const pendingVerifiesRef = useRef<VerifyDraft[]>([]);
-  function readPendingVerifies(): VerifyDraft[] {
+  const readPendingVerifies = useCallback((): VerifyDraft[] => {
     try {
       const raw = window.sessionStorage.getItem(PENDING_VERIFY_STORAGE_KEY);
       return raw ? parsePendingVerifyDrafts(raw) : pendingVerifiesRef.current;
     } catch {
       return pendingVerifiesRef.current;
     }
-  }
-  function savePendingVerify(draft: VerifyDraft) {
+  }, []);
+  const savePendingVerify = useCallback((draft: VerifyDraft) => {
     const next = [...readPendingVerifies().filter(item => item.localOrderId !== draft.localOrderId), draft];
     pendingVerifiesRef.current = next;
     setPendingVerifies(next);
     try { window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(next)); } catch {
       // In-memory recovery still works if browser storage is disabled.
     }
-  }
-  function clearPendingVerify(localOrderId: number) {
+  }, [readPendingVerifies]);
+  const clearPendingVerify = useCallback((localOrderId: number) => {
     const next = readPendingVerifies().filter(item => item.localOrderId !== localOrderId);
     pendingVerifiesRef.current = next;
     setPendingVerifies(next);
@@ -146,7 +146,7 @@ export default function ParentCoursesPage() {
     } catch {
       // In-memory state remains authoritative for this page.
     }
-  }
+  }, [readPendingVerifies]);
   const [billingAddresses, setBillingAddresses] = useState<BillingAddressRecord[]>([]);
   const [billingAddressesLoading, setBillingAddressesLoading] = useState(true);
   const [checkoutIntent, setCheckoutIntent] = useState<PaidCheckoutIntent | null>(null);
