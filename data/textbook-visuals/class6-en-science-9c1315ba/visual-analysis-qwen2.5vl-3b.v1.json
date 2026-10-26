@@ -13,20 +13,20 @@
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
-      "7648bdfd0ca00b2a9aab1c0d",
-      "264647961a857697afa5e279",
       "b90b1ccd2f380e4a35f9f791",
-      "9f232483ce16973cb62998c9",
-      "01128e1da549b4881f224152",
-      "071b9ffb6e11765d8d17e2bf",
-      "ac3ef67e4ced1dc1152e7b14",
-      "055ba61cf9184b7284850138"
+      "055ba61cf9184b7284850138",
+      "2104ecb647e20f98cb93ca2e",
+      "2185c15c0a88a108ea516878",
+      "47bbaaf66932c5ee5e514c6c",
+      "9f51f614abe6354db658fd1d",
+      "2cea301bf9b05b3d64207203",
+      "a14a3c2709d921232dcb91ac"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1364,
-    "assets_remaining": 714,
-    "assets_completion_percent": 65.6,
-    "assets_failed": 11,
+    "assets_analyzed": 1365,
+    "assets_remaining": 713,
+    "assets_completion_percent": 65.7,
+    "assets_failed": 10,
     "assets_skipped_from_checkpoint": 1364,
     "batch_limit": 10,
     "publication_allowed": false
@@ -442,26 +442,33 @@
           "Foundational and Preparatory Stages",
           "Middle Stage",
           "Secondary Stages",
-          "holistic development",
-          "transformative learning culture",
-          "appropriate textbooks",
-          "curricular areas",
-          "content and pedagogy",
-          "classroom arrangement",
-          "teacher preparation",
-          "conceptual connections",
-          "National Council of Educational Research and Training"
+          "Analytical, descriptive, and narrative capabilities",
+          "Challenges and opportunities",
+          "Diverse curriculum",
+          "Three languages",
+          "Science, Mathematics, Social Sciences",
+          "Art Education",
+          "Physical Education and Well-being",
+          "Vocational Education",
+          "Transformative learning culture",
+          "Appropriate textbooks",
+          "Curricular areas",
+          "Direct instruction",
+          "Opportunities for exploration and inquiry",
+          "Classroom arrangement"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving a holistic educational development.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving the policy's goals.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the curricular areas."
+          "The foreword does not provide specific details about the textbooks or their content.",
+          "The foreword does not mention the exact number of subjects covered in the curriculum.",
+          "The foreword does not describe the specific challenges and opportunities that students will face in the Middle Stage."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T22:39:33Z"
+      "checkpointed_at": "2026-10-26T23:16:22Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20138,7 +20145,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T22:43:30Z"
+      "checkpointed_at": "2026-10-26T23:18:04Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23749,7 +23756,7 @@
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
         "visible_text": [
-          "Presence/ absence of flowers",
+          "Presence/absence of flowers",
           "Hard/soft stem",
           "Eating habits",
           "Place they live",
@@ -23770,6 +23777,7 @@
           "grouping",
           "plants",
           "animals",
+          "criteria",
           "features",
           "stems",
           "leaves",
@@ -23780,13 +23788,12 @@
           "colour",
           "size",
           "arrangement",
-          "height",
-          "types of stem",
           "herbs",
           "shrubs",
           "trees",
-          "nature walk",
-          "observations"
+          "height",
+          "types of stem",
+          "features of plants"
         ],
         "context_relation": "The text is a part of a larger educational content, specifically discussing the criteria for grouping plants and animals.",
         "limitations": [
@@ -23797,7 +23804,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T22:55:36Z"
+      "checkpointed_at": "2026-10-26T23:19:32Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -38042,7 +38049,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:14:18Z"
+      "checkpointed_at": "2026-10-26T23:20:43Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -38783,7 +38790,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40380864418",
+      "run_id": "40413122029",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -40053,7 +40060,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40380864418",
+      "run_id": "40413122029",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -44168,12 +44175,13 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
+        "visual_summary": "A page from a textbook explaining Oral Rehydration Solution (ORS) and its preparation.",
         "visual_type": "uncertain",
         "visible_text": [
           "Make your own ORS!",
           "ORS—Oral Rehydration Solution— is used to treat dehydration due to diarrhoea or other illnesses. These ready-made ORS packets are available in primary health centres and also in the market. Each packet is dissolved in a litre of water before use. If these are not available, ORS can be prepared at ho",
           "Do liquids like oil, vinegar and honey dissolve in water?",
+          "Explore.",
           "What about the gases present in water?",
           "Some liquids get completely mixed with water. Some do not mix with water and form a separate layer when left undisturbed for some time. Similarly, some gases are soluble in water whereas others are not. For example, oxygen gas dissolves in water. It is very important for the survival of animals and ",
           "6.3.5 How heavy or light?",
@@ -44187,22 +44195,23 @@
           "Diarrhoea",
           "Health Centres",
           "Preparation of ORS",
+          "Water Solubility",
           "Gases in Water",
-          "Solubility",
+          "Survival of Animals and Plants",
           "Density",
-          "Survival of Animals and Plants"
+          "Weight Comparison"
         ],
-        "context_relation": "Explanation and activity related to ORS and its properties",
+        "context_relation": "Explanation and preparation of ORS, followed by a question about density and weight comparison.",
         "limitations": [
-          "No specific limitations mentioned",
+          "No specific limitations mentioned.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40277344414",
-      "checkpointed_at": "2026-10-26T07:50:18Z"
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:30:28Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -44662,9 +44671,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40277344414",
+      "run_id": "40413122029",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -45015,9 +45024,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40277344414",
+      "run_id": "40413122029",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -45817,19 +45826,30 @@
     {
       "asset_id": "a14a3c2709d921232dcb91ac",
       "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
-      "page_text_context_sha256": "1f13ef9b0a40cb8c5f04991fffb586942ce905c550c0b95905540e5d0bc64c30",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 141,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1f13ef9b0a40cb8c5f04991fffb586942ce905c550c0b95905540e5d0bc64c30",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40277344414",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:42:28Z"
     },
     {
       "asset_id": "8553be7ccbc0c795fb82a0c1",

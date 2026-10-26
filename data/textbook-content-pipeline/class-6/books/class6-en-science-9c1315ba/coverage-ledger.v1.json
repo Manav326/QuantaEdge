@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
     "raw_analysis_result_rows": 1380,
-    "successful_visual_analyses": 1369,
+    "successful_visual_analyses": 1370,
     "missing_visual_analyses": 698,
-    "failed_visual_analyses": 11,
+    "failed_visual_analyses": 10,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 709,
+    "unresolved_count": 708,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -8231,19 +8231,26 @@
           "Foundational and Preparatory Stages",
           "Middle Stage",
           "Secondary Stages",
-          "holistic development",
-          "transformative learning culture",
-          "appropriate textbooks",
-          "curricular areas",
-          "content and pedagogy",
-          "classroom arrangement",
-          "teacher preparation",
-          "conceptual connections",
-          "National Council of Educational Research and Training"
+          "Analytical, descriptive, and narrative capabilities",
+          "Challenges and opportunities",
+          "Diverse curriculum",
+          "Three languages",
+          "Science, Mathematics, Social Sciences",
+          "Art Education",
+          "Physical Education and Well-being",
+          "Vocational Education",
+          "Transformative learning culture",
+          "Appropriate textbooks",
+          "Curricular areas",
+          "Direct instruction",
+          "Opportunities for exploration and inquiry",
+          "Classroom arrangement"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving a holistic educational development.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving the policy's goals.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the curricular areas."
+          "The foreword does not provide specific details about the textbooks or their content.",
+          "The foreword does not mention the exact number of subjects covered in the curriculum.",
+          "The foreword does not describe the specific challenges and opportunities that students will face in the Middle Stage."
         ]
       },
       "chapter_id": null,
@@ -30777,7 +30784,7 @@
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
         "visible_text": [
-          "Presence/ absence of flowers",
+          "Presence/absence of flowers",
           "Hard/soft stem",
           "Eating habits",
           "Place they live",
@@ -30798,6 +30805,7 @@
           "grouping",
           "plants",
           "animals",
+          "criteria",
           "features",
           "stems",
           "leaves",
@@ -30808,13 +30816,12 @@
           "colour",
           "size",
           "arrangement",
-          "height",
-          "types of stem",
           "herbs",
           "shrubs",
           "trees",
-          "nature walk",
-          "observations"
+          "height",
+          "types of stem",
+          "features of plants"
         ],
         "context_relation": "The text is a part of a larger educational content, specifically discussing the criteria for grouping plants and animals.",
         "limitations": [
@@ -50656,12 +50663,13 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
+        "visual_summary": "A page from a textbook explaining Oral Rehydration Solution (ORS) and its preparation.",
         "visual_type": "uncertain",
         "visible_text": [
           "Make your own ORS!",
           "ORS—Oral Rehydration Solution— is used to treat dehydration due to diarrhoea or other illnesses. These ready-made ORS packets are available in primary health centres and also in the market. Each packet is dissolved in a litre of water before use. If these are not available, ORS can be prepared at ho",
           "Do liquids like oil, vinegar and honey dissolve in water?",
+          "Explore.",
           "What about the gases present in water?",
           "Some liquids get completely mixed with water. Some do not mix with water and form a separate layer when left undisturbed for some time. Similarly, some gases are soluble in water whereas others are not. For example, oxygen gas dissolves in water. It is very important for the survival of animals and ",
           "6.3.5 How heavy or light?",
@@ -50675,14 +50683,15 @@
           "Diarrhoea",
           "Health Centres",
           "Preparation of ORS",
+          "Water Solubility",
           "Gases in Water",
-          "Solubility",
+          "Survival of Animals and Plants",
           "Density",
-          "Survival of Animals and Plants"
+          "Weight Comparison"
         ],
-        "context_relation": "Explanation and activity related to ORS and its properties",
+        "context_relation": "Explanation and preparation of ORS, followed by a question about density and weight comparison.",
         "limitations": [
-          "No specific limitations mentioned",
+          "No specific limitations mentioned.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -52267,9 +52276,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
