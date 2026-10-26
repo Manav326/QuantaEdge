@@ -97,11 +97,11 @@ public class CourseMarketplaceController {
             where a.course_id=p.id and a.status='PUBLISHED') as assessment_question_count,
           o.description, o.price_paise, o.currency, o.status as offer_status,
           (exists(select 1 from student_program_enrollment e
-            where e.institution_id=? and e.student_id=? and e.program_id=p.id
+            where e.institution_id=? and e.student_id=? and qe_same_logical_course(e.program_id,p.id)
               and e.status in ('ACTIVE','PAUSED'))
             ) as has_access,
           exists(select 1 from course_purchase cp
-            where cp.institution_id=? and cp.student_id=? and cp.course_id=p.id) as purchased,
+            where cp.institution_id=? and cp.student_id=? and qe_same_logical_course(cp.course_id,p.id)) as purchased,
           exists(select 1 from student_login_credential c
             where c.student_id=? and c.active=true) as parent_managed,
           parent_request.status as parent_request_status,
@@ -204,28 +204,28 @@ public class CourseMarketplaceController {
         o.description,o.price_paise,o.currency,o.status as offer_status,
         (exists(select 1 from course_entitlement ce
           where ce.institution_id=(select institution_id from selected_tenant)
-            and ce.course_id=p.id and ce.holder_user_id=?)
+            and qe_same_logical_course(ce.course_id,p.id) and ce.holder_user_id=?)
          or exists(select 1 from student st
           join institution_membership m on m.student_id=st.id
             and m.institution_id=(select institution_id from selected_tenant) and m.status='ACTIVE'
           join student_program_enrollment e on e.student_id=st.id and e.institution_id=m.institution_id
-            and e.program_id=p.id and e.status in ('ACTIVE','PAUSED')
+            and qe_same_logical_course(e.program_id,p.id) and e.status in ('ACTIVE','PAUSED')
           where st.user_account_id=?)) as owned_by_parent,
         exists(select 1 from course_entitlement ce
           where ce.institution_id=(select institution_id from selected_tenant)
-            and ce.course_id=p.id and ce.holder_user_id=? and ce.transfer_count=0) as transferable_by_parent,
+            and qe_same_logical_course(ce.course_id,p.id) and ce.holder_user_id=? and ce.transfer_count=0) as transferable_by_parent,
         (exists(select 1 from course_entitlement ce
           join guardian_student gs on gs.student_id=ce.holder_student_id
           join institution_membership m on m.student_id=gs.student_id
             and m.institution_id=ce.institution_id and m.status='ACTIVE'
           where ce.institution_id=(select institution_id from selected_tenant)
-            and ce.course_id=p.id and gs.guardian_user_id=?
+            and qe_same_logical_course(ce.course_id,p.id) and gs.guardian_user_id=?
             and gs.active=true and gs.consent_status='CONSENTED' and gs.access_level='FULL')
          or exists(select 1 from guardian_student gs
           join institution_membership m on m.student_id=gs.student_id
             and m.institution_id=(select institution_id from selected_tenant) and m.status='ACTIVE'
           join student_program_enrollment e on e.student_id=gs.student_id
-            and e.institution_id=m.institution_id and e.program_id=p.id and e.status in ('ACTIVE','PAUSED')
+            and e.institution_id=m.institution_id and qe_same_logical_course(e.program_id,p.id) and e.status in ('ACTIVE','PAUSED')
           where gs.guardian_user_id=? and gs.active=true
             and gs.consent_status='CONSENTED' and gs.access_level='FULL')) as owned_by_child,
         (select coalesce(string_agg(distinct gs.student_id::text, ','), '')
@@ -235,11 +235,11 @@ public class CourseMarketplaceController {
          where gs.guardian_user_id=? and gs.active=true
            and gs.consent_status='CONSENTED' and gs.access_level='FULL'
            and (exists(select 1 from course_entitlement ce
-                 where ce.institution_id=m.institution_id and ce.course_id=p.id
+                 where ce.institution_id=m.institution_id and qe_same_logical_course(ce.course_id,p.id)
                    and ce.holder_student_id=gs.student_id)
              or exists(select 1 from student_program_enrollment e
                  where e.student_id=gs.student_id and e.institution_id=m.institution_id
-                   and e.program_id=p.id and e.status in ('ACTIVE','PAUSED'))
+                   and qe_same_logical_course(e.program_id,p.id) and e.status in ('ACTIVE','PAUSED'))
            )) as owned_child_ids
       from institution_marketplace_offer o
       join institution_course_assignment assignment
@@ -731,7 +731,8 @@ public class CourseMarketplaceController {
       String requestedDiscountCode, Long requestedBillingAddressId) {
     requireConfigured();
     List<Map<String, Object>> rows = jdbc.queryForList("""
-        select p.id, o.id as institution_offer_id,
+        select p.id, p.course_identity_id, identity.public_id as course_identity_public_id,
+          p.content_version_no, o.id as institution_offer_id,
           coalesce(nullif(o.title_override,''),p.display_name) as title,
           o.price_paise, o.currency, o.description
         from institution_marketplace_offer o
@@ -743,6 +744,9 @@ public class CourseMarketplaceController {
         join institution_tenant tenant_scope
           on tenant_scope.id=o.institution_id and tenant_scope.status='ACTIVE'
         join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
+        join institution_course_identity identity on identity.id=p.course_identity_id
+          and identity.status='ACTIVE' and identity.source_institution_id=release.source_institution_id
+          and identity.course_type_code=p.course_type_code
         join student target_student on target_student.id=? and target_student.active=true
           and target_student.environment='PRODUCTION'
         join institution_membership member
@@ -790,14 +794,19 @@ public class CourseMarketplaceController {
     }
     if (purchaserUserId != null) {
       Boolean alreadyOwnedByParent = jdbc.queryForObject("""
-        select exists(select 1 from course_entitlement
-          where holder_user_id=? and institution_id=? and course_id=?)
+        select exists(select 1 from course_entitlement entitlement
+          where entitlement.holder_user_id=? and entitlement.institution_id=?
+            and qe_same_logical_course(entitlement.course_id,?))
         """, Boolean.class, purchaserUserId, institutionId, courseId);
       if (Boolean.TRUE.equals(alreadyOwnedByParent)) {
         throw new IllegalArgumentException("You already own this course. Open your courses or transfer it to a linked child.");
       }
     }
     Map<String, Object> offer = rows.getFirst();
+    Object rawIdentityId=offer.get("course_identity_id");
+    if(!(rawIdentityId instanceof Number))
+      throw new IllegalStateException("This course has no canonical logical identity; checkout is blocked pending source-owner reconciliation.");
+    long courseIdentityId=((Number)rawIdentityId).longValue();
     long listedPricePaise = ((Number) offer.get("price_paise")).longValue();
     long amountPaise = listedPricePaise;
     String currency = String.valueOf(offer.get("currency")).toUpperCase(Locale.ROOT);
@@ -820,7 +829,7 @@ public class CourseMarketplaceController {
       throw new IllegalStateException("Institution payment branding is not configured.");
 
     List<Map<String, Object>> keyedOrders = jdbc.queryForList("""
-        select id,institution_offer_id,offer_price_paise,currency,provider_order_id,status,tax_profile_id,revenue_share_policy_id,
+        select id,institution_offer_id,course_identity_id,identity_contract_version,offer_price_paise,currency,provider_order_id,status,tax_profile_id,revenue_share_policy_id,
           listed_price_paise,discount_offer_id,discount_amount_paise,discount_reference,
           discount_snapshot::text as discount_snapshot_json,
           tax_calculation_snapshot::text as tax_calculation_snapshot_json,
@@ -852,21 +861,32 @@ public class CourseMarketplaceController {
       }
     }
 
-    List<Map<String, Object>> open = openOrders(targetStudentId, institutionId, courseId, purchaserUserId);
+    List<Map<String, Object>> open = openOrders(targetStudentId, institutionId, courseIdentityId, courseId, purchaserUserId);
+    if (open.size() > 1) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "More than one pending checkout exists for this logical course. Do not pay again; HRMS must reconcile the saved orders.");
+    }
     if (!open.isEmpty()) {
       Map<String, Object> prior = open.getFirst();
-      if ("PENDING".equals(String.valueOf(prior.get("status")))) {
+      Object priorOfferRaw=prior.get("institution_offer_id");
+      long currentOfferId=((Number)offer.get("institution_offer_id")).longValue();
+      boolean sameOffer=priorOfferRaw instanceof Number n && n.longValue()==currentOfferId;
+      String priorStatus=String.valueOf(prior.get("status"));
+      if (!sameOffer) {
+        // Never return an old offer's price/order as checkout for a newer offer revision.
+        expireSupersededUnpaidOrder(prior,institutionId,currentOfferId);
+      } else if ("PENDING".equals(priorStatus)) {
         requireSameBillingAddressChoice(prior,buyerSnapshot);
         if (!hasLockedFinancialSnapshots(prior)) {
           repairLegacyPendingOrderSnapshots(prior,institutionId,
-              ((Number)offer.get("institution_offer_id")).longValue(),listedPricePaise,currency,
-              title,buyerSnapshot,requestedDiscountCode);
+              currentOfferId,listedPricePaise,currency,title,buyerSnapshot,requestedDiscountCode);
           return checkoutResponse(prior,courseId,title,institutionDisplayName);
         }
         String providerState = inspectProviderOrderForNewAttempt(prior);
         if ("PAID".equals(providerState)) {
           throw new IllegalStateException(
-              "Razorpay reports that this course order is already paid. Retry payment verification for this same order; do not start another checkout.");
+              "Razorpay reports that this course order is already paid. Retry verification for this same order; do not start another checkout.");
         }
         if (!"RETRYABLE".equals(providerState)) {
           throw new IllegalStateException(
@@ -907,32 +927,40 @@ public class CourseMarketplaceController {
       localOrderId = jdbc.queryForObject("""
           insert into course_payment_order(
             student_id,purchaser_user_id,target_student_id,recipient_type,
-            course_id,institution_id,institution_offer_id,offer_price_paise,currency,
+            course_id,institution_id,institution_offer_id,course_identity_id,identity_contract_version,offer_price_paise,currency,
             discount_offer_id,listed_price_paise,discount_amount_paise,discount_reference,discount_snapshot,
             tax_profile_id,taxable_value_paise,output_tax_paise,tax_calculation_snapshot,
             revenue_share_policy_id,revenue_share_policy_snapshot,buyer_snapshot,
             receipt,client_request_key,status
-          ) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?::jsonb,?,?,?,?::jsonb,?,?::jsonb,?::jsonb,?,?, 'CREATING')
+          ) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?::jsonb,?,?,?,?::jsonb,?,?::jsonb,?::jsonb,?,?, 'CREATING')
           returning id
           """, Long.class, targetStudentId, purchaserUserId,
           purchaserUserId == null ? null : targetStudentForOrder, recipientType,
           courseId, institutionId, ((Number) offer.get("institution_offer_id")).longValue(),
-          amountPaise, currency, financialSnapshot.discountOfferId(),financialSnapshot.listedPricePaise(),
+          courseIdentityId, 1, amountPaise, currency, financialSnapshot.discountOfferId(),financialSnapshot.listedPricePaise(),
           financialSnapshot.discountPaise(),financialSnapshot.discountCode(),discountSnapshotJson,
           financialSnapshot.taxProfileId(),financialSnapshot.taxableValuePaise(),
           financialSnapshot.outputTaxPaise(),taxCalculationSnapshotJson,financialSnapshot.revenueSharePolicyId(),
           revenueShareSnapshotJson,buyerSnapshotJson,receipt,idempotencyKey);
     } catch (DuplicateKeyException conflict) {
-      List<Map<String, Object>> racedOrders = openOrders(targetStudentId, institutionId, courseId, purchaserUserId);
-      if (!racedOrders.isEmpty() && "PENDING".equals(String.valueOf(racedOrders.getFirst().get("status")))) {
+      List<Map<String, Object>> racedOrders = openOrders(targetStudentId, institutionId, courseIdentityId, courseId, purchaserUserId);
+      if (racedOrders.size() == 1 && "PENDING".equals(String.valueOf(racedOrders.getFirst().get("status")))) {
         Map<String,Object> racedOrder = racedOrders.getFirst();
+        long currentOfferId=((Number)offer.get("institution_offer_id")).longValue();
+        Object racedOfferRaw=racedOrder.get("institution_offer_id");
+        if(!(racedOfferRaw instanceof Number n) || n.longValue()!=currentOfferId) {
+          expireSupersededUnpaidOrder(racedOrder,institutionId,currentOfferId);
+          throw new IllegalStateException("The earlier checkout was confirmed unpaid and expired. Start a fresh checkout for the current offer.");
+        }
         requireSameBillingAddressChoice(racedOrder,buyerSnapshot);
         if (!hasLockedFinancialSnapshots(racedOrder)) {
           repairLegacyPendingOrderSnapshots(racedOrder,institutionId,
-              ((Number)offer.get("institution_offer_id")).longValue(),listedPricePaise,currency,
-              title,buyerSnapshot,requestedDiscountCode);
+              currentOfferId,listedPricePaise,currency,title,buyerSnapshot,requestedDiscountCode);
         }
         return checkoutResponse(racedOrder, courseId, title, institutionDisplayName);
+      }
+      if (racedOrders.size() > 1) {
+        throw new IllegalStateException("Multiple checkouts exist for this logical course. HRMS must reconcile them before another payment.");
       }
       if (!racedOrders.isEmpty()) {
         throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.", conflict);
@@ -1163,9 +1191,11 @@ public class CourseMarketplaceController {
     }
   }
 
-  private List<Map<String, Object>> openOrders(long studentId, long institutionId, long courseId, Long purchaserUserId) {
+  private List<Map<String, Object>> openOrders(
+      long studentId, long institutionId, long courseIdentityId, long currentCourseId, Long purchaserUserId) {
     return jdbc.queryForList("""
-        select id,institution_offer_id,offer_price_paise,currency,provider_order_id,status,listed_price_paise,
+        select id,institution_offer_id,course_identity_id,identity_contract_version,
+          offer_price_paise,currency,provider_order_id,status,listed_price_paise,
           discount_offer_id,discount_amount_paise,discount_reference,
           discount_snapshot::text as discount_snapshot_json,
           tax_profile_id,revenue_share_policy_id,
@@ -1173,12 +1203,54 @@ public class CourseMarketplaceController {
           revenue_share_policy_snapshot::text as revenue_share_policy_snapshot_json,
           buyer_snapshot::text as buyer_snapshot_json
         from course_payment_order
-        where student_id=? and institution_id=? and course_id=?
+        where student_id=? and institution_id=?
+          and (course_identity_id=? or (course_identity_id is null and qe_same_logical_course(course_id,?)))
           and purchaser_user_id is not distinct from ?
           and status in ('CREATING','PENDING')
         order by id desc
-        limit 1
-        """, studentId, institutionId, courseId, purchaserUserId);
+        """, studentId, institutionId, courseIdentityId, currentCourseId, purchaserUserId);
+  }
+
+  /** Expire a superseded offer only when the provider proves the exact saved order is unpaid. */
+  private void expireSupersededUnpaidOrder(Map<String,Object> prior,long institutionId,long currentOfferId) {
+    Object rawOfferId=prior.get("institution_offer_id");
+    Object rawOrderId=prior.get("id");
+    if(!(rawOfferId instanceof Number savedOffer) || savedOffer.longValue()==currentOfferId
+        || !(rawOrderId instanceof Number savedOrder)
+        || !"PENDING".equals(String.valueOf(prior.get("status")))) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "A previous checkout exists for this course identity, but it cannot be safely replaced automatically. Do not pay again; reconcile the saved order first.");
+    }
+    String providerState;
+    try {
+      providerState=inspectProviderOrderForNewAttempt(prior);
+    } catch(RuntimeException providerFailure) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "The previous checkout belongs to an older course offer and its payment status could not be confirmed. Do not pay again; reconcile the saved order first.");
+    }
+    if("PAID".equals(providerState)) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "A previous checkout for this course was reported paid. Do not pay again; reconcile that exact order before continuing.");
+    }
+    if(!providerConfirmsRetryIsSafe(providerState)) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "A previous checkout for an older course offer may still be processing. Do not pay again until its saved order is reconciled.");
+    }
+    int changed=jdbc.update("""
+        update course_payment_order
+        set status='EXPIRED',failure_code='COURSE_OFFER_SUPERSEDED_UNPAID',updated_at=now()
+        where id=? and institution_id=? and status='PENDING'
+          and institution_offer_id=? and provider_order_id=?
+        """,savedOrder.longValue(),institutionId,savedOffer.longValue(),prior.get("provider_order_id"));
+    if(changed!=1) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "The previous checkout changed while being reconciled. Reload the course and check payment status before trying again.");
+    }
   }
 
   private Map<String, Object> checkoutResponse(
@@ -2043,11 +2115,12 @@ public class CourseMarketplaceController {
       purchaseId = jdbc.queryForObject("""
           insert into course_purchase(
             student_id,course_id,order_id,provider_payment_id,amount_paise,currency,purchaser_user_id,
-            institution_id,institution_offer_id
-          ) values(?,?,?,?,?,?,?,?,?) returning id
+            institution_id,institution_offer_id,course_identity_id,identity_contract_version
+          ) values(?,?,?,?,?,?,?,?,?,?,?) returning id
           """, Long.class, targetStudentId, courseId, localOrderId,
           paymentId, expectedAmount, expectedCurrency, purchaserUserId, institutionId,
-          ((Number) order.get("institution_offer_id")).longValue());
+          ((Number) order.get("institution_offer_id")).longValue(),
+          ((Number) order.get("course_identity_id")).longValue(), 1);
     } catch (DuplicateKeyException ex) {
       // A concurrent payment or retry must never mint a second ownership record.
       List<Map<String,Object>> prior = jdbc.queryForList("""
@@ -2065,10 +2138,12 @@ public class CourseMarketplaceController {
         ? purchaserUserId : null;
     jdbc.update("""
         insert into course_entitlement(
-          course_id,source_purchase_id,holder_user_id,holder_student_id,granted_by_user_id,institution_id
-        ) values(?,?,?,?,?,?)
+          course_id,source_purchase_id,holder_user_id,holder_student_id,granted_by_user_id,institution_id,
+          course_identity_id,identity_contract_version
+        ) values(?,?,?,?,?,?,?,?)
         on conflict(source_purchase_id) do nothing
-        """, courseId, purchaseId, entitlementOwnerUser, targetStudentId, purchaserUserId, institutionId);
+        """, courseId, purchaseId, entitlementOwnerUser, targetStudentId, purchaserUserId, institutionId,
+        ((Number) order.get("course_identity_id")).longValue(), 1);
 
     // Course membership is switched server-side. A parent's self-purchase stays owned
     // by that parent and is assigned to their personal learning profile until transferred.
@@ -2212,13 +2287,13 @@ public class CourseMarketplaceController {
     Boolean value = jdbc.queryForObject("""
         select exists(
           select 1 from student_program_enrollment e
-          where e.student_id=? and e.institution_id=? and e.program_id=? and e.status in ('ACTIVE','PAUSED')
+          where e.student_id=? and e.institution_id=? and qe_same_logical_course(e.program_id,?) and e.status in ('ACTIVE','PAUSED')
           union all
           select 1 from course_purchase p
-          where p.student_id=? and p.institution_id=? and p.course_id=?
+          where p.student_id=? and p.institution_id=? and qe_same_logical_course(p.course_id,?)
           union all
           select 1 from course_entitlement ce
-          where ce.institution_id=? and ce.course_id=? and (ce.holder_student_id=? or ce.holder_user_id=(select user_account_id from student where id=?))
+          where ce.institution_id=? and qe_same_logical_course(ce.course_id,?) and (ce.holder_student_id=? or ce.holder_user_id=(select user_account_id from student where id=?))
         )
         """, Boolean.class, studentId, institutionId, courseId, studentId, institutionId, courseId,
         institutionId, courseId, studentId, studentId);
