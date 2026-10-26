@@ -8,26 +8,26 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1374,
+    "assets_selected": 1375,
     "assets_processed_this_run": 10,
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
-      "2104ecb647e20f98cb93ca2e",
-      "2185c15c0a88a108ea516878",
       "47bbaaf66932c5ee5e514c6c",
-      "9f51f614abe6354db658fd1d",
-      "2cea301bf9b05b3d64207203",
-      "a14a3c2709d921232dcb91ac"
+      "08b81961bc11c71ef6a17fb0",
+      "252dd9a60332c2099bb41b90",
+      "ecd54b0a0b906cd36c0dce5e",
+      "961865761ac633a42d21fd6c",
+      "24e10ab3c039e15760398786"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1365,
-    "assets_remaining": 713,
-    "assets_completion_percent": 65.7,
+    "assets_analyzed": 1370,
+    "assets_remaining": 708,
+    "assets_completion_percent": 65.9,
     "assets_failed": 10,
-    "assets_skipped_from_checkpoint": 1364,
+    "assets_skipped_from_checkpoint": 1365,
     "batch_limit": 10,
     "publication_allowed": false
   },
@@ -468,7 +468,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:16:22Z"
+      "checkpointed_at": "2026-10-26T23:44:24Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20145,7 +20145,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:18:04Z"
+      "checkpointed_at": "2026-10-26T23:46:03Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23804,7 +23804,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:19:32Z"
+      "checkpointed_at": "2026-10-26T23:47:28Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -38049,7 +38049,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:20:43Z"
+      "checkpointed_at": "2026-10-26T23:48:38Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44175,13 +44175,12 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook explaining Oral Rehydration Solution (ORS) and its preparation.",
+        "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
         "visible_text": [
           "Make your own ORS!",
           "ORS—Oral Rehydration Solution— is used to treat dehydration due to diarrhoea or other illnesses. These ready-made ORS packets are available in primary health centres and also in the market. Each packet is dissolved in a litre of water before use. If these are not available, ORS can be prepared at ho",
           "Do liquids like oil, vinegar and honey dissolve in water?",
-          "Explore.",
           "What about the gases present in water?",
           "Some liquids get completely mixed with water. Some do not mix with water and form a separate layer when left undisturbed for some time. Similarly, some gases are soluble in water whereas others are not. For example, oxygen gas dissolves in water. It is very important for the survival of animals and ",
           "6.3.5 How heavy or light?",
@@ -44194,16 +44193,15 @@
           "Oral Rehydration Solution (ORS)",
           "Diarrhoea",
           "Health Centres",
-          "Preparation of ORS",
           "Water Solubility",
           "Gases in Water",
-          "Survival of Animals and Plants",
+          "Animal and Plant Survival",
           "Density",
-          "Weight Comparison"
+          "Paper Cups"
         ],
-        "context_relation": "Explanation and preparation of ORS, followed by a question about density and weight comparison.",
+        "context_relation": "Explanation and activity related to ORS and its preparation",
         "limitations": [
-          "No specific limitations mentioned.",
+          "No specific limitations mentioned in the image.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -44211,7 +44209,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:30:28Z"
+      "checkpointed_at": "2026-10-26T23:49:36Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -45918,6 +45916,228 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40277344414",
       "checkpointed_at": "2026-10-26T07:54:28Z"
+    },
+    {
+      "asset_id": "08b81961bc11c71ef6a17fb0",
+      "asset_sha256": "c4a87f5f65247af67dc61eb8d331569d027567f1659b57f7943334d3f1168020",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 142,
+      "asset_path": "assets/c4a87f5f65247af67dc61eb8d331569d027567f1659b57f7943334d3f1168020.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "11e4f07c7079d8111de8b7329c432f4bb35516fab135d4de13ae20a88c2ec194",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person in a white shirt and blue tie standing behind three large containers filled with different temperatures of water.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "Take three large containers and label them A, B and C, as shown in Fig. 7.1.",
+          "Pour warm water in container A, tap water in B and ice-cold water in C.",
+          "We will conduct this activity in two parts — prediction and observation.",
+          "Firstly, predict what will you feel if you",
+          "Observation: We can realise this by merely touching the two",
+          "samples of water. But can we always rely upon our sense of",
+          "touch? Let us find out."
+        ],
+        "concepts": [
+          "Temperature",
+          "Prediction",
+          "Observation",
+          "Senses"
+        ],
+        "context_relation": "The image is related to an educational activity involving the perception of different temperatures of water.",
+        "limitations": [
+          "The image does not show the actual activity of pouring water into the containers.",
+          "The image does not show the person conducting the activity."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:51:02Z"
+    },
+    {
+      "asset_id": "252dd9a60332c2099bb41b90",
+      "asset_sha256": "e9423e2d3e4be7ff010fb4be7f4c91a42b8ededadbfda677ab66babb98c28f0a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 142,
+      "asset_path": "assets/e9423e2d3e4be7ff010fb4be7f4c91a42b8ededadbfda677ab66babb98c28f0a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "11e4f07c7079d8111de8b7329c432f4bb35516fab135d4de13ae20a88c2ec194",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person in a white shirt and tie standing behind three glass containers filled with different temperatures of water.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Take three large containers and label them A, B and C, as shown in Fig. 7.1.",
+          "Pour warm water in container A, tap water in B and ice-cold water in C.",
+          "We will conduct this activity in two parts — prediction and observation.",
+          "Firstly, predict what will you feel if you",
+          "Observation: The person is standing behind three glass containers filled with different temperatures of water.",
+          "Activity 7.1: Let us investigate"
+        ],
+        "concepts": [
+          "Temperature",
+          "Prediction",
+          "Observation",
+          "Activity"
+        ],
+        "context_relation": "The image is related to an educational activity involving the investigation of different temperatures of water.",
+        "limitations": [
+          "The image does not show the actual experiment being conducted."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:52:25Z"
+    },
+    {
+      "asset_id": "ecd54b0a0b906cd36c0dce5e",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 142,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "11e4f07c7079d8111de8b7329c432f4bb35516fab135d4de13ae20a88c2ec194",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Three large containers labeled A, B, and C are shown, with warm water in A, tap water in B, and ice-cold water in C.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Take three large containers and label them A, B and C, as shown in Fig. 7.1.",
+          "Pour warm water in container A, tap water in B and ice-cold water in C.",
+          "We will conduct this activity in two parts — prediction and observation."
+        ],
+        "concepts": [
+          "Prediction",
+          "Observation",
+          "Warm water",
+          "Tap water",
+          "Ice-cold water"
+        ],
+        "context_relation": "The image is related to an educational activity involving the comparison of different temperatures of water.",
+        "limitations": [
+          "The image does not show the actual containers or the water being poured.",
+          "The image does not show the results of the prediction and observation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:53:05Z"
+    },
+    {
+      "asset_id": "961865761ac633a42d21fd6c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 142,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "11e4f07c7079d8111de8b7329c432f4bb35516fab135d4de13ae20a88c2ec194",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Three large containers labeled A, B, and C with warm water in A, tap water in B, and ice-cold water in C.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "refrigerator. We can realise this by merely touching the two",
+          "samples of water. But can we always rely upon our sense of",
+          "touch? Let us find out.",
+          "Activity 7.1: Let us investigate",
+          "Take three large containers and label them A, B and C,",
+          "as shown in Fig. 7.1.",
+          "Pour warm water in container A, tap water in B and ice-",
+          "cold water in C.",
+          "We will conduct this activity in two parts — prediction",
+          "and observation.",
+          "Firstly, predict what will you feel if y",
+          ""
+        ],
+        "concepts": [
+          "Prediction",
+          "Observation",
+          "Senses",
+          "Warm Water",
+          "Tap Water",
+          "Ice-Cold Water",
+          "Containers"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "No specific limitations provided."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:53:53Z"
+    },
+    {
+      "asset_id": "24e10ab3c039e15760398786",
+      "asset_sha256": "3f84c002d5ff2fe1dde8aec774112ffae9a05a93a4b47853f9eb62b2fc16ee4f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 142,
+      "asset_path": "page-0142.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "11e4f07c7079d8111de8b7329c432f4bb35516fab135d4de13ae20a88c2ec194",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Activity instructions for a science experiment involving three containers labeled A, B, and C, with warm, tap, and ice-cold water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "refrigerator. We can realise this by merely touching the two\nsamples of water. But can we always rely upon our sense of\ntouch? Let us find out.",
+          "Activity 7.1: Let us investigate",
+          "Take three large containers and label them A, B and C,\nas shown in Fig. 7.1.",
+          "Pour warm water in container A, tap water in B and ice-\ncold water in C.",
+          "We will conduct this activity in two parts — prediction\nand observation.",
+          "Firstly, predict what will you feel if you",
+          "dip your right hand in A and left hand in C and\nkeep them there for 1–2 minutes.",
+          "take out your hands from containers A and C, and\nplace both hands simultaneously in B.",
+          "Fig. 7.1: Feeling hotness or coldness of water by dipping hands",
+          "Write down your predictions.",
+          "What will my right hand feel on dipping it in B?",
+          "What will my left hand feel on dipping it in B?",
+          "Now, conduct the activity and write your observations."
+        ],
+        "concepts": [
+          "science experiment",
+          "touch",
+          "senses",
+          "warm water",
+          "tap water",
+          "ice-cold water",
+          "containers",
+          "predictions",
+          "observations"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "no specific limitations mentioned"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:57:01Z"
     }
   ]
 }
