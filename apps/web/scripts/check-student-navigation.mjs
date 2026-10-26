@@ -1219,7 +1219,8 @@ assert.ok(courseMarketplaceApi.includes('@PostMapping("/courses/{courseId}/order
   courseMarketplaceApi.includes('@PostMapping("/family/courses/{courseId}/orders")') &&
   (courseMarketplaceApi.match(/createOrderInternal\(/g) || []).length >= 3 &&
   courseMarketplaceApi.includes('inspectProviderOrderForNewAttempt') &&
-  courseMarketplaceApi.includes('The previous payment attempt is still being reconciled') &&
+  courseMarketplaceApi.includes('pendingOrderRecoveryResponse(') &&
+  courseMarketplaceApi.includes('The previous payment is still processing or needs reconciliation') &&
   courseMarketplaceApi.includes('courseOrderFinancialService.prepareCheckout(') &&
   courseOrderFinancialService.includes('Checkout is not configured: HRMS must activate the legal seller'),
   'Student and family purchase routes must share the server lifecycle and retain seller/tax and no-double-payment guards.');
