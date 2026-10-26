@@ -2131,7 +2131,8 @@ public class CourseMarketplaceController {
           """, Long.class, targetStudentId, courseId, localOrderId,
           paymentId, expectedAmount, expectedCurrency, purchaserUserId, institutionId,
           ((Number) order.get("institution_offer_id")).longValue(),
-          ((Number) order.get("course_identity_id")).longValue(), 1);
+          order.get("course_identity_id") instanceof Number identity ? identity.longValue() : null,
+          order.get("identity_contract_version") instanceof Number contractVersion ? contractVersion.intValue() : 0);
     } catch (DuplicateKeyException ex) {
       // A concurrent payment or retry must never mint a second ownership record.
       List<Map<String,Object>> prior = jdbc.queryForList("""
@@ -2154,7 +2155,8 @@ public class CourseMarketplaceController {
         ) values(?,?,?,?,?,?,?,?)
         on conflict(source_purchase_id) do nothing
         """, courseId, purchaseId, entitlementOwnerUser, targetStudentId, purchaserUserId, institutionId,
-        ((Number) order.get("course_identity_id")).longValue(), 1);
+        order.get("course_identity_id") instanceof Number identity ? identity.longValue() : null,
+        order.get("identity_contract_version") instanceof Number contractVersion ? contractVersion.intValue() : 0);
 
     // Course membership is switched server-side. A parent's self-purchase stays owned
     // by that parent and is assigned to their personal learning profile until transferred.
