@@ -2224,10 +2224,21 @@ public class CourseMarketplaceController {
       throw new IllegalArgumentException("The payment ID, order, amount or currency does not match this course order. Course access remains locked.");
     }
 
+    // Validate beneficiary and entitlement prerequisites before any external capture.
+    // A local transaction rollback cannot undo a successful Razorpay capture.
+    long targetStudentId = ((Number) order.get("student_id")).longValue();
+    Long purchaserUserId = order.get("purchaser_user_id") == null
+        ? null : ((Number) order.get("purchaser_user_id")).longValue();
+    String recipientType = String.valueOf(order.get("recipient_type"));
+    if ("CHILD".equals(recipientType)) {
+      if (purchaserUserId == null) throw new SecurityException("The parent purchase identity is missing.");
+      requireFullGuardianChildAccess(purchaserUserId,targetStudentId,institutionId);
+    }
+    requireStudentMembership(targetStudentId,institutionId);
+
     // Razorpay can return a successful checkout in the authorised state when automatic
-    // capture is delayed or unavailable. Capture only after the signed callback and exact
-    // persisted order, amount and currency have been checked; never capture an arbitrary
-    // payment supplied by the browser.
+    // capture is delayed or unavailable. Capture only after the signed callback, exact
+    // persisted order, amount/currency and entitlement prerequisites have been checked.
     if ("authorized".equalsIgnoreCase(payment.path("status").asText(""))) {
       String captureRequest;
       try {
@@ -2259,15 +2270,6 @@ public class CourseMarketplaceController {
           "The payment is not captured for this exact course order. Retry verification; do not start another checkout.");
     }
 
-    long targetStudentId = ((Number) order.get("student_id")).longValue();
-    Long purchaserUserId = order.get("purchaser_user_id") == null
-        ? null : ((Number) order.get("purchaser_user_id")).longValue();
-    String recipientType = String.valueOf(order.get("recipient_type"));
-    if ("CHILD".equals(recipientType)) {
-      if (purchaserUserId == null) throw new SecurityException("The parent purchase identity is missing.");
-      requireFullGuardianChildAccess(purchaserUserId,targetStudentId,institutionId);
-    }
-    requireStudentMembership(targetStudentId,institutionId);
     Long purchaseId;
     try {
       purchaseId = jdbc.queryForObject("""
