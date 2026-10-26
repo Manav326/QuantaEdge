@@ -1,0 +1,389 @@
+{
+  "schema_version": "quantaedge.visual-analysis-effective.v1",
+  "source_book_id": "ncert-c7-hindi-ghgp1",
+  "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+  "raw_analysis_path": "data/textbook-visuals/class7-hi-maths-part1-d9bd23b6/visual-analysis-qwen2.5vl-3b.v1.json",
+  "raw_analysis_sha256": "f54f1ecc2fff9355fedcc96594b56e7b3e1bffa711775736b1fd75b41b959bef",
+  "model": "qwen2.5vl:3b",
+  "prompt_version": "visual-analysis-prompt-v2",
+  "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-hi-maths-part1-d9bd23b6/visual-analysis-corrections.v1.json",
+  "corrections_applied_count": 0,
+  "results": [
+    {
+      "asset_id": "065b567b30c4c88b3a2d6127",
+      "asset_sha256": "7d801bdf3e30f746fbca282580a2111953a0529d6b3571e588d882ab2457305d",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/7d801bdf3e30f746fbca282580a2111953a0529d6b3571e588d882ab2457305d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "748aa5244dde1ce9cf9e2af41c547cb2630814f49de4886dab6570334cbe26f7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A QR code with the number 0775 at the bottom.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "0775"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code is likely related to educational content, possibly a page or resource from the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or its relation to the textbook.",
+          "The QR code may lead to additional resources or information not visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:38:34Z",
+      "effective_analysis": {
+        "visual_summary": "A QR code with the number 0775 at the bottom.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "0775"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code is likely related to educational content, possibly a page or resource from the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or its relation to the textbook.",
+          "The QR code may lead to additional resources or information not visible in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1b9a715dc604a08ce6cd46fe",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "748aa5244dde1ce9cf9e2af41c547cb2630814f49de4886dab6570334cbe26f7",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b639fb95cddf777e65232338",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "page_text_context_sha256": "748aa5244dde1ce9cf9e2af41c547cb2630814f49de4886dab6570334cbe26f7",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "26a5c393f1459216d39fd874",
+      "asset_sha256": "615d645c71c08a399770753a8b87f99c0cea786ce9b82a385e3115956ac8d46a",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 1,
+      "asset_path": "page-0001.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "748aa5244dde1ce9cf9e2af41c547cb2630814f49de4886dab6570334cbe26f7",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Title page of a mathematics textbook in Hindi, with a QR code and logos.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "गणित प्रकाश",
+          "गणित की पाठ्यपुस्तक",
+          "कक्षा",
+          "7",
+          "भाग 1",
+          "NATIONAL COUNCIL OF EDUCATIONAL RESEARCH AND TRAINING",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "mathematics",
+          "textbook",
+          "Hindi",
+          "QR code",
+          "National Council of Educational Research and Training"
+        ],
+        "context_relation": "The page is the title page of a mathematics textbook.",
+        "limitations": [
+          "The page does not contain any equations or formulas."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:52:04Z",
+      "effective_analysis": {
+        "visual_summary": "Title page of a mathematics textbook in Hindi, with a QR code and logos.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "गणित प्रकाश",
+          "गणित की पाठ्यपुस्तक",
+          "कक्षा",
+          "7",
+          "भाग 1",
+          "NATIONAL COUNCIL OF EDUCATIONAL RESEARCH AND TRAINING",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "mathematics",
+          "textbook",
+          "Hindi",
+          "QR code",
+          "National Council of Educational Research and Training"
+        ],
+        "context_relation": "The page is the title page of a mathematics textbook.",
+        "limitations": [
+          "The page does not contain any equations or formulas."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "92b5bdc639cd9c9e77e3f901",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 2,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "643dd1e9d6f397a9e14a411d463e050bb3ae93724954d236c331e2ed61b2da1f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:52:30Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3a480f4b29a4556eab0b5d77",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 2,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "643dd1e9d6f397a9e14a411d463e050bb3ae93724954d236c331e2ed61b2da1f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:52:55Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "01740aaa88ca393d71f8715f",
+      "asset_sha256": "7fc65587219bc1e2edd86b89a69e09a8369d157059c7f87d69cb0d5990893b80",
+      "page_text_context_sha256": "643dd1e9d6f397a9e14a411d463e050bb3ae93724954d236c331e2ed61b2da1f",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 2,
+      "asset_path": "page-0002.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b2db0d9848725e54da55f53e",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 3,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "540ec6035840a4ddb866fe5ce3e90578dcd7c7353c335e449feb18c8073cec65",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the National Education Policy 2020, emphasizing its alignment with Indian culture, society, and traditional knowledge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "आमुख",
+          "राष्ट्रीय शिक्षा नीति 2020 एक परिवर्तनकारी पाठ्यचर्यया और शैक्षणिक संरचना की अनुशंसा",
+          "करती है, जिसके मूल में भारतीय संस्कृति, सभ्यता और भारतीय ज्ञान परंपरा सन्निहित है।",
+          "यह नीति विद्यार्थियों को इक्ककीीसवीं सदी की संभावनाओं और चुनौतियोों के साथ रचनात्‍मक रूप से जुड़ने के लिए तैयार करती है।",
+          "यह दूरदर्शी परिप्रेप्रेक्षय विद्यालयी शिक्षा के लिए राष्ट्रीय पाठ्यचर्यया की रूपरेखा 2023 में सभी स्तरों और पाठ्यचर्यया क्षेत्रों में समाहित है।",
+          "बुनियादी और आरंभिक स्तर मानवीय अस्ततित्व के पाँचों आयामों को स्पर्श करते हुए विद्यार्थियों को इक्ककीीसवीं सदी की संभावनाओं और चुनौतियों के साथ रचनात्‍मक रूप से जुड़ने के लिए तैयार करती है।"
+        ],
+        "concepts": [
+          "National Education Policy 2020",
+          "Indian culture",
+          "Society",
+          "Traditional knowledge",
+          "Vidhyarthi",
+          "21st century",
+          "Challenges",
+          "Distance learning",
+          "National curriculum",
+          "All levels and subjects",
+          "Bunyadhi and Adhunik",
+          "Human anatomy"
+        ],
+        "context_relation": "The page discusses the National Education Policy 2020, emphasizing its alignment with Indian culture, society, and traditional knowledge, and its role in preparing students for the challenges of the 21st century.",
+        "limitations": [
+          "The page does not provide specific details about the policy's implementation or its impact."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:00:54Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the National Education Policy 2020, emphasizing its alignment with Indian culture, society, and traditional knowledge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "आमुख",
+          "राष्ट्रीय शिक्षा नीति 2020 एक परिवर्तनकारी पाठ्यचर्यया और शैक्षणिक संरचना की अनुशंसा",
+          "करती है, जिसके मूल में भारतीय संस्कृति, सभ्यता और भारतीय ज्ञान परंपरा सन्निहित है।",
+          "यह नीति विद्यार्थियों को इक्ककीीसवीं सदी की संभावनाओं और चुनौतियोों के साथ रचनात्‍मक रूप से जुड़ने के लिए तैयार करती है।",
+          "यह दूरदर्शी परिप्रेप्रेक्षय विद्यालयी शिक्षा के लिए राष्ट्रीय पाठ्यचर्यया की रूपरेखा 2023 में सभी स्तरों और पाठ्यचर्यया क्षेत्रों में समाहित है।",
+          "बुनियादी और आरंभिक स्तर मानवीय अस्ततित्व के पाँचों आयामों को स्पर्श करते हुए विद्यार्थियों को इक्ककीीसवीं सदी की संभावनाओं और चुनौतियों के साथ रचनात्‍मक रूप से जुड़ने के लिए तैयार करती है।"
+        ],
+        "concepts": [
+          "National Education Policy 2020",
+          "Indian culture",
+          "Society",
+          "Traditional knowledge",
+          "Vidhyarthi",
+          "21st century",
+          "Challenges",
+          "Distance learning",
+          "National curriculum",
+          "All levels and subjects",
+          "Bunyadhi and Adhunik",
+          "Human anatomy"
+        ],
+        "context_relation": "The page discusses the National Education Policy 2020, emphasizing its alignment with Indian culture, society, and traditional knowledge, and its role in preparing students for the challenges of the 21st century.",
+        "limitations": [
+          "The page does not provide specific details about the policy's implementation or its impact."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "446c4035f92ed5a06066f306",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "page_text_context_sha256": "540ec6035840a4ddb866fe5ce3e90578dcd7c7353c335e449feb18c8073cec65",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 3,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "86a060a6da597d57c7e2958c",
+      "asset_sha256": "62214bf1495d329ca3f88d55951f32f2d521251f2604bfec7a6c71c0379bd0e4",
+      "page_text_context_sha256": "540ec6035840a4ddb866fe5ce3e90578dcd7c7353c335e449feb18c8073cec65",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 3,
+      "asset_path": "page-0003.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    }
+  ],
+  "human_review_required": true,
+  "publication_allowed": false
+}
