@@ -899,8 +899,11 @@ public class CourseMarketplaceController {
         }
         String providerState = inspectProviderOrderForNewAttempt(prior);
         if ("PAID".equals(providerState)) {
-          throw new IllegalStateException(
-              "Razorpay reports that this course order is already paid. Retry verification for this same order; do not start another checkout.");
+          // Never offer another checkout for an order Razorpay reports as paid. Reconcile the
+          // exact saved provider order now; if authoritative matching payment facts are missing,
+          // return the existing local/provider references so the client can retry this same order.
+          return reconcilePaidExistingOrder(
+              prior,courseId,targetStudentId,purchaserUserId,institutionId);
         }
         if (!"RETRYABLE".equals(providerState)) {
           throw new IllegalStateException(
@@ -2107,6 +2110,51 @@ public class CourseMarketplaceController {
     return reconciliation != null
         && "VERIFIED".equalsIgnoreCase(String.valueOf(reconciliation.getOrDefault("status","")))
         && Boolean.TRUE.equals(reconciliation.get("entitled"));
+  }
+
+  static boolean reconciliationConfirmsExistingOrderEntitlement(Map<String,Object> reconciliation) {
+    if(reconciliation==null||!Boolean.TRUE.equals(reconciliation.get("entitled"))) return false;
+    String status=String.valueOf(reconciliation.getOrDefault("status","")).toUpperCase(Locale.ROOT);
+    return "VERIFIED".equals(status)||"PAYMENT_VERIFIED_ACCESS_GRANTED".equals(status);
+  }
+
+  /**
+   * Resume a saved checkout when the learner starts another checkout but Razorpay says the old
+   * order is paid. This is the same authenticated learner/parent order path used by the explicit
+   * reconcile endpoint; it never creates a second provider order or trusts client payment facts.
+   */
+  private Map<String,Object> reconcilePaidExistingOrder(
+      Map<String,Object> prior,long courseId,long targetStudentId,Long purchaserUserId,long institutionId) {
+    Object rawId=prior.get("id");
+    if(!(rawId instanceof Number number)) {
+      throw new IllegalStateException(
+          "Razorpay reports an existing paid order, but its local QuantaEdge reference is missing. Do not pay again; HRMS must review it.");
+    }
+    long localOrderId=number.longValue();
+    String providerOrderId=prior.get("provider_order_id")==null?"":String.valueOf(prior.get("provider_order_id"));
+    try {
+      Map<String,Object> reconciled=reconcileOrderInternal(
+          localOrderId,targetStudentId,purchaserUserId,institutionId);
+      if(reconciliationConfirmsExistingOrderEntitlement(reconciled)) {
+        reconciled.put("localOrderId",localOrderId);
+        reconciled.put("providerOrderId",providerOrderId);
+        reconciled.put("courseId",courseId);
+        return reconciled;
+      }
+    } catch(RuntimeException reconciliationFailure) {
+      // Preserve the payment/order. A failed automatic reconcile is not proof that the payment
+      // failed, so the caller must receive a durable recovery reference rather than a new checkout.
+    }
+    Map<String,Object> recovery=new LinkedHashMap<>();
+    recovery.put("status","RECONCILIATION_REQUIRED");
+    recovery.put("entitled",false);
+    recovery.put("canRetryCheckout",false);
+    recovery.put("localOrderId",localOrderId);
+    recovery.put("providerOrderId",providerOrderId);
+    recovery.put("courseId",courseId);
+    recovery.put("automaticReconciliationAttempted",true);
+    recovery.put("message","Razorpay reports that this saved course order is already paid, but QuantaEdge could not yet confirm and finalize the exact payment. The order is preserved. Retry verification for this saved order or ask HRMS to review it; do not pay again.");
+    return recovery;
   }
 
   static boolean reconciliationConfirmsCheckoutRetryIsSafe(Map<String,Object> reconciliation) {
