@@ -3,6 +3,7 @@ package com.quantaedge.api;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.verify;
@@ -112,6 +113,51 @@ class CourseMarketplaceTenantScopeTest {
   }
 
   @Test
+  void pendingStudentOrdersAreScopedToTheCurrentLearnerAndInstitution() {
+    when(jdbc.queryForList(contains("from course_payment_order o"), any(Object[].class)))
+        .thenReturn(List.of());
+
+    List<Map<String,Object>> result = controller.listPendingStudentOrders(student, tenant);
+
+    assertTrue(result.isEmpty());
+    ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
+    ArgumentCaptor<Object[]> args = ArgumentCaptor.forClass(Object[].class);
+    verify(jdbc).queryForList(sql.capture(), args.capture());
+    assertTrue(sql.getValue().contains("where o.institution_id=?"));
+    assertTrue(sql.getValue().contains("o.student_id=? and o.purchaser_user_id is null"));
+    assertTrue(sql.getValue().contains("cast(? as bigint) is not null"));
+    Object[] values = args.getValue();
+    assertEquals(17L, values[0]);
+    assertEquals(7L, values[1]);
+    assertEquals(7L, values[2]);
+    assertNull(values[3]);
+    assertNull(values[4]);
+  }
+
+  @Test
+  void pendingParentOrdersAreScopedToTheAuthenticatedPurchaserAndInstitution() {
+    AuthContext parent = new AuthContext(1L, 4L, "PARENT", "Test Parent");
+    when(authorization.requireParent(parent)).thenReturn(parent);
+    when(jdbc.queryForList(contains("from course_payment_order o"), any(Object[].class)))
+        .thenReturn(List.of());
+
+    List<Map<String,Object>> result = controller.listPendingFamilyOrders(parent, tenant);
+
+    assertTrue(result.isEmpty());
+    ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
+    ArgumentCaptor<Object[]> args = ArgumentCaptor.forClass(Object[].class);
+    verify(jdbc).queryForList(sql.capture(), args.capture());
+    assertTrue(sql.getValue().contains("where o.institution_id=?"));
+    assertTrue(sql.getValue().contains("o.purchaser_user_id=?"));
+    Object[] values = args.getValue();
+    assertEquals(17L, values[0]);
+    assertNull(values[1]);
+    assertNull(values[2]);
+    assertEquals(1L, values[3]);
+    assertEquals(1L, values[4]);
+  }
+
+  @Test
   void studentCannotVerifyOrReconcileAnOrderPaidForByTheirParent() {
     CourseMarketplaceController secured = new CourseMarketplaceController(
         jdbc, authorization, new ObjectMapper(), courseOrderFinancialService,
@@ -133,6 +179,8 @@ class CourseMarketplaceTenantScopeTest {
     for (int i = 0; i < sql.getAllValues().size(); i++) {
       assertTrue(sql.getAllValues().get(i).contains("student_id=? and purchaser_user_id is null"));
       assertTrue(sql.getAllValues().get(i).contains("purchaser_user_id=?"));
+      assertTrue(sql.getAllValues().get(i).contains("cast(? as bigint) is not null"),
+          "Nullable caller identity parameters must be explicitly typed for PostgreSQL.");
       Object[] values = args.getAllValues().get(i);
       assertEquals(41L, values[0]);
       assertEquals(17L, values[1]);
@@ -167,6 +215,8 @@ class CourseMarketplaceTenantScopeTest {
     for (int i = 0; i < sql.getAllValues().size(); i++) {
       assertTrue(sql.getAllValues().get(i).contains("student_id=? and purchaser_user_id is null"));
       assertTrue(sql.getAllValues().get(i).contains("purchaser_user_id=?"));
+      assertTrue(sql.getAllValues().get(i).contains("cast(? as bigint) is not null"),
+          "Nullable caller identity parameters must be explicitly typed for PostgreSQL.");
       Object[] values = args.getAllValues().get(i);
       assertEquals(42L, values[0]);
       assertEquals(17L, values[1]);
