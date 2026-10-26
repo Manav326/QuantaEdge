@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Plan safe, source-bound Layer 4–5 runner matrices for Classes 6–8.
+# Resume dispatch epoch: book-sharded Class 6 lane.
 
 Resume work is sharded by whole book so each GitHub runner owns one canonical
 Layer 4 checkpoint and one coverage ledger. Non-resume modes retain their
