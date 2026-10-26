@@ -13,10 +13,31 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.Instant;
 import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 class CourseMarketplaceLaunchReadinessServiceTest {
+  @Test
+  void internalUseOnlyRightsDoNotAuthorizeMarketplaceDistribution() {
+    assertFalse(CourseMarketplaceLaunchReadinessService.isVerifiedPackageRightsClearance(
+        "CLEARED_FOR_INTERNAL_USE","https://rights.example.org/evidence",44L,
+        Instant.parse("2026-10-26T00:00:00Z"),
+        "Approved for internal use only."));
+  }
+
+  @Test
+  void publicRedistributionRightsRequireReviewerNotesAndHttpsEvidence() {
+    assertTrue(CourseMarketplaceLaunchReadinessService.isVerifiedPackageRightsClearance(
+        "CLEARED_FOR_PUBLIC_REPOSITORY","https://rights.example.org/evidence",44L,
+        Instant.parse("2026-10-26T00:00:00Z"),
+        "Approved for public redistribution."));
+    assertFalse(CourseMarketplaceLaunchReadinessService.isVerifiedPackageRightsClearance(
+        "CLEARED_FOR_PUBLIC_REPOSITORY","http://rights.example.org/evidence",44L,
+        Instant.parse("2026-10-26T00:00:00Z"),
+        "Approved for public redistribution."));
+  }
+
   @Test
   void publishedSellerTemplateCanSatisfyFallbackForItsInstitution() {
     JdbcTemplate jdbc=mock(JdbcTemplate.class);
@@ -41,7 +62,7 @@ class CourseMarketplaceLaunchReadinessServiceTest {
   }
 
   @Test
-  void legacyMigratedPublishedOfferDoesNotRecomputeExpensiveContentFingerprint() {
+  void archivedLegacyOfferCannotPassCurrentPipelineOrRecomputeFingerprint() {
     JdbcTemplate jdbc=mock(JdbcTemplate.class);
     CourseMarketplaceLaunchReadinessService service=
         new CourseMarketplaceLaunchReadinessService(jdbc,new ObjectMapper(),"","","");
@@ -51,11 +72,19 @@ class CourseMarketplaceLaunchReadinessServiceTest {
     offer.put("assignment_id",2L);
     offer.put("course_release_id",2L);
     offer.put("course_id",6L);
+    offer.put("course_identity_id",6L);
+    offer.put("course_identity_public_id","CLS6-TEST-PUBLIC");
+    offer.put("course_identity_status","ACTIVE");
+    offer.put("course_identity_source_institution_id",2L);
+    offer.put("release_source_institution_id",2L);
+    offer.put("identity_course_type_code","K12");
+    offer.put("course_type_code","K12");
+    offer.put("current_offer_version",false);
     offer.put("title_override","Class 6");
     offer.put("description","Class 6 course");
     offer.put("price_paise",0L);
     offer.put("currency","INR");
-    offer.put("offer_status","PUBLISHED");
+    offer.put("offer_status","ARCHIVED");
     offer.put("institution_name","Quanta Edge");
     offer.put("institution_status","ACTIVE");
     offer.put("assignment_status","ASSIGNED");
@@ -74,21 +103,28 @@ class CourseMarketplaceLaunchReadinessServiceTest {
 
     java.util.Map<String,Object> result=service.inspect(1L,2L);
 
-    assertEquals("PUBLISHED",result.get("offerStatus"));
+    assertEquals("ARCHIVED",result.get("offerStatus"));
     assertEquals("LEGACY_MIGRATED",result.get("releaseState"));
     @SuppressWarnings("unchecked")
     java.util.List<java.util.Map<String,Object>> checks=
         (java.util.List<java.util.Map<String,Object>>)result.get("checks");
     assertTrue(checks.stream().anyMatch(check ->
+        "CURRENT_COURSE_RELEASE".equals(check.get("code"))
+            && Boolean.FALSE.equals(check.get("passed"))));
+    assertTrue(checks.stream().anyMatch(check ->
         "CONTENT_REVIEW_CURRENT".equals(check.get("code"))
             && Boolean.FALSE.equals(check.get("passed"))));
+    assertTrue(checks.stream().anyMatch(check ->
+        "SOURCE_RIGHTS_CLEARANCE".equals(check.get("code"))
+            && Boolean.TRUE.equals(check.get("passed"))
+            && String.valueOf(check.get("label")).contains("not applicable")));
     verify(jdbc,never()).queryForObject(
         eq("select course_content_fingerprint(?)"),eq(String.class),any(Object[].class));
   }
 
 
   @Test
-  void originAssignmentForLegacyOrInReviewReleaseDefersContentFingerprint() {
+  void inReviewReleaseDefersFingerprintAndNonImportedRightsAreExplicitlyNotApplicable() {
     JdbcTemplate jdbc=mock(JdbcTemplate.class);
     CourseMarketplaceLaunchReadinessService service=
         new CourseMarketplaceLaunchReadinessService(jdbc,new ObjectMapper(),"","","");
@@ -102,6 +138,15 @@ class CourseMarketplaceLaunchReadinessServiceTest {
     assignment.put("institution_name","Quanta Edge");
     assignment.put("institution_status","ACTIVE");
     assignment.put("course_id",14L);
+    assignment.put("course_identity_id",14L);
+    assignment.put("course_identity_public_id","TRE4-TEST-PUBLIC");
+    assignment.put("course_identity_status","ACTIVE");
+    assignment.put("course_identity_source_institution_id",2L);
+    assignment.put("release_source_institution_id",2L);
+    assignment.put("identity_course_type_code","ASSESSMENT");
+    assignment.put("content_version_no",1);
+    assignment.put("release_version",1);
+    assignment.put("current_release_assignment",false);
     assignment.put("course_code","I2_TRE4");
     assignment.put("course_name","TRE-4 · Computer Science");
     assignment.put("course_status","ACTIVE");
@@ -125,6 +170,13 @@ class CourseMarketplaceLaunchReadinessServiceTest {
     assertTrue(checks.stream().anyMatch(check ->
         "CONTENT_REVIEW_CURRENT".equals(check.get("code"))
             && Boolean.FALSE.equals(check.get("passed"))));
+    assertTrue(checks.stream().anyMatch(check ->
+        "CURRENT_COURSE_RELEASE".equals(check.get("code"))
+            && Boolean.FALSE.equals(check.get("passed"))));
+    assertTrue(checks.stream().anyMatch(check ->
+        "SOURCE_RIGHTS_CLEARANCE".equals(check.get("code"))
+            && Boolean.TRUE.equals(check.get("passed"))
+            && String.valueOf(check.get("label")).contains("not applicable")));
     verify(jdbc,never()).queryForObject(
         eq("select course_content_fingerprint(?)"),eq(String.class),any(Object[].class));
   }

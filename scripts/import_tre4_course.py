@@ -505,10 +505,10 @@ def ensure_schema(cursor: Any) -> None:
 
 
 def get_or_create_course(cursor: Any, institution_id: int) -> tuple[int, str, bool]:
-    """Create/reuse an ASSESSMENT course without fabricating a school class or K12 hierarchy."""
+    """Create/reuse TRE-4 only when its stable source identity exists before its graph."""
     internal_code = f"I{institution_id}_{COURSE_CODE_SUFFIX}"
     cursor.execute("""
-        SELECT id,display_name,status,public_id,class_id,course_type_code
+        SELECT id,display_name,status,public_id,class_id,course_type_code,course_identity_id
         FROM curriculum_program
         WHERE code=%s AND curriculum_version=%s
         FOR UPDATE
@@ -517,7 +517,7 @@ def get_or_create_course(cursor: Any, institution_id: int) -> tuple[int, str, bo
     if len(rows) > 1:
         raise ImportErrorSafe("Multiple TRE-4 course rows exist for the same institution-scoped key; refusing to choose one.")
     if rows:
-        course_id, display_name, status, public_id, class_id, course_type = rows[0]
+        course_id, display_name, status, public_id, class_id, course_type, identity_id = rows[0]
         if display_name != COURSE_TITLE or status != "ACTIVE" or not public_id:
             raise ImportErrorSafe("Existing TRE-4 course metadata differs from the expected source course.")
         if class_id is not None:
@@ -528,90 +528,37 @@ def get_or_create_course(cursor: Any, institution_id: int) -> tuple[int, str, bo
             )
         if course_type != COURSE_TYPE_CODE:
             raise ImportErrorSafe("Existing TRE-4 course is not registered as course_type_code='ASSESSMENT'.")
+        if identity_id is None:
+            raise ImportErrorSafe(
+                "The existing TRE-4 graph has no stable course identity and is treated as obsolete. "
+                "Do not attach an identity to historical content in place; create a fresh source-owned course through HRMS."
+            )
         return int(course_id), str(public_id), False
-    cursor.execute("""
-        INSERT INTO curriculum_program(
-          class_id,code,display_name,stream_code,curriculum_version,status,notes,public_id_prefix,
-          course_type_code
-        ) VALUES (NULL,%s,%s,'BPSC_TRE',%s,'ACTIVE',%s,'INS','ASSESSMENT')
-        RETURNING id,public_id
-    """, (
-        internal_code, COURSE_TITLE, COURSE_VERSION,
-        "QuantaEdge-origin BPSC TRE-4 assessment course. Hierarchy is course → test packs → assessments → ordered question snapshots; source questions and answers remain review-gated.",
-    ))
-    course_id, public_id = cursor.fetchone()
-    return int(course_id), str(public_id), True
 
-
-def ensure_course_identity(cursor: Any, institution_id: int, course_id: int) -> int:
-    """Attach the TRE4 course to its source-owned identity before content import."""
-    # Stable identity key is source-scoped and independent of the version-graph code.
-    # The curriculum_program code remains institution-prefixed and may gain a version suffix.
     stable_key = COURSE_CODE_SUFFIX
-    cursor.execute("""
-        SELECT p.display_name,p.course_type_code,p.course_identity_id,
-               i.source_institution_id,i.stable_course_key,i.course_type_code,i.status
-        FROM curriculum_program p
-        LEFT JOIN institution_course_identity i ON i.id=p.course_identity_id
-        WHERE p.id=%s FOR UPDATE OF p
-    """, (course_id,))
-    row = cursor.fetchone()
-    if not row or row[0] != COURSE_TITLE:
-        raise ImportErrorSafe("TRE-4 course identity cannot be reconciled with the expected course.")
-    if len(row) < 6:
-        raise ImportErrorSafe("TRE-4 course identity lookup returned an incomplete row.")
-    display_name, course_type, identity_id, owner_id, saved_key, identity_type = row[:6]
-    # The production SELECT includes status as its seventh column. Older test/adapter
-    # cursors may supply only the six stable identity fields; treat that legacy shape
-    # as active only when an identity is already attached. Real DB rows always use status.
-    identity_status = row[6] if len(row) >= 7 else ("ACTIVE" if identity_id is not None else None)
-    if identity_id is not None:
-        if int(owner_id or 0) != institution_id or saved_key != stable_key:
-            raise ImportErrorSafe("TRE-4 course is linked to a different source identity; refusing cross-institution mutation.")
-        if identity_status != "ACTIVE":
-            raise ImportErrorSafe("TRE-4 course is linked to an inactive identity; reactivate/reconcile the identity through the HRMS/source-owner workflow before importing.")
-        if course_type != "ASSESSMENT" or identity_type != "ASSESSMENT":
-            raise ImportErrorSafe("TRE-4 course identity has a conflicting type; reconcile it through the source-owned draft workflow.")
-        return int(identity_id)
-
-    cursor.execute("""
-        SELECT count(*) FROM institution_course_release
-        WHERE program_id=%s AND release_state NOT IN ('DRAFT')
-    """, (course_id,))
-    non_draft_releases = int(cursor.fetchone()[0])
-    cursor.execute("SELECT count(*) FROM assessment WHERE course_id=%s AND status='PUBLISHED'", (course_id,))
-    published_assessments = int(cursor.fetchone()[0])
-    if non_draft_releases or published_assessments:
-        raise ImportErrorSafe("An unlinked TRE-4 course has reviewed/published history; refusing to rewrite its identity or type.")
-
     cursor.execute("""
         SELECT id,display_name,course_type_code,status
         FROM institution_course_identity
         WHERE source_institution_id=%s AND stable_course_key=%s
         FOR UPDATE
     """, (institution_id, stable_key))
-    existing = cursor.fetchone()
-    if existing:
-        identity_id, identity_name, identity_type, identity_status = existing
-        if identity_name != COURSE_TITLE or identity_type not in {"ASSESSMENT", "K12"} or identity_status != "ACTIVE":
+    identities = cursor.fetchall()
+    if len(identities) > 1:
+        raise ImportErrorSafe("Multiple stable TRE-4 identities exist for this institution; refusing to choose one.")
+    if identities:
+        identity_id, identity_name, identity_type, identity_status = identities[0]
+        if identity_name != COURSE_TITLE or identity_type != COURSE_TYPE_CODE or identity_status != "ACTIVE":
             raise ImportErrorSafe("The stable TRE-4 identity exists with conflicting metadata.")
         cursor.execute("""
-            SELECT id,code,curriculum_version,content_version_no
-            FROM curriculum_program
-            WHERE course_identity_id=%s AND id<>%s
-            FOR UPDATE
-        """, (identity_id, course_id))
-        linked_versions = cursor.fetchall()
+            SELECT count(*) FROM curriculum_program
+            WHERE course_identity_id=%s
+        """, (identity_id,))
+        linked_versions = int(cursor.fetchone()[0])
         if linked_versions:
             raise ImportErrorSafe(
-                "The stable TRE-4 identity is already linked to another course/version. "
-                "Use the course-version workflow; the batch importer will not reuse or retype that identity."
+                "The TRE-4 identity already has a course graph. Use the current HRMS course-version workflow; "
+                "the importer will not create a second v1 graph for an existing identity."
             )
-        if identity_type != "ASSESSMENT":
-            cursor.execute("""
-                UPDATE institution_course_identity SET course_type_code='ASSESSMENT',updated_at=now()
-                WHERE id=%s AND source_institution_id=%s AND status='ACTIVE'
-            """, (identity_id, institution_id))
     else:
         cursor.execute("""
             INSERT INTO institution_course_identity(
@@ -621,13 +568,44 @@ def ensure_course_identity(cursor: Any, institution_id: int, course_id: int) -> 
         identity_id = int(cursor.fetchone()[0])
 
     cursor.execute("""
-        UPDATE curriculum_program
-        SET course_type_code='ASSESSMENT',course_identity_id=%s,
-            stream_code='BPSC_TRE',updated_at=now()
-        WHERE id=%s AND course_identity_id IS NULL
-    """, (identity_id, course_id))
-    if cursor.rowcount != 1:
-        raise ImportErrorSafe("TRE-4 course identity changed concurrently; retry the import.")
+        INSERT INTO curriculum_program(
+          class_id,code,display_name,stream_code,curriculum_version,status,notes,public_id_prefix,
+          course_type_code,course_identity_id,content_version_no
+        ) VALUES (NULL,%s,%s,'BPSC_TRE',%s,'ACTIVE',%s,'INS','ASSESSMENT',%s,1)
+        RETURNING id,public_id
+    """, (
+        internal_code, COURSE_TITLE, COURSE_VERSION,
+        "QuantaEdge-origin BPSC TRE-4 assessment course. Hierarchy is course → test packs → assessments → ordered question snapshots; source questions and answers remain review-gated.",
+        identity_id,
+    ))
+    course_id, public_id = cursor.fetchone()
+    return int(course_id), str(public_id), True
+
+
+def ensure_course_identity(cursor: Any, institution_id: int, course_id: int) -> int:
+    """Validate the identity already attached at graph creation; never repair an orphan in place."""
+    cursor.execute("""
+        SELECT p.display_name,p.course_type_code,p.course_identity_id,
+               i.source_institution_id,i.stable_course_key,i.course_type_code,i.status
+        FROM curriculum_program p
+        LEFT JOIN institution_course_identity i ON i.id=p.course_identity_id
+        WHERE p.id=%s FOR UPDATE OF p
+    """, (course_id,))
+    row = cursor.fetchone()
+    if not row or row[0] != COURSE_TITLE:
+        raise ImportErrorSafe("TRE-4 course identity cannot be reconciled with the expected source course.")
+    display_name, course_type, identity_id, owner_id, saved_key, identity_type, identity_status = row
+    if identity_id is None:
+        raise ImportErrorSafe(
+            "An unlinked TRE-4 course is an obsolete/orphan graph. The importer will not rewrite it in place; "
+            "create a fresh course through the current HRMS/source-owned workflow."
+        )
+    if int(owner_id or 0) != institution_id or saved_key != COURSE_CODE_SUFFIX:
+        raise ImportErrorSafe("TRE-4 course is linked to a different source identity; refusing cross-institution mutation.")
+    if identity_status != "ACTIVE":
+        raise ImportErrorSafe("TRE-4 course is linked to an inactive identity; reconcile it through HRMS before importing.")
+    if course_type != COURSE_TYPE_CODE or identity_type != COURSE_TYPE_CODE:
+        raise ImportErrorSafe("TRE-4 course identity has a conflicting type; refusing to retype existing content.")
     return int(identity_id)
 
 

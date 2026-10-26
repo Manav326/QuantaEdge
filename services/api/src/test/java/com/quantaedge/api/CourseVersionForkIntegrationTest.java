@@ -24,13 +24,19 @@ class CourseVersionForkIntegrationTest {
     Long sourceInstitutionId = jdbc.queryForObject("""
       select id from institution_tenant where tenant_code='QUANTA-EDGE' and status='ACTIVE'
       """, Long.class);
+    ensureCurrentSourceRelease(sourceInstitutionId);
     Map<String,Object> source = jdbc.queryForMap("""
       select p.id as course_id,p.course_identity_id,p.content_version_no,r.release_state
       from curriculum_program p join institution_course_release r
         on r.program_id=p.id and r.source_institution_id=?
-      where p.code='CLASS_6' and p.status='ACTIVE'
-        and r.release_state in ('SHAREABLE','WITHDRAWN','LEGACY_MIGRATED')
-      order by r.release_version desc,p.id desc limit 1
+      join institution_course_identity identity
+        on identity.id=p.course_identity_id and identity.status='ACTIVE'
+       and identity.source_institution_id=r.source_institution_id
+       and identity.course_type_code=p.course_type_code
+      where identity.stable_course_key='CLASS_6' and p.status='ACTIVE'
+        and r.release_state in ('SHAREABLE','WITHDRAWN')
+        and r.legacy_migration=false and r.obsolete_at is null
+      order by p.content_version_no desc,r.release_version desc,p.id desc,r.id desc limit 1
       """, sourceInstitutionId);
     long sourceId = ((Number) source.get("course_id")).longValue();
     long identityId = ((Number) source.get("course_identity_id")).longValue();
@@ -117,13 +123,19 @@ class CourseVersionForkIntegrationTest {
     Long sourceInstitutionId = jdbc.queryForObject("""
       select id from institution_tenant where tenant_code='QUANTA-EDGE' and status='ACTIVE'
       """, Long.class);
+    ensureCurrentSourceRelease(sourceInstitutionId);
     Map<String,Object> source = jdbc.queryForMap("""
       select p.id as course_id,p.content_version_no
       from curriculum_program p
       join institution_course_release r on r.program_id=p.id and r.source_institution_id=?
-      where p.code='CLASS_6' and p.status='ACTIVE'
-        and r.release_state in ('SHAREABLE','WITHDRAWN','LEGACY_MIGRATED')
-      order by r.release_version desc,p.id desc limit 1
+      join institution_course_identity identity
+        on identity.id=p.course_identity_id and identity.status='ACTIVE'
+       and identity.source_institution_id=r.source_institution_id
+       and identity.course_type_code=p.course_type_code
+      where identity.stable_course_key='CLASS_6' and p.status='ACTIVE'
+        and r.release_state in ('SHAREABLE','WITHDRAWN')
+        and r.legacy_migration=false and r.obsolete_at is null
+      order by p.content_version_no desc,r.release_version desc,p.id desc,r.id desc limit 1
       """, sourceInstitutionId);
     long sourceId=((Number)source.get("course_id")).longValue();
     int oldVersion=((Number)source.get("content_version_no")).intValue();
@@ -142,6 +154,43 @@ class CourseVersionForkIntegrationTest {
       from curriculum_program where id=?
       """,oldVersion+2,sourceId),
       "A superseding version must reference the latest course version, not an older course graph.");
+  }
+
+  private void ensureCurrentSourceRelease(long sourceInstitutionId) {
+    Long courseId=jdbc.queryForObject("""
+      select p.id
+      from curriculum_program p
+      join institution_course_identity identity
+        on identity.id=p.course_identity_id and identity.status='ACTIVE'
+       and identity.source_institution_id=?
+       and identity.course_type_code=p.course_type_code
+      where identity.stable_course_key='CLASS_6' and p.status='ACTIVE' and p.code<>'GENERAL'
+      order by p.content_version_no desc,p.id desc limit 1
+      """,Long.class,sourceInstitutionId);
+    Boolean currentReleaseExists=jdbc.queryForObject("""
+      select exists(
+        select 1 from institution_course_release release
+        where release.program_id=? and release.source_institution_id=?
+          and release.release_state in ('SHAREABLE','WITHDRAWN')
+          and release.legacy_migration=false and release.obsolete_at is null
+      )
+      """,Boolean.class,courseId,sourceInstitutionId);
+    if(Boolean.TRUE.equals(currentReleaseExists)) return;
+
+    jdbc.update("""
+      insert into institution_course_release(
+        source_institution_id,program_id,release_version,release_state,
+        content_fingerprint,legacy_migration,created_at,updated_at
+      )
+      select ?,p.id,
+        coalesce((select max(existing.release_version)
+          from institution_course_release existing
+          where existing.source_institution_id=?
+            and existing.program_id=p.id),0)+1,
+        'WITHDRAWN',course_content_fingerprint(p.id),false,now(),now()
+      from curriculum_program p
+      where p.id=?
+      """,sourceInstitutionId,sourceInstitutionId,courseId);
   }
 
   private long count(String sql,Object... args) {
