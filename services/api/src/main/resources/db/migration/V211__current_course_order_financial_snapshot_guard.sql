@@ -4,7 +4,7 @@
 -- New paid checkout attempts must explicitly opt into the canonical v1 identity contract.
 -- Existing rows remain version 0 and can only be addressed through guarded HRMS recovery.
 CREATE OR REPLACE FUNCTION qe_require_current_course_order_contract_v211()
-RETURNS trigger LANGUAGE plpgsql AS $
+RETURNS trigger LANGUAGE plpgsql AS $qe_v211$
 BEGIN
   IF NEW.status IN ('CREATING','PENDING','VERIFIED')
      AND NEW.identity_contract_version <> 1 THEN
@@ -13,7 +13,7 @@ BEGIN
   END IF;
   RETURN NEW;
 END;
-$;
+$qe_v211$;
 
 CREATE TRIGGER trg_qe_current_course_order_contract_v211
 BEFORE INSERT ON course_payment_order
