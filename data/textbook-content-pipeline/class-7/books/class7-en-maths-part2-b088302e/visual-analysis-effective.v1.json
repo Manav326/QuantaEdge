@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gegp2",
   "source_pdf_sha256": "86499952914e3427cc1d1a70628b1750c0341259c6536eb3ca3d2b1b353c4942",
   "raw_analysis_path": "data/textbook-visuals/class7-en-maths-part2-b088302e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "425d528a9401df286fda99264ea75614e3d34a620e96a81729c1b4fc930e5692",
+  "raw_analysis_sha256": "e0777ffa1babf2bbe92a22d22bddd4cc17f78ecb435f10b9e7f452d26266fb64",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-maths-part2-b088302e/visual-analysis-corrections.v1.json",
@@ -613,7 +613,6 @@
         "visible_text": [
           "ABOUT THE BOOK",
           "Mathematics helps students develop not only basic arithmetic skills, but also the crucial capacities of logical reasoning, creative problem solving, and clear and precise communication (both oral and written). Mathematical knowledge also plays a crucial role in understanding concepts in other school",
-          "Mathematics at the Middle Stage is a major challenge and has to perform the dual role of being both close to the experience and environment of the child and being abstract. It must perform the dual role of developing intuition while also maintaining and emphasising rigour. It must perform the dual r",
           "The present textbook has made an attempt to address the above mentioned goals and challenges of learning mathematics. The writers of this book have aimed to strike a judicious balance between informal and formal definitions and methods to develop in students both intuition and rigour. The book also ",
           "Chapter 1 of this textbook, 'Geometric Twins', introduces the concept of congruence of plane figures. Chapter 2, 'Integers — Multiplication and Division' is about how to multiply and divide positive and negative integers. Chapter 3, 'Finding Common Ground', deals with the ideas of common factors, co"
         ],
@@ -628,18 +627,18 @@
           "Physical Education",
           "Vocational Education",
           "democratic and economic participation",
+          "intuition",
+          "rigour",
           "critical and logical thinking",
           "artistry and creativity",
           "elegance and aesthetics",
+          "exploration",
+          "discovery",
           "student-student and student-teacher interaction",
           "active and experiential learning",
-          "open-ended questions",
-          "puzzles",
-          "interactive exercises",
-          "congruence of plane figures",
-          "multiplication and division"
+          "open-ended questions"
         ],
-        "context_relation": "The text discusses the importance of mathematics in education and outlines the content of a textbook.",
+        "context_relation": "The text discusses the importance of mathematics in education and outlines the structure of the textbook.",
         "limitations": [
           "The text does not provide specific details about the textbook's content or structure.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -649,14 +648,13 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:16:58Z",
+      "checkpointed_at": "2026-10-26T23:24:17Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the importance of mathematics in education.",
         "visual_type": "uncertain",
         "visible_text": [
           "ABOUT THE BOOK",
           "Mathematics helps students develop not only basic arithmetic skills, but also the crucial capacities of logical reasoning, creative problem solving, and clear and precise communication (both oral and written). Mathematical knowledge also plays a crucial role in understanding concepts in other school",
-          "Mathematics at the Middle Stage is a major challenge and has to perform the dual role of being both close to the experience and environment of the child and being abstract. It must perform the dual role of developing intuition while also maintaining and emphasising rigour. It must perform the dual r",
           "The present textbook has made an attempt to address the above mentioned goals and challenges of learning mathematics. The writers of this book have aimed to strike a judicious balance between informal and formal definitions and methods to develop in students both intuition and rigour. The book also ",
           "Chapter 1 of this textbook, 'Geometric Twins', introduces the concept of congruence of plane figures. Chapter 2, 'Integers — Multiplication and Division' is about how to multiply and divide positive and negative integers. Chapter 3, 'Finding Common Ground', deals with the ideas of common factors, co"
         ],
@@ -671,18 +669,18 @@
           "Physical Education",
           "Vocational Education",
           "democratic and economic participation",
+          "intuition",
+          "rigour",
           "critical and logical thinking",
           "artistry and creativity",
           "elegance and aesthetics",
+          "exploration",
+          "discovery",
           "student-student and student-teacher interaction",
           "active and experiential learning",
-          "open-ended questions",
-          "puzzles",
-          "interactive exercises",
-          "congruence of plane figures",
-          "multiplication and division"
+          "open-ended questions"
         ],
-        "context_relation": "The text discusses the importance of mathematics in education and outlines the content of a textbook.",
+        "context_relation": "The text discusses the importance of mathematics in education and outlines the structure of the textbook.",
         "limitations": [
           "The text does not provide specific details about the textbook's content or structure.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -829,6 +827,428 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cef14c0743d89dadba83c73a",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gegp2",
+      "source_pdf_sha256": "86499952914e3427cc1d1a70628b1750c0341259c6536eb3ca3d2b1b353c4942",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "fad6cc62e86904ba1e8f4c12f4bcebaeb1db92b4fb1ef64d1cdf0c4d5e35b8c0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is a blank page with no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:24:34Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is a blank page with no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7ebeeac39d68813df1269686",
+      "asset_sha256": "94096c8081026f575d5ecdec0616f85ae4fb5e1044928f0ef695ed481deb0661",
+      "source_book_id": "ncert-c7-english-gegp2",
+      "source_pdf_sha256": "86499952914e3427cc1d1a70628b1750c0341259c6536eb3ca3d2b1b353c4942",
+      "source_pdf_page_number": 7,
+      "asset_path": "page-0007.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "fad6cc62e86904ba1e8f4c12f4bcebaeb1db92b4fb1ef64d1cdf0c4d5e35b8c0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the aims and benefits of the book.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Finally, this textbook aims to be more than just a textbook—it’s a\npassport to a world of mathematical discovery and exploration. Whether\nused in the classroom or at home, we hope that it may inspire students\nto embark on  their own mathematical adventures, empowering\nthem to see the beauty and rele",
+          "Ashutosh Wazalwar\nProfessor and Academic Convener\nDepartment of Education in\nScience and Mathematics\nNational Council of Educational\nResearch and Training"
+        ],
+        "concepts": [
+          "mathematical discovery",
+          "mathematics concepts",
+          "mathematics teachers",
+          "learners",
+          "educational research and training"
+        ],
+        "context_relation": "The page discusses the aims and benefits of the textbook, including its impact on students and teachers.",
+        "limitations": [
+          "The page does not provide specific details about the textbook's content or structure.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:28:48Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the aims and benefits of the book.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Finally, this textbook aims to be more than just a textbook—it’s a\npassport to a world of mathematical discovery and exploration. Whether\nused in the classroom or at home, we hope that it may inspire students\nto embark on  their own mathematical adventures, empowering\nthem to see the beauty and rele",
+          "Ashutosh Wazalwar\nProfessor and Academic Convener\nDepartment of Education in\nScience and Mathematics\nNational Council of Educational\nResearch and Training"
+        ],
+        "concepts": [
+          "mathematical discovery",
+          "mathematics concepts",
+          "mathematics teachers",
+          "learners",
+          "educational research and training"
+        ],
+        "context_relation": "The page discusses the aims and benefits of the textbook, including its impact on students and teachers.",
+        "limitations": [
+          "The page does not provide specific details about the textbook's content or structure.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e01285ca86d974cc3b05d80d",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gegp2",
+      "source_pdf_sha256": "86499952914e3427cc1d1a70628b1750c0341259c6536eb3ca3d2b1b353c4942",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d33b311e03b87e7120ab25154efdb770745bd82b3bc785a2f04cea7fc5065013",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank or unused page in a textbook.",
+        "limitations": [
+          "The page is completely black and lacks any visible content or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:29:06Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank or unused page in a textbook.",
+        "limitations": [
+          "The page is completely black and lacks any visible content or text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7219f7e4e3da86b069bddb69",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gegp2",
+      "source_pdf_sha256": "86499952914e3427cc1d1a70628b1750c0341259c6536eb3ca3d2b1b353c4942",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d33b311e03b87e7120ab25154efdb770745bd82b3bc785a2f04cea7fc5065013",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be blank or contains no visible content.",
+        "limitations": [
+          "The page is completely black and does not contain any text, images, or other visual elements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:29:25Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be blank or contains no visible content.",
+        "limitations": [
+          "The page is completely black and does not contain any text, images, or other visual elements."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2c7af3903e55dfe81122feb3",
+      "asset_sha256": "0b8fcf93516cd75896a7b50c293c5765994e8f4a53cc193ac302ed7c704704c5",
+      "source_book_id": "ncert-c7-english-gegp2",
+      "source_pdf_sha256": "86499952914e3427cc1d1a70628b1750c0341259c6536eb3ca3d2b1b353c4942",
+      "source_pdf_page_number": 8,
+      "asset_path": "page-0008.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "d33b311e03b87e7120ab25154efdb770745bd82b3bc785a2f04cea7fc5065013",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "List of names and positions of individuals involved in the National Syllabus and Teaching Learning Material Committee (NSTC).",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "NATIONAL SYLLABUS AND\nTEACHING LEARNING MATERIAL\nCOMMITTEE (NSTC)",
+          "1. M.C. Pant, Chancellor, National Institute of Educational Planning\nand Administration (NIEPA), (Chairperson)",
+          "2. Manjul Bhargava, Professor, Princeton University,\n(Co-Chairperson)",
+          "3. Sudha Murty, Acclaimed Writer and Educationist",
+          "4. Bibek Debroy, Chairperson, Economic Advisory Council to the\nPrime Minister (EAC – PM)",
+          "5. Shekhar Mande, Former Director General, CSIR; Distinguished\nProfessor, Savitribai Phule Pune University, Pune",
+          "6. Sujatha Ramdorai, Professor, University of British Columbia,\nCanada",
+          "7. Shankar Mahadevan, Music Maestro, Mumbai",
+          "8. U. Vimal Kumar, Director, Prakash Padukone Badminton Academy,\nBengaluru",
+          "9. Michel Danino, Visiting Professor, IIT – Gandhinagar",
+          "10. Surina Rajan, IAS (Retd.), Haryana, Former Director General, HIPA",
+          "11. Chamu Krishna Shastri, Chairperson, Bharatiya Bhasha Samiti,\nMinistry of Education",
+          "12. Sanjeev Sanyal, Member, Economic Advisory Council to the Prime\nMinister (EAC – PM)",
+          "13. M.D. Srinivas, Chairperson, Centre for Policy Studies, Chennai",
+          "14. Gajanan Londhe, Head, Programme Office",
+          "15. Rabin Chhetri, Director, SCERT, Sikkim",
+          "16. Pratyusa Kumar Mandal, Professor, Department of Education in\nSocial Sciences, NCERT, New Delhi",
+          "17. Dinesh Kumar, Professor, Department of Education in Science and\nMathematics, NCERT, New Delhi",
+          "18. Kirti Kapur, Professor, Department of Education in Languages,\nNCERT, New Delhi",
+          "19. Ranjana Arora, Professor and Head, Department of Curriculum\nStudies and Development, NCERT (Member-Secretary)"
+        ],
+        "concepts": [
+          "National Syllabus and Teaching Learning Material Committee (NSTC)",
+          "Chancellor",
+          "Professor",
+          "Chairperson",
+          "Acclaimed Writer",
+          "Educationist",
+          "Economic Advisory Council",
+          "Prime Minister",
+          "Music Maestro",
+          "Visiting Professor",
+          "IAS",
+          "Bharatiya Bhasha Samiti",
+          "Ministry of Education",
+          "Economic Advisory Council to the Prime Minister",
+          "Centre for Policy Studies",
+          "Programme Office",
+          "SCERT",
+          "Member-Secretary"
+        ],
+        "context_relation": "The list of individuals involved in the National Syllabus and Teaching Learning Material Committee (NSTC).",
+        "limitations": [
+          "The list is incomplete and does not include all the members of the committee.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:34:24Z",
+      "effective_analysis": {
+        "visual_summary": "List of names and positions of individuals involved in the National Syllabus and Teaching Learning Material Committee (NSTC).",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "NATIONAL SYLLABUS AND\nTEACHING LEARNING MATERIAL\nCOMMITTEE (NSTC)",
+          "1. M.C. Pant, Chancellor, National Institute of Educational Planning\nand Administration (NIEPA), (Chairperson)",
+          "2. Manjul Bhargava, Professor, Princeton University,\n(Co-Chairperson)",
+          "3. Sudha Murty, Acclaimed Writer and Educationist",
+          "4. Bibek Debroy, Chairperson, Economic Advisory Council to the\nPrime Minister (EAC – PM)",
+          "5. Shekhar Mande, Former Director General, CSIR; Distinguished\nProfessor, Savitribai Phule Pune University, Pune",
+          "6. Sujatha Ramdorai, Professor, University of British Columbia,\nCanada",
+          "7. Shankar Mahadevan, Music Maestro, Mumbai",
+          "8. U. Vimal Kumar, Director, Prakash Padukone Badminton Academy,\nBengaluru",
+          "9. Michel Danino, Visiting Professor, IIT – Gandhinagar",
+          "10. Surina Rajan, IAS (Retd.), Haryana, Former Director General, HIPA",
+          "11. Chamu Krishna Shastri, Chairperson, Bharatiya Bhasha Samiti,\nMinistry of Education",
+          "12. Sanjeev Sanyal, Member, Economic Advisory Council to the Prime\nMinister (EAC – PM)",
+          "13. M.D. Srinivas, Chairperson, Centre for Policy Studies, Chennai",
+          "14. Gajanan Londhe, Head, Programme Office",
+          "15. Rabin Chhetri, Director, SCERT, Sikkim",
+          "16. Pratyusa Kumar Mandal, Professor, Department of Education in\nSocial Sciences, NCERT, New Delhi",
+          "17. Dinesh Kumar, Professor, Department of Education in Science and\nMathematics, NCERT, New Delhi",
+          "18. Kirti Kapur, Professor, Department of Education in Languages,\nNCERT, New Delhi",
+          "19. Ranjana Arora, Professor and Head, Department of Curriculum\nStudies and Development, NCERT (Member-Secretary)"
+        ],
+        "concepts": [
+          "National Syllabus and Teaching Learning Material Committee (NSTC)",
+          "Chancellor",
+          "Professor",
+          "Chairperson",
+          "Acclaimed Writer",
+          "Educationist",
+          "Economic Advisory Council",
+          "Prime Minister",
+          "Music Maestro",
+          "Visiting Professor",
+          "IAS",
+          "Bharatiya Bhasha Samiti",
+          "Ministry of Education",
+          "Economic Advisory Council to the Prime Minister",
+          "Centre for Policy Studies",
+          "Programme Office",
+          "SCERT",
+          "Member-Secretary"
+        ],
+        "context_relation": "The list of individuals involved in the National Syllabus and Teaching Learning Material Committee (NSTC).",
+        "limitations": [
+          "The list is incomplete and does not include all the members of the committee.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "74786508588c2eb05b2d333b",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gegp2",
+      "source_pdf_sha256": "86499952914e3427cc1d1a70628b1750c0341259c6536eb3ca3d2b1b353c4942",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6b0258ba6eac3aca925575c8dbaa6b5f8153c3b6960301776c041cea8e4bd1b4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:34:44Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4ba54d22cfc68aa457a508c2",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gegp2",
+      "source_pdf_sha256": "86499952914e3427cc1d1a70628b1750c0341259c6536eb3ca3d2b1b353c4942",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6b0258ba6eac3aca925575c8dbaa6b5f8153c3b6960301776c041cea8e4bd1b4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:35:03Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0909f7d1c9ac891497dbb573",
+      "asset_sha256": "6ef7d6ae2d525d91130f13002b6d13caeb8ec435414ef4cb397e5b390ad82d50",
+      "page_text_context_sha256": "6b0258ba6eac3aca925575c8dbaa6b5f8153c3b6960301776c041cea8e4bd1b4",
+      "source_book_id": "ncert-c7-english-gegp2",
+      "source_pdf_sha256": "86499952914e3427cc1d1a70628b1750c0341259c6536eb3ca3d2b1b353c4942",
+      "source_pdf_page_number": 9,
+      "asset_path": "page-0009.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "27e4d0565fab1601365f7088",
+      "asset_sha256": "0cfd1868ac64ac71ec336016c3393e45b9b772a25382bbedcf11643d2609f427",
+      "page_text_context_sha256": "e6db02c46bf5a03145fc1776dd879d0914396ee3131a2ce6371b52e2d41dca0b",
+      "source_book_id": "ncert-c7-english-gegp2",
+      "source_pdf_sha256": "86499952914e3427cc1d1a70628b1750c0341259c6536eb3ca3d2b1b353c4942",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/0cfd1868ac64ac71ec336016c3393e45b9b772a25382bbedcf11643d2609f427.jpx",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Unsupported vision media type 'image/jpx'; use JPEG, PNG, or WebP assets.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],

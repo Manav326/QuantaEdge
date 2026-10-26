@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 8,
     "inventory_asset_rows": 1761,
     "eligible_visual_asset_rows": 1761,
-    "raw_analysis_result_rows": 20,
-    "successful_visual_analyses": 13,
-    "missing_visual_analyses": 1741,
-    "failed_visual_analyses": 7,
+    "raw_analysis_result_rows": 29,
+    "successful_visual_analyses": 20,
+    "missing_visual_analyses": 1732,
+    "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1756,
+    "unresolved_count": 1749,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -6761,7 +6761,6 @@
         "visible_text": [
           "ABOUT THE BOOK",
           "Mathematics helps students develop not only basic arithmetic skills, but also the crucial capacities of logical reasoning, creative problem solving, and clear and precise communication (both oral and written). Mathematical knowledge also plays a crucial role in understanding concepts in other school",
-          "Mathematics at the Middle Stage is a major challenge and has to perform the dual role of being both close to the experience and environment of the child and being abstract. It must perform the dual role of developing intuition while also maintaining and emphasising rigour. It must perform the dual r",
           "The present textbook has made an attempt to address the above mentioned goals and challenges of learning mathematics. The writers of this book have aimed to strike a judicious balance between informal and formal definitions and methods to develop in students both intuition and rigour. The book also ",
           "Chapter 1 of this textbook, 'Geometric Twins', introduces the concept of congruence of plane figures. Chapter 2, 'Integers — Multiplication and Division' is about how to multiply and divide positive and negative integers. Chapter 3, 'Finding Common Ground', deals with the ideas of common factors, co"
         ],
@@ -6776,18 +6775,18 @@
           "Physical Education",
           "Vocational Education",
           "democratic and economic participation",
+          "intuition",
+          "rigour",
           "critical and logical thinking",
           "artistry and creativity",
           "elegance and aesthetics",
+          "exploration",
+          "discovery",
           "student-student and student-teacher interaction",
           "active and experiential learning",
-          "open-ended questions",
-          "puzzles",
-          "interactive exercises",
-          "congruence of plane figures",
-          "multiplication and division"
+          "open-ended questions"
         ],
-        "context_relation": "The text discusses the importance of mathematics in education and outlines the content of a textbook.",
+        "context_relation": "The text discusses the importance of mathematics in education and outlines the structure of the textbook.",
         "limitations": [
           "The text does not provide specific details about the textbook's content or structure.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -6907,9 +6906,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is a blank page with no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6925,9 +6933,28 @@
       "asset_path": "page-0007.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the aims and benefits of the book.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Finally, this textbook aims to be more than just a textbook—it’s a\npassport to a world of mathematical discovery and exploration. Whether\nused in the classroom or at home, we hope that it may inspire students\nto embark on  their own mathematical adventures, empowering\nthem to see the beauty and rele",
+          "Ashutosh Wazalwar\nProfessor and Academic Convener\nDepartment of Education in\nScience and Mathematics\nNational Council of Educational\nResearch and Training"
+        ],
+        "concepts": [
+          "mathematical discovery",
+          "mathematics concepts",
+          "mathematics teachers",
+          "learners",
+          "educational research and training"
+        ],
+        "context_relation": "The page discusses the aims and benefits of the textbook, including its impact on students and teachers.",
+        "limitations": [
+          "The page does not provide specific details about the textbook's content or structure.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6943,9 +6970,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank or unused page in a textbook.",
+        "limitations": [
+          "The page is completely black and lacks any visible content or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6961,9 +6997,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be blank or contains no visible content.",
+        "limitations": [
+          "The page is completely black and does not contain any text, images, or other visual elements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6979,9 +7024,59 @@
       "asset_path": "page-0008.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "List of names and positions of individuals involved in the National Syllabus and Teaching Learning Material Committee (NSTC).",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "NATIONAL SYLLABUS AND\nTEACHING LEARNING MATERIAL\nCOMMITTEE (NSTC)",
+          "1. M.C. Pant, Chancellor, National Institute of Educational Planning\nand Administration (NIEPA), (Chairperson)",
+          "2. Manjul Bhargava, Professor, Princeton University,\n(Co-Chairperson)",
+          "3. Sudha Murty, Acclaimed Writer and Educationist",
+          "4. Bibek Debroy, Chairperson, Economic Advisory Council to the\nPrime Minister (EAC – PM)",
+          "5. Shekhar Mande, Former Director General, CSIR; Distinguished\nProfessor, Savitribai Phule Pune University, Pune",
+          "6. Sujatha Ramdorai, Professor, University of British Columbia,\nCanada",
+          "7. Shankar Mahadevan, Music Maestro, Mumbai",
+          "8. U. Vimal Kumar, Director, Prakash Padukone Badminton Academy,\nBengaluru",
+          "9. Michel Danino, Visiting Professor, IIT – Gandhinagar",
+          "10. Surina Rajan, IAS (Retd.), Haryana, Former Director General, HIPA",
+          "11. Chamu Krishna Shastri, Chairperson, Bharatiya Bhasha Samiti,\nMinistry of Education",
+          "12. Sanjeev Sanyal, Member, Economic Advisory Council to the Prime\nMinister (EAC – PM)",
+          "13. M.D. Srinivas, Chairperson, Centre for Policy Studies, Chennai",
+          "14. Gajanan Londhe, Head, Programme Office",
+          "15. Rabin Chhetri, Director, SCERT, Sikkim",
+          "16. Pratyusa Kumar Mandal, Professor, Department of Education in\nSocial Sciences, NCERT, New Delhi",
+          "17. Dinesh Kumar, Professor, Department of Education in Science and\nMathematics, NCERT, New Delhi",
+          "18. Kirti Kapur, Professor, Department of Education in Languages,\nNCERT, New Delhi",
+          "19. Ranjana Arora, Professor and Head, Department of Curriculum\nStudies and Development, NCERT (Member-Secretary)"
+        ],
+        "concepts": [
+          "National Syllabus and Teaching Learning Material Committee (NSTC)",
+          "Chancellor",
+          "Professor",
+          "Chairperson",
+          "Acclaimed Writer",
+          "Educationist",
+          "Economic Advisory Council",
+          "Prime Minister",
+          "Music Maestro",
+          "Visiting Professor",
+          "IAS",
+          "Bharatiya Bhasha Samiti",
+          "Ministry of Education",
+          "Economic Advisory Council to the Prime Minister",
+          "Centre for Policy Studies",
+          "Programme Office",
+          "SCERT",
+          "Member-Secretary"
+        ],
+        "context_relation": "The list of individuals involved in the National Syllabus and Teaching Learning Material Committee (NSTC).",
+        "limitations": [
+          "The list is incomplete and does not include all the members of the committee.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6997,9 +7092,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7015,9 +7119,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7033,7 +7146,7 @@
       "asset_path": "page-0009.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -7051,7 +7164,7 @@
       "asset_path": "assets/0cfd1868ac64ac71ec336016c3393e45b9b772a25382bbedcf11643d2609f427.jpx",
       "media_type": "image/jpx",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
