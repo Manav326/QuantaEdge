@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hegp2",
   "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
   "raw_analysis_path": "data/textbook-visuals/class8-en-maths-part2-24c8080e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "aec5d54c5f1e690e0d8e6380fc6b71b8aa291dbe20d65033790668cc17fa2e9c",
+  "raw_analysis_sha256": "b4d3a3430b445350a9f60c657f434b676c88bd2b60dbf78e23987b067f90cac4",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-maths-part2-24c8080e/visual-analysis-corrections.v1.json",
@@ -1186,18 +1186,18 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook with a pink watercolor background and a thank you note to contributors.",
+        "visual_summary": "A page from a textbook with a pink watercolor background and a thank you note from the author.",
         "visual_type": "uncertain",
         "visible_text": [
           "of Grade 8 mathematics concepts, this textbook aims to captivate young\nminds and set them on a lifelong journey mathematical discovery.\nI once again thank all the writers of and contributors of this textbook\nfor their valuable contributions and service to the nation’s mathematics\nteachers, learners ",
-          "Ashutosh Wazalwar\nProfessor and Academic Convener\nDepartment of Education in\nScience and Mathematics\nNational Council of Educational\nResearch and Training"
+          "vii"
         ],
         "concepts": [
-          "mathematics concepts",
+          "mathematics",
           "textbook",
           "writers",
           "contributors",
-          "mathematics teachers",
+          "teachers",
           "learners",
           "enthusiasts",
           "comments",
@@ -1213,14 +1213,9 @@
           "Department of Education in Science and Mathematics",
           "National Council of Educational Research and Training"
         ],
-        "context_relation": "acknowledgment and invitation for feedback",
+        "context_relation": "The page is a thank you note from the author of a mathematics textbook.",
         "limitations": [
-          "text is in English",
-          "page is from a textbook",
-          "thank you note to contributors",
-          "invitation for comments and suggestions",
-          "mention of exercises, activities, and tasks",
-          "mention of Ashutosh Wazalwar",
+          "The page does not contain any images or diagrams.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -1228,20 +1223,20 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:31:56Z",
+      "checkpointed_at": "2026-10-26T23:39:37Z",
       "effective_analysis": {
-        "visual_summary": "A page from a textbook with a pink watercolor background and a thank you note to contributors.",
+        "visual_summary": "A page from a textbook with a pink watercolor background and a thank you note from the author.",
         "visual_type": "uncertain",
         "visible_text": [
           "of Grade 8 mathematics concepts, this textbook aims to captivate young\nminds and set them on a lifelong journey mathematical discovery.\nI once again thank all the writers of and contributors of this textbook\nfor their valuable contributions and service to the nation’s mathematics\nteachers, learners ",
-          "Ashutosh Wazalwar\nProfessor and Academic Convener\nDepartment of Education in\nScience and Mathematics\nNational Council of Educational\nResearch and Training"
+          "vii"
         ],
         "concepts": [
-          "mathematics concepts",
+          "mathematics",
           "textbook",
           "writers",
           "contributors",
-          "mathematics teachers",
+          "teachers",
           "learners",
           "enthusiasts",
           "comments",
@@ -1257,14 +1252,9 @@
           "Department of Education in Science and Mathematics",
           "National Council of Educational Research and Training"
         ],
-        "context_relation": "acknowledgment and invitation for feedback",
+        "context_relation": "The page is a thank you note from the author of a mathematics textbook.",
         "limitations": [
-          "text is in English",
-          "page is from a textbook",
-          "thank you note to contributors",
-          "invitation for comments and suggestions",
-          "mention of exercises, activities, and tasks",
-          "mention of Ashutosh Wazalwar",
+          "The page does not contain any images or diagrams.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -1570,6 +1560,330 @@
         "context_relation": "The page is a blank page with no visible content.",
         "limitations": [
           "The page is completely black and has no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1c4df2e7a09f2fd253a46a5e",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a2010b99f87d0b32b34c9cbb3244b5c7c5aaff30d283cc5dbf5ee9dcdd139cd1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:39:53Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bc6c79f6cfeeec496ac98d35",
+      "asset_sha256": "28306ba0ebf9119438d1b9d79d794e13a18fefea4f85ffd70d86f25132922a99",
+      "page_text_context_sha256": "a2010b99f87d0b32b34c9cbb3244b5c7c5aaff30d283cc5dbf5ee9dcdd139cd1",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 9,
+      "asset_path": "page-0009.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fdac911233050f583371739c",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f5c93b205b9be6620b2d7c6508024196e107d059e84e9fb1c5da785c2f24169c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, smudged, and irregularly shaped object that appears to be a splash or a smear.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear object shape and form"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:45:06Z",
+      "effective_analysis": {
+        "visual_summary": "A red, smudged, and irregularly shaped object that appears to be a splash or a smear.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear object shape and form"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6e013588636813f1c2c24267",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f5c93b205b9be6620b2d7c6508024196e107d059e84e9fb1c5da785c2f24169c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, smudged, and unevenly spread liquid-like substance covering the entire page.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a full page of a textbook.",
+        "limitations": [
+          "The image is not clear enough to identify specific details or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:45:15Z",
+      "effective_analysis": {
+        "visual_summary": "A red, smudged, and unevenly spread liquid-like substance covering the entire page.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a full page of a textbook.",
+        "limitations": [
+          "The image is not clear enough to identify specific details or text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "15607137f7cc43cf9b83ecac",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f5c93b205b9be6620b2d7c6508024196e107d059e84e9fb1c5da785c2f24169c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:45:30Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "632f2c3e0d336fd978455db5",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f5c93b205b9be6620b2d7c6508024196e107d059e84e9fb1c5da785c2f24169c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "acknowledgment",
+        "limitations": [
+          "unclear text content",
+          "no visible images or diagrams"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:45:47Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "acknowledgment",
+        "limitations": [
+          "unclear text content",
+          "no visible images or diagrams"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1804bfb1bc7863628212058d",
+      "asset_sha256": "c762f61d258d91f1a56e679e70c9de4617c42ef164215129e57f1649a2e46750",
+      "page_text_context_sha256": "f5c93b205b9be6620b2d7c6508024196e107d059e84e9fb1c5da785c2f24169c",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 10,
+      "asset_path": "page-0010.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "55ba3fb8d8e1c6042fe62d7f",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c8c3791894d634a21275bf582928a02dc93887c3a88b59fe19968b9b7e71244c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Red splash or smudge on a white background.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:50:59Z",
+      "effective_analysis": {
+        "visual_summary": "Red splash or smudge on a white background.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "93a88dce0d657583013fe0fb",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c8c3791894d634a21275bf582928a02dc93887c3a88b59fe19968b9b7e71244c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Red abstract shape with irregular edges.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Educational content",
+        "limitations": [
+          "Unclear content",
+          "No specific text visible"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:51:05Z",
+      "effective_analysis": {
+        "visual_summary": "Red abstract shape with irregular edges.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Educational content",
+        "limitations": [
+          "Unclear content",
+          "No specific text visible"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
