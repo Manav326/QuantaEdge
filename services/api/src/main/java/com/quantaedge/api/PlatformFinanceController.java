@@ -149,13 +149,19 @@ public class PlatformFinanceController {
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=requireOwner(context);
     Map<String,Object> current=one("""
-      select id,institution_id,status,legal_name,invoice_series_code
+      select id,institution_id,status,legal_name,trade_name,contact_email,contact_phone,
+        registered_address->>'line1' as address_line1,registered_address->>'city' as address_city,
+        registered_address->>'state' as address_state,registered_address->>'postalCode' as address_postal_code,
+        registered_address->>'country' as address_country,invoice_series_code
       from billing_legal_entity where id=? for update
       """,legalEntityId);
     if(current.isEmpty()) throw notFound("Legal entity not found.");
     if(!"DRAFT".equals(String.valueOf(current.get("status"))))
       throw bad("Core legal details can only be edited while the entity is DRAFT. Activated entities retain an immutable legal identity for audit and issued-invoice history.");
     String legalName=requiredText(body,"legalName");
+    String tradeName=optionalText(body.get("tradeName"));
+    String contactEmail=optionalText(body.get("contactEmail"));
+    String contactPhone=optionalText(body.get("contactPhone"));
     String series=requiredText(body,"invoiceSeriesCode").toUpperCase(Locale.ROOT);
     if(!series.matches("[A-Z0-9_-]{1,3}"))
       throw bad("Invoice series prefix must be 1–3 uppercase letters, digits, underscores or hyphens.");
@@ -174,8 +180,7 @@ public class PlatformFinanceController {
       set legal_name=?,trade_name=?,contact_email=?,contact_phone=?,registered_address=?::jsonb,
           invoice_series_code=?,updated_by_staff_id=?,updated_at=now()
       where id=? and status='DRAFT'
-      """,legalName,optionalText(body.get("tradeName")),optionalText(body.get("contactEmail")),
-        optionalText(body.get("contactPhone")),jsonObject(address),series,context.staffId(),legalEntityId);
+      """,legalName,tradeName,contactEmail,contactPhone,jsonObject(address),series,context.staffId(),legalEntityId);
     if(changed!=1) throw bad("The legal entity changed while being edited. Reload it and try again.");
     Long institutionId=optionalLong(current.get("institution_id"));
     Map<String,Object> details=new LinkedHashMap<>();
@@ -183,6 +188,18 @@ public class PlatformFinanceController {
     details.put("legalName",legalName);
     details.put("previousInvoiceSeries",String.valueOf(current.get("invoice_series_code")));
     details.put("invoiceSeries",series);
+    List<String> changedFields=new ArrayList<>();
+    if(!java.util.Objects.equals(current.get("legal_name"),legalName)) changedFields.add("legalName");
+    if(!java.util.Objects.equals(current.get("trade_name"),tradeName)) changedFields.add("tradeName");
+    if(!java.util.Objects.equals(current.get("contact_email"),contactEmail)) changedFields.add("contactEmail");
+    if(!java.util.Objects.equals(current.get("contact_phone"),contactPhone)) changedFields.add("contactPhone");
+    if(!java.util.Objects.equals(current.get("address_line1"),address.get("line1"))
+        || !java.util.Objects.equals(current.get("address_city"),address.get("city"))
+        || !java.util.Objects.equals(current.get("address_state"),address.get("state"))
+        || !java.util.Objects.equals(current.get("address_postal_code"),address.get("postalCode"))
+        || !java.util.Objects.equals(current.get("address_country"),address.get("country"))) changedFields.add("registeredAddress");
+    if(!java.util.Objects.equals(current.get("invoice_series_code"),series)) changedFields.add("invoiceSeriesCode");
+    details.put("changedFields",changedFields);
     audit(legalEntityId,institutionId,context,"LEGAL_ENTITY_DETAILS_UPDATED","BILLING_LEGAL_ENTITY",
         Long.toString(legalEntityId),details);
     return Map.of("id",legalEntityId,"status","DRAFT","message","Draft legal entity details updated.");
@@ -420,7 +437,7 @@ public class PlatformFinanceController {
     }
     int changed=jdbc.update("""
       update course_tax_profile set status='APPROVED',approved_by_staff_id=?,approved_at=now()
-      where id=? and upper(status)='PENDING_APPROVAL'
+      where id=? and upper(btrim(status))='PENDING_APPROVAL'
       """,context.staffId(),profileId);
     if(changed!=1) throw bad("Tax profile #"+profileId+" changed while approval was being saved. Refresh the saved profiles and try again.");
     audit(entityId,offerInstitution(offerId),context,"TAX_PROFILE_APPROVED","COURSE_TAX_PROFILE",
