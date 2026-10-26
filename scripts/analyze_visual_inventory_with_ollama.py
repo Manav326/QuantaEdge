@@ -557,7 +557,17 @@ def run_analysis(
         analysis_asset["source_pdf_sha256"] = expected_pdf_sha256
         try:
             item = analyze_one(inventory_dir, analysis_asset, endpoint=endpoint, model=model, timeout=timeout, num_ctx=num_ctx, num_predict=num_predict, opener=opener)
+            # Bind all checkpoint fingerprints to the exact inventory row that was
+            # selected above. This prevents a successful model response from being
+            # repeatedly re-selected when a legacy/canonicalized row carries stale
+            # metadata despite the same exact asset bytes and source-bound inventory.
+            item["asset_id"] = asset_id
+            item["asset_sha256"] = current_asset_hashes[asset_id]
+            item["source_book_id"] = source.get("book_id")
+            item["source_pdf_sha256"] = source.get("pdf_sha256")
+            item["model"] = model
             item["prompt_version"] = PROMPT_VERSION
+            item["page_text_context_sha256"] = current_asset_context_hashes[asset_id]
             if run_id:
                 item["run_id"] = run_id
             item["checkpointed_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
