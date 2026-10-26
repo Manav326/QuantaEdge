@@ -342,10 +342,15 @@ public class PlatformFinanceController {
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireOwner(context);
     return jdbc.queryForList("""
-      select id,institution_offer_id,legal_entity_id,version,service_classification_code,tax_treatment,
-        gst_rate_basis_points,cess_rate_basis_points,price_includes_tax,place_of_supply_rule,
-        rounding_rule,tax_components::text as tax_components_json,status,effective_from,effective_until,approved_at
-      from course_tax_profile where institution_offer_id=? order by version desc
+      select tp.id,tp.institution_offer_id,tp.legal_entity_id,
+        le.legal_name as legal_seller_name,le.status as legal_seller_status,
+        tp.version,tp.service_classification_code,tp.tax_treatment,
+        tp.gst_rate_basis_points,tp.cess_rate_basis_points,tp.price_includes_tax,tp.place_of_supply_rule,
+        tp.rounding_rule,tp.tax_components::text as tax_components_json,tp.status,
+        tp.effective_from,tp.effective_until,tp.approved_at
+      from course_tax_profile tp
+      left join billing_legal_entity le on le.id=tp.legal_entity_id
+      where tp.institution_offer_id=? order by tp.version desc
       """,offerId);
   }
 
