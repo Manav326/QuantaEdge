@@ -8,26 +8,26 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 25,
+    "assets_selected": 34,
     "assets_processed_this_run": 10,
     "assets_processed_ids": [
-      "1fb82d8382b123a4d52d91b9",
-      "9b7ed198665a35fb78679fa4",
-      "8cac18b557cb7a7ae726e868",
-      "18eb5b415affe17e30f3f7f0",
-      "6a644ef3c4dc60ffd992fe23",
-      "b30f82903e5dfef4281655af",
-      "77749bd95f329867e73c5e6d",
-      "d9406703672745403679ed25",
-      "974830f9d80297a7dcdfef15",
-      "64bd3d07e99bf694d4adefe7"
+      "211c5447055ae30fe7ed8e34",
+      "66684f180e794479abd895dd",
+      "efef9688f7b47c60901dc7a1",
+      "61745961574a9d4347a5b409",
+      "dc39ef5e6bd9413400d636e2",
+      "beb01b7957b286b87955836a",
+      "d879914623d060e7b59a961b",
+      "e68bd2d7e79d6ae56fbdfe46",
+      "6edb2c44969374a76eb3bb6d",
+      "b3f4f6f0b27109389ca673f3"
     ],
     "assets_eligible": 2195,
-    "assets_analyzed": 24,
-    "assets_remaining": 2171,
-    "assets_completion_percent": 1.1,
-    "assets_failed": 6,
-    "assets_skipped_from_checkpoint": 15,
+    "assets_analyzed": 33,
+    "assets_remaining": 2162,
+    "assets_completion_percent": 1.5,
+    "assets_failed": 7,
+    "assets_skipped_from_checkpoint": 24,
     "batch_limit": 10,
     "publication_allowed": false
   },
@@ -863,6 +863,335 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
       "checkpointed_at": "2026-10-26T23:27:21Z"
+    },
+    {
+      "asset_id": "211c5447055ae30fe7ed8e34",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "939acfa311711720aeb6d30db062805b77ed7d8ea542de84a0d0996f4ee04271",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:27:46Z"
+    },
+    {
+      "asset_id": "66684f180e794479abd895dd",
+      "asset_sha256": "9c34f3546a43cf627687ef26d1c51e7189a7bb9851f830fcdcec10165903da9a",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 7,
+      "asset_path": "page-0007.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "939acfa311711720aeb6d30db062805b77ed7d8ea542de84a0d0996f4ee04271",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with a pink watercolor background and text about mathematics education.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "students to embark on their own mathematical adventures, empowering",
+          "them to see the beauty and relevance of Mathematics in everything.",
+          "With its engaging approach and comprehensive coverage of Grade 8",
+          "mathematics concepts, this textbook aims to captivate young minds",
+          "and set them on a lifelong journey of mathematical discovery.",
+          "I once again thank all the writers of and contributors of this textbook",
+          "for their valuable contribution and service to the nation’s mathematics",
+          "teachers, learners and enthusiasts.",
+          "We look forward to your comments and suggestions regarding the",
+          "textbook and hope that you will send interesting exercises, activities",
+          "and tasks that you may develop while teaching and learning for future",
+          "editions.",
+          "Ashutosh Wazalwar",
+          "Professor and Academic Convener",
+          "Department of Education in",
+          "Science and Mathematics",
+          "National Council of Educational",
+          "Research and Training",
+          "vii",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "mathematics education",
+          "Grade 8 mathematics concepts",
+          "engaging approach",
+          "lifelong journey of mathematical discovery",
+          "writers and contributors",
+          "national mathematics teachers",
+          "learners and enthusiasts",
+          "interesting exercises",
+          "activities and tasks",
+          "future editions"
+        ],
+        "context_relation": "educational content editor",
+        "limitations": [
+          "text is partially obscured by a pink watercolor background",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:32:03Z"
+    },
+    {
+      "asset_id": "efef9688f7b47c60901dc7a1",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c6f73e23b6fb2772ba96cb54e4f1ec35298542fec7443f54e6f90fba5e2da4a5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, textured, abstract shape that appears to be a smear or splash of paint.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual element in the context of a page from a textbook.",
+        "limitations": [
+          "The image does not contain any text or information that can be directly analyzed.",
+          "The abstract nature of the image makes it difficult to determine its exact purpose or context within the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:32:21Z"
+    },
+    {
+      "asset_id": "61745961574a9d4347a5b409",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c6f73e23b6fb2772ba96cb54e4f1ec35298542fec7443f54e6f90fba5e2da4a5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, textured, and irregularly shaped object that appears to be a splash or a smear of paint.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual element in the document, likely used as a design element or a decorative element.",
+        "limitations": [
+          "The image does not contain any text or information that can be used to infer the context or content of the document."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:32:32Z"
+    },
+    {
+      "asset_id": "dc39ef5e6bd9413400d636e2",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c6f73e23b6fb2772ba96cb54e4f1ec35298542fec7443f54e6f90fba5e2da4a5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank or unused page in a textbook.",
+        "limitations": [
+          "The page is completely black and lacks any visible content or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:32:51Z"
+    },
+    {
+      "asset_id": "beb01b7957b286b87955836a",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c6f73e23b6fb2772ba96cb54e4f1ec35298542fec7443f54e6f90fba5e2da4a5",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "NATIONAL SYLLABUS AND TEACHING LEARNING MATERIAL",
+        "limitations": [
+          "No visible content on the page.",
+          "No visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:33:10Z"
+    },
+    {
+      "asset_id": "d879914623d060e7b59a961b",
+      "asset_sha256": "3807994713e5758d3d597b29da5a24eda1e04123a96a03f1b9bfc294def8b664",
+      "page_text_context_sha256": "c6f73e23b6fb2772ba96cb54e4f1ec35298542fec7443f54e6f90fba5e2da4a5",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 8,
+      "asset_path": "page-0008.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "e68bd2d7e79d6ae56fbdfe46",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0211cd9077dda2b72fb973b140cdf0383085e0a8126df2849e9ab746dd8dd026",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, textured, abstract shape that resembles a wave or a brushstroke.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual element in the textbook, likely used for aesthetic or thematic purposes.",
+        "limitations": [
+          "The image does not contain any text or numerical data.",
+          "The image is abstract and does not represent any specific concept or data."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:38:27Z"
+    },
+    {
+      "asset_id": "6edb2c44969374a76eb3bb6d",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0211cd9077dda2b72fb973b140cdf0383085e0a8126df2849e9ab746dd8dd026",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Red ink splatter across the page.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:38:33Z"
+    },
+    {
+      "asset_id": "b3f4f6f0b27109389ca673f3",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0211cd9077dda2b72fb973b140cdf0383085e0a8126df2849e9ab746dd8dd026",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page with text about contributors to a textbook development team.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "TEXTBOOK DEVELOPMENT TEAM",
+          "Contributors",
+          "Amartya Kumar Dutta, Professor, Stat-math Unit, Indian Statistical Institute (ISI), Kolkata",
+          "Anjali Gupte, Principal (Retd.), Vidya Bhavan Public School, Udaipur",
+          "Ashutosh Kedarnath Wazalwar, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi — CAG (Mathematics)",
+          "(Member Coordinator)",
+          "H. S. Sharada, Assistant Mistress, Government High School, M. C. Thalalu, H. D. Kote Taluk, Mysore, Karnataka",
+          "Madhavan Mukund, Director, Chennai Mathematical Institute, Chennai — CAG Chairperson (Mathematics)",
+          "Madhu B."
+        ],
+        "concepts": [
+          "Textbook Development Team",
+          "Contributors",
+          "Stat-math Unit",
+          "Indian Statistical Institute (ISI)",
+          "Vidya Bhavan Public School",
+          "Department of Education in Science and Mathematics",
+          "NCERT",
+          "Member Coordinator",
+          "Government High School",
+          "Mysore",
+          "Chennai Mathematical Institute",
+          "CAG Chairperson (Mathematics)"
+        ],
+        "context_relation": "The page is a part of a textbook development team's contributors list.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any specific information about the textbook's content or subject."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:39:32Z"
     }
   ]
 }

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2195,
     "eligible_visual_asset_rows": 2195,
-    "raw_analysis_result_rows": 30,
-    "successful_visual_analyses": 24,
-    "missing_visual_analyses": 2165,
-    "failed_visual_analyses": 6,
+    "raw_analysis_result_rows": 40,
+    "successful_visual_analyses": 33,
+    "missing_visual_analyses": 2155,
+    "failed_visual_analyses": 7,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 2171,
+    "unresolved_count": 2162,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -8584,9 +8584,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -8602,9 +8611,51 @@
       "asset_path": "page-0007.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with a pink watercolor background and text about mathematics education.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "students to embark on their own mathematical adventures, empowering",
+          "them to see the beauty and relevance of Mathematics in everything.",
+          "With its engaging approach and comprehensive coverage of Grade 8",
+          "mathematics concepts, this textbook aims to captivate young minds",
+          "and set them on a lifelong journey of mathematical discovery.",
+          "I once again thank all the writers of and contributors of this textbook",
+          "for their valuable contribution and service to the nation’s mathematics",
+          "teachers, learners and enthusiasts.",
+          "We look forward to your comments and suggestions regarding the",
+          "textbook and hope that you will send interesting exercises, activities",
+          "and tasks that you may develop while teaching and learning for future",
+          "editions.",
+          "Ashutosh Wazalwar",
+          "Professor and Academic Convener",
+          "Department of Education in",
+          "Science and Mathematics",
+          "National Council of Educational",
+          "Research and Training",
+          "vii",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "mathematics education",
+          "Grade 8 mathematics concepts",
+          "engaging approach",
+          "lifelong journey of mathematical discovery",
+          "writers and contributors",
+          "national mathematics teachers",
+          "learners and enthusiasts",
+          "interesting exercises",
+          "activities and tasks",
+          "future editions"
+        ],
+        "context_relation": "educational content editor",
+        "limitations": [
+          "text is partially obscured by a pink watercolor background",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -8620,9 +8671,19 @@
       "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red, textured, abstract shape that appears to be a smear or splash of paint.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual element in the context of a page from a textbook.",
+        "limitations": [
+          "The image does not contain any text or information that can be directly analyzed.",
+          "The abstract nature of the image makes it difficult to determine its exact purpose or context within the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -8638,9 +8699,18 @@
       "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red, textured, and irregularly shaped object that appears to be a splash or a smear of paint.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual element in the document, likely used as a design element or a decorative element.",
+        "limitations": [
+          "The image does not contain any text or information that can be used to infer the context or content of the document."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -8656,9 +8726,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank or unused page in a textbook.",
+        "limitations": [
+          "The page is completely black and lacks any visible content or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -8674,9 +8753,19 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "NATIONAL SYLLABUS AND TEACHING LEARNING MATERIAL",
+        "limitations": [
+          "No visible content on the page.",
+          "No visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -8692,7 +8781,7 @@
       "asset_path": "page-0008.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -8710,9 +8799,19 @@
       "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red, textured, abstract shape that resembles a wave or a brushstroke.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual element in the textbook, likely used for aesthetic or thematic purposes.",
+        "limitations": [
+          "The image does not contain any text or numerical data.",
+          "The image is abstract and does not represent any specific concept or data."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -8728,9 +8827,18 @@
       "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Red ink splatter across the page.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -8746,9 +8854,42 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Page with text about contributors to a textbook development team.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "TEXTBOOK DEVELOPMENT TEAM",
+          "Contributors",
+          "Amartya Kumar Dutta, Professor, Stat-math Unit, Indian Statistical Institute (ISI), Kolkata",
+          "Anjali Gupte, Principal (Retd.), Vidya Bhavan Public School, Udaipur",
+          "Ashutosh Kedarnath Wazalwar, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi — CAG (Mathematics)",
+          "(Member Coordinator)",
+          "H. S. Sharada, Assistant Mistress, Government High School, M. C. Thalalu, H. D. Kote Taluk, Mysore, Karnataka",
+          "Madhavan Mukund, Director, Chennai Mathematical Institute, Chennai — CAG Chairperson (Mathematics)",
+          "Madhu B."
+        ],
+        "concepts": [
+          "Textbook Development Team",
+          "Contributors",
+          "Stat-math Unit",
+          "Indian Statistical Institute (ISI)",
+          "Vidya Bhavan Public School",
+          "Department of Education in Science and Mathematics",
+          "NCERT",
+          "Member Coordinator",
+          "Government High School",
+          "Mysore",
+          "Chennai Mathematical Institute",
+          "CAG Chairperson (Mathematics)"
+        ],
+        "context_relation": "The page is a part of a textbook development team's contributors list.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any specific information about the textbook's content or subject."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
