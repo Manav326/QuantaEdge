@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e923f15e789ad5739acd5590d5bd5f9275ea9ac2bc9ad5caaf0b6e353ab53342",
+  "raw_analysis_sha256": "b9d4d1ae6c1bc75d3cf2f1a996a1ff275494b634263a01ef149a76d583eb932f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40252444999",
-      "checkpointed_at": "2026-10-26T01:38:46Z",
+      "checkpointed_at": "2026-10-26T01:45:55Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40252444999",
-      "checkpointed_at": "2026-10-26T01:39:13Z",
+      "checkpointed_at": "2026-10-26T01:46:22Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57837,7 +57837,7 @@
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_type": "diagram",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -57851,22 +57851,21 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force",
-          "living beings"
+          "muscular force"
         ],
         "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The image does not provide specific details about the forces acting on the objects in the diagram."
+          "The image does not provide specific details about the types of forces or the physical properties of the objects."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40252444999",
-      "checkpointed_at": "2026-10-26T01:41:10Z",
+      "checkpointed_at": "2026-10-26T01:46:53Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_type": "diagram",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -57880,12 +57879,11 @@
         ],
         "concepts": [
           "contact forces",
-          "muscular force",
-          "living beings"
+          "muscular force"
         ],
         "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The image does not provide specific details about the forces acting on the objects in the diagram."
+          "The image does not provide specific details about the types of forces or the physical properties of the objects."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -63510,7 +63508,7 @@
           "You must have observed fallen leaves on the ground swirling\nin the air or being swept away, and trees swaying or even\nbending when a strong wind blows. Have you ever wondered\nwhy fallen leaves rise in the air or trees sway or bend? Does the\nwind exert force on fallen leaves to make them rise or on t",
           "Megha and her brother Pawan are going on a picnic. They walk\n    to the picnic spot, carrying identical items in their bags (Fig. 6.1).\n    On the way, Pawan keeps adjusting his bag, and looks\n    uncomfortable. Megha asks, \"Is there a problem with\n    your bag?\" Pawan responds, \"Yes, it is hurting ",
           "Can the shape or size of the straps really make a\n    difference? Let us try to find out.",
-          "When we carry a bag, we feel its weight because\n    of the force of gravity acting on our shoulders. The\n    weight of the bag with narrow straps acts on a\n    smaller area of our shoulders, whereas the weight of\n    the bag with broad straps is spread out over a larger\n    area. It is due to this r",
+          "When we carry a bag, we feel its weight because of the force of gravity acting on our shoulders. The\n    weight of the bag with narrow straps acts on a\n    smaller area of our shoulders, whereas the weight of\n    the bag with broad straps is spread out over a larger\n    area. It is due to this reaso",
           "At this stage, we will consider only those forces which act\n    perpendicular to the surface on which the pressure is to be computed."
         ],
         "concepts": [
@@ -63522,22 +63520,18 @@
           "thunderstorms",
           "gravity",
           "straps",
-          "weight",
-          "force of gravity",
-          "area of force",
-          "perpendicular to the surface",
-          "pressure to be computed"
+          "force per unit area"
         ],
         "context_relation": "pressure",
         "limitations": [
-          "The image does not provide specific formulas or equations."
+          "The image does not show the actual experiment or the visual representation of the force per unit area."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40242884307",
-      "checkpointed_at": "2026-10-25T23:59:18Z",
+      "run_id": "40252444999",
+      "checkpointed_at": "2026-10-26T01:48:56Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing pressure, winds, storms, and cyclones.",
         "visual_type": "page_with_multiple_visuals",
@@ -63545,7 +63539,7 @@
           "You must have observed fallen leaves on the ground swirling\nin the air or being swept away, and trees swaying or even\nbending when a strong wind blows. Have you ever wondered\nwhy fallen leaves rise in the air or trees sway or bend? Does the\nwind exert force on fallen leaves to make them rise or on t",
           "Megha and her brother Pawan are going on a picnic. They walk\n    to the picnic spot, carrying identical items in their bags (Fig. 6.1).\n    On the way, Pawan keeps adjusting his bag, and looks\n    uncomfortable. Megha asks, \"Is there a problem with\n    your bag?\" Pawan responds, \"Yes, it is hurting ",
           "Can the shape or size of the straps really make a\n    difference? Let us try to find out.",
-          "When we carry a bag, we feel its weight because\n    of the force of gravity acting on our shoulders. The\n    weight of the bag with narrow straps acts on a\n    smaller area of our shoulders, whereas the weight of\n    the bag with broad straps is spread out over a larger\n    area. It is due to this r",
+          "When we carry a bag, we feel its weight because of the force of gravity acting on our shoulders. The\n    weight of the bag with narrow straps acts on a\n    smaller area of our shoulders, whereas the weight of\n    the bag with broad straps is spread out over a larger\n    area. It is due to this reaso",
           "At this stage, we will consider only those forces which act\n    perpendicular to the surface on which the pressure is to be computed."
         ],
         "concepts": [
@@ -63557,15 +63551,11 @@
           "thunderstorms",
           "gravity",
           "straps",
-          "weight",
-          "force of gravity",
-          "area of force",
-          "perpendicular to the surface",
-          "pressure to be computed"
+          "force per unit area"
         ],
         "context_relation": "pressure",
         "limitations": [
-          "The image does not provide specific formulas or equations."
+          "The image does not show the actual experiment or the visual representation of the force per unit area."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -63930,7 +63920,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40242884307",
+      "run_id": "40252444999",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
