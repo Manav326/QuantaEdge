@@ -1226,7 +1226,7 @@ assert.ok(courseMarketplaceApi.includes('@PostMapping("/courses/{courseId}/order
   'Student and family purchase routes must share the server lifecycle and retain seller/tax and no-double-payment guards.');
 assert.ok((courseMarketplaceApi.match(/return resumePendingCheckout\(/g) || []).length === 3 &&
   courseMarketplaceApi.includes('return reconcilePaidExistingOrder(order,courseId,targetStudentId,purchaserUserId,institutionId)') &&
-  courseMarketplaceApi.includes('repairFailure.addSuppressed(secondProviderFailure)') &&
+  courseMarketplaceApi.includes('Provider status became uncertain during financial snapshot repair for order {}.') &&
   courseMarketplaceApi.includes('reconciliationConfirmsExistingOrderEntitlement(reconciliation)'),
   'Idempotent retries, normal retries, and concurrent insert races must share exact paid-order recovery; incomplete financial snapshots must not bypass it.');
 assert.ok(studentMarketplacePage.includes("orderStatus === 'RECONCILIATION_REQUIRED'") &&
