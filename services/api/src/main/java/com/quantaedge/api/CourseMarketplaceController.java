@@ -1344,16 +1344,19 @@ public class CourseMarketplaceController {
     try {
       providerState=inspectProviderOrderForNewAttempt(order);
     } catch(RuntimeException providerFailure) {
-      throw new ResponseStatusException(HttpStatus.CONFLICT,
-          "The saved course order's payment state could not be confirmed. Keep this order and retry verification; do not pay again.",
-          providerFailure);
+      LOGGER.warn("Provider status could not be confirmed on final checkout handoff for order {}.",
+          order.get("id"),providerFailure);
+      return pendingOrderRecoveryResponse(order,courseId,
+          "The saved order's payment state could not be confirmed. Keep this order and retry verification; do not pay again.",
+          false);
     }
     if ("PAID".equals(providerState)) {
       return reconcilePaidExistingOrder(order,courseId,targetStudentId,purchaserUserId,institutionId);
     }
     if (!"RETRYABLE".equals(providerState)) {
-      throw new ResponseStatusException(HttpStatus.CONFLICT,
-          "The previous payment attempt is still processing or needs reconciliation. Keep this order; do not start another checkout.");
+      return pendingOrderRecoveryResponse(order,courseId,
+          "The previous payment attempt is still processing or needs reconciliation. Keep this order and retry verification; do not pay again.",
+          false);
     }
 
     return checkoutResponse(
