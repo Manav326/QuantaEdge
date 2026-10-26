@@ -1760,8 +1760,8 @@ public class CourseMarketplaceController {
           to_char(created_at at time zone 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"') as order_created_at_iso
         from course_payment_order
         where id=? and institution_id=?
-          and ((? is not null and student_id=? and purchaser_user_id is null)
-            or (? is not null and purchaser_user_id=?))
+          and ((cast(? as bigint) is not null and student_id=? and purchaser_user_id is null)
+            or (cast(? as bigint) is not null and purchaser_user_id=?))
         """, localOrderId, institutionId, callerStudentId, callerStudentId, callerUserId, callerUserId);
     if (rows.isEmpty()) throw new SecurityException("This payment order is not available to this account.");
     Map<String,Object> order = rows.getFirst();
