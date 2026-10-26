@@ -751,16 +751,16 @@ public class CourseMarketplaceLaunchReadinessService {
         text(row.get("rights_evidence_url")),row.get("rights_reviewed_by_staff_id"),
         row.get("rights_reviewed_at"),text(row.get("rights_review_notes")));
     String message=cleared
-        ?"HRMS recorded a cleared rights decision with reviewer attribution, notes, and valid HTTPS evidence."
+        ?"HRMS recorded public-distribution clearance with reviewer attribution, notes, and valid HTTPS evidence."
         :"Package "+text(row.get("package_id"))+" version "+text(row.get("package_version"))
             +" has rights state "+(status.isBlank()?"UNCONFIRMED":status)
-            +" without a complete evidence-backed HRMS review. HRMS must record a cleared decision, reviewer attribution, notes, and valid HTTPS evidence before Marketplace distribution.";
-    add(checks,"SOURCE_RIGHTS_CLEARANCE","Course package distribution rights are cleared",cleared,message);
+            +" without evidence-backed public-redistribution clearance. Internal-use-only permission is insufficient for Marketplace distribution; HRMS must record CLEARED_FOR_PUBLIC_REPOSITORY with reviewer attribution, notes, and valid HTTPS evidence.";
+    add(checks,"SOURCE_RIGHTS_CLEARANCE","Course package public-distribution rights are cleared",cleared,message);
   }
 
   static boolean isVerifiedPackageRightsClearance(
       String status,String evidenceUrl,Object reviewerId,Object reviewedAt,String reviewNotes) {
-    if(!List.of("CLEARED_FOR_INTERNAL_USE","CLEARED_FOR_PUBLIC_REPOSITORY").contains(status)
+    if(!List.of("CLEARED_FOR_PUBLIC_REPOSITORY").contains(status)
         ||!(reviewerId instanceof Number reviewer&&reviewer.longValue()>0L)
         ||reviewedAt==null||reviewNotes==null||reviewNotes.trim().length()<5) {
       return false;
