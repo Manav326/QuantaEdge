@@ -861,13 +861,9 @@ public class CourseMarketplaceController {
           expireSupersededUnpaidOrder(previous,institutionId,targetStudentId);
           throw new IllegalStateException("The previous checkout was confirmed unpaid and expired. Start a fresh checkout for the current offer.");
         }
-        requireSameBillingAddressChoice(previous,buyerSnapshot);
-        if (!hasLockedFinancialSnapshots(previous)) {
-          repairLegacyPendingOrderSnapshots(previous,institutionId,
-              ((Number)offer.get("institution_offer_id")).longValue(),listedPricePaise,currency,
-              title,buyerSnapshot,requestedDiscountCode);
-        }
-        return checkoutResponse(previous, courseId, title, institutionDisplayName);
+        return resumePendingCheckout(previous,courseId,title,institutionDisplayName,
+            targetStudentId,purchaserUserId,institutionId,currentOfferId,
+            listedPricePaise,currency,buyerSnapshot,requestedDiscountCode);
       } else if ("CREATING".equals(previousStatus)) {
         throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.");
       } else {
@@ -894,30 +890,11 @@ public class CourseMarketplaceController {
         // Never return another payer's checkout or an old offer's price/order to this request.
         expireSupersededUnpaidOrder(prior,institutionId,targetStudentId);
       } else if ("PENDING".equals(priorStatus)) {
-        requireSameBillingAddressChoice(prior,buyerSnapshot);
-        if (!hasLockedFinancialSnapshots(prior)) {
-          repairLegacyPendingOrderSnapshots(prior,institutionId,
-              currentOfferId,listedPricePaise,currency,title,buyerSnapshot,requestedDiscountCode);
-          return checkoutResponse(prior,courseId,title,institutionDisplayName);
-        }
-        String providerState = inspectProviderOrderForNewAttempt(prior);
-        if ("PAID".equals(providerState)) {
-          // Never offer another checkout for an order Razorpay reports as paid. Reconcile the
-          // exact saved provider order now; if authoritative matching payment facts are missing,
-          // return the existing local/provider references so the client can retry this same order.
-          return reconcilePaidExistingOrder(
-              prior,courseId,targetStudentId,purchaserUserId,institutionId);
-        }
-        if (!"RETRYABLE".equals(providerState)) {
-          throw new IllegalStateException(
-              "The previous payment attempt is still being reconciled. Retry verification shortly; do not pay again.");
-        }
-        String previousCode=prior.get("discount_reference")==null?null:String.valueOf(prior.get("discount_reference"));
-        if(!discountCodeMatchesForRetry(previousCode,requestedDiscountCode)) {
-          throw new IllegalStateException(
-              "A retryable checkout already exists with a different locked offer code. Finish or reconcile that checkout before switching codes; its amount cannot be changed.");
-        }
-        return checkoutResponse(prior,courseId,title,institutionDisplayName);
+        return resumePendingCheckout(prior,courseId,title,institutionDisplayName,
+            targetStudentId,purchaserUserId,institutionId,currentOfferId,
+            listedPricePaise,currency,buyerSnapshot,requestedDiscountCode);
+      } else {
+        throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.");
       } else {
         throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.");
       }
@@ -975,12 +952,9 @@ public class CourseMarketplaceController {
           expireSupersededUnpaidOrder(racedOrder,institutionId,targetStudentId);
           throw new IllegalStateException("The earlier checkout was confirmed unpaid and expired. Start a fresh checkout for the current offer.");
         }
-        requireSameBillingAddressChoice(racedOrder,buyerSnapshot);
-        if (!hasLockedFinancialSnapshots(racedOrder)) {
-          repairLegacyPendingOrderSnapshots(racedOrder,institutionId,
-              currentOfferId,listedPricePaise,currency,title,buyerSnapshot,requestedDiscountCode);
-        }
-        return checkoutResponse(racedOrder, courseId, title, institutionDisplayName);
+        return resumePendingCheckout(racedOrder,courseId,title,institutionDisplayName,
+            targetStudentId,purchaserUserId,institutionId,currentOfferId,
+            listedPricePaise,currency,buyerSnapshot,requestedDiscountCode);
       }
       if (racedOrders.size() > 1) {
         throw new IllegalStateException("Multiple checkouts exist for this logical course. HRMS must reconcile them before another payment.");
@@ -1285,7 +1259,7 @@ public class CourseMarketplaceController {
       try {
         Map<String,Object> reconciliation = reconcileOrderInternal(
             savedOrder.longValue(), targetStudentId, originalPayerUserId, institutionId);
-        reconciledVerified = reconciliationConfirmsExistingOrderVerified(reconciliation);
+        reconciledVerified = reconciliationConfirmsExistingOrderEntitlement(reconciliation);
         reconciledRetrySafe = reconciliationConfirmsCheckoutRetryIsSafe(reconciliation);
       } catch(RuntimeException reconciliationFailure) {
         // An exception is not proof that payment failed; retain the fail-closed decision below.
@@ -1329,32 +1303,83 @@ public class CourseMarketplaceController {
     }
   }
 
+  /**
+   * Reuse only the exact pending provider order after a fresh authoritative provider check.
+   * The final read closes the race where another tab completes payment after the initial lookup.
+   */
   private Map<String, Object> checkoutResponse(
-      Map<String, Object> order, long courseId, String title, String institutionDisplayName) {
+      Map<String, Object> order, long courseId, String title, String institutionDisplayName,
+      long targetStudentId, Long purchaserUserId, long institutionId) {
     if (!isReusablePendingOrder(order)) {
-      throw new IllegalStateException("The previous course checkout is not ready. Please retry shortly.");
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "The previous course checkout is not ready. Retry verification; do not pay again.");
     }
 
-    // A local PENDING row can outlive a successful provider payment when the browser
-    // callback was interrupted or verification failed. Never hand a paid Razorpay order
-    // back to checkout; the original payment must be reconciled instead of charged again.
     String providerOrderId = String.valueOf(order.get("provider_order_id"));
-    JsonNode providerOrder = razorpayRequest("GET", "/orders/" + providerOrderId, null);
-    long expectedAmount = ((Number) order.get("offer_price_paise")).longValue();
-    if ("paid".equalsIgnoreCase(providerOrder.path("status").asText(""))
-        || providerOrder.path("amount_paid").asLong(0) >= expectedAmount) {
-      throw new IllegalStateException(
-          "A payment has already completed for this course order. Retry verification for the saved payment; do not start another checkout.");
+    String providerState;
+    try {
+      providerState=inspectProviderOrderForNewAttempt(order);
+    } catch(RuntimeException providerFailure) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "The saved course order's payment state could not be confirmed. Keep this order and retry verification; do not pay again.",
+          providerFailure);
+    }
+    if ("PAID".equals(providerState)) {
+      return reconcilePaidExistingOrder(order,courseId,targetStudentId,purchaserUserId,institutionId);
+    }
+    if (!"RETRYABLE".equals(providerState)) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "The previous payment attempt is still processing or needs reconciliation. Keep this order; do not start another checkout.");
     }
 
     return checkoutResponse(
         ((Number) order.get("id")).longValue(),
         providerOrderId,
-        expectedAmount,
+        ((Number) order.get("offer_price_paise")).longValue(),
         String.valueOf(order.get("currency")),
         courseId,
         title,
         institutionDisplayName);
+  }
+
+  /**
+   * One shared order-resume path for idempotent retries, ordinary retries, and insert races.
+   * In particular, incomplete snapshots must not hide a Razorpay-paid order behind the
+   * legacy snapshot-repair guard.
+   */
+  private Map<String,Object> resumePendingCheckout(
+      Map<String,Object> order,long courseId,String title,String institutionDisplayName,
+      long targetStudentId,Long purchaserUserId,long institutionId,long currentOfferId,
+      long listedPricePaise,String currency,Map<String,Object> buyerSnapshot,String requestedDiscountCode) {
+    if(!isReusablePendingOrder(order)) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "The previous course checkout is not ready. Retry verification; do not pay again.");
+    }
+    requireSameBillingAddressChoice(order,buyerSnapshot);
+    String storedCode=order.get("discount_reference")==null?null:String.valueOf(order.get("discount_reference"));
+    if(!discountCodeMatchesForRetry(storedCode,requestedDiscountCode)) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "A checkout already exists with a different locked offer code. Reconcile that exact order before switching codes; do not pay again.");
+    }
+    if(!hasLockedFinancialSnapshots(order)) {
+      try {
+        repairLegacyPendingOrderSnapshots(order,institutionId,currentOfferId,listedPricePaise,
+            currency,title,buyerSnapshot,requestedDiscountCode);
+      } catch(RuntimeException repairFailure) {
+        // The provider can settle between the first read and legacy repair's read. If Razorpay
+        // now says paid, route to the reconciler rather than exposing the old generic checkout error.
+        try {
+          if("PAID".equals(inspectProviderOrderForNewAttempt(order))) {
+            return reconcilePaidExistingOrder(order,courseId,targetStudentId,purchaserUserId,institutionId);
+          }
+        } catch(RuntimeException secondProviderFailure) {
+          repairFailure.addSuppressed(secondProviderFailure);
+        }
+        throw repairFailure;
+      }
+    }
+    return checkoutResponse(order,courseId,title,institutionDisplayName,
+        targetStudentId,purchaserUserId,institutionId);
   }
 
   private Map<String, Object> checkoutResponse(
