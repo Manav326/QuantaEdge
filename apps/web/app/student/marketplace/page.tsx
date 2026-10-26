@@ -3,7 +3,7 @@
 
 import { apiFetch } from '../../components/apiClient';
 import Link from 'next/link';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './marketplace.module.css';
 import { tenantPrimaryColor, useTenantBranding } from '../../components/TenantBrandingProvider';
@@ -51,6 +51,35 @@ type PurchaseRequestStatus = {
 };
 type VerifyDraft = { courseId: number; localOrderId: number; paymentId: string; orderId: string; signature: string };
 const PENDING_VERIFY_STORAGE_KEY = 'qe:marketplace:pending-payment:student';
+
+function parsePendingVerifyDrafts(raw: string | null): VerifyDraft[] {
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    const values = Array.isArray(parsed) ? parsed : [parsed]; // Accept the old single-order format.
+    const unique = new Map<number, VerifyDraft>();
+    for (const value of values) {
+      const draft: VerifyDraft = {
+        courseId: Number(value?.courseId),
+        localOrderId: Number(value?.localOrderId),
+        paymentId: String(value?.paymentId || ''),
+        orderId: String(value?.orderId || ''),
+        signature: String(value?.signature || ''),
+      };
+      const hasPaymentCallback = draft.paymentId.length > 0 || draft.signature.length > 0;
+      const callbackIsValid = !hasPaymentCallback ||
+        (/^pay_[A-Za-z0-9]+$/.test(draft.paymentId) && /^[A-Fa-f0-9]{64}$/.test(draft.signature));
+      if (Number.isSafeInteger(draft.courseId) && draft.courseId > 0
+          && Number.isSafeInteger(draft.localOrderId) && draft.localOrderId > 0
+          && /^order_[A-Za-z0-9]+$/.test(draft.orderId) && callbackIsValid) {
+        unique.set(draft.localOrderId, draft);
+      }
+    }
+    return [...unique.values()];
+  } catch {
+    return [];
+  }
+}
 type CheckoutResponse = { orderId: string; localOrderId: number; amount: number; currency: string; keyId: string; description?: string; listedPricePaise?: number; discountPaise?: number; discountCode?: string | null };
 
 declare global {
@@ -102,7 +131,35 @@ export default function StudentMarketplacePage() {
   const [busyCourseId, setBusyCourseId] = useState<number | null>(null);
   const [discountCode, setDiscountCode] = useState('');
   const [status, setStatus] = useState('');
-  const [pendingVerify, setPendingVerify] = useState<VerifyDraft | null>(null);
+  const [pendingVerifies, setPendingVerifies] = useState<VerifyDraft[]>([]);
+  const pendingVerifiesRef = useRef<VerifyDraft[]>([]);
+  function readPendingVerifies(): VerifyDraft[] {
+    try {
+      const raw = window.sessionStorage.getItem(PENDING_VERIFY_STORAGE_KEY);
+      return raw ? parsePendingVerifyDrafts(raw) : pendingVerifiesRef.current;
+    } catch {
+      return pendingVerifiesRef.current;
+    }
+  }
+  function savePendingVerify(draft: VerifyDraft) {
+    const next = [...readPendingVerifies().filter(item => item.localOrderId !== draft.localOrderId), draft];
+    pendingVerifiesRef.current = next;
+    setPendingVerifies(next);
+    try { window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(next)); } catch {
+      // In-memory recovery still works if browser storage is disabled.
+    }
+  }
+  function clearPendingVerify(localOrderId: number) {
+    const next = readPendingVerifies().filter(item => item.localOrderId !== localOrderId);
+    pendingVerifiesRef.current = next;
+    setPendingVerifies(next);
+    try {
+      if (next.length) window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(next));
+      else window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY);
+    } catch {
+      // In-memory state remains authoritative for this page.
+    }
+  }
   const [verifying, setVerifying] = useState(false);
   const [purchaseRequests, setPurchaseRequests] = useState<PurchaseRequestStatus[]>([]);
   const [billingAddresses, setBillingAddresses] = useState<BillingAddressRecord[]>([]);
@@ -167,24 +224,11 @@ export default function StudentMarketplacePage() {
     try {
       const saved = window.sessionStorage.getItem(PENDING_VERIFY_STORAGE_KEY);
       if (!saved) return;
-      const value = JSON.parse(saved) as Partial<VerifyDraft>;
-      const draft: VerifyDraft = {
-        courseId: Number(value.courseId),
-        localOrderId: Number(value.localOrderId),
-        paymentId: String(value.paymentId || ''),
-        orderId: String(value.orderId || ''),
-        signature: String(value.signature || ''),
-      };
-      const hasPaymentCallback = draft.paymentId.length > 0 || draft.signature.length > 0;
-      const callbackIsValid = !hasPaymentCallback ||
-        (/^pay_[A-Za-z0-9]+$/.test(draft.paymentId) && /^[A-Fa-f0-9]{64}$/.test(draft.signature));
-      if (Number.isSafeInteger(draft.courseId) && draft.courseId > 0
-          && Number.isSafeInteger(draft.localOrderId) && draft.localOrderId > 0
-          && /^order_[A-Za-z0-9]+$/.test(draft.orderId) && callbackIsValid) {
-        setPendingVerify(draft);
-      } else {
-        window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY);
-      }
+      const drafts = parsePendingVerifyDrafts(saved);
+      pendingVerifiesRef.current = drafts;
+      setPendingVerifies(drafts);
+      if (drafts.length) window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(drafts));
+      else window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY);
     } catch {
       // Storage may be disabled by the browser; in-page retry still works.
     }
@@ -193,7 +237,7 @@ export default function StudentMarketplacePage() {
   const verifyPurchase = useCallback(async (draft: VerifyDraft) => {
     setVerifying(true);
     setStatus('');
-    setPendingVerify(draft);
+    savePendingVerify(draft);
     try {
       window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(draft));
     } catch {
@@ -210,14 +254,14 @@ export default function StudentMarketplacePage() {
           signature: draft.signature,
         }),
       }));
-      setPendingVerify(null);
+      clearPendingVerify(draft.localOrderId);
       try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
       setStatus(tx('Payment verified. Your course is now in All Courses.', 'भुगतान सत्यापित हो गया। आपका कोर्स All Courses में उपलब्ध है।'));
       await loadOffers();
       await loadPurchaseRequests();
       router.push('/student/courses?focus=' + encodeURIComponent(String(draft.courseId)));
     } catch (error: any) {
-      setPendingVerify(draft);
+      savePendingVerify(draft);
       setStatus(localizeMarketplaceError(error?.message, language, 'Payment verification could not be completed. Retry verification before paying again.', 'भुगतान की पुष्टि पूरी नहीं हो सकी। दोबारा भुगतान करने से पहले इसी order की पुष्टि फिर करें।'));
     } finally {
       setVerifying(false);
@@ -239,7 +283,7 @@ export default function StudentMarketplacePage() {
         method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: '{}',
       }));
       if (String(result.status || '').toUpperCase() === 'VERIFIED' || result.entitled === true) {
-        setPendingVerify(null);
+        clearPendingVerify(draft.localOrderId);
         try { window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY); } catch { /* Ignore blocked storage. */ }
         setStatus(tx('Payment verified. Your course is now in All Courses.', 'भुगतान सत्यापित हो गया। आपका कोर्स All Courses में उपलब्ध है।'));
         await loadOffers();
@@ -285,10 +329,6 @@ export default function StudentMarketplacePage() {
   }
 
   async function buyCourse(courseId: number, billingAddressId: number) {
-    if (pendingVerify) {
-      setStatus(tx('A previous payment still needs verification. Retry verification before starting another checkout.', 'पिछले भुगतान की पुष्टि बाकी है। नया checkout शुरू करने से पहले उसी order की जाँच करें।'));
-      return;
-    }
     if (!Number.isSafeInteger(courseId) || courseId <= 0 || busyCourseId !== null) return;
     if (institutionContextRequested && (!brand || isResolving)) {
       setStatus(tx('We could not verify your school identity. Reopen the official link shared by your school before starting checkout.', 'आपकी संस्था की पहचान सत्यापित नहीं हो सकी। भुगतान शुरू करने से पहले संस्था द्वारा भेजा गया आधिकारिक लिंक फिर खोलें।'));
@@ -344,7 +384,7 @@ export default function StudentMarketplacePage() {
           };
           if (!draft.paymentId || !draft.orderId || !draft.signature || draft.orderId !== order.orderId) {
             setStatus(tx('The payment confirmation did not match this order. Reconcile this order before starting another checkout.', 'भुगतान की पुष्टि इस order से मेल नहीं खाती। नया checkout शुरू करने से पहले इसी order की जाँच करें।'));
-            setPendingVerify(recoverableDraft);
+            savePendingVerify(recoverableDraft);
             try { window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(recoverableDraft)); } catch { /* Keep in-memory draft. */ }
             setBusyCourseId(null);
             return;
@@ -422,7 +462,7 @@ export default function StudentMarketplacePage() {
         <div className={styles.discountCodeEntry}>
           <input id="qe-student-discount-code" autoComplete="off" maxLength={40} value={discountCode}
             onChange={event=>setDiscountCode(event.target.value.toUpperCase())}
-            placeholder={tx("Enter a code supplied by your institution", "अपनी संस्था द्वारा दिया गया कोड डालें")} disabled={busyCourseId!==null||!!pendingVerify}/>
+            placeholder={tx("Enter a code supplied by your institution", "अपनी संस्था द्वारा दिया गया कोड डालें")} disabled={busyCourseId!==null}/>
           <span>{tx('Validated securely when you start checkout', 'Checkout शुरू करते समय सुरक्षित रूप से जाँचा जाएगा')}</span>
         </div>
         <p>{tx('Offer codes apply only to the course and institution for which HRMS approved them. The payable amount and tax calculation come from the server.', 'Offer code केवल उसी course और institution पर लागू होगा जिसे HRMS ने मंज़ूरी दी है। भुगतान और tax की गणना server पर होती है।')}</p>
@@ -472,14 +512,15 @@ export default function StudentMarketplacePage() {
           </div>
         </section>
       )}
-      {pendingVerify && (
-        <section className={styles.verifyCard} aria-label={tx("Retry payment verification", "भुगतान की पुष्टि फिर करें")}>
-          <div><strong>{tx('Complete course access', 'कोर्स की पहुँच पूरी करें')}</strong><p>{tx('The checkout response is saved for retry. Verify this payment before starting another checkout.', 'Checkout का विवरण सुरक्षित है। नया checkout शुरू करने से पहले इस भुगतान की पुष्टि करें।')}</p></div>
-          <button type="button" disabled={verifying} onClick={() => void reconcilePurchase(pendingVerify)}>
+      {pendingVerifies.map(draft => (
+        <section className={styles.verifyCard} key={draft.localOrderId} aria-label={tx("Retry payment verification", "भुगतान की पुष्टि फिर करें")}>
+          <div><strong>{tx('Payment verification pending — course #{id}', 'भुगतान की पुष्टि बाकी — कोर्स #{id}', {id:draft.courseId})}</strong>
+            <p>{tx('This saved order can be reconciled independently. Other courses remain available to purchase.', 'इस सुरक्षित order की अलग से जाँच हो सकती है। अन्य कोर्स खरीदने के लिए उपलब्ध हैं।')}</p></div>
+          <button type="button" disabled={verifying} onClick={() => void reconcilePurchase(draft)}>
             {verifying ? tx('Verifying…', 'जाँच हो रही है…') : tx('Retry verification', 'फिर सत्यापित करें')}
           </button>
         </section>
-      )}
+      ))}
 
       {loading && <div className={styles.stateCard} role="status">{tx('Loading course offers…', 'कोर्स ऑफर लोड हो रहे हैं…')}</div>}
       {!loading && loadError && (
@@ -546,8 +587,8 @@ export default function StudentMarketplacePage() {
                       {busyCourseId === offer.course_id ? tx('Adding…', 'जोड़ा जा रहा है…') : tx('Add free course', 'निःशुल्क कोर्स जोड़ें')}
                     </button>
                   ) : (
-                    <button className={styles.primaryButton} type="button" disabled={busyCourseId !== null || pendingVerify !== null} onClick={() => requestCheckout(offer.course_id)}>
-                      {pendingVerify ? tx('Verify previous payment first', 'पहले पिछले भुगतान की पुष्टि करें') : busyCourseId === offer.course_id ? tx('Opening checkout…', 'Checkout खुल रहा है…') : tx('Buy course', 'कोर्स खरीदें')}
+                    <button className={styles.primaryButton} type="button" disabled={busyCourseId !== null} onClick={() => requestCheckout(offer.course_id)}>
+                      {busyCourseId === offer.course_id ? tx('Opening checkout…', 'Checkout खुल रहा है…') : tx('Buy course', 'कोर्स खरीदें')}
                     </button>
                   )}
                 </div>
