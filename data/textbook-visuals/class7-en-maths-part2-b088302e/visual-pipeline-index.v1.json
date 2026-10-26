@@ -1,0 +1,28 @@
+{
+  "schema_version": "quantaedge.textbook-content-pipeline-index.v1",
+  "architecture_version": "8-layer-resumable-v1",
+  "class": 7,
+  "book_slug": "class7-en-maths-part2-b088302e",
+  "source_book_id": "ncert-c7-english-gegp2",
+  "source_pdf_sha256": "86499952914e3427cc1d1a70628b1750c0341259c6536eb3ca3d2b1b353c4942",
+  "layers": {
+    "1": "COMPLETE",
+    "2": "COMPLETE",
+    "3": "COMPLETE",
+    "4": "RUNNING",
+    "5": "RUNNING",
+    "6": "NOT_STARTED",
+    "7": "NOT_STARTED",
+    "8": "NOT_STARTED"
+  },
+  "inventory_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "tag": "inventory-layer1-class7-class7-en-maths-part2-b088302e-sha86499952914e-run-40413122029",
+    "tar_sha256": "af0a65df9944efb90274b2670e681c2c8b3b8dc662a569668a79f691c4542a5b"
+  },
+  "analysis_path": "data/textbook-visuals/class7-en-maths-part2-b088302e/visual-analysis-qwen2.5vl-3b.v1.json",
+  "effective_analysis_path": "data/textbook-content-pipeline/class-7/books/class7-en-maths-part2-b088302e/visual-analysis-effective.v1.json",
+  "coverage_ledger_path": "data/textbook-content-pipeline/class-7/books/class7-en-maths-part2-b088302e/coverage-ledger.v1.json",
+  "publication_allowed": false,
+  "human_review_required": true
+}
