@@ -80,6 +80,24 @@ class CourseMarketplaceControllerTest {
   }
 
   @Test
+  void legacyTestRecoveryAllowsLegacyProfileWithoutAddressBookIdOnlyWhenPostalAddressIsComplete() {
+    Map<String,Object> snapshot = new LinkedHashMap<>();
+    snapshot.put("billingAddress", Map.of(
+        "line1", "12 Test Road",
+        "city", "Patna",
+        "state", "Bihar",
+        "postalCode", "800001"));
+    assertTrue(CourseMarketplaceController.hasCompleteLegacyRecoveryBillingAddress(snapshot));
+
+    snapshot.put("billingAddress", Map.of(
+        "line1", "12 Test Road",
+        "city", "Patna",
+        "state", "Bihar"));
+    assertFalse(CourseMarketplaceController.hasCompleteLegacyRecoveryBillingAddress(snapshot));
+    assertFalse(CourseMarketplaceController.hasCompleteLegacyRecoveryBillingAddress(Map.of()));
+  }
+
+  @Test
   void legacyIncompleteOrderMayOnlyBeRepairedWhenProviderConfirmsRetryIsSafe() {
     assertTrue(CourseMarketplaceController.providerConfirmsRetryIsSafe("RETRYABLE"));
     assertFalse(CourseMarketplaceController.providerConfirmsRetryIsSafe("PAID"));
