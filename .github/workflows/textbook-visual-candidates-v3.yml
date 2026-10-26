@@ -161,7 +161,7 @@ jobs:
 
   prepare:
     needs: [plan]
-    if: needs.plan.result == 'success' && needs.plan.outputs.matrix != '[]'
+    if: needs.plan.result == 'success' && needs.plan.outputs.matrix != '{"include":[]}'
     name: Prepare full bilingual Class ${{ matrix.class_no }} candidate set - ${{ matrix.book_slug }}
     outputs:
       yielded: ${{ steps.layer45_run.outputs.yielded || 'false' }}
@@ -738,6 +738,7 @@ jobs:
     if: >-
       always() &&
       needs.plan.result == 'success' &&
+      needs.prepare.result != 'skipped' &&
       (
         (github.event_name == 'push' && !contains(github.event.head_commit.message || '', '[cancel-layer45-matrix]') && (
           contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]') ||
@@ -872,6 +873,7 @@ jobs:
     if: >-
       always() &&
       needs.plan.result == 'success' &&
+      needs.prepare.result != 'skipped' &&
       (
         (github.event_name == 'push' && !contains(github.event.head_commit.message || '', '[cancel-layer45-matrix]') && (
           contains(github.event.head_commit.message || '', '[resume-visual-layers-4-5-classes-6-8]') ||

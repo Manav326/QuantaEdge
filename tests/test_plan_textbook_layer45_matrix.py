@@ -32,6 +32,11 @@ class TextbookLayer45MatrixTests(unittest.TestCase):
             plan_matrix("push", "[analyze-all-visual-layers-4-5-class-7]"),
         )
 
+    def test_workflow_matrix_output_uses_include_object_envelope(self):
+        from pathlib import Path
+        planner = (Path(__file__).resolve().parents[1] / "scripts" / "plan_textbook_layer45_matrix.py").read_text(encoding="utf-8")
+        self.assertIn('json.dumps({"include": matrix}, separators=(",", ":"))', planner)
+
     def test_unknown_events_and_unmarked_pushes_do_not_start_workers(self):
         self.assertEqual([], plan_matrix("push", "ordinary unrelated commit"))
         self.assertEqual([], plan_matrix("schedule"))

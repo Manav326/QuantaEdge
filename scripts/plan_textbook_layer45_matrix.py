@@ -93,7 +93,8 @@ def main() -> int:
     parser.add_argument("--github-output", type=Path, default=Path(os.environ["GITHUB_OUTPUT"]) if os.environ.get("GITHUB_OUTPUT") else None)
     args = parser.parse_args()
     matrix = plan_matrix(args.event_name, args.head_message, args.class_no, args.analysis_mode)
-    serialized = json.dumps(matrix, separators=(",", ":"))
+    # GitHub Actions strategy.matrix must be an object; use its supported include-list form.
+    serialized = json.dumps({"include": matrix}, separators=(",", ":"))
     if args.github_output:
         with args.github_output.open("a", encoding="utf-8") as handle:
             handle.write(f"matrix={serialized}\n")
