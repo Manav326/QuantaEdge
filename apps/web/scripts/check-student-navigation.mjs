@@ -1223,6 +1223,18 @@ assert.ok(courseMarketplaceApi.includes('@PostMapping("/courses/{courseId}/order
   courseMarketplaceApi.includes('courseOrderFinancialService.prepareCheckout(') &&
   courseOrderFinancialService.includes('Checkout is not configured: HRMS must activate the legal seller'),
   'Student and family purchase routes must share the server lifecycle and retain seller/tax and no-double-payment guards.');
+assert.ok((courseMarketplaceApi.match(/return resumePendingCheckout\(/g) || []).length === 3 &&
+  courseMarketplaceApi.includes('return reconcilePaidExistingOrder(order,courseId,targetStudentId,purchaserUserId,institutionId)') &&
+  courseMarketplaceApi.includes('repairFailure.addSuppressed(secondProviderFailure)') &&
+  courseMarketplaceApi.includes('reconciliationConfirmsExistingOrderEntitlement(reconciliation)'),
+  'Idempotent retries, normal retries, and concurrent insert races must share exact paid-order recovery; incomplete financial snapshots must not bypass it.');
+assert.ok(studentMarketplacePage.includes("orderStatus === 'RECONCILIATION_REQUIRED'") &&
+  parentMarketplacePage.includes("orderStatus === 'RECONCILIATION_REQUIRED'") &&
+  androidApp.includes('if (orderStatus == "RECONCILIATION_REQUIRED")') &&
+  studentMarketplacePage.includes("'/api/v1/marketplace/orders/' + draft.localOrderId + '/reconcile'") &&
+  parentMarketplacePage.includes("'/api/v1/marketplace/family/orders/' + draft.localOrderId + '/reconcile'") &&
+  androidApp.includes('"/api/v1/marketplace/orders/" + localOrderId + "/reconcile"'),
+  'Web and Android student/parent checkouts must preserve returned saved-order identifiers and retry reconciliation instead of starting another payment.');
 assert.ok(learningMetricsService.includes('result.put("diagnosticStats"') &&
   learningMetricsService.includes('result.put("diagnosticSubjects"') &&
   recommendationApi.includes('diagnostic_result.percent') &&
