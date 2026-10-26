@@ -553,10 +553,10 @@ public class CourseOrderFinancialService {
         """,purchaserUserId,purchaserUserId,targetStudentId,institutionId,courseId);
     }
     int updated=jdbc.update("""
-      update course_payment_order set status='VERIFIED',provider_payment_id=?,provider_signature=?,
-        verified_at=coalesce(verified_at,now()),captured_amount_paise=?,captured_at=coalesce(captured_at,now()),
+      update course_payment_order set provider_payment_id=?,provider_signature=?,
+        captured_amount_paise=?,captured_at=coalesce(captured_at,now()),
         failure_code='FINANCIAL_RECONCILIATION_REQUIRED',updated_at=now()
-      where id=? and institution_id=? and status in ('PENDING','EXPIRED','VERIFIED')
+      where id=? and institution_id=? and status in ('PENDING','EXPIRED')
       """,paymentId,signature,capturedAmountPaise,localOrderId,institutionId);
     if(updated!=1) throw new IllegalStateException("The captured course payment was verified but the access grant could not be committed; retry verification for this same order.");
     return new CapturedAccessGrant(purchaseId,courseId,institutionId,targetStudentId,purchaserUserId,recipientType);
