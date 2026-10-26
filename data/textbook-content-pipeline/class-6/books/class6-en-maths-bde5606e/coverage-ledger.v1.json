@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 6328,
     "eligible_visual_asset_rows": 6328,
-    "raw_analysis_result_rows": 29,
-    "successful_visual_analyses": 16,
-    "missing_visual_analyses": 6299,
-    "failed_visual_analyses": 13,
+    "raw_analysis_result_rows": 38,
+    "successful_visual_analyses": 21,
+    "missing_visual_analyses": 6290,
+    "failed_visual_analyses": 17,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 6312,
+    "unresolved_count": 6307,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -15830,13 +15830,12 @@
           "Elegance and aesthetics",
           "Exploration and discovery",
           "Active and experiential learning",
-          "Open-ended questions",
-          "Puzzles and interactive exercises",
+          "Questions and puzzles",
           "Unsolved problems",
-          "Unknown realms and unresolved questions",
-          "New ideas and adventurers"
+          "New ideas",
+          "Adventurers"
         ],
-        "context_relation": "The text discusses the importance of mathematics in education and its various applications.",
+        "context_relation": "The text discusses the importance of mathematics in education and its role in developing various skills and understanding.",
         "limitations": [
           "The text does not provide specific examples or details about the textbook being discussed.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -15920,9 +15919,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or title page for a textbook.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -15938,9 +15946,40 @@
       "asset_path": "page-0006.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the contributions of mathematician Manjul Bhargava and the book's content.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Among the world’s greatest problem solvers and most creative minds\nof the current generation is world-renowned mathematician Manjul\nBhargava. He has resolved decades-old, and in some cases centuries-\nold, problems of a fundamental nature across Mathematics, particularly\nin the areas of number theory",
+          "We are thrilled and honoured that the beautiful Chapter 1 of\nthis book, ʻPatterns in Mathematicsʼ, has been kindly composed and\ncontributed by Professor Bhargava. In this chapter, in the section ʻWhat\nis Mathematics?ʼ, Bhargava eloquently speaks of mathematics as a\ncreative art—as a search for beaut",
+          "Building on the idea of exploring patterns in mathematics, the\nbook then turns to a journey across different areas of mathematics.\nChapter 2, ʻLines and Anglesʼ, introduces the building blocks of\ngeometry—points, linesegments, rays, lines, angles, andhowto measure\nangles. Chapter 3, ʻNumber Playʼ, i"
+        ],
+        "concepts": [
+          "mathematics",
+          "patterns",
+          "geometry",
+          "number theory",
+          "algebra",
+          "representation theory",
+          "arithmetic geometry",
+          "Fields Medal",
+          "Nobel Prize of Mathematics",
+          "Patterns in Mathematics",
+          "Lines and Angles",
+          "Number Play",
+          "Data Handling",
+          "Prime Time",
+          "Perimeter and Area",
+          "Fractions"
+        ],
+        "context_relation": "The page discusses the contributions of Manjul Bhargava and the content of the book.",
+        "limitations": [
+          "The page does not provide specific details about the book's content or structure.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -15956,7 +15995,7 @@
       "asset_path": "assets/8fde114254d2d9a633185b1886acb01925723810d45ca1d21db8d1a2a3ba8ec3.jpx",
       "media_type": "image/jpx",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -15974,7 +16013,7 @@
       "asset_path": "assets/3a469f5ec97bbf4403afdf297faa7fff7ce1b7a9e6d7ef62f9cfc24d597d3ce8.jpx",
       "media_type": "image/jpx",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -15992,9 +16031,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and no text or images are visible."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16010,9 +16058,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Chapter content description",
+        "limitations": [
+          "No visible text or images present on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16028,9 +16085,32 @@
       "asset_path": "page-0007.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing various mathematical concepts and activities.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "their comparison, addition, and subtraction. Chapter 8, 'Playing with Constructions', is a hands-on experience of drawing shapes, including using a compass and a ruler, to enhance students' geometric intuition and comprehension. Chapter 9, 'Symmetry', is an artistic and hands-on exploration of this ",
+          "In all chapters, an attempt has been made to emphasise connections with other subjects including Art, History, and Science. Many pictures and drawings have been included to illustrate patterns, numbers, constructions, symmetry, games, puzzles, etc., to thereby develop visual and artistic imagination",
+          "By weaving together storytelling and hands-on activities, we hope that an immersive learning experience will be created that ignites curiosity and fosters a love for mathematics. It is hoped that teachers would give children the opportunity to discuss, play, engage with each other, provide logical a",
+          "As per the NEP 2020, Computational Thinking has also been gently introduced through puzzles, games, and interactive exercises that encourage such thinking. Indian rootedness has also been kept in"
+        ],
+        "concepts": [
+          "mathematics",
+          "computation",
+          "computational thinking",
+          "puzzles",
+          "games",
+          "interactive exercises",
+          "Indian rootedness"
+        ],
+        "context_relation": "textbook",
+        "limitations": [
+          "The page does not provide specific details about the content or structure of the textbook.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -16046,7 +16126,7 @@
       "asset_path": "assets/7c0ed25b27d1ccc55395ab795233cbd3cbb5434a27f1e7e0003e9412ada36f90.jpx",
       "media_type": "image/jpx",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -16064,7 +16144,7 @@
       "asset_path": "assets/0752c296d2588a1edec5a655ec732bd57834885d80d8e1046cf08ff69185fda9.jpx",
       "media_type": "image/jpx",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
