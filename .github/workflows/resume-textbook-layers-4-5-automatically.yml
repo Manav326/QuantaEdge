@@ -9,6 +9,7 @@ on:
     - cron: "*/5 * * * *"
   workflow_run:
     workflows:
+      - "Process Class 6–8 Textbooks in English and Hindi"
       - "Prepare textbook visual candidates v3 (additive)"
       - "Mirror verified textbook extraction artifact to main"
     types: [completed]
