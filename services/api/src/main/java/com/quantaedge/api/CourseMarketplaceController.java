@@ -2291,12 +2291,23 @@ public class CourseMarketplaceController {
     CourseOrderFinancialService.CapturedAccessGrant accessGrant =
         courseOrderFinancialService.grantAccessForCapturedPayment(
             localOrderId,orderId,paymentId,signature,expectedAmount);
+    boolean parentRequestHousekeepingPending=false;
+    if(accessGrant.purchaserUserId()!=null && "CHILD".equals(accessGrant.recipientType())) {
+      try {
+        courseOrderFinancialService.markParentPurchaseRequestPurchased(
+            accessGrant.purchaserUserId(),accessGrant.targetStudentId(),
+            accessGrant.institutionId(),accessGrant.courseId());
+      } catch(RuntimeException ignored) {
+        // The child has access already. A stale parent-request badge is non-blocking housekeeping.
+        parentRequestHousekeepingPending=true;
+      }
+    }
 
     CourseOrderFinancialService.FinalizedSale finalizedSale=null;
     boolean financePending=true;
     if(financeSnapshotsReady) {
       try {
-        finalizedSale=courseOrderFinancialService.finalizeCapturedSale(localOrderId,paymentId,expectedAmount);
+        finalizedSale=courseOrderFinancialService.finalizeCapturedSale(localOrderId,paymentId,signature,expectedAmount);
         financePending=false;
       } catch(RuntimeException financeFailure) {
         // Access was committed in its own transaction after exact provider confirmation.
@@ -2318,6 +2329,7 @@ public class CourseMarketplaceController {
       result.put("transferable",accessGrant.purchaserUserId()!=null
           &&"STUDENT".equals(accessGrant.recipientType()));
       result.put("financeReconciliationRequired",true);
+      result.put("parentRequestHousekeepingPending",parentRequestHousekeepingPending);
       result.put("message","Payment confirmed and course access granted. Invoice and revenue-share finalization is still being reconciled; do not pay again.");
       return result;
     }
@@ -2333,6 +2345,7 @@ public class CourseMarketplaceController {
     result.put("transferable", accessGrant.purchaserUserId()!=null
         && "STUDENT".equals(accessGrant.recipientType()));
     result.put("financeReconciliationRequired", false);
+    result.put("parentRequestHousekeepingPending",parentRequestHousekeepingPending);
     return result;
   }
 
