@@ -1236,6 +1236,11 @@ assert.ok(studentMarketplacePage.includes("orderStatus === 'RECONCILIATION_REQUI
   parentMarketplacePage.includes("'/api/v1/marketplace/family/orders/' + draft.localOrderId + '/reconcile'") &&
   androidApp.includes('"/api/v1/marketplace/orders/" + localOrderId + "/reconcile"'),
   'Web and Android student/parent checkouts must preserve returned saved-order identifiers and retry reconciliation instead of starting another payment.');
+
+assert.ok(
+  /if \(orderStatus === 'RECONCILIATION_REQUIRED'\) \{[\s\S]*?setBusyCourseId\(null\);\s*return;\s*\}/.test(studentMarketplacePage) &&
+  /if \(orderStatus === 'RECONCILIATION_REQUIRED'\) \{[\s\S]*?setBusy\(''\);\s*return;\s*\}/.test(parentMarketplacePage),
+  'Student and parent checkout busy states must reset when reconciliation is required so the saved-order retry remains usable.');
 assert.ok(learningMetricsService.includes('result.put("diagnosticStats"') &&
   learningMetricsService.includes('result.put("diagnosticSubjects"') &&
   recommendationApi.includes('diagnostic_result.percent') &&
