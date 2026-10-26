@@ -740,9 +740,9 @@ public class CourseMarketplaceLaunchReadinessService {
       limit 1
       """,courseId);
     if(rows.isEmpty()) {
-      add(checks,"SOURCE_RIGHTS_CLEARANCE","Course package distribution rights are cleared",
+      add(checks,"SOURCE_RIGHTS_CLEARANCE","Imported package rights review is not applicable",
           true,
-          "Not applicable: this course identity has no imported Course Studio package ledger. Source ownership, content quality, and publication approval checks still apply.");
+          "No imported Course Studio package is associated with this course identity. Source ownership, content quality, and publication approval checks still apply.");
       return;
     }
     Map<String,Object> row=rows.getFirst();
