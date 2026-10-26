@@ -25,6 +25,8 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +39,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/marketplace")
 public class CourseMarketplaceController {
+  private static final Logger LOGGER = LoggerFactory.getLogger(CourseMarketplaceController.class);
   private static final long ORDER_EXPIRY_MINUTES = 30L;
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
@@ -2132,6 +2135,7 @@ public class CourseMarketplaceController {
     }
     long localOrderId=number.longValue();
     String providerOrderId=prior.get("provider_order_id")==null?"":String.valueOf(prior.get("provider_order_id"));
+    String failureCategory="AUTHORITATIVE_RECONCILIATION_DID_NOT_FINALIZE";
     try {
       Map<String,Object> reconciled=reconcileOrderInternal(
           localOrderId,targetStudentId,purchaserUserId,institutionId);
@@ -2141,9 +2145,14 @@ public class CourseMarketplaceController {
         reconciled.put("courseId",courseId);
         return reconciled;
       }
+      failureCategory=String.valueOf(reconciled.getOrDefault("status","UNKNOWN_RECONCILIATION_STATUS"));
     } catch(RuntimeException reconciliationFailure) {
       // Preserve the payment/order. A failed automatic reconcile is not proof that the payment
-      // failed, so the caller must receive a durable recovery reference rather than a new checkout.
+      // failed. Log the exception server-side without exposing provider/database details to clients.
+      failureCategory=reconciliationFailure.getClass().getSimpleName();
+      LOGGER.warn("Automatic reconciliation failed for already-paid course order {}. " +
+          "The saved transaction remains unchanged and no replacement checkout was created.",
+          localOrderId,reconciliationFailure);
     }
     Map<String,Object> recovery=new LinkedHashMap<>();
     recovery.put("status","RECONCILIATION_REQUIRED");
@@ -2152,6 +2161,7 @@ public class CourseMarketplaceController {
     recovery.put("localOrderId",localOrderId);
     recovery.put("providerOrderId",providerOrderId);
     recovery.put("courseId",courseId);
+    recovery.put("errorCategory",failureCategory);
     recovery.put("automaticReconciliationAttempted",true);
     recovery.put("message","Razorpay reports that this saved course order is already paid, but QuantaEdge could not yet confirm and finalize the exact payment. The order is preserved. Retry verification for this saved order or ask HRMS to review it; do not pay again.");
     return recovery;
