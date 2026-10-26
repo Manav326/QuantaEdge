@@ -32,7 +32,25 @@ type Entitlement = {
   entitlement_id: number; course_id: number; course_name: string; current_learner_name: string;
   holder_student_id: number; transfer_count: number;
 };
-type VerifyDraft = { courseId: number; localOrderId: number; paymentId: string; orderId: string; signature: string };
+type VerifyDraft = {
+  courseId: number; localOrderId: number; paymentId: string; orderId: string; signature: string;
+  courseIdentityKey?: string; courseTitle?: string; studentId?: number; beneficiaryName?: string;
+  recipientType?: string; amountPaise?: number;
+};
+type PendingVerifyGroup = { key: string; drafts: VerifyDraft[] };
+function scopedPendingVerifyStorageKey(base: string, institutionCode: string | null | undefined, userId: number) {
+  const tenant = String(institutionCode || 'default').trim().toUpperCase().replace(/[^A-Z0-9_-]/g, '_') || 'DEFAULT';
+  return `${base}:${tenant}:user:${userId}`;
+}
+function groupPendingVerifyDrafts(drafts: VerifyDraft[]): PendingVerifyGroup[] {
+  const grouped = new Map<string, VerifyDraft[]>();
+  for (const draft of drafts) {
+    const identity = draft.courseIdentityKey || `course:${draft.courseId}`;
+    const key = `${identity}:student:${draft.studentId ?? 'unknown'}`;
+    grouped.set(key, [...(grouped.get(key) || []), draft]);
+  }
+  return [...grouped.entries()].map(([key, values]) => ({ key, drafts: values }));
+}
 type PaidCheckoutIntent = { courseId: number; recipientType: 'SELF' | 'CHILD'; studentId?: number };
 const PENDING_VERIFY_STORAGE_KEY = 'qe:marketplace:pending-payment:parent';
 
@@ -49,6 +67,12 @@ function parsePendingVerifyDrafts(raw: string | null): VerifyDraft[] {
         paymentId: String(value?.paymentId || ''),
         orderId: String(value?.orderId || ''),
         signature: String(value?.signature || ''),
+        ...(String(value?.courseIdentityKey || '').trim() ? { courseIdentityKey: String(value.courseIdentityKey).trim() } : {}),
+        ...(String(value?.courseTitle || '').trim() ? { courseTitle: String(value.courseTitle).trim() } : {}),
+        ...(Number.isSafeInteger(Number(value?.studentId)) && Number(value?.studentId) > 0 ? { studentId: Number(value.studentId) } : {}),
+        ...(String(value?.beneficiaryName || '').trim() ? { beneficiaryName: String(value.beneficiaryName).trim() } : {}),
+        ...(String(value?.recipientType || '').trim() ? { recipientType: String(value.recipientType).trim() } : {}),
+        ...(Number.isSafeInteger(Number(value?.amountPaise)) && Number(value?.amountPaise) >= 0 ? { amountPaise: Number(value.amountPaise) } : {}),
       };
       const hasPaymentCallback = draft.paymentId.length > 0 || draft.signature.length > 0;
       const callbackIsValid = !hasPaymentCallback ||
@@ -102,7 +126,7 @@ async function ensureRazorpayCheckout(): Promise<void> {
 
 export default function ParentCoursesPage() {
   const router = useRouter();
-  const { brand } = useTenantBranding();
+  const { brand, isResolving, institutionContextRequested } = useTenantBranding();
   const { locale } = useLocale();
   const english = locale === 'english';
   const language = english ? 'en' : 'hi';
@@ -119,10 +143,13 @@ export default function ParentCoursesPage() {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [pendingVerifies, setPendingVerifies] = useState<VerifyDraft[]>([]);
+  const [pendingRecoveryReady, setPendingRecoveryReady] = useState(false);
   const pendingVerifiesRef = useRef<VerifyDraft[]>([]);
+  const pendingVerifyStorageKeyRef = useRef<string | null>(null);
   const readPendingVerifies = useCallback((): VerifyDraft[] => {
     try {
-      const raw = window.sessionStorage.getItem(PENDING_VERIFY_STORAGE_KEY);
+      const key = pendingVerifyStorageKeyRef.current;
+      const raw = key ? window.sessionStorage.getItem(key) : null;
       return raw ? parsePendingVerifyDrafts(raw) : pendingVerifiesRef.current;
     } catch {
       return pendingVerifiesRef.current;
@@ -132,7 +159,10 @@ export default function ParentCoursesPage() {
     const next = [...readPendingVerifies().filter(item => item.localOrderId !== draft.localOrderId), draft];
     pendingVerifiesRef.current = next;
     setPendingVerifies(next);
-    try { window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(next)); } catch {
+    try {
+      const key = pendingVerifyStorageKeyRef.current;
+      if (key) window.sessionStorage.setItem(key, JSON.stringify(next));
+    } catch {
       // In-memory recovery still works if browser storage is disabled.
     }
   }, [readPendingVerifies]);
@@ -141,8 +171,10 @@ export default function ParentCoursesPage() {
     pendingVerifiesRef.current = next;
     setPendingVerifies(next);
     try {
-      if (next.length) window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(next));
-      else window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY);
+      const key = pendingVerifyStorageKeyRef.current;
+      if (!key) return;
+      if (next.length) window.sessionStorage.setItem(key, JSON.stringify(next));
+      else window.sessionStorage.removeItem(key);
     } catch {
       // In-memory state remains authoritative for this page.
     }
@@ -208,20 +240,98 @@ export default function ParentCoursesPage() {
 
   useEffect(() => { void load(); }, [load]);
 
-  // Retain the exact provider callback for same-order recovery after a refresh.
+  // Restore only orders returned for this authenticated parent and current institution.
+  // The old workspace-wide storage key is deliberately not read because it can belong to a prior login.
   useEffect(() => {
-    try {
-      const saved = window.sessionStorage.getItem(PENDING_VERIFY_STORAGE_KEY);
-      if (!saved) return;
-      const drafts = parsePendingVerifyDrafts(saved);
-      pendingVerifiesRef.current = drafts;
-      setPendingVerifies(drafts);
-      if (drafts.length) window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(drafts));
-      else window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY);
-    } catch {
-      // Keep the checkout usable if browser session storage is unavailable.
+    if (isResolving) {
+      setPendingRecoveryReady(false);
+      return;
     }
-  }, []);
+    let cancelled = false;
+    const previousStorageKey = pendingVerifyStorageKeyRef.current;
+    pendingVerifyStorageKeyRef.current = null;
+    setPendingRecoveryReady(false);
+    void (async () => {
+      try {
+        if (institutionContextRequested && !brand?.institutionCode) {
+          pendingVerifiesRef.current = [];
+          setPendingVerifies([]);
+          return;
+        }
+        const session = await readJson(await apiFetch('/api/v1/auth/me', {
+          credentials: 'same-origin', cache: 'no-store',
+          headers: { 'X-QE-Workspace': 'PARENT' },
+        }));
+        const userId = Number(session.userId);
+        if (session.role !== 'PARENT' || !Number.isSafeInteger(userId) || userId <= 0) {
+          throw new Error('The signed-in parent identity could not be verified.');
+        }
+        const storageKey = scopedPendingVerifyStorageKey(PENDING_VERIFY_STORAGE_KEY, brand?.institutionCode, userId);
+        const accountChanged = previousStorageKey !== null && previousStorageKey !== storageKey;
+        if (accountChanged) {
+          pendingVerifiesRef.current = [];
+          setPendingVerifies([]);
+        }
+        pendingVerifyStorageKeyRef.current = storageKey;
+        let cached: VerifyDraft[] = [];
+        try { cached = parsePendingVerifyDrafts(window.sessionStorage.getItem(storageKey)); } catch { /* Session storage is optional. */ }
+        const current = accountChanged ? [] : pendingVerifiesRef.current;
+        let serverLoaded = false;
+        let serverDrafts: VerifyDraft[] = [];
+        try {
+          const rows = await readJson(await apiFetch('/api/v1/marketplace/family/orders/pending', {
+            credentials: 'same-origin', cache: 'no-store',
+            headers: { 'X-QE-Workspace': 'PARENT', 'Accept': 'application/json' },
+          }));
+          if (Array.isArray(rows)) {
+            serverLoaded = true;
+            serverDrafts = parsePendingVerifyDrafts(JSON.stringify(rows.map((row: any) => ({
+              courseId: row.course_id, localOrderId: row.local_order_id,
+              paymentId: '', orderId: row.provider_order_id, signature: '',
+              courseIdentityKey: row.course_identity_key, courseTitle: row.course_title,
+              studentId: row.student_id, beneficiaryName: row.beneficiary_name,
+              recipientType: row.recipient_type, amountPaise: row.amount_paise,
+            }))));
+          }
+        } catch {
+          // Scoped cache remains available if the order-recovery endpoint is temporarily offline.
+        }
+        if (cancelled) return;
+        const localById = new Map<number, VerifyDraft>();
+        for (const draft of [...cached, ...current]) localById.set(draft.localOrderId, draft);
+        let merged: VerifyDraft[];
+        if (serverLoaded) {
+          const serverIds = new Set(serverDrafts.map(draft => draft.localOrderId));
+          merged = serverDrafts.map(remote => {
+            const local = localById.get(remote.localOrderId);
+            return local ? { ...remote, paymentId: local.paymentId, signature: local.signature } : remote;
+          });
+          for (const draft of current) {
+            if (!serverIds.has(draft.localOrderId)) merged.push(draft);
+          }
+        } else {
+          const unique = new Map<number, VerifyDraft>();
+          for (const draft of [...cached, ...current]) unique.set(draft.localOrderId, draft);
+          merged = [...unique.values()];
+        }
+        pendingVerifiesRef.current = merged;
+        setPendingVerifies(merged);
+        try {
+          if (merged.length) window.sessionStorage.setItem(storageKey, JSON.stringify(merged));
+          else window.sessionStorage.removeItem(storageKey);
+        } catch { /* In-memory recovery remains available if storage is disabled. */ }
+      } catch {
+        if (!cancelled) {
+          pendingVerifyStorageKeyRef.current = null;
+          pendingVerifiesRef.current = [];
+          setPendingVerifies([]);
+        }
+      } finally {
+        if (!cancelled) setPendingRecoveryReady(true);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [brand?.institutionCode, institutionContextRequested, isResolving]);
 
   const money = (paise: number) => new Intl.NumberFormat(english ? 'en-IN' : 'hi-IN', {
     style: 'currency', currency: 'INR', maximumFractionDigits: 2,
@@ -246,30 +356,49 @@ export default function ParentCoursesPage() {
     } finally { setBusy(''); }
   }
 
-  async function reconcilePayment(draft: VerifyDraft) {
+  async function reconcilePayment(input: VerifyDraft | VerifyDraft[]) {
+    const attempts = Array.isArray(input) ? input : [input];
     setBusy('verify');
     setError('');
     setNotice('');
-    savePendingVerify(draft);
+    let accessGranted = false;
+    const unresolvedMessages: string[] = [];
     try {
-      const result = await readJson(await apiFetch('/api/v1/marketplace/family/orders/' + draft.localOrderId + '/reconcile', {
-        method: 'POST', credentials: 'same-origin',
-        headers: { 'Content-Type': 'application/json' }, body: '{}',
-      }));
-      if (String(result.status || '').toUpperCase() === 'VERIFIED' || result.entitled === true) {
-        clearPendingVerify(draft.localOrderId);
+      for (const draft of attempts) {
+        savePendingVerify(draft);
+        try {
+          const result = await readJson(await apiFetch('/api/v1/marketplace/family/orders/' + draft.localOrderId + '/reconcile', {
+            method: 'POST', credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' }, body: '{}',
+          }));
+          if (String(result.status || '').toUpperCase() === 'VERIFIED' || result.entitled === true) {
+            clearPendingVerify(draft.localOrderId);
+            accessGranted = true;
+            continue;
+          }
+          if (result.canRetryCheckout === true) {
+            clearPendingVerify(draft.localOrderId);
+            continue;
+          }
+          savePendingVerify(draft);
+          unresolvedMessages.push(localizeMarketplaceError(result.message, language,
+            'Payment status is still being reconciled. Do not pay again while verification is pending.',
+            'भुगतान की जाँच जारी है। पुष्टि पूरी होने तक दोबारा भुगतान न करें।'));
+        } catch (e) {
+          savePendingVerify(draft);
+          unresolvedMessages.push(localizeMarketplaceError(e, language,
+            'Payment status could not be reconciled. Keep this order and retry verification; do not pay again.',
+            'भुगतान की स्थिति की पुष्टि नहीं हो सकी। यही order सुरक्षित रखें और फिर जाँचें; दोबारा भुगतान न करें।'));
+        }
+      }
+      if (accessGranted) {
         setNotice(english ? 'Payment verified. Course access has been updated.' : 'भुगतान सत्यापित। कोर्स की पहुँच अपडेट हो गई है।');
-        await load();
-        return;
+      } else {
+        setError(unresolvedMessages[0] || (english
+          ? 'Previous payment attempts were confirmed unpaid. You can now start checkout again.'
+          : 'पिछले भुगतान पूरे नहीं हुए। अब आप checkout दोबारा शुरू कर सकते हैं।'));
       }
-      if (result.canRetryCheckout === true) {
-        clearPendingVerify(draft.localOrderId);
-      }
-      setError(localizeMarketplaceError(result.message, language, 'Payment status is still being reconciled. Do not pay again while verification is pending.', 'भुगतान की जाँच जारी है। पुष्टि पूरी होने तक दोबारा भुगतान न करें।'));
       await load();
-    } catch (e) {
-      savePendingVerify(draft);
-      setError(localizeMarketplaceError(e, language, 'Payment status could not be reconciled. Keep this order and retry verification; do not pay again.', 'भुगतान की स्थिति की पुष्टि नहीं हो सकी। यही order सुरक्षित रखें और फिर जाँचें; दोबारा भुगतान न करें।'));
     } finally {
       setBusy('');
     }
@@ -487,12 +616,25 @@ export default function ParentCoursesPage() {
             }}
           />
         )}
-        {pendingVerifies.map(draft => <section className="parent-courses-page__verify" key={draft.localOrderId}>
-          <div><strong><LocaleText hinglish={`भुगतान पुष्टि बाकी है — कोर्स #${draft.courseId}`} english={`Payment verification pending — course #${draft.courseId}`} /></strong>
-            <p><LocaleText hinglish="इस order की अलग से जाँच हो सकती है। अन्य कोर्स खरीदने के लिए उपलब्ध हैं।" english="This saved order can be reconciled independently. Other courses remain available to purchase." /></p></div>
-          <button className="button button-dark button-small" type="button" disabled={busy !== ''}
-            onClick={() => void reconcilePayment(draft)}><LocaleText hinglish="फिर से सत्यापित करें" english="Retry verification" /></button>
-        </section>)}
+        {pendingRecoveryReady && groupPendingVerifyDrafts(pendingVerifies).map(group => {
+          const draft = group.drafts[0];
+          return <section className="parent-courses-page__verify" key={group.key}>
+            <div><strong>{draft.courseTitle || (english ? 'Course payment needs verification' : 'कोर्स भुगतान की पुष्टि बाकी है')}</strong>
+              {draft.beneficiaryName && <small>{english ? `For ${draft.beneficiaryName}` : `${draft.beneficiaryName} के लिए`}</small>}
+              <p>{group.drafts.length > 1
+                ? (english
+                    ? `We found ${group.drafts.length} saved payment attempts for this course and learner. We will check each one. Do not pay again.`
+                    : `इस कोर्स और विद्यार्थी के ${group.drafts.length} पुराने भुगतान प्रयास मिले। हम हर प्रयास की जाँच करेंगे। दोबारा भुगतान न करें।`)
+                : (english
+                    ? 'We will check this saved payment. Do not start another checkout while its status is being confirmed.'
+                    : 'इस सुरक्षित भुगतान की जाँच होगी। स्थिति की पुष्टि तक नया checkout शुरू न करें।')}</p></div>
+            <button className="button button-dark button-small" type="button" disabled={busy !== ''}
+              onClick={() => void reconcilePayment(group.drafts)}>
+              {busy === 'verify' ? (english ? 'Checking payment…' : 'भुगतान जाँचा जा रहा है…')
+                : (english ? 'Check payment status' : 'भुगतान की स्थिति जाँचें')}
+            </button>
+          </section>;
+        })}
 
         <section className="parent-courses-page__section">
           <div className="parent-courses-page__section-heading">
