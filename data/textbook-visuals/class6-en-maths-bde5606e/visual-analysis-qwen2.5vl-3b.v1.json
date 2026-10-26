@@ -1,0 +1,295 @@
+{
+  "schema_version": "quantaedge.visual-analysis.v1",
+  "analysis_status": "DRAFT_VISION_ANALYSIS_ONLY",
+  "source_inventory": "visual-inventory.v1.json",
+  "source_book_id": "ncert-c6-english-fegp1",
+  "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+  "model_provider": "ollama_local",
+  "model": "qwen2.5vl:3b",
+  "prompt_version": "visual-analysis-prompt-v2",
+  "summary": {
+    "assets_selected": 10,
+    "assets_processed_this_run": 10,
+    "assets_processed_ids": [
+      "bb51a8fc880892530123033b",
+      "073ca67cbb1b052027a5f4f3",
+      "a734c575167900f6da758304",
+      "0d0d76f26ba58c0948987698",
+      "49e53d76b9da7a63b604b249",
+      "62838c6a53bfba29ad30e379",
+      "dbe6d42289bae4bfd3404bd7",
+      "05b66f34746f2fe12c60c053",
+      "83f8de92ec9eb8911e143711",
+      "6089fc60d73e3a8bc21b1cab"
+    ],
+    "assets_eligible": 6328,
+    "assets_analyzed": 5,
+    "assets_remaining": 6323,
+    "assets_completion_percent": 0.1,
+    "assets_failed": 5,
+    "assets_skipped_from_checkpoint": 0,
+    "batch_limit": 10,
+    "publication_allowed": false
+  },
+  "results": [
+    {
+      "asset_id": "bb51a8fc880892530123033b",
+      "asset_sha256": "e8ec38330f3b147fcd5ae303ba99cfd4ddaac6b431ddc17c0e4679614ffc91b2",
+      "page_text_context_sha256": "ccc3adbe49479d1e25f0af9f19243ebfe8ccd641f832bf9ea3afc444520626db",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/e8ec38330f3b147fcd5ae303ba99cfd4ddaac6b431ddc17c0e4679614ffc91b2.jpx",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Unsupported vision media type 'image/jpx'; use JPEG, PNG, or WebP assets.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "073ca67cbb1b052027a5f4f3",
+      "asset_sha256": "8fde114254d2d9a633185b1886acb01925723810d45ca1d21db8d1a2a3ba8ec3",
+      "page_text_context_sha256": "ccc3adbe49479d1e25f0af9f19243ebfe8ccd641f832bf9ea3afc444520626db",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/8fde114254d2d9a633185b1886acb01925723810d45ca1d21db8d1a2a3ba8ec3.jpx",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Unsupported vision media type 'image/jpx'; use JPEG, PNG, or WebP assets.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "a734c575167900f6da758304",
+      "asset_sha256": "3a469f5ec97bbf4403afdf297faa7fff7ce1b7a9e6d7ef62f9cfc24d597d3ce8",
+      "page_text_context_sha256": "ccc3adbe49479d1e25f0af9f19243ebfe8ccd641f832bf9ea3afc444520626db",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/3a469f5ec97bbf4403afdf297faa7fff7ce1b7a9e6d7ef62f9cfc24d597d3ce8.jpx",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Unsupported vision media type 'image/jpx'; use JPEG, PNG, or WebP assets.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "0d0d76f26ba58c0948987698",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ccc3adbe49479d1e25f0af9f19243ebfe8ccd641f832bf9ea3afc444520626db",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Title page of a mathematics textbook for Grade 6.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "GANITA PRAKASH",
+          "Textbook of Mathematics for",
+          "Grade 6",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "mathematics",
+          "Grade 6",
+          "textbook",
+          "reprint",
+          "year"
+        ],
+        "context_relation": "The image is a title page of a mathematics textbook.",
+        "limitations": [
+          "No specific content or visual details are provided."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:38:56Z"
+    },
+    {
+      "asset_id": "49e53d76b9da7a63b604b249",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ccc3adbe49479d1e25f0af9f19243ebfe8ccd641f832bf9ea3afc444520626db",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Title page of a mathematics textbook for Grade 6.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "GANITA PRAKASH",
+          "Textbook of Mathematics for",
+          "Grade 6",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "mathematics",
+          "Grade 6",
+          "textbook",
+          "reprint"
+        ],
+        "context_relation": "The image is a title page of a mathematics textbook for Grade 6.",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "The image does not provide any content or information about the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:41:32Z"
+    },
+    {
+      "asset_id": "62838c6a53bfba29ad30e379",
+      "asset_sha256": "c85c3a1f05053b6a40f7027e53922bb0c0fe7904bc3c077cce0b5e3948565c24",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 1,
+      "asset_path": "page-0001.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "ccc3adbe49479d1e25f0af9f19243ebfe8ccd641f832bf9ea3afc444520626db",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The cover page of a mathematics textbook for Grade 6.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "GANITA PRAKASH",
+          "Textbook of Mathematics for",
+          "Grade 6",
+          "not to be republished",
+          "NATIONAL COUNCIL OF EDUCATIONAL RESEARCH AND TRAINING",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Mathematics",
+          "Grade 6",
+          "Textbook",
+          "National Council of Educational Research and Training"
+        ],
+        "context_relation": "Cover page of a mathematics textbook",
+        "limitations": [
+          "No specific content details are visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:43:01Z"
+    },
+    {
+      "asset_id": "dbe6d42289bae4bfd3404bd7",
+      "asset_sha256": "7c0ed25b27d1ccc55395ab795233cbd3cbb5434a27f1e7e0003e9412ada36f90",
+      "page_text_context_sha256": "b1e6565193510e3c17a41a156d00a1ba20b5334035d038aee236bd5409c5290b",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 2,
+      "asset_path": "assets/7c0ed25b27d1ccc55395ab795233cbd3cbb5434a27f1e7e0003e9412ada36f90.jpx",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Unsupported vision media type 'image/jpx'; use JPEG, PNG, or WebP assets.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "05b66f34746f2fe12c60c053",
+      "asset_sha256": "0752c296d2588a1edec5a655ec732bd57834885d80d8e1046cf08ff69185fda9",
+      "page_text_context_sha256": "b1e6565193510e3c17a41a156d00a1ba20b5334035d038aee236bd5409c5290b",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 2,
+      "asset_path": "assets/0752c296d2588a1edec5a655ec732bd57834885d80d8e1046cf08ff69185fda9.jpx",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Unsupported vision media type 'image/jpx'; use JPEG, PNG, or WebP assets.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "83f8de92ec9eb8911e143711",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 2,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b1e6565193510e3c17a41a156d00a1ba20b5334035d038aee236bd5409c5290b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No visible content to analyze.",
+        "limitations": [
+          "No visible content to analyze."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:43:07Z"
+    },
+    {
+      "asset_id": "6089fc60d73e3a8bc21b1cab",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 2,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b1e6565193510e3c17a41a156d00a1ba20b5334035d038aee236bd5409c5290b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is a blank page with no visible content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:43:15Z"
+    }
+  ]
+}

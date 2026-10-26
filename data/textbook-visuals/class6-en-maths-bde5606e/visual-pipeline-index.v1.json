@@ -1,0 +1,28 @@
+{
+  "schema_version": "quantaedge.textbook-content-pipeline-index.v1",
+  "architecture_version": "8-layer-resumable-v1",
+  "class": 6,
+  "book_slug": "class6-en-maths-bde5606e",
+  "source_book_id": "ncert-c6-english-fegp1",
+  "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+  "layers": {
+    "1": "COMPLETE",
+    "2": "COMPLETE",
+    "3": "COMPLETE",
+    "4": "RUNNING",
+    "5": "RUNNING",
+    "6": "NOT_STARTED",
+    "7": "NOT_STARTED",
+    "8": "NOT_STARTED"
+  },
+  "inventory_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "tag": "inventory-layer1-class6-class6-en-maths-bde5606e-sha07e70f879355-run-40413122029",
+    "tar_sha256": "e1eb3e1e31ca197f9633c9e71f36c323be3fb6ed924910411e6758e0aa24e1cb"
+  },
+  "analysis_path": "data/textbook-visuals/class6-en-maths-bde5606e/visual-analysis-qwen2.5vl-3b.v1.json",
+  "effective_analysis_path": "data/textbook-content-pipeline/class-6/books/class6-en-maths-bde5606e/visual-analysis-effective.v1.json",
+  "coverage_ledger_path": "data/textbook-content-pipeline/class-6/books/class6-en-maths-bde5606e/coverage-ledger.v1.json",
+  "publication_allowed": false,
+  "human_review_required": true
+}
