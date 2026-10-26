@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2177,
     "eligible_visual_asset_rows": 2177,
-    "raw_analysis_result_rows": 90,
-    "successful_visual_analyses": 76,
-    "missing_visual_analyses": 2087,
-    "failed_visual_analyses": 14,
+    "raw_analysis_result_rows": 100,
+    "successful_visual_analyses": 83,
+    "missing_visual_analyses": 2077,
+    "failed_visual_analyses": 17,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 2101,
+    "unresolved_count": 2094,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -8965,7 +8965,7 @@
       "asset_path": "page-0009.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -8983,9 +8983,34 @@
       "asset_path": "assets/14014d0e1898f734025bee1ac8236d1b15748aa72bc9b8c39b67ffa8eb4708d4.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with text and a QR code.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Hkkjr dk lafo/ku",
+          "Hkkx&3 (vuqPNsn 12&35)",
+          "(vfuok;Z  'krks±] oqQN vioknksa vkSj ;qfDr;qDr fuc±/u  osQ v/hu)",
+          "n~okjk iznRr",
+          "ewy vf/dkj",
+          "lerk dk vf/dkj",
+          "•  fof/ osQ le{k ,oa fof/;ksa osQ leku laj{k.k_",
+          "•   /eZ] ewyoa'k] tkfr] fyax ;k tUeLFkku  osQ vk/kj ij_"
+        ],
+        "concepts": [
+          "QR code",
+          "textbook page",
+          "text",
+          "notations",
+          "notations"
+        ],
+        "context_relation": "The page is part of a textbook, likely related to a subject or topic that uses QR codes.",
+        "limitations": [
+          "The page does not show any equations, diagrams, or other visual elements.",
+          "The text is in a language that is not specified in the schema."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9001,7 +9026,7 @@
       "asset_path": "assets/de790bb5a3cc95297181c36d127232f2a0576d2fcc8c176cec5734be19d3f420.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -9019,9 +9044,18 @@
       "asset_path": "assets/a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for educational content to be filled in.",
+        "limitations": [
+          "The page is blank and requires content to be added."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9037,9 +9071,18 @@
       "asset_path": "assets/a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear content or text on the page"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9055,9 +9098,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9073,9 +9125,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9091,7 +9152,7 @@
       "asset_path": "page-0010.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -9109,9 +9170,18 @@
       "asset_path": "assets/3f943fc7dcb12098fdb7716fe9ca6b80b5f7f213f0e4a5a39cb5a19e3a01c07a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope, possibly used in educational content related to physics or engineering.",
+        "limitations": [
+          "The image does not provide specific details about the rope's properties or uses, and the context is limited to the text provided."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9127,9 +9197,18 @@
       "asset_path": "assets/0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A coiled rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope with a ring, possibly used as a symbol or an illustration in a textbook.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond the visual of the rope and ring."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
