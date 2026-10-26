@@ -1254,8 +1254,7 @@ public class CourseMarketplaceController {
       try {
         Map<String,Object> reconciliation = reconcileOrderInternal(
             savedOrder.longValue(), targetStudentId, originalPayerUserId, institutionId);
-        reconciledVerified = "VERIFIED".equalsIgnoreCase(
-            String.valueOf(reconciliation.getOrDefault("status","")));
+        reconciledVerified = reconciliationConfirmsExistingOrderVerified(reconciliation);
       } catch(RuntimeException reconciliationFailure) {
         // Keep the fail-closed decision below. This is not proof that payment failed.
       }
@@ -2005,6 +2004,12 @@ public class CourseMarketplaceController {
 
   static boolean providerConfirmsRetryIsSafe(String providerState) {
     return "RETRYABLE".equals(providerState);
+  }
+
+  static boolean reconciliationConfirmsExistingOrderVerified(Map<String,Object> reconciliation) {
+    return reconciliation != null
+        && "VERIFIED".equalsIgnoreCase(String.valueOf(reconciliation.getOrDefault("status","")))
+        && Boolean.TRUE.equals(reconciliation.get("entitled"));
   }
 
   private String inspectProviderOrderForNewAttempt(Map<String,Object> localOrder) {
