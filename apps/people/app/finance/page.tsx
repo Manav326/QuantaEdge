@@ -192,11 +192,9 @@ export default function FinancePage(){
       const requestedOfferExists=Boolean(requestedOfferId&&requestedOffer);
       if(requestedOfferId&&!requestedOfferExists){
         setError('The course offer linked from Institution Marketplace Control was not found in Finance. Refresh the launch checklist. No other course offer is selected automatically.');
-        if(launchSetup){
-          setSelectedOfferId('');
-          setTaxForm(v=>({...v,offerId:'',legalEntityId:''}));
-          setDiscountForm(v=>({...v,offerId:''}));
-        }
+        setSelectedOfferId('');
+        setTaxForm(v=>({...v,offerId:'',legalEntityId:''}));
+        setDiscountForm(v=>({...v,offerId:''}));
         launchOfferIdFromUrl.current=null;
         marketplaceSetupFromUrl.current=false;
         setMarketplaceSetupContext(null);
@@ -250,7 +248,7 @@ export default function FinancePage(){
     try{
       const p=await api<PolicyDetail>(BASE+'/revenue-share/policies/'+id);
       setPolicyDetail(p);
-      const offerId=String(p.institution_offer_id);setSelectedOfferId(offerId);setTaxForm(v=>({...v,offerId,legalEntityId:''}));setDiscountForm(v=>({...v,offerId}));
+      const offerId=String(p.institution_offer_id);selectWorkflowOffer(offerId,true);
       setRecipients((p.recipients||[]).map(r=>({
         institutionId:String(r.institution_id),calculationType:r.calculation_type as 'PERCENTAGE'|'FLAT',
         percentage:r.percentage_basis_points==null?'':String(r.percentage_basis_points/100),
@@ -259,10 +257,8 @@ export default function FinancePage(){
     }catch(e){setError(e instanceof Error?e.message:'Policy detail could not load.');}
   };
   const selectedOffer=useMemo(()=>catalog?.offers.find(o=>String(o.offer_id)===selectedOfferId),[catalog,selectedOfferId]);
-  const contextualOffer=marketplaceSetupContext?.offerId
-    ? catalog?.offers.find(o=>String(o.offer_id)===marketplaceSetupContext.offerId)
-    : selectedOffer;
-  const selectWorkflowOffer=(offerId:string)=>{
+  const contextualOffer=selectedOffer;
+  const selectWorkflowOffer=(offerId:string,preservePolicy=false)=>{
     const offer=catalog?.offers.find(row=>String(row.offer_id)===offerId);
     const seller=(offer?.legal_entity_id?catalog?.legalEntities.find(e=>e.id===offer.legal_entity_id&&e.status==='ACTIVE'):undefined)
       ||catalog?.legalEntities.find(e=>e.status==='ACTIVE'&&e.entity_kind==='INSTITUTION'&&e.institution_id===offer?.institution_id)
@@ -271,7 +267,7 @@ export default function FinancePage(){
     setSelectedOfferId(offerId);setTaxForm(v=>({...v,offerId,legalEntityId:sellerId,serviceClassificationCode:v.offerId===offerId?v.serviceClassificationCode:'',gstPercent:v.offerId===offerId?v.gstPercent:'',cessPercent:v.offerId===offerId?v.cessPercent:''}));
     setDiscountForm(v=>({...v,offerId,code:v.offerId===offerId?v.code:''}));setGstEntityId(sellerId);
     if(templateScope==='SELLER')setTemplateEntityId(sellerId);
-    setSelectedPolicyId('');setPolicyDetail(null);setRecipients([]);
+    if(!preservePolicy){setSelectedPolicyId('');setPolicyDetail(null);setRecipients([]);}
   };
   const selectedTemplate=useMemo(()=>templates.find(t=>String(t.id)===selectedTemplateId),[templates,selectedTemplateId]);
   const designUnchanged=Boolean(selectedTemplate)&&JSON.stringify(design)===JSON.stringify(parseDesign(selectedTemplate?.design_definition_json));
@@ -748,7 +744,7 @@ export default function FinancePage(){
     {catalog&&(marketplaceSetupContext||['overview','entities','tax','distribution','discounts','studio'].includes(tab))&&<section className={styles.marketplaceSetupGuide} aria-labelledby="marketplace-finance-setup-heading">
       <div className={styles.marketplaceSetupHeader}><div><span className={styles.eyebrow}>HRMS · COURSE FINANCE</span>
         <h2 id="marketplace-finance-setup-heading">{marketplaceSetupContext?'Finish course launch setup':'Configure course launch finance'}</h2>
-        <p>{marketplaceSetupContext?<>Configuring <strong>{contextualOffer?.course_name||marketplaceSetupContext.courseName||'this course'}</strong> for <strong>{contextualOffer?.institution_name||'the selected institution'}</strong>.</>:<>Select the exact course once, then follow the steps in order. Settings stay bound to this offer.</>}</p></div>
+        <p>{marketplaceSetupContext?(selectedOffer?<>Configuring <strong>{selectedOffer.course_name}</strong> for <strong>{selectedOffer.institution_name}</strong>.</>:<>Select the course offer to continue setup for <strong>{marketplaceSetupContext.courseName||'this course'}</strong>{marketplaceSetupContext.institutionId?<> at institution #{marketplaceSetupContext.institutionId}</>:null}.</>):<>Select the exact course once, then follow the steps in order. Settings stay bound to this offer.</>}</p></div>
         <span className={styles.marketplaceSetupOfferTag}>{contextualOffer?contextualOffer.course_code+' · v'+contextualOffer.content_version_no:'Select an offer'}</span></div>
       <div className={styles.marketplaceSetupOfferSelector}><label>Course offer<select value={selectedOfferId} onChange={event=>selectWorkflowOffer(event.target.value)}>
         <option value="">Select a current course offer</option>{catalog.offers.filter(o=>o.current_candidate||o.publicly_sellable).map(o=><option key={o.offer_id} value={String(o.offer_id)}>{o.institution_name} · {o.course_name} · v{o.content_version_no}</option>)}
