@@ -8,26 +8,26 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 19,
+    "assets_selected": 23,
     "assets_processed_this_run": 10,
     "assets_processed_ids": [
-      "41ed94a3c37796d1e26620b0",
-      "03aa71c56904ee9a1c7a17c5",
-      "269cc575cf8d6649daa1c927",
-      "7cc0a014339bab387bafef13",
-      "877b79087578a1a1c714006c",
-      "8026d084a6a42e4848c0b6fe",
-      "81089fd924f4f2e076ca6d19",
-      "c362da6df46d35e5b8bb754d",
-      "7dcd6c47e65632f9369d67d2",
-      "3bcbd64e847e347a6322fe2e"
+      "3f447fffefe03c9b58047cb6",
+      "a37c810c30cdb026fb6735ba",
+      "f0da89a5acd83634470fb7d8",
+      "65a27fd0d3aa22e01070613d",
+      "973b18c01060c26a11fb4411",
+      "d3c992f160569bb85bfb25eb",
+      "39a6d32b22a686320ae4bd74",
+      "6f3018768717389416d69bc4",
+      "50c36595a62a176b63cae910",
+      "acbcac2ac750593ccf06d0e1"
     ],
     "assets_eligible": 2177,
-    "assets_analyzed": 13,
-    "assets_remaining": 2164,
-    "assets_completion_percent": 0.6,
-    "assets_failed": 7,
-    "assets_skipped_from_checkpoint": 9,
+    "assets_analyzed": 22,
+    "assets_remaining": 2155,
+    "assets_completion_percent": 1.0,
+    "assets_failed": 8,
+    "assets_skipped_from_checkpoint": 13,
     "batch_limit": 10,
     "publication_allowed": false
   },
@@ -534,6 +534,277 @@
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "3f447fffefe03c9b58047cb6",
+      "asset_sha256": "3f943fc7dcb12098fdb7716fe9ca6b80b5f7f213f0e4a5a39cb5a19e3a01c07a",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/3f943fc7dcb12098fdb7716fe9ca6b80b5f7f213f0e4a5a39cb5a19e3a01c07a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bb6c9fe359150a3843b3c58cb87c96550c26a3f468c8ef0c4bdde14852bef094",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope with a blue loop, which is likely used as an illustration in a textbook or educational content.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond the rope itself."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:05:44Z"
+    },
+    {
+      "asset_id": "a37c810c30cdb026fb6735ba",
+      "asset_sha256": "0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/0fc8ee47dcb3d4105f2e579740dc24c955eb892d8fc482ad35c46ecd262d1ef4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bb6c9fe359150a3843b3c58cb87c96550c26a3f468c8ef0c4bdde14852bef094",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A coiled rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Educational content related to rope and its properties.",
+        "limitations": [
+          "The image does not provide specific details about the rope's properties or uses."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:05:55Z"
+    },
+    {
+      "asset_id": "f0da89a5acd83634470fb7d8",
+      "asset_sha256": "2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bb6c9fe359150a3843b3c58cb87c96550c26a3f468c8ef0c4bdde14852bef094",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Educational content related to rope patterns or geometry.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:06:05Z"
+    },
+    {
+      "asset_id": "65a27fd0d3aa22e01070613d",
+      "asset_sha256": "2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bb6c9fe359150a3843b3c58cb87c96550c26a3f468c8ef0c4bdde14852bef094",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Educational content related to rope patterns or geometry.",
+        "limitations": [
+          "No specific labels or formulas are present in the image.",
+          "The image does not provide any numerical data or measurements.",
+          "The image does not depict any specific educational content or question.",
+          "The image does not show any specific educational context or topic."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:06:11Z"
+    },
+    {
+      "asset_id": "973b18c01060c26a11fb4411",
+      "asset_sha256": "a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bb6c9fe359150a3843b3c58cb87c96550c26a3f468c8ef0c4bdde14852bef094",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook or educational material.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:06:26Z"
+    },
+    {
+      "asset_id": "d3c992f160569bb85bfb25eb",
+      "asset_sha256": "a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bb6c9fe359150a3843b3c58cb87c96550c26a3f468c8ef0c4bdde14852bef094",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook or educational material.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:06:33Z"
+    },
+    {
+      "asset_id": "39a6d32b22a686320ae4bd74",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bb6c9fe359150a3843b3c58cb87c96550c26a3f468c8ef0c4bdde14852bef094",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:06:46Z"
+    },
+    {
+      "asset_id": "6f3018768717389416d69bc4",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "bb6c9fe359150a3843b3c58cb87c96550c26a3f468c8ef0c4bdde14852bef094",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "No visible text or images on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:07:00Z"
+    },
+    {
+      "asset_id": "50c36595a62a176b63cae910",
+      "asset_sha256": "77aacd7f872404f40d23a440b52cdb2c26719369233a54a7ae17cacd48b2d0f6",
+      "page_text_context_sha256": "bb6c9fe359150a3843b3c58cb87c96550c26a3f468c8ef0c4bdde14852bef094",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 5,
+      "asset_path": "page-0005.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "acbcac2ac750593ccf06d0e1",
+      "asset_sha256": "465f18cabc64d36d5aadae02f780a2d23f575954c751eaae7b03aac406b29808",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/465f18cabc64d36d5aadae02f780a2d23f575954c751eaae7b03aac406b29808.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ab8d81d3b3d2fbe356ae8d98e311757e8a00691b20900a6a3ac0ae930bf8993a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rectangular frame with a white background.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a frame for educational content.",
+        "limitations": [
+          "The image does not contain any text or information.",
+          "The frame is empty and requires content to be added."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:09:43Z"
     }
   ]
 }
