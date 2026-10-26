@@ -1274,6 +1274,17 @@ public class CourseMarketplaceController {
       if(reconciledRetrySafe) providerState="RETRYABLE";
     }
 
+    if("PAID".equals(providerState)) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "A previous checkout for this course was reported paid. Automatic reconciliation did not complete; do not pay again. The saved order requires finance review.");
+    }
+    if(!providerConfirmsRetryIsSafe(providerState)) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "The previous checkout is not yet confirmed unpaid. Its saved order was checked for reconciliation, but the provider state remains ambiguous. Do not pay again; finance must review the saved order.");
+    }
+
     int changed=jdbc.update("""
         update course_payment_order
         set status='EXPIRED',failure_code='COURSE_OFFER_SUPERSEDED_UNPAID',updated_at=now()
