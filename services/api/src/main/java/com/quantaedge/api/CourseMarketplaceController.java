@@ -1433,6 +1433,1327 @@ public class CourseMarketplaceController {
     return verifyOrderInternal(localOrderId, request, null, context.userId(), requireTenant(tenant).institutionId());
   }
 
+  /**
+   * Return unresolved payment attempts only for the authenticated learner and active institution.
+   * Browser storage is a callback cache; this endpoint is the ownership source of truth.
+   */
+  @GetMapping("/orders/pending")
+  public List<Map<String,Object>> listPendingStudentOrders(
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    context=authorization.requireStudent(context);
+    return listPendingCourseOrders(requireTenant(tenant).institutionId(),context.studentId(),null);
+  }
+
+  /** A parent recovers only orders purchased by that parent, including purchases for linked children. */
+  @GetMapping("/family/orders/pending")
+  public List<Map<String,Object>> listPendingFamilyOrders(
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestAttribute(value=InstitutionTenantContextService.REQUEST_ATTRIBUTE,required=false)
+          InstitutionTenantContext tenant) {
+    context=authorization.requireParent(context);
+    return listPendingCourseOrders(requireTenant(tenant).institutionId(),null,context.userId());
+  }
+
+  private List<Map<String,Object>> listPendingCourseOrders(
+      long institutionId,Long studentId,Long purchaserUserId) {
+    return jdbc.queryForList("""
+      select o.id as local_order_id,o.student_id,o.purchaser_user_id,o.recipient_type,o.course_id,
+        coalesce(identity.public_id::text,identity.stable_course_key,p.public_id::text) as course_identity_key,
+        p.public_id as course_public_id,
+        coalesce(nullif(saved_offer.title_override,''),p.display_name) as course_title,
+        st.display_name as beneficiary_name,
+        o.status,o.offer_price_paise as amount_paise,o.currency,o.provider_order_id,o.institution_offer_id
+      from course_payment_order o
+      join curriculum_program p on p.id=o.course_id
+      left join institution_course_identity identity
+        on identity.id=coalesce(o.course_identity_id,p.course_identity_id)
+      left join institution_marketplace_offer saved_offer
+        on saved_offer.id=o.institution_offer_id and saved_offer.institution_id=o.institution_id
+          and saved_offer.course_id=o.course_id
+      left join student st on st.id=o.student_id
+      where o.institution_id=? and o.status in ('PENDING','EXPIRED')
+        and o.failure_code is distinct from 'PROVIDER_CONFIRMED_UNPAID'
+        and o.provider_order_id ~ '^order_[A-Za-z0-9]+
+  @PostMapping("/orders/{localOrderId}/reconcile")
+  public Map<String, Object> reconcileOrder(
+      @PathVariable long localOrderId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
+    context = authorization.requireStudent(context);
+    return reconcileOrderInternal(localOrderId, context.studentId(), null, requireTenant(tenant).institutionId());
+  }
+
+  /** Parent reconciliation stays bound to the authenticated purchaser and their institution. */
+  @PostMapping("/family/orders/{localOrderId}/reconcile")
+  public Map<String, Object> reconcileFamilyOrder(
+      @PathVariable long localOrderId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context,
+      @RequestAttribute(value = InstitutionTenantContextService.REQUEST_ATTRIBUTE, required = false)
+          InstitutionTenantContext tenant) {
+    context = authorization.requireParent(context);
+    return reconcileOrderInternal(localOrderId, null, context.userId(), requireTenant(tenant).institutionId());
+  }
+
+  private Map<String, Object> reconcileOrderInternal(
+      long localOrderId, Long callerStudentId, Long callerUserId, long institutionId) {
+    return reconcileOrderInternal(localOrderId, callerStudentId, callerUserId, institutionId, false, false);
+  }
+
+  private Map<String, Object> reconcileOrderInternal(
+      long localOrderId, Long callerStudentId, Long callerUserId, long institutionId,
+      boolean includeProviderDiagnostics) {
+    return reconcileOrderInternal(localOrderId, callerStudentId, callerUserId, institutionId,
+        includeProviderDiagnostics, false);
+  }
+
+  /**
+   * Platform-owner entry point used by HRMS Payments & Reconciliation. The purchaser/beneficiary
+   * IDs are loaded from the persisted order, never accepted from the caller.
+   */
+  public Map<String, Object> reconcileOrderForHrms(long localOrderId, AuthContext context) {
+    authorization.requirePermission(context, "QE_PLATFORM_OWNER");
+    List<Map<String,Object>> rows = jdbc.queryForList("""
+        select id,student_id,purchaser_user_id,institution_id,course_id,status
+        from course_payment_order where id=?
+        """, localOrderId);
+    if (rows.isEmpty()) throw new IllegalArgumentException("Course payment order not found.");
+    Map<String,Object> order = rows.getFirst();
+    String state = String.valueOf(order.get("status"));
+    long courseId = ((Number) order.get("course_id")).longValue();
+    if ("VERIFIED".equals(state)) {
+      return new LinkedHashMap<>(verifiedResult(localOrderId, courseId));
+    }
+    if (!List.of("PENDING", "EXPIRED").contains(state)) {
+      throw new IllegalArgumentException(
+          "This order is not eligible for provider reconciliation. Review its saved failure code and event history; do not mark it paid manually.");
+    }
+    if (order.get("institution_id") == null) {
+      throw new IllegalStateException(
+          "This legacy order has no institution scope. Do not reconcile or issue documents until finance resolves its ownership.");
+    }
+    Long callerStudentId = order.get("student_id") == null ? null : ((Number) order.get("student_id")).longValue();
+    Long callerUserId = order.get("purchaser_user_id") == null ? null : ((Number) order.get("purchaser_user_id")).longValue();
+    long institutionId = ((Number) order.get("institution_id")).longValue();
+    return reconcileOrderInternal(localOrderId, callerStudentId, callerUserId, institutionId, true, true);
+  }
+
+  /**
+   * Signed provider-webhook entry point. Resolve the local order solely from the already-saved
+   * Razorpay order ID; the webhook payload never supplies price, buyer, institution or entitlement.
+   * Existing server-side provider lookups and captured-payment checks remain authoritative.
+   */
+  public Map<String,Object> reconcileOrderFromProviderEvent(String providerOrderId) {
+    if(providerOrderId==null||!providerOrderId.matches("order_[A-Za-z0-9]+"))
+      return Map.of("status","UNMATCHED","message","The provider event has no valid saved Razorpay order reference.");
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+        select id,student_id,purchaser_user_id,institution_id,course_id,status
+        from course_payment_order where provider_order_id=?
+        """,providerOrderId);
+    if(rows.isEmpty())
+      return Map.of("status","UNMATCHED","message","No QuantaEdge course order references this Razorpay order. Finance must investigate.");
+    Map<String,Object> order=rows.getFirst();
+    long localOrderId=((Number)order.get("id")).longValue();
+    long courseId=((Number)order.get("course_id")).longValue();
+    String state=String.valueOf(order.get("status"));
+    if("VERIFIED".equals(state)) {
+      Map<String,Object> existing=new LinkedHashMap<>(verifiedResult(localOrderId,courseId));
+      existing.put("message","This exact provider order is already verified; no duplicate purchase or invoice was created.");
+      return existing;
+    }
+    if(!List.of("PENDING","EXPIRED").contains(state))
+      return Map.of("status","ACTION_BLOCKED","localOrderId",localOrderId,
+          "message","The local order is in "+state+" and cannot be automatically finalized. Keep the event for HRMS review.");
+    if(order.get("institution_id")==null)
+      return Map.of("status","RECONCILIATION_REQUIRED","localOrderId",localOrderId,
+          "message","The saved order lacks institution scope. Do not grant access or collect another payment.");
+
+    long institutionId=((Number)order.get("institution_id")).longValue();
+    Long studentId=order.get("student_id")==null?null:((Number)order.get("student_id")).longValue();
+    Long purchaserUserId=order.get("purchaser_user_id")==null?null:((Number)order.get("purchaser_user_id")).longValue();
+    // Catch here, inside this proxied method, so a provider timeout can be recorded as an
+    // actionable terminal inbox outcome instead of marking the outer webhook transaction rollback-only.
+    try {
+      return reconcileOrderInternal(localOrderId,studentId,purchaserUserId,institutionId,true,false);
+    } catch(RuntimeException providerOrFinalizationFailure) {
+      Map<String,Object> blocked=new LinkedHashMap<>();
+      blocked.put("status","RECONCILIATION_REQUIRED");
+      blocked.put("orderId",localOrderId);
+      blocked.put("canRetryCheckout",false);
+      blocked.put("message","The signed provider event was received, but authoritative payment verification/finalization did not complete. Reconcile this saved order in HRMS; do not collect another payment.");
+      blocked.put("errorCategory",providerOrFinalizationFailure.getClass().getSimpleName());
+      return blocked;
+    }
+  }
+
+  private Map<String, Object> reconcileOrderInternal(
+      long localOrderId, Long callerStudentId, Long callerUserId, long institutionId,
+      boolean includeProviderDiagnostics, boolean allowTestModeSnapshotRepair) {
+    requireConfigured();
+    List<Map<String,Object>> rows = jdbc.queryForList("""
+        select id,student_id,purchaser_user_id,target_student_id,recipient_type,course_id,
+          institution_id,institution_offer_id,course_identity_id,identity_contract_version,offer_price_paise,currency,provider_order_id,provider_payment_id,status,
+          listed_price_paise,discount_offer_id,discount_amount_paise,discount_reference,
+          discount_snapshot::text as discount_snapshot_json,
+          tax_profile_id,revenue_share_policy_id,taxable_value_paise,output_tax_paise,
+          tax_calculation_snapshot::text as tax_calculation_snapshot_json,
+          revenue_share_policy_snapshot::text as revenue_share_policy_snapshot_json,
+          buyer_snapshot::text as buyer_snapshot_json,
+          to_char(created_at at time zone 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"') as order_created_at_iso
+        from course_payment_order
+        where id=? and institution_id=?
+          and ((cast(? as bigint) is not null and student_id=? and purchaser_user_id is null)
+            or (cast(? as bigint) is not null and purchaser_user_id=?))
+        """, localOrderId, institutionId, callerStudentId, callerStudentId, callerUserId, callerUserId);
+    if (rows.isEmpty()) throw new SecurityException("This payment order is not available to this account.");
+    Map<String,Object> order = rows.getFirst();
+    String state = String.valueOf(order.get("status"));
+    long courseId = ((Number) order.get("course_id")).longValue();
+    if ("VERIFIED".equals(state)) return verifiedResult(localOrderId, courseId);
+    if (!List.of("PENDING", "EXPIRED").contains(state)) {
+      throw new IllegalArgumentException("This payment order is not available for reconciliation.");
+    }
+
+    String providerOrderId = String.valueOf(order.get("provider_order_id"));
+    if (!providerOrderId.matches("order_[A-Za-z0-9]+")) {
+      throw new IllegalStateException(
+          "The saved order has no verified Razorpay order reference. Do not pay again; contact support.");
+    }
+    long expectedAmount = ((Number) order.get("offer_price_paise")).longValue();
+    String expectedCurrency = String.valueOf(order.get("currency"));
+    JsonNode providerOrder = razorpayRequest("GET", "/orders/" + providerOrderId, null);
+    if (!providerOrderId.equals(providerOrder.path("id").asText(""))
+        || providerOrder.path("amount").asLong(-1) != expectedAmount
+        || !expectedCurrency.equalsIgnoreCase(providerOrder.path("currency").asText(""))) {
+      throw new IllegalStateException(
+          "Razorpay order details do not match the saved course order. Do not pay again; contact support.");
+    }
+
+    JsonNode paymentList = razorpayRequest("GET", "/orders/" + providerOrderId + "/payments", null);
+    JsonNode items = paymentList.path("items");
+    JsonNode captured = null;
+    JsonNode authorised = null;
+    boolean paymentInProgress = false;
+    if (items.isArray()) {
+      for (JsonNode candidate : items) {
+        String candidateId = candidate.path("id").asText("");
+        if (!candidateId.matches("pay_[A-Za-z0-9]+")
+            || !isPaymentForExactOrder(candidate, candidateId, providerOrderId, expectedAmount, expectedCurrency)) {
+          continue;
+        }
+        String paymentStatus = candidate.path("status").asText("").toLowerCase(Locale.ROOT);
+        if ("captured".equals(paymentStatus)) {
+          captured = candidate;
+          break;
+        }
+        if ("authorized".equals(paymentStatus)) authorised = candidate;
+        else if (Set.of("created", "processing").contains(paymentStatus)) paymentInProgress = true;
+      }
+    }
+
+    JsonNode selected = captured != null ? captured : authorised;
+    if (selected != null) {
+      boolean repairedFinancialSnapshots = false;
+      String financialSnapshotRepairBasis = "";
+      if (!hasLockedFinancialSnapshots(order) && allowTestModeSnapshotRepair) {
+        try {
+          financialSnapshotRepairBasis=repairFinancialSnapshotsDuringTestModeReconciliation(order,institutionId);
+          repairedFinancialSnapshots = true;
+        } catch(RuntimeException snapshotRepairFailure) {
+          // If the provider already captured this exact payment, financial snapshot repair must
+          // not block course access. verifyOrderInternal grants access and leaves finance pending.
+          // An authorization without a completed capture remains blocked by the verifier.
+          if(captured==null) throw snapshotRepairFailure;
+        }
+      }
+      String paymentId = selected.path("id").asText("");
+      // The provider API confirms the exact persisted order, amount and currency. Generate
+      // the same callback HMAC server-side only after those authenticated provider checks.
+      String signature = hmacSha256(providerOrderId + "|" + paymentId, keySecret);
+      Map<String,Object> verified = new LinkedHashMap<>(verifyOrderInternal(localOrderId,
+          new VerifyCoursePaymentRequest(paymentId, providerOrderId, signature),
+          callerStudentId, callerUserId, institutionId));
+      if (repairedFinancialSnapshots) {
+        verified.put("financialSnapshotsRepaired", true);
+        verified.put("financialSnapshotRepairMode", "TEST_MODE_HRMS_RECONCILIATION");
+        verified.put("financialSnapshotRepairBasis", financialSnapshotRepairBasis);
+        verified.put("financialSnapshotRepairMessage",
+            "Missing order snapshots were reconstructed only after the exact saved Razorpay order/payment was checked, no discount facts were present, and approved terms reproduced the existing payable amount.");
+      }
+      if (includeProviderDiagnostics) {
+        verified.putAll(providerPaymentDiagnostics(providerOrder, items, providerOrderId, expectedAmount, expectedCurrency));
+      }
+      return verified;
+    }
+
+    if ("paid".equalsIgnoreCase(providerOrder.path("status").asText(""))
+        || providerOrder.path("amount_paid").asLong(0) >= expectedAmount) {
+      String message="Razorpay reports this order as paid, but the exact matching payment is not available. Do not pay again; finance/engineering must reconcile the provider references.";
+      if (!includeProviderDiagnostics) throw new IllegalStateException(message);
+      Map<String,Object> result=new LinkedHashMap<>();
+      result.put("status","RECONCILIATION_REQUIRED");
+      result.put("entitled",false);
+      result.put("canRetryCheckout",false);
+      result.put("orderId",localOrderId);
+      result.put("courseId",courseId);
+      result.put("message",message);
+      result.putAll(providerPaymentDiagnostics(providerOrder,items,providerOrderId,expectedAmount,expectedCurrency));
+      return result;
+    }
+
+    Map<String,Object> result = new LinkedHashMap<>();
+    result.put("status", paymentInProgress ? "PAYMENT_PROCESSING" : "AWAITING_PAYMENT");
+    result.put("entitled", false);
+    result.put("canRetryCheckout", !paymentInProgress);
+    result.put("orderId", localOrderId);
+    result.put("courseId", courseId);
+    result.put("message", paymentInProgress
+        ? "Razorpay is still processing the payment. Retry verification shortly; do not pay again."
+        : "No authorised or captured payment was found for this order. It is safe to retry checkout; a new Razorpay order will be created.");
+    if (includeProviderDiagnostics) {
+      result.putAll(providerPaymentDiagnostics(providerOrder, items, providerOrderId, expectedAmount, expectedCurrency));
+    }
+    return result;
+  }
+
+  /**
+   * Recover only test-mode legacy orders during an explicit HRMS reconciliation. This path never
+   * fabricates a snapshot from today's policy: it requires approved tax/share terms effective when
+   * the saved order was created, no coupon facts, complete persisted buyer details, and an exact
+   * match to the existing offer amount. Live-mode orders remain blocked for manual finance review.
+   */
+  private String repairFinancialSnapshotsDuringTestModeReconciliation(
+      Map<String,Object> order,long institutionId) {
+    if(!isRazorpayTestModeKey(keyId)) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "This order is missing locked financial snapshots. Automatic reconstruction is limited to Razorpay test mode; preserve this order and route live-mode orders to explicit finance review.");
+    }
+    if(!hasNoDiscountFacts(order)) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "This order has coupon/discount facts that cannot be reconstructed automatically. The saved order is unchanged; finance must resolve its original discount snapshot.");
+    }
+    Object orderIdRaw=order.get("id");
+    Object offerIdRaw=order.get("institution_offer_id");
+    if(!(orderIdRaw instanceof Number orderIdNumber)||!(offerIdRaw instanceof Number offerIdNumber)) {
+      throw new IllegalStateException("The saved order is missing its local order or institution offer reference.");
+    }
+    long orderId=orderIdNumber.longValue();
+    long offerId=offerIdNumber.longValue();
+    List<Map<String,Object>> offers=jdbc.queryForList("""
+        select o.id,o.course_id,o.institution_id,o.price_paise,o.currency,
+          coalesce(nullif(o.title_override,''),p.display_name) as course_title
+        from institution_marketplace_offer o
+        join curriculum_program p on p.id=o.course_id
+        where o.id=? and o.institution_id=? and o.course_id=?
+        """,offerId,institutionId,((Number)order.get("course_id")).longValue());
+    if(offers.size()!=1) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "The original institution Marketplace offer is no longer uniquely available. Snapshots were not reconstructed; review the offer history.");
+    }
+    Map<String,Object> offer=offers.getFirst();
+    long offerPricePaise=((Number)offer.get("price_paise")).longValue();
+    long savedPayable=((Number)order.get("offer_price_paise")).longValue();
+    String savedCurrency=String.valueOf(order.get("currency"));
+    String offerCurrency=String.valueOf(offer.get("currency"));
+    if(!"INR".equalsIgnoreCase(savedCurrency)||!savedCurrency.equalsIgnoreCase(offerCurrency)) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "The saved order and current offer currency do not match. Snapshots were not reconstructed.");
+    }
+    Object priorListedRaw=order.get("listed_price_paise");
+    if(priorListedRaw instanceof Number priorListed && priorListed.longValue()!=offerPricePaise) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "The offer price differs from the original listed price saved on this order. Snapshots were not reconstructed.");
+    }
+    // Tax may be added on top of the listed price. The authoritative comparison is the
+    // reconstructed customer payable below, not listed price versus payable.
+    if(!(order.get("order_created_at_iso") instanceof String createdAtRaw)||createdAtRaw.isBlank()) {
+      throw new IllegalStateException("The saved order creation time is unavailable; historical financial terms cannot be resolved.");
+    }
+    java.time.OffsetDateTime createdAt;
+    try { createdAt=java.time.OffsetDateTime.parse(createdAtRaw); }
+    catch(Exception exception) {
+      throw new IllegalStateException("The saved order creation time is invalid; historical financial terms cannot be resolved.",exception);
+    }
+    Object buyerRaw=order.get("buyer_snapshot_json");
+    Map<String,Object> buyerSnapshot;
+    boolean reconstructedBuyerSnapshot=false;
+    if(buyerRaw==null||String.valueOf(buyerRaw).isBlank()
+        ||"{}".equals(String.valueOf(buyerRaw).trim())
+        ||"null".equalsIgnoreCase(String.valueOf(buyerRaw).trim())) {
+      if(!mayReconstructMissingBuyerSnapshotForTestMode(order,isRazorpayTestModeKey(keyId))) {
+        throw new org.springframework.web.server.ResponseStatusException(
+            org.springframework.http.HttpStatus.CONFLICT,
+            "The original buyer/billing snapshot is missing. Automatic reconstruction is restricted to test-mode orders with no discount facts; finance must review this order.");
+      }
+      if(!(order.get("student_id") instanceof Number beneficiaryId)) {
+        throw new org.springframework.web.server.ResponseStatusException(
+            org.springframework.http.HttpStatus.CONFLICT,
+            "The saved order has no beneficiary identity for a test-mode billing snapshot recovery.");
+      }
+      Long buyerAccountId=order.get("purchaser_user_id") instanceof Number purchaser
+          ? purchaser.longValue() : null;
+      if(buyerAccountId==null&&"CHILD".equalsIgnoreCase(String.valueOf(order.get("recipient_type")))) {
+        throw new org.springframework.web.server.ResponseStatusException(
+            org.springframework.http.HttpStatus.CONFLICT,
+            "The parent purchaser identity is missing from this child checkout. Finance must resolve ownership before recovery.");
+      }
+      if(buyerAccountId==null) {
+        List<Map<String,Object>> linkedAccounts=jdbc.queryForList("""
+            select user_account_id from student where id=? and active=true
+            """,beneficiaryId.longValue());
+        if(linkedAccounts.size()!=1
+            ||!(linkedAccounts.getFirst().get("user_account_id") instanceof Number linkedUser)) {
+          throw new org.springframework.web.server.ResponseStatusException(
+              org.springframework.http.HttpStatus.CONFLICT,
+              "The original student checkout cannot be linked to one active purchaser account. Finance must review this order.");
+        }
+        buyerAccountId=linkedUser.longValue();
+      }
+      try {
+        buyerSnapshot=billingProfileSnapshot(buyerAccountId,beneficiaryId.longValue(),null);
+        requireCompleteLegacyRecoveryBillingAddress(buyerSnapshot);
+      } catch(RuntimeException billingProfileFailure) {
+        throw new org.springframework.web.server.ResponseStatusException(
+            org.springframework.http.HttpStatus.CONFLICT,
+            "The legacy test order has no complete active billing profile to reconstruct its buyer snapshot. Complete the purchaser billing profile before HRMS retries reconciliation.",
+            billingProfileFailure);
+      }
+      buyerSnapshot.put("snapshotRecovery",Map.of(
+          "mode","TEST_MODE_HRMS_RECONCILIATION",
+          "source","CURRENT_ACTIVE_BILLING_PROFILE",
+          "reconstructedAt",java.time.OffsetDateTime.now(java.time.ZoneOffset.UTC).toString(),
+          "historicalBuyerSnapshotAvailable",false));
+      reconstructedBuyerSnapshot=true;
+    } else {
+      try {
+        buyerSnapshot=objectMapper.readValue(String.valueOf(buyerRaw),
+            new com.fasterxml.jackson.core.type.TypeReference<Map<String,Object>>(){});
+      } catch(Exception exception) {
+        throw new org.springframework.web.server.ResponseStatusException(
+            org.springframework.http.HttpStatus.CONFLICT,
+            "The original buyer/billing snapshot cannot be read safely. Finance must review this order.",exception);
+      }
+    }
+    Object addressRaw=buyerSnapshot.get("billingAddress");
+    if(!(addressRaw instanceof Map<?,?> address)) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "The original buyer snapshot does not contain a complete billing address. Finance must review this order.");
+    }
+    for(String required:List.of("line1","city","state","postalCode")) {
+      Object value=address.get(required);
+      if(value==null||String.valueOf(value).isBlank()) {
+        throw new org.springframework.web.server.ResponseStatusException(
+            org.springframework.http.HttpStatus.CONFLICT,
+            "The original buyer snapshot has an incomplete billing address. Finance must review this order.");
+      }
+    }
+
+    CourseOrderFinancialService.CheckoutSnapshot snapshot;
+    String repairBasis;
+    try {
+      snapshot=courseOrderFinancialService.prepareCheckout(offerId,institutionId,offerPricePaise,offerCurrency,
+          String.valueOf(offer.get("course_title")),buyerSnapshot,null,createdAt);
+      repairBasis="APPROVED_TERMS_EFFECTIVE_AT_ORDER_CREATION";
+    } catch(IllegalStateException historicalConfigUnavailable) {
+      String reason=historicalConfigUnavailable.getMessage()==null?"":historicalConfigUnavailable.getMessage();
+      boolean noHistoricalTax=reason.contains("approve an effective tax profile");
+      boolean noHistoricalShares=reason.contains("approve an effective revenue-share policy");
+      boolean noHistoricalTemplate=reason.contains("publish an invoice template");
+      if(!(noHistoricalTax||noHistoricalShares||noHistoricalTemplate)) throw historicalConfigUnavailable;
+      // In test mode it is acceptable to restore a synthetic sale under today's approved setup,
+      // provided the saved amount matches exactly. The explicit snapshot marker prevents this from
+      // being mistaken for the original historical policy basis. Live mode never takes this path.
+      snapshot=courseOrderFinancialService.prepareCheckout(offerId,institutionId,offerPricePaise,offerCurrency,
+          String.valueOf(offer.get("course_title")),buyerSnapshot,null);
+      repairBasis="CURRENT_APPROVED_TERMS_FOR_TEST_MODE_RECOVERY";
+    }
+    if(snapshot.payablePaise()!=savedPayable||snapshot.discountPaise()!=0
+        ||snapshot.listedPricePaise()!=offerPricePaise) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "Approved tax/share terms effective at the original order time do not reproduce the saved payable exactly. Snapshots were not reconstructed.");
+    }
+    if(order.get("tax_profile_id") instanceof Number oldTaxId
+        && oldTaxId.longValue()!=snapshot.taxProfileId()) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "The existing tax-profile reference conflicts with the approved profile effective at order creation. Snapshots were not reconstructed.");
+    }
+    if(order.get("revenue_share_policy_id") instanceof Number oldPolicyId
+        && oldPolicyId.longValue()!=snapshot.revenueSharePolicyId()) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "The existing revenue-share reference conflicts with the approved policy effective at order creation. Snapshots were not reconstructed.");
+    }
+    if(order.get("taxable_value_paise") instanceof Number oldTaxable
+        && oldTaxable.longValue()!=snapshot.taxableValuePaise()) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "The saved taxable amount conflicts with the reconstructed approved tax calculation. Snapshots were not reconstructed.");
+    }
+    if(order.get("output_tax_paise") instanceof Number oldTax
+        && oldTax.longValue()!=snapshot.outputTaxPaise()) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "The saved tax amount conflicts with the reconstructed approved tax calculation. Snapshots were not reconstructed.");
+    }
+
+    Map<String,Object> taxSnapshot=new LinkedHashMap<>(snapshot.taxCalculationSnapshot());
+    Map<String,Object> shareSnapshot=new LinkedHashMap<>(snapshot.revenueSharePolicySnapshot());
+    Map<String,Object> recovery=new LinkedHashMap<>();
+    recovery.put("mode","TEST_MODE_HRMS_RECONCILIATION");
+    recovery.put("originalOrderCreatedAt",createdAt.toString());
+    recovery.put("reconstructedAt",java.time.OffsetDateTime.now(java.time.ZoneOffset.UTC).toString());
+    recovery.put("basis",repairBasis);
+    recovery.put("buyerSnapshotSource",reconstructedBuyerSnapshot
+        ? "CURRENT_ACTIVE_BILLING_PROFILE_TEST_MODE_RECOVERY" : "ORIGINAL_ORDER_SNAPSHOT");
+    recovery.put("validation","Exact saved provider order amount/currency; no discount facts; "
+        +(reconstructedBuyerSnapshot
+            ? "current active purchaser billing profile was used only for TEST-mode recovery."
+            : "original buyer snapshot preserved."));
+    recovery.put("testModeOnly",true);
+    taxSnapshot.put("snapshotRecovery",recovery);
+    shareSnapshot.put("snapshotRecovery",recovery);
+    String taxJson;
+    String shareJson;
+    String discountJson;
+    String buyerJson;
+    try {
+      taxJson=objectMapper.writeValueAsString(taxSnapshot);
+      shareJson=objectMapper.writeValueAsString(shareSnapshot);
+      discountJson=objectMapper.writeValueAsString(snapshot.discountSnapshot());
+      buyerJson=objectMapper.writeValueAsString(buyerSnapshot);
+    } catch(JsonProcessingException exception) {
+      throw new IllegalStateException("The validated financial recovery snapshots could not be serialized.",exception);
+    }
+    int updated=jdbc.update("""
+        update course_payment_order set
+          listed_price_paise=?,discount_offer_id=null,discount_amount_paise=0,discount_reference=null,
+          discount_snapshot=?::jsonb,tax_profile_id=?,taxable_value_paise=?,output_tax_paise=?,
+          tax_calculation_snapshot=?::jsonb,revenue_share_policy_id=?,revenue_share_policy_snapshot=?::jsonb,
+          buyer_snapshot=?::jsonb,updated_at=now()
+        where id=? and institution_id=? and status in ('PENDING','EXPIRED')
+          and provider_order_id=? and offer_price_paise=? and upper(currency)=upper(?)
+          and discount_offer_id is null and coalesce(discount_amount_paise,0)=0
+          and nullif(btrim(discount_reference),'') is null
+          and (buyer_snapshot is null or buyer_snapshot='{}'::jsonb or buyer_snapshot=?::jsonb)
+          and (tax_profile_id is null or revenue_share_policy_id is null or not (
+            tax_calculation_snapshot ? 'customerPayablePaise'
+            and tax_calculation_snapshot ? 'taxProfileId'
+            and revenue_share_policy_snapshot ? 'policyId'
+            and jsonb_typeof(revenue_share_policy_snapshot->'recipients')='array'))
+        """,snapshot.listedPricePaise(),discountJson,snapshot.taxProfileId(),
+        snapshot.taxableValuePaise(),snapshot.outputTaxPaise(),taxJson,
+        snapshot.revenueSharePolicyId(),shareJson,buyerJson,orderId,institutionId,
+        String.valueOf(order.get("provider_order_id")),savedPayable,savedCurrency,buyerJson);
+    if(updated!=1) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "The saved order changed while its test-mode recovery was being saved. No new order was created; reload and reconcile the existing order.");
+    }
+    return repairBasis;
+  }
+
+  static boolean isRazorpayTestModeKey(String keyId) {
+    return keyId!=null && keyId.trim().matches("^rzp_test_[A-Za-z0-9]+$");
+  }
+
+  /**
+   * The current billing address may stand in for missing historical buyer facts only for a
+   * test-mode legacy order with no discount facts. Live orders and discounted sales are never
+   * reconstructed from mutable current profile data.
+   */
+  static boolean mayReconstructMissingBuyerSnapshotForTestMode(
+      Map<String,Object> order,boolean testMode) {
+    if(!testMode||order==null||!hasNoDiscountFacts(order)) return false;
+    Object raw=order.get("buyer_snapshot_json");
+    return raw==null||String.valueOf(raw).isBlank()
+        ||"{}".equals(String.valueOf(raw).trim())
+        ||"null".equalsIgnoreCase(String.valueOf(raw).trim());
+  }
+
+  private Map<String,Object> providerPaymentDiagnostics(
+      JsonNode providerOrder, JsonNode paymentItems, String expectedOrderId,
+      long expectedAmountPaise, String expectedCurrency) {
+    Map<String,Object> diagnostic = new LinkedHashMap<>();
+    diagnostic.put("providerOrderId", expectedOrderId);
+    diagnostic.put("providerOrderStatus", providerOrder.path("status").asText("unknown"));
+    diagnostic.put("providerAmountPaidPaise", providerOrder.path("amount_paid").asLong(0));
+    diagnostic.put("providerAttemptCount", providerOrder.path("attempts").asInt(0));
+    List<Map<String,Object>> attempts = new ArrayList<>();
+    if (paymentItems != null && paymentItems.isArray()) {
+      for (JsonNode payment : paymentItems) {
+        String paymentOrderId = payment.path("order_id").asText("");
+        String paymentId = payment.path("id").asText("");
+        if (!expectedOrderId.equals(paymentOrderId) || !paymentId.matches("pay_[A-Za-z0-9]+")) continue;
+        Map<String,Object> attempt = new LinkedHashMap<>();
+        attempt.put("paymentId", paymentId);
+        attempt.put("status", payment.path("status").asText("unknown"));
+        attempt.put("amountPaise", payment.path("amount").asLong(-1));
+        attempt.put("currency", payment.path("currency").asText(""));
+        attempt.put("matchesExpectedAmountAndCurrency",
+            isPaymentForExactOrder(payment, paymentId, expectedOrderId, expectedAmountPaise, expectedCurrency));
+        String method = safeProviderDiagnosticText(payment.path("method").asText(""), 32);
+        String errorCode = safeProviderDiagnosticText(payment.path("error_code").asText(""), 80);
+        String errorReason = safeProviderDiagnosticText(payment.path("error_reason").asText(""), 120);
+        String errorDescription = safeProviderDiagnosticText(payment.path("error_description").asText(""), 240);
+        if (!method.isBlank()) attempt.put("method", method);
+        if (!errorCode.isBlank()) attempt.put("errorCode", errorCode);
+        if (!errorReason.isBlank()) attempt.put("errorReason", errorReason);
+        if (!errorDescription.isBlank()) attempt.put("errorDescription", errorDescription);
+        attempts.add(attempt);
+      }
+    }
+    diagnostic.put("paymentAttempts", attempts);
+    return diagnostic;
+  }
+
+  private static String safeProviderDiagnosticText(String raw, int maxLength) {
+    if (raw == null || raw.isBlank()) return "";
+    String safe = raw.replaceAll("[\\p{Cntrl}&&[^\\t]]", " ").replaceAll("\\s+", " ").trim();
+    return safe.length() <= maxLength ? safe : safe.substring(0, maxLength);
+  }
+
+  /**
+   * A legacy PENDING row may be repaired only when its existing Razorpay order is conclusively
+   * unpaid and current approved terms reproduce the exact amount already saved with that order.
+   * Reusing that same provider order avoids creating two independently payable Razorpay orders.
+   */
+  private void repairLegacyPendingOrderSnapshots(
+      Map<String,Object> localOrder,long institutionId,long institutionOfferId,
+      long listedPricePaise,String currency,String title,Map<String,Object> buyerSnapshot,
+      String requestedDiscountCode) {
+    String storedDiscountCode=localOrder.get("discount_reference")==null
+        ?null:String.valueOf(localOrder.get("discount_reference"));
+    if (!discountCodeMatchesForRetry(storedDiscountCode,requestedDiscountCode)
+        || !hasNoDiscountFacts(localOrder)) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "This older checkout has incomplete financial snapshots and coupon details that cannot be safely reconstructed automatically. The saved order was left unchanged; do not pay again. HRMS must reconcile this order.");
+    }
+    Object storedOfferId=localOrder.get("institution_offer_id");
+    if(!(storedOfferId instanceof Number savedOfferId)||savedOfferId.longValue()!=institutionOfferId) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "This existing checkout belongs to a different course-offer version. The order was left unchanged; do not pay again. HRMS must reconcile the saved offer and its financial terms.");
+    }
+    String providerState;
+    try {
+      providerState=inspectProviderOrderForNewAttempt(localOrder);
+    } catch(RuntimeException providerCheckFailure) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "This existing checkout is missing its locked financial snapshots and Razorpay status could not be confirmed. The saved order was left unchanged; do not pay again until it is reconciled.");
+    }
+    if("PAID".equals(providerState)) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "Razorpay reports that this existing checkout is paid, but its locked financial snapshots are missing. Do not pay again; finance/engineering must reconcile this exact order.");
+    }
+    if(!providerConfirmsRetryIsSafe(providerState)) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "This existing checkout is missing its locked financial snapshots and Razorpay has not confirmed it is safe to continue. The saved order was left unchanged; do not pay again. Retry after provider status settles or ask HRMS to reconcile this order.");
+    }
+
+    Map<String,Object> repairBuyerSnapshot = preserveLegacyBuyerSnapshot(localOrder,buyerSnapshot);
+    CourseOrderFinancialService.CheckoutSnapshot snapshot =
+        courseOrderFinancialService.prepareCheckout(
+            institutionOfferId,institutionId,listedPricePaise,currency,title,repairBuyerSnapshot,null);
+    long savedPayable=((Number)localOrder.get("offer_price_paise")).longValue();
+    String savedCurrency=String.valueOf(localOrder.get("currency"));
+    Object savedListedPrice=localOrder.get("listed_price_paise");
+    if(snapshot.payablePaise()!=savedPayable
+        || !currency.equalsIgnoreCase(savedCurrency)
+        || (savedListedPrice instanceof Number number && number.longValue()!=listedPricePaise)) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "Current approved pricing/tax terms do not exactly match this older Razorpay order. The order was left unchanged; do not pay again. HRMS/finance must reconcile it before checkout can continue.");
+    }
+
+    Object rawId=localOrder.get("id");
+    if(!(rawId instanceof Number orderId)) {
+      throw new IllegalStateException("The legacy course order has no valid local ID; its payment order was not changed.");
+    }
+    String buyerSnapshotJson;
+    String taxSnapshotJson;
+    String shareSnapshotJson;
+    String discountSnapshotJson;
+    try {
+      buyerSnapshotJson=objectMapper.writeValueAsString(repairBuyerSnapshot);
+      taxSnapshotJson=objectMapper.writeValueAsString(snapshot.taxCalculationSnapshot());
+      shareSnapshotJson=objectMapper.writeValueAsString(snapshot.revenueSharePolicySnapshot());
+      discountSnapshotJson=objectMapper.writeValueAsString(snapshot.discountSnapshot());
+    } catch(JsonProcessingException exception) {
+      throw new IllegalStateException("Approved financial snapshots could not be serialized; the saved order was not changed.",exception);
+    }
+    int updated=jdbc.update("""
+        update course_payment_order set
+          listed_price_paise=?,discount_offer_id=null,discount_amount_paise=0,discount_reference=null,
+          discount_snapshot=?::jsonb,tax_profile_id=?,taxable_value_paise=?,output_tax_paise=?,
+          tax_calculation_snapshot=?::jsonb,revenue_share_policy_id=?,
+          revenue_share_policy_snapshot=?::jsonb,buyer_snapshot=?::jsonb,updated_at=now()
+        where id=? and institution_id=? and status='PENDING' and provider_order_id=?
+          and offer_price_paise=? and upper(currency)=upper(?)
+          and discount_offer_id is null and coalesce(discount_amount_paise,0)=0
+          and nullif(btrim(discount_reference),'') is null
+          and (tax_profile_id is null or revenue_share_policy_id is null or not (
+            tax_calculation_snapshot ? 'customerPayablePaise'
+            and tax_calculation_snapshot ? 'taxProfileId'
+            and revenue_share_policy_snapshot ? 'policyId'
+            and revenue_share_policy_snapshot ? 'recipients'))
+        """,
+        snapshot.listedPricePaise(),discountSnapshotJson,snapshot.taxProfileId(),
+        snapshot.taxableValuePaise(),snapshot.outputTaxPaise(),taxSnapshotJson,
+        snapshot.revenueSharePolicyId(),shareSnapshotJson,buyerSnapshotJson,
+        orderId.longValue(),institutionId,String.valueOf(localOrder.get("provider_order_id")),
+        savedPayable,savedCurrency);
+    if(updated!=1) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          org.springframework.http.HttpStatus.CONFLICT,
+          "This checkout changed while its financial snapshots were being repaired. The order was not replaced; reload and reconcile its current status before paying.");
+    }
+  }
+
+    static boolean hasNoDiscountFacts(Map<String,Object> order) {
+    if(order==null) return false;
+    Object rawCode=order.get("discount_reference");
+    if(rawCode!=null&&!String.valueOf(rawCode).isBlank()) return false;
+    Object rawOffer=order.get("discount_offer_id");
+    if(rawOffer!=null) return false;
+    Object rawAmount=order.get("discount_amount_paise");
+    if(rawAmount instanceof Number n&&n.longValue()!=0L) return false;
+    String snapshot=order.get("discount_snapshot_json")==null?"":String.valueOf(order.get("discount_snapshot_json")).trim();
+    if(snapshot.isBlank()||"{}".equals(snapshot)) return true;
+    // PostgreSQL jsonb::text may include whitespace around separators.
+    String compactSnapshot=snapshot.replaceAll("\\s+", "");
+    return compactSnapshot.contains("\"discountType\":\"NONE\"")
+        && compactSnapshot.contains("\"discountPaise\":0")
+        && !compactSnapshot.contains("\"discountOfferId\"")
+        && !compactSnapshot.contains("\"code\"");
+  }
+
+  static boolean providerConfirmsRetryIsSafe(String providerState) {
+    return "RETRYABLE".equals(providerState);
+  }
+
+  static boolean reconciliationConfirmsExistingOrderVerified(Map<String,Object> reconciliation) {
+    return reconciliation != null
+        && "VERIFIED".equalsIgnoreCase(String.valueOf(reconciliation.getOrDefault("status","")))
+        && Boolean.TRUE.equals(reconciliation.get("entitled"));
+  }
+
+  static boolean reconciliationConfirmsCheckoutRetryIsSafe(Map<String,Object> reconciliation) {
+    return reconciliation != null
+        && "AWAITING_PAYMENT".equalsIgnoreCase(String.valueOf(reconciliation.getOrDefault("status","")))
+        && Boolean.FALSE.equals(reconciliation.get("entitled"))
+        && Boolean.TRUE.equals(reconciliation.get("canRetryCheckout"));
+  }
+
+  private String inspectProviderOrderForNewAttempt(Map<String,Object> localOrder) {
+    String providerOrderId = String.valueOf(localOrder.get("provider_order_id"));
+    if (!providerOrderId.matches("order_[A-Za-z0-9]+")) return "IN_FLIGHT";
+    JsonNode providerOrder = razorpayRequest("GET", "/orders/" + providerOrderId, null);
+    long expectedAmount = ((Number) localOrder.get("offer_price_paise")).longValue();
+    String currency = String.valueOf(localOrder.get("currency"));
+    if (!providerOrderId.equals(providerOrder.path("id").asText(""))
+        || providerOrder.path("amount").asLong(-1) != expectedAmount
+        || !currency.equalsIgnoreCase(providerOrder.path("currency").asText(""))) {
+      return "IN_FLIGHT";
+    }
+    if ("paid".equalsIgnoreCase(providerOrder.path("status").asText(""))
+        || providerOrder.path("amount_paid").asLong(0) >= expectedAmount) return "PAID";
+
+    JsonNode response = razorpayRequest("GET", "/orders/" + providerOrderId + "/payments", null);
+    JsonNode items = response.path("items");
+    if (!items.isArray()) return "IN_FLIGHT";
+    boolean matchingPayment = false;
+    for (JsonNode payment : items) {
+      String paymentId = payment.path("id").asText("");
+      if (!paymentId.matches("pay_[A-Za-z0-9]+")
+          || !isPaymentForExactOrder(payment, paymentId, providerOrderId, expectedAmount, currency)) continue;
+      matchingPayment = true;
+      String status = payment.path("status").asText("").toLowerCase(Locale.ROOT);
+      if (!Set.of("failed", "refunded", "cancelled", "voided").contains(status)) {
+        return "IN_FLIGHT";
+      }
+    }
+    if (!matchingPayment && providerOrder.path("attempts").asInt(0) > 0) return "IN_FLIGHT";
+    String providerStatus = providerOrder.path("status").asText("").toLowerCase(Locale.ROOT);
+    if (!Set.of("created", "attempted").contains(providerStatus)) return "IN_FLIGHT";
+    return "RETRYABLE";
+  }
+
+  private Map<String,Object> verifyOrderInternal(
+      long localOrderId, VerifyCoursePaymentRequest request, Long callerStudentId, Long callerUserId, long institutionId) {
+    requireConfigured();
+    String paymentId = request == null || request.paymentId() == null ? "" : request.paymentId().trim();
+    String orderId = request == null || request.orderId() == null ? "" : request.orderId().trim();
+    String signature = request == null || request.signature() == null ? "" : request.signature().trim();
+    if (!paymentId.matches("pay_[A-Za-z0-9]+") || signature.isBlank()) {
+      throw new IllegalArgumentException("The payment confirmation is incomplete. Please retry checkout verification.");
+    }
+    List<Map<String, Object>> rows = jdbc.queryForList("""
+        select id,student_id,purchaser_user_id,target_student_id,recipient_type,course_id,
+          institution_id,institution_offer_id,course_identity_id,identity_contract_version,offer_price_paise,currency,provider_order_id,provider_payment_id,status,
+          tax_profile_id,revenue_share_policy_id,buyer_snapshot::text as buyer_snapshot_json,
+          tax_calculation_snapshot::text as tax_calculation_snapshot_json,
+          revenue_share_policy_snapshot::text as revenue_share_policy_snapshot_json
+        from course_payment_order
+        where id=? and institution_id=?
+          and ((cast(? as bigint) is not null and student_id=? and purchaser_user_id is null)
+            or (cast(? as bigint) is not null and purchaser_user_id=?))
+        """, localOrderId, institutionId, callerStudentId, callerStudentId, callerUserId, callerUserId);
+    if (rows.isEmpty()) throw new SecurityException("This payment order is not available to this account.");
+    Map<String, Object> order = rows.getFirst();
+    String state = String.valueOf(order.get("status"));
+    String savedPaymentId = (String) order.get("provider_payment_id");
+    long courseId = ((Number) order.get("course_id")).longValue();
+    if ("VERIFIED".equals(state)) {
+      if (paymentId.equals(savedPaymentId)) return verifiedResult(localOrderId, courseId);
+      throw new IllegalArgumentException("This order has already been verified against a different payment.");
+    }
+    if (!List.of("PENDING", "EXPIRED").contains(state)) {
+      throw new IllegalArgumentException("This payment order is no longer payable.");
+    }
+    // Payment verification belongs to the exact historical offer on the saved order.
+    // A later offer revision may archive this offer or withdraw its release while a valid
+    // Razorpay payment is still settling. Current publication/fingerprint gates protect NEW
+    // checkouts; they must not invalidate an already-created transaction's immutable terms.
+    Object savedIdentityId = order.get("course_identity_id");
+    Boolean originalOfferMatchesOrder = jdbc.queryForObject("""
+        select exists(
+          select 1
+          from institution_marketplace_offer offer
+          join institution_course_assignment assignment
+            on assignment.id=offer.assignment_id
+           and assignment.institution_id=offer.institution_id
+          join institution_course_release release
+            on release.id=offer.course_release_id
+           and release.program_id=offer.course_id
+          join institution_tenant tenant_scope
+            on tenant_scope.id=offer.institution_id and tenant_scope.status='ACTIVE'
+          join curriculum_program program on program.id=offer.course_id
+          left join institution_course_identity identity on identity.id=program.course_identity_id
+          where offer.id=? and offer.institution_id=? and offer.course_id=?
+            and offer.hrms_published_by_staff_id is not null
+            and (cast(? as bigint) is null or program.course_identity_id=cast(? as bigint))
+            and (program.course_identity_id is null or (
+              identity.source_institution_id=release.source_institution_id
+              and identity.course_type_code=program.course_type_code
+            ))
+        )
+        """, Boolean.class,
+        ((Number) order.get("institution_offer_id")).longValue(), institutionId,
+        ((Number) order.get("course_id")).longValue(), savedIdentityId, savedIdentityId);
+    if (!Boolean.TRUE.equals(originalOfferMatchesOrder)) {
+      throw new IllegalArgumentException("The saved checkout is not linked to its original institutional offer. No new payment was taken; finance must reconcile the saved order.");
+    }
+    String expectedOrderId = String.valueOf(order.get("provider_order_id"));
+    if (!expectedOrderId.equals(orderId)) {
+      throw new IllegalArgumentException("The payment order does not match. Please reopen the course checkout.");
+    }
+    String expectedSignature = hmacSha256(orderId + "|" + paymentId, keySecret);
+    if (!constantTimeEquals(expectedSignature, signature)) {
+      throw new IllegalArgumentException("Payment verification failed. No course access was granted.");
+    }
+
+    JsonNode payment = razorpayRequest("GET", "/payments/" + paymentId, null);
+    long expectedAmount = ((Number) order.get("offer_price_paise")).longValue();
+    String expectedCurrency = String.valueOf(order.get("currency"));
+    if (!isPaymentForExactOrder(payment, paymentId, orderId, expectedAmount, expectedCurrency)) {
+      throw new IllegalArgumentException("The payment ID, order, amount or currency does not match this course order. Course access remains locked.");
+    }
+
+    // Validate beneficiary and entitlement prerequisites before any external capture.
+    // A local transaction rollback cannot undo a successful Razorpay capture.
+    long targetStudentId = ((Number) order.get("student_id")).longValue();
+    Long purchaserUserId = order.get("purchaser_user_id") == null
+        ? null : ((Number) order.get("purchaser_user_id")).longValue();
+    String recipientType = String.valueOf(order.get("recipient_type"));
+    if ("CHILD".equals(recipientType)) {
+      if (purchaserUserId == null) throw new SecurityException("The parent purchase identity is missing.");
+      requireFullGuardianChildAccess(purchaserUserId,targetStudentId,institutionId);
+    }
+    requireStudentMembership(targetStudentId,institutionId);
+
+    boolean financeSnapshotsReady=hasLockedFinancialSnapshots(order)
+        && order.get("buyer_snapshot_json")!=null
+        && !"{}".equals(String.valueOf(order.get("buyer_snapshot_json")).trim())
+        && !"null".equalsIgnoreCase(String.valueOf(order.get("buyer_snapshot_json")).trim());
+    // Never capture an authorization without the locked financial contract. If Razorpay has
+    // already captured the exact payment, access is granted first and finance can reconcile later.
+    if ("authorized".equalsIgnoreCase(payment.path("status").asText("")) && !financeSnapshotsReady) {
+      throw new org.springframework.web.server.ResponseStatusException(
+          HttpStatus.CONFLICT,
+          "Razorpay has authorised this payment, but the saved financial contract is incomplete. It has not been captured by this retry; do not pay again. Reconcile this same order.");
+    }
+    // Razorpay can return a successful checkout in the authorised state when automatic
+    // capture is delayed or unavailable. Capture only after the signed callback, exact
+    // persisted order, amount/currency and entitlement prerequisites have been checked.
+    if ("authorized".equalsIgnoreCase(payment.path("status").asText(""))) {
+      String captureRequest;
+      try {
+        captureRequest = objectMapper.writeValueAsString(
+            Map.of("amount", expectedAmount, "currency", expectedCurrency));
+      } catch (Exception exception) {
+        throw new IllegalStateException("Payment capture could not be prepared. Retry verification; do not start another checkout.", exception);
+      }
+      try {
+        razorpayRequest("POST", "/payments/" + paymentId + "/capture", captureRequest);
+      } catch (IllegalStateException captureFailure) {
+        // The capture may have succeeded even if the HTTP response was lost, or another
+        // capture worker may have won the race. Re-read provider state before reporting
+        // failure so an already-captured payment is still allowed to finish verification.
+        JsonNode refreshed = razorpayRequest("GET", "/payments/" + paymentId, null);
+        if (!isCapturedPaymentForExactOrder(refreshed, paymentId, orderId, expectedAmount, expectedCurrency)) {
+          throw new IllegalStateException(
+              "Razorpay has authorised this payment but capture is still pending. Retry verification; do not start another checkout.",
+              captureFailure);
+        }
+        payment = refreshed;
+      }
+      if (!isCapturedPaymentForExactOrder(payment, paymentId, orderId, expectedAmount, expectedCurrency)) {
+        payment = razorpayRequest("GET", "/payments/" + paymentId, null);
+      }
+    }
+    if (!isCapturedPaymentForExactOrder(payment, paymentId, orderId, expectedAmount, expectedCurrency)) {
+      throw new IllegalArgumentException(
+          "The payment is not captured for this exact course order. Retry verification; do not start another checkout.");
+    }
+
+    CourseOrderFinancialService.CapturedAccessGrant accessGrant =
+        courseOrderFinancialService.grantAccessForCapturedPayment(
+            localOrderId,orderId,paymentId,signature,expectedAmount);
+    boolean parentRequestHousekeepingPending=false;
+    if(accessGrant.purchaserUserId()!=null && "CHILD".equals(accessGrant.recipientType())) {
+      try {
+        courseOrderFinancialService.markParentPurchaseRequestPurchased(
+            accessGrant.purchaserUserId(),accessGrant.targetStudentId(),
+            accessGrant.institutionId(),accessGrant.courseId());
+      } catch(RuntimeException ignored) {
+        // The child has access already. A stale parent-request badge is non-blocking housekeeping.
+        parentRequestHousekeepingPending=true;
+      }
+    }
+
+    CourseOrderFinancialService.FinalizedSale finalizedSale=null;
+    boolean financePending=true;
+    if(financeSnapshotsReady) {
+      try {
+        finalizedSale=courseOrderFinancialService.finalizeCapturedSale(localOrderId,paymentId,signature,expectedAmount);
+        financePending=false;
+      } catch(RuntimeException financeFailure) {
+        // Access was committed in its own transaction after exact provider confirmation.
+        // Invoice/share failure must not convert a successful payment into an inaccessible course.
+        financePending=true;
+      }
+    }
+
+    if(financePending) {
+      Map<String,Object> result=new LinkedHashMap<>();
+      result.put("status","PAYMENT_VERIFIED_ACCESS_GRANTED");
+      result.put("entitled",true);
+      result.put("canRetryCheckout",false);
+      result.put("orderId",localOrderId);
+      result.put("courseId",courseId);
+      result.put("studentId",accessGrant.targetStudentId());
+      result.put("purchasedFor","CHILD".equals(accessGrant.recipientType())?"CHILD"
+          :accessGrant.purchaserUserId()==null?"LEARNER":"PARENT");
+      result.put("transferable",accessGrant.purchaserUserId()!=null
+          &&"STUDENT".equals(accessGrant.recipientType()));
+      result.put("financeReconciliationRequired",true);
+      result.put("parentRequestHousekeepingPending",parentRequestHousekeepingPending);
+      result.put("message","Payment confirmed and course access granted. Invoice and revenue-share finalization is still being reconciled; do not pay again.");
+      return result;
+    }
+
+    Map<String, Object> result = new LinkedHashMap<>(verifiedResult(localOrderId, courseId));
+    result.put("purchasedFor", "CHILD".equals(accessGrant.recipientType()) ? "CHILD"
+        : accessGrant.purchaserUserId() == null ? "LEARNER" : "PARENT");
+    result.put("studentId", accessGrant.targetStudentId());
+    result.put("invoiceDocumentId", finalizedSale.fiscalDocumentId());
+    result.put("invoiceNumber", finalizedSale.documentNumber());
+    result.put("institutionSharePaise", finalizedSale.allocatedToInstitutionsPaise());
+    result.put("platformRemainderPaise", finalizedSale.platformRemainderPaise());
+    result.put("transferable", accessGrant.purchaserUserId()!=null
+        && "STUDENT".equals(accessGrant.recipientType()));
+    result.put("financeReconciliationRequired", false);
+    result.put("parentRequestHousekeepingPending",parentRequestHousekeepingPending);
+    return result;
+  }
+
+  /**
+   * @deprecated Historical platform-wide Marketplace editor. Learner-facing offers are now
+   * institution-scoped and may only be published through the HRMS launch stepper.
+   */
+  @Deprecated(since="2026-10", forRemoval=false)
+  @GetMapping("/admin/courses")
+  public List<Map<String, Object>> adminCourses(
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    throw legacyGlobalMarketplaceGone();
+  }
+
+  /**
+   * @deprecated Historical platform-wide offer mutation endpoint. It cannot approve or publish
+   * the current tenant-scoped Marketplace catalogue.
+   */
+  @Deprecated(since="2026-10", forRemoval=false)
+  @PutMapping("/admin/courses/{courseId}")
+  public Map<String, Object> saveOffer(
+      @PathVariable long courseId,
+      @RequestBody SaveCourseOfferRequest request,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    throw legacyGlobalMarketplaceGone();
+  }
+
+  private ResponseStatusException legacyGlobalMarketplaceGone() {
+    return new ResponseStatusException(HttpStatus.GONE,
+        "DEPRECATED_GLOBAL_MARKETPLACE: Configure and publish institution offers through the HRMS Marketplace launch stepper. The legacy global editor is retained temporarily for migration compatibility.");
+  }
+
+  private InstitutionTenantContext requireTenant(InstitutionTenantContext tenant) {
+    if (tenant == null) {
+      throw new InstitutionTenantContextService.InvalidInstitutionContextException(
+          400, "INSTITUTION_CONTEXT_REQUIRED", "Select the institution before using course commerce.");
+    }
+    return tenant;
+  }
+
+  /**
+   * A parent who is already a member of this institution through a consented child may explicitly
+   * create their own learner profile there. It does not enroll children or arbitrary accounts.
+   */
+  private long ensureCourseMembership(long studentId,long institutionId,Long actorStudentId,
+      Long actorUserId,String source,long courseId) {
+    List<Map<String,Object>> previous=jdbc.queryForList("""
+      select id,status from institution_membership
+      where institution_id=? and student_id=? for update
+      """,institutionId,studentId);
+    String previousStatus=previous.isEmpty()?"":String.valueOf(previous.getFirst().get("status"));
+    if("SUSPENDED".equals(previousStatus)) {
+      throw new SecurityException("Membership in the selected institution is suspended. Contact the institution administrator.");
+    }
+    Boolean authorized=jdbc.queryForObject("""
+      select exists(select 1 from institution_membership m
+        join institution_tenant t on t.id=m.institution_id and t.status='ACTIVE'
+        join guardian_student gs on gs.student_id=m.student_id
+          and gs.guardian_user_id=? and gs.active=true and gs.consent_status='CONSENTED'
+        where m.institution_id=? and m.status='ACTIVE')
+      """,Boolean.class,actorUserId,institutionId);
+    if(!Boolean.TRUE.equals(authorized)) throw new SecurityException(
+        "A parent must already be linked to a learner in the selected institution before creating a personal learner profile.");
+    Long membershipId=jdbc.queryForObject("""
+      insert into institution_membership(
+        institution_id,student_id,join_code_id,status,joined_at,left_at,created_at,updated_at
+      ) values(?,?,null,'ACTIVE',now(),null,now(),now())
+      on conflict(institution_id,student_id) do update set
+        status='ACTIVE',joined_at=case when institution_membership.status='ACTIVE'
+          then institution_membership.joined_at else now() end,
+        left_at=null,updated_at=now()
+      returning id
+      """,Long.class,institutionId,studentId);
+    if(membershipId==null)throw new IllegalStateException("Institution membership could not be recorded.");
+    if(previous.isEmpty()) {
+      jdbc.update("""
+        insert into institution_membership_event(
+          institution_id,membership_id,student_id,event_type,actor_student_id,details
+        ) values(?,?,?,'MEMBERSHIP_CREATED',?,jsonb_build_object('source',?,'courseId',?,'actorUserId',?))
+        """,institutionId,membershipId,studentId,actorStudentId,source,courseId,actorUserId);
+    } else if(!"ACTIVE".equals(previousStatus)) {
+      jdbc.update("""
+        insert into institution_membership_event(
+          institution_id,membership_id,student_id,event_type,actor_student_id,details
+        ) values(?,?,?,'MEMBERSHIP_REACTIVATED',?,jsonb_build_object('source',?,'courseId',?,'actorUserId',?))
+        """,institutionId,membershipId,studentId,actorStudentId,source,courseId,actorUserId);
+    }
+    return membershipId;
+  }
+
+  private boolean hasAccessInInstitution(long studentId, long courseId, long institutionId) {
+    Boolean value = jdbc.queryForObject("""
+        select exists(
+          select 1 from student_program_enrollment e
+          where e.student_id=? and e.institution_id=? and qe_same_logical_course(e.program_id,?) and e.status in ('ACTIVE','PAUSED')
+          union all
+          select 1 from course_purchase p
+          where p.student_id=? and p.institution_id=? and qe_same_logical_course(p.course_id,?)
+          union all
+          select 1 from course_entitlement ce
+          where ce.institution_id=? and qe_same_logical_course(ce.course_id,?) and (ce.holder_student_id=? or ce.holder_user_id=(select user_account_id from student where id=?))
+        )
+        """, Boolean.class, studentId, institutionId, courseId, studentId, institutionId, courseId,
+        institutionId, courseId, studentId, studentId);
+    return Boolean.TRUE.equals(value);
+  }
+
+  private boolean hasAccess(long studentId, long courseId) {
+    Boolean value = jdbc.queryForObject("""
+        select exists(
+          select 1 from student_program_enrollment e
+          where e.student_id=? and e.program_id=? and e.status in ('ACTIVE','PAUSED')
+          union all
+          select 1 from course_purchase p where p.student_id=? and p.course_id=?
+        )
+        """, Boolean.class, studentId, courseId, studentId, courseId);
+    return Boolean.TRUE.equals(value);
+  }
+
+  static boolean isPaymentForExactOrder(
+      JsonNode payment, String paymentId, String orderId, long amount, String currency) {
+    return payment != null
+        && paymentId != null && paymentId.equals(payment.path("id").asText(""))
+        && orderId != null && orderId.equals(payment.path("order_id").asText(""))
+        && payment.path("amount").asLong(-1) == amount
+        && currency != null && currency.equalsIgnoreCase(payment.path("currency").asText(""));
+  }
+
+  static boolean isCapturedPaymentForExactOrder(
+      JsonNode payment, String paymentId, String orderId, long amount, String currency) {
+    return isPaymentForExactOrder(payment, paymentId, orderId, amount, currency)
+        && "captured".equalsIgnoreCase(payment.path("status").asText(""));
+  }
+
+  private Map<String, Object> verifiedResult(long localOrderId, long courseId) {
+    Map<String, Object> result = new LinkedHashMap<>();
+    result.put("status", "VERIFIED");
+    result.put("entitled", true);
+    result.put("orderId", localOrderId);
+    result.put("courseId", courseId);
+    List<Map<String,Object>> invoiceRows=jdbc.queryForList("""
+      select d.id as invoice_document_id,d.document_number,d.total_value_paise,d.tax_value_paise
+      from course_payment_order o left join fiscal_document d on d.id=o.fiscal_document_id
+      where o.id=? and o.status='VERIFIED'
+      """,localOrderId);
+    if(!invoiceRows.isEmpty()&&invoiceRows.getFirst().get("invoice_document_id")!=null) {
+      Map<String,Object> invoice=invoiceRows.getFirst();
+      result.put("invoiceDocumentId",invoice.get("invoice_document_id"));
+      result.put("invoiceNumber",invoice.get("document_number"));
+      result.put("invoiceTotalPaise",invoice.get("total_value_paise"));
+      result.put("invoiceTaxPaise",invoice.get("tax_value_paise"));
+    }
+    return result;
+  }
+
+  /**
+   * Read-only Razorpay inspection for the HRMS delivery-chain view. This deliberately does not
+   * reconcile, capture, mark paid, repair snapshots, grant access, or issue documents.
+   *
+   * The active checkout credentials are tried first, followed by optional test/live credentials.
+   * A result is trusted only when the provider returns the exact saved order ID. For legacy orders
+   * created before provider mode was recorded, checking both configured modes avoids guessing.
+   */
+  public Map<String,Object> inspectProviderStatusForHrms(
+      String providerOrderId,long expectedAmountPaise,String expectedCurrency) {
+    Map<String,Object> unavailable=new LinkedHashMap<>();
+    unavailable.put("providerQueryAvailable",false);
+    unavailable.put("providerOrderId",providerOrderId==null?"":providerOrderId);
+    unavailable.put("configuredProviderMode",configuredProviderMode());
+    if(providerOrderId==null||!providerOrderId.matches("order_[A-Za-z0-9]+")) {
+      unavailable.put("providerStatus","NO_PROVIDER_REFERENCE");
+      unavailable.put("message","This local order has no valid saved Razorpay order reference. Local transaction stages are still shown.");
+      unavailable.put("credentialModesTried",List.of());
+      return unavailable;
+    }
+    List<ProviderCredential> credentials=providerCredentialsForInspection();
+    List<String> modesTried=new ArrayList<>();
+    String lastError="";
+    Map<String,Object> amountMismatch=null;
+    for(ProviderCredential credential:credentials) {
+      modesTried.add(credential.mode());
+      try {
+        JsonNode providerOrder=razorpayReadRequest(
+            "/orders/"+providerOrderId,credential.keyId(),credential.keySecret());
+        String returnedId=providerOrder.path("id").asText("");
+        if(!providerOrderId.equals(returnedId)) continue;
+        String returnedCurrency=providerOrder.path("currency").asText("");
+        long returnedAmount=providerOrder.path("amount").asLong(-1);
+        boolean amountMatches=returnedAmount==expectedAmountPaise
+            && expectedCurrency!=null&&expectedCurrency.equalsIgnoreCase(returnedCurrency);
+        JsonNode paymentResponse=razorpayReadRequest(
+            "/orders/"+providerOrderId+"/payments",credential.keyId(),credential.keySecret());
+        JsonNode items=paymentResponse.path("items");
+        Map<String,Object> result=new LinkedHashMap<>(providerPaymentDiagnostics(
+            providerOrder,items,providerOrderId,expectedAmountPaise,expectedCurrency));
+        result.put("providerQueryAvailable",true);
+        result.put("configuredProviderMode",configuredProviderMode());
+        result.put("matchedProviderMode",credential.mode());
+        result.put("credentialModesTried",new ArrayList<>(modesTried));
+        result.put("providerOrderMatches",true);
+        result.put("providerAmountPaise",returnedAmount);
+        result.put("providerCurrency",returnedCurrency);
+        result.put("providerAmountCurrencyMatch",amountMatches);
+        result.put("providerStatus",providerOutcome(providerOrder,items,providerOrderId,
+            expectedAmountPaise,expectedCurrency,amountMatches));
+        result.put("message",amountMatches
+            ? "Razorpay was queried using "+credential.mode()+" credentials for this exact order. No transaction data was changed."
+            : "The Razorpay order exists, but its amount/currency does not match the saved QuantaEdge order. No transaction data was changed.");
+        if(amountMatches) return result;
+        amountMismatch=result;
+      } catch(RuntimeException providerError) {
+        lastError=safeProviderDiagnosticText(providerError.getMessage(),240);
+      }
+    }
+    if(amountMismatch!=null) return amountMismatch;
+    unavailable.put("providerStatus","UNCONFIRMED");
+    unavailable.put("credentialModesTried",modesTried);
+    unavailable.put("message",lastError.isBlank()
+        ? "Razorpay could not confirm this order using the configured credentials. Check that the matching test/live key pair is configured; no transaction data was changed."
+        : "Razorpay could not confirm this order using the configured credentials ("+lastError+"). Check that the matching test/live key pair is configured; no transaction data was changed.");
+    return unavailable;
+  }
+
+  private String providerOutcome(JsonNode providerOrder,JsonNode paymentItems,String orderId,
+      long expectedAmount,String expectedCurrency,boolean amountMatches) {
+    if(!amountMatches) return "ORDER_AMOUNT_CURRENCY_MISMATCH";
+    if(paymentItems!=null&&paymentItems.isArray()) {
+      for(JsonNode payment:paymentItems) {
+        String paymentId=payment.path("id").asText("");
+        if(!paymentId.matches("pay_[A-Za-z0-9]+")
+            ||!isPaymentForExactOrder(payment,paymentId,orderId,expectedAmount,expectedCurrency)) continue;
+        String status=payment.path("status").asText("").toLowerCase(Locale.ROOT);
+        if("captured".equals(status)) return "CAPTURED";
+      }
+      for(JsonNode payment:paymentItems) {
+        String paymentId=payment.path("id").asText("");
+        if(!paymentId.matches("pay_[A-Za-z0-9]+")
+            ||!isPaymentForExactOrder(payment,paymentId,orderId,expectedAmount,expectedCurrency)) continue;
+        String status=payment.path("status").asText("").toLowerCase(Locale.ROOT);
+        if("authorized".equals(status)) return "AUTHORIZED";
+        if(Set.of("created","processing").contains(status)) return "PROCESSING";
+      }
+    }
+    if("paid".equalsIgnoreCase(providerOrder.path("status").asText(""))
+        ||providerOrder.path("amount_paid").asLong(0)>=expectedAmount) return "PAID_NO_EXACT_PAYMENT";
+    return "NOT_PAID";
+  }
+
+  private String configuredProviderMode() {
+    if(isRazorpayTestModeKey(keyId)) return "TEST";
+    if(keyId!=null&&keyId.trim().matches("^rzp_live_[A-Za-z0-9]+$")) return "LIVE";
+    return keyId==null||keyId.isBlank()?"UNCONFIGURED":"UNKNOWN";
+  }
+
+  private List<ProviderCredential> providerCredentialsForInspection() {
+    Map<String,ProviderCredential> byKeyId=new LinkedHashMap<>();
+    addProviderCredential(byKeyId,keyId,keySecret,configuredProviderMode());
+    addProviderCredential(byKeyId,testModeKeyId,testModeKeySecret,"TEST");
+    addProviderCredential(byKeyId,liveModeKeyId,liveModeKeySecret,"LIVE");
+    return new ArrayList<>(byKeyId.values());
+  }
+
+  private static void addProviderCredential(
+      Map<String,ProviderCredential> credentials,String suppliedKeyId,String suppliedSecret,String mode) {
+    String id=suppliedKeyId==null?"":suppliedKeyId.trim();
+    String secret=suppliedSecret==null?"":suppliedSecret.trim();
+    if(!id.isBlank()&&!secret.isBlank()) credentials.putIfAbsent(id,new ProviderCredential(mode,id,secret));
+  }
+
+  private JsonNode razorpayReadRequest(String path,String requestKeyId,String requestKeySecret) {
+    if(requestKeyId==null||requestKeyId.isBlank()||requestKeySecret==null||requestKeySecret.isBlank())
+      throw new IllegalStateException("Matching provider credentials are not configured.");
+    try {
+      String basic=Base64.getEncoder().encodeToString(
+          (requestKeyId+":"+requestKeySecret).getBytes(StandardCharsets.UTF_8));
+      HttpRequest request=HttpRequest.newBuilder(URI.create(baseUrl+path))
+          .timeout(java.time.Duration.ofSeconds(15))
+          .header("Authorization","Basic "+basic)
+          .header("Accept","application/json")
+          .GET().build();
+      HttpResponse<String> response=httpClient.send(request,HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+      if(response.statusCode()<200||response.statusCode()>=300)
+        throw new IllegalStateException("provider returned HTTP "+response.statusCode());
+      return objectMapper.readTree(response.body());
+    } catch(IllegalStateException exception) {
+      throw exception;
+    } catch(Exception exception) {
+      throw new IllegalStateException("provider could not be reached",exception);
+    }
+  }
+
+  private record ProviderCredential(String mode,String keyId,String keySecret) {}
+
+  private void requireConfigured() {
+    if (keyId.isBlank() || keySecret.isBlank()) {
+      throw new IllegalStateException("Course checkout is not available right now. Please try again later.");
+    }
+  }
+
+  private JsonNode razorpayRequest(String method, String path, String body) {
+    requireConfigured();
+    try {
+      String basic = Base64.getEncoder().encodeToString((keyId + ":" + keySecret).getBytes(StandardCharsets.UTF_8));
+      HttpRequest.Builder builder = HttpRequest.newBuilder(URI.create(baseUrl + path))
+          .timeout(java.time.Duration.ofSeconds(15))
+          .header("Authorization", "Basic " + basic)
+          .header("Accept", "application/json");
+      if ("GET".equalsIgnoreCase(method)) {
+        builder.GET();
+      } else if ("POST".equalsIgnoreCase(method)) {
+        builder.header("Content-Type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(body == null ? "" : body, StandardCharsets.UTF_8));
+      } else {
+        throw new IllegalArgumentException("Unsupported payment-provider request method.");
+      }
+      HttpResponse<String> response = httpClient.send(builder.build(),
+          HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+      if (response.statusCode() < 200 || response.statusCode() >= 300) {
+        throw new IllegalStateException("Payment provider could not complete the request (HTTP "
+            + response.statusCode() + ").");
+      }
+      return objectMapper.readTree(response.body());
+    } catch (IllegalStateException exception) {
+      throw exception;
+    } catch (Exception exception) {
+      throw new IllegalStateException("Payment provider could not be reached. Please retry.", exception);
+    }
+  }
+
+  static String hmacSha256(String data, String secret) {
+    try {
+      Mac mac = Mac.getInstance("HmacSHA256");
+      mac.init(new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
+      return HexFormat.of().formatHex(mac.doFinal(data.getBytes(StandardCharsets.UTF_8)));
+    } catch (Exception exception) {
+      throw new IllegalStateException("Payment verification is unavailable.", exception);
+    }
+  }
+
+  private static boolean constantTimeEquals(String expected, String supplied) {
+    if (expected == null || supplied == null) return false;
+    return MessageDigest.isEqual(
+        expected.getBytes(StandardCharsets.US_ASCII),
+        supplied.getBytes(StandardCharsets.US_ASCII));
+  }
+
+  public record VerifyCoursePaymentRequest(String paymentId, String orderId, String signature) {}
+  public record CourseOrderRequest(String discountCode, Long billingAddressId) {
+    public CourseOrderRequest(String discountCode) { this(discountCode,null); }
+  }
+  public record FamilyCourseOrderRequest(String recipientType, Long studentId, String discountCode, Long billingAddressId) {
+    public FamilyCourseOrderRequest(String recipientType, Long studentId) { this(recipientType,studentId,null,null); }
+    public FamilyCourseOrderRequest(String recipientType, Long studentId, String discountCode) { this(recipientType,studentId,discountCode,null); }
+  }
+  public record SaveCourseOfferRequest(String title, String description, long pricePaise, String currency, String status) {}
+}
+
+        and (
+          (cast(? as bigint) is not null and o.student_id=? and o.purchaser_user_id is null)
+          or (cast(? as bigint) is not null and o.purchaser_user_id=?)
+        )
+      order by o.created_at desc,o.id desc
+      limit 100
+      """,institutionId,studentId,studentId,purchaserUserId,purchaserUserId);
+  }
+
   /** Reconcile a saved student order directly with Razorpay when a checkout callback is missing. */
   @PostMapping("/orders/{localOrderId}/reconcile")
   public Map<String, Object> reconcileOrder(
