@@ -382,8 +382,10 @@
 @media(max-width:560px){.qe-content-main .qe-step-strip{grid-template-columns:1fr 1fr;gap:5px}.qe-content-main .qe-step-strip>span{padding:8px 6px;gap:5px;font-size:10px}.qe-content-main .qe-step-strip>span b{font-size:10px}.qe-fullscreen-bar{flex-direction:column}.qe-fullscreen-actions{width:100%;justify-content:space-between}.qe-content-main .qe-editor-actions{flex-wrap:wrap}.qe-content-main .qe-editor-actions button{flex:1 1 100%;min-height:40px}}
 
 
-/* Final contrast pass: make supporting content readable without relying on colour alone. */
-.qe-content-main .qe-editor-section label,
+/* Content Studio contrast uses the same semantic palette in light and dark mode. */
+.qe-content-main .qe-editor-section label{
+  color:var(--qe-color-text,#34445b)!important;
+}
 .qe-content-main .qe-editor-section-title p,
 .qe-content-main .qe-editor-section>div>p,
 .qe-content-main .qe-block-editor-head p,
@@ -392,24 +394,35 @@
 .qe-content-main .qe-readiness-list small,
 .qe-content-main .qe-readiness-summary p,
 .qe-content-main .qe-editor-hint,
-.qe-content-main .qe-staff-help{color:#34445b!important}
+.qe-content-main .qe-staff-help{
+  color:var(--qe-color-text-muted,#34445b)!important;
+}
 .qe-content-main .qe-editor-section h3,
 .qe-content-main .qe-block-editor-head h4,
-.qe-content-main .qe-readiness-list b{color:#17273d!important}
+.qe-content-main .qe-readiness-list b{
+  color:var(--qe-color-text,#17273d)!important;
+}
 .qe-content-main .qe-form-grid label,
 .qe-content-main .qe-form-field{font-weight:650}
 .qe-content-main input:disabled,
 .qe-content-main textarea:disabled,
-.qe-content-main select:disabled{color:#526178!important;opacity:1}
+.qe-content-main select:disabled{color:var(--qe-color-text-muted,#526178)!important;opacity:1}
 .qe-audit-event strong{color:#18283e}
 .qe-audit-event>span{color:#29394f}
 .qe-audit-event>small{color:#3d4e65!important}
 .qe-audit-detail{display:block;color:#24364e!important;font-size:11px;line-height:1.55;margin-top:7px;white-space:normal}
-.qe-staff-help{color:#34445b}
+.qe-staff-help{color:var(--qe-color-text-muted,#34445b)}
 
 /* Reviewers can certify source mappings in read-only authoring mode; authors cannot self-certify. */
-.qe-viewer-mode .qe-editor-section select.qe-source-verification{pointer-events:auto!important;opacity:1!important;color:#17273d!important;background:#fff!important;cursor:pointer}
-.qe-content-main .qe-source-verification:disabled{color:#526178!important;opacity:.75}
+.qe-viewer-mode .qe-editor-section select.qe-source-verification{
+  pointer-events:auto!important;
+  opacity:1!important;
+  color:var(--qe-color-text,#17273d)!important;
+  background:var(--qe-color-surface-elevated,#fff)!important;
+  border-color:var(--qe-color-border-subtle,#d6dfeb);
+  cursor:pointer;
+}
+.qe-content-main .qe-source-verification:disabled{color:var(--qe-color-text-muted,#526178)!important;opacity:.85}
 
 
 /* Staff authentication: calm, high-contrast two-panel experience. */
@@ -626,7 +639,7 @@ body.qe-session-bfcache-guard::after{content:'Verifying your secure session…';
 
 
 /* Workspace navigation: align the staff console with the learner site's white/orange design. */
-.qe-admin-workspace-layout>.admin-sidebar{position:sticky;top:0;display:flex;flex-direction:column;gap:0;height:100vh;min-height:0;padding:16px 13px 12px;overflow:hidden;background:#fff;color:#152038;border-right:1px solid #e6e9f0;box-shadow:2px 0 18px rgba(21,32,56,.025)}
+.qe-admin-workspace-layout>.admin-sidebar{position:sticky;top:0;z-index:30;display:flex;flex-direction:column;gap:0;height:100vh;min-height:0;padding:16px 13px 12px;overflow:hidden;background:#fff;color:#152038;border-right:1px solid #e6e9f0;box-shadow:2px 0 18px rgba(21,32,56,.025);pointer-events:auto}
 .qe-admin-workspace-layout .qe-sidebar-brand-row{flex:0 0 auto;min-height:48px;gap:8px}
 .qe-admin-workspace-layout .qe-admin-brand-copy{min-width:0}
 .qe-admin-workspace-layout .qe-admin-brand-tagline{color:#8a91a3}
@@ -1081,3 +1094,88 @@ body.qe-session-bfcache-guard::after{content:'Verifying your secure session…';
 .qe-admin-global-brand .qe-brand__logo{max-width:165px;max-height:36px}
 .qe-admin-login-brand-lockup .qe-brand__logo{max-width:300px;max-height:68px}
 @media(max-width:620px){.qe-admin-brand-lockup .qe-brand__logo,.qe-admin-login-brand-lockup .qe-brand__logo{max-width:220px;max-height:48px}}
+
+/* Content Studio layout safety for the shared header/sidebar and all course types. */
+.qe-admin-workspace-layout>.admin-sidebar .qe-sidebar-scroll,
+.qe-admin-workspace-layout>.admin-sidebar .qe-admin-navigation,
+.qe-admin-workspace-layout>.admin-sidebar .qe-nav-link,
+.qe-admin-workspace-layout>.admin-sidebar .qe-admin-nav-group-toggle,
+.qe-admin-workspace-layout>.admin-sidebar .qe-sidebar-toggle{
+  pointer-events:auto;
+}
+.qe-content-main .qe-studio-top{
+  height:auto;
+  min-height:112px;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.qe-content-main .qe-editor-page-top>div:first-child{
+  min-width:0;
+  flex:1 1 280px;
+}
+.qe-content-main .qe-editor-page-top .admin-top-actions{
+  min-width:0;
+  max-width:100%;
+  flex-wrap:wrap;
+}
+.qe-content-main .qe-authoring-layout,
+.qe-content-main .qe-main-authoring,
+.qe-content-main .qe-preview-column{
+  min-width:0;
+  max-width:100%;
+}
+@media(max-width:1180px){
+  .qe-content-main .qe-authoring-layout{
+    grid-template-columns:minmax(0,1fr);
+  }
+  .qe-content-main .qe-preview-column{
+    position:relative;
+    top:auto;
+  }
+}
+@media(max-width:900px){
+  .qe-content-main .qe-studio-top{
+    min-height:0;
+    padding:16px 0;
+  }
+  .qe-content-main .qe-editor-page-top .admin-top-actions{
+    justify-content:flex-start;
+    width:100%;
+  }
+}
+@media(max-width:720px){
+  .qe-content-main .qe-editor-top,
+  .qe-content-main .qe-editor-section-title{
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .qe-content-main .qe-step-strip{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .qe-content-main .qe-step-strip>span{
+    min-width:0;
+    white-space:normal;
+    overflow-wrap:anywhere;
+  }
+  .qe-content-main .qe-editor-actions{
+    flex-wrap:wrap;
+  }
+  .qe-content-main .qe-editor-actions>button{
+    flex:1 1 140px;
+    min-width:0;
+    white-space:normal;
+  }
+}
+@media(max-width:420px){
+  .qe-content-main .qe-studio-top h1{
+    font-size:22px;
+    overflow-wrap:anywhere;
+  }
+  .qe-content-main .qe-step-strip{
+    grid-template-columns:minmax(0,1fr);
+  }
+  .qe-content-main .qe-editor-actions>button{
+    flex-basis:100%;
+  }
+}
+
