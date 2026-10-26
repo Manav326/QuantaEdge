@@ -250,21 +250,99 @@ export default function StudentMarketplacePage() {
 
   useEffect(() => { void loadOffers(); void loadPurchaseRequests(); }, [loadOffers, loadPurchaseRequests]);
 
-  // Keep the signed checkout response for this tab so a refresh/deployment cannot
-  // erase the only data that can safely verify a payment already made by the learner.
+  // Recover only orders returned for this authenticated account and institution.
+  // The old workspace-wide storage key is deliberately not read: it can belong to a previous login.
   useEffect(() => {
-    try {
-      const saved = window.sessionStorage.getItem(PENDING_VERIFY_STORAGE_KEY);
-      if (!saved) return;
-      const drafts = parsePendingVerifyDrafts(saved);
-      pendingVerifiesRef.current = drafts;
-      setPendingVerifies(drafts);
-      if (drafts.length) window.sessionStorage.setItem(PENDING_VERIFY_STORAGE_KEY, JSON.stringify(drafts));
-      else window.sessionStorage.removeItem(PENDING_VERIFY_STORAGE_KEY);
-    } catch {
-      // Storage may be disabled by the browser; in-page retry still works.
+    if (isResolving) {
+      setPendingRecoveryReady(false);
+      return;
     }
-  }, []);
+    let cancelled = false;
+    const previousStorageKey = pendingVerifyStorageKeyRef.current;
+    pendingVerifyStorageKeyRef.current = null;
+    setPendingRecoveryReady(false);
+    void (async () => {
+      try {
+        if (institutionContextRequested && !brand?.institutionCode) {
+          pendingVerifiesRef.current = [];
+          setPendingVerifies([]);
+          return;
+        }
+        const session = await readJson(await apiFetch('/api/v1/auth/me', {
+          credentials: 'same-origin', cache: 'no-store',
+          headers: { 'X-QE-Workspace': 'STUDENT' },
+        }));
+        const userId = Number(session.userId);
+        if (session.role !== 'STUDENT' || !Number.isSafeInteger(userId) || userId <= 0) {
+          throw new Error('The signed-in student identity could not be verified.');
+        }
+        const storageKey = scopedPendingVerifyStorageKey(PENDING_VERIFY_STORAGE_KEY, brand?.institutionCode, userId);
+        const accountChanged = previousStorageKey !== null && previousStorageKey !== storageKey;
+        if (accountChanged) {
+          pendingVerifiesRef.current = [];
+          setPendingVerifies([]);
+        }
+        pendingVerifyStorageKeyRef.current = storageKey;
+        let cached: VerifyDraft[] = [];
+        try { cached = parsePendingVerifyDrafts(window.sessionStorage.getItem(storageKey)); } catch { /* Session storage is optional. */ }
+        const current = accountChanged ? [] : pendingVerifiesRef.current;
+        let serverLoaded = false;
+        let serverDrafts: VerifyDraft[] = [];
+        try {
+          const rows = await readJson(await apiFetch('/api/v1/marketplace/orders/pending', {
+            credentials: 'same-origin', cache: 'no-store',
+            headers: { 'X-QE-Workspace': 'STUDENT', 'Accept': 'application/json' },
+          }));
+          if (Array.isArray(rows)) {
+            serverLoaded = true;
+            serverDrafts = parsePendingVerifyDrafts(JSON.stringify(rows.map((row: any) => ({
+              courseId: row.course_id, localOrderId: row.local_order_id,
+              paymentId: '', orderId: row.provider_order_id, signature: '',
+              courseIdentityKey: row.course_identity_key, courseTitle: row.course_title,
+              studentId: row.student_id, beneficiaryName: row.beneficiary_name,
+              recipientType: row.recipient_type, amountPaise: row.amount_paise,
+            }))));
+          }
+        } catch {
+          // Scoped cache remains available if the order-recovery endpoint is temporarily offline.
+        }
+        if (cancelled) return;
+        const localById = new Map<number, VerifyDraft>();
+        for (const draft of [...cached, ...current]) localById.set(draft.localOrderId, draft);
+        let merged: VerifyDraft[];
+        if (serverLoaded) {
+          const serverIds = new Set(serverDrafts.map(draft => draft.localOrderId));
+          merged = serverDrafts.map(remote => {
+            const local = localById.get(remote.localOrderId);
+            return local ? { ...remote, paymentId: local.paymentId, signature: local.signature } : remote;
+          });
+          // Preserve an order created in this page while the initial server query was in flight.
+          for (const draft of current) {
+            if (!serverIds.has(draft.localOrderId)) merged.push(draft);
+          }
+        } else {
+          const unique = new Map<number, VerifyDraft>();
+          for (const draft of [...cached, ...current]) unique.set(draft.localOrderId, draft);
+          merged = [...unique.values()];
+        }
+        pendingVerifiesRef.current = merged;
+        setPendingVerifies(merged);
+        try {
+          if (merged.length) window.sessionStorage.setItem(storageKey, JSON.stringify(merged));
+          else window.sessionStorage.removeItem(storageKey);
+        } catch { /* In-memory recovery remains available if storage is disabled. */ }
+      } catch {
+        if (!cancelled) {
+          pendingVerifyStorageKeyRef.current = null;
+          pendingVerifiesRef.current = [];
+          setPendingVerifies([]);
+        }
+      } finally {
+        if (!cancelled) setPendingRecoveryReady(true);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [brand?.institutionCode, institutionContextRequested, isResolving]);
 
   const verifyPurchase = useCallback(async (draft: VerifyDraft) => {
     setVerifying(true);
