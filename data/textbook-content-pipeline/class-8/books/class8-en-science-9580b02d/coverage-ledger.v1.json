@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1311,
-    "successful_visual_analyses": 1298,
-    "missing_visual_analyses": 980,
+    "raw_analysis_result_rows": 1313,
+    "successful_visual_analyses": 1300,
+    "missing_visual_analyses": 978,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 993,
+    "unresolved_count": 991,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -49081,9 +49081,24 @@
       "asset_path": "assets/3e3c17bc9cfa30fa866830722bb8aa3b98454a48c44118e77b7aba6f88c5d0d2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a river flowing through a dam, with arrows indicating the direction of water flow.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "river flow",
+          "dam",
+          "water flow direction",
+          "arrows indicating flow"
+        ],
+        "context_relation": "The image illustrates the concept of water flow and pressure in a river through a dam, which is related to the educational content about pressure in liquids.",
+        "limitations": [
+          "The image does not provide specific numerical data or measurements.",
+          "The image does not include any text or labels explaining the concept."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -49099,9 +49114,24 @@
       "asset_path": "assets/b286e388b236a2bda84b5df793dcfa4bffdf54184e9808f1bb13c89d3135675d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A wooden desk with a circular hole in the center.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "desk",
+          "hole",
+          "wooden",
+          "circular",
+          "center"
+        ],
+        "context_relation": "The image represents a desk with a hole in the center, which is a part of the educational content about pressure and liquids.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the desk and the hole."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

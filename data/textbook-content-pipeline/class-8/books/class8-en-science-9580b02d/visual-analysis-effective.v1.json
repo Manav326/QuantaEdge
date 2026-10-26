@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c414c76f34265c556b4ef33fdebd4483c59ba2d5b3ad43efe187efd41dcb29c5",
+  "raw_analysis_sha256": "b1a3958eeff09f96207d46b59193341da0a737fe9ef9e4a094a3e69a4630ca3e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40277348694",
-      "checkpointed_at": "2026-10-26T07:26:25Z",
+      "checkpointed_at": "2026-10-26T07:38:33Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40277348694",
-      "checkpointed_at": "2026-10-26T07:27:10Z",
+      "checkpointed_at": "2026-10-26T07:39:16Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57861,7 +57861,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40277348694",
-      "checkpointed_at": "2026-10-26T07:28:03Z",
+      "checkpointed_at": "2026-10-26T07:40:08Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -64684,6 +64684,110 @@
         "context_relation": "The image is related to the text discussing the pressure exerted by liquids in containers and how it can be observed in spurring water from leaking joints or holes in pipes.",
         "limitations": [
           "The image does not provide specific details about the experiment or the explanation of the spurring water."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "eec9fbd50bcdb479f93d3cec",
+      "asset_sha256": "3e3c17bc9cfa30fa866830722bb8aa3b98454a48c44118e77b7aba6f88c5d0d2",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/3e3c17bc9cfa30fa866830722bb8aa3b98454a48c44118e77b7aba6f88c5d0d2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "138180b5c5a208b01601e22239615e5e1561f3ee4a91e52fddddce77e51d1d7b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a river flowing through a dam, with arrows indicating the direction of water flow.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "river flow",
+          "dam",
+          "water flow direction",
+          "arrows indicating flow"
+        ],
+        "context_relation": "The image illustrates the concept of water flow and pressure in a river through a dam, which is related to the educational content about pressure in liquids.",
+        "limitations": [
+          "The image does not provide specific numerical data or measurements.",
+          "The image does not include any text or labels explaining the concept."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40277348694",
+      "checkpointed_at": "2026-10-26T07:41:46Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a river flowing through a dam, with arrows indicating the direction of water flow.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "river flow",
+          "dam",
+          "water flow direction",
+          "arrows indicating flow"
+        ],
+        "context_relation": "The image illustrates the concept of water flow and pressure in a river through a dam, which is related to the educational content about pressure in liquids.",
+        "limitations": [
+          "The image does not provide specific numerical data or measurements.",
+          "The image does not include any text or labels explaining the concept."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e2c20b2f04e1555647ed988e",
+      "asset_sha256": "b286e388b236a2bda84b5df793dcfa4bffdf54184e9808f1bb13c89d3135675d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 105,
+      "asset_path": "assets/b286e388b236a2bda84b5df793dcfa4bffdf54184e9808f1bb13c89d3135675d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "138180b5c5a208b01601e22239615e5e1561f3ee4a91e52fddddce77e51d1d7b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A wooden desk with a circular hole in the center.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "desk",
+          "hole",
+          "wooden",
+          "circular",
+          "center"
+        ],
+        "context_relation": "The image represents a desk with a hole in the center, which is a part of the educational content about pressure and liquids.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the desk and the hole."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40277348694",
+      "checkpointed_at": "2026-10-26T07:43:23Z",
+      "effective_analysis": {
+        "visual_summary": "A wooden desk with a circular hole in the center.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "desk",
+          "hole",
+          "wooden",
+          "circular",
+          "center"
+        ],
+        "context_relation": "The image represents a desk with a hole in the center, which is a part of the educational content about pressure and liquids.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the desk and the hole."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
