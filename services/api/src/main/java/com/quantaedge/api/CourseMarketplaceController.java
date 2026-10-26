@@ -878,7 +878,9 @@ public class CourseMarketplaceController {
         long currentOfferId=((Number)offer.get("institution_offer_id")).longValue();
         Object savedOfferRaw=previous.get("institution_offer_id");
         if(!(savedOfferRaw instanceof Number n) || n.longValue()!=currentOfferId) {
-          expireSupersededUnpaidOrder(previous,institutionId,targetStudentId);
+          Map<String,Object> recovery=expireSupersededOrderOrRecover(
+              previous,courseId,targetStudentId,purchaserUserId,institutionId);
+          if(recovery!=null) return recovery;
           throw new IllegalStateException("The previous checkout was confirmed unpaid and expired. Start a fresh checkout for the current offer.");
         }
         return resumePendingCheckout(previous,courseId,title,institutionDisplayName,
@@ -912,7 +914,13 @@ public class CourseMarketplaceController {
           : purchaserUserId!=null && priorPayerRaw instanceof Number n && n.longValue()==purchaserUserId.longValue();
       if (!sameOffer || !samePayer) {
         // Never return another payer's checkout or an old offer's price/order to this request.
-        expireSupersededUnpaidOrder(prior,institutionId,targetStudentId);
+        if(samePayer && "PENDING".equals(priorStatus)) {
+          Map<String,Object> recovery=expireSupersededOrderOrRecover(
+              prior,courseId,targetStudentId,purchaserUserId,institutionId);
+          if(recovery!=null) return recovery;
+        } else {
+          expireSupersededUnpaidOrder(prior,institutionId,targetStudentId);
+        }
       } else if ("PENDING".equals(priorStatus)) {
         return resumePendingCheckout(prior,courseId,title,institutionDisplayName,
             targetStudentId,purchaserUserId,institutionId,currentOfferId,
@@ -973,7 +981,13 @@ public class CourseMarketplaceController {
         boolean sameRacedPayer=racedPayerRaw==null ? purchaserUserId==null
             : purchaserUserId!=null && racedPayerRaw instanceof Number payer && payer.longValue()==purchaserUserId.longValue();
         if(!(racedOfferRaw instanceof Number n) || n.longValue()!=currentOfferId || !sameRacedPayer) {
-          expireSupersededUnpaidOrder(racedOrder,institutionId,targetStudentId);
+          if(sameRacedPayer) {
+            Map<String,Object> recovery=expireSupersededOrderOrRecover(
+                racedOrder,courseId,targetStudentId,purchaserUserId,institutionId);
+            if(recovery!=null) return recovery;
+          } else {
+            expireSupersededUnpaidOrder(racedOrder,institutionId,targetStudentId);
+          }
           throw new IllegalStateException("The earlier checkout was confirmed unpaid and expired. Start a fresh checkout for the current offer.");
         }
         return resumePendingCheckout(racedOrder,courseId,title,institutionDisplayName,
@@ -1252,6 +1266,62 @@ public class CourseMarketplaceController {
   }
 
   /** Expire a superseded offer only when the provider proves the exact saved order is unpaid. */
+  /**
+   * A newer offer may supersede an earlier version of the same logical course. For the same
+   * purchaser, check the saved order before expiring it: a settled payment belongs to the old
+   * offer but must still be reconciled and must never trigger a second charge.
+   *
+   * @return a recovery/verified response when the order must be retained; null when a conclusively
+   *         unpaid superseded order was safely expired and a fresh checkout may proceed.
+   */
+  private Map<String,Object> expireSupersededOrderOrRecover(
+      Map<String,Object> prior,long currentCourseId,long targetStudentId,
+      Long purchaserUserId,long institutionId) {
+    String providerState;
+    try {
+      providerState=inspectProviderOrderForNewAttempt(prior);
+    } catch(RuntimeException providerFailure) {
+      LOGGER.warn("Provider status could not be confirmed before superseding course order {}.",
+          prior.get("id"),providerFailure);
+      return pendingOrderRecoveryResponse(prior,currentCourseId,
+          "The earlier course order could not be confirmed unpaid. Keep that order and retry verification; do not pay again.",
+          false);
+    }
+    if("PAID".equals(providerState)) {
+      return reconcilePaidExistingOrder(prior,currentCourseId,targetStudentId,purchaserUserId,institutionId);
+    }
+    if(!"RETRYABLE".equals(providerState)) {
+      return pendingOrderRecoveryResponse(prior,currentCourseId,
+          "The earlier course payment is still processing or needs reconciliation. Keep that order; do not pay again.",
+          false);
+    }
+    try {
+      expireSupersededUnpaidOrder(prior,institutionId,targetStudentId);
+      return null;
+    } catch(RuntimeException expirationFailure) {
+      // The provider can settle between the first check and expiry's own check. Recover if that
+      // happened; otherwise preserve the original fail-closed response.
+      try {
+        String currentState=inspectProviderOrderForNewAttempt(prior);
+        if("PAID".equals(currentState)) {
+          return reconcilePaidExistingOrder(prior,currentCourseId,targetStudentId,purchaserUserId,institutionId);
+        }
+        if(!"RETRYABLE".equals(currentState)) {
+          return pendingOrderRecoveryResponse(prior,currentCourseId,
+              "The earlier course payment state changed while replacing its offer. Keep the saved order and retry verification; do not pay again.",
+              false);
+        }
+      } catch(RuntimeException providerFailure) {
+        LOGGER.warn("Provider status became uncertain while replacing course order {}.",
+            prior.get("id"),providerFailure);
+        return pendingOrderRecoveryResponse(prior,currentCourseId,
+            "The earlier course order's payment state could not be confirmed. Keep that order and retry verification; do not pay again.",
+            false);
+      }
+      throw expirationFailure;
+    }
+  }
+
   private void expireSupersededUnpaidOrder(
       Map<String,Object> prior,long institutionId,long targetStudentId) {
     Object rawOfferId=prior.get("institution_offer_id");
