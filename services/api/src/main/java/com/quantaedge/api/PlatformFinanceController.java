@@ -781,17 +781,35 @@ public class PlatformFinanceController {
     long offerId=((Number)row.get("institution_offer_id")).longValue();
     long sourceInstitution=offerInstitution(offerId);
     Instant start=asInstant(row.get("effective_from")),end=row.get("effective_until")==null?null:asInstant(row.get("effective_until"));
-    boolean sellerReady=exists("""
+    // Finance configuration can be approved before the offer is published. Keep the
+    // exact-revision guard, but do not confuse the offer's lifecycle status with seller readiness.
+    boolean currentOffer=exists("""
       select exists(select 1 from institution_marketplace_offer o
-        join course_tax_profile tax on tax.institution_offer_id=o.id and tax.status='APPROVED'
-          and tax.effective_from<=? and (tax.effective_until is null or tax.effective_until>?)
-        join billing_legal_entity le on le.id=tax.legal_entity_id and le.status='ACTIVE'
-        where o.id=? and o.status in ('APPROVED','PUBLISHED'))
-      """,dbInstant(start),dbInstant(start),offerId);
-    if(!sellerReady) throw bad("Approval needs an active legal seller and an approved tax profile effective for this sale.");
+        where o.id=? and o.status<>'ARCHIVED'
+          and (qe_current_course_offer_revision(o.id) or qe_marketplace_offer_publicly_sellable(o.id)))
+      """,offerId);
+    if(!currentOffer) throw bad("This revenue-share policy is attached to an archived or obsolete course-offer revision. Select the current course offer before approval.");
+
+    long effectiveTaxProfileCount=count("""
+      select count(*) from course_tax_profile tax
+      join institution_marketplace_offer o on o.id=tax.institution_offer_id
+      join billing_legal_entity le on le.id=tax.legal_entity_id and le.status='ACTIVE'
+        and (le.entity_kind='PLATFORM' or (le.entity_kind='INSTITUTION' and le.institution_id=o.institution_id))
+      where o.id=? and tax.status='APPROVED'
+        and tax.effective_from<=? and (tax.effective_until is null or tax.effective_until>?)
+      """,offerId,dbInstant(start),dbInstant(start));
+    if(effectiveTaxProfileCount==0) {
+      throw bad("No approved tax profile effective on this policy's start date is linked to an active legal seller for this exact course offer. Activate the seller, then submit and approve a tax profile for this offer using that seller. Finance setup does not publish the course.");
+    }
+    if(effectiveTaxProfileCount>1) {
+      throw bad("More than one approved tax profile is effective for this course offer at the policy start date. Resolve the overlap before approving revenue share.");
+    }
     Map<String,Object> tax=one("""
       select tax.legal_entity_id,tax.tax_treatment from course_tax_profile tax
-      where tax.institution_offer_id=? and tax.status='APPROVED'
+      join institution_marketplace_offer o on o.id=tax.institution_offer_id
+      join billing_legal_entity le on le.id=tax.legal_entity_id and le.status='ACTIVE'
+        and (le.entity_kind='PLATFORM' or (le.entity_kind='INSTITUTION' and le.institution_id=o.institution_id))
+      where o.id=? and tax.status='APPROVED'
         and tax.effective_from<=? and (tax.effective_until is null or tax.effective_until>?)
       order by tax.version desc limit 1
       """,offerId,dbInstant(start),dbInstant(start));
@@ -801,7 +819,7 @@ public class PlatformFinanceController {
         select exists(select 1 from billing_gst_registration where legal_entity_id=? and status='ACTIVE'
           and effective_from<=? and (effective_until is null or effective_until>=?))
         """,((Number)tax.get("legal_entity_id")).longValue(),date,date)) {
-        throw bad("Taxable sales need an active, HRMS-verified GST registration covering the policy start date.");
+        throw bad("The selected tax profile is linked to an active legal seller, but no active, HRMS-verified GST registration covers the policy start date.");
       }
     }
     boolean overlap=Boolean.TRUE.equals(jdbc.queryForObject("""
