@@ -48311,7 +48311,7 @@
           "You must have observed fallen leaves on the ground swirling\nin the air or being swept away, and trees swaying or even\nbending when a strong wind blows. Have you ever wondered\nwhy fallen leaves rise in the air or trees sway or bend? Does the\nwind exert force on fallen leaves to make them rise or on t",
           "Megha and her brother Pawan are going on a picnic. They walk\n    to the picnic spot, carrying identical items in their bags (Fig. 6.1).\n    On the way, Pawan keeps adjusting his bag, and looks\n    uncomfortable. Megha asks, \"Is there a problem with\n    your bag?\" Pawan responds, \"Yes, it is hurting ",
           "Can the shape or size of the straps really make a\n    difference? Let us try to find out.",
-          "When we carry a bag, we feel its weight because of the force of gravity acting on our shoulders. The\n    weight of the bag with narrow straps acts on a\n    smaller area of our shoulders, whereas the weight of\n    the bag with broad straps is spread out over a larger\n    area. It is due to this reaso",
+          "When we carry a bag, we feel its weight because\n    of the force of gravity acting on our shoulders. The\n    weight of the bag with narrow straps acts on a\n    smaller area of our shoulders, whereas the weight of\n    the bag with broad straps is spread out over a larger\n    area. It is due to this r",
           "At this stage, we will consider only those forces which act\n    perpendicular to the surface on which the pressure is to be computed."
         ],
         "concepts": [
@@ -48323,11 +48323,15 @@
           "thunderstorms",
           "gravity",
           "straps",
-          "force per unit area"
+          "weight",
+          "force of gravity",
+          "area of force",
+          "perpendicular to the surface",
+          "pressure to be computed"
         ],
         "context_relation": "pressure",
         "limitations": [
-          "The image does not show the actual experiment or the visual representation of the force per unit area."
+          "The image does not provide specific formulas or equations."
         ]
       },
       "chapter_id": null,
