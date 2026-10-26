@@ -1794,6 +1794,17 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
         }
     }
 
+    fun coursePaymentStatusMessage(response: JSONObject): String {
+        if (response.optBoolean("financeReconciliationRequired")) {
+            return if (language == "hi")
+                "भुगतान की पुष्टि हो गई और कोर्स की पहुँच मिल गई है। इनवॉइस और revenue-share का अंतिम मिलान अभी जारी है; दोबारा भुगतान न करें।"
+            else "Payment confirmed and course access granted. Invoice and revenue-share finalization is still being reconciled; do not pay again."
+        }
+        return response.optString("message").takeIf { it.isNotBlank() }
+            ?: if (language == "hi") "भुगतान सत्यापित है। कोर्स की पहुँच अपडेट हो गई।"
+            else "Payment verified. Course access has been updated."
+    }
+
     fun retryPendingCoursePayment(workspace: String) {
         val normalizedWorkspace = workspace.uppercase()
         val draft = if (normalizedWorkspace == "PARENT") pendingParentPaymentVerification
@@ -1827,9 +1838,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                             setPendingCoursePayment("STUDENT", null)
                             route = AppRoute.STUDENT_HOME
                         }
-                        status = result.optString("message").takeIf { it.isNotBlank() }
-                            ?: if (language == "hi") "भुगतान सत्यापित है। कोर्स की पहुँच अपडेट हो गई।"
-                            else "Payment verified. Course access has been updated."
+                        status = coursePaymentStatusMessage(result)
                     }
                     result.optBoolean("canRetryCheckout") -> {
                         setPendingCoursePayment(normalizedWorkspace, null)
@@ -1897,9 +1906,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     loadParentMarketplaceData()
                     val recoveredId = order.optLong("localOrderId", order.optLong("orderId", 0L))
                     if (recoveredId > 0L) setPendingCoursePayment("PARENT", null)
-                    status = order.optString("message").takeIf { it.isNotBlank() }
-                        ?: if (language == "hi") "मौजूदा भुगतान सत्यापित हो गया। कोर्स की पहुँच अपडेट हो गई।"
-                        else "The existing payment was reconciled. Course access has been updated."
+                    status = coursePaymentStatusMessage(order)
                     parentMarketplaceBusyCourseId = 0L
                     return@runTask
                 }
@@ -1965,15 +1972,14 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         setPendingCoursePayment("PARENT", callbackDraft)
                         runTask {
                             try {
-                                ApiClient.postObject(
+                                val verification = ApiClient.postObject(
                                     "/api/v1/marketplace/family/orders/" + localOrderId + "/verify",
                                     JSONObject().put("paymentId", paymentId)
                                         .put("orderId", returnedOrderId).put("signature", signature)
                                 )
                                 loadParentMarketplaceData()
                                 setPendingCoursePayment("PARENT", null)
-                                status = if (language == "hi") "भुगतान सत्यापित है। कोर्स की पहुँच अपडेट हो गई।"
-                                    else "Payment verified. Course access has been updated."
+                                status = coursePaymentStatusMessage(verification)
                             } finally {
                                 parentMarketplaceBusyCourseId = 0L
                             }
@@ -2042,9 +2048,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     val recoveredId = order.optLong("localOrderId", order.optLong("orderId", 0L))
                     if (recoveredId > 0L) setPendingCoursePayment("STUDENT", null)
                     route = AppRoute.STUDENT_HOME
-                    status = order.optString("message").takeIf { it.isNotBlank() }
-                        ?: if (language == "hi") "मौजूदा भुगतान सत्यापित हो गया। आपका course तैयार है।"
-                        else "The existing payment was reconciled. Your course is ready."
+                    status = coursePaymentStatusMessage(order)
                     marketplaceBusyCourseId = 0L
                     return@runTask
                 }
@@ -2105,7 +2109,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                         setPendingCoursePayment("STUDENT", callbackDraft)
                         runTask {
                             try {
-                                ApiClient.postObject(
+                                val verification = ApiClient.postObject(
                                     "/api/v1/marketplace/orders/" + localOrderId + "/verify",
                                     JSONObject().put("paymentId", paymentId)
                                         .put("orderId", returnedOrderId).put("signature", signature)
@@ -2116,8 +2120,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                                 marketplaceOffers = ApiClient.getArray("/api/v1/marketplace/courses").objectItems()
                                 setPendingCoursePayment("STUDENT", null)
                                 route = AppRoute.STUDENT_HOME
-                                status = if (language == "hi") "भुगतान सत्यापित है। आपका course तैयार है।"
-                                    else "Payment verified. Your course is ready."
+                                status = coursePaymentStatusMessage(verification)
                             } finally {
                                 marketplaceBusyCourseId = 0L
                             }
