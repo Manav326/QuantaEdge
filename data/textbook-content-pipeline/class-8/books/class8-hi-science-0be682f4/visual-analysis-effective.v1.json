@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-hindi-hhcu1",
   "source_pdf_sha256": "98652193c50cfcee8438117c6a49029bb03b71893dbc1a0007230b66f05cb6b1",
   "raw_analysis_path": "data/textbook-visuals/class8-hi-science-0be682f4/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "8071c8a949f133cc91e12de9a6e962bfa8294329bcb7c3eb12da622cc2d17fc8",
+  "raw_analysis_sha256": "07175903146a67a4c45aa02099a43ba5bc472f7b47cdb80aa3c101e685da1be0",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-hi-science-0be682f4/visual-analysis-corrections.v1.json",
@@ -927,6 +927,214 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d829911ce52953dd62e82ac2",
+      "asset_sha256": "3c9553492653b32302f8ab7b62ae51687ac5152cc8581ccb7abf4f2052f5e020",
+      "page_text_context_sha256": "6f39534ffcbededc2ed809fff313ad8e947eb57e6f9d49be663f822082ee6787",
+      "source_book_id": "ncert-c8-hindi-hhcu1",
+      "source_pdf_sha256": "98652193c50cfcee8438117c6a49029bb03b71893dbc1a0007230b66f05cb6b1",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/3c9553492653b32302f8ab7b62ae51687ac5152cc8581ccb7abf4f2052f5e020.jpx",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Unsupported vision media type 'image/jpx'; use JPEG, PNG, or WebP assets.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7ce343bf3b14a3d02221cd0a",
+      "asset_sha256": "e3b50f3a263fff788a79a971b6fdce89d6ffc67cb12e8f2cdf4351fc66b4e3ec",
+      "page_text_context_sha256": "6f39534ffcbededc2ed809fff313ad8e947eb57e6f9d49be663f822082ee6787",
+      "source_book_id": "ncert-c8-hindi-hhcu1",
+      "source_pdf_sha256": "98652193c50cfcee8438117c6a49029bb03b71893dbc1a0007230b66f05cb6b1",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/e3b50f3a263fff788a79a971b6fdce89d6ffc67cb12e8f2cdf4351fc66b4e3ec.jpx",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Unsupported vision media type 'image/jpx'; use JPEG, PNG, or WebP assets.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c31826825c8222ce8b690775",
+      "asset_sha256": "c0dbf9a7c7ea9ce04217349180ed8a4ed457831d9e768429a21dfafe00b58499",
+      "page_text_context_sha256": "6f39534ffcbededc2ed809fff313ad8e947eb57e6f9d49be663f822082ee6787",
+      "source_book_id": "ncert-c8-hindi-hhcu1",
+      "source_pdf_sha256": "98652193c50cfcee8438117c6a49029bb03b71893dbc1a0007230b66f05cb6b1",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/c0dbf9a7c7ea9ce04217349180ed8a4ed457831d9e768429a21dfafe00b58499.jpx",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Unsupported vision media type 'image/jpx'; use JPEG, PNG, or WebP assets.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e007d03d72841241040b5619",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-hindi-hhcu1",
+      "source_pdf_sha256": "98652193c50cfcee8438117c6a49029bb03b71893dbc1a0007230b66f05cb6b1",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6f39534ffcbededc2ed809fff313ad8e947eb57e6f9d49be663f822082ee6787",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of scientific knowledge in the context of scientific traditions and their impact on society.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "एक सोपाान ऊपर नाामक अनुभाग",
+          "संकल््पपनााएँ",
+          "हैैं जो विषय काा अधिक गहनताा  से",
+          "अन््ववेेषण करतती हैैं। इसके अंततर््गतत",
+          "मेें दी गइ जाानकाारी",
+          "वैज्ञानिक सिद््धाांतोों एवं ज्ञान काा  वाास््तविक जीवन  मेें",
+          "प्रयोग सिखातती  हैैं ततथाा यह दर््शशातती  हैैं कि विज्ञान ने",
+          "समाज   के विकाास  मेें किस प्रकाार योगदाान दियाा  है।",
+          "हमाारीी  वैज्ञानिक परंंपराा",
+          "हमाारीी वैज्ञानिक परंंपराा नाामक अनुभाग     मेें उन",
+          "संस््थथा"
+        ],
+        "concepts": [
+          "scientific knowledge",
+          "scientific traditions",
+          "impact on society",
+          "scientific traditions and their impact on society"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the importance of scientific knowledge in the context of scientific traditions and their impact on society.",
+        "limitations": [
+          "The image does not show any specific visual elements or diagrams."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:41:46Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of scientific knowledge in the context of scientific traditions and their impact on society.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "एक सोपाान ऊपर नाामक अनुभाग",
+          "संकल््पपनााएँ",
+          "हैैं जो विषय काा अधिक गहनताा  से",
+          "अन््ववेेषण करतती हैैं। इसके अंततर््गतत",
+          "मेें दी गइ जाानकाारी",
+          "वैज्ञानिक सिद््धाांतोों एवं ज्ञान काा  वाास््तविक जीवन  मेें",
+          "प्रयोग सिखातती  हैैं ततथाा यह दर््शशातती  हैैं कि विज्ञान ने",
+          "समाज   के विकाास  मेें किस प्रकाार योगदाान दियाा  है।",
+          "हमाारीी  वैज्ञानिक परंंपराा",
+          "हमाारीी वैज्ञानिक परंंपराा नाामक अनुभाग     मेें उन",
+          "संस््थथा"
+        ],
+        "concepts": [
+          "scientific knowledge",
+          "scientific traditions",
+          "impact on society",
+          "scientific traditions and their impact on society"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the importance of scientific knowledge in the context of scientific traditions and their impact on society.",
+        "limitations": [
+          "The image does not show any specific visual elements or diagrams."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1209ecf21eda2b5ae716ecd1",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-hindi-hhcu1",
+      "source_pdf_sha256": "98652193c50cfcee8438117c6a49029bb03b71893dbc1a0007230b66f05cb6b1",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6f39534ffcbededc2ed809fff313ad8e947eb57e6f9d49be663f822082ee6787",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the role of scientific knowledge in the development of society and the practical applications of scientific theories and knowledge in everyday life.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "एक सोपाान ऊपर नाामक अनुभाग       मेें उन््नतत",
+          "संकल््पपनााएँ    हैैं जो विषय  काा अधिक गहनताा  से",
+          "अन््ववेेषण करतती हैैं। इसके अंततर््गतत     मेें दी गइ जाानकाारी",
+          "वैज्ञानिक सिद््धाांतोों एवं ज्ञान काा  वाास््तविक जीवन  मेें",
+          "प्रयोग सिखातती  हैैं ततथाा यह दर््शशातती  हैैं कि विज्ञान ने",
+          "समाज   के विकाास  मेें किस प्रकाार योगदाान दियाा  है।",
+          "हमाारीी  वैज्ञानिक परंंपराा                                         हमाारीी वैज्ञानिक परंंपराा नाामक अनुभाग     मेें उन",
+          "संस््थथा"
+        ],
+        "concepts": [
+          "scientific knowledge",
+          "society development",
+          "practical applications",
+          "scientific theories",
+          "everyday life",
+          "scientific tradition"
+        ],
+        "context_relation": "The text discusses the role of scientific knowledge in the development of society and the practical applications of scientific theories and knowledge in everyday life.",
+        "limitations": [
+          "The text does not provide specific examples or details about the applications of scientific knowledge.",
+          "The text does not mention any specific scientific theories or knowledge."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:43:44Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the role of scientific knowledge in the development of society and the practical applications of scientific theories and knowledge in everyday life.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "एक सोपाान ऊपर नाामक अनुभाग       मेें उन््नतत",
+          "संकल््पपनााएँ    हैैं जो विषय  काा अधिक गहनताा  से",
+          "अन््ववेेषण करतती हैैं। इसके अंततर््गतत     मेें दी गइ जाानकाारी",
+          "वैज्ञानिक सिद््धाांतोों एवं ज्ञान काा  वाास््तविक जीवन  मेें",
+          "प्रयोग सिखातती  हैैं ततथाा यह दर््शशातती  हैैं कि विज्ञान ने",
+          "समाज   के विकाास  मेें किस प्रकाार योगदाान दियाा  है।",
+          "हमाारीी  वैज्ञानिक परंंपराा                                         हमाारीी वैज्ञानिक परंंपराा नाामक अनुभाग     मेें उन",
+          "संस््थथा"
+        ],
+        "concepts": [
+          "scientific knowledge",
+          "society development",
+          "practical applications",
+          "scientific theories",
+          "everyday life",
+          "scientific tradition"
+        ],
+        "context_relation": "The text discusses the role of scientific knowledge in the development of society and the practical applications of scientific theories and knowledge in everyday life.",
+        "limitations": [
+          "The text does not provide specific examples or details about the applications of scientific knowledge.",
+          "The text does not mention any specific scientific theories or knowledge."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
