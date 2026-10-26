@@ -27,6 +27,21 @@ RETURNS trigger
 LANGUAGE plpgsql
 AS $function$
 BEGIN
+  IF NEW.code <> 'GENERAL' AND (
+    NEW.course_identity_id IS NULL
+    OR NOT EXISTS (
+      SELECT 1
+      FROM institution_course_identity identity
+      WHERE identity.id = NEW.course_identity_id
+        AND identity.status = 'ACTIVE'
+        AND identity.course_type_code = NEW.course_type_code
+    )
+  ) THEN
+    RAISE EXCEPTION
+      'COURSE_IDENTITY_REQUIRED: every new course product must reference one active, type-matched stable course identity before its content graph is created.'
+      USING ERRCODE = '23514';
+  END IF;
+
   IF NEW.content_version_no IS NULL OR NEW.content_version_no < 1 THEN
     RAISE EXCEPTION
       'COURSE_VERSION_NUMBER_REQUIRED: new course graphs require a positive content version number.'
