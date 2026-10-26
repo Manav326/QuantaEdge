@@ -927,8 +927,6 @@ public class CourseMarketplaceController {
             listedPricePaise,currency,buyerSnapshot,requestedDiscountCode);
       } else {
         throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.");
-      } else {
-        throw new IllegalStateException("Your course checkout is being prepared. Please retry shortly.");
       }
     }
 
