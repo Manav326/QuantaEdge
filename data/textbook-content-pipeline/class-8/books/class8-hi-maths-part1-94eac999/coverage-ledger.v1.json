@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 2,
     "inventory_asset_rows": 1946,
     "eligible_visual_asset_rows": 1946,
-    "raw_analysis_result_rows": 20,
-    "successful_visual_analyses": 13,
-    "missing_visual_analyses": 1926,
-    "failed_visual_analyses": 7,
+    "raw_analysis_result_rows": 25,
+    "successful_visual_analyses": 17,
+    "missing_visual_analyses": 1921,
+    "failed_visual_analyses": 8,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1935,
+    "unresolved_count": 1931,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -6717,9 +6717,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6735,7 +6744,7 @@
       "asset_path": "page-0005.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -6753,9 +6762,18 @@
       "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red, textured background with a white border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or border for a page with multiple visual elements.",
+        "limitations": [
+          "The image does not contain any text or visual elements that can be analyzed for content or context."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6771,9 +6789,21 @@
       "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red, abstract, and irregularly shaped object that appears to be a splash or a wave.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of an abstract object, possibly a splash or wave.",
+        "limitations": [
+          "The image does not contain any text or labels that provide specific information about the object.",
+          "The image is abstract and does not have a clear subject or context.",
+          "The image does not provide any numerical data or measurements.",
+          "The image does not depict any specific scientific or mathematical concepts."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6789,9 +6819,27 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An educational page from a textbook discussing various properties of numbers and their applications in different fields.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "अध्याय 5— ‘संंख्याओंं का खेेल’ वि�द्याार्थि�ियोंं   द्वााराा अध्ययन कि�ए गए संंख्याओंं केे वि�भि�न्न गुुणोंं को  रुचि�कर गतििSवि�धि�यों  केे संंतुुलन   केे साथ दृश्यावलोकन और कठि�न  गणि�तीीय तर्कक केे माध्यम सेे प्रदर्शिशिeित करताा हैै।",
+          "अध्याय 6 — ‘जि�तनाा  बाँँ�टेंंगेे उतनाा बढ़ेेगा’ बीज गणि�त    सेे संंबधि�त पहलुुओंं और वि�शेेष रूप सेे वि�तरण    गुुणधर्मम  को   सम्मि�िलि�त    करताा हैै।",
+          "अध्याय 7— ‘समाानुुपातििSक तर्ककण-1’ दैैनि�क जीवन की   स्थि�ितििSयों का उपयोोग करकेे    दो  रााशिeयों की  तुुलना का नयाा प्रकार खोजताा हैै। सभीी अध्यायोंं    मेंं कला, इतििSहास और वि�ज्ञाान  सहि�त   अन्य  वि�शेेष रूप सेे वि�तरण    गुुणधर्मम  को   सम्मि�िलि�त    करताा हैै।"
+        ],
+        "concepts": [
+          "properties of numbers",
+          "applications in different fields",
+          "comparison of two quantities",
+          "mathematical reasoning"
+        ],
+        "context_relation": "educational content",
+        "limitations": [
+          "No specific visual elements are described."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
