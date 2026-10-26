@@ -258,7 +258,13 @@ export default function ParentCoursesPage() {
       }));
       if (String(result.status || '').toUpperCase() === 'VERIFIED' || result.entitled === true) {
         clearPendingVerify(draft.localOrderId);
-        setNotice(english ? 'Payment verified. Course access has been updated.' : 'भुगतान सत्यापित। कोर्स की पहुँच अपडेट हो गई है।');
+        setNotice(result.financeReconciliationRequired === true
+          ? english
+            ? 'Payment confirmed and course access granted. Invoice and revenue-share finalization is still being reconciled; do not pay again.'
+            : 'भुगतान की पुष्टि हो गई और कोर्स की पहुँच मिल गई है। इनवॉइस और revenue-share का अंतिम मिलान अभी जारी है; दोबारा भुगतान न करें।'
+          : String(result.message || '').trim() || (english
+            ? 'Payment verified. Course access has been updated.'
+            : 'भुगतान सत्यापित। कोर्स की पहुँच अपडेट हो गई है।'));
         await load();
         return;
       }
@@ -317,9 +323,13 @@ export default function ParentCoursesPage() {
         if (Number.isSafeInteger(recoveredLocalOrderId) && recoveredLocalOrderId > 0) {
           clearPendingVerify(recoveredLocalOrderId);
         }
-        setNotice(english
-          ? 'The existing payment was reconciled. Course access has been updated.'
-          : 'मौजूदा भुगतान सत्यापित हो गया। कोर्स की पहुँच अपडेट हो गई है।');
+        setNotice(body.financeReconciliationRequired === true
+          ? english
+            ? 'Payment confirmed and course access granted. Invoice and revenue-share finalization is still being reconciled; do not pay again.'
+            : 'भुगतान की पुष्टि हो गई और कोर्स की पहुँच मिल गई है। इनवॉइस और revenue-share का अंतिम मिलान अभी जारी है; दोबारा भुगतान न करें।'
+          : String(body.message || '').trim() || (english
+            ? 'The existing payment was reconciled. Course access has been updated.'
+            : 'मौजूदा भुगतान सत्यापित हो गया। कोर्स की पहुँच अपडेट हो गई है।'));
         await load();
         return;
       }
