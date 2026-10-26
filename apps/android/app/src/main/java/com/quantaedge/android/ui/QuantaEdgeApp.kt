@@ -1891,6 +1891,37 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     body,
                     mapOf("Idempotency-Key" to java.util.UUID.randomUUID().toString())
                 )
+                val orderStatus = order.optString("status").uppercase(Locale.ROOT)
+                if (order.optBoolean("entitled") || orderStatus == "VERIFIED" ||
+                    orderStatus == "PAYMENT_VERIFIED_ACCESS_GRANTED") {
+                    loadParentMarketplaceData()
+                    val recoveredId = order.optLong("localOrderId", order.optLong("orderId", 0L))
+                    if (recoveredId > 0L) setPendingCoursePayment("PARENT", null)
+                    status = order.optString("message").takeIf { it.isNotBlank() }
+                        ?: if (language == "hi") "मौजूदा भुगतान सत्यापित हो गया। कोर्स की पहुँच अपडेट हो गई।"
+                        else "The existing payment was reconciled. Course access has been updated."
+                    parentMarketplaceBusyCourseId = 0L
+                    return@runTask
+                }
+                if (orderStatus == "RECONCILIATION_REQUIRED") {
+                    val recoveredId = order.optLong("localOrderId", 0L)
+                    val recoveredProviderId = order.optString("providerOrderId").trim()
+                    if (recoveredId > 0L && recoveredProviderId.matches(Regex("order_[A-Za-z0-9]+"))) {
+                        setPendingCoursePayment("PARENT", JSONObject()
+                            .put("courseId", courseId)
+                            .put("localOrderId", recoveredId)
+                            .put("orderId", recoveredProviderId)
+                            .put("paymentId", "")
+                            .put("signature", "")
+                            .put("recipientType", recipientType)
+                            .put("studentId", studentId))
+                    }
+                    status = order.optString("message").takeIf { it.isNotBlank() }
+                        ?: if (language == "hi") "पुराना order अभी जाँच के अधीन है। इसी order को फिर सत्यापित करें; दोबारा भुगतान न करें।"
+                        else "The original order is still being reconciled. Retry verification for that order; do not pay again."
+                    parentMarketplaceBusyCourseId = 0L
+                    return@runTask
+                }
                 val localOrderId = order.optLong("localOrderId", 0L)
                 val providerOrderId = order.optString("orderId").trim()
                 if (localOrderId <= 0L || !providerOrderId.matches(Regex("order_[A-Za-z0-9]+"))) {
@@ -2000,6 +2031,40 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
                     checkoutBody,
                     mapOf("Idempotency-Key" to java.util.UUID.randomUUID().toString())
                 )
+                val orderStatus = order.optString("status").uppercase(Locale.ROOT)
+                if (order.optBoolean("entitled") || orderStatus == "VERIFIED" ||
+                    orderStatus == "PAYMENT_VERIFIED_ACCESS_GRANTED") {
+                    val recoveredCourseId = order.optLong("courseId", courseId).takeIf { it > 0L } ?: courseId
+                    currentCourseId = recoveredCourseId
+                    refreshStudentPrograms()
+                    studentProfile = ApiClient.getObject("/api/v1/students/me?courseId=" + recoveredCourseId)
+                    marketplaceOffers = ApiClient.getArray("/api/v1/marketplace/courses").objectItems()
+                    val recoveredId = order.optLong("localOrderId", order.optLong("orderId", 0L))
+                    if (recoveredId > 0L) setPendingCoursePayment("STUDENT", null)
+                    route = AppRoute.STUDENT_HOME
+                    status = order.optString("message").takeIf { it.isNotBlank() }
+                        ?: if (language == "hi") "मौजूदा भुगतान सत्यापित हो गया। आपका course तैयार है।"
+                        else "The existing payment was reconciled. Your course is ready."
+                    marketplaceBusyCourseId = 0L
+                    return@runTask
+                }
+                if (orderStatus == "RECONCILIATION_REQUIRED") {
+                    val recoveredId = order.optLong("localOrderId", 0L)
+                    val recoveredProviderId = order.optString("providerOrderId").trim()
+                    if (recoveredId > 0L && recoveredProviderId.matches(Regex("order_[A-Za-z0-9]+"))) {
+                        setPendingCoursePayment("STUDENT", JSONObject()
+                            .put("courseId", courseId)
+                            .put("localOrderId", recoveredId)
+                            .put("orderId", recoveredProviderId)
+                            .put("paymentId", "")
+                            .put("signature", ""))
+                    }
+                    status = order.optString("message").takeIf { it.isNotBlank() }
+                        ?: if (language == "hi") "पुराना order अभी जाँच के अधीन है। इसी order को फिर सत्यापित करें; दोबारा भुगतान न करें।"
+                        else "The original order is still being reconciled. Retry verification for that order; do not pay again."
+                    marketplaceBusyCourseId = 0L
+                    return@runTask
+                }
                 val localOrderId = order.optLong("localOrderId", 0L)
                 val providerOrderId = order.optString("orderId").trim()
                 if (localOrderId <= 0L || !providerOrderId.matches(Regex("order_[A-Za-z0-9]+"))) {
