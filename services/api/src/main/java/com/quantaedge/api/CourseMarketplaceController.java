@@ -162,7 +162,7 @@ public class CourseMarketplaceController {
         order by p.display_name,p.id
         """, institutionId, context.studentId(),
         institutionId, context.studentId(), context.studentId(),
-        institutionId, context.studentId(), context.studentId(),
+        institutionId, context.studentId(),
         context.studentId(), context.studentId(), institutionId);
     for (Map<String, Object> offer : offers) {
       long courseId = ((Number) offer.get("course_id")).longValue();
