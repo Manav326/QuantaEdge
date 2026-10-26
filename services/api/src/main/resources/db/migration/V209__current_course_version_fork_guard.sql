@@ -80,3 +80,50 @@ CREATE TRIGGER trg_qe_current_course_version_fork_source
 
 COMMENT ON FUNCTION qe_validate_current_course_version_fork_source() IS
   'Stops direct SQL callers and obsolete API paths from creating a new draft version from a legacy-migrated or obsolete course release. Existing event and learner history remains intact.';
+
+-- Reuse V208's insert trigger, but require a released version. SHAREABLE courses are live
+-- or have previously been live; WITHDRAWN releases remain valid for existing learner history
+-- and certificate completion but do not re-enter Marketplace publication.
+CREATE OR REPLACE FUNCTION qe_require_course_identity_for_new_certificate()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $function$
+BEGIN
+  IF NEW.program_id IS NULL OR NEW.course_identity_id IS NULL THEN
+    RAISE EXCEPTION
+      'COURSE_IDENTITY_REQUIRED: newly issued certificates must reference a stable course identity and exact content version.'
+      USING ERRCODE = '23514';
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1
+    FROM curriculum_program program
+    JOIN institution_course_identity identity
+      ON identity.id = program.course_identity_id
+     AND identity.status = 'ACTIVE'
+     AND identity.course_type_code = program.course_type_code
+    WHERE program.id = NEW.program_id
+      AND program.course_identity_id = NEW.course_identity_id
+      AND program.status = 'ACTIVE'
+      AND program.code <> 'GENERAL'
+      AND EXISTS (
+        SELECT 1
+        FROM institution_course_release source_release
+        WHERE source_release.program_id = program.id
+          AND source_release.source_institution_id = identity.source_institution_id
+          AND source_release.legacy_migration = false
+          AND source_release.release_state IN ('SHAREABLE','WITHDRAWN')
+          AND source_release.obsolete_at IS NULL
+      )
+  ) THEN
+    RAISE EXCEPTION
+      'COURSE_IDENTITY_MISMATCH: newly issued certificates require an active identity and an exact course version with a valid SHAREABLE or WITHDRAWN source release.'
+      USING ERRCODE = '23514';
+  END IF;
+  RETURN NEW;
+END
+$function$;
+
+COMMENT ON FUNCTION qe_require_course_identity_for_new_certificate() IS
+  'A certificate is bound to a stable logical course identity plus exact content version. Draft, in-review and merely quality-approved versions cannot issue certificates; already-shared or withdrawn versions remain valid for existing learner completion.';
+
