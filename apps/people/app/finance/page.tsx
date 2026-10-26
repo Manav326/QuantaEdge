@@ -206,17 +206,6 @@ export default function FinancePage(){
         setSelectedOfferId(requestedOfferId);
         setTaxForm(v=>({...v,offerId:requestedOfferId,legalEntityId:linkedSeller?String(linkedSeller.id):''}));
         setDiscountForm(v=>({...v,offerId:requestedOfferId}));
-      } else if(!selectedOfferId&&c.offers.length) {
-        setSelectedOfferId(String(c.offers[0].offer_id));
-      }
-      if(!launchSetup&&!requestedOfferId&&!discountForm.offerId&&c.offers.length) setDiscountForm(v=>({...v,offerId:String(c.offers[0].offer_id)}));
-      if(!launchSetup&&!requestedOfferId&&!taxForm.offerId&&c.offers.length) setTaxForm(v=>({...v,offerId:String(c.offers[0].offer_id)}));
-      if(!launchSetup&&!requestedOfferId&&!taxForm.legalEntityId&&c.legalEntities.length) setTaxForm(v=>({...v,legalEntityId:String(c.legalEntities[0].id)}));
-      if(!gstEntityId&&c.legalEntities.length) setGstEntityId(String(c.legalEntities[0].id));
-      if(!selectedTemplateId&&t.length&&!marketplaceSetupFromUrl.current){
-        const first=t[0];setSelectedTemplateId(String(first.id));setSelectedVersionNo(first.version_no||null);
-        setTemplateScope(first.scope);setTemplateEntityId(first.legal_entity_id?String(first.legal_entity_id):'');
-        setTemplateName(first.internal_name);setDesign(parseDesign(first.design_definition_json));
       }
     }catch(e){setError(e instanceof Error?e.message:'Finance workspace could not load.');}
     finally{setLoading(false);}
@@ -755,32 +744,22 @@ export default function FinancePage(){
     {error&&<div className={styles.alertError} role="alert">{error}</div>}
     {notice&&<div className={styles.alertSuccess} role="status">{notice}</div>}
     {catalog&&(marketplaceSetupContext||['overview','entities','tax','distribution','discounts','studio'].includes(tab))&&<section className={styles.marketplaceSetupGuide} aria-labelledby="marketplace-finance-setup-heading">
-      <div className={styles.marketplaceSetupHeader}>
-        <div>
-          <span className={styles.eyebrow}>COURSE LAUNCH · FINANCE SETUP</span>
-          <h2 id="marketplace-finance-setup-heading">{marketplaceSetupContext?'Finish course launch setup':'Configure course launch finance'}</h2>
-          <p>{marketplaceSetupContext
-            ?<>Configuring <strong>{contextualOffer?.course_name||marketplaceSetupContext.courseName||'this course'}</strong> for <strong>{contextualOffer?.institution_name||(marketplaceSetupContext.institutionId?'institution #'+marketplaceSetupContext.institutionId:'your institution')}</strong>.</>
-            :<>Select the exact course offer once; use it across seller, tax, revenue share, invoice design and optional discounts.</>}</p>
-        </div>
-        <span className={styles.marketplaceSetupOfferTag}>{contextualOffer?contextualOffer.course_code+' · Content v'+contextualOffer.content_version_no:'Select an offer below'}</span>
-      </div>
-      <div className={styles.marketplaceSetupOfferSelector}>
-        <label>Course offer<select value={selectedOfferId} onChange={event=>selectWorkflowOffer(event.target.value)}>
-          <option value="">Select a current course offer</option>
-          {catalog.offers.filter(o=>o.current_candidate||o.publicly_sellable).map(o=><option key={o.offer_id} value={String(o.offer_id)}>{o.institution_name} · {o.course_name} · v{o.content_version_no} · release {o.release_version}</option>)}
-        </select></label>
-        <p>{selectedOffer?<>Selected: <strong>{selectedOffer.course_name}</strong> · {selectedOffer.institution_name} · {selectedOffer.price_paise>0?rupees(selectedOffer.price_paise,selectedOffer.currency):'Free course'}.</>:'No offer is preselected. Choose one to avoid attaching settings to the wrong course.'}</p>
-      </div>
+      <div className={styles.marketplaceSetupHeader}><div><span className={styles.eyebrow}>HRMS · COURSE FINANCE</span>
+        <h2 id="marketplace-finance-setup-heading">{marketplaceSetupContext?'Finish course launch setup':'Configure course launch finance'}</h2>
+        <p>{marketplaceSetupContext?<>Configuring <strong>{contextualOffer?.course_name||marketplaceSetupContext.courseName||'this course'}</strong> for <strong>{contextualOffer?.institution_name||'the selected institution'}</strong>.</>:<>Select the exact course once, then follow the steps in order. Settings stay bound to this offer.</>}</p></div>
+        <span className={styles.marketplaceSetupOfferTag}>{contextualOffer?contextualOffer.course_code+' · v'+contextualOffer.content_version_no:'Select an offer'}</span></div>
+      <div className={styles.marketplaceSetupOfferSelector}><label>Course offer<select value={selectedOfferId} onChange={event=>selectWorkflowOffer(event.target.value)}>
+        <option value="">Select a current course offer</option>{catalog.offers.filter(o=>o.current_candidate||o.publicly_sellable).map(o=><option key={o.offer_id} value={String(o.offer_id)}>{o.institution_name} · {o.course_name} · v{o.content_version_no}</option>)}
+      </select></label><p>{selectedOffer?<>Selected: <strong>{selectedOffer.course_name}</strong> · {selectedOffer.institution_name} · {selectedOffer.price_paise>0?rupees(selectedOffer.price_paise,selectedOffer.currency):'Free course'}.</>:'No course is preselected.'}</p></div>
       <div className={styles.marketplaceSetupSteps}>
-        <a className={styles.marketplaceSetupStep} href="/institutions#hrms-integrations-heading"><span className={styles.marketplaceSetupStepNumber}>01</span><span className={styles.marketplaceSetupStepCopy}><strong>Payment integration{selectedOffer&&selectedOffer.price_paise<=0?' · optional':''}</strong><small>{selectedOffer&&selectedOffer.price_paise<=0?'Free offer — paid checkout is not a launch blocker.':'Confirm central Razorpay credentials and webhook for paid courses.'}</small></span><span className={styles.marketplaceSetupStepAction}>Open setup ↗</span></a>
-        <button type="button" className={tab==='entities'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('entities')}><span className={styles.marketplaceSetupStepNumber}>02</span><span className={styles.marketplaceSetupStepCopy}><strong>Seller &amp; GST</strong><small>Complete saved details, verify GST and review e-invoice status.</small></span><span className={styles.marketplaceSetupStepAction}>{tab==='entities'?'Current':'Open'}</span></button>
-        <button type="button" className={tab==='tax'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('tax')}><span className={styles.marketplaceSetupStepNumber}>03</span><span className={styles.marketplaceSetupStepCopy}><strong>Tax profile</strong><small>Submit and approve the seller's effective tax treatment.</small></span><span className={styles.marketplaceSetupStepAction}>{tab==='tax'?'Current':'Open'}</span></button>
-        <button type="button" className={tab==='distribution'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('distribution')}><span className={styles.marketplaceSetupStepNumber}>04</span><span className={styles.marketplaceSetupStepCopy}><strong>Revenue share</strong><small>Approve recipient allocation after tax.</small></span><span className={styles.marketplaceSetupStepAction}>{tab==='distribution'?'Current':'Open'}</span></button>
-        <button type="button" className={tab==='studio'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('studio')}><span className={styles.marketplaceSetupStepNumber}>05</span><span className={styles.marketplaceSetupStepCopy}><strong>Invoice design</strong><small>Publish an approved template for future invoices.</small></span><span className={styles.marketplaceSetupStepAction}>{tab==='studio'?'Current':'Open'}</span></button>
-        <button type="button" className={tab==='discounts'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('discounts')}><span className={styles.marketplaceSetupStepNumber}>06</span><span className={styles.marketplaceSetupStepCopy}><strong>Discounts · optional</strong><small>Approve each code before use.</small></span><span className={styles.marketplaceSetupStepAction}>{tab==='discounts'?'Current':'Open'}</span></button>
+        <a className={styles.marketplaceSetupStep} href="/institutions#hrms-integrations-heading"><span className={styles.marketplaceSetupStepNumber}>01</span><span className={styles.marketplaceSetupStepCopy}><strong>Payments</strong><small>Razorpay / webhook for paid courses</small></span></a>
+        <button type="button" className={tab==='entities'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('entities')}><span className={styles.marketplaceSetupStepNumber}>02</span><span className={styles.marketplaceSetupStepCopy}><strong>Seller &amp; GST</strong><small>Legal details, GST and e-invoice review</small></span></button>
+        <button type="button" className={tab==='tax'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('tax')}><span className={styles.marketplaceSetupStepNumber}>03</span><span className={styles.marketplaceSetupStepCopy}><strong>Tax profile</strong><small>Classification and effective rates</small></span></button>
+        <button type="button" className={tab==='distribution'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('distribution')}><span className={styles.marketplaceSetupStepNumber}>04</span><span className={styles.marketplaceSetupStepCopy}><strong>Revenue share</strong><small>Approve after-tax allocation</small></span></button>
+        <button type="button" className={tab==='studio'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('studio')}><span className={styles.marketplaceSetupStepNumber}>05</span><span className={styles.marketplaceSetupStepCopy}><strong>Invoice design</strong><small>Approve and publish a template</small></span></button>
+        <button type="button" className={tab==='discounts'?styles.marketplaceSetupStepActive:styles.marketplaceSetupStep} onClick={()=>setTab('discounts')}><span className={styles.marketplaceSetupStepNumber}>06</span><span className={styles.marketplaceSetupStepCopy}><strong>Discounts · optional</strong><small>Approve codes before use</small></span></button>
       </div>
-      <p className={styles.marketplaceSetupNote}><strong>When finished:</strong> the server validates the saved state. Return to Institution Marketplace Control and refresh; financial setup does not publish the course. Existing course access is unchanged while a listing is prepared.</p>
+      <p className={styles.marketplaceSetupNote}>HRMS rechecks saved finance state for launch readiness. Finance setup does not publish the course.</p>
     </section>}
     <nav className={styles.tabs} aria-label="Finance workspace">
       {tabs.map(([key,label,icon])=><button key={key} className={tab===key?styles.tabActive:styles.tab}
