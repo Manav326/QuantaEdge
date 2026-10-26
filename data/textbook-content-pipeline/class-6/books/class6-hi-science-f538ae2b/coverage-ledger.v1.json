@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2017,
     "eligible_visual_asset_rows": 2017,
-    "raw_analysis_result_rows": 20,
-    "successful_visual_analyses": 9,
-    "missing_visual_analyses": 1997,
-    "failed_visual_analyses": 11,
+    "raw_analysis_result_rows": 30,
+    "successful_visual_analyses": 15,
+    "missing_visual_analyses": 1987,
+    "failed_visual_analyses": 15,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 2008,
+    "unresolved_count": 2002,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -8080,9 +8080,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -8098,7 +8107,7 @@
       "asset_path": "page-0005.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -8116,9 +8125,33 @@
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image is a page from a textbook discussing various scientific methods and their applications in education. It mentions that each method aims to provide information to students in an effective manner and includes questions to assess the understanding of students.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "विभिन्नन्न गतिविधियााँ  वैज्ञानिक प्रक्रियााओं पर आधाारितत    हैं, जिनकी योजनाा  व्यावहाारिक और माानसिक अनुभव",
+          "प्रतयेक क्रियााकलााप के पश्‍चातत्, विद्यार्थियों के  द्वााराा जाानकाारी को कितनी अचछी",
+          "ततरह से आतमसातत   कियाा  है उसके लिए कुछ स्व-मूल्य    ांांकन  प्रश्‍नन दिये गए  हैं।  प्रश्‍नन अधिगम की प्रक्रियाा   में",
+          "महत्वपूर्ण भूमिकाा  निभातते    हैं। वे शिक्षार्थीी को अन्वेेषण करने और उसे सुदृढ़ करने में सहाायताा  करतते    हैं। आपको कई",
+          "विचाारोत्तेजक प्रश्‍नन भी मिलेंगे जो गहन सोच, आतम-जागरूकताा और समालोचनाातमक विश्‍लेेषण को प्रोत्साहितत"
+        ],
+        "concepts": [
+          "scientific methods",
+          "educational applications",
+          "assessment questions",
+          "scientific inquiry",
+          "educational assessment",
+          "critical thinking",
+          "self-awareness",
+          "critical evaluation"
+        ],
+        "context_relation": "The image discusses the use of various scientific methods in educational contexts, emphasizing the importance of assessment questions and critical thinking in evaluating students' understanding.",
+        "limitations": [
+          "The image does not provide specific examples or details about the methods or questions discussed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -8134,9 +8167,35 @@
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing various scientific experiments and their applications in providing educational content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "विभिन्नन्न गतिविधियााँ  वैज्ञानिक प्रक्रियााओं पर आधाारितत    हैं, जिनकी योजनाा  व्यावहाारिक और माानसिक अनुभव",
+          "प्रतयेक क्रियााकलााप के पश्‍चातत्, विद्यार्थियों के  द्वााराा जाानकाारी को कितनी अचछी",
+          "ततरह से आतमसातत   कियाा  है उसके लिए कुछ स्व-मूल्य    ांांकन  प्रश्‍नन दिये गए  हैं।  प्रश्‍नन अधिगम की प्रक्रियाा   में महत्वपूर्ण भूमिकाा  निभातते    हैं। वे शिक्षार्थीी को अन्वेेषण करने और उसे सुदृढ़ करने में सहाायताा  करतते    हैं। आपको कई",
+          "विचाारोत्तेजक प्रश्‍नन भी मिलेंगे जो गहन सोच, आतम-जागरूकताा और समालोचनाातमक विश्‍लेेषण को प्रोत्साहितत",
+          "करने के लिए रचे गए"
+        ],
+        "concepts": [
+          "scientific experiments",
+          "educational content",
+          "scientific methods",
+          "educational objectives",
+          "educational assessment",
+          "educational evaluation",
+          "educational feedback",
+          "educational assessment methods",
+          "educational evaluation methods",
+          "educational feedback methods"
+        ],
+        "context_relation": "The page discusses the application of various scientific experiments in providing educational content.",
+        "limitations": [
+          "The page does not provide specific examples or details of the experiments."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -8152,7 +8211,7 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -8170,7 +8229,7 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -8188,7 +8247,7 @@
       "asset_path": "page-0006.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -8206,9 +8265,31 @@
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing various educational activities and initiatives designed to engage students, teachers, parents, and the broader community in educational activities. It emphasizes the importance of students gathering diverse information and extracting their knowledge to improve their understanding.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "खंड मेें कुछ परियोजनाएँ और गतिविधियाँ हैैं जो शिक्षार््थथियों की विशेषज्ञों, शिक्षकों, माता-पिता और व्यापक समुदाय के साथथ अंत:क्रिया को प्ोत््ससाहित करने के लिए रची गयी हैैं। शिक्षार््थथियों को विविध जानकारी एकत्र करने और अपने निष््कर््ष निकालने के लिए भी प्ोत््ससाहित किया गया है।",
+          "पाठ्यपुस््तक, सीखने के अनेक माध््यमों मेें से एक माध््यम है। शिक्षार््थथि‍यों को अपने आस-पास के परिवेश की खोज एवं अवलोकन करके अपने ज्ञान को और बढ़ाना चाहिए। सूचना और संचार प्रौद्योगिकी (आई.सी.टी.) का उचित उपयोग शिक्षार््थथियों के सीखने और विकास के लिए एक मूल््यवान माध््यम हो सकता है।",
+          "शिक्षार्थी प"
+        ],
+        "concepts": [
+          "educational activities",
+          "community engagement",
+          "diverse information",
+          "knowledge extraction",
+          "educational initiatives",
+          "information and communication technology",
+          "learning methods",
+          "environmental awareness"
+        ],
+        "context_relation": "The text discusses the importance of students gathering diverse information and engaging in educational activities to improve their knowledge and understanding.",
+        "limitations": [
+          "The text does not provide specific examples or details about the educational activities or initiatives."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -8224,9 +8305,30 @@
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Text discussing educational content creation and dissemination.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "खंड मेें कुछ परियोजनाएँ और गतिविधियाँ हैैं जो शिक्षार््थथियों की विशेषज्ञों, शिक्षकों, माता-पिता और व्यापक समुदाय के साथथ अंत:क्रिया को प्ोत््ससाहित करने के लिए रची गयी हैैं। शिक्षार््थथियों को विविध जानकारी एकत्र करने और अपने निष््कर््ष निकालने के लिए भी प्ोत््ससाहित किया गया है।",
+          "पाठ्यपुस््तक, सीखने के अनेक माध््यमों मेें से एक माध््यम है। शिक्षार््थथि‍यों को अपने आस-पास के परिवेश की खोज एवं अवलोकन करके अपने ज्ञान को और बढ़ाना चाहिए। सूचना और संचार प्रौद्योगिकी (आई.सी.टी.) का उचित उपयोग शिक्षार््थथियों के सीखने और विकास के लिए एक मूल््यवान माध््यम हो सकता है।",
+          "शिक्षार्थी प"
+        ],
+        "concepts": [
+          "educational content creation",
+          "dissemination",
+          "learning",
+          "information and communication technology",
+          "education"
+        ],
+        "context_relation": "educational content creation and dissemination",
+        "limitations": [
+          "unclear visual elements",
+          "unclear figure or diagram",
+          "unclear equation or formula"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -8242,9 +8344,29 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing various educational activities and opportunities for students, teachers, parents, and the community to engage in. It emphasizes the importance of students gathering diverse information and extracting knowledge from their surroundings to enhance their learning.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "खंड मेें कुछ परियोजनाएँ और गतिविधियाँ हैैं जो शिक्षार््थथियों की विशेषज्ञों, शिक्षकों, माता-पिता और व्यापक समुदाय के साथथ अंत:क्रिया को प्ोत््ससाहित करने के लिए रची गयी हैैं। शिक्षार््थथियों को विविध जानकारी एकत्र करने और अपने निष््कर््ष निकालने के लिए भी प्ोत््ससाहित किया गया है।",
+          "पाठ्यपुस््तक, सीखने के अनेक माध््यमों मेें से एक माध््यम है। शिक्षार््थथि‍यों को अपने आस-पास के परिवेश की खोज एवं अवलोकन करके अपने ज्ञान को और बढ़ाना चाहिए। सूचना और संचार प्रौद्योगिकी (आई.सी.टी.) का उचित उपयोग शिक्षार््थथियों के सीखने और विकास के लिए एक मूल््यवान माध््यम हो सकता है।",
+          "शिक्षार्थी प"
+        ],
+        "concepts": [
+          "educational activities",
+          "community engagement",
+          "diverse information",
+          "knowledge extraction",
+          "environmental learning",
+          "information and communication technology"
+        ],
+        "context_relation": "The text discusses the importance of students gathering diverse information and extracting knowledge from their surroundings to enhance their learning, emphasizing the role of various educational activities and opportunities in achieving this goal.",
+        "limitations": [
+          "The text does not provide specific examples or details about the activities or opportunities mentioned."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

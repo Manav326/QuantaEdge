@@ -8,26 +8,26 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 15,
+    "assets_selected": 19,
     "assets_processed_this_run": 10,
     "assets_processed_ids": [
-      "32764b05e7497a4c88076da3",
-      "b00daf705b5b55cd03e9c9e1",
-      "4d5d62e18e3b7ecb0db4b347",
-      "271dc8c89129c9f573b6d05e",
-      "c033c0958edb492d3f3bbac1",
-      "b9224d6dea4f2885ca390f79",
-      "32347d11f8d29e531b5acaba",
-      "e927d1942e8218f46ae3025f",
-      "d7f77205b2fb464e7832aa40",
-      "964eb8f60e9372c84d9f4a95"
+      "492ae2df39d8df3d34ac00b4",
+      "9c6dff9a9f057931ec6c936e",
+      "7b372d9ba7d34a8dd61d71ee",
+      "ea9408eddad9740ed7247ed5",
+      "efc5046533722315414b76e5",
+      "3f1c411d4efd51c4d6f53357",
+      "2e0dd209bed78ee6e34bfb6e",
+      "0927971894795773908073f8",
+      "ea513ad92187c03d12db64dd",
+      "80cc779ff3995cac7552b4d8"
     ],
     "assets_eligible": 2017,
-    "assets_analyzed": 9,
-    "assets_remaining": 2008,
-    "assets_completion_percent": 0.4,
-    "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 5,
+    "assets_analyzed": 15,
+    "assets_remaining": 2002,
+    "assets_completion_percent": 0.7,
+    "assets_failed": 15,
+    "assets_skipped_from_checkpoint": 9,
     "batch_limit": 10,
     "publication_allowed": false
   },
@@ -496,6 +496,310 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
       "checkpointed_at": "2026-10-26T23:29:33Z"
+    },
+    {
+      "asset_id": "492ae2df39d8df3d34ac00b4",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "529a2c4ea6822ceec9077ec6beb30f118deec103720faf1ce13cd897e6751c03",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:30:21Z"
+    },
+    {
+      "asset_id": "9c6dff9a9f057931ec6c936e",
+      "asset_sha256": "ed892b9435b57a494f2b600ea94d3548b0dcc92edcc101ac11988fbb7435fe1b",
+      "page_text_context_sha256": "529a2c4ea6822ceec9077ec6beb30f118deec103720faf1ce13cd897e6751c03",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 5,
+      "asset_path": "page-0005.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "7b372d9ba7d34a8dd61d71ee",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1292812668961c584acc443d2ef33971cffff3e192dfeb719618e7a9c36fbf3a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a page from a textbook discussing various scientific methods and their applications in education. It mentions that each method aims to provide information to students in an effective manner and includes questions to assess the understanding of students.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "विभिन्नन्न गतिविधियााँ  वैज्ञानिक प्रक्रियााओं पर आधाारितत    हैं, जिनकी योजनाा  व्यावहाारिक और माानसिक अनुभव",
+          "प्रतयेक क्रियााकलााप के पश्‍चातत्, विद्यार्थियों के  द्वााराा जाानकाारी को कितनी अचछी",
+          "ततरह से आतमसातत   कियाा  है उसके लिए कुछ स्व-मूल्य    ांांकन  प्रश्‍नन दिये गए  हैं।  प्रश्‍नन अधिगम की प्रक्रियाा   में",
+          "महत्वपूर्ण भूमिकाा  निभातते    हैं। वे शिक्षार्थीी को अन्वेेषण करने और उसे सुदृढ़ करने में सहाायताा  करतते    हैं। आपको कई",
+          "विचाारोत्तेजक प्रश्‍नन भी मिलेंगे जो गहन सोच, आतम-जागरूकताा और समालोचनाातमक विश्‍लेेषण को प्रोत्साहितत"
+        ],
+        "concepts": [
+          "scientific methods",
+          "educational applications",
+          "assessment questions",
+          "scientific inquiry",
+          "educational assessment",
+          "critical thinking",
+          "self-awareness",
+          "critical evaluation"
+        ],
+        "context_relation": "The image discusses the use of various scientific methods in educational contexts, emphasizing the importance of assessment questions and critical thinking in evaluating students' understanding.",
+        "limitations": [
+          "The image does not provide specific examples or details about the methods or questions discussed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:36:56Z"
+    },
+    {
+      "asset_id": "ea9408eddad9740ed7247ed5",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "1292812668961c584acc443d2ef33971cffff3e192dfeb719618e7a9c36fbf3a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing various scientific experiments and their applications in providing educational content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "विभिन्नन्न गतिविधियााँ  वैज्ञानिक प्रक्रियााओं पर आधाारितत    हैं, जिनकी योजनाा  व्यावहाारिक और माानसिक अनुभव",
+          "प्रतयेक क्रियााकलााप के पश्‍चातत्, विद्यार्थियों के  द्वााराा जाानकाारी को कितनी अचछी",
+          "ततरह से आतमसातत   कियाा  है उसके लिए कुछ स्व-मूल्य    ांांकन  प्रश्‍नन दिये गए  हैं।  प्रश्‍नन अधिगम की प्रक्रियाा   में महत्वपूर्ण भूमिकाा  निभातते    हैं। वे शिक्षार्थीी को अन्वेेषण करने और उसे सुदृढ़ करने में सहाायताा  करतते    हैं। आपको कई",
+          "विचाारोत्तेजक प्रश्‍नन भी मिलेंगे जो गहन सोच, आतम-जागरूकताा और समालोचनाातमक विश्‍लेेषण को प्रोत्साहितत",
+          "करने के लिए रचे गए"
+        ],
+        "concepts": [
+          "scientific experiments",
+          "educational content",
+          "scientific methods",
+          "educational objectives",
+          "educational assessment",
+          "educational evaluation",
+          "educational feedback",
+          "educational assessment methods",
+          "educational evaluation methods",
+          "educational feedback methods"
+        ],
+        "context_relation": "The page discusses the application of various scientific experiments in providing educational content.",
+        "limitations": [
+          "The page does not provide specific examples or details of the experiments."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:38:10Z"
+    },
+    {
+      "asset_id": "efc5046533722315414b76e5",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "1292812668961c584acc443d2ef33971cffff3e192dfeb719618e7a9c36fbf3a",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "3f1c411d4efd51c4d6f53357",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "page_text_context_sha256": "1292812668961c584acc443d2ef33971cffff3e192dfeb719618e7a9c36fbf3a",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "2e0dd209bed78ee6e34bfb6e",
+      "asset_sha256": "e08e6109a58d33c2454f4fdebb410d99584d766ba312d9b761b84cefe42da410",
+      "page_text_context_sha256": "1292812668961c584acc443d2ef33971cffff3e192dfeb719618e7a9c36fbf3a",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 6,
+      "asset_path": "page-0006.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "0927971894795773908073f8",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d12460c88e102baa7d558030c3712d1e59b38164589e90ddd0ed3caf52dfa1ea",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing various educational activities and initiatives designed to engage students, teachers, parents, and the broader community in educational activities. It emphasizes the importance of students gathering diverse information and extracting their knowledge to improve their understanding.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "खंड मेें कुछ परियोजनाएँ और गतिविधियाँ हैैं जो शिक्षार््थथियों की विशेषज्ञों, शिक्षकों, माता-पिता और व्यापक समुदाय के साथथ अंत:क्रिया को प्ोत््ससाहित करने के लिए रची गयी हैैं। शिक्षार््थथियों को विविध जानकारी एकत्र करने और अपने निष््कर््ष निकालने के लिए भी प्ोत््ससाहित किया गया है।",
+          "पाठ्यपुस््तक, सीखने के अनेक माध््यमों मेें से एक माध््यम है। शिक्षार््थथि‍यों को अपने आस-पास के परिवेश की खोज एवं अवलोकन करके अपने ज्ञान को और बढ़ाना चाहिए। सूचना और संचार प्रौद्योगिकी (आई.सी.टी.) का उचित उपयोग शिक्षार््थथियों के सीखने और विकास के लिए एक मूल््यवान माध््यम हो सकता है।",
+          "शिक्षार्थी प"
+        ],
+        "concepts": [
+          "educational activities",
+          "community engagement",
+          "diverse information",
+          "knowledge extraction",
+          "educational initiatives",
+          "information and communication technology",
+          "learning methods",
+          "environmental awareness"
+        ],
+        "context_relation": "The text discusses the importance of students gathering diverse information and engaging in educational activities to improve their knowledge and understanding.",
+        "limitations": [
+          "The text does not provide specific examples or details about the educational activities or initiatives."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:50:34Z"
+    },
+    {
+      "asset_id": "ea513ad92187c03d12db64dd",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d12460c88e102baa7d558030c3712d1e59b38164589e90ddd0ed3caf52dfa1ea",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Text discussing educational content creation and dissemination.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "खंड मेें कुछ परियोजनाएँ और गतिविधियाँ हैैं जो शिक्षार््थथियों की विशेषज्ञों, शिक्षकों, माता-पिता और व्यापक समुदाय के साथथ अंत:क्रिया को प्ोत््ससाहित करने के लिए रची गयी हैैं। शिक्षार््थथियों को विविध जानकारी एकत्र करने और अपने निष््कर््ष निकालने के लिए भी प्ोत््ससाहित किया गया है।",
+          "पाठ्यपुस््तक, सीखने के अनेक माध््यमों मेें से एक माध््यम है। शिक्षार््थथि‍यों को अपने आस-पास के परिवेश की खोज एवं अवलोकन करके अपने ज्ञान को और बढ़ाना चाहिए। सूचना और संचार प्रौद्योगिकी (आई.सी.टी.) का उचित उपयोग शिक्षार््थथियों के सीखने और विकास के लिए एक मूल््यवान माध््यम हो सकता है।",
+          "शिक्षार्थी प"
+        ],
+        "concepts": [
+          "educational content creation",
+          "dissemination",
+          "learning",
+          "information and communication technology",
+          "education"
+        ],
+        "context_relation": "educational content creation and dissemination",
+        "limitations": [
+          "unclear visual elements",
+          "unclear figure or diagram",
+          "unclear equation or formula"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:51:44Z"
+    },
+    {
+      "asset_id": "80cc779ff3995cac7552b4d8",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d12460c88e102baa7d558030c3712d1e59b38164589e90ddd0ed3caf52dfa1ea",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing various educational activities and opportunities for students, teachers, parents, and the community to engage in. It emphasizes the importance of students gathering diverse information and extracting knowledge from their surroundings to enhance their learning.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "खंड मेें कुछ परियोजनाएँ और गतिविधियाँ हैैं जो शिक्षार््थथियों की विशेषज्ञों, शिक्षकों, माता-पिता और व्यापक समुदाय के साथथ अंत:क्रिया को प्ोत््ससाहित करने के लिए रची गयी हैैं। शिक्षार््थथियों को विविध जानकारी एकत्र करने और अपने निष््कर््ष निकालने के लिए भी प्ोत््ससाहित किया गया है।",
+          "पाठ्यपुस््तक, सीखने के अनेक माध््यमों मेें से एक माध््यम है। शिक्षार््थथि‍यों को अपने आस-पास के परिवेश की खोज एवं अवलोकन करके अपने ज्ञान को और बढ़ाना चाहिए। सूचना और संचार प्रौद्योगिकी (आई.सी.टी.) का उचित उपयोग शिक्षार््थथियों के सीखने और विकास के लिए एक मूल््यवान माध््यम हो सकता है।",
+          "शिक्षार्थी प"
+        ],
+        "concepts": [
+          "educational activities",
+          "community engagement",
+          "diverse information",
+          "knowledge extraction",
+          "environmental learning",
+          "information and communication technology"
+        ],
+        "context_relation": "The text discusses the importance of students gathering diverse information and extracting knowledge from their surroundings to enhance their learning, emphasizing the role of various educational activities and opportunities in achieving this goal.",
+        "limitations": [
+          "The text does not provide specific examples or details about the activities or opportunities mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:53:54Z"
     }
   ]
 }
