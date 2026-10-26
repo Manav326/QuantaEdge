@@ -99,6 +99,9 @@ public class CourseMarketplaceController {
           (exists(select 1 from student_program_enrollment e
             where e.institution_id=? and e.student_id=? and qe_same_logical_course(e.program_id,p.id)
               and e.status in ('ACTIVE','PAUSED'))
+            or exists(select 1 from course_entitlement ce
+              where ce.institution_id=? and qe_same_logical_course(ce.course_id,p.id)
+                and (ce.holder_student_id=? or ce.holder_user_id=(select user_account_id from student where id=?)))
             ) as has_access,
           exists(select 1 from course_purchase cp
             where cp.institution_id=? and cp.student_id=? and qe_same_logical_course(cp.course_id,p.id)) as purchased,
@@ -158,7 +161,9 @@ public class CourseMarketplaceController {
           )
         order by p.display_name,p.id
         """, institutionId, context.studentId(),
-        institutionId, context.studentId(), context.studentId(), context.studentId(), institutionId);
+        institutionId, context.studentId(), context.studentId(),
+        institutionId, context.studentId(), context.studentId(),
+        context.studentId(), context.studentId(), institutionId);
     for (Map<String, Object> offer : offers) {
       long courseId = ((Number) offer.get("course_id")).longValue();
       offer.put("subjects", jdbc.queryForList("""
@@ -1562,9 +1567,11 @@ public class CourseMarketplaceController {
           buyer_snapshot::text as buyer_snapshot_json,
           to_char(created_at at time zone 'UTC','YYYY-MM-DD"T"HH24:MI:SS.US"Z"') as order_created_at_iso
         from course_payment_order
-        where id=? and institution_id=? and (student_id=? or purchaser_user_id=?)
+        where id=? and institution_id=?
+          and ((? is not null and student_id=? and purchaser_user_id is null)
+            or (? is not null and purchaser_user_id=?))
         for update
-        """, localOrderId, institutionId, callerStudentId, callerUserId);
+        """, localOrderId, institutionId, callerStudentId, callerStudentId, callerUserId, callerUserId);
     if (rows.isEmpty()) throw new SecurityException("This payment order is not available to this account.");
     Map<String,Object> order = rows.getFirst();
     String state = String.valueOf(order.get("status"));
@@ -2159,9 +2166,11 @@ public class CourseMarketplaceController {
           tax_calculation_snapshot::text as tax_calculation_snapshot_json,
           revenue_share_policy_snapshot::text as revenue_share_policy_snapshot_json
         from course_payment_order
-        where id=? and institution_id=? and (student_id=? or purchaser_user_id=?)
+        where id=? and institution_id=?
+          and ((? is not null and student_id=? and purchaser_user_id is null)
+            or (? is not null and purchaser_user_id=?))
         for update
-        """, localOrderId, institutionId, callerStudentId, callerUserId);
+        """, localOrderId, institutionId, callerStudentId, callerStudentId, callerUserId, callerUserId);
     if (rows.isEmpty()) throw new SecurityException("This payment order is not available to this account.");
     Map<String, Object> order = rows.getFirst();
     String state = String.valueOf(order.get("status"));
