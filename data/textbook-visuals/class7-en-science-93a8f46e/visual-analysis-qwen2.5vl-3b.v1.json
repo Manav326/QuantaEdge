@@ -11,11 +11,11 @@
     "assets_selected": 2299,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "e904eb84e607d05c01b9eca9",
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "79bbc448b9853ba138d248e2",
-      "c85f41bbf274ff0251ebf3e6"
+      "19182aa83463f523d90ed77b",
+      "156c826ab2a2fbe86cb5bfea",
+      "bfd2a5a7d3b8762a333a2b8e"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 2294,
@@ -9959,7 +9959,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and open-mindedness.",
+        "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts\nor learning about diﬀ erent things in nature. Science, as we said\nin Grade 6, is a process, so it is about a way of thinking that\nwelcomes curiosity, asks questions, and is open to the unknown.\nIn Grade 7, we will try to ask deeper quest",
@@ -9969,10 +9969,9 @@
         "concepts": [
           "science",
           "curiosity",
-          "open-mindedness",
-          "exploration",
+          "questioning",
           "environment",
-          "society",
+          "responsibility",
           "science as a process",
           "environmental challenges",
           "sustainable world",
@@ -9981,13 +9980,13 @@
           "interconnectedness",
           "scientific ideas",
           "discoveries",
-          "questions",
-          "environmental challenges",
-          "sustainable world"
+          "asking questions"
         ],
-        "context_relation": "exploration and curiosity in science",
+        "context_relation": "exploration and questioning in science",
         "limitations": [
-          "The text does not provide specific examples or activities for Grade 7 students to engage with.",
+          "limited to Grade 7",
+          "focus on nature and environment",
+          "emphasis on responsibility and sustainability",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -9995,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40322830539",
-      "checkpointed_at": "2026-10-26T12:46:06Z"
+      "checkpointed_at": "2026-10-26T12:56:59Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13461,31 +13460,41 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A diagram showing the Earth and the Moon casting shadows during a solar eclipse.",
-        "visual_type": "diagram",
+        "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
           "In the chapters that follow, you'll also make simple observations and do fun experiments, and dive into topics that need careful thinking. Each chapter builds on what you already know and encourages you to ask questions, explore, do hands-on experiments, and think like a scientist! As you will find ",
           "1.1 Happy Exploring!",
-          "Activity 1.1: Question the Answer"
+          "Activity 1.1: Question the Answer",
+          "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
         ],
         "concepts": [
+          "light",
           "eclipse",
-          "Earth's rotation",
-          "Moon's orbit",
+          "Earth",
+          "Moon",
+          "rotation",
+          "axis",
           "day and night",
-          "scientific inquiry"
+          "experiments",
+          "questions",
+          "thinking",
+          "experiments that confirm what we think will happen",
+          "additional questions that might need more experiments and more questions",
+          "questions and answers",
+          "turning around"
         ],
-        "context_relation": "The text discusses the role of light and shadows in understanding the universe, specifically focusing on eclipses and the movements of the Earth, Moon, and Sun.",
+        "context_relation": "The text discusses the effects of light on the Earth and Moon, including eclipses, and encourages readers to think critically and conduct experiments.",
         "limitations": [
-          "The text does not provide specific details about the diagrams or experiments mentioned."
+          "The text does not provide specific images or diagrams related to the concepts discussed."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40322830539",
-      "checkpointed_at": "2026-10-26T12:49:20Z"
+      "checkpointed_at": "2026-10-26T12:57:37Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -50035,7 +50044,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40277346366",
+      "run_id": "40322830539",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -63064,9 +63073,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40277346366",
+      "run_id": "40322830539",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -67387,7 +67396,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40277346366",
+      "run_id": "40322830539",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
