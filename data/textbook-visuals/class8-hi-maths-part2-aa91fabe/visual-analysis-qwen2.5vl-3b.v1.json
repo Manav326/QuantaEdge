@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 15,
+    "assets_selected": 18,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "0e7a926d67303ac8ca733ea3",
-      "da0585f084e2900d8b18c018",
-      "a298ea8ba3ebf309bba389e0",
-      "324f7b85334572108d164b4d",
-      "512c9084ffa49c3c6eae2fd7"
+      "fd69a5ef3b2af9bc04b8670a",
+      "07ce610ba78784f2ceb7201c",
+      "fd3735e052a5ac6afbc7332b",
+      "c844cbccaed758c5a8f2d88c",
+      "868711d6e63dd9c54a7c74d1"
     ],
     "assets_eligible": 1156,
-    "assets_analyzed": 13,
-    "assets_remaining": 1143,
-    "assets_completion_percent": 1.1,
-    "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 10,
+    "assets_analyzed": 17,
+    "assets_remaining": 1139,
+    "assets_completion_percent": 1.5,
+    "assets_failed": 13,
+    "assets_skipped_from_checkpoint": 13,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -597,6 +597,159 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413175682",
       "checkpointed_at": "2026-10-26T23:34:53Z"
+    },
+    {
+      "asset_id": "fd69a5ef3b2af9bc04b8670a",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "224249296ad755fc0a98a11ba342904b5ca92aee0873938ac59227464a38bc9b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear content",
+          "no visible text or images"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:35:30Z"
+    },
+    {
+      "asset_id": "07ce610ba78784f2ceb7201c",
+      "asset_sha256": "35217729227f3c0f915c70bda858f34f20a393575a1b996756b8a6d41e10cb42",
+      "page_text_context_sha256": "224249296ad755fc0a98a11ba342904b5ca92aee0873938ac59227464a38bc9b",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 6,
+      "asset_path": "page-0006.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "fd3735e052a5ac6afbc7332b",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "136b1fdf41b49c417916f8ec441dc9e69f6c48131ddd9d2461111a88636015ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, abstract, and irregularly shaped object that appears to be a splash or a wave.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The text is about the purpose of the textbook to engage students' minds and encourage them to embark on mathematical journeys.",
+        "limitations": [
+          "The image does not provide specific details about the textbook or its content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:40:59Z"
+    },
+    {
+      "asset_id": "c844cbccaed758c5a8f2d88c",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "136b1fdf41b49c417916f8ec441dc9e69f6c48131ddd9d2461111a88636015ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, textured, and irregularly shaped object that appears to be a splash or a smear of paint.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "पाठ्यपुस््तकका उद्ेश््य युवा मन को  आकर््षषित और   उन््हेें  गणितीय खोोज की आजीवन यात्राअग्रसर करता है।",
+          "मैैं इस पुस््तकसभी ललेखकों और योोगदानकर््तताओं को इस महत्तत्तपूर््ण और मूूल्यवान योोगदान हेतु",
+          "और  राष्टट्रगणित शिक्षकों,  विद्यार््थथियों और जिज्ासुओं के लिए की गई सेवा के लिए पुनः धन्यवाद",
+          "देता हूँ।",
+          "हम इस पुस््तकसंबंध  मेें आपकी टिप््पणियो         ओं और सुझावों की प्रतीक्षाकरते  हैैं और आशा करते  हैैं",
+          "किश    क्षण और सीखने के समय आपने जो रोोचक अभ्यास, क्रियाकललाप और कार््य विकसित किए  हैैं",
+          "उन््हेें   प्रेषित करेेंगे। आपके   सुझावों को आगामी संस््करणों    मेें सम््ममिलित किया जा",
+          "न्यायालय द्वारा राष्ट्रीय गणित शिक्षकों की आयात और विद्यार्थियों की शिक्षा के लिए आयात और विद्यार्थियों की शिक्षा के लिए आयात"
+        ],
+        "concepts": [
+          "textbook",
+          "goals",
+          "mathematical exploration",
+          "teacher",
+          "student",
+          "service",
+          "appreciation",
+          "education",
+          "learning",
+          "exercises",
+          "activities",
+          "development",
+          "future editions"
+        ],
+        "context_relation": "The image is a visual representation of a red, textured object that appears to be a splash or a smear of paint.",
+        "limitations": [
+          "The image does not provide specific details about the textbook or its content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:43:06Z"
+    },
+    {
+      "asset_id": "868711d6e63dd9c54a7c74d1",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "136b1fdf41b49c417916f8ec441dc9e69f6c48131ddd9d2461111a88636015ff",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:43:40Z"
     }
   ]
 }
