@@ -82,7 +82,7 @@ class ApplicationStartupSmokeTest {
   }
 
   @Test
-  void classSixThroughEightArePublishedOrdinaryCoursesWithMappedTracksAndGrandfatheredAccess() {
+  void classSixThroughEightAreOrdinaryCoursesAndLegacyRowsAreRetiredWithoutLosingTenantScope() {
     assertEquals(3, jdbc.queryForObject("""
       select count(*) from curriculum_program p
       where p.code in ('CLASS_6','CLASS_7','CLASS_8')
@@ -117,23 +117,11 @@ class ApplicationStartupSmokeTest {
     assertEquals(0, jdbc.queryForObject("""
       select count(*) from student_program_enrollment spe
       join curriculum_program p on p.id=spe.program_id
+      left join institution_tenant t on t.id=spe.institution_id
       where spe.status in ('ACTIVE','PAUSED')
         and p.code in ('CLASS_6','CLASS_7','CLASS_8')
-        and not exists(select 1 from course_purchase cp
-          where cp.student_id=spe.student_id and cp.institution_id=spe.institution_id
-            and cp.course_id=spe.program_id)
-        and not exists(
-          select 1 from institution_course_entitlement e
-          where e.institution_id=spe.institution_id
-            and e.program_id=spe.program_id and e.status='ACTIVE'
-        )
-        and not exists(
-          select 1 from institution_marketplace_offer offer
-          where offer.institution_id=spe.institution_id
-            and offer.course_id=spe.program_id and offer.price_paise=0
-            and qe_marketplace_offer_publicly_sellable(offer.id)
-        )
-    """, Integer.class), "Every active course enrollment must be backed by a current purchase, institution entitlement or current free Marketplace offer.");
+        and (spe.institution_id is null or t.id is null or t.status<>'ACTIVE')
+    """, Integer.class), "Existing learner enrollment remains a valid institution-provisioned access record and must retain active tenant scope; it must not depend on obsolete grants or a Marketplace sale.");
   }
 
   @Test

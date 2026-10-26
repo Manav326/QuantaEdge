@@ -387,19 +387,20 @@ class AssessmentLifecycleIntegrationTest {
       insert into curriculum_subject(class_id,code,display_name,sort_order,active)
       values(?,'maths','Mathematics',1,true) returning id
       """, Long.class, classId);
-    Long courseId = jdbc.queryForObject("""
-      insert into curriculum_program(
-        class_id,code,display_name,curriculum_version,status,notes,public_id_prefix,course_type_code)
-      values(?,?,'Assessment lifecycle course','CURRENT','ACTIVE','CI fixture course','INS',?)
-      returning id
-      """, Long.class, classId, "ASSESSMENT_" + suffix.toUpperCase(Locale.ROOT),courseType);
+    // The current database contract requires the stable identity to exist before its graph.
     Long identityId = jdbc.queryForObject("""
       insert into institution_course_identity(
         source_institution_id,stable_course_key,display_name,course_type_code)
       values(?,?,?,?) returning id
       """, Long.class, institutionId, "assessment-lifecycle-" + suffix,
       "Assessment lifecycle course",courseType);
-    jdbc.update("update curriculum_program set course_identity_id=? where id=?", identityId, courseId);
+    Long courseId = jdbc.queryForObject("""
+      insert into curriculum_program(
+        class_id,code,display_name,curriculum_version,status,notes,public_id_prefix,
+        course_type_code,course_identity_id,content_version_no)
+      values(?,?,'Assessment lifecycle course','CURRENT','ACTIVE','CI fixture course','INS',?,?,1)
+      returning id
+      """, Long.class, classId, "ASSESSMENT_" + suffix.toUpperCase(Locale.ROOT),courseType,identityId);
     jdbc.update("""
       insert into curriculum_program_subject(program_id,class_id,subject_id,is_required,sort_order)
       values(?,?,?,true,1)

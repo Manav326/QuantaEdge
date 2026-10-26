@@ -726,13 +726,13 @@ public class CertificateController {
              where source_release.program_id=program.id
                and source_release.source_institution_id=identity.source_institution_id
                and source_release.legacy_migration=false
-               and source_release.release_state<>'LEGACY_MIGRATED'
+               and source_release.release_state in ('SHAREABLE','WITHDRAWN')
                and source_release.obsolete_at is null
            )
         """, courseId);
     if (courseIdentityRows.size() != 1) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
-          "The course has no unique active identity. Certificates are issued only for the current course pipeline.");
+          "The course version has no eligible released identity. Certificates require a version that was shared through the source-release workflow.");
     }
     Map<String,Object> courseIdentity = courseIdentityRows.getFirst();
     long courseIdentityId = ((Number) courseIdentity.get("id")).longValue();
