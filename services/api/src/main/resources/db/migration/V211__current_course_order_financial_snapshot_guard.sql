@@ -31,7 +31,11 @@ ALTER TABLE course_payment_order
       AND jsonb_typeof(revenue_share_policy_snapshot) = 'object'
       AND revenue_share_policy_snapshot ? 'policyId'
       AND jsonb_typeof(revenue_share_policy_snapshot->'recipients') = 'array'
-      AND jsonb_array_length(revenue_share_policy_snapshot->'recipients') > 0
+      AND CASE
+        WHEN jsonb_typeof(revenue_share_policy_snapshot->'recipients') = 'array'
+        THEN jsonb_array_length(revenue_share_policy_snapshot->'recipients') > 0
+        ELSE false
+      END
       AND revenue_share_policy_snapshot->>'policyId' IS NOT DISTINCT FROM revenue_share_policy_id::text
       AND buyer_snapshot IS NOT NULL
       AND jsonb_typeof(buyer_snapshot) = 'object'
