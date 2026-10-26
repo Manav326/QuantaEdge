@@ -1,6 +1,24 @@
 -- V211: current-contract paid course orders must carry the complete immutable checkout snapshot.
 -- Keep legacy identity_contract_version=0 rows readable for explicit HRMS recovery; do not
 -- validate/backfill historical rows by guessing. NOT VALID still protects all new writes/updates.
+-- New paid checkout attempts must explicitly opt into the canonical v1 identity contract.
+-- Existing rows remain version 0 and can only be addressed through guarded HRMS recovery.
+CREATE OR REPLACE FUNCTION qe_require_current_course_order_contract_v211()
+RETURNS trigger LANGUAGE plpgsql AS $
+BEGIN
+  IF NEW.status IN ('CREATING','PENDING','VERIFIED')
+     AND NEW.identity_contract_version <> 1 THEN
+    RAISE EXCEPTION 'New course payment orders must use canonical course identity contract v1.'
+      USING ERRCODE = '23514';
+  END IF;
+  RETURN NEW;
+END;
+$;
+
+CREATE TRIGGER trg_qe_current_course_order_contract_v211
+BEFORE INSERT ON course_payment_order
+FOR EACH ROW EXECUTE FUNCTION qe_require_current_course_order_contract_v211();
+
 ALTER TABLE course_payment_order
   ADD CONSTRAINT ck_course_order_v1_locked_financial_facts
   CHECK (
