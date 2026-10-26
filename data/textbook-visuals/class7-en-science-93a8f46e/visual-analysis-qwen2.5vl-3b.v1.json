@@ -14,14 +14,14 @@
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "0e143e54e2f709b8a4e5968d",
-      "463542d4277119b7abc93e3a"
+      "28dd5d9a4eede770b0f64bfd",
+      "8604e838b1f1e41398ca72dd"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2294,
-    "assets_remaining": 5194,
+    "assets_analyzed": 2295,
+    "assets_remaining": 5193,
     "assets_completion_percent": 30.6,
-    "assets_failed": 29,
+    "assets_failed": 28,
     "assets_skipped_from_checkpoint": 2294,
     "batch_limit": 5,
     "publication_allowed": false
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40322830539",
-      "checkpointed_at": "2026-10-26T13:48:36Z"
+      "checkpointed_at": "2026-10-26T13:55:41Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40322830539",
-      "checkpointed_at": "2026-10-26T13:49:14Z"
+      "checkpointed_at": "2026-10-26T13:56:20Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82462,7 +82462,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40322830539",
-      "checkpointed_at": "2026-10-26T13:50:05Z"
+      "checkpointed_at": "2026-10-26T13:57:11Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -85661,19 +85661,47 @@
     {
       "asset_id": "28dd5d9a4eede770b0f64bfd",
       "asset_sha256": "fe754650e5aff6abf9bb776cb50acfb98081ac2681caae4c7a6924d16c9b5e81",
-      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 71,
       "asset_path": "assets/fe754650e5aff6abf9bb776cb50acfb98081ac2681caae4c7a6924d16c9b5e81.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40277346366",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a person's hand holding a dark object, possibly a metal rod or tool.",
+        "visual_type": "photo",
+        "visible_text": [
+          "51",
+          "4.3 Eﬀect of Air and Water on Other",
+          "Metals",
+          "Activity 4.6: Let us investigate (demonstration activity)",
+          "Non-metals",
+          "The teacher may demonstrate this activity.",
+          "Caution— It is advisable",
+          "to wear gloves when handling",
+          "metal objects."
+        ],
+        "concepts": [
+          "Metal",
+          "Activity",
+          "Demonstration",
+          "Non-metals",
+          "Metal objects",
+          "Wearing gloves"
+        ],
+        "context_relation": "The image is a close-up of a person's hand holding a dark object, possibly a metal rod or tool, and is related to the activity and caution mentioned in the visible text.",
+        "limitations": [
+          "The image does not provide specific details about the metal object or the activity being demonstrated."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40322830539",
+      "checkpointed_at": "2026-10-26T13:58:30Z"
     },
     {
       "asset_id": "8604e838b1f1e41398ca72dd",
@@ -85686,7 +85714,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40277346366",
+      "run_id": "40322830539",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "27a2deaf9528001d12a97b8ff8e2b541cfd12f9e8fbaf21fc6e2f3c60a71dadf",
+  "raw_analysis_sha256": "88a1d2d71179fb952368615d611f2601d7b216bf1016c49be31f17d35c876a8b",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40322830539",
-      "checkpointed_at": "2026-10-26T13:48:36Z",
+      "checkpointed_at": "2026-10-26T13:55:41Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40322830539",
-      "checkpointed_at": "2026-10-26T13:49:14Z",
+      "checkpointed_at": "2026-10-26T13:56:20Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129654,7 +129654,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40322830539",
-      "checkpointed_at": "2026-10-26T13:50:05Z",
+      "checkpointed_at": "2026-10-26T13:57:11Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -134704,21 +134704,75 @@
     {
       "asset_id": "28dd5d9a4eede770b0f64bfd",
       "asset_sha256": "fe754650e5aff6abf9bb776cb50acfb98081ac2681caae4c7a6924d16c9b5e81",
-      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 71,
       "asset_path": "assets/fe754650e5aff6abf9bb776cb50acfb98081ac2681caae4c7a6924d16c9b5e81.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40277346366",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a person's hand holding a dark object, possibly a metal rod or tool.",
+        "visual_type": "photo",
+        "visible_text": [
+          "51",
+          "4.3 Eﬀect of Air and Water on Other",
+          "Metals",
+          "Activity 4.6: Let us investigate (demonstration activity)",
+          "Non-metals",
+          "The teacher may demonstrate this activity.",
+          "Caution— It is advisable",
+          "to wear gloves when handling",
+          "metal objects."
+        ],
+        "concepts": [
+          "Metal",
+          "Activity",
+          "Demonstration",
+          "Non-metals",
+          "Metal objects",
+          "Wearing gloves"
+        ],
+        "context_relation": "The image is a close-up of a person's hand holding a dark object, possibly a metal rod or tool, and is related to the activity and caution mentioned in the visible text.",
+        "limitations": [
+          "The image does not provide specific details about the metal object or the activity being demonstrated."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40322830539",
+      "checkpointed_at": "2026-10-26T13:58:30Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a person's hand holding a dark object, possibly a metal rod or tool.",
+        "visual_type": "photo",
+        "visible_text": [
+          "51",
+          "4.3 Eﬀect of Air and Water on Other",
+          "Metals",
+          "Activity 4.6: Let us investigate (demonstration activity)",
+          "Non-metals",
+          "The teacher may demonstrate this activity.",
+          "Caution— It is advisable",
+          "to wear gloves when handling",
+          "metal objects."
+        ],
+        "concepts": [
+          "Metal",
+          "Activity",
+          "Demonstration",
+          "Non-metals",
+          "Metal objects",
+          "Wearing gloves"
+        ],
+        "context_relation": "The image is a close-up of a person's hand holding a dark object, possibly a metal rod or tool, and is related to the activity and caution mentioned in the visible text.",
+        "limitations": [
+          "The image does not provide specific details about the metal object or the activity being demonstrated."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -134732,7 +134786,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40277346366",
+      "run_id": "40322830539",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
