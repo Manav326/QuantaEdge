@@ -1,0 +1,276 @@
+{
+  "schema_version": "quantaedge.visual-analysis.v1",
+  "analysis_status": "DRAFT_VISION_ANALYSIS_ONLY",
+  "source_inventory": "visual-inventory.v1.json",
+  "source_book_id": "ncert-c8-english-hegp1",
+  "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+  "model_provider": "ollama_local",
+  "model": "qwen2.5vl:3b",
+  "prompt_version": "visual-analysis-prompt-v2",
+  "summary": {
+    "assets_selected": 10,
+    "assets_processed_this_run": 10,
+    "assets_processed_ids": [
+      "b324aa2043917f5db7b4dbee",
+      "faed969c0b8bbab8473f8ac1",
+      "e4a9de88815ad02abb7f0a85",
+      "eb4e1b702775aa1b94793aee",
+      "108ab2ec6774a88e77606e16",
+      "d6c77cbea252bc3f3025717e",
+      "598a196e36d7371f1cff96c4",
+      "9d116e9be94e8f352f568262",
+      "f04f06b18788b0e9908d1ecf",
+      "57289701f1651ea5272e15d4"
+    ],
+    "assets_eligible": 2195,
+    "assets_analyzed": 6,
+    "assets_remaining": 2189,
+    "assets_completion_percent": 0.3,
+    "assets_failed": 4,
+    "assets_skipped_from_checkpoint": 0,
+    "batch_limit": 10,
+    "publication_allowed": false
+  },
+  "results": [
+    {
+      "asset_id": "b324aa2043917f5db7b4dbee",
+      "asset_sha256": "371843eb93d1d2dbb4208432e073592ddd60b746b60dfa37fd815a69d6f28961",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/371843eb93d1d2dbb4208432e073592ddd60b746b60dfa37fd815a69d6f28961.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1d5b46f1f801624f3128c68e6c3730301c7f1ddfae33036a53908926c3d66e9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A QR code with the text '0874' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0874"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code is likely related to the content of the textbook, possibly for accessing additional resources or information.",
+        "limitations": [
+          "The QR code's content is not visible in the image, so the specific information it leads to cannot be determined."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:39:45Z"
+    },
+    {
+      "asset_id": "faed969c0b8bbab8473f8ac1",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "c1d5b46f1f801624f3128c68e6c3730301c7f1ddfae33036a53908926c3d66e9",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "e4a9de88815ad02abb7f0a85",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "page_text_context_sha256": "c1d5b46f1f801624f3128c68e6c3730301c7f1ddfae33036a53908926c3d66e9",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "eb4e1b702775aa1b94793aee",
+      "asset_sha256": "0792c7bf4903ba4fbe46403bf781db7e147117c8a4cc69bd7ae2bbd4d44f412b",
+      "page_text_context_sha256": "c1d5b46f1f801624f3128c68e6c3730301c7f1ddfae33036a53908926c3d66e9",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 1,
+      "asset_path": "page-0001.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "108ab2ec6774a88e77606e16",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 2,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b0dcbdfb515b05c8498545fc915d852fd23d6d53ec2be30a7d13f33cfda1170f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:56:47Z"
+    },
+    {
+      "asset_id": "d6c77cbea252bc3f3025717e",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 2,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b0dcbdfb515b05c8498545fc915d852fd23d6d53ec2be30a7d13f33cfda1170f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T22:57:01Z"
+    },
+    {
+      "asset_id": "598a196e36d7371f1cff96c4",
+      "asset_sha256": "dc1191bc06e1de0a7e218dfff191283bf4b40f188b827c085e0af5898e01b84b",
+      "page_text_context_sha256": "b0dcbdfb515b05c8498545fc915d852fd23d6d53ec2be30a7d13f33cfda1170f",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 2,
+      "asset_path": "page-0002.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "9d116e9be94e8f352f568262",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 3,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9e8e15f65ea6117e895d33fa080d7ffc2ebe5201b04f62b14c790174d98b5010",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Red ink splatter across a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Foreword of a textbook discussing the National Education Policy (NEP) 2020 and its goals for education in India.",
+        "limitations": [
+          "No specific text or data is visible in the image.",
+          "The image does not provide any numerical or quantitative information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:03:41Z"
+    },
+    {
+      "asset_id": "f04f06b18788b0e9908d1ecf",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 3,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9e8e15f65ea6117e895d33fa080d7ffc2ebe5201b04f62b14c790174d98b5010",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Red ink spill across the page, obscuring text.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is partially obscured by a red ink spill.",
+        "limitations": [
+          "The text is unreadable due to the ink spill."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:03:49Z"
+    },
+    {
+      "asset_id": "57289701f1651ea5272e15d4",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 3,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9e8e15f65ea6117e895d33fa080d7ffc2ebe5201b04f62b14c790174d98b5010",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:04:04Z"
+    }
+  ]
+}
