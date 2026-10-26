@@ -8,26 +8,26 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 55,
+    "assets_selected": 59,
     "assets_processed_this_run": 10,
     "assets_processed_ids": [
       "de5158b9db979a97ca7a8cac",
       "72ea2ce87986317ba317f097",
       "48ffd19b5ddcd710eee90800",
-      "8db32279b72eab9df486017c",
-      "a761b0e6bf2d1eba26c7ab32",
-      "089df4be0bf769a9eb43c4c8",
-      "f5a7df62e4e47379f7991a0d",
-      "3cb87918debc1432dc11c910",
-      "79cede9e555be767fbfb19ea",
-      "8635f6678ef4e1bc45cb5b64"
+      "5a0480d8ae028474208c8895",
+      "44a3d9f11bd1f784f57b6bf6",
+      "517f340aaf2e14ab0a80e58f",
+      "298509911ac6683b547b2008",
+      "dfd5532e3a0430add4968070",
+      "9d1e8155da1f790ba27c9f38",
+      "70e380c305bae11a97dbc078"
     ],
     "assets_eligible": 6328,
-    "assets_analyzed": 49,
-    "assets_remaining": 6279,
-    "assets_completion_percent": 0.8,
-    "assets_failed": 40,
-    "assets_skipped_from_checkpoint": 45,
+    "assets_analyzed": 54,
+    "assets_remaining": 6274,
+    "assets_completion_percent": 0.9,
+    "assets_failed": 42,
+    "assets_skipped_from_checkpoint": 49,
     "batch_limit": 10,
     "publication_allowed": false
   },
@@ -858,7 +858,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:31:26Z"
+      "checkpointed_at": "2026-10-26T23:37:32Z"
     },
     {
       "asset_id": "5741b6286dd632c1737e611f",
@@ -1130,7 +1130,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:32:03Z"
+      "checkpointed_at": "2026-10-26T23:38:09Z"
     },
     {
       "asset_id": "d05c93257e48b3dd2492f1a1",
@@ -2307,7 +2307,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:32:39Z"
+      "checkpointed_at": "2026-10-26T23:38:44Z"
     },
     {
       "asset_id": "c9682a447d6e57f8b7b41415",
@@ -2788,6 +2788,219 @@
       "error": "Unsupported vision media type 'image/jpx'; use JPEG, PNG, or WebP assets.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "5a0480d8ae028474208c8895",
+      "asset_sha256": "3a469f5ec97bbf4403afdf297faa7fff7ce1b7a9e6d7ef62f9cfc24d597d3ce8",
+      "page_text_context_sha256": "c1920be55c5e5c62d87ff4772f356ebfe0e8f3cd9b3dd4ceb4c6ce9ce9223ed9",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 19,
+      "asset_path": "assets/3a469f5ec97bbf4403afdf297faa7fff7ce1b7a9e6d7ef62f9cfc24d597d3ce8.jpx",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Unsupported vision media type 'image/jpx'; use JPEG, PNG, or WebP assets.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "44a3d9f11bd1f784f57b6bf6",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 19,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1920be55c5e5c62d87ff4772f356ebfe0e8f3cd9b3dd4ceb4c6ce9ce9223ed9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is a blank page with no visible content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:38:51Z"
+    },
+    {
+      "asset_id": "517f340aaf2e14ab0a80e58f",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 19,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c1920be55c5e5c62d87ff4772f356ebfe0e8f3cd9b3dd4ceb4c6ce9ce9223ed9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible content.",
+        "limitations": [
+          "The image is a blank page with no visible content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:38:58Z"
+    },
+    {
+      "asset_id": "298509911ac6683b547b2008",
+      "asset_sha256": "2bfbee79c58ffe29a15245f8567ad5bbb15e3ca385ffd9eeba0ed714e381f835",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 19,
+      "asset_path": "page-0019.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "c1920be55c5e5c62d87ff4772f356ebfe0e8f3cd9b3dd4ceb4c6ce9ce9223ed9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table of contents for a mathematics textbook.",
+        "visual_type": "table",
+        "visible_text": [
+          "Contents",
+          "Foreword",
+          "About the Book",
+          "Chapter 1",
+          "Patterns in Mathematics",
+          "Chapter 2",
+          "Lines and Angles",
+          "Chapter 3",
+          "Number Play",
+          "Chapter 4",
+          "Data Handling and Presentation",
+          "Chapter 5",
+          "Prime Time",
+          "Chapter 6",
+          "Perimeter and Area",
+          "Chapter 7",
+          "Fractions",
+          "Chapter 8",
+          "Playing with Constructions",
+          "Chapter 9",
+          "Symmetry",
+          "Chapter 10",
+          "The Other Side of Zero",
+          "Learning Material Sheets"
+        ],
+        "concepts": [
+          "Foreword",
+          "About the Book",
+          "Patterns in Mathematics",
+          "Lines and Angles",
+          "Number Play",
+          "Data Handling and Presentation",
+          "Prime Time",
+          "Perimeter and Area",
+          "Fractions",
+          "Playing with Constructions",
+          "Symmetry",
+          "The Other Side of Zero",
+          "Learning Material Sheets"
+        ],
+        "context_relation": "Table of contents for a mathematics textbook.",
+        "limitations": [
+          "The table of contents does not include page numbers for each chapter."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:40:35Z"
+    },
+    {
+      "asset_id": "dfd5532e3a0430add4968070",
+      "asset_sha256": "9e427ee5a39f18b32f2790997b4e2a9ed6079e7874eb919f98674ff23a5b4084",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 20,
+      "asset_path": "assets/9e427ee5a39f18b32f2790997b4e2a9ed6079e7874eb919f98674ff23a5b4084.jpx",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Unsupported vision media type 'image/jpx'; use JPEG, PNG, or WebP assets.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "9d1e8155da1f790ba27c9f38",
+      "asset_sha256": "bbb407c8d9f4b049be6a8fbe2a7f2896e51b3961729a230c7a8283a43700e649",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 20,
+      "asset_path": "assets/bbb407c8d9f4b049be6a8fbe2a7f2896e51b3961729a230c7a8283a43700e649.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:41:09Z"
+    },
+    {
+      "asset_id": "70e380c305bae11a97dbc078",
+      "asset_sha256": "e0079aa99561d88a922c3c51eb2382e32d3f39eee35528b6241bfe0a8466b20d",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "source_pdf_page_number": 20,
+      "asset_path": "assets/e0079aa99561d88a922c3c51eb2382e32d3f39eee35528b6241bfe0a8466b20d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to yellow.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:41:42Z"
     }
   ]
 }
