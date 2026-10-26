@@ -260,9 +260,10 @@ export default function FinancePage(){
   const contextualOffer=selectedOffer;
   const selectWorkflowOffer=(offerId:string,preservePolicy=false)=>{
     const offer=catalog?.offers.find(row=>String(row.offer_id)===offerId);
-    const seller=(offer?.legal_entity_id?catalog?.legalEntities.find(e=>e.id===offer.legal_entity_id&&e.status==='ACTIVE'):undefined)
-      ||catalog?.legalEntities.find(e=>e.status==='ACTIVE'&&e.entity_kind==='INSTITUTION'&&e.institution_id===offer?.institution_id)
-      ||catalog?.legalEntities.find(e=>e.status==='ACTIVE'&&e.entity_kind==='PLATFORM');
+    const seller=!offer?undefined:offer.legal_entity_id!=null
+      ?catalog?.legalEntities.find(e=>e.id===offer.legal_entity_id)
+      :catalog?.legalEntities.find(e=>e.status==='ACTIVE'&&e.entity_kind==='INSTITUTION'&&e.institution_id===offer.institution_id)
+        ||catalog?.legalEntities.find(e=>e.status==='ACTIVE'&&e.entity_kind==='PLATFORM');
     const sellerId=seller?String(seller.id):'';
     setSelectedOfferId(offerId);setTaxForm(v=>({...v,offerId,legalEntityId:sellerId,serviceClassificationCode:v.offerId===offerId?v.serviceClassificationCode:'',gstPercent:v.offerId===offerId?v.gstPercent:'',cessPercent:v.offerId===offerId?v.cessPercent:''}));
     setDiscountForm(v=>({...v,offerId,code:v.offerId===offerId?v.code:''}));setGstEntityId(sellerId);
