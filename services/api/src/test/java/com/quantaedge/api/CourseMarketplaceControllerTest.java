@@ -82,6 +82,21 @@ class CourseMarketplaceControllerTest {
   }
 
   @Test
+  void existingReconciliationMustExplicitlyAuthorizeCheckoutRetry() {
+    assertTrue(CourseMarketplaceController.reconciliationConfirmsCheckoutRetryIsSafe(
+        Map.of("status", "AWAITING_PAYMENT", "entitled", false, "canRetryCheckout", true)));
+    assertFalse(CourseMarketplaceController.reconciliationConfirmsCheckoutRetryIsSafe(
+        Map.of("status", "PAYMENT_PROCESSING", "entitled", false, "canRetryCheckout", false)));
+    assertFalse(CourseMarketplaceController.reconciliationConfirmsCheckoutRetryIsSafe(
+        Map.of("status", "RECONCILIATION_REQUIRED", "entitled", false, "canRetryCheckout", false)));
+    assertFalse(CourseMarketplaceController.reconciliationConfirmsCheckoutRetryIsSafe(
+        Map.of("status", "AWAITING_PAYMENT", "entitled", false, "canRetryCheckout", false)));
+    assertFalse(CourseMarketplaceController.reconciliationConfirmsCheckoutRetryIsSafe(
+        Map.of("status", "AWAITING_PAYMENT", "entitled", true, "canRetryCheckout", true)));
+    assertFalse(CourseMarketplaceController.reconciliationConfirmsCheckoutRetryIsSafe(null));
+  }
+
+  @Test
   void onlyLegacyOrdersWithNoDiscountFactsCanBeRepairedAutomatically() {
     Map<String,Object> legacy = new LinkedHashMap<>();
     legacy.put("discount_reference", null);
