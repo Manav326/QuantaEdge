@@ -373,35 +373,55 @@ export default function StudentMarketplacePage() {
     }
   }, [loadOffers, loadPurchaseRequests, router, english, savePendingVerify, clearPendingVerify]);
 
-  const reconcilePurchase = useCallback(async (draft: VerifyDraft) => {
+  const reconcilePurchase = useCallback(async (input: VerifyDraft | VerifyDraft[]) => {
+    const attempts = Array.isArray(input) ? input : [input];
     setVerifying(true);
     setStatus('');
-    savePendingVerify(draft);
+    let grantedCourseId: number | null = null;
+    const unresolvedMessages: string[] = [];
     try {
-      const result = await readJson(await apiFetch('/api/v1/marketplace/orders/' + draft.localOrderId + '/reconcile', {
-        method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: '{}',
-      }));
-      if (String(result.status || '').toUpperCase() === 'VERIFIED' || result.entitled === true) {
-        clearPendingVerify(draft.localOrderId);
+      for (const draft of attempts) {
+        savePendingVerify(draft);
+        try {
+          const result = await readJson(await apiFetch('/api/v1/marketplace/orders/' + draft.localOrderId + '/reconcile', {
+            method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: '{}',
+          }));
+          if (String(result.status || '').toUpperCase() === 'VERIFIED' || result.entitled === true) {
+            clearPendingVerify(draft.localOrderId);
+            grantedCourseId = draft.courseId;
+            continue;
+          }
+          if (result.canRetryCheckout === true) {
+            clearPendingVerify(draft.localOrderId);
+            continue;
+          }
+          savePendingVerify(draft);
+          unresolvedMessages.push(localizeMarketplaceError(result.message, language,
+            'Payment status is still being reconciled. Do not pay again while verification is pending.',
+            'भुगतान की जाँच अभी जारी है। पुष्टि पूरी होने तक दोबारा भुगतान न करें।'));
+        } catch (error: any) {
+          savePendingVerify(draft);
+          unresolvedMessages.push(localizeMarketplaceError(error?.message, language,
+            'Payment status could not be reconciled. Keep this order and retry verification; do not pay again.',
+            'भुगतान की स्थिति की पुष्टि नहीं हो सकी। यही order सुरक्षित रखें और फिर जाँचें; दोबारा भुगतान न करें।'));
+        }
+      }
+      if (grantedCourseId !== null) {
         setStatus(tx('Payment verified. Your course is now in All Courses.', 'भुगतान सत्यापित हो गया। आपका कोर्स All Courses में उपलब्ध है।'));
         await loadOffers();
         await loadPurchaseRequests();
-        router.push('/student/courses?focus=' + encodeURIComponent(String(draft.courseId)));
+        router.push('/student/courses?focus=' + encodeURIComponent(String(grantedCourseId)));
         return;
       }
-      if (result.canRetryCheckout === true) {
-        clearPendingVerify(draft.localOrderId);
-      }
-      setStatus(localizeMarketplaceError(result.message, language, 'Payment status is still being reconciled. Do not pay again while verification is pending.', 'भुगतान की जाँच अभी जारी है। पुष्टि पूरी होने तक दोबारा भुगतान न करें।'));
+      setStatus(unresolvedMessages[0] || tx(
+        'The previous attempts were confirmed unpaid. You can now start checkout again.',
+        'पिछले भुगतान पूरे नहीं हुए। अब आप checkout दोबारा शुरू कर सकते हैं।'));
       await loadOffers();
-    } catch (error: any) {
-      savePendingVerify(draft);
-      setStatus(localizeMarketplaceError(error?.message, language, 'Payment status could not be reconciled. Keep this order and retry verification; do not pay again.', 'भुगतान की स्थिति की पुष्टि नहीं हो सकी। यही order सुरक्षित रखें और फिर जाँचें; दोबारा भुगतान न करें।'));
     } finally {
       setVerifying(false);
       setBusyCourseId(null);
     }
-  }, [loadOffers, loadPurchaseRequests, router, english, savePendingVerify, clearPendingVerify]);
+  }, [loadOffers, loadPurchaseRequests, router, language, tx, savePendingVerify, clearPendingVerify]);
 
   function requestCheckout(courseId: number) {
     if (billingAddressesLoading) {
