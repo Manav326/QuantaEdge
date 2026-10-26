@@ -1617,8 +1617,15 @@ public class CourseMarketplaceController {
       boolean repairedFinancialSnapshots = false;
       String financialSnapshotRepairBasis = "";
       if (!hasLockedFinancialSnapshots(order) && allowTestModeSnapshotRepair) {
-        financialSnapshotRepairBasis=repairFinancialSnapshotsDuringTestModeReconciliation(order,institutionId);
-        repairedFinancialSnapshots = true;
+        try {
+          financialSnapshotRepairBasis=repairFinancialSnapshotsDuringTestModeReconciliation(order,institutionId);
+          repairedFinancialSnapshots = true;
+        } catch(RuntimeException snapshotRepairFailure) {
+          // If the provider already captured this exact payment, financial snapshot repair must
+          // not block course access. verifyOrderInternal grants access and leaves finance pending.
+          // An authorization without a completed capture remains blocked by the verifier.
+          if(captured==null) throw snapshotRepairFailure;
+        }
       }
       String paymentId = selected.path("id").asText("");
       // The provider API confirms the exact persisted order, amount and currency. Generate
