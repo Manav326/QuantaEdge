@@ -509,7 +509,7 @@ export default function ParentCoursesPage() {
                   {request.requested_at && <small><LocaleText hinglish="अनुरोध भेजा गया" english="Requested" /> · {formatUserTimestamp(request.requested_at, language)}</small>}
                 </div>
                 <div className="parent-courses-page__request-actions">
-                  <button type="button" className="button button-dark button-small" disabled={busy !== '' || (false)}
+                  <button type="button" className="button button-dark button-small" disabled={busy !== ''}
                     onClick={() => {
                       const kid = children.find(child => child.id === request.student_id);
                       if (!kid) { setError(english ? 'This child is no longer linked to your account.' : 'यह बच्चा अब आपके खाते से लिंक नहीं है।'); return; }
