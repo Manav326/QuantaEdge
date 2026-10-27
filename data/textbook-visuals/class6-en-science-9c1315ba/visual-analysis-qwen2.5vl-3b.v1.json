@@ -8,7 +8,7 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1380,
+    "assets_selected": 1384,
     "assets_processed_this_run": 10,
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
@@ -16,18 +16,18 @@
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "b2a39e0653ba29e198440267",
-      "60f4e378f93db6257a32b817",
-      "bbf7266cb7b25de1bc778901",
-      "7160a2c7863e6c362022de10",
-      "f9f31ac3c179b5d02598fdea"
+      "e3aed84d2a209d8c107813e1",
+      "02530f38f98cc3ea4e51989e",
+      "d1642db8e337d43e78984da7",
+      "522777aaf38deecd3c8f6dd1",
+      "8fcc8e50a344e2f357068835"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1374,
-    "assets_remaining": 704,
-    "assets_completion_percent": 66.1,
+    "assets_analyzed": 1379,
+    "assets_remaining": 699,
+    "assets_completion_percent": 66.4,
     "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 1370,
+    "assets_skipped_from_checkpoint": 1374,
     "batch_limit": 10,
     "publication_allowed": false
   },
@@ -468,7 +468,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:58:59Z"
+      "checkpointed_at": "2026-10-27T00:13:23Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20145,7 +20145,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:00:40Z"
+      "checkpointed_at": "2026-10-27T00:15:00Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23804,7 +23804,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:02:07Z"
+      "checkpointed_at": "2026-10-27T00:16:25Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -38049,7 +38049,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:03:18Z"
+      "checkpointed_at": "2026-10-27T00:17:36Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44209,7 +44209,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:04:17Z"
+      "checkpointed_at": "2026-10-27T00:18:33Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -46285,6 +46285,177 @@
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "e3aed84d2a209d8c107813e1",
+      "asset_sha256": "d6b80918a8d05944a88ca8a05ab3e2f2ec673dc2c266cd42dd3f271330d3661c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 144,
+      "asset_path": "assets/d6b80918a8d05944a88ca8a05ab3e2f2ec673dc2c266cd42dd3f271330d3661c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d7de654acded8ad53b8865f61fdcb31c8685af7037d2572e425cef598eb9f088",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rectangular shape with a textured border.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:19:34Z"
+    },
+    {
+      "asset_id": "02530f38f98cc3ea4e51989e",
+      "asset_sha256": "b82f2ad389575ee933280e7db205161554e1db780e91ca12555df3b0341cfced",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 144,
+      "asset_path": "assets/b82f2ad389575ee933280e7db205161554e1db780e91ca12555df3b0341cfced.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d7de654acded8ad53b8865f61fdcb31c8685af7037d2572e425cef598eb9f088",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A clinical thermometer displaying a temperature reading.",
+        "visual_type": "photo",
+        "visible_text": [
+          "35",
+          "36",
+          "37",
+          "38",
+          "39",
+          "40",
+          "41",
+          "42",
+          "94",
+          "6",
+          "8",
+          "100",
+          "2",
+          "4",
+          "6",
+          "108",
+          "°C",
+          "°F"
+        ],
+        "concepts": [
+          "Clinical thermometer",
+          "Celsius scale",
+          "Mercury thermometer",
+          "Toxicity of mercury"
+        ],
+        "context_relation": "The image shows a clinical thermometer used for measuring body temperature.",
+        "limitations": [
+          "The image does not provide specific temperature readings.",
+          "The image does not show the mercury thermometer used earlier."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:20:55Z"
+    },
+    {
+      "asset_id": "d1642db8e337d43e78984da7",
+      "asset_sha256": "979899fc5581f2a269505d942f3d874cdb45bee28cf9761de0bb6e9605753e05",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 144,
+      "asset_path": "assets/979899fc5581f2a269505d942f3d874cdb45bee28cf9761de0bb6e9605753e05.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d7de654acded8ad53b8865f61fdcb31c8685af7037d2572e425cef598eb9f088",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person wearing a white shirt and a blue striped tie, extending their hand towards the viewer.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about clinical thermometers and mercury thermometers.",
+        "limitations": [
+          "The image does not provide any information about clinical thermometers or mercury thermometers."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:22:01Z"
+    },
+    {
+      "asset_id": "522777aaf38deecd3c8f6dd1",
+      "asset_sha256": "e27a57afa4cd1cb1eef14f540002a46fb19877674c6679db4128241daf3de3b8",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 144,
+      "asset_path": "assets/e27a57afa4cd1cb1eef14f540002a46fb19877674c6679db4128241daf3de3b8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d7de654acded8ad53b8865f61fdcb31c8685af7037d2572e425cef598eb9f088",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person wearing a face mask and holding a digital thermometer.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "face mask",
+          "digital thermometer",
+          "measuring temperature",
+          "Celsius scale",
+          "mercury thermometer",
+          "toxicity",
+          "disposal"
+        ],
+        "context_relation": "The image illustrates the use of a digital thermometer for measuring body temperature, contrasting with the use of mercury thermometers due to their toxicity and difficulty in disposal.",
+        "limitations": [
+          "The image does not provide specific details about the digital thermometer or its operation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:23:11Z"
+    },
+    {
+      "asset_id": "8fcc8e50a344e2f357068835",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 144,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d7de654acded8ad53b8865f61fdcb31c8685af7037d2572e425cef598eb9f088",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:23:23Z"
     }
   ]
 }

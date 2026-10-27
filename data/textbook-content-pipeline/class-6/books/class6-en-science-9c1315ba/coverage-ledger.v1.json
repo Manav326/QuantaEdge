@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1390,
-    "successful_visual_analyses": 1379,
-    "missing_visual_analyses": 688,
+    "raw_analysis_result_rows": 1395,
+    "successful_visual_analyses": 1384,
+    "missing_visual_analyses": 683,
     "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 699,
+    "unresolved_count": 694,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -52728,9 +52728,16 @@
       "asset_path": "assets/d6b80918a8d05944a88ca8a05ab3e2f2ec673dc2c266cd42dd3f271330d3661c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow rectangular shape with a textured border.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52746,9 +52753,43 @@
       "asset_path": "assets/b82f2ad389575ee933280e7db205161554e1db780e91ca12555df3b0341cfced.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A clinical thermometer displaying a temperature reading.",
+        "visual_type": "photo",
+        "visible_text": [
+          "35",
+          "36",
+          "37",
+          "38",
+          "39",
+          "40",
+          "41",
+          "42",
+          "94",
+          "6",
+          "8",
+          "100",
+          "2",
+          "4",
+          "6",
+          "108",
+          "°C",
+          "°F"
+        ],
+        "concepts": [
+          "Clinical thermometer",
+          "Celsius scale",
+          "Mercury thermometer",
+          "Toxicity of mercury"
+        ],
+        "context_relation": "The image shows a clinical thermometer used for measuring body temperature.",
+        "limitations": [
+          "The image does not provide specific temperature readings.",
+          "The image does not show the mercury thermometer used earlier."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52764,9 +52805,18 @@
       "asset_path": "assets/979899fc5581f2a269505d942f3d874cdb45bee28cf9761de0bb6e9605753e05.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person wearing a white shirt and a blue striped tie, extending their hand towards the viewer.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about clinical thermometers and mercury thermometers.",
+        "limitations": [
+          "The image does not provide any information about clinical thermometers or mercury thermometers."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52782,9 +52832,26 @@
       "asset_path": "assets/e27a57afa4cd1cb1eef14f540002a46fb19877674c6679db4128241daf3de3b8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person wearing a face mask and holding a digital thermometer.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "face mask",
+          "digital thermometer",
+          "measuring temperature",
+          "Celsius scale",
+          "mercury thermometer",
+          "toxicity",
+          "disposal"
+        ],
+        "context_relation": "The image illustrates the use of a digital thermometer for measuring body temperature, contrasting with the use of mercury thermometers due to their toxicity and difficulty in disposal.",
+        "limitations": [
+          "The image does not provide specific details about the digital thermometer or its operation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52800,9 +52867,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

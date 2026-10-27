@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "83712b4d28dd0ca36da38e5a3176e1da30f50c1ceb5e26e3dd9aa8dbfdb254e8",
+  "raw_analysis_sha256": "1075628e4cdeede324c3f2be7b8ca6b1315198269e378c5b09d40d4081634498",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -650,7 +650,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:58:59Z",
+      "checkpointed_at": "2026-10-27T00:13:23Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -29465,7 +29465,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:00:40Z",
+      "checkpointed_at": "2026-10-27T00:15:00Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -35077,7 +35077,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:02:07Z",
+      "checkpointed_at": "2026-10-27T00:16:25Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57433,7 +57433,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:03:18Z",
+      "checkpointed_at": "2026-10-27T00:17:36Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -67084,7 +67084,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:04:17Z",
+      "checkpointed_at": "2026-10-27T00:18:33Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -70297,6 +70297,268 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e3aed84d2a209d8c107813e1",
+      "asset_sha256": "d6b80918a8d05944a88ca8a05ab3e2f2ec673dc2c266cd42dd3f271330d3661c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 144,
+      "asset_path": "assets/d6b80918a8d05944a88ca8a05ab3e2f2ec673dc2c266cd42dd3f271330d3661c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d7de654acded8ad53b8865f61fdcb31c8685af7037d2572e425cef598eb9f088",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rectangular shape with a textured border.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:19:34Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rectangular shape with a textured border.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "02530f38f98cc3ea4e51989e",
+      "asset_sha256": "b82f2ad389575ee933280e7db205161554e1db780e91ca12555df3b0341cfced",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 144,
+      "asset_path": "assets/b82f2ad389575ee933280e7db205161554e1db780e91ca12555df3b0341cfced.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d7de654acded8ad53b8865f61fdcb31c8685af7037d2572e425cef598eb9f088",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A clinical thermometer displaying a temperature reading.",
+        "visual_type": "photo",
+        "visible_text": [
+          "35",
+          "36",
+          "37",
+          "38",
+          "39",
+          "40",
+          "41",
+          "42",
+          "94",
+          "6",
+          "8",
+          "100",
+          "2",
+          "4",
+          "6",
+          "108",
+          "°C",
+          "°F"
+        ],
+        "concepts": [
+          "Clinical thermometer",
+          "Celsius scale",
+          "Mercury thermometer",
+          "Toxicity of mercury"
+        ],
+        "context_relation": "The image shows a clinical thermometer used for measuring body temperature.",
+        "limitations": [
+          "The image does not provide specific temperature readings.",
+          "The image does not show the mercury thermometer used earlier."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:20:55Z",
+      "effective_analysis": {
+        "visual_summary": "A clinical thermometer displaying a temperature reading.",
+        "visual_type": "photo",
+        "visible_text": [
+          "35",
+          "36",
+          "37",
+          "38",
+          "39",
+          "40",
+          "41",
+          "42",
+          "94",
+          "6",
+          "8",
+          "100",
+          "2",
+          "4",
+          "6",
+          "108",
+          "°C",
+          "°F"
+        ],
+        "concepts": [
+          "Clinical thermometer",
+          "Celsius scale",
+          "Mercury thermometer",
+          "Toxicity of mercury"
+        ],
+        "context_relation": "The image shows a clinical thermometer used for measuring body temperature.",
+        "limitations": [
+          "The image does not provide specific temperature readings.",
+          "The image does not show the mercury thermometer used earlier."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d1642db8e337d43e78984da7",
+      "asset_sha256": "979899fc5581f2a269505d942f3d874cdb45bee28cf9761de0bb6e9605753e05",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 144,
+      "asset_path": "assets/979899fc5581f2a269505d942f3d874cdb45bee28cf9761de0bb6e9605753e05.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d7de654acded8ad53b8865f61fdcb31c8685af7037d2572e425cef598eb9f088",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person wearing a white shirt and a blue striped tie, extending their hand towards the viewer.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about clinical thermometers and mercury thermometers.",
+        "limitations": [
+          "The image does not provide any information about clinical thermometers or mercury thermometers."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:22:01Z",
+      "effective_analysis": {
+        "visual_summary": "A person wearing a white shirt and a blue striped tie, extending their hand towards the viewer.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about clinical thermometers and mercury thermometers.",
+        "limitations": [
+          "The image does not provide any information about clinical thermometers or mercury thermometers."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "522777aaf38deecd3c8f6dd1",
+      "asset_sha256": "e27a57afa4cd1cb1eef14f540002a46fb19877674c6679db4128241daf3de3b8",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 144,
+      "asset_path": "assets/e27a57afa4cd1cb1eef14f540002a46fb19877674c6679db4128241daf3de3b8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d7de654acded8ad53b8865f61fdcb31c8685af7037d2572e425cef598eb9f088",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person wearing a face mask and holding a digital thermometer.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "face mask",
+          "digital thermometer",
+          "measuring temperature",
+          "Celsius scale",
+          "mercury thermometer",
+          "toxicity",
+          "disposal"
+        ],
+        "context_relation": "The image illustrates the use of a digital thermometer for measuring body temperature, contrasting with the use of mercury thermometers due to their toxicity and difficulty in disposal.",
+        "limitations": [
+          "The image does not provide specific details about the digital thermometer or its operation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:23:11Z",
+      "effective_analysis": {
+        "visual_summary": "A person wearing a face mask and holding a digital thermometer.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "face mask",
+          "digital thermometer",
+          "measuring temperature",
+          "Celsius scale",
+          "mercury thermometer",
+          "toxicity",
+          "disposal"
+        ],
+        "context_relation": "The image illustrates the use of a digital thermometer for measuring body temperature, contrasting with the use of mercury thermometers due to their toxicity and difficulty in disposal.",
+        "limitations": [
+          "The image does not provide specific details about the digital thermometer or its operation."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8fcc8e50a344e2f357068835",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 144,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d7de654acded8ad53b8865f61fdcb31c8685af7037d2572e425cef598eb9f088",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:23:23Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
