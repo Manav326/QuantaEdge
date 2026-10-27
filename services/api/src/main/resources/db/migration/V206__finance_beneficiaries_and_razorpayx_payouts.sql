@@ -88,6 +88,12 @@ CREATE TABLE billing_finance_payout_settings (
   default_remainder_recipient_type varchar(16) NOT NULL CHECK(default_remainder_recipient_type IN ('INSTITUTION','COMPANY')),
   default_remainder_institution_id bigint REFERENCES institution_tenant(id) ON DELETE RESTRICT,
   default_remainder_legal_entity_id bigint REFERENCES billing_legal_entity(id) ON DELETE RESTRICT,
+  payment_collection_legal_entity_id bigint REFERENCES billing_legal_entity(id) ON DELETE RESTRICT,
+  razorpayx_funding_legal_entity_id bigint REFERENCES billing_legal_entity(id) ON DELETE RESTRICT,
+  collection_arrangement_status varchar(16) NOT NULL DEFAULT 'PENDING' CHECK(collection_arrangement_status IN ('PENDING','VERIFIED','BLOCKED')),
+  collection_arrangement_reference varchar(180),
+  collection_arrangement_verified_by_staff_id bigint REFERENCES staff_account(id) ON DELETE RESTRICT,
+  collection_arrangement_verified_at timestamptz, 
   payout_frequency varchar(16) NOT NULL DEFAULT 'MONTHLY' CHECK(payout_frequency='MONTHLY'),
   payout_minimum_paise bigint CHECK(payout_minimum_paise IS NULL OR payout_minimum_paise>=100),
   refund_reserve_basis_points integer CHECK(refund_reserve_basis_points IS NULL OR refund_reserve_basis_points BETWEEN 0 AND 10000),
@@ -96,6 +102,12 @@ CREATE TABLE billing_finance_payout_settings (
   CHECK (
     (default_remainder_recipient_type='INSTITUTION' AND default_remainder_institution_id IS NOT NULL AND default_remainder_legal_entity_id IS NULL)
     OR (default_remainder_recipient_type='COMPANY' AND default_remainder_institution_id IS NULL AND default_remainder_legal_entity_id IS NOT NULL)
+  ),
+  CHECK (
+    collection_arrangement_status<>'VERIFIED'
+    OR (payment_collection_legal_entity_id IS NOT NULL AND razorpayx_funding_legal_entity_id IS NOT NULL
+        AND collection_arrangement_reference IS NOT NULL AND length(btrim(collection_arrangement_reference))>=3
+        AND collection_arrangement_verified_by_staff_id IS NOT NULL AND collection_arrangement_verified_at IS NOT NULL)
   )
 );
 
@@ -164,6 +176,9 @@ CREATE TABLE finance_payout_batch (
     CHECK(status IN ('DRAFT','PENDING_APPROVAL','APPROVED','PROCESSING','PARTIAL','COMPLETED','FAILED','CANCELLED')),
   beneficiary_count integer NOT NULL DEFAULT 0 CHECK(beneficiary_count>=0),
   total_amount_paise bigint NOT NULL DEFAULT 0 CHECK(total_amount_paise>=0),
+  provider_fee_total_paise bigint CHECK(provider_fee_total_paise IS NULL OR provider_fee_total_paise>=0),
+  provider_fee_tax_total_paise bigint CHECK(provider_fee_tax_total_paise IS NULL OR provider_fee_tax_total_paise>=0),
+  provider_fee_reconciled_at timestamptz,
   created_by_staff_id bigint NOT NULL REFERENCES staff_account(id) ON DELETE RESTRICT,
   approved_by_staff_id bigint REFERENCES staff_account(id) ON DELETE RESTRICT,
   approved_at timestamptz,
@@ -186,6 +201,8 @@ CREATE TABLE finance_payout (
   provider_idempotency_key varchar(80) NOT NULL UNIQUE,
   provider_payout_id varchar(80) UNIQUE,
   provider_status varchar(32),
+  provider_fee_paise bigint CHECK(provider_fee_paise IS NULL OR provider_fee_paise>=0),
+  provider_fee_tax_paise bigint CHECK(provider_fee_tax_paise IS NULL OR provider_fee_tax_paise>=0),
   status varchar(32) NOT NULL DEFAULT 'PENDING_APPROVAL'
     CHECK(status IN ('PENDING_APPROVAL','APPROVED','SUBMITTING','PENDING','QUEUED','PROCESSING','PROCESSED','REVERSED','FAILED','REJECTED','RECONCILIATION_REQUIRED')),
   transfer_reference varchar(180),
@@ -254,6 +271,18 @@ INSERT INTO staff_permission_catalog(permission_key,display_name,description) VA
  ('QE_FINANCE_PAYOUT_APPROVE','Approve course finance payouts','Independently approve or reject beneficiary and monthly payout transfers before they are submitted to RazorpayX.')
 ON CONFLICT(permission_key) DO UPDATE
 SET display_name=excluded.display_name,description=excluded.description;
+
+-- Only the configured platform owner receives the initial grant. Additional users must be
+-- explicitly granted these permissions; HRMS role names alone do not authorize payout approval.
+INSERT INTO staff_permission_grant(staff_id,workspace_key,permission_key)
+SELECT id,'HRMS','QE_FINANCE_PAYOUT_MANAGE'
+FROM staff_account WHERE lower(username)='hrms_admin' AND active=true
+ON CONFLICT(staff_id,workspace_key,permission_key) DO NOTHING;
+
+INSERT INTO staff_permission_grant(staff_id,workspace_key,permission_key)
+SELECT id,'HRMS','QE_FINANCE_PAYOUT_APPROVE'
+FROM staff_account WHERE lower(username)='hrms_admin' AND active=true
+ON CONFLICT(staff_id,workspace_key,permission_key) DO NOTHING;
 
 INSERT INTO app_metadata(key,value)
 VALUES ('schema','finance-beneficiaries-razorpayx-payouts-v206')
