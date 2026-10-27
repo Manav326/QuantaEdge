@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "ba542d4ddb0563aafb1f124a4afe3816bc344870326cfb2e75597d26e46c37ad",
+  "raw_analysis_sha256": "69d238555c9653824625b057e3e35d5ffd081fa982fc0661a26793f83c05ae33",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15062,7 +15062,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40559863508",
-      "checkpointed_at": "2026-10-27T19:39:39Z",
+      "checkpointed_at": "2026-10-27T19:49:53Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "page_with_multiple_visuals",
@@ -20252,7 +20252,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40559863508",
-      "checkpointed_at": "2026-10-27T19:40:35Z",
+      "checkpointed_at": "2026-10-27T19:50:50Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -134830,7 +134830,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40539303120",
+      "run_id": "40559863508",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -134850,7 +134850,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40539303120",
+      "run_id": "40559863508",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -135358,21 +135358,71 @@
     {
       "asset_id": "69883c015cbfe046373e1e90",
       "asset_sha256": "c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61",
-      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 71,
       "asset_path": "assets/c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40539303120",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "51",
+          "4.3 Eﬀect of Air and Water on Other",
+          "Metals",
+          "Activity 4.6: Let us investigate (demonstration activity)",
+          "Non-metals",
+          "The teacher may demonstrate this activity.",
+          "Caution— It is advisabl"
+        ],
+        "concepts": [
+          "Metal",
+          "Air",
+          "Water",
+          "Demonstration activity",
+          "Non-metals",
+          "Teacher demonstration"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the visible_text array.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond what is in the visible_text array."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40559863508",
+      "checkpointed_at": "2026-10-27T19:57:38Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "51",
+          "4.3 Eﬀect of Air and Water on Other",
+          "Metals",
+          "Activity 4.6: Let us investigate (demonstration activity)",
+          "Non-metals",
+          "The teacher may demonstrate this activity.",
+          "Caution— It is advisabl"
+        ],
+        "concepts": [
+          "Metal",
+          "Air",
+          "Water",
+          "Demonstration activity",
+          "Non-metals",
+          "Teacher demonstration"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the visible_text array.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond what is in the visible_text array."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {

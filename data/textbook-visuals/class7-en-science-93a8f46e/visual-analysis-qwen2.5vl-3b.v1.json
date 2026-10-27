@@ -13,15 +13,15 @@
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "4b1298747dc1ec978a226ae5",
-      "0e143e54e2f709b8a4e5968d",
-      "463542d4277119b7abc93e3a"
+      "8604e838b1f1e41398ca72dd",
+      "1554b4067d24673fc7b88fc2",
+      "69883c015cbfe046373e1e90"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2432,
-    "assets_remaining": 5056,
+    "assets_analyzed": 2433,
+    "assets_remaining": 5055,
     "assets_completion_percent": 32.5,
-    "assets_failed": 25,
+    "assets_failed": 24,
     "assets_skipped_from_checkpoint": 2432,
     "batch_limit": 5,
     "publication_allowed": false
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40559863508",
-      "checkpointed_at": "2026-10-27T19:39:39Z"
+      "checkpointed_at": "2026-10-27T19:49:53Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40559863508",
-      "checkpointed_at": "2026-10-27T19:40:35Z"
+      "checkpointed_at": "2026-10-27T19:50:50Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -85738,7 +85738,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40539303120",
+      "run_id": "40559863508",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -85755,7 +85755,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40539303120",
+      "run_id": "40559863508",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -86068,19 +86068,45 @@
     {
       "asset_id": "69883c015cbfe046373e1e90",
       "asset_sha256": "c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61",
-      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 71,
       "asset_path": "assets/c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "cf57307ca7c5475af0290f406483dbdb81857029a6413f7f2229b23f7e91d1db",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40539303120",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "51",
+          "4.3 Eﬀect of Air and Water on Other",
+          "Metals",
+          "Activity 4.6: Let us investigate (demonstration activity)",
+          "Non-metals",
+          "The teacher may demonstrate this activity.",
+          "Caution— It is advisabl"
+        ],
+        "concepts": [
+          "Metal",
+          "Air",
+          "Water",
+          "Demonstration activity",
+          "Non-metals",
+          "Teacher demonstration"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the visible_text array.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond what is in the visible_text array."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40559863508",
+      "checkpointed_at": "2026-10-27T19:57:38Z"
     },
     {
       "asset_id": "c973477a8cf682ca3f4db4ca",
