@@ -1830,7 +1830,7 @@ public class CourseMarketplaceController {
       String signature = hmacSha256(providerOrderId + "|" + paymentId, keySecret);
       Map<String,Object> verified = new LinkedHashMap<>(verifyOrderInternal(localOrderId,
           new VerifyCoursePaymentRequest(paymentId, providerOrderId, signature),
-          callerStudentId, callerUserId, institutionId));
+          callerStudentId, callerUserId, institutionId, includeProviderDiagnostics));
       if (repairedFinancialSnapshots) {
         verified.put("financialSnapshotsRepaired", true);
         verified.put("financialSnapshotRepairMode", "TEST_MODE_HRMS_RECONCILIATION");
@@ -2402,6 +2402,13 @@ public class CourseMarketplaceController {
 
   private Map<String,Object> verifyOrderInternal(
       long localOrderId, VerifyCoursePaymentRequest request, Long callerStudentId, Long callerUserId, long institutionId) {
+    return verifyOrderInternal(localOrderId, request, callerStudentId, callerUserId, institutionId, false);
+  }
+
+  /** Include technical finance-failure details only for privileged reconciliation diagnostics. */
+  private Map<String,Object> verifyOrderInternal(
+      long localOrderId, VerifyCoursePaymentRequest request, Long callerStudentId, Long callerUserId,
+      long institutionId, boolean includeFinanceDiagnostics) {
     requireConfigured();
     String paymentId = request == null || request.paymentId() == null ? "" : request.paymentId().trim();
     String orderId = request == null || request.orderId() == null ? "" : request.orderId().trim();
@@ -2555,15 +2562,29 @@ public class CourseMarketplaceController {
 
     CourseOrderFinancialService.FinalizedSale finalizedSale=null;
     boolean financePending=true;
+    boolean financeFinalizationAttempted=false;
+    String financeFinalizationFailureType="";
+    String financeFinalizationFailureMessage="";
     if(financeSnapshotsReady) {
+      financeFinalizationAttempted=true;
       try {
         finalizedSale=courseOrderFinancialService.finalizeCapturedSale(localOrderId,paymentId,signature,expectedAmount);
         financePending=false;
       } catch(RuntimeException financeFailure) {
         // Access was committed in its own transaction after exact provider confirmation.
-        // Invoice/share failure must not convert a successful payment into an inaccessible course.
-        financePending=true;
+        // Preserve access, but keep a staff-only diagnostic so reconciliation can repair the
+        // actual fiscal/share failure rather than returning an opaque pending state.
+        Throwable rootCause=org.springframework.core.NestedExceptionUtils.getMostSpecificCause(financeFailure);
+        financeFinalizationFailureType=rootCause==null
+            ?financeFailure.getClass().getSimpleName():rootCause.getClass().getSimpleName();
+        String rootMessage=rootCause==null?financeFailure.getMessage():rootCause.getMessage();
+        financeFinalizationFailureMessage=safeProviderDiagnosticText(rootMessage,500);
+        LOGGER.error("Course order {} payment {} is captured and access is granted, but financial finalization failed. Root cause type={} message={}",
+            localOrderId,paymentId,financeFinalizationFailureType,financeFinalizationFailureMessage,financeFailure);
       }
+    } else {
+      financeFinalizationFailureType="FINANCIAL_SNAPSHOT_GATE_NOT_READY";
+      financeFinalizationFailureMessage="Finalization was not attempted because the locked tax/revenue-share/buyer snapshots were not ready.";
     }
 
     if(financePending) {
@@ -2580,6 +2601,12 @@ public class CourseMarketplaceController {
           &&"STUDENT".equals(accessGrant.recipientType()));
       result.put("financeReconciliationRequired",true);
       result.put("parentRequestHousekeepingPending",parentRequestHousekeepingPending);
+      if(includeFinanceDiagnostics) {
+        result.put("financeFinalizationAttempted",financeFinalizationAttempted);
+        result.put("financeFinalizationFailureType",financeFinalizationFailureType);
+        if(!financeFinalizationFailureMessage.isBlank())
+          result.put("financeFinalizationFailureMessage",financeFinalizationFailureMessage);
+      }
       result.put("message","Payment confirmed and course access granted. Invoice and revenue-share finalization is still being reconciled; do not pay again.");
       return result;
     }
