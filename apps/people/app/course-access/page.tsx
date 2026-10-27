@@ -44,8 +44,17 @@ function fmt(value?: string | null) {
   if (Number.isNaN(date.getTime())) return value;
   return new Intl.DateTimeFormat('en-IN', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Kolkata' }).format(date) + ' IST';
 }
-function localInput(date: Date) {
-  return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+function istDateTimeInput(date: Date) {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
+  }).formatToParts(date);
+  const value = (type: string) => parts.find(part => part.type === type)?.value || '';
+  return value('year') + '-' + value('month') + '-' + value('day') + 'T' + value('hour') + ':' + value('minute');
+}
+function parseIstDateTime(value: string) {
+  // datetime-local has no offset; the HRMS form interprets it explicitly as India Standard Time.
+  return new Date(value + ':00+05:30');
 }
 function expired(value?: string | null) { return Boolean(value && new Date(value).getTime() <= Date.now()); }
 function duration(course: Course) {
@@ -178,7 +187,7 @@ export default function CourseAccessPage() {
       if (action.kind === 'UNBLOCK') endpoint = '/api/v1/hrms/platform/course-access/enrollments/' + action.row.enrollment_id + '/unblock';
       if (action.kind === 'EXTEND') {
         if (!actionExpiry) throw new Error('Choose the new expiry date and time.');
-        const date = new Date(actionExpiry);
+        const date = parseIstDateTime(actionExpiry);
         if (Number.isNaN(date.getTime())) throw new Error('Choose a valid expiry date and time.');
         body.expiresAt = date.toISOString();
         endpoint = '/api/v1/hrms/platform/course-access/enrollments/' + action.row.enrollment_id + '/extend';
@@ -308,8 +317,8 @@ export default function CourseAccessPage() {
               <button type="button" className={styles.quiet} onClick={() => setAction(null)} disabled={saving}>Cancel</button>
             </div>
             {action.kind === 'EXTEND' && <label className={styles.full}>New expiry date and time
-              <input type="datetime-local" required min={localInput(new Date())} value={actionExpiry} onChange={e => setActionExpiry(e.target.value)} />
-              <small>Enter date and time in your browser's local time zone; the table displays India Standard Time. The new expiry must be in the future and later than the current expiry.</small>
+              <input type="datetime-local" required min={istDateTimeInput(new Date())} value={actionExpiry} onChange={e => setActionExpiry(e.target.value)} />
+              <small>Enter the expiry date and time in India Standard Time (IST). The new expiry must be in the future and later than the current expiry.</small>
             </label>}
             <label className={styles.full}>Written reason
               <textarea rows={3} minLength={3} maxLength={1000} required value={actionNotes} onChange={e => setActionNotes(e.target.value)}
