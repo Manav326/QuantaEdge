@@ -177,6 +177,23 @@ class RevenueDistributionCalculatorTest {
   }
 
   @Test
+  void namedRemainderRecipientReceivesTheWholePoolWhenThereAreNoExplicitShares() {
+    RevenueDistributionCalculator.BeneficiaryResult result =
+        RevenueDistributionCalculator.calculateBeneficiaries(
+            RevenueDistributionCalculator.PaymentConfirmation.VERIFIED_CAPTURED,
+            10_000L,1_000L,0L,List.of(),"INSTITUTION",42L);
+
+    assertEquals(9_000L,result.distributablePoolPaise());
+    assertEquals(0L,result.explicitAllocationsPaise());
+    assertEquals(9_000L,result.remainderPaise());
+    assertEquals(0L,result.unassignedRemainderPaise());
+    assertEquals(1,result.allocations().size());
+    assertEquals("INSTITUTION",result.allocations().getFirst().recipientType());
+    assertEquals(42L,result.allocations().getFirst().recipientId());
+    assertEquals(9_000L,result.allocations().getFirst().amountPaise());
+  }
+
+  @Test
   void emptyApprovedRecipientListLeavesTheWholePoolWithThePlatform() {
     RevenueDistributionCalculator.Result result = RevenueDistributionCalculator.calculate(
         RevenueDistributionCalculator.PaymentConfirmation.VERIFIED_CAPTURED,
