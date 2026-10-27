@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1322,
+    "assets_selected": 1323,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "1ad982bcd93525bf306d2c98"
+      "51a75caa0e20a5faf15c701f"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1318,
-    "assets_remaining": 973,
-    "assets_completion_percent": 57.5,
+    "assets_analyzed": 1319,
+    "assets_remaining": 972,
+    "assets_completion_percent": 57.6,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 1317,
+    "assets_skipped_from_checkpoint": 1318,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441272121",
-      "checkpointed_at": "2026-10-27T05:27:01Z"
+      "checkpointed_at": "2026-10-27T05:32:07Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441272121",
-      "checkpointed_at": "2026-10-27T05:27:26Z"
+      "checkpointed_at": "2026-10-27T05:32:33Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441272121",
-      "checkpointed_at": "2026-10-27T05:27:56Z"
+      "checkpointed_at": "2026-10-27T05:33:02Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441272121",
-      "checkpointed_at": "2026-10-27T05:28:40Z"
+      "checkpointed_at": "2026-10-27T05:33:45Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -43743,6 +43743,38 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441174014",
       "checkpointed_at": "2026-10-27T04:37:41Z"
+    },
+    {
+      "asset_id": "51a75caa0e20a5faf15c701f",
+      "asset_sha256": "867a978bd9f17e6b858fc964a30d480adf638510414c573e431765e06057db6a",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/867a978bd9f17e6b858fc964a30d480adf638510414c573e431765e06057db6a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "074b5d86b43b2bf51ba58ce13721abba85145a2647097a19f4233e38b436919e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person with long braided hair wearing a blue apron over a purple shirt, with both hands open and palms facing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "pressure differences",
+          "land breeze",
+          "sea breeze"
+        ],
+        "context_relation": "The image is related to the educational content about pressure differences and their effects on wind patterns, specifically land breeze and sea breeze.",
+        "limitations": [
+          "The image does not provide specific details about the pressure differences or the wind patterns."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40441272121",
+      "checkpointed_at": "2026-10-27T05:34:25Z"
     }
   ]
 }

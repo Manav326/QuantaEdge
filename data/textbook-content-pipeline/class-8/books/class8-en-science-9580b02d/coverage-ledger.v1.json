@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1334,
-    "successful_visual_analyses": 1322,
-    "missing_visual_analyses": 957,
+    "raw_analysis_result_rows": 1335,
+    "successful_visual_analyses": 1323,
+    "missing_visual_analyses": 956,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 969,
+    "unresolved_count": 968,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -49958,9 +49958,22 @@
       "asset_path": "assets/867a978bd9f17e6b858fc964a30d480adf638510414c573e431765e06057db6a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person with long braided hair wearing a blue apron over a purple shirt, with both hands open and palms facing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "pressure differences",
+          "land breeze",
+          "sea breeze"
+        ],
+        "context_relation": "The image is related to the educational content about pressure differences and their effects on wind patterns, specifically land breeze and sea breeze.",
+        "limitations": [
+          "The image does not provide specific details about the pressure differences or the wind patterns."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
