@@ -449,7 +449,7 @@ public class CoursePaymentOperationsController {
         "The platform saved order QE-ORDER-"+orderId+" for "+text(order.get("course_title")!=null?order.get("course_title"):"course #"+courseId)+".",
         List.of("Local order status: "+localStatus,
             "Marketplace institution: "+text(order.get("institution_name")),
-            "Course source institution: "+value(order,"source_institution_name","Not resolved from the saved course release"),
+            "Course source institution: "+text(order.get("source_institution_name")!=null?order.get("source_institution_name"):"Not resolved from the saved course release"),
             "Created: "+text(order.get("created_at")),"Last updated: "+text(order.get("updated_at"))),
         order.get("created_at")));
 
