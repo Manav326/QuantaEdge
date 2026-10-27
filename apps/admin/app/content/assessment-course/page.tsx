@@ -449,26 +449,38 @@ export default function AssessmentCourseStudioPage() {
     if (!packages.length) { setError('Choose at least one portable assessment JSON package.'); return; }
     if (packages.some(entry => entry.parseError)) { setError('Fix the invalid JSON file(s) before validating.'); return; }
     setValidating(true); setError(''); setNotice(''); setHasValidation(false);
-    const checked: PackageEntry[] = [];
     try {
-      for (const entry of packages) {
+      const checked = await Promise.all(packages.map(async entry => {
         const payload = packagePayload(entry);
         const signature = JSON.stringify(payload);
-        const result = await requestJson<PackageValidation>('/api/v1/admin/assessments/validate-package', {
-          courseId: course.courseId,
-          package: payload
-        });
-        checked.push({ ...entry, validation: result, validatedSignature: result.valid ? signature : undefined });
-      }
+        try {
+          const result = await requestJson<PackageValidation>('/api/v1/admin/assessments/validate-package', {
+            courseId: course.courseId,
+            package: payload
+          });
+          return { ...entry, validation: result, validatedSignature: result.valid ? signature : undefined };
+        } catch (cause) {
+          const message = cause instanceof Error ? cause.message : 'Server validation failed for this package.';
+          return {
+            ...entry,
+            validation: { valid: false, issues: [message] },
+            validatedSignature: undefined
+          };
+        }
+      }));
       setPackages(checked);
-      setHasValidation(checked.every(entry => entry.validation?.valid && entry.validatedSignature === JSON.stringify(packagePayload(entry))));
+      const allValid = checked.every(entry =>
+        entry.validation?.valid && entry.validatedSignature === JSON.stringify(packagePayload(entry)));
+      setHasValidation(Boolean(allValid));
       const passed = checked.filter(entry => entry.validation?.valid).length;
-      if (passed === checked.length) setNotice('All ' + passed + ' package(s) passed server-side validation. Import will create draft tests and versioned test packs only.');
-      else setError(passed + ' of ' + checked.length + ' packages passed. Correct the fields and content listed on each package, then validate again.');
-    } catch (cause) {
-      setPackages(checked.length ? checked : packages);
-      setError(cause instanceof Error ? cause.message : 'Package validation failed.');
-    } finally { setValidating(false); }
+      if (passed === checked.length) {
+        setNotice('All ' + passed + ' package(s) passed server-side validation. Import will create draft tests and versioned test packs only.');
+      } else {
+        setError(passed + ' of ' + checked.length + ' packages passed. Each file keeps its own findings below; fix the indicated fields and validate again.');
+      }
+    } finally {
+      setValidating(false);
+    }
   }
 
   async function importPackages() {
