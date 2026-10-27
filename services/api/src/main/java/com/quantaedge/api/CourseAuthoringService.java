@@ -75,6 +75,13 @@ public class CourseAuthoringService {
         throw badRequest("Course code must use 2–38 letters, digits, hyphens or underscores.");
     }
     if("ASSESSMENT".equals(type)) {
+      // A row lock alone cannot protect an absent row. Serialize same-name creation attempts
+      // per institution, then use the unique identity key as the final collision-proof guard.
+      String normalizedName=displayName.trim().toLowerCase(java.util.Locale.ROOT);
+      jdbc.query("select pg_advisory_xact_lock(hashtext(?),hashtext(?))",rs->{
+        while(rs.next()) { /* acquire transaction-scoped lock */ }
+        return null;
+      },"assessment-course-name:"+institutionId,normalizedName);
       List<Map<String,Object>> sameName=jdbc.queryForList("""
         select id,stable_course_key
         from institution_course_identity
@@ -83,8 +90,7 @@ public class CourseAuthoringService {
         for update
         """,institutionId,displayName);
       if(!sameName.isEmpty()) {
-        Map<String,Object> existing=sameName.getFirst();
-        throw conflict("An assessment course with this name already exists in this institution. Open the existing course instead of creating a duplicate.");
+        throw conflict("An assessment course with this name already exists in this institution. Return to Content Studio and select the existing course instead of creating a duplicate.");
       }
     }
 
