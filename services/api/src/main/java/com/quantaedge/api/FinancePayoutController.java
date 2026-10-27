@@ -812,18 +812,32 @@ public class FinancePayoutController {
   }
 
   private Map<String,Object> applyProviderStatus(long payoutId,JsonNode provider,Long actorStaffId) {
-    String providerId=optionalText(provider==null?null:provider.path("id").asText(null));
-    String providerStatus=optionalText(provider==null?null:provider.path("status").asText(null));
-    if(providerId==null||!providerId.matches("[A-Za-z0-9_-]{4,80}")||providerStatus==null)
-      throw new IllegalStateException("RazorpayX response has no valid payout ID and status.");
+    if(provider==null||!provider.isObject())
+      throw new IllegalStateException("RazorpayX returned a non-object payout record.");
+    String providerId=optionalText(provider.path("id").asText(null));
+    String providerStatus=optionalText(provider.path("status").asText(null));
+    Map<String,Object> current=one("""
+      select p.status,p.batch_id,p.provider_payout_id,p.amount_paise,p.currency,p.public_id,
+        b.provider_fund_account_id
+      from finance_payout p
+      join finance_payout_beneficiary b on b.id=p.beneficiary_id
+      where p.id=?
+      """,payoutId);
+    if(current.isEmpty())throw notFound("Payout not found.");
+    if(providerId==null||!providerId.matches("[A-Za-z0-9_-]{4,80}"))
+      return markProviderReviewRequired(payoutId,current,null,providerStatus,actorStaffId,
+          "RazorpayX returned a missing or invalid payout ID. Check the provider record; no paid ledger event was posted.");
+    String identityProblem=providerDataMismatch(payoutId,provider,providerId,current);
+    if(identityProblem==null&&(providerStatus==null||providerStatus.length()>32))
+      identityProblem="RazorpayX returned a missing or invalid payout status. Refresh provider state before considering this transfer complete.";
+    if(identityProblem!=null)
+      return markProviderReviewRequired(payoutId,current,providerId,providerStatus,actorStaffId,identityProblem);
     String normalized=providerStatus.toLowerCase(Locale.ROOT);
     String status=switch(normalized){
       case "pending"->"PENDING";case "queued"->"QUEUED";case "initiated","processing"->"PROCESSING";
       case "processed"->"PROCESSED";case "reversed"->"REVERSED";case "failed"->"FAILED";
       case "rejected","cancelled"->"REJECTED";default->"RECONCILIATION_REQUIRED";
     };
-    Map<String,Object> current=one("select status,batch_id from finance_payout where id=?",payoutId);
-    if(current.isEmpty())throw notFound("Payout not found.");
     String prior=text(current,"status");
     if("PROCESSED".equals(prior)&&!"PROCESSED".equals(status)&&!"REVERSED".equals(status))return payoutSummary(payoutId);
     if("REVERSED".equals(prior)&&!"REVERSED".equals(status))return payoutSummary(payoutId);
@@ -831,10 +845,12 @@ public class FinancePayoutController {
     String utr=optionalText(provider.path("utr").asText(null));
     String description=optionalText(provider.path("status_details").path("description").asText(null));
     if(description==null)description=optionalText(provider.path("failure_reason").asText(null));
-    Long providerFee=provider.hasNonNull("fees")?provider.path("fees").asLong():null;
-    Long providerFeeTax=provider.hasNonNull("tax")?provider.path("tax").asLong():null;
-    if(providerFee!=null&&providerFee<0||providerFeeTax!=null&&providerFeeTax<0)
-      throw new IllegalStateException("RazorpayX returned negative payout-fee values.");
+    Long providerFee=optionalProviderAmount(provider,"fees");
+    Long providerFeeTax=optionalProviderAmount(provider,"tax");
+    // Never coerce malformed provider amounts to zero. The transfer status may still be valid;
+    // incomplete fees remain visible for statement reconciliation.
+    boolean providerFeeDataInvalid=(provider.hasNonNull("fees")&&providerFee==null)
+        ||(provider.hasNonNull("tax")&&providerFeeTax==null);
     boolean providerFeesComplete=providerFee!=null&&providerFeeTax!=null;
     jdbc.update("""
       update finance_payout set provider_payout_id=?,provider_status=?,status=?,transfer_reference=?,status_details=?,
@@ -857,11 +873,84 @@ public class FinancePayoutController {
     providerDetails.put("statusDetails",description==null?"":description);
     if(providerFee!=null)providerDetails.put("providerFeePaise",providerFee);
     if(providerFeeTax!=null)providerDetails.put("providerFeeTaxPaise",providerFeeTax);
+    if(providerFeeDataInvalid)providerDetails.put("providerFeeDataNeedsManualReconciliation",true);
     payoutEvent(payoutId,eventType,"course-payout:"+payoutId+":provider:"+normalized+":"+providerId,actorStaffId,providerId,providerDetails);
     if("PROCESSED".equals(status)&&!"PROCESSED".equals(prior)&&!"REVERSED".equals(prior))postPayoutLedgerEvents(payoutId,"PAID",actorStaffId);
     else if("REVERSED".equals(status)&&"PROCESSED".equals(prior))postPayoutLedgerEvents(payoutId,"REVERSED",actorStaffId);
     refreshBatchStatus(number(current.get("batch_id")));
     return payoutSummary(payoutId);
+  }
+
+  /**
+   * Validate provider-to-ledger identity fields before accepting any payout status transition.
+   * Mismatches are routed to review and never create a PAID allocation event.
+   */
+  private String providerDataMismatch(long payoutId,JsonNode provider,String providerId,Map<String,Object> current) {
+    String savedId=optionalText(current.get("provider_payout_id"));
+    if(savedId!=null&&!savedId.equals(providerId))
+      return "RazorpayX payout ID differs from the ID already linked to this transfer. Review the provider record.";
+    if(exists("select exists(select 1 from finance_payout where provider_payout_id=? and id<>?)",providerId,payoutId))
+      return "RazorpayX payout ID is already linked to a different QuantaEdge transfer. Review the provider record.";
+    Long actualAmount=nonNegativeIntegral(provider.get("amount"));
+    if(actualAmount==null)
+      return "RazorpayX did not return an integer payout amount. Refresh provider state before considering this transfer complete.";
+    if(actualAmount!=number(current.get("amount_paise")))
+      return "RazorpayX payout amount does not match the approved QuantaEdge amount. No paid ledger event was posted.";
+    String actualCurrency=optionalText(provider.path("currency").asText(null));
+    if(actualCurrency==null||!actualCurrency.equalsIgnoreCase(string(current.get("currency"))))
+      return "RazorpayX payout currency does not match the approved QuantaEdge currency. No paid ledger event was posted.";
+    String expectedFundAccount=string(current.get("provider_fund_account_id"));
+    String actualFundAccount=optionalText(provider.path("fund_account_id").asText(null));
+    if(expectedFundAccount.isBlank()||actualFundAccount==null||!expectedFundAccount.equals(actualFundAccount))
+      return "RazorpayX fund account does not match the approved beneficiary. No paid ledger event was posted.";
+    String notedPayoutId=optionalText(provider.path("notes").path("quantaedge_payout_id").asText(null));
+    String referenceId=optionalText(provider.path("reference_id").asText(null));
+    if(notedPayoutId!=null&&!Long.toString(payoutId).equals(notedPayoutId))
+      return "RazorpayX payout notes identify a different QuantaEdge payout. No paid ledger event was posted.";
+    if(referenceId!=null&&!referenceId.equals(string(current.get("public_id"))))
+      return "RazorpayX reference ID does not match this QuantaEdge payout. No paid ledger event was posted.";
+    boolean correlated=providerId.equals(savedId)||Long.toString(payoutId).equals(notedPayoutId)
+        ||string(current.get("public_id")).equals(referenceId);
+    if(!correlated)
+      return "RazorpayX response could not be linked to this QuantaEdge payout by provider ID, reference ID or payout note. Review the provider record.";
+    return null;
+  }
+
+  private Map<String,Object> markProviderReviewRequired(long payoutId,Map<String,Object> current,String providerId,
+      String providerStatus,Long actorStaffId,String reason) {
+    String prior=text(current,"status");
+    boolean terminal=List.of("PROCESSED","REVERSED","FAILED","REJECTED").contains(prior);
+    String safeProviderId=providerId==null?"":providerId.trim();
+    boolean validProviderId=safeProviderId.matches("[A-Za-z0-9_-]{4,80}");
+    boolean providerIdOwned=validProviderId
+        &&exists("select exists(select 1 from finance_payout where provider_payout_id=? and id<>?)",safeProviderId,payoutId);
+    String safeProviderStatus=providerStatus==null?"":providerStatus.substring(0,Math.min(32,providerStatus.length()));
+    if(terminal) {
+      jdbc.update("update finance_payout set status_details=?,updated_at=now() where id=?",reason,payoutId);
+    } else {
+      jdbc.update("""
+        update finance_payout set
+          provider_payout_id=case when provider_payout_id is null and ?=true and ?=false then ? else provider_payout_id end,
+          provider_status=?,status='RECONCILIATION_REQUIRED',status_details=?,
+          submitted_at=coalesce(submitted_at,now()),updated_at=now()
+        where id=? and status not in ('PROCESSED','REVERSED','FAILED','REJECTED')
+        """,validProviderId,providerIdOwned,safeProviderId,safeProviderStatus,reason,payoutId);
+    }
+    String reviewKey="course-payout:"+payoutId+":provider-review:"+safeProviderId+":"+Integer.toHexString(reason.hashCode());
+    payoutEvent(payoutId,"RECONCILIATION_REQUIRED",reviewKey,actorStaffId,validProviderId?safeProviderId:null,
+        Map.of("providerStatus",safeProviderStatus,"reason",reason));
+    refreshBatchStatus(number(current.get("batch_id")));
+    return payoutSummary(payoutId);
+  }
+
+  private static Long optionalProviderAmount(JsonNode provider,String key) {
+    return provider==null||!provider.hasNonNull(key)?null:nonNegativeIntegral(provider.get(key));
+  }
+
+  private static Long nonNegativeIntegral(JsonNode value) {
+    if(value==null||value.isNull()||!value.isIntegralNumber()||!value.canConvertToLong())return null;
+    long amount=value.longValue();
+    return amount<0?null:amount;
   }
 
   private void postPayoutLedgerEvents(long payoutId,String eventType,Long actorStaffId) {
