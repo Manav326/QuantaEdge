@@ -23,6 +23,7 @@ import tempfile
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
+from urllib.parse import urlparse
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_ARCHIVE = REPO_ROOT / "data" / "TRE-4_PYQ.zip"
@@ -450,6 +451,16 @@ def database_url(args: argparse.Namespace) -> str:
     if not value.startswith(("postgresql://", "postgres://")):
         raise ImportErrorSafe("Database URL must be a PostgreSQL URL (or jdbc:postgresql:// URL).")
     return value
+
+
+def require_loopback_database_url(value: str) -> None:
+    """Keep the repair-only path from ever targeting a production or remote database."""
+    parsed = urlparse(str(value or "").strip())
+    if parsed.scheme not in {"postgres", "postgresql"} or parsed.hostname not in {"localhost", "127.0.0.1", "::1"}:
+        raise ImportErrorSafe(
+            "The --repair-draft-hindi operation is restricted to localhost/loopback PostgreSQL. "
+            "Refusing to change a remote or production database."
+        )
 
 
 def ensure_schema(cursor: Any) -> None:
@@ -955,6 +966,7 @@ def database_repair_draft_hindi(args: argparse.Namespace, papers: list[dict[str,
         ) from exc
 
     url = database_url(args)
+    require_loopback_database_url(url)
     report: dict[str, Any] = {
         "mode": "REPAIR_DRAFT_HINDI",
         "course": COURSE_TITLE,
