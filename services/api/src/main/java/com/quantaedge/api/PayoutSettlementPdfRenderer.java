@@ -201,7 +201,7 @@ public class PayoutSettlementPdfRenderer {
       g.drawString(documentClass,WIDTH-320,66);
       g.setColor(LINE);g.drawLine(MARGIN,112,WIDTH-MARGIN,112);
       g.setColor(INK);g.setFont(font(Font.BOLD,continued?24:28));g.drawString(continued?title+" (CONTINUED)":title,MARGIN,160);
-      g.setColor(MUTED);g.setFont(font(Font.PLAIN,13));
+      g.setColor(MUTED);g.setFont(font(Font.PLAIN,15));
       g.drawString(clip(documentNumber,360),MARGIN,190);
       g.drawString("Generated "+clip(created,330),WIDTH-MARGIN-330,190);
       y=230;
@@ -225,8 +225,8 @@ public class PayoutSettlementPdfRenderer {
     void notice(String headline,String detail) {
       ensure(88);
       g.setColor(WARNING_BG);g.fillRoundRect(MARGIN,y,CONTENT_WIDTH,75,12,12);
-      g.setColor(WARNING);g.setFont(font(Font.BOLD,14));g.drawString(clip(headline,CONTENT_WIDTH-28),MARGIN+14,y+24);
-      g.setColor(INK);g.setFont(font(Font.PLAIN,12));g.drawString(clip(detail,CONTENT_WIDTH-28),MARGIN+14,y+48);
+      g.setColor(WARNING);g.setFont(font(Font.BOLD,17));g.drawString(clip(headline,CONTENT_WIDTH-28),MARGIN+14,y+25);
+      g.setColor(INK);g.setFont(font(Font.PLAIN,15));g.drawString(clip(detail,CONTENT_WIDTH-28),MARGIN+14,y+52);
       y+=88;
     }
     void summaryCards(List<Metric> metrics) {
@@ -235,7 +235,7 @@ public class PayoutSettlementPdfRenderer {
       for(int i=0;i<metrics.size();i++) {
         int x=MARGIN+i*(width+gap);
         g.setColor(SUBTLE);g.fillRoundRect(x,y,width,h,12,12);
-        g.setColor(MUTED);g.setFont(font(Font.BOLD,11));g.drawString(clip(metrics.get(i).label(),width-24),x+12,y+27);
+        g.setColor(MUTED);g.setFont(font(Font.BOLD,13));g.drawString(clip(metrics.get(i).label(),width-24),x+12,y+27);
         g.setColor(INK);g.setFont(font(Font.BOLD,17));g.drawString(clip(metrics.get(i).value(),width-24),x+12,y+62);
       }
       y+=h+18;
@@ -247,26 +247,26 @@ public class PayoutSettlementPdfRenderer {
     }
     void keyValue(String key,String value) {
       ensure(29);
-      g.setColor(MUTED);g.setFont(font(Font.PLAIN,13));g.drawString(clip(key,300),MARGIN,y+16);
-      g.setColor(INK);g.setFont(font(Font.BOLD,13));g.drawString(clip(value,CONTENT_WIDTH-320),MARGIN+320,y+16);
-      g.setColor(LINE);g.drawLine(MARGIN,y+24,WIDTH-MARGIN,y+24);y+=28;
+      g.setColor(MUTED);g.setFont(font(Font.PLAIN,15));g.drawString(clip(key,300),MARGIN,y+20);
+      g.setColor(INK);g.setFont(font(Font.BOLD,15));g.drawString(clip(value,CONTENT_WIDTH-320),MARGIN+320,y+20);
+      g.setColor(LINE);g.drawLine(MARGIN,y+28,WIDTH-MARGIN,y+28);y+=32;
     }
     void muted(String text) {
-      ensure(34);g.setColor(MUTED);g.setFont(font(Font.PLAIN,12));g.drawString(clip(text,CONTENT_WIDTH),MARGIN,y+12);y+=26;
+      ensure(34);g.setColor(MUTED);g.setFont(font(Font.PLAIN,14));g.drawString(clip(text,CONTENT_WIDTH),MARGIN,y+15);y+=29;
     }
     void paragraph(String text) {
-      String[] lines=wrap(text,CONTENT_WIDTH,font(Font.PLAIN,12));
-      ensure(Math.max(28,lines.length*19+6));
-      g.setColor(INK);g.setFont(font(Font.PLAIN,12));
-      for(String line:lines){if(y+22>FOOTER_Y-24){newPage(true);g.setColor(INK);g.setFont(font(Font.PLAIN,12));}g.drawString(line,MARGIN,y+13);y+=19;}
-      y+=6;
+      String[] lines=wrap(text,CONTENT_WIDTH,font(Font.PLAIN,15));
+      ensure(Math.max(32,lines.length*22+8));
+      g.setColor(INK);g.setFont(font(Font.PLAIN,15));
+      for(String line:lines){if(y+24>FOOTER_Y-24){newPage(true);g.setColor(INK);g.setFont(font(Font.PLAIN,15));}g.drawString(line,MARGIN,y+17);y+=22;}
+      y+=8;
     }
     void empty(String text) { paragraph(text); }
     void tableHeader(String[] labels) {
       ensure(49);
       int[] widths=columns(labels.length);
       g.setColor(INK);g.fillRoundRect(MARGIN,y,CONTENT_WIDTH,42,8,8);
-      g.setColor(Color.WHITE);g.setFont(font(Font.BOLD,11));
+      g.setColor(Color.WHITE);g.setFont(font(Font.BOLD,14));
       int x=MARGIN;
       for(int i=0;i<labels.length;i++){g.drawString(clip(labels[i],widths[i]-12),x+8,y+26);x+=widths[i];}
       y+=46;
@@ -276,12 +276,12 @@ public class PayoutSettlementPdfRenderer {
       int[] widths=columns(values.length);
       g.setColor(((pages.size()+1)%2)==0?SUBTLE:Color.WHITE);g.fillRect(MARGIN,y,CONTENT_WIDTH,rowHeight);
       g.setColor(LINE);g.setStroke(new BasicStroke(1));g.drawLine(MARGIN,y+rowHeight,WIDTH-MARGIN,y+rowHeight);
-      g.setColor(INK);g.setFont(font(Font.PLAIN,11));
+      g.setColor(INK);g.setFont(font(Font.PLAIN,15));
       int x=MARGIN;
       for(int i=0;i<values.length;i++) {
         String[] parts=String.valueOf(values[i]==null?"":values[i]).split("\n",-1);
-        int lineY=y+21;
-        for(int j=0;j<Math.min(parts.length,3);j++){g.drawString(clip(parts[j],widths[i]-14),x+7,lineY);lineY+=17;}
+        int lineY=y+20;
+        for(int j=0;j<Math.min(parts.length,3);j++){g.drawString(clip(parts[j],widths[i]-14),x+7,lineY);lineY+=18;}
         x+=widths[i];
       }
       y+=rowHeight;
@@ -403,7 +403,7 @@ public class PayoutSettlementPdfRenderer {
     String clean=value.replaceAll("[\\p{Cntrl}]"," ").trim();
     if(clean.length()<2)return clean;
     // Use the logical font's metrics without allocating a new image for every table cell.
-    Font measuredFont=font(Font.PLAIN,11);
+    Font measuredFont=font(Font.PLAIN,15);
     if(measuredFont.getStringBounds(clean,FONT_CONTEXT).getWidth()<=width)return clean;
     StringBuilder out=new StringBuilder();
     for(int i=0;i<clean.length();) {
