@@ -79,6 +79,21 @@ BEGIN
     RAISE EXCEPTION 'Only a pending distribution-repair proposal can be reviewed once'
       USING ERRCODE='23514';
   END IF;
+  IF NEW.status='APPLIED' AND NOT EXISTS (
+    SELECT 1
+    FROM revenue_share_allocation a
+    JOIN revenue_share_allocation_event e ON e.allocation_id=a.id
+      AND e.event_type='EARNED'
+      AND e.details->>'distributionRepairId'=NEW.id::text
+      AND e.amount_paise=NEW.remainder_amount_paise
+    WHERE a.course_payment_order_id=NEW.course_payment_order_id
+      AND a.recipient_type=NEW.remainder_recipient_type
+      AND ((NEW.remainder_recipient_type='INSTITUTION' AND a.institution_id=NEW.remainder_institution_id)
+        OR (NEW.remainder_recipient_type='COMPANY' AND a.legal_entity_id=NEW.remainder_legal_entity_id))
+  ) THEN
+    RAISE EXCEPTION 'A distribution repair cannot be marked applied without its matching allocation and EARNED event'
+      USING ERRCODE='23514';
+  END IF;
   RETURN NEW;
 END;
 $$;
