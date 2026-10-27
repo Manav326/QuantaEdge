@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "718d8d88fc7d54b2e01370392693a09b59caa1a58e622d5cef7e9f00f174a7eb",
+  "raw_analysis_sha256": "f379e26dee935b4198a62932a444e4a1bc97a7263ac3ededde29c5aa9a798189",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -141524,6 +141524,204 @@
         "context_relation": "Explanation of non-metals and their properties",
         "limitations": [
           "No specific limitations mentioned"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "44924b0d91dae5102064e9c3",
+      "asset_sha256": "3c592f7a47fcbc1e16ead05f54686eb66c070a8f19d8792bc5f0a92fb8ae41b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/3c592f7a47fcbc1e16ead05f54686eb66c070a8f19d8792bc5f0a92fb8ae41b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue, stylized, abstract figure resembling a person or an object with a curved line and a circular shape.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is an abstract illustration that does not directly relate to the text provided.",
+        "limitations": [
+          "The image does not provide specific information or data that can be quantified or analyzed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40451620191",
+      "checkpointed_at": "2026-10-27T07:05:16Z",
+      "effective_analysis": {
+        "visual_summary": "A blue, stylized, abstract figure resembling a person or an object with a curved line and a circular shape.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is an abstract illustration that does not directly relate to the text provided.",
+        "limitations": [
+          "The image does not provide specific information or data that can be quantified or analyzed."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bedd75838506fd1d79352954",
+      "asset_sha256": "04359c6b8f97f6c90232ee85623c8aba2c6ecd1f7f545100561329f1b74d8742",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/04359c6b8f97f6c90232ee85623c8aba2c6ecd1f7f545100561329f1b74d8742.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40451620191",
+      "checkpointed_at": "2026-10-27T07:06:46Z",
+      "effective_analysis": {
+        "visual_summary": "A blue butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8449611b0d30d484ef2257f1",
+      "asset_sha256": "e7fcc67805f4ae45005efaf2ee41e8ec9e047f018a55c0e3c298dce9a62a6cac",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/e7fcc67805f4ae45005efaf2ee41e8ec9e047f018a55c0e3c298dce9a62a6cac.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a person's face, focusing on the eyes and nose.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a person's face, focusing on the eyes and nose.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the close-up of the person's face."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40451620191",
+      "checkpointed_at": "2026-10-27T07:08:19Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a person's face, focusing on the eyes and nose.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a person's face, focusing on the eyes and nose.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the close-up of the person's face."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "42e7b6b5aa13ba31ce54663b",
+      "asset_sha256": "3ce8d7b1e67d9ecb2f1a05deff3ca9f7365003200976f1863fd3b4836cd0908d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/3ce8d7b1e67d9ecb2f1a05deff3ca9f7365003200976f1863fd3b4836cd0908d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person wearing a black shirt with a logo on the left side of the chest.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a person wearing a black shirt with a logo on the left side of the chest.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40451620191",
+      "checkpointed_at": "2026-10-27T07:09:52Z",
+      "effective_analysis": {
+        "visual_summary": "A person wearing a black shirt with a logo on the left side of the chest.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a person wearing a black shirt with a logo on the left side of the chest.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c7f85c0ad625adda617a76f2",
+      "asset_sha256": "80d4cca3cb352d48b88a19073105ffa66992a002aead790e9ab66a5dffbc3bf7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/80d4cca3cb352d48b88a19073105ffa66992a002aead790e9ab66a5dffbc3bf7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a coin with a map of the world on it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information related to the text.",
+          "The image is not a diagram, chart, graph, table, map, cartoon, or equation.",
+          "The image is not a page with multiple visuals or an illustration.",
+          "The image is not an equation or a page with text that is not visible."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40451620191",
+      "checkpointed_at": "2026-10-27T07:11:29Z",
+      "effective_analysis": {
+        "visual_summary": "A close-up of a coin with a map of the world on it.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information related to the text.",
+          "The image is not a diagram, chart, graph, table, map, cartoon, or equation.",
+          "The image is not a page with multiple visuals or an illustration.",
+          "The image is not an equation or a page with text that is not visible."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
