@@ -23,8 +23,8 @@ Hinglish is Hindi in Devanagari with familiar English terms retained naturally. 
 ## Phases and acceptance gates
 
 ### P0 — Locale contract and preference consistency
-- [ ] Register only supported UI locales and keep selectors aligned with runtime capabilities.
-- [ ] Align Android's account interface-language options and save behavior with the app's active UI locale.
+- [x] Register only supported UI locales and keep selectors aligned with runtime capabilities.
+- [x] Align Android's account interface-language options and save behavior with the app's active UI locale.
 - [ ] Document preference precedence and persistence for browser apps, Android, login/logout and offline startup.
 - [ ] Verify changing UI locale never changes the learning-content or certificate locale.
 - **Accept:** selected, saved and displayed locale agree across app navigation and reload; unsupported choices cannot be saved or offered.
@@ -80,6 +80,17 @@ Hinglish is Hindi in Devanagari with familiar English terms retained naturally. 
 5. Unify Android translation resources and cover every destination.
 6. Complete contextual copy review, dynamic messages and learning-content audit.
 7. Run end-to-end bilingual/responsive acceptance and update the tracker with evidence.
+
+## Implementation checkpoint — 2026-10-27
+
+Implemented on this branch:
+- Restricted Android account interface-language choices to English and Hinglish; legacy unsupported profile values display as Hinglish instead of an unselected option.
+- Saving the account interface preference now updates Android's active UI locale and persists it in app preferences after the API accepts the change.
+- The account profile API now accepts only registered UI locale IDs (`english`, `hinglish`). Added API and Android locale-resolution regression tests.
+- Added a report-only UI copy-quality audit. It lists long messages for contextual review, validates locale key/placeholder consistency, and is attached as a CI artifact.
+- Shortened six Admin/HRMS messages in both languages. Updated the canonical catalogs and all generated Web/Admin/People copies together.
+
+**Validation still required:** Android/API tests and full CI have not yet been confirmed on this branch. Full route coverage, browser/device acceptance, the complete Android/catalog integration, dynamic-message coverage, and the broader contextual copy review remain open.
 
 ## Existing authoritative records
 
