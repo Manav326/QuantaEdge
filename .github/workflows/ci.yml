@@ -41,6 +41,12 @@ jobs:
       - name: Test UI route inventory generator
         run: node --test scripts/inventory_ui_routes.test.mjs
 
+      - name: Test contextual UI copy quality audit
+        run: node --test scripts/audit-ui-copy-quality.test.mjs
+
+      - name: Generate contextual UI copy quality report
+        run: node scripts/audit-ui-copy-quality.mjs --json "$RUNNER_TEMP/ui-copy-quality-audit.json"
+
       - name: Generate machine-readable UI route inventory
         run: node scripts/inventory_ui_routes.mjs --output "$RUNNER_TEMP/ui-localization-route-inventory.json"
 
@@ -55,6 +61,14 @@ jobs:
         with:
           name: ui-localization-route-inventory
           path: ${{ runner.temp }}/ui-localization-route-inventory.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload contextual UI copy quality report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-copy-quality-audit
+          path: ${{ runner.temp }}/ui-copy-quality-audit.json
           if-no-files-found: error
           retention-days: 14
 
