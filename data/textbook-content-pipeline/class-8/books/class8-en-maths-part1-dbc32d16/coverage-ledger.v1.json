@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2195,
     "eligible_visual_asset_rows": 2195,
-    "raw_analysis_result_rows": 50,
-    "successful_visual_analyses": 41,
-    "missing_visual_analyses": 2145,
+    "raw_analysis_result_rows": 60,
+    "successful_visual_analyses": 51,
+    "missing_visual_analyses": 2135,
     "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 2154,
+    "unresolved_count": 2144,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -9193,9 +9193,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9211,9 +9220,40 @@
       "asset_path": "page-0011.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Note to the Teacher section of a textbook.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "NOTE TO THE TEACHER",
+          "We hope that this book, Ganita Prakash, will serve as a strong support and guide to you in achieving the exciting task that you have before you: that of passing on the joy of learning the beautiful subject of Mathematics to the next generation.",
+          "This task calls for providing a fertile environment that allows for the flowering of mathematical thinking in the minds of students. Classrooms, where students just listen and write down whatever is being told to them or written on the board, are deficient in the conditions required for learning mat",
+          "Fortunately, it is not difficult to create such conditions in the classroom. It just requires an interesting question, problem, pattern, or challenge to be thrown open to the students on a regular basis, and sufficient time to be given to them to play with, discuss, and work on it as a class or in p",
+          "Along with it, an environment that accepts mistakes and acknowledges their importance in learning needs to be nurtured.",
+          "While creating the spark for initiating mathematical thinking in classrooms is not difficult, sustaining it may be challenging and may involve efforts from your side. Nevertheless, even if just the first part of throwing open a question, problem, pattern, or challenge is done at least once or twice ",
+          "It should be noted that this positive impact will not happen overnight. That takes time and depends on various factors such as the number of opportunities you give for problem solving, your patience, and the encouragement you give to the students.",
+          "To support you in posing problems, all the problems or questions in this book are marked using the icons and . These icons are indicators of potential opportunities to start off a process of problem-solving and exploration in the classroom. You will find some of the problems labelled . Such question"
+        ],
+        "concepts": [
+          "Mathematics",
+          "Classroom",
+          "Mathematical thinking",
+          "Problem-solving",
+          "Questioning",
+          "Discussion",
+          "Patience",
+          "Encouragement",
+          "Opportunities",
+          "Problem-solving process",
+          "Classroom discussion"
+        ],
+        "context_relation": "The note provides guidance and advice for teachers on how to create a conducive environment for teaching mathematics.",
+        "limitations": [
+          "The note does not provide specific strategies or methods for teaching mathematics.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9229,9 +9269,18 @@
       "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red, textured, abstract shape that resembles a wave or a splash.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of an abstract concept, possibly related to mathematical processes or problem-solving approaches.",
+        "limitations": [
+          "The image does not provide specific details about the concepts or processes it represents."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9247,9 +9296,18 @@
       "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red, textured, abstract shape that resembles a wave or a splash.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of an abstract concept, possibly related to mathematical processes or problem-solving approaches.",
+        "limitations": [
+          "The image does not provide specific details about the concepts or processes it represents."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9265,9 +9323,29 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An owl mascot appears in various parts of the textbook to highlight important mathematical processes, ways of thinking, and problem-solving approaches.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "An owl mascot appears at various points in the textbook to highlight important mathematical processes, ways of thinking, and problem-solving approaches. These can be brought out during classroom discussions, both where the owl is present and also in other similar situations.",
+          "In this grade, justification/proofs of mathematical statements find an increased presence. Students should be gently encouraged to deduce properties and not be forced to do it. Whenever students face challenges in doing it, encourage them to experiment and observe, and use their intuition in figurin"
+        ],
+        "concepts": [
+          "mathematical processes",
+          "ways of thinking",
+          "problem-solving approaches",
+          "justification/proofs",
+          "deduction",
+          "intuition"
+        ],
+        "context_relation": "The owl mascot serves as a visual aid to emphasize the importance of mathematical processes and problem-solving in the classroom.",
+        "limitations": [
+          "The owl mascot is not a diagram, chart, graph, table, map, cartoon, photo, or equation.",
+          "The owl mascot is not a page with multiple visuals."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9283,9 +9361,27 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An owl mascot appears in various parts of the textbook to highlight important mathematical processes, ways of thinking, and problem-solving approaches.",
+        "visual_type": "other",
+        "visible_text": [
+          "An owl mascot appears at various points in the textbook to highlight important mathematical processes, ways of thinking, and problem-solving approaches. These can be brought out during classroom discussions, both where the owl is present and also in other similar situations.",
+          "In this grade, justification/proofs of mathematical statements find an increased presence. Students should be gently encouraged to deduce properties and not be forced to do it. Whenever students face challenges in doing it, encourage them to experiment and observe, and use their intuition in figurin"
+        ],
+        "concepts": [
+          "Mathematical processes",
+          "Problem-solving approaches",
+          "Justification/proofs",
+          "Properties",
+          "Intuition"
+        ],
+        "context_relation": "The owl mascot serves as a visual aid to emphasize key concepts in the textbook.",
+        "limitations": [
+          "The owl mascot is not a diagram, chart, graph, table, map, cartoon, photo, or equation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9301,9 +9397,49 @@
       "asset_path": "page-0012.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the use of an owl mascot to highlight mathematical processes and problem-solving approaches, and encouraging students to deduce properties and experiment with their intuition.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "An owl mascot appears at various points in the textbook to highlight important mathematical processes, ways of thinking, and problem-solving approaches. These can be brought out during classroom discussions, both where the owl is present and also in other similar situations.",
+          "In this grade, justification/proofs of mathematical statements find an increased presence. Students should be gently encouraged to deduce properties and not be forced to do it. Whenever students face challenges in doing it, encourage them to experiment and observe, and use their intuition in figurin",
+          "To develop students' mathematical thinking and understanding of concepts, a sufficient number of problems are given. Trying to 'cover' all of them must not happen at the cost of students not getting to spend quality time on playing with and discussing them.",
+          "It is important to understand that the exploratory problems are not only for promoting problem solving skills; they also serve in strengthening procedural fluency when children start engaging in exploration.",
+          "Efforts must be made in making students independent learners. One essential aspect required for this is an ability to read and understand mathematical text. To promote this skill, students should be encouraged to read the book by themselves and in groups. Give opportunities to them to interpret what",
+          "This textbook contains a number of open-ended problems. It also contains new treatments of certain concepts. If you are not able to solve them or follow some of them immediately, it is perfectly okay! Not everyone knows everything. Along with trying to understand and reflect upon such content, it wi",
+          "In these discussions, you can participate as a fellow seeker, and when students see a teacher seek and think to understand something, it sets a wonderful example for them.",
+          "It is hoped that you and your students will have a great and fruitful time using this textbook!"
+        ],
+        "concepts": [
+          "mathematical processes",
+          "ways of thinking",
+          "problem-solving approaches",
+          "justification/proofs",
+          "deduction",
+          "experimentation",
+          "intuition",
+          "exploratory problems",
+          "problem solving skills",
+          "procedural fluency",
+          "independent learners",
+          "reading and understanding mathematical text",
+          "interpreting word problems",
+          "open-ended problems",
+          "new treatments of concepts",
+          "understanding and reflection",
+          "classroom discussion",
+          "summarising",
+          "teacher seeking",
+          "understanding something"
+        ],
+        "context_relation": "The text discusses the use of an owl mascot in a textbook to highlight mathematical processes and problem-solving approaches, and encourages students to deduce properties and experiment with their intuition.",
+        "limitations": [
+          "The text does not provide specific examples or details about the owl mascot or the textbook.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9319,9 +9455,16 @@
       "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red, textured, abstract shape that resembles a wave or a splash.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9337,9 +9480,16 @@
       "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red, abstract, and irregularly shaped object that resembles a wave or a splash.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9355,9 +9505,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
