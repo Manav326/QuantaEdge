@@ -781,7 +781,7 @@ public class FinancePayoutController {
         "message","RazorpayX did not return a payout ID. Review the provider record before reusing the same idempotency key."));
     try {
       JsonNode provider=providerRequest("GET","/payouts/"+providerId,null,null);
-      Map<String,Object> out=applyProviderStatus(payoutId,provider,context.staffId());
+      Map<String,Object> out=applyProviderStatus(payoutId,provider,context.staffId(),null);
       refreshBatchStatus(number(payout.get("batch_id")));
       return ResponseEntity.ok(out);
     } catch(Exception ex) {
@@ -873,7 +873,7 @@ public class FinancePayoutController {
         "quantaedge_beneficiary_id",Long.toString(number(row.get("beneficiary_id")))));
     try {
       JsonNode provider=providerRequest("POST","/payouts",payload,text(row,"provider_idempotency_key"));
-      return applyProviderStatus(payoutId,provider,actorStaffId);
+      return applyProviderStatus(payoutId,provider,actorStaffId,null);
     } catch(Exception ex) {
       markPayoutUnknown(payoutId,actorStaffId,safePayoutFailure(ex));
       return payoutSummary(payoutId);
@@ -903,9 +903,10 @@ public class FinancePayoutController {
     String disposition="UNMATCHED";
     Long localPayoutId=local.isEmpty()?null:number(local.get("id"));
     if(localPayoutId!=null) {
-      applyProviderStatus(localPayoutId,payout,null);
+      Map<String,Object> applied=applyProviderStatus(localPayoutId,payout,null,eventId);
       Map<String,Object> updated=one("select status from finance_payout where id=?",localPayoutId);
-      disposition="RECONCILIATION_REQUIRED".equals(string(updated.get("status")))
+      disposition=Boolean.TRUE.equals(applied.get("providerReviewRequired"))
+          ||"RECONCILIATION_REQUIRED".equals(string(updated.get("status")))
           ?"RECONCILIATION_REQUIRED":"PROCESSED";
     }
     jdbc.update("""
@@ -916,7 +917,7 @@ public class FinancePayoutController {
       """,eventId,providerId,kind,payloadSha256,disposition);
   }
 
-  private Map<String,Object> applyProviderStatus(long payoutId,JsonNode provider,Long actorStaffId) {
+  private Map<String,Object> applyProviderStatus(long payoutId,JsonNode provider,Long actorStaffId,String providerEventId) {
     if(provider==null||!provider.isObject())
       throw new IllegalStateException("RazorpayX returned a non-object payout record.");
     String providerId=optionalText(provider.path("id").asText(null));
@@ -930,13 +931,13 @@ public class FinancePayoutController {
       """,payoutId);
     if(current.isEmpty())throw notFound("Payout not found.");
     if(providerId==null||!providerId.matches("[A-Za-z0-9_-]{4,80}"))
-      return markProviderReviewRequired(payoutId,current,null,providerStatus,actorStaffId,
+      return markProviderReviewRequired(payoutId,current,null,providerStatus,actorStaffId,providerEventId,
           "RazorpayX returned a missing or invalid payout ID. Check the provider record; no paid ledger event was posted.");
     String identityProblem=providerDataMismatch(payoutId,provider,providerId,current);
     if(identityProblem==null&&(providerStatus==null||providerStatus.length()>32))
       identityProblem="RazorpayX returned a missing or invalid payout status. Refresh provider state before considering this transfer complete.";
     if(identityProblem!=null)
-      return markProviderReviewRequired(payoutId,current,providerId,providerStatus,actorStaffId,identityProblem);
+      return markProviderReviewRequired(payoutId,current,providerId,providerStatus,actorStaffId,providerEventId,identityProblem);
     String normalized=providerStatus.toLowerCase(Locale.ROOT);
     String status=switch(normalized){
       case "pending"->"PENDING";case "queued"->"QUEUED";case "initiated","processing"->"PROCESSING";
@@ -979,7 +980,10 @@ public class FinancePayoutController {
     if(providerFee!=null)providerDetails.put("providerFeePaise",providerFee);
     if(providerFeeTax!=null)providerDetails.put("providerFeeTaxPaise",providerFeeTax);
     if(providerFeeDataInvalid)providerDetails.put("providerFeeDataNeedsManualReconciliation",true);
-    payoutEvent(payoutId,eventType,"course-payout:"+payoutId+":provider:"+normalized+":"+providerId,actorStaffId,providerId,providerDetails);
+    String providerEventKey=providerEventId==null
+        ?"course-payout:"+payoutId+":provider:"+normalized+":"+providerId
+        :"course-payout:"+payoutId+":webhook:"+providerEventId;
+    payoutEvent(payoutId,eventType,providerEventKey,actorStaffId,providerEventId,providerDetails);
     if("PROCESSED".equals(status)&&!"PROCESSED".equals(prior)&&!"REVERSED".equals(prior))postPayoutLedgerEvents(payoutId,"PAID",actorStaffId);
     else if("REVERSED".equals(status)&&"PROCESSED".equals(prior))postPayoutLedgerEvents(payoutId,"REVERSED",actorStaffId);
     refreshBatchStatus(number(current.get("batch_id")));
@@ -1022,7 +1026,7 @@ public class FinancePayoutController {
   }
 
   private Map<String,Object> markProviderReviewRequired(long payoutId,Map<String,Object> current,String providerId,
-      String providerStatus,Long actorStaffId,String reason) {
+      String providerStatus,Long actorStaffId,String providerEventId,String reason) {
     String prior=text(current,"status");
     boolean terminal=List.of("PROCESSED","REVERSED","FAILED","REJECTED").contains(prior);
     String safeProviderId=providerId==null?"":providerId.trim();
@@ -1041,11 +1045,15 @@ public class FinancePayoutController {
         where id=? and status not in ('PROCESSED','REVERSED','FAILED','REJECTED')
         """,validProviderId,providerIdOwned,safeProviderId,safeProviderStatus,reason,payoutId);
     }
-    String reviewKey="course-payout:"+payoutId+":provider-review:"+safeProviderId+":"+Integer.toHexString(reason.hashCode());
-    payoutEvent(payoutId,"RECONCILIATION_REQUIRED",reviewKey,actorStaffId,validProviderId?safeProviderId:null,
+    String reviewKey=providerEventId==null
+        ?"course-payout:"+payoutId+":provider-review:"+safeProviderId+":"+Integer.toHexString(reason.hashCode())
+        :"course-payout:"+payoutId+":webhook-review:"+providerEventId;
+    payoutEvent(payoutId,"RECONCILIATION_REQUIRED",reviewKey,actorStaffId,providerEventId,
         Map.of("providerStatus",safeProviderStatus,"reason",reason));
     refreshBatchStatus(number(current.get("batch_id")));
-    return payoutSummary(payoutId);
+    Map<String,Object> summary=new LinkedHashMap<>(payoutSummary(payoutId));
+    summary.put("providerReviewRequired",true);
+    return summary;
   }
 
   private static Long optionalProviderAmount(JsonNode provider,String key) {
