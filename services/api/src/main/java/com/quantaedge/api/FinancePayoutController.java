@@ -473,6 +473,226 @@ public class FinancePayoutController {
     return financialService.reconcileProviderFees(orderId,fee,feeTax,reference,source,idempotencyKey,context.staffId());
   }
 
+
+  @GetMapping("/course-order-fee-adjustment-candidates")
+  public List<Map<String,Object>> feeAdjustmentCandidates(
+      @RequestParam(value="limit",defaultValue="50") int suppliedLimit,
+      @RequestParam(value="offset",defaultValue="0") int suppliedOffset,
+      @RequestParam(value="q",defaultValue="") String rawQuery,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireManage(context);
+    int limit=Math.max(1,Math.min(suppliedLimit,200)),offset=Math.max(0,Math.min(suppliedOffset,1_000_000));
+    String query=rawQuery==null?"":rawQuery.trim();
+    if(query.length()>100)throw bad("Fee-adjustment search can contain at most 100 characters.");
+    return jdbc.queryForList("""
+      select o.id as order_id,o.currency,o.provider_payment_id,
+        coalesce(nullif(offer.title_override,''),course.display_name) as course_title,tenant.display_name as source_institution,
+        f.processing_fee_paise as recorded_processing_fee_paise,f.fee_tax_paise as recorded_fee_tax_paise,
+        coalesce(approved.requested_processing_fee_paise,f.processing_fee_paise) as effective_processing_fee_paise,
+        coalesce(approved.requested_fee_tax_paise,f.fee_tax_paise) as effective_fee_tax_paise,
+        coalesce(approved.settlement_reference,f.settlement_reference) as effective_reference,
+        coalesce(approved.source_type,f.source_type) as effective_source_type,
+        pending.id as pending_adjustment_id,
+        (pending.id is null and not exists(
+          select 1 from finance_payout_item i join revenue_share_allocation a on a.id=i.allocation_id
+          join finance_payout p on p.id=i.payout_id
+          where a.course_payment_order_id=o.id
+            and p.status in ('PENDING_APPROVAL','APPROVED','SUBMITTING','PENDING','QUEUED','PROCESSING','RECONCILIATION_REQUIRED')
+        )) as can_adjust
+      from course_payment_order_fee f
+      join course_payment_order o on o.id=f.course_payment_order_id and o.status='VERIFIED'
+      join institution_tenant tenant on tenant.id=o.institution_id
+      left join institution_marketplace_offer offer on offer.id=o.institution_offer_id
+      left join curriculum_program course on course.id=o.course_id
+      left join lateral (
+        select q.requested_processing_fee_paise,q.requested_fee_tax_paise,q.settlement_reference,q.source_type
+        from course_payment_order_fee_adjustment q
+        join course_payment_order_fee_adjustment_review r on r.adjustment_id=q.id and r.decision='APPROVED'
+        where q.course_payment_order_id=o.id order by q.id desc limit 1
+      ) approved on true
+      left join lateral (
+        select q.id from course_payment_order_fee_adjustment q
+        where q.course_payment_order_id=o.id
+          and not exists(select 1 from course_payment_order_fee_adjustment_review r where r.adjustment_id=q.id)
+        order by q.id desc limit 1
+      ) pending on true
+      where (?='' or cast(o.id as text) ilike '%'||?||'%'
+        or coalesce(nullif(offer.title_override,''),course.display_name) ilike '%'||?||'%'
+        or tenant.display_name ilike '%'||?||'%' or o.provider_payment_id ilike '%'||?||'%')
+      order by o.id desc limit ? offset ?
+      """,query,query,query,query,query,limit,offset);
+  }
+
+  @GetMapping("/course-order-fee-adjustments/pending")
+  public List<Map<String,Object>> pendingFeeAdjustments(
+      @RequestParam(value="limit",defaultValue="100") int suppliedLimit,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireManage(context);int limit=Math.max(1,Math.min(suppliedLimit,200));
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select q.id,q.course_payment_order_id as order_id,q.previous_processing_fee_paise,q.previous_fee_tax_paise,
+        q.requested_processing_fee_paise,q.requested_fee_tax_paise,q.settlement_reference,q.source_type,q.reason,
+        q.requested_by_staff_id,maker.display_name as requested_by_name,q.created_at,
+        coalesce(nullif(offer.title_override,''),course.display_name) as course_title,o.provider_payment_id,o.currency
+      from course_payment_order_fee_adjustment q
+      join course_payment_order o on o.id=q.course_payment_order_id
+      left join institution_marketplace_offer offer on offer.id=o.institution_offer_id
+      left join curriculum_program course on course.id=o.course_id
+      left join staff_account maker on maker.id=q.requested_by_staff_id
+      where not exists(select 1 from course_payment_order_fee_adjustment_review r where r.adjustment_id=q.id)
+      order by q.created_at,q.id limit ?
+      """,limit);
+    boolean mayReview=context.staffId()!=null&&hasPermission(context,"QE_FINANCE_PAYOUT_APPROVE");
+    for(Map<String,Object> row:rows)row.put("canReview",mayReview&&number(row.get("requested_by_staff_id"))!=number(context.staffId()));
+    return rows;
+  }
+
+  @PostMapping("/course-orders/{orderId}/fee-adjustments")
+  @org.springframework.transaction.annotation.Transactional
+  public ResponseEntity<Map<String,Object>> requestFeeAdjustment(@PathVariable long orderId,
+      @RequestHeader(value="Idempotency-Key",required=false) String idempotencyKey,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireManage(context);
+    long fee=requiredLong(body.get("processingFeePaise"),"processingFeePaise");
+    long tax=requiredLong(body.get("feeTaxPaise"),"feeTaxPaise");
+    if(fee<0||tax<0)throw bad("Corrected provider fee and fee tax cannot be negative.");
+    try { Math.addExact(fee,tax); } catch(ArithmeticException ex) { throw bad("Corrected fee plus tax exceeds supported integer-paise precision."); }
+    String reference=requiredText(body.get("settlementReference"),"settlement reference");
+    String reason=requiredText(body.get("reason"),"adjustment reason");
+    if(reference.length()<3||reference.length()>180)throw bad("Enter a valid provider settlement reference.");
+    if(reason.length()<5||reason.length()>500)throw bad("Explain the reason for the correction in 5–500 characters.");
+    String source=optionalText(body.get("sourceType"))==null?"MANUAL_RECONCILIATION":text(body,"sourceType").toUpperCase(Locale.ROOT);
+    if(!List.of("SETTLEMENT_REPORT","PROVIDER_API","MANUAL_RECONCILIATION").contains(source))
+      throw bad("Choose a supported correction evidence source.");
+    String key=idempotencyKey==null?"":idempotencyKey.trim();
+    if(!key.matches("[A-Za-z0-9_-]{10,180}"))throw bad("Idempotency-Key must contain 10–180 letters, digits, underscores or hyphens.");
+    Map<String,Object> order=one("select id,status,currency from course_payment_order where id=? for update",orderId);
+    if(order.isEmpty())throw notFound("Course payment order was not found.");
+    if(!"VERIFIED".equals(text(order,"status")))throw bad("Only a verified captured sale can be corrected.");
+    if(!"INR".equalsIgnoreCase(text(order,"currency")))throw bad("Fee correction is available for the INR settlement route only.");
+    Map<String,Object> current=effectiveCourseOrderFee(orderId);
+    if(current.isEmpty())throw bad("This order does not have an original confirmed fee record to correct.");
+    Map<String,Object> duplicate=one("select * from course_payment_order_fee_adjustment where idempotency_key=?",key);
+    if(!duplicate.isEmpty()) {
+      boolean same=number(duplicate.get("course_payment_order_id"))==orderId
+        &&number(duplicate.get("requested_processing_fee_paise"))==fee
+        &&number(duplicate.get("requested_fee_tax_paise"))==tax
+        &&reference.equals(text(duplicate,"settlement_reference"))
+        &&source.equals(text(duplicate,"source_type"))&&reason.equals(text(duplicate,"reason"))
+        &&number(duplicate.get("requested_by_staff_id"))==number(context.staffId());
+      if(!same)throw bad("This idempotency key was already used for a different fee-adjustment request.");
+      return ResponseEntity.ok(Map.of("id",number(duplicate.get("id")),"status",feeAdjustmentStatus(number(duplicate.get("id"))),
+        "message","The original fee-adjustment request was found. No duplicate request was created."));
+    }
+    if(number(current.get("effective_processing_fee_paise"))==fee&&number(current.get("effective_fee_tax_paise"))==tax)
+      throw bad("The corrected fee and tax are identical to the current approved values. No adjustment is needed.");
+    if(exists("""
+      select exists(select 1 from finance_payout_item i join revenue_share_allocation a on a.id=i.allocation_id
+        join finance_payout p on p.id=i.payout_id where a.course_payment_order_id=?
+        and p.status in ('PENDING_APPROVAL','APPROVED','SUBMITTING','PENDING','QUEUED','PROCESSING','RECONCILIATION_REQUIRED'))
+      """,orderId))
+      throw bad("A payout batch currently reserves this sale. Finish or safely resolve that batch before requesting a fee correction.");
+    if(exists("select exists(select 1 from course_payment_order_fee_adjustment q where q.course_payment_order_id=? and not exists(select 1 from course_payment_order_fee_adjustment_review r where r.adjustment_id=q.id))",orderId))
+      throw bad("A fee correction for this order is already awaiting independent review.");
+    Long adjustmentId=jdbc.queryForObject("""
+      insert into course_payment_order_fee_adjustment(
+        course_payment_order_id,previous_processing_fee_paise,previous_fee_tax_paise,
+        requested_processing_fee_paise,requested_fee_tax_paise,settlement_reference,source_type,reason,
+        idempotency_key,requested_by_staff_id
+      ) values(?,?,?,?,?,?,?,?,?,?) returning id
+      """,Long.class,orderId,number(current.get("effective_processing_fee_paise")),number(current.get("effective_fee_tax_paise")),
+        fee,tax,reference,source,reason,key,context.staffId());
+    if(adjustmentId==null)throw new IllegalStateException("Fee correction request could not be recorded.");
+    auditCourseOrderFeeAdjustment(orderId,adjustmentId,context.staffId(),"COURSE_ORDER_FEE_ADJUSTMENT_REQUESTED",
+      Map.of("previousProcessingFeePaise",number(current.get("effective_processing_fee_paise")),
+        "previousFeeTaxPaise",number(current.get("effective_fee_tax_paise")),"requestedProcessingFeePaise",fee,
+        "requestedFeeTaxPaise",tax,"settlementReference",reference,"sourceType",source,"reason",reason));
+    return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("id",adjustmentId,"status","PENDING_APPROVAL",
+      "previousProcessingFeePaise",number(current.get("effective_processing_fee_paise")),
+      "previousFeeTaxPaise",number(current.get("effective_fee_tax_paise")),
+      "requestedProcessingFeePaise",fee,"requestedFeeTaxPaise",tax,
+      "message","Correction request recorded immutably. A different authorized staff member must review it before the allocation ledger changes."));
+  }
+
+  @PostMapping("/course-order-fee-adjustments/{adjustmentId}/review")
+  @org.springframework.transaction.annotation.Transactional
+  public ResponseEntity<Map<String,Object>> reviewFeeAdjustment(@PathVariable long adjustmentId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireApprover(context);
+    String decision=text(body,"decision").toUpperCase(Locale.ROOT);
+    if(!List.of("APPROVED","REJECTED").contains(decision))throw bad("Choose approve or reject for this fee correction.");
+    String reason=requiredText(body.get("reason"),"review rationale");
+    if(reason.length()<5||reason.length()>500)throw bad("Review rationale must contain 5–500 characters.");
+    Map<String,Object> request=one("select * from course_payment_order_fee_adjustment where id=?",adjustmentId);
+    if(request.isEmpty())throw notFound("Fee-adjustment request was not found.");
+    if(number(request.get("requested_by_staff_id"))==number(context.staffId()))
+      throw bad("The person who requested this fee correction cannot review it.");
+    long orderId=number(request.get("course_payment_order_id"));
+    jdbc.queryForList("select id from course_payment_order where id=? for update",orderId);
+    if(!one("select id from course_payment_order_fee_adjustment_review where adjustment_id=?",adjustmentId).isEmpty())
+      throw bad("This fee correction already has a final review decision.");
+    Map<String,Object> current=effectiveCourseOrderFee(orderId);
+    if(current.isEmpty()
+        ||number(current.get("effective_processing_fee_paise"))!=number(request.get("previous_processing_fee_paise"))
+        ||number(current.get("effective_fee_tax_paise"))!=number(request.get("previous_fee_tax_paise")))
+      throw bad("The fee values changed after this request was submitted. Do not apply a stale correction; refresh and submit a new request.");
+    if(exists("""
+      select exists(select 1 from finance_payout_item i join revenue_share_allocation a on a.id=i.allocation_id
+        join finance_payout p on p.id=i.payout_id where a.course_payment_order_id=?
+        and p.status in ('PENDING_APPROVAL','APPROVED','SUBMITTING','PENDING','QUEUED','PROCESSING','RECONCILIATION_REQUIRED'))
+      """,orderId))
+      throw bad("A payout batch now reserves this sale. Resolve the batch before reviewing the fee correction.");
+    if("APPROVED".equals(decision)) {
+      Map<String,Object> ledgerResult=financialService.applyApprovedProviderFeeAdjustment(adjustmentId,context.staffId());
+      jdbc.update("""
+        insert into course_payment_order_fee_adjustment_review(adjustment_id,decision,reason,reviewed_by_staff_id)
+        values(?,'APPROVED',?,?)
+        """,adjustmentId,reason,context.staffId());
+      auditCourseOrderFeeAdjustment(orderId,adjustmentId,context.staffId(),"COURSE_ORDER_FEE_ADJUSTMENT_APPROVED",
+        Map.of("reviewReason",reason,"ledgerImpact",ledgerResult));
+      return ResponseEntity.ok(Map.of("id",adjustmentId,"status","APPROVED","ledgerImpact",ledgerResult,
+        "message","The reviewed correction was appended to the allocation ledger. The original provider fee record remains unchanged."));
+    }
+    jdbc.update("""
+      insert into course_payment_order_fee_adjustment_review(adjustment_id,decision,reason,reviewed_by_staff_id)
+      values(?,'REJECTED',?,?)
+      """,adjustmentId,reason,context.staffId());
+    auditCourseOrderFeeAdjustment(orderId,adjustmentId,context.staffId(),"COURSE_ORDER_FEE_ADJUSTMENT_REJECTED",
+      Map.of("reviewReason",reason));
+    return ResponseEntity.ok(Map.of("id",adjustmentId,"status","REJECTED",
+      "message","The correction request was rejected and retained in the immutable review history. No ledger entries changed."));
+  }
+
+  private Map<String,Object> effectiveCourseOrderFee(long orderId) {
+    return one("""
+      select f.processing_fee_paise as recorded_processing_fee_paise,f.fee_tax_paise as recorded_fee_tax_paise,
+        coalesce(approved.requested_processing_fee_paise,f.processing_fee_paise) as effective_processing_fee_paise,
+        coalesce(approved.requested_fee_tax_paise,f.fee_tax_paise) as effective_fee_tax_paise
+      from course_payment_order_fee f
+      left join lateral (
+        select q.requested_processing_fee_paise,q.requested_fee_tax_paise
+        from course_payment_order_fee_adjustment q
+        join course_payment_order_fee_adjustment_review r on r.adjustment_id=q.id and r.decision='APPROVED'
+        where q.course_payment_order_id=f.course_payment_order_id order by q.id desc limit 1
+      ) approved on true
+      where f.course_payment_order_id=?
+      """,orderId);
+  }
+
+  private String feeAdjustmentStatus(long adjustmentId) {
+    Map<String,Object> review=one("select decision from course_payment_order_fee_adjustment_review where adjustment_id=?",adjustmentId);
+    return review.isEmpty()?"PENDING_APPROVAL":text(review,"decision");
+  }
+
+  private void auditCourseOrderFeeAdjustment(long orderId,long adjustmentId,long actorStaffId,String action,Map<String,Object> details) {
+    jdbc.update("""
+      insert into billing_financial_audit_log(legal_entity_id,institution_id,actor_staff_id,action,target_type,target_id,details)
+      select d.legal_entity_id,o.institution_id,?,?, 'COURSE_ORDER_FEE_ADJUSTMENT',?,?::jsonb
+      from course_payment_order o left join fiscal_document d on d.id=o.fiscal_document_id where o.id=?
+      """,actorStaffId,action,Long.toString(adjustmentId),json(details),orderId);
+  }
+
   @GetMapping("/payout-balances")
   public Map<String,Object> payoutBalances(@RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireManage(context);
@@ -483,7 +703,8 @@ public class FinancePayoutController {
         select a.id as allocation_id,a.recipient_type,a.institution_id,a.legal_entity_id,a.currency,
           coalesce(sum(e.amount_paise) filter(where e.event_type='EARNED'),0) as earned_paise,
           coalesce(sum(e.amount_paise) filter(where e.event_type='REFUNDED'),0) as refunded_paise,
-          coalesce(sum(e.amount_paise) filter(where e.event_type='PROCESSING_FEE_DEDUCTED'),0) as charges_paise,
+          coalesce(sum(e.amount_paise) filter(where e.event_type='PROCESSING_FEE_DEDUCTED'),0)
+            -coalesce(sum(e.amount_paise) filter(where e.event_type='PROCESSING_FEE_CREDITED'),0) as charges_paise,
           coalesce(sum(e.amount_paise) filter(where e.event_type='PAID'),0) as paid_paise,
           coalesce(sum(e.amount_paise) filter(where e.event_type='REVERSED'),0) as reversed_paise
         from revenue_share_allocation a
@@ -715,7 +936,8 @@ public class FinancePayoutController {
       join lateral (
         select coalesce(sum(amount_paise) filter(where event_type='EARNED'),0) earned_paise,
           coalesce(sum(amount_paise) filter(where event_type='REFUNDED'),0) refunded_paise,
-          coalesce(sum(amount_paise) filter(where event_type='PROCESSING_FEE_DEDUCTED'),0) fee_paise,
+          coalesce(sum(amount_paise) filter(where event_type='PROCESSING_FEE_DEDUCTED'),0)
+            -coalesce(sum(amount_paise) filter(where event_type='PROCESSING_FEE_CREDITED'),0) fee_paise,
           coalesce(sum(amount_paise) filter(where event_type='PAID'),0) paid_paise,
           coalesce(sum(amount_paise) filter(where event_type='REVERSED'),0) reversed_paise,
           min(created_at) filter(where event_type='EARNED') first_earned_at

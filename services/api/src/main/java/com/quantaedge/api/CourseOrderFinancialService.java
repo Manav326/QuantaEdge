@@ -760,6 +760,122 @@ public class CourseOrderFinancialService {
         "platformBorneOveragePaise",platformBorneOveragePaise,
         "distributablePoolPaise",net.distributablePoolPaise(),"adjustedAllocations",adjusted);
   }
+ 
+
+  /**
+   * Apply an independently approved correction without rewriting the original provider fee
+   * record. The saved sale policy is re-evaluated and differences are appended to the same
+   * immutable allocation-event ledger; platform-borne overage never becomes a negative share.
+   */
+  @Transactional
+  public Map<String,Object> applyApprovedProviderFeeAdjustment(long adjustmentId,long actorStaffId) {
+    Map<String,Object> adjustment=one("""
+      select q.id,q.course_payment_order_id,q.requested_processing_fee_paise,q.requested_fee_tax_paise,
+        q.reason,q.settlement_reference,q.source_type
+      from course_payment_order_fee_adjustment q where q.id=?
+      """,adjustmentId);
+    if(adjustment.isEmpty())throw new IllegalArgumentException("Fee adjustment request was not found.");
+    long orderId=number(adjustment.get("course_payment_order_id"));
+    Map<String,Object> order=one("""
+      select id,status,provider_payment_id,captured_amount_paise,output_tax_paise,currency,
+        revenue_share_policy_snapshot::text as share_snapshot_json
+      from course_payment_order where id=? for update
+      """,orderId);
+    if(order.isEmpty()||!"VERIFIED".equals(string(order.get("status"))))
+      throw new IllegalStateException("Only a verified captured course order can receive a fee adjustment.");
+    if(!"INR".equalsIgnoreCase(string(order.get("currency"))))
+      throw new IllegalStateException("The fee correction path supports INR only; do not convert or relabel non-INR amounts.");
+
+    long processingFeePaise=number(adjustment.get("requested_processing_fee_paise"));
+    long feeTaxPaise=number(adjustment.get("requested_fee_tax_paise"));
+    long totalChargesPaise;
+    try { totalChargesPaise=Math.addExact(processingFeePaise,feeTaxPaise); }
+    catch(ArithmeticException overflow) { throw new IllegalArgumentException("Corrected fee plus tax exceeds supported integer-paise precision.",overflow); }
+
+    Map<String,Object> snapshot=parseObject(order.get("share_snapshot_json"));
+    List<Map<String,Object>> recipientSnapshots=asMapList(snapshot.get("recipients"));
+    List<RevenueDistributionCalculator.BeneficiaryShare> shares=new ArrayList<>();
+    for(Map<String,Object> recipient:recipientSnapshots) {
+      String recipientType=string(recipient.get("recipientType"));
+      if(recipientType.isBlank())recipientType="INSTITUTION";
+      long recipientId=number(recipient.get("recipientId"));
+      if(recipientId<=0)recipientId=number("COMPANY".equals(recipientType)?recipient.get("legalEntityId"):recipient.get("institutionId"));
+      String calculationType=string(recipient.get("calculationType"));
+      if("PERCENTAGE".equals(calculationType))
+        shares.add(RevenueDistributionCalculator.BeneficiaryShare.percentage(recipientType,recipientId,integer(recipient.get("percentageBasisPoints"))));
+      else if("FLAT".equals(calculationType))
+        shares.add(RevenueDistributionCalculator.BeneficiaryShare.flat(recipientType,recipientId,number(recipient.get("flatAmountPaise"))));
+      else throw new IllegalStateException("The saved sale snapshot contains an unsupported share type.");
+    }
+    String remainderType=string(snapshot.get("remainderRecipientType"));
+    if(remainderType.isBlank())remainderType="PLATFORM_REMAINDER";
+    Long remainderId=nullableLong(snapshot.get("remainderRecipientId"));
+    if(!"PLATFORM_REMAINDER".equals(remainderType)&&remainderId==null)
+      throw new IllegalStateException("The saved sale snapshot has an invalid remainder recipient.");
+    long capturedPaise=number(order.get("captured_amount_paise"));
+    long outputTaxPaise=number(order.get("output_tax_paise"));
+    long availableBeforeFees=Math.subtractExact(capturedPaise,outputTaxPaise);
+    long maximumDeductible=Math.min(totalChargesPaise,availableBeforeFees);
+    RevenueDistributionCalculator.BeneficiaryResult net=calculateWithMaximumSafeFeeDeduction(
+        capturedPaise,outputTaxPaise,maximumDeductible,shares,
+        "PLATFORM_REMAINDER".equals(remainderType)?null:remainderType,remainderId);
+    long platformBorneOveragePaise=Math.subtractExact(totalChargesPaise,net.processingChargesPaise());
+
+    List<Map<String,Object>> allocationRows=jdbc.queryForList("""
+      select a.id,a.recipient_type,a.institution_id,a.legal_entity_id,a.currency,a.allocated_amount_paise,
+        coalesce(sum(e.amount_paise) filter(where e.event_type='PROCESSING_FEE_DEDUCTED'),0)
+          -coalesce(sum(e.amount_paise) filter(where e.event_type='PROCESSING_FEE_CREDITED'),0) as current_fee_deduction_paise
+      from revenue_share_allocation a
+      left join revenue_share_allocation_event e on e.allocation_id=a.id
+        and e.event_type in ('PROCESSING_FEE_DEDUCTED','PROCESSING_FEE_CREDITED')
+        and (e.details ? 'feeReconciliationId' or e.details ? 'feeAdjustmentId')
+      where a.course_payment_order_id=?
+      group by a.id,a.recipient_type,a.institution_id,a.legal_entity_id,a.currency,a.allocated_amount_paise
+      order by a.id
+      """,orderId);
+    Map<String,RevenueDistributionCalculator.BeneficiaryAllocation> targetByKey=new LinkedHashMap<>();
+    for(RevenueDistributionCalculator.BeneficiaryAllocation allocation:net.allocations())
+      targetByKey.put(allocation.recipientType()+":"+allocation.recipientId(),allocation);
+    if(allocationRows.isEmpty()||allocationRows.size()!=targetByKey.size())
+      throw new IllegalStateException("The immutable allocation ledger does not match the locked sale policy. No fee correction was posted.");
+
+    int adjustedAllocations=0;
+    long beneficiaryDeductionDelta=0L;
+    for(Map<String,Object> allocation:allocationRows) {
+      String type=string(allocation.get("recipient_type"));
+      long recipientId="COMPANY".equals(type)?number(allocation.get("legal_entity_id")):number(allocation.get("institution_id"));
+      RevenueDistributionCalculator.BeneficiaryAllocation target=targetByKey.get(type+":"+recipientId);
+      if(target==null)throw new IllegalStateException("The locked sale policy does not contain an existing allocation recipient.");
+      long original=number(allocation.get("allocated_amount_paise"));
+      long targetDeduction=Math.subtractExact(original,target.amountPaise());
+      long currentDeduction=number(allocation.get("current_fee_deduction_paise"));
+      if(targetDeduction<0||currentDeduction<0)
+        throw new IllegalStateException("The fee adjustment would create an invalid negative deduction; manual finance review is required.");
+      long delta=Math.subtractExact(targetDeduction,currentDeduction);
+      if(delta==0)continue;
+      boolean debit=delta>0;
+      long amount=Math.abs(delta);
+      String eventType=debit?"PROCESSING_FEE_DEDUCTED":"PROCESSING_FEE_CREDITED";
+      String key="course-order:"+orderId+":fee-adjustment:"+adjustmentId+":allocation:"+number(allocation.get("id"))+":"+(debit?"debit":"credit");
+      jdbc.update("""
+        insert into revenue_share_allocation_event(
+          allocation_id,event_type,amount_paise,currency,idempotency_key,actor_staff_id,details
+        ) values(?,?,?,?,?,?,?::jsonb) on conflict(idempotency_key) do nothing
+        """,number(allocation.get("id")),eventType,amount,string(allocation.get("currency")),key,actorStaffId,
+          json(Map.of("coursePaymentOrderId",orderId,"feeAdjustmentId",adjustmentId,
+            "processingFeePaise",processingFeePaise,"feeTaxPaise",feeTaxPaise,
+            "previousDeductionPaise",currentDeduction,"correctedDeductionPaise",targetDeduction,
+            "amountPaise",amount,"direction",debit?"DEBIT":"CREDIT",
+            "reason",string(adjustment.get("reason")),"settlementReference",string(adjustment.get("settlement_reference")),
+            "sourceType",string(adjustment.get("source_type")),"platformBorneOveragePaise",platformBorneOveragePaise)));
+      adjustedAllocations++;
+      beneficiaryDeductionDelta=Math.addExact(beneficiaryDeductionDelta,delta);
+    }
+    return Map.of("adjustmentId",adjustmentId,"orderId",orderId,"status","APPLIED",
+      "processingFeePaise",processingFeePaise,"feeTaxPaise",feeTaxPaise,
+      "totalChargesPaise",totalChargesPaise,"platformBorneOveragePaise",platformBorneOveragePaise,
+      "beneficiaryDeductionDeltaPaise",beneficiaryDeductionDelta,"adjustedAllocations",adjustedAllocations);
+  }
 
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public FinalizedSale finalizeCapturedSale(long localOrderId,String paymentId,String signature,long capturedAmountPaise) {
