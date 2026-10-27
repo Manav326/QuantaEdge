@@ -679,7 +679,7 @@ public class CourseOrderFinancialService {
             course_payment_order_id,policy_id,policy_recipient_id,institution_id,currency,
             actual_paid_paise,output_tax_paise,distributable_pool_paise,total_institution_allocated_paise,
             allocated_amount_paise,platform_remainder_paise,calculation_snapshot,idempotency_key
-          ) values(?,?,?,?,?,?,?,?,?,?,?,?,?) returning id
+          ) values(?,?,?,?,?,?,?,?,?,?,?,?::jsonb,?) returning id
           """,Long.class,orderId,policyId,recipientRowId,allocation.institutionId(),currency,
             capturedAmountPaise,storedTax,distribution.distributablePoolPaise(),
             distribution.totalInstitutionAllocatedPaise(),allocation.amountPaise(),
