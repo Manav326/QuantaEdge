@@ -8,26 +8,26 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 51,
+    "assets_selected": 60,
     "assets_processed_this_run": 10,
     "assets_processed_ids": [
-      "7e9decc7a06d2bc5bd60b2a5",
       "c9e61204c647b558d1743b49",
-      "98e67b251ca0cd2bf04a3bff",
-      "5981e5e93137320d5960e10a",
-      "9fa0828e7e8ea31f2a9f58cd",
-      "701a6cd698151c671bd2d649",
-      "f45836b99180c950a3feebfd",
-      "b5acb280c45c628430a342fa",
-      "4b758109b4b3811d679788ae",
-      "dddc39320c7f26b5d86dbeb1"
+      "ddad7b9b22f51b8ca7351e5d",
+      "5351918280d64b3aeaedbede",
+      "e3549b483cb87ac55ba59fdd",
+      "5e90422aac88121ed24d3f2a",
+      "270fa31442a48d478e9ad84a",
+      "9ff10ee66ceb4ef2709d1239",
+      "e583aa2a4e86e62cca943d40",
+      "f785525943433ad145092621",
+      "5f6a77ec6d056f49bd7d8e9e"
     ],
     "assets_eligible": 2195,
-    "assets_analyzed": 50,
-    "assets_remaining": 2145,
-    "assets_completion_percent": 2.3,
+    "assets_analyzed": 59,
+    "assets_remaining": 2136,
+    "assets_completion_percent": 2.7,
     "assets_failed": 9,
-    "assets_skipped_from_checkpoint": 41,
+    "assets_skipped_from_checkpoint": 50,
     "batch_limit": 10,
     "publication_allowed": false
   },
@@ -1542,7 +1542,7 @@
         ],
         "concepts": [
           "Mathematics",
-          "Classroom",
+          "Classrooms",
           "Mathematical thinking",
           "Problem-solving",
           "Questioning",
@@ -1553,7 +1553,7 @@
           "Problem-solving process",
           "Classroom discussion"
         ],
-        "context_relation": "The note provides guidance and advice for teachers on how to create a conducive environment for teaching mathematics.",
+        "context_relation": "The note provides guidance and advice for teachers on how to create a conducive environment for students to develop mathematical thinking and problem-solving skills.",
         "limitations": [
           "The note does not provide specific strategies or methods for teaching mathematics.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -1563,7 +1563,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:58:13Z"
+      "checkpointed_at": "2026-10-27T00:06:54Z"
     },
     {
       "asset_id": "98e67b251ca0cd2bf04a3bff",
@@ -1835,6 +1835,352 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
       "checkpointed_at": "2026-10-27T00:05:28Z"
+    },
+    {
+      "asset_id": "ddad7b9b22f51b8ca7351e5d",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c59614d4e02337063e1927743b9198da2d8dabdcecd98bdebdbd52eb1f6fd567",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:07:09Z"
+    },
+    {
+      "asset_id": "5351918280d64b3aeaedbede",
+      "asset_sha256": "5448fbb4d68748a050b5b03a7b89ac7a6a6543e9a4a076e701b784f1ef81eba1",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 13,
+      "asset_path": "page-0013.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "c59614d4e02337063e1927743b9198da2d8dabdcecd98bdebdbd52eb1f6fd567",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Summary of key points for an educational textbook.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Summary of Key Points",
+          "Time for Exploration",
+          "1. It is important to routinely pose new problems, questions, patterns, or challenges to the students and give them sufficient time to play with, discuss, and work on them, individually and in groups.",
+          "2. During this time, an environment that accepts mistakes and acknowledges their importance in learning needs to be nurtured.",
+          "3. There should be a culture where students pose problems to each other and discuss with each other various ways to approach the problems.",
+          "About the Problems in the Book",
+          "1. The exploratory problems in the book not only promote problem solving; they also aim to strengthen procedural fluency when students start engaging in exploration.",
+          "2. Trying to 'cover' all the problems in the book must not happen at the cost of students not getting to spend quality time on playing with, discussing, and solving them.",
+          "Reading",
+          "1. Encourage students to read the book by themselves and in groups.",
+          "2. Give opportunities to them to interpret what they read and to express it to others.",
+          "Right of Not Knowing!",
+          "1. It is perfectly okay if some of the content is not understood immediately. Along with trying to understand and reflect upon such content, it can also be taken to the classroom and opened up for discussion. After the discussion, things that are clear and those that are not yet clear can be clearly",
+          "2. Learning is a continual process. Indeed, there is so much in mathematics that is still not known and requires further exploration!"
+        ],
+        "concepts": [
+          "exploration",
+          "problem solving",
+          "procedural fluency",
+          "reading",
+          "interpretation",
+          "reflection",
+          "discussions",
+          "summarisation",
+          "continual process",
+          "mathematics"
+        ],
+        "context_relation": "educational content",
+        "limitations": [
+          "The text does not provide specific examples or detailed explanations for each point.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:11:39Z"
+    },
+    {
+      "asset_id": "e3549b483cb87ac55ba59fdd",
+      "asset_sha256": "27632c184f4864e96f4b88ad04870ce5506734a5f9d6ab9089d189bb4b69f4bd",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/27632c184f4864e96f4b88ad04870ce5506734a5f9d6ab9089d189bb4b69f4bd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "44a253c82bd2f721cb8445f6436919eeee4bb2cd4762dfb0e6ed840b02ed3377",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon owl wearing glasses and a graduation cap, pointing with its right hand.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "A NOTE TO STUDENTS!",
+          "To be able to appreciate the art of mathematics, it is not enough to just be a passive spectator. You need to immerse yourself in its process like a detective getting into action to solve a mystery.",
+          "This is especially required when you see a new question or when a question arises from your own sense of wonder, or when you come across a new beautiful pattern. When you encounter these, pause your reading, and use your creativity to work out the question or understand and appreciate the pattern.",
+          "You will find that some questions are accompanied by their answers. Even"
+        ],
+        "concepts": [
+          "mathematics",
+          "creative thinking",
+          "problem-solving",
+          "appreciation",
+          "pattern recognition"
+        ],
+        "context_relation": "The image is a visual representation of the text, emphasizing the importance of active engagement and creativity in understanding mathematical concepts.",
+        "limitations": [
+          "The image does not provide specific examples or solutions to questions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:13:30Z"
+    },
+    {
+      "asset_id": "5e90422aac88121ed24d3f2a",
+      "asset_sha256": "bd695418be1c2c63092fdc1cfe110f92e0a8801520820a2654f1717be1d69399",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/bd695418be1c2c63092fdc1cfe110f92e0a8801520820a2654f1717be1d69399.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "44a253c82bd2f721cb8445f6436919eeee4bb2cd4762dfb0e6ed840b02ed3377",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon bird wearing a graduation cap and holding a peace sign.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "A NOTE TO STUDENTS!",
+          "To be able to appreciate the art of mathematics, it is not enough to just be a passive spectator. You need to immerse yourself in its process like a detective getting into action to solve a mystery.",
+          "This is especially required when you see a new question or when a question arises from your own sense of wonder, or when you come across a new beautiful pattern. When you encounter these, pause your reading, and use your creativity to work out the question or understand and appreciate the pattern.",
+          "You will find that some questions are accompanied by their answers. Even"
+        ],
+        "concepts": [
+          "mathematics",
+          "creative thinking",
+          "problem-solving",
+          "pattern recognition"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing the importance of active participation and creativity in understanding mathematical concepts.",
+        "limitations": [
+          "The image does not provide specific examples or solutions to the questions mentioned in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:15:23Z"
+    },
+    {
+      "asset_id": "270fa31442a48d478e9ad84a",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "44a253c82bd2f721cb8445f6436919eeee4bb2cd4762dfb0e6ed840b02ed3377",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, abstract, and irregularly shaped splash or blotch.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The text discusses the importance of active engagement in appreciating the art of mathematics.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:15:35Z"
+    },
+    {
+      "asset_id": "9ff10ee66ceb4ef2709d1239",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "44a253c82bd2f721cb8445f6436919eeee4bb2cd4762dfb0e6ed840b02ed3377",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, abstract, splatter-like pattern on a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of an abstract pattern, possibly used as a background or decorative element in the educational content.",
+        "limitations": [
+          "The image does not contain any text or specific content related to the educational content.",
+          "The abstract pattern may not have a direct relation to the educational content.",
+          "The image is a static representation and does not convey any dynamic or interactive elements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:15:48Z"
+    },
+    {
+      "asset_id": "e583aa2a4e86e62cca943d40",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "44a253c82bd2f721cb8445f6436919eeee4bb2cd4762dfb0e6ed840b02ed3377",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with a note to students about appreciating the art of mathematics.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A NOTE TO STUDENTS!",
+          "To be able to appreciate the art of mathematics, it is not enough to just be a passive spectator. You need to immerse yourself in its process like a detective getting into action to solve a mystery.",
+          "This is especially required when you see a new question or when a question arises from your own sense of wonder, or when you come across a new beautiful pattern. When you encounter these, pause your reading, and use your creativity to work out the question or understand and appreciate the pattern.",
+          "You will find that some questions are accompanied by their answers. Even"
+        ],
+        "concepts": [
+          "appreciation of mathematics",
+          "process of mathematics",
+          "creative thinking",
+          "understanding patterns"
+        ],
+        "context_relation": "The note is providing guidance on how to engage with mathematical concepts actively and creatively.",
+        "limitations": [
+          "The note does not provide specific examples or exercises.",
+          "The note is general and does not cover all aspects of mathematics."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:16:30Z"
+    },
+    {
+      "asset_id": "f785525943433ad145092621",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "44a253c82bd2f721cb8445f6436919eeee4bb2cd4762dfb0e6ed840b02ed3377",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:16:48Z"
+    },
+    {
+      "asset_id": "5f6a77ec6d056f49bd7d8e9e",
+      "asset_sha256": "46eb6f2ddc59c330f9f8d0538a35b568312efb2b854b6eca8be407df7f9ee439",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 14,
+      "asset_path": "page-0014.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "44a253c82bd2f721cb8445f6436919eeee4bb2cd4762dfb0e6ed840b02ed3377",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook providing instructions and tips for students on how to appreciate and solve mathematical problems.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "A NOTE TO STUDENTS!",
+          "To be able to appreciate the art of mathematics, it is not enough to just",
+          "be a passive spectator. You need to immerse yourself in its process like",
+          "a detective getting into action to solve a mystery.",
+          "This is especially required when you see a new question or when",
+          "a question arises from your own sense of wonder, or when you come",
+          "across a new beautiful pattern. When you encounter these, pause your",
+          "reading, and use your creativity to work out the question or understand",
+          "and appreciate the pattern.",
+          "You will find that some questions are accompanied by their answers.",
+          "Even if this is the case, it is worthwhile to work on the problems by",
+          "yourself or in a group before you see the answer.",
+          "This will enrich your experience of going through the book!",
+          "Whenever there are questions coming up, you will see the icon",
+          "and ? This indicates that it is time for figuring things out!",
+          "indicates a main question and ? indicates a sub-question.",
+          "The icons for owls and ? suggest some important",
+          "processes in the learning of mathematics.",
+          "Sometimes you will find many questions collected together in a",
+          "single place under the title 'Figure it Out'.",
+          "Some questions are marked Math Talk. These questions are meant to",
+          "be discussed and worked out with your peers.",
+          "Finally, there are questions marked Try This. These questions",
+          "demand more creativity to be answered, and therefore will also often",
+          "be more fun to answer as a result!"
+        ],
+        "concepts": [
+          "mathematics",
+          "creative thinking",
+          "problem-solving",
+          "question answering",
+          "group work",
+          "understanding patterns",
+          "figuring things out",
+          "mathematical processes"
+        ],
+        "context_relation": "instructions",
+        "limitations": [
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:21:13Z"
     }
   ]
 }

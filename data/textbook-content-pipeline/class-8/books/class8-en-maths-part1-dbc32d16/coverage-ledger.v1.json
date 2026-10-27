@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2195,
     "eligible_visual_asset_rows": 2195,
-    "raw_analysis_result_rows": 60,
-    "successful_visual_analyses": 51,
-    "missing_visual_analyses": 2135,
+    "raw_analysis_result_rows": 69,
+    "successful_visual_analyses": 60,
+    "missing_visual_analyses": 2126,
     "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 2144,
+    "unresolved_count": 2135,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -9237,7 +9237,7 @@
         ],
         "concepts": [
           "Mathematics",
-          "Classroom",
+          "Classrooms",
           "Mathematical thinking",
           "Problem-solving",
           "Questioning",
@@ -9248,7 +9248,7 @@
           "Problem-solving process",
           "Classroom discussion"
         ],
-        "context_relation": "The note provides guidance and advice for teachers on how to create a conducive environment for teaching mathematics.",
+        "context_relation": "The note provides guidance and advice for teachers on how to create a conducive environment for students to develop mathematical thinking and problem-solving skills.",
         "limitations": [
           "The note does not provide specific strategies or methods for teaching mathematics.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
@@ -9532,9 +9532,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9550,9 +9559,45 @@
       "asset_path": "page-0013.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Summary of key points for an educational textbook.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Summary of Key Points",
+          "Time for Exploration",
+          "1. It is important to routinely pose new problems, questions, patterns, or challenges to the students and give them sufficient time to play with, discuss, and work on them, individually and in groups.",
+          "2. During this time, an environment that accepts mistakes and acknowledges their importance in learning needs to be nurtured.",
+          "3. There should be a culture where students pose problems to each other and discuss with each other various ways to approach the problems.",
+          "About the Problems in the Book",
+          "1. The exploratory problems in the book not only promote problem solving; they also aim to strengthen procedural fluency when students start engaging in exploration.",
+          "2. Trying to 'cover' all the problems in the book must not happen at the cost of students not getting to spend quality time on playing with, discussing, and solving them.",
+          "Reading",
+          "1. Encourage students to read the book by themselves and in groups.",
+          "2. Give opportunities to them to interpret what they read and to express it to others.",
+          "Right of Not Knowing!",
+          "1. It is perfectly okay if some of the content is not understood immediately. Along with trying to understand and reflect upon such content, it can also be taken to the classroom and opened up for discussion. After the discussion, things that are clear and those that are not yet clear can be clearly",
+          "2. Learning is a continual process. Indeed, there is so much in mathematics that is still not known and requires further exploration!"
+        ],
+        "concepts": [
+          "exploration",
+          "problem solving",
+          "procedural fluency",
+          "reading",
+          "interpretation",
+          "reflection",
+          "discussions",
+          "summarisation",
+          "continual process",
+          "mathematics"
+        ],
+        "context_relation": "educational content",
+        "limitations": [
+          "The text does not provide specific examples or detailed explanations for each point.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9568,9 +9613,29 @@
       "asset_path": "assets/27632c184f4864e96f4b88ad04870ce5506734a5f9d6ab9089d189bb4b69f4bd.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon owl wearing glasses and a graduation cap, pointing with its right hand.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "A NOTE TO STUDENTS!",
+          "To be able to appreciate the art of mathematics, it is not enough to just be a passive spectator. You need to immerse yourself in its process like a detective getting into action to solve a mystery.",
+          "This is especially required when you see a new question or when a question arises from your own sense of wonder, or when you come across a new beautiful pattern. When you encounter these, pause your reading, and use your creativity to work out the question or understand and appreciate the pattern.",
+          "You will find that some questions are accompanied by their answers. Even"
+        ],
+        "concepts": [
+          "mathematics",
+          "creative thinking",
+          "problem-solving",
+          "appreciation",
+          "pattern recognition"
+        ],
+        "context_relation": "The image is a visual representation of the text, emphasizing the importance of active engagement and creativity in understanding mathematical concepts.",
+        "limitations": [
+          "The image does not provide specific examples or solutions to questions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9586,9 +9651,28 @@
       "asset_path": "assets/bd695418be1c2c63092fdc1cfe110f92e0a8801520820a2654f1717be1d69399.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon bird wearing a graduation cap and holding a peace sign.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "A NOTE TO STUDENTS!",
+          "To be able to appreciate the art of mathematics, it is not enough to just be a passive spectator. You need to immerse yourself in its process like a detective getting into action to solve a mystery.",
+          "This is especially required when you see a new question or when a question arises from your own sense of wonder, or when you come across a new beautiful pattern. When you encounter these, pause your reading, and use your creativity to work out the question or understand and appreciate the pattern.",
+          "You will find that some questions are accompanied by their answers. Even"
+        ],
+        "concepts": [
+          "mathematics",
+          "creative thinking",
+          "problem-solving",
+          "pattern recognition"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing the importance of active participation and creativity in understanding mathematical concepts.",
+        "limitations": [
+          "The image does not provide specific examples or solutions to the questions mentioned in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9604,9 +9688,16 @@
       "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red, abstract, and irregularly shaped splash or blotch.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The text discusses the importance of active engagement in appreciating the art of mathematics.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9622,9 +9713,20 @@
       "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red, abstract, splatter-like pattern on a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of an abstract pattern, possibly used as a background or decorative element in the educational content.",
+        "limitations": [
+          "The image does not contain any text or specific content related to the educational content.",
+          "The abstract pattern may not have a direct relation to the educational content.",
+          "The image is a static representation and does not convey any dynamic or interactive elements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9640,9 +9742,29 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with a note to students about appreciating the art of mathematics.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A NOTE TO STUDENTS!",
+          "To be able to appreciate the art of mathematics, it is not enough to just be a passive spectator. You need to immerse yourself in its process like a detective getting into action to solve a mystery.",
+          "This is especially required when you see a new question or when a question arises from your own sense of wonder, or when you come across a new beautiful pattern. When you encounter these, pause your reading, and use your creativity to work out the question or understand and appreciate the pattern.",
+          "You will find that some questions are accompanied by their answers. Even"
+        ],
+        "concepts": [
+          "appreciation of mathematics",
+          "process of mathematics",
+          "creative thinking",
+          "understanding patterns"
+        ],
+        "context_relation": "The note is providing guidance on how to engage with mathematical concepts actively and creatively.",
+        "limitations": [
+          "The note does not provide specific examples or exercises.",
+          "The note is general and does not cover all aspects of mathematics."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9658,9 +9780,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9676,9 +9807,53 @@
       "asset_path": "page-0014.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook providing instructions and tips for students on how to appreciate and solve mathematical problems.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "A NOTE TO STUDENTS!",
+          "To be able to appreciate the art of mathematics, it is not enough to just",
+          "be a passive spectator. You need to immerse yourself in its process like",
+          "a detective getting into action to solve a mystery.",
+          "This is especially required when you see a new question or when",
+          "a question arises from your own sense of wonder, or when you come",
+          "across a new beautiful pattern. When you encounter these, pause your",
+          "reading, and use your creativity to work out the question or understand",
+          "and appreciate the pattern.",
+          "You will find that some questions are accompanied by their answers.",
+          "Even if this is the case, it is worthwhile to work on the problems by",
+          "yourself or in a group before you see the answer.",
+          "This will enrich your experience of going through the book!",
+          "Whenever there are questions coming up, you will see the icon",
+          "and ? This indicates that it is time for figuring things out!",
+          "indicates a main question and ? indicates a sub-question.",
+          "The icons for owls and ? suggest some important",
+          "processes in the learning of mathematics.",
+          "Sometimes you will find many questions collected together in a",
+          "single place under the title 'Figure it Out'.",
+          "Some questions are marked Math Talk. These questions are meant to",
+          "be discussed and worked out with your peers.",
+          "Finally, there are questions marked Try This. These questions",
+          "demand more creativity to be answered, and therefore will also often",
+          "be more fun to answer as a result!"
+        ],
+        "concepts": [
+          "mathematics",
+          "creative thinking",
+          "problem-solving",
+          "question answering",
+          "group work",
+          "understanding patterns",
+          "figuring things out",
+          "mathematical processes"
+        ],
+        "context_relation": "instructions",
+        "limitations": [
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
