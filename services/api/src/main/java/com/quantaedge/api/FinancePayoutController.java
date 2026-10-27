@@ -814,23 +814,27 @@ public class FinancePayoutController {
   public Map<String,Object> payoutTaxOverview(@RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireManage(context);
     long verifiedSales=amount("""
-      select coalesce(sum(captured_amount_paise),0) from course_payment_order where status='VERIFIED'
+      select coalesce(sum(captured_amount_paise),0) from course_payment_order where status='VERIFIED' and upper(currency)='INR'
       """);
-    long verifiedOrders=count("select count(*) from course_payment_order where status='VERIFIED'");
+    long verifiedOrders=count("select count(*) from course_payment_order where status='VERIFIED' and upper(currency)='INR'");
     long recordedOutputTax=amount("""
-      select coalesce(sum(output_tax_paise),0) from course_payment_order where status='VERIFIED'
+      select coalesce(sum(output_tax_paise),0) from course_payment_order where status='VERIFIED' and upper(currency)='INR'
       """);
     long processedCreditNoteTax=amount("""
       select coalesce(sum(d.tax_value_paise),0)
       from fiscal_document d
       join course_payment_refund r on r.credit_note_document_id=d.id
-      where d.document_type='CREDIT_NOTE' and d.source_type='COURSE_ORDER' and r.status='PROCESSED'
+      where d.document_type='CREDIT_NOTE' and d.source_type='COURSE_ORDER' and r.status='PROCESSED' and upper(d.currency)='INR'
       """);
-    long recordedProcessorFeeTax=amount("select coalesce(sum(fee_tax_paise),0) from course_payment_order_fee");
+    long recordedProcessorFeeTax=amount("select coalesce(sum(fee_tax_paise),0) from course_payment_order_fee where upper(currency)='INR'");
     long netOutputTaxBeforeCredits=Math.subtractExact(recordedOutputTax,processedCreditNoteTax);
     Map<String,Object> result=new LinkedHashMap<>();
     result.put("currency","INR");
     result.put("verifiedSalesPaise",verifiedSales);
+    result.put("nonInrCurrencies",jdbc.queryForList("""
+      select distinct upper(currency) as currency from course_payment_order
+      where status='VERIFIED' and upper(currency)<>'INR' order by upper(currency)
+      """,String.class));
     result.put("verifiedOrderCount",verifiedOrders);
     result.put("recordedOutputTaxPaise",recordedOutputTax);
     result.put("processedCreditNoteTaxPaise",processedCreditNoteTax);
