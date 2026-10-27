@@ -2088,3 +2088,59 @@ html[data-qe-appearance="dark"] .qe-admin-workspace-page-slot .qe-question-revie
   .qe-admin-login-controls { gap: 6px; }
   .qe-admin-login-controls .qe-appearance-toggle { padding: 7px 8px; font-size: 10px; }
 }
+
+/* Workspace-wide UX baseline: concise headers, readable controls and resilient grids. */
+html[data-qe-appearance] .qe-admin-workspace-page-slot :is(
+  [class*="pageHeader"], [class*="PageHeader"], [class*="pageHeading"], [class*="PageHeading"],
+  [class*="panelHeading"], [class*="PanelHeading"], [class*="sectionHeading"], [class*="SectionHeading"],
+  [class*="detailHeader"], [class*="DetailHeader"], [class*="section-head"], [class*="sectionHead"]
+) > div > p:not([role="alert"]):not([role="status"]):not([class*="error"]):not([class*="Error"]) {
+  display: none;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot :where(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),
+  select, textarea
+) {
+  color: var(--qe-color-text);
+  background-color: var(--qe-color-surface-elevated);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot :where(input, textarea)::placeholder {
+  color: var(--qe-color-text-muted);
+  opacity: 1;
+}
+html[data-qe-appearance] .qe-admin-workspace-page-slot :where(button:not([class*="primary"]):not([class*="Primary"]):not([class*="danger"]):not([class*="Danger"]):not([class*="warning"]):not([class*="Warning"])) {
+  border-color: var(--qe-color-border-subtle);
+}
+@media (max-width: 1024px) {
+  .qe-admin-workspace-page-slot :is([class*="fieldGrid"], [class*="formGrid"], [class*="fields"], [class*="metrics"], [class*="statGrid"]) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .qe-admin-workspace-page-slot :is([class*="pageHeader"], [class*="PageHeader"], [class*="pageHeading"], [class*="PageHeading"]) {
+    gap: 12px;
+  }
+  .qe-admin-workspace-page-slot :is([class*="pageHeaderActions"], [class*="headerActions"], [class*="pageActions"]) {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 640px) {
+  .qe-admin-workspace-page-slot {
+    min-width: 0;
+  }
+  .qe-admin-workspace-page-slot :is([class*="fieldGrid"], [class*="formGrid"], [class*="fields"]) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .qe-admin-workspace-page-slot :is([class*="pageHeader"], [class*="PageHeader"], [class*="pageHeading"], [class*="PageHeading"]) {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .qe-admin-workspace-page-slot :is([class*="headerActions"], [class*="pageActions"], [class*="toolbar"]) {
+    min-width: 0;
+    flex-wrap: wrap;
+  }
+  .qe-admin-workspace-page-slot :is([class*="tableWrap"], [class*="table-wrap"], [class*="tableScroll"], [class*="table-scroll"]) {
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+  }
+}

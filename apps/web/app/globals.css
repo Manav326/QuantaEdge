@@ -2371,3 +2371,70 @@ html[data-qe-appearance] .student-certificate-actions a:hover {
 .qe-account-deletion__confirmation textarea { resize: vertical; }
 .qe-account-deletion__child { display: grid; gap: 7px; padding: 10px 0; }
 .qe-account-deletion__child small { color: var(--qe-color-text-muted, #5a6475); }
+
+/* App-wide learner/parent polish: preserve meaningful data; remove repeated header prose. */
+html[data-qe-appearance] .qe-workspace-content :is(
+  .welcome-row > div > p,
+  .parent-dashboard > div > p,
+  .parent-report-switcher__intro > p,
+  .qe-practice-intro > p,
+  [class*="pageHeader"] > div > p,
+  [class*="pageHeading"] > div > p,
+  [class*="panelHeading"] > div > p,
+  [class*="sectionHeading"] > div > p,
+  [class*="page-header"] > div > p
+):not([role="alert"]):not([role="status"]):not(.feedback):not(.qe-workspace-inline-error) {
+  display: none;
+}
+html[data-qe-appearance] .qe-workspace-content :where(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select, textarea) {
+  color: var(--qe-color-text);
+  background-color: var(--qe-color-surface-elevated);
+  border-color: var(--qe-color-border-subtle);
+}
+html[data-qe-appearance] .qe-workspace-content :where(input, textarea)::placeholder {
+  color: var(--qe-color-text-muted);
+  opacity: 1;
+}
+html[data-qe-appearance] .qe-workspace-content :where(h1, h2, h3, h4, h5, h6, label, legend, th, td, dt, dd) {
+  color: var(--qe-color-text);
+}
+html[data-qe-appearance="dark"] .qe-workspace-content :where(.muted-small, .section-title span, .parent-readonly-note, .qe-workspace-label) {
+  color: var(--qe-color-text-muted);
+}
+@media (max-width: 1024px) {
+  .qe-workspace-content .app-content {
+    max-width: 100%;
+    padding: 28px 24px 76px;
+  }
+  .qe-workspace-content .app-layout {
+    grid-template-columns: 190px minmax(0, 1fr);
+  }
+}
+@media (max-width: 720px) {
+  .qe-workspace-content .app-content {
+    padding: 20px 16px 88px;
+  }
+  .qe-workspace-content .app-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .qe-workspace-content :where(.welcome-row, .parent-dashboard > div:first-child, .content-heading, .parent-courses-page__section-heading) {
+    min-width: 0;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .qe-workspace-content :where(.parent-grid, .parent-stats, .subject-grid, .promise-grid) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 420px) {
+  .qe-workspace-content .app-content {
+    padding-inline: 12px;
+  }
+  .qe-workspace-content :where(.streak-card, .goal-card, .app-task, .report-panel) {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .qe-workspace-content :where(.button, button) {
+    max-width: 100%;
+  }
+}
