@@ -369,7 +369,7 @@ export default function AssessmentsPage(){
   const selectedImportedReviewItem=filteredImportedReviewItems.find(item=>Number(item.sequenceNo)===importedReviewSequence)||filteredImportedReviewItems[0]||null;
   const selectedImportedQuestion=selectedImportedReviewItem?.question||{};
   const selectedImportedSequence=Number(selectedImportedReviewItem?.sequenceNo||importedReviewSequence);
-  const importedReviewHeaderTitle=t('admin.assessments.bilingualQuestionReview',{course:activeCourse?.display_name||t('admin.assessments.assessment')})+' · '+t('admin.assessments.importedDraftStatus',{id:importedReviewId??'',status:statusText(importedReviewStatus,t)});
+  const importedReviewHeaderTitle=t('admin.assessments.bilingualQuestionReview',{course:activeCourse?.display_name||t('admin.assessments.assessment')});
   const selectedImportedSourceLocation=formatReviewSourceLocation(selectedImportedQuestion.source_location);
   const selectedImportedSourceUrl=safeReviewSourceUrl(selectedImportedQuestion.source_ref);
   const selectedImportedOptions=Array.isArray(selectedImportedQuestion.options)?selectedImportedQuestion.options:[];
