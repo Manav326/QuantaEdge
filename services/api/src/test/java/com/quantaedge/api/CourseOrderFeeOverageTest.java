@@ -47,12 +47,15 @@ class CourseOrderFeeOverageTest {
     List<RevenueDistributionCalculator.BeneficiaryShare> shares = List.of(
         RevenueDistributionCalculator.BeneficiaryShare.flat("INSTITUTION", 11L, 90_000L));
 
+    long actualProviderChargePaise=150_000L;
+    long availableBeforeFeesPaise=100_000L-10_000L;
     RevenueDistributionCalculator.BeneficiaryResult result =
         CourseOrderFinancialService.calculateWithMaximumSafeFeeDeduction(
-            100_000L, 10_000L, 90_000L, shares, "COMPANY", 99L);
+            100_000L, 10_000L, Math.min(actualProviderChargePaise,availableBeforeFeesPaise),
+            shares, "COMPANY", 99L);
 
     assertEquals(0L, result.processingChargesPaise());
     assertEquals(90_000L, result.allocations().getFirst().amountPaise());
-    assertEquals(150_000L, 150_000L - result.processingChargesPaise());
+    assertEquals(actualProviderChargePaise, actualProviderChargePaise - result.processingChargesPaise());
   }
 }
