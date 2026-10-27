@@ -473,6 +473,7 @@ class Tre4ImporterTests(unittest.TestCase):
                         "key": "A", "raw_text": "एक सौ अस्सी legacy", "text_i18n": "एक सौ अस्सी",
                         "ocr_text_i18n": "एक सौ अस्सी",
                         "ocr_status": "OCR_SHREEDEV_OPTION_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW",
+                        "hindi_ocr_status": "OCR_SHREEDEV_OPTION_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW",
                         "content_kind": "PROSE"
                     }],
                 },
