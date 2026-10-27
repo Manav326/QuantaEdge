@@ -324,6 +324,8 @@ public class CoursePaymentOperationsController {
         item.put("local_order_id",orderId);
         item.put("institution_id",order.get("institution_id"));
         item.put("institution_name",order.get("institution_name"));
+        item.put("source_institution_id",order.get("source_institution_id"));
+        item.put("source_institution_name",order.get("source_institution_name"));
         item.put("course_id",order.get("course_id"));
         item.put("course_title",order.get("course_title"));
         item.put("student_id",order.get("student_id"));
