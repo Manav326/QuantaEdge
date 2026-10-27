@@ -430,6 +430,30 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertIn("if submit_for_review:", importer)
         self.assertIn("only DRAFT releases may be imported", importer)
 
+    def test_database_write_requires_known_hindi_ocr_regression_prompt(self):
+        good = {
+            "cycle": "TRE 1.0",
+            "question_snapshots": [{
+                "source_question_number": 1,
+                "prompt_i18n": {"hi": "तीन अंकों की कितनी संख्याएँ 5 से विभाज्य हैं?"},
+                "hindi_prompt_reconstruction": {
+                    "method": "TESSERACT_HINDI_OCR",
+                    "status": "REQUIRES_HUMAN_REVIEW",
+                },
+            }],
+        }
+        import_tre4_course.validate_tre_hindi_ocr_preflight([good])
+
+        bad = {
+            "cycle": "TRE 1.0",
+            "question_snapshots": [{
+                "source_question_number": 1,
+                "prompt_i18n": {"hi": "VrZ AßH$moß H$s {H$VZr"},
+            }],
+        }
+        with self.assertRaisesRegex(import_tre4_course.ImportErrorSafe, "Refusing database writes"):
+            import_tre4_course.validate_tre_hindi_ocr_preflight([bad])
+
     def test_ocr_reconstructed_hindi_prompt_keeps_raw_provenance_and_review_pending(self):
         record = {
             "source_question_number": 1,
