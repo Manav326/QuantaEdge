@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2451,
+    "assets_selected": 2453,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "1cdfaa6ab50b549feb652818",
-      "503c6db01e96c746242d9d1c"
+      "a830d6c849aca638a93058fe",
+      "beeca397af9ac1d985fc6024"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2448,
-    "assets_remaining": 5040,
+    "assets_analyzed": 2450,
+    "assets_remaining": 5038,
     "assets_completion_percent": 32.7,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 2446,
+    "assets_skipped_from_checkpoint": 2448,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40579491228",
-      "checkpointed_at": "2026-10-27T21:38:11Z"
+      "checkpointed_at": "2026-10-27T21:40:47Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40579491228",
-      "checkpointed_at": "2026-10-27T21:38:38Z"
+      "checkpointed_at": "2026-10-27T21:41:14Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40579491228",
-      "checkpointed_at": "2026-10-27T21:39:14Z"
+      "checkpointed_at": "2026-10-27T21:41:49Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -92464,6 +92464,76 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40579491228",
       "checkpointed_at": "2026-10-27T21:40:01Z"
+    },
+    {
+      "asset_id": "a830d6c849aca638a93058fe",
+      "asset_sha256": "03f8b0d28e1f44a7211d1c319b499b862ce48a974a5df92d8508ad8cdc15c6ac",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 75,
+      "asset_path": "assets/03f8b0d28e1f44a7211d1c319b499b862ce48a974a5df92d8508ad8cdc15c6ac.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5f2e159e7cd25798d652993e38ece1b8fbc177eb5667babc67ce14051faedc36",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "ENQUIRY",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal",
+          "food packaging",
+          "flexibility"
+        ],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the visible text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40579491228",
+      "checkpointed_at": "2026-10-27T21:42:28Z"
+    },
+    {
+      "asset_id": "beeca397af9ac1d985fc6024",
+      "asset_sha256": "91db0bb0bdf5daabe46664b1db27783c1ec80abea77909700ccb37f513ecd4ba",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 75,
+      "asset_path": "assets/91db0bb0bdf5daabe46664b1db27783c1ec80abea77909700ccb37f513ecd4ba.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5f2e159e7cd25798d652993e38ece1b8fbc177eb5667babc67ce14051faedc36",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A twisted rope-like object.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text content.",
+          "The image is a visual representation of a twisted rope-like object, which is not directly related to the text content about metal properties and uses in food packaging."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40579491228",
+      "checkpointed_at": "2026-10-27T21:43:03Z"
     }
   ]
 }
