@@ -356,8 +356,31 @@ def _split_block_questions(text: str, cycle: str) -> tuple[str, list[tuple[str, 
     return preamble, questions
 
 
-SHREE_DEV_FONT_NAMES = {"SHREE-DEV-0708", "SHREE-DEV-0709"}
+SHREE_DEV_FONT_NAMES = {
+    "SHREE-DEV-0708", "SHREE-DEV-0709", "SHREE-DEV7-0708", "SHREE-DEV7-0709",
+}
 _TESSERACT_HINDI_AVAILABLE: bool | None = None
+LEGACY_HINDI_GLYPH_MARKERS = re.compile(r"[{}$~‹›¶³àñ’‘§‡Œœ„±¤ü°¢¥]")
+QUESTION_LABEL_ONLY = re.compile(r"^\s*(?:[EHUB]\s*[-–]\s*)?\d{1,3}\s*[.)]?\s*$", re.IGNORECASE)
+
+
+def uses_legacy_hindi_glyphs(text: str, fonts: set[str] | None = None) -> bool:
+    """Detect known Shree font names and obvious legacy glyph streams in mislabeled CIDFonts."""
+    normalized_fonts = {str(font or "").strip().upper() for font in (fonts or set())}
+    if any(
+        font in SHREE_DEV_FONT_NAMES
+        or font.startswith(("SHREE-DEV-0708", "SHREE-DEV-0709", "SHREE-DEV7-0708", "SHREE-DEV7-0709"))
+        for font in normalized_fonts
+    ):
+        return True
+    value = str(text or "")
+    if not value.strip() or re.search(r"[\u0900-\u097F]", value):
+        return False
+    if QUESTION_LABEL_ONLY.fullmatch(value.strip()):
+        return False
+    letters = len(re.findall(r"[A-Za-z]", value))
+    markers = len(LEGACY_HINDI_GLYPH_MARKERS.findall(value))
+    return letters >= 5 and markers >= 2
 
 
 def normalize_ocr_prompt(value: str) -> str:
