@@ -552,7 +552,43 @@ public class FinancePayoutController {
     }
   }
 
-  private Map<String,Object> applyProviderStatus(long payoutId,JsonNode provider,long actorStaffId) {
+  /**
+   * Applies a signature-verified RazorpayX webhook. A provider payout ID or our saved payout ID
+   * in provider notes identifies the transfer; unmatched events are retained for reconciliation.
+   */
+  @org.springframework.transaction.annotation.Transactional
+  public void processPayoutWebhook(JsonNode payout,String providerEventId,String eventType,String payloadSha256) {
+    String eventId=providerEventId==null?"":providerEventId.trim();
+    String kind=eventType==null?"":eventType.trim();
+    String providerId=payout==null?"":payout.path("id").asText("").trim();
+    if(!eventId.matches("[A-Za-z0-9._:-]{1,120}")||kind.isBlank()||kind.length()>80
+        ||!providerId.matches("[A-Za-z0-9_-]{4,80}")
+        ||payloadSha256==null||!payloadSha256.matches("[0-9a-f]{64}"))
+      throw bad("RazorpayX payout webhook is missing a valid event ID, payout ID or event type.");
+    if(exists("select exists(select 1 from finance_payout_provider_event where provider_event_id=?)",eventId))return;
+
+    Map<String,Object> local=one("select id,batch_id from finance_payout where provider_payout_id=?",providerId);
+    if(local.isEmpty()) {
+      Long notedId=nullableLong(payout.path("notes").path("quantaedge_payout_id").asText(null));
+      if(notedId!=null&&notedId>0)local=one("select id,batch_id from finance_payout where id=?",notedId);
+    }
+    String disposition="UNMATCHED";
+    Long localPayoutId=local.isEmpty()?null:number(local.get("id"));
+    if(localPayoutId!=null) {
+      applyProviderStatus(localPayoutId,payout,null);
+      Map<String,Object> updated=one("select status from finance_payout where id=?",localPayoutId);
+      disposition="RECONCILIATION_REQUIRED".equals(string(updated.get("status")))
+          ?"RECONCILIATION_REQUIRED":"PROCESSED";
+    }
+    jdbc.update("""
+      insert into finance_payout_provider_event(
+        provider_event_id,provider_payout_id,event_type,payload_sha256,disposition,processed_at
+      ) values(?,?,?,?,?,now())
+      on conflict(provider_event_id) do nothing
+      """,eventId,providerId,kind,payloadSha256,disposition);
+  }
+
+  private Map<String,Object> applyProviderStatus(long payoutId,JsonNode provider,Long actorStaffId) {
     String providerId=optionalText(provider==null?null:provider.path("id").asText(null));
     String providerStatus=optionalText(provider==null?null:provider.path("status").asText(null));
     if(providerId==null||!providerId.matches("[A-Za-z0-9_-]{4,80}")||providerStatus==null)
@@ -566,8 +602,9 @@ public class FinancePayoutController {
     Map<String,Object> current=one("select status,batch_id from finance_payout where id=?",payoutId);
     if(current.isEmpty())throw notFound("Payout not found.");
     String prior=text(current,"status");
-    if("PROCESSED".equals(prior)&&!"REVERSED".equals(status))return payoutSummary(payoutId);
+    if("PROCESSED".equals(prior)&&!"PROCESSED".equals(status)&&!"REVERSED".equals(status))return payoutSummary(payoutId);
     if("REVERSED".equals(prior)&&!"REVERSED".equals(status))return payoutSummary(payoutId);
+    if(List.of("FAILED","REJECTED").contains(prior)&&!prior.equals(status))return payoutSummary(payoutId);
     String utr=optionalText(provider.path("utr").asText(null));
     String description=optionalText(provider.path("status_details").path("description").asText(null));
     if(description==null)description=optionalText(provider.path("failure_reason").asText(null));
@@ -587,7 +624,7 @@ public class FinancePayoutController {
     return payoutSummary(payoutId);
   }
 
-  private void postPayoutLedgerEvents(long payoutId,String eventType,long actorStaffId) {
+  private void postPayoutLedgerEvents(long payoutId,String eventType,Long actorStaffId) {
     List<Map<String,Object>> items=jdbc.queryForList("""
       select i.allocation_id,i.amount_paise,a.currency,a.course_payment_order_id
       from finance_payout_item i join revenue_share_allocation a on a.id=i.allocation_id
