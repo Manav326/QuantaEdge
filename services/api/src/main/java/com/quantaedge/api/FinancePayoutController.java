@@ -770,6 +770,91 @@ public class FinancePayoutController {
         "payouts",results,"message","Approval was recorded. Payout completion is shown only after RazorpayX confirms the transfer."));
   }
 
+  @GetMapping("/payout-provider-events/unmatched")
+  public List<Map<String,Object>> unmatchedProviderEvents(
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireManage(context);
+    return jdbc.queryForList("""
+      select e.provider_event_id,e.provider_payout_id,e.event_type,e.disposition,e.received_at,e.payload_sha256
+      from finance_payout_provider_event e
+      where e.disposition='UNMATCHED'
+        and not exists(select 1 from finance_payout_event pe where pe.provider_event_id=e.provider_event_id)
+      order by e.received_at desc,e.provider_event_id desc limit 100
+      """);
+  }
+
+  @GetMapping("/payout-reconciliation-candidates")
+  public List<Map<String,Object>> payoutReconciliationCandidates(
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireManage(context);
+    return jdbc.queryForList("""
+      select p.id,p.public_id,p.batch_id,p.amount_paise,p.currency,p.status,p.provider_payout_id,
+        b.period_start,b.period_end,coalesce(t.display_name,le.legal_name,bf.beneficiary_name) as recipient_name,
+        bf.bank_ifsc,bf.bank_account_last4
+      from finance_payout p
+      join finance_payout_batch b on b.id=p.batch_id
+      join finance_payout_beneficiary bf on bf.id=p.beneficiary_id
+      left join institution_tenant t on t.id=bf.institution_id
+      left join billing_legal_entity le on le.id=bf.legal_entity_id
+      where p.provider_payout_id is null and bf.status='ACTIVE'
+        and p.status in ('PENDING_APPROVAL','APPROVED','SUBMITTING','RECONCILIATION_REQUIRED')
+        and b.status in ('APPROVED','PROCESSING','PARTIAL')
+      order by b.period_start desc,p.id desc limit 200
+      """);
+  }
+
+  @PostMapping("/payout-provider-events/{providerEventId}/reconcile")
+  public ResponseEntity<Map<String,Object>> reconcileUnmatchedProviderEvent(
+      @PathVariable String providerEventId,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireApprover(context);requirePayoutReady();
+    if(providerEventId==null||!providerEventId.matches("[A-Za-z0-9._:-]{1,120}"))
+      throw bad("Provider event ID is invalid.");
+    Map<String,Object> event=one("""
+      select provider_event_id,provider_payout_id,event_type,disposition
+      from finance_payout_provider_event where provider_event_id=?
+      """,providerEventId);
+    if(event.isEmpty())throw notFound("Provider webhook event was not found.");
+    if(!"UNMATCHED".equals(text(event,"disposition"))
+        ||exists("select exists(select 1 from finance_payout_event where provider_event_id=?)",providerEventId))
+      throw bad("This provider event has already been linked or requires review through its existing payout. Refresh the workspace.");
+    long payoutId=requiredLong(body.get("payoutId"),"payoutId");
+    if(payoutId<=0)throw bad("Choose a valid existing QuantaEdge payout.");
+    String providerId=text(event,"provider_payout_id");
+    if(!providerId.matches("[A-Za-z0-9_-]{4,80}"))throw bad("The unmatched webhook contains an invalid provider payout ID.");
+    Map<String,Object> local=one("""
+      select p.status,p.batch_id,p.provider_payout_id,p.amount_paise,p.currency,p.public_id,
+        bf.provider_fund_account_id,b.status as batch_status,b.approved_by_staff_id as batch_approved_by_staff_id
+      from finance_payout p join finance_payout_beneficiary bf on bf.id=p.beneficiary_id
+      join finance_payout_batch b on b.id=p.batch_id where p.id=?
+      """,payoutId);
+    if(local.isEmpty())throw notFound("The selected QuantaEdge payout was not found.");
+    if(!List.of("APPROVED","PROCESSING","PARTIAL").contains(text(local,"batch_status")))
+      throw bad("Only a payout from an already-approved batch can be linked to an unmatched provider event.");
+    if(!List.of("PENDING_APPROVAL","APPROVED","SUBMITTING","RECONCILIATION_REQUIRED").contains(text(local,"status")))
+      throw bad("The selected payout is not eligible for provider-event reconciliation.");
+    if(optionalText(local.get("provider_payout_id"))!=null&&!providerId.equals(string(local.get("provider_payout_id"))))
+      throw bad("The selected payout already has a different provider payout ID.");
+    if(exists("select exists(select 1 from finance_payout where provider_payout_id=? and id<>?)",providerId,payoutId))
+      throw bad("This provider payout ID is already linked to another QuantaEdge payout.");
+    JsonNode provider=providerRequest("GET","/payouts/"+providerId,null,null);
+    String mismatch=providerDataMismatch(payoutId,provider,providerId,local,true);
+    if(mismatch!=null)throw bad("The provider record does not match the selected payout. "+mismatch);
+    int linked=jdbc.update("""
+      update finance_payout set provider_payout_id=?,updated_at=now()
+      where id=? and (provider_payout_id is null or provider_payout_id=?)
+      """,providerId,payoutId,providerId);
+    if(linked!=1)throw bad("Payout changed during reconciliation. Refresh the workspace and review the provider record again.");
+    payoutEvent(payoutId,"RECONCILIATION_REQUIRED","course-payout:"+payoutId+":manual-link:"+providerEventId,
+        context.staffId(),providerEventId,Map.of("providerEventId",providerEventId,"providerPayoutId",providerId,
+          "manualAssociationAfterServerValidation",true,"providerAmountPaise",number(local.get("amount_paise")),
+          "currency",string(local.get("currency"))));
+    Map<String,Object> result=applyProviderStatus(payoutId,provider,context.staffId(),providerEventId);
+    refreshBatchStatus(number(local.get("batch_id")));
+    return ResponseEntity.ok(Map.of("payout",result,"message",
+        "Provider event was linked after server-side amount, currency and beneficiary-account checks. Review the resulting payout status before considering it settled."));
+  }
+
   @PostMapping("/payouts/{payoutId}/refresh")
   public ResponseEntity<Map<String,Object>> refreshPayout(@PathVariable long payoutId,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
@@ -933,7 +1018,7 @@ public class FinancePayoutController {
     if(providerId==null||!providerId.matches("[A-Za-z0-9_-]{4,80}"))
       return markProviderReviewRequired(payoutId,current,null,providerStatus,actorStaffId,providerEventId,
           "RazorpayX returned a missing or invalid payout ID. Check the provider record; no paid ledger event was posted.");
-    String identityProblem=providerDataMismatch(payoutId,provider,providerId,current);
+    String identityProblem=providerDataMismatch(payoutId,provider,providerId,current,false);
     if(identityProblem==null&&(providerStatus==null||providerStatus.length()>32))
       identityProblem="RazorpayX returned a missing or invalid payout status. Refresh provider state before considering this transfer complete.";
     if(identityProblem!=null)
@@ -994,7 +1079,8 @@ public class FinancePayoutController {
    * Validate provider-to-ledger identity fields before accepting any payout status transition.
    * Mismatches are routed to review and never create a PAID allocation event.
    */
-  private String providerDataMismatch(long payoutId,JsonNode provider,String providerId,Map<String,Object> current) {
+  private String providerDataMismatch(long payoutId,JsonNode provider,String providerId,Map<String,Object> current,
+      boolean allowManualCorrelation) {
     String savedId=optionalText(current.get("provider_payout_id"));
     if(savedId!=null&&!savedId.equals(providerId))
       return "RazorpayX payout ID differs from the ID already linked to this transfer. Review the provider record.";
@@ -1020,7 +1106,7 @@ public class FinancePayoutController {
       return "RazorpayX reference ID does not match this QuantaEdge payout. No paid ledger event was posted.";
     boolean correlated=providerId.equals(savedId)||Long.toString(payoutId).equals(notedPayoutId)
         ||string(current.get("public_id")).equals(referenceId);
-    if(!correlated)
+    if(!correlated&&!allowManualCorrelation)
       return "RazorpayX response could not be linked to this QuantaEdge payout by provider ID, reference ID or payout note. Review the provider record.";
     return null;
   }
