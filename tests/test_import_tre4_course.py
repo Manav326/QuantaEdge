@@ -464,10 +464,17 @@ class Tre4ImporterTests(unittest.TestCase):
             "cycle": "TRE 3.0",
             "question_snapshots": [{
                 "source_question_number": "H-9",
-                "prompt_i18n": {"hi": "रत्न ने दौड़कर अजय को क्यों रोकना चाहा?"},
+                "prompt_i18n": {"hi": "रतन ने दौड़कर अजय को क्यों रोकना चाहा?"},
                 "hindi_prompt_reconstruction": {
                     "method": "TESSERACT_HINDI_OCR",
                     "status": "REQUIRES_HUMAN_REVIEW",
+                },
+                "stimulus_i18n": {"hi": "रतन और अजय एक ही स्कूल के छात्र थे। रतन गरीब था और अजय धनी।"},
+                "hindi_stimulus_reconstruction": {
+                    "method": "TESSERACT_HINDI_OCR",
+                    "status": "REQUIRES_HUMAN_REVIEW",
+                    "raw_legacy_text": "aVZ Am¡a AO¶ EH$ hr ñHy$b",
+                    "source_location": {"pdf_page": 3, "column": "left", "top_y": 142.32},
                 },
             }],
         }
@@ -520,6 +527,17 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertEqual(snapshot["hindi_prompt_reconstruction"]["status"], "REQUIRES_HUMAN_REVIEW")
         self.assertEqual(snapshot["hindi_prompt_reconstruction"]["raw_legacy_text"], "VrZ AßH$moß H$s {H$VZr")
         self.assertEqual(snapshot["hindi_prompt_reconstruction"]["source_location"]["pdf_page"], 3)
+        record["stimulus_i18n"] = {"hi": "रतन और अजय एक ही स्कूल के छात्र थे। रतन गरीब था और अजय धनी।"}
+        record["hindi_stimulus_reconstruction"] = {
+            "method": "TESSERACT_HINDI_OCR",
+            "status": "REQUIRES_HUMAN_REVIEW",
+            "raw_legacy_text": "aVZ Am¡a AO¶ EH$ hr ñHy$b",
+            "source_location": {"pdf_page": 4, "column": "right", "top_y": 210.5},
+        }
+        snapshot = import_tre4_course.build_question_snapshot(
+            record, "TRE 1.0", "data/TRE-Papres/sources/tre1.pdf", "a" * 64
+        )
+        self.assertEqual(snapshot["hindi_stimulus_reconstruction"]["source_location"]["pdf_page"], 4)
         self.assertEqual(snapshot["options"][0]["text_i18n"]["hi"], "एक सौ अस्सी")
         self.assertEqual(snapshot["options"][0]["hindi_ocr_reconstruction"]["status"], "REQUIRES_HUMAN_REVIEW")
         self.assertEqual(snapshot["options"][0]["hindi_ocr_reconstruction"]["raw_legacy_text"], "एक सौ अस्सी legacy")
