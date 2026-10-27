@@ -5,7 +5,7 @@ import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import styles from './CourseAccess.module.css';
 
 type Course = {
-  course_identity_id: number; stable_course_key?: string; display_name: string; course_type_code?: string;
+  course_identity_id: number; course_identity_public_id?: string; stable_course_key?: string; display_name: string; course_type_code?: string;
   source_institution_code?: string; source_institution_name?: string; current_course_code?: string;
   policy_mode?: 'CALENDAR_DURATION' | 'FIXED_DAYS' | null; calendar_years?: number | null;
   calendar_months?: number | null; calendar_days?: number | null; fixed_days?: number | null;
@@ -123,8 +123,13 @@ export default function CourseAccessPage() {
       if (!live) return;
       const items = Array.isArray(rows) ? rows : [];
       setCourses(items);
+      const requestedIdentity = new URLSearchParams(window.location.search).get('courseIdentityPublicId');
+      const requestedCourse = requestedIdentity
+        ? items.find(c => c.course_identity_public_id === requestedIdentity)
+        : undefined;
       setSelectedId(current => current && items.some(c => String(c.course_identity_id) === current)
-        ? current : (items[0] ? String(items[0].course_identity_id) : ''));
+        ? current : (requestedCourse ? String(requestedCourse.course_identity_id)
+          : (items[0] ? String(items[0].course_identity_id) : '')));
     }).catch(e => {
       if (live) setError(e instanceof Error ? e.message : 'Courses could not be loaded.');
     }).finally(() => { if (live) setLoading(false); });

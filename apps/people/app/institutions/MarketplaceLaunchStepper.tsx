@@ -1543,7 +1543,14 @@ export default function MarketplaceLaunchStepper({
                 <header className={styles.courseHeader}>
                   <div className={styles.courseIdentity}>
                     <span className={styles.courseMark} aria-hidden="true">QE</span>
-                    <div><h3>{item.courseName}</h3><p>{item.courseCode || 'Course'} · Content v{item.contentVersionNo ?? '—'} · Submission {item.releaseVersion ?? '—'}</p></div>
+                    <div>
+                      <h3>{item.courseName}</h3>
+                      <p>{item.courseCode || 'Course'} · Content v{item.contentVersionNo ?? '—'} · Submission {item.releaseVersion ?? '—'}</p>
+                      {item.courseIdentityPublicId && <a className={styles.expiryPolicyLink}
+                        href={'/course-access?courseIdentityPublicId=' + encodeURIComponent(item.courseIdentityPublicId)}>
+                        Configure shared expiry & access
+                      </a>}
+                    </div>
                   </div>
                   <div className={styles.statusCluster}>
                     <span className={styles.statusPill + ' ' + (status === 'PUBLISHED' ? styles.statusPublished : status === 'NOT_CONFIGURED' ? styles.statusDraft : styles.statusOther)}>{statusText(status)}</span>
