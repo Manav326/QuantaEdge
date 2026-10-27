@@ -95,7 +95,7 @@ public class CourseInvoiceController {
     context=authorization.requireStudent(context);
     long institutionId=requireTenant(tenant);
     requireStudentOrder(orderId,context.studentId(),institutionId);
-    return buildDownload(orderId,"STUDENT",context.userId());
+    return buildDownload(orderId,"STUDENT",null,context.studentId());
   }
 
   @GetMapping(value="/family/orders/{orderId}/invoice.pdf",produces=MediaType.APPLICATION_PDF_VALUE)
@@ -107,7 +107,7 @@ public class CourseInvoiceController {
     context=authorization.requireParent(context);
     long institutionId=requireTenant(tenant);
     requireParentOrder(orderId,context.userId(),institutionId);
-    return buildDownload(orderId,"PARENT",context.userId());
+    return buildDownload(orderId,"PARENT",context.userId(),null);
   }
 
   @GetMapping(value="/orders/{orderId}/documents/{documentId}.pdf",produces=MediaType.APPLICATION_PDF_VALUE)
@@ -119,7 +119,7 @@ public class CourseInvoiceController {
     context=authorization.requireStudent(context);
     long institutionId=requireTenant(tenant);
     requireStudentDocument(orderId,documentId,context.studentId(),institutionId);
-    return buildDownloadDocument(orderId,documentId,"STUDENT",context.userId());
+    return buildDownloadDocument(orderId,documentId,"STUDENT",null,context.studentId());
   }
 
   @GetMapping(value="/family/orders/{orderId}/documents/{documentId}.pdf",produces=MediaType.APPLICATION_PDF_VALUE)
@@ -131,7 +131,7 @@ public class CourseInvoiceController {
     context=authorization.requireParent(context);
     long institutionId=requireTenant(tenant);
     requireParentDocument(orderId,documentId,context.userId(),institutionId);
-    return buildDownloadDocument(orderId,documentId,"PARENT",context.userId());
+    return buildDownloadDocument(orderId,documentId,"PARENT",context.userId(),null);
   }
 
   private void requireStudentDocument(long orderId,long documentId,long studentId,long institutionId) {
@@ -184,22 +184,27 @@ public class CourseInvoiceController {
         HttpStatus.NOT_FOUND,"The invoice is not available to this parent account.");
   }
 
-  private ResponseEntity<byte[]> buildDownload(long orderId,String actorType,long actorUserId) {
+  private ResponseEntity<byte[]> buildDownload(long orderId,String actorType,Long actorUserId,Long actorStudentId) {
     CourseOrderFinancialService.DownloadableInvoice invoice=financialService.invoiceDownload(orderId);
-    return buildDownloadDocument(orderId,invoice.documentId(),actorType,actorUserId);
+    return buildDownloadDocument(orderId,invoice.documentId(),actorType,actorUserId,actorStudentId);
   }
 
   private ResponseEntity<byte[]> buildDownloadDocument(
-      long orderId,long documentId,String actorType,long actorUserId) {
+      long orderId,long documentId,String actorType,Long actorUserId,Long actorStudentId) {
     CourseOrderFinancialService.DownloadableInvoice document=financialService.fiscalDocumentDownload(documentId);
     byte[] bytes=financialService.readInvoice(document);
     try {
+      Map<String,Object> auditDetails=new LinkedHashMap<>();
+      auditDetails.put("actorType",actorType);
+      if(actorUserId!=null) auditDetails.put("actorUserId",actorUserId);
+      if(actorStudentId!=null) auditDetails.put("actorStudentId",actorStudentId);
+      auditDetails.put("courseOrderId",orderId);
+      auditDetails.put("documentId",documentId);
       jdbc.update("""
         insert into fiscal_document_event(fiscal_document_id,event_type,idempotency_key,details)
         values(?,'DOWNLOAD_AUDITED',?,?::jsonb)
         """,document.documentId(),"fiscal-document-download:"+UUID.randomUUID(),
-          mapper.writeValueAsString(Map.of("actorType",actorType,"actorUserId",actorUserId,
-              "courseOrderId",orderId,"documentId",documentId)));
+          mapper.writeValueAsString(auditDetails));
     } catch(Exception ex) {
       throw new IllegalStateException("The fiscal-document download could not be recorded in the audit trail.",ex);
     }
