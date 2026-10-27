@@ -603,7 +603,7 @@ public class FinancePayoutController {
           and not exists(select 1 from course_payment_order_fee_adjustment_review r where r.adjustment_id=q.id)
         order by q.id desc limit 1
       ) pending on true
-      where (?='' or cast(o.id as text) ilike '%'||?||'%'
+      where o.currency='INR' and (?='' or cast(o.id as text) ilike '%'||?||'%'
         or coalesce(nullif(offer.title_override,''),course.display_name) ilike '%'||?||'%'
         or tenant.display_name ilike '%'||?||'%' or o.provider_payment_id ilike '%'||?||'%')
       order by o.id desc limit ? offset ?
