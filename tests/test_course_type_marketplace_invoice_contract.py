@@ -200,6 +200,23 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
         )
 
 
+    
+    def test_student_invoice_download_audits_student_identity_without_null_user_id(self):
+        invoices = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseInvoiceController.java").read_text(encoding="utf-8")
+
+        # Student workspace identities are keyed by student_id; user_id is legitimately null.
+        # Both document-based and legacy invoice download URLs must preserve that identity
+        # for the audit event instead of unboxing a null user_id into a primitive long.
+        self.assertIn('return buildDownload(orderId,"STUDENT",null,context.studentId());', invoices)
+        self.assertIn('return buildDownloadDocument(orderId,documentId,"STUDENT",null,context.studentId());', invoices)
+        self.assertIn('if(actorStudentId!=null) auditDetails.put("actorStudentId",actorStudentId);', invoices)
+        self.assertIn('if(actorUserId!=null) auditDetails.put("actorUserId",actorUserId);', invoices)
+
+        # Parent downloads continue to be attributed to the purchasing user.
+        self.assertIn('return buildDownload(orderId,"PARENT",context.userId(),null);', invoices)
+        self.assertIn('return buildDownloadDocument(orderId,documentId,"PARENT",context.userId(),null);', invoices)
+
+
 
 if __name__ == "__main__":
     unittest.main()
