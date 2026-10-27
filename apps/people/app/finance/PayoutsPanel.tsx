@@ -102,9 +102,8 @@ export default function PayoutsPanel(){
       const institutions=c.institutions.filter(i=>i.status==='ACTIVE');
       setSettingsForm(old=>({
         remainderType:s.default_remainder_recipient_type||old.remainderType,
-        remainderId:String(s.default_remainder_recipient_type==='INSTITUTION'
-          ?(s.default_remainder_institution_id??institutions[0]?.id??'')
-          :(s.default_remainder_legal_entity_id??companies[0]?.id??'')),
+        remainderId:s.configured?String(s.default_remainder_recipient_type==='INSTITUTION'
+          ?(s.default_remainder_institution_id??''):(s.default_remainder_legal_entity_id??'')):'',
         minimumRupees:s.payout_minimum_paise!=null?String(s.payout_minimum_paise/100):old.minimumRupees,
         reservePercent:s.refund_reserve_basis_points!=null?String(s.refund_reserve_basis_points/100):old.reservePercent
       }));
@@ -214,7 +213,7 @@ export default function PayoutsPanel(){
     {notice&&<div className={styles.payoutAlertSuccess} role="status">{notice}</div>}
     {loading&&!catalog?<section className={styles.panel}>Loading payout settings and balances…</section>:<>
       <section className={styles.payoutMetricGrid}>
-        <article className={styles.metric}><span>Beneficiaries awaiting review</span><strong>{overview?.beneficiariesAwaitingApproval??'—'}</strong><small>Bank profile requires a second person’s approval</small></article>
+        <article className={styles.payoutMetricCard}><span>Beneficiaries awaiting review</span><strong>{overview?.beneficiariesAwaitingApproval??'—'}</strong><small>Bank profile requires a second person’s approval</small></article>
         <article className={styles.metric}><span>Payments missing fee confirmation</span><strong>{overview?.unreconciledFees??'—'}</strong><small>Payout batches stay blocked until actual fees are recorded</small></article>
         <article className={styles.metric}><span>Transfers in progress</span><strong>{overview?.payoutsInProgress??'—'}</strong><small>Not counted as paid until RazorpayX confirms completion</small></article>
         <article className={styles.metric}><span>Confirmed transfers</span><strong>{money(overview?.payoutsPaidPaise)}</strong><small>Provider-confirmed processed payouts</small></article>
