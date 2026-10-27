@@ -82,7 +82,7 @@ export default function PayoutsPanel(){
   const [busy,setBusy]=useState(false);
   const [error,setError]=useState('');
   const [notice,setNotice]=useState('');
-  const [settingsForm,setSettingsForm]=useState({remainderType:'COMPANY',remainderId:'',minimumRupees:'100',reservePercent:'10'});
+  const [settingsForm,setSettingsForm]=useState({remainderType:'COMPANY',remainderId:'',minimumRupees:'',reservePercent:''});
   const [beneficiaryForm,setBeneficiaryForm]=useState({type:'INSTITUTION',recipientId:'',holderName:'',accountNumber:'',ifsc:'',email:'',phone:''});
   const [rejectingId,setRejectingId]=useState<number|null>(null);
   const [rejectReason,setRejectReason]=useState('');
@@ -92,7 +92,7 @@ export default function PayoutsPanel(){
     setLoading(true);setError('');
     try{
       const [c,s,o,b,f,bs]=await Promise.all([
-        api<Catalog>(BASE+'/catalog'),api<Settings>(BASE+'/payout-settings'),api<Overview>(BASE+'/payout-overview'),
+        api<Catalog>(BASE+'/payout-catalog'),api<Settings>(BASE+'/payout-settings'),api<Overview>(BASE+'/payout-overview'),
         api<Beneficiary[]>(BASE+'/payout-beneficiaries'),api<FeeOrder[]>(BASE+'/fee-reconciliation?limit=200'),
         api<Batch[]>(BASE+'/payout-batches')
       ]);
@@ -104,8 +104,8 @@ export default function PayoutsPanel(){
         remainderType:s.default_remainder_recipient_type||old.remainderType,
         remainderId:s.configured?String(s.default_remainder_recipient_type==='INSTITUTION'
           ?(s.default_remainder_institution_id??''):(s.default_remainder_legal_entity_id??'')):'',
-        minimumRupees:s.payout_minimum_paise!=null?String(s.payout_minimum_paise/100):old.minimumRupees,
-        reservePercent:s.refund_reserve_basis_points!=null?String(s.refund_reserve_basis_points/100):old.reservePercent
+        minimumRupees:s.payout_minimum_paise!=null?String(s.payout_minimum_paise/100):(s.configured?old.minimumRupees:''),
+        reservePercent:s.refund_reserve_basis_points!=null?String(s.refund_reserve_basis_points/100):(s.configured?old.reservePercent:'')
       }));
       setBeneficiaryForm(old=>{
         const options=old.type==='INSTITUTION'?institutions:companies;
