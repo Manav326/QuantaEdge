@@ -15,13 +15,13 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "1851a22784c9105601dfe039",
-      "6c1022d163de9567aa2cefaa"
+      "b389386d98c0aebc2243f4cd"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1327,
     "assets_remaining": 964,
     "assets_completion_percent": 57.9,
-    "assets_failed": 13,
+    "assets_failed": 14,
     "assets_skipped_from_checkpoint": 1327,
     "batch_limit": 5,
     "publication_allowed": false
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40474310784",
-      "checkpointed_at": "2026-10-27T10:10:34Z"
+      "checkpointed_at": "2026-10-27T10:19:45Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40474310784",
-      "checkpointed_at": "2026-10-27T10:11:17Z"
+      "checkpointed_at": "2026-10-27T10:20:28Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40474310784",
-      "checkpointed_at": "2026-10-27T10:12:11Z"
+      "checkpointed_at": "2026-10-27T10:21:21Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43308,7 +43308,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40474310784",
-      "checkpointed_at": "2026-10-27T10:13:35Z"
+      "checkpointed_at": "2026-10-27T10:22:45Z"
     },
     {
       "asset_id": "46c9d5f38c6da536fdee0c3d",
@@ -44071,6 +44071,23 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40466785838",
       "checkpointed_at": "2026-10-27T08:30:52Z"
+    },
+    {
+      "asset_id": "b389386d98c0aebc2243f4cd",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "23a534507295986cb38f896a36acbcd95ccd1ae45a82b50233bf7077ecb5a51a",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 110,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40474310784",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
