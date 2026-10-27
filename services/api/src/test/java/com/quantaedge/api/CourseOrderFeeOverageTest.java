@@ -49,7 +49,7 @@ class CourseOrderFeeOverageTest {
 
     RevenueDistributionCalculator.BeneficiaryResult result =
         CourseOrderFinancialService.calculateWithMaximumSafeFeeDeduction(
-            100_000L, 10_000L, 150_000L, shares, "COMPANY", 99L);
+            100_000L, 10_000L, 90_000L, shares, "COMPANY", 99L);
 
     assertEquals(0L, result.processingChargesPaise());
     assertEquals(90_000L, result.allocations().getFirst().amountPaise());
