@@ -128,6 +128,34 @@ def expected_question_count(cycle: str) -> int:
     except KeyError as exc:
         raise ImportErrorSafe(f"Unexpected TRE cycle in source inventory: {cycle!r}") from exc
 
+def validate_tre_hindi_ocr_preflight(papers: list[dict[str, Any]]) -> None:
+    """Require the known SHREE-DEV Hindi regression question to be reconstructed before any DB write."""
+    tre1 = next((paper for paper in papers if paper.get("cycle") == "TRE 1.0"), None)
+    if not tre1:
+        raise ImportErrorSafe("Source plan is missing TRE 1.0; Hindi OCR preflight cannot be verified.")
+    question = next(
+        (
+            snapshot for snapshot in tre1.get("question_snapshots", [])
+            if str(snapshot.get("source_question_number")) == "1"
+        ),
+        None,
+    )
+    expected = "तीन अंकों की कितनी संख्याएँ 5 से विभाज्य हैं?"
+    prompt_i18n = question.get("prompt_i18n") if isinstance(question, dict) else None
+    actual = " ".join(str((prompt_i18n or {}).get("hi") or "").split()) if isinstance(prompt_i18n, dict) else ""
+    metadata = question.get("hindi_prompt_reconstruction") if isinstance(question, dict) else None
+    if (
+        actual != expected
+        or not isinstance(metadata, dict)
+        or metadata.get("method") != "TESSERACT_HINDI_OCR"
+        or metadata.get("status") != "REQUIRES_HUMAN_REVIEW"
+    ):
+        raise ImportErrorSafe(
+            "Refusing database writes because TRE 1.0 Hindi question 1 was not reconstructed from the SHREE-DEV source "
+            "as expected. Install Tesseract with Hindi trained data, regenerate the inventory, visually verify the stem, "
+            "then rerun. No database rows were written."
+        )
+
 
 def source_pdf_url(register: dict[str, Any], cycle: str) -> str:
     matches = [item for item in register.get("sources", []) if item.get("cycle") == cycle]
@@ -1545,6 +1573,8 @@ def main() -> int:
         if not isinstance(papers_map, dict):
             raise ImportErrorSafe("Inventory has no papers object.")
         papers = [build_paper_plan(cycle, papers_map.get(cycle) or {}, register) for cycle in EXPECTED_QUESTIONS]
+        if args.apply:
+            validate_tre_hindi_ocr_preflight(papers)
         archive_hash = str(inventory.get("source_archive", {}).get("sha256") or "")
         if not re.fullmatch(r"[0-9a-fA-F]{64}", archive_hash):
             raise ImportErrorSafe("Inventory has no valid source archive SHA-256.")
