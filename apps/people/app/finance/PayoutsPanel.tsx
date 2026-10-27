@@ -19,7 +19,7 @@ type Settings={
   canVerifyCollectionArrangement?:boolean;collectionArrangementVerified?:boolean
 };
 type Overview={
-  beneficiariesAwaitingApproval:number;beneficiariesNeedingReview:number;unreconciledFees:number;
+  beneficiariesAwaitingApproval:number;beneficiariesNeedingReview:number;unreconciledFees:number;unreconciledFeesForNextBatch?:number;
   batchesAwaitingApproval:number;payoutsInProgress:number;payoutsPaidPaise:number;
   payoutsReversedPaise:number;payoutsFailed:number;providerConfigured:boolean;payoutFeeReconciliationPending?:number;
   pendingFeeAdjustments?:number;pendingFeeAdjustmentsForNextBatch?:number
@@ -220,8 +220,8 @@ export default function PayoutsPanel(){
   const payoutEligible=Boolean(settings?.configured&&settings?.payoutReady);
   const bankAccountsReady=Boolean(balances&&!beneficiaries.some(b=>['PROVISIONING','PENDING_APPROVAL','RECONCILIATION_REQUIRED'].includes(b.status))
     &&!balances.beneficiaries.some(b=>b.payout_supported!==false&&b.payable_paise>=(settings?.payout_minimum_paise??Number.MAX_SAFE_INTEGER)&&b.beneficiary_status!=='ACTIVE'));
-  const feeReconciliationReady=Boolean(overview&&overview.unreconciledFees===0&&(overview.payoutFeeReconciliationPending??0)===0
-    &&(overview.pendingFeeAdjustmentsForNextBatch??0)===0);
+  const feeReconciliationReady=Boolean(overview&&(overview.unreconciledFeesForNextBatch??0)===0
+    &&(overview.payoutFeeReconciliationPending??0)===0&&(overview.pendingFeeAdjustmentsForNextBatch??0)===0);
   const savedRemainderId=String(settings?.default_remainder_recipient_type==='INSTITUTION'
     ?(settings?.default_remainder_institution_id??''):(settings?.default_remainder_legal_entity_id??''));
   const settingsDirty=!settings?.configured||settingsForm.remainderType!==(settings?.default_remainder_recipient_type||'COMPANY')
@@ -684,10 +684,11 @@ export default function PayoutsPanel(){
       </section>
       <section className={styles.panel} id="payout-batches">
         <div className={styles.panelHead}><div><h2>6. Monthly payout batches</h2><p>Prepare the previous completed calendar month. The amount is calculated from earned allocations, confirmed fee deductions, processed refunds, existing reservations, paid transfers and the configured refund reserve.</p></div>
-          <button type="button" className={styles.primary} onClick={()=>void createBatch()} disabled={busy||loading||!payoutEligible||!settings?.configured||!overview||feeOrders.length>0||(overview.pendingFeeAdjustmentsForNextBatch??0)>0}>Prepare last month’s batch</button></div>
+          <button type="button" className={styles.primary} onClick={()=>void createBatch()} disabled={busy||loading||!payoutEligible||!settings?.configured||!overview||(overview.unreconciledFeesForNextBatch??0)>0||(overview.pendingFeeAdjustmentsForNextBatch??0)>0}>Prepare last month’s batch</button></div>
         {!payoutEligible&&<p className={styles.payoutHint}>Preparation is disabled until the RazorpayX API credentials and source account are configured on the API server.</p>}
-        {feeOrders.length>0&&<p className={styles.payoutHint}>Reconcile the outstanding fee records that affect the selected payout period. Search or filter the queue; the API will identify any remaining blocking order before a batch is prepared.</p>}
+        {feeOrders.length>0&&<p className={styles.payoutHint}>The queue shows outstanding fee confirmations across all periods. Use search and verified-date filters; only missing records affecting the month being prepared block that batch.</p>}
         {(overview?.payoutFeeReconciliationPending??0)>0&&<p className={styles.payoutHint}>There are {overview?.payoutFeeReconciliationPending} completed payout batch(es) with unconfirmed RazorpayX transfer charges. Open each batch, record its actual provider fee and fee tax from the settlement statement, and reconcile it before preparing another month.</p>}
+        {(overview?.unreconciledFeesForNextBatch??0)>0&&<p className={styles.payoutHint}>{overview?.unreconciledFeesForNextBatch} missing payment-fee record(s) affect the period being prepared. Reconcile the listed payments using actual provider evidence first; later-period orders do not block this month.</p>}
         {(overview?.pendingFeeAdjustmentsForNextBatch??0)>0&&<p className={styles.payoutHint}>{overview?.pendingFeeAdjustmentsForNextBatch} fee-correction request(s) affect the period being prepared. Have an independent approver accept or reject them before preparing the batch. Other corrections for later periods do not block this month.</p>}
         <div className={styles.payoutList}>
           {batches.map(batch=><article className={styles.payoutListRow} key={batch.id}>

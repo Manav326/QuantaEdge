@@ -206,11 +206,19 @@ public class FinancePayoutController {
     Map<String,Object> out=new LinkedHashMap<>();
     out.put("beneficiariesAwaitingApproval",count("select count(*) from finance_payout_beneficiary where status='PENDING_APPROVAL'"));
     out.put("beneficiariesNeedingReview",count("select count(*) from finance_payout_beneficiary where status in ('PROVISIONING','RECONCILIATION_REQUIRED')"));
+    LocalDate nextBatchEnd=YearMonth.from(LocalDate.now(INDIA)).minusMonths(1).atEndOfMonth();
     out.put("unreconciledFees",count("""
       select count(distinct o.id) from course_payment_order o join revenue_share_allocation a on a.course_payment_order_id=o.id
       join revenue_share_allocation_event e on e.allocation_id=a.id and e.event_type='EARNED'
       left join course_payment_order_fee f on f.course_payment_order_id=o.id where o.status='VERIFIED' and f.id is null
       """));
+    out.put("unreconciledFeesForNextBatch",count("""
+      select count(distinct o.id) from course_payment_order o
+      join revenue_share_allocation a on a.course_payment_order_id=o.id
+      join revenue_share_allocation_event e on e.allocation_id=a.id and e.event_type='EARNED'
+      left join course_payment_order_fee f on f.course_payment_order_id=o.id
+      where o.status='VERIFIED' and f.id is null and e.created_at < (?::date + interval '1 day')
+      """,nextBatchEnd));
     out.put("batchesAwaitingApproval",count("select count(*) from finance_payout_batch where status='PENDING_APPROVAL'"));
     out.put("payoutsInProgress",count("select count(*) from finance_payout where status in ('SUBMITTING','PENDING','QUEUED','PROCESSING','RECONCILIATION_REQUIRED')"));
     out.put("payoutsPaidPaise",amount("select coalesce(sum(amount_paise),0) from finance_payout where status='PROCESSED'"));
@@ -227,7 +235,6 @@ public class FinancePayoutController {
       select count(*) from course_payment_order_fee_adjustment q
       where not exists(select 1 from course_payment_order_fee_adjustment_review r where r.adjustment_id=q.id)
       """));
-    LocalDate nextBatchEnd=YearMonth.from(LocalDate.now(INDIA)).minusMonths(1).atEndOfMonth();
     out.put("pendingFeeAdjustmentsForNextBatch",count("""
       select count(distinct q.id) from course_payment_order_fee_adjustment q
       join course_payment_order o on o.id=q.course_payment_order_id and o.status='VERIFIED'
