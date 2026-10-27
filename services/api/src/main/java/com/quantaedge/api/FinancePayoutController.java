@@ -44,6 +44,7 @@ public class FinancePayoutController {
   private final String keyId;
   private final String keySecret;
   private final String sourceAccountNumber;
+  private final String webhookSecret;
   private final String baseUrl;
   private final HttpClient http=HttpClient.newBuilder().connectTimeout(java.time.Duration.ofSeconds(5)).build();
 
@@ -52,10 +53,12 @@ public class FinancePayoutController {
       @Value("\u0024{app.razorpayx.key-id:}") String keyId,
       @Value("\u0024{app.razorpayx.key-secret:}") String keySecret,
       @Value("\u0024{app.razorpayx.account-number:}") String sourceAccountNumber,
+      @Value("\u0024{app.razorpayx.webhook-secret:}") String webhookSecret,
       @Value("\u0024{app.razorpayx.base-url:https://api.razorpay.com/v1}") String baseUrl) {
     this.jdbc=jdbc;this.authorization=authorization;this.financialService=financialService;this.mapper=mapper;
     this.keyId=keyId==null?"":keyId.trim();this.keySecret=keySecret==null?"":keySecret.trim();
     this.sourceAccountNumber=sourceAccountNumber==null?"":sourceAccountNumber.trim();
+    this.webhookSecret=webhookSecret==null?"":webhookSecret.trim();
     this.baseUrl=(baseUrl==null?"https://api.razorpay.com/v1":baseUrl.trim()).replaceAll("/+$","");
   }
 
@@ -67,8 +70,8 @@ public class FinancePayoutController {
       where status='ACTIVE' order by lower(display_name),id
       """);
     List<Map<String,Object>> companies=jdbc.queryForList("""
-      select id,entity_kind,legal_name,trade_name,status from billing_legal_entity
-      where status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY')
+      select id,entity_kind,institution_id,legal_name,trade_name,status from billing_legal_entity
+      where status='ACTIVE'
       order by lower(legal_name),id
       """);
     return Map.of("institutions",institutions,"legalEntities",companies);
@@ -79,17 +82,31 @@ public class FinancePayoutController {
     requireManage(context);
     Map<String,Object> row=one("""
       select s.default_remainder_recipient_type,s.default_remainder_institution_id,s.default_remainder_legal_entity_id,
+        s.payment_collection_legal_entity_id,s.razorpayx_funding_legal_entity_id,
+        s.collection_arrangement_status,s.collection_arrangement_reference,
+        s.collection_arrangement_verified_by_staff_id,s.collection_arrangement_verified_at,
         s.payout_frequency,s.payout_minimum_paise,s.refund_reserve_basis_points,s.updated_at,
-        t.display_name as default_institution_name,le.legal_name as default_company_name
+        t.display_name as default_institution_name,le.legal_name as default_company_name,
+        pc.legal_name as payment_collection_legal_name,rf.legal_name as razorpayx_funding_legal_name
       from billing_finance_payout_settings s
       left join institution_tenant t on t.id=s.default_remainder_institution_id
       left join billing_legal_entity le on le.id=s.default_remainder_legal_entity_id
+      left join billing_legal_entity pc on pc.id=s.payment_collection_legal_entity_id
+      left join billing_legal_entity rf on rf.id=s.razorpayx_funding_legal_entity_id
       where s.id=1
       """);
     row.put("configured",!row.isEmpty()&&row.get("payout_minimum_paise")!=null&&row.get("refund_reserve_basis_points")!=null);
     row.put("providerConfigured",providerConfigured());
+    row.put("webhookConfigured",!webhookSecret.isBlank());
     row.put("provider","RAZORPAYX");
     row.put("sourceAccountConfigured",!sourceAccountNumber.isBlank());
+    row.put("canVerifyCollectionArrangement",hasPermission(context,"QE_PLATFORM_OWNER"));
+    row.put("collectionArrangementVerified","VERIFIED".equals(string(row.get("collection_arrangement_status")))
+        &&row.get("collection_arrangement_verified_at")!=null);
+    row.put("payoutReady",providerConfigured()&&!webhookSecret.isBlank()
+        &&"VERIFIED".equals(string(row.get("collection_arrangement_status")))
+        &&row.get("payment_collection_legal_entity_id")!=null
+        &&row.get("razorpayx_funding_legal_entity_id")!=null);
     return row;
   }
 
