@@ -35,6 +35,8 @@ type CoursePaymentOrder = {
   verified_at?:string|null; fiscal_document_id?:number|null; invoice_number?:string|null;
   last_operation_event?:string|null; last_resolution_code?:string|null; last_operation_message?:string|null;
   last_operation_at?:string|null; resolution_code:string; recommended_action:string; resolution_message:string;
+  distribution_reconciliation_status?:'RECONCILED'|'REVIEW_REQUIRED'|'NOT_FINALIZED'|string;
+  distribution_issue_count?:number; distribution_reconciliation_summary?:string;
 };
 type PaymentOperationEvent = {
   id:number; event_type:string; resolution_code:string; message:string; provider_order_id?:string|null;
@@ -1037,7 +1039,7 @@ export default function FinancePage(){
           </div>
           {paymentLoading?<p className={styles.empty}>Loading course payment orders…</p>
           :paymentOrders.length?<div className={styles.policyTableWrap}><table className={styles.table}>
-            <thead><tr><th>Order / course</th><th>Institution / learner</th><th>Payment state</th><th>Payable / captured</th><th>Invoice</th><th>Resolution</th></tr></thead>
+            <thead><tr><th>Order / course</th><th>Institution / learner</th><th>Payment state</th><th>Payable / captured</th><th>Invoice</th><th>Distribution</th><th>Resolution</th></tr></thead>
             <tbody>{paymentOrders.map(order=>{
               const status=String(order.status||'').toUpperCase();
               const canReconcile=['PENDING','EXPIRED'].includes(status);
@@ -1047,6 +1049,15 @@ export default function FinancePage(){
                 <td><span className={styles.status}>{status}</span><small>{order.failure_code||'No saved failure code'}</small><small>{order.provider_payment_id||'No payment ID recorded'}</small></td>
                 <td><b>{rupees(order.offer_price_paise,order.currency)}</b><small>Discount: {rupees(order.discount_amount_paise||0,order.currency)} {order.discount_reference||''}</small><small>Captured: {order.captured_amount_paise==null?'Not recorded':rupees(order.captured_amount_paise,order.currency)}</small></td>
                 <td><b>{order.invoice_number||'Not issued / linked'}</b><small>{order.fiscal_document_id?'Document #'+order.fiscal_document_id:'No invoice reference'}</small></td>
+                <td>
+                  <span className={styles.status}>{order.distribution_reconciliation_status==='RECONCILED'?'RECONCILED':order.distribution_reconciliation_status==='REVIEW_REQUIRED'?'REVIEW REQUIRED':'NOT FINALIZED'}</span>
+                  {Number(order.distribution_issue_count||0)>0&&<small>{order.distribution_issue_count} issue(s) found</small>}
+                  <small>{order.distribution_reconciliation_summary||'Distribution status unavailable.'}</small>
+                  {order.distribution_reconciliation_status==='REVIEW_REQUIRED'&&<button type="button" className={styles.secondarySmall}
+                    disabled={statusTraceLoadingId!==null} onClick={()=>void checkCurrentStatus(order.local_order_id)}>
+                    {statusTraceLoadingId===order.local_order_id?'Inspecting…':'Inspect distribution'}
+                  </button>}
+                </td>
                 <td><div className={styles.paymentRowActions}>
                   <button type="button" className={styles.secondarySmall} onClick={()=>selectPaymentOrder(order)}>Inspect</button>
                   <button type="button" className={styles.secondarySmall}
