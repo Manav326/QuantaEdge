@@ -379,6 +379,10 @@ export default function AssessmentCourseStudioPage() {
         next.section_result_policy = section?.result_policy || 'SCORED';
       } else if (field === 'marks') {
         next.marks = value.trim() ? Number(value) : value;
+      } else if (field === 'answer_key') {
+        next.proposed_answer = { ...(next.proposed_answer || {}), option_key: value || null };
+      } else if (field === 'topic_tags') {
+        next.topic_tags = value.split(',').map(tag => tag.trim()).filter(Boolean);
       } else {
         (next as Record<string, any>)[field] = value;
       }
@@ -458,13 +462,19 @@ export default function AssessmentCourseStudioPage() {
             courseId: course.courseId,
             package: payload
           });
-          return { ...entry, validation: result, validatedSignature: result.valid ? signature : undefined };
+          return {
+            ...entry,
+            validation: result,
+            validatedSignature: result.valid ? signature : undefined,
+            editorOpen: entry.editorOpen || !result.valid
+          };
         } catch (cause) {
           const message = cause instanceof Error ? cause.message : 'Server validation failed for this package.';
           return {
             ...entry,
             validation: { valid: false, issues: [message] },
-            validatedSignature: undefined
+            validatedSignature: undefined,
+            editorOpen: true
           };
         }
       }));
@@ -589,6 +599,7 @@ export default function AssessmentCourseStudioPage() {
                   {!entry.parseError && (
                     <>
                       <p>Complete the fields that are missing from the file. The question and section content must come from your verified source; QuantaEdge will not invent questions or answers.</p>
+                      {!entry.questionEditorOpen && <button className="button button-dark" type="button" onClick={() => setPackages(current => current.map((row, rowIndex) => rowIndex === index ? { ...row, editorOpen: true, questionEditorOpen: true, validation: undefined, validatedSignature: undefined } : row))}>Edit sections and question content</button>}
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,240px),1fr))', gap: 12 }}>
                         <div>
                           <label htmlFor={'package-id-' + index}>Package ID</label>
@@ -683,6 +694,9 @@ export default function AssessmentCourseStudioPage() {
                             <div><label htmlFor={'q-type-' + index + '-' + questionIndex}>Question type</label><select id={'q-type-' + index + '-' + questionIndex} value={String(question.question_type || 'MCQ')} onChange={event => updateQuestionField(index, questionIndex, 'question_type', event.target.value)}>{['MCQ','TRUE_FALSE','INFERENCE','INPUT','NUMERICAL','SHORT_ANSWER','LONG_ANSWER','CASE_BASED','SOURCE_BASED','DIAGRAM','MAP','ASSERTION_REASON','MATCH','ORDER'].map(type => <option value={type} key={type}>{type.replaceAll('_', ' ')}</option>)}</select></div>
                             <div><label htmlFor={'q-section-' + index + '-' + questionIndex}>Section</label><select id={'q-section-' + index + '-' + questionIndex} value={String(question.section_code || '')} onChange={event => updateQuestionField(index, questionIndex, 'section_code', event.target.value)}>{currentSections(pkg).map(section => <option value={String(section.code)} key={String(section.code)}>{String(section.name_i18n?.en || section.code)}</option>)}</select></div>
                             <div><label htmlFor={'q-marks-' + index + '-' + questionIndex}>Marks</label><input id={'q-marks-' + index + '-' + questionIndex} type="number" min={0} max={1000} step="any" value={String(question.marks ?? 1)} onChange={event => updateQuestionField(index, questionIndex, 'marks', event.target.value)} /></div>
+                            <div><label htmlFor={'q-difficulty-' + index + '-' + questionIndex}>Difficulty</label><select id={'q-difficulty-' + index + '-' + questionIndex} value={String(question.difficulty || 'CORE')} onChange={event => updateQuestionField(index, questionIndex, 'difficulty', event.target.value)}><option value="FOUNDATION">Foundation</option><option value="CORE">Core</option><option value="CHALLENGE">Challenge</option></select></div>
+                            <div><label htmlFor={'q-topics-' + index + '-' + questionIndex}>Topics (comma-separated)</label><input id={'q-topics-' + index + '-' + questionIndex} value={(Array.isArray(question.topic_tags) ? question.topic_tags : []).join(', ')} onChange={event => updateQuestionField(index, questionIndex, 'topic_tags', event.target.value)} placeholder="Data structures, Algorithms" /></div>
+                            <div><label htmlFor={'q-answer-key-' + index + '-' + questionIndex}>Proposed answer key (still requires review)</label><select id={'q-answer-key-' + index + '-' + questionIndex} value={String(question.proposed_answer?.option_key || '')} onChange={event => updateQuestionField(index, questionIndex, 'answer_key', event.target.value)}><option value="">Unresolved — reviewer decides</option>{(Array.isArray(question.options) ? question.options : []).map((option: Record<string, any>) => <option key={String(option.key)} value={String(option.key)}>{String(option.key)} — {String(option.text_i18n?.en || option.text || 'Option')}</option>)}</select></div>
                             <div style={{ gridColumn: '1 / -1' }}><label htmlFor={'q-prompt-en-' + index + '-' + questionIndex}>Question text (English, if present)</label><textarea id={'q-prompt-en-' + index + '-' + questionIndex} value={String(question.prompt_i18n?.en || '')} onChange={event => updateQuestionField(index, questionIndex, 'prompt_en', event.target.value)} rows={3} placeholder="Enter the verified question exactly as it appears in the source." /></div>
                             <div style={{ gridColumn: '1 / -1' }}><label htmlFor={'q-prompt-hi-' + index + '-' + questionIndex}>Question text (Hindi, if present)</label><textarea id={'q-prompt-hi-' + index + '-' + questionIndex} value={String(question.prompt_i18n?.hi || '')} onChange={event => updateQuestionField(index, questionIndex, 'prompt_hi', event.target.value)} rows={3} placeholder="स्रोत में उपलब्ध हिंदी प्रश्न यहाँ लिखें।" /></div>
                           </div>
