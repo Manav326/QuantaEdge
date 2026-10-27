@@ -810,14 +810,76 @@ public class FinancePayoutController {
       """,actorStaffId,action,Long.toString(adjustmentId),json(details),orderId);
   }
 
+  @GetMapping("/payout-tax-overview")
+  public Map<String,Object> payoutTaxOverview(@RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireManage(context);
+    long verifiedSales=amount("""
+      select coalesce(sum(captured_amount_paise),0) from course_payment_order where status='VERIFIED' and upper(currency)='INR'
+      """);
+    long verifiedOrders=count("select count(*) from course_payment_order where status='VERIFIED' and upper(currency)='INR'");
+    long recordedOutputTax=amount("""
+      select coalesce(sum(output_tax_paise),0) from course_payment_order where status='VERIFIED' and upper(currency)='INR'
+      """);
+    long processedCreditNoteTax=amount("""
+      select coalesce(sum(d.tax_value_paise),0)
+      from fiscal_document d
+      join course_payment_refund r on r.credit_note_document_id=d.id
+      where d.document_type='CREDIT_NOTE' and d.source_type='COURSE_ORDER' and r.status='PROCESSED' and upper(d.currency)='INR'
+      """);
+    long recordedProcessorFeeTax=amount("select coalesce(sum(fee_tax_paise),0) from course_payment_order_fee where upper(currency)='INR'");
+    long netOutputTaxBeforeCredits=Math.subtractExact(recordedOutputTax,processedCreditNoteTax);
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("currency","INR");
+    result.put("verifiedSalesPaise",verifiedSales);
+    result.put("nonInrCurrencies",jdbc.queryForList("""
+      select distinct upper(currency) as currency from course_payment_order
+      where status='VERIFIED' and upper(currency)<>'INR' order by upper(currency)
+      """,String.class));
+    result.put("verifiedOrderCount",verifiedOrders);
+    result.put("recordedOutputTaxPaise",recordedOutputTax);
+    result.put("processedCreditNoteTaxPaise",processedCreditNoteTax);
+    result.put("netOutputTaxBeforeInputCreditsPaise",netOutputTaxBeforeCredits);
+    result.put("recordedProcessorFeeTaxPaise",recordedProcessorFeeTax);
+    result.put("approvedTaxProfiles",count("select count(*) from course_tax_profile where status='APPROVED'"));
+    result.put("pendingTaxProfiles",count("select count(*) from course_tax_profile where status='PENDING_APPROVAL'"));
+    // These are intentionally not reported as zero: no recipient-level TCS/TDS liability
+    // ledger is implemented/approved, so no statutory withholding total can be asserted.
+    result.put("gstTcsLedgerStatus","NOT_REPRESENTED");
+    result.put("incomeTaxTdsLedgerStatus","NOT_REPRESENTED");
+    result.put("finalGovernmentTaxPayableStatus","REVIEW_REQUIRED");
+    result.put("finalTaxAmountIncludesInputCredits",false);
+    return result;
+  }
+
   @GetMapping("/payout-balances")
   public Map<String,Object> payoutBalances(@RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireManage(context);
-    Map<String,Object> settings=one("select refund_reserve_basis_points from billing_finance_payout_settings where id=1");
+    Map<String,Object> settings=one("select refund_reserve_basis_points,payout_minimum_paise from billing_finance_payout_settings where id=1");
     int reserveBps=settings.get("refund_reserve_basis_points")==null?0:Math.toIntExact(number(settings.get("refund_reserve_basis_points")));
+    long minimumPayoutPaise=settings.get("payout_minimum_paise")==null?0L:number(settings.get("payout_minimum_paise"));
+    boolean providerReady=providerConfigured()&&!webhookSecret.isBlank();
+    boolean legalArrangementReady=payoutReadyFromDatabase();
     List<Map<String,Object>> rows=jdbc.queryForList("""
-      with ledger as (
-        select a.id as allocation_id,a.recipient_type,a.institution_id,a.legal_entity_id,a.currency,
+      with recipients as (
+        select 'INSTITUTION'::varchar as recipient_type,t.id as institution_id,
+          null::bigint as legal_entity_id,t.display_name as recipient_name,t.status as recipient_status
+        from institution_tenant t where t.status='ACTIVE'
+        union
+        select 'COMPANY'::varchar as recipient_type,null::bigint as institution_id,
+          le.id as legal_entity_id,le.legal_name as recipient_name,le.status as recipient_status
+        from billing_legal_entity le
+        where le.status='ACTIVE' and le.entity_kind in ('PLATFORM','COMPANY')
+        union
+        -- Keep historic liabilities visible even after a recipient is suspended or deactivated.
+        select a.recipient_type,a.institution_id,a.legal_entity_id,
+          coalesce(t.display_name,le.legal_name,'Unresolved recipient') as recipient_name,
+          coalesce(t.status,le.status,'UNKNOWN') as recipient_status
+        from revenue_share_allocation a
+        left join institution_tenant t on t.id=a.institution_id
+        left join billing_legal_entity le on le.id=a.legal_entity_id
+        where a.recipient_type in ('INSTITUTION','COMPANY')
+      ), ledger as (
+        select a.id as allocation_id,a.course_payment_order_id,a.recipient_type,a.institution_id,a.legal_entity_id,a.currency,
           coalesce(sum(e.amount_paise) filter(where e.event_type='EARNED'),0) as earned_paise,
           coalesce(sum(e.amount_paise) filter(where e.event_type='REFUNDED'),0) as refunded_paise,
           coalesce(sum(e.amount_paise) filter(where e.event_type='PROCESSING_FEE_DEDUCTED'),0)
@@ -827,33 +889,54 @@ public class FinancePayoutController {
         from revenue_share_allocation a
         join course_payment_order o on o.id=a.course_payment_order_id and o.status='VERIFIED'
         left join revenue_share_allocation_event e on e.allocation_id=a.id
-        group by a.id,a.recipient_type,a.institution_id,a.legal_entity_id,a.currency
+        group by a.id,a.course_payment_order_id,a.recipient_type,a.institution_id,a.legal_entity_id,a.currency
       ), reservations as (
         select i.allocation_id,coalesce(sum(i.amount_paise),0) as reserved_paise
         from finance_payout_item i join finance_payout p on p.id=i.payout_id
         where p.status in ('PENDING_APPROVAL','APPROVED','SUBMITTING','PENDING','QUEUED','PROCESSING','RECONCILIATION_REQUIRED')
         group by i.allocation_id
+      ), balance_by_currency as (
+        select l.recipient_type,l.institution_id,l.legal_entity_id,l.currency,
+          coalesce(sum(l.earned_paise),0) as earned_paise,
+          coalesce(sum(l.refunded_paise),0) as refunded_paise,
+          coalesce(sum(l.charges_paise),0) as charges_paise,
+          coalesce(sum(l.paid_paise),0) as paid_paise,
+          coalesce(sum(l.reversed_paise),0) as reversed_paise,
+          coalesce(sum(r.reserved_paise),0) as reserved_paise,
+          count(distinct l.course_payment_order_id) filter(where l.earned_paise>0) as source_sale_count,
+          count(distinct l.course_payment_order_id) filter(where l.earned_paise>0 and f.id is null) as unreconciled_fee_order_count
+        from ledger l
+        left join reservations r on r.allocation_id=l.allocation_id
+        left join course_payment_order_fee f on f.course_payment_order_id=l.course_payment_order_id
+        group by l.recipient_type,l.institution_id,l.legal_entity_id,l.currency
       )
-      select l.recipient_type,l.institution_id,l.legal_entity_id,l.currency,
-        coalesce(t.display_name,le.legal_name) as recipient_name,
+      select r.recipient_type,r.institution_id,r.legal_entity_id,
+        coalesce(fin.currency,'INR') as currency,r.recipient_name,r.recipient_status,
         coalesce(b.status,'MISSING') as beneficiary_status,b.bank_ifsc,b.bank_account_last4,
-        coalesce(sum(l.earned_paise),0) as earned_paise,
-        coalesce(sum(l.refunded_paise),0) as refunded_paise,
-        coalesce(sum(l.charges_paise),0) as charges_paise,
-        coalesce(sum(l.paid_paise),0) as paid_paise,
-        coalesce(sum(l.reversed_paise),0) as reversed_paise,
-        coalesce(sum(r.reserved_paise),0) as reserved_paise
-      from ledger l
-      left join reservations r on r.allocation_id=l.allocation_id
-      left join institution_tenant t on t.id=l.institution_id
-      left join billing_legal_entity le on le.id=l.legal_entity_id
-      left join finance_payout_beneficiary b on b.status='ACTIVE' and (
-        (l.recipient_type='INSTITUTION' and b.beneficiary_type='INSTITUTION' and b.institution_id=l.institution_id)
-        or (l.recipient_type='COMPANY' and b.beneficiary_type='COMPANY' and b.legal_entity_id=l.legal_entity_id)
-      )
-      group by l.recipient_type,l.institution_id,l.legal_entity_id,l.currency,t.display_name,le.legal_name,
-        b.status,b.bank_ifsc,b.bank_account_last4
-      order by recipient_name,l.recipient_type
+        coalesce(fin.earned_paise,0) as earned_paise,
+        coalesce(fin.refunded_paise,0) as refunded_paise,
+        coalesce(fin.charges_paise,0) as charges_paise,
+        coalesce(fin.paid_paise,0) as paid_paise,
+        coalesce(fin.reversed_paise,0) as reversed_paise,
+        coalesce(fin.reserved_paise,0) as reserved_paise,
+        coalesce(fin.source_sale_count,0) as source_sale_count,
+        coalesce(fin.unreconciled_fee_order_count,0) as unreconciled_fee_order_count
+      from recipients r
+      left join balance_by_currency fin on fin.recipient_type=r.recipient_type
+        and ((r.recipient_type='INSTITUTION' and fin.institution_id=r.institution_id)
+          or (r.recipient_type='COMPANY' and fin.legal_entity_id=r.legal_entity_id))
+      left join lateral (
+        select fpb.status,fpb.bank_ifsc,fpb.bank_account_last4
+        from finance_payout_beneficiary fpb
+        where ((r.recipient_type='INSTITUTION' and fpb.beneficiary_type='INSTITUTION' and fpb.institution_id=r.institution_id)
+          or (r.recipient_type='COMPANY' and fpb.beneficiary_type='COMPANY' and fpb.legal_entity_id=r.legal_entity_id))
+        order by case fpb.status
+          when 'ACTIVE' then 0 when 'PENDING_APPROVAL' then 1 when 'PROVISIONING' then 2
+          when 'RECONCILIATION_REQUIRED' then 3 when 'SUSPENDED' then 4 else 5 end,
+          fpb.created_at desc,fpb.id desc
+        limit 1
+      ) b on true
+      order by lower(r.recipient_name),r.recipient_type,coalesce(fin.currency,'INR')
       """);
     long totalEarned=0L,totalRefunded=0L,totalCharges=0L,totalPaid=0L,totalReversed=0L,totalReserved=0L,totalPayable=0L,totalRecovery=0L,totalReserve=0L;
     Set<String> unsupportedCurrencies=new java.util.TreeSet<>();
@@ -879,6 +962,45 @@ public class FinancePayoutController {
       row.put("refund_reserve_paise",refundReserve);
       row.put("payable_paise",payable);
       row.put("recovery_due_paise",recovery);
+      long sourceSales=number(row.get("source_sale_count"));
+      long unreconciledFeeOrders=number(row.get("unreconciled_fee_order_count"));
+      String readinessStatus;
+      String readinessReason;
+      if(!payoutSupported) {
+        readinessStatus="BLOCKED";
+        readinessReason="This currency has no configured payout route.";
+      } else if(recovery>0) {
+        readinessStatus="BLOCKED";
+        readinessReason="A recovery balance is due; reconcile the recovery before any further transfer.";
+      } else if(payable<=0) {
+        readinessStatus="NO_PAYABLE_BALANCE";
+        readinessReason="No positive payable balance remains after refunds, payments, reservations and holdback.";
+      } else if(!"ACTIVE".equals(string(row.get("recipient_status")))) {
+        readinessStatus="BLOCKED";
+        readinessReason="The recipient entity is not active. Its historical balance remains visible, but transfers are blocked until its status is reviewed.";
+      } else if(!"ACTIVE".equals(string(row.get("beneficiary_status")))) {
+        readinessStatus="BLOCKED";
+        readinessReason="The recipient does not have an approved active bank beneficiary.";
+      } else if(payable<minimumPayoutPaise) {
+        readinessStatus="BELOW_MINIMUM";
+        readinessReason="Below the configured minimum payout of "+minimumPayoutPaise+" paise.";
+      } else if(unreconciledFeeOrders>0) {
+        readinessStatus="BLOCKED";
+        readinessReason=unreconciledFeeOrders+" source sale(s) still need actual collection-fee reconciliation.";
+      } else if(!providerReady) {
+        readinessStatus="BLOCKED";
+        readinessReason="RazorpayX credentials, source-account identifier or payout webhook are not fully configured.";
+      } else if(!legalArrangementReady) {
+        readinessStatus="BLOCKED";
+        readinessReason="The legal seller, collection entity and RazorpayX funding-owner arrangement is not verified.";
+      } else {
+        readinessStatus="READY_FOR_BATCH_REVIEW";
+        readinessReason="Existing payout controls pass for batch preparation, but this status does not assess GST TCS or income-tax TDS. Confirm sale/recipient tax treatment before approving a live transfer; server-side batch checks and independent approval still apply.";
+      }
+      row.put("source_sale_count",sourceSales);
+      row.put("unreconciled_fee_order_count",unreconciledFeeOrders);
+      row.put("payout_readiness_status",readinessStatus);
+      row.put("payout_readiness_reason",readinessReason);
       if(!payoutSupported) {
         // These values are retained only for reconciliation. The UI must not render non-INR
         // minor units as rupees or blend them into INR summary totals.
@@ -929,6 +1051,8 @@ public class FinancePayoutController {
       select e.id,e.event_type,e.amount_paise,e.currency,e.payment_reference,e.created_at,
         a.id as allocation_id,a.course_payment_order_id as order_id,o.provider_payment_id,
         coalesce(nullif(offer.title_override,''),course.display_name) as course_title,
+        marketplace_t.id as marketplace_institution_id,marketplace_t.display_name as marketplace_institution_name,
+        source_release.source_institution_id,source_t.display_name as source_institution_name,
         p.id as payout_id,p.public_id as payout_public_id,p.status as payout_status,p.transfer_reference,
         b.id as payout_batch_id,b.period_start as payout_period_start,
         e.details->>'feeAdjustmentId' as fee_adjustment_id,
@@ -937,7 +1061,11 @@ public class FinancePayoutController {
       from revenue_share_allocation a
       join revenue_share_allocation_event e on e.allocation_id=a.id
       join course_payment_order o on o.id=a.course_payment_order_id
-      left join institution_marketplace_offer offer on offer.id=o.institution_offer_id
+      left join institution_marketplace_offer offer on offer.id=o.institution_offer_id and offer.institution_id=o.institution_id
+      left join institution_course_release source_release
+        on source_release.id=offer.course_release_id and source_release.program_id=o.course_id
+      left join institution_tenant source_t on source_t.id=source_release.source_institution_id
+      left join institution_tenant marketplace_t on marketplace_t.id=o.institution_id
       left join curriculum_program course on course.id=o.course_id
       left join finance_payout p on p.id::text=e.details->>'payoutId'
       left join finance_payout_batch b on b.id=p.batch_id
