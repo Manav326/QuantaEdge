@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1329,
+    "assets_selected": 1330,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "af20798307a00bb1bcc68e77"
+      "71acfdbfa81450613747a4f1"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1325,
-    "assets_remaining": 966,
-    "assets_completion_percent": 57.8,
+    "assets_analyzed": 1326,
+    "assets_remaining": 965,
+    "assets_completion_percent": 57.9,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1324,
+    "assets_skipped_from_checkpoint": 1325,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40466785838",
-      "checkpointed_at": "2026-10-27T08:22:24Z"
+      "checkpointed_at": "2026-10-27T08:25:26Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40466785838",
-      "checkpointed_at": "2026-10-27T08:22:50Z"
+      "checkpointed_at": "2026-10-27T08:25:51Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40466785838",
-      "checkpointed_at": "2026-10-27T08:23:20Z"
+      "checkpointed_at": "2026-10-27T08:26:22Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40466785838",
-      "checkpointed_at": "2026-10-27T08:24:04Z"
+      "checkpointed_at": "2026-10-27T08:27:06Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -44014,6 +44014,34 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40466785838",
       "checkpointed_at": "2026-10-27T08:24:41Z"
+    },
+    {
+      "asset_id": "71acfdbfa81450613747a4f1",
+      "asset_sha256": "c7984fa0c52d08ca6333572469d54d875efdcf623510246cdac25839eed53467",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 110,
+      "asset_path": "assets/c7984fa0c52d08ca6333572469d54d875efdcf623510246cdac25839eed53467.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "23a534507295986cb38f896a36acbcd95ccd1ae45a82b50233bf7077ecb5a51a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person in a purple shirt with one hand on their hip and the other hand open, gesturing.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text about high-speed winds and house roofs.",
+        "limitations": [
+          "The image does not provide any specific information about the text's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40466785838",
+      "checkpointed_at": "2026-10-27T08:27:43Z"
     }
   ]
 }
