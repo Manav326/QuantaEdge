@@ -234,7 +234,7 @@ public class FinancePayoutController {
     if(!status.isBlank()&&!List.of("PROVISIONING","PENDING_APPROVAL","ACTIVE","SUSPENDED","REJECTED","RECONCILIATION_REQUIRED").contains(status))
       throw bad("Choose a valid beneficiary status.");
     List<Map<String,Object>> rows=jdbc.queryForList("""
-      select b.id,b.public_id,b.beneficiary_type,b.institution_id,b.legal_entity_id,b.beneficiary_name,
+      select b.id,b.public_id,b.beneficiary_type,b.institution_id,b.legal_entity_id,b.beneficiary_name,b.replaces_beneficiary_id,
         b.bank_ifsc,b.bank_account_last4,b.provider_contact_id,b.provider_fund_account_id,b.status,
         b.created_by_staff_id,maker.display_name as created_by_name,b.approved_by_staff_id,b.approved_at,b.rejection_reason,b.created_at,b.updated_at,
         t.display_name as institution_name,le.legal_name as company_name,
@@ -312,6 +312,69 @@ public class FinancePayoutController {
           Map.of("providerContactId",contactId==null?"":contactId,"failure","Provider setup not confirmed; full bank data was not retained."));
       return ResponseEntity.status(HttpStatus.ACCEPTED).body(Map.of("id",id,"publicId",publicId,"status","RECONCILIATION_REQUIRED",
           "message","RazorpayX beneficiary setup is uncertain. Check the provider contact/fund-account records before retrying; the full account number was not retained."));
+    }
+  }
+
+  @PostMapping("/payout-beneficiaries/{beneficiaryId}/replacement")
+  public ResponseEntity<Map<String,Object>> requestBeneficiaryReplacement(@PathVariable long beneficiaryId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireManage(context);requireProviderConfiguration();
+    Map<String,Object> old=one("select * from finance_payout_beneficiary where id=?",beneficiaryId);
+    if(old.isEmpty())throw notFound("Existing beneficiary was not found.");
+    if(!"ACTIVE".equals(text(old,"status")))throw bad("Only the currently approved bank account can start a replacement.");
+    if(exists("select exists(select 1 from finance_payout_beneficiary where replaces_beneficiary_id=? and status<>'REJECTED')",beneficiaryId))
+      throw bad("A bank-account replacement for this beneficiary is already pending or was already approved. Resolve that replacement record before starting another.");
+    String name=requiredText(body.get("accountHolderName"),"account holder legal name");
+    String accountNumber=requiredText(body.get("accountNumber"),"new bank account number");
+    String ifsc=requiredText(body.get("ifsc"),"new IFSC").toUpperCase(Locale.ROOT);
+    String email=optionalText(body.get("email")),phone=optionalText(body.get("phone"));
+    if(name.length()>240||!accountNumber.matches("[0-9]{9,18}"))throw bad("Enter an account-holder name (up to 240 characters) and a 9–18 digit bank account number.");
+    if(!ifsc.matches("^[A-Z]{4}0[A-Z0-9]{6}$"))throw bad("Enter a valid 11-character IFSC.");
+    if(email==null&&phone==null)throw bad("Provide an email address or phone number for the RazorpayX contact.");
+    if(email!=null&&(email.length()>320||!email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")))throw bad("Enter a valid email address.");
+    if(phone!=null&&(phone.length()>20||!phone.matches("^[+0-9() -]{7,20}$")))throw bad("Enter a valid phone number.");
+    String type=text(old,"beneficiary_type");Long institutionId=nullableLong(old.get("institution_id")),legalEntityId=nullableLong(old.get("legal_entity_id"));
+    String publicId=UUID.randomUUID().toString();
+    Long replacementId=jdbc.queryForObject("""
+      insert into finance_payout_beneficiary(
+        public_id,beneficiary_type,institution_id,legal_entity_id,beneficiary_name,bank_ifsc,bank_account_last4,
+        status,created_by_staff_id,replaces_beneficiary_id
+      ) values(?::uuid,?,?,?,?,?,?,'PROVISIONING',?,?) returning id
+      """,Long.class,publicId,type,institutionId,legalEntityId,name,ifsc,accountNumber.substring(accountNumber.length()-4),context.staffId(),beneficiaryId);
+    if(replacementId==null)throw new IllegalStateException("Bank-account replacement request could not be created.");
+    String contactId=null;
+    try {
+      Map<String,Object> contactPayload=new LinkedHashMap<>();contactPayload.put("name",name);
+      if(email!=null)contactPayload.put("email",email);if(phone!=null)contactPayload.put("contact",phone);
+      contactPayload.put("type","vendor");contactPayload.put("reference_id",publicId);
+      contactPayload.put("notes",Map.of("quantaedge_beneficiary_id",Long.toString(replacementId),
+        "quantaedge_beneficiary_type",type,"replaces_beneficiary_id",Long.toString(beneficiaryId)));
+      JsonNode contact=providerRequest("POST","/contacts",contactPayload,null);
+      contactId=requiredProviderText(contact,"id");
+      jdbc.update("update finance_payout_beneficiary set provider_contact_id=?,updated_at=now() where id=?",contactId,replacementId);
+      JsonNode fund=providerRequest("POST","/fund_accounts",Map.of("contact_id",contactId,"account_type","bank_account",
+        "bank_account",Map.of("name",name,"ifsc",ifsc,"account_number",accountNumber)),null);
+      String fundId=requiredProviderText(fund,"id");
+      int changed=jdbc.update("""
+        update finance_payout_beneficiary set provider_fund_account_id=?,status='PENDING_APPROVAL',updated_at=now()
+        where id=? and status='PROVISIONING' and replaces_beneficiary_id=?
+        """,fundId,replacementId,beneficiaryId);
+      if(changed!=1)throw bad("Replacement request changed during provider setup. Reconcile the existing provider record before retrying.");
+      auditFinancial("PAYOUT_BENEFICIARY_REPLACEMENT_SUBMITTED",replacementId,type,
+        "INSTITUTION".equals(type)?institutionId:legalEntityId,context.staffId(),
+        Map.of("replacesBeneficiaryId",beneficiaryId,"providerContactId",contactId,"providerFundAccountId",fundId,
+          "accountLast4",accountNumber.substring(accountNumber.length()-4),"ifsc",ifsc));
+      return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("id",replacementId,"publicId",publicId,"status","PENDING_APPROVAL",
+        "replacesBeneficiaryId",beneficiaryId,"message","Replacement bank account is registered and awaiting independent approval. The current approved account remains active until approval; any in-flight payout must finish before switching."));
+    } catch(Exception ex) {
+      jdbc.update("update finance_payout_beneficiary set status='RECONCILIATION_REQUIRED',updated_at=now() where id=? and status='PROVISIONING'",replacementId);
+      auditFinancial("PAYOUT_BENEFICIARY_REPLACEMENT_SETUP_UNCERTAIN",replacementId,type,
+        "INSTITUTION".equals(type)?institutionId:legalEntityId,context.staffId(),
+        Map.of("replacesBeneficiaryId",beneficiaryId,"providerContactId",contactId==null?"":contactId,
+          "failure","Replacement setup not confirmed; full bank data was not retained."));
+      return ResponseEntity.status(HttpStatus.ACCEPTED).body(Map.of("id",replacementId,"publicId",publicId,"status","RECONCILIATION_REQUIRED",
+        "replacesBeneficiaryId",beneficiaryId,"message","Replacement setup is uncertain. The previous approved bank account remains active. Reconcile the saved provider reference before retrying; no new replacement will be created automatically."));
     }
   }
 
@@ -396,6 +459,7 @@ public class FinancePayoutController {
   }
 
   @PostMapping("/payout-beneficiaries/{beneficiaryId}/approve")
+  @org.springframework.transaction.annotation.Transactional
   public Map<String,Object> approveBeneficiary(@PathVariable long beneficiaryId,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=requireApprover(context);
@@ -408,14 +472,37 @@ public class FinancePayoutController {
         :exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY'))",row.get("legal_entity_id"));
     if(!active||optionalText(row.get("provider_fund_account_id"))==null||optionalText(row.get("provider_contact_id"))==null)
       throw bad("Beneficiary identity or provider fund account is not ready for approval.");
+    Long replacesBeneficiaryId=nullableLong(row.get("replaces_beneficiary_id"));
+    Map<String,Object> previous=Map.of();
+    if(replacesBeneficiaryId!=null) {
+      previous=one("select * from finance_payout_beneficiary where id=? for update",replacesBeneficiaryId);
+      if(previous.isEmpty()||!"ACTIVE".equals(text(previous,"status"))
+          ||!text(previous,"beneficiary_type").equals(text(row,"beneficiary_type"))
+          ||!java.util.Objects.equals(nullableLong(previous.get("institution_id")),nullableLong(row.get("institution_id")))
+          ||!java.util.Objects.equals(nullableLong(previous.get("legal_entity_id")),nullableLong(row.get("legal_entity_id"))))
+        throw bad("The bank account being replaced is no longer the active account for this recipient. Refresh and review the beneficiary chain.");
+      if(exists("""
+        select exists(select 1 from finance_payout where beneficiary_id=?
+          and status in ('PENDING_APPROVAL','APPROVED','SUBMITTING','PENDING','QUEUED','PROCESSING','RECONCILIATION_REQUIRED'))
+        """,replacesBeneficiaryId))
+        throw bad("An existing payout still depends on the previous bank account. Resolve or finish that payout batch before approving the replacement.");
+      int retired=jdbc.update("update finance_payout_beneficiary set status='SUSPENDED',updated_at=now() where id=? and status='ACTIVE'",replacesBeneficiaryId);
+      if(retired!=1)throw bad("The previous bank account changed during replacement approval. Refresh and review again.");
+    }
     int changed=jdbc.update("""
       update finance_payout_beneficiary set status='ACTIVE',approved_by_staff_id=?,approved_at=now(),updated_at=now()
       where id=? and status='PENDING_APPROVAL'
       """,context.staffId(),beneficiaryId);
     if(changed!=1)throw bad("Beneficiary changed during approval. Refresh and retry.");
-    auditFinancial("PAYOUT_BENEFICIARY_APPROVED",beneficiaryId,text(row,"beneficiary_type"),beneficiaryId(row),context.staffId(),
-        Map.of("providerFundAccountId",row.get("provider_fund_account_id")));
-    return Map.of("id",beneficiaryId,"status","ACTIVE","message","Beneficiary is approved for payout batches.");
+    if(replacesBeneficiaryId!=null)
+      auditFinancial("PAYOUT_BENEFICIARY_REPLACED_ACCOUNT_SUSPENDED",replacesBeneficiaryId,text(previous,"beneficiary_type"),beneficiaryId(previous),context.staffId(),
+        Map.of("replacementBeneficiaryId",beneficiaryId,"reason","Approved replacement after checking no in-flight payouts remain."));
+    auditFinancial(replacesBeneficiaryId==null?"PAYOUT_BENEFICIARY_APPROVED":"PAYOUT_BENEFICIARY_REPLACEMENT_APPROVED",
+        beneficiaryId,text(row,"beneficiary_type"),beneficiaryId(row),context.staffId(),
+        Map.of("providerFundAccountId",row.get("provider_fund_account_id"),"replacesBeneficiaryId",replacesBeneficiaryId==null?0:replacesBeneficiaryId));
+    return Map.of("id",beneficiaryId,"status","ACTIVE","message",replacesBeneficiaryId==null
+        ?"Beneficiary is approved for payout batches."
+        :"Replacement bank account approved. The previous bank account is now suspended; future payout batches use the new account.");
   }
 
   @PostMapping("/payout-beneficiaries/{beneficiaryId}/reject")

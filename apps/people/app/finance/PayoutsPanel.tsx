@@ -25,7 +25,7 @@ type Overview={
 };
 type Beneficiary={
   id:number;public_id:string;beneficiary_type:string;institution_id?:number|null;legal_entity_id?:number|null;
-  beneficiary_name:string;recipient_name:string;bank_ifsc:string;bank_account_last4:string;status:string;
+  replaces_beneficiary_id?:number|null;beneficiary_name:string;recipient_name:string;bank_ifsc:string;bank_account_last4:string;status:string;
   created_by_staff_id:number;created_by_name?:string|null;canApprove?:boolean;
   approved_by_staff_id?:number|null;approved_at?:string|null;rejection_reason?:string|null
 };
@@ -130,6 +130,8 @@ export default function PayoutsPanel(){
   const [approvalBatch,setApprovalBatch]=useState<Batch|null>(null);
   const [approvalConfirmed,setApprovalConfirmed]=useState(false);
   const [recoveryAccounts,setRecoveryAccounts]=useState<Record<string,string>>({});
+  const [selectedReplacementId,setSelectedReplacementId]=useState<number|null>(null);
+  const [replacementDrafts,setReplacementDrafts]=useState<Record<string,{holderName:string;accountNumber:string;ifsc:string;email:string;phone:string}>>({});
   const [error,setError]=useState('');
   const [notice,setNotice]=useState('');
   const [settingsForm,setSettingsForm]=useState({remainderType:'COMPANY',remainderId:'',minimumRupees:'',reservePercent:''});
@@ -378,6 +380,18 @@ export default function PayoutsPanel(){
     if(result){setFeeAdjustmentReviewReasons(old=>({...old,[key]:''}));setNotice(result.message||'Fee correction review recorded.');}
   };
 
+  const requestBankReplacement=async(beneficiary:Beneficiary)=>{
+    const key=String(beneficiary.id),draft=replacementDrafts[key]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''};
+    if(!/^\\d{9,18}$/.test(draft.accountNumber)){setError('Enter the new 9–18 digit bank account number.');return;}
+    if(!/^[A-Z]{4}0[A-Z0-9]{6}$/.test(draft.ifsc.trim().toUpperCase())){setError('Enter a valid 11-character IFSC.');return;}
+    if(!draft.email.trim()&&!draft.phone.trim()){setError('Provide an email address or phone number for RazorpayX.');return;}
+    const result=await action(()=>api<{id:number;status:string;message:string}>(BASE+'/payout-beneficiaries/'+beneficiary.id+'/replacement',{
+      method:'POST',body:JSON.stringify({accountHolderName:draft.holderName,accountNumber:draft.accountNumber,ifsc:draft.ifsc.trim().toUpperCase(),email:draft.email.trim()||null,phone:draft.phone.trim()||null})
+    }),'Replacement registration requested. The previous approved bank account remains active until independent approval.');
+    setReplacementDrafts(old=>({...old,[key]:{...draft,accountNumber:''}}));
+    if(result){setSelectedReplacementId(null);setNotice(result.message||'Replacement account is awaiting independent review.');}
+  };
+
   const reconcileBeneficiaryProviderSetup=async(beneficiary:Beneficiary)=>{
     const key=String(beneficiary.id),accountNumber=(recoveryAccounts[key]||'').trim();
     if(!/^\\d{9,18}$/.test(accountNumber)){setError('Re-enter the 9–18 digit bank account number so the server can match an existing provider record.');return;}
@@ -560,6 +574,16 @@ export default function PayoutsPanel(){
               {b.status==='PENDING_APPROVAL'&&!b.canApprove&&<small>Only a different authorized staff member with approval permission can review this account.</small>}
               {b.canApprove&&['PENDING_APPROVAL','PROVISIONING','RECONCILIATION_REQUIRED'].includes(b.status)&&<button type="button" className={styles.secondarySmall} disabled={busy} onClick={()=>{setRejectingId(rejectingId===b.id?null:b.id);setRejectReason('');}}>Reject</button>}
             </div>
+            {b.status==='ACTIVE'&&b.replaces_beneficiary_id==null&&<button type="button" className={styles.secondarySmall} disabled={busy||!settings?.providerConfigured} onClick={()=>setSelectedReplacementId(selectedReplacementId===b.id?null:b.id)}>{selectedReplacementId===b.id?'Close replacement form':'Change bank account'}</button>}
+            {selectedReplacementId===b.id&&b.status==='ACTIVE'&&<form className={styles.payoutReplacementForm} onSubmit={e=>{e.preventDefault();void requestBankReplacement(b);}}>
+              <p>The existing approved account remains active while the new account is registered and reviewed by another authorized staff member.</p>
+              <label>New account holder’s legal name<input required maxLength={240} value={(replacementDrafts[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}).holderName} onChange={e=>setReplacementDrafts(old=>({...old,[String(b.id)]:{...(old[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}),holderName:e.target.value}}))}/></label>
+              <label>New bank account number<input required type="password" inputMode="numeric" autoComplete="off" maxLength={18} value={(replacementDrafts[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}).accountNumber} onChange={e=>setReplacementDrafts(old=>({...old,[String(b.id)]:{...(old[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}),accountNumber:e.target.value.replace(/\\D/g,'').slice(0,18)}}))}/><small>Used for server-side RazorpayX setup only; not retained by QuantaEdge.</small></label>
+              <label>New IFSC<input required maxLength={11} value={(replacementDrafts[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}).ifsc} onChange={e=>setReplacementDrafts(old=>({...old,[String(b.id)]:{...(old[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}),ifsc:e.target.value.toUpperCase().replace(/\\s/g,'')}}))}/></label>
+              <label>Contact email<input type="email" maxLength={320} value={(replacementDrafts[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}).email} onChange={e=>setReplacementDrafts(old=>({...old,[String(b.id)]:{...(old[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}),email:e.target.value}}))}/></label>
+              <label>Contact phone<input type="tel" maxLength={20} value={(replacementDrafts[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}).phone} onChange={e=>setReplacementDrafts(old=>({...old,[String(b.id)]:{...(old[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}),phone:e.target.value}}))}/></label>
+              <div className={styles.payoutFormFooter}><span>The new account will not be used until an independent approver accepts it. Any in-flight payout using the old account must resolve before the switch.</span><button type="submit" className={styles.primary} disabled={busy||!settings?.providerConfigured||!(replacementDrafts[String(b.id)]||{}).accountNumber}>Submit replacement</button></div>
+            </form>}
             {['PROVISIONING','RECONCILIATION_REQUIRED'].includes(b.status)&&b.canApprove&&<form className={styles.payoutRejectForm} onSubmit={e=>{e.preventDefault();void reconcileBeneficiaryProviderSetup(b);}}>
               <label>Re-enter bank account number to match an existing RazorpayX record
                 <input type="password" inputMode="numeric" autoComplete="off" maxLength={18} value={recoveryAccounts[String(b.id)]||''} onChange={e=>setRecoveryAccounts(old=>({...old,[String(b.id)]:e.target.value.replace(/\\D/g,'').slice(0,18)}))}/>
