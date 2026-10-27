@@ -1050,7 +1050,10 @@ public class CourseOrderFinancialService {
       values(?,'PDF_RENDERED',?,?::jsonb)
       on conflict(idempotency_key) do nothing
       """,docId,idempotency+":pdf",json(Map.of("sha256",asset.sha256(),"byteLength",asset.sizeBytes())));
-    return new FinalizedSale(docId,docNumber,distribution.totalInstitutionAllocatedPaise(),distribution.platformRemainderPaise());
+    long institutionAllocatedPaise=distribution.allocations().stream()
+        .filter(a->"INSTITUTION".equals(a.recipientType()))
+        .mapToLong(RevenueDistributionCalculator.BeneficiaryAllocation::amountPaise).sum();
+    return new FinalizedSale(docId,docNumber,institutionAllocatedPaise,distribution.unassignedRemainderPaise());
   }
 
   public record DownloadableInvoice(long documentId,String documentNumber,String storageKey,String sha256,long sizeBytes) {}
@@ -1283,6 +1286,11 @@ public class CourseOrderFinancialService {
     try { return mapper.writeValueAsString(value==null?Map.of():value); }
     catch(Exception ex) { throw new IllegalStateException("A financial snapshot could not be serialized.",ex); }
   }
+  private boolean exists(String sql,Object... args) {
+    Boolean result=jdbc.queryForObject(sql,Boolean.class,args);
+    return Boolean.TRUE.equals(result);
+  }
+
   private Map<String,Object> one(String sql,Object... args) {
     List<Map<String,Object>> rows=jdbc.queryForList(sql,args);
     return rows.isEmpty()?Map.of():rows.getFirst();
