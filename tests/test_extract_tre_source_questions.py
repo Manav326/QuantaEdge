@@ -57,7 +57,7 @@ class TreSourceCodePreservationTests(unittest.TestCase):
         self.assertFalse(hindi_conversion_needs_review("CONVERTED_CHANAKYA"))
 
     def test_shree_dev_legacy_glyphs_are_detected_when_pdf_uses_cidfont_names(self):
-        raw = "H-9.\\naVZ Zo Xm¡‹S>H$a AO¶ H$mo ³¶m| amoH$Zm Mmhm ?"
+        raw = "H-9.\naVZ Zo Xm¡‹S>H$a AO¶ H$mo ³¶m| amoH$Zm Mmhm ?"
         self.assertTrue(uses_legacy_hindi_glyphs(raw, {"CIDFont+F4"}))
         self.assertTrue(uses_legacy_hindi_glyphs("प्रश्न हिन्दी में", {"SHREE-DEV7-0709"}))
         self.assertFalse(uses_legacy_hindi_glyphs("How many numbers are divisible by 5?", {"CIDFont+F4"}))
@@ -69,6 +69,7 @@ class TreSourceCodePreservationTests(unittest.TestCase):
             "तीन अंकों की कितनी संख्याएँ 5 से विभाज्य\nहैं?",
         )
         self.assertEqual(normalize_ocr_prompt("(A) 180"), "")
+        self.assertEqual(normalize_ocr_prompt("प-9. रतन ने दौड़कर अजय को क्यों रोकना चाहा ?"), "रतन ने दौड़कर अजय को क्यों रोकना चाहा ?")
         self.assertEqual(normalize_ocr_option("(D) उपर्युक्त में से एक से अधिक"), "उपर्युक्त में से एक से अधिक")
         self.assertEqual(normalize_ocr_option("(A) 180"), "")
 
