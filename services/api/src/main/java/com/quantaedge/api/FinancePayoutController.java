@@ -663,22 +663,29 @@ public class FinancePayoutController {
       beneficiaryByKey.putIfAbsent(key,row);
       long net=Math.subtractExact(Math.subtractExact(number(row.get("earned_paise")),number(row.get("refunded_paise"))),number(row.get("fee_paise")));
       netEarned.merge(key,net,Math::addExact);
-      paidNet.merge(key,number(row.get("paid_paise"))-number(row.get("reversed_paise")),Math::addExact);
+      paidNet.merge(key,Math.subtractExact(number(row.get("paid_paise")),number(row.get("reversed_paise"))),Math::addExact);
       reservedNet.merge(key,number(row.get("reserved_paise")),Math::addExact);
     }
     int reserveBps=Math.toIntExact(number(settings.get("refund_reserve_basis_points")));
     long minimum=number(settings.get("payout_minimum_paise"));
     Map<String,Long> payoutAmounts=new LinkedHashMap<>();
     for(String key:byRecipient.keySet()) {
-      long amount=Math.max(0L,netEarned.get(key)-percentageOf(netEarned.get(key),reserveBps)
-          -paidNet.getOrDefault(key,0L)-reservedNet.getOrDefault(key,0L));
+      long amount=Math.max(0L,Math.subtractExact(Math.subtractExact(
+          Math.subtractExact(netEarned.get(key),percentageOf(Math.max(0L,netEarned.get(key)),reserveBps)),
+          paidNet.getOrDefault(key,0L)),reservedNet.getOrDefault(key,0L)));
       Map<String,Object> beneficiary=beneficiaryByKey.get(key);
       if(amount<minimum)continue;
       if(beneficiary==null||number(beneficiary.get("beneficiary_id"))<=0)
         throw bad("A beneficiary has a payable balance but no approved bank account: "+key+". Set up and approve its payout profile.");
-      long positiveBalance=byRecipient.get(key).stream().mapToLong(row->Math.max(0L,
-          number(row.get("earned_paise"))-number(row.get("refunded_paise"))-number(row.get("fee_paise"))
-          -number(row.get("paid_paise"))+number(row.get("reversed_paise"))-number(row.get("reserved_paise")))).sum();
+      long positiveBalance=0L;
+      for(Map<String,Object> allocation:byRecipient.get(key)) {
+        long open=Math.subtractExact(Math.subtractExact(
+            Math.subtractExact(number(allocation.get("earned_paise")),number(allocation.get("refunded_paise"))),
+            number(allocation.get("fee_paise"))),
+            Math.subtractExact(number(allocation.get("paid_paise"))-number(allocation.get("reversed_paise")),
+                -number(allocation.get("reserved_paise")));
+        positiveBalance=Math.addExact(positiveBalance,Math.max(0L,open));
+      }
       amount=Math.min(amount,positiveBalance);
       if(amount>=minimum)payoutAmounts.put(key,amount);
     }
@@ -703,11 +710,14 @@ public class FinancePayoutController {
       allocations.sort(Comparator.comparing(r->String.valueOf(r.get("first_earned_at"))));
       for(Map<String,Object> row:allocations) {
         if(remaining<=0)break;
-        long open=Math.max(0L,number(row.get("earned_paise"))-number(row.get("refunded_paise"))-number(row.get("fee_paise"))
-          -number(row.get("paid_paise"))+number(row.get("reversed_paise"))-number(row.get("reserved_paise")));
+        long netEarnedForAllocation=Math.subtractExact(Math.subtractExact(
+            number(row.get("earned_paise")),number(row.get("refunded_paise"))),number(row.get("fee_paise")));
+        long netPaidForAllocation=Math.subtractExact(number(row.get("paid_paise")),number(row.get("reversed_paise")));
+        long open=Math.max(0L,Math.subtractExact(Math.subtractExact(netEarnedForAllocation,netPaidForAllocation),
+            number(row.get("reserved_paise"))));
         long item=Math.min(open,remaining);if(item<=0)continue;
         jdbc.update("insert into finance_payout_item(payout_id,allocation_id,amount_paise) values(?,?,?)",
-            payoutId,number(row.get("allocation_id")),item);remaining-=item;
+            payoutId,number(row.get("allocation_id")),item);remaining=Math.subtractExact(remaining,item);
       }
       if(remaining!=0)throw new IllegalStateException("Payout allocation changed while preparing the batch. No transfer was initiated.");
       payoutEvent(payoutId,"CREATED","course-payout:"+payoutId+":created",context.staffId(),null,
@@ -1199,7 +1209,11 @@ public class FinancePayoutController {
   private static long requiredLong(Object v,String label){try{return new BigDecimal(String.valueOf(v)).longValueExact();}catch(Exception e){throw bad("Enter an integer amount for "+label+".");}}
   private static String optionalText(Object v){if(v==null)return null;String s=String.valueOf(v).trim();return s.isBlank()?null:s;}
   private static Long nullableLong(Object v){if(v==null)return null;try{return new BigDecimal(String.valueOf(v)).longValueExact();}catch(Exception e){return null;}}
-  private static long number(Object v){if(v instanceof Number n)return n.longValue();try{return Long.parseLong(String.valueOf(v));}catch(Exception e){return 0;}}
+  private static long number(Object v){
+    if(v==null)return 0L; // SQL NULL is an explicit optional-value default; malformed non-null values must fail closed.
+    try{return new BigDecimal(String.valueOf(v)).longValueExact();}
+    catch(Exception e){throw new IllegalStateException("A finance field expected to contain an integer was malformed.",e);}
+  }
   private static long percentageOf(long amount,int bps){return BigDecimal.valueOf(amount).multiply(BigDecimal.valueOf(bps)).divide(BigDecimal.valueOf(10_000),0,RoundingMode.HALF_UP).longValueExact();}
   private static IllegalArgumentException bad(String m){return new IllegalArgumentException(m);}
   private static org.springframework.web.server.ResponseStatusException notFound(String m){return new org.springframework.web.server.ResponseStatusException(HttpStatus.NOT_FOUND,m);}
