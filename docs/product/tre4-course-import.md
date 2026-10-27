@@ -1,17 +1,17 @@
-# TRE-4 assessment-course import and HRMS release
+# BPSC TRE Computer Science — Previous-Year Practice Series: import and HRMS release
 
 ## Target course structure
 
 - Source institution: QuantaEdge (`QUANTA-EDGE`)
-- Course: `TRE-4 · Computer Science`
+- Course: `BPSC TRE Computer Science — Previous-Year Practice Series`
 - Course type: `ASSESSMENT`
 - Delivery mode: `ASSESSMENT_ONLY`
 - Hierarchy: **Course → test packs → assessments/tests → ordered question snapshots**
 - Test packs: one versioned pack each for TRE 1.0, TRE 2.0 and TRE 3.0
 
-This is not a school-class course. The importer does not create or require a `curriculum_class`, `curriculum_subject`, or `curriculum_chapter` association. Exam sections (General Studies, Computer Science and qualifying language) stay as section metadata on the question snapshots rather than being represented as fake school subjects or chapters.
+The new Previous-Year Practice Series is not a school-class course. The importer does not create or require a `curriculum_class`, `curriculum_subject`, or `curriculum_chapter` association. Exam sections (General Studies, Computer Science and qualifying language) stay as section metadata on the question snapshots rather than being represented as fake school subjects or chapters.
 
-The complete-archive batch importer creates the source-owned course and its initial release itself; do not pre-create a class-bound TRE4 course before running it. If an existing TRE4 course is still class-bound, the importer refuses to rewrite it in place. Reconcile that existing draft through the course-version workflow before retrying. The importer never changes a reviewed release's content fingerprint.
+The complete-archive batch importer creates a **separate source-owned course identity** (`BPSC_TRE_CS_PYQ_SERIES`) and its initial draft release itself. It deliberately does not reuse or rename the rejected `TRE4` / `BPSC-TRE-4` course. Do not pre-create this series through the legacy TRE4 assessment-course form; the importer creates the classless `ASSESSMENT` / `ASSESSMENT_ONLY` graph. Existing rejected course and release history remain unchanged.
 
 ## Source materials and question review
 
@@ -56,7 +56,7 @@ The importer also accepts `SPRING_DATASOURCE_URL` (including the `jdbc:postgresq
 
 ## What the script writes
 
-The import is one PostgreSQL transaction. It idempotently creates/reuses the QuantaEdge-owned, classless `ASSESSMENT` course, ensures `ASSESSMENT_ONLY` delivery, and writes three versioned test packs. Each pack contains exactly one assessment for its paper, with ordered question snapshots and source hashes. Source package IDs and hashes are stable; repeat runs must match the existing package hash, pack identity and question count. The importer refuses to overwrite changed, archived or inconsistent pack records. It also creates audit rows for imported assessments and course lifecycle events.
+The import is one PostgreSQL transaction. It idempotently creates/reuses the QuantaEdge-owned, classless `ASSESSMENT` course named `BPSC TRE Computer Science — Previous-Year Practice Series`, under stable key `BPSC_TRE_CS_PYQ_SERIES`, ensures `ASSESSMENT_ONLY` delivery, and writes three versioned test packs. The `tre4-bpsc-tre-*-computer-science` strings are retained as source-package IDs because current V199 readiness validates those three IDs; each is scoped to the new course and does not link to the rejected course. Each pack contains exactly one assessment for its paper, with ordered question snapshots and source hashes. Source package IDs and hashes are stable; repeat runs must match the existing package hash, pack identity and question count. The importer refuses to overwrite changed, archived or inconsistent pack records. It also creates audit rows for imported assessments and course lifecycle events.
 
 The dry-run JSON reports the course type, delivery mode, hierarchy, each pack code/version and paper/question counts. A database apply additionally reports database IDs, the exact current state of every assessment and test pack, per-question review-status counts, the course-release state, and which packs/assessments were newly inserted. Statuses are read back from PostgreSQL rather than hardcoded in the report.
 
