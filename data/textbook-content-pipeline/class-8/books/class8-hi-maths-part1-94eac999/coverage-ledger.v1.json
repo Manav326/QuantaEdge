@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 2,
     "inventory_asset_rows": 1946,
     "eligible_visual_asset_rows": 1946,
-    "raw_analysis_result_rows": 50,
-    "successful_visual_analyses": 36,
-    "missing_visual_analyses": 1896,
-    "failed_visual_analyses": 14,
+    "raw_analysis_result_rows": 55,
+    "successful_visual_analyses": 40,
+    "missing_visual_analyses": 1891,
+    "failed_visual_analyses": 15,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1912,
+    "unresolved_count": 1908,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -7496,9 +7496,19 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear text content",
+          "no visible images or diagrams"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7514,7 +7524,7 @@
       "asset_path": "page-0011.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -7532,9 +7542,39 @@
       "asset_path": "assets/14014d0e1898f734025bee1ac8236d1b15748aa72bc9b8c39b67ffa8eb4708d4.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook in Hindi, discussing the concept of 'Lokra' and its various aspects.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Hkkjr dk lafo/ku",
+          "Hkkx&3 (vuqPNsn 12&35)",
+          "(vfuok;Z  'krks±] oqQN vioknksa vkSj ;qfDr;qDr fuc±/u  osQ v/hu)",
+          "n~okjk iznRr",
+          "ewy vf/dkj",
+          "lerk dk vf/dkj",
+          "•  fof/ osQ le{k ,oa fof/;ksa osQ leku laj{k.k_",
+          "•   /eZ] ewyoa'k] tkfr] fyax ;k tUeLFkku  osQ vk/kj ij_",
+          "•  yksd fu;kstu  osQ fo\"k;  esa_",
+          "•  vLi`';rk vkSj mikf/;ksa dk varA",
+          "Lokra=;&vf/dkj",
+          "•  vfHkO;fDr] lEesyu]  la?k] lapj.k] fuokl vkSj o`fRr dk Lokra=;",
+          "•   vijk/ksa  osQ fy,  nks\"k fln~f/  osQ laca/   esa laj{k.k_",
+          "•   izk.k vkSj nSfgd Lora=krk dk l"
+        ],
+        "concepts": [
+          "Lokra",
+          "varA",
+          "Lokra=;",
+          "Lokra=;&vf/dkj",
+          "Lokra=;"
+        ],
+        "context_relation": "The page discusses the concept of 'Lokra' and its various aspects, including its definition, usage, and significance.",
+        "limitations": [
+          "The page does not provide specific examples or explanations for the concepts discussed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7550,9 +7590,34 @@
       "asset_path": "assets/de790bb5a3cc95297181c36d127232f2a0576d2fcc8c176cec5734be19d3f420.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook in Hindi, discussing concepts related to physics, specifically focusing on the interaction between forces and motion.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Hkkjr dk lafo/ku",
+          "(vfuok;Z  'krks±] oqQN vioknksa vkSj ;qfDr;qDr fuc±/u  osQ v/hu)",
+          "lerk dk vf/dkj",
+          "•  fof/ osQ le{k ,oa fof/;ksa osQ leku laj{k.k_",
+          "•   /eZ] ewyoa'k] tkfr] fyax ;k tUeLFkku  osQ vk/kj ij_",
+          "•  yksd fu;kstu  osQ fo\"k;  esa_",
+          "•  vLi`';rk vkSj mikf/;ksa dk varA",
+          "Lokra=;&vf/dkj",
+          "•  vfHkO;fDr] lEesyu]  la?k] lapj.k] fuokl vkSj o`fRr dk Lokra=;",
+          "•   vijk/ksa  osQ fy,  nks\"k fln~f/  osQ laca/   esa laj{k.k_",
+          "•   izk.k vkSj nSfgd Lora=krk dk l"
+        ],
+        "concepts": [
+          "forces",
+          "motion",
+          "interaction between forces and motion"
+        ],
+        "context_relation": "The page discusses the interaction between forces and motion in physics, providing examples and explanations.",
+        "limitations": [
+          "The text is in Hindi and may not be easily understood by non-Hindi speakers."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7568,9 +7633,38 @@
       "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red, abstract, and irregularly shaped object that appears to be a splash or a blob of paint.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Hkkjr dk lafo/ku",
+          "Hkkx&3 (vuqPNsn 12&35)",
+          "(vfuok;Z  'krks±] oqQN vioknksa vkSj ;qfDr;qDr fuc±/u  osQ v/hu)",
+          "n~okjk iznRr",
+          "ewy vf/dkj",
+          "lerk dk vf/dkj",
+          "•  fof/ osQ le{k ,oa fof/;ksa osQ leku laj{k.k_",
+          "•   /eZ] ewyoa'k] tkfr] fyax ;k tUeLFkku  osQ vk/kj ij_",
+          "•  yksd fu;kstu  osQ fo\"k;  esa_",
+          "•  vLi`';rk vkSj mikf/;ksa dk varA",
+          "Lokra=;&vf/dkj",
+          "•  vfHkO;fDr] lEesyu]  la?k] lapj.k] fuokl vkSj o`fRr dk Lokra=;",
+          "•   vijk/ksa  osQ fy,  nks\"k fln~f/  osQ laca/   esa laj{k.k_",
+          "•   izk.k vkSj nSfgd Lora=krk dk l"
+        ],
+        "concepts": [
+          "abstract shapes",
+          "red color",
+          "paint splashes",
+          "abstract illustration"
+        ],
+        "context_relation": "The visible text does not directly relate to the abstract illustration.",
+        "limitations": [
+          "The text is not directly related to the abstract illustration."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
