@@ -116,6 +116,10 @@ export default function PayoutsPanel(){
   const [loadIssues,setLoadIssues]=useState<{section:string;message:string}[]>([]);
   const [feeSearchDraft,setFeeSearchDraft]=useState('');
   const [feeSearch,setFeeSearch]=useState('');
+  const [feeFromDraft,setFeeFromDraft]=useState('');
+  const [feeThroughDraft,setFeeThroughDraft]=useState('');
+  const [feeFrom,setFeeFrom]=useState('');
+  const [feeThrough,setFeeThrough]=useState('');
   const [feeOffset,setFeeOffset]=useState(0);
   const [feeHasMore,setFeeHasMore]=useState(false);
   const [feeAdjustmentCandidates,setFeeAdjustmentCandidates]=useState<FeeAdjustmentCandidate[]>([]);
@@ -147,7 +151,7 @@ export default function PayoutsPanel(){
       const requests=[
         api<Catalog>(BASE+'/payout-catalog'),api<Settings>(BASE+'/payout-settings'),api<Overview>(BASE+'/payout-overview'),
         api<Beneficiary[]>(BASE+'/payout-beneficiaries'),
-        api<FeeOrder[]>(BASE+'/fee-reconciliation?limit=51&offset='+feeOffset+'&q='+encodeURIComponent(feeSearch)),
+        api<FeeOrder[]>(BASE+'/fee-reconciliation?limit=51&offset='+feeOffset+'&q='+encodeURIComponent(feeSearch)+'&from='+encodeURIComponent(feeFrom)+'&through='+encodeURIComponent(feeThrough)),
         api<Batch[]>(BASE+'/payout-batches'),api<BalanceResponse>(BASE+'/payout-balances'),
         api<ProviderEvent[]>(BASE+'/payout-provider-events/unmatched'),
         api<ReconciliationCandidate[]>(BASE+'/payout-reconciliation-candidates'),
@@ -198,7 +202,7 @@ export default function PayoutsPanel(){
       setLoadIssues(issues);
     }
     finally{setLoading(false);}
-  },[feeOffset,feeSearch,feeAdjustmentOffset,feeAdjustmentSearch]);
+  },[feeOffset,feeSearch,feeFrom,feeThrough,feeAdjustmentOffset,feeAdjustmentSearch]);
   useEffect(()=>{void load();},[load]);
 
   const action=async<T,>(work:()=>Promise<T>,success:string):Promise<T|null>=>{
@@ -609,9 +613,11 @@ export default function PayoutsPanel(){
 
       <section className={styles.panel}>
         <div className={styles.panelHead}><div><h2>4. Confirm actual payment-processing charges</h2><p>Charges reduce the distributable pool before shares. Use the actual Razorpay settlement statement/API result—not an estimate. Until charges are reconciled, the sale cannot enter a payout batch.</p></div><span className={feeOrders.length?styles.payoutStatusPending:styles.payoutStatusSuccess}>{feeOrders.length} shown · {overview?.unreconciledFees??'—'} pending</span></div>
-        <form className={styles.payoutQueueFilters} onSubmit={e=>{e.preventDefault();setFeeOffset(0);setFeeSearch(feeSearchDraft.trim());}}>
+        <form className={styles.payoutQueueFilters} onSubmit={e=>{e.preventDefault();setFeeOffset(0);setFeeSearch(feeSearchDraft.trim());setFeeFrom(feeFromDraft);setFeeThrough(feeThroughDraft);}}>
           <label htmlFor="payout-fee-search">Search by order, course, institution or provider payment ID</label>
-          <div><input id="payout-fee-search" value={feeSearchDraft} maxLength={100} onChange={e=>setFeeSearchDraft(e.target.value)} placeholder="e.g. order number or payment reference"/><button type="submit" className={styles.secondarySmall} disabled={loading||busy}>Search</button></div>
+          <div><input id="payout-fee-search" value={feeSearchDraft} maxLength={100} onChange={e=>setFeeSearchDraft(e.target.value)} placeholder="e.g. order number or payment reference"/></div>
+          <div className={styles.payoutQueueDates}><label>Verified from<input type="date" value={feeFromDraft} max={feeThroughDraft||undefined} onChange={e=>setFeeFromDraft(e.target.value)}/></label><label>Verified through<input type="date" value={feeThroughDraft} min={feeFromDraft||undefined} onChange={e=>setFeeThroughDraft(e.target.value)}/></label></div>
+          <div><button type="submit" className={styles.secondarySmall} disabled={loading||busy}>Apply filters</button><button type="button" className={styles.secondarySmall} disabled={loading||busy||(!feeSearch&&!feeFrom&&!feeThrough&&!feeSearchDraft&&!feeFromDraft&&!feeThroughDraft)} onClick={()=>{setFeeSearchDraft('');setFeeThroughDraft('');setFeeFromDraft('');setFeeSearch('');setFeeFrom('');setFeeThrough('');setFeeOffset(0);}}>Clear filters</button></div>
         </form>
         {feeOrders.map(order=>{
           const key=String(order.order_id);

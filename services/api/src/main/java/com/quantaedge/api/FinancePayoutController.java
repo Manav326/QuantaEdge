@@ -526,11 +526,19 @@ public class FinancePayoutController {
   public List<Map<String,Object>> feeQueue(@RequestParam(value="limit",defaultValue="50") int suppliedLimit,
       @RequestParam(value="offset",defaultValue="0") int suppliedOffset,
       @RequestParam(value="q",defaultValue="") String rawQuery,
+      @RequestParam(value="from",defaultValue="") String rawFrom,
+      @RequestParam(value="through",defaultValue="") String rawThrough,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireManage(context);
     int limit=Math.max(1,Math.min(suppliedLimit,200)),offset=Math.max(0,Math.min(suppliedOffset,1_000_000));
-    String query=rawQuery==null?"":rawQuery.trim();
+    String query=rawQuery==null?"":rawQuery.trim(),from=rawFrom==null?"":rawFrom.trim(),through=rawThrough==null?"":rawThrough.trim();
     if(query.length()>100)throw bad("Fee-queue search can contain at most 100 characters.");
+    LocalDate fromDate=null,throughDate=null;
+    try { if(!from.isBlank())fromDate=LocalDate.parse(from); }
+    catch(java.time.format.DateTimeParseException ex) { throw bad("Enter the verification start date as YYYY-MM-DD."); }
+    try { if(!through.isBlank())throughDate=LocalDate.parse(through); }
+    catch(java.time.format.DateTimeParseException ex) { throw bad("Enter the verification end date as YYYY-MM-DD."); }
+    if(fromDate!=null&&throughDate!=null&&fromDate.isAfter(throughDate))throw bad("The start date must not be after the end date.");
     return jdbc.queryForList("""
       select o.id as order_id,o.course_id,coalesce(nullif(offer.title_override,''),course.display_name) as course_title,
         tenant.display_name as source_institution,o.provider_payment_id,o.captured_amount_paise,o.output_tax_paise,o.verified_at,o.currency
@@ -539,13 +547,15 @@ public class FinancePayoutController {
       join curriculum_program course on course.id=o.course_id join institution_tenant tenant on tenant.id=o.institution_id
       left join course_payment_order_fee f on f.course_payment_order_id=o.id
       where o.status='VERIFIED' and f.id is null
+        and (cast(? as date) is null or o.verified_at::date>=cast(? as date))
+        and (cast(? as date) is null or o.verified_at::date<=cast(? as date))
         and (?='' or cast(o.id as text) ilike '%'||?||'%'
           or coalesce(nullif(offer.title_override,''),course.display_name) ilike '%'||?||'%'
           or tenant.display_name ilike '%'||?||'%' or o.provider_payment_id ilike '%'||?||'%')
       group by o.id,o.course_id,offer.title_override,course.display_name,tenant.display_name,o.provider_payment_id,
         o.captured_amount_paise,o.output_tax_paise,o.verified_at,o.currency
       order by o.verified_at,o.id limit ? offset ?
-      """,query,query,query,query,query,limit,offset);
+      """,fromDate,fromDate,throughDate,throughDate,query,query,query,query,query,limit,offset);
   }
 
   @PostMapping("/course-orders/{orderId}/processing-fees")
