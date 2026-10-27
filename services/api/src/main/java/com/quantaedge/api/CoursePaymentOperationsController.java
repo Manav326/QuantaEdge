@@ -108,7 +108,7 @@ public class CoursePaymentOperationsController {
       List<Long> pageOrderIds=items.stream().map(item->number(item.get("local_order_id"))).toList();
       String placeholders=String.join(",",java.util.Collections.nCopies(pageOrderIds.size(),"?"));
       List<Object> allocationArgs=new ArrayList<>(pageOrderIds);
-      List<Map<String,Object>> allocationRows=jdbc.queryForList("""
+      String allocationSql="""
         select a.course_payment_order_id,a.id,a.policy_id,a.policy_recipient_id,a.recipient_type,
           a.institution_id,a.legal_entity_id,a.currency,a.actual_paid_paise,a.output_tax_paise,
           a.distributable_pool_paise,a.allocated_amount_paise,
@@ -116,12 +116,13 @@ public class CoursePaymentOperationsController {
           count(e.id) filter(where e.event_type='EARNED') as earned_event_count
         from revenue_share_allocation a
         left join revenue_share_allocation_event e on e.allocation_id=a.id
-        where a.course_payment_order_id in ("""+placeholders+""")
+        where a.course_payment_order_id in (%s)
         group by a.course_payment_order_id,a.id,a.policy_id,a.policy_recipient_id,a.recipient_type,
           a.institution_id,a.legal_entity_id,a.currency,a.actual_paid_paise,a.output_tax_paise,
           a.distributable_pool_paise,a.allocated_amount_paise
         order by a.course_payment_order_id,a.id
-        """,allocationArgs.toArray());
+        """.formatted(placeholders);
+      List<Map<String,Object>> allocationRows=jdbc.queryForList(allocationSql,allocationArgs.toArray());
       for(Map<String,Object> allocation:allocationRows) {
         long allocationOrderId=number(allocation.get("course_payment_order_id"));
         allocationsByOrder.computeIfAbsent(allocationOrderId,ignored->new ArrayList<>()).add(allocation);
