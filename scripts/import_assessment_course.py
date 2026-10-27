@@ -319,6 +319,7 @@ def validate_package(pkg: dict[str, Any], source_path: Path) -> list[str]:
         proposed = question.get("proposed_answer")
         if not isinstance(proposed, dict):
             issues.append(f"{source_path.name}: questions[{index}].proposed_answer is required; use UNRESOLVED when the answer is not verified.")
+            proposed = {}
         elif proposed.get("review_status") != "PENDING_HUMAN_REVIEW":
             issues.append(f"{source_path.name}: questions[{index}].proposed_answer.review_status must remain PENDING_HUMAN_REVIEW.")
         explicit = question.get("answer_payload")
@@ -758,7 +759,7 @@ def main() -> int:
             pkg = _prompt_package_metadata(pkg, path)
             # Missing question/section bodies cannot be inferred. Ask for a complete file
             # when running interactively; never fabricate assessment content.
-            if (not isinstance(pkg.get("sections"), list) or not isinstance(pkg.get("questions"), list)) and sys.stdin.isatty():
+            if (not isinstance(pkg.get("sections"), list) or not pkg.get("sections") or not isinstance(pkg.get("questions"), list) or not pkg.get("questions")) and sys.stdin.isatty():
                 replacement = ask(
                     f"{path.name} is missing sections/questions. Path to a completed portable assessment JSON file",
                     "data/assessment-courses/example/tre-1.json",
