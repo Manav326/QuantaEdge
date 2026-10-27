@@ -38,7 +38,7 @@ class CourseRevenueAllocationReconciliationTest {
         allocation(100L,7L,"INSTITUTION",2L,11L,100_000L,100_000L,0L,100_000L,100_000L,1L));
 
     CourseRevenueAllocationReconciliation.Result result =
-        CourseRevenueAllocationReconciliation.reconcile(snapshot,7L,100_000L,0L,allocations);
+        CourseRevenueAllocationReconciliation.reconcile(snapshot,7L,100_000L,0L,"INR",allocations);
 
     assertTrue(result.complete(),() -> String.join("; ",result.issues()));
     assertEquals(1,result.expectedRecipientCount());
@@ -72,7 +72,7 @@ class CourseRevenueAllocationReconciliationTest {
         allocation(100L,7L,"INSTITUTION",2L,11L,10_000L,100_000L,0L,100_000L,10_000L,1L));
 
     CourseRevenueAllocationReconciliation.Result result =
-        CourseRevenueAllocationReconciliation.reconcile(snapshot,7L,100_000L,0L,allocations);
+        CourseRevenueAllocationReconciliation.reconcile(snapshot,7L,100_000L,0L,"INR",allocations);
 
     assertFalse(result.complete());
     assertEquals(90_000L,result.unassignedRemainderPaise());
@@ -85,10 +85,10 @@ class CourseRevenueAllocationReconciliationTest {
         List.of(recipient(11L,"INSTITUTION",2L,"PERCENTAGE",1_000,0L,"Sunrise Public School")),
         "INSTITUTION",1L,"Quanta Edge");
     List<Map<String,Object>> allocations = List.of(
-        allocation(100L,7L,"INSTITUTION",2L,10_000L,100_000L,0L,100_000L,10_000L,1L));
+        allocation(100L,7L,"INSTITUTION",2L,11L,10_000L,100_000L,0L,100_000L,10_000L,1L));
 
     CourseRevenueAllocationReconciliation.Result result =
-        CourseRevenueAllocationReconciliation.reconcile(snapshot,7L,100_000L,0L,allocations);
+        CourseRevenueAllocationReconciliation.reconcile(snapshot,7L,100_000L,0L,"INR",allocations);
 
     assertFalse(result.complete());
     assertTrue(result.issues().stream().anyMatch(issue -> issue.contains("Expected recipient INSTITUTION:1 has no allocation row")));
@@ -104,7 +104,7 @@ class CourseRevenueAllocationReconciliationTest {
         allocation(100L,7L,"INSTITUTION",2L,11L,100_000L,100_000L,0L,100_000L,99_999L,1L));
 
     CourseRevenueAllocationReconciliation.Result result =
-        CourseRevenueAllocationReconciliation.reconcile(snapshot,7L,100_000L,0L,allocations);
+        CourseRevenueAllocationReconciliation.reconcile(snapshot,7L,100_000L,0L,"INR",allocations);
 
     assertFalse(result.complete());
     assertTrue(result.issues().stream().anyMatch(issue -> issue.contains("matching EARNED ledger event")));
