@@ -589,14 +589,10 @@ public class CourseOrderFinancialService {
   }
 
   /**
-   * Finalize the fiscal document and revenue-share allocations in a separate transaction after
-   * course access is already committed. Failure here must not undo an exact captured payment's access.
+   * Finds the greatest confirmed charge deduction that preserves every share in the locked policy.
+   * Any real provider charge above this limit is recorded separately as platform-borne overage.
    */
-  /**
-   * Records confirmed gateway charges and reduces the same sale's existing allocation ledger.
-   * Charges are sourced from a provider settlement record, never from an estimate.
-   */
-  private static RevenueDistributionCalculator.BeneficiaryResult calculateWithMaximumSafeFeeDeduction(
+  static RevenueDistributionCalculator.BeneficiaryResult calculateWithMaximumSafeFeeDeduction(
       long capturedPaise,long outputTaxPaise,long maximumDeductiblePaise,
       List<RevenueDistributionCalculator.BeneficiaryShare> shares,String remainderType,Long remainderId) {
     long low=0L,high=maximumDeductiblePaise;
@@ -620,6 +616,10 @@ public class CourseOrderFinancialService {
         capturedPaise,outputTaxPaise,low,shares,remainderType,remainderId);
   }
 
+  /**
+   * Records confirmed gateway charges and reduces the same sale's existing allocation ledger.
+   * Charges are sourced from a provider settlement record, never from an estimate.
+   */
   @Transactional
   public Map<String,Object> reconcileProviderFees(
       long orderId,long processingFeePaise,long feeTaxPaise,String settlementReference,
