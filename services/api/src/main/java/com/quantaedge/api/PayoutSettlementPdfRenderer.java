@@ -9,6 +9,9 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
@@ -23,6 +26,8 @@ import javax.imageio.ImageIO;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
+import org.apache.pdfbox.pdmodel.graphics.state.RenderingMode;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
@@ -179,7 +184,9 @@ public class PayoutSettlementPdfRenderer {
   private static final class ReportCanvas {
     // Keep compressed page images instead of hundreds of megabytes of live RGB bitmaps.
     private final List<byte[]> pages=new ArrayList<>();
+    private final List<TextRun> textRuns=new ArrayList<>();
     private final String title,documentNumber,created;
+    private record TextRun(int pageIndex,float x,float baselineY,String text,int style,int size) {}
     private BufferedImage page;
     private Graphics2D g;
     private int y;
@@ -205,6 +212,11 @@ public class PayoutSettlementPdfRenderer {
       g.drawString(clip(documentNumber,360),MARGIN,190);
       g.drawString("Generated "+clip(created,330),WIDTH-MARGIN-330,190);
       y=230;
+    }
+    private void drawText(String value,int x,int baselineY) {
+      if(value==null||value.isEmpty())return;
+      g.drawString(value,x,baselineY);
+      textRuns.add(new TextRun(pages.size(),x,baselineY,value,g.getFont().getStyle(),g.getFont().getSize()));
     }
     private void archiveCurrentPage() {
       if(page==null)return;
@@ -303,6 +315,9 @@ public class PayoutSettlementPdfRenderer {
         Calendar calendar=Calendar.getInstance(java.util.TimeZone.getTimeZone(INDIA));
         calendar.setTimeInMillis((time==null?Instant.now():time).toEpochMilli());
         info.setCreationDate(calendar);document.setDocumentInformation(info);
+        PDType0Font searchableFont=loadSearchableFont(document);
+        float scale=PDRectangle.A4.getWidth()/WIDTH;
+        int pageIndex=0;
         for(byte[] pagePng:pages) {
           BufferedImage image=ImageIO.read(new ByteArrayInputStream(pagePng));
           if(image==null)throw new IOException("A stored payout PDF page is not a valid PNG.");
@@ -312,9 +327,26 @@ public class PayoutSettlementPdfRenderer {
             try(PDPageContentStream stream=new PDPageContentStream(document,pdfPage)) {
               stream.drawImage(embedded,0,0,pdfPage.getMediaBox().getWidth(),pdfPage.getMediaBox().getHeight());
             }
+            // Preserve the pixel-perfect visual page but layer invisible selectable Unicode text on top.
+            // This makes statements searchable/copyable and improves assistive-tool text extraction.
+            try(PDPageContentStream textStream=new PDPageContentStream(document,pdfPage,
+                PDPageContentStream.AppendMode.APPEND,true,true)) {
+              textStream.setRenderingMode(RenderingMode.NEITHER);
+              for(TextRun run:textRuns) {
+                if(run.pageIndex()!=pageIndex)continue;
+                String text=pdfSafeText(run.text(),searchableFont);
+                if(text.isEmpty())continue;
+                textStream.beginText();
+                textStream.setFont(searchableFont,Math.max(3f,run.size()*scale));
+                textStream.newLineAtOffset(run.x()*scale,pdfPage.getMediaBox().getHeight()-run.baselineY()*scale);
+                textStream.showText(text);
+                textStream.endText();
+              }
+            }
           } finally {
             image.flush();
           }
+          pageIndex++;
         }
         document.save(output);
         return new RenderedStatement(output.toByteArray(),pages.size());
@@ -333,6 +365,36 @@ public class PayoutSettlementPdfRenderer {
         }
       };
     }
+  }
+
+  private static PDType0Font loadSearchableFont(PDDocument document) throws IOException {
+    List<Path> candidates=List.of(
+        Path.of("/usr/share/fonts/truetype/noto/NotoSansDevanagari-Regular.ttf"),
+        Path.of("/usr/share/fonts/truetype/noto/NotoSans-Regular.ttf"),
+        Path.of("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"));
+    for(Path candidate:candidates) {
+      if(Files.isRegularFile(candidate)) {
+        try(InputStream input=Files.newInputStream(candidate)) {
+          return PDType0Font.load(document,input);
+        }
+      }
+    }
+    throw new IOException("A Unicode font is required to create searchable settlement statements.");
+  }
+  private static String pdfSafeText(String value,PDType0Font font) {
+    StringBuilder safe=new StringBuilder();
+    for(int offset=0;offset<value.length();) {
+      int cp=value.codePointAt(offset);
+      String glyph=new String(Character.toChars(cp));
+      try {
+        font.encode(glyph);
+        safe.append(glyph);
+      } catch(IOException|IllegalArgumentException unsupportedGlyph) {
+        // The visual layer remains intact; omit only an unencodable glyph from the searchable layer.
+      }
+      offset+=Character.charCount(cp);
+    }
+    return safe.toString();
   }
 
   private record Metric(String label,String value) {}
