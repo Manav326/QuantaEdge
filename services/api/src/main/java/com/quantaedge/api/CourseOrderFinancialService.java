@@ -857,17 +857,25 @@ public class CourseOrderFinancialService {
       long amount=Math.abs(delta);
       String eventType=debit?"PROCESSING_FEE_DEDUCTED":"PROCESSING_FEE_CREDITED";
       String key="course-order:"+orderId+":fee-adjustment:"+adjustmentId+":allocation:"+number(allocation.get("id"))+":"+(debit?"debit":"credit");
+      Map<String,Object> eventDetails=new LinkedHashMap<>();
+      eventDetails.put("coursePaymentOrderId",orderId);
+      eventDetails.put("feeAdjustmentId",adjustmentId);
+      eventDetails.put("processingFeePaise",processingFeePaise);
+      eventDetails.put("feeTaxPaise",feeTaxPaise);
+      eventDetails.put("previousDeductionPaise",currentDeduction);
+      eventDetails.put("correctedDeductionPaise",targetDeduction);
+      eventDetails.put("amountPaise",amount);
+      eventDetails.put("direction",debit?"DEBIT":"CREDIT");
+      eventDetails.put("reason",string(adjustment.get("reason")));
+      eventDetails.put("settlementReference",string(adjustment.get("settlement_reference")));
+      eventDetails.put("sourceType",string(adjustment.get("source_type")));
+      eventDetails.put("platformBorneOveragePaise",platformBorneOveragePaise);
       jdbc.update("""
         insert into revenue_share_allocation_event(
           allocation_id,event_type,amount_paise,currency,idempotency_key,actor_staff_id,details
         ) values(?,?,?,?,?,?,?::jsonb) on conflict(idempotency_key) do nothing
         """,number(allocation.get("id")),eventType,amount,string(allocation.get("currency")),key,actorStaffId,
-          json(Map.of("coursePaymentOrderId",orderId,"feeAdjustmentId",adjustmentId,
-            "processingFeePaise",processingFeePaise,"feeTaxPaise",feeTaxPaise,
-            "previousDeductionPaise",currentDeduction,"correctedDeductionPaise",targetDeduction,
-            "amountPaise",amount,"direction",debit?"DEBIT":"CREDIT",
-            "reason",string(adjustment.get("reason")),"settlementReference",string(adjustment.get("settlement_reference")),
-            "sourceType",string(adjustment.get("source_type")),"platformBorneOveragePaise",platformBorneOveragePaise)));
+          json(eventDetails));
       adjustedAllocations++;
       beneficiaryDeductionDelta=Math.addExact(beneficiaryDeductionDelta,delta);
     }
