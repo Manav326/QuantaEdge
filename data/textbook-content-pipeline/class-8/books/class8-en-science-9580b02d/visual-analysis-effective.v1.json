@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0ee7f83dbddc521ed08cd8f757c063f3c8d39cdc16dd463fa4a646feb21d121a",
+  "raw_analysis_sha256": "03b17b3811eac6bbef15b2df6ef593508f51216a91e2bff13e04e0434839e035",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40474310784",
-      "checkpointed_at": "2026-10-27T09:42:49Z",
+      "checkpointed_at": "2026-10-27T09:52:13Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40474310784",
-      "checkpointed_at": "2026-10-27T09:43:33Z",
+      "checkpointed_at": "2026-10-27T09:52:57Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57861,7 +57861,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40474310784",
-      "checkpointed_at": "2026-10-27T09:44:27Z",
+      "checkpointed_at": "2026-10-27T09:53:50Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -65368,21 +65368,71 @@
     {
       "asset_id": "1851a22784c9105601dfe039",
       "asset_sha256": "00bb00797e96f793c322428cce739653303fd136a386d64fd912eaaeda159c5b",
-      "page_text_context_sha256": "f6aa5ef1687b0f686accb8b7d47e4aae62249fc3a024613b31f9b4b79cfe6f9b",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 106,
       "asset_path": "page-0106.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "f6aa5ef1687b0f686accb8b7d47e4aae62249fc3a024613b31f9b4b79cfe6f9b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40466785838",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing how to lift a paper plate with a stick, and how the effort needed to lift it changes with the amount of chart paper used.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "the folded chart paper sheet—big enough for the\nstick to come out. Place the folded sheet on top\nof the inverted paper plate as shown in Fig. 6.9b.\n\n• Now, try to lift the paper plate covered with a\nfolded sheet using the stick.\n\n• Observe how much effort is needed to lift it.\n\n• Now, place the seco",
+          "Fig. 6.9: (b) Inverted paper plate\nwith two folds of chart paper",
+          "Fig. 6.9: (c) Inverted paper plate\nwith unfolded chart paper",
+          "You would have observed that more effort is\nneeded to lift the paper plate when it is covered with\nthe unfolded chart paper, than with the folded chart\npaper. When we cover the paper plate with unfolded\nchart paper, the area of the covering sheet increases.\nThe effort needed to lift the paper plate "
+        ],
+        "concepts": [
+          "lifting effort",
+          "chart paper",
+          "paper plate",
+          "atmospheric pressure",
+          "force",
+          "pressure",
+          "area",
+          "balloon",
+          "inflation"
+        ],
+        "context_relation": "The image is a diagram showing how to lift a paper plate with a stick, and how the effort needed to lift it changes with the amount of chart paper used.",
+        "limitations": [
+          "The image does not provide specific instructions or steps for lifting the paper plate."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40474310784",
+      "checkpointed_at": "2026-10-27T09:58:32Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing how to lift a paper plate with a stick, and how the effort needed to lift it changes with the amount of chart paper used.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "the folded chart paper sheet—big enough for the\nstick to come out. Place the folded sheet on top\nof the inverted paper plate as shown in Fig. 6.9b.\n\n• Now, try to lift the paper plate covered with a\nfolded sheet using the stick.\n\n• Observe how much effort is needed to lift it.\n\n• Now, place the seco",
+          "Fig. 6.9: (b) Inverted paper plate\nwith two folds of chart paper",
+          "Fig. 6.9: (c) Inverted paper plate\nwith unfolded chart paper",
+          "You would have observed that more effort is\nneeded to lift the paper plate when it is covered with\nthe unfolded chart paper, than with the folded chart\npaper. When we cover the paper plate with unfolded\nchart paper, the area of the covering sheet increases.\nThe effort needed to lift the paper plate "
+        ],
+        "concepts": [
+          "lifting effort",
+          "chart paper",
+          "paper plate",
+          "atmospheric pressure",
+          "force",
+          "pressure",
+          "area",
+          "balloon",
+          "inflation"
+        ],
+        "context_relation": "The image is a diagram showing how to lift a paper plate with a stick, and how the effort needed to lift it changes with the amount of chart paper used.",
+        "limitations": [
+          "The image does not provide specific instructions or steps for lifting the paper plate."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -65666,7 +65716,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
+        "visual_summary": "A diagram of a rubber sucker being pressed against a surface, with instructions on how to perform an activity related to atmospheric pressure.",
         "visual_type": "diagram",
         "visible_text": [
           "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
@@ -65691,27 +65741,21 @@
           "millibar",
           "hectopascal",
           "wind formation",
-          "pressure difference",
-          "atmospheric force",
-          "air movement",
-          "fluids and gases in tissues and organs",
-          "atmospheric pressure balance",
-          "wind strength",
-          "wind damage"
+          "inflated balloon",
+          "puncture in the bicycle tube"
         ],
-        "context_relation": "educational",
+        "context_relation": "The image is a diagram illustrating an activity related to atmospheric pressure using a rubber sucker.",
         "limitations": [
-          "The image does not show the actual experiment with the rubber sucker.",
-          "The image does not show the actual measurement of atmospheric pressure."
+          "The image does not provide specific measurements or calculations related to atmospheric pressure."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40466785838",
-      "checkpointed_at": "2026-10-27T08:30:07Z",
+      "run_id": "40474310784",
+      "checkpointed_at": "2026-10-27T10:03:11Z",
       "effective_analysis": {
-        "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
+        "visual_summary": "A diagram of a rubber sucker being pressed against a surface, with instructions on how to perform an activity related to atmospheric pressure.",
         "visual_type": "diagram",
         "visible_text": [
           "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
@@ -65736,18 +65780,12 @@
           "millibar",
           "hectopascal",
           "wind formation",
-          "pressure difference",
-          "atmospheric force",
-          "air movement",
-          "fluids and gases in tissues and organs",
-          "atmospheric pressure balance",
-          "wind strength",
-          "wind damage"
+          "inflated balloon",
+          "puncture in the bicycle tube"
         ],
-        "context_relation": "educational",
+        "context_relation": "The image is a diagram illustrating an activity related to atmospheric pressure using a rubber sucker.",
         "limitations": [
-          "The image does not show the actual experiment with the rubber sucker.",
-          "The image does not show the actual measurement of atmospheric pressure."
+          "The image does not provide specific measurements or calculations related to atmospheric pressure."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
