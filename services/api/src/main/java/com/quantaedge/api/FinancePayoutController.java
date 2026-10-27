@@ -1235,6 +1235,16 @@ public class FinancePayoutController {
       """,batchId,recipientPayoutId,recipientPayoutId);
     Map<String,Object> batchSnapshot=new LinkedHashMap<>(batch);
     batchSnapshot.remove("payouts");
+    Map<String,Object> fundingContext=one("""
+      select collection.collection_arrangement_status,collection.collection_arrangement_verified_at,
+        collectionEntity.legal_name as payment_collection_legal_name,
+        fundingEntity.legal_name as razorpayx_funding_legal_name
+      from billing_finance_payout_settings collection
+      left join billing_legal_entity collectionEntity on collectionEntity.id=collection.payment_collection_legal_entity_id
+      left join billing_legal_entity fundingEntity on fundingEntity.id=collection.razorpayx_funding_legal_entity_id
+      where collection.id=1
+      """);
+    batchSnapshot.putAll(fundingContext);
     final Long selectedPayoutFilter=recipientPayoutId;
     List<Map<String,Object>> selectedAllocations=selectedPayoutFilter==null?allocations
         :allocations.stream().filter(row->number(row.get("payout_id"))==selectedPayoutFilter.longValue()).toList();
