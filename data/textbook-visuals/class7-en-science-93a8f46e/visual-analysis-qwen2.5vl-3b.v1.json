@@ -14,12 +14,12 @@
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "c973477a8cf682ca3f4db4ca",
-      "29c388b0161ccfef7bc70795"
+      "0d1c88ea0154d314c4c70259",
+      "bc404714050e87c89d5907f3"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2445,
-    "assets_remaining": 5043,
+    "assets_analyzed": 2446,
+    "assets_remaining": 5042,
     "assets_completion_percent": 32.7,
     "assets_failed": 21,
     "assets_skipped_from_checkpoint": 2445,
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40579491228",
-      "checkpointed_at": "2026-10-27T21:30:09Z"
+      "checkpointed_at": "2026-10-27T21:34:19Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40579491228",
-      "checkpointed_at": "2026-10-27T21:30:37Z"
+      "checkpointed_at": "2026-10-27T21:34:46Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40579491228",
-      "checkpointed_at": "2026-10-27T21:31:12Z"
+      "checkpointed_at": "2026-10-27T21:35:22Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -90502,7 +90502,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40559863508",
+      "run_id": "40579491228",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -92346,6 +92346,44 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40559863508",
       "checkpointed_at": "2026-10-27T20:33:27Z"
+    },
+    {
+      "asset_id": "bc404714050e87c89d5907f3",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 75,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5f2e159e7cd25798d652993e38ece1b8fbc177eb5667babc67ce14051faedc36",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A multiple-choice question about the use of metals in food packaging.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal use in food packaging",
+          "cost-effectiveness",
+          "flexibility of metal sheets"
+        ],
+        "context_relation": "The question is related to the content of the textbook, specifically the section on metals and their uses.",
+        "limitations": [
+          "The image does not provide any additional context or visual information beyond the question and answer options."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40579491228",
+      "checkpointed_at": "2026-10-27T21:37:26Z"
     }
   ]
 }

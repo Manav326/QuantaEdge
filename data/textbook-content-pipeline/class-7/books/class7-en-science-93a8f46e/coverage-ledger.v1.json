@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2469,
-    "successful_visual_analyses": 2448,
-    "missing_visual_analyses": 5019,
+    "raw_analysis_result_rows": 2470,
+    "successful_visual_analyses": 2449,
+    "missing_visual_analyses": 5018,
     "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5040,
+    "unresolved_count": 5039,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -101801,9 +101801,28 @@
       "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A multiple-choice question about the use of metals in food packaging.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal use in food packaging",
+          "cost-effectiveness",
+          "flexibility of metal sheets"
+        ],
+        "context_relation": "The question is related to the content of the textbook, specifically the section on metals and their uses.",
+        "limitations": [
+          "The image does not provide any additional context or visual information beyond the question and answer options."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7287c085d1af0f602edd2e42c226556bb1670022617249d39fa19bd2b315ddc8",
+  "raw_analysis_sha256": "e6ab31ad2800e0f47d7f2adf5b6e57e739c266d35e5af6dc65bfc2b316f5bf73",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40579491228",
-      "checkpointed_at": "2026-10-27T21:30:09Z",
+      "checkpointed_at": "2026-10-27T21:34:19Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40579491228",
-      "checkpointed_at": "2026-10-27T21:30:37Z",
+      "checkpointed_at": "2026-10-27T21:34:46Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40579491228",
-      "checkpointed_at": "2026-10-27T21:31:12Z",
+      "checkpointed_at": "2026-10-27T21:35:22Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -142284,7 +142284,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40559863508",
+      "run_id": "40579491228",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -145182,6 +145182,66 @@
         "context_relation": "The question is about the use of metals in food packaging, specifically focusing on aluminium, which is commonly used due to its properties.",
         "limitations": [
           "The question does not provide a specific context or question number."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bc404714050e87c89d5907f3",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 75,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5f2e159e7cd25798d652993e38ece1b8fbc177eb5667babc67ce14051faedc36",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A multiple-choice question about the use of metals in food packaging.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal use in food packaging",
+          "cost-effectiveness",
+          "flexibility of metal sheets"
+        ],
+        "context_relation": "The question is related to the content of the textbook, specifically the section on metals and their uses.",
+        "limitations": [
+          "The image does not provide any additional context or visual information beyond the question and answer options."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40579491228",
+      "checkpointed_at": "2026-10-27T21:37:26Z",
+      "effective_analysis": {
+        "visual_summary": "A multiple-choice question about the use of metals in food packaging.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal use in food packaging",
+          "cost-effectiveness",
+          "flexibility of metal sheets"
+        ],
+        "context_relation": "The question is related to the content of the textbook, specifically the section on metals and their uses.",
+        "limitations": [
+          "The image does not provide any additional context or visual information beyond the question and answer options."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
