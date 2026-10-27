@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1322,
-    "successful_visual_analyses": 1310,
-    "missing_visual_analyses": 969,
+    "raw_analysis_result_rows": 1324,
+    "successful_visual_analyses": 1312,
+    "missing_visual_analyses": 967,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 981,
+    "unresolved_count": 979,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -49508,9 +49508,22 @@
       "asset_path": "assets/5ad36971c9cf2b64bc35211fe09e0a6a9f577378b4e694c987bfd5117a52690b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person struggling to climb a staircase.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "climbing",
+          "staircase",
+          "struggling"
+        ],
+        "context_relation": "The image is related to the activity of climbing stairs, which is part of the educational content about pressure and winds.",
+        "limitations": [
+          "The image does not provide specific details about the activity or the educational content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -49526,9 +49539,33 @@
       "asset_path": "assets/54a3d363a05f21c70b860daea1d0828d4ff169b75b4a484dd8a6f0e59afc284e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rubber sucker adhering to a smooth surface.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "87",
+          "Have you ever wondered how large the atmospheric pressure is?",
+          "Let us get an idea about its magnitude by performing the following activity.",
+          "Activity 6.4: Let us perform",
+          "z Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
+          "z Do you realise that it sticks to the surface?",
+          "Fig. 6.11: A sucker",
+          "z Now, try to pull it off. Do you find it difficult to pull it off?"
+        ],
+        "concepts": [
+          "atmospheric pressure",
+          "rubber sucker",
+          "smooth surface"
+        ],
+        "context_relation": "The image is related to the activity described in the text.",
+        "limitations": [
+          "The image does not show the actual activity being performed.",
+          "The image does not show the difficulty in pulling the sucker off."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

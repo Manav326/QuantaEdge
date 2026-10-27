@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1311,
+    "assets_selected": 1312,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "bc8b9f38957bc25bef9fdfd8",
-      "1851a22784c9105601dfe039"
+      "46c9d5f38c6da536fdee0c3d",
+      "e8b8ed1e8f169d6be77da9c1"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1307,
-    "assets_remaining": 984,
-    "assets_completion_percent": 57.0,
+    "assets_analyzed": 1309,
+    "assets_remaining": 982,
+    "assets_completion_percent": 57.1,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 1306,
+    "assets_skipped_from_checkpoint": 1307,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1229,7 +1229,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413175682",
-      "checkpointed_at": "2026-10-27T00:14:15Z"
+      "checkpointed_at": "2026-10-27T00:22:46Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20171,7 +20171,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413175682",
-      "checkpointed_at": "2026-10-27T00:15:08Z"
+      "checkpointed_at": "2026-10-27T00:23:39Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38449,7 +38449,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413175682",
-      "checkpointed_at": "2026-10-27T00:16:07Z"
+      "checkpointed_at": "2026-10-27T00:24:38Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43281,6 +43281,81 @@
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "46c9d5f38c6da536fdee0c3d",
+      "asset_sha256": "5ad36971c9cf2b64bc35211fe09e0a6a9f577378b4e694c987bfd5117a52690b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 107,
+      "asset_path": "assets/5ad36971c9cf2b64bc35211fe09e0a6a9f577378b4e694c987bfd5117a52690b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c837b29b08feb77ea963de909a5c33550b2e7ee7d30222c8fc6f62c5142c08d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person struggling to climb a staircase.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "climbing",
+          "staircase",
+          "struggling"
+        ],
+        "context_relation": "The image is related to the activity of climbing stairs, which is part of the educational content about pressure and winds.",
+        "limitations": [
+          "The image does not provide specific details about the activity or the educational content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-27T00:25:40Z"
+    },
+    {
+      "asset_id": "e8b8ed1e8f169d6be77da9c1",
+      "asset_sha256": "54a3d363a05f21c70b860daea1d0828d4ff169b75b4a484dd8a6f0e59afc284e",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 107,
+      "asset_path": "assets/54a3d363a05f21c70b860daea1d0828d4ff169b75b4a484dd8a6f0e59afc284e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c837b29b08feb77ea963de909a5c33550b2e7ee7d30222c8fc6f62c5142c08d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rubber sucker adhering to a smooth surface.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "87",
+          "Have you ever wondered how large the atmospheric pressure is?",
+          "Let us get an idea about its magnitude by performing the following activity.",
+          "Activity 6.4: Let us perform",
+          "z Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
+          "z Do you realise that it sticks to the surface?",
+          "Fig. 6.11: A sucker",
+          "z Now, try to pull it off. Do you find it difficult to pull it off?"
+        ],
+        "concepts": [
+          "atmospheric pressure",
+          "rubber sucker",
+          "smooth surface"
+        ],
+        "context_relation": "The image is related to the activity described in the text.",
+        "limitations": [
+          "The image does not show the actual activity being performed.",
+          "The image does not show the difficulty in pulling the sucker off."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-27T00:27:01Z"
     }
   ]
 }
