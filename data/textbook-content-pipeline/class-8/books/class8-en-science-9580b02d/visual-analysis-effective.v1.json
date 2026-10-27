@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "bfc30698ad3b25e2fbcfb6ee51269d49b33d0c8137a210eac04433457f3039e1",
+  "raw_analysis_sha256": "a2cd1a6c6eeb887e05433f4327d6825bac6d7a2d8a3c56b63796e8cbdc52d04f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441272121",
-      "checkpointed_at": "2026-10-27T05:32:07Z",
+      "checkpointed_at": "2026-10-27T05:35:09Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441272121",
-      "checkpointed_at": "2026-10-27T05:32:33Z",
+      "checkpointed_at": "2026-10-27T05:35:34Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441272121",
-      "checkpointed_at": "2026-10-27T05:33:02Z",
+      "checkpointed_at": "2026-10-27T05:36:04Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -65709,7 +65709,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441272121",
-      "checkpointed_at": "2026-10-27T05:33:45Z",
+      "checkpointed_at": "2026-10-27T05:36:47Z",
       "effective_analysis": {
         "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
@@ -66166,6 +66166,56 @@
         "context_relation": "The image is related to the educational content about pressure differences and their effects on wind patterns, specifically land breeze and sea breeze.",
         "limitations": [
           "The image does not provide specific details about the pressure differences or the wind patterns."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b2dd11cdd9bcd79eeec72edc",
+      "asset_sha256": "0df2608c360838e793c688747fb2ce81b3f66fc8b8ce6d16cd6404ad9b5705a1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/0df2608c360838e793c688747fb2ce81b3f66fc8b8ce6d16cd6404ad9b5705a1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "074b5d86b43b2bf51ba58ce13721abba85145a2647097a19f4233e38b436919e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a person thinking with one hand on the chin.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "thinking",
+          "person",
+          "hand",
+          "chin"
+        ],
+        "context_relation": "The image is a static illustration used to represent the concept of thinking or contemplation.",
+        "limitations": [
+          "The image does not provide any specific information about the context or the question it is related to."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40441272121",
+      "checkpointed_at": "2026-10-27T05:37:27Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a person thinking with one hand on the chin.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "thinking",
+          "person",
+          "hand",
+          "chin"
+        ],
+        "context_relation": "The image is a static illustration used to represent the concept of thinking or contemplation.",
+        "limitations": [
+          "The image does not provide any specific information about the context or the question it is related to."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

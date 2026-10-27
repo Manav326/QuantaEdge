@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1323,
+    "assets_selected": 1324,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "51a75caa0e20a5faf15c701f"
+      "b2dd11cdd9bcd79eeec72edc"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1319,
-    "assets_remaining": 972,
+    "assets_analyzed": 1320,
+    "assets_remaining": 971,
     "assets_completion_percent": 57.6,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 1318,
+    "assets_skipped_from_checkpoint": 1319,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441272121",
-      "checkpointed_at": "2026-10-27T05:32:07Z"
+      "checkpointed_at": "2026-10-27T05:35:09Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441272121",
-      "checkpointed_at": "2026-10-27T05:32:33Z"
+      "checkpointed_at": "2026-10-27T05:35:34Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441272121",
-      "checkpointed_at": "2026-10-27T05:33:02Z"
+      "checkpointed_at": "2026-10-27T05:36:04Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441272121",
-      "checkpointed_at": "2026-10-27T05:33:45Z"
+      "checkpointed_at": "2026-10-27T05:36:47Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -43775,6 +43775,39 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441272121",
       "checkpointed_at": "2026-10-27T05:34:25Z"
+    },
+    {
+      "asset_id": "b2dd11cdd9bcd79eeec72edc",
+      "asset_sha256": "0df2608c360838e793c688747fb2ce81b3f66fc8b8ce6d16cd6404ad9b5705a1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 109,
+      "asset_path": "assets/0df2608c360838e793c688747fb2ce81b3f66fc8b8ce6d16cd6404ad9b5705a1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "074b5d86b43b2bf51ba58ce13721abba85145a2647097a19f4233e38b436919e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a person thinking with one hand on the chin.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "thinking",
+          "person",
+          "hand",
+          "chin"
+        ],
+        "context_relation": "The image is a static illustration used to represent the concept of thinking or contemplation.",
+        "limitations": [
+          "The image does not provide any specific information about the context or the question it is related to."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40441272121",
+      "checkpointed_at": "2026-10-27T05:37:27Z"
     }
   ]
 }

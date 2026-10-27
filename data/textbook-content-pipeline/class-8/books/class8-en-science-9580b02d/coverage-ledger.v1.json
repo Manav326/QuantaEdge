@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1335,
-    "successful_visual_analyses": 1323,
-    "missing_visual_analyses": 956,
+    "raw_analysis_result_rows": 1336,
+    "successful_visual_analyses": 1324,
+    "missing_visual_analyses": 955,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 968,
+    "unresolved_count": 967,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -49989,9 +49989,23 @@
       "asset_path": "assets/0df2608c360838e793c688747fb2ce81b3f66fc8b8ce6d16cd6404ad9b5705a1.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a person thinking with one hand on the chin.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "thinking",
+          "person",
+          "hand",
+          "chin"
+        ],
+        "context_relation": "The image is a static illustration used to represent the concept of thinking or contemplation.",
+        "limitations": [
+          "The image does not provide any specific information about the context or the question it is related to."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
