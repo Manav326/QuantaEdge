@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1329,
-    "successful_visual_analyses": 1317,
-    "missing_visual_analyses": 962,
+    "raw_analysis_result_rows": 1330,
+    "successful_visual_analyses": 1318,
+    "missing_visual_analyses": 961,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 974,
+    "unresolved_count": 973,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -49777,9 +49777,25 @@
       "asset_path": "assets/65cbb859a87e05114cca6c903a2103db97da042d0f77fb68ea7510df8fe27399.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two balloons connected by a straw, one blue and one yellow.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Take two similar balloons made of thin rubber, and a drinking straw.",
+          "Insert one end of the straw into one balloon and secure it with a rubber band or thread."
+        ],
+        "concepts": [
+          "balloons",
+          "straw",
+          "rubber band or thread"
+        ],
+        "context_relation": "The image is related to the activity described in the text.",
+        "limitations": [
+          "The image does not show the balloons being inflated or the straw being inserted."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1317,
+    "assets_selected": 1318,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "aa215e35a25f62ce603962c2"
+      "6ee841838123e6b9916ba551"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1313,
-    "assets_remaining": 978,
-    "assets_completion_percent": 57.3,
+    "assets_analyzed": 1314,
+    "assets_remaining": 977,
+    "assets_completion_percent": 57.4,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 1312,
+    "assets_skipped_from_checkpoint": 1313,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441174014",
-      "checkpointed_at": "2026-10-27T04:07:28Z"
+      "checkpointed_at": "2026-10-27T04:11:50Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441174014",
-      "checkpointed_at": "2026-10-27T04:08:03Z"
+      "checkpointed_at": "2026-10-27T04:12:23Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441174014",
-      "checkpointed_at": "2026-10-27T04:08:43Z"
+      "checkpointed_at": "2026-10-27T04:13:03Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441174014",
-      "checkpointed_at": "2026-10-27T04:09:44Z"
+      "checkpointed_at": "2026-10-27T04:14:01Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -43557,6 +43557,41 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441174014",
       "checkpointed_at": "2026-10-27T04:10:51Z"
+    },
+    {
+      "asset_id": "6ee841838123e6b9916ba551",
+      "asset_sha256": "65cbb859a87e05114cca6c903a2103db97da042d0f77fb68ea7510df8fe27399",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 108,
+      "asset_path": "assets/65cbb859a87e05114cca6c903a2103db97da042d0f77fb68ea7510df8fe27399.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "269d7d45dc9bb3da49e150dcbf8cc1bd29f86ab0950e516e695694e3d730938f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two balloons connected by a straw, one blue and one yellow.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Take two similar balloons made of thin rubber, and a drinking straw.",
+          "Insert one end of the straw into one balloon and secure it with a rubber band or thread."
+        ],
+        "concepts": [
+          "balloons",
+          "straw",
+          "rubber band or thread"
+        ],
+        "context_relation": "The image is related to the activity described in the text.",
+        "limitations": [
+          "The image does not show the balloons being inflated or the straw being inserted."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40441174014",
+      "checkpointed_at": "2026-10-27T04:15:12Z"
     }
   ]
 }
