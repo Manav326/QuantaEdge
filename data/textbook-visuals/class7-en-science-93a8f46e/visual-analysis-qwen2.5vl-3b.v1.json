@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2457,
+    "assets_selected": 2458,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "0d1c88ea0154d314c4c70259",
-      "692865a8344c485e04bb0f7b"
+      "95fa98436967925e1d716c78",
+      "c47b4bd9e212a1832f18e15f"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2453,
-    "assets_remaining": 5035,
+    "assets_analyzed": 2455,
+    "assets_remaining": 5033,
     "assets_completion_percent": 32.8,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 2452,
+    "assets_skipped_from_checkpoint": 2453,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40589862068",
-      "checkpointed_at": "2026-10-27T22:48:23Z"
+      "checkpointed_at": "2026-10-27T22:52:45Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40589862068",
-      "checkpointed_at": "2026-10-27T22:48:55Z"
+      "checkpointed_at": "2026-10-27T22:53:17Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40589862068",
-      "checkpointed_at": "2026-10-27T22:49:35Z"
+      "checkpointed_at": "2026-10-27T22:53:58Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -92645,6 +92645,58 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40589862068",
       "checkpointed_at": "2026-10-27T22:51:56Z"
+    },
+    {
+      "asset_id": "95fa98436967925e1d716c78",
+      "asset_sha256": "cd72410e92a12089f30b2cc8d04baf61ffc685a6de1d8e8762924b1f8d71d482",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 75,
+      "asset_path": "assets/cd72410e92a12089f30b2cc8d04baf61ffc685a6de1d8e8762924b1f8d71d482.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5f2e159e7cd25798d652993e38ece1b8fbc177eb5667babc67ce14051faedc36",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a coiled rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40589862068",
+      "checkpointed_at": "2026-10-27T22:54:36Z"
+    },
+    {
+      "asset_id": "c47b4bd9e212a1832f18e15f",
+      "asset_sha256": "cd72410e92a12089f30b2cc8d04baf61ffc685a6de1d8e8762924b1f8d71d482",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 75,
+      "asset_path": "assets/cd72410e92a12089f30b2cc8d04baf61ffc685a6de1d8e8762924b1f8d71d482.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5f2e159e7cd25798d652993e38ece1b8fbc177eb5667babc67ce14051faedc36",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a coiled rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40589862068",
+      "checkpointed_at": "2026-10-27T22:54:39Z"
     }
   ]
 }
