@@ -1086,6 +1086,7 @@ def database_repair_draft_hindi(args: argparse.Namespace, papers: list[dict[str,
                         and target_hindi.strip()
                     )
                     changed = False
+                    has_option_ocr = False
                     if has_prompt_ocr:
                         candidate_count += 1
                         prompts = current.get("prompt_i18n")
@@ -1141,6 +1142,7 @@ def database_repair_draft_hindi(args: argparse.Namespace, papers: list[dict[str,
                                 f"{cycle} question {source_number} OCR option {option_key} has no Unicode Hindi text."
                             )
                         candidate_count += 1
+                        has_option_ocr = True
                         option_i18n = current_option.get("text_i18n")
                         if not isinstance(option_i18n, dict):
                             option_i18n = {}
@@ -1154,12 +1156,7 @@ def database_repair_draft_hindi(args: argparse.Namespace, papers: list[dict[str,
                             changed = True
                             reconstructed_option_count += 1
 
-                    if candidate_count == 0 or not (has_prompt_ocr or any(
-                        isinstance(option, dict)
-                        and isinstance(option.get("hindi_ocr_reconstruction"), dict)
-                        and option["hindi_ocr_reconstruction"].get("method") == "TESSERACT_HINDI_OCR"
-                        for option in incoming_options
-                    )):
+                    if not (has_prompt_ocr or has_option_ocr):
                         skipped_count += 1
                     if changed:
                         updates.append((int(question_id), current))
@@ -1182,7 +1179,7 @@ def database_repair_draft_hindi(args: argparse.Namespace, papers: list[dict[str,
 
             if total_candidates == 0:
                 raise ImportErrorSafe(
-                    "The current inventory contains no successful SHREE-DEV Hindi OCR reconstructions. "
+                    "The current inventory contains no successful SHREE-DEV Hindi prompt or option OCR reconstructions. "
                     "Install Tesseract with Hindi trained data and regenerate the inventory before applying repair."
                 )
 
