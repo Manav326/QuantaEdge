@@ -445,7 +445,12 @@ class Tre4ImporterTests(unittest.TestCase):
                     "prompt_ocr_text": "तीन अंकों की कितनी संख्याएँ 5 से विभाज्य हैं?",
                     "prompt_ocr_status": "OCR_SHREEDEV_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW",
                     "prompt_i18n": "तीन अंकों की कितनी संख्याएँ 5 से विभाज्य हैं?",
-                    "options": [{"key": "A", "raw_text": "180", "text_i18n": "180", "content_kind": "PROSE"}],
+                    "options": [{
+                        "key": "A", "raw_text": "एक सौ अस्सी legacy", "text_i18n": "एक सौ अस्सी",
+                        "ocr_text_i18n": "एक सौ अस्सी",
+                        "ocr_status": "OCR_SHREEDEV_OPTION_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW",
+                        "content_kind": "PROSE"
+                    }],
                 },
             },
             "source_locations": {"hi": {"pdf_page": 3, "column": "left", "top_y": 155.74}},
@@ -461,6 +466,9 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertEqual(snapshot["hindi_prompt_reconstruction"]["status"], "REQUIRES_HUMAN_REVIEW")
         self.assertEqual(snapshot["hindi_prompt_reconstruction"]["raw_legacy_text"], "VrZ AßH$moß H$s {H$VZr")
         self.assertEqual(snapshot["hindi_prompt_reconstruction"]["source_location"]["pdf_page"], 3)
+        self.assertEqual(snapshot["options"][0]["text_i18n"]["hi"], "एक सौ अस्सी")
+        self.assertEqual(snapshot["options"][0]["hindi_ocr_reconstruction"]["status"], "REQUIRES_HUMAN_REVIEW")
+        self.assertEqual(snapshot["options"][0]["hindi_ocr_reconstruction"]["raw_legacy_text"], "एक सौ अस्सी legacy")
         self.assertEqual(snapshot["question_review_status"], "PENDING_HUMAN_REVIEW")
         self.assertEqual(snapshot["answer_review_status"], "PENDING_HUMAN_REVIEW")
         self.assertEqual(snapshot["answer_payload"], {"kind": "UNRESOLVED", "value": None})
