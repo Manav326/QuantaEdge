@@ -862,13 +862,22 @@ public class FinancePayoutController {
     List<Map<String,Object>> rows=jdbc.queryForList("""
       with recipients as (
         select 'INSTITUTION'::varchar as recipient_type,t.id as institution_id,
-          null::bigint as legal_entity_id,t.display_name as recipient_name
+          null::bigint as legal_entity_id,t.display_name as recipient_name,t.status as recipient_status
         from institution_tenant t where t.status='ACTIVE'
-        union all
+        union
         select 'COMPANY'::varchar as recipient_type,null::bigint as institution_id,
-          le.id as legal_entity_id,le.legal_name as recipient_name
+          le.id as legal_entity_id,le.legal_name as recipient_name,le.status as recipient_status
         from billing_legal_entity le
         where le.status='ACTIVE' and le.entity_kind in ('PLATFORM','COMPANY')
+        union
+        -- Keep historic liabilities visible even after a recipient is suspended or deactivated.
+        select a.recipient_type,a.institution_id,a.legal_entity_id,
+          coalesce(t.display_name,le.legal_name,'Unresolved recipient') as recipient_name,
+          coalesce(t.status,le.status,'UNKNOWN') as recipient_status
+        from revenue_share_allocation a
+        left join institution_tenant t on t.id=a.institution_id
+        left join billing_legal_entity le on le.id=a.legal_entity_id
+        where a.recipient_type in ('INSTITUTION','COMPANY')
       ), ledger as (
         select a.id as allocation_id,a.course_payment_order_id,a.recipient_type,a.institution_id,a.legal_entity_id,a.currency,
           coalesce(sum(e.amount_paise) filter(where e.event_type='EARNED'),0) as earned_paise,
@@ -902,7 +911,7 @@ public class FinancePayoutController {
         group by l.recipient_type,l.institution_id,l.legal_entity_id,l.currency
       )
       select r.recipient_type,r.institution_id,r.legal_entity_id,
-        coalesce(fin.currency,'INR') as currency,r.recipient_name,
+        coalesce(fin.currency,'INR') as currency,r.recipient_name,r.recipient_status,
         coalesce(b.status,'MISSING') as beneficiary_status,b.bank_ifsc,b.bank_account_last4,
         coalesce(fin.earned_paise,0) as earned_paise,
         coalesce(fin.refunded_paise,0) as refunded_paise,
@@ -966,6 +975,9 @@ public class FinancePayoutController {
       } else if(payable<=0) {
         readinessStatus="NO_PAYABLE_BALANCE";
         readinessReason="No positive payable balance remains after refunds, payments, reservations and holdback.";
+      } else if(!"ACTIVE".equals(string(row.get("recipient_status")))) {
+        readinessStatus="BLOCKED";
+        readinessReason="The recipient entity is not active. Its historical balance remains visible, but transfers are blocked until its status is reviewed.";
       } else if(!"ACTIVE".equals(string(row.get("beneficiary_status")))) {
         readinessStatus="BLOCKED";
         readinessReason="The recipient does not have an approved active bank beneficiary.";
@@ -983,7 +995,7 @@ public class FinancePayoutController {
         readinessReason="The legal seller, collection entity and RazorpayX funding-owner arrangement is not verified.";
       } else {
         readinessStatus="READY_FOR_BATCH_REVIEW";
-        readinessReason="Ready for batch preparation; server-side batch checks and independent approval still apply.";
+        readinessReason="Existing payout controls pass for batch preparation, but this status does not assess GST TCS or income-tax TDS. Confirm sale/recipient tax treatment before approving a live transfer; server-side batch checks and independent approval still apply.";
       }
       row.put("source_sale_count",sourceSales);
       row.put("unreconciled_fee_order_count",unreconciledFeeOrders);
