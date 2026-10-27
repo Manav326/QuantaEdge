@@ -263,7 +263,8 @@ public class CourseOrderFinancialService {
     Map<String,Object> designSnapshot=parseObject(selectedTemplate.get("design_definition_json"));
 
     List<Map<String,Object>> policies=jdbc.queryForList("""
-      select id,policy_version,currency,effective_from,effective_until
+      select id,policy_version,currency,effective_from,effective_until,
+        remainder_recipient_type,remainder_institution_id,remainder_legal_entity_id
       from revenue_share_policy
       where institution_offer_id=? and status='APPROVED'
         and currency=? and effective_from<=? and (effective_until is null or effective_until>?)
@@ -276,27 +277,43 @@ public class CourseOrderFinancialService {
     Map<String,Object> policy=policies.getFirst();
     long policyId=number(policy.get("id"));
     List<Map<String,Object>> recipientRows=jdbc.queryForList("""
-      select r.id as policy_recipient_id,r.institution_id,t.display_name as institution_name,t.status as institution_status,
+      select r.id as policy_recipient_id,r.recipient_type,r.institution_id,r.legal_entity_id,
+        coalesce(t.display_name,nullif(le.trade_name,''),le.legal_name) as recipient_name,
+        case when r.recipient_type='INSTITUTION' then t.status else le.status end as recipient_status,
+        le.entity_kind as legal_entity_kind,
         r.calculation_type,r.percentage_basis_points,r.flat_amount_paise
       from revenue_share_policy_recipient r
-      join institution_tenant t on t.id=r.institution_id
-      where r.policy_id=? order by t.display_name,r.id
+      left join institution_tenant t on t.id=r.institution_id
+      left join billing_legal_entity le on le.id=r.legal_entity_id
+      where r.policy_id=? order by recipient_name,r.id
       """,policyId);
-    if(recipientRows.isEmpty()) throw new IllegalStateException("The approved revenue-share policy has no institution recipients.");
+    if(recipientRows.isEmpty()) throw new IllegalStateException("The approved revenue-share policy has no recipients. HRMS must configure at least one institution or company.");
     List<Map<String,Object>> recipientSnapshots=new ArrayList<>();
-    List<RevenueDistributionCalculator.Share> validationShares=new ArrayList<>();
+    List<RevenueDistributionCalculator.BeneficiaryShare> validationShares=new ArrayList<>();
     long percentageBasisPoints=0;
+    Map<String,Map<String,Object>> recipientByKey=new LinkedHashMap<>();
     for(Map<String,Object> recipient:recipientRows) {
-      if(!"ACTIVE".equals(string(recipient.get("institution_status"))))
-        throw new IllegalStateException("An approved share recipient is not an active institution. HRMS must update the policy.");
-      long institutionRecipientId=number(recipient.get("institution_id"));
+      String recipientType=string(recipient.get("recipient_type"));
+      long recipientId="COMPANY".equals(recipientType)
+          ?number(recipient.get("legal_entity_id")):number(recipient.get("institution_id"));
+      if(!"ACTIVE".equals(string(recipient.get("recipient_status"))))
+        throw new IllegalStateException("A revenue-share recipient is inactive. HRMS must update the policy before checkout.");
+      if("COMPANY".equals(recipientType)&&!"PLATFORM".equals(string(recipient.get("legal_entity_kind")))
+          ||(!"COMPANY".equals(recipientType)&&!"INSTITUTION".equals(recipientType)))
+        throw new IllegalStateException("The saved revenue-share beneficiary type does not match its legal entity.");
+      String key=recipientType+":"+recipientId;
+      if(recipientByKey.put(key,recipient)!=null)
+        throw new IllegalStateException("The approved policy contains a duplicate beneficiary.");
       String calculationType=string(recipient.get("calculation_type"));
       Integer bps=nullableInteger(recipient.get("percentage_basis_points"));
       Long flat=nullableLong(recipient.get("flat_amount_paise"));
       Map<String,Object> snapshot=new LinkedHashMap<>();
       snapshot.put("policyRecipientId",number(recipient.get("policy_recipient_id")));
-      snapshot.put("institutionId",institutionRecipientId);
-      snapshot.put("institutionName",string(recipient.get("institution_name")));
+      snapshot.put("recipientType",recipientType);
+      snapshot.put("recipientId",recipientId);
+      if("INSTITUTION".equals(recipientType)) snapshot.put("institutionId",recipientId);
+      else snapshot.put("legalEntityId",recipientId);
+      snapshot.put("recipientName",string(recipient.get("recipient_name")));
       snapshot.put("calculationType",calculationType);
       snapshot.put("percentageBasisPoints",bps);
       snapshot.put("flatAmountPaise",flat);
@@ -304,25 +321,29 @@ public class CourseOrderFinancialService {
       if("PERCENTAGE".equals(calculationType)) {
         if(bps==null||bps<1||bps>10_000) throw new IllegalStateException("Approved revenue-share percentage is invalid.");
         percentageBasisPoints=Math.addExact(percentageBasisPoints,bps);
-        validationShares.add(RevenueDistributionCalculator.Share.percentage(institutionRecipientId,bps));
+        validationShares.add(RevenueDistributionCalculator.BeneficiaryShare.percentage(recipientType,recipientId,bps));
       } else if("FLAT".equals(calculationType)) {
         if(flat==null||flat<=0) throw new IllegalStateException("Approved flat revenue share is invalid.");
-        validationShares.add(RevenueDistributionCalculator.Share.flat(institutionRecipientId,flat));
+        validationShares.add(RevenueDistributionCalculator.BeneficiaryShare.flat(recipientType,recipientId,flat));
       } else throw new IllegalStateException("Approved revenue-share calculation type is unsupported.");
     }
     if(percentageBasisPoints>10_000)
       throw new IllegalStateException("The approved percentage shares exceed 100% of the distributable pool.");
 
-    long pool=quote.customerPayablePaise()-quote.outputTaxPaise();
-    long estimatedAllocated=0;
-    for(RevenueDistributionCalculator.Share share:validationShares) {
-      long amount=share.calculationType()==RevenueDistributionCalculator.CalculationType.PERCENTAGE
-          ?percentageOf(pool,share.percentageBasisPoints())
-          :share.flatAmountPaise();
-      estimatedAllocated=Math.addExact(estimatedAllocated,amount);
-    }
-    if(estimatedAllocated>pool)
-      throw new IllegalStateException("The approved flat and percentage shares exceed the after-tax pool for this course price. HRMS must adjust the policy.");
+    String remainderType=string(policy.get("remainder_recipient_type"));
+    Long remainderId="INSTITUTION".equals(remainderType)?nullableLong(policy.get("remainder_institution_id"))
+        :"COMPANY".equals(remainderType)?nullableLong(policy.get("remainder_legal_entity_id")):null;
+    if(!"PLATFORM_REMAINDER".equals(remainderType)&&remainderId==null)
+      throw new IllegalStateException("The approved revenue-share policy has no valid remainder recipient.");
+    String remainderName=null;
+    if("INSTITUTION".equals(remainderType)) remainderName=institutionName(remainderId);
+    else if("COMPANY".equals(remainderType)) remainderName=string(one("select legal_name from billing_legal_entity where id=? and status='ACTIVE' and entity_kind='PLATFORM'",remainderId).get("legal_name"));
+    if("INSTITUTION".equals(remainderType)&&!exists("select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",remainderId)
+        ||"COMPANY".equals(remainderType)&&!exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind='PLATFORM')",remainderId))
+      throw new IllegalStateException("The configured remainder recipient is inactive. HRMS must update the policy.");
+    RevenueDistributionCalculator.BeneficiaryResult quoteDistribution=RevenueDistributionCalculator.calculateBeneficiaries(
+        RevenueDistributionCalculator.PaymentConfirmation.VERIFIED_CAPTURED,quote.customerPayablePaise(),
+        quote.outputTaxPaise(),0L,validationShares,"PLATFORM_REMAINDER".equals(remainderType)?null:remainderType,remainderId);
 
     Map<String,Object> taxSnapshot=new LinkedHashMap<>();
     taxSnapshot.put("snapshotVersion",1);
