@@ -367,3 +367,26 @@
   .reviewFooterNavigation,.reviewFooterActions{gap:4px}
   .reviewFooterNavigation button,.reviewFooterActions button{min-height:28px;padding:5px;font-size:9px}
 }
+
+
+/* Semantic foregrounds and surfaces for review badges in light and dark themes. */
+.reviewLanguageHeader>div>span{
+  background:var(--qe-color-primary-container,#FEF1E8);
+  color:var(--qe-color-on-primary-container,#111827);
+  border:1px solid var(--qe-review-border,#D7DEE8);
+}
+.reviewStatusPending{
+  background:var(--qe-color-warning-container,#FEF3C7);
+  color:var(--qe-color-on-warning-container,#78350F);
+  border:1px solid var(--qe-color-warning,#D97706);
+}
+.reviewStatusApproved{
+  background:var(--qe-color-success-container,#DCFCE7);
+  color:var(--qe-color-on-success-container,#14532D);
+  border:1px solid var(--qe-color-success,#166534);
+}
+.reviewStatusRejected{
+  background:var(--qe-color-error-container,#FEE2E2);
+  color:var(--qe-color-on-error-container,#7F1D1D);
+  border:1px solid var(--qe-color-error,#B42318);
+}
