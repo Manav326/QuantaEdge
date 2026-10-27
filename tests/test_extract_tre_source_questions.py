@@ -56,8 +56,8 @@ class TreSourceCodePreservationTests(unittest.TestCase):
 
     def test_shreedev_ocr_prompt_normalization_and_human_review(self):
         self.assertEqual(
-            normalize_ocr_prompt(". तीन अंकों की कितनी संख्याएँ 5 से विभाज्य\\nहैं?"),
-            "तीन अंकों की कितनी संख्याएँ 5 से विभाज्य\\nहैं?",
+            normalize_ocr_prompt(". तीन अंकों की कितनी संख्याएँ 5 से विभाज्य\nहैं?"),
+            "तीन अंकों की कितनी संख्याएँ 5 से विभाज्य\nहैं?",
         )
         self.assertEqual(normalize_ocr_prompt("(A) 180"), "")
 
