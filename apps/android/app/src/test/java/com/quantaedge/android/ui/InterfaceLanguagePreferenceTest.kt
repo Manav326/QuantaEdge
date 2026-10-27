@@ -14,6 +14,14 @@ class InterfaceLanguagePreferenceTest {
     }
 
     @Test
+    fun explicitLocalPreferenceWinsAndAccountPreferenceSeedsFirstUse() {
+        assertEquals("hi", initialInterfaceLanguage("hi", "english"))
+        assertEquals("en", initialInterfaceLanguage("english", "hinglish"))
+        assertEquals("en", initialInterfaceLanguage(null, "english"))
+        assertEquals("hi", initialInterfaceLanguage(null, "bhojpuri"))
+    }
+
+    @Test
     fun acceptsLegacyEnglishAndHindiAliasesWithoutAdvertisingNewLocales() {
         assertEquals("en", resolveInterfaceLanguage("en"))
         assertEquals("hi", resolveInterfaceLanguage("hi"))

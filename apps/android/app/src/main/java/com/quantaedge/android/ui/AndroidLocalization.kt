@@ -27,6 +27,12 @@ internal fun resolveInterfaceLanguage(preferredLocale: String): String? =
         else -> null
     }
 
+/** Explicit device choice wins; account preference seeds the UI locale only on first use. */
+internal fun initialInterfaceLanguage(localPreference: String?, accountPreference: String?): String =
+    resolveInterfaceLanguage(localPreference.orEmpty())
+        ?: resolveInterfaceLanguage(accountPreference.orEmpty())
+        ?: "hi"
+
 private data class UiPhrase(val key: String, val english: String, val hindi: String)
 private val uiPhrases = listOf(
     UiPhrase("account_deletion_child_request_blocked", "The parent account remains blocked until the child account is resolved.", "बच्चे का खाता resolve होने तक parent account blocked रहेगा।"),

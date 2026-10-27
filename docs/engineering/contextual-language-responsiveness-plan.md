@@ -25,7 +25,7 @@ Hinglish is Hindi in Devanagari with familiar English terms retained naturally. 
 ### P0 — Locale contract and preference consistency
 - [x] Register only supported UI locales and keep selectors aligned with runtime capabilities.
 - [x] Align Android's account interface-language options and save behavior with the app's active UI locale.
-- [ ] Document preference precedence and persistence for browser apps, Android, login/logout and offline startup.
+- [~] Local browser/Android UI choices win; saved account `preferredLocale` seeds first use when no local choice exists. Full logout/offline persistence acceptance remains open.
 - [ ] Verify changing UI locale never changes the learning-content or certificate locale.
 - **Accept:** selected, saved and displayed locale agree across app navigation and reload; unsupported choices cannot be saved or offered.
 
@@ -87,6 +87,7 @@ Implemented on this branch:
 - Restricted Android account interface-language choices to English and Hinglish; legacy unsupported profile values display as Hinglish instead of an unselected option.
 - Saving the account interface preference now updates Android's active UI locale and persists it in app preferences after the API accepts the change.
 - The account profile API now accepts only registered UI locale IDs (`english`, `hinglish`). Added API and Android locale-resolution regression tests.
+- Web and Android now use the saved account UI locale only when there is no valid local preference. Parent preferred learning language no longer changes the interface language.
 - Added a report-only UI copy-quality audit. It lists long messages for contextual review, validates locale key/placeholder consistency, and is attached as a CI artifact.
 - Shortened and contextualized 18 messages across learner, Admin and HRMS screens in English and Hinglish. Updated the canonical catalogs and all generated Web/Admin/People copies together.
 - Added a central-sync generator for Android locale resources. It exports only phrases with one unambiguous Hinglish equivalent; Android uses those entries before its existing fallback map.

@@ -113,10 +113,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let active = true;
     setLanguageReady(false);
+    let hasStoredLocale = false;
     try {
       const cookieLocale = localeCookieValue();
       const saved = window.localStorage.getItem(STORAGE_KEY);
       const resolved = cookieLocale ?? toLocale(saved);
+      hasStoredLocale = Boolean(resolved);
       if (resolved) {
         applyLocale(resolved, false);
         // Normalize older localStorage-only values and make the preference available
@@ -144,18 +146,38 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     window.addEventListener('storage', onStorage);
 
     const resolveLanguage = async () => {
-      if (isStudentRoute) {
-        try {
-          const response = await apiFetch('/api/v1/students/me/profile', { cache: 'no-store', credentials: 'same-origin' });
-          const profile = response.ok ? await response.json() : null;
-          if (active && profile) {
-            const savedLanguage = normalizedLanguage(profile.learningLanguage ?? profile.learning_language ?? profile.language);
-            if (savedLanguage) applyLearningLanguage(savedLanguage, true);
+      const requests: Promise<void>[] = [];
+      if (!hasStoredLocale && (isStudentRoute || isParentRoute)) {
+        requests.push((async () => {
+          try {
+            const response = await apiFetch('/api/v1/account/me/profile', { cache: 'no-store', credentials: 'same-origin' });
+            const profile = response.ok ? await response.json() : null;
+            const accountLocale = resolveUiLocale(profile?.preferredLocale ?? profile?.preferred_locale);
+            let localLocaleIsSet = false;
+            try {
+              localLocaleIsSet = Boolean(localeCookieValue() || toLocale(window.localStorage.getItem(STORAGE_KEY)));
+            } catch {}
+            if (active && accountLocale && !localLocaleIsSet) applyLocale(accountLocale, true);
+          } catch {
+            // Keep the default locale when the account preference is unavailable.
           }
-        } catch {
-          // The resolved local preference remains the offline fallback.
-        }
+        })());
       }
+      if (isStudentRoute) {
+        requests.push((async () => {
+          try {
+            const response = await apiFetch('/api/v1/students/me/profile', { cache: 'no-store', credentials: 'same-origin' });
+            const profile = response.ok ? await response.json() : null;
+            if (active && profile) {
+              const savedLanguage = normalizedLanguage(profile.learningLanguage ?? profile.learning_language ?? profile.language);
+              if (savedLanguage) applyLearningLanguage(savedLanguage, true);
+            }
+          } catch {
+            // Keep the resolved local learning language when offline or unauthenticated.
+          }
+        })());
+      }
+      await Promise.all(requests);
       if (active) setLanguageReady(true);
     };
     void resolveLanguage();
@@ -164,32 +186,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       active = false;
       window.removeEventListener('storage', onStorage);
     };
-  }, [applyLocale, applyLearningLanguage, applyCertificateLanguage, isStudentRoute]);
-
-  useEffect(() => {
-    if (!isParentRoute || isStudentRoute) return;
-    let active = true;
-    const localLocaleIsSet = () => {
-      try {
-        return Boolean(localeCookieValue() || toLocale(window.localStorage.getItem(STORAGE_KEY)));
-      } catch {
-        return false;
-      }
-    };
-    // An explicit interface-language choice on this device must not be overwritten
-    // by the parent's older profile preference during navigation or reload.
-    if (localLocaleIsSet()) return;
-    apiFetch('/api/v1/guardians/profile', { cache: 'no-store', credentials: 'same-origin' })
-      .then(response => response.ok ? response.json() : null)
-      .then(profile => {
-        if (!active || !profile || localLocaleIsSet()) return;
-        const preference = String(profile.preferred_language || '');
-        if (preference === 'English') applyLocale('english', true);
-        else if (preference === 'Hindi' || preference === 'Hindi & English') applyLocale('hinglish', true);
-      })
-      .catch(() => undefined);
-    return () => { active = false; };
-  }, [isParentRoute, isStudentRoute, applyLocale]);
+  }, [applyLocale, applyLearningLanguage, applyCertificateLanguage, isStudentRoute, isParentRoute]);
 
   const value = useMemo(() => ({
     locale, setLocale, learningLanguage, setLearningLanguage, certificateLanguage, setCertificateLanguage, languageReady

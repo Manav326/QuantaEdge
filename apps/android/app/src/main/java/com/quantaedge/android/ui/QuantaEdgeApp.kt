@@ -227,7 +227,7 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     val preferences = remember { context.getSharedPreferences("qe_preferences", 0) }
     val scope = rememberCoroutineScope()
     var auth by remember { mutableStateOf(JSONObject()) }
-    var language by rememberSaveable { mutableStateOf(preferences.getString("language", "hi") ?: "hi") }
+    var language by rememberSaveable { mutableStateOf(initialInterfaceLanguage(preferences.getString("language", null), null)) }
     val configuredTenantCode = remember { InstitutionBrandingRepository.normalizeCode(BuildConfig.INSTITUTION_CODE) }
     val launchTenantCode = remember(launchIntent, configuredTenantCode) {
         val linkedCode = InstitutionBrandingRepository.tenantCodeFromIntent(launchIntent)
@@ -4269,6 +4269,19 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
     val role = auth.textAny("role")
     val parentRole = role.contains("PARENT", true) || role.contains("GUARDIAN", true)
     val signedIn = role.isNotBlank() && route !in setOf(AppRoute.WELCOME, AppRoute.LOGIN, AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET)
+    LaunchedEffect(signedIn) {
+        if (!signedIn || resolveInterfaceLanguage(preferences.getString("language", null).orEmpty()) != null) {
+            return@LaunchedEffect
+        }
+        val accountProfile = runCatching {
+            withContext(Dispatchers.IO) { ApiClient.getObject("/api/v1/account/me/profile") }
+        }.getOrNull() ?: return@LaunchedEffect
+        val preferredLocale = resolveInterfaceLanguage(accountProfile.optString("preferredLocale")) ?: return@LaunchedEffect
+        if (resolveInterfaceLanguage(preferences.getString("language", null).orEmpty()) == null) {
+            language = preferredLocale
+            preferences.edit().putString("language", preferredLocale).apply()
+        }
+    }
     val notificationPermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->

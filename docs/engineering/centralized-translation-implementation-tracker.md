@@ -12,7 +12,9 @@ Implementation branch: [`feature/contextual-language-responsiveness`](https://gi
 - CI now runs the audit tests and uploads a `ui-copy-quality-audit` artifact.
 - Rewrote 18 messages across learner, Admin and HRMS screens with contextual English/Hinglish. Synchronized canonical catalogs and all generated browser-app copies.
 - Added deterministic Android XML resources from unambiguous central catalog pairs and an Android runtime lookup fallback. Ambiguous English phrases remain on the existing context-specific mapping.
-- **Validation pending:** no CI or emulator/browser acceptance result has yet been recorded for this branch. The overall localization status remains in progress and not production-complete.
+- Web and Android now use account `preferredLocale` as a first-use fallback only; an explicit local UI choice wins. Parent preferred learning language no longer changes interface copy.
+- Source-level catalog check: 4,110 keys per locale, no missing/blank messages or placeholder drift. Generated browser catalog copies and Android resources match their generators.
+- **Validation pending:** full CI, emulator/browser acceptance, and route-level translation coverage are not complete. Overall localization remains in progress and not production-complete.
 
 
 **Baseline reviewed before the route-inventory continuation:** [`8ba4f10c6f60c05da77719039d3a7700822fefae`](https://github.com/Manav326/QuantaEdge/commit/8ba4f10c6f60c05da77719039d3a7700822fefae). Latest successful full localization-code build remains [Actions #3021](https://github.com/Manav326/QuantaEdge/actions/runs/38996750050) for commit `66a2c3d0b0a9b9685210b199b536cbdb145f30f3`; it validates that older localization-code commit, not the new inventory changes.

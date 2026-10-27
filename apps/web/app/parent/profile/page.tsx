@@ -101,7 +101,7 @@ async function prepareProfilePhoto(file: File): Promise<string> {
 
 export default function ParentProfilePage() {
   const router = useRouter();
-  const { locale, setLocale } = useLocale();
+  const { locale } = useLocale();
   const t = useUiTranslation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [draft, setDraft] = useState<ParentProfileDraft>(emptyProfile);
@@ -255,8 +255,6 @@ export default function ParentProfilePage() {
       setDraft(saved);
       setSavedDraft(saved);
       setEditingCard(null);
-      if (body.preferred_language === 'English') setLocale('english');
-      else if (body.preferred_language === 'Hindi' || body.preferred_language === 'Hindi & English') setLocale('hinglish');
       setNotice(t('parent.profile.saved'));
       window.dispatchEvent(new Event('qe:profile-updated'));
       setPhotoName('');
