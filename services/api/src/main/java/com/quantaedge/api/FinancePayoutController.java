@@ -426,6 +426,7 @@ public class FinancePayoutController {
       order by recipient_name,l.recipient_type
       """);
     long totalEarned=0L,totalRefunded=0L,totalCharges=0L,totalPaid=0L,totalReversed=0L,totalReserved=0L,totalPayable=0L,totalRecovery=0L,totalReserve=0L;
+    Set<String> unsupportedCurrencies=new java.util.TreeSet<>();
     for(Map<String,Object> row:rows) {
       long earned=number(row.get("earned_paise"));
       long refunds=number(row.get("refunded_paise"));
@@ -440,11 +441,21 @@ public class FinancePayoutController {
       // A pre-payout refund followed by later fee reconciliation can make net earned negative.
       // Do not call an unpaid accounting deficit a recovery; only recover money already transferred.
       long recovery=Math.max(0L,Math.subtractExact(netPaid,Math.max(0L,netEarned)));
+      boolean payoutSupported="INR".equalsIgnoreCase(string(row.get("currency")));
+      row.put("payout_supported",payoutSupported);
+      row.put("payout_support_reason",payoutSupported?"":"RazorpayX payout batches are INR-only; foreign-exchange conversion is not configured.");
       row.put("net_earned_paise",netEarned);
       row.put("net_paid_paise",netPaid);
       row.put("refund_reserve_paise",refundReserve);
       row.put("payable_paise",payable);
       row.put("recovery_due_paise",recovery);
+      if(!payoutSupported) {
+        // These values are retained only for reconciliation. The UI must not render non-INR
+        // minor units as rupees or blend them into INR summary totals.
+        if(Math.subtractExact(Math.subtractExact(netEarned,netPaid),reserved)>0)
+          unsupportedCurrencies.add(string(row.get("currency")).toUpperCase(Locale.ROOT));
+        continue;
+      }
       totalEarned=Math.addExact(totalEarned,netEarned);
       totalRefunded=Math.addExact(totalRefunded,refunds);
       totalCharges=Math.addExact(totalCharges,charges);
@@ -466,7 +477,7 @@ public class FinancePayoutController {
     totals.put("payablePaise",totalPayable);
     totals.put("recoveryDuePaise",totalRecovery);
     totals.put("refundReserveBasisPoints",reserveBps);
-    return Map.of("totals",totals,"beneficiaries",rows);
+    return Map.of("totals",totals,"beneficiaries",rows,"unsupportedCurrencies",List.copyOf(unsupportedCurrencies));
   }
 
   @PostMapping("/payouts/{payoutId}/fees")
