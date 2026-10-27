@@ -60,6 +60,31 @@ jobs:
             --output-dir "$RUNNER_TEMP/tre-question-inventory" \
             --repo-root "$GITHUB_WORKSPACE"
 
+      - name: Assert full paper counts and a known Hindi reconstruction
+        run: |
+          python - <<'PY'
+          import json, re
+          from pathlib import Path
+          inventory_path = Path("$RUNNER_TEMP/tre-question-inventory/tre-question-inventory.json")
+          inventory = json.loads(inventory_path.read_text(encoding="utf-8"))
+          expected_counts = {"TRE 1.0": 120, "TRE 2.0": 150, "TRE 3.0": 150}
+          for cycle, expected in expected_counts.items():
+              actual = len(inventory["papers"][cycle]["questions"])
+              if actual != expected:
+                  raise SystemExit(f"{cycle}: expected {expected} questions, got {actual}")
+          q1 = next(q for q in inventory["papers"]["TRE 1.0"]["questions"] if str(q["source_question_number"]) == "1")
+          hindi = q1["source_variants"]["hi"]
+          normalized = re.sub(r"\\s+", " ", hindi.get("prompt_i18n", "")).strip()
+          expected_prompt = "तीन अंकों की कितनी संख्याएँ 5 से विभाज्य हैं?"
+          if normalized != expected_prompt:
+              raise SystemExit(f"TRE 1.0 Hindi Q1 OCR mismatch: {normalized!r}")
+          if hindi.get("prompt_ocr_status") != "OCR_SHREEDEV_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW":
+              raise SystemExit("Known Hindi prompt was not marked as an OCR reconstruction requiring human review")
+          if not hindi.get("prompt_raw") or hindi.get("prompt_raw") == hindi.get("prompt_i18n"):
+              raise SystemExit("Original legacy Hindi source text was not retained alongside the OCR reconstruction")
+          print("TRE question counts and source-Hindi OCR check passed; OCR content remains review-gated.")
+          PY
+
       - name: Upload temporary inventory for question and answer review
         uses: actions/upload-artifact@v4
         with:
