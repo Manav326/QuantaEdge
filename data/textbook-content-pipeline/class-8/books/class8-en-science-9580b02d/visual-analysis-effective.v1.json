@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "380c77f88fd6502526cab0c854374dcb16eee16ca5eee093f0497d57e65568af",
+  "raw_analysis_sha256": "b494e23236be385b8c8bc684de0bd410cca8c2c02d8390ffa47efab1dff90bfb",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40520039010",
-      "checkpointed_at": "2026-10-27T16:02:11Z",
+      "checkpointed_at": "2026-10-27T16:06:45Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40520039010",
-      "checkpointed_at": "2026-10-27T16:02:45Z",
+      "checkpointed_at": "2026-10-27T16:07:20Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40520039010",
-      "checkpointed_at": "2026-10-27T16:03:26Z",
+      "checkpointed_at": "2026-10-27T16:08:02Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -65709,7 +65709,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40520039010",
-      "checkpointed_at": "2026-10-27T16:04:26Z",
+      "checkpointed_at": "2026-10-27T16:09:04Z",
       "effective_analysis": {
         "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
@@ -67204,6 +67204,70 @@
         "context_relation": "The image is a visual representation of the lightning conductor's function in a building.",
         "limitations": [
           "The image does not show the actual lightning conductor or its installation."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ab36371e2c4f5458b69bf297",
+      "asset_sha256": "037e99c9177703b60d69b8e346334b6a0ce5699b23340c39a5b1afdcfbbeb71f",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 112,
+      "asset_path": "assets/037e99c9177703b60d69b8e346334b6a0ce5699b23340c39a5b1afdcfbbeb71f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e7642c3aeda86d04ba7f1847071dffd75b249cbd6931426fb55becc7d77fadd0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Diagram showing the path of lightning through a lightning conductor.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ever heard of...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building.",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides easy path for the",
+          "lightning to flow through."
+        ],
+        "concepts": [
+          "Lightning conductor",
+          "Lightning path",
+          "Building construction"
+        ],
+        "context_relation": "The image illustrates the function of a lightning conductor in preventing lightning strikes on buildings.",
+        "limitations": [
+          "The image does not provide specific details about the construction or design of the lightning conductor.",
+          "The image does not show the actual lightning strike or the path it takes through the conductor."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40520039010",
+      "checkpointed_at": "2026-10-27T16:10:22Z",
+      "effective_analysis": {
+        "visual_summary": "Diagram showing the path of lightning through a lightning conductor.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ever heard of...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building.",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides easy path for the",
+          "lightning to flow through."
+        ],
+        "concepts": [
+          "Lightning conductor",
+          "Lightning path",
+          "Building construction"
+        ],
+        "context_relation": "The image illustrates the function of a lightning conductor in preventing lightning strikes on buildings.",
+        "limitations": [
+          "The image does not provide specific details about the construction or design of the lightning conductor.",
+          "The image does not show the actual lightning strike or the path it takes through the conductor."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
