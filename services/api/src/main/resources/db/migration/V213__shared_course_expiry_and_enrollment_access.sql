@@ -26,6 +26,7 @@ ALTER TABLE student_program_enrollment
         AND course_expiry_fixed_days_snapshot IS NULL)
       OR
       (course_expiry_mode_snapshot='CALENDAR_DURATION'
+        AND course_expiry_policy_version_snapshot IS NOT NULL
         AND course_expiry_policy_version_snapshot > 0
         AND course_expiry_years_snapshot IS NOT NULL AND course_expiry_years_snapshot >= 0
         AND course_expiry_months_snapshot IS NOT NULL AND course_expiry_months_snapshot >= 0
@@ -35,6 +36,7 @@ ALTER TABLE student_program_enrollment
         AND course_expiry_fixed_days_snapshot IS NULL)
       OR
       (course_expiry_mode_snapshot='FIXED_DAYS'
+        AND course_expiry_policy_version_snapshot IS NOT NULL
         AND course_expiry_policy_version_snapshot > 0
         AND course_expiry_years_snapshot IS NULL
         AND course_expiry_months_snapshot IS NULL
