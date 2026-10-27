@@ -186,7 +186,7 @@ public class CourseEnrollmentAccessController {
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select enrollment.id as enrollment_id,enrollment.course_identity_id,enrollment.institution_id,
         tenant.tenant_code as institution_code,coalesce(branding.display_name,tenant.display_name) as institution_name,
-        enrollment.student_id,student.public_id as student_public_id,student.public_id::text,
+        enrollment.student_id,student.public_user_id as student_public_id,
         student.display_name as student_name,enrollment.program_id,enrollment.status as enrollment_status,
         enrollment.enrolled_at,enrollment.course_expires_at,enrollment.course_access_blocked,
         enrollment.course_access_blocked_at,enrollment.course_access_blocked_by_staff_id,
@@ -205,7 +205,7 @@ public class CourseEnrollmentAccessController {
       left join institution_branding branding on branding.institution_id=tenant.id
       where enrollment.course_identity_id=?
         and (?='' or lower(coalesce(student.display_name,'')) like ?
-          or lower(coalesce(student.public_id::text,'')) like ?
+          or lower(coalesce(student.public_user_id,'')) like ?
           or lower(tenant.display_name) like ? or lower(tenant.tenant_code) like ?)
       order by enrollment.enrolled_at desc,enrollment.id desc
       limit ? offset ?
@@ -216,7 +216,7 @@ public class CourseEnrollmentAccessController {
       join institution_tenant tenant on tenant.id=enrollment.institution_id
       where enrollment.course_identity_id=?
         and (?='' or lower(coalesce(student.display_name,'')) like ?
-          or lower(coalesce(student.public_id::text,'')) like ?
+          or lower(coalesce(student.public_user_id,'')) like ?
           or lower(tenant.display_name) like ? or lower(tenant.tenant_code) like ?)
       """,Long.class,courseIdentityId,search,pattern,pattern,pattern,pattern);
 
