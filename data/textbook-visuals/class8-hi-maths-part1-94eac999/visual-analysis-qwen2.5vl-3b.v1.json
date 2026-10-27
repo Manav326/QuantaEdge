@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 33,
+    "assets_selected": 37,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "66af9bd217abc7233025835f",
-      "c213463c6175cae7275011a4",
-      "dd7c0b73503d2f7596c87540",
-      "ec17d24bd4d29fbbedc7f1c5",
-      "ab82339960d959271ebb551e"
+      "e4df8fb8b08736c388807e2d",
+      "75c1ae528a138b8460d5d0e0",
+      "33966e078d939cc46db9328a",
+      "b14a63ed3a93edf2c21bfd44",
+      "4772fde7603b672a8f92970a"
     ],
     "assets_eligible": 1946,
-    "assets_analyzed": 32,
-    "assets_remaining": 1914,
-    "assets_completion_percent": 1.6,
-    "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 28,
+    "assets_analyzed": 36,
+    "assets_remaining": 1910,
+    "assets_completion_percent": 1.8,
+    "assets_failed": 14,
+    "assets_skipped_from_checkpoint": 32,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1216,6 +1216,136 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413175682",
       "checkpointed_at": "2026-10-27T00:03:11Z"
+    },
+    {
+      "asset_id": "e4df8fb8b08736c388807e2d",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-hindi-hhgp1",
+      "source_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b1df66063309c6e75e559309ff0dc571d4abbac650b61d98bbb23f23f5b713ce",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-27T00:03:52Z"
+    },
+    {
+      "asset_id": "75c1ae528a138b8460d5d0e0",
+      "asset_sha256": "f7081dbd12c282b625783ce17eb84ee5012794ac1095f88bbd766120bcc5253f",
+      "page_text_context_sha256": "b1df66063309c6e75e559309ff0dc571d4abbac650b61d98bbb23f23f5b713ce",
+      "source_book_id": "ncert-c8-hindi-hhgp1",
+      "source_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+      "source_pdf_page_number": 10,
+      "asset_path": "page-0010.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "33966e078d939cc46db9328a",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-hindi-hhgp1",
+      "source_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "90ef5d229a7ca3ae7779befc6cb82bc5e2a1449c1deae033421709a59d3bf92f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Red ink spill across the page, obscuring text.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is partially obscured by a red ink spill.",
+        "limitations": [
+          "The text is unreadable due to the ink spill."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-27T00:09:19Z"
+    },
+    {
+      "asset_id": "b14a63ed3a93edf2c21bfd44",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-hindi-hhgp1",
+      "source_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "90ef5d229a7ca3ae7779befc6cb82bc5e2a1449c1deae033421709a59d3bf92f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, textured, and irregularly shaped object that appears to be a splash or a blotch.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a red, irregularly shaped object.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond its visual appearance."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-27T00:09:28Z"
+    },
+    {
+      "asset_id": "4772fde7603b672a8f92970a",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-hindi-hhgp1",
+      "source_pdf_sha256": "706c3b90109b338b088e47e45df267727f24ec5676a4455add60bb28161ed6b7",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "90ef5d229a7ca3ae7779befc6cb82bc5e2a1449c1deae033421709a59d3bf92f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear text content",
+          "no visible objects or figures"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-27T00:10:00Z"
     }
   ]
 }
