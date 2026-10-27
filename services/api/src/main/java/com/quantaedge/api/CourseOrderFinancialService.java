@@ -612,13 +612,15 @@ public class CourseOrderFinancialService {
       throw new IllegalArgumentException("Idempotency-Key must contain 10–180 letters, digits, underscores or hyphens.");
 
     Map<String,Object> order=one("""
-      select id,status,provider_payment_id,captured_amount_paise,output_tax_paise,
+      select id,status,provider_payment_id,captured_amount_paise,output_tax_paise,currency,
         revenue_share_policy_snapshot::text as share_snapshot_json
       from course_payment_order where id=? for update
       """,orderId);
     if(order.isEmpty())throw new IllegalArgumentException("Course payment order was not found.");
     if(!"VERIFIED".equals(string(order.get("status"))))
       throw new IllegalStateException("Processor fees can only be reconciled for a verified captured sale.");
+    if(!"INR".equalsIgnoreCase(string(order.get("currency"))))
+      throw new IllegalStateException("This reconciliation form records integer paise and is only available for INR Razorpay settlements. Do not convert or relabel a non-INR amount as paise; reconcile it through a currency-compatible finance route.");
     String paymentId=string(order.get("provider_payment_id"));
     if(paymentId.isBlank())throw new IllegalStateException("The verified order has no provider payment reference.");
     Map<String,Object> prior=one("""
