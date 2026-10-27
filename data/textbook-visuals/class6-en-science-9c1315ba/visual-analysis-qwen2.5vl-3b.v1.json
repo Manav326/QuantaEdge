@@ -15,13 +15,13 @@
       "73d7871359ba2e1d3fe3cfeb",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "f9f31ac3c179b5d02598fdea"
+      "9fb71d7d0f261624fe3ce0a4"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1413,
-    "assets_remaining": 665,
+    "assets_analyzed": 1414,
+    "assets_remaining": 664,
     "assets_completion_percent": 68.0,
-    "assets_failed": 13,
+    "assets_failed": 12,
     "assets_skipped_from_checkpoint": 1413,
     "batch_limit": 5,
     "publication_allowed": false
@@ -451,7 +451,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40568791626",
-      "checkpointed_at": "2026-10-27T21:02:59Z"
+      "checkpointed_at": "2026-10-27T21:12:37Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20129,7 +20129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40568791626",
-      "checkpointed_at": "2026-10-27T21:04:22Z"
+      "checkpointed_at": "2026-10-27T21:14:00Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37984,7 +37984,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40568791626",
-      "checkpointed_at": "2026-10-27T21:05:21Z"
+      "checkpointed_at": "2026-10-27T21:15:00Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44144,7 +44144,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40568791626",
-      "checkpointed_at": "2026-10-27T21:06:11Z"
+      "checkpointed_at": "2026-10-27T21:15:50Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -46585,19 +46585,67 @@
     {
       "asset_id": "9fb71d7d0f261624fe3ce0a4",
       "asset_sha256": "b188bc8a1d8d6c6deb1776a683835dcd7d6b6d3b8071be8da3a03d207027de95",
-      "page_text_context_sha256": "b33602f5133011cb20efb64570ad868a3c5b6a954f6e86dacf188e0837dc7c74",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 145,
       "asset_path": "page-0145.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "b33602f5133011cb20efb64570ad868a3c5b6a954f6e86dacf188e0837dc7c74",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40413122029",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for using a digital clinical thermometer to measure body temperature.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Activity 7.2: Let us measure",
+          "Let us now use a digital clinical thermometer",
+          "to measure body temperature. You may",
+          "measure your own temperature as well as",
+          "the temperature of some of your friends. Talk to your friends to find out who would",
+          "be willing to get their body temperatures",
+          "measured by you.",
+          "Wash your hands and the tip of the",
+          "digital thermometer with soap and water.",
+          "Reset the thermometer by pressing the",
+          "reset button.",
+          "Place the thermometer under the",
+          "tongue and close your mouth.",
+          "Wait till the thermometer makes a",
+          "beeping sound or flashes a light.",
+          "Take it out from the mouth and read",
+          "the temperature on the digital display.",
+          "Record the temperature in Table 7.1.",
+          "Clean the tip of the thermometer with soap and water, and dry it.",
+          "Repeat the above steps for measuring the temperatures of your friends.",
+          "Table 7.1: Body temperatures of 10 persons",
+          "S. no. Name Temperature (°C)",
+          "1. .",
+          "2. .",
+          "3. .",
+          "4. .",
+          "5. .",
+          "6. .",
+          "7. .",
+          "8. ."
+        ],
+        "concepts": [
+          "digital clinical thermometer",
+          "body temperature",
+          "instructions for use",
+          "precautions"
+        ],
+        "context_relation": "instructions",
+        "limitations": [
+          "no specific limitations mentioned",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40568791626",
+      "checkpointed_at": "2026-10-27T21:20:05Z"
     },
     {
       "asset_id": "895e55170e2df8f85f399e23",
