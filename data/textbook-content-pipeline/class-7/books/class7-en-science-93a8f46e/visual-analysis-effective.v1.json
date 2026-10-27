@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "30c0e02bf6cda9e9b3c628984edbdecc44c81ea92fb70327d7fab48fffea038e",
+  "raw_analysis_sha256": "9994a0f52a2a360ace6e0d7cc0413f392f86487df4960ee2a6380b21f4fd4b39",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15062,7 +15062,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40559863508",
-      "checkpointed_at": "2026-10-27T20:17:26Z",
+      "checkpointed_at": "2026-10-27T20:23:20Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "page_with_multiple_visuals",
@@ -20252,7 +20252,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40559863508",
-      "checkpointed_at": "2026-10-27T20:18:22Z",
+      "checkpointed_at": "2026-10-27T20:24:16Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -144708,6 +144708,216 @@
         "context_relation": "The image is related to the text about enhancing learning through the use of different metals for food packaging.",
         "limitations": [
           "The image does not provide specific details about the learning activity."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ca0e83462db1bebcfd95f432",
+      "asset_sha256": "10b782c3c6ccd836a4a5ec4d0be398bfea328d72bee8f2b393b155ba6152cc95",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 75,
+      "asset_path": "assets/10b782c3c6ccd836a4a5ec4d0be398bfea328d72bee8f2b393b155ba6152cc95.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5f2e159e7cd25798d652993e38ece1b8fbc177eb5667babc67ce14051faedc36",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the structure of a metal, possibly aluminum, with a rope on the left side.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "ENQUIRY",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal",
+          "food packaging",
+          "aluminium",
+          "copper",
+          "iron",
+          "gold"
+        ],
+        "context_relation": "The image is related to the text about enhancing learning through the use of metals for food packaging.",
+        "limitations": [
+          "The image does not provide specific details about the metal's structure or properties."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40559863508",
+      "checkpointed_at": "2026-10-27T20:25:28Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the structure of a metal, possibly aluminum, with a rope on the left side.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "ENQUIRY",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal",
+          "food packaging",
+          "aluminium",
+          "copper",
+          "iron",
+          "gold"
+        ],
+        "context_relation": "The image is related to the text about enhancing learning through the use of metals for food packaging.",
+        "limitations": [
+          "The image does not provide specific details about the metal's structure or properties."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "498ced2b0b4d473b89793406",
+      "asset_sha256": "adefb78647e177979b85070a475ef0678bd2cdf98024c0103197eca2240b1d69",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 75,
+      "asset_path": "assets/adefb78647e177979b85070a475ef0678bd2cdf98024c0103197eca2240b1d69.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5f2e159e7cd25798d652993e38ece1b8fbc177eb5667babc67ce14051faedc36",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A set of ice cubes and a rope.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal",
+          "food packaging",
+          "aluminium",
+          "copper",
+          "iron",
+          "gold"
+        ],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": [
+          "The image does not provide any visual information about the metal used for food packaging."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40559863508",
+      "checkpointed_at": "2026-10-27T20:26:37Z",
+      "effective_analysis": {
+        "visual_summary": "A set of ice cubes and a rope.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal",
+          "food packaging",
+          "aluminium",
+          "copper",
+          "iron",
+          "gold"
+        ],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": [
+          "The image does not provide any visual information about the metal used for food packaging."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "45e53dae8800c7b7175bd3e1",
+      "asset_sha256": "973619418d510c86751d9404c699318289d467ffa8394a40a56a76fef710c610",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 75,
+      "asset_path": "assets/973619418d510c86751d9404c699318289d467ffa8394a40a56a76fef710c610.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5f2e159e7cd25798d652993e38ece1b8fbc177eb5667babc67ce14051faedc36",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Three objects: a spiral, a rectangular object, and a square object.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "ENQUIRY (i) Aluminium (ii) Copper",
+          "Non-metals",
+          "3. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "ENQUIRY (i) Aluminium (ii) Copper",
+          "Non-metals"
+        ],
+        "concepts": [
+          "metal",
+          "food packaging",
+          "aluminium",
+          "copper"
+        ],
+        "context_relation": "The image is related to the text about metals used in food packaging.",
+        "limitations": [
+          "The image does not provide specific details about the metal used in food packaging."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40559863508",
+      "checkpointed_at": "2026-10-27T20:27:50Z",
+      "effective_analysis": {
+        "visual_summary": "Three objects: a spiral, a rectangular object, and a square object.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "ENQUIRY (i) Aluminium (ii) Copper",
+          "Non-metals",
+          "3. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "ENQUIRY (i) Aluminium (ii) Copper",
+          "Non-metals"
+        ],
+        "concepts": [
+          "metal",
+          "food packaging",
+          "aluminium",
+          "copper"
+        ],
+        "context_relation": "The image is related to the text about metals used in food packaging.",
+        "limitations": [
+          "The image does not provide specific details about the metal used in food packaging."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
