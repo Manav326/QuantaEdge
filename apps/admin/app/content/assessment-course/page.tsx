@@ -44,6 +44,8 @@ type PackageEntry = {
   validation?: PackageValidation;
   validatedSignature?: string;
   importResult?: ImportResult;
+  editorOpen?: boolean;
+  questionEditorOpen?: boolean;
 };
 
 const EXAMPLE_PACKAGE = {
@@ -203,12 +205,24 @@ export default function AssessmentCourseStudioPage() {
     }
   }
 
-  function finishPackageEdit(index: number, mutate: (pkg: Record<string, any>) => void) {
+  function finishPackageEdit(
+    index: number,
+    mutate: (pkg: Record<string, any>) => void,
+    options: { openEditor?: boolean; openQuestionEditor?: boolean } = {}
+  ) {
     setPackages(current => current.map((entry, currentIndex) => {
       if (currentIndex !== index) return entry;
       const pkg = clonePackage(entry.packageJson);
       mutate(pkg);
-      return { ...entry, packageJson: pkg, validation: undefined, validatedSignature: undefined, importResult: undefined };
+      return {
+        ...entry,
+        packageJson: pkg,
+        validation: undefined,
+        validatedSignature: undefined,
+        importResult: undefined,
+        editorOpen: entry.editorOpen || Boolean(options.openEditor),
+        questionEditorOpen: entry.questionEditorOpen || Boolean(options.openQuestionEditor)
+      };
     }));
     setHasValidation(false); setError(''); setNotice('');
   }
@@ -266,7 +280,7 @@ export default function AssessmentCourseStudioPage() {
         section_result_policy: question.section_code === defaultCode ? 'SCORED' : question.section_result_policy
       }));
       recountQuestionCounts(pkg);
-    });
+    }, { openEditor: true });
   }
 
   function updateSectionField(index: number, sectionIndex: number, field: 'code' | 'result_policy' | 'name_en' | 'name_hi', value: string) {
@@ -297,7 +311,7 @@ export default function AssessmentCourseStudioPage() {
         );
       }
       recountQuestionCounts(pkg);
-    });
+    }, { openEditor: true });
   }
 
   function addQuestion(index: number) {
@@ -343,7 +357,7 @@ export default function AssessmentCourseStudioPage() {
         marks: 1
       }];
       recountQuestionCounts(pkg);
-    });
+    }, { openEditor: true, openQuestionEditor: true });
   }
 
   function updateQuestionField(index: number, questionIndex: number, field: string, value: string) {
@@ -368,7 +382,7 @@ export default function AssessmentCourseStudioPage() {
       }
       pkg.questions = questions.map((item, i) => i === questionIndex ? next : item);
       recountQuestionCounts(pkg);
-    });
+    }, { openEditor: true, openQuestionEditor: true });
   }
 
   function updateQuestionOption(index: number, questionIndex: number, optionIndex: number, field: 'en' | 'hi', value: string) {
@@ -386,7 +400,7 @@ export default function AssessmentCourseStudioPage() {
         };
       });
       pkg.questions = questions.map((item, i) => i === questionIndex ? { ...item, options: updatedOptions } : item);
-    });
+    }, { openEditor: true, openQuestionEditor: true });
   }
 
   function addQuestionOption(index: number, questionIndex: number) {
@@ -399,7 +413,7 @@ export default function AssessmentCourseStudioPage() {
       const key = String.fromCharCode(65 + options.length);
       const updated = [...options, { key, text: '', text_i18n: { en: '', hi: '' } }];
       pkg.questions = questions.map((item, i) => i === questionIndex ? { ...item, options: updated } : item);
-    });
+    }, { openEditor: true, openQuestionEditor: true });
   }
 
   function removeQuestionOption(index: number, questionIndex: number, optionIndex: number) {
@@ -412,14 +426,14 @@ export default function AssessmentCourseStudioPage() {
       const updated = options.filter((_: unknown, i: number) => i !== optionIndex)
         .map((option: Record<string, any>, i: number) => ({ ...option, key: String.fromCharCode(65 + i) }));
       pkg.questions = questions.map((item, i) => i === questionIndex ? { ...item, options: updated } : item);
-    });
+    }, { openEditor: true, openQuestionEditor: true });
   }
 
   function removeQuestion(index: number, questionIndex: number) {
     finishPackageEdit(index, pkg => {
       pkg.questions = currentQuestions(pkg).filter((_, i) => i !== questionIndex);
       recountQuestionCounts(pkg);
-    });
+    }, { openEditor: true, openQuestionEditor: true });
   }
 
   function loadExamplePackage() {
@@ -629,8 +643,9 @@ export default function AssessmentCourseStudioPage() {
                           <input id={'attempts-' + index} type="number" min={1} max={10} value={String(config.max_attempts ?? '')} onChange={event => updatePackageField(index, 'configuration', 'max_attempts', event.target.value)} placeholder="1" />
                         </div>
                       </div>
-                      {(!Array.isArray(pkg.sections) || !pkg.sections.length || !Array.isArray(pkg.questions) || !pkg.questions.length) && <section style={{ marginTop: 16, padding: 14, border: '1px solid var(--admin-border, #d8dce5)', borderRadius: 10 }}>
-                        <h4>Complete missing sections or questions</h4>
+                      {((!Array.isArray(pkg.sections) || !pkg.sections.length || !Array.isArray(pkg.questions) || !pkg.questions.length) || entry.editorOpen) && <section style={{ marginTop: 16, padding: 14, border: '1px solid var(--admin-border, #d8dce5)', borderRadius: 10 }}>
+                        <h4>{missingQuestionContent(entry) ? 'Complete missing sections or questions' : 'Section and question editor'}</h4>
+                        {!entry.questionEditorOpen && currentQuestions(pkg).length > 0 && <button className="button button-dark" type="button" onClick={() => setPackages(current => current.map((row, rowIndex) => rowIndex === index ? { ...row, editorOpen: true, questionEditorOpen: true, validation: undefined, validatedSignature: undefined } : row))}>Edit existing question rows</button>}
                         <p>Enter verified source content below. QuantaEdge will not guess a question, answer, translation, or exam rule. Every newly entered question remains pending human review.</p>
                         {currentSections(pkg).map((section, sectionIndex) => <div key={'section-' + sectionIndex} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,180px),1fr))', gap: 10, margin: '10px 0', padding: 10, border: '1px solid var(--admin-border, #d8dce5)', borderRadius: 8 }}>
                           <div><label htmlFor={'sec-code-' + index + '-' + sectionIndex}>Section code</label><input id={'sec-code-' + index + '-' + sectionIndex} value={String(section.code || '')} onChange={event => updateSectionField(index, sectionIndex, 'code', event.target.value)} placeholder="COMPUTER_SCIENCE" /></div>
@@ -643,7 +658,7 @@ export default function AssessmentCourseStudioPage() {
                           <button className="button button-dark" type="button" disabled={currentSections(pkg).length >= 20} onClick={() => addSection(index)}>Add section</button>
                           <button className="button button-dark" type="button" disabled={currentQuestions(pkg).length >= 250} onClick={() => addQuestion(index)}>Add question</button>
                         </div>
-                        {currentQuestions(pkg).map((question, questionIndex) => <div key={String(question.id || questionIndex) + '-' + questionIndex} style={{ marginTop: 12, padding: 12, border: '1px solid var(--admin-border, #d8dce5)', borderRadius: 8 }}>
+                        {(entry.questionEditorOpen || currentQuestions(pkg).length === 0) && currentQuestions(pkg).map((question, questionIndex) => <div key={String(question.id || questionIndex) + '-' + questionIndex} style={{ marginTop: 12, padding: 12, border: '1px solid var(--admin-border, #d8dce5)', borderRadius: 8 }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
                             <h4 style={{ margin: 0 }}>Question {questionIndex + 1}</h4>
                             <button className="button button-dark" type="button" onClick={() => removeQuestion(index, questionIndex)}>Remove question</button>
