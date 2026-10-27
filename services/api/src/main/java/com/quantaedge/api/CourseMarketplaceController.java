@@ -2417,8 +2417,8 @@ public class CourseMarketplaceController {
           revenue_share_policy_snapshot::text as revenue_share_policy_snapshot_json
         from course_payment_order
         where id=? and institution_id=?
-          and ((? is not null and student_id=? and purchaser_user_id is null)
-            or (? is not null and purchaser_user_id=?))
+          and ((cast(? as bigint) is not null and student_id=? and purchaser_user_id is null)
+            or (cast(? as bigint) is not null and purchaser_user_id=?))
         """, localOrderId, institutionId, callerStudentId, callerStudentId, callerUserId, callerUserId);
     if (rows.isEmpty()) throw new SecurityException("This payment order is not available to this account.");
     Map<String, Object> order = rows.getFirst();

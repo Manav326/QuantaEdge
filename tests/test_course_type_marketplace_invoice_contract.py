@@ -42,11 +42,20 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
         self.assertIn("offer.id=? and offer.institution_id=? and offer.course_id=?", verification)
         self.assertIn("identity.course_type_code=program.course_type_code", verification)
         self.assertIn("identity.source_institution_id=release.source_institution_id", verification)
+        # Both nullable caller ids must be explicitly typed for PostgreSQL when one is null.
+        self.assertIn("cast(? as bigint) is not null and student_id=?", verification)
+        self.assertIn("cast(? as bigint) is not null and purchaser_user_id=?", verification)
         self.assertNotIn("offer.status='PUBLISHED'", verification)
         self.assertNotIn("release.release_state='SHAREABLE'", verification)
         self.assertGreaterEqual(
             controller.count("newer_program.status='ACTIVE' and newer_program.code<>'GENERAL'"), 4,
             "Inactive or placeholder course versions must not hide a currently published learner offer.")
+
+    def test_provider_event_pagination_separates_filter_from_order_by(self):
+        operations = (ROOT / "services/api/src/main/java/com/quantaedge/api/CoursePaymentOperationsController.java").read_text(encoding="utf-8")
+        self.assertIn('""" + where + "\\n" + """', operations)
+        self.assertIn('order by e.received_at desc,e.id desc limit ? offset ?', operations)
+        self.assertNotIn('""" + where + """\\n        order by e.received_at', operations)
 
     def test_android_marketplace_and_invoice_history_preserve_course_type(self):
         android_student = (ROOT / "apps/android/app/src/main/java/com/quantaedge/android/ui/StudentMarketplaceScreen.kt").read_text(encoding="utf-8")
