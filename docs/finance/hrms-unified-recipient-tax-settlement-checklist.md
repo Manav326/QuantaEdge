@@ -64,6 +64,19 @@ Scope: improve the existing HRMS Finance and Payouts workspace in place. This is
 - [ ] Obtain tax/legal approval before enabling any automatic tax calculation, withholding or Government remittance in production.
 - [ ] Merge/deploy only after review and green required checks; deployment remains a separate explicit step.
 
+
+## 7. Monthly payout PDF statements
+- [x] Generate an internal monthly batch report PDF and a separate recipient-specific payout advice PDF from the existing batch detail workflow.
+- [x] Use an A4 portrait, multi-page layout with batch/cycle reference, versioned document number, generated timestamp, preparer/approver where recorded, recipient, amount, payment state, masked bank details, provider payout ID, UTR/reference when available, confirmed fees and source-allocation trace.
+- [x] Separate payout-cycle period from source-sales period; show allocation applied to a payout, not as gross monthly course sales.
+- [x] Prominently state when transfers are not all confirmed and include a clear status/tax-document disclaimer. Do not represent a pending/failed transfer as paid.
+- [x] Keep GST TCS/income-tax TDS out of inferred totals; state that the PDF is not a GST invoice, credit note, statutory TDS/TCS certificate or tax-remittance receipt.
+- [x] Archive the document number, revision, generation actor/time, immutable JSON snapshot, storage key, byte length and SHA-256 checksum.
+- [x] Verify checksum/size before re-download, use private no-store response headers, and append immutable generation/download audit events.
+- [x] Add tests for multi-page batches, A4 geometry, recipient statements and Hindi institution/course names.
+- [ ] Run the PDF renderer tests and database migration against the actual API test environment; verify Noto fonts/Devanagari rendering in the final container image.
+- [ ] Browser-check generated and re-downloaded PDFs, mobile batch-detail controls, and statements before/after provider status updates.
+
 ## Implementation status
 - [x] Checklist saved in the repository.
 - [x] Complete recipient catalogue in payout balances, including zero-activity entities.
@@ -71,3 +84,5 @@ Scope: improve the existing HRMS Finance and Payouts workspace in place. This is
 - [ ] Consolidated tax-liability model and reviewed rule lifecycle. Implemented so far: read-only recorded output-tax and processed credit-note tax snapshot plus explicit TCS/TDS coverage gaps. Payout-readiness wording now states that tax applicability is not assessed and requires separate review. Automated withholding/remittance remains disabled.
 - [x] Redesigned responsive recipient overview with targeted readiness, currency, missing-bank, recovery and reservation filters. Existing Finance and Tax tabs/routes are reused; broader navigation reorganization remains open.
 - [ ] Automated regression checks and CI verification (pending required CI and runtime verification).
+- [x] Monthly payout batch report and recipient-specific PDF advice are integrated into the existing batch detail UI with immutable archived revisions and download history.
+- [ ] Final PDF visual/regression and runtime migration checks are still pending.
