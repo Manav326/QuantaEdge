@@ -489,6 +489,8 @@ public class FinancePayoutController {
     long fee=requiredLong(body.get("processingFeePaise"),"processingFeePaise");
     long tax=requiredLong(body.get("feeTaxPaise"),"feeTaxPaise");
     if(fee<0||tax<0)throw bad("Payout fee and fee tax cannot be negative.");
+    try { Math.addExact(fee,tax); }
+    catch(ArithmeticException overflow) { throw bad("Payout fee plus tax exceeds supported integer-paise precision."); }
     String reference=requiredText(body.get("settlementReference"),"settlement reference");
     if(reference.length()<3||reference.length()>180)throw bad("Enter a valid payout-fee statement reference.");
     String source=optionalText(body.get("sourceType"))==null?"MANUAL_RECONCILIATION":text(body,"sourceType").toUpperCase(Locale.ROOT);
