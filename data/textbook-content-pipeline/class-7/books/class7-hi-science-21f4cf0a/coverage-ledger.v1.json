@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2177,
     "eligible_visual_asset_rows": 2177,
-    "raw_analysis_result_rows": 110,
-    "successful_visual_analyses": 91,
-    "missing_visual_analyses": 2067,
-    "failed_visual_analyses": 19,
+    "raw_analysis_result_rows": 120,
+    "successful_visual_analyses": 99,
+    "missing_visual_analyses": 2057,
+    "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 2086,
+    "unresolved_count": 2078,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -9471,9 +9471,18 @@
       "asset_path": "assets/a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9489,9 +9498,29 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Page with text containing names and titles of educational institutions and individuals.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "दिनेश कुमार, आचार््य, विज्ञान एवं गणित शिक्षा विभााग, राा.शै.अ.प्र.प., नई दिल्ली",
+          "निकोल ऐन फे सेक््‍ववेराा, सहायक आचार््य, गोवाा विश्‍विद्याालय, गोवाा",
+          "नीरजाा दशपुत्े, प्रधान तकनीकी अधिकारी (शिक्षाा), भारतीय विज्ञान शिक्षाा और अनुसंधान संस््थथान, पुणे",
+          "पी.वी. रााघवेेंद्र, सह-आचार््य, विज्ञान एवं गणित शिक्षा विभााग, राा.शै.अ.प्र.प., नई दिल्ली",
+          "पूनम कत््ययााल, पूर््व टी.जी.टी., जीनत महल सर्वोदय कन््ययाा विद्याालय, जााफरााबााद, दिल्ली",
+          "पुनीत शर््ममा"
+        ],
+        "concepts": [
+          "Educational institutions",
+          "Titles of individuals",
+          "Names of people involved in education"
+        ],
+        "context_relation": "The text provides information about educational institutions and individuals involved in teaching and research in the field of science and mathematics.",
+        "limitations": [
+          "The text does not provide any visual elements or diagrams."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9507,9 +9536,29 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Page with text containing names and titles of educational institutions and individuals.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "दिनेश कुमार, आचार््य, विज्ञान एवं गणित शिक्षा विभााग, राा.शै.अ.प्र.प., नई दिल्ली",
+          "निकोल ऐन फे सेक््‍ववेराा, सहायक आचार््य, गोवाा विश्‍विद्याालय, गोवाा",
+          "नीरजाा दशपुत्े, प्रधान तकनीकी अधिकारी (शिक्षाा), भारतीय विज्ञान शिक्षाा और अनुसंधान संस््थथान, पुणे",
+          "पी.वी. रााघवेेंद्र, सह-आचार््य, विज्ञान एवं गणित शिक्षा विभााग, राा.शै.अ.प्र.प., नई दिल्ली",
+          "पूनम कत््ययााल, पूर््व टी.जी.टी., जीनत महल सर्वोदय कन््ययाा विद्याालय, जााफरााबााद, दिल्ली",
+          "पुनीत शर््ममा"
+        ],
+        "concepts": [
+          "Educational institutions",
+          "Titles of individuals",
+          "Names of people involved in education"
+        ],
+        "context_relation": "The text is a list of names and titles of educational institutions and individuals.",
+        "limitations": [
+          "The text is in Hindi and may not be easily readable by non-Hindi speakers."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9525,7 +9574,7 @@
       "asset_path": "page-0012.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -9543,9 +9592,18 @@
       "asset_path": "assets/a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "No visible text or images on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9561,9 +9619,18 @@
       "asset_path": "assets/a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible content.",
+        "limitations": [
+          "No visible text or content on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9579,9 +9646,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9597,9 +9673,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9615,7 +9700,7 @@
       "asset_path": "page-0013.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -9633,9 +9718,18 @@
       "asset_path": "assets/a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible text or content.",
+        "limitations": [
+          "The page is blank and does not contain any text or visual elements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-hindi-ghcu1",
   "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
   "raw_analysis_path": "data/textbook-visuals/class7-hi-science-21f4cf0a/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "714342f65450aaf1eaa4ef924817be14c1c28c4e0c0370ec03b2e4928980537e",
+  "raw_analysis_sha256": "ee1c2fc213768e35ecd695c0761d3404d6db4d199204b41947518aa0d2366d79",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-hi-science-21f4cf0a/visual-analysis-corrections.v1.json",
@@ -4174,6 +4174,410 @@
         "context_relation": "The page appears to be a blank page with no visible content.",
         "limitations": [
           "No visible text or images on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "14cfe50ba661cac49842685b",
+      "asset_sha256": "a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b8ae16ed33407689abbad5a9c53d1e8a85ac3c97e225a49084a7bff392a4ab39",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:58:53Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e66e6fac89452c8d8f3059a3",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b8ae16ed33407689abbad5a9c53d1e8a85ac3c97e225a49084a7bff392a4ab39",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page with text containing names and titles of educational institutions and individuals.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "दिनेश कुमार, आचार््य, विज्ञान एवं गणित शिक्षा विभााग, राा.शै.अ.प्र.प., नई दिल्ली",
+          "निकोल ऐन फे सेक््‍ववेराा, सहायक आचार््य, गोवाा विश्‍विद्याालय, गोवाा",
+          "नीरजाा दशपुत्े, प्रधान तकनीकी अधिकारी (शिक्षाा), भारतीय विज्ञान शिक्षाा और अनुसंधान संस््थथान, पुणे",
+          "पी.वी. रााघवेेंद्र, सह-आचार््य, विज्ञान एवं गणित शिक्षा विभााग, राा.शै.अ.प्र.प., नई दिल्ली",
+          "पूनम कत््ययााल, पूर््व टी.जी.टी., जीनत महल सर्वोदय कन््ययाा विद्याालय, जााफरााबााद, दिल्ली",
+          "पुनीत शर््ममा"
+        ],
+        "concepts": [
+          "Educational institutions",
+          "Titles of individuals",
+          "Names of people involved in education"
+        ],
+        "context_relation": "The text provides information about educational institutions and individuals involved in teaching and research in the field of science and mathematics.",
+        "limitations": [
+          "The text does not provide any visual elements or diagrams."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:59:43Z",
+      "effective_analysis": {
+        "visual_summary": "Page with text containing names and titles of educational institutions and individuals.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "दिनेश कुमार, आचार््य, विज्ञान एवं गणित शिक्षा विभााग, राा.शै.अ.प्र.प., नई दिल्ली",
+          "निकोल ऐन फे सेक््‍ववेराा, सहायक आचार््य, गोवाा विश्‍विद्याालय, गोवाा",
+          "नीरजाा दशपुत्े, प्रधान तकनीकी अधिकारी (शिक्षाा), भारतीय विज्ञान शिक्षाा और अनुसंधान संस््थथान, पुणे",
+          "पी.वी. रााघवेेंद्र, सह-आचार््य, विज्ञान एवं गणित शिक्षा विभााग, राा.शै.अ.प्र.प., नई दिल्ली",
+          "पूनम कत््ययााल, पूर््व टी.जी.टी., जीनत महल सर्वोदय कन््ययाा विद्याालय, जााफरााबााद, दिल्ली",
+          "पुनीत शर््ममा"
+        ],
+        "concepts": [
+          "Educational institutions",
+          "Titles of individuals",
+          "Names of people involved in education"
+        ],
+        "context_relation": "The text provides information about educational institutions and individuals involved in teaching and research in the field of science and mathematics.",
+        "limitations": [
+          "The text does not provide any visual elements or diagrams."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cfa8370b7f9faf2928686d84",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b8ae16ed33407689abbad5a9c53d1e8a85ac3c97e225a49084a7bff392a4ab39",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page with text containing names and titles of educational institutions and individuals.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "दिनेश कुमार, आचार््य, विज्ञान एवं गणित शिक्षा विभााग, राा.शै.अ.प्र.प., नई दिल्ली",
+          "निकोल ऐन फे सेक््‍ववेराा, सहायक आचार््य, गोवाा विश्‍विद्याालय, गोवाा",
+          "नीरजाा दशपुत्े, प्रधान तकनीकी अधिकारी (शिक्षाा), भारतीय विज्ञान शिक्षाा और अनुसंधान संस््थथान, पुणे",
+          "पी.वी. रााघवेेंद्र, सह-आचार््य, विज्ञान एवं गणित शिक्षा विभााग, राा.शै.अ.प्र.प., नई दिल्ली",
+          "पूनम कत््ययााल, पूर््व टी.जी.टी., जीनत महल सर्वोदय कन््ययाा विद्याालय, जााफरााबााद, दिल्ली",
+          "पुनीत शर््ममा"
+        ],
+        "concepts": [
+          "Educational institutions",
+          "Titles of individuals",
+          "Names of people involved in education"
+        ],
+        "context_relation": "The text is a list of names and titles of educational institutions and individuals.",
+        "limitations": [
+          "The text is in Hindi and may not be easily readable by non-Hindi speakers."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:00:32Z",
+      "effective_analysis": {
+        "visual_summary": "Page with text containing names and titles of educational institutions and individuals.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "दिनेश कुमार, आचार््य, विज्ञान एवं गणित शिक्षा विभााग, राा.शै.अ.प्र.प., नई दिल्ली",
+          "निकोल ऐन फे सेक््‍ववेराा, सहायक आचार््य, गोवाा विश्‍विद्याालय, गोवाा",
+          "नीरजाा दशपुत्े, प्रधान तकनीकी अधिकारी (शिक्षाा), भारतीय विज्ञान शिक्षाा और अनुसंधान संस््थथान, पुणे",
+          "पी.वी. रााघवेेंद्र, सह-आचार््य, विज्ञान एवं गणित शिक्षा विभााग, राा.शै.अ.प्र.प., नई दिल्ली",
+          "पूनम कत््ययााल, पूर््व टी.जी.टी., जीनत महल सर्वोदय कन््ययाा विद्याालय, जााफरााबााद, दिल्ली",
+          "पुनीत शर््ममा"
+        ],
+        "concepts": [
+          "Educational institutions",
+          "Titles of individuals",
+          "Names of people involved in education"
+        ],
+        "context_relation": "The text is a list of names and titles of educational institutions and individuals.",
+        "limitations": [
+          "The text is in Hindi and may not be easily readable by non-Hindi speakers."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "41613b46daf70510503be425",
+      "asset_sha256": "7ca12ff03a8519cee9907fcda3ac8c520ce25537914bb7da9adf51417954b38a",
+      "page_text_context_sha256": "b8ae16ed33407689abbad5a9c53d1e8a85ac3c97e225a49084a7bff392a4ab39",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 12,
+      "asset_path": "page-0012.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e432b82b98295c23845e68be",
+      "asset_sha256": "a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b6e5df874529d1f3a846945ec995c7efa5dc323fc77ab137efc6283af575aad1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "No visible text or images on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:03:19Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "No visible text or images on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8e0b5ec8ece0bfde8f020e09",
+      "asset_sha256": "a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b6e5df874529d1f3a846945ec995c7efa5dc323fc77ab137efc6283af575aad1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible content.",
+        "limitations": [
+          "No visible text or content on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:03:25Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible content.",
+        "limitations": [
+          "No visible text or content on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "af6e44686c6be3fcc48c139c",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b6e5df874529d1f3a846945ec995c7efa5dc323fc77ab137efc6283af575aad1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:03:39Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "61b1899f9271be9a1373d8e0",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b6e5df874529d1f3a846945ec995c7efa5dc323fc77ab137efc6283af575aad1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:03:53Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2b131a17738a588663b5352b",
+      "asset_sha256": "efaefaffa3d7d2ee4019dacb10ea5295a34833882578f7a76098ddc582f42d97",
+      "page_text_context_sha256": "b6e5df874529d1f3a846945ec995c7efa5dc323fc77ab137efc6283af575aad1",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 13,
+      "asset_path": "page-0013.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0ba5c6dc41cae39f71629cbb",
+      "asset_sha256": "a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55",
+      "source_book_id": "ncert-c7-hindi-ghcu1",
+      "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/a182424df285d0ae17ccd6d145741a65e734e4fcfa125f99b878f74e6e2f3d55.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "39ea3a4d6d437c3f8086b81dc455d0eb91cdaa95a045e0b1a712c717e4ef2c92",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible text or content.",
+        "limitations": [
+          "The page is blank and does not contain any text or visual elements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:06:46Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible text or content.",
+        "limitations": [
+          "The page is blank and does not contain any text or visual elements."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
