@@ -287,7 +287,8 @@ public class CourseOrderFinancialService {
       left join billing_legal_entity le on le.id=r.legal_entity_id
       where r.policy_id=? order by recipient_name,r.id
       """,policyId);
-    if(recipientRows.isEmpty()) throw new IllegalStateException("The approved revenue-share policy has no recipients. HRMS must configure at least one institution or company.");
+    // A remainder-only policy is valid: the configured institution or company can receive
+    // the full distributable pool without requiring a redundant 100% explicit-share row.
     List<Map<String,Object>> recipientSnapshots=new ArrayList<>();
     List<RevenueDistributionCalculator.BeneficiaryShare> validationShares=new ArrayList<>();
     long percentageBasisPoints=0;
