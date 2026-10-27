@@ -15,12 +15,12 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "ed47972eb74639ec9bc709d3"
+      "c2670b10a1cbf2cd7b34410e"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1329,
-    "assets_remaining": 962,
-    "assets_completion_percent": 58.0,
+    "assets_analyzed": 1330,
+    "assets_remaining": 961,
+    "assets_completion_percent": 58.1,
     "assets_failed": 15,
     "assets_skipped_from_checkpoint": 1329,
     "batch_limit": 5,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40491993157",
-      "checkpointed_at": "2026-10-27T11:50:12Z"
+      "checkpointed_at": "2026-10-27T11:56:44Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40491993157",
-      "checkpointed_at": "2026-10-27T11:50:39Z"
+      "checkpointed_at": "2026-10-27T11:57:10Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40491993157",
-      "checkpointed_at": "2026-10-27T11:51:10Z"
+      "checkpointed_at": "2026-10-27T11:57:42Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40491993157",
-      "checkpointed_at": "2026-10-27T11:51:58Z"
+      "checkpointed_at": "2026-10-27T11:58:29Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -44225,6 +44225,34 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40474310784",
       "checkpointed_at": "2026-10-27T10:50:29Z"
+    },
+    {
+      "asset_id": "c2670b10a1cbf2cd7b34410e",
+      "asset_sha256": "90f2b9164db05ef2b9e8ce319ccee55f602468e6fe495e6bc6371e568b60c924",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 111,
+      "asset_path": "assets/90f2b9164db05ef2b9e8ce319ccee55f602468e6fe495e6bc6371e568b60c924.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9953e75554b5b7568230a6dc61fc42937365a2994a0e78c22c92c7477ce4ec80",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character is climbing stairs, smiling and extending their hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information related to the text provided in the source PDF page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40491993157",
+      "checkpointed_at": "2026-10-27T11:59:06Z"
     }
   ]
 }
