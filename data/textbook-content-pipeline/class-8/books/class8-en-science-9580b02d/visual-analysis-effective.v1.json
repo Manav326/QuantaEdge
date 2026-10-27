@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a78801ce35d6bac49a289cc010cccd8af87b7536fd7b7628a4f03d9af3b0813b",
+  "raw_analysis_sha256": "09382abe7b29907d67711fd7861e9ad408990ce579f5571e96d4f334200c4b01",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40466785838",
-      "checkpointed_at": "2026-10-27T07:46:34Z",
+      "checkpointed_at": "2026-10-27T07:53:24Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40466785838",
-      "checkpointed_at": "2026-10-27T07:47:01Z",
+      "checkpointed_at": "2026-10-27T07:53:50Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57856,14 +57856,14 @@
         ],
         "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The image does not provide specific details about the types of forces or the physical properties of the objects."
+          "The image does not provide specific details about the forces acting on the objects in the diagram."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40450969894",
-      "checkpointed_at": "2026-10-27T07:01:58Z",
+      "run_id": "40466785838",
+      "checkpointed_at": "2026-10-27T07:55:40Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -57885,7 +57885,7 @@
         ],
         "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "limitations": [
-          "The image does not provide specific details about the types of forces or the physical properties of the objects."
+          "The image does not provide specific details about the forces acting on the objects in the diagram."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -58830,9 +58830,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40450969894",
+      "run_id": "40466785838",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -60474,7 +60474,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40450969894",
+      "run_id": "40466785838",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
