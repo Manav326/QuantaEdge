@@ -1220,6 +1220,205 @@ public class CoursePaymentOperationsController {
     }
   }
 
+  private RepairEvaluation evaluateMissingRemainderRepair(long orderId,String suppliedType,long recipientId) {
+    String type=suppliedType==null?"":suppliedType.trim().toUpperCase(Locale.ROOT);
+    Map<String,Object> order=singleRow("""
+      select o.id,o.status,o.institution_id,o.currency,o.captured_amount_paise,o.output_tax_paise,
+        o.provider_payment_id,o.offer_price_paise,o.listed_price_paise,o.discount_offer_id,
+        o.discount_amount_paise,o.discount_reference,o.tax_profile_id,o.taxable_value_paise,
+        o.revenue_share_policy_id,o.tax_calculation_snapshot::text as tax_calculation_snapshot_json,
+        o.revenue_share_policy_snapshot::text as revenue_share_policy_snapshot_json,
+        o.discount_snapshot::text as discount_snapshot_json,o.buyer_snapshot::text as buyer_snapshot_json,
+        o.tax_calculation_snapshot->>'customerPayablePaise' as snapshot_payable_paise,
+        o.tax_calculation_snapshot->>'listedPricePaise' as snapshot_listed_price_paise,
+        o.tax_calculation_snapshot->>'taxProfileId' as snapshot_tax_profile_id,
+        o.tax_calculation_snapshot->>'taxableValuePaise' as snapshot_taxable_value_paise,
+        o.tax_calculation_snapshot->>'outputTaxPaise' as snapshot_output_tax_paise,
+        o.tax_calculation_snapshot->>'discountOfferId' as tax_snapshot_discount_offer_id,
+        o.tax_calculation_snapshot->>'discountCode' as tax_snapshot_discount_code,
+        o.tax_calculation_snapshot->>'discountPaise' as tax_snapshot_discount_paise,
+        o.discount_snapshot->>'discountOfferId' as discount_snapshot_offer_id,
+        o.discount_snapshot->>'code' as discount_snapshot_code,
+        o.discount_snapshot->>'discountPaise' as discount_snapshot_discount_paise
+      from course_payment_order o where o.id=?
+      """,orderId);
+    if(order.isEmpty())return RepairEvaluation.blocked(Map.of("id",orderId),Map.of(),"",type,recipientId,"Course payment order not found.");
+    String raw=text(order.get("revenue_share_policy_snapshot_json"));
+    String hash=sha256Hex(raw);
+    Map<String,Object> snapshot;
+    try {
+      if(raw.isBlank())throw new IllegalArgumentException("Missing locked policy snapshot");
+      snapshot=mapper.readValue(raw,new TypeReference<Map<String,Object>>() {});
+    } catch(Exception ignored) {
+      return RepairEvaluation.blocked(order,Map.of(),hash,type,recipientId,
+          "The original locked revenue policy snapshot is missing or unreadable. Manual finance review is required.");
+    }
+    if(!"VERIFIED".equalsIgnoreCase(text(order.get("status"))))
+      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"Only verified course sales can be considered for a remainder repair.");
+    if(!"INR".equalsIgnoreCase(text(order.get("currency"))))
+      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"This repair path supports INR only. Non-INR sales require a separate reviewed process.");
+    if(!List.of("INSTITUTION","COMPANY").contains(type)||recipientId<=0)
+      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"Choose an active institution or company recipient.");
+    if(!CourseMarketplaceController.hasLockedFinancialSnapshots(order))
+      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"The sale's locked tax or revenue-share snapshot is incomplete.");
+    long policyId=number(order.get("revenue_share_policy_id"));
+    if(policyId<=0||number(snapshot.get("policyId"))!=policyId)
+      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"The order and locked revenue-policy IDs do not match.");
+    if(numberOrMinusOne(order.get("snapshot_payable_paise"))!=number(order.get("offer_price_paise"))
+        ||numberOrMinusOne(order.get("snapshot_listed_price_paise"))!=number(order.get("listed_price_paise"))
+        ||numberOrMinusOne(order.get("snapshot_tax_profile_id"))!=number(order.get("tax_profile_id"))
+        ||!snapshotNumberMatches(order,"snapshot_taxable_value_paise","taxable_value_paise")
+        ||!snapshotNumberMatches(order,"snapshot_output_tax_paise","output_tax_paise")
+        ||!discountSnapshotMatches(order)||!presentJsonObject(order.get("buyer_snapshot_json")))
+      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"Tax, discount, buyer or payable snapshots do not reconcile. This sale is not eligible for automatic repair.");
+    long paid=number(order.get("captured_amount_paise")),tax=number(order.get("output_tax_paise"));
+    if(paid<=0||tax<0||tax>paid)
+      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"The captured amount or output-tax basis is invalid.");
+
+    String savedType=text(snapshot.get("remainderRecipientType")).toUpperCase(Locale.ROOT);
+    long savedId=number(snapshot.get("remainderRecipientId"));
+    boolean namedRemainder=List.of("INSTITUTION","COMPANY").contains(savedType)&&savedId>0;
+    if(namedRemainder&&(!type.equals(savedType)||recipientId!=savedId))
+      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"The original sale snapshot names a different remainder recipient. Do not substitute a new recipient.");
+    if(!namedRemainder&&!savedType.isBlank()&&!"PLATFORM_REMAINDER".equals(savedType))
+      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"The saved remainder fields are malformed; manual finance review is required.");
+
+    String recipientName;
+    if("INSTITUTION".equals(type)) {
+      Map<String,Object> recipient=singleRow("select display_name as name,status from institution_tenant where id=?",recipientId);
+      if(recipient.isEmpty()||!"ACTIVE".equalsIgnoreCase(text(recipient.get("status"))))
+        return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"The proposed institution must be active.");
+      recipientName=text(recipient.get("name"));
+    } else {
+      Map<String,Object> recipient=singleRow("select coalesce(nullif(trade_name,''),legal_name) as name,status,entity_kind from billing_legal_entity where id=?",recipientId);
+      if(recipient.isEmpty()||!"ACTIVE".equalsIgnoreCase(text(recipient.get("status")))
+          ||!List.of("PLATFORM","COMPANY").contains(text(recipient.get("entity_kind")).toUpperCase(Locale.ROOT)))
+        return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"The proposed legal entity must be an active platform/company entity.");
+      recipientName=text(recipient.get("name"));
+    }
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select a.id,a.policy_id,a.policy_recipient_id,a.recipient_type,a.institution_id,a.legal_entity_id,
+        a.currency,a.actual_paid_paise,a.output_tax_paise,a.distributable_pool_paise,a.allocated_amount_paise,
+        coalesce(sum(e.amount_paise) filter(where e.event_type='EARNED'),0) as earned_event_amount_paise,
+        count(e.id) filter(where e.event_type='EARNED') as earned_event_count
+      from revenue_share_allocation a left join revenue_share_allocation_event e on e.allocation_id=a.id
+      where a.course_payment_order_id=?
+      group by a.id,a.policy_id,a.policy_recipient_id,a.recipient_type,a.institution_id,a.legal_entity_id,
+        a.currency,a.actual_paid_paise,a.output_tax_paise,a.distributable_pool_paise,a.allocated_amount_paise
+      order by a.id
+      """,orderId);
+    String key=type+":"+recipientId;
+    if(rows.stream().anyMatch(row->key.equals(text(row.get("recipient_type"))+":"+
+        number("COMPANY".equals(type)?row.get("legal_entity_id"):row.get("institution_id")))))
+      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,
+          "This recipient already has an allocation row. A duplicate row is not safe; a reviewed additive correction to the existing allocation is required.");
+
+    CourseRevenueAllocationReconciliation.Result baseline;
+    try {
+      baseline=CourseRevenueAllocationReconciliation.reconcile(snapshot,policyId,paid,tax,text(order.get("currency")),rows);
+    } catch(RuntimeException ignored) {
+      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"The original sale cannot be recalculated safely.");
+    }
+    if(baseline.remainderPaise()<=0)
+      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"There is no positive remainder to allocate. No zero-value repair will be created.");
+
+    Map<String,Object> proposedSnapshot=new LinkedHashMap<>(snapshot);
+    proposedSnapshot.put("remainderRecipientType",type);
+    proposedSnapshot.put("remainderRecipientId",recipientId);
+    proposedSnapshot.put("remainderRecipientName",recipientName);
+    CourseRevenueAllocationReconciliation.Result result;
+    try {
+      result=CourseRevenueAllocationReconciliation.reconcile(proposedSnapshot,policyId,paid,tax,text(order.get("currency")),rows);
+    } catch(RuntimeException ignored) {
+      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"The proposed distribution cannot be recalculated safely.");
+    }
+    String missing="Expected recipient "+key+" has no allocation row.";
+    boolean remainderOnlyException= result.issues().contains(missing)&&result.issues().size()==3
+        &&result.issues().stream().allMatch(issue->issue.equals(missing)
+          ||issue.startsWith("Recorded allocation total ")
+          ||issue.equals("The recorded allocation ledger does not account for the complete distributable pool."));
+    if(!remainderOnlyException) {
+      String explanation=String.join(" ",result.issues().stream().limit(3).toList());
+      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,
+          "The sale has additional discrepancies beyond a missing remainder allocation and cannot be repaired automatically. "+explanation);
+    }
+    return new RepairEvaluation(true,"",order,snapshot,result,hash,baseline.remainderPaise(),
+        text(order.get("currency")).toUpperCase(Locale.ROOT),type,recipientId,recipientName);
+  }
+
+  private Map<String,Object> singleRow(String sql,Object...args) {
+    List<Map<String,Object>> rows=jdbc.queryForList(sql,args);
+    return rows.isEmpty()?Map.of():rows.getFirst();
+  }
+
+  private String writeJson(Object value) {
+    try { return mapper.writeValueAsString(value); }
+    catch(Exception exception) { throw new IllegalStateException("The finance reconciliation record could not be serialized.",exception); }
+  }
+
+  private static String sha256Hex(String value) {
+    try {
+      byte[] digest=java.security.MessageDigest.getInstance("SHA-256")
+          .digest((value==null?"":value).getBytes(java.nio.charset.StandardCharsets.UTF_8));
+      return java.util.HexFormat.of().formatHex(digest);
+    } catch(java.security.NoSuchAlgorithmException exception) {
+      throw new IllegalStateException("SHA-256 is unavailable for financial snapshot evidence.",exception);
+    }
+  }
+
+  private void auditDistributionRepair(long orderId,String recipientType,long recipientId,long actorStaffId,
+      String action,long repairId,Map<String,Object> details) {
+    jdbc.update("""
+      insert into billing_financial_audit_log(legal_entity_id,institution_id,actor_staff_id,action,target_type,target_id,details)
+      select ?,o.institution_id,?,?,'COURSE_REVENUE_DISTRIBUTION_REPAIR',?,?::jsonb
+      from course_payment_order o where o.id=?
+      ""","COMPANY".equals(recipientType)?recipientId:null,actorStaffId,action,Long.toString(repairId),writeJson(details),orderId);
+  }
+
+  private Map<String,Object> repairResponse(Map<String,Object> row,String message) {
+    Map<String,Object> response=new LinkedHashMap<>();
+    response.put("id",number(row.get("id")));
+    response.put("orderId",number(row.get("course_payment_order_id")));
+    response.put("status",text(row.get("status")));
+    response.put("recipientType",text(row.get("remainder_recipient_type")));
+    response.put("recipientId","COMPANY".equals(text(row.get("remainder_recipient_type"))
+        )?number(row.get("remainder_legal_entity_id")):number(row.get("remainder_institution_id")));
+    response.put("remainderAmountPaise",number(row.get("remainder_amount_paise")));
+    response.put("currency",text(row.get("currency")));
+    response.put("reason",text(row.get("reason")));
+    response.put("evidenceReference",text(row.get("evidence_reference")));
+    response.put("reviewReason",text(row.get("review_reason")));
+    response.put("proposedByStaffId",number(row.get("proposed_by_staff_id")));
+    response.put("reviewedByStaffId",number(row.get("reviewed_by_staff_id")));
+    response.put("allocationId",row.get("allocation_id"));
+    response.put("message",message);
+    return response;
+  }
+
+  private record RepairEvaluation(boolean canPropose,String blockReason,Map<String,Object> order,
+      Map<String,Object> snapshot,CourseRevenueAllocationReconciliation.Result result,String snapshotSha256,
+      long remainderAmountPaise,String currency,String recipientType,long recipientId,String recipientName) {
+    static RepairEvaluation blocked(Map<String,Object> order,Map<String,Object> snapshot,String hash,
+        String type,long recipientId,String reason) {
+      return new RepairEvaluation(false,reason,order==null?Map.of():order,snapshot==null?Map.of():snapshot,
+          null,hash==null?"":hash,0L,order==null?"":String.valueOf(order.getOrDefault("currency","")),type,recipientId,"");
+    }
+    Map<String,Object> asMap() {
+      Map<String,Object> resultMap=new LinkedHashMap<>();
+      resultMap.put("canPropose",canPropose);
+      resultMap.put("blockReason",blockReason);
+      resultMap.put("orderId",number(order.get("id")));
+      resultMap.put("recipientType",recipientType);
+      resultMap.put("recipientId",recipientId);
+      resultMap.put("recipientName",recipientName);
+      resultMap.put("remainderAmountPaise",remainderAmountPaise);
+      resultMap.put("currency",currency);
+      resultMap.put("originalSnapshotSha256",snapshotSha256);
+      if(result!=null)resultMap.put("distributionReconciliation",result.asMap());
+      return resultMap;
+    }
+  }
+
   static String normalizeStatus(String status) {
     if(status==null||status.isBlank()) return null;
     String normalized=status.trim().toUpperCase(Locale.ROOT);
