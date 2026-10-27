@@ -1432,6 +1432,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--database-url", help="PostgreSQL URL; otherwise TRE4_DATABASE_URL or SPRING_DATASOURCE_URL is used.")
     parser.add_argument("--apply", action="store_true", help="Commit the classless ASSESSMENT course, versioned test packs, draft tests, questions, and release records. Without this flag, no DB writes occur.")
     parser.add_argument(
+        "--repair-draft-hindi", action="store_true",
+        help="With --apply, repair only OCR-reconstructed Hindi prompts in the already-existing TRE course while its release, assessments, and packs are DRAFT and every question/answer review state is still pending.",
+    )
+    parser.add_argument(
         "--submit-for-review", action="store_true",
         help="With --apply, transition the source release DRAFT → IN_QUALITY_REVIEW only when all assessments and complete test packs are already PUBLISHED and every server-side review/readiness gate passes. Does not approve or publish content."
     )
@@ -1443,6 +1447,12 @@ def main() -> int:
     if args.submit_for_review and not args.apply:
         print("ERROR: --submit-for-review requires --apply.", file=sys.stderr)
         return 2
+    if args.repair_draft_hindi and not args.apply:
+        print("ERROR: --repair-draft-hindi requires --apply; without it no database repair is attempted.", file=sys.stderr)
+        return 2
+    if args.repair_draft_hindi and args.submit_for_review:
+        print("ERROR: --repair-draft-hindi cannot be combined with --submit-for-review. Repair and review submission are separate lifecycle actions.", file=sys.stderr)
+        return 2
     try:
         inventory, register = load_inventory(args)
         papers_map = inventory.get("papers")
@@ -1453,7 +1463,7 @@ def main() -> int:
         if not re.fullmatch(r"[0-9a-fA-F]{64}", archive_hash):
             raise ImportErrorSafe("Inventory has no valid source archive SHA-256.")
         plan = {
-            "mode": "APPLY" if args.apply else "DRY_RUN",
+            "mode": "REPAIR_DRAFT_HINDI" if args.repair_draft_hindi else "APPLY" if args.apply else "DRY_RUN",
             "course": COURSE_TITLE,
             "sourceInstitution": "QUANTA-EDGE",
             "courseTypeCode": COURSE_TYPE_CODE,
@@ -1484,7 +1494,11 @@ def main() -> int:
         if not args.apply:
             print(json.dumps(plan, ensure_ascii=False, indent=2))
             return 0
-        report = database_import(args, papers, archive_hash)
+        report = (
+            database_repair_draft_hindi(args, papers)
+            if args.repair_draft_hindi
+            else database_import(args, papers, archive_hash)
+        )
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0
     except (ImportErrorSafe, OSError, ValueError, json.JSONDecodeError, subprocess.SubprocessError) as exc:
