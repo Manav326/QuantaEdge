@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
     "raw_analysis_result_rows": 1317,
-    "successful_visual_analyses": 1303,
+    "successful_visual_analyses": 1305,
     "missing_visual_analyses": 974,
-    "failed_visual_analyses": 14,
+    "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 988,
+    "unresolved_count": 986,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -49054,9 +49054,43 @@
       "asset_path": "page-0104.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a balloon with water being added to it, and a question about the effect of increasing the height of the water column on the balloon's bulge.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 6.6: Higher heights of water column produce bigger bulge of the balloon",
+          "What will happen to the bulge of the balloon if we increase the height of the water column?",
+          "Pour some more water in any one of the pipes used in Fig. 6.5. Observe the bulge of the balloon. Repeat this process a few times, adding more water each time and noting the extent of bulge as shown in Fig. 6.6.",
+          "Do you see any relation between the amount of bulge of the rubber balloon and the height of the water column in the pipe? You must have observed that the bulge of the balloon increases as the height of the water column increases.",
+          "Thus, as the height of the water column in the pipe increases, the pressure at the bottom of the pipe also increases, which causes the balloon to bulge more. So, we can say that the pressure exerted by a liquid in a vessel depends on the height of its column. This is the reason why overhead tanks ar",
+          "Suppose you are living on the second floor of a three-storeyed building and an overhead water tank is placed on the top floor. Will you or your friend on the first floor receive a more powerful stream of tap water? Give reasons.",
+          "Do liquids also exert pressure on the walls of the container? Let us find out by conducting the following activity.",
+          "Activity 6.2: Let us find out",
+          "Take a used plastic bottle and remove its cap. Make four small holes near the bottom around the sides using a needle or a nail. Make sure that the holes are at the same height from the bottom as shown in Fig. 6.7. (If you find it difficult to make a hole, you can slightly heat the needle and poke it",
+          "Seal the holes with a tape and fill the bottle with water. Now, remove the tape from all holes at the same time. What do you observe?"
+        ],
+        "concepts": [
+          "pressure",
+          "buoyancy",
+          "hydrostatic pressure",
+          "buoyant force",
+          "column height",
+          "water column",
+          "balloon bulge",
+          "overhead tanks",
+          "pressure in taps",
+          "liquid pressure",
+          "container walls",
+          "activity"
+        ],
+        "context_relation": "The image is a part of a textbook page that explains the concept of pressure exerted by liquids in different containers and how it affects the shape of objects placed in those containers.",
+        "limitations": [
+          "The image does not provide specific numerical values or measurements.",
+          "The image does not show the actual experiment being conducted."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -49214,9 +49248,30 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Observation of water flowing out from holes in a container, indicating pressure on the sides.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "85",
+          "You observe water flowing out through the holes on the sides of the bottle. What can you infer from this observation?",
+          "It indicates that water also exerts pressure on the sides of a container. Therefore, we can conclude that liquids exert pressure not only at the bottom of the container, but also on its sides. In fact liquids exert pressure in all directions.",
+          "You must have seen water spurting out like a fountain from leaking joints or holes in water pipes. Can you explain why this happens?"
+        ],
+        "concepts": [
+          "Pressure",
+          "Liquids",
+          "Pressure on sides of a container",
+          "Pressure in all directions",
+          "Water spurting out"
+        ],
+        "context_relation": "Observation and explanation of pressure in liquids",
+        "limitations": [
+          "No specific image provided, only text description."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
