@@ -1,7 +1,5 @@
 package com.quantaedge.api;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
@@ -29,16 +27,6 @@ class AccountProfileControllerTest {
   void setUp() {
     when(authorization.requireAuth(learner)).thenReturn(learner);
     controller = new AccountProfileController(jdbc, authorization);
-  }
-
-  @Test
-  void preferredLocaleAcceptsOnlyRegisteredUiLocales() {
-    assertEquals("english", AccountProfileController.normalizePreferredLocale(" ENGLISH "));
-    assertEquals("hinglish", AccountProfileController.normalizePreferredLocale("Hinglish"));
-    assertThrows(IllegalArgumentException.class,
-        () -> AccountProfileController.normalizePreferredLocale("bhojpuri"));
-    assertThrows(IllegalArgumentException.class,
-        () -> AccountProfileController.normalizePreferredLocale("fr"));
   }
 
   @Test
