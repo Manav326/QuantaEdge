@@ -22,8 +22,12 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 5
     steps:
-      - name: Check out repository
+      - name: Check out only the TRE importer
         uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            scripts/import_tre4_local.ps1
+          sparse-checkout-cone-mode: false
 
       - name: Validate PowerShell syntax without running the importer
         shell: powershell
