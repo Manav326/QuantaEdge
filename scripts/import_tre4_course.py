@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Import TRE-4 source papers into QuantaEdge while preserving the database lifecycle.
+"""Import BPSC TRE Computer Science previous-year papers into QuantaEdge while preserving the database lifecycle.
 
 Default mode is a dry run. --apply creates/reuses the source-owned ASSESSMENT course, DRAFT
 assessments, DRAFT test packs and, on first import, a DRAFT release. The importer never approves
@@ -27,9 +27,9 @@ from urllib.parse import urlparse
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_ARCHIVE = REPO_ROOT / "data" / "TRE-4_PYQ.zip"
 DEFAULT_REGISTER = REPO_ROOT / "data" / "TRE-Papres" / "source-register.json"
-COURSE_VERSION = "BPSC-TRE-4"
-COURSE_CODE_SUFFIX = "TRE4"
-COURSE_TITLE = "TRE-4 · Computer Science"
+COURSE_VERSION = "BPSC-TRE-CS-PYQ-SERIES"
+COURSE_CODE_SUFFIX = "BPSC_TRE_CS_PYQ_SERIES"
+COURSE_TITLE = "BPSC TRE Computer Science — Previous-Year Practice Series"
 COURSE_TYPE_CODE = "ASSESSMENT"
 PACKAGE_VERSION = "1.0.0"
 EXPECTED_QUESTIONS = {"TRE 1.0": 120, "TRE 2.0": 150, "TRE 3.0": 150}
@@ -51,6 +51,8 @@ EXPECTED_SOURCE_IDENTITIES = {
     },
 }
 PACKAGE_IDS = {
+    # Kept stable because migration V199 validates these source-package IDs.
+    # They are scoped to the new course_id and do not link to the rejected TRE4 graph.
     "TRE 1.0": "tre4-bpsc-tre-1-0-computer-science",
     "TRE 2.0": "tre4-bpsc-tre-2-0-computer-science",
     "TRE 3.0": "tre4-bpsc-tre-3-0-computer-science",
@@ -505,7 +507,7 @@ def ensure_schema(cursor: Any) -> None:
 
 
 def get_or_create_course(cursor: Any, institution_id: int) -> tuple[int, str, bool]:
-    """Create/reuse TRE-4 only when its stable source identity exists before its graph."""
+    """Create/reuse this course only when its stable source identity exists before its graph."""
     internal_code = f"I{institution_id}_{COURSE_CODE_SUFFIX}"
     cursor.execute("""
         SELECT id,display_name,status,public_id,class_id,course_type_code,course_identity_id
@@ -575,7 +577,7 @@ def get_or_create_course(cursor: Any, institution_id: int) -> tuple[int, str, bo
         RETURNING id,public_id
     """, (
         internal_code, COURSE_TITLE, COURSE_VERSION,
-        "QuantaEdge-origin BPSC TRE-4 assessment course. Hierarchy is course → test packs → assessments → ordered question snapshots; source questions and answers remain review-gated.",
+        "QuantaEdge-origin BPSC TRE Computer Science Previous-Year Practice Series. Hierarchy is course → test packs → assessments → ordered question snapshots; source questions and answers remain review-gated.",
         identity_id,
     ))
     course_id, public_id = cursor.fetchone()
@@ -853,7 +855,7 @@ def lock_latest_draft_release(cursor: Any, institution_id: int, course_id: int) 
     row = cursor.fetchone()
     if row and str(row[2]) != "DRAFT":
         raise ImportErrorSafe(
-            f"The latest TRE-4 course release is {row[2]}; source import only writes into an editable DRAFT release. "
+            f"The latest BPSC TRE Computer Science Previous-Year Practice Series release is {row[2]}; source import only writes into an editable DRAFT release. "
             "Use the supported release/version workflow before importing revised content."
         )
 
@@ -870,7 +872,7 @@ def lock_latest_draft_release(cursor: Any, institution_id: int, course_id: int) 
     frozen_release = cursor.fetchone()
     if frozen_release:
         raise ImportErrorSafe(
-            f"TRE-4 course graph is immutable because release {frozen_release[0]} is {frozen_release[1]}. "
+            f"BPSC TRE Computer Science Previous-Year Practice Series graph is immutable because release {frozen_release[0]} is {frozen_release[1]}. "
             "Create/fork a new course version through the supported course-version workflow; do not import into the frozen graph."
         )
 
@@ -884,7 +886,7 @@ def lock_latest_draft_release(cursor: Any, institution_id: int, course_id: int) 
     published_offer = cursor.fetchone()
     if published_offer:
         raise ImportErrorSafe(
-            f"TRE-4 course graph is immutable because Marketplace offer {published_offer[0]} has reached published state/history. "
+            f"BPSC TRE Computer Science Previous-Year Practice Series graph is immutable because Marketplace offer {published_offer[0]} has reached published state/history. "
             "Create/fork a new course version through the supported course-version workflow before importing changes."
         )
     return row
@@ -1052,7 +1054,7 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                         WHERE id=%s AND source_institution_id=%s AND release_state='DRAFT'
                     """, (fingerprint, release_id, institution_id))
                     if cursor.rowcount != 1:
-                        raise ImportErrorSafe("The editable TRE-4 release changed concurrently; retry the import.")
+                        raise ImportErrorSafe("The editable BPSC TRE Computer Science Previous-Year Practice Series release changed concurrently; retry the import.")
                     release_submitted = True
                 elif str(saved_fingerprint or "").strip() != fingerprint:
                     cursor.execute("""
@@ -1068,10 +1070,10 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                 """, (release_id,))
                 release_row = cursor.fetchone()
             if not release_row:
-                raise ImportErrorSafe("TRE-4 release row is missing after import.")
+                raise ImportErrorSafe("BPSC TRE Computer Science Previous-Year Practice Series release row is missing after import.")
             release_id, release_version, release_state, _ = release_row
             if str(release_state) not in ({"DRAFT", "IN_QUALITY_REVIEW"} if release_submitted else {"DRAFT"}):
-                raise ImportErrorSafe("TRE-4 import ended in an unexpected lifecycle state.")
+                raise ImportErrorSafe("BPSC TRE Computer Science Previous-Year Practice Series import ended in an unexpected lifecycle state.")
             assignment_id = ensure_source_assignment(cursor, institution_id, int(release_id))
             if created_course:
                 cursor.execute("""
@@ -1079,7 +1081,7 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                       institution_id,course_release_id,assignment_id,event_type,details
                     ) VALUES (%s,%s,%s,'COURSE_CREATED',%s::jsonb)
                 """, (institution_id, release_id, assignment_id, json.dumps({
-                    "courseId": course_id, "courseCode": f"I{institution_id}_TRE4",
+                    "courseId": course_id, "courseCode": f"I{institution_id}_{COURSE_CODE_SUFFIX}",
                     "courseIdentityId": course_identity_id, "publicId": public_id,
                     "courseTypeCode": COURSE_TYPE_CODE,
                     "hierarchy": "COURSE_TEST_PACK_ASSESSMENT_ORDERED_QUESTIONS",
@@ -1093,7 +1095,7 @@ def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], arch
                     ) VALUES (%s,%s,%s,'RELEASE_SUBMITTED',%s::jsonb)
                 """, (institution_id, release_id, assignment_id, json.dumps({
                     "courseId": course_id,
-                    "workflow": "TRE-4 import CLI",
+                    "workflow": "BPSC TRE Computer Science Previous-Year Practice Series import CLI",
                     "deliveryMode": "ASSESSMENT_ONLY",
                     "sourceArchiveSha256": archive_sha256,
                     "reviewRequired": True,
