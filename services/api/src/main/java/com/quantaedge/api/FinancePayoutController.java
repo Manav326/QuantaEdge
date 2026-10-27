@@ -1188,6 +1188,10 @@ public class FinancePayoutController {
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=requireManage(context);
     if(context.staffId()==null)throw new SecurityException("An authenticated HRMS staff identity is required to generate payout statements.");
+    // Serialize revision allocation for a batch so concurrent requests cannot race the unique revision index.
+    List<Map<String,Object>> lockedBatch=jdbc.queryForList(
+        "select id from finance_payout_batch where id=? for update",batchId);
+    if(lockedBatch.isEmpty())throw notFound("Payout batch was not found.");
     String type=body==null?"BATCH_SUMMARY":optionalText(body.get("documentType"));
     if(type==null)type="BATCH_SUMMARY";
     type=type.trim().toUpperCase(Locale.ROOT);
