@@ -173,5 +173,21 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
         self.assertIn('portable-package questions or tests belonging to an ASSESSMENT_ONLY course', assessment_controller)
 
 
+    def test_revenue_share_calculation_snapshot_is_typed_as_jsonb(self):
+        financial = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseOrderFinancialService.java").read_text(encoding="utf-8")
+
+        # JdbcTemplate binds json(calc) as a VARCHAR. Cast the parameter at the SQL
+        # boundary so PostgreSQL receives the JSON object as the column's jsonb type.
+        self.assertIn(
+            "allocated_amount_paise,platform_remainder_paise,calculation_snapshot,idempotency_key",
+            financial,
+        )
+        self.assertIn(
+            ") values(?,?,?,?,?,?,?,?,?,?,?,?::jsonb,?) returning id",
+            financial,
+        )
+
+
+
 if __name__ == "__main__":
     unittest.main()
