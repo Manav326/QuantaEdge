@@ -43,7 +43,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class PayoutSettlementPdfRenderer {
-  private static final int WIDTH=1240,HEIGHT=1754,MARGIN=64,CONTENT_WIDTH=WIDTH-(MARGIN*2);
+  private static final int WIDTH=1240,HEIGHT=1754,RENDER_SCALE=2,MARGIN=64,CONTENT_WIDTH=WIDTH-(MARGIN*2);
   private static final int FOOTER_Y=HEIGHT-68;
   private static final int MAX_PAGES=120;
   private static final Color INK=new Color(0x152038),MUTED=new Color(0x667085),
@@ -94,7 +94,7 @@ public class PayoutSettlementPdfRenderer {
         new Metric(recipientOnly?"PAYOUT AMOUNT":"BATCH TRANSFER VALUE",money(recipientOnly?first(safePayouts,"amount_paise"):safeBatch.get("total_amount_paise"),currency(safeBatch))),
         new Metric(recipientOnly?"TRANSFER STATUS":"RECIPIENT TRANSFERS",recipientOnly?label(first(safePayouts,"status")):String.valueOf(safePayouts.size())),
         new Metric(recipientOnly?"BANK REFERENCE":"CONFIRMED PAID",recipientOnly?utr(firstMap(safePayouts)):String.valueOf(countStatus(safePayouts,"PROCESSED"))),
-        new Metric(recipientOnly?"PAYOUT CYCLE":"EXCEPTIONS",recipientOnly?String.valueOf(safeBatch.getOrDefault("public_id","")):
+        new Metric(recipientOnly?"BATCH REFERENCE":"EXCEPTIONS",recipientOnly?String.valueOf(safeBatch.getOrDefault("public_id","")):
             String.valueOf(countExceptions(safePayouts)))));
     if(recipientOnly) {
       Map<String,Object> pay=safePayouts.isEmpty()?Map.of():safePayouts.getFirst();
@@ -137,15 +137,17 @@ public class PayoutSettlementPdfRenderer {
     c.section(recipientOnly?"ALLOCATION REFERENCES IN THIS PAYOUT":"TRANSFER REGISTER");
     if(recipientOnly) {
       c.muted("Source sales may predate this payout cycle. Allocation values below identify ledger portions applied to this payout, not the month's gross course sales.");
-      c.tableHeader(new String[]{"Course / order","Source institution","Marketplace institution","Allocation applied"});
+      c.muted("Use the invoice for the underlying taxable supply and the supplier's statutory tax records for tax treatment; this payout advice covers amounts applied to the transfer.");
+      c.tableHeader(new String[]{"Course / order / invoice","Legal seller","Source institution","Marketplace institution","Allocation applied"});
       if(safeAllocations.isEmpty())c.empty("No allocation references were returned for this payout. Do not infer a zero balance; check the batch record.");
       for(Map<String,Object> row:safeAllocations) {
         c.tableRow(new String[]{
-          twoLine(text(row.get("course_title"))+"\nOrder #"+text(row.get("order_id"))+" · Allocation #"+text(row.get("allocation_id")),34),
-          twoLine(text(row.get("source_institution_name")),26),
-          twoLine(text(row.get("marketplace_institution_name")),26),
+          text(row.get("course_title"))+"\nOrder #"+text(row.get("order_id"))+" · Allocation #"+text(row.get("allocation_id"))+"\nInvoice: "+safeText(row.get("invoice_number"))+" · Payment: "+safeText(row.get("provider_payment_id")),
+          twoLine(safeText(row.get("legal_seller_name")),26),
+          twoLine(safeText(row.get("source_institution_name")),26),
+          twoLine(safeText(row.get("marketplace_institution_name")),26),
           money(row.get("payout_item_amount_paise"),currency(row))
-        },72);
+        },82);
       }
     } else {
       c.tableHeader(new String[]{"Recipient / type","Payout amount","Status","Bank (masked)","Provider payout ID","UTR / reference"});
@@ -162,16 +164,17 @@ public class PayoutSettlementPdfRenderer {
       }
       c.section("ALLOCATION TRACE");
       c.muted("Allocation-applied values identify ledger portions included in the batch. Source sales may predate this payout cycle; these are not monthly gross sales.");
-      c.tableHeader(new String[]{"Recipient","Course / order","Source -> marketplace","Payment reference","Applied to payout"});
+      c.tableHeader(new String[]{"Recipient","Course / order / invoice","Legal seller","Source -> marketplace","Payment reference","Applied to payout"});
       if(safeAllocations.isEmpty())c.empty("No allocation references were returned for this batch.");
       for(Map<String,Object> row:safeAllocations) {
         c.tableRow(new String[]{
           twoLine(firstNonBlank(row,"recipient_name","beneficiary_name"),25),
-          twoLine(text(row.get("course_title"))+"\nOrder #"+text(row.get("order_id"))+" · Allocation #"+text(row.get("allocation_id")),32),
-          twoLine(text(row.get("source_institution_name"))+" -> "+text(row.get("marketplace_institution_name")),31),
+          text(row.get("course_title"))+"\nOrder #"+text(row.get("order_id"))+" · Allocation #"+text(row.get("allocation_id"))+"\nInvoice: "+safeText(row.get("invoice_number")),
+          twoLine(safeText(row.get("legal_seller_name")),31),
+          twoLine(safeText(row.get("source_institution_name"))+" -> "+safeText(row.get("marketplace_institution_name")),31),
           safeText(row.get("provider_payment_id")),
           money(row.get("payout_item_amount_paise"),currency(row))
-        },74);
+        },82);
       }
     }
 
@@ -194,8 +197,9 @@ public class PayoutSettlementPdfRenderer {
     void newPage(boolean continued) {
       if(g!=null){footer();g.dispose();g=null;archiveCurrentPage();}
       if(pages.size()>=MAX_PAGES)throw new IllegalArgumentException("The payout statement is too large for one PDF. Use a smaller payout batch.");
-      page=new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_RGB);
+      page=new BufferedImage(WIDTH*RENDER_SCALE,HEIGHT*RENDER_SCALE,BufferedImage.TYPE_INT_RGB);
       g=page.createGraphics();
+      g.scale(RENDER_SCALE,RENDER_SCALE);
       g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
       g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
       g.setRenderingHint(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_QUALITY);
