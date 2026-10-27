@@ -83,8 +83,7 @@ public class CourseAuthoringService {
         """,institutionId,displayName);
       if(!sameName.isEmpty()) {
         Map<String,Object> existing=sameName.getFirst();
-        throw conflict("An assessment course with this name already exists (public course identity #"
-            +existing.get("id")+"). Open the existing course instead of creating a duplicate.");
+        throw conflict("An assessment course with this name already exists in this institution. Open the existing course instead of creating a duplicate.");
       }
     }
 
@@ -220,7 +219,7 @@ public class CourseAuthoringService {
           "courseIdentity","SOURCED","contentVersionNo",1)));
     } catch(DuplicateKeyException ex) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
-          "A course with that code and curriculum version already exists for this institution.",ex);
+          "This course identity already exists or another request created it concurrently. Refresh the course list and open the existing course; no duplicate course was created.",ex);
     }
 
     Map<String,Object> result=new LinkedHashMap<>();
