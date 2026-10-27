@@ -374,7 +374,7 @@
 @media(max-width:640px){.payoutLedgerDialog{max-height:94dvh;border-radius:14px}.payoutLedgerEventList{max-height:48dvh}.payoutLedgerEventHead{align-items:flex-start}}
  
 /* Unified HRMS recipient register: responsive cards replace the 11-column payout-only view. */
-.payoutRecipientFilters{display:grid;grid-template-columns:minmax(0,2fr) minmax(190px,1fr) auto;gap:12px;align-items:end;margin:16px 0}
+.payoutRecipientFilters{display:grid;grid-template-columns:minmax(230px,2fr) minmax(210px,1fr) minmax(140px,.65fr) auto;gap:12px;align-items:end;margin:16px 0}
 .payoutRecipientFilters label{display:grid;gap:6px;min-width:0;color:var(--finance-ink,var(--ink));font-size:11px;font-weight:800}
 .payoutRecipientFilters input,.payoutRecipientFilters select{width:100%;min-width:0;min-height:40px;padding:9px 11px;border:1px solid var(--finance-line,var(--line));border-radius:10px;background:var(--finance-field,var(--finance-surface,#fff));color:var(--finance-ink,var(--ink));font-size:12px}
 .payoutRecipientFilters>span{padding:0 2px 11px;color:var(--finance-muted,var(--muted));font-size:11px;white-space:nowrap}
