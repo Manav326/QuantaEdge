@@ -363,10 +363,10 @@ public class PlatformFinanceController {
     long entityId=requiredLong(body,"legalEntityId");
     if(!exists("""
       select exists(select 1 from billing_legal_entity e
-        where e.id=? and (e.entity_kind='PLATFORM'
+        where e.id=? and (e.entity_kind in ('PLATFORM','COMPANY')
           or (e.entity_kind='INSTITUTION' and e.institution_id=?)))
       """,entityId,institutionId)) {
-      throw bad("Select the platform legal seller or the legal entity belonging to this course offer's institution.");
+      throw bad("Select an active platform/company legal seller or the legal entity belonging to this course offer's institution.");
     }
     String treatment=requiredText(body,"taxTreatment").toUpperCase(Locale.ROOT);
     if(!List.of("TAXABLE","EXEMPT","NIL_RATED","NON_GST","COMPOSITION").contains(treatment)) throw bad("Unsupported tax treatment.");
