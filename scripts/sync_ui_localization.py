@@ -120,8 +120,8 @@ def render_registry(locales: dict[str, dict[str, Any]]) -> str:
 
 def _xml_resource_text(value: str) -> str:
     # Android string resources treat apostrophes and backslashes specially in addition to XML.
-    escaped = value.replace("\\\\", "\\\\\\\\").replace("'", "\\\\'").replace('"', '\\\\"')
-    escaped = escaped.replace("\\r", "").replace("\\n", "\\\\n").replace("\\t", "\\\\t")
+    escaped = value.replace("\\", "\\\\").replace("'", "\\'").replace('"', '\\"')
+    escaped = escaped.replace("\r", "").replace("\n", "\\n").replace("\t", "\\t")
     return html.escape(escaped, quote=False)
 
 
