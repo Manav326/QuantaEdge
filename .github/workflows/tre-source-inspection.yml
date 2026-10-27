@@ -75,7 +75,7 @@ jobs:
                   raise SystemExit(f"{cycle}: expected {expected} questions, got {actual}")
           q1 = next(q for q in inventory["papers"]["TRE 1.0"]["questions"] if str(q["source_question_number"]) == "1")
           hindi = q1["source_variants"]["hi"]
-          normalized = re.sub(r"\\s+", " ", hindi.get("prompt_i18n", "")).strip()
+          normalized = re.sub(r"\s+", " ", hindi.get("prompt_i18n", "")).strip()
           expected_prompt = "तीन अंकों की कितनी संख्याएँ 5 से विभाज्य हैं?"
           if normalized != expected_prompt:
               raise SystemExit(f"TRE 1.0 Hindi Q1 OCR mismatch: {normalized!r}")
