@@ -64,6 +64,22 @@ class CourseRevenueAllocationReconciliationTest {
   }
 
   @Test
+  void reconcilesRemainderOnlyPolicyWithNoExplicitShareRows() {
+    Map<String,Object> snapshot = snapshot(List.of(),"INSTITUTION",1L,"Quanta Edge");
+    List<Map<String,Object>> allocations = List.of(
+        allocation(100L,7L,"INSTITUTION",1L,null,100_000L,100_000L,0L,100_000L,100_000L,1L));
+
+    CourseRevenueAllocationReconciliation.Result result =
+        CourseRevenueAllocationReconciliation.reconcile(snapshot,7L,100_000L,0L,"INR",allocations);
+
+    assertTrue(result.complete(),() -> String.join("; ",result.issues()));
+    assertEquals(0L,result.explicitAmountPaise());
+    assertEquals(100_000L,result.remainderPaise());
+    assertEquals(100_000L,result.expectedTotalPaise());
+    assertEquals(1,result.expectedRecipientCount());
+  }
+
+  @Test
   void marksMissingRemainderAsUnassignedInsteadOfCallingSaleReconciled() {
     Map<String,Object> snapshot = snapshot(
         List.of(recipient(11L,"INSTITUTION",2L,"PERCENTAGE",1_000,0L,"Sunrise Public School")),
