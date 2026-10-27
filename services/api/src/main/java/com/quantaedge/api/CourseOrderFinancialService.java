@@ -647,70 +647,102 @@ public class CourseOrderFinancialService {
       throw new IllegalStateException("Captured payment does not reconcile to the stored, approved tax calculation.");
 
     List<Map<String,Object>> recipientSnapshots=asMapList(shareSnapshot.get("recipients"));
-    List<RevenueDistributionCalculator.Share> shares=new ArrayList<>();
-    Map<Long,Map<String,Object>> recipientByInstitution=new LinkedHashMap<>();
+    List<RevenueDistributionCalculator.BeneficiaryShare> shares=new ArrayList<>();
+    Map<String,Map<String,Object>> recipientByKey=new LinkedHashMap<>();
+    long percentageBasisPoints=0L;
     for(Map<String,Object> recipient:recipientSnapshots) {
-      long institutionId=number(recipient.get("institutionId"));
+      String recipientType=string(recipient.get("recipientType"));
+      if(recipientType.isBlank()) recipientType="INSTITUTION"; // immutable snapshots created before company beneficiaries
+      long recipientId=number(recipient.get("recipientId"));
+      if(recipientId<=0) recipientId=number("COMPANY".equals(recipientType)
+          ?recipient.get("legalEntityId"):recipient.get("institutionId"));
+      String key=recipientType+":"+recipientId;
+      if(recipientId<=0||recipientByKey.put(key,recipient)!=null)
+        throw new IllegalStateException("Stored revenue-share snapshot contains a missing or duplicate beneficiary.");
       String type=string(recipient.get("calculationType"));
-      RevenueDistributionCalculator.Share share;
-      if("PERCENTAGE".equals(type))
-        share=RevenueDistributionCalculator.Share.percentage(institutionId,integer(recipient.get("percentageBasisPoints")));
-      else if("FLAT".equals(type))
-        share=RevenueDistributionCalculator.Share.flat(institutionId,number(recipient.get("flatAmountPaise")));
-      else throw new IllegalStateException("Stored revenue-share snapshot contains an unsupported share type.");
+      RevenueDistributionCalculator.BeneficiaryShare share;
+      if("PERCENTAGE".equals(type)) {
+        int bps=integer(recipient.get("percentageBasisPoints"));
+        percentageBasisPoints=Math.addExact(percentageBasisPoints,bps);
+        share=RevenueDistributionCalculator.BeneficiaryShare.percentage(recipientType,recipientId,bps);
+      } else if("FLAT".equals(type)) {
+        share=RevenueDistributionCalculator.BeneficiaryShare.flat(recipientType,recipientId,number(recipient.get("flatAmountPaise")));
+      } else throw new IllegalStateException("Stored revenue-share snapshot contains an unsupported calculation type.");
       shares.add(share);
-      if(recipientByInstitution.put(institutionId,recipient)!=null)
-        throw new IllegalStateException("Stored revenue-share snapshot contains a duplicate institution.");
     }
-    RevenueDistributionCalculator.Result distribution=RevenueDistributionCalculator.calculate(
+    if(percentageBasisPoints>10_000)
+      throw new IllegalStateException("Stored percentage allocations exceed 100% of the distributable pool.");
+    String remainderType=string(shareSnapshot.get("remainderRecipientType"));
+    if(remainderType.isBlank()) remainderType="PLATFORM_REMAINDER";
+    Long remainderId=nullableLong(shareSnapshot.get("remainderRecipientId"));
+    if(!"PLATFORM_REMAINDER".equals(remainderType)&&remainderId==null)
+      throw new IllegalStateException("The locked revenue-share snapshot has no valid remainder recipient.");
+    RevenueDistributionCalculator.BeneficiaryResult distribution=RevenueDistributionCalculator.calculateBeneficiaries(
         RevenueDistributionCalculator.PaymentConfirmation.VERIFIED_CAPTURED,
-        capturedAmountPaise,storedTax,shares);
+        capturedAmountPaise,storedTax,0L,shares,
+        "PLATFORM_REMAINDER".equals(remainderType)?null:remainderType,remainderId);
 
     String currency=string(order.get("currency")).toUpperCase(Locale.ROOT);
     long orderId=number(order.get("id"));
     long policyId=number(shareSnapshot.get("policyId"));
-    for(RevenueDistributionCalculator.Allocation allocation:distribution.allocations()) {
-      Map<String,Object> recipient=recipientByInstitution.get(allocation.institutionId());
-      if(recipient==null) throw new IllegalStateException("The revenue allocation recipient snapshot is incomplete.");
-      long recipientRowId=number(recipient.get("policyRecipientId"));
-      String idem="course-order:"+orderId+":revenue-share:"+allocation.institutionId()+":v1";
+    long totalAllocatedPaise=distribution.explicitAllocationsPaise()
+        +("PLATFORM_REMAINDER".equals(remainderType)?0L:distribution.remainderPaise());
+    for(RevenueDistributionCalculator.BeneficiaryAllocation allocation:distribution.allocations()) {
+      String recipientType=allocation.recipientType();
+      long recipientId=allocation.recipientId();
+      String key=recipientType+":"+recipientId;
+      Map<String,Object> recipient=recipientByKey.get(key);
+      Long recipientRowId=recipient==null?null:nullableLong(recipient.get("policyRecipientId"));
+      Long institutionRecipientId="INSTITUTION".equals(recipientType)?recipientId:null;
+      Long legalEntityRecipientId="COMPANY".equals(recipientType)?recipientId:null;
+      String idempotencyRecipient="INSTITUTION".equals(recipientType)
+          ?Long.toString(recipientId):"company:"+recipientId;
+      String idem="course-order:"+orderId+":revenue-share:"+idempotencyRecipient+":v1";
       List<Map<String,Object>> existing=jdbc.queryForList("""
-        select id,policy_id,policy_recipient_id,allocated_amount_paise,actual_paid_paise,output_tax_paise
-        from revenue_share_allocation where course_payment_order_id=? and institution_id=?
-        """,orderId,allocation.institutionId());
+        select id,policy_id,policy_recipient_id,recipient_type,institution_id,legal_entity_id,
+          allocated_amount_paise,actual_paid_paise,output_tax_paise
+        from revenue_share_allocation where course_payment_order_id=? and idempotency_key=?
+        """,orderId,idem);
       long allocationId;
       if(!existing.isEmpty()) {
         Map<String,Object> row=existing.getFirst();
         if(number(row.get("policy_id"))!=policyId
-            ||number(row.get("policy_recipient_id"))!=recipientRowId
+            ||!recipientType.equals(string(row.get("recipient_type")))
             ||number(row.get("allocated_amount_paise"))!=allocation.amountPaise()
             ||number(row.get("actual_paid_paise"))!=capturedAmountPaise
             ||number(row.get("output_tax_paise"))!=storedTax)
-          throw new IllegalStateException("An existing institutional allocation conflicts with this captured sale.");
+          throw new IllegalStateException("An existing beneficiary allocation conflicts with this captured sale.");
         allocationId=number(row.get("id"));
       } else {
         Map<String,Object> calc=new LinkedHashMap<>();
         calc.put("policyId",policyId);
         calc.put("policyVersion",shareSnapshot.get("policyVersion"));
-        calc.put("institutionId",allocation.institutionId());
-        calc.put("calculationType",allocation.calculationType().name());
-        calc.put("percentageBasisPoints",recipient.get("percentageBasisPoints"));
-        calc.put("flatAmountPaise",recipient.get("flatAmountPaise"));
+        calc.put("recipientType",recipientType);
+        calc.put("recipientId",recipientId);
+        calc.put("recipientName",recipient==null?string(shareSnapshot.get("remainderRecipientName")):string(recipient.get("recipientName")));
+        calc.put("calculationType",allocation.calculationType()==null?"REMAINDER_ONLY":allocation.calculationType().name());
+        calc.put("percentageBasisPoints",recipient==null?null:recipient.get("percentageBasisPoints"));
+        calc.put("flatAmountPaise",recipient==null?null:recipient.get("flatAmountPaise"));
+        calc.put("explicitAmountPaise",allocation.explicitAmountPaise());
+        calc.put("remainderAmountPaise",allocation.remainderAmountPaise());
         calc.put("actualPaidPaise",capturedAmountPaise);
         calc.put("outputTaxPaise",storedTax);
+        calc.put("processingFeePaise",0L);
+        calc.put("processingFeeTaxPaise",0L);
+        calc.put("processingFeesConfirmed",false);
         calc.put("distributablePoolPaise",distribution.distributablePoolPaise());
         calc.put("allocatedAmountPaise",allocation.amountPaise());
-        calc.put("platformRemainderPaise",distribution.platformRemainderPaise());
+        calc.put("totalAllocatedPaise",totalAllocatedPaise);
+        calc.put("unassignedRemainderPaise",distribution.unassignedRemainderPaise());
         allocationId=jdbc.queryForObject("""
           insert into revenue_share_allocation(
-            course_payment_order_id,policy_id,policy_recipient_id,institution_id,currency,
+            course_payment_order_id,policy_id,policy_recipient_id,recipient_type,institution_id,legal_entity_id,currency,
             actual_paid_paise,output_tax_paise,distributable_pool_paise,total_institution_allocated_paise,
             allocated_amount_paise,platform_remainder_paise,calculation_snapshot,idempotency_key
-          ) values(?,?,?,?,?,?,?,?,?,?,?,?::jsonb,?) returning id
-          """,Long.class,orderId,policyId,recipientRowId,allocation.institutionId(),currency,
+          ) values(?,?,?,?,?,?,?, ?,?,?,?,?,?,?::jsonb,?) returning id
+          """,Long.class,orderId,policyId,recipientRowId,recipientType,institutionRecipientId,legalEntityRecipientId,currency,
             capturedAmountPaise,storedTax,distribution.distributablePoolPaise(),
-            distribution.totalInstitutionAllocatedPaise(),allocation.amountPaise(),
-            distribution.platformRemainderPaise(),json(calc),idem);
+            totalAllocatedPaise,allocation.amountPaise(),distribution.unassignedRemainderPaise(),json(calc),idem);
       }
       jdbc.update("""
         insert into revenue_share_allocation_event(
@@ -718,7 +750,10 @@ public class CourseOrderFinancialService {
         ) values(?,'EARNED',?,?,?,?::jsonb)
         on conflict(idempotency_key) do nothing
         """,allocationId,allocation.amountPaise(),currency,idem+":earned",
-          json(Map.of("coursePaymentOrderId",orderId,"paymentId",paymentId,"policyId",policyId)));
+          json(Map.of("coursePaymentOrderId",orderId,"paymentId",paymentId,"policyId",policyId,
+              "recipientType",recipientType,"recipientId",recipientId,
+              "explicitAmountPaise",allocation.explicitAmountPaise(),
+              "remainderAmountPaise",allocation.remainderAmountPaise())));
     }
 
     long fiscalDocumentId=number(order.get("fiscal_document_id"));
