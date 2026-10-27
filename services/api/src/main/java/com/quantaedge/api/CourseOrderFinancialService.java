@@ -389,6 +389,12 @@ public class CourseOrderFinancialService {
     shareSnapshot.put("effectiveFrom",String.valueOf(policy.get("effective_from")));
     shareSnapshot.put("effectiveUntil",policy.get("effective_until")==null?null:String.valueOf(policy.get("effective_until")));
     shareSnapshot.put("recipients",recipientSnapshots);
+    shareSnapshot.put("remainderRecipientType",remainderType);
+    shareSnapshot.put("remainderRecipientId",remainderId);
+    shareSnapshot.put("remainderRecipientName",remainderName);
+    shareSnapshot.put("processingFeesConfirmed",false);
+    shareSnapshot.put("processingFeePaise",null);
+    shareSnapshot.put("processingFeeTaxPaise",null);
 
     return new CheckoutSnapshot(
         listedPricePaise,discountPaise,discountOfferId,normalizedCode,quote.customerPayablePaise(),
