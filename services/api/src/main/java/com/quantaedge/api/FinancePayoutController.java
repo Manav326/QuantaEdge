@@ -103,10 +103,7 @@ public class FinancePayoutController {
     row.put("canVerifyCollectionArrangement",hasPermission(context,"QE_PLATFORM_OWNER"));
     row.put("collectionArrangementVerified","VERIFIED".equals(string(row.get("collection_arrangement_status")))
         &&row.get("collection_arrangement_verified_at")!=null);
-    row.put("payoutReady",providerConfigured()&&!webhookSecret.isBlank()
-        &&"VERIFIED".equals(string(row.get("collection_arrangement_status")))
-        &&row.get("payment_collection_legal_entity_id")!=null
-        &&row.get("razorpayx_funding_legal_entity_id")!=null);
+    row.put("payoutReady",payoutReadyFromDatabase()&&providerConfigured()&&!webhookSecret.isBlank());
     return row;
   }
 
@@ -144,6 +141,64 @@ public class FinancePayoutController {
     return Map.of("configured",true,"defaultRemainderRecipientType",type,"defaultRemainderRecipientId",recipientId,
         "payoutFrequency","MONTHLY","payoutMinimumPaise",minimum,"refundReserveBasisPoints",reserve,
         "providerConfigured",providerConfigured());
+  }
+
+  @PostMapping("/payout-settings/collection-arrangement")
+  @org.springframework.transaction.annotation.Transactional
+  public Map<String,Object> reviewCollectionArrangement(@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requirePermission(context,"QE_PLATFORM_OWNER");
+    String status=text(body,"status").toUpperCase(Locale.ROOT);
+    if(!List.of("PENDING","VERIFIED","BLOCKED").contains(status))
+      throw bad("Choose Pending, Verified or Blocked for the legal/collection-account review.");
+    Map<String,Object> current=one("select id from billing_finance_payout_settings where id=1");
+    if(current.isEmpty())throw bad("Save the monthly payout rules first, then record the legal/collection-account review.");
+    Long collectionEntityId=optionalLong(body.get("paymentCollectionLegalEntityId"));
+    Long fundingEntityId=optionalLong(body.get("razorpayxFundingLegalEntityId"));
+    String reference=optionalText(body.get("evidenceReference"));
+    if("VERIFIED".equals(status)) {
+      if(!Boolean.TRUE.equals(body.get("confirm")))
+        throw bad("Confirm that the legal seller and collection-account arrangement has been reviewed with Razorpay and the responsible legal/tax adviser.");
+      if(collectionEntityId==null||fundingEntityId==null)
+        throw bad("Select both the legal entity receiving course-payment collections and the legal entity owning the RazorpayX payout funding account.");
+      if(reference==null||reference.length()<3||reference.length()>180)
+        throw bad("Record a review reference, such as the approved agreement or provider case reference.");
+      Map<String,Object> collection=one("select id,status,entity_kind from billing_legal_entity where id=?",collectionEntityId);
+      if(collection.isEmpty()||!"ACTIVE".equals(string(collection.get("status"))))
+        throw bad("The legal entity receiving payment collections must be active.");
+      Map<String,Object> funding=one("select id,status,entity_kind from billing_legal_entity where id=?",fundingEntityId);
+      if(funding.isEmpty()||!"ACTIVE".equals(string(funding.get("status")))
+          ||!List.of("PLATFORM","COMPANY").contains(string(funding.get("entity_kind"))))
+        throw bad("The RazorpayX payout funding owner must be an active platform or company legal entity.");
+    } else if(reference!=null&&reference.length()>180) {
+      throw bad("Review reference cannot exceed 180 characters.");
+    }
+    int changed=jdbc.update("""
+      update billing_finance_payout_settings set
+        payment_collection_legal_entity_id=?,razorpayx_funding_legal_entity_id=?,
+        collection_arrangement_status=?,collection_arrangement_reference=?,
+        collection_arrangement_verified_by_staff_id=?,collection_arrangement_verified_at=?,
+        updated_by_staff_id=?,updated_at=now()
+      where id=1
+      """,collectionEntityId,fundingEntityId,status,reference,
+        "VERIFIED".equals(status)?context.staffId():null,
+        "VERIFIED".equals(status)?java.time.OffsetDateTime.now(ZoneId.of("UTC")):null,
+        context.staffId());
+    if(changed!=1)throw bad("Collection arrangement review could not be saved. Refresh and retry.");
+    jdbc.update("""
+      insert into billing_financial_audit_log(legal_entity_id,actor_staff_id,action,target_type,target_id,details)
+      values(?,?,?,?,?,?::jsonb)
+      """,collectionEntityId,context.staffId(),"COLLECTION_ARRANGEMENT_"+status,
+        "FINANCE_COLLECTION_ARRANGEMENT","1",
+        json(Map.of("status",status,
+          "paymentCollectionLegalEntityId",collectionEntityId==null?0:collectionEntityId,
+          "razorpayxFundingLegalEntityId",fundingEntityId==null?0:fundingEntityId,
+          "evidenceReference",reference==null?"":reference)));
+    return Map.of("status",status,"paymentCollectionLegalEntityId",collectionEntityId==null?0:collectionEntityId,
+        "razorpayxFundingLegalEntityId",fundingEntityId==null?0:fundingEntityId,
+        "evidenceReference",reference==null?"":reference,
+        "payoutReady",payoutReadyFromDatabase()&&providerConfigured()&&!webhookSecret.isBlank(),
+        "message","Legal/collection arrangement review saved. Transfers remain blocked unless the review is Verified and the RazorpayX API and webhook are configured.");
   }
 
   @GetMapping("/payout-overview")
@@ -356,9 +411,10 @@ public class FinancePayoutController {
   }
 
   @PostMapping("/payout-batches")
+  @org.springframework.transaction.annotation.Transactional
   public ResponseEntity<Map<String,Object>> createMonthlyBatch(@RequestBody(required=false) Map<String,Object> body,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
-    context=requireManage(context);requireProviderConfiguration();
+    context=requireManage(context);requirePayoutReady();
     Map<String,Object> settings=one("select payout_minimum_paise,refund_reserve_basis_points,payout_frequency from billing_finance_payout_settings where id=1");
     if(settings.isEmpty()||settings.get("payout_minimum_paise")==null||settings.get("refund_reserve_basis_points")==null)
       throw bad("Complete Finance payout settings, including minimum payout and refund reserve, before preparing a batch.");
@@ -480,7 +536,7 @@ public class FinancePayoutController {
   @PostMapping("/payout-batches/{batchId}/approve")
   public ResponseEntity<Map<String,Object>> approveBatch(@PathVariable long batchId,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
-    context=requireApprover(context);requireProviderConfiguration();
+    context=requireApprover(context);requirePayoutReady();
     Map<String,Object> batch=one("select * from finance_payout_batch where id=?",batchId);
     if(batch.isEmpty())throw notFound("Payout batch was not found.");
     if(!"PENDING_APPROVAL".equals(text(batch,"status")))throw bad("Only a batch awaiting approval can be approved.");
@@ -531,7 +587,7 @@ public class FinancePayoutController {
   @PostMapping("/payouts/{payoutId}/retry-submission")
   public ResponseEntity<Map<String,Object>> retryPayout(@PathVariable long payoutId,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
-    context=requireApprover(context);requireProviderConfiguration();
+    context=requireApprover(context);requirePayoutReady();
     Map<String,Object> row=one("select * from finance_payout where id=?",payoutId);
     if(row.isEmpty())throw notFound("Payout not found.");
     if(!"RECONCILIATION_REQUIRED".equals(text(row,"status")))throw bad("Only an uncertain payout submission can be retried.");
