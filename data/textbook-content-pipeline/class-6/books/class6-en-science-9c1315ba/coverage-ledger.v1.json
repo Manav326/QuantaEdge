@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1432,
-    "successful_visual_analyses": 1419,
-    "missing_visual_analyses": 646,
+    "raw_analysis_result_rows": 1433,
+    "successful_visual_analyses": 1420,
+    "missing_visual_analyses": 645,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 659,
+    "unresolved_count": 658,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -54177,9 +54177,24 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two thermometers are placed next to each other, one labeled 'Laboratory thermometer' and the other labeled 'Boiling water'. The setup is for observing temperature readings.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Laboratory thermometer",
+          "Boiling water"
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Thermometer"
+        ],
+        "context_relation": "Observation of temperature readings",
+        "limitations": [
+          "No specific temperature values are provided"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
