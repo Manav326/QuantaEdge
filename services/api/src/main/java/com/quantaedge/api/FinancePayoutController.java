@@ -680,16 +680,26 @@ public class FinancePayoutController {
     String utr=optionalText(provider.path("utr").asText(null));
     String description=optionalText(provider.path("status_details").path("description").asText(null));
     if(description==null)description=optionalText(provider.path("failure_reason").asText(null));
+    Long providerFee=provider.hasNonNull("fees")?provider.path("fees").asLong():null;
+    Long providerFeeTax=provider.hasNonNull("tax")?provider.path("tax").asLong():null;
+    if(providerFee!=null&&providerFee<0||providerFeeTax!=null&&providerFeeTax<0)
+      throw new IllegalStateException("RazorpayX returned negative payout-fee values.");
     jdbc.update("""
       update finance_payout set provider_payout_id=?,provider_status=?,status=?,transfer_reference=?,status_details=?,
+        provider_fee_paise=coalesce(?,provider_fee_paise),provider_fee_tax_paise=coalesce(?,provider_fee_tax_paise),
         submitted_at=coalesce(submitted_at,now()),
         processed_at=case when ? in ('PROCESSED','REVERSED') then coalesce(processed_at,now()) else processed_at end,updated_at=now()
       where id=?
-      """,providerId,normalized,status,utr,description,status,payoutId);
+      """,providerId,normalized,status,utr,description,providerFee,providerFeeTax,status,payoutId);
     String eventType=switch(status){case "PENDING"->"PROVIDER_PENDING";case "QUEUED"->"QUEUED";case "PROCESSING"->"PROCESSING";
       case "PROCESSED"->"PROCESSED";case "REVERSED"->"REVERSED";case "FAILED"->"FAILED";case "REJECTED"->"REJECTED";default->"RECONCILIATION_REQUIRED";};
-    payoutEvent(payoutId,eventType,"course-payout:"+payoutId+":provider:"+normalized+":"+providerId,actorStaffId,providerId,
-        Map.of("providerStatus",normalized,"transferReference",utr==null?"":utr,"statusDetails",description==null?"":description));
+    Map<String,Object> providerDetails=new LinkedHashMap<>();
+    providerDetails.put("providerStatus",normalized);
+    providerDetails.put("transferReference",utr==null?"":utr);
+    providerDetails.put("statusDetails",description==null?"":description);
+    if(providerFee!=null)providerDetails.put("providerFeePaise",providerFee);
+    if(providerFeeTax!=null)providerDetails.put("providerFeeTaxPaise",providerFeeTax);
+    payoutEvent(payoutId,eventType,"course-payout:"+payoutId+":provider:"+normalized+":"+providerId,actorStaffId,providerId,providerDetails);
     if("PROCESSED".equals(status)&&!"PROCESSED".equals(prior)&&!"REVERSED".equals(prior))postPayoutLedgerEvents(payoutId,"PAID",actorStaffId);
     else if("REVERSED".equals(status)&&"PROCESSED".equals(prior))postPayoutLedgerEvents(payoutId,"REVERSED",actorStaffId);
     refreshBatchStatus(number(current.get("batch_id")));
