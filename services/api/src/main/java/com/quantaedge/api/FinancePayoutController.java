@@ -756,7 +756,7 @@ public class FinancePayoutController {
     for(Map<String,Object> row:payouts) {
       long id=number(row.get("id"));
       try{results.add(submitApprovedPayout(id,context.staffId()));}
-      catch(Exception ex){markPayoutUnknown(id,context.staffId());results.add(payoutSummary(id));}
+      catch(Exception ex){markPayoutUnknown(id,context.staffId(),safePayoutFailure(ex));results.add(payoutSummary(id));}
     }
     refreshBatchStatus(batchId);
     return ResponseEntity.ok(Map.of("batchId",batchId,
@@ -869,7 +869,7 @@ public class FinancePayoutController {
       JsonNode provider=providerRequest("POST","/payouts",payload,text(row,"provider_idempotency_key"));
       return applyProviderStatus(payoutId,provider,actorStaffId);
     } catch(Exception ex) {
-      markPayoutUnknown(payoutId,actorStaffId);
+      markPayoutUnknown(payoutId,actorStaffId,safePayoutFailure(ex));
       return payoutSummary(payoutId);
     }
   }
@@ -1069,17 +1069,34 @@ public class FinancePayoutController {
     }
   }
 
-  private void markPayoutUnknown(long payoutId,long actorStaffId) {
+  private void markPayoutUnknown(long payoutId,long actorStaffId,String safeReason) {
     Map<String,Object> row=one("select batch_id,status from finance_payout where id=?",payoutId);
+    String reason=safeReason==null||safeReason.isBlank()
+        ?"RazorpayX did not confirm this transfer. Check provider state before retrying with the saved idempotency key."
+        :safeReason.substring(0,Math.min(500,safeReason.length()));
     jdbc.update("""
-      update finance_payout set status='RECONCILIATION_REQUIRED',
-        status_details='RazorpayX did not confirm this request. Refresh provider state or retry with the same saved idempotency key.',
-        updated_at=now()
+      update finance_payout set status='RECONCILIATION_REQUIRED',status_details=?,updated_at=now()
       where id=? and status not in ('PROCESSED','REVERSED','FAILED','REJECTED')
-      """,payoutId);
+      """,reason,payoutId);
     payoutEvent(payoutId,"RECONCILIATION_REQUIRED","course-payout:"+payoutId+":reconciliation:"+UUID.randomUUID(),actorStaffId,null,
-        Map.of("message","Provider result is uncertain; payout balance remains reserved."));
+        Map.of("message",reason,"balanceRemainsReserved",true));
     if(!row.isEmpty())refreshBatchStatus(number(row.get("batch_id")));
+  }
+
+  private static String safePayoutFailure(Exception ex) {
+    String message=ex==null?"":string(ex.getMessage());
+    java.util.regex.Matcher matcher=java.util.regex.Pattern.compile("RazorpayX returned HTTP ([0-9]{3})").matcher(message);
+    if(matcher.find()) {
+      String code=matcher.group(1);
+      if("401".equals(code)||"403".equals(code))
+        return "RazorpayX rejected authentication/authorization (HTTP "+code+"). Verify server-side RazorpayX credentials, environment and source-account configuration. Check provider state before retrying; no paid ledger event is posted from this response.";
+      if("400".equals(code)||"422".equals(code))
+        return "RazorpayX rejected the payout request (HTTP "+code+"). Review the source account, fund account, amount, currency, mode and purpose in the provider dashboard before retrying with the same idempotency key.";
+      return "RazorpayX returned HTTP "+code+". Check provider status before retrying; use only the saved idempotency key and do not create a duplicate payout.";
+    }
+    if(message.contains("no valid payout ID and status"))
+      return "RazorpayX response did not contain a valid payout ID and status. Check the provider dashboard; if no provider payout ID was saved, retry only the same request with its existing idempotency key.";
+    return "RazorpayX could not confirm the submission. Its outcome may be uncertain. Check provider state, then Refresh or Retry the same request with the saved idempotency key; do not create a duplicate payout.";
   }
 
   private Map<String,Object> payoutSummary(long payoutId) {
