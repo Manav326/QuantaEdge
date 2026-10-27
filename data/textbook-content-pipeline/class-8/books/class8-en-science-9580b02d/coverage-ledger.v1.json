@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1357,
-    "successful_visual_analyses": 1341,
-    "missing_visual_analyses": 934,
+    "raw_analysis_result_rows": 1358,
+    "successful_visual_analyses": 1342,
+    "missing_visual_analyses": 933,
     "failed_visual_analyses": 16,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 950,
+    "unresolved_count": 949,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -50730,9 +50730,30 @@
       "asset_path": "assets/5b564cee455441614121bc3f587c05025d5b7cc10331ecb7f73a796915a143b2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a three-story building with a lightning conductor attached to its side.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Ever heard of ...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building.",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides easy path for the",
+          "lightning to flow through."
+        ],
+        "concepts": [
+          "Lightning conductor",
+          "Building construction",
+          "Lightning protection",
+          "Grounding"
+        ],
+        "context_relation": "The image illustrates the concept of a lightning conductor in building construction, explaining its purpose and installation.",
+        "limitations": [
+          "The image does not show the actual installation process or the lightning flow."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

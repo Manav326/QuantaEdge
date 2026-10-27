@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a9674ef33d15fb44abb4950d14d3de5ffa5969023d073728f46fc9ab394e9cff",
+  "raw_analysis_sha256": "3a355a2b2626de1e8138a05009e96c916e6f0a39d168de1a7a44c28b443202cb",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40539307444",
-      "checkpointed_at": "2026-10-27T19:46:45Z",
+      "checkpointed_at": "2026-10-27T19:49:48Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40539307444",
-      "checkpointed_at": "2026-10-27T19:47:10Z",
+      "checkpointed_at": "2026-10-27T19:50:13Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40539307444",
-      "checkpointed_at": "2026-10-27T19:47:39Z",
+      "checkpointed_at": "2026-10-27T19:50:42Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -65709,7 +65709,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40539307444",
-      "checkpointed_at": "2026-10-27T19:48:22Z",
+      "checkpointed_at": "2026-10-27T19:51:25Z",
       "effective_analysis": {
         "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
@@ -67332,6 +67332,70 @@
         "limitations": [
           "The image does not show the actual installation or the lightning protection it provides.",
           "The image does not include any measurements or specific details about the rod's length or burial depth."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f7aa874dbe53a243291c8f29",
+      "asset_sha256": "5b564cee455441614121bc3f587c05025d5b7cc10331ecb7f73a796915a143b2",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 112,
+      "asset_path": "assets/5b564cee455441614121bc3f587c05025d5b7cc10331ecb7f73a796915a143b2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e7642c3aeda86d04ba7f1847071dffd75b249cbd6931426fb55becc7d77fadd0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a three-story building with a lightning conductor attached to its side.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Ever heard of ...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building.",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides easy path for the",
+          "lightning to flow through."
+        ],
+        "concepts": [
+          "Lightning conductor",
+          "Building construction",
+          "Lightning protection",
+          "Grounding"
+        ],
+        "context_relation": "The image illustrates the concept of a lightning conductor in building construction, explaining its purpose and installation.",
+        "limitations": [
+          "The image does not show the actual installation process or the lightning flow."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40539307444",
+      "checkpointed_at": "2026-10-27T19:52:06Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a three-story building with a lightning conductor attached to its side.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Ever heard of ...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building.",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides easy path for the",
+          "lightning to flow through."
+        ],
+        "concepts": [
+          "Lightning conductor",
+          "Building construction",
+          "Lightning protection",
+          "Grounding"
+        ],
+        "context_relation": "The image illustrates the concept of a lightning conductor in building construction, explaining its purpose and installation.",
+        "limitations": [
+          "The image does not show the actual installation process or the lightning flow."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

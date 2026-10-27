@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1341,
+    "assets_selected": 1342,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "3e39c853ef5d60e663748f06"
+      "f7aa874dbe53a243291c8f29"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1337,
-    "assets_remaining": 954,
+    "assets_analyzed": 1338,
+    "assets_remaining": 953,
     "assets_completion_percent": 58.4,
     "assets_failed": 16,
-    "assets_skipped_from_checkpoint": 1336,
+    "assets_skipped_from_checkpoint": 1337,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40539307444",
-      "checkpointed_at": "2026-10-27T19:46:45Z"
+      "checkpointed_at": "2026-10-27T19:49:48Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40539307444",
-      "checkpointed_at": "2026-10-27T19:47:10Z"
+      "checkpointed_at": "2026-10-27T19:50:13Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40539307444",
-      "checkpointed_at": "2026-10-27T19:47:39Z"
+      "checkpointed_at": "2026-10-27T19:50:42Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40539307444",
-      "checkpointed_at": "2026-10-27T19:48:22Z"
+      "checkpointed_at": "2026-10-27T19:51:25Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -44530,6 +44530,46 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40539307444",
       "checkpointed_at": "2026-10-27T19:49:02Z"
+    },
+    {
+      "asset_id": "f7aa874dbe53a243291c8f29",
+      "asset_sha256": "5b564cee455441614121bc3f587c05025d5b7cc10331ecb7f73a796915a143b2",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 112,
+      "asset_path": "assets/5b564cee455441614121bc3f587c05025d5b7cc10331ecb7f73a796915a143b2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e7642c3aeda86d04ba7f1847071dffd75b249cbd6931426fb55becc7d77fadd0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a three-story building with a lightning conductor attached to its side.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Ever heard of ...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building.",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides easy path for the",
+          "lightning to flow through."
+        ],
+        "concepts": [
+          "Lightning conductor",
+          "Building construction",
+          "Lightning protection",
+          "Grounding"
+        ],
+        "context_relation": "The image illustrates the concept of a lightning conductor in building construction, explaining its purpose and installation.",
+        "limitations": [
+          "The image does not show the actual installation process or the lightning flow."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40539307444",
+      "checkpointed_at": "2026-10-27T19:52:06Z"
     }
   ]
 }
