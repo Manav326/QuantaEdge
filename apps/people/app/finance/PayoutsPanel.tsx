@@ -306,7 +306,36 @@ export default function PayoutsPanel(){
       </section>
 
       <section className={styles.panel}>
-        <div className={styles.panelHead}><div><h2>1. Legal seller & collection-account review</h2>
+        <div className={styles.panelHead}><div><h2>1. Payout rules</h2><p>Choose who receives the remaining balance and how much must stay available for refunds.</p></div>
+          <span className={styles.payoutStatusNeutral}>Monthly</span></div>
+        <form className={styles.payoutFormGrid} onSubmit={saveSettings}>
+          <label>Who receives the remaining balance?
+            <select required value={settingsForm.remainderType} onChange={e=>setSettingsForm(v=>({...v,remainderType:e.target.value,remainderId:''}))}>
+              <option value="COMPANY">Company (PureDeal or another company)</option><option value="INSTITUTION">Institution</option>
+            </select>
+            <small>The company/institution is an explicit recipient. If it also has a configured share, both amounts are combined into one payable balance.</small>
+          </label>
+          <label>Remainder recipient
+            <select required value={settingsForm.remainderId} onChange={e=>setSettingsForm(v=>({...v,remainderId:e.target.value}))}>
+              <option value="">Choose beneficiary</option>
+              {(settingsForm.remainderType==='INSTITUTION'?activeInstitutions.map(i=>({id:i.id,label:i.display_name})):activeCompanies.map(e=>({id:e.id,label:e.legal_name}))).map(x=><option key={x.id} value={x.id}>{x.label}</option>)}
+            </select>
+          </label>
+          <label>Minimum payout (₹)
+            <input inputMode="decimal" type="number" min="1" step="0.01" required value={settingsForm.minimumRupees} onChange={e=>setSettingsForm(v=>({...v,minimumRupees:e.target.value}))}/>
+            <small>Balances below this amount carry forward to the next month.</small>
+          </label>
+          <label>Refund reserve (%)
+            <input type="number" min="0" max="100" step="0.5" required value={settingsForm.reservePercent} onChange={e=>setSettingsForm(v=>({...v,reservePercent:e.target.value}))}/>
+            <small>This portion remains unpaid to help cover future refunds; it remains a liability, not company revenue.</small>
+          </label>
+          <div className={styles.payoutFormFooter}><span>{settings?.configured?'Saved payout rules are active.':'Save these rules before creating a payout batch.'}</span>
+            <button type="submit" className={styles.primary} disabled={busy}>Save payout rules</button></div>
+        </form>
+      </section>
+
+      <section className={styles.panel}>
+        <div className={styles.panelHead}><div><h2>2. Legal seller & collection-account review</h2>
           <p>This is a launch gate, not a legal opinion. Verify the seller/collection arrangement with Razorpay and the responsible legal/tax adviser before any transfer can be sent.</p></div>
           <span className={statusClass(settings?.collection_arrangement_status||'PENDING')}>{label(settings?.collection_arrangement_status||'PENDING')}</span></div>
         {settings?.canVerifyCollectionArrangement?<form className={styles.payoutFormGrid} onSubmit={submitArrangement}>
@@ -338,35 +367,6 @@ export default function PayoutsPanel(){
           <p><b>Evidence reference:</b> {settings?.collection_arrangement_reference||'Not recorded'}</p>
           <p>Only a staff member with the platform-owner permission can record this legal review.</p>
         </div>}
-      </section>
-
-      <section className={styles.panel}>
-        <div className={styles.panelHead}><div><h2>2. Payout rules</h2><p>Choose who receives the remaining balance and how much must stay available for refunds.</p></div>
-          <span className={styles.payoutStatusNeutral}>Monthly</span></div>
-        <form className={styles.payoutFormGrid} onSubmit={saveSettings}>
-          <label>Who receives the remaining balance?
-            <select required value={settingsForm.remainderType} onChange={e=>setSettingsForm(v=>({...v,remainderType:e.target.value,remainderId:''}))}>
-              <option value="COMPANY">Company (PureDeal or another company)</option><option value="INSTITUTION">Institution</option>
-            </select>
-            <small>The company/institution is an explicit recipient. If it also has a configured share, both amounts are combined into one payable balance.</small>
-          </label>
-          <label>Remainder recipient
-            <select required value={settingsForm.remainderId} onChange={e=>setSettingsForm(v=>({...v,remainderId:e.target.value}))}>
-              <option value="">Choose beneficiary</option>
-              {(settingsForm.remainderType==='INSTITUTION'?activeInstitutions.map(i=>({id:i.id,label:i.display_name})):activeCompanies.map(e=>({id:e.id,label:e.legal_name}))).map(x=><option key={x.id} value={x.id}>{x.label}</option>)}
-            </select>
-          </label>
-          <label>Minimum payout (₹)
-            <input inputMode="decimal" type="number" min="1" step="0.01" required value={settingsForm.minimumRupees} onChange={e=>setSettingsForm(v=>({...v,minimumRupees:e.target.value}))}/>
-            <small>Balances below this amount carry forward to the next month.</small>
-          </label>
-          <label>Refund reserve (%)
-            <input type="number" min="0" max="100" step="0.5" required value={settingsForm.reservePercent} onChange={e=>setSettingsForm(v=>({...v,reservePercent:e.target.value}))}/>
-            <small>This portion remains unpaid to help cover future refunds; it remains a liability, not company revenue.</small>
-          </label>
-          <div className={styles.payoutFormFooter}><span>{settings?.configured?'Saved payout rules are active.':'Save these rules before creating a payout batch.'}</span>
-            <button type="submit" className={styles.primary} disabled={busy}>Save payout rules</button></div>
-        </form>
       </section>
 
       <section className={styles.panel}>
