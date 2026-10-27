@@ -839,7 +839,7 @@ public class PlatformFinanceController {
           :exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY'))",recipient.get("legal_entity_id"));
       if(!active) throw bad("Every revenue recipient must remain active when a policy is approved.");
     }
-    if(policyRecipients.isEmpty()) throw bad("A policy needs at least one institution recipient.");
+    if(policyRecipients.isEmpty()) throw bad("A revenue-share policy needs at least one institution or company recipient.");
     long percentageBasisPoints=policyRecipients.stream()
       .filter(r -> "PERCENTAGE".equals(String.valueOf(r.get("calculation_type"))))
       .mapToLong(r -> ((Number)r.get("percentage_basis_points")).longValue()).sum();
