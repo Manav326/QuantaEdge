@@ -70,7 +70,14 @@ type PaymentStatusTrace = {
   financialFacts?:{listedPricePaise:number;discountAmountPaise:number;payablePaise:number;capturedAmountPaise:number;
     currency:string;financialSnapshotsPresent:boolean;buyerSnapshotPresent:boolean};
 };
-type Overview = { legalEntities:number; activeTaxProfiles:number; pendingTaxProfiles:number; approvedSharePolicies:number; pendingSharePolicies:number; issuedDocuments:number; allocatedPaise:number };
+type Overview = {
+  legalEntities:number; activeTaxProfiles:number; pendingTaxProfiles:number; approvedSharePolicies:number;
+  pendingSharePolicies:number; issuedDocuments:number; allocatedPaise:number;
+  capturedSalesPaise:number;processedRefundsPaise:number;pendingRefundsPaise:number;pendingRefundCount:number;
+  netCollectedAfterRefundsPaise:number;invoicedOutputTaxPaise:number;processedCreditNoteTaxPaise:number;
+  netOutputTaxBeforeInputCreditsPaise:number;confirmedProcessorFeesPaise:number;confirmedProcessorFeeTaxPaise:number;
+  netPoolAfterTaxRefundsAndFeesPaise:number;paymentFeeReconciliationPending:number
+};
 type Design = { primaryColor:string; accentColor:string; surfaceStyle:string; layout:string; showLogo:boolean; footerText:string };
 type RecipientDraft = { recipientType:'INSTITUTION'|'COMPANY'; recipientId:string; calculationType:'PERCENTAGE'|'FLAT'; percentage:string; flatRupees:string };
 type TaxForm = { offerId:string; legalEntityId:string; serviceClassificationCode:string; taxTreatment:string; gstPercent:string; cessPercent:string; priceIncludesTax:boolean; placeOfSupplyRule:string; effectiveFrom:string };
@@ -784,6 +791,23 @@ export default function FinancePage(){
     </nav>
     {loading&&!catalog?<section className={styles.panel}>Loading financial configuration…</section>:!catalog?<section className={styles.panel}>The Finance workspace is unavailable. Confirm HRMS owner access and check the API response.</section>:<>
       {tab==='overview'&&<section className={styles.stack}>
+        <div className={styles.panel}>
+          <div className={styles.panelHead}><div><h2>Financial position</h2>
+            <p>Figures come from verified course orders, provider-confirmed refunds, approved invoices and recorded processor charges. Amounts below are in INR.</p></div></div>
+          <div className={styles.metrics}>
+            <article><span>Verified course sales</span><strong>{rupees(overview?.capturedSalesPaise)}</strong><small>Payments confirmed as captured; excludes pending checkouts</small></article>
+            <article><span>Refunds processed</span><strong>{rupees(overview?.processedRefundsPaise)}</strong><small>Razorpay-confirmed refunds only</small></article>
+            <article><span>Refunds awaiting confirmation</span><strong>{rupees(overview?.pendingRefundsPaise)}</strong><small>{overview?.pendingRefundCount??0} refund request(s); not yet treated as repaid</small></article>
+            <article><span>Net collections after refunds</span><strong>{rupees(overview?.netCollectedAfterRefundsPaise)}</strong><small>Captured money less provider-confirmed refunds</small></article>
+            <article><span>Output tax on invoices</span><strong>{rupees(overview?.invoicedOutputTaxPaise)}</strong><small>Tax recorded on verified course sales</small></article>
+            <article><span>Tax on processed credit notes</span><strong>{rupees(overview?.processedCreditNoteTaxPaise)}</strong><small>Tax credits recorded on refund credit notes</small></article>
+            <article><span>Net output tax</span><strong>{rupees(overview?.netOutputTaxBeforeInputCreditsPaise)}</strong><small>Before input-tax credits or other statutory adjustments</small></article>
+            <article><span>Confirmed payment-processing charges</span><strong>{rupees((overview?.confirmedProcessorFeesPaise??0)+(overview?.confirmedProcessorFeeTaxPaise??0))}</strong><small>Provider fee plus tax; missing actual charges are shown below</small></article>
+            <article><span>Pool before revenue shares</span><strong>{rupees(overview?.netPoolAfterTaxRefundsAndFeesPaise)}</strong><small>Net collections less net output tax and confirmed processor charges; may be negative while refunds/fees settle</small></article>
+            <article><span>Payment fees still unconfirmed</span><strong>{overview?.paymentFeeReconciliationPending??'—'}</strong><small>Sales blocked from payout preparation until actual fees are recorded</small></article>
+          </div>
+          <p className={styles.note}>The net output-tax figure is an operational reconciliation, not a final GST return or tax-advice calculation. Input-tax credits, GST adjustments, withholding/TDS and any other statutory obligations must still be handled by the responsible finance/tax adviser.</p>
+        </div>
         <div className={styles.metrics}>
           <article><span>Legal entities</span><strong>{overview?.legalEntities??'—'}</strong><small>Configured suppliers</small></article>
           <article><span>Tax profiles pending</span><strong>{overview?.pendingTaxProfiles??'—'}</strong><small>Requires HRMS review</small></article>
