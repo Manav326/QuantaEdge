@@ -6,7 +6,8 @@ Assessment content is authored as a portable package before it is attached to a 
 
 For the TRE-4 work, the intended presentation is:
 
-- Course: `TRE-4 · Computer Science`
+- Course: `BPSC TRE Computer Science — Previous-Year Practice Series`
+- Stable course key: `BPSC_TRE_CS_PYQ_SERIES`; keep it separate from the historical/rejected `TRE4` identity.
 - Chapter: `Prev years`
 - Three separate full-length Computer Science practice assessments: TRE 1.0, TRE 2.0, TRE 3.0
 - Each attempt, score and question response must be recorded by the existing course-bound assessment engine so course-level analytics remain coherent.
