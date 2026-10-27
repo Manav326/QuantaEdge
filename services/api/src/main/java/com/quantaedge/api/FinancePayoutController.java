@@ -315,6 +315,86 @@ public class FinancePayoutController {
     }
   }
 
+  @PostMapping("/payout-beneficiaries/{beneficiaryId}/reconcile-provider-setup")
+  public ResponseEntity<Map<String,Object>> reconcileBeneficiaryProviderSetup(@PathVariable long beneficiaryId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireManage(context);requireProviderConfiguration();
+    Map<String,Object> local=one("select * from finance_payout_beneficiary where id=?",beneficiaryId);
+    if(local.isEmpty())throw notFound("Beneficiary not found.");
+    if(!List.of("PROVISIONING","RECONCILIATION_REQUIRED").contains(text(local,"status")))
+      throw bad("Only an interrupted or uncertain provider setup can be reconciled this way.");
+    String accountNumber=requiredText(body.get("accountNumber"),"bank account number");
+    if(!accountNumber.matches("[0-9]{9,18}"))throw bad("Enter the original 9–18 digit account number for exact provider matching.");
+    String publicId=text(local,"public_id"),beneficiaryName=text(local,"beneficiary_name");
+    String localIfsc=text(local,"bank_ifsc").toUpperCase(Locale.ROOT);
+    if(!publicId.matches("[A-Fa-f0-9-]{20,40}")||beneficiaryName.isBlank()||localIfsc.isBlank())
+      throw bad("The saved beneficiary identity is incomplete. Do not retry setup; ask a platform owner to reconcile this record.");
+
+    String contactId=optionalText(local.get("provider_contact_id"));
+    JsonNode contact;
+    if(contactId!=null) {
+      if(!contactId.matches("cont_[A-Za-z0-9_-]{4,80}"))throw bad("The saved provider contact reference is invalid; manual review is required.");
+      contact=providerRequest("GET","/contacts/"+contactId,null,null);
+    } else {
+      JsonNode contactCollection=providerRequest("GET","/contacts?reference_id="+java.net.URLEncoder.encode(publicId,StandardCharsets.UTF_8)+"&count=100&skip=0",null,null);
+      JsonNode items=contactCollection.path("items");
+      if(!items.isArray())throw new IllegalStateException("RazorpayX contact lookup returned an invalid collection.");
+      if(items.size()>=100)throw bad("The provider contact search returned a full page. Manual review is required; no contact was created.");
+      List<JsonNode> matchingContacts=new ArrayList<>();
+      for(JsonNode item:items) {
+        if(publicId.equals(item.path("reference_id").asText(""))
+            &&beneficiaryName.equalsIgnoreCase(item.path("name").asText("").trim()))matchingContacts.add(item);
+      }
+      if(matchingContacts.size()!=1)
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(Map.of("id",beneficiaryId,"status","RECONCILIATION_REQUIRED",
+          "message",matchingContacts.isEmpty()
+            ?"No existing RazorpayX contact matched this QuantaEdge reference. No new contact or fund account was created. Locate the provider record by the saved reference before retrying setup."
+            :"More than one provider contact matched this reference. No record was linked; a platform owner must resolve the ambiguity."));
+      contact=matchingContacts.getFirst();contactId=requiredProviderText(contact,"id");
+    }
+    if(!publicId.equals(contact.path("reference_id").asText(""))
+        ||!beneficiaryName.equalsIgnoreCase(contact.path("name").asText("").trim()))
+      throw bad("The provider contact does not match the saved QuantaEdge reference and beneficiary name. No record was linked.");
+
+    List<JsonNode> matchingFunds=new ArrayList<>();
+    boolean complete=false;
+    for(int skip=0;skip<=400;skip+=100) {
+      JsonNode collection=providerRequest("GET","/fund_accounts?contact_id="+java.net.URLEncoder.encode(contactId,StandardCharsets.UTF_8)+"&account_type=bank_account&count=100&skip="+skip,null,null);
+      JsonNode items=collection.path("items");
+      if(!items.isArray())throw new IllegalStateException("RazorpayX fund-account lookup returned an invalid collection.");
+      for(JsonNode item:items) {
+        JsonNode bank=item.path("bank_account");
+        if(contactId.equals(item.path("contact_id").asText(""))
+            &&"bank_account".equals(item.path("account_type").asText(""))
+            &&localIfsc.equalsIgnoreCase(bank.path("ifsc").asText("").trim())
+            &&beneficiaryName.equalsIgnoreCase(bank.path("name").asText("").trim())
+            &&accountNumber.equals(bank.path("account_number").asText("")))matchingFunds.add(item);
+      }
+      if(items.size()<100){complete=true;break;}
+    }
+    if(!complete)throw bad("The provider fund-account search exceeded the safe reconciliation window. No record was linked; manual review is required.");
+    if(matchingFunds.size()!=1)
+      return ResponseEntity.status(HttpStatus.ACCEPTED).body(Map.of("id",beneficiaryId,"status","RECONCILIATION_REQUIRED",
+        "message",matchingFunds.isEmpty()
+          ?"No exact existing RazorpayX fund-account record matched the re-entered account number, holder name and IFSC. No duplicate was created. Verify the provider record and retry reconciliation only after the mismatch is resolved."
+          :"Multiple RazorpayX fund-account records matched the supplied bank details. No record was linked; a platform owner must resolve the ambiguity."));
+    String fundAccountId=requiredProviderText(matchingFunds.getFirst(),"id");
+    int changed=jdbc.update("""
+      update finance_payout_beneficiary set provider_contact_id=?,provider_fund_account_id=?,status='PENDING_APPROVAL',updated_at=now()
+      where id=? and status in ('PROVISIONING','RECONCILIATION_REQUIRED')
+        and (provider_contact_id is null or provider_contact_id=?)
+        and (provider_fund_account_id is null or provider_fund_account_id=?)
+      """,contactId,fundAccountId,beneficiaryId,contactId,fundAccountId);
+    if(changed!=1)throw bad("Beneficiary setup changed during reconciliation. Refresh the record and review it again.");
+    auditFinancial("PAYOUT_BENEFICIARY_PROVIDER_SETUP_RECONCILED",beneficiaryId,text(local,"beneficiary_type"),beneficiaryId(local),
+      context.staffId(),Map.of("providerContactId",contactId,"providerFundAccountId",fundAccountId,
+        "accountLast4",accountNumber.substring(accountNumber.length()-4),"ifsc",localIfsc,
+        "matchedExistingProviderRecords",true));
+    return ResponseEntity.ok(Map.of("id",beneficiaryId,"status","PENDING_APPROVAL",
+      "message","The existing RazorpayX contact and fund account were matched exactly and linked. A different authorized staff member must still approve this beneficiary."));
+  }
+
   @PostMapping("/payout-beneficiaries/{beneficiaryId}/approve")
   public Map<String,Object> approveBeneficiary(@PathVariable long beneficiaryId,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {

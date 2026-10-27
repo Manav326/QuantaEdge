@@ -114,6 +114,7 @@ export default function PayoutsPanel(){
   const [feeHasMore,setFeeHasMore]=useState(false);
   const [approvalBatch,setApprovalBatch]=useState<Batch|null>(null);
   const [approvalConfirmed,setApprovalConfirmed]=useState(false);
+  const [recoveryAccounts,setRecoveryAccounts]=useState<Record<string,string>>({});
   const [error,setError]=useState('');
   const [notice,setNotice]=useState('');
   const [settingsForm,setSettingsForm]=useState({remainderType:'COMPANY',remainderId:'',minimumRupees:'',reservePercent:''});
@@ -333,6 +334,20 @@ export default function PayoutsPanel(){
     if(result){setRejectingId(null);setRejectReason('');}
   };
 
+  const reconcileBeneficiaryProviderSetup=async(beneficiary:Beneficiary)=>{
+    const key=String(beneficiary.id),accountNumber=(recoveryAccounts[key]||'').trim();
+    if(!/^\\d{9,18}$/.test(accountNumber)){setError('Re-enter the 9–18 digit bank account number so the server can match an existing provider record.');return;}
+    try{
+      const result=await action(()=>api<{status:string;message:string}>(BASE+'/payout-beneficiaries/'+beneficiary.id+'/reconcile-provider-setup',{
+        method:'POST',body:JSON.stringify({accountNumber})
+      }),'Provider setup reconciliation checked.');
+      if(result)setNotice(result.message||'Provider setup reconciliation completed.');
+    }finally{
+      // Account number is used only for a server-side exact match and is never kept in the form after the request.
+      setRecoveryAccounts(old=>({...old,[key]:''}));
+    }
+  };
+
   return <section className={styles.stack}>
     <section className={styles.payoutsIntro}>
       <div>
@@ -501,6 +516,13 @@ export default function PayoutsPanel(){
               {b.status==='PENDING_APPROVAL'&&!b.canApprove&&<small>Only a different authorized staff member with approval permission can review this account.</small>}
               {b.canApprove&&['PENDING_APPROVAL','PROVISIONING','RECONCILIATION_REQUIRED'].includes(b.status)&&<button type="button" className={styles.secondarySmall} disabled={busy} onClick={()=>{setRejectingId(rejectingId===b.id?null:b.id);setRejectReason('');}}>Reject</button>}
             </div>
+            {['PROVISIONING','RECONCILIATION_REQUIRED'].includes(b.status)&&b.canApprove&&<form className={styles.payoutRejectForm} onSubmit={e=>{e.preventDefault();void reconcileBeneficiaryProviderSetup(b);}}>
+              <label>Re-enter bank account number to match an existing RazorpayX record
+                <input type="password" inputMode="numeric" autoComplete="off" maxLength={18} value={recoveryAccounts[String(b.id)]||''} onChange={e=>setRecoveryAccounts(old=>({...old,[String(b.id)]:e.target.value.replace(/\\D/g,'').slice(0,18)}))}/>
+                <small>This is sent only to the API for an exact match. QuantaEdge will not create a duplicate fund account during reconciliation.</small>
+              </label>
+              <button type="submit" className={styles.secondarySmall} disabled={busy||!settings?.providerConfigured||!(recoveryAccounts[String(b.id)]||'')}>Find existing provider record</button>
+            </form>}
             {rejectingId===b.id&&<form className={styles.payoutRejectForm} onSubmit={e=>{e.preventDefault();void rejectBeneficiary(b.id);}}>
               <label>Reason for rejection<input required minLength={5} maxLength={500} value={rejectReason} onChange={e=>setRejectReason(e.target.value)} placeholder="Explain what needs correcting"/></label>
               <button type="submit" className={styles.secondarySmall} disabled={busy}>Confirm rejection</button>
