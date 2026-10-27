@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1410,
-    "successful_visual_analyses": 1398,
-    "missing_visual_analyses": 668,
+    "raw_analysis_result_rows": 1415,
+    "successful_visual_analyses": 1403,
+    "missing_visual_analyses": 663,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 680,
+    "unresolved_count": 675,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -53380,9 +53380,28 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An educational page explaining the conversion between Celsius, Fahrenheit, and Kelvin temperature scales.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "All three temperature scales, Celsius, Fahrenheit, and Kelvin are named in honour of the scientists who developed these scales.",
+          "Temperature in Kelvin = Temperature in Celsius scale + 273.15",
+          "More to know!"
+        ],
+        "concepts": [
+          "Temperature scales",
+          "Celsius scale",
+          "Fahrenheit scale",
+          "Kelvin scale",
+          "Conversion between temperature scales"
+        ],
+        "context_relation": "The page provides a formula for converting temperatures from Celsius to Kelvin.",
+        "limitations": [
+          "The page does not include any images or diagrams."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -53398,9 +53417,38 @@
       "asset_path": "page-0147.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook explaining temperature scales and conversions.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "All three temperature scales, Celsius, Fahrenheit and Kelvin are named in honour of the scientists who developed these scales.",
+          "We can easily convert the temperature from Celsius scale to Kelvin scale by using:",
+          "Temperature in Kelvin scale = Temperature in Celsius scale + 273.15",
+          "The names of temperature scales—Celsius scale, Fahrenheit scale and Kelvin scale—start with a capital letter. For the units for temperature, degree Celsius and degree Fahrenheit, the word degree starts with a lower-case letter while Celsius and Fahrenheit start with a capital letter. The unit kelvin",
+          "Can a clinical thermometer be used for measuring the temperature of boiling water? Or for measuring the temperature of ice?",
+          "How was fever detected before thermometers were developed? Fever affects the pulse rate of a person. This was known even in olden days in India. However, apart from fever, some other situations also affect the pulse rate. Hence, pulse rate alone is not a reliable indicator of fever.",
+          "No, the temperatures of boiling water and ice are outside the range of a clinical thermometer."
+        ],
+        "concepts": [
+          "temperature scales",
+          "Celsius",
+          "Fahrenheit",
+          "Kelvin",
+          "temperature conversion",
+          "fever",
+          "pulse rate",
+          "clinical thermometer",
+          "boiling water",
+          "ice",
+          "temperature measurement"
+        ],
+        "context_relation": "explanation",
+        "limitations": [
+          "The text does not provide specific examples or calculations for temperature conversions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -53416,9 +53464,34 @@
       "asset_path": "assets/e487d16f8f81c6e4cfd29707524965d8e56446794a0d22236d3e2c5d8d509d24.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A laboratory thermometer with a Celsius scale marked along the tube, showing a liquid column rising or falling with changes in temperature.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "7.3.2 Laboratory thermometer",
+          "There are many types of laboratory thermometers but the",
+          "one that might be available in your school laboratory may",
+          "look like the one shown in Fig. 7.3a. It consists of a long",
+          "narrow, uniform glass tube which is sealed. At one end of",
+          "the tube is a bulb which contains a liquid. Outside the bulb",
+          "in the tube, a narrow column of liquid can be seen. There",
+          "is a Celsius scale marked along the tube. The liquid column",
+          "rises or falls with change in",
+          "temperature."
+        ],
+        "concepts": [
+          "Laboratory thermometer",
+          "Celsius scale",
+          "Liquid column",
+          "Temperature change"
+        ],
+        "context_relation": "The image is a visual representation of a laboratory thermometer used in educational settings to measure temperature.",
+        "limitations": [
+          "The image does not show the bulb or the liquid inside the tube."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -53434,9 +53507,36 @@
       "asset_path": "assets/d14f5d387bf621bb85477c06c9ce4729506449c0c7ad3af99edf94b8fbf7dcb1.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A laboratory thermometer with a liquid column rising or falling with temperature changes.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "7.3.2 Laboratory thermometer",
+          "There are many types of laboratory thermometers but the",
+          "one that might be available in your school laboratory may",
+          "look like the one shown in Fig. 7.3a. It consists of a long",
+          "narrow, uniform glass tube which is sealed. At one end of",
+          "the tube is a bulb which contains a liquid. Outside the bulb",
+          "in the tube, a narrow column of liquid can be seen. There",
+          "is a Celsius scale marked along the tube. The liquid column",
+          "rises or falls with change in",
+          "temperature",
+          "The liquid column rises or falls with change in temperature."
+        ],
+        "concepts": [
+          "Laboratory thermometer",
+          "Temperature",
+          "Celsius scale",
+          "Liquid column",
+          "Temperature change"
+        ],
+        "context_relation": "The image is a visual representation of a laboratory thermometer, explaining its components and how it measures temperature.",
+        "limitations": [
+          "The image does not show the thermometer in use or the actual measurement process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -53452,9 +53552,36 @@
       "asset_path": "assets/014b7488b9f6c661af9d6e408d9632b760eaa40e796311439426630e66e65a3a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red triangular warning sign with a white exclamation mark in the center.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "!",
+          "A",
+          "7.3.2 Laboratory thermometer",
+          "There are many types of laboratory thermometers but the",
+          "one that might be available in your school laboratory may",
+          "look like the one shown in Fig. 7.3a. It consists of a long",
+          "narrow, uniform glass tube which is sealed. At one end of",
+          "the tube is a bulb which contains a liquid. Outside the bulb",
+          "in the tube, a narrow column of liquid can be seen. There",
+          "is a Celsius scale marked along the tube. The liquid column",
+          "rises or falls with change in",
+          "7.3a"
+        ],
+        "concepts": [
+          "Laboratory thermometer",
+          "Celsius scale",
+          "Liquid column",
+          "Temperature measurement"
+        ],
+        "context_relation": "The image is a warning sign, not related to the text about laboratory thermometers.",
+        "limitations": [
+          "The image is a warning sign, not related to the text about laboratory thermometers."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
