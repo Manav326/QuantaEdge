@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "30920b08fb195363da0404c7d3394deaafc8b21236617a82c0fb5961f231f89c",
+  "raw_analysis_sha256": "6164ddc786db641ee38e77ce76c88d4e6b0d828c264f4df1eb43542af8ac68bf",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40501519107",
-      "checkpointed_at": "2026-10-27T13:35:32Z",
+      "checkpointed_at": "2026-10-27T13:44:02Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40501519107",
-      "checkpointed_at": "2026-10-27T13:36:07Z",
+      "checkpointed_at": "2026-10-27T13:44:38Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40501519107",
-      "checkpointed_at": "2026-10-27T13:36:49Z",
+      "checkpointed_at": "2026-10-27T13:45:20Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -65709,7 +65709,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40501519107",
-      "checkpointed_at": "2026-10-27T13:37:50Z",
+      "checkpointed_at": "2026-10-27T13:46:22Z",
       "effective_analysis": {
         "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
@@ -67036,6 +67036,46 @@
         "limitations": [
           "The image does not contain any visual elements.",
           "The text is in English."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ba42af2b1e4f32f481232ba9",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 111,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9953e75554b5b7568230a6dc61fc42937365a2994a0e78c22c92c7477ce4ec80",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40501519107",
+      "checkpointed_at": "2026-10-27T13:46:34Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
