@@ -430,6 +430,41 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertIn("if submit_for_review:", importer)
         self.assertIn("only DRAFT releases may be imported", importer)
 
+    def test_ocr_reconstructed_hindi_prompt_keeps_raw_provenance_and_review_pending(self):
+        record = {
+            "source_question_number": 1,
+            "section_code": "GENERAL_STUDIES",
+            "source_variants": {
+                "en": {
+                    "prompt_raw": "How many three-digit numbers are divisible by 5?",
+                    "prompt_i18n": "How many three-digit numbers are divisible by 5?",
+                    "options": [{"key": "A", "raw_text": "180", "text_i18n": "180", "content_kind": "PROSE"}],
+                },
+                "hi": {
+                    "prompt_raw": "VrZ AßH$moß H$s {H$VZr",
+                    "prompt_ocr_text": "तीन अंकों की कितनी संख्याएँ 5 से विभाज्य हैं?",
+                    "prompt_ocr_status": "OCR_SHREEDEV_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW",
+                    "prompt_i18n": "तीन अंकों की कितनी संख्याएँ 5 से विभाज्य हैं?",
+                    "options": [{"key": "A", "raw_text": "180", "text_i18n": "180", "content_kind": "PROSE"}],
+                },
+            },
+            "source_locations": {"hi": {"pdf_page": 3, "column": "left", "top_y": 155.74}},
+            "review_flags": ["HINDI_FONT_DETECTION_UNCERTAIN"],
+        }
+
+        snapshot = import_tre4_course.build_question_snapshot(
+            record, "TRE 1.0", "data/TRE-Papres/sources/tre1.pdf", "a" * 64
+        )
+
+        self.assertEqual(snapshot["prompt_i18n"]["hi"], "तीन अंकों की कितनी संख्याएँ 5 से विभाज्य हैं?")
+        self.assertEqual(snapshot["hindi_prompt_reconstruction"]["method"], "TESSERACT_HINDI_OCR")
+        self.assertEqual(snapshot["hindi_prompt_reconstruction"]["status"], "REQUIRES_HUMAN_REVIEW")
+        self.assertEqual(snapshot["hindi_prompt_reconstruction"]["raw_legacy_text"], "VrZ AßH$moß H$s {H$VZr")
+        self.assertEqual(snapshot["hindi_prompt_reconstruction"]["source_location"]["pdf_page"], 3)
+        self.assertEqual(snapshot["question_review_status"], "PENDING_HUMAN_REVIEW")
+        self.assertEqual(snapshot["answer_review_status"], "PENDING_HUMAN_REVIEW")
+        self.assertEqual(snapshot["answer_payload"], {"kind": "UNRESOLVED", "value": None})
+
     def test_status_vocabulary_matches_schema_and_supported_workflows(self):
         root = SCRIPT.parents[1]
         releases_and_offers = (root / "services/api/src/main/resources/db/migration/V125__institution_course_releases_and_tenant_offers.sql").read_text(encoding="utf-8")
