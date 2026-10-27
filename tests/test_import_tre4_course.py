@@ -449,7 +449,7 @@ class Tre4ImporterTests(unittest.TestCase):
                 import_tre4_course.require_loopback_database_url(url)
 
     def test_database_write_requires_known_hindi_ocr_regression_prompt(self):
-        good = {
+        tre1 = {
             "cycle": "TRE 1.0",
             "question_snapshots": [{
                 "source_question_number": 1,
@@ -460,7 +460,18 @@ class Tre4ImporterTests(unittest.TestCase):
                 },
             }],
         }
-        import_tre4_course.validate_tre_hindi_ocr_preflight([good])
+        tre3 = {
+            "cycle": "TRE 3.0",
+            "question_snapshots": [{
+                "source_question_number": "H-9",
+                "prompt_i18n": {"hi": "रत्न ने दौड़कर अजय को क्यों रोकना चाहा?"},
+                "hindi_prompt_reconstruction": {
+                    "method": "TESSERACT_HINDI_OCR",
+                    "status": "REQUIRES_HUMAN_REVIEW",
+                },
+            }],
+        }
+        import_tre4_course.validate_tre_hindi_ocr_preflight([tre1, tre3])
 
         bad = {
             "cycle": "TRE 1.0",
@@ -470,7 +481,7 @@ class Tre4ImporterTests(unittest.TestCase):
             }],
         }
         with self.assertRaisesRegex(import_tre4_course.ImportErrorSafe, "Refusing database writes"):
-            import_tre4_course.validate_tre_hindi_ocr_preflight([bad])
+            import_tre4_course.validate_tre_hindi_ocr_preflight([bad, tre3])
 
     def test_ocr_reconstructed_hindi_prompt_keeps_raw_provenance_and_review_pending(self):
         record = {
