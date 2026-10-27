@@ -1231,11 +1231,12 @@ public class FinancePayoutController {
       """,batchId,recipientPayoutId,recipientPayoutId);
     Map<String,Object> batchSnapshot=new LinkedHashMap<>(batch);
     batchSnapshot.remove("payouts");
-    List<Map<String,Object>> selectedAllocations=recipientPayoutId==null?allocations
-        :allocations.stream().filter(row->number(row.get("payout_id"))==recipientPayoutId.longValue()).toList();
-    int prior=recipientPayoutId==null
-      ?Math.toIntExact(count("select coalesce(max(revision),0) from finance_payout_statement_document where batch_id=? and document_type='BATCH_SUMMARY'",batchId))
-      :Math.toIntExact(count("select coalesce(max(revision),0) from finance_payout_statement_document where batch_id=? and document_type='RECIPIENT_STATEMENT' and payout_id=?",batchId,recipientPayoutId));
+    final Long selectedPayoutFilter=recipientPayoutId;
+    List<Map<String,Object>> selectedAllocations=selectedPayoutFilter==null?allocations
+        :allocations.stream().filter(row->number(row.get("payout_id"))==selectedPayoutFilter.longValue()).toList();
+    int prior=selectedPayoutFilter==null
+      ?Math.toIntExact(count("select coalesce(max(revision),0)::bigint from finance_payout_statement_document where batch_id=? and document_type='BATCH_SUMMARY'",batchId))
+      :Math.toIntExact(count("select coalesce(max(revision),0)::bigint from finance_payout_statement_document where batch_id=? and document_type='RECIPIENT_STATEMENT' and payout_id=?",batchId,selectedPayoutFilter));
     int revision=Math.addExact(prior,1);
     String documentNumber="QE-PS-"+batchId+(recipientPayoutId==null?"-B":"-P"+recipientPayoutId)+"-R"+revision;
     java.time.Instant generatedAt=java.time.Instant.now();
