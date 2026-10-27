@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-hindi-fhgp1",
   "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
   "raw_analysis_path": "data/textbook-visuals/class6-hi-maths-0bbba43f/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c1c0ae4a434c6a0bb0e763e7e2b8c9db1f94bb92b2b9eb556b30149e22e16d6f",
+  "raw_analysis_sha256": "d6d7aa40a13d4ed7da06e98e42d1a2e0fb1aaa1a43562098a0d589adf1fd064f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-hi-maths-0bbba43f/visual-analysis-corrections.v1.json",
@@ -2528,6 +2528,428 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
       "checkpointed_at": "2026-10-27T00:57:59Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "07f79d0d6da50a325cef8c58",
+      "asset_sha256": "fa3e010413399aef9b17cee88bee6eb392517469e6935cb8921e6eb76111e938",
+      "page_text_context_sha256": "afa40cc69cb3062547ed549795f1f3464c8ce5e877639a9d03d8697f2404927c",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 14,
+      "asset_path": "page-0014.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cec61a8b65a44b62df7821c3",
+      "asset_sha256": "9fbd3b21a14dbb9efb66023da999953ddf34661e7c1e7805b74fa7a8df0ca1a5",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 15,
+      "asset_path": "assets/9fbd3b21a14dbb9efb66023da999953ddf34661e7c1e7805b74fa7a8df0ca1a5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "299eaed3d729adeba8910ffa6b35eb265b325d9941849743792cf93868227b9c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue background with intricate gold and white floral patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "floral patterns",
+          "gold and white",
+          "blue background"
+        ],
+        "context_relation": "The image is a decorative element in the educational content.",
+        "limitations": [
+          "No specific text or labels are present in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:03:38Z",
+      "effective_analysis": {
+        "visual_summary": "A blue background with intricate gold and white floral patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "floral patterns",
+          "gold and white",
+          "blue background"
+        ],
+        "context_relation": "The image is a decorative element in the educational content.",
+        "limitations": [
+          "No specific text or labels are present in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "98a52d79839a07ce8b8bd3b2",
+      "asset_sha256": "c6bdf0eac231e4a8caaf23fd36fe9b492f184468791b3fcab65963e312859cd9",
+      "page_text_context_sha256": "299eaed3d729adeba8910ffa6b35eb265b325d9941849743792cf93868227b9c",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 15,
+      "asset_path": "assets/c6bdf0eac231e4a8caaf23fd36fe9b492f184468791b3fcab65963e312859cd9.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "limitations must be a list of strings.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "de79cff3dd8b7bdec67fef02",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 15,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "299eaed3d729adeba8910ffa6b35eb265b325d9941849743792cf93868227b9c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of a conducive learning environment for students to develop mathematical thinking.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "शिक्षक के लिए शब्द",
+          "हम आशा करते  हैं कि गणित प्रकाश पााठ्यपुस्तक, गणित जैसे रोमाांचक विषय को सीखने के",
+          "आनंद को अगली पीढी तक पहुँचााने के महत्‍वपूर्ण कार्य को पूर्ण करने में मजबूूत समर्थक और",
+          "मार्गदर्शक के रूप में आपकी सहाायता करेगी।",
+          "इस कार्य के लिए एक अनुकूल वाातावरण प्रदाान करनाा  आवश्यश्यक है जो विद्यार्थियों के मस्तिष्क में गणितीय सोच को विकसित करने में सहाायता करेगाा।",
+          "अक्सर कक्षाओं में विद्याि‍र्थयों को जो कुछ भी बताायाा  जााताा  है उसे वे केवल सुनते हैं याा बोर्ड पर जो कुछ लिखाा  जााताा  है उसे कााॅपी में उताारते हैं। इस तरह की कक्षाओं में गणित सीखने के लिए आवश्यश"
+        ],
+        "concepts": [
+          "Mathematics",
+          "Learning Environment",
+          "Mathematical Thinking",
+          "Advisory and Guidance",
+          "Classroom Learning"
+        ],
+        "context_relation": "The text discusses the importance of a conducive learning environment for students to develop mathematical thinking.",
+        "limitations": [
+          "The text does not provide specific examples or methods for creating a conducive learning environment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:06:09Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of a conducive learning environment for students to develop mathematical thinking.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "शिक्षक के लिए शब्द",
+          "हम आशा करते  हैं कि गणित प्रकाश पााठ्यपुस्तक, गणित जैसे रोमाांचक विषय को सीखने के",
+          "आनंद को अगली पीढी तक पहुँचााने के महत्‍वपूर्ण कार्य को पूर्ण करने में मजबूूत समर्थक और",
+          "मार्गदर्शक के रूप में आपकी सहाायता करेगी।",
+          "इस कार्य के लिए एक अनुकूल वाातावरण प्रदाान करनाा  आवश्यश्यक है जो विद्यार्थियों के मस्तिष्क में गणितीय सोच को विकसित करने में सहाायता करेगाा।",
+          "अक्सर कक्षाओं में विद्याि‍र्थयों को जो कुछ भी बताायाा  जााताा  है उसे वे केवल सुनते हैं याा बोर्ड पर जो कुछ लिखाा  जााताा  है उसे कााॅपी में उताारते हैं। इस तरह की कक्षाओं में गणित सीखने के लिए आवश्यश"
+        ],
+        "concepts": [
+          "Mathematics",
+          "Learning Environment",
+          "Mathematical Thinking",
+          "Advisory and Guidance",
+          "Classroom Learning"
+        ],
+        "context_relation": "The text discusses the importance of a conducive learning environment for students to develop mathematical thinking.",
+        "limitations": [
+          "The text does not provide specific examples or methods for creating a conducive learning environment."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "828254f469ebbc3580874575",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 15,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "299eaed3d729adeba8910ffa6b35eb265b325d9941849743792cf93868227b9c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook in Hindi, discussing the importance of a conducive environment for teaching mathematics to students.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "शिक्षक के लिए शब्द",
+          "हम आशा करते हैं कि गणित प्रकाश पा ठ्यपुस्तक, गणित जैसे रोमा चक विषय को सीखने के",
+          "आनंद को अगली पीढी तक पहुँचा ने के महत् वपूर्ण कार्य को पूर्ण करने में मजबूत समर्थक और",
+          "मार्गदर्शक के रूप में आपकी सहा यता करेगी।",
+          "इस कार्य के लिए एक अनुकूल वा तावरण प्रदा न करना आवश्यश्यक है जो विद्यार्थियों के मस्तिष्क में गणितीय सोच को विकसित करने में सहा यता करेगा",
+          "अक्सर कक्षाओं में विद्याि र्थयों को जो कुछ भी बता या जा ता है उसे वे केवल सुनते हैं या बोर्ड पर जो कुछ लिखा जा ता है उसे का अपी में उता रते हैं। इस तरह की कक्षाओं में गणित सीखने के लिए आवश्यश",
+          "शिक्षक के लिए शब्द",
+          "हम आशा करते हैं कि गणित प्रकाश पा ठ्यपुस्तक, गणित जैसे रोमा चक विषय को सीखने के",
+          "आनंद को अगली पीढी तक पहुँचा ने के महत् वपूर्ण कार्य को पूर्ण करने में मजबूत समर्थक और",
+          "मार्गदर्शक के रूप में आपकी सहा यता करेगी।",
+          "इस कार्य के लिए एक अनुकूल वा तावरण प्रदा न करना आवश्यश"
+        ],
+        "concepts": [
+          "teaching mathematics",
+          "conducive environment",
+          "student learning",
+          "mathematical thinking development",
+          "classroom teaching methods"
+        ],
+        "context_relation": "teaching mathematics",
+        "limitations": [
+          "No specific visual elements are described."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:08:42Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook in Hindi, discussing the importance of a conducive environment for teaching mathematics to students.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "शिक्षक के लिए शब्द",
+          "हम आशा करते हैं कि गणित प्रकाश पा ठ्यपुस्तक, गणित जैसे रोमा चक विषय को सीखने के",
+          "आनंद को अगली पीढी तक पहुँचा ने के महत् वपूर्ण कार्य को पूर्ण करने में मजबूत समर्थक और",
+          "मार्गदर्शक के रूप में आपकी सहा यता करेगी।",
+          "इस कार्य के लिए एक अनुकूल वा तावरण प्रदा न करना आवश्यश्यक है जो विद्यार्थियों के मस्तिष्क में गणितीय सोच को विकसित करने में सहा यता करेगा",
+          "अक्सर कक्षाओं में विद्याि र्थयों को जो कुछ भी बता या जा ता है उसे वे केवल सुनते हैं या बोर्ड पर जो कुछ लिखा जा ता है उसे का अपी में उता रते हैं। इस तरह की कक्षाओं में गणित सीखने के लिए आवश्यश",
+          "शिक्षक के लिए शब्द",
+          "हम आशा करते हैं कि गणित प्रकाश पा ठ्यपुस्तक, गणित जैसे रोमा चक विषय को सीखने के",
+          "आनंद को अगली पीढी तक पहुँचा ने के महत् वपूर्ण कार्य को पूर्ण करने में मजबूत समर्थक और",
+          "मार्गदर्शक के रूप में आपकी सहा यता करेगी।",
+          "इस कार्य के लिए एक अनुकूल वा तावरण प्रदा न करना आवश्यश"
+        ],
+        "concepts": [
+          "teaching mathematics",
+          "conducive environment",
+          "student learning",
+          "mathematical thinking development",
+          "classroom teaching methods"
+        ],
+        "context_relation": "teaching mathematics",
+        "limitations": [
+          "No specific visual elements are described."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0660c8b2b452bc532c0f65b5",
+      "asset_sha256": "b183159cfc13c66c62d16235b9e16b7326ec0a9cfe939115a5e40cc6df865991",
+      "page_text_context_sha256": "299eaed3d729adeba8910ffa6b35eb265b325d9941849743792cf93868227b9c",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 15,
+      "asset_path": "page-0015.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "16698293756c9fb7a42a2ece",
+      "asset_sha256": "9985840a107a31deb877a74529f71a88a26a2aca60252b74b40d91be1d92c6d5",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/9985840a107a31deb877a74529f71a88a26a2aca60252b74b40d91be1d92c6d5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "76c9489b2535f6f0b20f0506788f3c955ec26468079ea878efc585ccbca7c311",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue background with intricate gold and white floral patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a decorative element in the textbook, possibly used as a header or footer.",
+        "limitations": [
+          "The image does not contain any text or information that can be directly related to the content of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:14:11Z",
+      "effective_analysis": {
+        "visual_summary": "A blue background with intricate gold and white floral patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a decorative element in the textbook, possibly used as a header or footer.",
+        "limitations": [
+          "The image does not contain any text or information that can be directly related to the content of the textbook."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "023aca986989e8597f34e364",
+      "asset_sha256": "0149131d0aa0deeefd1b98bfc38ba39ee15a05bef071f5144cf59a858582897e",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/0149131d0aa0deeefd1b98bfc38ba39ee15a05bef071f5144cf59a858582897e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "76c9489b2535f6f0b20f0506788f3c955ec26468079ea878efc585ccbca7c311",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue and gold patterned fabric with intricate designs.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "fabric",
+          "pattern",
+          "design",
+          "blue",
+          "gold"
+        ],
+        "context_relation": "The image is a visual representation of a fabric pattern, likely used for educational content or design purposes.",
+        "limitations": [
+          "The image does not contain any text or labels that provide specific information about the fabric or its use."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:14:43Z",
+      "effective_analysis": {
+        "visual_summary": "A blue and gold patterned fabric with intricate designs.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "fabric",
+          "pattern",
+          "design",
+          "blue",
+          "gold"
+        ],
+        "context_relation": "The image is a visual representation of a fabric pattern, likely used for educational content or design purposes.",
+        "limitations": [
+          "The image does not contain any text or labels that provide specific information about the fabric or its use."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d0ad48c99afb05b466c57e0f",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "76c9489b2535f6f0b20f0506788f3c955ec26468079ea878efc585ccbca7c311",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:15:16Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "078b127b91e54739892e5db7",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "76c9489b2535f6f0b20f0506788f3c955ec26468079ea878efc585ccbca7c311",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:15:48Z",
       "effective_analysis": {
         "visual_summary": "A black page with no visible content.",
         "visual_type": "page_with_multiple_visuals",
