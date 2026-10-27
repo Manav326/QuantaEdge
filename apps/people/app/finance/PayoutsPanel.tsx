@@ -172,6 +172,10 @@ export default function PayoutsPanel(){
 
   const submitArrangement=async(event:FormEvent)=>{
     event.preventDefault();
+    if(!settings?.configured){
+      setError('Save the payout rules first. The legal/collection review is linked to those saved finance settings.');
+      return;
+    }
     if(!settings?.canVerifyCollectionArrangement){
       setError('Only an authorized platform owner can verify the legal seller and collection-account arrangement.');
       return;
@@ -360,7 +364,7 @@ export default function PayoutsPanel(){
             </select>
           </label>
           {arrangementForm.status==='VERIFIED'&&<label className={styles.payoutConfirmCheck}><input type="checkbox" checked={arrangementForm.confirm} onChange={e=>setArrangementForm(v=>({...v,confirm:e.target.checked}))}/>I confirm the legal seller, payment collection arrangement and RazorpayX funding ownership have been reviewed and approved.</label>}
-          <div className={styles.payoutFormFooter}><span>Changing this review status does not alter a sale's saved legal seller or tax snapshot.</span><button className={styles.primary} type="submit" disabled={busy}>{arrangementForm.status==='VERIFIED'?'Confirm legal review':'Save review status'}</button></div>
+          <div className={styles.payoutFormFooter}><span>Changing this review status does not alter a sale's saved legal seller or tax snapshot.</span><button className={styles.primary} type="submit" disabled={busy||!settings?.configured}>{arrangementForm.status==='VERIFIED'?'Confirm legal review':'Save review status'}</button></div>
         </form>:<div className={styles.payoutReadOnly}>
           <p><b>Collection entity:</b> {settings?.payment_collection_legal_name||'Not selected'}</p>
           <p><b>RazorpayX funding owner:</b> {settings?.razorpayx_funding_legal_name||'Not selected'}</p>
