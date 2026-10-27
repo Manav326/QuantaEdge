@@ -40,7 +40,7 @@ python -m pip install "psycopg[binary]>=3.2,<4" pymupdf
 To repair an already-imported TRE course in your **local database**, its course release, all three assessments and test packs must still be `DRAFT`, and every question and answer must still be pending review. First run the normal dry run, then use this explicit repair command. It updates only confidently OCR-reconstructed Hindi prompts/options, preserves the raw source and reconstruction method, refreshes draft source hashes/fingerprint, and leaves answers, review states and publication untouched:
 
 ```powershell
-.\\scripts\\import_tre4_local.ps1 -Apply -RepairDraftHindi
+.\scripts\import_tre4_local.ps1 -Apply -RepairDraftHindi
 ```
 
 The wrapper refuses remote database hosts. Review the JSON report and compare every reconstructed Hindi prompt against its cited PDF page in Admin Web before approving anything. Questions without confident OCR remain flagged for manual reconstruction. Repair cannot be combined with `-SubmitForReview`.
