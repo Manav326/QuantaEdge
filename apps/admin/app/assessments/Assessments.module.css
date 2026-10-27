@@ -258,7 +258,7 @@
   border-color:var(--qe-review-border);
 }
 .assessmentReviewHeader h1,.reviewQuestionTitleBar h2,.reviewLanguageHeader h3,
-.reviewOptions>li>p,.reviewEditorHeader h3,.reviewNoteField,
+.reviewPrompt,.reviewOptions>li>p,.reviewEditorHeader h3,.reviewNoteField,
 .reviewProvenanceGrid strong,.reviewProvenanceGrid p,.reviewProvenanceGrid a{
   color:var(--qe-review-text);
 }

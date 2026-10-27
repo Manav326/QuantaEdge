@@ -369,7 +369,7 @@ export default function AssessmentsPage(){
   const selectedImportedReviewItem=filteredImportedReviewItems.find(item=>Number(item.sequenceNo)===importedReviewSequence)||filteredImportedReviewItems[0]||null;
   const selectedImportedQuestion=selectedImportedReviewItem?.question||{};
   const selectedImportedSequence=Number(selectedImportedReviewItem?.sequenceNo||importedReviewSequence);
-  const importedReviewHeaderTitle=t('admin.assessments.importedDraftStatus',{id:importedReviewId??'',status:statusText(importedReviewStatus,t)})+' · '+t('admin.assessments.bilingualQuestionReview',{course:activeCourse?.display_name||t('admin.assessments.assessment')});
+  const importedReviewHeaderTitle=t('admin.assessments.bilingualQuestionReview',{course:activeCourse?.display_name||t('admin.assessments.assessment')})+' · '+t('admin.assessments.importedDraftStatus',{id:importedReviewId??'',status:statusText(importedReviewStatus,t)});
   const selectedImportedSourceLocation=formatReviewSourceLocation(selectedImportedQuestion.source_location);
   const selectedImportedSourceUrl=safeReviewSourceUrl(selectedImportedQuestion.source_ref);
   const selectedImportedOptions=Array.isArray(selectedImportedQuestion.options)?selectedImportedQuestion.options:[];
@@ -834,7 +834,7 @@ export default function AssessmentsPage(){
 
       {importedReviewOpen&&importedReviewId!==null&&typeof document!=='undefined'&&createPortal(
         <div className={styles.assessmentReviewBackdrop} style={{top:reviewViewportInsets.top,bottom:reviewViewportInsets.bottom}} role="presentation" onMouseDown={event=>{if(event.target===event.currentTarget)closeImportedReview();}}>
-        <section ref={importedReviewDialogRef} tabIndex={-1} className={styles.assessmentReviewWorkspace} role="dialog" aria-modal="true" aria-labelledby="imported-review-title">
+        <section ref={importedReviewDialogRef} tabIndex={-1} className={styles.assessmentReviewWorkspace} role="dialog" aria-modal="false" aria-labelledby="imported-review-title">
           <aside className={styles.assessmentReviewSidebar}>
             <div className={styles.reviewSidebarHeader}>
               <h2>{t('admin.assessments.questionNavigator')}</h2>
