@@ -183,7 +183,7 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
             financial,
         )
         self.assertIn(
-            ") values(?,?,?,?,?,?,?,?,?,?,?,?::jsonb,?) returning id",
+            ") values(?,?,?,?,?,?,?, ?,?,?,?,?,?,?::jsonb,?) returning id",
             financial,
         )
         self.assertIn(
@@ -222,7 +222,7 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
         calculator = (ROOT / "services/api/src/main/java/com/quantaedge/api/RevenueDistributionCalculator.java").read_text(encoding="utf-8")
         financial = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseOrderFinancialService.java").read_text(encoding="utf-8")
         finance = (ROOT / "services/api/src/main/java/com/quantaedge/api/PlatformFinanceController.java").read_text(encoding="utf-8")
-        migration = (ROOT / "services/api/src/main/resources/db/migration/V206__finance_beneficiaries_and_razorpayx_payouts.sql").read_text(encoding="utf-8")
+        migration = (ROOT / "services/api/src/main/resources/db/migration/V213__finance_beneficiaries_and_razorpayx_payouts.sql").read_text(encoding="utf-8")
 
         self.assertIn("calculateBeneficiaries(", calculator)
         self.assertIn("actualPaidPaise-outputTaxPaise-processingChargesPaise", calculator)
@@ -238,7 +238,7 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
     def test_razorpayx_payout_requires_legal_review_maker_checker_and_safe_webhooks(self):
         payout = (ROOT / "services/api/src/main/java/com/quantaedge/api/FinancePayoutController.java").read_text(encoding="utf-8")
         webhook = (ROOT / "services/api/src/main/java/com/quantaedge/api/RazorpayXPayoutWebhookController.java").read_text(encoding="utf-8")
-        migration = (ROOT / "services/api/src/main/resources/db/migration/V206__finance_beneficiaries_and_razorpayx_payouts.sql").read_text(encoding="utf-8")
+        migration = (ROOT / "services/api/src/main/resources/db/migration/V213__finance_beneficiaries_and_razorpayx_payouts.sql").read_text(encoding="utf-8")
         panel = (ROOT / "apps/people/app/finance/PayoutsPanel.tsx").read_text(encoding="utf-8")
         route = (ROOT / "apps/people/app/finance/payouts/page.tsx").read_text(encoding="utf-8")
 
