@@ -379,6 +379,7 @@ public class FinancePayoutController {
     requireManage(context);
     return jdbc.queryForList("""
       select b.id,b.public_id,b.period_start,b.period_end,b.currency,b.status,b.beneficiary_count,b.total_amount_paise,
+        b.provider_fee_total_paise,b.provider_fee_tax_total_paise,b.provider_fee_reconciled_at,
         b.created_by_staff_id,b.approved_by_staff_id,b.approved_at,b.created_at,b.updated_at,
         (select count(*) from finance_payout p where p.batch_id=b.id and p.status='PROCESSED') as paid_count,
         (select count(*) from finance_payout p where p.batch_id=b.id and p.status in ('FAILED','REJECTED','REVERSED')) as exception_count
@@ -398,6 +399,7 @@ public class FinancePayoutController {
     if(batch.isEmpty())throw notFound("Payout batch was not found.");
     batch.put("payouts",jdbc.queryForList("""
       select p.id,p.public_id,p.beneficiary_id,p.amount_paise,p.currency,p.status,p.provider_status,p.provider_payout_id,
+        p.provider_fee_paise,p.provider_fee_tax_paise,p.provider_fee_reference,p.provider_fee_source_type,p.provider_fee_confirmed_at,
         p.transfer_reference,p.status_details,p.created_at,p.submitted_at,p.processed_at,b.beneficiary_type,b.beneficiary_name,
         b.bank_ifsc,b.bank_account_last4,t.display_name as institution_name,le.legal_name as company_name,
         coalesce(t.display_name,le.legal_name,b.beneficiary_name) as recipient_name,
@@ -684,13 +686,18 @@ public class FinancePayoutController {
     Long providerFeeTax=provider.hasNonNull("tax")?provider.path("tax").asLong():null;
     if(providerFee!=null&&providerFee<0||providerFeeTax!=null&&providerFeeTax<0)
       throw new IllegalStateException("RazorpayX returned negative payout-fee values.");
+    boolean providerFeesComplete=providerFee!=null&&providerFeeTax!=null;
     jdbc.update("""
       update finance_payout set provider_payout_id=?,provider_status=?,status=?,transfer_reference=?,status_details=?,
         provider_fee_paise=coalesce(?,provider_fee_paise),provider_fee_tax_paise=coalesce(?,provider_fee_tax_paise),
+        provider_fee_reference=case when ? then coalesce(provider_fee_reference,?) else provider_fee_reference end,
+        provider_fee_source_type=case when ? then coalesce(provider_fee_source_type,'PROVIDER_API') else provider_fee_source_type end,
+        provider_fee_confirmed_at=case when ? then coalesce(provider_fee_confirmed_at,now()) else provider_fee_confirmed_at end,
         submitted_at=coalesce(submitted_at,now()),
         processed_at=case when ? in ('PROCESSED','REVERSED') then coalesce(processed_at,now()) else processed_at end,updated_at=now()
       where id=?
-      """,providerId,normalized,status,utr,description,providerFee,providerFeeTax,status,payoutId);
+      """,providerId,normalized,status,utr,description,providerFee,providerFeeTax,
+        providerFeesComplete,providerId,providerFeesComplete,providerFeesComplete,status,payoutId);
     String eventType=switch(status){case "PENDING"->"PROVIDER_PENDING";case "QUEUED"->"QUEUED";case "PROCESSING"->"PROCESSING";
       case "PROCESSED"->"PROCESSED";case "REVERSED"->"REVERSED";case "FAILED"->"FAILED";case "REJECTED"->"REJECTED";default->"RECONCILIATION_REQUIRED";};
     Map<String,Object> providerDetails=new LinkedHashMap<>();
@@ -739,6 +746,7 @@ public class FinancePayoutController {
   private Map<String,Object> payoutSummary(long payoutId) {
     return one("""
       select p.id,p.public_id,p.batch_id,p.beneficiary_id,p.amount_paise,p.currency,p.status,p.provider_status,p.provider_payout_id,
+        p.provider_fee_paise,p.provider_fee_tax_paise,p.provider_fee_reference,p.provider_fee_source_type,p.provider_fee_confirmed_at,
         p.provider_idempotency_key,p.transfer_reference,p.status_details,p.created_at,p.submitted_at,p.processed_at,
         b.beneficiary_type,b.beneficiary_name,b.bank_ifsc,b.bank_account_last4,t.display_name as institution_name,
         le.legal_name as company_name,coalesce(t.display_name,le.legal_name,b.beneficiary_name) as recipient_name
