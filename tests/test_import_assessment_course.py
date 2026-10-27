@@ -87,7 +87,7 @@ class AssessmentCourseImporterTests(unittest.TestCase):
         package["source"].pop("source_url")
         errors = importer.validate_package(package, self.path)
         self.assertTrue(any("source.source_url is required" in error for error in errors))
-        self.assertTrue(any("https://example.org/official-paper.pdf" in error for error in errors))
+        self.assertTrue(any("https://example.org/official-source.pdf" in error for error in errors))
 
     def test_invalid_url_is_rejected(self) -> None:
         package = valid_package()
