@@ -58,8 +58,8 @@ public class CourseAuthoringService {
       throw badRequest("Course code must use 2–38 letters, digits, hyphens or underscores.");
     String displayName=requiredText(body.get("displayName"),2,200,"Course name");
     String version=optionalText(body.get("curriculumVersion"),"CURRENT",120,"Curriculum version");
-    String stream=optionalText(body.get("streamCode"),"ASSESSMENT".equals(type)?"BPSC_TRE":null,60,"Stream code");
-    String classCode=optionalText(body.get("classCode"),"ASSESSMENT".equals(type)?"TRE4":null,20,"Class code");
+    String stream=optionalText(body.get("streamCode"),"ASSESSMENT".equals(type)?"ASSESSMENT":null,60,"Stream code");
+    String classCode=optionalText(body.get("classCode"),null,20,"Class code");
 
     Long classId=null;
     if("ASSESSMENT".equals(type)&&"TRE4".equalsIgnoreCase(classCode==null?"":classCode)) {
@@ -90,12 +90,12 @@ public class CourseAuthoringService {
       throw badRequest("The "+type+" course type requires an active curriculum class.");
 
     List<Map<String,Object>> subjects=parseSubjects(body.get("subjects"));
-    if(Set.of("K12","ASSESSMENT").contains(type)&&subjects.isEmpty())
-      throw badRequest("A "+("ASSESSMENT".equals(type)?"standalone assessment":"K–12")+" course needs at least one subject track.");
+    if("K12".equals(type)&&subjects.isEmpty())
+      throw badRequest("A K–12 course needs at least one subject track.");
     if(subjects.size()>30)
       throw badRequest("Add no more than 30 subject tracks to one course.");
     if(classId==null&&!subjects.isEmpty())
-      throw badRequest("Subject tracks require an active curriculum class. For a standalone assessment course, use the TRE4 exam-preparation scope.");
+      throw badRequest("Subject tracks require an active curriculum class. A standalone assessment-only course must omit classCode and subjects.");
 
     String internalCode="I"+institutionId+"_"+requestedCode;
     Long courseIdentityId;
@@ -141,31 +141,37 @@ public class CourseAuthoringService {
       }
 
       if("ASSESSMENT".equals(type)) {
-        if(!"TRE4".equalsIgnoreCase(classCode==null?"":classCode)
-            ||!"BPSC-TRE-4".equalsIgnoreCase(version)
-            ||!requestedCode.equalsIgnoreCase("TRE4")
-            ||!"TRE-4 · Computer Science".equals(displayName)) {
-          throw badRequest("The current assessment-only release gate is configured for the exact TRE4 course identity: TRE4 / TRE-4 · Computer Science / BPSC-TRE-4 / TRE4 compatibility scope.");
-        }
-        Long subjectId=createdSubjects.get("computer-science");
-        if(subjectId==null || subjects.size()!=1
-            || !"Computer Science".equals(String.valueOf(subjects.getFirst().get("displayName")))) {
-          throw badRequest("TRE4 assessment course requires exactly one Computer Science subject track (computer-science).");
-        }
+        // A new assessment-only course is classless and has no synthetic subject/chapter.
+        // Retain the existing TRE4 compatibility profile for historical clients only.
         jdbc.update("""
           insert into curriculum_program_delivery_mode(program_id,delivery_mode)
           values(?,'ASSESSMENT_ONLY')
           """,courseId);
-        assessmentChapterId=jdbc.queryForObject("""
-          insert into curriculum_chapter(
-            subject_id,code,display_name,description,sort_order,teaching_order,active,content_status,
-            curriculum_source,curriculum_source_url,curriculum_source_edition,curriculum_source_pages,
-            curriculum_source_verified
-          ) values(?, 'prev-years','Prev years',
-            'Previous-year TRE examination papers and their versioned assessment packs.',
-            1,1,true,'DRAFT',null,null,null,null,false)
-          returning id
-          """,Long.class,subjectId);
+
+        boolean legacyTre4Compatibility = classId != null
+            && "TRE4".equalsIgnoreCase(classCode==null?"":classCode)
+            && "BPSC-TRE-4".equalsIgnoreCase(version)
+            && requestedCode.equalsIgnoreCase("TRE4")
+            && "TRE-4 · Computer Science".equals(displayName);
+        if(legacyTre4Compatibility) {
+          Long subjectId=createdSubjects.get("computer-science");
+          if(subjectId==null || subjects.size()!=1
+              || !"Computer Science".equals(String.valueOf(subjects.getFirst().get("displayName")))) {
+            throw badRequest("The legacy TRE4 compatibility course requires exactly one Computer Science subject track (computer-science).");
+          }
+          assessmentChapterId=jdbc.queryForObject("""
+            insert into curriculum_chapter(
+              subject_id,code,display_name,description,sort_order,teaching_order,active,content_status,
+              curriculum_source,curriculum_source_url,curriculum_source_edition,curriculum_source_pages,
+              curriculum_source_verified
+            ) values(?, 'prev-years','Prev years',
+              'Previous-year TRE examination papers and their versioned assessment packs.',
+              1,1,true,'DRAFT',null,null,null,null,false)
+            returning id
+            """,Long.class,subjectId);
+        } else if(classId!=null || !subjects.isEmpty()) {
+          throw badRequest("Create a standalone assessment-only course without classCode or subjects. The legacy TRE4 compatibility profile remains available for existing TRE4 course creation.");
+        }
       }
 
       String fingerprint=jdbc.queryForObject("select course_content_fingerprint(?)",String.class,courseId);
