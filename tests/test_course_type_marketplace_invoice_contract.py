@@ -323,7 +323,10 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
         migration = (ROOT / "services/api/src/main/resources/db/migration/V216__immutable_monthly_payout_statements.sql").read_text(encoding="utf-8")
         panel = (ROOT / "apps/people/app/finance/PayoutsPanel.tsx").read_text(encoding="utf-8")
         css = (ROOT / "apps/people/app/finance/Finance.module.css").read_text(encoding="utf-8")
+        dockerfile = (ROOT / "services/api/Dockerfile").read_text(encoding="utf-8")
 
+        self.assertIn("fontconfig fonts-noto-core", dockerfile)
+        self.assertIn("Noto Sans Devanagari", dockerfile)
         self.assertIn('@PostMapping("/payout-batches/{batchId}/statements")', payout)
         self.assertIn('@GetMapping("/payout-batches/{batchId}/statements")', payout)
         self.assertIn('"/payout-statements/{statementId}/download"', payout)
@@ -341,6 +344,7 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
         self.assertIn("Generate batch PDF", panel)
         self.assertIn("Generate payout advice PDF", panel)
         self.assertIn("Archived PDF statements", panel)
+        self.assertIn("doc.recipient_name", panel)
         self.assertIn("private, no-store, max-age=0", payout)
         self.assertIn(".payoutStatementRow", css)
 
