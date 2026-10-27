@@ -8,7 +8,7 @@ import PayoutsPanel from './PayoutsPanel';
 
 type Institution = { id:number; tenant_code:string; display_name:string; status:string };
 type LegalEntity = { id:number; entity_kind:string; institution_id?:number|null; institution_name?:string|null; legal_name:string; trade_name?:string|null; contact_email?:string|null; contact_phone?:string|null; registered_address_json?:string|null; invoice_series_code?:string; einvoice_applicability?:'UNREVIEWED'|'NOT_REQUIRED'|'REQUIRED'; einvoice_applicability_reviewed_at?:string|null; einvoice_applicability_review_note?:string|null; status:string; active_gst_registrations?:number };
-type Offer = { offer_id:number; institution_id:number; institution_name:string; course_identity_public_id:string; stable_course_key:string; course_code:string; course_name:string; content_version_no:number; assignment_id:number; assignment_source:string; release_id:number; release_version:number; release_state:string; current_candidate:boolean; publicly_sellable:boolean; price_paise:number; currency:string; offer_status:string; legal_entity_id?:number|null; legal_seller_name?:string|null; latest_tax_profile_id?:number|null; tax_profile_status?:string|null; tax_treatment?:string|null; latest_share_policy_status?:string|null };
+type Offer = { offer_id:number; institution_id:number; institution_name:string; source_institution_id?:number|null; source_institution_name?:string|null; course_identity_public_id:string; stable_course_key:string; course_code:string; course_name:string; content_version_no:number; assignment_id:number; assignment_source:string; release_id:number; release_version:number; release_state:string; current_candidate:boolean; publicly_sellable:boolean; price_paise:number; currency:string; offer_status:string; legal_entity_id?:number|null; legal_seller_name?:string|null; latest_tax_profile_id?:number|null; tax_profile_status?:string|null; tax_treatment?:string|null; latest_share_policy_status?:string|null };
 type Registration = { id:number; legal_entity_id:number; legal_entity_name:string; gstin:string; state_code:string; status:string; effective_from:string };
 type Catalog = { institutions:Institution[]; legalEntities:LegalEntity[]; offers:Offer[]; registrations:Registration[] };
 function offerLifecycleLabel(offer:Offer):string {
@@ -17,7 +17,7 @@ function offerLifecycleLabel(offer:Offer):string {
   if (offer.current_candidate) return 'CURRENT CANDIDATE';
   return 'OBSOLETE — DO NOT CONFIGURE';
 }
-type Policy = { id:number; institution_offer_id:number; policy_version:number; currency:string; status:string; institution_name:string; course_name:string; recipient_count:number; effective_from:string; effective_until?:string|null };
+type Policy = { id:number; institution_offer_id:number; policy_version:number; currency:string; status:string; institution_name:string; source_institution_id?:number|null; source_institution_name?:string|null; course_name:string; recipient_count:number; effective_from:string; effective_until?:string|null };
 type PolicyRecipient = { recipient_type?:string; institution_id?:number|null; legal_entity_id?:number|null; recipient_id?:number; recipient_name?:string; calculation_type:string; percentage_basis_points?:number|null; flat_amount_paise?:number|null };
 type DiscountOffer = { id:number; institution_offer_id:number; code:string; version:number; currency:string; discount_type:string; percentage_basis_points?:number|null; flat_amount_paise?:number|null; max_discount_paise?:number|null; min_listed_price_paise:number; max_redemptions?:number|null; max_redemptions_per_purchaser?:number|null; effective_from:string; effective_until?:string|null; status:string; institution_name:string; course_name:string; redemption_count:number; offer_price_paise:number };
 type PolicyDetail = Policy & { recipients:PolicyRecipient[]; remainder_recipient_type?:string; remainder_institution_id?:number|null; remainder_legal_entity_id?:number|null; remainder_recipient_name?:string };
@@ -26,7 +26,7 @@ type FinancialDocument = { id:number; document_type:string; document_number:stri
 type RefundRecord = { id:number; public_id:string; course_payment_order_id:number; requested_amount_paise:number; currency:string; reason:string; status:string; provider_status?:string|null; provider_refund_id?:string|null; requested_at:string; settled_at?:string|null; credit_note_document_id?:number|null; credit_note_number?:string|null; message?:string };
 
 type CoursePaymentOrder = {
-  local_order_id:number; institution_id:number; institution_name:string; course_id:number; course_title:string;
+  local_order_id:number; institution_id:number; institution_name:string; source_institution_id?:number|null; source_institution_name?:string|null; course_id:number; course_title:string;
   student_id:number; learner_name?:string|null; purchaser_user_id?:number|null; target_student_id?:number|null;
   recipient_type:string; status:string; failure_code?:string|null; currency:string;
   listed_price_paise?:number|null; discount_amount_paise?:number|null; discount_reference?:string|null;
@@ -39,11 +39,13 @@ type CoursePaymentOrder = {
   distribution_issue_count?:number; distribution_reconciliation_summary?:string;
 };
 type DistributionException = {
-  local_order_id:number; institution_id:number; institution_name:string; course_id:number; course_title:string;
+  local_order_id:number; institution_id:number; institution_name:string; source_institution_id?:number|null; source_institution_name?:string|null; course_id:number; course_title:string;
   student_id:number; learner_name?:string|null; status:string; currency:string; offer_price_paise:number;
   captured_amount_paise?:number|null; provider_order_id?:string|null; provider_payment_id?:string|null;
   created_at:string; verified_at?:string|null; fiscal_document_id?:number|null; invoice_number?:string|null;
   distribution_issue_count:number; distribution_reconciliation_summary:string;
+  distribution_pool_paise?:number|null; distribution_expected_total_paise?:number|null;
+  distribution_recorded_total_paise?:number|null; distribution_unassigned_remainder_paise?:number|null;
   distribution_reconciliation_issues:string[]; distribution_reconciliation_details:string[];
 };
 type PaymentOperationEvent = {
@@ -1008,15 +1010,15 @@ export default function FinancePage(){
         <section className={styles.panel}><div className={styles.panelHead}><div><h2>Institution revenue-share policies</h2><p>Shares are calculated from actual captured consideration minus the invoice's approved output-tax amount—not list price.</p></div><button className={styles.primary} disabled={busy||!selectedOfferId} onClick={createPolicy}>＋ New policy</button></div>
           <label className={styles.wideLabel}>Course offer<select value={selectedOfferId} onChange={e=>selectWorkflowOffer(e.target.value)}><option value="">Select offer</option>{catalog.offers.filter(o=>o.current_candidate||o.publicly_sellable).map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_name}</option>)}</select></label>
           {catalog.offers.length===0&&<p className={styles.empty}><a href="/institutions">Open HRMS Course launch</a> and create the course’s listing draft first. Revenue-share policies bind to an exact offer revision, never to an unlaunched course identity.</p>}
-          {policies.length?<div className={styles.policyTableWrap}><table className={styles.table}><thead><tr><th>Course / institution</th><th>Version</th><th>Status</th><th>Recipients</th><th>Action</th></tr></thead><tbody>{policies.map(p=><tr key={p.id}><td><b>{p.course_name}</b><small>{p.institution_name}</small></td><td>v{p.policy_version}</td><td><span className={styles.status}>{p.status}</span></td><td>{p.recipient_count===0?'Remainder only':p.recipient_count}</td><td><button className={styles.secondarySmall} onClick={()=>void loadPolicy(String(p.id))}>Open</button></td></tr>)}</tbody></table></div>:<p className={styles.empty}>No revenue-share policies have been created.</p>}
+          {policies.length?<div className={styles.policyTableWrap}><table className={styles.table}><thead><tr><th>Course / marketplace offer</th><th>Version</th><th>Status</th><th>Recipients</th><th>Action</th></tr></thead><tbody>{policies.map(p=><tr key={p.id}><td><b>{p.course_name}</b><small>Marketplace institution: {p.institution_name}</small><small>Course source: {p.source_institution_name||'Not resolved from saved release'}</small></td><td>v{p.policy_version}</td><td><span className={styles.status}>{p.status}</span></td><td>{p.recipient_count===0?'Remainder only':p.recipient_count}</td><td><button className={styles.secondarySmall} onClick={()=>void loadPolicy(String(p.id))}>Open</button></td></tr>)}</tbody></table></div>:<p className={styles.empty}>No revenue-share policies have been created.</p>}
         </section>
-        {policyDetail&&<section className={styles.panel}><div className={styles.panelHead}><div><h2>Policy v{policyDetail.policy_version}: {policyDetail.course_name}</h2><p>Source offer: {policyDetail.institution_name} · Currency {policyDetail.currency} · Status {policyDetail.status}</p></div>{policyDetail.status==='DRAFT'&&<button className={styles.secondary} onClick={()=>void saveRecipients()} disabled={busy||recipientsUnchanged}>Save recipients</button>}</div>
+        {policyDetail&&<section className={styles.panel}><div className={styles.panelHead}><div><h2>Policy v{policyDetail.policy_version}: {policyDetail.course_name}</h2><p>Marketplace offer: {policyDetail.institution_name} · Course source: {policyDetail.source_institution_name||'Not resolved from saved release'} · Currency {policyDetail.currency} · Status {policyDetail.status}</p></div>{policyDetail.status==='DRAFT'&&<button className={styles.secondary} onClick={()=>void saveRecipients()} disabled={busy||recipientsUnchanged}>Save recipients</button>}</div>
           {policyDetail.status==='DRAFT'?<><p>Each institution or company can receive a percentage of the distributable pool or a fixed amount per eligible paid sale. The source institution, shared institutions and a configured company can be combined in one policy. A remainder-only policy is also supported when the selected recipient should receive the entire pool.</p>
-            <p>The selected remainder recipient receives what remains after all explicit shares. The source institution is not assumed automatically; confirm the named remainder recipient below. A company can receive both its explicit share and the remainder.</p>
+            <p>The selected remainder recipient receives what remains after all explicit shares. Source and shared institutions are identified from the course release; neither the marketplace institution nor a company is assumed to receive the remainder. A recipient can receive both its explicit share and the remainder.</p>
             <div className={styles.form}>
               <label>Who receives the remaining balance?<select value={policyRemainderType+':'+policyRemainderId} onChange={e=>{const [type,id]=e.target.value.split(':');setPolicyRemainderType(type as 'INSTITUTION'|'COMPANY');setPolicyRemainderId(id||'');}}>
                 <option value="">Choose remainder recipient</option>
-                {catalog.institutions.filter(x=>x.status==='ACTIVE').map(x=><option key={'I'+x.id} value={'INSTITUTION:'+x.id}>Institution · {x.display_name}{Number(x.id)===Number(selectedOffer?.institution_id)?' · Sourced institution':' · Shared/other institution'}</option>)}
+                {catalog.institutions.filter(x=>x.status==='ACTIVE').map(x=><option key={'I'+x.id} value={'INSTITUTION:'+x.id}>Institution · {x.display_name}{Number(x.id)===Number(selectedOffer?.source_institution_id)?' · Course source institution':' · Shared institution'}</option>)}
                 {catalog.legalEntities.filter(x=>x.status==='ACTIVE'&&['PLATFORM','COMPANY'].includes(x.entity_kind)).map(x=><option key={'C'+x.id} value={'COMPANY:'+x.id}>Company · {x.legal_name}</option>)}
               </select></label>
             </div>
@@ -1025,7 +1027,7 @@ export default function FinancePage(){
               <label>Beneficiary<select value={r.recipientId} onChange={e=>setRecipients(old=>old.map((x,j)=>i===j?{...x,recipientId:e.target.value}:x))}><option value="">Select beneficiary</option>
                 {r.recipientType==='INSTITUTION'?catalog.institutions.filter(x=>x.status==='ACTIVE').map(x=><option key={x.id} value={x.id}>{x.display_name}</option>)
                   :catalog.legalEntities.filter(x=>x.status==='ACTIVE'&&['PLATFORM','COMPANY'].includes(x.entity_kind)).map(x=><option key={x.id} value={x.id}>{x.legal_name}</option>)}
-              </select><small>{r.recipientType==='COMPANY'?'Configured company/legal entity':Number(r.recipientId)===Number(selectedOffer?.institution_id)?'Sourced institution for this course offer':'Shared or other institution'}</small></label>
+              </select><small>{r.recipientType==='COMPANY'?'Configured company/legal entity':Number(r.recipientId)===Number(selectedOffer?.source_institution_id)?'Source institution for this course':'Shared institution'}</small></label>
               <label>Share type<select value={r.calculationType} onChange={e=>setRecipients(old=>old.map((x,j)=>i===j?{...x,calculationType:e.target.value as RecipientDraft['calculationType']}:x))}><option value="PERCENTAGE">Percentage</option><option value="FLAT">Flat ₹ amount</option></select></label>
               {r.calculationType==='PERCENTAGE'?<label>Pool share (%)<input type="number" min=".01" max="100" step=".01" value={r.percentage} onChange={e=>setRecipients(old=>old.map((x,j)=>i===j?{...x,percentage:e.target.value}:x))}/></label>:<label>Flat amount per sale (₹)<input type="number" min=".01" step=".01" value={r.flatRupees} onChange={e=>setRecipients(old=>old.map((x,j)=>i===j?{...x,flatRupees:e.target.value}:x))}/></label>}
               <button className={styles.removeRow} type="button" aria-label="Remove beneficiary" onClick={()=>setRecipients(old=>old.filter((_,j)=>j!==i))}>×</button>
@@ -1138,19 +1140,23 @@ export default function FinancePage(){
             </button></div>
           <form className={styles.paymentFilters} onSubmit={event=>{event.preventDefault();setDistributionExceptionCursor(null);setDistributionExceptionHasMore(false);void loadDistributionExceptions(false);}}>
             <label>Find order, institution, course or payment reference
-              <input value={distributionExceptionSearch} maxLength={120} onChange={e=>setDistributionExceptionSearch(e.target.value)} placeholder="Order ID, Quanta Edge, Class 6…"/>
+              <input value={distributionExceptionSearch} maxLength={120} onChange={e=>setDistributionExceptionSearch(e.target.value)} placeholder="Order ID, institution, course, or payment reference…"/>
             </label>
             <button type="submit" className={styles.primarySmall} disabled={distributionExceptionLoading}>Search exceptions</button>
             <button type="button" className={styles.secondarySmall} disabled={distributionExceptionLoading} onClick={()=>{setDistributionExceptionSearch('');setDistributionExceptionCursor(null);void loadDistributionExceptions(false,'');}}>Clear</button>
           </form>
           {distributionExceptionLoading?<p className={styles.empty}>Checking saved sale snapshots and allocation ledger…</p>
           :distributionExceptions.length?<div className={styles.policyTableWrap}><table className={styles.table}>
-            <thead><tr><th>Order / course</th><th>Source institution</th><th>Payment</th><th>Distribution issue</th><th>Action</th></tr></thead>
+            <thead><tr><th>Order / course</th><th>Course source institution</th><th>Payment</th><th>Distribution issue</th><th>Action</th></tr></thead>
             <tbody>{distributionExceptions.map(item=><tr key={item.local_order_id}>
               <td><b>QE-ORDER-{item.local_order_id}</b><small>{item.course_title||('Course #'+item.course_id)}</small><small>{item.created_at?new Date(item.created_at).toLocaleString('en-IN'):''}</small></td>
-              <td><b>{item.institution_name}</b><small>{item.learner_name||('Learner #'+item.student_id)}</small></td>
+              <td><b>{item.source_institution_name||'Source institution not resolved'}</b><small>Marketplace institution: {item.institution_name||'Not recorded'}</small><small>{item.learner_name||('Learner #'+item.student_id)}</small></td>
               <td><span className={styles.status}>{item.status}</span><small>{item.provider_payment_id||'No payment ID recorded'}</small><small>Captured: {item.captured_amount_paise==null?'Not recorded':rupees(item.captured_amount_paise,item.currency)}</small></td>
               <td><b>{item.distribution_issue_count} issue(s)</b><small>{item.distribution_reconciliation_summary}</small>
+                {item.distribution_pool_paise!=null&&<small>Distributable pool: {rupees(item.distribution_pool_paise,item.currency)}</small>}
+                {item.distribution_expected_total_paise!=null&&item.distribution_recorded_total_paise!=null&&<small>Expected: {rupees(item.distribution_expected_total_paise,item.currency)} · Recorded: {rupees(item.distribution_recorded_total_paise,item.currency)}</small>}
+                {item.distribution_unassigned_remainder_paise!=null&&item.distribution_unassigned_remainder_paise>0&&<strong>Unassigned remainder: {rupees(item.distribution_unassigned_remainder_paise,item.currency)}</strong>}
+                {item.distribution_pool_paise==null&&<small>Amount basis not calculated; payment or policy evidence needs review.</small>}
                 <details><summary>View checks</summary><ul>{(item.distribution_reconciliation_issues||[]).map((issue,i)=><li key={i}>{issue}</li>)}</ul>
                   {(item.distribution_reconciliation_details||[]).length>0&&<details><summary>Recipient-level expected vs recorded</summary><ul>{item.distribution_reconciliation_details.map((detail,i)=><li key={i}>{detail}</li>)}</ul></details>}
                 </details>
@@ -1189,13 +1195,13 @@ export default function FinancePage(){
           </div>
           {paymentLoading?<p className={styles.empty}>Loading course payment orders…</p>
           :paymentOrders.length?<div className={styles.policyTableWrap}><table className={styles.table}>
-            <thead><tr><th>Order / course</th><th>Institution / learner</th><th>Payment state</th><th>Payable / captured</th><th>Invoice</th><th>Distribution</th><th>Resolution</th></tr></thead>
+            <thead><tr><th>Order / course</th><th>Marketplace & course institutions / learner</th><th>Payment state</th><th>Payable / captured</th><th>Invoice</th><th>Distribution</th><th>Resolution</th></tr></thead>
             <tbody>{paymentOrders.map(order=>{
               const status=String(order.status||'').toUpperCase();
               const canReconcile=['PENDING','EXPIRED'].includes(status);
               return <tr key={order.local_order_id}>
                 <td><b>QE-ORDER-{order.local_order_id}</b><small>{order.course_title||('Course #'+order.course_id)}</small><small>{order.provider_order_id||'No Razorpay order reference'}</small></td>
-                <td><b>{order.institution_name}</b><small>{order.learner_name||('Learner #'+order.student_id)} · {order.recipient_type||'STUDENT'}</small><small>{order.purchaser_user_id?'Purchaser #'+order.purchaser_user_id:'Student purchase'}</small></td>
+                <td><b>{order.institution_name}</b><small>{order.source_institution_id!=null&&Number(order.source_institution_id)===Number(order.institution_id)?'Source and marketplace institution':order.source_institution_name?'Course source: '+order.source_institution_name:'Course source not resolved'}</small><small>{order.learner_name||('Learner #'+order.student_id)} · {order.recipient_type||'STUDENT'}</small><small>{order.purchaser_user_id?'Purchaser #'+order.purchaser_user_id:'Student purchase'}</small></td>
                 <td><span className={styles.status}>{status}</span><small>{order.failure_code||'No saved failure code'}</small><small>{order.provider_payment_id||'No payment ID recorded'}</small></td>
                 <td><b>{rupees(order.offer_price_paise,order.currency)}</b><small>Discount: {rupees(order.discount_amount_paise||0,order.currency)} {order.discount_reference||''}</small><small>Captured: {order.captured_amount_paise==null?'Not recorded':rupees(order.captured_amount_paise,order.currency)}</small></td>
                 <td><b>{order.invoice_number||'Not issued / linked'}</b><small>{order.fiscal_document_id?'Document #'+order.fiscal_document_id:'No invoice reference'}</small></td>
