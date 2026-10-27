@@ -14,14 +14,14 @@
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
-      "1851a22784c9105601dfe039",
-      "2e220d251d13a2e76c57e33b"
+      "2e220d251d13a2e76c57e33b",
+      "1ad982bcd93525bf306d2c98"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1317,
-    "assets_remaining": 974,
+    "assets_analyzed": 1318,
+    "assets_remaining": 973,
     "assets_completion_percent": 57.5,
-    "assets_failed": 13,
+    "assets_failed": 12,
     "assets_skipped_from_checkpoint": 1317,
     "batch_limit": 5,
     "publication_allowed": false
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441272121",
-      "checkpointed_at": "2026-10-27T05:20:59Z"
+      "checkpointed_at": "2026-10-27T05:27:01Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441272121",
-      "checkpointed_at": "2026-10-27T05:21:24Z"
+      "checkpointed_at": "2026-10-27T05:27:26Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441272121",
-      "checkpointed_at": "2026-10-27T05:21:54Z"
+      "checkpointed_at": "2026-10-27T05:27:56Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43458,9 +43458,11 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface.",
+        "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
         "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
           "Activity 6.4: Let us perform",
           "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
           "Do you realise that it sticks to the surface?",
@@ -43477,21 +43479,29 @@
           "atmospheric pressure",
           "rubber sucker",
           "air pressure",
-          "force of gravity",
+          "SI unit of pressure",
           "millibar",
           "hectopascal",
-          "wind formation"
+          "wind formation",
+          "pressure difference",
+          "atmospheric force",
+          "air movement",
+          "fluids and gases in tissues and organs",
+          "atmospheric pressure balance",
+          "wind strength",
+          "wind damage"
         ],
-        "context_relation": "The image is a diagram illustrating the concept of atmospheric pressure using a rubber sucker.",
+        "context_relation": "educational",
         "limitations": [
-          "The image does not provide a visual representation of the atmospheric pressure."
+          "The image does not show the actual experiment with the rubber sucker.",
+          "The image does not show the actual measurement of atmospheric pressure."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441272121",
-      "checkpointed_at": "2026-10-27T05:26:18Z"
+      "checkpointed_at": "2026-10-27T05:28:40Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -43623,19 +43633,42 @@
     {
       "asset_id": "1ad982bcd93525bf306d2c98",
       "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
-      "page_text_context_sha256": "269d7d45dc9bb3da49e150dcbf8cc1bd29f86ab0950e516e695694e3d730938f",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 108,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "269d7d45dc9bb3da49e150dcbf8cc1bd29f86ab0950e516e695694e3d730938f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40441174014",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two balloons connected by a straw, with a rubber band securing one end of the straw to one balloon.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Take two similar balloons made of thin rubber,",
+          "and a drinking straw.",
+          "Insert one end of the straw into one balloon and",
+          "secure it with a rubber band or thread."
+        ],
+        "concepts": [
+          "balloons",
+          "straw",
+          "rubber band",
+          "rubber",
+          "air pressure",
+          "wind formation"
+        ],
+        "context_relation": "The image is related to the activity described in the text, which involves observing the formation of winds using balloons and a straw.",
+        "limitations": [
+          "The image does not show the actual experiment or the results of the experiment."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40441272121",
+      "checkpointed_at": "2026-10-27T05:31:23Z"
     },
     {
       "asset_id": "b88b951a086d5dea05ab2062",

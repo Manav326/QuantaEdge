@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
     "raw_analysis_result_rows": 1334,
-    "successful_visual_analyses": 1321,
+    "successful_visual_analyses": 1322,
     "missing_visual_analyses": 957,
-    "failed_visual_analyses": 13,
+    "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 970,
+    "unresolved_count": 969,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -49670,9 +49670,11 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface.",
+        "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
         "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
           "Activity 6.4: Let us perform",
           "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
           "Do you realise that it sticks to the surface?",
@@ -49689,14 +49691,22 @@
           "atmospheric pressure",
           "rubber sucker",
           "air pressure",
-          "force of gravity",
+          "SI unit of pressure",
           "millibar",
           "hectopascal",
-          "wind formation"
+          "wind formation",
+          "pressure difference",
+          "atmospheric force",
+          "air movement",
+          "fluids and gases in tissues and organs",
+          "atmospheric pressure balance",
+          "wind strength",
+          "wind damage"
         ],
-        "context_relation": "The image is a diagram illustrating the concept of atmospheric pressure using a rubber sucker.",
+        "context_relation": "educational",
         "limitations": [
-          "The image does not provide a visual representation of the atmospheric pressure."
+          "The image does not show the actual experiment with the rubber sucker.",
+          "The image does not show the actual measurement of atmospheric pressure."
         ]
       },
       "chapter_id": null,
@@ -49837,9 +49847,30 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two balloons connected by a straw, with a rubber band securing one end of the straw to one balloon.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Take two similar balloons made of thin rubber,",
+          "and a drinking straw.",
+          "Insert one end of the straw into one balloon and",
+          "secure it with a rubber band or thread."
+        ],
+        "concepts": [
+          "balloons",
+          "straw",
+          "rubber band",
+          "rubber",
+          "air pressure",
+          "wind formation"
+        ],
+        "context_relation": "The image is related to the activity described in the text, which involves observing the formation of winds using balloons and a straw.",
+        "limitations": [
+          "The image does not show the actual experiment or the results of the experiment."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

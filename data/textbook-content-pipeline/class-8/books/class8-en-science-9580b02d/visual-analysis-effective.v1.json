@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7e1c342f567aef52e294dcd08f2f5c80d335621f5d0915f9c7aabd26fadfaca9",
+  "raw_analysis_sha256": "91efbfd11766cab3cccbc15cc48db4fa57b2e9b3f30184cd4be2e017932347cd",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441272121",
-      "checkpointed_at": "2026-10-27T05:20:59Z",
+      "checkpointed_at": "2026-10-27T05:27:01Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441272121",
-      "checkpointed_at": "2026-10-27T05:21:24Z",
+      "checkpointed_at": "2026-10-27T05:27:26Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441272121",
-      "checkpointed_at": "2026-10-27T05:21:54Z",
+      "checkpointed_at": "2026-10-27T05:27:56Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -65666,9 +65666,11 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface.",
+        "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
         "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
           "Activity 6.4: Let us perform",
           "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
           "Do you realise that it sticks to the surface?",
@@ -65685,25 +65687,35 @@
           "atmospheric pressure",
           "rubber sucker",
           "air pressure",
-          "force of gravity",
+          "SI unit of pressure",
           "millibar",
           "hectopascal",
-          "wind formation"
+          "wind formation",
+          "pressure difference",
+          "atmospheric force",
+          "air movement",
+          "fluids and gases in tissues and organs",
+          "atmospheric pressure balance",
+          "wind strength",
+          "wind damage"
         ],
-        "context_relation": "The image is a diagram illustrating the concept of atmospheric pressure using a rubber sucker.",
+        "context_relation": "educational",
         "limitations": [
-          "The image does not provide a visual representation of the atmospheric pressure."
+          "The image does not show the actual experiment with the rubber sucker.",
+          "The image does not show the actual measurement of atmospheric pressure."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441272121",
-      "checkpointed_at": "2026-10-27T05:26:18Z",
+      "checkpointed_at": "2026-10-27T05:28:40Z",
       "effective_analysis": {
-        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface.",
+        "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
         "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
           "Activity 6.4: Let us perform",
           "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
           "Do you realise that it sticks to the surface?",
@@ -65720,14 +65732,22 @@
           "atmospheric pressure",
           "rubber sucker",
           "air pressure",
-          "force of gravity",
+          "SI unit of pressure",
           "millibar",
           "hectopascal",
-          "wind formation"
+          "wind formation",
+          "pressure difference",
+          "atmospheric force",
+          "air movement",
+          "fluids and gases in tissues and organs",
+          "atmospheric pressure balance",
+          "wind strength",
+          "wind damage"
         ],
-        "context_relation": "The image is a diagram illustrating the concept of atmospheric pressure using a rubber sucker.",
+        "context_relation": "educational",
         "limitations": [
-          "The image does not provide a visual representation of the atmospheric pressure."
+          "The image does not show the actual experiment with the rubber sucker.",
+          "The image does not show the actual measurement of atmospheric pressure."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -65926,21 +65946,65 @@
     {
       "asset_id": "1ad982bcd93525bf306d2c98",
       "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
-      "page_text_context_sha256": "269d7d45dc9bb3da49e150dcbf8cc1bd29f86ab0950e516e695694e3d730938f",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 108,
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "269d7d45dc9bb3da49e150dcbf8cc1bd29f86ab0950e516e695694e3d730938f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40441174014",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two balloons connected by a straw, with a rubber band securing one end of the straw to one balloon.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Take two similar balloons made of thin rubber,",
+          "and a drinking straw.",
+          "Insert one end of the straw into one balloon and",
+          "secure it with a rubber band or thread."
+        ],
+        "concepts": [
+          "balloons",
+          "straw",
+          "rubber band",
+          "rubber",
+          "air pressure",
+          "wind formation"
+        ],
+        "context_relation": "The image is related to the activity described in the text, which involves observing the formation of winds using balloons and a straw.",
+        "limitations": [
+          "The image does not show the actual experiment or the results of the experiment."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40441272121",
+      "checkpointed_at": "2026-10-27T05:31:23Z",
+      "effective_analysis": {
+        "visual_summary": "Two balloons connected by a straw, with a rubber band securing one end of the straw to one balloon.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Take two similar balloons made of thin rubber,",
+          "and a drinking straw.",
+          "Insert one end of the straw into one balloon and",
+          "secure it with a rubber band or thread."
+        ],
+        "concepts": [
+          "balloons",
+          "straw",
+          "rubber band",
+          "rubber",
+          "air pressure",
+          "wind formation"
+        ],
+        "context_relation": "The image is related to the activity described in the text, which involves observing the formation of winds using balloons and a straw.",
+        "limitations": [
+          "The image does not show the actual experiment or the results of the experiment."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
