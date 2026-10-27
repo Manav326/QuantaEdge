@@ -70,6 +70,10 @@ public class RazorpayXPayoutWebhookController {
     }
   }
 
+  static boolean verifySignatureForTest(byte[] body,String supplied,String secret) {
+    return verify(body,supplied,secret);
+  }
+
   private static boolean verify(byte[] body,String supplied,String secret) {
     if(!supplied.matches("(?i)[0-9a-f]{64}"))return false;
     try {
