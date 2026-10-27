@@ -787,9 +787,17 @@ public class FinancePayoutController {
   public ResponseEntity<Map<String,Object>> retryPayout(@PathVariable long payoutId,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=requireApprover(context);requirePayoutReady();
-    Map<String,Object> row=one("select * from finance_payout where id=?",payoutId);
+    Map<String,Object> row=one("""
+      select p.*,b.status as batch_status,b.approved_by_staff_id as batch_approved_by_staff_id
+      from finance_payout p join finance_payout_batch b on b.id=p.batch_id where p.id=?
+      """,payoutId);
     if(row.isEmpty())throw notFound("Payout not found.");
-    if(!"RECONCILIATION_REQUIRED".equals(text(row,"status")))throw bad("Only an uncertain payout submission can be retried.");
+    String status=text(row,"status");
+    if(!List.of("RECONCILIATION_REQUIRED","SUBMITTING","APPROVED","PENDING_APPROVAL").contains(status))
+      throw bad("Only an approved transfer with an uncertain or interrupted submission can be retried.");
+    if("PENDING_APPROVAL".equals(status)
+        &&!List.of("APPROVED","PROCESSING","PARTIAL").contains(text(row,"batch_status")))
+      throw bad("This payout batch has not been approved. Do not send an unapproved transfer.");
     if(optionalText(row.get("provider_payout_id"))!=null)throw bad("A provider payout ID exists. Refresh its status instead of resubmitting.");
     return ResponseEntity.ok(submitApprovedPayout(payoutId,context.staffId()));
   }
@@ -797,14 +805,56 @@ public class FinancePayoutController {
   private Map<String,Object> submitApprovedPayout(long payoutId,long actorStaffId) {
     Map<String,Object> row=one("""
       select p.*,b.provider_fund_account_id,b.beneficiary_name,b.beneficiary_type,b.institution_id,b.legal_entity_id,
-        b.status as beneficiary_status
-      from finance_payout p join finance_payout_beneficiary b on b.id=p.beneficiary_id where p.id=?
+        b.status as beneficiary_status,batch.status as batch_status,
+        batch.approved_by_staff_id as batch_approved_by_staff_id
+      from finance_payout p
+      join finance_payout_beneficiary b on b.id=p.beneficiary_id
+      join finance_payout_batch batch on batch.id=p.batch_id
+      where p.id=?
       """,payoutId);
     if(row.isEmpty())throw notFound("Payout not found.");
-    if(!List.of("APPROVED","RECONCILIATION_REQUIRED").contains(text(row,"status")))throw bad("Payout is not approved for submission.");
+    String currentStatus=text(row,"status");
+    if("PENDING_APPROVAL".equals(currentStatus)
+        &&List.of("APPROVED","PROCESSING","PARTIAL").contains(text(row,"batch_status"))) {
+      long batchApprover=number(row.get("batch_approved_by_staff_id"));
+      if(batchApprover<=0)throw bad("The batch is marked approved but has no recorded approver. Finance review is required.");
+      int recovered=jdbc.update("""
+        update finance_payout set status='APPROVED',approved_by_staff_id=?,approved_at=coalesce(approved_at,now()),updated_at=now()
+        where id=? and status='PENDING_APPROVAL'
+        """,batchApprover,payoutId);
+      if(recovered==1) {
+        row.put("status","APPROVED");
+        payoutEvent(payoutId,"APPROVED","course-payout:"+payoutId+":approved",batchApprover,null,
+            Map.of("batchId",number(row.get("batch_id")),"recoveredAfterInterruptedApproval",true));
+      } else {
+        currentStatus=text(one("select status from finance_payout where id=?",payoutId),"status");
+        if(!List.of("APPROVED","SUBMITTING","RECONCILIATION_REQUIRED").contains(currentStatus))
+          return payoutSummary(payoutId);
+        row.put("status",currentStatus);
+      }
+    }
+    currentStatus=text(row,"status");
+    if(!List.of("APPROVED","RECONCILIATION_REQUIRED","SUBMITTING").contains(currentStatus))
+      throw bad("Payout is not approved for submission or recovery.");
     if(!"ACTIVE".equals(text(row,"beneficiary_status"))||optionalText(row.get("provider_fund_account_id"))==null)
       throw bad("The beneficiary account is not active.");
-    jdbc.update("update finance_payout set status='SUBMITTING',status_details=null,updated_at=now() where id=? and status in ('APPROVED','RECONCILIATION_REQUIRED')",payoutId);
+    if("SUBMITTING".equals(currentStatus)) {
+      // Explicit recovery action replays the exact payload with the same saved provider idempotency key.
+      // Do not replay if another worker already attached the provider payout ID.
+      int retry=jdbc.update("update finance_payout set status_details=null,updated_at=now() where id=? and status='SUBMITTING' and provider_payout_id is null",payoutId);
+      if(retry!=1)return payoutSummary(payoutId);
+    } else {
+      int claimed=jdbc.update("""
+        update finance_payout set status='SUBMITTING',status_details=null,updated_at=now()
+        where id=? and status in ('APPROVED','RECONCILIATION_REQUIRED')
+        """,payoutId);
+      if(claimed!=1) {
+        String actual=text(one("select status from finance_payout where id=?",payoutId),"status");
+        if(List.of("SUBMITTING","PENDING","QUEUED","PROCESSING","PROCESSED","REVERSED","FAILED","REJECTED").contains(actual))
+          return payoutSummary(payoutId);
+        throw bad("Payout changed before submission. Refresh it before retrying.");
+      }
+    }
     payoutEvent(payoutId,"SUBMITTED","course-payout:"+payoutId+":submitted:"+UUID.randomUUID(),actorStaffId,null,
         Map.of("providerIdempotencyKey",row.get("provider_idempotency_key")));
     Map<String,Object> payload=new LinkedHashMap<>();
