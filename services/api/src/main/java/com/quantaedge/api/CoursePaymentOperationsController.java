@@ -94,6 +94,8 @@ public class CoursePaymentOperationsController {
           o.student_id,s.display_name as learner_name,o.purchaser_user_id,o.target_student_id,o.recipient_type,
           o.status,o.failure_code,o.currency,o.listed_price_paise,coalesce(o.discount_amount_paise,0) as discount_amount_paise,
           o.discount_reference,o.offer_price_paise,o.captured_amount_paise,o.captured_at,
+          o.revenue_share_policy_id,o.output_tax_paise,
+          o.revenue_share_policy_snapshot::text as revenue_share_policy_snapshot_json,
           o.provider_order_id,o.provider_payment_id,o.created_at,o.updated_at,o.verified_at,
           o.fiscal_document_id,d.document_number as invoice_number,
           latest.event_type as last_operation_event,latest.resolution_code as last_resolution_code,
@@ -101,6 +103,30 @@ public class CoursePaymentOperationsController {
         """+fromAndWhere+filters+"""
         order by o.created_at desc,o.id desc limit ? offset ?
         """,pageArgs.toArray());
+    Map<Long,List<Map<String,Object>>> allocationsByOrder=new LinkedHashMap<>();
+    if(!items.isEmpty()) {
+      List<Long> pageOrderIds=items.stream().map(item->number(item.get("local_order_id"))).toList();
+      String placeholders=String.join(",",java.util.Collections.nCopies(pageOrderIds.size(),"?"));
+      List<Object> allocationArgs=new ArrayList<>(pageOrderIds);
+      List<Map<String,Object>> allocationRows=jdbc.queryForList("""
+        select a.course_payment_order_id,a.id,a.policy_id,a.policy_recipient_id,a.recipient_type,
+          a.institution_id,a.legal_entity_id,a.currency,a.actual_paid_paise,a.output_tax_paise,
+          a.distributable_pool_paise,a.allocated_amount_paise,
+          coalesce(sum(e.amount_paise) filter(where e.event_type='EARNED'),0) as earned_event_amount_paise,
+          count(e.id) filter(where e.event_type='EARNED') as earned_event_count
+        from revenue_share_allocation a
+        left join revenue_share_allocation_event e on e.allocation_id=a.id
+        where a.course_payment_order_id in ("""+placeholders+""")
+        group by a.course_payment_order_id,a.id,a.policy_id,a.policy_recipient_id,a.recipient_type,
+          a.institution_id,a.legal_entity_id,a.currency,a.actual_paid_paise,a.output_tax_paise,
+          a.distributable_pool_paise,a.allocated_amount_paise
+        order by a.course_payment_order_id,a.id
+        """,allocationArgs.toArray());
+      for(Map<String,Object> allocation:allocationRows) {
+        long allocationOrderId=number(allocation.get("course_payment_order_id"));
+        allocationsByOrder.computeIfAbsent(allocationOrderId,ignored->new ArrayList<>()).add(allocation);
+      }
+    }
     for(Map<String,Object> item:items) {
       Resolution resolution=resolutionFor(
           String.valueOf(item.get("status")),
@@ -110,6 +136,45 @@ public class CoursePaymentOperationsController {
       item.put("resolution_code",resolution.code());
       item.put("recommended_action",resolution.action());
       item.put("resolution_message",resolution.message());
+
+      long orderId=number(item.get("local_order_id"));
+      String orderStatus=String.valueOf(item.get("status")).toUpperCase(Locale.ROOT);
+      List<Map<String,Object>> rows=allocationsByOrder.getOrDefault(orderId,List.of());
+      if(!"VERIFIED".equals(orderStatus)) {
+        boolean unexpectedAllocations=!rows.isEmpty();
+        item.put("distribution_reconciliation_status",unexpectedAllocations?"REVIEW_REQUIRED":"NOT_FINALIZED");
+        item.put("distribution_issue_count",unexpectedAllocations?1:0);
+        item.put("distribution_reconciliation_summary",unexpectedAllocations
+            ?"Allocation rows exist before payment is verified; review this order."
+            :"Distribution is checked after payment is verified.");
+        continue;
+      }
+
+      Map<String,Object> shareSnapshot=Map.of();
+      try {
+        String rawSnapshot=text(item.get("revenue_share_policy_snapshot_json"));
+        if(!rawSnapshot.isBlank())
+          shareSnapshot=mapper.readValue(rawSnapshot,new TypeReference<Map<String,Object>>() {});
+      } catch(Exception ignored) {
+        // Bad historical JSON is shown as a reconciliation exception instead of breaking order search.
+      }
+      Long policyId=item.get("revenue_share_policy_id")==null?null:number(item.get("revenue_share_policy_id"));
+      try {
+        CourseRevenueAllocationReconciliation.Result distribution=
+            CourseRevenueAllocationReconciliation.reconcile(shareSnapshot,policyId,
+                number(item.get("captured_amount_paise")),number(item.get("output_tax_paise")),
+                text(item.get("currency")),rows);
+        item.put("distribution_reconciliation_status",distribution.complete()?"RECONCILED":"REVIEW_REQUIRED");
+        item.put("distribution_issue_count",distribution.issues().size());
+        item.put("distribution_reconciliation_summary",distribution.complete()
+            ?"Recipient amounts and EARNED ledger events reconcile."
+            :String.join(" ",distribution.issues().stream().limit(2).toList()));
+      } catch(RuntimeException exception) {
+        item.put("distribution_reconciliation_status","REVIEW_REQUIRED");
+        item.put("distribution_issue_count",1);
+        item.put("distribution_reconciliation_summary",
+            "Distribution could not be safely calculated from the saved records. Open the full status trace for review.");
+      }
     }
     Map<String,Object> response=new LinkedHashMap<>();
     response.put("items",items);
