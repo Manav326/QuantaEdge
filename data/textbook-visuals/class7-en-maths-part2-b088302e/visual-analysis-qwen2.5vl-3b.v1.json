@@ -8,26 +8,26 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 29,
+    "assets_selected": 34,
     "assets_processed_this_run": 10,
     "assets_processed_ids": [
       "0d9e21fc8c89769c08678f9f",
-      "de40fd2bb40cc56762758b28",
-      "24c927ed82a9d560daef3e4a",
-      "20c96b9875909a248b5e0106",
-      "e53658229ece758f6c981c93",
-      "445c7a01d57f1bce65fa5f95",
-      "516b3a818927634122c53885",
-      "4baa2e0a6d05dd1c4510010c",
-      "3397edc1838a6ad6952ea453",
-      "85a1b6230ab43d8aad7e4227"
+      "bcc91757fd17dfb9a10ed3da",
+      "49f1f6e7581302fe259007c1",
+      "17fa32021d5a2ad11b85b985",
+      "940577317615458cf4959de0",
+      "e8dac73685dcf97e6825d261",
+      "0fdc0c44e6c6073058262bf1",
+      "79e2ed0ae4d2051c019c54bd",
+      "9300b21ba9d5f38330bec5a8",
+      "5a83e5e0b7acdab98080bf84"
     ],
     "assets_eligible": 1761,
-    "assets_analyzed": 24,
-    "assets_remaining": 1737,
-    "assets_completion_percent": 1.4,
-    "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 19,
+    "assets_analyzed": 31,
+    "assets_remaining": 1730,
+    "assets_completion_percent": 1.8,
+    "assets_failed": 14,
+    "assets_skipped_from_checkpoint": 24,
     "batch_limit": 10,
     "publication_allowed": false
   },
@@ -492,7 +492,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:41:24Z"
+      "checkpointed_at": "2026-10-26T23:54:37Z"
     },
     {
       "asset_id": "a40342ee9e6134b6f651c437",
@@ -1181,6 +1181,309 @@
       "error": "Unsupported vision media type 'image/jpx'; use JPEG, PNG, or WebP assets.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "bcc91757fd17dfb9a10ed3da",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gegp2",
+      "source_pdf_sha256": "86499952914e3427cc1d1a70628b1750c0341259c6536eb3ca3d2b1b353c4942",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0219832c6da1da4dcb501673ca3466c60d4aef3efa982229fcaa060c3646ed89",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:54:54Z"
+    },
+    {
+      "asset_id": "49f1f6e7581302fe259007c1",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gegp2",
+      "source_pdf_sha256": "86499952914e3427cc1d1a70628b1750c0341259c6536eb3ca3d2b1b353c4942",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0219832c6da1da4dcb501673ca3466c60d4aef3efa982229fcaa060c3646ed89",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:55:09Z"
+    },
+    {
+      "asset_id": "17fa32021d5a2ad11b85b985",
+      "asset_sha256": "155ad3d3a44362d85bc65d54480e02ef487e08a5a3af70f95dc779f223215068",
+      "page_text_context_sha256": "0219832c6da1da4dcb501673ca3466c60d4aef3efa982229fcaa060c3646ed89",
+      "source_book_id": "ncert-c7-english-gegp2",
+      "source_pdf_sha256": "86499952914e3427cc1d1a70628b1750c0341259c6536eb3ca3d2b1b353c4942",
+      "source_pdf_page_number": 12,
+      "asset_path": "page-0012.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "940577317615458cf4959de0",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gegp2",
+      "source_pdf_sha256": "86499952914e3427cc1d1a70628b1750c0341259c6536eb3ca3d2b1b353c4942",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "90840cc3cfc9092a42e1853ecf60eb1c7f0c540f58a3c1fc47a971e769405ec1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:59:50Z"
+    },
+    {
+      "asset_id": "e8dac73685dcf97e6825d261",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gegp2",
+      "source_pdf_sha256": "86499952914e3427cc1d1a70628b1750c0341259c6536eb3ca3d2b1b353c4942",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "90840cc3cfc9092a42e1853ecf60eb1c7f0c540f58a3c1fc47a971e769405ec1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or introductory page in a textbook.",
+        "limitations": [
+          "No visible content or text on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:00:06Z"
+    },
+    {
+      "asset_id": "0fdc0c44e6c6073058262bf1",
+      "asset_sha256": "3003752c765026789a3e0f394a3d74a5a05b4b086405d3e76154ba7219d36b52",
+      "source_book_id": "ncert-c7-english-gegp2",
+      "source_pdf_sha256": "86499952914e3427cc1d1a70628b1750c0341259c6536eb3ca3d2b1b353c4942",
+      "source_pdf_page_number": 13,
+      "asset_path": "page-0013.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "90840cc3cfc9092a42e1853ecf60eb1c7f0c540f58a3c1fc47a971e769405ec1",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Note to the teacher section of a textbook.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "NOTE TO THE TEACHER",
+          "We hope that this textbook, Ganita Prakash, will serve as a strong support and guide to you in achieving the exciting task that you have before you — that of passing on the joy of learning the beautiful subject of Mathematics to the next generation.",
+          "This task calls for providing a fertile environment that allows for the flowering of mathematical thinking in the minds of students. Classrooms, where students just listen and write down whatever is being told to them or written on the board, are deficient in the conditions required for learning mat",
+          "Fortunately, it is not difficult to create such conditions in the classroom. It just requires an interesting question, problem, pattern, or challenge to be thrown open to the students on a regular basis, and sufficient time to be given to them to play with, discuss, and work on it as a class or in p",
+          "Along with it, an environment that accepts mistakes and acknowledges their importance in learning needs to be nurtured.",
+          "While creating the spark for initiating mathematical thinking in classrooms is not difficult, sustaining it may be challenging and may involve efforts from your side. Nevertheless, even if just the first part of throwing open a question, problem, pattern, or challenge is done at least once or twice ",
+          "It should be noted that this positive impact will not happen overnight. That takes time and depends on various factors such as the number of opportunities you give for problem solving, your patience, and the encouragement you give to the students.",
+          "To support you in posing problems, all the problems or questions in this book are marked using the icon ? This icon is an indicator of a potential opportunity to start off a process of problem solving and exploration in the classroom. You will find some of the problems"
+        ],
+        "concepts": [
+          "Mathematics",
+          "Classrooms",
+          "Mathematical thinking",
+          "Problem solving",
+          "Question",
+          "Pattern",
+          "Challenge",
+          "Waiting time",
+          "Patience",
+          "Encouragement",
+          "Positive impact",
+          "Problem solving process"
+        ],
+        "context_relation": "Introduction to the textbook's content and its importance in teaching mathematics.",
+        "limitations": [
+          "The text does not provide specific examples or exercises for the problems.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:04:51Z"
+    },
+    {
+      "asset_id": "79e2ed0ae4d2051c019c54bd",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gegp2",
+      "source_pdf_sha256": "86499952914e3427cc1d1a70628b1750c0341259c6536eb3ca3d2b1b353c4942",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2bf5cf74ffeccba6c30a0d65e9c2d3117b54ba6a29b362b51f5ed6ad4acb5dcd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An owl mascot appears in various parts of the textbook to highlight important mathematical processes, ways of thinking, and problem-solving approaches.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "An owl mascot appears at various points in the textbook to highlight important mathematical processes, ways of thinking, and problem-solving approaches. These can be brought out during classroom discussions, both where the owl is present and also in other similar situations.",
+          "To develop students’ mathematical thinking and understanding of concepts, a sufficient number of problems are given. Trying to ʻcover’ all of them must not happen at the cost of students not getting to spend quality time on"
+        ],
+        "concepts": [
+          "Mathematical thinking",
+          "Problem-solving approaches",
+          "Classroom discussions",
+          "Mathematical processes",
+          "Ways of thinking"
+        ],
+        "context_relation": "The owl mascot serves as a visual aid to enhance the understanding of mathematical concepts and problem-solving approaches.",
+        "limitations": [
+          "The owl mascot is only visible in certain parts of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:05:29Z"
+    },
+    {
+      "asset_id": "9300b21ba9d5f38330bec5a8",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gegp2",
+      "source_pdf_sha256": "86499952914e3427cc1d1a70628b1750c0341259c6536eb3ca3d2b1b353c4942",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2bf5cf74ffeccba6c30a0d65e9c2d3117b54ba6a29b362b51f5ed6ad4acb5dcd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An owl mascot appears at various points in the textbook to highlight important mathematical processes, ways of thinking, and problem-solving approaches.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "An owl mascot appears at various points in the textbook to highlight important mathematical processes, ways of thinking, and problem-solving approaches.",
+          "These can be brought out during classroom discussions, both where the owl is present and also in other similar situations."
+        ],
+        "concepts": [
+          "Mathematical processes",
+          "Ways of thinking",
+          "Problem-solving approaches"
+        ],
+        "context_relation": "The owl mascot serves as a visual aid to enhance the understanding of mathematical concepts and problem-solving strategies.",
+        "limitations": [
+          "The owl mascot is only visible in certain parts of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:05:58Z"
+    },
+    {
+      "asset_id": "5a83e5e0b7acdab98080bf84",
+      "asset_sha256": "f383f56a1a4c3dbb65a72e4cdc7975583025919371508e022005f7bd2471236f",
+      "source_book_id": "ncert-c7-english-gegp2",
+      "source_pdf_sha256": "86499952914e3427cc1d1a70628b1750c0341259c6536eb3ca3d2b1b353c4942",
+      "source_pdf_page_number": 14,
+      "asset_path": "page-0014.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "2bf5cf74ffeccba6c30a0d65e9c2d3117b54ba6a29b362b51f5ed6ad4acb5dcd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the use of an owl mascot to highlight mathematical processes and problem-solving approaches in classroom discussions.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "labelled ʻMath Talk’. Such questions can especially be made as topics\nfor classroom discussion.",
+          "An owl mascot appears at various points in the textbook to highlight\nimportant mathematical processes, ways of thinking, and problem-solving\napproaches. These can be brought out during classroom discussions,\nboth where the owl is present and also in other similar situations.",
+          "To develop students’ mathematical thinking and understanding of\nconcepts, a sufficient number of problems are given. Trying to ʻcover’\nall of them must not happen at the cost of students not getting to spend\nquality time on playing with and discussing them.",
+          "It is important to understand that the exploratory problems are\nnot only for promoting problem solving skills, they also serve in\nstrengthening procedural fluency when children start engaging in\nexploration.",
+          "Efforts must be made in making students independent learners. One\nessential aspect required for this is an ability to read and understand\nmathematical text. To promote this skill, students should be encouraged\nto read the book by themselves and in groups. Give opportunities to\nthem to interpret what",
+          "This textbook contains a number of open-ended problems. It also\ncontains new treatments of certain concepts. If you are not able to\nsolve them or follow some of them immediately, it is perfectly okay!\nNot everyone knows everything. Along with trying to understand and\nreflect upon such content, it wi",
+          "In these discussions, you can participate as a fellow seeker, and\nwhen students see a teacher seek and think to understand something,\nit sets a wonderful example for them.",
+          "It is hoped that you and your students will have a great and fruitful\ntime using this textbook!"
+        ],
+        "concepts": [
+          "Mathematical processes",
+          "Problem-solving approaches",
+          "Exploratory problems",
+          "Procedural fluency",
+          "Independent learners",
+          "Reading and understanding mathematical text",
+          "Interpreting and expressing mathematical content",
+          "Open-ended problems",
+          "New treatments of concepts",
+          "Understanding and reflecting upon content",
+          "Discussion in the classroom",
+          "Summarising content"
+        ],
+        "context_relation": "The page discusses the use of an owl mascot in a textbook to highlight mathematical processes and problem-solving approaches, and the importance of encouraging students to read and understand mathematical text.",
+        "limitations": [
+          "The page does not provide specific examples or exercises related to the owl mascot or the mathematical processes it highlights.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:10:45Z"
     }
   ]
 }
