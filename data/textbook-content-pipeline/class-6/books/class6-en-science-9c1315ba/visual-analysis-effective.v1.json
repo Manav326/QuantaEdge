@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "fc89b23c574aec1f87c953de7ca36e1b07f40d16053248273ede124b42cf7250",
+  "raw_analysis_sha256": "b30b088d51a710d733e38c18844dcfd615fc561e5e5548f2c8da929d10462d9c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -621,29 +621,27 @@
           "National Education Policy 2020",
           "National Curriculum Framework for School Education (NCF-SE) 2023",
           "pañchakośhas",
-          "Foundational and Preparatory Stages",
           "Middle Stage",
-          "Secondary Stages",
-          "holistic development",
-          "transformative learning culture",
-          "appropriate textbooks",
-          "curricular areas",
-          "content and pedagogy",
-          "classroom arrangement",
-          "teacher preparation",
-          "conceptual connections",
-          "National Council of Educational Research and Training"
+          "Foundational and Preparatory Stages",
+          "Analytical, descriptive, and narrative capabilities",
+          "Transformative learning culture",
+          "Appropriate textbooks",
+          "Curricular areas",
+          "Classroom arrangement",
+          "Teacher preparation",
+          "Conceptual connections",
+          "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving a holistic development.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving the policy's goals.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the curricular areas."
+          "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40506194485",
-      "checkpointed_at": "2026-10-27T13:39:19Z",
+      "run_id": "40518803038",
+      "checkpointed_at": "2026-10-27T14:20:51Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -658,22 +656,20 @@
           "National Education Policy 2020",
           "National Curriculum Framework for School Education (NCF-SE) 2023",
           "pañchakośhas",
-          "Foundational and Preparatory Stages",
           "Middle Stage",
-          "Secondary Stages",
-          "holistic development",
-          "transformative learning culture",
-          "appropriate textbooks",
-          "curricular areas",
-          "content and pedagogy",
-          "classroom arrangement",
-          "teacher preparation",
-          "conceptual connections",
-          "National Council of Educational Research and Training"
+          "Foundational and Preparatory Stages",
+          "Analytical, descriptive, and narrative capabilities",
+          "Transformative learning culture",
+          "Appropriate textbooks",
+          "Curricular areas",
+          "Classroom arrangement",
+          "Teacher preparation",
+          "Conceptual connections",
+          "Curricular Area Groups"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving a holistic development.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving the policy's goals.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the curricular areas."
+          "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -29435,25 +29431,22 @@
           "DES",
           "Coimbatore",
           "Amrita Vishwa Vidyapeetham",
-          "Educator",
           "Development Sector Professional",
-          "Chief Consultant",
           "Freelance Editor",
           "Proofreader",
-          "Publication Division",
-          "Contractual"
+          "Publication Division"
         ],
         "context_relation": "acknowledgements",
         "limitations": [
-          "The image may be a full page, not a cropped figure.",
+          "No specific limitations mentioned.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40506194485",
-      "checkpointed_at": "2026-10-27T13:40:27Z",
+      "run_id": "40518803038",
+      "checkpointed_at": "2026-10-27T14:25:40Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -29476,17 +29469,14 @@
           "DES",
           "Coimbatore",
           "Amrita Vishwa Vidyapeetham",
-          "Educator",
           "Development Sector Professional",
-          "Chief Consultant",
           "Freelance Editor",
           "Proofreader",
-          "Publication Division",
-          "Contractual"
+          "Publication Division"
         ],
         "context_relation": "acknowledgements",
         "limitations": [
-          "The image may be a full page, not a cropped figure.",
+          "No specific limitations mentioned.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -31482,7 +31472,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40506194485",
+      "run_id": "40518803038",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -32362,9 +32352,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40506194485",
+      "run_id": "40518803038",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -35019,7 +35009,7 @@
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
         "visible_text": [
-          "Presence/ absence of flowers",
+          "Presence/absence of flowers",
           "Hard/soft stem",
           "Eating habits",
           "Place they live",
@@ -35058,21 +35048,21 @@
           "features of plants",
           "nature walk"
         ],
-        "context_relation": "The image is a table showing different criteria for grouping plants and animals.",
+        "context_relation": "The text is a part of a larger educational content, specifically a textbook discussing the criteria for grouping plants and animals.",
         "limitations": [
-          "The image does not provide specific details about the criteria for grouping plants and animals."
+          "The text does not provide specific examples or instructions for the activities mentioned."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40506194485",
-      "checkpointed_at": "2026-10-27T13:41:26Z",
+      "run_id": "40518803038",
+      "checkpointed_at": "2026-10-27T14:40:16Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
         "visible_text": [
-          "Presence/ absence of flowers",
+          "Presence/absence of flowers",
           "Hard/soft stem",
           "Eating habits",
           "Place they live",
@@ -35111,9 +35101,9 @@
           "features of plants",
           "nature walk"
         ],
-        "context_relation": "The image is a table showing different criteria for grouping plants and animals.",
+        "context_relation": "The text is a part of a larger educational content, specifically a textbook discussing the criteria for grouping plants and animals.",
         "limitations": [
-          "The image does not provide specific details about the criteria for grouping plants and animals."
+          "The text does not provide specific examples or instructions for the activities mentioned."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
