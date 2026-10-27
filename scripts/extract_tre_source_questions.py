@@ -604,11 +604,14 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                 if active:
                     active["raw_text"] = preserve_layout("\n".join(active.pop("_lines")))
                     prompt_bbox = active.pop("_prompt_ocr_bbox", None)
+                    prompt_ocr_status = active.pop("_prompt_ocr_status", None)
                     if prompt_bbox and active.get("language") == "hi":
                         ocr_prompt, ocr_status = _ocr_shree_dev_prompt(page, prompt_bbox)
                         active["prompt_ocr_status"] = ocr_status
                         if ocr_prompt:
                             active["prompt_ocr_text"] = ocr_prompt
+                    elif prompt_ocr_status and active.get("language") == "hi":
+                        active["prompt_ocr_status"] = prompt_ocr_status
                     option_texts = active.pop("_ocr_option_texts", {})
                     option_statuses = active.pop("_ocr_option_statuses", {})
                     for option_key, option_bbox in active.pop("_ocr_option_bboxes", {}).items():
@@ -736,13 +739,23 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                         and SHREE_DEV_FONT_NAMES.intersection(line.get("fonts", set()))
                     ]
                     first_option_index = option_line_indices[0] if option_line_indices else len(line_metadata)
-                    prompt_line_boxes = [
-                        line["bbox"] for line in line_metadata[:first_option_index]
-                        if SHREE_DEV_FONT_NAMES.intersection(line.get("fonts", set()))
-                    ]
-                    prompt_bbox = union_pdf_boxes(prompt_line_boxes)
-                    if prompt_bbox:
-                        active["_prompt_ocr_bbox"] = prompt_bbox
+                    prompt_lines = line_metadata[:first_option_index]
+                    prompt_has_mixed_fonts = any(
+                        not SHREE_DEV_FONT_NAMES.intersection(line.get("fonts", set()))
+                        and str(line.get("text", "")).strip()
+                        for line in prompt_lines
+                    )
+                    if prompt_has_mixed_fonts:
+                        # Do not let OCR silently drop formula/code/Latin-font lines from a Hindi stem.
+                        active["_prompt_ocr_status"] = "SHREEDEV_OCR_MIXED_FONT_RAW_PRESERVED"
+                    else:
+                        prompt_line_boxes = [
+                            line["bbox"] for line in prompt_lines
+                            if SHREE_DEV_FONT_NAMES.intersection(line.get("fonts", set()))
+                        ]
+                        prompt_bbox = union_pdf_boxes(prompt_line_boxes)
+                        if prompt_bbox:
+                            active["_prompt_ocr_bbox"] = prompt_bbox
                     for line_index in option_line_indices:
                         line = line_metadata[line_index]
                         option_match = OPTION_START.match(str(line.get("text", "")))
