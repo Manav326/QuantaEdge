@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2417,
+    "assets_selected": 2419,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "e3e6b9ee3422dc155d783821",
-      "5e5405ce47832c78c83e34f0"
+      "cb75124972ed3af3dfbba5cc",
+      "ccf657fc0ce2e793d2461637"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2414,
-    "assets_remaining": 5074,
-    "assets_completion_percent": 32.2,
+    "assets_analyzed": 2416,
+    "assets_remaining": 5072,
+    "assets_completion_percent": 32.3,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 2412,
+    "assets_skipped_from_checkpoint": 2414,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40498882710",
-      "checkpointed_at": "2026-10-27T12:51:13Z"
+      "checkpointed_at": "2026-10-27T12:54:08Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40498882710",
-      "checkpointed_at": "2026-10-27T12:51:41Z"
+      "checkpointed_at": "2026-10-27T12:54:37Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40498882710",
-      "checkpointed_at": "2026-10-27T12:52:19Z"
+      "checkpointed_at": "2026-10-27T12:55:14Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -91127,6 +91127,66 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40498882710",
       "checkpointed_at": "2026-10-27T12:53:21Z"
+    },
+    {
+      "asset_id": "cb75124972ed3af3dfbba5cc",
+      "asset_sha256": "fc224c5bd0af4316ee87079ba6a35f267670a81477fcfb3bc4c6ec5f86a99e71",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/fc224c5bd0af4316ee87079ba6a35f267670a81477fcfb3bc4c6ec5f86a99e71.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely part of an educational content, possibly a textbook, discussing non-metals and their importance in everyday life.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text.",
+          "The page does not provide any specific information or data.",
+          "The page does not show any diagrams, charts, or illustrations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40498882710",
+      "checkpointed_at": "2026-10-27T12:55:53Z"
+    },
+    {
+      "asset_id": "ccf657fc0ce2e793d2461637",
+      "asset_sha256": "5dc9d12c2f43e1420e2f53687515e80177c6536d4096b936debd4bde571e54c7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/5dc9d12c2f43e1420e2f53687515e80177c6536d4096b936debd4bde571e54c7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope with a knot in the middle.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a simple illustration of a rope, not a diagram or chart.",
+          "The image does not contain any mathematical or scientific formulas or data points."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40498882710",
+      "checkpointed_at": "2026-10-27T12:56:33Z"
     }
   ]
 }

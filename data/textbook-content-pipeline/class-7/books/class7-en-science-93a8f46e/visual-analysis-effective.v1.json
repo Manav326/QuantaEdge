@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3640438ea34b5d4982468162ba939cf5131b02ef2e16a84b3e58d0daac93f4c9",
+  "raw_analysis_sha256": "83d808a0d6e11652b1648157064af4471cc14a2b19d9004b2ad7ac559250d942",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40498882710",
-      "checkpointed_at": "2026-10-27T12:51:13Z",
+      "checkpointed_at": "2026-10-27T12:54:08Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40498882710",
-      "checkpointed_at": "2026-10-27T12:51:41Z",
+      "checkpointed_at": "2026-10-27T12:54:37Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40498882710",
-      "checkpointed_at": "2026-10-27T12:52:19Z",
+      "checkpointed_at": "2026-10-27T12:55:14Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -143226,6 +143226,94 @@
         "limitations": [
           "The image does not provide any specific information about the textbook or the page number.",
           "The visible text is not a complete sentence and does not provide a clear context for the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cb75124972ed3af3dfbba5cc",
+      "asset_sha256": "fc224c5bd0af4316ee87079ba6a35f267670a81477fcfb3bc4c6ec5f86a99e71",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/fc224c5bd0af4316ee87079ba6a35f267670a81477fcfb3bc4c6ec5f86a99e71.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely part of an educational content, possibly a textbook, discussing non-metals and their importance in everyday life.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text.",
+          "The page does not provide any specific information or data.",
+          "The page does not show any diagrams, charts, or illustrations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40498882710",
+      "checkpointed_at": "2026-10-27T12:55:53Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely part of an educational content, possibly a textbook, discussing non-metals and their importance in everyday life.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text.",
+          "The page does not provide any specific information or data.",
+          "The page does not show any diagrams, charts, or illustrations."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ccf657fc0ce2e793d2461637",
+      "asset_sha256": "5dc9d12c2f43e1420e2f53687515e80177c6536d4096b936debd4bde571e54c7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/5dc9d12c2f43e1420e2f53687515e80177c6536d4096b936debd4bde571e54c7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope with a knot in the middle.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a simple illustration of a rope, not a diagram or chart.",
+          "The image does not contain any mathematical or scientific formulas or data points."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40498882710",
+      "checkpointed_at": "2026-10-27T12:56:33Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a knot in the middle.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a simple illustration of a rope, not a diagram or chart.",
+          "The image does not contain any mathematical or scientific formulas or data points."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
