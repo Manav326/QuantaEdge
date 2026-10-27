@@ -72,7 +72,12 @@ public class PayoutSettlementPdfRenderer {
     c.heading(recipientOnly?"Recipient settlement detail":"Internal finance batch report",
         "Payout cycle: "+date(safeBatch.get("period_start"))+" to "+date(safeBatch.get("period_end")));
     if(!recipientOnly) {
-      c.notice("INTERNAL FINANCE RECORD", "This report contains multiple recipients. Store and share only with authorised finance staff.");
+      boolean allProcessed=!safePayouts.isEmpty()
+          &&safePayouts.stream().allMatch(p->"PROCESSED".equalsIgnoreCase(string(p.get("status"))));
+      c.notice(allProcessed?"TRANSFER STATUS SNAPSHOT":"NOT ALL TRANSFERS CONFIRMED",
+          allProcessed
+            ?"All listed payouts are marked processed in the saved provider records at generation time; retain the status and UTR for each row."
+            :"This batch includes transfers that are pending, failed, reversed or otherwise not confirmed. Do not treat the batch total as money received by recipients.");
     } else {
       Map<String,Object> pay=safePayouts.isEmpty()?Map.of():safePayouts.getFirst();
       boolean processed="PROCESSED".equalsIgnoreCase(string(pay.get("status")));
@@ -119,6 +124,7 @@ public class PayoutSettlementPdfRenderer {
 
     c.section(recipientOnly?"ALLOCATION REFERENCES IN THIS PAYOUT":"TRANSFER REGISTER");
     if(recipientOnly) {
+      c.muted("Source sales may predate this payout cycle. Allocation values below identify ledger portions applied to this payout, not the month's gross course sales.");
       c.tableHeader(new String[]{"Course / order","Source institution","Marketplace institution","Allocation applied"});
       if(safeAllocations.isEmpty())c.empty("No allocation references were returned for this payout. Do not infer a zero balance; check the batch record.");
       for(Map<String,Object> row:safeAllocations) {
@@ -362,24 +368,22 @@ public class PayoutSettlementPdfRenderer {
       return lines.toArray(String[]::new);
     } finally {g.dispose();}
   }
+  private static final java.awt.font.FontRenderContext FONT_CONTEXT=
+      new java.awt.font.FontRenderContext(new java.awt.geom.AffineTransform(),true,true);
   private static String clip(String value,int width) {
     if(value==null)return "";
     String clean=value.replaceAll("[\\p{Cntrl}]"," ").trim();
     if(clean.length()<2)return clean;
-    // Font metrics are measured against a logical font so non-Latin entity names are not split by code unit.
-    BufferedImage scratch=new BufferedImage(2,2,BufferedImage.TYPE_INT_RGB);
-    Graphics2D g=scratch.createGraphics();
-    try{
-      g.setFont(font(Font.PLAIN,11));
-      if(g.getFontMetrics().stringWidth(clean)<=width)return clean;
-      StringBuilder out=new StringBuilder();
-      for(int i=0;i<clean.length();) {
-        int cp=clean.codePointAt(i);String next=out.toString()+new String(Character.toChars(cp))+"...";
-        if(g.getFontMetrics().stringWidth(next)>width)break;
-        out.appendCodePoint(cp);i+=Character.charCount(cp);
-      }
-      return out+"...";
-    }finally{g.dispose();}
+    // Use the logical font's metrics without allocating a new image for every table cell.
+    Font measuredFont=font(Font.PLAIN,11);
+    if(measuredFont.getStringBounds(clean,FONT_CONTEXT).getWidth()<=width)return clean;
+    StringBuilder out=new StringBuilder();
+    for(int i=0;i<clean.length();) {
+      int cp=clean.codePointAt(i);String next=out.toString()+new String(Character.toChars(cp))+"...";
+      if(measuredFont.getStringBounds(next,FONT_CONTEXT).getWidth()>width)break;
+      out.appendCodePoint(cp);i+=Character.charCount(cp);
+    }
+    return out+"...";
   }
   private static long countStatus(List<Map<String,Object>> payouts,String status){
     return payouts.stream().filter(p->status.equalsIgnoreCase(string(p.get("status")))).count();
