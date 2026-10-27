@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7f9dc609ae15aa24e0d1f5f5ad6c35e06260c967728841a28bb5c2b47f9ace8d",
+  "raw_analysis_sha256": "1292e915f64c6641b7ec5fb9fbd4cabced181193e3a527b410a52ee44921b8eb",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40539105763",
-      "checkpointed_at": "2026-10-27T17:37:16Z",
+      "checkpointed_at": "2026-10-27T17:49:31Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40539105763",
-      "checkpointed_at": "2026-10-27T17:37:57Z",
+      "checkpointed_at": "2026-10-27T17:50:13Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57861,7 +57861,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40539105763",
-      "checkpointed_at": "2026-10-27T17:38:46Z",
+      "checkpointed_at": "2026-10-27T17:51:02Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -65390,23 +65390,28 @@
           "lifting effort",
           "chart paper",
           "paper plate",
+          "folded sheet",
+          "unfolded sheet",
           "atmospheric pressure",
-          "force",
           "pressure",
+          "force",
           "area",
           "balloon",
-          "inflation"
+          "inflation",
+          "pressure on walls",
+          "pressure on objects",
+          "atmospheric pressure"
         ],
         "context_relation": "The image is a diagram showing how to lift a paper plate with a stick, and how the effort needed to lift it changes with the amount of chart paper used.",
         "limitations": [
-          "The image does not provide specific instructions or steps for lifting the paper plate."
+          "The image does not show the actual lifting process, but rather a diagram of the steps involved."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40539105763",
-      "checkpointed_at": "2026-10-27T17:43:33Z",
+      "checkpointed_at": "2026-10-27T17:52:23Z",
       "effective_analysis": {
         "visual_summary": "A diagram showing how to lift a paper plate with a stick, and how the effort needed to lift it changes with the amount of chart paper used.",
         "visual_type": "diagram",
@@ -65420,16 +65425,21 @@
           "lifting effort",
           "chart paper",
           "paper plate",
+          "folded sheet",
+          "unfolded sheet",
           "atmospheric pressure",
-          "force",
           "pressure",
+          "force",
           "area",
           "balloon",
-          "inflation"
+          "inflation",
+          "pressure on walls",
+          "pressure on objects",
+          "atmospheric pressure"
         ],
         "context_relation": "The image is a diagram showing how to lift a paper plate with a stick, and how the effort needed to lift it changes with the amount of chart paper used.",
         "limitations": [
-          "The image does not provide specific instructions or steps for lifting the paper plate."
+          "The image does not show the actual lifting process, but rather a diagram of the steps involved."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -65706,89 +65716,21 @@
     {
       "asset_id": "2e220d251d13a2e76c57e33b",
       "asset_sha256": "8365e4fa376ae0bf20050b6aad49cdd232cf9ca81ea7ca9a7d4fc7845600696e",
+      "page_text_context_sha256": "c837b29b08feb77ea963de909a5c33550b2e7ee7d30222c8fc6f62c5142c08d8",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 107,
       "asset_path": "page-0107.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "c837b29b08feb77ea963de909a5c33550b2e7ee7d30222c8fc6f62c5142c08d8",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A diagram of a rubber sucker being pressed against a surface, with instructions on how to perform an activity related to atmospheric pressure.",
-        "visual_type": "diagram",
-        "visible_text": [
-          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
-          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
-          "Activity 6.4: Let us perform",
-          "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
-          "Do you realise that it sticks to the surface?",
-          "Now, try to pull it off. Do you find it difficult to pull it off?",
-          "When we press the sucker, most of the air between its cup and the surface on which it is placed is pushed out and the air pressure inside it is reduced. The sucker sticks to the surface because the pressure of air surrounding the sucker is higher than the pressure exerted by the air inside the sucke",
-          "Do you know how large the atmospheric pressure is? The force exerted by the atmospheric air column over an area 15 cm × 15 cm is nearly equal to the force of gravity on an object of mass 225 kg (2250 N). The reason we are not crushed under this weight is that the pressure inside our bodies is also e",
-          "A step further",
-          "The SI unit of pressure is N/m², also known as pascal (Pa). However, the practical unit of air pressure is millibar (mb), which is equal to 100 Pa. Air pressure is also expressed in hectopascal (hPa), which is equal to 100 Pa.",
-          "6.3 Formation of Wind",
-          "You must have noticed that on some days, the wind blows strongly, whereas on other days, it is calm. Sometimes, wind becomes so strong that it causes damage to life and property.",
-          "You must have seen that when an inflated balloon is kept without closing its mouth, the air from the balloon escapes. Recall that when there is a puncture in the bicycle tube, the air escapes and the tube collapses. In both of these cases, does air move from a high pressure region to a low pressure "
-        ],
-        "concepts": [
-          "atmospheric pressure",
-          "rubber sucker",
-          "air pressure",
-          "SI unit of pressure",
-          "millibar",
-          "hectopascal",
-          "wind formation",
-          "inflated balloon",
-          "puncture in the bicycle tube"
-        ],
-        "context_relation": "The image is a diagram illustrating an activity related to atmospheric pressure using a rubber sucker.",
-        "limitations": [
-          "The image does not provide specific measurements or calculations related to atmospheric pressure."
-        ]
-      },
-      "human_review_required": true,
-      "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40539105763",
-      "checkpointed_at": "2026-10-27T17:48:22Z",
-      "effective_analysis": {
-        "visual_summary": "A diagram of a rubber sucker being pressed against a surface, with instructions on how to perform an activity related to atmospheric pressure.",
-        "visual_type": "diagram",
-        "visible_text": [
-          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
-          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
-          "Activity 6.4: Let us perform",
-          "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
-          "Do you realise that it sticks to the surface?",
-          "Now, try to pull it off. Do you find it difficult to pull it off?",
-          "When we press the sucker, most of the air between its cup and the surface on which it is placed is pushed out and the air pressure inside it is reduced. The sucker sticks to the surface because the pressure of air surrounding the sucker is higher than the pressure exerted by the air inside the sucke",
-          "Do you know how large the atmospheric pressure is? The force exerted by the atmospheric air column over an area 15 cm × 15 cm is nearly equal to the force of gravity on an object of mass 225 kg (2250 N). The reason we are not crushed under this weight is that the pressure inside our bodies is also e",
-          "A step further",
-          "The SI unit of pressure is N/m², also known as pascal (Pa). However, the practical unit of air pressure is millibar (mb), which is equal to 100 Pa. Air pressure is also expressed in hectopascal (hPa), which is equal to 100 Pa.",
-          "6.3 Formation of Wind",
-          "You must have noticed that on some days, the wind blows strongly, whereas on other days, it is calm. Sometimes, wind becomes so strong that it causes damage to life and property.",
-          "You must have seen that when an inflated balloon is kept without closing its mouth, the air from the balloon escapes. Recall that when there is a puncture in the bicycle tube, the air escapes and the tube collapses. In both of these cases, does air move from a high pressure region to a low pressure "
-        ],
-        "concepts": [
-          "atmospheric pressure",
-          "rubber sucker",
-          "air pressure",
-          "SI unit of pressure",
-          "millibar",
-          "hectopascal",
-          "wind formation",
-          "inflated balloon",
-          "puncture in the bicycle tube"
-        ],
-        "context_relation": "The image is a diagram illustrating an activity related to atmospheric pressure using a rubber sucker.",
-        "limitations": [
-          "The image does not provide specific measurements or calculations related to atmospheric pressure."
-        ]
-      },
-      "checkpoint_fingerprint_status": "MATCHED",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     },
     {
