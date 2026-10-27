@@ -295,7 +295,7 @@ public class CoursePaymentOperationsController {
           Long policyId=order.get("revenue_share_policy_id")==null?null:number(order.get("revenue_share_policy_id"));
           try {
             CourseRevenueAllocationReconciliation.Result result=CourseRevenueAllocationReconciliation.reconcile(
-                snapshot,policyId,number(order.get("captured_amount_paise"),0L),
+                snapshot,policyId,number(order.get("captured_amount_paise")),
                 number(order.get("output_tax_paise")),text(order.get("currency")),rows);
             if(result.complete())continue;
             issues=result.issues();
@@ -333,8 +333,12 @@ public class CoursePaymentOperationsController {
           foundExtraException=true;
           break;
         }
+        if(scanned>=scanBudget) {
+          scanLimitReached=true;
+          break;
+        }
       }
-      if(foundExtraException)break;
+      if(foundExtraException||scanLimitReached)break;
       if(batch.size()<batchSize)exhausted=true;
       if(scanned>=scanBudget&&!exhausted)scanLimitReached=true;
     }
