@@ -276,11 +276,11 @@ export default function PayoutsPanel(){
     {loading&&!catalog?<section className={styles.panel}>Loading payout settings and balances…</section>:<>
       <section className={styles.payoutMetricGrid}>
         <article className={styles.payoutMetricCard}><span>Beneficiaries awaiting review</span><strong>{overview?.beneficiariesAwaitingApproval??'—'}</strong><small>Bank profile requires a second person’s approval</small></article>
-        <article className={styles.metric}><span>Payments missing fee confirmation</span><strong>{overview?.unreconciledFees??'—'}</strong><small>Payout batches stay blocked until actual fees are recorded</small></article>
-        <article className={styles.metric}><span>Transfers in progress</span><strong>{overview?.payoutsInProgress??'—'}</strong><small>Not counted as paid until RazorpayX confirms completion</small></article>
-        <article className={styles.metric}><span>Confirmed transfers</span><strong>{money(overview?.payoutsPaidPaise)}</strong><small>Provider-confirmed processed payouts</small></article>
-        <article className={styles.metric}><span>Available after reserve</span><strong>{money(balances?.totals.payablePaise)}</strong><small>Net due after charges, refunds, reservations and holdback</small></article>
-        <article className={styles.metric}><span>Recovery balances</span><strong>{money(balances?.totals.recoveryDuePaise)}</strong><small>Amounts owed back where a beneficiary was already paid</small></article>
+        <article className={styles.payoutMetricCard}><span>Payments missing fee confirmation</span><strong>{overview?.unreconciledFees??'—'}</strong><small>Payout batches stay blocked until actual fees are recorded</small></article>
+        <article className={styles.payoutMetricCard}><span>Transfers in progress</span><strong>{overview?.payoutsInProgress??'—'}</strong><small>Not counted as paid until RazorpayX confirms completion</small></article>
+        <article className={styles.payoutMetricCard}><span>Confirmed transfers</span><strong>{money(overview?.payoutsPaidPaise)}</strong><small>Provider-confirmed processed payouts</small></article>
+        <article className={styles.payoutMetricCard}><span>Available after reserve</span><strong>{money(balances?.totals.payablePaise)}</strong><small>Net due after charges, refunds, reservations and holdback</small></article>
+        <article className={styles.payoutMetricCard}><span>Recovery balances</span><strong>{money(balances?.totals.recoveryDuePaise)}</strong><small>Amounts owed back where a beneficiary was already paid</small></article>
       </section>
 
       {!settings?.providerConfigured||!settings?.sourceAccountConfigured||!settings?.webhookConfigured?
@@ -389,7 +389,7 @@ export default function PayoutsPanel(){
           <label>Contact email<input type="email" maxLength={320} value={beneficiaryForm.email} onChange={e=>setBeneficiaryForm(v=>({...v,email:e.target.value}))}/></label>
           <label>Contact phone<input type="tel" maxLength={20} value={beneficiaryForm.phone} onChange={e=>setBeneficiaryForm(v=>({...v,phone:e.target.value}))}/><small>Provide an email or phone number for the RazorpayX contact.</small></label>
           <div className={styles.payoutFormFooter}><span>New or changed bank accounts require independent approval before they can receive money.</span>
-            <button type="submit" className={styles.primary} disabled={busy||!payoutEligible||!beneficiaryForm.recipientId||!beneficiaryForm.accountNumber}>Submit bank details</button></div>
+            <button type="submit" className={styles.primary} disabled={busy||!settings?.providerConfigured||!beneficiaryForm.recipientId||!beneficiaryForm.accountNumber}>Submit bank details</button></div>
         </form>
         <div className={styles.payoutList}>
           {beneficiaries.map(b=><article className={styles.payoutListRow} key={b.id}>
