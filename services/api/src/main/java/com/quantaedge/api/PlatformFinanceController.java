@@ -865,11 +865,18 @@ public class PlatformFinanceController {
   public Map<String,Object> submitPolicy(@PathVariable long policyId,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=requireOwner(context);
-    Map<String,Object> row=one("select institution_offer_id,status from revenue_share_policy where id=?",policyId);
+    Map<String,Object> row=one("""
+      select institution_offer_id,status,remainder_recipient_type,remainder_institution_id,remainder_legal_entity_id
+      from revenue_share_policy where id=?
+      """,policyId);
     if(row.isEmpty()) throw notFound("Revenue-share policy not found.");
-    if(count("select count(*) from revenue_share_policy_recipient where policy_id=?",policyId)<1) {
-      throw bad("Add at least one institution recipient before submitting this policy.");
-    }
+    String remainderType=string(row.get("remainder_recipient_type"));
+    Long remainderId="INSTITUTION".equals(remainderType)?optionalLong(row.get("remainder_institution_id"))
+        :"COMPANY".equals(remainderType)?optionalLong(row.get("remainder_legal_entity_id")):null;
+    boolean validRemainder=remainderId!=null&&("INSTITUTION".equals(remainderType)
+        ?exists("select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",remainderId)
+        : "COMPANY".equals(remainderType)&&exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY') and institution_id is null)",remainderId));
+    if(!validRemainder) throw bad("Choose an active institution or company to receive the remaining balance before submitting this policy.");
     int n=jdbc.update("""
       update revenue_share_policy set status='PENDING_APPROVAL',submitted_by_staff_id=?,submitted_at=now()
       where id=? and status='DRAFT'
@@ -886,7 +893,8 @@ public class PlatformFinanceController {
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=requireOwner(context);
     Map<String,Object> row=one("""
-      select institution_offer_id,status,effective_from,effective_until,policy_version
+      select institution_offer_id,status,effective_from,effective_until,policy_version,
+        remainder_recipient_type,remainder_institution_id,remainder_legal_entity_id
       from revenue_share_policy where id=?
       """,policyId);
     if(row.isEmpty()) throw notFound("Revenue-share policy not found.");
@@ -902,7 +910,13 @@ public class PlatformFinanceController {
           :exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY'))",recipient.get("legal_entity_id"));
       if(!active) throw bad("Every revenue recipient must remain active when a policy is approved.");
     }
-    if(policyRecipients.isEmpty()) throw bad("A revenue-share policy needs at least one institution or company recipient.");
+    String remainderType=string(row.get("remainder_recipient_type"));
+    Long remainderId="INSTITUTION".equals(remainderType)?optionalLong(row.get("remainder_institution_id"))
+        :"COMPANY".equals(remainderType)?optionalLong(row.get("remainder_legal_entity_id")):null;
+    boolean validRemainder=remainderId!=null&&("INSTITUTION".equals(remainderType)
+        ?exists("select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",remainderId)
+        : "COMPANY".equals(remainderType)&&exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY') and institution_id is null)",remainderId));
+    if(!validRemainder) throw bad("Revenue-share policy must assign its remainder to an active institution or company before approval.");
     long percentageBasisPoints=policyRecipients.stream()
       .filter(r -> "PERCENTAGE".equals(String.valueOf(r.get("calculation_type"))))
       .mapToLong(r -> ((Number)r.get("percentage_basis_points")).longValue()).sum();
