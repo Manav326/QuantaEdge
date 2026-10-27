@@ -8,10 +8,11 @@
   a dry run only. With -Apply it validates that the database URL targets localhost, asks for
   explicit confirmation, then calls scripts/import_tre4_course.py. The Python importer owns
   the database transaction and checks required migrations, including V199.
-  Import always persists assessments, packs and the first course release in DRAFT. Optional -SubmitForReview
-  asks the importer to advance an already-existing DRAFT release to IN_QUALITY_REVIEW only when the
-  database confirms all question/answer review gates and every assessment/test pack is PUBLISHED.
-  It never marks tests/packs published or approves a release.
+  Import always persists assessments, packs and the first course release in DRAFT. Optional -RepairDraftHindi
+  reconstructs source Hindi prompts from the embedded SHREE-DEV PDF render via Tesseract Hindi OCR, but only
+  for an existing all-DRAFT course graph whose question/answer review states are still pending.
+  Optional -SubmitForReview is a separate lifecycle action and cannot be combined with -RepairDraftHindi.
+  The script never marks tests/packs published or approves a release.
 
 .EXAMPLE
   .\scripts\import_tre4_local.ps1
@@ -23,6 +24,10 @@
   Remove-Item Env:TRE4_DATABASE_URL
 
 .EXAMPLE
+  .\scripts\import_tre4_local.ps1 -Apply -RepairDraftHindi
+  Repairs only OCR-reconstructed Hindi prompts in the existing editable local draft. Requires Tesseract with Hindi trained data.
+  
+.EXAMPLE
   .\scripts\import_tre4_local.ps1 -Apply -SubmitForReview
   After all assessments and packs were human-reviewed and published through Admin Web, advances an existing DRAFT release to IN_QUALITY_REVIEW. A first import always persists DRAFT first.
 
@@ -31,6 +36,7 @@
 param(
     [switch]$Apply,
     [switch]$SubmitForReview,
+    [switch]$RepairDraftHindi,
     [switch]$Yes,
     [string]$ArchivePath = "data/TRE-4_PYQ.zip",
     [string]$DatabaseUrl,
@@ -190,6 +196,25 @@ try {
     if ($SubmitForReview -and -not $Apply) {
         Stop-WithMessage "-SubmitForReview requires -Apply."
     }
+    if ($RepairDraftHindi -and -not $Apply) {
+        Stop-WithMessage "-RepairDraftHindi requires -Apply; otherwise the script performs no database writes."
+    }
+    if ($RepairDraftHindi -and $SubmitForReview) {
+        Stop-WithMessage "-RepairDraftHindi and -SubmitForReview are separate lifecycle actions and cannot be combined."
+    }
+
+    if ($RepairDraftHindi) {
+        $tesseract = Get-Command tesseract -ErrorAction SilentlyContinue
+        if (-not $tesseract) {
+            Stop-WithMessage "Hindi draft repair needs Tesseract on PATH with Hindi trained data. Install Tesseract OCR and the hin language data before using -RepairDraftHindi."
+        }
+        $languages = & $tesseract.Source --list-langs 2>$null
+        if ($LASTEXITCODE -ne 0 -or -not ($languages -contains "hin")) {
+            Stop-WithMessage "Tesseract is installed but its Hindi language data 'hin' is missing. Install Hindi trained data before using -RepairDraftHindi."
+        }
+    } elseif (-not (Get-Command tesseract -ErrorAction SilentlyContinue)) {
+        Write-Warning "Tesseract Hindi OCR is not installed. SHREE-DEV stems will remain raw and flagged; do not use that dry-run inventory to import unreadable Hindi."
+    }
 
     if (-not $Apply) {
         Write-Host ""
@@ -197,6 +222,7 @@ try {
         Write-Host "To import locally, set TRE4_DATABASE_URL to your localhost PostgreSQL URL and rerun with -Apply."
         Write-Host 'Example: $env:TRE4_DATABASE_URL = "postgresql://quantaedge:YOUR_LOCAL_DB_PASSWORD@localhost:5432/quantaedge"'
         Write-Host ".\scripts\import_tre4_local.ps1 -Apply"
+        Write-Host ".\scripts\import_tre4_local.ps1 -Apply -RepairDraftHindi  # only for an existing all-DRAFT course"
         Write-Host "The importer defaults to DRAFT. Add -SubmitForReview only after question review and assessment/test-pack publication have completed; readiness is rechecked by the database." 
         return
     }
@@ -221,8 +247,9 @@ try {
     }
 
     if (-not $Yes) {
-        $confirmation = Read-Host "To write to this local database, type IMPORT (anything else cancels)"
-        if ($confirmation -cne "IMPORT") {
+        $confirmationWord = if ($RepairDraftHindi) { "REPAIR" } else { "IMPORT" }
+        $confirmation = Read-Host "To write to this local database, type $confirmationWord (anything else cancels)"
+        if ($confirmation -cne $confirmationWord) {
             Write-Host "Cancelled. The dry run completed, but no database writes were made." -ForegroundColor Yellow
             return
         }
@@ -233,12 +260,13 @@ try {
     try {
         $env:TRE4_DATABASE_URL = $database.Url
         $applyArguments = @($importer, "--archive", $archiveFullPath, "--register", $sourceRegister, "--apply")
+        if ($RepairDraftHindi) { $applyArguments += "--repair-draft-hindi" }
         if ($SubmitForReview) { $applyArguments += "--submit-for-review" }
         Write-Host ""
         Write-Host "Applying BPSC TRE Computer Science — Previous-Year Practice Series data to the confirmed local database..." -ForegroundColor Cyan
         Invoke-CheckedPython -Arguments $applyArguments
         Write-Host ""
-        Write-Host "IMPORT/REQUEST SUCCEEDED. Read the JSON report above for actual assessment, pack and release states. Review/publish tests in Admin Web, then use -SubmitForReview only for the ready DRAFT release." -ForegroundColor Green
+        Write-Host "IMPORT/REQUEST SUCCEEDED. Read the JSON report above for actual assessment, pack and release states. OCR-reconstructed Hindi still requires human review; -RepairDraftHindi does not approve questions or publish content." -ForegroundColor Green
         Write-Host "This script did not publish questions or packs, perform HRMS quality approval, approve the origin release, or publish a Marketplace offer."
     } finally {
         if ($hadPreviousTre4Url) {
