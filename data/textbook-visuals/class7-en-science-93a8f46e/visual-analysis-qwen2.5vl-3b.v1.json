@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "9af34fc1b7f333c1847afcdd",
-      "1c05ac75455fb8a4ad4abfee",
-      "25477d9d165b80a701e0e7dd"
+      "5ee56b21f0830e88558f6ff0",
+      "4b1298747dc1ec978a226ae5",
+      "647c2218dab5482dd1c1758e"
     ],
     "assets_eligible": 7488,
     "assets_analyzed": 2459,
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40600192733",
-      "checkpointed_at": "2026-10-27T23:39:21Z"
+      "checkpointed_at": "2026-10-27T23:45:12Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40600192733",
-      "checkpointed_at": "2026-10-27T23:39:49Z"
+      "checkpointed_at": "2026-10-27T23:45:40Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -75574,7 +75574,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40589862068",
+      "run_id": "40600192733",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -78871,7 +78871,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40589862068",
+      "run_id": "40600192733",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -82532,8 +82532,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40589862068",
-      "checkpointed_at": "2026-10-27T23:02:06Z"
+      "run_id": "40600192733",
+      "checkpointed_at": "2026-10-27T23:53:42Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
