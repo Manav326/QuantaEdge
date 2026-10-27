@@ -41,7 +41,7 @@ type Payout={
 };
 type Batch={id:number;public_id:string;period_start:string;period_end:string;currency:string;status:string;
   beneficiary_count:number;total_amount_paise:number;provider_fee_total_paise?:number|null;provider_fee_tax_total_paise?:number|null;
-  provider_fee_reconciled_at?:string|null;created_by_staff_id:number;approved_by_staff_id?:number|null;
+  platform_borne_overage_paise?:number|null;provider_fee_reconciled_at?:string|null;created_by_staff_id:number;approved_by_staff_id?:number|null;
   approved_at?:string|null;paid_count?:number;exception_count?:number;payouts?:Payout[]};
 type BeneficiaryBalance={
   recipient_type:string;recipient_name:string;currency:string;beneficiary_status:string;
@@ -231,10 +231,13 @@ export default function PayoutsPanel(){
     const fee=parsePaise(draft.fee,true),tax=parsePaise(draft.tax,true);
     if(fee===null||tax===null){setError('Enter the actual provider fee and fee tax in rupees. Zero is allowed; guesses are not.');return;}
     if(draft.reference.trim().length<3){setError('Enter the settlement reference from the actual provider statement.');return;}
-    await action(()=>api(BASE+'/course-orders/'+order.order_id+'/processing-fees',{
+    const result=await action(()=>api<{platformBorneOveragePaise?:number}>(BASE+'/course-orders/'+order.order_id+'/processing-fees',{
       method:'POST',headers:{'Idempotency-Key':crypto.randomUUID()},
       body:JSON.stringify({processingFeePaise:fee,feeTaxPaise:tax,settlementReference:draft.reference.trim(),sourceType:draft.source})
     }),'Actual payment-processing charges recorded. Allocation adjustments are now reflected in payout balances.');
+    const overage=Number(result?.platformBorneOveragePaise??0);
+    if(result&&Number.isSafeInteger(overage)&&overage>0)
+      setNotice('Actual collection charges were recorded in full. '+money(overage)+' is borne by the platform; beneficiary balances were not pushed below the approved share policy.');
   };
 
   const createBatch=async()=>{await action(()=>api(BASE+'/payout-batches',{method:'POST',body:JSON.stringify({})}),
@@ -493,7 +496,8 @@ export default function PayoutsPanel(){
             <div className={styles.payoutRowMain}><strong>{new Date(batch.period_start+'T12:00:00').toLocaleDateString('en-IN',{month:'long',year:'numeric'})} · Batch #{batch.id}</strong>
               <span>{batch.beneficiary_count} beneficiaries · {money(batch.total_amount_paise)} total</span>
               <small>{batch.paid_count??0} transfers confirmed paid · {batch.exception_count??0} exceptions · created by staff #{batch.created_by_staff_id}</small>
-              <small>{batch.provider_fee_reconciled_at?('Payout charges reconciled: '+money(batch.provider_fee_total_paise)+' + fee tax '+money(batch.provider_fee_tax_total_paise)):'Payout transfer fees await confirmed provider values or statement reconciliation.'}</small></div>
+              <small>{batch.provider_fee_reconciled_at?('Payout charges reconciled: '+money(batch.provider_fee_total_paise)+' + fee tax '+money(batch.provider_fee_tax_total_paise)):'Payout transfer fees await confirmed provider values or statement reconciliation.'}</small>
+              {(batch.platform_borne_overage_paise??0)>0&&<small>Platform-borne fee overage: {money(batch.platform_borne_overage_paise)}. Full provider charges are recorded without making beneficiary balances negative.</small>}</div>
             <span className={statusClass(batch.status)}>{label(batch.status)}</span>
             <div className={styles.payoutRowActions}>
               <button type="button" className={styles.secondarySmall} onClick={()=>void openBatch(batch.id)}>View details</button>
@@ -505,6 +509,7 @@ export default function PayoutsPanel(){
         {selectedBatch&&<section className={styles.payoutBatchDetail}>
           <div className={styles.panelHead}><div><h3>Batch #{selectedBatch.id} · {selectedBatch.period_start} to {selectedBatch.period_end}</h3>
             <p>{money(selectedBatch.total_amount_paise)} · {selectedBatch.beneficiary_count} beneficiary transfers · {label(selectedBatch.status)}</p></div><button type="button" className={styles.secondarySmall} onClick={()=>setSelectedBatch(null)}>Close details</button></div>
+          {(selectedBatch.platform_borne_overage_paise??0)>0&&<p className={styles.payoutAlertWarning} role="status">Platform-borne provider fee overage: {money(selectedBatch.platform_borne_overage_paise)}. The actual charge is recorded; this excess was not deducted from beneficiaries because their saved allocation weights could not safely absorb it.</p>}
           {selectedBatch.status==='PENDING_APPROVAL'&&<p className={styles.payoutApprovalNote}>Approval sends the listed bank transfers to RazorpayX. The preparer cannot approve their own batch. Once approved, each payout is tracked separately and only marked paid when the provider confirms a processed result.</p>}
           {!selectedBatch.provider_fee_reconciled_at&&<p className={styles.payoutHint}>Record actual RazorpayX payout fees from the provider response or settlement statement. The charge adjustment is posted to the same allocation ledger and reduces future balances; do not treat unreconciled charges as platform revenue.</p>}
           {(selectedBatch.payouts||[]).map(p=><article className={styles.payoutListRow} key={p.id}>
@@ -515,7 +520,7 @@ export default function PayoutsPanel(){
               {p.status_details&&<small>{p.status_details}</small>}</div>
             <span className={statusClass(p.status)}>{label(p.status)}</span>
             <div className={styles.payoutRowActions}>
-              {!['PROCESSED','REVERSED','FAILED','REJECTED'].includes(p.status)&&<button type="button" className={styles.secondarySmall} disabled={busy} onClick={()=>void refreshPayout(p)}>Refresh status</button>}
+              {(!['PROCESSED','REVERSED','FAILED','REJECTED'].includes(p.status)||(Boolean(p.provider_payout_id)&&Boolean(p.status_details?.startsWith('RazorpayX'))))&&<button type="button" className={styles.secondarySmall} disabled={busy} onClick={()=>void refreshPayout(p)}>Refresh status</button>}
               {!p.provider_payout_id&&(['RECONCILIATION_REQUIRED','SUBMITTING','APPROVED'].includes(p.status)||(p.status==='PENDING_APPROVAL'&&['APPROVED','PROCESSING','PARTIAL'].includes(selectedBatch.status)))&&<button type="button" className={styles.secondarySmall} disabled={busy} onClick={()=>void retryPayout(p)}>{p.status==='APPROVED'||p.status==='PENDING_APPROVAL'?'Resume submission':'Retry same request'}</button>}
             </div>
             {!selectedBatch.provider_fee_reconciled_at&&['PROCESSED','FAILED','REJECTED','REVERSED'].includes(p.status)&&(p.provider_fee_paise==null||p.provider_fee_tax_paise==null)&&<form className={styles.payoutFeeForm} onSubmit={e=>{e.preventDefault();void submitPayoutFees(p);}}>
