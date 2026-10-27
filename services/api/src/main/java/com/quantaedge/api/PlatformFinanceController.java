@@ -127,6 +127,7 @@ public class PlatformFinanceController {
       """);
     List<Map<String,Object>> offers=jdbc.queryForList("""
       select o.id as offer_id,o.public_id,o.institution_id,t.display_name as institution_name,
+        release.source_institution_id,source_t.display_name as source_institution_name,
         identity.public_id as course_identity_public_id,identity.stable_course_key,
         p.content_version_no,assignment.id as assignment_id,assignment.assignment_source,
         release.id as release_id,release.release_version,release.release_state,
@@ -147,6 +148,7 @@ public class PlatformFinanceController {
       join institution_course_release release
         on release.id=o.course_release_id and release.program_id=o.course_id
        and release.release_state='SHAREABLE' and release.legacy_migration=false
+      left join institution_tenant source_t on source_t.id=release.source_institution_id
       join curriculum_program p on p.id=o.course_id and p.status='ACTIVE' and p.code<>'GENERAL'
       join institution_course_identity identity
         on identity.id=p.course_identity_id and identity.status='ACTIVE'
@@ -702,10 +704,14 @@ public class PlatformFinanceController {
     return jdbc.queryForList("""
       select p.id,p.institution_offer_id,p.policy_version,p.currency,p.status,p.effective_from,p.effective_until,
         p.contractual_reference,p.notes,p.submitted_at,p.approved_at,o.institution_id,
-        t.display_name as institution_name,coalesce(nullif(o.title_override,''),course.display_name) as course_name,
+        t.display_name as institution_name,release.source_institution_id,source_t.display_name as source_institution_name,
+        coalesce(nullif(o.title_override,''),course.display_name) as course_name,
         (select count(*) from revenue_share_policy_recipient r where r.policy_id=p.id) as recipient_count
       from revenue_share_policy p join institution_marketplace_offer o on o.id=p.institution_offer_id
-      join institution_tenant t on t.id=o.institution_id join curriculum_program course on course.id=o.course_id
+      join institution_tenant t on t.id=o.institution_id
+      left join institution_course_release release on release.id=o.course_release_id and release.program_id=o.course_id
+      left join institution_tenant source_t on source_t.id=release.source_institution_id
+      join curriculum_program course on course.id=o.course_id
       order by p.created_at desc,p.id desc
       """);
   }
@@ -716,9 +722,13 @@ public class PlatformFinanceController {
     requireOwner(context);
     Map<String,Object> policy=one("""
       select p.*,o.institution_id,t.display_name as institution_name,
+        release.source_institution_id,source_t.display_name as source_institution_name,
         coalesce(nullif(o.title_override,''),course.display_name) as course_name
       from revenue_share_policy p join institution_marketplace_offer o on o.id=p.institution_offer_id
-      join institution_tenant t on t.id=o.institution_id join curriculum_program course on course.id=o.course_id
+      join institution_tenant t on t.id=o.institution_id
+      left join institution_course_release release on release.id=o.course_release_id and release.program_id=o.course_id
+      left join institution_tenant source_t on source_t.id=release.source_institution_id
+      join curriculum_program course on course.id=o.course_id
       where p.id=?
       """,policyId);
     if(policy.isEmpty()) throw notFound("Revenue-share policy not found.");
@@ -865,11 +875,18 @@ public class PlatformFinanceController {
   public Map<String,Object> submitPolicy(@PathVariable long policyId,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=requireOwner(context);
-    Map<String,Object> row=one("select institution_offer_id,status from revenue_share_policy where id=?",policyId);
+    Map<String,Object> row=one("""
+      select institution_offer_id,status,remainder_recipient_type,remainder_institution_id,remainder_legal_entity_id
+      from revenue_share_policy where id=?
+      """,policyId);
     if(row.isEmpty()) throw notFound("Revenue-share policy not found.");
-    if(count("select count(*) from revenue_share_policy_recipient where policy_id=?",policyId)<1) {
-      throw bad("Add at least one institution recipient before submitting this policy.");
-    }
+    String remainderType=string(row.get("remainder_recipient_type"));
+    Long remainderId="INSTITUTION".equals(remainderType)?optionalLong(row.get("remainder_institution_id"))
+        :"COMPANY".equals(remainderType)?optionalLong(row.get("remainder_legal_entity_id")):null;
+    boolean validRemainder=remainderId!=null&&("INSTITUTION".equals(remainderType)
+        ?exists("select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",remainderId)
+        : "COMPANY".equals(remainderType)&&exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY'))",remainderId));
+    if(!validRemainder) throw bad("Choose an active institution or company to receive the remaining balance before submitting this policy.");
     int n=jdbc.update("""
       update revenue_share_policy set status='PENDING_APPROVAL',submitted_by_staff_id=?,submitted_at=now()
       where id=? and status='DRAFT'
@@ -886,7 +903,8 @@ public class PlatformFinanceController {
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=requireOwner(context);
     Map<String,Object> row=one("""
-      select institution_offer_id,status,effective_from,effective_until,policy_version
+      select institution_offer_id,status,effective_from,effective_until,policy_version,
+        remainder_recipient_type,remainder_institution_id,remainder_legal_entity_id
       from revenue_share_policy where id=?
       """,policyId);
     if(row.isEmpty()) throw notFound("Revenue-share policy not found.");
@@ -902,7 +920,13 @@ public class PlatformFinanceController {
           :exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY'))",recipient.get("legal_entity_id"));
       if(!active) throw bad("Every revenue recipient must remain active when a policy is approved.");
     }
-    if(policyRecipients.isEmpty()) throw bad("A revenue-share policy needs at least one institution or company recipient.");
+    String remainderType=string(row.get("remainder_recipient_type"));
+    Long remainderId="INSTITUTION".equals(remainderType)?optionalLong(row.get("remainder_institution_id"))
+        :"COMPANY".equals(remainderType)?optionalLong(row.get("remainder_legal_entity_id")):null;
+    boolean validRemainder=remainderId!=null&&("INSTITUTION".equals(remainderType)
+        ?exists("select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",remainderId)
+        : "COMPANY".equals(remainderType)&&exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY'))",remainderId));
+    if(!validRemainder) throw bad("Revenue-share policy must assign its remainder to an active institution or company before approval.");
     long percentageBasisPoints=policyRecipients.stream()
       .filter(r -> "PERCENTAGE".equals(String.valueOf(r.get("calculation_type"))))
       .mapToLong(r -> ((Number)r.get("percentage_basis_points")).longValue()).sum();

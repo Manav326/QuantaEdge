@@ -8,7 +8,7 @@ import PayoutsPanel from './PayoutsPanel';
 
 type Institution = { id:number; tenant_code:string; display_name:string; status:string };
 type LegalEntity = { id:number; entity_kind:string; institution_id?:number|null; institution_name?:string|null; legal_name:string; trade_name?:string|null; contact_email?:string|null; contact_phone?:string|null; registered_address_json?:string|null; invoice_series_code?:string; einvoice_applicability?:'UNREVIEWED'|'NOT_REQUIRED'|'REQUIRED'; einvoice_applicability_reviewed_at?:string|null; einvoice_applicability_review_note?:string|null; status:string; active_gst_registrations?:number };
-type Offer = { offer_id:number; institution_id:number; institution_name:string; course_identity_public_id:string; stable_course_key:string; course_code:string; course_name:string; content_version_no:number; assignment_id:number; assignment_source:string; release_id:number; release_version:number; release_state:string; current_candidate:boolean; publicly_sellable:boolean; price_paise:number; currency:string; offer_status:string; legal_entity_id?:number|null; legal_seller_name?:string|null; latest_tax_profile_id?:number|null; tax_profile_status?:string|null; tax_treatment?:string|null; latest_share_policy_status?:string|null };
+type Offer = { offer_id:number; institution_id:number; institution_name:string; source_institution_id?:number|null; source_institution_name?:string|null; course_identity_public_id:string; stable_course_key:string; course_code:string; course_name:string; content_version_no:number; assignment_id:number; assignment_source:string; release_id:number; release_version:number; release_state:string; current_candidate:boolean; publicly_sellable:boolean; price_paise:number; currency:string; offer_status:string; legal_entity_id?:number|null; legal_seller_name?:string|null; latest_tax_profile_id?:number|null; tax_profile_status?:string|null; tax_treatment?:string|null; latest_share_policy_status?:string|null };
 type Registration = { id:number; legal_entity_id:number; legal_entity_name:string; gstin:string; state_code:string; status:string; effective_from:string };
 type Catalog = { institutions:Institution[]; legalEntities:LegalEntity[]; offers:Offer[]; registrations:Registration[] };
 function offerLifecycleLabel(offer:Offer):string {
@@ -17,7 +17,7 @@ function offerLifecycleLabel(offer:Offer):string {
   if (offer.current_candidate) return 'CURRENT CANDIDATE';
   return 'OBSOLETE — DO NOT CONFIGURE';
 }
-type Policy = { id:number; institution_offer_id:number; policy_version:number; currency:string; status:string; institution_name:string; course_name:string; recipient_count:number; effective_from:string; effective_until?:string|null };
+type Policy = { id:number; institution_offer_id:number; policy_version:number; currency:string; status:string; institution_name:string; source_institution_id?:number|null; source_institution_name?:string|null; course_name:string; recipient_count:number; effective_from:string; effective_until?:string|null };
 type PolicyRecipient = { recipient_type?:string; institution_id?:number|null; legal_entity_id?:number|null; recipient_id?:number; recipient_name?:string; calculation_type:string; percentage_basis_points?:number|null; flat_amount_paise?:number|null };
 type DiscountOffer = { id:number; institution_offer_id:number; code:string; version:number; currency:string; discount_type:string; percentage_basis_points?:number|null; flat_amount_paise?:number|null; max_discount_paise?:number|null; min_listed_price_paise:number; max_redemptions?:number|null; max_redemptions_per_purchaser?:number|null; effective_from:string; effective_until?:string|null; status:string; institution_name:string; course_name:string; redemption_count:number; offer_price_paise:number };
 type PolicyDetail = Policy & { recipients:PolicyRecipient[]; remainder_recipient_type?:string; remainder_institution_id?:number|null; remainder_legal_entity_id?:number|null; remainder_recipient_name?:string };
@@ -26,7 +26,7 @@ type FinancialDocument = { id:number; document_type:string; document_number:stri
 type RefundRecord = { id:number; public_id:string; course_payment_order_id:number; requested_amount_paise:number; currency:string; reason:string; status:string; provider_status?:string|null; provider_refund_id?:string|null; requested_at:string; settled_at?:string|null; credit_note_document_id?:number|null; credit_note_number?:string|null; message?:string };
 
 type CoursePaymentOrder = {
-  local_order_id:number; institution_id:number; institution_name:string; course_id:number; course_title:string;
+  local_order_id:number; institution_id:number; institution_name:string; source_institution_id?:number|null; source_institution_name?:string|null; course_id:number; course_title:string;
   student_id:number; learner_name?:string|null; purchaser_user_id?:number|null; target_student_id?:number|null;
   recipient_type:string; status:string; failure_code?:string|null; currency:string;
   listed_price_paise?:number|null; discount_amount_paise?:number|null; discount_reference?:string|null;
@@ -35,6 +35,18 @@ type CoursePaymentOrder = {
   verified_at?:string|null; fiscal_document_id?:number|null; invoice_number?:string|null;
   last_operation_event?:string|null; last_resolution_code?:string|null; last_operation_message?:string|null;
   last_operation_at?:string|null; resolution_code:string; recommended_action:string; resolution_message:string;
+  distribution_reconciliation_status?:'RECONCILED'|'REVIEW_REQUIRED'|'NOT_FINALIZED'|string;
+  distribution_issue_count?:number; distribution_reconciliation_summary?:string;
+};
+type DistributionException = {
+  local_order_id:number; institution_id:number; institution_name:string; source_institution_id?:number|null; source_institution_name?:string|null; course_id:number; course_title:string;
+  student_id:number; learner_name?:string|null; status:string; currency:string; offer_price_paise:number;
+  captured_amount_paise?:number|null; provider_order_id?:string|null; provider_payment_id?:string|null;
+  created_at:string; verified_at?:string|null; fiscal_document_id?:number|null; invoice_number?:string|null;
+  distribution_issue_count:number; distribution_reconciliation_summary:string;
+  distribution_pool_paise?:number|null; distribution_expected_total_paise?:number|null;
+  distribution_recorded_total_paise?:number|null; distribution_unassigned_remainder_paise?:number|null;
+  distribution_reconciliation_issues:string[]; distribution_reconciliation_details:string[];
 };
 type PaymentOperationEvent = {
   id:number; event_type:string; resolution_code:string; message:string; provider_order_id?:string|null;
@@ -100,7 +112,7 @@ const rupees=(paise:number|undefined,currency='INR')=>typeof paise!=='number'?'�
 const asIso=(value:string)=>new Date(value).toISOString();
 function parseRupeesPaise(raw:string):number|null{
   const value=raw.trim();
-  if(!/^\\d{1,9}(?:\\.\\d{1,2})?$/.test(value))return null;
+  if(!/^\d{1,9}(?:\.\d{1,2})?$/.test(value))return null;
   const parts=value.split('.');
   const paise=Number(parts[0])*100+Number(((parts[1]||'')+'00').slice(0,2));
   return Number.isSafeInteger(paise)&&paise>=100?paise:null;
@@ -139,6 +151,12 @@ export default function FinancePage(){
   const [paymentStatusFilter,setPaymentStatusFilter]=useState('');
   const [paymentOffset,setPaymentOffset]=useState(0);
   const [paymentLoading,setPaymentLoading]=useState(false);
+  const [distributionExceptions,setDistributionExceptions]=useState<DistributionException[]>([]);
+  const [distributionExceptionSearch,setDistributionExceptionSearch]=useState('');
+  const [distributionExceptionCursor,setDistributionExceptionCursor]=useState<number|null>(null);
+  const [distributionExceptionHasMore,setDistributionExceptionHasMore]=useState(false);
+  const [distributionExceptionScanLimitReached,setDistributionExceptionScanLimitReached]=useState(false);
+  const [distributionExceptionLoading,setDistributionExceptionLoading]=useState(false);
   const [selectedPaymentOrderId,setSelectedPaymentOrderId]=useState<number|null>(null);
   const [paymentEvents,setPaymentEvents]=useState<PaymentOperationEvent[]>([]);
   const [paymentEventsLoading,setPaymentEventsLoading]=useState(false);
@@ -167,6 +185,7 @@ export default function FinancePage(){
   const [recipients,setRecipients]=useState<RecipientDraft[]>([]);
   const [policyRemainderType,setPolicyRemainderType]=useState<'INSTITUTION'|'COMPANY'>('COMPANY');
   const [policyRemainderId,setPolicyRemainderId]=useState('');
+  const [distributionPreviewPoolRupees,setDistributionPreviewPoolRupees]=useState('1000');
   const [entityForm,setEntityForm]=useState({entityKind:'PLATFORM',institutionId:'',legalName:'',tradeName:'',contactEmail:'',contactPhone:'',addressLine:'',city:'',state:'',postalCode:'',invoiceSeriesCode:'QE'});
   const [editingCoreEntityId,setEditingCoreEntityId]=useState<number|null>(null);
   const [gstEntityId,setGstEntityId]=useState('');
@@ -435,6 +454,34 @@ export default function FinancePage(){
     }catch(e){setError(e instanceof Error?e.message:'Course payment orders could not be loaded.');}
     finally{setPaymentLoading(false);}
   };
+  const loadDistributionExceptions=async(append=false,searchOverride?:string)=>{
+    setDistributionExceptionLoading(true);
+    setError('');
+    try{
+      const query=new URLSearchParams({limit:'50'});
+      const searchValue=(searchOverride??distributionExceptionSearch).trim();
+      if(searchValue)query.set('search',searchValue);
+      if(append&&distributionExceptionCursor!=null)query.set('beforeOrderId',String(distributionExceptionCursor));
+      const response=await api<{
+        items:DistributionException[];count:number;hasMore:boolean;nextCursor?:number|null;
+        scannedOrders:number;scanLimitReached:boolean;readOnly:boolean
+      }>('/api/v1/hrms/platform/finance/course-orders/reconciliation-exceptions?'+query.toString());
+      const next=Array.isArray(response.items)?response.items:[];
+      setDistributionExceptions(current=>append?[...current,...next]:next);
+      setDistributionExceptionCursor(response.nextCursor==null?null:Number(response.nextCursor));
+      setDistributionExceptionHasMore(Boolean(response.hasMore));
+      setDistributionExceptionScanLimitReached(Boolean(response.scanLimitReached));
+      if(!append&&next.length===0&&response.scanLimitReached){
+        setNotice('No exception was found in this scan window. Continue scanning to check older orders.');
+      }else if(!append){
+        setNotice('Found '+next.length+' distribution exception(s) in the scanned orders.');
+      }
+    }catch(e){
+      setError(e instanceof Error?e.message:'Distribution exceptions could not be loaded. No financial records were changed.');
+    }finally{
+      setDistributionExceptionLoading(false);
+    }
+  };
   const loadPaymentEvents=async(orderId:number)=>{
     setPaymentEventsLoading(true);
     try{
@@ -664,6 +711,55 @@ export default function FinancePage(){
     percentageBasisPoints:row.percentageBasisPoints??row.percentage_basis_points??null,
     flatAmountPaise:row.flatAmountPaise??row.flat_amount_paise??null
   })).sort((a,b)=>a.recipientType.localeCompare(b.recipientType)||a.recipientId-b.recipientId));
+  const previewPoolPaise=(()=>{
+    const value=distributionPreviewPoolRupees.trim();
+    if(!/^\d{1,9}(?:\.\d{1,2})?$/.test(value))return null;
+    const [rupees,decimal='']=value.split('.');
+    const amount=Number(rupees)*100+Number((decimal+'00').slice(0,2));
+    return Number.isSafeInteger(amount)&&amount>=100?amount:null;
+  })();
+  const distributionPreview=(()=>{
+    const byKey=new Map<string,{key:string;name:string;type:string;amountPaise:number;explicitPaise:number;remainderPaise:number}>();
+    let explicitTotalPaise=0;
+    let valid=previewPoolPaise!==null&&Boolean(policyRemainderId);
+    for(const recipient of recipients){
+      const id=Number(recipient.recipientId);
+      if(!recipient.recipientId||!Number.isSafeInteger(id)||id<=0){valid=false;continue;}
+      let amountPaise:number;
+      if(recipient.calculationType==='PERCENTAGE'){
+        const percentage=Number(recipient.percentage);
+        if(!Number.isFinite(percentage)||percentage<=0||percentage>100){valid=false;continue;}
+        amountPaise=Math.round((previewPoolPaise||0)*Math.round(percentage*100)/10000);
+      }else{
+        const value=recipient.flatRupees.trim();
+        if(!/^\d{1,9}(?:\.\d{1,2})?$/.test(value)){valid=false;continue;}
+        const [rupees,decimal='']=value.split('.');
+        amountPaise=Number(rupees)*100+Number((decimal+'00').slice(0,2));
+        if(!Number.isSafeInteger(amountPaise)||amountPaise<1){valid=false;continue;}
+      }
+      const key=recipient.recipientType+':'+id;
+      const institution=catalog?.institutions.find(x=>x.id===id);
+      const entity=catalog?.legalEntities.find(x=>x.id===id);
+      const name=recipient.recipientType==='INSTITUTION'?(institution?.display_name||('Institution #'+id)):(entity?.trade_name||entity?.legal_name||('Company #'+id));
+      if(byKey.has(key)){valid=false;continue;}
+      byKey.set(key,{key,name,type:recipient.recipientType,amountPaise,explicitPaise:amountPaise,remainderPaise:0});
+      explicitTotalPaise+=amountPaise;
+    }
+    if(previewPoolPaise===null||explicitTotalPaise>previewPoolPaise)valid=false;
+    const remainderPaise=previewPoolPaise===null||explicitTotalPaise>previewPoolPaise?0:previewPoolPaise-explicitTotalPaise;
+    const remainderKey=policyRemainderType+':'+Number(policyRemainderId);
+    const remainderInstitution=catalog?.institutions.find(x=>x.id===Number(policyRemainderId));
+    const remainderEntity=catalog?.legalEntities.find(x=>x.id===Number(policyRemainderId));
+    const remainderName=policyRemainderType==='INSTITUTION'
+      ?(remainderInstitution?.display_name||('Institution #'+policyRemainderId))
+      :(remainderEntity?.trade_name||remainderEntity?.legal_name||('Company #'+policyRemainderId));
+    if(remainderPaise>0&&policyRemainderId){
+      const existing=byKey.get(remainderKey);
+      if(existing){existing.amountPaise+=remainderPaise;existing.remainderPaise=remainderPaise;}
+      else byKey.set(remainderKey,{key:remainderKey,name:remainderName,type:policyRemainderType,amountPaise:remainderPaise,explicitPaise:0,remainderPaise});
+    }
+    return {valid,explicitTotalPaise,remainderPaise,rows:[...byKey.values()],totalPaise:previewPoolPaise};
+  })();
   const recipientsUnchanged=(()=>{
     if(!policyDetail||!selectedPolicyId)return false;
     try{return recipientSnapshot(recipientPayload())===recipientSnapshot(policyDetail.recipients||[])
@@ -914,15 +1010,15 @@ export default function FinancePage(){
         <section className={styles.panel}><div className={styles.panelHead}><div><h2>Institution revenue-share policies</h2><p>Shares are calculated from actual captured consideration minus the invoice's approved output-tax amount—not list price.</p></div><button className={styles.primary} disabled={busy||!selectedOfferId} onClick={createPolicy}>＋ New policy</button></div>
           <label className={styles.wideLabel}>Course offer<select value={selectedOfferId} onChange={e=>selectWorkflowOffer(e.target.value)}><option value="">Select offer</option>{catalog.offers.filter(o=>o.current_candidate||o.publicly_sellable).map(o=><option key={o.offer_id} value={o.offer_id}>{o.institution_name} · {o.course_name}</option>)}</select></label>
           {catalog.offers.length===0&&<p className={styles.empty}><a href="/institutions">Open HRMS Course launch</a> and create the course’s listing draft first. Revenue-share policies bind to an exact offer revision, never to an unlaunched course identity.</p>}
-          {policies.length?<div className={styles.policyTableWrap}><table className={styles.table}><thead><tr><th>Course / institution</th><th>Version</th><th>Status</th><th>Recipients</th><th>Action</th></tr></thead><tbody>{policies.map(p=><tr key={p.id}><td><b>{p.course_name}</b><small>{p.institution_name}</small></td><td>v{p.policy_version}</td><td><span className={styles.status}>{p.status}</span></td><td>{p.recipient_count}</td><td><button className={styles.secondarySmall} onClick={()=>void loadPolicy(String(p.id))}>Open</button></td></tr>)}</tbody></table></div>:<p className={styles.empty}>No revenue-share policies have been created.</p>}
+          {policies.length?<div className={styles.policyTableWrap}><table className={styles.table}><thead><tr><th>Course / marketplace offer</th><th>Version</th><th>Status</th><th>Recipients</th><th>Action</th></tr></thead><tbody>{policies.map(p=><tr key={p.id}><td><b>{p.course_name}</b><small>Marketplace institution: {p.institution_name}</small><small>Course source: {p.source_institution_name||'Not resolved from saved release'}</small></td><td>v{p.policy_version}</td><td><span className={styles.status}>{p.status}</span></td><td>{p.recipient_count===0?'Remainder only':p.recipient_count}</td><td><button className={styles.secondarySmall} onClick={()=>void loadPolicy(String(p.id))}>Open</button></td></tr>)}</tbody></table></div>:<p className={styles.empty}>No revenue-share policies have been created.</p>}
         </section>
-        {policyDetail&&<section className={styles.panel}><div className={styles.panelHead}><div><h2>Policy v{policyDetail.policy_version}: {policyDetail.course_name}</h2><p>Source offer: {policyDetail.institution_name} · Currency {policyDetail.currency} · Status {policyDetail.status}</p></div>{policyDetail.status==='DRAFT'&&<button className={styles.secondary} onClick={()=>void saveRecipients()} disabled={busy||recipientsUnchanged}>Save recipients</button>}</div>
-          {policyDetail.status==='DRAFT'?<><p>Each institution receives either a percentage of the net distributable pool or a fixed amount per eligible paid sale. Duplicate institutions are not permitted.</p>
-            <p>Shares are calculated after tax and confirmed payment-processing charges. The selected remainder recipient receives what remains after all explicit shares; a company may receive both amounts.</p>
+        {policyDetail&&<section className={styles.panel}><div className={styles.panelHead}><div><h2>Policy v{policyDetail.policy_version}: {policyDetail.course_name}</h2><p>Marketplace offer: {policyDetail.institution_name} · Course source: {policyDetail.source_institution_name||'Not resolved from saved release'} · Currency {policyDetail.currency} · Status {policyDetail.status}</p></div>{policyDetail.status==='DRAFT'&&<button className={styles.secondary} onClick={()=>void saveRecipients()} disabled={busy||recipientsUnchanged}>Save recipients</button>}</div>
+          {policyDetail.status==='DRAFT'?<><p>Each institution or company can receive a percentage of the distributable pool or a fixed amount per eligible paid sale. The source institution, shared institutions and a configured company can be combined in one policy. A remainder-only policy is also supported when the selected recipient should receive the entire pool.</p>
+            <p>The selected remainder recipient receives what remains after all explicit shares. Source and shared institutions are identified from the course release; neither the marketplace institution nor a company is assumed to receive the remainder. A recipient can receive both its explicit share and the remainder.</p>
             <div className={styles.form}>
               <label>Who receives the remaining balance?<select value={policyRemainderType+':'+policyRemainderId} onChange={e=>{const [type,id]=e.target.value.split(':');setPolicyRemainderType(type as 'INSTITUTION'|'COMPANY');setPolicyRemainderId(id||'');}}>
                 <option value="">Choose remainder recipient</option>
-                {catalog.institutions.filter(x=>x.status==='ACTIVE').map(x=><option key={'I'+x.id} value={'INSTITUTION:'+x.id}>Institution · {x.display_name}</option>)}
+                {catalog.institutions.filter(x=>x.status==='ACTIVE').map(x=><option key={'I'+x.id} value={'INSTITUTION:'+x.id}>Institution · {x.display_name}{Number(x.id)===Number(selectedOffer?.source_institution_id)?' · Course source institution':' · Shared institution'}</option>)}
                 {catalog.legalEntities.filter(x=>x.status==='ACTIVE'&&['PLATFORM','COMPANY'].includes(x.entity_kind)).map(x=><option key={'C'+x.id} value={'COMPANY:'+x.id}>Company · {x.legal_name}</option>)}
               </select></label>
             </div>
@@ -931,13 +1027,31 @@ export default function FinancePage(){
               <label>Beneficiary<select value={r.recipientId} onChange={e=>setRecipients(old=>old.map((x,j)=>i===j?{...x,recipientId:e.target.value}:x))}><option value="">Select beneficiary</option>
                 {r.recipientType==='INSTITUTION'?catalog.institutions.filter(x=>x.status==='ACTIVE').map(x=><option key={x.id} value={x.id}>{x.display_name}</option>)
                   :catalog.legalEntities.filter(x=>x.status==='ACTIVE'&&['PLATFORM','COMPANY'].includes(x.entity_kind)).map(x=><option key={x.id} value={x.id}>{x.legal_name}</option>)}
-              </select></label>
+              </select><small>{r.recipientType==='COMPANY'?'Configured company/legal entity':Number(r.recipientId)===Number(selectedOffer?.source_institution_id)?'Source institution for this course':'Shared institution'}</small></label>
               <label>Share type<select value={r.calculationType} onChange={e=>setRecipients(old=>old.map((x,j)=>i===j?{...x,calculationType:e.target.value as RecipientDraft['calculationType']}:x))}><option value="PERCENTAGE">Percentage</option><option value="FLAT">Flat ₹ amount</option></select></label>
               {r.calculationType==='PERCENTAGE'?<label>Pool share (%)<input type="number" min=".01" max="100" step=".01" value={r.percentage} onChange={e=>setRecipients(old=>old.map((x,j)=>i===j?{...x,percentage:e.target.value}:x))}/></label>:<label>Flat amount per sale (₹)<input type="number" min=".01" step=".01" value={r.flatRupees} onChange={e=>setRecipients(old=>old.map((x,j)=>i===j?{...x,flatRupees:e.target.value}:x))}/></label>}
               <button className={styles.removeRow} type="button" aria-label="Remove beneficiary" onClick={()=>setRecipients(old=>old.filter((_,j)=>j!==i))}>×</button>
             </div>)}</div>
             <button className={styles.secondary} onClick={()=>setRecipients(old=>[...old,{recipientType:'INSTITUTION',recipientId:'',calculationType:'PERCENTAGE',percentage:'',flatRupees:''}])}>＋ Add beneficiary</button>
-            <div className={styles.policyFooter}><span>HRMS checks that approved shares fit the pool at checkout. A missing/inactive bank account blocks payout, not the historical allocation.</span><button className={styles.primary} disabled={busy||!recipients.length||!policyRemainderId} onClick={()=>void action(async()=>{await api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/recipients',{method:'PUT',body:JSON.stringify({recipients:recipientPayload(),remainderRecipientType:policyRemainderType,remainderRecipientId:Number(policyRemainderId)})});await api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/submit',{method:'POST'});},'Policy submitted for HRMS approval.')}>Submit policy</button></div>
+            <section className={styles.panel} aria-label="Illustrative revenue distribution preview">
+              <div className={styles.panelHead}><div><h3>Check the distribution</h3><p>Illustrative preview only. Actual per-sale amounts use that order’s locked tax, capture and confirmed-fee records.</p></div></div>
+              <label>Example distributable pool (₹)
+                <input inputMode="decimal" value={distributionPreviewPoolRupees} onChange={e=>setDistributionPreviewPoolRupees(e.target.value)} placeholder="e.g. 1000"/>
+              </label>
+              {previewPoolPaise===null?<p className={styles.empty}>Enter a valid example amount of at least ₹1.00.</p>:<>
+                <div className={styles.recipientList}>
+                  {distributionPreview.rows.map(row=><article className={styles.policyRow} key={row.key}>
+                    <b>{row.name}</b>
+                    <span>{rupees(row.amountPaise)}{row.explicitPaise>0&&row.remainderPaise>0?' · explicit '+rupees(row.explicitPaise)+' + remainder '+rupees(row.remainderPaise):row.remainderPaise>0?' · remainder': ' · configured share'}</span>
+                  </article>)}
+                </div>
+                <div className={styles.policyFooter}><span>Configured shares: {rupees(distributionPreview.explicitTotalPaise)} · Remaining balance: {rupees(distributionPreview.remainderPaise)}</span>
+                  <b>{distributionPreview.valid&&distributionPreview.rows.reduce((sum,row)=>sum+row.amountPaise,0)===previewPoolPaise?'Balanced: '+rupees(previewPoolPaise):'Review required: verify recipients and amounts'}</b>
+                </div>
+                {distributionPreview.explicitTotalPaise>previewPoolPaise&&<p className={styles.note}>Explicit shares exceed this example pool by {rupees(distributionPreview.explicitTotalPaise-previewPoolPaise)}. Reduce the configured shares before submitting.</p>}
+              </>}
+            </section>
+            <div className={styles.policyFooter}><span>HRMS checks that approved shares fit the pool at checkout. A missing/inactive bank account blocks payout, not the historical allocation.</span><button className={styles.primary} disabled={busy||!policyRemainderId||!distributionPreview.valid} onClick={()=>void action(async()=>{await api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/recipients',{method:'PUT',body:JSON.stringify({recipients:recipientPayload(),remainderRecipientType:policyRemainderType,remainderRecipientId:Number(policyRemainderId)})});await api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/submit',{method:'POST'});},'Policy submitted for HRMS approval.')}>Submit policy</button></div>
           </>:policyDetail.status==='PENDING_APPROVAL'?<div className={styles.approvalBox}><p>This policy is waiting for approval. Confirm its parties, effective dates and contract references before activating it.</p><button className={styles.primary} disabled={busy} onClick={()=>void action(()=>api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/approve',{method:'POST'}),'Revenue-share policy approved.')}>Approve policy</button></div>:<div className={styles.recipientList}>{(policyDetail.recipients||[]).map((r,i)=><article className={styles.policyRow} key={i}><b>{r.recipient_name||(r.recipient_type==='COMPANY'?'Company':'Institution')+' #'+(r.recipient_type==='COMPANY'?r.legal_entity_id:r.institution_id)}</b><span>{r.calculation_type==='PERCENTAGE'?Number(r.percentage_basis_points)/100+'% of distributable pool':rupees(r.flat_amount_paise||0)+' per eligible sale'}</span></article>)}</div>}
         </section>}
       </section>}
@@ -1019,6 +1133,50 @@ export default function FinancePage(){
       {tab==='payouts'&&<PayoutsPanel/>}
       {tab==='payments'&&<section className={styles.stack}>
         <section className={styles.panel}>
+          <div className={styles.panelHead}><div><h2>Distribution exceptions</h2>
+            <p>Read-only checks of each sale’s locked revenue policy, recipient amounts and immutable EARNED ledger events. This scan does not repair records or change payouts.</p></div>
+            <button type="button" className={styles.secondary} onClick={()=>void loadDistributionExceptions(false)} disabled={distributionExceptionLoading}>
+              {distributionExceptionLoading?'Scanning…':'↻ Scan exceptions'}
+            </button></div>
+          <form className={styles.paymentFilters} onSubmit={event=>{event.preventDefault();setDistributionExceptionCursor(null);setDistributionExceptionHasMore(false);void loadDistributionExceptions(false);}}>
+            <label>Find order, institution, course or payment reference
+              <input value={distributionExceptionSearch} maxLength={120} onChange={e=>setDistributionExceptionSearch(e.target.value)} placeholder="Order ID, institution, course, or payment reference…"/>
+            </label>
+            <button type="submit" className={styles.primarySmall} disabled={distributionExceptionLoading}>Search exceptions</button>
+            <button type="button" className={styles.secondarySmall} disabled={distributionExceptionLoading} onClick={()=>{setDistributionExceptionSearch('');setDistributionExceptionCursor(null);void loadDistributionExceptions(false,'');}}>Clear</button>
+          </form>
+          {distributionExceptionLoading?<p className={styles.empty}>Checking saved sale snapshots and allocation ledger…</p>
+          :distributionExceptions.length?<div className={styles.policyTableWrap}><table className={styles.table}>
+            <thead><tr><th>Order / course</th><th>Course source institution</th><th>Payment</th><th>Distribution issue</th><th>Action</th></tr></thead>
+            <tbody>{distributionExceptions.map(item=><tr key={item.local_order_id}>
+              <td><b>QE-ORDER-{item.local_order_id}</b><small>{item.course_title||('Course #'+item.course_id)}</small><small>{item.created_at?new Date(item.created_at).toLocaleString('en-IN'):''}</small></td>
+              <td><b>{item.source_institution_name||'Source institution not resolved'}</b><small>Marketplace institution: {item.institution_name||'Not recorded'}</small><small>{item.learner_name||('Learner #'+item.student_id)}</small></td>
+              <td><span className={styles.status}>{item.status}</span><small>{item.provider_payment_id||'No payment ID recorded'}</small><small>Captured: {item.captured_amount_paise==null?'Not recorded':rupees(item.captured_amount_paise,item.currency)}</small></td>
+              <td><b>{item.distribution_issue_count} issue(s)</b><small>{item.distribution_reconciliation_summary}</small>
+                {item.distribution_pool_paise!=null&&<small>Distributable pool: {rupees(item.distribution_pool_paise,item.currency)}</small>}
+                {item.distribution_expected_total_paise!=null&&item.distribution_recorded_total_paise!=null&&<small>Expected: {rupees(item.distribution_expected_total_paise,item.currency)} · Recorded: {rupees(item.distribution_recorded_total_paise,item.currency)}</small>}
+                {item.distribution_unassigned_remainder_paise!=null&&item.distribution_unassigned_remainder_paise>0&&<strong>Unassigned remainder: {rupees(item.distribution_unassigned_remainder_paise,item.currency)}</strong>}
+                {item.distribution_pool_paise==null&&<small>Amount basis not calculated; payment or policy evidence needs review.</small>}
+                <details><summary>View checks</summary><ul>{(item.distribution_reconciliation_issues||[]).map((issue,i)=><li key={i}>{issue}</li>)}</ul>
+                  {(item.distribution_reconciliation_details||[]).length>0&&<details><summary>Recipient-level expected vs recorded</summary><ul>{item.distribution_reconciliation_details.map((detail,i)=><li key={i}>{detail}</li>)}</ul></details>}
+                </details>
+              </td>
+              <td><div className={styles.paymentRowActions}>
+                <button type="button" className={styles.secondarySmall} disabled={statusTraceLoadingId!==null} onClick={()=>void checkCurrentStatus(item.local_order_id)}>
+                  {statusTraceLoadingId===item.local_order_id?'Inspecting…':'Open full trace'}
+                </button>
+              </div></td>
+            </tr>)}</tbody>
+          </table></div>
+          :<p className={styles.empty}>No distribution exceptions are currently shown. Run a scan to check verified sales and orders that unexpectedly have allocation rows.</p>}
+          <div className={styles.policyFooter}>
+            <span>This queue is read-only. Ambiguous historical recipient assignments require reviewed evidence; no automatic ledger repairs are performed.</span>
+            {distributionExceptionHasMore&&<button type="button" className={styles.secondary} disabled={distributionExceptionLoading} onClick={()=>void loadDistributionExceptions(true)}>
+              {distributionExceptionLoading?'Scanning…':distributionExceptionScanLimitReached?'Continue older-order scan':'Load more exceptions'}
+            </button>}
+          </div>
+        </section>
+        <section className={styles.panel}>
           <div className={styles.panelHead}><div><h2>Course payments & reconciliation</h2>
             <p>Inspect saved course orders, provider references, discounts, invoices and the immutable HRMS recovery history.</p></div>
             <button type="button" className={styles.secondary} onClick={()=>void loadPaymentOrders()} disabled={paymentLoading}>↻ Refresh</button></div>
@@ -1037,16 +1195,25 @@ export default function FinancePage(){
           </div>
           {paymentLoading?<p className={styles.empty}>Loading course payment orders…</p>
           :paymentOrders.length?<div className={styles.policyTableWrap}><table className={styles.table}>
-            <thead><tr><th>Order / course</th><th>Institution / learner</th><th>Payment state</th><th>Payable / captured</th><th>Invoice</th><th>Resolution</th></tr></thead>
+            <thead><tr><th>Order / course</th><th>Marketplace & course institutions / learner</th><th>Payment state</th><th>Payable / captured</th><th>Invoice</th><th>Distribution</th><th>Resolution</th></tr></thead>
             <tbody>{paymentOrders.map(order=>{
               const status=String(order.status||'').toUpperCase();
               const canReconcile=['PENDING','EXPIRED'].includes(status);
               return <tr key={order.local_order_id}>
                 <td><b>QE-ORDER-{order.local_order_id}</b><small>{order.course_title||('Course #'+order.course_id)}</small><small>{order.provider_order_id||'No Razorpay order reference'}</small></td>
-                <td><b>{order.institution_name}</b><small>{order.learner_name||('Learner #'+order.student_id)} · {order.recipient_type||'STUDENT'}</small><small>{order.purchaser_user_id?'Purchaser #'+order.purchaser_user_id:'Student purchase'}</small></td>
+                <td><b>{order.institution_name}</b><small>{order.source_institution_id!=null&&Number(order.source_institution_id)===Number(order.institution_id)?'Source and marketplace institution':order.source_institution_name?'Course source: '+order.source_institution_name:'Course source not resolved'}</small><small>{order.learner_name||('Learner #'+order.student_id)} · {order.recipient_type||'STUDENT'}</small><small>{order.purchaser_user_id?'Purchaser #'+order.purchaser_user_id:'Student purchase'}</small></td>
                 <td><span className={styles.status}>{status}</span><small>{order.failure_code||'No saved failure code'}</small><small>{order.provider_payment_id||'No payment ID recorded'}</small></td>
                 <td><b>{rupees(order.offer_price_paise,order.currency)}</b><small>Discount: {rupees(order.discount_amount_paise||0,order.currency)} {order.discount_reference||''}</small><small>Captured: {order.captured_amount_paise==null?'Not recorded':rupees(order.captured_amount_paise,order.currency)}</small></td>
                 <td><b>{order.invoice_number||'Not issued / linked'}</b><small>{order.fiscal_document_id?'Document #'+order.fiscal_document_id:'No invoice reference'}</small></td>
+                <td>
+                  <span className={styles.status}>{order.distribution_reconciliation_status==='RECONCILED'?'RECONCILED':order.distribution_reconciliation_status==='REVIEW_REQUIRED'?'REVIEW REQUIRED':'NOT FINALIZED'}</span>
+                  {Number(order.distribution_issue_count||0)>0&&<small>{order.distribution_issue_count} issue(s) found</small>}
+                  <small>{order.distribution_reconciliation_summary||'Distribution status unavailable.'}</small>
+                  {order.distribution_reconciliation_status==='REVIEW_REQUIRED'&&<button type="button" className={styles.secondarySmall}
+                    disabled={statusTraceLoadingId!==null} onClick={()=>void checkCurrentStatus(order.local_order_id)}>
+                    {statusTraceLoadingId===order.local_order_id?'Inspecting…':'Inspect distribution'}
+                  </button>}
+                </td>
                 <td><div className={styles.paymentRowActions}>
                   <button type="button" className={styles.secondarySmall} onClick={()=>selectPaymentOrder(order)}>Inspect</button>
                   <button type="button" className={styles.secondarySmall}
