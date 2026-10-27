@@ -316,5 +316,34 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
         self.assertIn("never invent a tax rate", checklist.lower())
 
 
+    def test_monthly_payout_pdfs_are_archived_audited_and_not_tax_certificates(self):
+        payout = (ROOT / "services/api/src/main/java/com/quantaedge/api/FinancePayoutController.java").read_text(encoding="utf-8")
+        renderer = (ROOT / "services/api/src/main/java/com/quantaedge/api/PayoutSettlementPdfRenderer.java").read_text(encoding="utf-8")
+        renderer_test = (ROOT / "services/api/src/test/java/com/quantaedge/api/PayoutSettlementPdfRendererTest.java").read_text(encoding="utf-8")
+        migration = (ROOT / "services/api/src/main/resources/db/migration/V216__immutable_monthly_payout_statements.sql").read_text(encoding="utf-8")
+        panel = (ROOT / "apps/people/app/finance/PayoutsPanel.tsx").read_text(encoding="utf-8")
+        css = (ROOT / "apps/people/app/finance/Finance.module.css").read_text(encoding="utf-8")
+
+        self.assertIn('@PostMapping("/payout-batches/{batchId}/statements")', payout)
+        self.assertIn('@GetMapping("/payout-batches/{batchId}/statements")', payout)
+        self.assertIn('"/payout-statements/{statementId}/download"', payout)
+        self.assertIn("FiscalDocumentStorage.StoredDocument stored", payout)
+        self.assertIn("X-QE-Statement-SHA256", payout)
+        self.assertIn("finance_payout_statement_event", payout)
+        self.assertIn("snapshot_json", migration)
+        self.assertIn("trg_finance_payout_statement_document_immutable", migration)
+        self.assertIn("trg_finance_payout_statement_event_immutable", migration)
+        self.assertIn("MAX_PAGES", renderer)
+        self.assertIn("not a GST tax invoice", renderer.lower())
+        self.assertIn("TDS/TCS certificate", renderer)
+        self.assertIn("createsArchivedStyleBatchReportWithContinuationPagesAndA4Geometry", renderer_test)
+        self.assertIn("recipientAdviceIncludesOneRecipientOnlyAndBuildsWithHindiNames", renderer_test)
+        self.assertIn("Generate batch PDF", panel)
+        self.assertIn("Generate payout advice PDF", panel)
+        self.assertIn("Archived PDF statements", panel)
+        self.assertIn("private, no-store, max-age=0", payout)
+        self.assertIn(".payoutStatementRow", css)
+
+
 if __name__ == "__main__":
     unittest.main()
