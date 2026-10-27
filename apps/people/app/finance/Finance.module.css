@@ -261,3 +261,26 @@
 .page .payoutStatusSuccess,.page .payoutStatusDanger,.page .payoutStatusPending,.page .payoutStatusNeutral{background-color:initial}
 @media(max-width:900px){.payoutMetricGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.payoutMetricGrid,.payoutFormGrid,.feeReviewRow{grid-template-columns:minmax(0,1fr)}.payoutFormFooter,.feeReviewFooter{align-items:stretch;flex-direction:column}.payoutFormFooter button,.feeReviewFooter button{width:100%}.payoutListRow{grid-template-columns:minmax(0,1fr)}.payoutListRow>.payoutStatusSuccess,.payoutListRow>.payoutStatusDanger,.payoutListRow>.payoutStatusPending,.payoutListRow>.payoutStatusNeutral{grid-row:2;justify-self:start}.payoutRowActions{grid-column:1;justify-content:stretch}.payoutRowActions button{flex:1 1 120px}.payoutRejectForm{grid-column:1}.payoutsIntro{padding:15px}.payoutMetricCard{padding:14px}}
+
+
+.payoutReadOnly{display:grid;gap:5px;padding:13px 14px;border:1px solid var(--finance-line,var(--line));border-radius:11px;background:var(--finance-subtle,#f8fafc);color:var(--finance-ink,var(--ink))}
+.payoutReadOnly p{margin:0;font-size:11px;line-height:1.6;color:var(--finance-muted,var(--muted));overflow-wrap:anywhere}
+.payoutConfirmCheck{grid-column:1/-1;display:flex!important;flex-direction:row;align-items:flex-start;gap:9px!important;padding:10px 12px;border:1px solid var(--finance-line,var(--line));border-radius:10px;background:var(--finance-subtle,#f8fafc);font-size:11px;line-height:1.6;font-weight:600!important}
+.payoutConfirmCheck input{width:17px;min-width:17px;min-height:17px;margin:1px 0 0;accent-color:var(--qe-people-brand,#f97316)}
+.payoutRemainderEditor{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;padding:13px;border:1px solid var(--finance-line,var(--line));border-radius:12px;background:var(--finance-subtle,#f8fafc)}
+.payoutRemainderEditor label{display:grid;gap:6px;min-width:0;font-size:11px;font-weight:800;color:var(--finance-ink,var(--ink))}
+.payoutRemainderEditor select{width:100%;min-width:0;min-height:40px;padding:9px 11px;border:1px solid var(--finance-line,var(--line));border-radius:10px;background:var(--finance-field,var(--finance-surface,#fff));color:var(--finance-ink,var(--ink));font-size:12px}
+.payoutRemainderEditor p{grid-column:1/-1;margin:0;font-size:10px;line-height:1.6;color:var(--finance-muted,var(--muted))}
+.payoutBalanceWrap{width:100%;max-width:100%;overflow:auto;border:1px solid var(--finance-line,var(--line));border-radius:12px;background:var(--finance-surface,#fff)}
+.payoutBalanceTable{width:100%;min-width:950px;border-collapse:separate;border-spacing:0;color:var(--finance-ink,var(--ink));font-size:11px}
+.payoutBalanceTable th{position:sticky;top:0;background:var(--finance-subtle,#f8fafc);color:var(--finance-muted,var(--muted));font-size:10px;line-height:1.4;text-align:left;padding:11px;border-bottom:1px solid var(--finance-line,var(--line));white-space:nowrap}
+.payoutBalanceTable td{padding:11px;border-bottom:1px solid var(--finance-line,var(--line));vertical-align:top;white-space:nowrap}
+.payoutBalanceTable tbody tr:last-child td{border-bottom:0}
+.payoutBalanceTable td:first-child{min-width:180px;white-space:normal}
+.payoutBalanceTable td:first-child strong,.payoutBalanceTable td:first-child small{display:block;overflow-wrap:anywhere}
+.payoutBalanceTable td:first-child small{margin-top:5px;font-size:10px;line-height:1.5;color:var(--finance-muted,var(--muted))}
+.payoutFeeForm{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px;border:1px solid var(--finance-line,var(--line));border-radius:12px;background:var(--finance-subtle,#f8fafc)}
+.payoutFeeForm label{display:grid;gap:6px;min-width:0;font-size:10px;font-weight:800;color:var(--finance-ink,var(--ink))}
+.payoutFeeForm input,.payoutFeeForm select{width:100%;min-width:0;min-height:39px;padding:8px 10px;border:1px solid var(--finance-line,var(--line));border-radius:9px;background:var(--finance-field,var(--finance-surface,#fff));color:var(--finance-ink,var(--ink));font-size:11px}
+.payoutFeeForm .payoutFormFooter{grid-column:1/-1}
+@media(max-width:640px){.payoutRemainderEditor,.payoutFeeForm{grid-template-columns:minmax(0,1fr)}.payoutConfirmCheck{grid-column:1}.payoutFeeForm .payoutFormFooter{grid-column:1}}
