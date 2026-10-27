@@ -40,6 +40,15 @@ class CoursePaymentOperationsControllerTest {
   }
 
   @Test
+  void providerEventPageQuerySeparatesDynamicFiltersFromOrdering() {
+    String sql=CoursePaymentOperationsController.providerEventsPageSql(
+        " where true and e.course_payment_order_id=?");
+
+    assertTrue(sql.contains("e.course_payment_order_id=?\norder by e.received_at desc,e.id desc"));
+    assertFalse(sql.contains("?order by"));
+  }
+
+  @Test
   void statusTraceRequiresTaxAmountsToMatchTheSavedOrder() {
     Map<String,Object> consistent=Map.of(
         "snapshot_taxable_value_paise","900","taxable_value_paise",900L,
