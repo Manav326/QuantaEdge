@@ -157,6 +157,28 @@ def validate_tre_hindi_ocr_preflight(papers: list[dict[str, Any]]) -> None:
             "then rerun. No database rows were written."
         )
 
+    tre3 = next((paper for paper in papers if paper.get("cycle") == "TRE 3.0"), None)
+    tre3_question = next(
+        (
+            snapshot for snapshot in (tre3 or {}).get("question_snapshots", [])
+            if str(snapshot.get("source_question_number")) == "H-9"
+        ),
+        None,
+    )
+    tre3_prompts = tre3_question.get("prompt_i18n") if isinstance(tre3_question, dict) else None
+    tre3_hindi = str((tre3_prompts or {}).get("hi") or "").strip() if isinstance(tre3_prompts, dict) else ""
+    tre3_metadata = tre3_question.get("hindi_prompt_reconstruction") if isinstance(tre3_question, dict) else None
+    if (
+        len(re.findall(r"[\\u0900-\\u097F]", tre3_hindi)) < 4
+        or not isinstance(tre3_metadata, dict)
+        or tre3_metadata.get("method") != "TESSERACT_HINDI_OCR"
+        or tre3_metadata.get("status") != "REQUIRES_HUMAN_REVIEW"
+    ):
+        raise ImportErrorSafe(
+            "Refusing database writes because TRE 3.0 Hindi question H-9 is still an encoded legacy-font string. "
+            "Regenerate the inventory with the corrected CIDFont/SHREE-DEV detection; no database rows were written."
+        )
+
 
 def source_pdf_url(register: dict[str, Any], cycle: str) -> str:
     matches = [item for item in register.get("sources", []) if item.get("cycle") == cycle]
