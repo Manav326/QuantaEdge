@@ -64,8 +64,9 @@ jobs:
         run: |
           python - <<'PY'
           import json, re
+          import os
           from pathlib import Path
-          inventory_path = Path("$RUNNER_TEMP/tre-question-inventory/tre-question-inventory.json")
+          inventory_path = Path(os.environ["RUNNER_TEMP"]) / "tre-question-inventory" / "tre-question-inventory.json"
           inventory = json.loads(inventory_path.read_text(encoding="utf-8"))
           expected_counts = {"TRE 1.0": 120, "TRE 2.0": 150, "TRE 3.0": 150}
           for cycle, expected in expected_counts.items():
