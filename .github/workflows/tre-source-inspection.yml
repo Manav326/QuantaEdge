@@ -89,7 +89,12 @@ jobs:
               raise SystemExit("TRE 3.0 H-9 Hindi legacy/CIDFont stem was not reconstructed")
           if len(re.findall(r"[\u0900-\u097F]", h9.get("prompt_i18n", ""))) < 4:
               raise SystemExit("TRE 3.0 H-9 still contains unreadable legacy Hindi text")
-          print("TRE question counts and TRE1/TRE3 Hindi OCR checks passed; OCR content remains review-gated.")
+          passage = h9.get("stimulus_i18n", {}).get("hi", "")
+          if len(re.findall(r"[\u0900-\u097F]", passage)) < 20:
+              raise SystemExit("TRE 3.0 H-9 shared Hindi passage is still unreadable")
+          if h9.get("hindi_stimulus_reconstruction", {}).get("status") != "REQUIRES_HUMAN_REVIEW":
+              raise SystemExit("TRE 3.0 shared Hindi passage is not recorded as requiring human review")
+          print("TRE question counts, TRE1/TRE3 Hindi stems, and TRE3 shared passage checks passed; OCR remains review-gated.")
           PY
 
       - name: Upload temporary inventory for question and answer review
