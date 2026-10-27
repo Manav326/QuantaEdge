@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1332,
-    "successful_visual_analyses": 1319,
-    "missing_visual_analyses": 959,
+    "raw_analysis_result_rows": 1333,
+    "successful_visual_analyses": 1320,
+    "missing_visual_analyses": 958,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 972,
+    "unresolved_count": 971,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -49865,9 +49865,32 @@
       "asset_path": "page-0108.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Activity involving balloons and a drinking straw to demonstrate wind formation.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 6.12: Air moves from a high pressure region to a low pressure region",
+          "z Take two similar balloons made of thin rubber, and a drinking straw.",
+          "z Insert one end of the straw into one balloon and secure it with a rubber band or thread.",
+          "z Now inflate the second balloon and hold its mouth with your fingers, so that air does not escape.",
+          "z Insert the free end of the straw into the neck of the inflated balloon and secure it with a rubber band or thread. Make sure that the air does not leak from the balloon as the straw is inserted in it. Now you have one end of the straw inside the inflated balloon and the other end inside the uninfl",
+          "z Predict what would happen to the balloons.",
+          "z Observe what happens to both the balloons. Did it happen as predicted?",
+          "z Do you observe any change in the size of the balloons? Write down your observations."
+        ],
+        "concepts": [
+          "wind formation",
+          "air pressure",
+          "balloons",
+          "drinking straw"
+        ],
+        "context_relation": "demonstration",
+        "limitations": [
+          "The image does not show the actual experiment being conducted."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

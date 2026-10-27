@@ -15,11 +15,11 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "1ad982bcd93525bf306d2c98"
+      "b88b951a086d5dea05ab2062"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1315,
-    "assets_remaining": 976,
+    "assets_analyzed": 1316,
+    "assets_remaining": 975,
     "assets_completion_percent": 57.4,
     "assets_failed": 13,
     "assets_skipped_from_checkpoint": 1315,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441174014",
-      "checkpointed_at": "2026-10-27T04:19:48Z"
+      "checkpointed_at": "2026-10-27T04:28:15Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441174014",
-      "checkpointed_at": "2026-10-27T04:20:23Z"
+      "checkpointed_at": "2026-10-27T04:28:48Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441174014",
-      "checkpointed_at": "2026-10-27T04:21:04Z"
+      "checkpointed_at": "2026-10-27T04:29:28Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441174014",
-      "checkpointed_at": "2026-10-27T04:22:04Z"
+      "checkpointed_at": "2026-10-27T04:30:26Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -43646,6 +43646,48 @@
       "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "b88b951a086d5dea05ab2062",
+      "asset_sha256": "00cbcc37b10626f5425ef2aa3c4a5a692d7ad9803796eeacfeb33d3dd95513fb",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 108,
+      "asset_path": "page-0108.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "269d7d45dc9bb3da49e150dcbf8cc1bd29f86ab0950e516e695694e3d730938f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Activity involving balloons and a drinking straw to demonstrate wind formation.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Fig. 6.12: Air moves from a high pressure region to a low pressure region",
+          "z Take two similar balloons made of thin rubber, and a drinking straw.",
+          "z Insert one end of the straw into one balloon and secure it with a rubber band or thread.",
+          "z Now inflate the second balloon and hold its mouth with your fingers, so that air does not escape.",
+          "z Insert the free end of the straw into the neck of the inflated balloon and secure it with a rubber band or thread. Make sure that the air does not leak from the balloon as the straw is inserted in it. Now you have one end of the straw inside the inflated balloon and the other end inside the uninfl",
+          "z Predict what would happen to the balloons.",
+          "z Observe what happens to both the balloons. Did it happen as predicted?",
+          "z Do you observe any change in the size of the balloons? Write down your observations."
+        ],
+        "concepts": [
+          "wind formation",
+          "air pressure",
+          "balloons",
+          "drinking straw"
+        ],
+        "context_relation": "demonstration",
+        "limitations": [
+          "The image does not show the actual experiment being conducted."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40441174014",
+      "checkpointed_at": "2026-10-27T04:33:22Z"
     }
   ]
 }
