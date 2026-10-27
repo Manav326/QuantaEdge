@@ -901,6 +901,287 @@ def lock_latest_draft_release(cursor: Any, institution_id: int, course_id: int) 
     return row
 
 
+
+
+def database_repair_draft_hindi(args: argparse.Namespace, papers: list[dict[str, Any]]) -> dict[str, Any]:
+    """Repair OCR-reconstructed Hindi prompts in the existing, still-editable TRE draft only.
+
+    This deliberately does not create a course, alter answers, set review states, publish content,
+    or touch assessments/packs/releases outside DRAFT. All changes participate in one transaction.
+    """
+    try:
+        import psycopg  # type: ignore[import-not-found]
+    except ImportError as exc:
+        raise ImportErrorSafe(
+            "psycopg 3 is required for --repair-draft-hindi. Install it with: "
+            "python -m pip install 'psycopg[binary]>=3.2,<4'"
+        ) from exc
+
+    url = database_url(args)
+    report: dict[str, Any] = {
+        "mode": "REPAIR_DRAFT_HINDI",
+        "course": COURSE_TITLE,
+        "sourceInstitution": "QUANTA-EDGE",
+        "studentDeliveryAllowed": False,
+        "published": False,
+        "papers": [],
+    }
+    with psycopg.connect(url) as connection:
+        with connection.cursor() as cursor:
+            ensure_schema(cursor)
+            institution_id = resolve_quantaedge_source_institution(cursor)
+            internal_code = f"I{institution_id}_{COURSE_CODE_SUFFIX}"
+            cursor.execute("""
+                SELECT id,display_name,status,public_id,class_id,course_type_code,course_identity_id
+                FROM curriculum_program
+                WHERE code=%s AND curriculum_version=%s
+                FOR UPDATE
+            """, (internal_code, COURSE_VERSION))
+            course_rows = cursor.fetchall()
+            if len(course_rows) != 1:
+                raise ImportErrorSafe(
+                    "Draft repair requires exactly one already-existing TRE Previous-Year Practice Series course. "
+                    "It will not create or choose a course implicitly."
+                )
+            course_id, display_name, status, public_id, class_id, course_type, identity_id = course_rows[0]
+            if (
+                display_name != COURSE_TITLE or status != "ACTIVE" or not public_id
+                or class_id is not None or course_type != COURSE_TYPE_CODE or identity_id is None
+            ):
+                raise ImportErrorSafe(
+                    "The existing TRE course identity/type differs from the expected ASSESSMENT draft. "
+                    "No records were changed."
+                )
+            ensure_course_identity(cursor, institution_id, int(course_id))
+            release_row = lock_latest_draft_release(cursor, institution_id, int(course_id))
+            if not release_row:
+                raise ImportErrorSafe("No existing DRAFT TRE course release was found; refusing to repair an untracked graph.")
+            release_id, release_version, release_state, _saved_fingerprint = release_row
+            if str(release_state) != "DRAFT":
+                raise ImportErrorSafe("Hindi draft repair is permitted only while the latest course release is DRAFT.")
+
+            prepared: list[dict[str, Any]] = []
+            total_candidates = 0
+            total_unreconstructed = 0
+            for paper in papers:
+                cycle = str(paper["cycle"])
+                cursor.execute("""
+                    SELECT id,title,status,source_package_id,source_package_version,source_package_sha256,
+                           source_exam_cycle,source_url,assessment_type,portable_assessment_type
+                    FROM assessment
+                    WHERE course_id=%s AND source_package_id=%s AND source_package_version=%s
+                    FOR UPDATE
+                """, (course_id, paper["package_id"], paper["package_version"]))
+                assessment_rows = cursor.fetchall()
+                if len(assessment_rows) != 1:
+                    raise ImportErrorSafe(
+                        f"{cycle} requires exactly one existing assessment for {paper['package_id']} "
+                        f"{paper['package_version']}; found {len(assessment_rows)}. No records were changed."
+                    )
+                assessment = assessment_rows[0]
+                (
+                    assessment_id, title, assessment_status, saved_package_id, saved_package_version,
+                    _saved_package_sha, source_cycle, source_url, assessment_type, portable_type,
+                ) = assessment
+                if (
+                    title != paper["title"] or assessment_status != "DRAFT"
+                    or saved_package_id != paper["package_id"]
+                    or str(saved_package_version) != str(paper["package_version"])
+                    or source_cycle != cycle or source_url != paper["source_url"]
+                    or assessment_type != "PREVIOUS_YEAR_PAPER" or portable_type != "PREVIOUS_YEAR_PAPER"
+                ):
+                    raise ImportErrorSafe(
+                        f"{cycle} assessment is not the expected editable DRAFT source paper. "
+                        "Reviewed/published or mismatched content is never rewritten."
+                    )
+
+                cursor.execute("""
+                    SELECT id,status,title,content_sha256
+                    FROM course_assessment_pack
+                    WHERE course_id=%s AND pack_code=%s AND pack_version=%s
+                    FOR UPDATE
+                """, (course_id, paper["package_id"], paper["package_version"]))
+                pack_rows = cursor.fetchall()
+                if len(pack_rows) != 1:
+                    raise ImportErrorSafe(
+                        f"{cycle} requires exactly one existing source test pack; found {len(pack_rows)}."
+                    )
+                pack_id, pack_status, pack_title, _saved_pack_sha = pack_rows[0]
+                if (
+                    pack_status != "DRAFT"
+                    or pack_title != f"BPSC {cycle} — Computer Science Previous-Year Paper"
+                ):
+                    raise ImportErrorSafe(
+                        f"{cycle} test pack is not the expected DRAFT pack. No published pack can be repaired."
+                    )
+
+                cursor.execute("""
+                    SELECT id,sequence_no,question_snapshot
+                    FROM assessment_question WHERE assessment_id=%s
+                    ORDER BY sequence_no,id FOR UPDATE
+                """, (assessment_id,))
+                question_rows = cursor.fetchall()
+                incoming_questions = paper["question_snapshots"]
+                if len(question_rows) != len(incoming_questions):
+                    raise ImportErrorSafe(
+                        f"{cycle} question count differs from the source inventory "
+                        f"({len(question_rows)} database rows vs {len(incoming_questions)} source rows)."
+                    )
+
+                updates: list[tuple[int, dict[str, Any]]] = []
+                candidate_count = 0
+                skipped_count = 0
+                for row, incoming in zip(question_rows, incoming_questions):
+                    question_id, sequence_no, current = row
+                    if not isinstance(current, dict):
+                        raise ImportErrorSafe(f"{cycle} question {sequence_no} has an unreadable snapshot.")
+                    if int(sequence_no) < 1 or int(sequence_no) > len(incoming_questions):
+                        raise ImportErrorSafe(f"{cycle} has an invalid question sequence; refusing positional repair.")
+                    if str(current.get("source_question_number")) != str(incoming.get("source_question_number")):
+                        raise ImportErrorSafe(
+                            f"{cycle} sequence {sequence_no} does not match source question "
+                            f"{incoming.get('source_question_number')}; no content was changed."
+                        )
+                    if (
+                        str(current.get("question_review_status", "PENDING_HUMAN_REVIEW")).upper() != "PENDING_HUMAN_REVIEW"
+                        or str(current.get("answer_review_status", "PENDING_HUMAN_REVIEW")).upper() != "PENDING_HUMAN_REVIEW"
+                    ):
+                        raise ImportErrorSafe(
+                            f"{cycle} sequence {sequence_no} has already been approved/rejected in at least one review gate. "
+                            "The draft repair requires all questions and answers to remain pending."
+                        )
+
+                    reconstruction = incoming.get("hindi_prompt_reconstruction")
+                    incoming_prompts = incoming.get("prompt_i18n")
+                    target_hindi = incoming_prompts.get("hi") if isinstance(incoming_prompts, dict) else None
+                    if not (
+                        isinstance(reconstruction, dict)
+                        and reconstruction.get("method") == "TESSERACT_HINDI_OCR"
+                        and reconstruction.get("status") == "REQUIRES_HUMAN_REVIEW"
+                        and isinstance(target_hindi, str)
+                        and target_hindi.strip()
+                    ):
+                        skipped_count += 1
+                        continue
+
+                    candidate_count += 1
+                    prompts = current.get("prompt_i18n")
+                    if not isinstance(prompts, dict):
+                        prompts = {}
+                        current["prompt_i18n"] = prompts
+                    old_hindi = str(prompts.get("hi") or "")
+                    old_metadata = current.get("hindi_prompt_reconstruction")
+                    if old_hindi == target_hindi and old_metadata == reconstruction:
+                        continue
+                    prompts["hi"] = target_hindi
+                    # For native-Hindi-only qualifying questions, the top-level prompt mirrors hi.
+                    if not str(prompts.get("en") or "").strip():
+                        current["prompt"] = target_hindi
+                    current["hindi_prompt_reconstruction"] = reconstruction
+                    updates.append((int(question_id), current))
+
+                prepared.append({
+                    "cycle": cycle,
+                    "assessment_id": int(assessment_id),
+                    "pack_id": int(pack_id),
+                    "package_sha256": paper["package_sha256"],
+                    "question_updates": updates,
+                    "reconstructed_count": len(updates),
+                    "candidate_count": candidate_count,
+                    "unreconstructed_count": skipped_count,
+                    "question_count": len(question_rows),
+                })
+                total_candidates += candidate_count
+                total_unreconstructed += skipped_count
+
+            if total_candidates == 0:
+                raise ImportErrorSafe(
+                    "The current inventory contains no successful SHREE-DEV Hindi OCR reconstructions. "
+                    "Install Tesseract with Hindi trained data and regenerate the inventory before applying repair."
+                )
+
+            for item in prepared:
+                for question_id, snapshot in item["question_updates"]:
+                    cursor.execute("""
+                        UPDATE assessment_question
+                        SET question_snapshot=%s::jsonb
+                        WHERE id=%s AND assessment_id=%s
+                    """, (
+                        json.dumps(snapshot, ensure_ascii=False, separators=(",", ":")),
+                        question_id, item["assessment_id"],
+                    ))
+                    if cursor.rowcount != 1:
+                        raise ImportErrorSafe(
+                            f"{item['cycle']} question {question_id} changed concurrently; the repair transaction was rolled back."
+                        )
+                # The source hash must describe the repaired draft snapshot, so a later dry-run/apply
+                # recognizes this exact source package rather than treating it as an unrelated edit.
+                cursor.execute("""
+                    UPDATE assessment
+                    SET source_package_sha256=%s
+                    WHERE id=%s AND course_id=%s AND status='DRAFT'
+                """, (item["package_sha256"], item["assessment_id"], course_id))
+                if cursor.rowcount != 1:
+                    raise ImportErrorSafe(f"{item['cycle']} assessment changed concurrently; repair rolled back.")
+                cursor.execute("""
+                    UPDATE course_assessment_pack
+                    SET content_sha256=%s,updated_at=now()
+                    WHERE id=%s AND course_id=%s AND status='DRAFT'
+                """, (item["package_sha256"], item["pack_id"], course_id))
+                if cursor.rowcount != 1:
+                    raise ImportErrorSafe(f"{item['cycle']} test pack changed concurrently; repair rolled back.")
+                if item["reconstructed_count"]:
+                    cursor.execute("""
+                        INSERT INTO assessment_audit_log(
+                          assessment_id,actor_role,action,previous_status,new_status,note,occurred_at
+                        ) VALUES (%s,'SYSTEM_IMPORT','TRE_HINDI_PROMPTS_RECONSTRUCTED','DRAFT','DRAFT',%s,now())
+                    """, (
+                        item["assessment_id"],
+                        f"Reconstructed {item['reconstructed_count']} Hindi prompt(s) from the original SHREE-DEV PDF via OCR. "
+                        "All question/answer review states remain pending; human verification is required.",
+                    ))
+                report["papers"].append({
+                    "cycle": item["cycle"],
+                    "assessmentId": item["assessment_id"],
+                    "testPackId": item["pack_id"],
+                    "questionCount": item["question_count"],
+                    "ocrCandidates": item["candidate_count"],
+                    "reconstructedPromptsUpdated": item["reconstructed_count"],
+                    "promptsWithoutConfidentOcr": item["unreconstructed_count"],
+                    "assessmentStatus": "DRAFT",
+                    "testPackStatus": "DRAFT",
+                })
+
+            cursor.execute("SELECT course_content_fingerprint(%s)", (course_id,))
+            fingerprint = str(cursor.fetchone()[0]).strip()
+            cursor.execute("""
+                UPDATE institution_course_release
+                SET content_fingerprint=%s,updated_at=now()
+                WHERE id=%s AND source_institution_id=%s AND release_state='DRAFT'
+            """, (fingerprint, release_id, institution_id))
+            if cursor.rowcount != 1:
+                raise ImportErrorSafe("The TRE course release changed concurrently; repair transaction rolled back.")
+            report.update({
+                "applied": True,
+                "courseId": int(course_id),
+                "releaseId": int(release_id),
+                "releaseVersion": int(release_version),
+                "releaseState": "DRAFT",
+                "releaseFingerprint": fingerprint,
+                "ocrCandidates": total_candidates,
+                "promptsWithoutConfidentOcr": total_unreconstructed,
+                "answersModified": False,
+                "reviewStatesChanged": False,
+                "publicationChanged": False,
+                "nextStep": (
+                    "Visually compare reconstructed Hindi against the linked PDF source page. "
+                    "The corrected text remains pending review; enter/verify authoritative answers and explanations "
+                    "through the existing Admin question-review workspace before publication."
+                ),
+            })
+    return report
+
+
 def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], archive_sha256: str) -> dict[str, Any]:
     try:
         import psycopg  # type: ignore[import-not-found]
