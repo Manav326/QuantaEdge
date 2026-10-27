@@ -72,6 +72,19 @@ class CoursePaymentOperationsControllerTest {
   }
 
   @Test
+  void finalizationFailureDiagnosticsArePreservedInTheStaffAuditPayload() {
+    Map<String,Object> result=Map.of(
+        "financeFinalizationAttempted",true,
+        "financeFinalizationFailureType","DataIntegrityViolationException",
+        "financeFinalizationFailureMessage","Invoice PDF asset insert failed");
+    Map<String,Object> details=CoursePaymentOperationsController.diagnosticDetails(result);
+
+    assertEquals(true,details.get("financeFinalizationAttempted"));
+    assertEquals("DataIntegrityViolationException",details.get("financeFinalizationFailureType"));
+    assertEquals("Invoice PDF asset insert failed",details.get("financeFinalizationFailureMessage"));
+  }
+
+  @Test
   void failedAndCreatingOrdersCannotBeAutoReconciled() {
     assertEquals("FAILED_ORDER_REVIEW",
         CoursePaymentOperationsController.resolutionFor("FAILED",false,true,"ORDER_CREATE_FAILED").code());
