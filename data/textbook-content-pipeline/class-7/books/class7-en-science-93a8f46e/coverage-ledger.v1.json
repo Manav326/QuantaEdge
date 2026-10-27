@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2418,
-    "successful_visual_analyses": 2389,
-    "missing_visual_analyses": 5070,
-    "failed_visual_analyses": 29,
+    "raw_analysis_result_rows": 2423,
+    "successful_visual_analyses": 2393,
+    "missing_visual_analyses": 5065,
+    "failed_visual_analyses": 30,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5099,
+    "unresolved_count": 5095,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -99722,9 +99722,37 @@
       "asset_path": "assets/6b92d4f689fd0da403af58f4ec0575681785916b07a94dc43c782a8c9666a97b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character is playing a guitar on a stage with a microphone stand and a guitar case in the background.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "and electrical conductivity, and high strength. However, this",
+          "should not give an impression in your mind that non-metals are not important in our lives.",
+          "We breathe in oxygen, which is a non-metal, and without it,",
+          "we would not be able to survive. Can you think of any other uses",
+          "of oxygen?",
+          "Carbon is essential in everyday life because it is the building",
+          "block of all life forms. It is a key component of proteins, fats, and",
+          ""
+        ],
+        "concepts": [
+          "non-metals",
+          "electrical conductivity",
+          "strength",
+          "oxygen",
+          "building blocks",
+          "life forms",
+          "proteins",
+          "fats"
+        ],
+        "context_relation": "The image is a cartoon character playing a guitar, which is unrelated to the text about non-metals and their importance in everyday life.",
+        "limitations": [
+          "The image does not provide any information about the text.",
+          "The text is about non-metals and their importance, but the image is about a cartoon character playing a guitar."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -99740,7 +99768,7 @@
       "asset_path": "assets/b246d561b49d46a742aafb53202f76c8e5cb6083a92f99aa3367877e8534ae0c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -99758,9 +99786,36 @@
       "asset_path": "assets/1797e07858988cb1890db45187d5ddc7ba52c4e739bcb5a19de190af061f19bf.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue and brown object with a circular shape, possibly a part of a larger structure.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "and electrical conductivity, and high strength. However, this",
+          "should not give an impression in your mind that non-metals are not important in our lives.",
+          "We breathe in oxygen, which is a non-metal, and without it,",
+          "we would not be able to survive. Can you think of any other uses",
+          "of oxygen?",
+          "Carbon is essential in everyday life because it is the building",
+          "block of all life forms. It is a key component of proteins, fats, and"
+        ],
+        "concepts": [
+          "non-metals",
+          "electrical conductivity",
+          "strength",
+          "oxygen",
+          "carbon",
+          "building block",
+          "life forms",
+          "proteins",
+          "fats"
+        ],
+        "context_relation": "The image is related to the discussion of non-metals and their importance in everyday life, particularly in the context of oxygen and carbon's role in life.",
+        "limitations": [
+          "The image does not provide specific details about the object's function or structure."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -99776,9 +99831,19 @@
       "asset_path": "assets/2cccf428d01224d159aa068c4dc5ac1d58f13b969f88a02f50721b16f706bf6c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green and blue background with a tree in the center.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a cartoon illustration of a tree.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the textbook content.",
+          "The image is a simple cartoon illustration and does not represent any specific concept or formula from the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -99794,9 +99859,37 @@
       "asset_path": "assets/565cb31614afa7bfbc7351d420a21232dc27caeb0b2fbf619dcf37678f59fd29.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the relationship between non-metals and metals, with a focus on oxygen and carbon.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "and electrical conductivity, and high strength. However, this",
+          "should not give an impression in your mind that non-metals are not important in our lives.",
+          "We breathe in oxygen, which is a non-metal, and without it,",
+          "we would not be able to survive. Can you think of any other uses",
+          "of oxygen?",
+          "Carbon is essential in everyday life because it is the building",
+          "block of all life forms. It is a key component of proteins, fats, and"
+        ],
+        "concepts": [
+          "non-metals",
+          "metals",
+          "oxygen",
+          "carbon",
+          "electrical conductivity",
+          "strength",
+          "life forms",
+          "proteins",
+          "fats"
+        ],
+        "context_relation": "The image is a visual representation of the importance of non-metals and metals in everyday life, particularly focusing on oxygen and carbon.",
+        "limitations": [
+          "The image does not provide specific examples or details about the uses of oxygen and carbon.",
+          "The image does not show the exact relationship between non-metals and metals."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
