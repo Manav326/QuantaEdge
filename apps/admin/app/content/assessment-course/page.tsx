@@ -203,20 +203,193 @@ export default function AssessmentCourseStudioPage() {
     }
   }
 
-  function updatePackageField(index: number, area: 'root' | 'source' | 'configuration', key: string, value: string) {
+  function finishPackageEdit(index: number, mutate: (pkg: Record<string, any>) => void) {
     setPackages(current => current.map((entry, currentIndex) => {
       if (currentIndex !== index) return entry;
       const pkg = clonePackage(entry.packageJson);
+      mutate(pkg);
+      return { ...entry, packageJson: pkg, validation: undefined, validatedSignature: undefined, importResult: undefined };
+    }));
+    setHasValidation(false); setError(''); setNotice('');
+  }
+
+  function updatePackageField(index: number, area: 'root' | 'source' | 'configuration', key: string, value: string) {
+    finishPackageEdit(index, pkg => {
       if (area === 'root') {
         pkg[key] = value;
       } else {
         const target = area === 'source' ? sourceOf(pkg) : configurationOf(pkg);
         const rootKey = area === 'source' ? 'source' : 'configuration';
-        pkg[rootKey] = { ...target, [key]: value };
+        const parsed = area === 'configuration' && ['duration_minutes', 'max_attempts'].includes(key)
+          ? (value.trim() ? Number(value) : value)
+          : area === 'configuration' && ['marks_per_question', 'negative_marking_fraction', 'unanswered_mark'].includes(key)
+            ? (value.trim() ? Number(value) : value)
+            : value;
+        pkg[rootKey] = { ...target, [key]: parsed };
       }
-      return { ...entry, packageJson: pkg, validation: undefined, validatedSignature: undefined, importResult: undefined };
+    });
+  }
+
+  function currentSections(pkg: Record<string, any>): Array<Record<string, any>> {
+    return Array.isArray(pkg.sections) ? pkg.sections.filter((value: unknown) => value && typeof value === 'object') : [];
+  }
+  function currentQuestions(pkg: Record<string, any>): Array<Record<string, any>> {
+    return Array.isArray(pkg.questions) ? pkg.questions.filter((value: unknown) => value && typeof value === 'object') : [];
+  }
+  function recountQuestionCounts(pkg: Record<string, any>) {
+    const sections = currentSections(pkg);
+    const questions = currentQuestions(pkg);
+    pkg.sections = sections.map(section => ({
+      ...section,
+      question_count: questions.filter(question => String(question.section_code || '') === String(section.code || '')).length
     }));
-    setHasValidation(false); setError(''); setNotice('');
+  }
+
+  function addSection(index: number) {
+    finishPackageEdit(index, pkg => {
+      const sections = currentSections(pkg);
+      if (sections.length >= 20) return;
+      const questions = currentQuestions(pkg);
+      const firstQuestionCode = String(questions[0]?.section_code || '');
+      const defaultCode = sections.length === 0 && /^[A-Z][A-Z0-9_]{1,49}$/.test(firstQuestionCode)
+        ? firstQuestionCode
+        : sections.length === 0 ? 'COMPUTER_SCIENCE' : 'SECTION_' + (sections.length + 1);
+      const section = {
+        code: defaultCode,
+        name_i18n: { en: defaultCode.replaceAll('_', ' '), hi: '' },
+        question_count: 0,
+        result_policy: 'SCORED'
+      };
+      pkg.sections = [...sections, section];
+      pkg.questions = questions.map(question => ({
+        ...question,
+        section_result_policy: question.section_code === defaultCode ? 'SCORED' : question.section_result_policy
+      }));
+      recountQuestionCounts(pkg);
+    });
+  }
+
+  function updateSectionField(index: number, sectionIndex: number, field: 'code' | 'result_policy' | 'name_en' | 'name_hi', value: string) {
+    finishPackageEdit(index, pkg => {
+      const sections = currentSections(pkg);
+      const previous = sections[sectionIndex];
+      if (!previous) return;
+      const oldCode = String(previous.code || '');
+      const nextCode = field === 'code' ? value.toUpperCase().replace(/[^A-Z0-9_]/g, '_') : oldCode;
+      pkg.sections = sections.map((section, i) => {
+        if (i !== sectionIndex) return section;
+        if (field === 'name_en' || field === 'name_hi') {
+          return { ...section, name_i18n: { ...(section.name_i18n || {}), [field === 'name_en' ? 'en' : 'hi']: value } };
+        }
+        if (field === 'result_policy') return { ...section, result_policy: value };
+        return { ...section, code: nextCode };
+      });
+      if (field === 'code' && nextCode !== oldCode) {
+        pkg.questions = currentQuestions(pkg).map(question =>
+          question.section_code === oldCode
+            ? { ...question, section_code: nextCode, section_result_policy: String(previous.result_policy || 'SCORED') }
+            : question
+        );
+      }
+      if (field === 'result_policy') {
+        pkg.questions = currentQuestions(pkg).map(question =>
+          question.section_code === oldCode ? { ...question, section_result_policy: value } : question
+        );
+      }
+      recountQuestionCounts(pkg);
+    });
+  }
+
+  function addQuestion(index: number) {
+    finishPackageEdit(index, pkg => {
+      let sections = currentSections(pkg);
+      if (!sections.length) {
+        sections = [{
+          code: 'COMPUTER_SCIENCE',
+          name_i18n: { en: 'Computer Science', hi: 'कंप्यूटर विज्ञान' },
+          question_count: 0,
+          result_policy: 'SCORED'
+        }];
+        pkg.sections = sections;
+      }
+      const questions = currentQuestions(pkg);
+      if (questions.length >= 250) return;
+      const section = sections[0];
+      const ordinal = questions.length + 1;
+      pkg.questions = [...questions, {
+        id: 'question-' + ordinal,
+        source_question_number: 'Q-' + ordinal,
+        question_type: 'MCQ',
+        prompt: '',
+        prompt_i18n: { en: '', hi: '' },
+        options: [
+          { key: 'A', text: '', text_i18n: { en: '', hi: '' } },
+          { key: 'B', text: '', text_i18n: { en: '', hi: '' } }
+        ],
+        topic_tags: ['Unclassified'],
+        difficulty: 'CORE',
+        proposed_answer: {
+          option_key: null,
+          confidence: 'UNRESOLVED',
+          explanation: 'Pending human review.',
+          answer_source: 'UNRESOLVED',
+          review_status: 'PENDING_HUMAN_REVIEW',
+          explanation_i18n: { en: 'Pending human review.' },
+          solution_mode: 'CONCISE'
+        },
+        section_code: section.code,
+        section_result_policy: section.result_policy || 'SCORED',
+        marks: 1
+      }];
+      recountQuestionCounts(pkg);
+    });
+  }
+
+  function updateQuestionField(index: number, questionIndex: number, field: string, value: string) {
+    finishPackageEdit(index, pkg => {
+      const questions = currentQuestions(pkg);
+      const question = questions[questionIndex];
+      if (!question) return;
+      const next = { ...question };
+      if (field === 'prompt_en' || field === 'prompt_hi') {
+        next.prompt_i18n = { ...(next.prompt_i18n || {}), [field === 'prompt_en' ? 'en' : 'hi']: value };
+        if (field === 'prompt_en') next.prompt = value;
+      } else if (field === 'explanation') {
+        next.proposed_answer = { ...(next.proposed_answer || {}), explanation: value };
+      } else if (field === 'section_code') {
+        const section = currentSections(pkg).find(item => item.code === value);
+        next.section_code = value;
+        next.section_result_policy = section?.result_policy || 'SCORED';
+      } else if (field === 'marks') {
+        next.marks = value.trim() ? Number(value) : value;
+      } else {
+        (next as Record<string, any>)[field] = value;
+      }
+      pkg.questions = questions.map((item, i) => i === questionIndex ? next : item);
+      recountQuestionCounts(pkg);
+    });
+  }
+
+  function updateQuestionOption(index: number, questionIndex: number, optionIndex: number, field: 'text' | 'en' | 'hi', value: string) {
+    finishPackageEdit(index, pkg => {
+      const questions = currentQuestions(pkg);
+      const question = questions[questionIndex];
+      if (!question) return;
+      const options = Array.isArray(question.options) ? question.options : [];
+      const updatedOptions = options.map((option: Record<string, any>, i: number) => {
+        if (i !== optionIndex) return option;
+        if (field === 'text') return { ...option, text: value };
+        return { ...option, text_i18n: { ...(option.text_i18n || {}), [field]: value } };
+      });
+      pkg.questions = questions.map((item, i) => i === questionIndex ? { ...item, options: updatedOptions } : item);
+    });
+  }
+
+  function removeQuestion(index: number, questionIndex: number) {
+    finishPackageEdit(index, pkg => {
+      pkg.questions = currentQuestions(pkg).filter((_, i) => i !== questionIndex);
+      recountQuestionCounts(pkg);
+    });
   }
 
   function loadExamplePackage() {
@@ -285,7 +458,7 @@ export default function AssessmentCourseStudioPage() {
   const allPackagesValid = packages.length > 0 && packages.every(entry =>
     entry.validation?.valid && entry.validatedSignature === JSON.stringify(packagePayload(entry)));
   const missingQuestionContent = (entry: PackageEntry) =>
-    !Array.isArray(entry.packageJson.sections) || !Array.isArray(entry.packageJson.questions);
+    !Array.isArray(entry.packageJson.sections) || !entry.packageJson.sections.length || !Array.isArray(entry.packageJson.questions) || !entry.packageJson.questions.length;
 
   return (
     <main className="admin-shell">
@@ -426,9 +599,45 @@ export default function AssessmentCourseStudioPage() {
                           <input id={'attempts-' + index} type="number" min={1} max={10} value={String(config.max_attempts ?? '')} onChange={event => updatePackageField(index, 'configuration', 'max_attempts', event.target.value)} placeholder="1" />
                         </div>
                       </div>
-                      {missingQuestionContent(entry) && <div className="feedback" role="alert" style={{ marginTop: 12 }}>
-                        This file is missing sections or questions. Those are source content and cannot be inferred. Upload a complete package; the reference format includes a section code such as <code>COMPUTER_SCIENCE</code> and a matching <code>questions</code> list.
-                      </div>}
+                      {(!Array.isArray(pkg.sections) || !pkg.sections.length || !Array.isArray(pkg.questions) || !pkg.questions.length) && <section style={{ marginTop: 16, padding: 14, border: '1px solid var(--admin-border, #d8dce5)', borderRadius: 10 }}>
+                        <h4>Complete missing sections or questions</h4>
+                        <p>Enter verified source content below. QuantaEdge will not guess a question, answer, translation, or exam rule. Every newly entered question remains pending human review.</p>
+                        {currentSections(pkg).map((section, sectionIndex) => <div key={'section-' + sectionIndex} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,180px),1fr))', gap: 10, margin: '10px 0', padding: 10, border: '1px solid var(--admin-border, #d8dce5)', borderRadius: 8 }}>
+                          <div><label htmlFor={'sec-code-' + index + '-' + sectionIndex}>Section code</label><input id={'sec-code-' + index + '-' + sectionIndex} value={String(section.code || '')} onChange={event => updateSectionField(index, sectionIndex, 'code', event.target.value)} placeholder="COMPUTER_SCIENCE" /></div>
+                          <div><label htmlFor={'sec-en-' + index + '-' + sectionIndex}>Section name (English)</label><input id={'sec-en-' + index + '-' + sectionIndex} value={String(section.name_i18n?.en || '')} onChange={event => updateSectionField(index, sectionIndex, 'name_en', event.target.value)} placeholder="Computer Science" /></div>
+                          <div><label htmlFor={'sec-hi-' + index + '-' + sectionIndex}>Section name (Hindi, optional)</label><input id={'sec-hi-' + index + '-' + sectionIndex} value={String(section.name_i18n?.hi || '')} onChange={event => updateSectionField(index, sectionIndex, 'name_hi', event.target.value)} placeholder="कंप्यूटर विज्ञान" /></div>
+                          <div><label htmlFor={'sec-policy-' + index + '-' + sectionIndex}>Scoring policy</label><select id={'sec-policy-' + index + '-' + sectionIndex} value={String(section.result_policy || 'SCORED')} onChange={event => updateSectionField(index, sectionIndex, 'result_policy', event.target.value)}><option value="SCORED">Scored</option><option value="QUALIFYING_ONLY">Qualifying only</option><option value="PRACTICE_ONLY">Practice only</option></select></div>
+                          <p style={{ gridColumn: '1 / -1', margin: 0 }}>Questions assigned to this section: {Number(section.question_count || 0)}</p>
+                        </div>)}
+                        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', margin: '10px 0' }}>
+                          <button className="button button-dark" type="button" disabled={currentSections(pkg).length >= 20} onClick={() => addSection(index)}>Add section</button>
+                          <button className="button button-dark" type="button" disabled={currentQuestions(pkg).length >= 250} onClick={() => addQuestion(index)}>Add question</button>
+                        </div>
+                        {currentQuestions(pkg).map((question, questionIndex) => <div key={String(question.id || questionIndex) + '-' + questionIndex} style={{ marginTop: 12, padding: 12, border: '1px solid var(--admin-border, #d8dce5)', borderRadius: 8 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                            <h4 style={{ margin: 0 }}>Question {questionIndex + 1}</h4>
+                            <button className="button button-dark" type="button" onClick={() => removeQuestion(index, questionIndex)}>Remove question</button>
+                          </div>
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,220px),1fr))', gap: 10, marginTop: 10 }}>
+                            <div><label htmlFor={'q-id-' + index + '-' + questionIndex}>Stable question ID</label><input id={'q-id-' + index + '-' + questionIndex} value={String(question.id || '')} onChange={event => updateQuestionField(index, questionIndex, 'id', event.target.value.toLowerCase().replace(/[^a-z0-9._-]/g, '-'))} placeholder="question-1" /></div>
+                            <div><label htmlFor={'q-source-number-' + index + '-' + questionIndex}>Source question number</label><input id={'q-source-number-' + index + '-' + questionIndex} value={String(question.source_question_number || '')} onChange={event => updateQuestionField(index, questionIndex, 'source_question_number', event.target.value)} placeholder="Q-1" /></div>
+                            <div><label htmlFor={'q-type-' + index + '-' + questionIndex}>Question type</label><select id={'q-type-' + index + '-' + questionIndex} value={String(question.question_type || 'MCQ')} onChange={event => updateQuestionField(index, questionIndex, 'question_type', event.target.value)}>{['MCQ','TRUE_FALSE','INFERENCE','INPUT','NUMERICAL','SHORT_ANSWER','LONG_ANSWER','CASE_BASED','SOURCE_BASED','DIAGRAM','MAP','ASSERTION_REASON','MATCH','ORDER'].map(type => <option value={type} key={type}>{type.replaceAll('_', ' ')}</option>)}</select></div>
+                            <div><label htmlFor={'q-section-' + index + '-' + questionIndex}>Section</label><select id={'q-section-' + index + '-' + questionIndex} value={String(question.section_code || '')} onChange={event => updateQuestionField(index, questionIndex, 'section_code', event.target.value)}>{currentSections(pkg).map(section => <option value={String(section.code)} key={String(section.code)}>{String(section.name_i18n?.en || section.code)}</option>)}</select></div>
+                            <div><label htmlFor={'q-marks-' + index + '-' + questionIndex}>Marks</label><input id={'q-marks-' + index + '-' + questionIndex} type="number" min={0} max={1000} step="any" value={String(question.marks ?? 1)} onChange={event => updateQuestionField(index, questionIndex, 'marks', event.target.value)} /></div>
+                            <div><label htmlFor={'q-prompt-en-' + index + '-' + questionIndex}>Question text (English)</label><textarea id={'q-prompt-en-' + index + '-' + questionIndex} value={String(question.prompt_i18n?.en || '')} onChange={event => updateQuestionField(index, questionIndex, 'prompt_en', event.target.value)} rows={3} placeholder="Enter the verified question exactly as it appears in the source." /></div>
+                            <div><label htmlFor={'q-prompt-hi-' + index + '-' + questionIndex}>Question text (Hindi, if present)</label><textarea id={'q-prompt-hi-' + index + '-' + questionIndex} value={String(question.prompt_i18n?.hi || '')} onChange={event => updateQuestionField(index, questionIndex, 'prompt_hi', event.target.value)} rows={3} placeholder="स्रोत में उपलब्ध हिंदी प्रश्न यहाँ लिखें।" /></div>
+                          </div>
+                          <h5 style={{ marginBottom: 8 }}>Options (for MCQ / true-false)</h5>
+                          {(Array.isArray(question.options) ? question.options : []).map((option: Record<string, any>, optionIndex: number) => <div key={String(option.key || optionIndex)} style={{ display: 'grid', gridTemplateColumns: '50px repeat(3,minmax(0,1fr))', gap: 8, marginBottom: 8 }}>
+                            <label>{String(option.key || String.fromCharCode(65 + optionIndex))}</label>
+                            <input aria-label={'Option ' + String(option.key) + ' English text'} value={String(option.text_i18n?.en || option.text || '')} onChange={event => updateQuestionOption(index, questionIndex, optionIndex, 'en', event.target.value)} placeholder="Option text (English)" />
+                            <input aria-label={'Option ' + String(option.key) + ' Hindi text'} value={String(option.text_i18n?.hi || '')} onChange={event => updateQuestionOption(index, questionIndex, optionIndex, 'hi', event.target.value)} placeholder="विकल्प (हिंदी)" />
+                            <input aria-label={'Option ' + String(option.key) + ' canonical text'} value={String(option.text || '')} onChange={event => updateQuestionOption(index, questionIndex, optionIndex, 'text', event.target.value)} placeholder="Canonical text" />
+                          </div>)}
+                          <div><label htmlFor={'q-explanation-' + index + '-' + questionIndex}>Proposed explanation (review required)</label><textarea id={'q-explanation-' + index + '-' + questionIndex} value={String(question.proposed_answer?.explanation || '')} onChange={event => updateQuestionField(index, questionIndex, 'explanation', event.target.value)} rows={2} placeholder="Add a concise explanation from a verified source; a reviewer must approve it." /></div>
+                          <p>Answer key remains unresolved unless supplied in the package. Reviewers must approve the correct answer and explanation before publishing.</p>
+                        </div>)}
+                      </section>}
                       {validation && (
                         <div style={{ marginTop: 14 }}>
                           <h4>{validation.valid ? 'Validation passed' : 'Validation needs attention'}</h4>
