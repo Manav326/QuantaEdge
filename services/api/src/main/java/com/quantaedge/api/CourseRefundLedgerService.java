@@ -578,7 +578,10 @@ public class CourseRefundLedgerService {
         if(allocated>0) throw new IllegalStateException("Revenue-share allocation has a zero net distributable pool.");
         continue;
       }
-      long target=proportional(allocated,cumulativeNetRefund,pool);
+      // Processor charges remain an expense even on a full refund. Reverse all net
+      // beneficiary earnings when the net refund reaches/exceeds the post-fee pool,
+      // but never create a negative beneficiary allocation or over-reversal.
+      long target=cumulativeNetRefund>=pool?allocated:proportional(allocated,cumulativeNetRefund,pool);
       Long alreadyReversedValue=jdbc.queryForObject("""
         select coalesce(sum(amount_paise),0) from revenue_share_allocation_event
         where allocation_id=? and event_type='REFUNDED'
