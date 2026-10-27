@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 5,
     "inventory_asset_rows": 1156,
     "eligible_visual_asset_rows": 1156,
-    "raw_analysis_result_rows": 35,
-    "successful_visual_analyses": 19,
-    "missing_visual_analyses": 1121,
-    "failed_visual_analyses": 16,
+    "raw_analysis_result_rows": 40,
+    "successful_visual_analyses": 23,
+    "missing_visual_analyses": 1116,
+    "failed_visual_analyses": 17,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1142,
+    "unresolved_count": 1138,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -6236,7 +6236,7 @@
       "asset_path": "page-0008.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -6254,9 +6254,18 @@
       "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red, abstract, and irregularly shaped object that appears to be a splash or a wave.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual element in a document about educational content.",
+        "limitations": [
+          "The image is abstract and does not represent any specific concept or relationship."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6272,9 +6281,18 @@
       "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red, textured, and irregularly shaped object that appears to be a splash or a smear of paint.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a red, textured object.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond its visual appearance."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6290,9 +6308,35 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook listing names and roles of individuals involved in educational administration and governance.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "राष्ट्रीीीय पाठ््यक्रम और  शि�क्षण    अधि�गम सामग्रीीी.",
+          "समि�ति�   (एन.एस.टीीी.सीीी.)",
+          "1.  महेश चंद्र  पंत, कुलाधिपति, राष्ट्रीीय शैक्षिक   योोजना एवं प्रशासन संस््थथाथान (अध््यक्ष)",
+          "2.   मञ््जुल   भार््गव, आचार््य, प््रििंंसटन विश्‍वविद्याललय (सह-अध््यक्ष)",
+          "3.  सुधा मूर््तति, प्रतिष््‍ठठित लेखिका एवं शिक्षाविद्",
+          "4.  बिबेक देबरॉॉय, अध््यक्ष, प्रधानमंत्रीकी आर््थथिक सललाहकार परिषद् (ई.ए.सीी.-पीी.एम.)",
+          "5.  शेखर  मांडे,  पूर््व  महानिदेशक, सी.एस.आई.आर. एवं  प्रतिष््‍ठठित आचार््य,  सावित्रीत्रीबाई   फुलले    पुणे",
+          "विश्‍वविद्याललय, पुणे",
+          "6.  सुजाता रामदोोरई, आचार््य, ब्रिटिश को"
+        ],
+        "concepts": [
+          "Educational Administration",
+          "Governance",
+          "Educational Institutions",
+          "Educational Roles",
+          "Educational Leadership"
+        ],
+        "context_relation": "The page is a list of names and roles of individuals involved in educational administration and governance.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any specific information about the educational institutions or the roles of the individuals."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6308,9 +6352,34 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook listing names and roles of individuals involved in educational administration and governance.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "राष्ट्रीीीय पाठ््यक्रम और  शि�क्षण    अधि�गम सामग्रीीी.",
+          "समि�ति�   (एन.एस.टीीी.सीीी.)",
+          "1.  महेश चंद्र  पंत, कुलाधिपति, राष्ट्रीीय शैक्षिक   योोजना एवं प्रशासन संस््थथाथान (अध््यक्ष)",
+          "2.   मञ््जुल   भार््गव, आचार््य, प््रििंंसटन विश्‍वविद्याललय (सह-अध््यक्ष)",
+          "3.  सुधा मूर््तति, प्रतिष््‍ठठित लेखिका एवं शिक्षाविद्",
+          "4.  बिबेक देबरॉॉय, अध््यक्ष, प्रधानमंत्रीकी आर््थथिक सललाहकार परिषद् (ई.ए.सीी.-पीी.एम.)",
+          "5.  शेखर  मांडे,  पूर््व  महानिदेशक, सी.एस.आई.आर. एवं  प्रतिष््‍ठठित आचार््य,  सावित्रीत्रीबाई   फुलले    पुणे",
+          "विश्‍वविद्याललय, पुणे",
+          "6.  सुजाता रामदोोरई, आचार््य, ब्रिटिश को"
+        ],
+        "concepts": [
+          "educational administration",
+          "governance",
+          "educational administration roles",
+          "educational administration responsibilities"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the roles and responsibilities of individuals involved in educational administration and governance.",
+        "limitations": [
+          "The image does not contain any visual elements other than text.",
+          "The text is in Hindi, and the page is from a textbook related to educational administration and governance."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

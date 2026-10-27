@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-hindi-hhgp2",
   "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
   "raw_analysis_path": "data/textbook-visuals/class8-hi-maths-part2-aa91fabe/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "ed71be9704875fa050e02ee0ce9aeecdfae2abd8bd791e312a8b0c7b5c4f82d3",
+  "raw_analysis_sha256": "9b471c87978b26ba5255105d27665b244fe8d3398897c3d948cd6dc45f95a334",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-hi-maths-part2-aa91fabe/visual-analysis-corrections.v1.json",
@@ -1138,6 +1138,252 @@
         "context_relation": "The page is likely a blank or unused page in the textbook.",
         "limitations": [
           "The page is completely black and has no visible content or text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2e20bad9b31cf8ddd58b637e",
+      "asset_sha256": "652012f836e74dd4afe3cafe16e77fd702507dc807a5d7695b472d327033ebb8",
+      "page_text_context_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 8,
+      "asset_path": "page-0008.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0f82033853b931b0d66a6d45",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "921a0b76082b1425a1f26a12754de25d58da10709deab35d9b2e51f14d61be46",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, abstract, and irregularly shaped object that appears to be a splash or a wave.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual element in a document about educational content.",
+        "limitations": [
+          "The image is abstract and does not represent any specific concept or relationship."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:55:15Z",
+      "effective_analysis": {
+        "visual_summary": "A red, abstract, and irregularly shaped object that appears to be a splash or a wave.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual element in a document about educational content.",
+        "limitations": [
+          "The image is abstract and does not represent any specific concept or relationship."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5f4c7d6dc211b4d9da0ce80c",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "921a0b76082b1425a1f26a12754de25d58da10709deab35d9b2e51f14d61be46",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, textured, and irregularly shaped object that appears to be a splash or a smear of paint.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a red, textured object.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond its visual appearance."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:55:28Z",
+      "effective_analysis": {
+        "visual_summary": "A red, textured, and irregularly shaped object that appears to be a splash or a smear of paint.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a red, textured object.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond its visual appearance."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bdbd7de7ff95fb0582ac0913",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "921a0b76082b1425a1f26a12754de25d58da10709deab35d9b2e51f14d61be46",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook listing names and roles of individuals involved in educational administration and governance.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "राष्ट्रीीीय पाठ््यक्रम और  शि�क्षण    अधि�गम सामग्रीीी.",
+          "समि�ति�   (एन.एस.टीीी.सीीी.)",
+          "1.  महेश चंद्र  पंत, कुलाधिपति, राष्ट्रीीय शैक्षिक   योोजना एवं प्रशासन संस््थथाथान (अध््यक्ष)",
+          "2.   मञ््जुल   भार््गव, आचार््य, प््रििंंसटन विश्‍वविद्याललय (सह-अध््यक्ष)",
+          "3.  सुधा मूर््तति, प्रतिष््‍ठठित लेखिका एवं शिक्षाविद्",
+          "4.  बिबेक देबरॉॉय, अध््यक्ष, प्रधानमंत्रीकी आर््थथिक सललाहकार परिषद् (ई.ए.सीी.-पीी.एम.)",
+          "5.  शेखर  मांडे,  पूर््व  महानिदेशक, सी.एस.आई.आर. एवं  प्रतिष््‍ठठित आचार््य,  सावित्रीत्रीबाई   फुलले    पुणे",
+          "विश्‍वविद्याललय, पुणे",
+          "6.  सुजाता रामदोोरई, आचार््य, ब्रिटिश को"
+        ],
+        "concepts": [
+          "Educational Administration",
+          "Governance",
+          "Educational Institutions",
+          "Educational Roles",
+          "Educational Leadership"
+        ],
+        "context_relation": "The page is a list of names and roles of individuals involved in educational administration and governance.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any specific information about the educational institutions or the roles of the individuals."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-26T23:57:59Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook listing names and roles of individuals involved in educational administration and governance.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "राष्ट्रीीीय पाठ््यक्रम और  शि�क्षण    अधि�गम सामग्रीीी.",
+          "समि�ति�   (एन.एस.टीीी.सीीी.)",
+          "1.  महेश चंद्र  पंत, कुलाधिपति, राष्ट्रीीय शैक्षिक   योोजना एवं प्रशासन संस््थथाथान (अध््यक्ष)",
+          "2.   मञ््जुल   भार््गव, आचार््य, प््रििंंसटन विश्‍वविद्याललय (सह-अध््यक्ष)",
+          "3.  सुधा मूर््तति, प्रतिष््‍ठठित लेखिका एवं शिक्षाविद्",
+          "4.  बिबेक देबरॉॉय, अध््यक्ष, प्रधानमंत्रीकी आर््थथिक सललाहकार परिषद् (ई.ए.सीी.-पीी.एम.)",
+          "5.  शेखर  मांडे,  पूर््व  महानिदेशक, सी.एस.आई.आर. एवं  प्रतिष््‍ठठित आचार््य,  सावित्रीत्रीबाई   फुलले    पुणे",
+          "विश्‍वविद्याललय, पुणे",
+          "6.  सुजाता रामदोोरई, आचार््य, ब्रिटिश को"
+        ],
+        "concepts": [
+          "Educational Administration",
+          "Governance",
+          "Educational Institutions",
+          "Educational Roles",
+          "Educational Leadership"
+        ],
+        "context_relation": "The page is a list of names and roles of individuals involved in educational administration and governance.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any specific information about the educational institutions or the roles of the individuals."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6498c851f5375fb46d4e38c2",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "921a0b76082b1425a1f26a12754de25d58da10709deab35d9b2e51f14d61be46",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook listing names and roles of individuals involved in educational administration and governance.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "राष्ट्रीीीय पाठ््यक्रम और  शि�क्षण    अधि�गम सामग्रीीी.",
+          "समि�ति�   (एन.एस.टीीी.सीीी.)",
+          "1.  महेश चंद्र  पंत, कुलाधिपति, राष्ट्रीीय शैक्षिक   योोजना एवं प्रशासन संस््थथाथान (अध््यक्ष)",
+          "2.   मञ््जुल   भार््गव, आचार््य, प््रििंंसटन विश्‍वविद्याललय (सह-अध््यक्ष)",
+          "3.  सुधा मूर््तति, प्रतिष््‍ठठित लेखिका एवं शिक्षाविद्",
+          "4.  बिबेक देबरॉॉय, अध््यक्ष, प्रधानमंत्रीकी आर््थथिक सललाहकार परिषद् (ई.ए.सीी.-पीी.एम.)",
+          "5.  शेखर  मांडे,  पूर््व  महानिदेशक, सी.एस.आई.आर. एवं  प्रतिष््‍ठठित आचार््य,  सावित्रीत्रीबाई   फुलले    पुणे",
+          "विश्‍वविद्याललय, पुणे",
+          "6.  सुजाता रामदोोरई, आचार््य, ब्रिटिश को"
+        ],
+        "concepts": [
+          "educational administration",
+          "governance",
+          "educational administration roles",
+          "educational administration responsibilities"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the roles and responsibilities of individuals involved in educational administration and governance.",
+        "limitations": [
+          "The image does not contain any visual elements other than text.",
+          "The text is in Hindi, and the page is from a textbook related to educational administration and governance."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-27T00:00:32Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook listing names and roles of individuals involved in educational administration and governance.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "राष्ट्रीीीय पाठ््यक्रम और  शि�क्षण    अधि�गम सामग्रीीी.",
+          "समि�ति�   (एन.एस.टीीी.सीीी.)",
+          "1.  महेश चंद्र  पंत, कुलाधिपति, राष्ट्रीीय शैक्षिक   योोजना एवं प्रशासन संस््थथाथान (अध््यक्ष)",
+          "2.   मञ््जुल   भार््गव, आचार््य, प््रििंंसटन विश्‍वविद्याललय (सह-अध््यक्ष)",
+          "3.  सुधा मूर््तति, प्रतिष््‍ठठित लेखिका एवं शिक्षाविद्",
+          "4.  बिबेक देबरॉॉय, अध््यक्ष, प्रधानमंत्रीकी आर््थथिक सललाहकार परिषद् (ई.ए.सीी.-पीी.एम.)",
+          "5.  शेखर  मांडे,  पूर््व  महानिदेशक, सी.एस.आई.आर. एवं  प्रतिष््‍ठठित आचार््य,  सावित्रीत्रीबाई   फुलले    पुणे",
+          "विश्‍वविद्याललय, पुणे",
+          "6.  सुजाता रामदोोरई, आचार््य, ब्रिटिश को"
+        ],
+        "concepts": [
+          "educational administration",
+          "governance",
+          "educational administration roles",
+          "educational administration responsibilities"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the roles and responsibilities of individuals involved in educational administration and governance.",
+        "limitations": [
+          "The image does not contain any visual elements other than text.",
+          "The text is in Hindi, and the page is from a textbook related to educational administration and governance."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
