@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hegp1",
   "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
   "raw_analysis_path": "data/textbook-visuals/class8-en-maths-part1-dbc32d16/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0abf0281e31d3b95d9fc26257419830638be5d1df55a8c87bd0add12b77d0b99",
+  "raw_analysis_sha256": "96fd1060b56f6f3751120fcbc5852fc3122724e33f5fb8d8c87f9995532f2855",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-maths-part1-dbc32d16/visual-analysis-corrections.v1.json",
@@ -2225,7 +2225,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:06:54Z",
+      "checkpointed_at": "2026-10-27T00:22:36Z",
       "effective_analysis": {
         "visual_summary": "Note to the Teacher section of a textbook.",
         "visual_type": "uncertain",
@@ -3218,6 +3218,460 @@
         "context_relation": "instructions",
         "limitations": [
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3ad86ba2572d792d7e3d4ef2",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 15,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a82edbbe76c74f97b05c5eb8766db6fd51c5f3da4832a25ba652d8a551d826c6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Red background with a white border, possibly a page header or footer.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Foreword",
+          "About the Book",
+          "Note to the Teacher",
+          "A Note to Students",
+          "Chapter 1",
+          "Chapter 2",
+          "Chapter 3",
+          "Chapter 4"
+        ],
+        "concepts": [
+          "Foreword",
+          "About the Book",
+          "Note to the Teacher",
+          "A Note to Students",
+          "Chapter 1",
+          "Chapter 2",
+          "Chapter 3",
+          "Chapter 4"
+        ],
+        "context_relation": "The visible text is related to the contents of the textbook.",
+        "limitations": [
+          "The image does not provide specific information about the textbook's content or structure."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:22:55Z",
+      "effective_analysis": {
+        "visual_summary": "Red background with a white border, possibly a page header or footer.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Foreword",
+          "About the Book",
+          "Note to the Teacher",
+          "A Note to Students",
+          "Chapter 1",
+          "Chapter 2",
+          "Chapter 3",
+          "Chapter 4"
+        ],
+        "concepts": [
+          "Foreword",
+          "About the Book",
+          "Note to the Teacher",
+          "A Note to Students",
+          "Chapter 1",
+          "Chapter 2",
+          "Chapter 3",
+          "Chapter 4"
+        ],
+        "context_relation": "The visible text is related to the contents of the textbook.",
+        "limitations": [
+          "The image does not provide specific information about the textbook's content or structure."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a6c7ab4006279518dd47f789",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 15,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a82edbbe76c74f97b05c5eb8766db6fd51c5f3da4832a25ba652d8a551d826c6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, textured, abstract shape that resembles a wave or a brushstroke.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A Square and A Cube",
+          "Power Play",
+          "A Story of Numbers",
+          "Quadrilaterals"
+        ],
+        "concepts": [
+          "mathematics",
+          "geometry",
+          "numbers"
+        ],
+        "context_relation": "The image is related to the educational content of a textbook.",
+        "limitations": [
+          "The image does not provide specific details about the content of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:23:06Z",
+      "effective_analysis": {
+        "visual_summary": "A red, textured, abstract shape that resembles a wave or a brushstroke.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "A Square and A Cube",
+          "Power Play",
+          "A Story of Numbers",
+          "Quadrilaterals"
+        ],
+        "concepts": [
+          "mathematics",
+          "geometry",
+          "numbers"
+        ],
+        "context_relation": "The image is related to the educational content of a textbook.",
+        "limitations": [
+          "The image does not provide specific details about the content of the textbook."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "36588303c3f183ff8fb8166c",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 15,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a82edbbe76c74f97b05c5eb8766db6fd51c5f3da4832a25ba652d8a551d826c6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible content.",
+        "limitations": [
+          "The image is a blank page with no visible content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:23:21Z",
+      "effective_analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible content.",
+        "limitations": [
+          "The image is a blank page with no visible content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "22ff983319bcb6cfa706b79b",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 15,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a82edbbe76c74f97b05c5eb8766db6fd51c5f3da4832a25ba652d8a551d826c6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible content.",
+        "limitations": [
+          "The image is a blank page with no visible content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:23:36Z",
+      "effective_analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible content.",
+        "limitations": [
+          "The image is a blank page with no visible content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "44c3c7413299c1245b87872c",
+      "asset_sha256": "dabcfaf735edd8a17d608c7312122ae6e587f2f99884469dcca80c29a3929617",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 15,
+      "asset_path": "page-0015.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "a82edbbe76c74f97b05c5eb8766db6fd51c5f3da4832a25ba652d8a551d826c6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table of contents for a mathematics textbook.",
+        "visual_type": "table",
+        "visible_text": [
+          "Foreword",
+          "About the Book",
+          "Note to the Teacher",
+          "A Note to Students",
+          "Chapter 1",
+          "A Square and A Cube",
+          "Chapter 2",
+          "Power Play",
+          "Chapter 3",
+          "A Story of Numbers",
+          "Chapter 4",
+          "Quadrilaterals",
+          "Chapter 5",
+          "Number Play",
+          "Chapter 6",
+          "We Distribute, Yet Things Multiply",
+          "Chapter 7",
+          "Proportional Reasoning-1"
+        ],
+        "concepts": [
+          "mathematics",
+          "geometry",
+          "proportionality",
+          "algebra"
+        ],
+        "context_relation": "Table of contents",
+        "limitations": [
+          "No images or diagrams are present."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:27:32Z",
+      "effective_analysis": {
+        "visual_summary": "Table of contents for a mathematics textbook.",
+        "visual_type": "table",
+        "visible_text": [
+          "Foreword",
+          "About the Book",
+          "Note to the Teacher",
+          "A Note to Students",
+          "Chapter 1",
+          "A Square and A Cube",
+          "Chapter 2",
+          "Power Play",
+          "Chapter 3",
+          "A Story of Numbers",
+          "Chapter 4",
+          "Quadrilaterals",
+          "Chapter 5",
+          "Number Play",
+          "Chapter 6",
+          "We Distribute, Yet Things Multiply",
+          "Chapter 7",
+          "Proportional Reasoning-1"
+        ],
+        "concepts": [
+          "mathematics",
+          "geometry",
+          "proportionality",
+          "algebra"
+        ],
+        "context_relation": "Table of contents",
+        "limitations": [
+          "No images or diagrams are present."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5c7b902d04db40642e2897aa",
+      "asset_sha256": "b49c065485fb301a31e3c54b9c034ade502b9d2be918644cf8396d3e6c46649f",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/b49c065485fb301a31e3c54b9c034ade502b9d2be918644cf8396d3e6c46649f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A light green background with small, scattered black lines.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:29:05Z",
+      "effective_analysis": {
+        "visual_summary": "A light green background with small, scattered black lines.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fef238411d1e70140f4e42fd",
+      "asset_sha256": "bbb407c8d9f4b049be6a8fbe2a7f2896e51b3961729a230c7a8283a43700e649",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/bbb407c8d9f4b049be6a8fbe2a7f2896e51b3961729a230c7a8283a43700e649.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:30:42Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "62928ef684ae1784402dc53b",
+      "asset_sha256": "e0079aa99561d88a922c3c51eb2382e32d3f39eee35528b6241bfe0a8466b20d",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/e0079aa99561d88a922c3c51eb2382e32d3f39eee35528b6241bfe0a8466b20d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:32:15Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0e5ba370abfea9fa04567f28",
+      "asset_sha256": "2dbbbcb8a21495310878e56c5b3b586f0b0e69936131dfd9605b8948ec797c05",
+      "source_book_id": "ncert-c8-english-hegp1",
+      "source_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/2dbbbcb8a21495310878e56c5b3b586f0b0e69936131dfd9605b8948ec797c05.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with shades of orange and brown.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:33:44Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background with shades of orange and brown.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text visible in the image."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
