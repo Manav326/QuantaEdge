@@ -88,7 +88,7 @@ Implemented on this branch:
 - Saving the account interface preference now updates Android's active UI locale and persists it in app preferences after the API accepts the change.
 - The account profile API now accepts only registered UI locale IDs (`english`, `hinglish`). Added API and Android locale-resolution regression tests.
 - Added a report-only UI copy-quality audit. It lists long messages for contextual review, validates locale key/placeholder consistency, and is attached as a CI artifact.
-- Shortened six Admin/HRMS messages in both languages. Updated the canonical catalogs and all generated Web/Admin/People copies together.
+- Shortened and contextualized 18 messages across learner, Admin and HRMS screens in English and Hinglish. Updated the canonical catalogs and all generated Web/Admin/People copies together.
 
 **Validation still required:** Android/API tests and full CI have not yet been confirmed on this branch. Full route coverage, browser/device acceptance, the complete Android/catalog integration, dynamic-message coverage, and the broader contextual copy review remain open.
 

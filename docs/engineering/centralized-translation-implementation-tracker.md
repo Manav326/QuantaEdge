@@ -10,7 +10,7 @@ Implementation branch: [`feature/contextual-language-responsiveness`](https://gi
 - The account profile API now rejects unregistered interface locale IDs. Added API and Android tests for supported-locale handling.
 - Added `scripts/audit-ui-copy-quality.mjs` and tests. The report detects catalog drift, placeholder mismatch, and long-copy candidates for human contextual review; it does not pretend to judge meaning automatically.
 - CI now runs the audit tests and uploads a `ui-copy-quality-audit` artifact.
-- Rewrote six verbose Admin/HRMS messages with shorter contextual English/Hinglish and synchronized the canonical catalogs plus all generated browser-app copies.
+- Rewrote 18 messages across learner, Admin and HRMS screens with contextual English/Hinglish. Synchronized canonical catalogs and all generated browser-app copies.
 - **Validation pending:** no CI or emulator/browser acceptance result has yet been recorded for this branch. The overall localization status remains in progress and not production-complete.
 
 
