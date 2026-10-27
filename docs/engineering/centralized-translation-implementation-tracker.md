@@ -2,6 +2,18 @@
 
 **Purpose:** Resumable implementation record for centralized QuantaEdge web UI localization and context-aware learning-content translation. Update this file on every meaningful implementation milestone. Continue from the latest main revision and this tracker; do not restart completed work or create another branch.
 
+## Contextual language responsiveness follow-up — 2026-10-27
+
+Implementation branch: [`feature/contextual-language-responsiveness`](https://github.com/Manav326/QuantaEdge/tree/feature/contextual-language-responsiveness), cut from `main` at `a0b865fddf31e5b8befb677cfd77a8aa6eade377`. Plan: [Contextual Language Responsiveness](contextual-language-responsiveness-plan.md).
+
+- Android account interface settings now offer only the supported English/Hinglish choices, normalize old unsupported saved choices to Hinglish, and apply/persist the selected UI locale after a successful profile save.
+- The account profile API now rejects unregistered interface locale IDs. Added API and Android tests for supported-locale handling.
+- Added `scripts/audit-ui-copy-quality.mjs` and tests. The report detects catalog drift, placeholder mismatch, and long-copy candidates for human contextual review; it does not pretend to judge meaning automatically.
+- CI now runs the audit tests and uploads a `ui-copy-quality-audit` artifact.
+- Rewrote six verbose Admin/HRMS messages with shorter contextual English/Hinglish and synchronized the canonical catalogs plus all generated browser-app copies.
+- **Validation pending:** no CI or emulator/browser acceptance result has yet been recorded for this branch. The overall localization status remains in progress and not production-complete.
+
+
 **Baseline reviewed before the route-inventory continuation:** [`8ba4f10c6f60c05da77719039d3a7700822fefae`](https://github.com/Manav326/QuantaEdge/commit/8ba4f10c6f60c05da77719039d3a7700822fefae). Latest successful full localization-code build remains [Actions #3021](https://github.com/Manav326/QuantaEdge/actions/runs/38996750050) for commit `66a2c3d0b0a9b9685210b199b536cbdb145f30f3`; it validates that older localization-code commit, not the new inventory changes.
 
 **Overall status: IN PROGRESS — NOT PRODUCTION-COMPLETE.** A shared static UI catalog, shared translation APIs/hooks, cross-app language preference bridge, and extensive first-wave route migrations are implemented. The complete admin/People page-body migration, comprehensive route coverage proof, and a central server-side AI translation service for arbitrary runtime dynamic content are not yet complete. Do not describe the entire site as fully translated until the remaining checklists and CI gates are green.
