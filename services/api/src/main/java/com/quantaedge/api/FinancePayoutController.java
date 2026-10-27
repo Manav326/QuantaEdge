@@ -679,11 +679,12 @@ public class FinancePayoutController {
         throw bad("A beneficiary has a payable balance but no approved bank account: "+key+". Set up and approve its payout profile.");
       long positiveBalance=0L;
       for(Map<String,Object> allocation:byRecipient.get(key)) {
-        long open=Math.subtractExact(Math.subtractExact(
-            Math.subtractExact(number(allocation.get("earned_paise")),number(allocation.get("refunded_paise"))),
-            number(allocation.get("fee_paise"))),
-            Math.subtractExact(number(allocation.get("paid_paise"))-number(allocation.get("reversed_paise")),
-                -number(allocation.get("reserved_paise")));
+        long allocationNetEarned=Math.subtractExact(Math.subtractExact(
+            number(allocation.get("earned_paise")),number(allocation.get("refunded_paise"))),
+            number(allocation.get("fee_paise")));
+        long allocationNetPaid=Math.subtractExact(number(allocation.get("paid_paise")),number(allocation.get("reversed_paise")));
+        long open=Math.subtractExact(Math.subtractExact(allocationNetEarned,allocationNetPaid),
+            number(allocation.get("reserved_paise")));
         positiveBalance=Math.addExact(positiveBalance,Math.max(0L,open));
       }
       amount=Math.min(amount,positiveBalance);
