@@ -252,8 +252,14 @@ export default function FinancePage(){
       const p=await api<PolicyDetail>(BASE+'/revenue-share/policies/'+id);
       setPolicyDetail(p);
       const offerId=String(p.institution_offer_id);selectWorkflowOffer(offerId,true);
+      const remainderType=p.remainder_recipient_type==='INSTITUTION'?'INSTITUTION':'COMPANY';
+      setPolicyRemainderType(remainderType);
+      const remainderId=remainderType==='INSTITUTION'?p.remainder_institution_id:p.remainder_legal_entity_id;
+      setPolicyRemainderId(remainderId==null?'':String(remainderId));
       setRecipients((p.recipients||[]).map(r=>({
-        institutionId:String(r.institution_id),calculationType:r.calculation_type as 'PERCENTAGE'|'FLAT',
+        recipientType:r.recipient_type==='COMPANY'?'COMPANY':'INSTITUTION',
+        recipientId:String(r.recipient_type==='COMPANY'?r.legal_entity_id:r.institution_id),
+        calculationType:r.calculation_type as 'PERCENTAGE'|'FLAT',
         percentage:r.percentage_basis_points==null?'':String(r.percentage_basis_points/100),
         flatRupees:r.flat_amount_paise==null?'':String(r.flat_amount_paise/100)
       })));
@@ -627,32 +633,41 @@ export default function FinancePage(){
       const result=await api<{id:number}>(BASE+'/revenue-share/offers/'+selectedOfferId+'/policies',{method:'POST',body:JSON.stringify({currency:'INR',effectiveFrom:new Date().toISOString()})});
       setSelectedPolicyId(String(result.id));
       const detail=await api<PolicyDetail>(BASE+'/revenue-share/policies/'+result.id);
-      setPolicyDetail(detail);setRecipients([]);
+      setPolicyDetail(detail);
+      const remainderType=detail.remainder_recipient_type==='INSTITUTION'?'INSTITUTION':'COMPANY';
+      setPolicyRemainderType(remainderType);
+      const remainderId=remainderType==='INSTITUTION'?detail.remainder_institution_id:detail.remainder_legal_entity_id;
+      setPolicyRemainderId(remainderId==null?'':String(remainderId));
+      setRecipients([]);
     },'Draft revenue-share policy created.');
   };
   const recipientPayload=()=>{
     if(!selectedPolicyId) throw new Error('Create or select a draft policy first.');
-    const invalid=recipients.some(r=>!r.institutionId||(r.calculationType==='PERCENTAGE'?!(Number(r.percentage)>0&&Number(r.percentage)<=100):!(Number(r.flatRupees)>0)));
-    if(invalid) throw new Error('Every recipient must have an institution and a valid positive percentage or flat amount.');
+    const invalid=recipients.some(r=>!r.recipientId||(r.calculationType==='PERCENTAGE'?!(Number(r.percentage)>0&&Number(r.percentage)<=100):!(Number(r.flatRupees)>0)));
+    if(invalid) throw new Error('Each institution or company needs a positive percentage or flat share.');
+    if(!policyRemainderId)throw new Error('Choose the institution or company that receives the remaining balance.');
     return recipients.map(r=>r.calculationType==='PERCENTAGE'
-      ?{institutionId:Number(r.institutionId),calculationType:r.calculationType,percentageBasisPoints:Math.round(Number(r.percentage)*100)}
-      :{institutionId:Number(r.institutionId),calculationType:r.calculationType,flatAmountPaise:Math.round(Number(r.flatRupees)*100)});
+      ?{recipientType:r.recipientType,recipientId:Number(r.recipientId),calculationType:r.calculationType,percentageBasisPoints:Math.round(Number(r.percentage)*100)}
+      :{recipientType:r.recipientType,recipientId:Number(r.recipientId),calculationType:r.calculationType,flatAmountPaise:Math.round(Number(r.flatRupees)*100)});
   };
   const recipientSnapshot=(rows:any[])=>JSON.stringify(rows.map(row=>({
-    institutionId:Number(row.institutionId??row.institution_id),
+    recipientType:String(row.recipientType??row.recipient_type??'INSTITUTION'),
+    recipientId:Number(row.recipientId??row.recipient_id??(String(row.recipient_type)==='COMPANY'?row.legal_entity_id:row.institution_id)),
     calculationType:String(row.calculationType??row.calculation_type),
     percentageBasisPoints:row.percentageBasisPoints??row.percentage_basis_points??null,
     flatAmountPaise:row.flatAmountPaise??row.flat_amount_paise??null
-  })).sort((a,b)=>a.institutionId-b.institutionId));
+  })).sort((a,b)=>a.recipientType.localeCompare(b.recipientType)||a.recipientId-b.recipientId));
   const recipientsUnchanged=(()=>{
     if(!policyDetail||!selectedPolicyId)return false;
-    try{return recipientSnapshot(recipientPayload())===recipientSnapshot(policyDetail.recipients||[]);}
+    try{return recipientSnapshot(recipientPayload())===recipientSnapshot(policyDetail.recipients||[])
+      &&policyRemainderType===(policyDetail.remainder_recipient_type==='INSTITUTION'?'INSTITUTION':'COMPANY')
+      &&Number(policyRemainderId)===(policyRemainderType==='INSTITUTION'?Number(policyDetail.remainder_institution_id):Number(policyDetail.remainder_legal_entity_id));}
     catch{return false;}
   })();
   const saveRecipients=async()=>{
     if(!selectedPolicyId||recipientsUnchanged)return;
     const policyId=selectedPolicyId;
-    const saved=await action(async()=>api(BASE+'/revenue-share/policies/'+policyId+'/recipients',{method:'PUT',body:JSON.stringify({recipients:recipientPayload()})}), 'Revenue-share recipients saved.');
+    const saved=await action(async()=>api(BASE+'/revenue-share/policies/'+policyId+'/recipients',{method:'PUT',body:JSON.stringify({recipients:recipientPayload(),remainderRecipientType:policyRemainderType,remainderRecipientId:Number(policyRemainderId)})}), 'Revenue-share recipients saved.');
     if(saved)await loadPolicy(policyId);
   };
   const createTemplate=()=>{
@@ -886,7 +901,7 @@ export default function FinancePage(){
               <button className={styles.removeRow} type="button" aria-label="Remove institution" onClick={()=>setRecipients(old=>old.filter((_,j)=>j!==i))}>×</button>
             </div>)}</div>
             <button className={styles.secondary} onClick={()=>setRecipients(old=>[...old,{institutionId:'',calculationType:'PERCENTAGE',percentage:'',flatRupees:''}])}>＋ Add institution</button>
-            <div className={styles.policyFooter}><span>Approval checks seller/tax readiness and effective-period conflicts. Actual pool limits are checked at payment allocation time.</span><button className={styles.primary} disabled={busy||!recipients.length} onClick={()=>void action(async()=>{await api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/recipients',{method:'PUT',body:JSON.stringify({recipients:recipientPayload()})});await api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/submit',{method:'POST'});},'Policy submitted for HRMS approval.')}>Submit policy</button></div>
+            <div className={styles.policyFooter}><span>Approval checks seller/tax readiness and effective-period conflicts. Actual pool limits are checked at payment allocation time.</span><button className={styles.primary} disabled={busy||!recipients.length} onClick={()=>void action(async()=>{await api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/recipients',{method:'PUT',body:JSON.stringify({recipients:recipientPayload(),remainderRecipientType:policyRemainderType,remainderRecipientId:Number(policyRemainderId)})});await api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/submit',{method:'POST'});},'Policy submitted for HRMS approval.')}>Submit policy</button></div>
           </>:policyDetail.status==='PENDING_APPROVAL'?<div className={styles.approvalBox}><p>This policy is waiting for approval. Confirm its parties, effective dates and contract references before activating it.</p><button className={styles.primary} disabled={busy} onClick={()=>void action(()=>api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/approve',{method:'POST'}),'Revenue-share policy approved.')}>Approve policy</button></div>:<div className={styles.recipientList}>{(policyDetail.recipients||[]).map((r,i)=><article className={styles.policyRow} key={i}><b>{r.institution_name}</b><span>{r.calculation_type==='PERCENTAGE'?Number(r.percentage_basis_points)/100+'% of net pool':rupees(r.flat_amount_paise||0)+' per eligible sale'}</span></article>)}</div>}
         </section>}
       </section>}
@@ -965,6 +980,7 @@ export default function FinancePage(){
           {refundHistory.length?<div className={styles.policyTableWrap}><table className={styles.table}><thead><tr><th>Requested</th><th>Amount</th><th>Status</th><th>Credit note</th><th>Recovery</th></tr></thead><tbody>{refundHistory.map(refund=><tr key={refund.id}><td>{new Date(refund.requested_at).toLocaleString('en-IN')}<small>{refund.reason}</small></td><td>{rupees(refund.requested_amount_paise,refund.currency)}</td><td><b>{refund.status}</b><small>{refund.provider_status||'Provider state not yet confirmed'}</small></td><td>{refund.credit_note_number||'Not issued'}</td><td><div className={styles.documentActions}>{['PROCESSING','PENDING','RECONCILIATION_REQUIRED'].includes(String(refund.status).toUpperCase())&&<><button type="button" className={styles.secondarySmall} onClick={()=>void refreshRefund(refund)} disabled={refundBusy}>Refresh status</button><button type="button" className={styles.secondarySmall} onClick={()=>void retryRefund(refund)} disabled={refundBusy}>Retry safely</button></>}</div></td></tr>)}</tbody></table></div>:<p className={styles.empty}>No refund requests for this order yet.</p>}
         </section>}
       </section>}
+      {tab==='payouts'&&<PayoutsPanel/>}
       {tab==='payments'&&<section className={styles.stack}>
         <section className={styles.panel}>
           <div className={styles.panelHead}><div><h2>Course payments & reconciliation</h2>
