@@ -374,6 +374,48 @@ public class FinancePayoutController {
     return financialService.reconcileProviderFees(orderId,fee,feeTax,reference,source,idempotencyKey,context.staffId());
   }
 
+  @PostMapping("/payouts/{payoutId}/fees")
+  public Map<String,Object> confirmPayoutFees(@PathVariable long payoutId,@RequestBody Map<String,Object> body,
+      @RequestHeader(value="Idempotency-Key",required=false) String idempotencyKey,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireManage(context);
+    long fee=requiredLong(body.get("processingFeePaise"),"processingFeePaise");
+    long tax=requiredLong(body.get("feeTaxPaise"),"feeTaxPaise");
+    if(fee<0||tax<0)throw bad("Payout fee and fee tax cannot be negative.");
+    String reference=requiredText(body.get("settlementReference"),"settlement reference");
+    if(reference.length()<3||reference.length()>180)throw bad("Enter a valid payout-fee statement reference.");
+    String source=optionalText(body.get("sourceType"))==null?"MANUAL_RECONCILIATION":text(body,"sourceType").toUpperCase(Locale.ROOT);
+    if(!List.of("SETTLEMENT_REPORT","MANUAL_RECONCILIATION").contains(source))
+      throw bad("Choose an actual settlement report or manual statement reconciliation as the evidence source.");
+    String key=idempotencyKey==null?"":idempotencyKey.trim();
+    if(!key.matches("[A-Za-z0-9_-]{10,180}"))throw bad("Idempotency-Key must contain 10–180 letters, digits, underscores or hyphens.");
+    Map<String,Object> row=one("""
+      select p.id,p.batch_id,p.status,p.provider_fee_paise,p.provider_fee_tax_paise,p.provider_fee_reference,
+        b.provider_fee_reconciled_at
+      from finance_payout p join finance_payout_batch b on b.id=p.batch_id where p.id=?
+      """,payoutId);
+    if(row.isEmpty())throw notFound("Payout not found.");
+    if(!List.of("PROCESSED","FAILED","REJECTED","REVERSED").contains(string(row.get("status"))))
+      throw bad("Payout fees may be confirmed only after the provider payout reaches a final state.");
+    if(row.get("provider_fee_reconciled_at")!=null)throw bad("This batch's payout fees are already reconciled and cannot be overwritten.");
+    if(row.get("provider_fee_paise")!=null||row.get("provider_fee_tax_paise")!=null) {
+      if(number(row.get("provider_fee_paise"))==fee&&number(row.get("provider_fee_tax_paise"))==tax
+          &&reference.equals(string(row.get("provider_fee_reference"))))return payoutSummary(payoutId);
+      throw bad("This payout already has provider-confirmed fee values. Use a reviewed correction workflow rather than overwriting its financial facts.");
+    }
+    int changed=jdbc.update("""
+      update finance_payout set provider_fee_paise=?,provider_fee_tax_paise=?,provider_fee_reference=?,
+        provider_fee_source_type=?,provider_fee_confirmed_by_staff_id=?,provider_fee_confirmed_at=now(),updated_at=now()
+      where id=? and provider_fee_paise is null and provider_fee_tax_paise is null
+      """,fee,tax,reference,source,context.staffId(),payoutId);
+    if(changed!=1)throw bad("Payout fee record changed while saving. Refresh and retry.");
+    payoutEvent(payoutId,"FEES_RECONCILED","course-payout:"+payoutId+":fees:"+key,context.staffId(),null,
+        Map.of("processingFeePaise",fee,"feeTaxPaise",tax,"reference",reference,"sourceType",source));
+    long batchId=number(row.get("batch_id"));
+    reconcileBatchProviderFees(batchId);
+    return payoutSummary(payoutId);
+  }
+
   @GetMapping("/payout-batches")
   public List<Map<String,Object>> listBatches(@RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireManage(context);
@@ -755,6 +797,65 @@ public class FinancePayoutController {
       """,payoutId);
   }
 
+  private void reconcileBatchProviderFees(long batchId) {
+    Map<String,Object> batch=one("select provider_fee_reconciled_at from finance_payout_batch where id=?",batchId);
+    if(batch.isEmpty()||batch.get("provider_fee_reconciled_at")!=null)return;
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select id,status,provider_fee_paise,provider_fee_tax_paise
+      from finance_payout where batch_id=? order by id
+      """,batchId);
+    if(rows.isEmpty()||rows.stream().anyMatch(r->!List.of("PROCESSED","FAILED","REJECTED","REVERSED").contains(string(r.get("status")))))return;
+    if(rows.stream().anyMatch(r->r.get("provider_fee_paise")==null||r.get("provider_fee_tax_paise")==null))return;
+    long totalFee=0L,totalTax=0L;
+    for(Map<String,Object> row:rows) {
+      totalFee=Math.addExact(totalFee,number(row.get("provider_fee_paise")));
+      totalTax=Math.addExact(totalTax,number(row.get("provider_fee_tax_paise")));
+    }
+    long totalCharge=Math.addExact(totalFee,totalTax);
+    List<Map<String,Object>> items=jdbc.queryForList("""
+      select i.allocation_id,sum(i.amount_paise) as weight_paise,a.currency
+      from finance_payout_item i join finance_payout p on p.id=i.payout_id
+      join revenue_share_allocation a on a.id=i.allocation_id
+      where p.batch_id=? group by i.allocation_id,a.currency order by i.allocation_id
+      """,batchId);
+    long weightTotal=items.stream().mapToLong(r->number(r.get("weight_paise"))).reduce(0L,Math::addExact);
+    if(totalCharge>0&&(weightTotal<=0||totalCharge>weightTotal))return;
+    long assigned=0L;
+    for(int i=0;i<items.size();i++) {
+      Map<String,Object> item=items.get(i);
+      long allocationId=number(item.get("allocation_id"));
+      long amount=i==items.size()-1?totalCharge-assigned
+          :proportionalAmount(totalCharge,number(item.get("weight_paise")),weightTotal);
+      if(amount<0)throw new IllegalStateException("Provider payout-fee allocation cannot be negative.");
+      if(amount>totalCharge-assigned)amount=totalCharge-assigned;
+      assigned=Math.addExact(assigned,amount);
+      if(amount==0)continue;
+      jdbc.update("""
+        insert into revenue_share_allocation_event(
+          allocation_id,event_type,amount_paise,currency,idempotency_key,details
+        ) values(?,'PROCESSING_FEE_DEDUCTED',?,?,?,?::jsonb)
+        on conflict(idempotency_key) do nothing
+        """,allocationId,amount,string(item.get("currency")),
+          "course-payout-batch:"+batchId+":fee-allocation:"+allocationId,
+          json(Map.of("payoutBatchId",batchId,"payoutProcessingFeePaise",totalFee,
+            "payoutFeeTaxPaise",totalTax,"totalProviderChargePaise",totalCharge,
+            "allocationWeightPaise",number(item.get("weight_paise")),
+            "allocationFeeSharePaise",amount,"basis","PROVIDER_CONFIRMED_MONTHLY_PAYOUT")));
+    }
+    if(assigned!=totalCharge)return;
+    jdbc.update("""
+      update finance_payout_batch set provider_fee_total_paise=?,provider_fee_tax_total_paise=?,
+        provider_fee_reconciled_at=now(),updated_at=now()
+      where id=? and provider_fee_reconciled_at is null
+      """,totalFee,totalTax,batchId);
+  }
+
+  private static long proportionalAmount(long total,long part,long whole) {
+    if(total<0||part<0||whole<=0||part>whole)throw new IllegalArgumentException("Proportional allocation inputs are invalid.");
+    return BigDecimal.valueOf(total).multiply(BigDecimal.valueOf(part))
+        .divide(BigDecimal.valueOf(whole),0,RoundingMode.HALF_UP).longValueExact();
+  }
+
   private void refreshBatchStatus(long batchId) {
     if(batchId<=0)return;List<Map<String,Object>> rows=jdbc.queryForList("select status from finance_payout where batch_id=?",batchId);
     if(rows.isEmpty())return;
@@ -764,6 +865,7 @@ public class FinancePayoutController {
     String status=terminal==rows.size()?(failures==0?"COMPLETED":processed>0?"PARTIAL":"FAILED")
         :(processed>0||failures>0?"PARTIAL":"PROCESSING");
     jdbc.update("update finance_payout_batch set status=?,updated_at=now() where id=? and status<>'CANCELLED'",status,batchId);
+    reconcileBatchProviderFees(batchId);
   }
 
   private void payoutEvent(long payoutId,String eventType,String idempotencyKey,Long staffId,String providerEventId,Map<String,Object> details) {
