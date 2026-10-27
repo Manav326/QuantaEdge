@@ -4,6 +4,7 @@ import { apiFetch } from '../components/apiClient';
 import { notifyUser } from '../components/GlobalNotificationHost';
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type CSSProperties } from 'react';
 import styles from './Finance.module.css';
+import PayoutsPanel from './PayoutsPanel';
 
 type Institution = { id:number; tenant_code:string; display_name:string; status:string };
 type LegalEntity = { id:number; entity_kind:string; institution_id?:number|null; institution_name?:string|null; legal_name:string; trade_name?:string|null; contact_email?:string|null; contact_phone?:string|null; registered_address_json?:string|null; invoice_series_code?:string; einvoice_applicability?:'UNREVIEWED'|'NOT_REQUIRED'|'REQUIRED'; einvoice_applicability_reviewed_at?:string|null; einvoice_applicability_review_note?:string|null; status:string; active_gst_registrations?:number };
@@ -17,9 +18,9 @@ function offerLifecycleLabel(offer:Offer):string {
   return 'OBSOLETE — DO NOT CONFIGURE';
 }
 type Policy = { id:number; institution_offer_id:number; policy_version:number; currency:string; status:string; institution_name:string; course_name:string; recipient_count:number; effective_from:string; effective_until?:string|null };
-type PolicyRecipient = { institution_id:number; calculation_type:string; percentage_basis_points?:number|null; flat_amount_paise?:number|null; institution_name?:string };
+type PolicyRecipient = { recipient_type?:string; institution_id?:number|null; legal_entity_id?:number|null; recipient_id?:number; recipient_name?:string; calculation_type:string; percentage_basis_points?:number|null; flat_amount_paise?:number|null };
 type DiscountOffer = { id:number; institution_offer_id:number; code:string; version:number; currency:string; discount_type:string; percentage_basis_points?:number|null; flat_amount_paise?:number|null; max_discount_paise?:number|null; min_listed_price_paise:number; max_redemptions?:number|null; max_redemptions_per_purchaser?:number|null; effective_from:string; effective_until?:string|null; status:string; institution_name:string; course_name:string; redemption_count:number; offer_price_paise:number };
-type PolicyDetail = Policy & { recipients:PolicyRecipient[] };
+type PolicyDetail = Policy & { recipients:PolicyRecipient[]; remainder_recipient_type?:string; remainder_institution_id?:number|null; remainder_legal_entity_id?:number|null; remainder_recipient_name?:string };
 type Template = { id:number; scope:string; legal_entity_id?:number|null; internal_name:string; template_version_id?:number|null; version_no?:number|null; version_status?:string; design_definition_json?:string|null; published_at?:string|null };
 type FinancialDocument = { id:number; document_type:string; document_number:string; issued_at:string; currency:string; total_value_paise:number; tax_value_paise:number; source_type:string; source_record_key:string; pdf_available:boolean };
 type RefundRecord = { id:number; public_id:string; course_payment_order_id:number; requested_amount_paise:number; currency:string; reason:string; status:string; provider_status?:string|null; provider_refund_id?:string|null; requested_at:string; settled_at?:string|null; credit_note_document_id?:number|null; credit_note_number?:string|null; message?:string };
@@ -71,10 +72,10 @@ type PaymentStatusTrace = {
 };
 type Overview = { legalEntities:number; activeTaxProfiles:number; pendingTaxProfiles:number; approvedSharePolicies:number; pendingSharePolicies:number; issuedDocuments:number; allocatedPaise:number };
 type Design = { primaryColor:string; accentColor:string; surfaceStyle:string; layout:string; showLogo:boolean; footerText:string };
-type RecipientDraft = { institutionId:string; calculationType:'PERCENTAGE'|'FLAT'; percentage:string; flatRupees:string };
+type RecipientDraft = { recipientType:'INSTITUTION'|'COMPANY'; recipientId:string; calculationType:'PERCENTAGE'|'FLAT'; percentage:string; flatRupees:string };
 type TaxForm = { offerId:string; legalEntityId:string; serviceClassificationCode:string; taxTreatment:string; gstPercent:string; cessPercent:string; priceIncludesTax:boolean; placeOfSupplyRule:string; effectiveFrom:string };
-type FinanceTab = 'overview'|'entities'|'tax'|'distribution'|'discounts'|'studio'|'documents'|'payments';
-const FINANCE_TABS:FinanceTab[]=['overview','entities','tax','distribution','discounts','studio','documents','payments'];
+type FinanceTab = 'overview'|'entities'|'tax'|'distribution'|'discounts'|'studio'|'documents'|'payments'|'payouts';
+const FINANCE_TABS:FinanceTab[]=['overview','entities','tax','distribution','discounts','studio','documents','payments','payouts'];
 
 const BASE='/api/v1/hrms/platform/finance';
 const DEFAULT_DESIGN:Design={primaryColor:'#F97316',accentColor:'#0F766E',surfaceStyle:'WARM_PAPER',layout:'EDITORIAL',showLogo:true,footerText:'Thank you for learning with us.'};
@@ -157,6 +158,8 @@ export default function FinancePage(){
   const [selectedPolicyId,setSelectedPolicyId]=useState('');
   const [policyDetail,setPolicyDetail]=useState<PolicyDetail|null>(null);
   const [recipients,setRecipients]=useState<RecipientDraft[]>([]);
+  const [policyRemainderType,setPolicyRemainderType]=useState<'INSTITUTION'|'COMPANY'>('COMPANY');
+  const [policyRemainderId,setPolicyRemainderId]=useState('');
   const [entityForm,setEntityForm]=useState({entityKind:'PLATFORM',institutionId:'',legalName:'',tradeName:'',contactEmail:'',contactPhone:'',addressLine:'',city:'',state:'',postalCode:'',invoiceSeriesCode:'QE'});
   const [editingCoreEntityId,setEditingCoreEntityId]=useState<number|null>(null);
   const [gstEntityId,setGstEntityId]=useState('');
@@ -718,7 +721,7 @@ export default function FinancePage(){
   const tabs:[typeof tab,string,string][]=[
     ['overview','Overview','▦'],['entities','Seller & GST','⌂'],['tax','Tax profile','%'],
     ['distribution','Revenue share','↗'],['studio','Invoice design','▤'],['discounts','Discount codes','%'],
-    ['payments','Payments & reconciliation','↻'],['documents','Issued documents','▣']
+    ['payments','Payments & reconciliation','↻'],['documents','Issued documents','▣'],['payouts','Payouts & settlements','⇢']
   ];
   // Render the same selected design on two workspace surfaces. The design and PDF
   // are independent of HRMS appearance and retain their explicitly authored colours.
@@ -785,7 +788,7 @@ export default function FinancePage(){
       {tab==='entities'&&<section className={styles.twoCol}>
         <div className={styles.panel}><h2>{editingCoreEntityId?'Edit legal entity':'Legal entities'}</h2><p>{editingCoreEntityId?'Edit draft details before activating the supplier. Core details lock after activation.':'Create the legal supplier record, then verify its details before activation.'}</p>
           <form className={styles.form} onSubmit={saveEntity}>
-            <label>Entity scope<select disabled={editingCoreEntityId!==null} value={entityForm.entityKind} onChange={e=>setEntityForm(v=>({...v,entityKind:e.target.value}))}><option value="PLATFORM">Platform legal entity</option><option value="INSTITUTION">Institution legal entity</option></select></label>
+            <label>Entity scope<select disabled={editingCoreEntityId!==null} value={entityForm.entityKind} onChange={e=>setEntityForm(v=>({...v,entityKind:e.target.value}))}><option value="PLATFORM">Platform legal entity (PureDeal)</option><option value="COMPANY">Other company</option><option value="INSTITUTION">Institution legal entity</option></select></label>
             {entityForm.entityKind==='INSTITUTION'&&<label>Institution<select disabled={editingCoreEntityId!==null} required value={entityForm.institutionId} onChange={e=>setEntityForm(v=>({...v,institutionId:e.target.value}))}><option value="">Select institution</option>{catalog.institutions.map(i=><option key={i.id} value={i.id}>{i.display_name} · {i.tenant_code}</option>)}</select></label>}
             <label>Legal name<input required value={entityForm.legalName} onChange={e=>setEntityForm(v=>({...v,legalName:e.target.value}))}/></label>
             <label>Trade name<input value={entityForm.tradeName} onChange={e=>setEntityForm(v=>({...v,tradeName:e.target.value}))}/></label>
