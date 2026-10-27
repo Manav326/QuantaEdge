@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-hindi-fhgp1",
   "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
   "raw_analysis_path": "data/textbook-visuals/class6-hi-maths-0bbba43f/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5be3234882cb721160da4e8b5d90428d62f9d929b836bc5fcba86359344a5d0e",
+  "raw_analysis_sha256": "6d30636b7c85299228c4d7d415a264a80050918e16fe1c5b8cd9ed6149c3fb12",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-hi-maths-0bbba43f/visual-analysis-corrections.v1.json",
@@ -1012,6 +1012,426 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
       "checkpointed_at": "2026-10-26T23:46:16Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e71c1d1cc5b8557fc5671f58",
+      "asset_sha256": "ef8b98e6e84902a687be1cbfa24f87e335a30686089c98c49ef5818aa4410174",
+      "page_text_context_sha256": "55a67f2201a36bf0c45349526e7b097118972903178ba92d175b843c4467e8ff",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 6,
+      "asset_path": "page-0006.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e77e5071b9236093b0bc93c4",
+      "asset_sha256": "9fbd3b21a14dbb9efb66023da999953ddf34661e7c1e7805b74fa7a8df0ca1a5",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/9fbd3b21a14dbb9efb66023da999953ddf34661e7c1e7805b74fa7a8df0ca1a5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ec08821485903ee2256751ec05d3f044dfffad81461ef418dc455b485fdf4692",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue background with intricate gold and white floral patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "floral patterns",
+          "intricate designs",
+          "gold and white colors",
+          "blue background"
+        ],
+        "context_relation": "The image is a decorative element in the educational content.",
+        "limitations": [
+          "No specific text or labels are present in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:51:55Z",
+      "effective_analysis": {
+        "visual_summary": "A blue background with intricate gold and white floral patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "floral patterns",
+          "intricate designs",
+          "gold and white colors",
+          "blue background"
+        ],
+        "context_relation": "The image is a decorative element in the educational content.",
+        "limitations": [
+          "No specific text or labels are present in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "696eedc7f7b60207463f38a1",
+      "asset_sha256": "c6bdf0eac231e4a8caaf23fd36fe9b492f184468791b3fcab65963e312859cd9",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/c6bdf0eac231e4a8caaf23fd36fe9b492f184468791b3fcab65963e312859cd9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ec08821485903ee2256751ec05d3f044dfffad81461ef418dc455b485fdf4692",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue and gold patterned fabric with intricate designs.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "fabric",
+          "pattern",
+          "design",
+          "blue",
+          "gold",
+          "intricate",
+          "designs"
+        ],
+        "context_relation": "The image is a visual representation of a fabric pattern, likely used in educational content about fabric design or textile arts.",
+        "limitations": [
+          "The image does not provide specific details about the educational content it is related to."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:52:30Z",
+      "effective_analysis": {
+        "visual_summary": "A blue and gold patterned fabric with intricate designs.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "fabric",
+          "pattern",
+          "design",
+          "blue",
+          "gold",
+          "intricate",
+          "designs"
+        ],
+        "context_relation": "The image is a visual representation of a fabric pattern, likely used in educational content about fabric design or textile arts.",
+        "limitations": [
+          "The image does not provide specific details about the educational content it is related to."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8396542a76622b86b25c4116",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ec08821485903ee2256751ec05d3f044dfffad81461ef418dc455b485fdf4692",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:53:09Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c959dc310d17f129acba2858",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ec08821485903ee2256751ec05d3f044dfffad81461ef418dc455b485fdf4692",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "No visible text or images on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:53:47Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "No visible text or images on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "932f4540cbe628acdaea2fcf",
+      "asset_sha256": "fd5ebec07f1902c9c9debc49fb6b417b39d2e7047762dd8aec146495503fb0c3",
+      "page_text_context_sha256": "ec08821485903ee2256751ec05d3f044dfffad81461ef418dc455b485fdf4692",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 7,
+      "asset_path": "page-0007.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cd3726cff76e345e6ae5a06e",
+      "asset_sha256": "9985840a107a31deb877a74529f71a88a26a2aca60252b74b40d91be1d92c6d5",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/9985840a107a31deb877a74529f71a88a26a2aca60252b74b40d91be1d92c6d5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "032d308e2d98b1ed750de3c964bf626f19d9c1ea99befd52bdf5e2f2e0ad688f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue background with intricate gold and white floral patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "floral patterns",
+          "intricate designs",
+          "blue background"
+        ],
+        "context_relation": "The image is a decorative element in the educational content.",
+        "limitations": [
+          "No specific text or labels are present in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:59:17Z",
+      "effective_analysis": {
+        "visual_summary": "A blue background with intricate gold and white floral patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "floral patterns",
+          "intricate designs",
+          "blue background"
+        ],
+        "context_relation": "The image is a decorative element in the educational content.",
+        "limitations": [
+          "No specific text or labels are present in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1dabb9c32cfe74aecf10aa6b",
+      "asset_sha256": "0149131d0aa0deeefd1b98bfc38ba39ee15a05bef071f5144cf59a858582897e",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/0149131d0aa0deeefd1b98bfc38ba39ee15a05bef071f5144cf59a858582897e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "032d308e2d98b1ed750de3c964bf626f19d9c1ea99befd52bdf5e2f2e0ad688f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue and gold patterned fabric with intricate designs.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "वे यह समझने की क्षमता विकसित करें कि किसी तथ्य  याा  अवधाारणाा को सिद्ध करने काा   क्याा",
+          "अर्थ होताा  है और अंतर्निहित अवधाारणााओं के विषय में भी आश्‍वस्तस्त बनें। गणित की कक्षा में",
+          "एल्गोगोरिदम के अंधााधुंध अनुप्रयोग की अपेक्षा नहीं की जाानी चाहिए, अपितु बचचों को प्रश्न हल",
+          "करने के विभिन्नन्न तरीके ढूूँढ़ने के लिए प्रोत्साहित कियाा  जाानाा चाहिए।",
+          "रााष्ट्रीय शिक्षा नीति 2020 के अनुसाार गणनाातमक सोच (Computational Thinking)",
+          "को भी पहेलियों, खेलों और संवाादाातमक अभ्याासों के मााधयम से धीरे-धीरे प्रस्तुत कियाा  है,",
+          "यह पुस्तक इस सोच को बढ़ावाा  देती है। पााठ्यपुस्तक  में विभिन्नन्न अवधाारण"
+        ],
+        "concepts": [
+          "Computational Thinking",
+          "Educational Content",
+          "Patterned Fabric",
+          "Design Elements"
+        ],
+        "context_relation": "The image is a visual representation of a patterned fabric, which is likely used as an educational tool to teach computational thinking.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the context in which it is used."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:00:47Z",
+      "effective_analysis": {
+        "visual_summary": "A blue and gold patterned fabric with intricate designs.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "वे यह समझने की क्षमता विकसित करें कि किसी तथ्य  याा  अवधाारणाा को सिद्ध करने काा   क्याा",
+          "अर्थ होताा  है और अंतर्निहित अवधाारणााओं के विषय में भी आश्‍वस्तस्त बनें। गणित की कक्षा में",
+          "एल्गोगोरिदम के अंधााधुंध अनुप्रयोग की अपेक्षा नहीं की जाानी चाहिए, अपितु बचचों को प्रश्न हल",
+          "करने के विभिन्नन्न तरीके ढूूँढ़ने के लिए प्रोत्साहित कियाा  जाानाा चाहिए।",
+          "रााष्ट्रीय शिक्षा नीति 2020 के अनुसाार गणनाातमक सोच (Computational Thinking)",
+          "को भी पहेलियों, खेलों और संवाादाातमक अभ्याासों के मााधयम से धीरे-धीरे प्रस्तुत कियाा  है,",
+          "यह पुस्तक इस सोच को बढ़ावाा  देती है। पााठ्यपुस्तक  में विभिन्नन्न अवधाारण"
+        ],
+        "concepts": [
+          "Computational Thinking",
+          "Educational Content",
+          "Patterned Fabric",
+          "Design Elements"
+        ],
+        "context_relation": "The image is a visual representation of a patterned fabric, which is likely used as an educational tool to teach computational thinking.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the context in which it is used."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9fc301ee372d98fad86c6246",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "032d308e2d98b1ed750de3c964bf626f19d9c1ea99befd52bdf5e2f2e0ad688f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:01:23Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c403609c3a220352b0968e7a",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "032d308e2d98b1ed750de3c964bf626f19d9c1ea99befd52bdf5e2f2e0ad688f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:01:58Z",
       "effective_analysis": {
         "visual_summary": "A black page with no visible content.",
         "visual_type": "page_with_multiple_visuals",

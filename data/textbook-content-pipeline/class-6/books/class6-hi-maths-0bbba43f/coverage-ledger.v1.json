@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 5189,
     "eligible_visual_asset_rows": 5189,
-    "raw_analysis_result_rows": 30,
-    "successful_visual_analyses": 14,
-    "missing_visual_analyses": 5159,
-    "failed_visual_analyses": 16,
+    "raw_analysis_result_rows": 40,
+    "successful_visual_analyses": 22,
+    "missing_visual_analyses": 5149,
+    "failed_visual_analyses": 18,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5175,
+    "unresolved_count": 5167,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -12359,7 +12359,7 @@
       "asset_path": "page-0006.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -12377,9 +12377,23 @@
       "asset_path": "assets/9fbd3b21a14dbb9efb66023da999953ddf34661e7c1e7805b74fa7a8df0ca1a5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue background with intricate gold and white floral patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "floral patterns",
+          "intricate designs",
+          "gold and white colors",
+          "blue background"
+        ],
+        "context_relation": "The image is a decorative element in the educational content.",
+        "limitations": [
+          "No specific text or labels are present in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12395,9 +12409,26 @@
       "asset_path": "assets/c6bdf0eac231e4a8caaf23fd36fe9b492f184468791b3fcab65963e312859cd9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue and gold patterned fabric with intricate designs.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "fabric",
+          "pattern",
+          "design",
+          "blue",
+          "gold",
+          "intricate",
+          "designs"
+        ],
+        "context_relation": "The image is a visual representation of a fabric pattern, likely used in educational content about fabric design or textile arts.",
+        "limitations": [
+          "The image does not provide specific details about the educational content it is related to."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12413,9 +12444,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12431,9 +12471,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "No visible text or images on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12449,7 +12498,7 @@
       "asset_path": "page-0007.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -12467,9 +12516,22 @@
       "asset_path": "assets/9985840a107a31deb877a74529f71a88a26a2aca60252b74b40d91be1d92c6d5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue background with intricate gold and white floral patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "floral patterns",
+          "intricate designs",
+          "blue background"
+        ],
+        "context_relation": "The image is a decorative element in the educational content.",
+        "limitations": [
+          "No specific text or labels are present in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12485,9 +12547,31 @@
       "asset_path": "assets/0149131d0aa0deeefd1b98bfc38ba39ee15a05bef071f5144cf59a858582897e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue and gold patterned fabric with intricate designs.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "वे यह समझने की क्षमता विकसित करें कि किसी तथ्य  याा  अवधाारणाा को सिद्ध करने काा   क्याा",
+          "अर्थ होताा  है और अंतर्निहित अवधाारणााओं के विषय में भी आश्‍वस्तस्त बनें। गणित की कक्षा में",
+          "एल्गोगोरिदम के अंधााधुंध अनुप्रयोग की अपेक्षा नहीं की जाानी चाहिए, अपितु बचचों को प्रश्न हल",
+          "करने के विभिन्नन्न तरीके ढूूँढ़ने के लिए प्रोत्साहित कियाा  जाानाा चाहिए।",
+          "रााष्ट्रीय शिक्षा नीति 2020 के अनुसाार गणनाातमक सोच (Computational Thinking)",
+          "को भी पहेलियों, खेलों और संवाादाातमक अभ्याासों के मााधयम से धीरे-धीरे प्रस्तुत कियाा  है,",
+          "यह पुस्तक इस सोच को बढ़ावाा  देती है। पााठ्यपुस्तक  में विभिन्नन्न अवधाारण"
+        ],
+        "concepts": [
+          "Computational Thinking",
+          "Educational Content",
+          "Patterned Fabric",
+          "Design Elements"
+        ],
+        "context_relation": "The image is a visual representation of a patterned fabric, which is likely used as an educational tool to teach computational thinking.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the context in which it is used."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12503,9 +12587,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12521,9 +12614,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
