@@ -156,22 +156,21 @@ public class FinancePayoutController {
     Long collectionEntityId=optionalLong(body.get("paymentCollectionLegalEntityId"));
     Long fundingEntityId=optionalLong(body.get("razorpayxFundingLegalEntityId"));
     String reference=optionalText(body.get("evidenceReference"));
+    if(collectionEntityId==null||fundingEntityId==null)
+      throw bad("Select both the legal entity receiving course-payment collections and the legal entity owning the RazorpayX payout funding account.");
+    if(reference!=null&&reference.length()>180)throw bad("Review reference cannot exceed 180 characters.");
+    Map<String,Object> collection=one("select id,status,entity_kind from billing_legal_entity where id=?",collectionEntityId);
+    if(collection.isEmpty()||!"ACTIVE".equals(string(collection.get("status"))))
+      throw bad("The legal entity receiving payment collections must be active.");
+    Map<String,Object> funding=one("select id,status,entity_kind from billing_legal_entity where id=?",fundingEntityId);
+    if(funding.isEmpty()||!"ACTIVE".equals(string(funding.get("status")))
+        ||!List.of("PLATFORM","COMPANY").contains(string(funding.get("entity_kind"))))
+      throw bad("The RazorpayX payout funding owner must be an active platform or company legal entity.");
     if("VERIFIED".equals(status)) {
       if(!Boolean.TRUE.equals(body.get("confirm")))
         throw bad("Confirm that the legal seller and collection-account arrangement has been reviewed with Razorpay and the responsible legal/tax adviser.");
-      if(collectionEntityId==null||fundingEntityId==null)
-        throw bad("Select both the legal entity receiving course-payment collections and the legal entity owning the RazorpayX payout funding account.");
-      if(reference==null||reference.length()<3||reference.length()>180)
+      if(reference==null||reference.length()<3)
         throw bad("Record a review reference, such as the approved agreement or provider case reference.");
-      Map<String,Object> collection=one("select id,status,entity_kind from billing_legal_entity where id=?",collectionEntityId);
-      if(collection.isEmpty()||!"ACTIVE".equals(string(collection.get("status"))))
-        throw bad("The legal entity receiving payment collections must be active.");
-      Map<String,Object> funding=one("select id,status,entity_kind from billing_legal_entity where id=?",fundingEntityId);
-      if(funding.isEmpty()||!"ACTIVE".equals(string(funding.get("status")))
-          ||!List.of("PLATFORM","COMPANY").contains(string(funding.get("entity_kind"))))
-        throw bad("The RazorpayX payout funding owner must be an active platform or company legal entity.");
-    } else if(reference!=null&&reference.length()>180) {
-      throw bad("Review reference cannot exceed 180 characters.");
     }
     int changed=jdbc.update("""
       update billing_finance_payout_settings set
@@ -793,6 +792,29 @@ public class FinancePayoutController {
       return node;
     } catch(IllegalStateException ex){throw ex;}
     catch(Exception ex){throw new IllegalStateException("RazorpayX response could not be confirmed. Do not create a new payout.",ex);}
+  }
+
+  private boolean payoutReadyFromDatabase() {
+    Map<String,Object> settings=one("""
+      select payment_collection_legal_entity_id,razorpayx_funding_legal_entity_id,collection_arrangement_status
+      from billing_finance_payout_settings where id=1
+      """);
+    Long collectionId=nullableLong(settings.get("payment_collection_legal_entity_id"));
+    Long fundingId=nullableLong(settings.get("razorpayx_funding_legal_entity_id"));
+    if(collectionId==null||fundingId==null||!"VERIFIED".equals(string(settings.get("collection_arrangement_status"))))return false;
+    return exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE')",collectionId)
+        &&exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY'))",fundingId);
+  }
+  private void requirePayoutReady() {
+    requireProviderConfiguration();
+    if(webhookSecret.isBlank())
+      throw bad("Configure the RazorpayX payout webhook secret before enabling transfers.");
+    if(!payoutReadyFromDatabase())
+      throw bad("Payouts are blocked. An authorized platform owner must verify the legal seller and collection-account arrangement, including the legal collection entity and RazorpayX funding owner.");
+  }
+  private boolean hasPermission(AuthContext context,String permission) {
+    try { authorization.requirePermission(context,permission);return true; }
+    catch(SecurityException ex) { return false; }
   }
 
   private void requireProviderConfiguration() {
