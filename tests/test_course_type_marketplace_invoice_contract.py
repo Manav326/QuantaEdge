@@ -320,7 +320,7 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
         payout = (ROOT / "services/api/src/main/java/com/quantaedge/api/FinancePayoutController.java").read_text(encoding="utf-8")
         renderer = (ROOT / "services/api/src/main/java/com/quantaedge/api/PayoutSettlementPdfRenderer.java").read_text(encoding="utf-8")
         renderer_test = (ROOT / "services/api/src/test/java/com/quantaedge/api/PayoutSettlementPdfRendererTest.java").read_text(encoding="utf-8")
-        migration = (ROOT / "services/api/src/main/resources/db/migration/V216__immutable_monthly_payout_statements.sql").read_text(encoding="utf-8")
+        migration = (ROOT / "services/api/src/main/resources/db/migration/V217__immutable_monthly_payout_statements.sql").read_text(encoding="utf-8")
         panel = (ROOT / "apps/people/app/finance/PayoutsPanel.tsx").read_text(encoding="utf-8")
         css = (ROOT / "apps/people/app/finance/Finance.module.css").read_text(encoding="utf-8")
         dockerfile = (ROOT / "services/api/Dockerfile").read_text(encoding="utf-8")
