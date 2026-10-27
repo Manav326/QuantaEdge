@@ -458,6 +458,18 @@ def _ocr_shree_dev_option(page: Any, bbox: tuple[float, float, float, float]) ->
         return "", "SHREEDEV_OCR_FAILED_RAW_PRESERVED"
 
 
+def union_pdf_boxes(boxes: list[tuple[float, float, float, float]]) -> tuple[float, float, float, float] | None:
+    """Return the minimum rectangle covering a set of PyMuPDF text-line boxes."""
+    if not boxes:
+        return None
+    return (
+        min(box[0] for box in boxes),
+        min(box[1] for box in boxes),
+        max(box[2] for box in boxes),
+        max(box[3] for box in boxes),
+    )
+
+
 def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
     collected: list[dict[str, Any]] = []
     for page_index in range(len(pdf)):
@@ -473,14 +485,22 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
             if not text_block.get("lines") or not text_block.get("bbox"):
                 continue
             bx0, by0, bx1, by1 = (float(value) for value in text_block["bbox"])
-            fonts = {
-                str(span.get("font", "")).strip().upper()
-                for line in text_block.get("lines", [])
-                for span in line.get("spans", [])
-            }
+            fonts: set[str] = set()
+            line_metadata: list[dict[str, Any]] = []
+            for line in text_block.get("lines", []):
+                spans = line.get("spans", [])
+                line_fonts = {str(span.get("font", "")).strip().upper() for span in spans}
+                fonts.update(line_fonts)
+                line_box = tuple(float(value) for value in line.get("bbox", (0, 0, 0, 0)))
+                line_metadata.append({
+                    "text": "".join(str(span.get("text", "")) for span in spans),
+                    "bbox": line_box,
+                    "fonts": line_fonts,
+                })
             block_metadata[(round(by0, 2), round(bx0, 2))] = {
                 "bbox": (bx0, by0, bx1, by1),
                 "fonts": fonts,
+                "lines": line_metadata,
             }
         columns: dict[str, list[tuple[float, str, float]]] = {"left": [], "right": []}
         for block in page.get_text("blocks"):
@@ -591,6 +611,11 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                             active["prompt_ocr_text"] = ocr_prompt
                     option_texts = active.pop("_ocr_option_texts", {})
                     option_statuses = active.pop("_ocr_option_statuses", {})
+                    for option_key, option_bbox in active.pop("_ocr_option_bboxes", {}).items():
+                        option_text, option_status = _ocr_shree_dev_option(page, option_bbox)
+                        option_statuses[option_key] = option_status
+                        if option_text:
+                            option_texts[option_key] = option_text
                     if option_texts:
                         active["option_ocr_texts"] = option_texts
                         active["option_ocr_statuses"] = option_statuses
@@ -704,7 +729,25 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                     and SHREE_DEV_FONT_NAMES.intersection(font_metadata.get("fonts", set()))
                     and font_metadata.get("bbox")
                 ):
-                    active["_prompt_ocr_bbox"] = font_metadata["bbox"]
+                    line_metadata = font_metadata.get("lines", [])
+                    option_line_indices = [
+                        index for index, line in enumerate(line_metadata)
+                        if OPTION_START.match(str(line.get("text", "")))
+                        and SHREE_DEV_FONT_NAMES.intersection(line.get("fonts", set()))
+                    ]
+                    first_option_index = option_line_indices[0] if option_line_indices else len(line_metadata)
+                    prompt_line_boxes = [
+                        line["bbox"] for line in line_metadata[:first_option_index]
+                        if SHREE_DEV_FONT_NAMES.intersection(line.get("fonts", set()))
+                    ]
+                    prompt_bbox = union_pdf_boxes(prompt_line_boxes)
+                    if prompt_bbox:
+                        active["_prompt_ocr_bbox"] = prompt_bbox
+                    for line_index in option_line_indices:
+                        line = line_metadata[line_index]
+                        option_match = OPTION_START.match(str(line.get("text", "")))
+                        if option_match:
+                            active.setdefault("_ocr_option_bboxes", {})[option_match.group(1).upper()] = line["bbox"]
                 # Attach the same stimulus ID/content to every item within its declared range.
                 for spec in passage_specs:
                     if identity_matches_spec(identity, number, prefix, spec) and spec["group_id"] in stimulus_by_group:
