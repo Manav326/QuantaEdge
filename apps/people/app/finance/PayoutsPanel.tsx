@@ -222,7 +222,7 @@ export default function PayoutsPanel(){
       if(b)setBeneficiaries(Array.isArray(b)?b:[]);
       if(f){setFeeOrders(Array.isArray(f)?f.slice(0,50):[]);setFeeHasMore(f.length>50);}
       if(bs)setBatches(Array.isArray(bs)?bs:[]);
-      if(bal)setBalances(bal);
+      if(bal)setBalances(bal);else setBalances(null);
       if(ue)setUnmatchedEvents(Array.isArray(ue)?ue:[]);
       if(rc)setReconciliationCandidates(Array.isArray(rc)?rc:[]);
       if(fc){setFeeAdjustmentCandidates(Array.isArray(fc)?fc.slice(0,50):[]);setFeeAdjustmentQueueHasMore(fc.length>50);}
