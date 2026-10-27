@@ -1126,7 +1126,14 @@ public class FinancePayoutController {
         &&exists("select exists(select 1 from finance_payout where provider_payout_id=? and id<>?)",safeProviderId,payoutId);
     String safeProviderStatus=providerStatus==null?"":providerStatus.substring(0,Math.min(32,providerStatus.length()));
     if(terminal) {
-      jdbc.update("update finance_payout set status_details=?,updated_at=now() where id=?",reason,payoutId);
+      // Preserve terminal state, but save a non-conflicting provider ID so the reviewer can refresh
+      // and clear the exception after the provider record is confirmed.
+      jdbc.update("""
+        update finance_payout set
+          provider_payout_id=case when provider_payout_id is null and ?=true and ?=false then ? else provider_payout_id end,
+          status_details=?,updated_at=now()
+        where id=?
+        """,validProviderId,providerIdOwned,safeProviderId,reason,payoutId);
     } else {
       jdbc.update("""
         update finance_payout set
