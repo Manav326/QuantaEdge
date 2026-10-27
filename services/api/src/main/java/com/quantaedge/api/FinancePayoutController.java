@@ -562,6 +562,33 @@ public class FinancePayoutController {
     YearMonth month=YearMonth.from(start);
     if(!start.equals(month.atDay(1))||!end.equals(month.atEndOfMonth()))throw bad("A payout batch must cover one complete calendar month.");
     if(end.isAfter(previous.atEndOfMonth()))throw bad("Only a completed month can be paid.");
+    Map<String,Object> unsupportedCurrency=one("""
+      select a.currency
+      from revenue_share_allocation a
+      join course_payment_order o on o.id=a.course_payment_order_id and o.status='VERIFIED'
+      join lateral (
+        select coalesce(sum(amount_paise) filter(where event_type='EARNED'),0) earned_paise,
+          coalesce(sum(amount_paise) filter(where event_type='REFUNDED'),0) refunded_paise,
+          coalesce(sum(amount_paise) filter(where event_type='PROCESSING_FEE_DEDUCTED'),0) fee_paise,
+          coalesce(sum(amount_paise) filter(where event_type='PAID'),0) paid_paise,
+          coalesce(sum(amount_paise) filter(where event_type='REVERSED'),0) reversed_paise,
+          min(created_at) filter(where event_type='EARNED') first_earned_at
+        from revenue_share_allocation_event where allocation_id=a.id
+      ) l on true
+      left join lateral (
+        select coalesce(sum(i.amount_paise),0) reserved_paise
+        from finance_payout_item i join finance_payout p on p.id=i.payout_id
+        where i.allocation_id=a.id and p.status in ('PENDING_APPROVAL','APPROVED','SUBMITTING','PENDING','QUEUED','PROCESSING','RECONCILIATION_REQUIRED')
+      ) r on true
+      where a.currency<>'INR' and l.earned_paise>0
+        and l.first_earned_at < (?::date + interval '1 day')
+        and l.earned_paise-l.refunded_paise-l.fee_paise-l.paid_paise+l.reversed_paise-coalesce(r.reserved_paise,0)>0
+      order by a.currency,a.id limit 1
+      """,end);
+    if(!unsupportedCurrency.isEmpty())
+      throw bad("Outstanding revenue uses unsupported payout currency "+text(unsupportedCurrency,"currency")+
+          ". This RazorpayX workflow pays INR only and performs no FX conversion. Resolve the non-INR balance through an approved currency-compatible settlement route before preparing an INR batch.");
+
     List<Map<String,Object>> missingFees=jdbc.queryForList("""
       select distinct o.id as order_id from course_payment_order o
       join revenue_share_allocation a on a.course_payment_order_id=o.id
@@ -610,7 +637,7 @@ public class FinancePayoutController {
         (a.recipient_type='INSTITUTION' and b.beneficiary_type='INSTITUTION' and b.institution_id=a.institution_id)
         or (a.recipient_type='COMPANY' and b.beneficiary_type='COMPANY' and b.legal_entity_id=a.legal_entity_id))
       left join institution_tenant t on t.id=a.institution_id left join billing_legal_entity le on le.id=a.legal_entity_id
-      where l.earned_paise>0 and l.first_earned_at < (?::date + interval '1 day')
+      where a.currency='INR' and l.earned_paise>0 and l.first_earned_at < (?::date + interval '1 day')
       order by l.first_earned_at,a.id
       """,end);
     if(balances.isEmpty())throw bad("No captured course-sale allocations are ready for payout in this period.");
