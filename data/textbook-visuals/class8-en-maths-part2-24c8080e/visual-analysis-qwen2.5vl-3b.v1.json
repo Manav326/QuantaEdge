@@ -8,26 +8,26 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 89,
+    "assets_selected": 98,
     "assets_processed_this_run": 10,
     "assets_processed_ids": [
       "f03d10be3e8016aa7a9ee958",
-      "9eaf4b9b91c39323108b13db",
-      "f4a8ef872f9d0f2cef556e70",
-      "c9ec76ff16a970fe4f35e3ba",
-      "15f5990fcffe97dd37a1ae60",
-      "53d8959de084e27b7efcc2da",
-      "420ab2230941ca55d8a92e8c",
-      "bbb3664eccfa8a5934472cd7",
-      "09577a56a6521c54e486ab34",
-      "f8bcc937d706476239a1df02"
+      "ec4e992e1e53e2c47deb58db",
+      "5cbe325d124e622c83850c41",
+      "e3be61a6d6e0133d301521f4",
+      "c4b027f7a25462d9e14a86fa",
+      "180feb938b523ed27e581d3f",
+      "7976e25a85d4309729569ec5",
+      "9208e385536a7918df498d33",
+      "8652c7a85b3ce4673d42b35d",
+      "ac9ea528bf6b30737f944268"
     ],
     "assets_eligible": 1727,
-    "assets_analyzed": 88,
-    "assets_remaining": 1639,
-    "assets_completion_percent": 5.1,
+    "assets_analyzed": 97,
+    "assets_remaining": 1630,
+    "assets_completion_percent": 5.6,
     "assets_failed": 14,
-    "assets_skipped_from_checkpoint": 79,
+    "assets_skipped_from_checkpoint": 88,
     "batch_limit": 10,
     "publication_allowed": false
   },
@@ -905,7 +905,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T01:04:30Z"
+      "checkpointed_at": "2026-10-27T01:19:02Z"
     },
     {
       "asset_id": "fa3a37bdca3cc1c6a62b41ea",
@@ -2909,6 +2909,250 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
       "checkpointed_at": "2026-10-27T01:18:19Z"
+    },
+    {
+      "asset_id": "ec4e992e1e53e2c47deb58db",
+      "asset_sha256": "c79ae7d144fad7e02c59441d27b36926a9af79c0609e028a8cdc6921f12ca57b",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/c79ae7d144fad7e02c59441d27b36926a9af79c0609e028a8cdc6921f12ca57b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to yellow.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:20:31Z"
+    },
+    {
+      "asset_id": "5cbe325d124e622c83850c41",
+      "asset_sha256": "61cabfac624a633491799e52bd0320df576ae2031fee6d934e30af6bba941264",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/61cabfac624a633491799e52bd0320df576ae2031fee6d934e30af6bba941264.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": [
+          "The image does not contain any text or visual elements that can be analyzed for content or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:22:05Z"
+    },
+    {
+      "asset_id": "e3be61a6d6e0133d301521f4",
+      "asset_sha256": "d5d50c185ace6f86619ae00e283a1dfbec4e164316afa3423fd13ae0eaf1e7e8",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/d5d50c185ace6f86619ae00e283a1dfbec4e164316afa3423fd13ae0eaf1e7e8.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from yellow to orange.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:23:34Z"
+    },
+    {
+      "asset_id": "c4b027f7a25462d9e14a86fa",
+      "asset_sha256": "aec30b5a721c440c11bbcb2d7bcf7624a84b8c5be38f937b091cc442b7c13fee",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/aec30b5a721c440c11bbcb2d7bcf7624a84b8c5be38f937b091cc442b7c13fee.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to a warm orange color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover page for a textbook.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content editing. It is a simple gradient background without any visible text or symbols."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:25:11Z"
+    },
+    {
+      "asset_id": "180feb938b523ed27e581d3f",
+      "asset_sha256": "ddc66c8a29651a274c73a0112bdbe0bb66528df085d84ffb4f85a48f7279ca41",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/ddc66c8a29651a274c73a0112bdbe0bb66528df085d84ffb4f85a48f7279ca41.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from a light brown at the top to a darker brown at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover page for a textbook.",
+        "limitations": [
+          "The image does not contain any text or visual elements that can be analyzed for content or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:26:43Z"
+    },
+    {
+      "asset_id": "7976e25a85d4309729569ec5",
+      "asset_sha256": "e44c91c3cd496ae586c2da8a22401d78fb7a7a210fd371863903bc1e3fd6f5a9",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/e44c91c3cd496ae586c2da8a22401d78fb7a7a210fd371863903bc1e3fd6f5a9.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to white.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for text or images",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:28:09Z"
+    },
+    {
+      "asset_id": "9208e385536a7918df498d33",
+      "asset_sha256": "20a035225cce8b72a95c89109ef0b47171545b5c91cba28a7fe35de508ef52a9",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/20a035225cce8b72a95c89109ef0b47171545b5c91cba28a7fe35de508ef52a9.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to a warm, golden color.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for text or images",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:29:42Z"
+    },
+    {
+      "asset_id": "8652c7a85b3ce4673d42b35d",
+      "asset_sha256": "d8b0002a512a7f9789561d18cfe72fc699c6789ad09187f81c6d018714ea7363",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/d8b0002a512a7f9789561d18cfe72fc699c6789ad09187f81c6d018714ea7363.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to white.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for text or image",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:31:19Z"
+    },
+    {
+      "asset_id": "ac9ea528bf6b30737f944268",
+      "asset_sha256": "37b6677caf477ac867c1667a2ca59f66a4c6c6d22e17740d44c84c8afa7eae7a",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/37b6677caf477ac867c1667a2ca59f66a4c6c6d22e17740d44c84c8afa7eae7a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from yellow to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:32:52Z"
     }
   ]
 }
