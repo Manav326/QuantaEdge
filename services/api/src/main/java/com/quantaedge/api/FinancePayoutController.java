@@ -50,11 +50,11 @@ public class FinancePayoutController {
 
   public FinancePayoutController(JdbcTemplate jdbc,AuthorizationService authorization,
       CourseOrderFinancialService financialService,ObjectMapper mapper,
-      @Value("\u0024{app.razorpayx.key-id:}") String keyId,
-      @Value("\u0024{app.razorpayx.key-secret:}") String keySecret,
+      @Value("\u0024{app.razorpay.key-id:}") String keyId,
+      @Value("\u0024{app.razorpay.key-secret:}") String keySecret,
       @Value("\u0024{app.razorpayx.account-number:}") String sourceAccountNumber,
       @Value("\u0024{app.razorpayx.webhook-secret:}") String webhookSecret,
-      @Value("\u0024{app.razorpayx.base-url:https://api.razorpay.com/v1}") String baseUrl) {
+      @Value("\u0024{app.razorpay.base-url:https://api.razorpay.com/v1}") String baseUrl) {
     this.jdbc=jdbc;this.authorization=authorization;this.financialService=financialService;this.mapper=mapper;
     this.keyId=keyId==null?"":keyId.trim();this.keySecret=keySecret==null?"":keySecret.trim();
     this.sourceAccountNumber=sourceAccountNumber==null?"":sourceAccountNumber.trim();
