@@ -1282,9 +1282,17 @@ def database_repair_draft_hindi(args: argparse.Namespace, papers: list[dict[str,
                                 changed = True
                     if has_prompt_ocr or has_option_ocr or has_stimulus_ocr:
                         incoming_flags = incoming.get("review_flags")
-                        if isinstance(incoming_flags, list) and current.get("review_flags") != incoming_flags:
-                            current["review_flags"] = incoming_flags
-                            changed = True
+                        current_flags = current.get("review_flags")
+                        if isinstance(incoming_flags, list):
+                            existing_flags = current_flags if isinstance(current_flags, list) else []
+                            # Preserve any draft-specific/manual flags while adding the source audit flags.
+                            merged_flags = list(dict.fromkeys(
+                                [str(flag) for flag in existing_flags]
+                                + [str(flag) for flag in incoming_flags]
+                            ))
+                            if merged_flags != current_flags:
+                                current["review_flags"] = merged_flags
+                                changed = True
                     if not (has_prompt_ocr or has_option_ocr or has_stimulus_ocr):
                         skipped_count += 1
                     if changed:
