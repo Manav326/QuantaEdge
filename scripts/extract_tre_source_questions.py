@@ -13,6 +13,7 @@ import hashlib
 import json
 import re
 import shutil
+import subprocess
 import sys
 import zipfile
 from collections import Counter, defaultdict
@@ -355,6 +356,72 @@ def _split_block_questions(text: str, cycle: str) -> tuple[str, list[tuple[str, 
     return preamble, questions
 
 
+SHREE_DEV_FONT_NAMES = {"SHREE-DEV-0708", "SHREE-DEV-0709"}
+_TESSERACT_HINDI_AVAILABLE: bool | None = None
+
+
+def normalize_ocr_prompt(value: str) -> str:
+    """Normalize an OCR-reconstructed Hindi question stem, removing the printed question label."""
+    lines = [line.strip() for line in str(value or "").replace("\r\n", "\n").replace("\r", "\n").split("\n") if line.strip()]
+    if not lines:
+        return ""
+    # Tesseract may read the Latin-font question number as punctuation, I, or a wrong digit.
+    lines[0] = re.sub(r"^\s*(?:(?:[0-9Il|]{1,3})\s*)?[.)]\s*", "", lines[0]).strip()
+    normalized = "\n".join(line for line in lines if line)
+    # Reject OCR noise; genuine Hindi prose must contain a usable Devanagari word.
+    if len(re.findall(r"[\u0900-\u097F]", normalized)) < 4:
+        return ""
+    return normalized
+
+
+def _tesseract_hindi_available() -> bool:
+    global _TESSERACT_HINDI_AVAILABLE
+    if _TESSERACT_HINDI_AVAILABLE is not None:
+        return _TESSERACT_HINDI_AVAILABLE
+    if not shutil.which("tesseract"):
+        _TESSERACT_HINDI_AVAILABLE = False
+        return False
+    try:
+        result = subprocess.run(
+            ["tesseract", "--list-langs"], capture_output=True, text=True, timeout=8, check=False
+        )
+        _TESSERACT_HINDI_AVAILABLE = result.returncode == 0 and re.search(
+            r"(?m)^\s*hin\s*$", result.stdout or ""
+        ) is not None
+    except (OSError, subprocess.SubprocessError):
+        _TESSERACT_HINDI_AVAILABLE = False
+    return _TESSERACT_HINDI_AVAILABLE
+
+
+def _ocr_shree_dev_prompt(page: Any, bbox: tuple[float, float, float, float]) -> tuple[str, str]:
+    """OCR only the Hindi prompt block rendered with a known SHREE-DEV legacy font.
+
+    OCR is a reconstruction aid, never an approval signal. If Hindi trained data or a usable
+    prompt is unavailable, leave the original encoded text unchanged and mark it for review.
+    """
+    if not _tesseract_hindi_available():
+        return "", "SHREEDEV_OCR_UNAVAILABLE_RAW_PRESERVED"
+    try:
+        x0, y0, x1, y1 = bbox
+        clip = fitz.Rect(x0 - 2, y0 - 2, x1 + 3, y1 + 3) & page.rect
+        if clip.width < 8 or clip.height < 8:
+            return "", "SHREEDEV_OCR_INVALID_CROP_RAW_PRESERVED"
+        pixmap = page.get_pixmap(matrix=fitz.Matrix(4, 4), clip=clip, alpha=False)
+        result = subprocess.run(
+            ["tesseract", "stdin", "stdout", "-l", "hin", "--psm", "6"],
+            input=pixmap.tobytes("png"), capture_output=True, timeout=15, check=False,
+        )
+        if result.returncode != 0:
+            return "", "SHREEDEV_OCR_FAILED_RAW_PRESERVED"
+        decoded = result.stdout.decode("utf-8", errors="replace")
+        normalized = normalize_ocr_prompt(decoded)
+        if not normalized:
+            return "", "SHREEDEV_OCR_NO_USABLE_HINDI_RAW_PRESERVED"
+        return normalized, "OCR_SHREEDEV_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW"
+    except (OSError, ValueError, RuntimeError, subprocess.SubprocessError):
+        return "", "SHREEDEV_OCR_FAILED_RAW_PRESERVED"
+
+
 def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
     collected: list[dict[str, Any]] = []
     for page_index in range(len(pdf)):
@@ -363,6 +430,22 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
         if page_num < 2 or page_num > 45:
             continue
         page = pdf[page_index]
+        # Correlate positioned text blocks with span-level fonts. OCR is restricted to the
+        # source blocks explicitly rendered with SHREE-DEV-0708/0709, never applied globally.
+        block_metadata: dict[tuple[float, float], dict[str, Any]] = {}
+        for text_block in page.get_text("dict").get("blocks", []):
+            if not text_block.get("lines") or not text_block.get("bbox"):
+                continue
+            bx0, by0, bx1, by1 = (float(value) for value in text_block["bbox"])
+            fonts = {
+                str(span.get("font", "")).strip().upper()
+                for line in text_block.get("lines", [])
+                for span in line.get("spans", [])
+            }
+            block_metadata[(round(by0, 2), round(bx0, 2))] = {
+                "bbox": (bx0, by0, bx1, by1),
+                "fonts": fonts,
+            }
         columns: dict[str, list[tuple[float, str, float]]] = {"left": [], "right": []}
         for block in page.get_text("blocks"):
             x0, y0, x1, y1, block_text, *_ = block
@@ -464,12 +547,22 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                 nonlocal active
                 if active:
                     active["raw_text"] = preserve_layout("\n".join(active.pop("_lines")))
+                    prompt_bbox = active.pop("_prompt_ocr_bbox", None)
+                    if prompt_bbox and active.get("language") == "hi":
+                        ocr_prompt, ocr_status = _ocr_shree_dev_prompt(page, prompt_bbox)
+                        active["prompt_ocr_status"] = ocr_status
+                        if ocr_prompt:
+                            active["prompt_ocr_text"] = ocr_prompt
                     collected.append(active)
                     active = None
 
             logical: list[tuple[float, str, float, str | None, int | None, str | None, str | None]] = []
+            block_question_counts: dict[tuple[str, float, float], tuple[int, bool]] = {}
             for y0, block_text, x0 in blocks:
                 preamble, question_parts = _split_block_questions(block_text, cycle)
+                block_question_counts[(column, round(y0, 2), round(x0, 2))] = (
+                    len(question_parts), bool(preamble.strip())
+                )
                 if preamble.strip():
                     logical.append((y0, preamble, x0, None, None, None, None))
                 for part_index, (identity, number, prefix, part_text) in enumerate(question_parts):
@@ -545,6 +638,17 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                     "raw_text": "",
                     "_lines": question_lines,
                 }
+                source_block_key = (column, round(y0, 2), round(x0, 2))
+                font_metadata = block_metadata.get((round(y0, 2), round(x0, 2)), {})
+                question_count, has_preamble = block_question_counts.get(source_block_key, (0, True))
+                if (
+                    locale == "hi"
+                    and question_count == 1
+                    and not has_preamble
+                    and SHREE_DEV_FONT_NAMES.intersection(font_metadata.get("fonts", set()))
+                    and font_metadata.get("bbox")
+                ):
+                    active["_prompt_ocr_bbox"] = font_metadata["bbox"]
                 # Attach the same stimulus ID/content to every item within its declared range.
                 for spec in passage_specs:
                     if identity_matches_spec(identity, number, prefix, spec) and spec["group_id"] in stimulus_by_group:
@@ -620,6 +724,8 @@ def hindi_conversion_needs_review(status: str) -> bool:
     value = str(status or "")
     return (
         "FORCED_LEGACY" in value
+        or "REQUIRES_HUMAN_REVIEW" in value
+        or value.startswith("SHREEDEV_OCR_")
         or value in {
             "LEGACY_FONT_UNCERTAIN_RAW_PRESERVED",
             "CONVERTER_UNAVAILABLE",
@@ -693,6 +799,8 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 if candidate_length >= previous_length:
                     entry["source_variants"][row["language"]] = {
                         "prompt_raw": prompt,
+                        "prompt_ocr_text": row.get("prompt_ocr_text") or "",
+                        "prompt_ocr_status": row.get("prompt_ocr_status") or "",
                         "options": options,
                         "conversion_status": "RAW_LEGACY" if row["language"] == "hi" else "SOURCE_TEXT",
                         "stimulus_id": row.get("stimulus_id"),
@@ -721,7 +829,14 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 # use the English sibling to reconstruct the Hindi language-test wording.
                 conversion_reference = "" if native_language_only else english_reference
                 if hi:
-                    converted_prompt, status = convert_hindi_text(hi.get("prompt_raw", ""), conversion_reference)
+                    if hi.get("prompt_ocr_text"):
+                        converted_prompt = str(hi["prompt_ocr_text"])
+                        status = str(hi.get("prompt_ocr_status") or "OCR_SHREEDEV_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW")
+                    elif str(hi.get("prompt_ocr_status") or "").startswith("SHREEDEV_OCR_"):
+                        converted_prompt = str(hi.get("prompt_raw", ""))
+                        status = str(hi["prompt_ocr_status"])
+                    else:
+                        converted_prompt, status = convert_hindi_text(hi.get("prompt_raw", ""), conversion_reference)
                     hi["prompt_i18n"] = preserve_layout(converted_prompt)
                     hi["conversion_status"] = status
                     hi["translation_policy"] = "NATIVE_SOURCE_ONLY" if native_language_only else "BILINGUAL_SOURCE_VARIANTS"
@@ -943,7 +1058,7 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 "alternate_language_tracks":alternate_language_tracks,
                 "source_notes":[
                     "Original PDF bytes are preserved exactly; SHA-256 is recorded.",
-                    "Supported legacy Hindi encodings are converted to Unicode; unsupported or uncertain font encodings remain raw and are flagged for visual review. The current TRE source PDFs include SHREE-DEV-0708/0709 text spans, which must not be force-converted as KrutiDev or Chanakya.",
+                    "Supported legacy Hindi encodings are converted to Unicode. SHREE-DEV-0708/0709 prompt blocks use Hindi OCR only when Tesseract Hindi data is available; reconstructed text remains pending human review, and the raw legacy text plus page provenance are preserved.",
                     "All questions present in each original booklet are preserved. TRE 2.0 and TRE 3.0 each have 30 qualifying-language items in addition to 40 General Studies + 80 Computer Science, for 150 total. Only GS and Computer Science contribute to the scored result, reported in two sections.",
                     "Do not release until question/option pair completeness, Hindi rendering, answers, concise explanations, paper rules and any mathematical/code expressions have been reviewed.",
                 ],
