@@ -75,7 +75,7 @@ public class RazorpayXPayoutWebhookController {
   }
 
   private static boolean verify(byte[] body,String supplied,String secret) {
-    if(!supplied.matches("(?i)[0-9a-f]{64}"))return false;
+    if(body==null||supplied==null||secret==null||secret.isBlank()||!supplied.matches("(?i)[0-9a-f]{64}"))return false;
     try {
       Mac mac=Mac.getInstance("HmacSHA256");
       mac.init(new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),"HmacSHA256"));
