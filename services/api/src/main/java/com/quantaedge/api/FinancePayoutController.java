@@ -223,6 +223,19 @@ public class FinancePayoutController {
         and not exists(select 1 from finance_payout p where p.batch_id=b.id
           and p.status not in ('PROCESSED','FAILED','REJECTED','REVERSED'))
       """));
+    out.put("pendingFeeAdjustments",count("""
+      select count(*) from course_payment_order_fee_adjustment q
+      where not exists(select 1 from course_payment_order_fee_adjustment_review r where r.adjustment_id=q.id)
+      """));
+    LocalDate nextBatchEnd=YearMonth.from(LocalDate.now(INDIA)).minusMonths(1).atEndOfMonth();
+    out.put("pendingFeeAdjustmentsForNextBatch",count("""
+      select count(distinct q.id) from course_payment_order_fee_adjustment q
+      join course_payment_order o on o.id=q.course_payment_order_id and o.status='VERIFIED'
+      join revenue_share_allocation a on a.course_payment_order_id=o.id
+      join revenue_share_allocation_event e on e.allocation_id=a.id and e.event_type='EARNED'
+      where e.created_at < (?::date + interval '1 day')
+        and not exists(select 1 from course_payment_order_fee_adjustment_review r where r.adjustment_id=q.id)
+      """,nextBatchEnd));
     out.put("providerConfigured",providerConfigured());
     return out;
   }
@@ -1012,6 +1025,20 @@ public class FinancePayoutController {
       """,end);
     if(!missingFees.isEmpty())throw bad("Payouts are blocked because confirmed processor charges are missing for captured order(s): "+
         missingFees.stream().map(r->number(r.get("order_id"))).toList()+". Record actual Razorpay settlement fees first; do not use estimates.");
+
+    List<Map<String,Object>> pendingCorrections=jdbc.queryForList("""
+      select distinct q.id,q.course_payment_order_id as order_id
+      from course_payment_order_fee_adjustment q
+      join course_payment_order o on o.id=q.course_payment_order_id and o.status='VERIFIED'
+      join revenue_share_allocation a on a.course_payment_order_id=o.id
+      join revenue_share_allocation_event e on e.allocation_id=a.id and e.event_type='EARNED'
+      where e.created_at < (?::date + interval '1 day')
+        and not exists(select 1 from course_payment_order_fee_adjustment_review r where r.adjustment_id=q.id)
+      order by q.id limit 25
+      """,end);
+    if(!pendingCorrections.isEmpty())throw bad("Payouts are blocked because fee-correction requests affecting this period still need an independent decision: "
+      +pendingCorrections.stream().map(r->"correction #"+number(r.get("id"))+" for order #"+number(r.get("order_id"))).toList()
+      +". Review or reject these requests before preparing the month.");
 
     Map<String,Object> feeReconciliationBlocker=one("""
       select b.id from finance_payout_batch b
