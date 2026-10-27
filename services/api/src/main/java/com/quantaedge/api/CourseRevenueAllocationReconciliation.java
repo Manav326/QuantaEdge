@@ -26,6 +26,7 @@ final class CourseRevenueAllocationReconciliation {
       Long orderPolicyId,
       long capturedAmountPaise,
       long outputTaxPaise,
+      String orderCurrency,
       List<Map<String,Object>> recordedRows) {
     List<String> issues = new ArrayList<>();
     List<String> details = new ArrayList<>();
@@ -42,6 +43,12 @@ final class CourseRevenueAllocationReconciliation {
       }
       details.add("Locked policy ID: " + snapshotPolicyId + "; order policy ID: "
           + (orderPolicyId == null ? "missing" : orderPolicyId));
+      String snapshotCurrency = text(snapshot.get("currency")).toUpperCase(Locale.ROOT);
+      String normalizedOrderCurrency = text(orderCurrency).toUpperCase(Locale.ROOT);
+      if (!snapshotCurrency.isBlank() && !normalizedOrderCurrency.isBlank()
+          && !snapshotCurrency.equals(normalizedOrderCurrency)) {
+        issues.add("The locked revenue-share policy currency does not match the order currency.");
+      }
     }
 
     long distributablePoolPaise = 0L;
@@ -174,6 +181,15 @@ final class CourseRevenueAllocationReconciliation {
       }
       String key = key(recipientType, recipientId);
       recordedByRecipient.computeIfAbsent(key, ignored -> new ArrayList<>()).add(row);
+      String recordedCurrency = text(row.get("currency")).toUpperCase(Locale.ROOT);
+      if (!text(orderCurrency).isBlank() && !recordedCurrency.equalsIgnoreCase(text(orderCurrency))) {
+        issues.add("Allocation #" + number(row.get("id")) + " has a different currency from the sale.");
+      }
+      ExpectedAllocation expectedRecipient = expected.get(key);
+      if (expectedRecipient != null && expectedRecipient.policyRecipientId > 0
+          && number(row.get("policy_recipient_id")) != expectedRecipient.policyRecipientId) {
+        issues.add("Allocation #" + number(row.get("id")) + " points to a different policy-recipient row.");
+      }
       recordedTotalPaise = Math.addExact(recordedTotalPaise, number(row.get("allocated_amount_paise")));
       recordedEarnedEventsPaise = Math.addExact(recordedEarnedEventsPaise,
           number(row.get("earned_event_amount_paise")));
