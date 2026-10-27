@@ -169,7 +169,7 @@ def validate_tre_hindi_ocr_preflight(papers: list[dict[str, Any]]) -> None:
     tre3_hindi = str((tre3_prompts or {}).get("hi") or "").strip() if isinstance(tre3_prompts, dict) else ""
     tre3_metadata = tre3_question.get("hindi_prompt_reconstruction") if isinstance(tre3_question, dict) else None
     if (
-        len(re.findall(r"[\\u0900-\\u097F]", tre3_hindi)) < 4
+        len(re.findall(r"[\u0900-\u097F]", tre3_hindi)) < 4
         or not isinstance(tre3_metadata, dict)
         or tre3_metadata.get("method") != "TESSERACT_HINDI_OCR"
         or tre3_metadata.get("status") != "REQUIRES_HUMAN_REVIEW"
