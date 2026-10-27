@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c8c35cde07c88b0a5e7194c3f8fb2af50820c1eefe6819743a346bc14bc4a7f4",
+  "raw_analysis_sha256": "dd427badf6a5255fc84bfbba742351524d0ea86011bb7ea9517d8fe713218109",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40568791626",
-      "checkpointed_at": "2026-10-27T21:12:37Z",
+      "checkpointed_at": "2026-10-27T21:21:32Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -29442,7 +29442,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40568791626",
-      "checkpointed_at": "2026-10-27T21:14:00Z",
+      "checkpointed_at": "2026-10-27T21:22:57Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -57315,7 +57315,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40568791626",
-      "checkpointed_at": "2026-10-27T21:15:00Z",
+      "checkpointed_at": "2026-10-27T21:23:57Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66966,7 +66966,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40568791626",
-      "checkpointed_at": "2026-10-27T21:15:50Z",
+      "checkpointed_at": "2026-10-27T21:24:48Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -72545,6 +72545,42 @@
           "The image does not provide specific temperature readings.",
           "The image does not show the actual temperature measurements."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ead2a0991200cae313ecf9ce",
+      "asset_sha256": "014b7488b9f6c661af9d6e408d9632b760eaa40e796311439426630e66e65a3a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 151,
+      "asset_path": "assets/014b7488b9f6c661af9d6e408d9632b760eaa40e796311439426630e66e65a3a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8e71bc7eebe0216970654da250116d1dcaa3863505130e66a89dbb611ec21e52",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red triangular warning sign with a white exclamation mark in the center.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40568791626",
+      "checkpointed_at": "2026-10-27T21:26:19Z",
+      "effective_analysis": {
+        "visual_summary": "A red triangular warning sign with a white exclamation mark in the center.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

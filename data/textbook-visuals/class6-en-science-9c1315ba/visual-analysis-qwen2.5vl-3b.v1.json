@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1418,
+    "assets_selected": 1419,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "9fb71d7d0f261624fe3ce0a4"
+      "ead2a0991200cae313ecf9ce"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1414,
-    "assets_remaining": 664,
-    "assets_completion_percent": 68.0,
+    "assets_analyzed": 1415,
+    "assets_remaining": 663,
+    "assets_completion_percent": 68.1,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 1413,
+    "assets_skipped_from_checkpoint": 1414,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -451,7 +451,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40568791626",
-      "checkpointed_at": "2026-10-27T21:12:37Z"
+      "checkpointed_at": "2026-10-27T21:21:32Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20129,7 +20129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40568791626",
-      "checkpointed_at": "2026-10-27T21:14:00Z"
+      "checkpointed_at": "2026-10-27T21:22:57Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37984,7 +37984,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40568791626",
-      "checkpointed_at": "2026-10-27T21:15:00Z"
+      "checkpointed_at": "2026-10-27T21:23:57Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44144,7 +44144,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40568791626",
-      "checkpointed_at": "2026-10-27T21:15:50Z"
+      "checkpointed_at": "2026-10-27T21:24:48Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -47724,6 +47724,32 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
       "checkpointed_at": "2026-10-27T01:55:45Z"
+    },
+    {
+      "asset_id": "ead2a0991200cae313ecf9ce",
+      "asset_sha256": "014b7488b9f6c661af9d6e408d9632b760eaa40e796311439426630e66e65a3a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 151,
+      "asset_path": "assets/014b7488b9f6c661af9d6e408d9632b760eaa40e796311439426630e66e65a3a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8e71bc7eebe0216970654da250116d1dcaa3863505130e66a89dbb611ec21e52",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red triangular warning sign with a white exclamation mark in the center.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40568791626",
+      "checkpointed_at": "2026-10-27T21:26:19Z"
     }
   ]
 }
