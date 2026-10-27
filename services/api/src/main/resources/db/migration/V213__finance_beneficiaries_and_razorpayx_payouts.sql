@@ -55,7 +55,7 @@ ALTER TABLE revenue_share_allocation
     OR (recipient_type='COMPANY' AND institution_id IS NULL AND legal_entity_id IS NOT NULL)
   ),
   ADD CONSTRAINT revenue_share_allocation_company_recipient_unique UNIQUE(course_payment_order_id,legal_entity_id);
-DO $
+DO $migration$
 DECLARE fk_name text;
 BEGIN
   SELECT conname INTO fk_name
@@ -66,7 +66,7 @@ BEGIN
   IF fk_name IS NOT NULL THEN
     EXECUTE format('ALTER TABLE revenue_share_allocation DROP CONSTRAINT %I',fk_name);
   END IF;
-END $;
+END $migration$;
 ALTER TABLE revenue_share_allocation
   ADD CONSTRAINT revenue_share_allocation_policy_institution_fk
     FOREIGN KEY(policy_recipient_id,policy_id,institution_id)
