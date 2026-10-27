@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "84f1eeadbd4d686e9f0a06cbc9bfa9323a5f98e16878c90f90ee908f0b66adb4",
+  "raw_analysis_sha256": "29ababcc4e588cb869364ee3b39ca02c99cf619898bd050169153bca4badca92",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40573700980",
-      "checkpointed_at": "2026-10-27T21:07:11Z",
+      "checkpointed_at": "2026-10-27T21:09:56Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40573700980",
-      "checkpointed_at": "2026-10-27T21:07:36Z",
+      "checkpointed_at": "2026-10-27T21:10:21Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40573700980",
-      "checkpointed_at": "2026-10-27T21:08:07Z",
+      "checkpointed_at": "2026-10-27T21:10:51Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -65709,7 +65709,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40573700980",
-      "checkpointed_at": "2026-10-27T21:08:52Z",
+      "checkpointed_at": "2026-10-27T21:11:35Z",
       "effective_analysis": {
         "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
@@ -67464,6 +67464,76 @@
           "easy path"
         ],
         "context_relation": "description",
+        "limitations": [
+          "The image does not show the lightning conductor in action or its function."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "929a1a8f3449aac585ffb55c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 112,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e7642c3aeda86d04ba7f1847071dffd75b249cbd6931426fb55becc7d77fadd0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A lightning conductor is a metallic rod installed along the walls of buildings during construction. One end is pointed and kept higher than the highest point of the building, while the other end is buried deep in the ground.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Ever heard of ...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building (Fig. 6.18).",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides easy path for the"
+        ],
+        "concepts": [
+          "lightning conductor",
+          "metallic rod",
+          "construction",
+          "walls of buildings",
+          "pointed end",
+          "highest point of the building",
+          "buried deep in the ground",
+          "easy path"
+        ],
+        "context_relation": "descriptive",
+        "limitations": [
+          "The image does not show the lightning conductor in action or its function."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40573700980",
+      "checkpointed_at": "2026-10-27T21:11:55Z",
+      "effective_analysis": {
+        "visual_summary": "A lightning conductor is a metallic rod installed along the walls of buildings during construction. One end is pointed and kept higher than the highest point of the building, while the other end is buried deep in the ground.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Ever heard of ...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building (Fig. 6.18).",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides easy path for the"
+        ],
+        "concepts": [
+          "lightning conductor",
+          "metallic rod",
+          "construction",
+          "walls of buildings",
+          "pointed end",
+          "highest point of the building",
+          "buried deep in the ground",
+          "easy path"
+        ],
+        "context_relation": "descriptive",
         "limitations": [
           "The image does not show the lightning conductor in action or its function."
         ]
