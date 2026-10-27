@@ -240,8 +240,8 @@ def build_question_snapshot(record: dict[str, Any], cycle: str, pdf_path: str, p
             if field in source_option:
                 option[field] = source_option[field]
         hindi_source_option = hi_options.get(key) or {}
-        if hindi_source_option.get("ocr_text_i18n"):
-            # Keep exact source option text and page provenance next to OCR text for visual review.
+        if hindi_source_option.get("hindi_ocr_status"):
+            # This marker is set only when OCR text was actually selected instead of a canonical option.
             option["hindi_ocr_reconstruction"] = {
                 "method": "TESSERACT_HINDI_OCR",
                 "status": "REQUIRES_HUMAN_REVIEW",
