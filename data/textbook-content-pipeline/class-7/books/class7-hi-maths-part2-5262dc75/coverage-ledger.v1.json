@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 1757,
     "eligible_visual_asset_rows": 1757,
-    "raw_analysis_result_rows": 30,
-    "successful_visual_analyses": 16,
-    "missing_visual_analyses": 1727,
-    "failed_visual_analyses": 14,
+    "raw_analysis_result_rows": 40,
+    "successful_visual_analyses": 24,
+    "missing_visual_analyses": 1717,
+    "failed_visual_analyses": 16,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1741,
+    "unresolved_count": 1733,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -7095,9 +7095,38 @@
       "asset_path": "page-0010.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Page from a textbook in Hindi with text about educational institutions and individuals.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "सदस्य-समन्वयक (हिंदी संस्करण)",
+          "टी.पी. शर्मा, आचार्य, विज्ञान एवं गणित शिक्षा विभाग, रा.शै.अ.प्र.प., नई दिल्ली",
+          "अनुवादक",
+          "आशीष कुमार श्रीवास्तव, प्रवक्ता (गणित), एंग्लो बंगाली इंटरमीडिएट कॉलेज, प्रयागराज, उत्तर प्रदेश",
+          "उमंग कुमार पंड्या, संसाधन विशेषज्ञ, सी.बी.ई.ओ., झल्ललाारा, सालुम्बर, राजस्थान",
+          "ॠषिकेश कुमार, सहायक आचार्य, विज्ञान एवं गणित शिक्षा विभाग, रा.शै.अ.प्र.प., नई दिल्ली",
+          "निशांत शेखर झा, कनिष्ठष्ठ अनुवाद अधिकारी, दूरसंचार विभाग, संचार मंत्रालय, नई दिल्ली",
+          "विनय कुमार, सहायक आचार्य, दिल्ली विश्वविद्यालय, नई दिल्ली",
+          "सुधा पाटीदार, संसाधन विशेषज्ञ, नई दिल्ली",
+          "सुभाष कौशिक, प्रवक्ता (सेवानिवृत्त), शिक्षा मंत्रालय, राष्ट्रीय राजधानी क्षेत्र, दिल्ली",
+          "अनुवाद समीक्षक",
+          "विजयराज सिंह शेखावत, सहायक निदेशक, वैज्ञानिक तथा तकनीकि शब्दावली आयोग, शिक्षा मंत्रालय, नई दिल्ली",
+          "स्वस्तित शर्मा, वरिष्ठ परामर्शदाता, प्रोग्राम ऑफिस, एन.एस.टी.सी."
+        ],
+        "concepts": [
+          "Educational institutions",
+          "Individuals involved in education",
+          "Hindi language",
+          "Textbook content"
+        ],
+        "context_relation": "The text is a page from a textbook in Hindi, discussing various educational institutions and individuals involved in the field of education.",
+        "limitations": [
+          "The text is in Hindi and may not be easily understood by non-Hindi speakers.",
+          "The text does not provide specific details about the institutions or individuals mentioned."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7113,9 +7142,35 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the development of a curriculum for cross-cutting themes in education, involving various educational institutions and experts.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "आभार",
+          "राष्ट्रीय शैक्षिक अनुसंधान और प्रशिक्षणरिषद्् इस पाठ्यपुस््ततक को विकसित करने  मेें मिश्रित",
+          "विषयोों  (क्रॉॉस कटिंग थीम्स) पर दिशानिर्देशोों के लिए पाठ्यचर््ययात्मक  क्षेेत्र समूूह (CAG) और",
+          "गणित एवं अन््य संबद्ध पाठ्यचर््ययात्मक  क्षेेत्र समूहोों के सम््ममानित अध््यक्ष एवं सदस््योों का उनके",
+          "मार््गदर््शन एवं समर््थन के लिए आभार व्यक्‍त करती है। इस पाठ्यपुस््ततक के विकास के समय",
+          "विभिन््न कार््यशालाएँ आयोजित की  गर्इं   जिनमेें विभिन््न संस््थथानों  से गणित के विषय विशेषज्ञ",
+          "आमंत्रित किए गए। परिषद् इन विषय-विशेषज्ञञों द्ारा इस पाठ्यपुस््ततक की विषयवस््ततु के विकास एवं शिक्ष",
+          "के विकास एवं शिक्ष"
+        ],
+        "concepts": [
+          "curriculum development",
+          "cross-cutting themes",
+          "CAG",
+          "mathematics and related subjects",
+          "experts and coordinators",
+          "various educational institutions",
+          "development of subject matter"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the development of a curriculum for cross-cutting themes in education, involving various educational institutions and experts.",
+        "limitations": [
+          "The image does not provide specific details about the curriculum development process or the subjects involved."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7131,9 +7186,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7149,7 +7213,7 @@
       "asset_path": "page-0011.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -7167,7 +7231,7 @@
       "asset_path": "assets/f5bb5bb18985f30bc72e21b7fa9d8c8420a64192fc6b56fbfd8b185fbe3e1d2c.jpx",
       "media_type": "image/jpx",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -7185,9 +7249,18 @@
       "asset_path": "assets/bbb407c8d9f4b049be6a8fbe2a7f2896e51b3961729a230c7a8283a43700e649.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visible content or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7203,9 +7276,18 @@
       "asset_path": "assets/e0079aa99561d88a922c3c51eb2382e32d3f39eee35528b6241bfe0a8466b20d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to yellow.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7221,9 +7303,18 @@
       "asset_path": "assets/2dbbbcb8a21495310878e56c5b3b586f0b0e69936131dfd9605b8948ec797c05.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to dark orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7239,9 +7330,18 @@
       "asset_path": "assets/38e10fab41fdf5613faee47d4261973de8ef97c1befff5f36c3c91b29d91ac42.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to yellow.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7257,9 +7357,18 @@
       "asset_path": "assets/fcd4796c40735b32a3d243e23c51f6d85c07d1052a051c43603942cb0d6b480c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light yellow to orange.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
