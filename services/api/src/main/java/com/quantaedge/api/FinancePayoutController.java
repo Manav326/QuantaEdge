@@ -1218,6 +1218,7 @@ public class FinancePayoutController {
         coalesce(nullif(offer.title_override,''),course.display_name) as course_title,
         source_t.display_name as source_institution_name,
         marketplace_t.display_name as marketplace_institution_name,
+        invoice.document_number as invoice_number,seller.legal_name as legal_seller_name,
         b.beneficiary_name,b.beneficiary_type
       from finance_payout_item i
       join finance_payout p on p.id=i.payout_id and p.batch_id=?
@@ -1229,6 +1230,8 @@ public class FinancePayoutController {
         on source_release.id=offer.course_release_id and source_release.program_id=o.course_id
       left join institution_tenant source_t on source_t.id=source_release.source_institution_id
       left join institution_tenant marketplace_t on marketplace_t.id=o.institution_id
+      left join fiscal_document invoice on invoice.id=o.fiscal_document_id
+      left join billing_legal_entity seller on seller.id=invoice.legal_entity_id
       left join finance_payout_beneficiary b on b.id=p.beneficiary_id
       where (?::bigint is null or p.id=?)
       order by lower(coalesce(nullif(offer.title_override,''),course.display_name,'')),o.id,a.id
