@@ -639,7 +639,14 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                                 and not re.fullmatch(r"[\d\s.,:/()+=%-]+", str(line.get("text", "")).strip())
                                 for line in lines
                             )
-                            if mixed_fonts:
+                            has_math_or_code = any(
+                                looks_like_code_line(str(line.get("text", "")))
+                                or looks_like_math_line(str(line.get("text", "")))
+                                for line in lines
+                            )
+                            if has_math_or_code:
+                                stimulus_record["ocr_status"] = "SHREEDEV_OCR_MATH_OR_CODE_RAW_PRESERVED"
+                            elif mixed_fonts:
                                 stimulus_record["ocr_status"] = "SHREEDEV_OCR_MIXED_FONT_RAW_PRESERVED"
                             else:
                                 stimulus_bbox = stimulus_metadata.get("bbox")
@@ -748,6 +755,7 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                             and option_match
                             and len(OPTION_START.findall(block_text)) == 1
                             and not looks_like_code_line(block_text)
+                            and not looks_like_math_line(block_text)
                             and uses_legacy_hindi_glyphs(block_text, font_metadata.get("fonts", set()))
                             and font_metadata.get("bbox")
                         ):
@@ -808,6 +816,8 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                     option_line_indices = [
                         index for index, line in enumerate(line_metadata)
                         if OPTION_START.match(str(line.get("text", "")))
+                        and not looks_like_code_line(str(line.get("text", "")))
+                        and not looks_like_math_line(str(line.get("text", "")))
                         and uses_legacy_hindi_glyphs(str(line.get("text", "")), line.get("fonts", set()))
                     ]
                     first_option_index = option_line_indices[0] if option_line_indices else len(line_metadata)
@@ -820,7 +830,15 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                         and str(line.get("text", "")).strip()
                         for line in prompt_lines
                     )
-                    if prompt_has_mixed_fonts:
+                    prompt_has_math_or_code = any(
+                        looks_like_code_line(str(line.get("text", "")))
+                        or looks_like_math_line(str(line.get("text", "")))
+                        for line in prompt_lines
+                    )
+                    if prompt_has_math_or_code:
+                        # OCR can substitute exam numerals/formulas; preserve those blocks for human verification.
+                        active["_prompt_ocr_status"] = "SHREEDEV_OCR_MATH_OR_CODE_RAW_PRESERVED"
+                    elif prompt_has_mixed_fonts:
                         # Do not let OCR silently drop formula/code/Latin-font lines from a Hindi stem.
                         active["_prompt_ocr_status"] = "SHREEDEV_OCR_MIXED_FONT_RAW_PRESERVED"
                     else:
