@@ -88,7 +88,7 @@ export function inspectUiCopyQuality(englishCatalog, hinglishCatalog, options = 
     blankMessages,
     placeholderMismatches,
     longCandidates,
-    note: 'Long-copy flags are review candidates, not automatic failures. Confirm context and preserve legal, safety, payment, and assessment meaning before editing. This report cannot prove contextual translation accuracy.',
+    note: 'Long-copy flags are candidates for human contextual review, not automatic failures. Confirm context and preserve legal, safety, payment, and assessment meaning before editing. This report cannot prove contextual translation accuracy.',
   };
 }
 
