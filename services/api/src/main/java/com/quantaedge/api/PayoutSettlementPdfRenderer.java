@@ -102,6 +102,9 @@ public class PayoutSettlementPdfRenderer {
       c.keyValue("Bank account",safeBank(pay));
       c.keyValue("Transfer reference",safeText(pay.get("provider_payout_id")));
       c.keyValue("Bank UTR / transfer reference",utr(pay));
+      c.keyValue("Payment collection entity",safeText(safeBatch.get("payment_collection_legal_name")));
+      c.keyValue("RazorpayX funding owner",safeText(safeBatch.get("razorpayx_funding_legal_name")));
+      c.keyValue("Funding arrangement review",label(string(safeBatch.get("collection_arrangement_status"))));
       c.keyValue("Processed at",dateTime(pay.get("processed_at")));
       c.keyValue("Provider fee (actual)",moneyNullable(pay.get("provider_fee_paise"),currency(pay)));
       c.keyValue("Tax on provider fee (actual)",moneyNullable(pay.get("provider_fee_tax_paise"),currency(pay)));
@@ -111,6 +114,9 @@ public class PayoutSettlementPdfRenderer {
       c.keyValue("Batch reference",firstNonBlank(safeBatch,"public_id","id"));
       c.keyValue("Batch status",label(batchStatus));
       c.keyValue("Currency",currency(safeBatch));
+      c.keyValue("Payment collection entity",safeText(safeBatch.get("payment_collection_legal_name")));
+      c.keyValue("RazorpayX funding owner",safeText(safeBatch.get("razorpayx_funding_legal_name")));
+      c.keyValue("Funding arrangement review",label(string(safeBatch.get("collection_arrangement_status"))));
       c.keyValue("Prepared by",safeText(safeBatch.get("created_by_name")));
       c.keyValue("Prepared at",dateTime(safeBatch.get("created_at")));
       c.keyValue("Approved by",safeText(safeBatch.get("approved_by_name")));
@@ -190,7 +196,9 @@ public class PayoutSettlementPdfRenderer {
       g.setColor(BRAND);g.fillRect(0,0,WIDTH,15);
       g.setColor(INK);g.setFont(font(Font.BOLD,19));g.drawString("QUANTAEDGE FINANCE",MARGIN,66);
       g.setColor(MUTED);g.setFont(font(Font.PLAIN,13));g.drawString("HRMS / SETTLEMENT RECORD",MARGIN,91);
-      g.setColor(BRAND);g.setFont(font(Font.BOLD,14));g.drawString(continued?"CONTINUED":"INTERNAL FINANCE PDF",WIDTH-320,66);
+      g.setColor(BRAND);g.setFont(font(Font.BOLD,14));
+      String documentClass=continued?"CONTINUED":(title.equals("MONTHLY PAYOUT ADVICE")?"RECIPIENT PAYOUT ADVICE":"INTERNAL FINANCE PDF");
+      g.drawString(documentClass,WIDTH-320,66);
       g.setColor(LINE);g.drawLine(MARGIN,112,WIDTH-MARGIN,112);
       g.setColor(INK);g.setFont(font(Font.BOLD,continued?24:28));g.drawString(continued?title+" (CONTINUED)":title,MARGIN,160);
       g.setColor(MUTED);g.setFont(font(Font.PLAIN,13));
