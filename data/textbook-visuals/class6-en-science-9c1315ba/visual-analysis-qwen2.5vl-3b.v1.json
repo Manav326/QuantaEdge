@@ -8,7 +8,7 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1394,
+    "assets_selected": 1398,
     "assets_processed_this_run": 10,
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
@@ -16,18 +16,18 @@
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "9fb71d7d0f261624fe3ce0a4",
-      "895e55170e2df8f85f399e23",
-      "a7581a1456a38daca8a863b2",
-      "fe31266cae3b619f59eafe9c",
-      "ed2f2cc528fbe2d080cc1db2"
+      "4d98adcd71ab775e65d37377",
+      "98e46d31cea07b228e7c0ec2",
+      "a545dc47e337962c2e330ba7",
+      "2dee548c8594fb95331ada8d",
+      "a2314a67d3730bd635c1f676"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1388,
-    "assets_remaining": 690,
-    "assets_completion_percent": 66.8,
+    "assets_analyzed": 1393,
+    "assets_remaining": 685,
+    "assets_completion_percent": 67.0,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 1384,
+    "assets_skipped_from_checkpoint": 1388,
     "batch_limit": 10,
     "publication_allowed": false
   },
@@ -468,7 +468,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:38:01Z"
+      "checkpointed_at": "2026-10-27T00:53:38Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20145,7 +20145,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:39:43Z"
+      "checkpointed_at": "2026-10-27T00:55:18Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23804,7 +23804,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:41:11Z"
+      "checkpointed_at": "2026-10-27T00:56:43Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -38049,7 +38049,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:42:22Z"
+      "checkpointed_at": "2026-10-27T00:57:53Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44209,7 +44209,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:43:20Z"
+      "checkpointed_at": "2026-10-27T00:58:50Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -46795,6 +46795,166 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
       "checkpointed_at": "2026-10-27T00:51:41Z"
+    },
+    {
+      "asset_id": "4d98adcd71ab775e65d37377",
+      "asset_sha256": "005882fce630f63185f2f9ea1c19d6c50a06d179d2a83e82c1284fe1e49ababf",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 147,
+      "asset_path": "assets/005882fce630f63185f2f9ea1c19d6c50a06d179d2a83e82c1284fe1e49ababf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb35a65ba9d53c476e5a8dc52c6dcd3d60576649c0ebd7b2d1396fda9b682bd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a person wearing a white shirt and blue striped tie, scratching their neck.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "Temperature scales",
+          "Celsius",
+          "Fahrenheit",
+          "Kelvin",
+          "Conversion between temperature scales"
+        ],
+        "context_relation": "The image is related to the educational content about temperature scales and their conversions.",
+        "limitations": [
+          "The image does not provide specific details about the conversion process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:59:57Z"
+    },
+    {
+      "asset_id": "98e46d31cea07b228e7c0ec2",
+      "asset_sha256": "20751de6658b9ee9a2a789873a1c2e35b610882831473909f0926d47d854b00a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 147,
+      "asset_path": "assets/20751de6658b9ee9a2a789873a1c2e35b610882831473909f0926d47d854b00a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb35a65ba9d53c476e5a8dc52c6dcd3d60576649c0ebd7b2d1396fda9b682bd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rectangular shape with a textured appearance.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or separator for the text about temperature scales.",
+        "limitations": [
+          "The image does not contain any text or information about temperature scales."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:01:02Z"
+    },
+    {
+      "asset_id": "a545dc47e337962c2e330ba7",
+      "asset_sha256": "77159f3f753de036ea143f15c5ac7708e83b4191ca3f335aba105696e323a4e3",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 147,
+      "asset_path": "assets/77159f3f753de036ea143f15c5ac7708e83b4191ca3f335aba105696e323a4e3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb35a65ba9d53c476e5a8dc52c6dcd3d60576649c0ebd7b2d1396fda9b682bd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A large rectangular block of yellow color.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a yellow block.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:02:01Z"
+    },
+    {
+      "asset_id": "2dee548c8594fb95331ada8d",
+      "asset_sha256": "23700ea378dfbfd0aaafee0008b6e79dc7986c793530ac840bbf8d59a8638f44",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 147,
+      "asset_path": "assets/23700ea378dfbfd0aaafee0008b6e79dc7986c793530ac840bbf8d59a8638f44.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb35a65ba9d53c476e5a8dc52c6dcd3d60576649c0ebd7b2d1396fda9b682bd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rectangular shape with rounded corners, resembling a torn piece of paper.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "All three temperature scales, Celsius, Fahrenheit, and Kelvin are named in honour of the scientists who developed these scales.",
+          "Temperature in Kelvin = Temperature in Celsius scale + 273.15",
+          "More to know!"
+        ],
+        "concepts": [
+          "Temperature scales",
+          "Celsius",
+          "Fahrenheit",
+          "Kelvin",
+          "Conversion between temperature scales"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source PDF page.",
+        "limitations": [
+          "The image does not provide any additional information beyond the text in the source PDF page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:03:16Z"
+    },
+    {
+      "asset_id": "a2314a67d3730bd635c1f676",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 147,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb35a65ba9d53c476e5a8dc52c6dcd3d60576649c0ebd7b2d1396fda9b682bd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "temperature scales",
+          "Celsius scale",
+          "Fahrenheit scale",
+          "Kelvin scale",
+          "temperature conversion"
+        ],
+        "context_relation": "The page is likely a blank page or a page with no visible text.",
+        "limitations": [
+          "No visible text or images to analyze."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:03:37Z"
     }
   ]
 }

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1405,
-    "successful_visual_analyses": 1393,
-    "missing_visual_analyses": 673,
+    "raw_analysis_result_rows": 1410,
+    "successful_visual_analyses": 1398,
+    "missing_visual_analyses": 668,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 685,
+    "unresolved_count": 680,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -53225,9 +53225,24 @@
       "asset_path": "assets/005882fce630f63185f2f9ea1c19d6c50a06d179d2a83e82c1284fe1e49ababf.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a person wearing a white shirt and blue striped tie, scratching their neck.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "Temperature scales",
+          "Celsius",
+          "Fahrenheit",
+          "Kelvin",
+          "Conversion between temperature scales"
+        ],
+        "context_relation": "The image is related to the educational content about temperature scales and their conversions.",
+        "limitations": [
+          "The image does not provide specific details about the conversion process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -53243,9 +53258,18 @@
       "asset_path": "assets/20751de6658b9ee9a2a789873a1c2e35b610882831473909f0926d47d854b00a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow rectangular shape with a textured appearance.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or separator for the text about temperature scales.",
+        "limitations": [
+          "The image does not contain any text or information about temperature scales."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -53261,9 +53285,16 @@
       "asset_path": "assets/77159f3f753de036ea143f15c5ac7708e83b4191ca3f335aba105696e323a4e3.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A large rectangular block of yellow color.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a yellow block.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -53279,9 +53310,28 @@
       "asset_path": "assets/23700ea378dfbfd0aaafee0008b6e79dc7986c793530ac840bbf8d59a8638f44.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow rectangular shape with rounded corners, resembling a torn piece of paper.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "All three temperature scales, Celsius, Fahrenheit, and Kelvin are named in honour of the scientists who developed these scales.",
+          "Temperature in Kelvin = Temperature in Celsius scale + 273.15",
+          "More to know!"
+        ],
+        "concepts": [
+          "Temperature scales",
+          "Celsius",
+          "Fahrenheit",
+          "Kelvin",
+          "Conversion between temperature scales"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source PDF page.",
+        "limitations": [
+          "The image does not provide any additional information beyond the text in the source PDF page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -53297,9 +53347,24 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "temperature scales",
+          "Celsius scale",
+          "Fahrenheit scale",
+          "Kelvin scale",
+          "temperature conversion"
+        ],
+        "context_relation": "The page is likely a blank page or a page with no visible text.",
+        "limitations": [
+          "No visible text or images to analyze."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

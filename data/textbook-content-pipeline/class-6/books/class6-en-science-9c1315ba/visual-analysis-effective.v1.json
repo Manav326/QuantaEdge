@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "29519bdc75b0b82b4835105b3b9557fe424a74e83c293e4571a841a8fd095207",
+  "raw_analysis_sha256": "cf9646ee63fa6de31c4f605bba9b92dbe5eded6e650ce18c530c8475f130a91d",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -650,7 +650,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:38:01Z",
+      "checkpointed_at": "2026-10-27T00:53:38Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -29465,7 +29465,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:39:43Z",
+      "checkpointed_at": "2026-10-27T00:55:18Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -35077,7 +35077,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:41:11Z",
+      "checkpointed_at": "2026-10-27T00:56:43Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57433,7 +57433,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:42:22Z",
+      "checkpointed_at": "2026-10-27T00:57:53Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -67084,7 +67084,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:43:20Z",
+      "checkpointed_at": "2026-10-27T00:58:50Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -71076,6 +71076,246 @@
           "The image does not provide specific numerical data or measurements.",
           "The image does not show the actual body temperature readings.",
           "The image does not show the results of the temperature measurements."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4d98adcd71ab775e65d37377",
+      "asset_sha256": "005882fce630f63185f2f9ea1c19d6c50a06d179d2a83e82c1284fe1e49ababf",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 147,
+      "asset_path": "assets/005882fce630f63185f2f9ea1c19d6c50a06d179d2a83e82c1284fe1e49ababf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb35a65ba9d53c476e5a8dc52c6dcd3d60576649c0ebd7b2d1396fda9b682bd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a person wearing a white shirt and blue striped tie, scratching their neck.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "Temperature scales",
+          "Celsius",
+          "Fahrenheit",
+          "Kelvin",
+          "Conversion between temperature scales"
+        ],
+        "context_relation": "The image is related to the educational content about temperature scales and their conversions.",
+        "limitations": [
+          "The image does not provide specific details about the conversion process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:59:57Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a person wearing a white shirt and blue striped tie, scratching their neck.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "Temperature scales",
+          "Celsius",
+          "Fahrenheit",
+          "Kelvin",
+          "Conversion between temperature scales"
+        ],
+        "context_relation": "The image is related to the educational content about temperature scales and their conversions.",
+        "limitations": [
+          "The image does not provide specific details about the conversion process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "98e46d31cea07b228e7c0ec2",
+      "asset_sha256": "20751de6658b9ee9a2a789873a1c2e35b610882831473909f0926d47d854b00a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 147,
+      "asset_path": "assets/20751de6658b9ee9a2a789873a1c2e35b610882831473909f0926d47d854b00a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb35a65ba9d53c476e5a8dc52c6dcd3d60576649c0ebd7b2d1396fda9b682bd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rectangular shape with a textured appearance.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or separator for the text about temperature scales.",
+        "limitations": [
+          "The image does not contain any text or information about temperature scales."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:01:02Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rectangular shape with a textured appearance.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or separator for the text about temperature scales.",
+        "limitations": [
+          "The image does not contain any text or information about temperature scales."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a545dc47e337962c2e330ba7",
+      "asset_sha256": "77159f3f753de036ea143f15c5ac7708e83b4191ca3f335aba105696e323a4e3",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 147,
+      "asset_path": "assets/77159f3f753de036ea143f15c5ac7708e83b4191ca3f335aba105696e323a4e3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb35a65ba9d53c476e5a8dc52c6dcd3d60576649c0ebd7b2d1396fda9b682bd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A large rectangular block of yellow color.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a yellow block.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:02:01Z",
+      "effective_analysis": {
+        "visual_summary": "A large rectangular block of yellow color.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a yellow block.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2dee548c8594fb95331ada8d",
+      "asset_sha256": "23700ea378dfbfd0aaafee0008b6e79dc7986c793530ac840bbf8d59a8638f44",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 147,
+      "asset_path": "assets/23700ea378dfbfd0aaafee0008b6e79dc7986c793530ac840bbf8d59a8638f44.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb35a65ba9d53c476e5a8dc52c6dcd3d60576649c0ebd7b2d1396fda9b682bd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rectangular shape with rounded corners, resembling a torn piece of paper.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "All three temperature scales, Celsius, Fahrenheit, and Kelvin are named in honour of the scientists who developed these scales.",
+          "Temperature in Kelvin = Temperature in Celsius scale + 273.15",
+          "More to know!"
+        ],
+        "concepts": [
+          "Temperature scales",
+          "Celsius",
+          "Fahrenheit",
+          "Kelvin",
+          "Conversion between temperature scales"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source PDF page.",
+        "limitations": [
+          "The image does not provide any additional information beyond the text in the source PDF page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:03:16Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rectangular shape with rounded corners, resembling a torn piece of paper.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "All three temperature scales, Celsius, Fahrenheit, and Kelvin are named in honour of the scientists who developed these scales.",
+          "Temperature in Kelvin = Temperature in Celsius scale + 273.15",
+          "More to know!"
+        ],
+        "concepts": [
+          "Temperature scales",
+          "Celsius",
+          "Fahrenheit",
+          "Kelvin",
+          "Conversion between temperature scales"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the source PDF page.",
+        "limitations": [
+          "The image does not provide any additional information beyond the text in the source PDF page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a2314a67d3730bd635c1f676",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 147,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6fb35a65ba9d53c476e5a8dc52c6dcd3d60576649c0ebd7b2d1396fda9b682bd",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "temperature scales",
+          "Celsius scale",
+          "Fahrenheit scale",
+          "Kelvin scale",
+          "temperature conversion"
+        ],
+        "context_relation": "The page is likely a blank page or a page with no visible text.",
+        "limitations": [
+          "No visible text or images to analyze."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:03:37Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "temperature scales",
+          "Celsius scale",
+          "Fahrenheit scale",
+          "Kelvin scale",
+          "temperature conversion"
+        ],
+        "context_relation": "The page is likely a blank page or a page with no visible text.",
+        "limitations": [
+          "No visible text or images to analyze."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
