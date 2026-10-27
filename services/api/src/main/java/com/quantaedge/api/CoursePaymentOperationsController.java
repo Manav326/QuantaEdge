@@ -226,6 +226,7 @@ public class CoursePaymentOperationsController {
       List<Map<String,Object>> batch=jdbc.queryForList("""
         select o.id as local_order_id,o.institution_id,
           coalesce(t.display_name,'[Institution scope missing]') as institution_name,
+          source_release.source_institution_id,source_t.display_name as source_institution_name,
           o.course_id,coalesce(nullif(offer.title_override,''),course.display_name) as course_title,
           o.student_id,s.display_name as learner_name,o.status,o.failure_code,o.currency,
           o.offer_price_paise,o.captured_amount_paise,o.output_tax_paise,o.captured_at,
