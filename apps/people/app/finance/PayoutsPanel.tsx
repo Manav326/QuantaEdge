@@ -53,6 +53,9 @@ type BeneficiaryBalance={
 type BalanceResponse={totals:{netEarnedPaise:number;refundReversalsPaise:number;confirmedChargesPaise:number;
   netPaidPaise:number;payoutReversalsPaise:number;reservedPaise:number;refundReservePaise:number;payablePaise:number;
   recoveryDuePaise:number;refundReserveBasisPoints:number};beneficiaries:BeneficiaryBalance[];unsupportedCurrencies?:string[]};
+type ProviderEvent={provider_event_id:string;provider_payout_id:string;event_type:string;disposition:string;received_at:string;payload_sha256:string};
+type ReconciliationCandidate={id:number;public_id:string;batch_id:number;period_start:string;period_end:string;amount_paise:number;
+  currency:string;status:string;recipient_name:string;bank_ifsc:string;bank_account_last4:string};
 
 const BASE='/api/v1/hrms/platform/finance';
 async function api<T>(path:string,init:RequestInit={}):Promise<T>{
@@ -95,6 +98,9 @@ export default function PayoutsPanel(){
   const [feeOrders,setFeeOrders]=useState<FeeOrder[]>([]);
   const [batches,setBatches]=useState<Batch[]>([]);
   const [balances,setBalances]=useState<BalanceResponse|null>(null);
+  const [unmatchedEvents,setUnmatchedEvents]=useState<ProviderEvent[]>([]);
+  const [reconciliationCandidates,setReconciliationCandidates]=useState<ReconciliationCandidate[]>([]);
+  const [reconciliationTargets,setReconciliationTargets]=useState<Record<string,string>>({});
   const [payoutFeeDrafts,setPayoutFeeDrafts]=useState<Record<string,{fee:string;tax:string;reference:string;source:string}>>({});
   const [selectedBatch,setSelectedBatch]=useState<Batch|null>(null);
   const [loading,setLoading]=useState(true);
@@ -111,13 +117,16 @@ export default function PayoutsPanel(){
   const load=useCallback(async()=>{
     setLoading(true);setError('');
     try{
-      const [c,s,o,b,f,bs,bal]=await Promise.all([
+      const [c,s,o,b,f,bs,bal,ue,rc]=await Promise.all([
         api<Catalog>(BASE+'/payout-catalog'),api<Settings>(BASE+'/payout-settings'),api<Overview>(BASE+'/payout-overview'),
         api<Beneficiary[]>(BASE+'/payout-beneficiaries'),api<FeeOrder[]>(BASE+'/fee-reconciliation?limit=200'),
-        api<Batch[]>(BASE+'/payout-batches'),api<BalanceResponse>(BASE+'/payout-balances')
+        api<Batch[]>(BASE+'/payout-batches'),api<BalanceResponse>(BASE+'/payout-balances'),
+        api<ProviderEvent[]>(BASE+'/payout-provider-events/unmatched'),
+        api<ReconciliationCandidate[]>(BASE+'/payout-reconciliation-candidates')
       ]);
       setCatalog(c);setSettings(s);setOverview(o);setBeneficiaries(Array.isArray(b)?b:[]);
       setFeeOrders(Array.isArray(f)?f:[]);setBatches(Array.isArray(bs)?bs:[]);setBalances(bal);
+      setUnmatchedEvents(Array.isArray(ue)?ue:[]);setReconciliationCandidates(Array.isArray(rc)?rc:[]);
       const companies=c.legalEntities.filter(e=>e.status==='ACTIVE'&&['PLATFORM','COMPANY'].includes(e.entity_kind));
       const institutions=c.institutions.filter(i=>i.status==='ACTIVE');
       setArrangementForm(old=>({
@@ -250,6 +259,18 @@ export default function PayoutsPanel(){
       'Safe retry requested using the existing payout idempotency key.');
     if(result&&selectedBatch)await openBatch(selectedBatch.id);
   };
+  const reconcileProviderEvent=async(event:ProviderEvent)=>{
+    const target=reconciliationTargets[event.provider_event_id];
+    if(!target||!Number.isSafeInteger(Number(target))||Number(target)<=0){
+      setError('Select an existing payout before reconciling this provider event.');
+      return;
+    }
+    const result=await action(()=>api(BASE+'/payout-provider-events/'+encodeURIComponent(event.provider_event_id)+'/reconcile',{
+      method:'POST',body:JSON.stringify({payoutId:Number(target)})
+    }),'Provider event linked after server-side amount, currency and beneficiary-account checks. Review the payout status before considering it settled.');
+    if(result)setReconciliationTargets(old=>({...old,[event.provider_event_id]:''}));
+  };
+
   const submitPayoutFees=async(payout:Payout)=>{
     const draft=payoutFeeDrafts[String(payout.id)]||{fee:'',tax:'',reference:'',source:'SETTLEMENT_REPORT'};
     const fee=parsePaise(draft.fee,true),tax=parsePaise(draft.tax,true);
@@ -313,6 +334,27 @@ export default function PayoutsPanel(){
             <td>{balance.payout_supported===false?'—':balance.recovery_due_paise>0?<span className={styles.payoutStatusDanger}>{money(balance.recovery_due_paise,balance.currency)}</span>:money(0,balance.currency)}</td>
           </tr>)}</tbody>
         </table></div>:<p className={styles.payoutEmpty}>No verified course-sale allocations have been posted yet. Captured sales appear after the existing financial finalizer adds ledger entries.</p>}
+      </section>
+
+      <section className={styles.panel}>
+        <div className={styles.panelHead}><div><h2>Unmatched RazorpayX webhook events</h2>
+          <p>Signed provider events that could not automatically be tied to a local payout. Choose a candidate only after reviewing the RazorpayX record; the server independently checks the amount, currency, fund account and any supplied QuantaEdge references.</p></div>
+          <span className={unmatchedEvents.length?styles.payoutStatusPending:styles.payoutStatusNeutral}>{unmatchedEvents.length} need review</span></div>
+        {unmatchedEvents.length?<div className={styles.payoutList}>
+          {unmatchedEvents.map(event=><article className={styles.payoutListRow} key={event.provider_event_id}>
+            <div className={styles.payoutRowMain}><strong>{event.event_type} · {event.provider_payout_id}</strong>
+              <span>Provider event {event.provider_event_id} · received {event.received_at?new Date(event.received_at).toLocaleString('en-IN'):'time unavailable'}</span>
+              <small>Payload fingerprint {event.payload_sha256?.slice(0,16)||'not available'} · {event.disposition}</small></div>
+            <label className={styles.payoutReconcileSelect}>Existing approved payout
+              <select value={reconciliationTargets[event.provider_event_id]||''} onChange={e=>setReconciliationTargets(old=>({...old,[event.provider_event_id]:e.target.value}))}>
+                <option value="">Choose payout to validate</option>
+                {reconciliationCandidates.map(p=><option key={p.id} value={p.id}>Payout #{p.id} · {p.recipient_name} · {money(p.amount_paise,p.currency)} · {new Date(p.period_start+'T12:00:00').toLocaleDateString('en-IN',{month:'short',year:'numeric'})} · {label(p.status)}</option>)}
+              </select>
+            </label>
+            <div className={styles.payoutRowActions}><button type="button" className={styles.primarySmall} disabled={busy||!reconciliationTargets[event.provider_event_id]||!reconciliationCandidates.length} onClick={()=>void reconcileProviderEvent(event)}>Validate & link event</button></div>
+          </article>)}
+        </div>:<p className={styles.payoutEmpty}>No unmatched signed webhook events. Any event that cannot be linked will remain visible here until an authorized reviewer validates the matching payout.</p>}
+        {!reconciliationCandidates.length&&unmatchedEvents.length>0&&<p className={styles.payoutHint}>There are no approved, unlinked payout candidates. Do not force a match. First locate or recover the original QuantaEdge payout, then return here to validate the provider event.</p>}
       </section>
 
       <section className={styles.panel}>
