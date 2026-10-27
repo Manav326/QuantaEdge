@@ -390,7 +390,7 @@ def normalize_ocr_prompt(value: str) -> str:
         return ""
     # Tesseract may read the Latin-font question number as punctuation, I, or a wrong digit.
     lines[0] = re.sub(
-        r"^\s*(?:(?:[A-Za-zअ-ह]{1,2}\s*[-–]\s*)?[0-9०-९Il|]{1,3}\s*[.)]\s*)",
+        r"^\s*(?:(?:[A-Za-zअ-ह]{1,2}\s*[-–]\s*)?[0-9०-९Il|]{1,3}\s*[.)]\s*|[.)]\s*)",
         "", lines[0],
     ).strip()
     normalized = "\n".join(line for line in lines if line)
