@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1420,
+    "assets_selected": 1421,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "870abb681f56397dfdf83a1c"
+      "ab1cd695f6ef1ff13556e694"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1416,
-    "assets_remaining": 662,
-    "assets_completion_percent": 68.1,
+    "assets_analyzed": 1417,
+    "assets_remaining": 661,
+    "assets_completion_percent": 68.2,
     "assets_failed": 13,
-    "assets_skipped_from_checkpoint": 1415,
+    "assets_skipped_from_checkpoint": 1416,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -451,7 +451,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40568791626",
-      "checkpointed_at": "2026-10-27T21:39:04Z"
+      "checkpointed_at": "2026-10-27T21:44:00Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20129,7 +20129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40568791626",
-      "checkpointed_at": "2026-10-27T21:40:30Z"
+      "checkpointed_at": "2026-10-27T21:45:21Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -37984,7 +37984,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40568791626",
-      "checkpointed_at": "2026-10-27T21:41:31Z"
+      "checkpointed_at": "2026-10-27T21:46:22Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44144,7 +44144,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40568791626",
-      "checkpointed_at": "2026-10-27T21:42:20Z"
+      "checkpointed_at": "2026-10-27T21:47:12Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -47801,6 +47801,58 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40568791626",
       "checkpointed_at": "2026-10-27T21:42:38Z"
+    },
+    {
+      "asset_id": "ab1cd695f6ef1ff13556e694",
+      "asset_sha256": "5372d8b4f2eb49a3de8b1552c16be6e6a78cc0c7abd568f703ae3d9e007ed820",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 151,
+      "asset_path": "page-0151.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "8e71bc7eebe0216970654da250116d1dcaa3863505130e66a89dbb611ec21e52",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two experimental setups for measuring temperatures of ice and boiling water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Following two experimental setups are to be arranged by your\nteacher. One by one, as per your turn, go closer to the setups\nand observe the readings of both the thermometers. What are\nthe temperatures of ice and boiling water?",
+          "Read the temperatures of ice and boiling water again after\nsome time. Are the temperatures same or have changed? You\nmay have noticed that the temperature of water remains\nconstant while it is boiling. Also, the temperature of ice\nremains constant while it is melting.",
+          "Activity 7.6: Let us compare",
+          "Phiban’s Science teacher arranged the experimental\nsetup for measuring temperature of boiling water. The\ntemperature readings of the boiling water taken by Phiban\nand her classmates in Shillong are given in Table 7.2.",
+          "Table 7.2: Temperatures of boiling water",
+          "Name",
+          "Temperature of boiling\nwater (in °C)",
+          "Phiban",
+          "97.8",
+          "Shemphang",
+          "98.0",
+          "Onestar",
+          "97.9",
+          "Kloi",
+          "98.0",
+          "Bandarisha",
+          "98.1"
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Ice and boiling water",
+          "Experimental setups",
+          "Temperature readings"
+        ],
+        "context_relation": "Experimental activity",
+        "limitations": [
+          "Performing the activity strictly under supervision",
+          "Not touching experimental setups"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40568791626",
+      "checkpointed_at": "2026-10-27T21:51:20Z"
     }
   ]
 }

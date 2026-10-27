@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1e9d01283d9d9afba80af5fc0a0aa53181e55d2086154fa956bb76a2ad89ec43",
+  "raw_analysis_sha256": "83ad8a9c121c74fc4f53d0c8b9aec81dacd02d83cdc6835ccbf918b795f4c292",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -638,7 +638,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40568791626",
-      "checkpointed_at": "2026-10-27T21:39:04Z",
+      "checkpointed_at": "2026-10-27T21:44:00Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -29442,7 +29442,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40568791626",
-      "checkpointed_at": "2026-10-27T21:40:30Z",
+      "checkpointed_at": "2026-10-27T21:45:21Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -57315,7 +57315,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40568791626",
-      "checkpointed_at": "2026-10-27T21:41:31Z",
+      "checkpointed_at": "2026-10-27T21:46:22Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66966,7 +66966,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40568791626",
-      "checkpointed_at": "2026-10-27T21:42:20Z",
+      "checkpointed_at": "2026-10-27T21:47:12Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -72652,6 +72652,94 @@
         "context_relation": "Observation of temperature readings",
         "limitations": [
           "No specific temperature values are provided"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ab1cd695f6ef1ff13556e694",
+      "asset_sha256": "5372d8b4f2eb49a3de8b1552c16be6e6a78cc0c7abd568f703ae3d9e007ed820",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 151,
+      "asset_path": "page-0151.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "8e71bc7eebe0216970654da250116d1dcaa3863505130e66a89dbb611ec21e52",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two experimental setups for measuring temperatures of ice and boiling water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Following two experimental setups are to be arranged by your\nteacher. One by one, as per your turn, go closer to the setups\nand observe the readings of both the thermometers. What are\nthe temperatures of ice and boiling water?",
+          "Read the temperatures of ice and boiling water again after\nsome time. Are the temperatures same or have changed? You\nmay have noticed that the temperature of water remains\nconstant while it is boiling. Also, the temperature of ice\nremains constant while it is melting.",
+          "Activity 7.6: Let us compare",
+          "Phiban’s Science teacher arranged the experimental\nsetup for measuring temperature of boiling water. The\ntemperature readings of the boiling water taken by Phiban\nand her classmates in Shillong are given in Table 7.2.",
+          "Table 7.2: Temperatures of boiling water",
+          "Name",
+          "Temperature of boiling\nwater (in °C)",
+          "Phiban",
+          "97.8",
+          "Shemphang",
+          "98.0",
+          "Onestar",
+          "97.9",
+          "Kloi",
+          "98.0",
+          "Bandarisha",
+          "98.1"
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Ice and boiling water",
+          "Experimental setups",
+          "Temperature readings"
+        ],
+        "context_relation": "Experimental activity",
+        "limitations": [
+          "Performing the activity strictly under supervision",
+          "Not touching experimental setups"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40568791626",
+      "checkpointed_at": "2026-10-27T21:51:20Z",
+      "effective_analysis": {
+        "visual_summary": "Two experimental setups for measuring temperatures of ice and boiling water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Following two experimental setups are to be arranged by your\nteacher. One by one, as per your turn, go closer to the setups\nand observe the readings of both the thermometers. What are\nthe temperatures of ice and boiling water?",
+          "Read the temperatures of ice and boiling water again after\nsome time. Are the temperatures same or have changed? You\nmay have noticed that the temperature of water remains\nconstant while it is boiling. Also, the temperature of ice\nremains constant while it is melting.",
+          "Activity 7.6: Let us compare",
+          "Phiban’s Science teacher arranged the experimental\nsetup for measuring temperature of boiling water. The\ntemperature readings of the boiling water taken by Phiban\nand her classmates in Shillong are given in Table 7.2.",
+          "Table 7.2: Temperatures of boiling water",
+          "Name",
+          "Temperature of boiling\nwater (in °C)",
+          "Phiban",
+          "97.8",
+          "Shemphang",
+          "98.0",
+          "Onestar",
+          "97.9",
+          "Kloi",
+          "98.0",
+          "Bandarisha",
+          "98.1"
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Ice and boiling water",
+          "Experimental setups",
+          "Temperature readings"
+        ],
+        "context_relation": "Experimental activity",
+        "limitations": [
+          "Performing the activity strictly under supervision",
+          "Not touching experimental setups"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
