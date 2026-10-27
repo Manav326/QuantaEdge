@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2411,
+    "assets_selected": 2414,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "f64a61fc30584c45dbd53fa0",
-      "06662faa159ad7a8273c82c7",
-      "f4884b28083822420399470c"
+      "b06dc31986394df5e48c7372",
+      "acb6741c574f0eadd08e7028",
+      "0c4bb20a8cec8b0ea8ecd53d"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2409,
-    "assets_remaining": 5079,
+    "assets_analyzed": 2412,
+    "assets_remaining": 5076,
     "assets_completion_percent": 32.2,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 2406,
+    "assets_skipped_from_checkpoint": 2409,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40481191123",
-      "checkpointed_at": "2026-10-27T11:37:10Z"
+      "checkpointed_at": "2026-10-27T11:42:56Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40481191123",
-      "checkpointed_at": "2026-10-27T11:38:13Z"
+      "checkpointed_at": "2026-10-27T11:43:59Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -90910,6 +90910,84 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40481191123",
       "checkpointed_at": "2026-10-27T11:41:22Z"
+    },
+    {
+      "asset_id": "b06dc31986394df5e48c7372",
+      "asset_sha256": "1d3737165604f4a9ba042ba1745ab994abd206d00155259f3219c39a3c6f52eb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/1d3737165604f4a9ba042ba1745ab994abd206d00155259f3219c39a3c6f52eb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope twisted together.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40481191123",
+      "checkpointed_at": "2026-10-27T11:44:56Z"
+    },
+    {
+      "asset_id": "acb6741c574f0eadd08e7028",
+      "asset_sha256": "1d3737165604f4a9ba042ba1745ab994abd206d00155259f3219c39a3c6f52eb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/1d3737165604f4a9ba042ba1745ab994abd206d00155259f3219c39a3c6f52eb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope twisted together.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40481191123",
+      "checkpointed_at": "2026-10-27T11:45:03Z"
+    },
+    {
+      "asset_id": "0c4bb20a8cec8b0ea8ecd53d",
+      "asset_sha256": "1d3737165604f4a9ba042ba1745ab994abd206d00155259f3219c39a3c6f52eb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/1d3737165604f4a9ba042ba1745ab994abd206d00155259f3219c39a3c6f52eb.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope twisted together.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40481191123",
+      "checkpointed_at": "2026-10-27T11:45:10Z"
     }
   ]
 }
