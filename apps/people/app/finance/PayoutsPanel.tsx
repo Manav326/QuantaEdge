@@ -213,6 +213,12 @@ export default function PayoutsPanel(){
     ?activeInstitutions.map(i=>({id:i.id,label:i.display_name+' · '+i.tenant_code}))
     :activeCompanies.map(e=>({id:e.id,label:e.legal_name+' · '+e.entity_kind}));
   const payoutEligible=Boolean(settings?.configured&&settings?.payoutReady);
+  const savedRemainderId=String(settings?.default_remainder_recipient_type==='INSTITUTION'
+    ?(settings?.default_remainder_institution_id??''):(settings?.default_remainder_legal_entity_id??''));
+  const settingsDirty=!settings?.configured||settingsForm.remainderType!==(settings?.default_remainder_recipient_type||'COMPANY')
+    ||settingsForm.remainderId!==savedRemainderId||parsePaise(settingsForm.minimumRupees,true)!==settings?.payout_minimum_paise
+    ||!Number.isFinite(Number(settingsForm.reservePercent))
+    ||Math.round(Number(settingsForm.reservePercent)*100)!==settings?.refund_reserve_basis_points;
 
   const saveSettings=async(event:FormEvent)=>{
     event.preventDefault();
@@ -429,6 +435,7 @@ export default function PayoutsPanel(){
         <article className={styles.payoutMetricCard}><span>INR available after reserve</span><strong>{money(balances?.totals.payablePaise)}</strong><small>INR-only total after charges, refunds, reservations and holdback</small></article>
         <article className={styles.payoutMetricCard}><span>Recovery balances</span><strong>{money(balances?.totals.recoveryDuePaise)}</strong><small>Amounts owed back where a beneficiary was already paid</small></article>
       </section>
+      {(balances?.totals.recoveryDuePaise??0)>0&&<p className={styles.payoutHint}>Recovery due means later refunds, reversals or reviewed fee corrections reduced a recipient’s net balance after a transfer. Future payable earnings offset that amount before another payout; QuantaEdge does not initiate a separate automatic bank debit.</p>}
 
       {!settings?.providerConfigured||!settings?.sourceAccountConfigured||!settings?.webhookConfigured?
         <div className={styles.payoutAlertWarning} role="status"><b>RazorpayX is not fully configured.</b> Configure the payout API credentials, source account identifier and payout webhook secret on the API server. Never paste secrets into this screen.</div>:null}
@@ -502,7 +509,7 @@ export default function PayoutsPanel(){
             <small>This portion remains unpaid to help cover future refunds; it remains a liability, not company revenue.</small>
           </label>
           <div className={styles.payoutFormFooter}><span>{settings?.configured?'Saved payout rules are active.':'Save these rules before creating a payout batch.'}</span>
-            <button type="submit" className={styles.primary} disabled={busy}>Save payout rules</button></div>
+            <button type="submit" className={styles.primary} disabled={busy||!settingsDirty}>Save payout rules</button></div>
         </form>
       </section>
 
@@ -582,9 +589,9 @@ export default function PayoutsPanel(){
               <label>New IFSC<input required maxLength={11} value={(replacementDrafts[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}).ifsc} onChange={e=>setReplacementDrafts(old=>({...old,[String(b.id)]:{...(old[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}),ifsc:e.target.value.toUpperCase().replace(/\\s/g,'')}}))}/></label>
               <label>Contact email<input type="email" maxLength={320} value={(replacementDrafts[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}).email} onChange={e=>setReplacementDrafts(old=>({...old,[String(b.id)]:{...(old[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}),email:e.target.value}}))}/></label>
               <label>Contact phone<input type="tel" maxLength={20} value={(replacementDrafts[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}).phone} onChange={e=>setReplacementDrafts(old=>({...old,[String(b.id)]:{...(old[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}),phone:e.target.value}}))}/></label>
-              <div className={styles.payoutFormFooter}><span>The new account will not be used until an independent approver accepts it. Any in-flight payout using the old account must resolve before the switch.</span><button type="submit" className={styles.primary} disabled={busy||!settings?.providerConfigured||!(replacementDrafts[String(b.id)]||{}).accountNumber}>Submit replacement</button></div>
+              <div className={styles.payoutFormFooter}><span>The new account will not be used until an independent approver accepts it. Any in-flight payout using the old account must resolve before the switch.</span><button type="submit" className={styles.primary} disabled={busy||!settings?.providerConfigured||!(replacementDrafts[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}).accountNumber}>Submit replacement</button></div>
             </form>}
-            {['PROVISIONING','RECONCILIATION_REQUIRED'].includes(b.status)&&b.canApprove&&<form className={styles.payoutRejectForm} onSubmit={e=>{e.preventDefault();void reconcileBeneficiaryProviderSetup(b);}}>
+            {['PROVISIONING','RECONCILIATION_REQUIRED'].includes(b.status)&&<form className={styles.payoutRejectForm} onSubmit={e=>{e.preventDefault();void reconcileBeneficiaryProviderSetup(b);}}>
               <label>Re-enter bank account number to match an existing RazorpayX record
                 <input type="password" inputMode="numeric" autoComplete="off" maxLength={18} value={recoveryAccounts[String(b.id)]||''} onChange={e=>setRecoveryAccounts(old=>({...old,[String(b.id)]:e.target.value.replace(/\\D/g,'').slice(0,18)}))}/>
                 <small>This is sent only to the API for an exact match. QuantaEdge will not create a duplicate fund account during reconciliation.</small>
