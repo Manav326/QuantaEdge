@@ -5,7 +5,9 @@
   "requested_collection_page": "https://csestudy247.com/download-bpsc-tre-1-tre-2-tre-3-computer-science-question-paper-pdf/",
   "collection_page_status": "Article and topic analysis inspected; its 30-second Google Drive redirects were not exposed by the readable page and raw source binaries could not be fetched into this runtime.",
   "target_course_presentation": {
-    "course_title": "TRE-4 · Computer Science",
+    "course_title": "BPSC TRE Computer Science — Previous-Year Practice Series",
+    "course_code": "BPSC_TRE_CS_PYQ_SERIES",
+    "course_identity_key": "BPSC_TRE_CS_PYQ_SERIES",
     "chapter_title": "Prev years",
     "assessment_titles": [
       "BPSC TRE 1.0 — Computer Science Previous-Year Practice Test",
