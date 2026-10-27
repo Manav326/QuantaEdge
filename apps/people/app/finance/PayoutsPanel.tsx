@@ -232,7 +232,7 @@ export default function PayoutsPanel(){
     if(result)await openBatch(batch.id);
   };
   const refreshPayout=async(payout:Payout)=>{
-    const result=await action(()=>api<any>(BASE+'/payouts/'+payout.id+'/refresh'),
+    const result=await action(()=>api<any>(BASE+'/payouts/'+payout.id+'/refresh',{method:'POST',body:JSON.stringify({})}),
       'RazorpayX payout status refreshed.');
     if(result&&selectedBatch)await openBatch(selectedBatch.id);
   };
@@ -277,6 +277,7 @@ export default function PayoutsPanel(){
       <section className={styles.payoutMetricGrid}>
         <article className={styles.payoutMetricCard}><span>Beneficiaries awaiting review</span><strong>{overview?.beneficiariesAwaitingApproval??'—'}</strong><small>Bank profile requires a second person’s approval</small></article>
         <article className={styles.payoutMetricCard}><span>Payments missing fee confirmation</span><strong>{overview?.unreconciledFees??'—'}</strong><small>Payout batches stay blocked until actual fees are recorded</small></article>
+        <article className={styles.payoutMetricCard}><span>Completed batches awaiting fee reconciliation</span><strong>{overview?.payoutFeeReconciliationPending??'—'}</strong><small>Confirm provider payout fees before preparing the next month</small></article>
         <article className={styles.payoutMetricCard}><span>Transfers in progress</span><strong>{overview?.payoutsInProgress??'—'}</strong><small>Not counted as paid until RazorpayX confirms completion</small></article>
         <article className={styles.payoutMetricCard}><span>Confirmed transfers</span><strong>{money(overview?.payoutsPaidPaise)}</strong><small>Provider-confirmed processed payouts</small></article>
         <article className={styles.payoutMetricCard}><span>Available after reserve</span><strong>{money(balances?.totals.payablePaise)}</strong><small>Net due after charges, refunds, reservations and holdback</small></article>
@@ -431,6 +432,7 @@ export default function PayoutsPanel(){
           <button type="button" className={styles.primary} onClick={()=>void createBatch()} disabled={busy||loading||!payoutEligible||!settings?.configured||feeOrders.length>0}>Prepare last month’s batch</button></div>
         {!payoutEligible&&<p className={styles.payoutHint}>Preparation is disabled until the RazorpayX API credentials and source account are configured on the API server.</p>}
         {feeOrders.length>0&&<p className={styles.payoutHint}>Reconcile the {feeOrders.length} outstanding fee record(s) above first. A payout batch will not be prepared with estimated or missing processor charges.</p>}
+        {(overview?.payoutFeeReconciliationPending??0)>0&&<p className={styles.payoutHint}>There are {overview?.payoutFeeReconciliationPending} completed payout batch(es) with unconfirmed RazorpayX transfer charges. Open each batch, record its actual provider fee and fee tax from the settlement statement, and reconcile it before preparing another month.</p>}
         <div className={styles.payoutList}>
           {batches.map(batch=><article className={styles.payoutListRow} key={batch.id}>
             <div className={styles.payoutRowMain}><strong>{new Date(batch.period_start+'T12:00:00').toLocaleDateString('en-IN',{month:'long',year:'numeric'})} · Batch #{batch.id}</strong>
