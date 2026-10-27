@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 1651,
     "eligible_visual_asset_rows": 1651,
-    "raw_analysis_result_rows": 40,
-    "successful_visual_analyses": 18,
-    "missing_visual_analyses": 1611,
-    "failed_visual_analyses": 22,
+    "raw_analysis_result_rows": 50,
+    "successful_visual_analyses": 23,
+    "missing_visual_analyses": 1601,
+    "failed_visual_analyses": 27,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1633,
+    "unresolved_count": 1628,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -7410,9 +7410,35 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the use of symbols in problem-solving and the significance of certain symbols in mathematics.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "समाधान हेतु आप विद्यार््थथियों को कितने अवसर देते  हैैं, आपका धैर््य और प्रोत्साहन, जो आप",
+          "विद्यार््थथियों को देते  हैैं।",
+          "समस््ययाया  प्रस््ततुतुत करने  मेें आपकी सहायता करने के लिए, इस  पुस््तक",
+          "मेें सभी समस््ययाओं या",
+          "प्रश्नों को चिह्न    का उपयोग करके चिह्नित किया गया है। यह चिह्न कक्षाक्षा मेें समस््ययाया समाधान",
+          "और अन््ववेेषण की प्रक्रिया प्रारंभ करने के संभावित अवसर का संकेतक है। आप देखेेंगे  कि  कुछ",
+          "समस््ययायाओं को ‘गणित चर््चचा’ नाम दिया गया है। इस प्रकार के प्रश्नों को कक्षाक्षा  मेें विशेष रूप से",
+          "चर््चचा के लिए विषय बनाया जा सकता है।",
+          "पाठ्यपुस्‍तक    मेें   महत्‍वपूर््"
+        ],
+        "concepts": [
+          "symbol usage in problem-solving",
+          "significance of certain symbols in mathematics",
+          "mathematical concepts",
+          "symbolic representation in education",
+          "symbolic representation in problem-solving"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not show any specific symbols or problems.",
+          "The text is in Hindi and may not be fully accessible to non-Hindi speakers."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7428,9 +7454,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7446,7 +7481,7 @@
       "asset_path": "page-0014.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -7464,9 +7499,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7482,9 +7526,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7500,7 +7553,7 @@
       "asset_path": "page-0015.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -7518,7 +7571,7 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -7536,7 +7589,7 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -7554,7 +7607,7 @@
       "asset_path": "page-0016.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -7572,9 +7625,30 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of active participation in mathematics education for students.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "विद्यार्थियों के लिए शब्द",
+          "गणित कला को सराहने के लिए केवल निष्क्रिय दर्शक बने रहना पर्ययापत नहीं है, अपितु इसमे आपकी सक्रिय भागीदारी की भी आवश्यकता है, जैसे— कोई जासूस किसी रहस्यय को सुलझाने के लिए प्रक्रिया मे अनुरत रहता है।",
+          "इस भागीदारी की आवश्यकता विशेषतः तब होती है जब आप कोई नया प्रश्न देखते हैं या कोई प्रश्न आपकी अपनी जिज्ञासा से उत्पन्न होता है या फिर जब आप संख्याओं अथवा आकृतियों के किसी नए आकर्षक पैटर्न को देखते हैं। जब ऐसी अवधारणाओं आपके सामने आएँ तो आप अपने अध्ययन कार्य को विराम दीजिए एवं अपनी रचनात्मकता का उपयोग",
+          "नया प्रश्न देखते हैं या कोई प्रश्न आपकी अपनी जिज्ञासा से उत्पन्न होता है या फिर जब आप संख्याओं अथवा आकृतियों के किसी नए आकर्षक पैटर्न को देखते हैं। जब ऐसी अवधारणाओं आपके सामने आएँ तो आप अपने अध्ययन कार्य को विराम दीजिए एवं अपनी रचनात्मकता का उपयोग प्रश्न"
+        ],
+        "concepts": [
+          "active participation",
+          "mathematics education",
+          "solving problems",
+          "creative thinking",
+          "new patterns"
+        ],
+        "context_relation": "The text discusses the importance of active participation in mathematics education for students, emphasizing the need for both observational skills and creative thinking.",
+        "limitations": [
+          "The text does not provide specific examples or exercises.",
+          "The text does not include any visual aids or diagrams."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

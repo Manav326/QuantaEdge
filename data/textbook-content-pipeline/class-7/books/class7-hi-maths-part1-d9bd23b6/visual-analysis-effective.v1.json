@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-hindi-ghgp1",
   "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
   "raw_analysis_path": "data/textbook-visuals/class7-hi-maths-part1-d9bd23b6/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9179516a635df7b8f7fec31c5f7467d81c3cd6d99856d285663ec4e2402bf975",
+  "raw_analysis_sha256": "1afe946aab8c2827ee56077f39dca690826625a0accc006406c6276b1abbd893",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-hi-maths-part1-d9bd23b6/visual-analysis-corrections.v1.json",
@@ -1409,6 +1409,364 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "42333143efc4b6a3190ce23e",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "022620ad3ed072c8623bb87ca1430f5e393c1811e5b1bc73ec63bf81f746f7d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the use of symbols in problem-solving and the significance of certain symbols in mathematics.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "समाधान हेतु आप विद्यार््थथियों को कितने अवसर देते  हैैं, आपका धैर््य और प्रोत्साहन, जो आप",
+          "विद्यार््थथियों को देते  हैैं।",
+          "समस््ययाया  प्रस््ततुतुत करने  मेें आपकी सहायता करने के लिए, इस  पुस््तक",
+          "मेें सभी समस््ययाओं या",
+          "प्रश्नों को चिह्न    का उपयोग करके चिह्नित किया गया है। यह चिह्न कक्षाक्षा मेें समस््ययाया समाधान",
+          "और अन््ववेेषण की प्रक्रिया प्रारंभ करने के संभावित अवसर का संकेतक है। आप देखेेंगे  कि  कुछ",
+          "समस््ययायाओं को ‘गणित चर््चचा’ नाम दिया गया है। इस प्रकार के प्रश्नों को कक्षाक्षा  मेें विशेष रूप से",
+          "चर््चचा के लिए विषय बनाया जा सकता है।",
+          "पाठ्यपुस्‍तक    मेें   महत्‍वपूर््"
+        ],
+        "concepts": [
+          "symbol usage in problem-solving",
+          "significance of certain symbols in mathematics",
+          "mathematical concepts",
+          "symbolic representation in education",
+          "symbolic representation in problem-solving"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not show any specific symbols or problems.",
+          "The text is in Hindi and may not be fully accessible to non-Hindi speakers."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:46:11Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the use of symbols in problem-solving and the significance of certain symbols in mathematics.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "समाधान हेतु आप विद्यार््थथियों को कितने अवसर देते  हैैं, आपका धैर््य और प्रोत्साहन, जो आप",
+          "विद्यार््थथियों को देते  हैैं।",
+          "समस््ययाया  प्रस््ततुतुत करने  मेें आपकी सहायता करने के लिए, इस  पुस््तक",
+          "मेें सभी समस््ययाओं या",
+          "प्रश्नों को चिह्न    का उपयोग करके चिह्नित किया गया है। यह चिह्न कक्षाक्षा मेें समस््ययाया समाधान",
+          "और अन््ववेेषण की प्रक्रिया प्रारंभ करने के संभावित अवसर का संकेतक है। आप देखेेंगे  कि  कुछ",
+          "समस््ययायाओं को ‘गणित चर््चचा’ नाम दिया गया है। इस प्रकार के प्रश्नों को कक्षाक्षा  मेें विशेष रूप से",
+          "चर््चचा के लिए विषय बनाया जा सकता है।",
+          "पाठ्यपुस्‍तक    मेें   महत्‍वपूर््"
+        ],
+        "concepts": [
+          "symbol usage in problem-solving",
+          "significance of certain symbols in mathematics",
+          "mathematical concepts",
+          "symbolic representation in education",
+          "symbolic representation in problem-solving"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not show any specific symbols or problems.",
+          "The text is in Hindi and may not be fully accessible to non-Hindi speakers."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a114ce1268d26da63881828c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "022620ad3ed072c8623bb87ca1430f5e393c1811e5b1bc73ec63bf81f746f7d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:46:41Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dc1e38a972425d7f1e8dc686",
+      "asset_sha256": "0203553a433c5ede39901e82032fc447b653d4d068192dd60ae97197010f1fe4",
+      "page_text_context_sha256": "022620ad3ed072c8623bb87ca1430f5e393c1811e5b1bc73ec63bf81f746f7d8",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 14,
+      "asset_path": "page-0014.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d9c7d49a001ad54405ef1d9f",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 15,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "90723f50a9272be10dc4bfeb592e9f56073fdfa33491e9e35303fcaa4ec30d0f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:52:11Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4c23a14d22d66d9f0adabc42",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 15,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "90723f50a9272be10dc4bfeb592e9f56073fdfa33491e9e35303fcaa4ec30d0f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:52:40Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3b8dd70eed3cfac069706171",
+      "asset_sha256": "9d9b1fae6d9f539def0991f5fbaf44a960c9b57ae240cc7db591c9239271163f",
+      "page_text_context_sha256": "90723f50a9272be10dc4bfeb592e9f56073fdfa33491e9e35303fcaa4ec30d0f",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 15,
+      "asset_path": "page-0015.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c0540e549bc17a9ed9c7fe9a",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "fd9d7b8ffb30bb53a6efaa88642154e8849fa86d60b4085cf0fcf1fc79cd1e36",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "21aa349f2fa5052f65482f39",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "page_text_context_sha256": "fd9d7b8ffb30bb53a6efaa88642154e8849fa86d60b4085cf0fcf1fc79cd1e36",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 16,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "45cfacba169db995b66331a9",
+      "asset_sha256": "23d5f50235ed66462d380f15eef5a54e9c1cb472d436a05882af101b2ecccdb4",
+      "page_text_context_sha256": "fd9d7b8ffb30bb53a6efaa88642154e8849fa86d60b4085cf0fcf1fc79cd1e36",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 16,
+      "asset_path": "page-0016.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c8a5dfd72d1e2433b9e3457e",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 17,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "dbd717244c1bffa02dbdb241f492ed631b03a21205978efc8338c627704483b4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of active participation in mathematics education for students.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "विद्यार्थियों के लिए शब्द",
+          "गणित कला को सराहने के लिए केवल निष्क्रिय दर्शक बने रहना पर्ययापत नहीं है, अपितु इसमे आपकी सक्रिय भागीदारी की भी आवश्यकता है, जैसे— कोई जासूस किसी रहस्यय को सुलझाने के लिए प्रक्रिया मे अनुरत रहता है।",
+          "इस भागीदारी की आवश्यकता विशेषतः तब होती है जब आप कोई नया प्रश्न देखते हैं या कोई प्रश्न आपकी अपनी जिज्ञासा से उत्पन्न होता है या फिर जब आप संख्याओं अथवा आकृतियों के किसी नए आकर्षक पैटर्न को देखते हैं। जब ऐसी अवधारणाओं आपके सामने आएँ तो आप अपने अध्ययन कार्य को विराम दीजिए एवं अपनी रचनात्मकता का उपयोग",
+          "नया प्रश्न देखते हैं या कोई प्रश्न आपकी अपनी जिज्ञासा से उत्पन्न होता है या फिर जब आप संख्याओं अथवा आकृतियों के किसी नए आकर्षक पैटर्न को देखते हैं। जब ऐसी अवधारणाओं आपके सामने आएँ तो आप अपने अध्ययन कार्य को विराम दीजिए एवं अपनी रचनात्मकता का उपयोग प्रश्न"
+        ],
+        "concepts": [
+          "active participation",
+          "mathematics education",
+          "solving problems",
+          "creative thinking",
+          "new patterns"
+        ],
+        "context_relation": "The text discusses the importance of active participation in mathematics education for students, emphasizing the need for both observational skills and creative thinking.",
+        "limitations": [
+          "The text does not provide specific examples or exercises.",
+          "The text does not include any visual aids or diagrams."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:13:19Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of active participation in mathematics education for students.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "विद्यार्थियों के लिए शब्द",
+          "गणित कला को सराहने के लिए केवल निष्क्रिय दर्शक बने रहना पर्ययापत नहीं है, अपितु इसमे आपकी सक्रिय भागीदारी की भी आवश्यकता है, जैसे— कोई जासूस किसी रहस्यय को सुलझाने के लिए प्रक्रिया मे अनुरत रहता है।",
+          "इस भागीदारी की आवश्यकता विशेषतः तब होती है जब आप कोई नया प्रश्न देखते हैं या कोई प्रश्न आपकी अपनी जिज्ञासा से उत्पन्न होता है या फिर जब आप संख्याओं अथवा आकृतियों के किसी नए आकर्षक पैटर्न को देखते हैं। जब ऐसी अवधारणाओं आपके सामने आएँ तो आप अपने अध्ययन कार्य को विराम दीजिए एवं अपनी रचनात्मकता का उपयोग",
+          "नया प्रश्न देखते हैं या कोई प्रश्न आपकी अपनी जिज्ञासा से उत्पन्न होता है या फिर जब आप संख्याओं अथवा आकृतियों के किसी नए आकर्षक पैटर्न को देखते हैं। जब ऐसी अवधारणाओं आपके सामने आएँ तो आप अपने अध्ययन कार्य को विराम दीजिए एवं अपनी रचनात्मकता का उपयोग प्रश्न"
+        ],
+        "concepts": [
+          "active participation",
+          "mathematics education",
+          "solving problems",
+          "creative thinking",
+          "new patterns"
+        ],
+        "context_relation": "The text discusses the importance of active participation in mathematics education for students, emphasizing the need for both observational skills and creative thinking.",
+        "limitations": [
+          "The text does not provide specific examples or exercises.",
+          "The text does not include any visual aids or diagrams."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
