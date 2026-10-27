@@ -98,35 +98,63 @@ function safeReviewSourceUrl(value:unknown):string {
   try {const url=new URL(String(value||''));return url.protocol==='https:'||url.protocol==='http:'?url.href:'';}
   catch{return '';}
 }
-function activateAccessibleReviewDialog(dialog:HTMLElement,onEscape:()=>void):()=>void {
+function activateAccessibleReviewDialog(
+  dialog:HTMLElement,
+  onEscape:()=>void,
+  persistentHeader:HTMLElement|null=null,
+):()=>void {
   const previousOverflow=document.body.style.overflow;
   const previousFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
   const inertedElements:Array<{element:HTMLElement;wasInert:boolean}>=[];
   let branch:HTMLElement=dialog;
   document.body.style.overflow='hidden';
-  // Walk all the way to body so the application shell is inert while the reviewer is in the modal.
+
+  const inertElement=(element:HTMLElement)=>{
+    inertedElements.push({element,wasInert:element.inert});
+    element.inert=true;
+  };
+  // Keep the visible global header interactive; inert every other branch behind the workspace.
+  const inertExceptPersistentHeader=(container:HTMLElement)=>{
+    for(const child of Array.from(container.children)){
+      if(!(child instanceof HTMLElement))continue;
+      if(persistentHeader&&(child===persistentHeader||child.contains(persistentHeader))){
+        if(child!==persistentHeader)inertExceptPersistentHeader(child);
+        continue;
+      }
+      inertElement(child);
+    }
+  };
+
   while(branch.parentElement){
     const nextAncestor:HTMLElement=branch.parentElement;
     for(const sibling of Array.from(nextAncestor.children)){
       if(sibling!==branch&&sibling instanceof HTMLElement&&!sibling.contains(dialog)){
-        inertedElements.push({element:sibling,wasInert:sibling.inert});
-        sibling.inert=true;
+        if(persistentHeader&&sibling.contains(persistentHeader))inertExceptPersistentHeader(sibling);
+        else inertElement(sibling);
       }
     }
     if(nextAncestor===document.body)break;
     branch=nextAncestor;
   }
+
   const selector='a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
-  const focusable=()=>Array.from(dialog.querySelectorAll<HTMLElement>(selector)).filter(el=>!el.hidden&&el.getAttribute('aria-hidden')!=='true'&&el.getClientRects().length>0);
-  const frame=window.requestAnimationFrame(()=>{(focusable()[0]||dialog).focus();});
+  const visibleFocusable=(el:HTMLElement)=>!el.hidden&&el.getAttribute('aria-hidden')!=='true'&&el.getClientRects().length>0&&!el.closest('[inert]');
+  const dialogFocusable=()=>Array.from(dialog.querySelectorAll<HTMLElement>(selector)).filter(visibleFocusable);
+  // Include only the deliberately persistent header, not the obscured application controls.
+  const focusable=()=>Array.from(document.querySelectorAll<HTMLElement>(selector))
+    .filter(el=>(dialog.contains(el)||Boolean(persistentHeader?.contains(el)))&&visibleFocusable(el));
+  const frame=window.requestAnimationFrame(()=>{(dialogFocusable()[0]||dialog).focus();});
   const onKeyDown=(event:KeyboardEvent)=>{
     if(event.key==='Escape'){event.preventDefault();onEscape();return;}
     if(event.key!=='Tab')return;
     const items=focusable();
     if(!items.length){event.preventDefault();dialog.focus();return;}
     const first=items[0],last=items[items.length-1];
-    if(event.shiftKey&&(document.activeElement===first||!dialog.contains(document.activeElement))){event.preventDefault();last.focus();}
-    else if(!event.shiftKey&&(document.activeElement===last||!dialog.contains(document.activeElement))){event.preventDefault();first.focus();}
+    const active=document.activeElement;
+    const activeIndex=active instanceof HTMLElement?items.indexOf(active):-1;
+    if(activeIndex<0){event.preventDefault();(event.shiftKey?last:first).focus();return;}
+    if(event.shiftKey&&activeIndex===0){event.preventDefault();last.focus();}
+    else if(!event.shiftKey&&activeIndex===items.length-1){event.preventDefault();first.focus();}
   };
   window.addEventListener('keydown',onKeyDown);
   return ()=>{
@@ -341,6 +369,7 @@ export default function AssessmentsPage(){
   const selectedImportedReviewItem=filteredImportedReviewItems.find(item=>Number(item.sequenceNo)===importedReviewSequence)||filteredImportedReviewItems[0]||null;
   const selectedImportedQuestion=selectedImportedReviewItem?.question||{};
   const selectedImportedSequence=Number(selectedImportedReviewItem?.sequenceNo||importedReviewSequence);
+  const importedReviewHeaderTitle=t('admin.assessments.importedDraftStatus',{id:importedReviewId??'',status:statusText(importedReviewStatus,t)})+' · '+t('admin.assessments.bilingualQuestionReview',{course:activeCourse?.display_name||t('admin.assessments.assessment')});
   const selectedImportedSourceLocation=formatReviewSourceLocation(selectedImportedQuestion.source_location);
   const selectedImportedSourceUrl=safeReviewSourceUrl(selectedImportedQuestion.source_ref);
   const selectedImportedOptions=Array.isArray(selectedImportedQuestion.options)?selectedImportedQuestion.options:[];
@@ -540,7 +569,8 @@ export default function AssessmentsPage(){
     if(!importedReviewOpen)return;
     const dialog=importedReviewDialogRef.current;
     if(!dialog)return;
-    return activateAccessibleReviewDialog(dialog,closeImportedReview);
+    const persistentHeader=document.querySelector('.qe-admin-global-header');
+    return activateAccessibleReviewDialog(dialog,closeImportedReview,persistentHeader instanceof HTMLElement?persistentHeader:null);
   },[importedReviewOpen]);
 
   async function importPackageDraft() {
@@ -807,13 +837,12 @@ export default function AssessmentsPage(){
         <section ref={importedReviewDialogRef} tabIndex={-1} className={styles.assessmentReviewWorkspace} role="dialog" aria-modal="true" aria-labelledby="imported-review-title">
           <aside className={styles.assessmentReviewSidebar}>
             <div className={styles.reviewSidebarHeader}>
-              <span>{t('admin.assessments.reviewWorkspaceLabel')}</span>
               <h2>{t('admin.assessments.questionNavigator')}</h2>
               <p>{t('admin.assessments.draftQuestionCount',{id:importedReviewId,count:importedReviewItems.length})}</p>
               <div className={styles.reviewProgressTrack} role="progressbar" aria-label={t('admin.assessments.questionsApproved')} aria-valuemin={0} aria-valuemax={importedReviewItems.length} aria-valuenow={importedApprovedCount}>
                 <span style={{width:(importedReviewItems.length?100*importedApprovedCount/importedReviewItems.length:0)+'%'}}/>
               </div>
-              <div className={styles.reviewProgressLabels}><b>{t('admin.assessments.approvedQuestionProgress',{approved:importedApprovedCount,total:importedReviewItems.length})}</b><span>{t('admin.assessments.pendingQuestionCount',{count:importedReviewItems.length-importedApprovedCount-importedRejectedCount})}</span></div>
+              <div className={styles.reviewProgressLabels}><b>{t('admin.assessments.approvedQuestionProgress',{approved:importedApprovedCount,total:importedReviewItems.length})}</b><span> · {t('admin.assessments.pendingQuestionCount',{count:importedReviewItems.length-importedApprovedCount-importedRejectedCount})}</span></div>
             </div>
             <div className={styles.reviewNavigatorTools}>
               <input aria-label={t('admin.assessments.searchQuestions')} value={importedReviewSearch} onChange={event=>setImportedReviewSearch(event.target.value)} placeholder={t('admin.assessments.searchQuestionPlaceholder')}/>
@@ -840,9 +869,7 @@ export default function AssessmentsPage(){
           <div className={styles.assessmentReviewMain}>
             <header className={styles.assessmentReviewHeader}>
               <div>
-                <span>{t('admin.assessments.importedDraftStatus',{id:importedReviewId,status:statusText(importedReviewStatus,t)})}</span>
-                <h1 id="imported-review-title">{t('admin.assessments.bilingualQuestionReview',{course:activeCourse?.display_name||t('admin.assessments.assessment')})}</h1>
-                <p>{t('admin.assessments.exactQuestionReviewHelp')}</p>
+                <h1 id="imported-review-title" title={importedReviewHeaderTitle}>{importedReviewHeaderTitle}</h1>
               </div>
               <button type="button" className={styles.reviewClose} aria-label={t('admin.assessments.closeReview')} onClick={closeImportedReview}>×</button>
             </header>
@@ -850,7 +877,7 @@ export default function AssessmentsPage(){
             {!selectedImportedReviewItem?<div className={styles.reviewWorkspaceEmpty} role="status">{t('admin.assessments.noQuestionsInDraft')}</div>:<>
               <div className={styles.assessmentReviewContent}>
                 <div className={styles.reviewQuestionTitleBar}>
-                  <div><span>{t('admin.assessments.questionPosition',{current:Math.max(0,filteredImportedReviewItems.findIndex(item=>Number(item.sequenceNo)===selectedImportedSequence)+1),total:filteredImportedReviewItems.length})}</span><h2>{t('admin.assessments.questionNumber',{number:selectedImportedSequence})}</h2>
+                  <div><h2>{t('admin.assessments.questionNumber',{number:selectedImportedSequence})}</h2>
                     <p>{t('admin.assessments.reviewQuestionMetadata',{type:selectedImportedQuestion.question_type||t('admin.assessments.defaultQuestionType'),section:selectedImportedQuestion.section_code||t('admin.assessments.unspecifiedSection'),marks:selectedImportedReviewItem.maxMarks??1})}</p>
                   </div>
                   <span className={[styles.reviewStatusPill,
@@ -904,7 +931,7 @@ export default function AssessmentsPage(){
                   <section className={styles.reviewEditorPanel}>
                     <div className={styles.reviewEditorHeader}><div><span>{t('admin.assessments.answerKey')}</span><h3>{t('admin.assessments.answerPayload')}</h3></div><b>{String(selectedImportedAnswer.kind||'UNRESOLVED')}</b></div>
                     <p>{t('admin.assessments.answerPayloadHelp')}</p>
-                    <textarea aria-label={t('admin.assessments.answerPayloadJson')} rows={7} spellCheck={false} disabled={importedReviewStatus!=='DRAFT'} value={importedAnswerEdits[selectedImportedSequence]??JSON.stringify(selectedImportedQuestion.answer_payload||{kind:'UNRESOLVED',value:''},null,2)} onChange={event=>setImportedAnswerEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))} placeholder={t('admin.assessments.answerPayloadExample')}/>
+                    <textarea aria-label={t('admin.assessments.answerPayloadJson')} rows={4} spellCheck={false} disabled={importedReviewStatus!=='DRAFT'} value={importedAnswerEdits[selectedImportedSequence]??JSON.stringify(selectedImportedQuestion.answer_payload||{kind:'UNRESOLVED',value:''},null,2)} onChange={event=>setImportedAnswerEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))} placeholder={t('admin.assessments.answerPayloadExample')}/>
                     <small>{t('admin.assessments.answerPayloadKindsHelp')}</small>
                     <label className={styles.reviewNoteField}>
                       {t('admin.assessments.reviewerNote')}
@@ -921,12 +948,12 @@ export default function AssessmentsPage(){
                   <section className={styles.reviewEditorPanel}>
                     <div className={styles.reviewEditorHeader}><div><span>{t('admin.assessments.explanationEnglish')}</span><h3>{t('admin.assessments.englishExplanation')}</h3></div></div>
                     <p>{t('admin.assessments.explanationHelp')}</p>
-                    <textarea aria-label={t('admin.assessments.englishExplanationAria')} rows={7} maxLength={700} disabled={importedReviewStatus!=='DRAFT'} value={importedExplanationEdits[selectedImportedSequence]??''} onChange={event=>setImportedExplanationEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))} placeholder={t('admin.assessments.writeEnglishExplanation')}/>
+                    <textarea aria-label={t('admin.assessments.englishExplanationAria')} rows={4} maxLength={700} disabled={importedReviewStatus!=='DRAFT'} value={importedExplanationEdits[selectedImportedSequence]??''} onChange={event=>setImportedExplanationEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))} placeholder={t('admin.assessments.writeEnglishExplanation')}/>
                   </section>
                   <section className={styles.reviewEditorPanel} lang="hi">
                     <div className={styles.reviewEditorHeader}><div><span>{t('admin.assessments.explanationHindi')}</span><h3>{t('admin.assessments.hindiExplanation')}</h3></div></div>
                     <p>{t('admin.assessments.hindiExplanationGuidance')}</p>
-                    <textarea aria-label={t('admin.assessments.hindiExplanationAria')} rows={7} maxLength={700} disabled={importedReviewStatus!=='DRAFT'} value={importedHindiExplanationEdits[selectedImportedSequence]??''} onChange={event=>setImportedHindiExplanationEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))} placeholder={t('admin.assessments.writeHindiExplanation')}/>
+                    <textarea aria-label={t('admin.assessments.hindiExplanationAria')} rows={4} maxLength={700} disabled={importedReviewStatus!=='DRAFT'} value={importedHindiExplanationEdits[selectedImportedSequence]??''} onChange={event=>setImportedHindiExplanationEdits(current=>({...current,[selectedImportedSequence]:event.target.value}))} placeholder={t('admin.assessments.writeHindiExplanation')}/>
                   </section>
                 </div>
               </div>
