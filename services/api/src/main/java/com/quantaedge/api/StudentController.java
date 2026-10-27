@@ -37,6 +37,8 @@ public class StudentController {
       from curriculum_program p
       join student_program_enrollment spe on spe.program_id=p.id
         and spe.student_id=? and spe.institution_id=? and spe.status='ACTIVE'
+         and spe.course_access_blocked=false
+         and (spe.course_expires_at is null or spe.course_expires_at>statement_timestamp())
       join institution_membership membership
         on membership.student_id=spe.student_id and membership.institution_id=spe.institution_id
            and membership.status='ACTIVE'
@@ -272,6 +274,8 @@ public class StudentController {
       join student_program_enrollment enrollment
         on enrollment.student_id=st.id and enrollment.institution_id=membership.institution_id
           and enrollment.program_id=? and enrollment.status='ACTIVE'
+          and enrollment.course_access_blocked=false
+          and (enrollment.course_expires_at is null or enrollment.course_expires_at>statement_timestamp())
       join curriculum_program selected_course
         on selected_course.id=enrollment.program_id and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
       join institution_course_assignment assignment

@@ -1420,6 +1420,8 @@ public class LearningClassController {
         join curriculum_program selected_course on selected_course.id=? and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
         join student_program_enrollment e on e.student_id=st.id and e.institution_id=m.institution_id
           and e.program_id=selected_course.id and e.status='ACTIVE'
+          and e.course_access_blocked=false
+          and (e.course_expires_at is null or e.course_expires_at>statement_timestamp())
         join institution_course_assignment a on a.institution_id=m.institution_id and a.status='ASSIGNED'
         join institution_course_release r on r.id=a.course_release_id and r.program_id=selected_course.id
         join curriculum_program_subject cps on cps.program_id=selected_course.id and cps.subject_id=s.id and cps.class_id=c.id
@@ -1497,7 +1499,9 @@ public class LearningClassController {
         join curriculum_program p on p.id=e.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
         join institution_course_assignment a on a.institution_id=e.institution_id and a.status='ASSIGNED'
         join institution_course_release r on r.id=a.course_release_id and r.program_id=p.id
-        where e.student_id=? and e.institution_id=? and e.program_id=? and e.status='ACTIVE')
+        where e.student_id=? and e.institution_id=? and e.program_id=? and e.status='ACTIVE'
+          and e.course_access_blocked=false
+          and (e.course_expires_at is null or e.course_expires_at>statement_timestamp()))
       """,Boolean.class,studentId,institutionId,courseId);
     if(!Boolean.TRUE.equals(allowed)) throw new SecurityException(
         "Active enrollment and course release in the selected institution are required.");

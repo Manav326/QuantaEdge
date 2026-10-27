@@ -476,6 +476,7 @@ public class CertificateController {
 
     long courseId=resolveStudentCourseId(request.courseId());
     requireActiveCourseEnrollment(studentId,courseId,institutionId);
+    requireCourseAccessForIssuance(studentId,courseId,institutionId);
     String type = clean(request.achievementType()).toUpperCase(Locale.ROOT);
     String template = CertificateRenderer.normalizeTemplate(request.templateId());
     String profileLanguage = clean(student.get("language"));
@@ -1539,6 +1540,18 @@ public class CertificateController {
     if (courseId == null || courseId < 1L) {
       throw new IllegalArgumentException("Select an enrolled course before accessing certificates.");
     }
+  }
+
+  /**
+   * Issue-new-only gate. Previously issued certificate records and artifacts remain readable
+   * after expiry/block; a new certificate cannot be issued from an inaccessible course.
+   */
+  private void requireCourseAccessForIssuance(long studentId,long courseId,long institutionId) {
+    Boolean allowed=jdbc.queryForObject(
+        "select qe_course_enrollment_access_allowed(?,?,?)",
+        Boolean.class,studentId,institutionId,courseId);
+    if(!Boolean.TRUE.equals(allowed)) throw new ResponseStatusException(
+        HttpStatus.FORBIDDEN,"Course access is blocked or expired. A new certificate cannot be issued.");
   }
 
   private void requireActiveCourseEnrollment(long studentId,long courseId,long institutionId) {

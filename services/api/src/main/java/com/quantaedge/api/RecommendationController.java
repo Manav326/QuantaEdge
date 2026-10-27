@@ -41,6 +41,8 @@ public class RecommendationController {
       join institution_course_release release
         on release.id=assignment.course_release_id and release.program_id=course.id
       where spe.student_id=? and spe.institution_id=? and spe.program_id=? and spe.status='ACTIVE'
+        and spe.course_access_blocked=false
+        and (spe.course_expires_at is null or spe.course_expires_at>statement_timestamp())
       """,Long.class,context.studentId(),institutionId,courseId);
     if(enrolled==null || enrolled==0L) throw new SecurityException("The selected course is not enrolled in this institution.");
 

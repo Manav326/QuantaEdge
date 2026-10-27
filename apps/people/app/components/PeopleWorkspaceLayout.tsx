@@ -39,6 +39,7 @@ const NAVIGATION: NavigationGroup[] = [
   ] },
   { message: 'people.navigation.group.platform', items: [
     { message: 'people.navigation.institutions', href: '/institutions', icon: '▦', permissions: ['QE_PLATFORM_OWNER'] },
+    { message: 'people.navigation.courseAccess', href: '/course-access', icon: '⌛', permissions: ['QE_PLATFORM_OWNER'] },
     { message: 'people.navigation.qaCenter', href: '/qa', icon: '✓', permissions: ['QE_PLATFORM_OWNER'] },
     { message: 'people.navigation.notifications', href: '/notifications', icon: '♧', permissions: ['QE_PLATFORM_OWNER'] },
     { message: 'people.navigation.financeBilling', href: '/finance', icon: '₹', permissions: ['QE_PLATFORM_OWNER'] },
@@ -186,7 +187,7 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
         if (!session?.staffId) return false;
         // Cross-institution operations are special: even a role labelled ADMIN
         // must carry the explicit platform-owner grant in the HRMS workspace.
-        if (item.href === '/institutions') return permissions.includes('QE_PLATFORM_OWNER');
+        if (item.href === '/institutions' || item.href === '/course-access') return permissions.includes('QE_PLATFORM_OWNER');
         if (item.href === '/self-service') {
           const role = String(session.role || '').toUpperCase();
           const employeeWorkspacePermissions = [

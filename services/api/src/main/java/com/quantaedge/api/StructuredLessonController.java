@@ -327,6 +327,8 @@ public class StructuredLessonController {
         join curriculum_program p on p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
         join student_program_enrollment e on e.student_id=st.id and e.institution_id=m.institution_id
           and e.program_id=p.id and e.status='ACTIVE'
+          and e.course_access_blocked=false
+          and (e.course_expires_at is null or e.course_expires_at>statement_timestamp())
         join institution_course_assignment a on a.institution_id=m.institution_id and a.status='ASSIGNED'
         join institution_course_release r on r.id=a.course_release_id and r.program_id=p.id
         where st.id=? and st.active=true
@@ -381,6 +383,8 @@ public class StructuredLessonController {
       join institution_tenant tenant on tenant.id=m.institution_id and tenant.status='ACTIVE'
       join student_program_enrollment spe on spe.student_id=st.id and spe.institution_id=m.institution_id
         and spe.program_id=? and spe.status='ACTIVE'
+         and spe.course_access_blocked=false
+         and (spe.course_expires_at is null or spe.course_expires_at>statement_timestamp())
       join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
       join institution_course_assignment assignment on assignment.institution_id=m.institution_id
         and assignment.status='ASSIGNED'

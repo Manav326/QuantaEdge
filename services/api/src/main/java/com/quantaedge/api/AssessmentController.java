@@ -1799,6 +1799,7 @@ public class AssessmentController {
     language = normalizeLanguage(language);
     String subjectFilter = safeText(subjectCode, 40);
     if(courseId==null || courseId<=0L) throw badRequest("Select an active course before accessing tests and results.");
+    requireStudentCourseAccess(context.studentId(),courseId,institutionId);
     Long active=jdbc.queryForObject("""
       select count(*) from student_program_enrollment spe
       join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
@@ -1934,6 +1935,7 @@ public class AssessmentController {
     long institutionId=requireInstitution(tenant);
     language = normalizeLanguage(language);
     if(courseId==null || courseId<1L) throw badRequest("Select an enrolled course before opening this leaderboard.");
+    requireStudentCourseAccess(context.studentId(),courseId,institutionId);
     Long activeCourse=jdbc.queryForObject("""
       select count(*) from student_program_enrollment spe
       join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
@@ -2108,6 +2110,7 @@ public class AssessmentController {
     context = authorization.requireStudent(context);
     language = normalizeLanguage(language);
     if(courseId==null || courseId<1L) throw badRequest("Select an enrolled course before starting this test.");
+    requireStudentCourseAccess(context.studentId(),courseId,institutionId);
     List<Map<String,Object>> scopedCourse=jdbc.queryForList("""
       select p.id,p.display_name
       from student_program_enrollment spe
@@ -2355,6 +2358,12 @@ public class AssessmentController {
           InstitutionTenantContext tenant) {
     context = authorization.requireStudent(context);
     requireAttemptInCourse(attemptId,courseId,tenant);
+    long institutionId=requireInstitution(tenant);
+    Boolean inProgress=jdbc.queryForObject("""
+      select exists(select 1 from student_assessment_attempt
+        where id=? and student_id=? and institution_id=? and status='IN_PROGRESS')
+      """,Boolean.class,attemptId,context.studentId(),institutionId);
+    if(Boolean.TRUE.equals(inProgress)) requireStudentCourseAccess(context.studentId(),courseId,institutionId);
     return attemptDetails(attemptId, context, false,requireInstitution(tenant));
   }
 
@@ -2385,6 +2394,7 @@ public class AssessmentController {
     if(!"RELEASED".equals(String.valueOf(owned.getFirst().get("status")))) {
       throw conflict("Incorrect-question practice unlocks after the official result is released.");
     }
+    requireStudentCourseAccess(context.studentId(),courseId,institutionId);
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select aq.id as attempt_question_id,aq.sequence_no,aq.question_snapshot::text as question_snapshot,
         ans.response_payload::text as source_response,
@@ -2442,6 +2452,7 @@ public class AssessmentController {
     context=authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
     requireAttemptInCourse(attemptId,courseId,tenant);
+    requireStudentCourseAccess(context.studentId(),courseId,institutionId);
     long questionId;
     try { questionId=Long.parseLong(String.valueOf(body==null?null:body.get("attemptQuestionId"))); }
     catch(RuntimeException ex) { throw badRequest("Select an incorrect question to practice."); }
@@ -2513,6 +2524,7 @@ public class AssessmentController {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
     requireAttemptInCourse(attemptId,courseId,tenant);
+    requireStudentCourseAccess(context.studentId(),courseId,institutionId);
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select att.id,att.status,att.deadline_at,att.student_id,att.offline_mode,
              att.offline_sync_expires_at,att.offline_package_token_hash
@@ -2557,6 +2569,7 @@ public class AssessmentController {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
     requireAttemptInCourse(attemptId,courseId,tenant);
+    requireStudentCourseAccess(context.studentId(),courseId,institutionId);
     List<Map<String, Object>> attempts = jdbc.queryForList("""
       select id,status,deadline_at,student_id,offline_mode,offline_sync_expires_at,offline_package_token_hash
       from student_assessment_attempt where id=? and institution_id=? for update
@@ -2612,6 +2625,7 @@ public class AssessmentController {
     context=authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
     requireAttemptInCourse(attemptId,courseId,tenant);
+    requireStudentCourseAccess(context.studentId(),courseId,institutionId);
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select id,assessment_id,student_id,status,offline_mode,offline_sync_expires_at
       from student_assessment_attempt where id=? and institution_id=? for update
@@ -2662,9 +2676,9 @@ public class AssessmentController {
       AuthContext context,long institutionId) {
     context = authorization.requireStudent(context);
     List<Map<String, Object>> attemptRows = jdbc.queryForList("""
-      select id,assessment_id,student_id,status,auto_score,max_score,offline_mode,
+      select att.id,att.assessment_id,a.course_id,att.student_id,att.status,att.auto_score,att.max_score,att.offline_mode,
              offline_sync_expires_at,offline_package_token_hash,assessment_snapshot::text as assessment_snapshot
-      from student_assessment_attempt where id=? and institution_id=? for update
+      from student_assessment_attempt att join assessment a on a.id=att.assessment_id where att.id=? and att.institution_id=? for update of att
       """, attemptId,institutionId);
     if (attemptRows.isEmpty() || ((Number) attemptRows.getFirst().get("student_id")).longValue() != context.studentId()) {
       throw notFound("Assessment attempt", attemptId);
@@ -2675,6 +2689,8 @@ public class AssessmentController {
     String oldStatus = String.valueOf(attempt.get("status"));
     if ("RELEASED".equals(oldStatus)) return attemptDetails(attemptId, context, false,institutionId);
     if (!"IN_PROGRESS".equals(oldStatus)) throw conflict("This test attempt has already been submitted.");
+    long enrolledCourseId=((Number)attempt.get("course_id")).longValue();
+    requireStudentCourseAccess(context.studentId(),enrolledCourseId,institutionId);
     long assessmentId = ((Number) attempt.get("assessment_id")).longValue();
 
     List<Map<String, Object>> answerRows = jdbc.queryForList("""
@@ -3300,6 +3316,15 @@ public class AssessmentController {
     if(!Boolean.TRUE.equals(sourceOwned))throw new ResponseStatusException(
         HttpStatus.FORBIDDEN,
         "Only the source institution may edit this assessment. Shared assessments are read-only here.");
+  }
+
+  private void requireStudentCourseAccess(long studentId,Long courseId,long institutionId) {
+    if(courseId==null||courseId<1L) throw badRequest("Select an enrolled course before accessing learning content.");
+    Boolean allowed=jdbc.queryForObject(
+        "select qe_course_enrollment_access_allowed(?,?,?)",
+        Boolean.class,studentId,institutionId,courseId);
+    if(!Boolean.TRUE.equals(allowed)) throw new ResponseStatusException(
+        HttpStatus.FORBIDDEN,"Course access is blocked or expired. Contact HRMS for course access assistance.");
   }
 
   private void requireAssignedCourse(Long courseId, InstitutionTenantContext tenant) {
