@@ -83,7 +83,13 @@ jobs:
               raise SystemExit("Known Hindi prompt was not marked as an OCR reconstruction requiring human review")
           if not hindi.get("prompt_raw") or hindi.get("prompt_raw") == hindi.get("prompt_i18n"):
               raise SystemExit("Original legacy Hindi source text was not retained alongside the OCR reconstruction")
-          print("TRE question counts and source-Hindi OCR check passed; OCR content remains review-gated.")
+          tre3_h9 = next(q for q in inventory["papers"]["TRE 3.0"]["questions"] if str(q["source_question_number"]) == "H-9")
+          h9 = tre3_h9["source_variants"]["hi"]
+          if h9.get("prompt_ocr_status") != "OCR_SHREEDEV_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW":
+              raise SystemExit("TRE 3.0 H-9 Hindi legacy/CIDFont stem was not reconstructed")
+          if len(re.findall(r"[\\u0900-\\u097F]", h9.get("prompt_i18n", ""))) < 4:
+              raise SystemExit("TRE 3.0 H-9 still contains unreadable legacy Hindi text")
+          print("TRE question counts and TRE1/TRE3 Hindi OCR checks passed; OCR content remains review-gated.")
           PY
 
       - name: Upload temporary inventory for question and answer review
