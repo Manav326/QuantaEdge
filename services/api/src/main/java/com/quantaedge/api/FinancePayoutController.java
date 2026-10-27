@@ -437,7 +437,9 @@ public class FinancePayoutController {
       long netPaid=Math.subtractExact(paid,reversed);
       long refundReserve=percentageOf(Math.max(0L,netEarned),reserveBps);
       long payable=Math.max(0L,Math.subtractExact(Math.subtractExact(Math.subtractExact(netEarned,netPaid),reserved),refundReserve));
-      long recovery=Math.max(0L,Math.subtractExact(netPaid,netEarned));
+      // A pre-payout refund followed by later fee reconciliation can make net earned negative.
+      // Do not call an unpaid accounting deficit a recovery; only recover money already transferred.
+      long recovery=Math.max(0L,Math.subtractExact(netPaid,Math.max(0L,netEarned)));
       row.put("net_earned_paise",netEarned);
       row.put("net_paid_paise",netPaid);
       row.put("refund_reserve_paise",refundReserve);
