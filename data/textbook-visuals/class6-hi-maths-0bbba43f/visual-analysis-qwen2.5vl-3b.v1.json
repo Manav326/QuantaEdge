@@ -8,26 +8,26 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 49,
+    "assets_selected": 56,
     "assets_processed_this_run": 10,
     "assets_processed_ids": [
-      "07f79d0d6da50a325cef8c58",
-      "cec61a8b65a44b62df7821c3",
-      "98a52d79839a07ce8b8bd3b2",
-      "de79cff3dd8b7bdec67fef02",
-      "828254f469ebbc3580874575",
-      "0660c8b2b452bc532c0f65b5",
-      "16698293756c9fb7a42a2ece",
-      "023aca986989e8597f34e364",
-      "d0ad48c99afb05b466c57e0f",
-      "078b127b91e54739892e5db7"
+      "cb5b290659fbcb674a44d998",
+      "3cb73c97ad0632eb9d940624",
+      "7e7c9680d38f076ad1d2ca6c",
+      "ea44b734accef00b98abda5f",
+      "acb1802ec0f1b2ae58488661",
+      "4b3b7569f46f0130b87f9610",
+      "5eee45757a21bbb5c9d5afc9",
+      "00f861b3f5360880ea7e7c1f",
+      "6c21b927cf153dea995b2bdf",
+      "cf21b146a7c1a69a8fcdf372"
     ],
     "assets_eligible": 5189,
-    "assets_analyzed": 46,
-    "assets_remaining": 5143,
-    "assets_completion_percent": 0.9,
-    "assets_failed": 34,
-    "assets_skipped_from_checkpoint": 39,
+    "assets_analyzed": 54,
+    "assets_remaining": 5135,
+    "assets_completion_percent": 1.0,
+    "assets_failed": 36,
+    "assets_skipped_from_checkpoint": 46,
     "batch_limit": 10,
     "publication_allowed": false
   },
@@ -2114,6 +2114,360 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
       "checkpointed_at": "2026-10-27T01:15:48Z"
+    },
+    {
+      "asset_id": "cb5b290659fbcb674a44d998",
+      "asset_sha256": "3570edb54e13bf18793e39c69523d72ca3a9328e9823eb626db5d274da7c85a3",
+      "page_text_context_sha256": "76c9489b2535f6f0b20f0506788f3c955ec26468079ea878efc585ccbca7c311",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 16,
+      "asset_path": "page-0016.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "3cb73c97ad0632eb9d940624",
+      "asset_sha256": "9fbd3b21a14dbb9efb66023da999953ddf34661e7c1e7805b74fa7a8df0ca1a5",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 17,
+      "asset_path": "assets/9fbd3b21a14dbb9efb66023da999953ddf34661e7c1e7805b74fa7a8df0ca1a5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "52f1d7af8bb545a778dc38f9b7260ce1747985ca25a22b9bb1ada1545e2d6c7c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue background with intricate gold and white floral patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "Floral patterns",
+          "Gold accents",
+          "Blue background"
+        ],
+        "context_relation": "The image is a decorative element for educational content, possibly a header or footer for a page.",
+        "limitations": [
+          "No specific text or labels are present in the image.",
+          "The image does not provide any direct information about the educational content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:21:27Z"
+    },
+    {
+      "asset_id": "7e7c9680d38f076ad1d2ca6c",
+      "asset_sha256": "c6bdf0eac231e4a8caaf23fd36fe9b492f184468791b3fcab65963e312859cd9",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 17,
+      "asset_path": "assets/c6bdf0eac231e4a8caaf23fd36fe9b492f184468791b3fcab65963e312859cd9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "52f1d7af8bb545a778dc38f9b7260ce1747985ca25a22b9bb1ada1545e2d6c7c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue and gold patterned fabric with intricate designs and floral motifs.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "fabric design",
+          "blue and gold",
+          "intricate patterns",
+          "floral motifs"
+        ],
+        "context_relation": "The image is a visual representation of a fabric design used in educational content.",
+        "limitations": [
+          "The image does not provide specific information about the educational content it represents."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:21:58Z"
+    },
+    {
+      "asset_id": "ea44b734accef00b98abda5f",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 17,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "52f1d7af8bb545a778dc38f9b7260ce1747985ca25a22b9bb1ada1545e2d6c7c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing key points for analysis in a science experiment. It emphasizes the importance of presenting new problems, questions, patterns, or obstacles to students regularly. It also mentions the need to create a suitable environment that understands and acknowledges the importance of learning.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "प्रमुख बिंदुओं कााराांश",
+          "अन्वेषण के लिए समय",
+          "1. विद्यार्थियों के लिए नियमित रूप से नई समस्यााओं, प्रश्नों, पैटर्नों याा  चुनौतियों को प्रस्तुत करनाा  महत्वपूर्ण है। व्यक्‍तिगत रूप से और समूूहों में उन प्रश्नों को समझने, चर्चा करने और उन पर कााम करने के लिए पर्याप्‍तत समय द‍ीजिए।",
+          "2. एक ऐसे वाातावरण को निर्मित करने की आवश्यश्यकताा  है, जो त्रुटियों को समझताा  है और सीखने में उनके महत्व  को स्वीीकाारताा  है।",
+          "3. एक ऐसी पााठ्य संस्कृति होनी चाहिए जहााँ विद्यार्थीी एक-दूूसरे के लिए समस्यााएँ प्रस्तुत करें और समस्यााओं को हल करने की विभिन्नन्न विधियों पर एक-दूूसरे से चर्चा",
+          "समय"
+        ],
+        "concepts": [
+          "Key Points",
+          "Analysis",
+          "Science Experiment",
+          "New Problems",
+          "Questions",
+          "Patterns",
+          "Obstacles",
+          "Regular Presentation",
+          "Understanding",
+          "Acknowledgment",
+          "Science Environment",
+          "Learning Importance",
+          "Science Curriculum",
+          "Problem Solving"
+        ],
+        "context_relation": "The image is a page from a textbook discussing key points for analysis in a science experiment.",
+        "limitations": [
+          "The image does not show any visual elements or diagrams.",
+          "The image does not contain any equations or formulas.",
+          "The image does not depict any cartoon or cartoon-like elements.",
+          "The image does not show any maps or geographical elements.",
+          "The image does not contain any tables or data.",
+          "The image does not show any illustrations or cartoon-like elements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:24:20Z"
+    },
+    {
+      "asset_id": "acb1802ec0f1b2ae58488661",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 17,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "52f1d7af8bb545a778dc38f9b7260ce1747985ca25a22b9bb1ada1545e2d6c7c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing key points for research, emphasizing the importance of presenting new problems, questions, patterns, or obstacles to students regularly, understanding them in a group, discussing them, and working on them.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "प्रमुख बिंदुओं कााराांश",
+          "अन्वेषण के लिए समय",
+          "1. विद्यार्थियों के लिए नियमित रूप से नई समस्यााओं, प्रश्नों, पैटर्नों याा  चुनौतियों को प्रस्तुत",
+          "करनाा महत्वपूर्ण है। व्यक्‍तिगत रूप से और समूूहों में उन प्रश्नों को समझने, चर्चा करने और",
+          "उन पर कााम करने के लिए पर्याप्‍तत समय द‍ीजिए।",
+          "2. एक ऐसे वाातावरण को निर्मित करने की आवश्यश्यकताा है, जो त्रुटियों को समझताा  है और",
+          "सीखने में उनके महत्व को स्वीीकाारताा है।",
+          "3. एक ऐसी पााठ्य संस्कृति होनी चाहिए जहााँ विद्यार्थी एक-दूूसरे के लिए समस्यााएँ प्रस्तुत करें",
+          "और समस्यााओं को हल करने की विभिन्नन्न विधियों पर एक-दूूसरे से चर्चा",
+          "पर्याप्‍तत समय द‍ीजिए।"
+        ],
+        "concepts": [
+          "Research",
+          "Presenting new problems",
+          "Understanding and discussing problems",
+          "Working on problems",
+          "Research environment",
+          "Understanding and acknowledging the importance of problems"
+        ],
+        "context_relation": "The text discusses key points for research, emphasizing the importance of presenting new problems, questions, patterns, or obstacles to students regularly, understanding them in a group, discussing them, and working on them.",
+        "limitations": [
+          "The text does not provide specific examples or methods for presenting problems."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:26:37Z"
+    },
+    {
+      "asset_id": "4b3b7569f46f0130b87f9610",
+      "asset_sha256": "d5830b5c86d99d0861938ce06693e38edc735aa744cd1b05ea6890e1aa950c10",
+      "page_text_context_sha256": "52f1d7af8bb545a778dc38f9b7260ce1747985ca25a22b9bb1ada1545e2d6c7c",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 17,
+      "asset_path": "page-0017.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "5eee45757a21bbb5c9d5afc9",
+      "asset_sha256": "9985840a107a31deb877a74529f71a88a26a2aca60252b74b40d91be1d92c6d5",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 18,
+      "asset_path": "assets/9985840a107a31deb877a74529f71a88a26a2aca60252b74b40d91be1d92c6d5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "656ed1816077d00dc5ce039ae398062fc2840d19c92cac00245f47916e04aad3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue background with intricate gold and white floral patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a decorative element in the educational content.",
+        "limitations": [
+          "The image does not provide specific information about the educational content.",
+          "The image does not show any text or labels that can be directly interpreted."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:32:07Z"
+    },
+    {
+      "asset_id": "00f861b3f5360880ea7e7c1f",
+      "asset_sha256": "0149131d0aa0deeefd1b98bfc38ba39ee15a05bef071f5144cf59a858582897e",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 18,
+      "asset_path": "assets/0149131d0aa0deeefd1b98bfc38ba39ee15a05bef071f5144cf59a858582897e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "656ed1816077d00dc5ce039ae398062fc2840d19c92cac00245f47916e04aad3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue and gold patterned fabric with intricate designs.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "fabric",
+          "pattern",
+          "design",
+          "blue",
+          "gold"
+        ],
+        "context_relation": "The image is a visual representation of a fabric pattern, likely used as a background or design element in an educational content.",
+        "limitations": [
+          "The image does not contain any text or labels that provide specific information about the fabric or its use."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:32:41Z"
+    },
+    {
+      "asset_id": "6c21b927cf153dea995b2bdf",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 18,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "656ed1816077d00dc5ce039ae398062fc2840d19c92cac00245f47916e04aad3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook in Hindi discussing the importance of active participation in learning mathematics, emphasizing the need for both critical thinking and creativity in problem-solving.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "विद्यार्थियों के लिए शब्द!",
+          "गणित कलाा को सरााहने के लिए केवल निष्क्रिय दर्शक बने रहनाा   पर्याप्‍तत नहीं है, अपितु इसमें",
+          "आपकी सक्रिय भाागीदाारी की भी आवश्यकताा  है, जैसे— कोई जाासूस किसी रहस्य को सुलझााने",
+          "के लिए प्रक्रियाा   में अनुरत रहताा  है।",
+          "इस भाागीदाारी की आवश्यकताा विशेषत: तब होती है जब आप कोई नयाा  प्रश्न देखते  हैं याा",
+          "कोई प्रश्न आपकी अपनी जिज्ञाासाा  से उत्‍पन्नपन्न होताा  है याा जब आप संख्‍यााओं याा आकृतियों के",
+          "किसी नए आर्कषक पैटर्न को देखते हैं। जब ऐसी अवधाारणााओं से आपकाा  साामनाा  हो, तो आप",
+          "अपने अध्‍यययन कार्य को विरााम दीजिए एवं अपनी रचनात्‍ममकताा  काा उपयोग प्रयोग करें।"
+        ],
+        "concepts": [
+          "active participation",
+          "critical thinking",
+          "creativity",
+          "problem-solving",
+          "mathematics education"
+        ],
+        "context_relation": "The text discusses the importance of active participation in learning mathematics, emphasizing the need for both critical thinking and creativity in problem-solving.",
+        "limitations": [
+          "The text is in Hindi and may not be easily understood by non-Hindi speakers."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:34:54Z"
+    },
+    {
+      "asset_id": "cf21b146a7c1a69a8fcdf372",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 18,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "656ed1816077d00dc5ce039ae398062fc2840d19c92cac00245f47916e04aad3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook in Hindi, discussing the importance of active participation in learning mathematics, emphasizing the need for both observational and active engagement.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "विद्यार्थियों के लिए शब्द!",
+          "गणित कलाा को सरााहने के लिए केवल निष्क्रिय दर्शक बने रहनाा   पर्याप्‍तत नहीं है, अपितु इसमें",
+          "आपकी सक्रिय भाागीदाारी की भी आवश्यकताा  है, जैसे— कोई जाासूस किसी रहस्य को सुलझााने",
+          "के लिए प्रक्रियाा   में अनुरत रहताा  है।",
+          "इस भाागीदाारी की आवश्यकताा विशेषत: तब होती है जब आप कोई नयाा  प्रश्न देखते  हैं याा",
+          "कोई प्रश्न आपकी अपनी जिज्ञाासाा  से उत्‍पन्नपन्न होताा  है याा जब आप संख्‍यााओं याा आकृतियों के",
+          "किसी नए आर्कषक पैटर्न को देखते हैं। जब ऐसी अवधाारणााओं से आपकाा  साामनाा  हो, तो आप",
+          "अपने अध्‍यययन कार्य को विरााम दीजिए एवं अपनी रचनात्‍ममकताा  काा उपयोग पर्याप्‍तताा  की जरूरत है।"
+        ],
+        "concepts": [
+          "active participation",
+          "mathematics learning",
+          "observational learning",
+          "active engagement",
+          "problem-solving",
+          "critical thinking",
+          "mathematical patterns",
+          "creative problem-solving"
+        ],
+        "context_relation": "educational content",
+        "limitations": [
+          "The image does not show any visual elements or diagrams.",
+          "The text is in Hindi, which may require translation for non-Hindi speakers."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:37:11Z"
     }
   ]
 }

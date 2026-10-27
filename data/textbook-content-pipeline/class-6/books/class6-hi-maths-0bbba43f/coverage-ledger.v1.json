@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 5189,
     "eligible_visual_asset_rows": 5189,
-    "raw_analysis_result_rows": 80,
-    "successful_visual_analyses": 46,
-    "missing_visual_analyses": 5109,
-    "failed_visual_analyses": 34,
+    "raw_analysis_result_rows": 90,
+    "successful_visual_analyses": 54,
+    "missing_visual_analyses": 5099,
+    "failed_visual_analyses": 36,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5143,
+    "unresolved_count": 5135,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -13696,7 +13696,7 @@
       "asset_path": "page-0016.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -13714,9 +13714,23 @@
       "asset_path": "assets/9fbd3b21a14dbb9efb66023da999953ddf34661e7c1e7805b74fa7a8df0ca1a5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue background with intricate gold and white floral patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "Floral patterns",
+          "Gold accents",
+          "Blue background"
+        ],
+        "context_relation": "The image is a decorative element for educational content, possibly a header or footer for a page.",
+        "limitations": [
+          "No specific text or labels are present in the image.",
+          "The image does not provide any direct information about the educational content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13732,9 +13746,23 @@
       "asset_path": "assets/c6bdf0eac231e4a8caaf23fd36fe9b492f184468791b3fcab65963e312859cd9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue and gold patterned fabric with intricate designs and floral motifs.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "fabric design",
+          "blue and gold",
+          "intricate patterns",
+          "floral motifs"
+        ],
+        "context_relation": "The image is a visual representation of a fabric design used in educational content.",
+        "limitations": [
+          "The image does not provide specific information about the educational content it represents."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13750,9 +13778,45 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing key points for analysis in a science experiment. It emphasizes the importance of presenting new problems, questions, patterns, or obstacles to students regularly. It also mentions the need to create a suitable environment that understands and acknowledges the importance of learning.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "प्रमुख बिंदुओं कााराांश",
+          "अन्वेषण के लिए समय",
+          "1. विद्यार्थियों के लिए नियमित रूप से नई समस्यााओं, प्रश्नों, पैटर्नों याा  चुनौतियों को प्रस्तुत करनाा  महत्वपूर्ण है। व्यक्‍तिगत रूप से और समूूहों में उन प्रश्नों को समझने, चर्चा करने और उन पर कााम करने के लिए पर्याप्‍तत समय द‍ीजिए।",
+          "2. एक ऐसे वाातावरण को निर्मित करने की आवश्यश्यकताा  है, जो त्रुटियों को समझताा  है और सीखने में उनके महत्व  को स्वीीकाारताा  है।",
+          "3. एक ऐसी पााठ्य संस्कृति होनी चाहिए जहााँ विद्यार्थीी एक-दूूसरे के लिए समस्यााएँ प्रस्तुत करें और समस्यााओं को हल करने की विभिन्नन्न विधियों पर एक-दूूसरे से चर्चा",
+          "समय"
+        ],
+        "concepts": [
+          "Key Points",
+          "Analysis",
+          "Science Experiment",
+          "New Problems",
+          "Questions",
+          "Patterns",
+          "Obstacles",
+          "Regular Presentation",
+          "Understanding",
+          "Acknowledgment",
+          "Science Environment",
+          "Learning Importance",
+          "Science Curriculum",
+          "Problem Solving"
+        ],
+        "context_relation": "The image is a page from a textbook discussing key points for analysis in a science experiment.",
+        "limitations": [
+          "The image does not show any visual elements or diagrams.",
+          "The image does not contain any equations or formulas.",
+          "The image does not depict any cartoon or cartoon-like elements.",
+          "The image does not show any maps or geographical elements.",
+          "The image does not contain any tables or data.",
+          "The image does not show any illustrations or cartoon-like elements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13768,9 +13832,36 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing key points for research, emphasizing the importance of presenting new problems, questions, patterns, or obstacles to students regularly, understanding them in a group, discussing them, and working on them.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "प्रमुख बिंदुओं कााराांश",
+          "अन्वेषण के लिए समय",
+          "1. विद्यार्थियों के लिए नियमित रूप से नई समस्यााओं, प्रश्नों, पैटर्नों याा  चुनौतियों को प्रस्तुत",
+          "करनाा महत्वपूर्ण है। व्यक्‍तिगत रूप से और समूूहों में उन प्रश्नों को समझने, चर्चा करने और",
+          "उन पर कााम करने के लिए पर्याप्‍तत समय द‍ीजिए।",
+          "2. एक ऐसे वाातावरण को निर्मित करने की आवश्यश्यकताा है, जो त्रुटियों को समझताा  है और",
+          "सीखने में उनके महत्व को स्वीीकाारताा है।",
+          "3. एक ऐसी पााठ्य संस्कृति होनी चाहिए जहााँ विद्यार्थी एक-दूूसरे के लिए समस्यााएँ प्रस्तुत करें",
+          "और समस्यााओं को हल करने की विभिन्नन्न विधियों पर एक-दूूसरे से चर्चा",
+          "पर्याप्‍तत समय द‍ीजिए।"
+        ],
+        "concepts": [
+          "Research",
+          "Presenting new problems",
+          "Understanding and discussing problems",
+          "Working on problems",
+          "Research environment",
+          "Understanding and acknowledging the importance of problems"
+        ],
+        "context_relation": "The text discusses key points for research, emphasizing the importance of presenting new problems, questions, patterns, or obstacles to students regularly, understanding them in a group, discussing them, and working on them.",
+        "limitations": [
+          "The text does not provide specific examples or methods for presenting problems."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13786,7 +13877,7 @@
       "asset_path": "page-0017.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -13804,9 +13895,19 @@
       "asset_path": "assets/9985840a107a31deb877a74529f71a88a26a2aca60252b74b40d91be1d92c6d5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue background with intricate gold and white floral patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a decorative element in the educational content.",
+        "limitations": [
+          "The image does not provide specific information about the educational content.",
+          "The image does not show any text or labels that can be directly interpreted."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13822,9 +13923,24 @@
       "asset_path": "assets/0149131d0aa0deeefd1b98bfc38ba39ee15a05bef071f5144cf59a858582897e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue and gold patterned fabric with intricate designs.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "fabric",
+          "pattern",
+          "design",
+          "blue",
+          "gold"
+        ],
+        "context_relation": "The image is a visual representation of a fabric pattern, likely used as a background or design element in an educational content.",
+        "limitations": [
+          "The image does not contain any text or labels that provide specific information about the fabric or its use."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13840,9 +13956,33 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook in Hindi discussing the importance of active participation in learning mathematics, emphasizing the need for both critical thinking and creativity in problem-solving.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "विद्यार्थियों के लिए शब्द!",
+          "गणित कलाा को सरााहने के लिए केवल निष्क्रिय दर्शक बने रहनाा   पर्याप्‍तत नहीं है, अपितु इसमें",
+          "आपकी सक्रिय भाागीदाारी की भी आवश्यकताा  है, जैसे— कोई जाासूस किसी रहस्य को सुलझााने",
+          "के लिए प्रक्रियाा   में अनुरत रहताा  है।",
+          "इस भाागीदाारी की आवश्यकताा विशेषत: तब होती है जब आप कोई नयाा  प्रश्न देखते  हैं याा",
+          "कोई प्रश्न आपकी अपनी जिज्ञाासाा  से उत्‍पन्नपन्न होताा  है याा जब आप संख्‍यााओं याा आकृतियों के",
+          "किसी नए आर्कषक पैटर्न को देखते हैं। जब ऐसी अवधाारणााओं से आपकाा  साामनाा  हो, तो आप",
+          "अपने अध्‍यययन कार्य को विरााम दीजिए एवं अपनी रचनात्‍ममकताा  काा उपयोग प्रयोग करें।"
+        ],
+        "concepts": [
+          "active participation",
+          "critical thinking",
+          "creativity",
+          "problem-solving",
+          "mathematics education"
+        ],
+        "context_relation": "The text discusses the importance of active participation in learning mathematics, emphasizing the need for both critical thinking and creativity in problem-solving.",
+        "limitations": [
+          "The text is in Hindi and may not be easily understood by non-Hindi speakers."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -13858,9 +13998,37 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook in Hindi, discussing the importance of active participation in learning mathematics, emphasizing the need for both observational and active engagement.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "विद्यार्थियों के लिए शब्द!",
+          "गणित कलाा को सरााहने के लिए केवल निष्क्रिय दर्शक बने रहनाा   पर्याप्‍तत नहीं है, अपितु इसमें",
+          "आपकी सक्रिय भाागीदाारी की भी आवश्यकताा  है, जैसे— कोई जाासूस किसी रहस्य को सुलझााने",
+          "के लिए प्रक्रियाा   में अनुरत रहताा  है।",
+          "इस भाागीदाारी की आवश्यकताा विशेषत: तब होती है जब आप कोई नयाा  प्रश्न देखते  हैं याा",
+          "कोई प्रश्न आपकी अपनी जिज्ञाासाा  से उत्‍पन्नपन्न होताा  है याा जब आप संख्‍यााओं याा आकृतियों के",
+          "किसी नए आर्कषक पैटर्न को देखते हैं। जब ऐसी अवधाारणााओं से आपकाा  साामनाा  हो, तो आप",
+          "अपने अध्‍यययन कार्य को विरााम दीजिए एवं अपनी रचनात्‍ममकताा  काा उपयोग पर्याप्‍तताा  की जरूरत है।"
+        ],
+        "concepts": [
+          "active participation",
+          "mathematics learning",
+          "observational learning",
+          "active engagement",
+          "problem-solving",
+          "critical thinking",
+          "mathematical patterns",
+          "creative problem-solving"
+        ],
+        "context_relation": "educational content",
+        "limitations": [
+          "The image does not show any visual elements or diagrams.",
+          "The text is in Hindi, which may require translation for non-Hindi speakers."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
