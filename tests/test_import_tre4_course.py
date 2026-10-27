@@ -233,7 +233,11 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertIn("'TRE 1.0'::varchar", tre_specific)
         self.assertIn("'TRE 2.0'::varchar", tre_specific)
         self.assertIn("'TRE 3.0'::varchar", tre_specific)
-        self.assertIn("150", tre_specific)
+        forward = SCRIPT.parents[1] / "services" / "api" / "src" / "main" / "resources" / "db" / "migration" / "V213__tre3_final_key_deleted_question_count.sql"
+        forward_sql = forward.read_text(encoding="utf-8")
+        function_start = forward_sql.index("CREATE OR REPLACE FUNCTION tre4_source_package_ready")
+        tre3_contract = forward_sql[function_start:]
+        self.assertIn("'TRE 3.0'::varchar, 'tre4-bpsc-tre-3-0-computer-science'::varchar, 148", tre3_contract)
 
     def test_marketplace_publish_readiness_is_generic_for_assessment_courses(self):
         migration = SCRIPT.parents[1] / "services" / "api" / "src" / "main" / "resources" / "db" / "migration" / "V200__generic_assessment_publish_readiness.sql"
@@ -280,10 +284,26 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertNotIn("entity_type||':'||entity_id||':'||row_json", function,
                          "Do not aggregate full JSON course rows into one large string.")
 
-    def test_expected_primary_booklet_counts(self):
+    def test_expected_primary_booklet_counts_and_final_key_deletions(self):
         self.assertEqual(import_tre4_course.expected_question_count("TRE 1.0"), 120)
         self.assertEqual(import_tre4_course.expected_question_count("TRE 2.0"), 150)
-        self.assertEqual(import_tre4_course.expected_question_count("TRE 3.0"), 150)
+        self.assertEqual(import_tre4_course.expected_question_count("TRE 3.0"), 148)
+        tre3 = import_tre4_course.EXPECTED_SOURCE_IDENTITIES["TRE 3.0"]
+        self.assertEqual(len(tre3["LANGUAGE_QUALIFYING"]), 30)
+        self.assertEqual(len(tre3["GENERAL_STUDIES"]), 38)
+        self.assertEqual(len(tre3["COMPUTER_SCIENCE"]), 80)
+        self.assertNotIn("52", tre3["GENERAL_STUDIES"])
+        self.assertNotIn("69", tre3["GENERAL_STUDIES"])
+
+
+    def test_excluded_source_items_are_retained_as_audit_only(self):
+        source_rows = [
+            {"section_code": "GENERAL_STUDIES", "source_question_number": 52, "excluded_from_practice_test": True},
+            {"section_code": "GENERAL_STUDIES", "source_question_number": 69, "excluded_from_practice_test": True},
+        ]
+        import_tre4_course.validate_excluded_source_questions("TRE 3.0", {"excluded_source_questions": source_rows})
+        with self.assertRaisesRegex(import_tre4_course.ImportErrorSafe, "excluded-source identities"):
+            import_tre4_course.validate_excluded_source_questions("TRE 3.0", {"excluded_source_questions": source_rows[:1]})
 
     def test_question_snapshot_preserves_bilingual_options_and_review_gates(self):
         row = {

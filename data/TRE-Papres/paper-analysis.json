@@ -11,7 +11,7 @@
     "Computer Organization & Architecture is reported at 6 / 7.5% in TRE 1.0, 2 / 2.5% in TRE 2.0 and 10 / 12.5% in TRE 3.0.",
     "IoT / AI is reported at 6 / 7.5% in TRE 1.0, 3 / 3.75% in TRE 2.0 and 7 / 8.75% in TRE 3.0.",
     "The collection article's general claim of no negative marking conflicts with the TRE 1.0 primary booklet, whose instructions specify a one-fourth-mark penalty for a wrong answer.",
-    "The supplied TRE 3.0 booklet inventory contains 150 questions (30 qualifying-language + 40 GS + 80 CS), with E-1 through E-8 and H-9 through H-30 preserved as source identities."
+    "The supplied TRE 3.0 booklet has 150 numbered positions, but its final-key mirror marks two General Studies items deleted; the importable practice inventory is 148 questions (30 qualifying language + 38 retained GS + 80 CS)."
   ],
   "per_cycle": {
     "TRE 1.0": {
@@ -100,15 +100,40 @@
         "qualifying_language_question_count": 30
       },
       "TRE 3.0": {
-        "total_question_count": 150,
+        "total_question_count": 148,
         "qualifying_language_question_count": 30,
         "qualifying_language_keys": [
           "E-1..E-8",
           "H-9..H-30"
         ],
-        "excluded_keys_not_present": []
+        "excluded_keys_not_present": [],
+        "source_numbered_question_positions": 150,
+        "general_studies_question_count": 38,
+        "computer_science_question_count": 80,
+        "scored_question_count": 118,
+        "deleted_general_studies_question_numbers": [
+          52,
+          69
+        ]
       }
     },
-    "note": "The article's 80-question topic distributions apply to the Computer Science section, not the whole booklet. In TRE 2.0 and TRE 3.0 qualifying-language questions appear in the attempt but are scored separately from GS and CS."
+    "note": "Section counts are cycle-specific. TRE 3.0's two final-key-referenced General Studies items remain in audit metadata but are excluded from the active practice inventory; no replacement content or answer is invented.",
+    "cycle_specific_scored_sections": {
+      "TRE 1.0": {
+        "GENERAL_STUDIES": 40,
+        "COMPUTER_SCIENCE": 80,
+        "scored_question_count": 120
+      },
+      "TRE 2.0": {
+        "GENERAL_STUDIES": 40,
+        "COMPUTER_SCIENCE": 80,
+        "scored_question_count": 120
+      },
+      "TRE 3.0": {
+        "GENERAL_STUDIES": 38,
+        "COMPUTER_SCIENCE": 80,
+        "scored_question_count": 118
+      }
+    }
   }
 }

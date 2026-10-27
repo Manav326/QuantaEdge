@@ -16,7 +16,7 @@ This folder is the durable home for the TRE 1.0, TRE 2.0 and TRE 3.0 source regi
 - `source-register.json` records the source article and three readable paper-mirror URLs.
 - `paper-analysis.json` records the article's published topic counts and flags discrepancies that must be checked against the PDFs.
 - The exact source PDFs supplied in `data/TRE-4_PYQ.zip` are stored under `sources/` on this draft branch and are hashed by the inspection workflow. The source question inventory is an audit artifact, not an approved exam.
-- Source-count reconciliation: TRE 1.0 has 120 questions (40 GS + 80 CS); TRE 2.0 and TRE 3.0 each have 150 (30 qualifying-language + 40 GS + 80 CS). TRE 3.0 preserves language IDs E-1 through E-8 and H-9 through H-30.
+- Source-count reconciliation: TRE 1.0 has 120 questions (40 GS + 80 CS); TRE 2.0 has 150 questions (30 qualifying-language + 40 GS + 80 CS). TRE 3.0 has 150 numbered source positions but 148 importable questions after excluding the two General Studies items marked Deleted by the final-key mirror: 30 qualifying-language + 38 retained GS + 80 CS. The Set E identities are 52 and 69; they remain in the extraction audit, not the attempt. TRE 3.0 preserves language IDs E-1 through E-8 and H-9 through H-30.
 - Keep question wording, Hindi reconstruction, answer keys, explanations and rights review as separate release gates. A green extraction workflow does not mean the paper is ready for students.
 
 ## Review and release safety

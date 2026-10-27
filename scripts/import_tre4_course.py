@@ -32,7 +32,7 @@ COURSE_CODE_SUFFIX = "BPSC_TRE_CS_PYQ_SERIES"
 COURSE_TITLE = "BPSC TRE Computer Science — Previous-Year Practice Series"
 COURSE_TYPE_CODE = "ASSESSMENT"
 PACKAGE_VERSION = "1.0.0"
-EXPECTED_QUESTIONS = {"TRE 1.0": 120, "TRE 2.0": 150, "TRE 3.0": 150}
+EXPECTED_QUESTIONS = {"TRE 1.0": 120, "TRE 2.0": 150, "TRE 3.0": 148}
 EXPECTED_SOURCE_IDENTITIES = {
     "TRE 1.0": {
         "GENERAL_STUDIES": {str(n) for n in range(1, 41)},
@@ -44,9 +44,9 @@ EXPECTED_SOURCE_IDENTITIES = {
         "COMPUTER_SCIENCE": {str(n) for n in range(71, 151)},
     },
     "TRE 3.0": {
-        # Preserve all 30 qualifying-language items present in the extracted TRE 3.0 booklet.
+        # The supplied Set E booklet has 40 GS positions; final-key-deleted items 52 and 69 are audit-only.
         "LANGUAGE_QUALIFYING": {f"E-{n}" for n in range(1, 9)} | {f"H-{n}" for n in range(9, 31)},
-        "GENERAL_STUDIES": {str(n) for n in range(31, 71)},
+        "GENERAL_STUDIES": {str(n) for n in range(31, 71)} - {"52", "69"},
         "COMPUTER_SCIENCE": {str(n) for n in range(71, 151)},
     },
 }
@@ -61,6 +61,10 @@ SECTION_POLICY = {
     "GENERAL_STUDIES": "SCORED",
     "COMPUTER_SCIENCE": "SCORED",
     "LANGUAGE_QUALIFYING": "QUALIFYING_ONLY",
+}
+
+EXPECTED_EXCLUDED_SOURCE_IDENTITIES = {
+    "TRE 3.0": {("GENERAL_STUDIES", "52"), ("GENERAL_STUDIES", "69")},
 }
 
 
@@ -120,6 +124,35 @@ def validate_question_inventory(cycle: str, questions: list[dict[str, Any]]) -> 
             raise ImportErrorSafe(
                 f"{cycle}/{section} source identities do not reconcile; missing={missing[:12]}, extra={extra[:12]}."
             )
+
+
+
+def validate_excluded_source_questions(cycle: str, record: dict[str, Any]) -> None:
+    """Require explicit audit rows for every final-key deletion; never import them as live questions."""
+    expected = EXPECTED_EXCLUDED_SOURCE_IDENTITIES.get(cycle, set())
+    rows = record.get("excluded_source_questions", [])
+    if not isinstance(rows, list):
+        raise ImportErrorSafe(f"{cycle} excluded_source_questions must be a list, including an empty list when none are excluded.")
+    actual: set[tuple[str, str]] = set()
+    for index, item in enumerate(rows, 1):
+        if not isinstance(item, dict):
+            raise ImportErrorSafe(f"{cycle} excluded source item {index} is not an object.")
+        if item.get("excluded_from_practice_test") is not True:
+            raise ImportErrorSafe(f"{cycle} excluded source item {index} is missing its audit-only exclusion marker.")
+        section = str(item.get("section_code") or "").strip().upper()
+        source_number = str(item.get("source_question_number") or "").strip()
+        if not section or not source_number:
+            raise ImportErrorSafe(f"{cycle} excluded source item {index} is missing section_code/source_question_number.")
+        key = (section, source_number)
+        if key in actual:
+            raise ImportErrorSafe(f"{cycle} has duplicate excluded source identity {section}/{source_number}.")
+        actual.add(key)
+    if actual != expected:
+        raise ImportErrorSafe(
+            f"{cycle} excluded-source identities differ from the final-key contract; "
+            f"expected={sorted(expected)}, actual={sorted(actual)}."
+        )
+
 
 
 def expected_question_count(cycle: str) -> int:
@@ -280,6 +313,7 @@ def build_question_snapshot(record: dict[str, Any], cycle: str, pdf_path: str, p
 
 
 def build_paper_plan(cycle: str, record: dict[str, Any], register: dict[str, Any]) -> dict[str, Any]:
+    validate_excluded_source_questions(cycle, record)
     questions = record.get("questions")
     expected = expected_question_count(cycle)
     if not isinstance(questions, list) or len(questions) != expected:
@@ -291,6 +325,30 @@ def build_paper_plan(cycle: str, record: dict[str, Any], register: dict[str, Any
     source_meta = next((item for item in register.get("sources", []) if item.get("cycle") == cycle), None)
     if not isinstance(source_meta, dict):
         raise ImportErrorSafe(f"Source register is missing {cycle}.")
+
+    booklet = (
+        register.get("verified_booklet_structure", {})
+        .get("cycles", {})
+        .get(cycle)
+    )
+    if not isinstance(booklet, dict) or int(booklet.get("total_question_count", -1)) != expected:
+        raise ImportErrorSafe(
+            f"{cycle} source-register total_question_count must match the {expected}-question import contract."
+        )
+    if cycle == "TRE 3.0":
+        if int(booklet.get("source_numbered_question_positions", -1)) != 150:
+            raise ImportErrorSafe("TRE 3.0 source register must retain all 150 numbered booklet positions for audit.")
+        if (
+            int(booklet.get("qualifying_language_question_count", -1)) != 30
+            or int(booklet.get("general_studies_question_count", -1)) != 38
+            or int(booklet.get("computer_science_question_count", -1)) != 80
+            or int(booklet.get("scored_question_count", -1)) != 118
+            or {str(n) for n in booklet.get("deleted_general_studies_source_question_numbers", [])} != {"52", "69"}
+        ):
+            raise ImportErrorSafe(
+                "TRE 3.0 source-register breakdown must be 30 qualifying + 38 retained GS + 80 CS; "
+                "deleted GS positions 52 and 69 are audit-only."
+            )
     if source_meta.get("source_status") != "VERIFIED_SOURCE_FILE":
         raise ImportErrorSafe(f"{cycle} source is not registered as a verified source file.")
     if source_meta.get("repository_distribution_rights") != "CLEARED_FOR_PUBLIC_REPOSITORY":
@@ -431,7 +489,7 @@ def ensure_schema(cursor: Any) -> None:
     row = cursor.fetchone()
     if not row or any(value is None for value in row):
         raise ImportErrorSafe(
-            "Required migrations V168, V177, V180, V198, V199, V200, V202, and V204 are missing. "
+            "Required migrations V168, V177, V180, V198, V199, V200, V202, V204, V205, and V213 are missing. "
             "Start the API against this database and verify Flyway completes before importing."
         )
     assessment_id_definition = str(row[12] or "")
@@ -476,6 +534,15 @@ def ensure_schema(cursor: Any) -> None:
     if "assessment_question_snapshot_publish_ready(aq.question_snapshot)" not in tre4_readiness_definition:
         raise ImportErrorSafe(
             "Flyway V204 is required: TRE readiness must use the same typed question/answer review gate."
+        )
+
+    if not re.search(
+        r"'TRE 3\\.0'::(?:character varying|varchar),\\s*'tre4-bpsc-tre-3-0-computer-science'::(?:character varying|varchar),\\s*148",
+        tre4_readiness_definition,
+    ):
+        raise ImportErrorSafe(
+            "Flyway V213 is required: TRE readiness must expect 148 active TRE 3.0 questions after excluding "
+            "the two final-key-deleted General Studies items."
         )
     if "course_marketplace_content_type_ready" not in course_type_readiness_definition or "assessment_only_course_publish_ready" not in course_type_readiness_definition:
         raise ImportErrorSafe(

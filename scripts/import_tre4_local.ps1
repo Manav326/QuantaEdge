@@ -42,6 +42,7 @@ $repoRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot ".."))
 $importer = Join-Path $repoRoot "scripts/import_tre4_course.py"
 $testPath = Join-Path $repoRoot "tests"
 $migration = Join-Path $repoRoot "services/api/src/main/resources/db/migration/V199__assessment_only_readiness_uses_test_packs.sql"
+$treReadinessMigration = Join-Path $repoRoot "services/api/src/main/resources/db/migration/V213__tre3_final_key_deleted_question_count.sql"
 $sourceRegister = Join-Path $repoRoot "data/TRE-Papres/source-register.json"
 
 function Stop-WithMessage {
@@ -120,7 +121,7 @@ try {
         Stop-WithMessage "The script path is not inside the expected Git repository root."
     }
 
-    foreach ($requiredPath in @($importer, $migration, $sourceRegister)) {
+    foreach ($requiredPath in @($importer, $migration, $treReadinessMigration, $sourceRegister)) {
         if (-not (Test-Path -LiteralPath $requiredPath -PathType Leaf)) {
             Stop-WithMessage "Required file is missing: $requiredPath. Pull the latest main branch before importing."
         }
@@ -171,6 +172,7 @@ try {
     Write-Host "Archive    : $archiveFullPath"
     Write-Host "Course     : BPSC TRE Computer Science — Previous-Year Practice Series [ASSESSMENT / ASSESSMENT_ONLY]"
     Write-Host "Hierarchy  : Course -> versioned test packs -> assessments -> ordered question snapshots"
+    Write-Host "TRE 3.0    : 148 importable questions; final-key-deleted GS positions remain audit-only"
     Write-Host "Safety     : no answer-key approval and no learner publication"
 
     # Source extraction needs PyMuPDF (the extractor accepts either pymupdf or fitz).
@@ -181,6 +183,7 @@ try {
 
     Write-Host ""
     Write-Host "Running offline importer regression tests..." -ForegroundColor Cyan
+    Invoke-CheckedPython -Arguments @("-m", "unittest", "discover", "-s", $testPath, "-p", "test_extract_tre_source_questions.py")
     Invoke-CheckedPython -Arguments @("-m", "unittest", "discover", "-s", $testPath, "-p", "test_import_tre4_course.py")
 
     Write-Host ""

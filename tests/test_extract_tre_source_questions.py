@@ -13,6 +13,8 @@ from scripts.extract_tre_source_questions import (
     detected_code_line_indices,
     detected_math_line_indices,
     expected_language_keys,
+    is_deleted_practice_question,
+    TRE3_DELETED_GS_IDENTITIES,
     parse_prompt_options,
     preserve_layout,
     _question_is_allowed,
@@ -21,16 +23,22 @@ from scripts.extract_tre_source_questions import (
 
 
 class TreSourceCodePreservationTests(unittest.TestCase):
-    def test_tre3_source_has_150_questions_with_all_30_language_items(self):
-        self.assertEqual(PAPERS["TRE 3.0"]["total_questions"], 150)
+    def test_tre3_has_148_active_questions_and_retains_two_deleted_items_for_audit(self):
+        self.assertEqual(PAPERS["TRE 3.0"]["total_questions"], 148)
+        self.assertEqual(PAPERS["TRE 3.0"]["source_question_positions"], 150)
         language_keys = expected_language_keys("TRE 3.0")
         self.assertEqual(len(language_keys), 30)
         self.assertEqual(
             language_keys,
             {f"E-{i}" for i in range(1, 9)} | {f"H-{i}" for i in range(9, 31)},
         )
-        self.assertIn("E-1", language_keys)
-        self.assertIn("E-6", language_keys)
+        self.assertEqual(TRE3_DELETED_GS_IDENTITIES, frozenset({"52", "69"}))
+        self.assertTrue(is_deleted_practice_question("TRE 3.0", "GENERAL_STUDIES", 52))
+        self.assertTrue(is_deleted_practice_question("TRE 3.0", "GENERAL_STUDIES", 69))
+        self.assertFalse(is_deleted_practice_question("TRE 3.0", "GENERAL_STUDIES", 53))
+        self.assertFalse(is_deleted_practice_question("TRE 3.0", "COMPUTER_SCIENCE", 69))
+        self.assertFalse(is_deleted_practice_question("TRE 2.0", "GENERAL_STUDIES", 52))
+        self.assertEqual(38 + 80 + len(language_keys), 148)
         self.assertEqual(40 + 80 + len(language_keys), 150)
 
     def test_native_language_track_and_prefix_normalization(self):

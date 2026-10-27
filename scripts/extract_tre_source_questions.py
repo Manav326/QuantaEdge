@@ -73,8 +73,9 @@ PAPERS = {
     "TRE 3.0": {
         "match": ("tre3.0", "tre-3", "tre3"),
         "expected": {"GENERAL_STUDIES": (31, 70), "COMPUTER_SCIENCE": (71, 150)},
-        # Preserve the 150 items: 40 GS + 80 CS + 30 qualifying-language questions.
-        "total_questions": 150,
+        # The booklet has 150 numbered positions; final-key-deleted GS items 52 and 69 are audit-only.
+        "total_questions": 148,
+        "source_question_positions": 150,
         "duration_minutes": 150,
         "negative_marking_fraction": 0.0,
         "exam_date": "2024-07-22",
@@ -590,6 +591,18 @@ def expected_language_keys(cycle: str) -> set[str]:
     return set()
 
 
+TRE3_DELETED_GS_IDENTITIES = frozenset({"52", "69"})
+
+
+def is_deleted_practice_question(cycle: str, section_code: str, source_question_number: Any) -> bool:
+    """Identify source items excluded by the TRE 3.0 final-answer-key reference, using supplied Set E numbering."""
+    return (
+        cycle == "TRE 3.0"
+        and str(section_code or "").strip().upper() == "GENERAL_STUDIES"
+        and str(source_question_number or "").strip() in TRE3_DELETED_GS_IDENTITIES
+    )
+
+
 def native_source_language(cycle: str, identity: str) -> str | None:
     """Return the actual source-language track for qualifying items, without translation."""
     key = str(identity).strip().upper()
@@ -857,10 +870,22 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 return (1 if code=="GENERAL_STUDIES" else 2,int(qnum))
             all_source_records=cycle_records
             language_records=[r for r in all_source_records if r["section_code"]=="LANGUAGE_QUALIFYING"]
-            # Preserve every question present in each original booklet. TRE 2.0/3.0 have
-            # 30 qualifying-language questions in addition to 40 GS + 80 CS. Only GS and CS
-            # contribute to the 120-mark scored result; qualifying items remain in the same attempt.
-            course_records=list(all_source_records)
+            # Preserve the full source inventory, but remove final-key-deleted GS items from the attempt.
+            # For the supplied TRE 3.0 Set E booklet these are positions 52 and 69.
+            excluded_source_questions=[]
+            for source_record in all_source_records:
+                if is_deleted_practice_question(
+                    cycle, source_record["section_code"], source_record["source_question_number"]
+                ):
+                    source_record["excluded_from_practice_test"]=True
+                    source_record["exclusion_reason"]=(
+                        "Marked Deleted in the TRE 3.0 Class 11-12 Computer Science final-answer-key reference; "
+                        "retained for audit and not imported as an attempt question."
+                    )
+                    excluded_source_questions.append(source_record)
+            course_records=[
+                r for r in all_source_records if not r.get("excluded_from_practice_test", False)
+            ]
             course_records.sort(key=sequence_key)
             for sequence, record in enumerate(course_records,1):
                 record["sequence_no"]=sequence
@@ -870,14 +895,19 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
             paired_sections={}
             for section,(low,high) in meta["expected"].items():
                 keys={str(q) for q in range(low,high+1)}
-                rows=[r for r in course_records if r["section_code"]==section]
+                source_rows=[r for r in all_source_records if r["section_code"]==section]
+                practice_rows=[r for r in course_records if r["section_code"]==section]
                 paired_sections[section]={
                     "expected_questions":high-low+1,
-                    "extracted_questions":len(rows),
-                    "missing_question_numbers":sorted(keys-{str(r["source_question_number"]) for r in rows},key=lambda x:int(x)),
-                    "questions_missing_english":sum("MISSING_ENGLISH_VARIANT" in r["review_flags"] for r in rows),
-                    "questions_missing_hindi":sum("MISSING_HINDI_VARIANT" in r["review_flags"] for r in rows),
-                    "questions_needing_visual_or_text_review":sum(bool(r["review_flags"]) for r in rows),
+                    "extracted_questions":len(source_rows),
+                    "active_practice_test_questions":len(practice_rows),
+                    "excluded_source_question_numbers":sorted(
+                        str(r["source_question_number"]) for r in source_rows if r.get("excluded_from_practice_test")
+                    ),
+                    "missing_question_numbers":sorted(keys-{str(r["source_question_number"]) for r in source_rows},key=lambda x:int(x)),
+                    "questions_missing_english":sum("MISSING_ENGLISH_VARIANT" in r["review_flags"] for r in source_rows),
+                    "questions_missing_hindi":sum("MISSING_HINDI_VARIANT" in r["review_flags"] for r in source_rows),
+                    "questions_needing_visual_or_text_review":sum(bool(r["review_flags"]) for r in source_rows),
                 }
             expected_language=len(expected_language_keys(cycle))
             language_check={
@@ -888,7 +918,7 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 ) if cycle!="TRE 1.0" else [],
                 "included_in_tre4_practice_test":cycle in {"TRE 2.0","TRE 3.0"},
                 "included_in_scored_result":False,
-                "note":"Preserve all questions from each original booklet. TRE 1.0 has 120 questions (40 GS + 80 CS); TRE 2.0 and TRE 3.0 have 150 each (30 qualifying language + 40 GS + 80 CS). Only GS and CS contribute to the two scored result sections."
+                "note":"Preserve all source positions for audit. TRE 3.0 has 150 numbered positions, but final-key-deleted GS items 52 and 69 are audit-only; its importable attempt has 148 items (30 qualifying language + 38 retained GS + 80 CS)."
             }
             # Also retain alternative Urdu/Bengali source-track availability without adding those
             # questions to the TRE-4 CS/GS test.
@@ -922,29 +952,36 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 "exam_configuration":{
                     "duration_minutes":meta["duration_minutes"],
                     "total_questions":meta["total_questions"],
+                    "source_numbered_question_positions":meta.get("source_question_positions",meta["total_questions"]),
                     "marks_per_question":1,
                     "negative_marking_fraction":meta["negative_marking_fraction"],
-                    "scored_question_count":120,
-                    "scored_sections":{"GENERAL_STUDIES":40,"COMPUTER_SCIENCE":80},
+                    "scored_question_count":sum(r["section_code"] in {"GENERAL_STUDIES","COMPUTER_SCIENCE"} for r in course_records),
+                    "scored_sections":{
+                        "GENERAL_STUDIES":sum(r["section_code"]=="GENERAL_STUDIES" for r in course_records),
+                        "COMPUTER_SCIENCE":sum(r["section_code"]=="COMPUTER_SCIENCE" for r in course_records),
+                    },
                     "qualifying_section_question_count":len(expected_language_keys(cycle)) if cycle in {"TRE 2.0","TRE 3.0"} else 0,
                 },
                 "extraction_summary":{
                     "raw_question_blocks_detected":len(raw_questions),
                     "practice_test_question_count":len(course_records),
                     "source_inventory_question_count":len(all_source_records),
+                    "excluded_source_question_count":len(excluded_source_questions),
                     "qualifying_language_question_count_included":len(language_records),
                     "section_counts":dict(Counter(r["section_code"] for r in course_records)),
+                    "source_inventory_section_counts":dict(Counter(r["section_code"] for r in all_source_records)),
                     "section_pair_audit":paired_sections,
                     "language_section_audit":language_check,
                     "question_flags":sum(len(r["review_flags"]) for r in course_records),
                 },
                 "questions":course_records,
+                "excluded_source_questions":excluded_source_questions,
                 "source_language_qualifying_questions":language_records,
                 "alternate_language_tracks":alternate_language_tracks,
                 "source_notes":[
                     "Original PDF bytes are preserved exactly; SHA-256 is recorded.",
                     "Supported legacy Hindi encodings are converted to Unicode; unsupported or uncertain font encodings remain raw and are flagged for visual review. The current TRE source PDFs include SHREE-DEV-0708/0709 text spans, which must not be force-converted as KrutiDev or Chanakya.",
-                    "All questions present in each original booklet are preserved. TRE 2.0 and TRE 3.0 each have 30 qualifying-language items in addition to 40 General Studies + 80 Computer Science, for 150 total. Only GS and Computer Science contribute to the scored result, reported in two sections.",
+                    "The extracted TRE 3.0 Set E source has 150 numbered positions; the two General Studies items marked Deleted by the final-key reference (52 and 69) remain in excluded_source_questions for audit and are not imported into the practice attempt. The active attempt contains 148 questions: 30 qualifying-language, 38 retained General Studies and 80 Computer Science.",
                     "Do not release until question/option pair completeness, Hindi rendering, answers, concise explanations, paper rules and any mathematical/code expressions have been reviewed.",
                 ],
             }

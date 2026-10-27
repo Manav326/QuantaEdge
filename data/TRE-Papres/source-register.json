@@ -76,7 +76,7 @@
   "binary_collection_status": "SOURCE_PDFS_EXTRACTED_AND_HASHED",
   "verified_booklet_structure": {
     "status": "QUESTION_COUNTS_RECONCILED_TO_SUPPLIED_BOOKLETS",
-    "note": "Counts describe the exact supplied booklet. Only General Studies and Computer Science contribute to the 120-question scored result; qualifying-language items remain visible in the attempt and are reported separately.",
+    "note": "Counts are cycle-specific. TRE 3.0's supplied Set E booklet has 150 numbered positions; final-key-referenced GS positions 52 and 69 are retained only in the source audit, leaving 148 active attempt questions (30 qualifying language + 38 retained GS + 80 CS). The active GS+CS inventory contains 118 questions; no marks or replacement content are invented for deleted items.",
     "cycles": {
       "TRE 1.0": {
         "total_question_count": 120,
@@ -93,13 +93,44 @@
         "scored_question_count": 120
       },
       "TRE 3.0": {
-        "total_question_count": 150,
+        "total_question_count": 148,
         "qualifying_language_question_count": 30,
-        "general_studies_question_count": 40,
+        "general_studies_question_count": 38,
         "computer_science_question_count": 80,
-        "scored_question_count": 120,
-        "source_note": "The extracted booklet inventory preserves E-1 through E-8 and H-9 through H-30 in the 30-question qualifying-language section."
+        "scored_question_count": 118,
+        "source_note": "The final-answer-key mirror marks two General Studies source items Deleted. For the supplied Set E booklet these are 52 and 69; equivalent numbers are E/F/G/H = 52/60/68/44 and 69/37/45/61. They remain in extraction audit only; primary BPSC-key confirmation remains a review item.",
+        "source_numbered_question_positions": 150,
+        "deleted_general_studies_source_question_numbers": [
+          52,
+          69
+        ]
       }
     }
+  },
+  "answer_key_review_reference": {
+    "status": "SECONDARY_MIRROR_REQUIRES_PRIMARY_CONFIRMATION",
+    "paper": "BPSC TRE 3.0, Advt. No. 22/2024, Computer Science, Class 11-12 — Final Answer Key",
+    "url": "https://img.freejobalert.com/uploads/2024/10/Written-Objective-Re-Final-Answer-Key-Computer-Science-BPSC-School-Teacher-Class-11-12-Posts.pdf",
+    "purpose": "Used only to identify deleted General Studies items; no answer option or explanation is imported from this reference.",
+    "deleted_general_studies_items": [
+      {
+        "source_set_e_question_number": 52,
+        "equivalents_by_booklet_set": {
+          "E": 52,
+          "F": 60,
+          "G": 68,
+          "H": 44
+        }
+      },
+      {
+        "source_set_e_question_number": 69,
+        "equivalents_by_booklet_set": {
+          "E": 69,
+          "F": 37,
+          "G": 45,
+          "H": 61
+        }
+      }
+    ]
   }
 }

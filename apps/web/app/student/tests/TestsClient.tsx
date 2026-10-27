@@ -1248,8 +1248,8 @@ export default function TestsClient(){
         <p>{t('This paper contains','इस प्रश्नपत्र में कुल')} <strong>{pendingTestStart.question_count}</strong> {t('questions in total.','प्रश्न हैं।')}</p>
         {/\bTRE[\s-]*3(?:\.0)?\b/i.test(pendingTestStart.title+' '+(pendingTestStart.description||''))&&<p>
           {uiLanguage==='hi'
-            ?'इस TRE 3.0 प्रश्नपत्र में कुल 150 प्रश्न हैं: 40 सामान्य अध्ययन, 80 कंप्यूटर विज्ञान और 30 अर्हकारी भाषा प्रश्न। सामान्य अध्ययन और कंप्यूटर विज्ञान के अंक अलग-अलग दिखाए जाएंगे; भाषा अनुभाग अलग रहेगा और स्कोर किए गए कुल अंकों में नहीं जुड़ेगा।'
-            :'The TRE 3.0 source paper contains 150 questions in total: 40 General Studies, 80 Computer Science, and 30 qualifying-language questions. General Studies and Computer Science are scored separately; the language section is shown separately and is not added to the scored total.'}
+            ?'इस TRE 3.0 अभ्यास-पत्र में 148 प्रश्न हैं: 30 अर्हकारी भाषा, 38 सामान्य अध्ययन और 80 कंप्यूटर विज्ञान। अंतिम उत्तर-कुंजी संदर्भ में हटाए गए दो सामान्य अध्ययन प्रश्न स्रोत-जाँच के लिए रखे गए हैं, लेकिन अभ्यास-पत्र में शामिल नहीं हैं। सामान्य अध्ययन और कंप्यूटर विज्ञान के परिणाम अलग दिखेंगे; भाषा अनुभाग अलग रहेगा।'
+            :'The TRE 3.0 practice paper contains 148 questions: 30 qualifying-language, 38 retained General Studies, and 80 Computer Science. Two General Studies items marked Deleted in the final-key reference are retained for source audit but excluded from this attempt. General Studies and Computer Science results are shown separately; the language section remains separate.'}
         </p>}
         <p>{t('The timer starts when you continue. Your answers save automatically, and you can submit when you finish.','आगे बढ़ने पर समय शुरू होगा। आपके उत्तर अपने-आप सहेजे जाएंगे और पूरा होने पर आप जमा कर सकते हैं।')}</p>
         <div>

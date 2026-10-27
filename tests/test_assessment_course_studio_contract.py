@@ -175,7 +175,7 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("def ensure_course_identity", importer)
         self.assertIn("course_type_code='ASSESSMENT'", importer)
         self.assertIn("institution_course_identity", importer)
-        self.assertIn("EXPECTED_QUESTIONS = {\"TRE 1.0\": 120, \"TRE 2.0\": 150, \"TRE 3.0\": 150}", importer)
+        self.assertIn("EXPECTED_QUESTIONS = {\"TRE 1.0\": 120, \"TRE 2.0\": 150, \"TRE 3.0\": 148}", importer)
 
     def test_release_fingerprint_covers_full_lesson_and_resource_graph(self):
         migration = (ROOT / "services/api/src/main/resources/db/migration/V196__complete_course_release_content_fingerprint.sql").read_text(encoding="utf-8")
