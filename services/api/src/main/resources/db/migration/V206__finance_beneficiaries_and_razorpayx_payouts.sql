@@ -288,6 +288,21 @@ SELECT id,'HRMS','QE_FINANCE_PAYOUT_APPROVE'
 FROM staff_account WHERE lower(username)='hrms_admin' AND active=true
 ON CONFLICT(staff_id,workspace_key,permission_key) DO NOTHING;
 
+-- Existing platform owners inherit the new finance permissions only because they already
+-- have the explicit cross-institution QE_PLATFORM_OWNER capability. Other staff need
+-- separately assigned payout permissions and still cannot approve their own submissions.
+INSERT INTO staff_permission_grant(staff_id,workspace_key,permission_key)
+SELECT DISTINCT staff_id,'HRMS','QE_FINANCE_PAYOUT_MANAGE'
+FROM staff_permission_grant
+WHERE workspace_key='HRMS' AND permission_key='QE_PLATFORM_OWNER'
+ON CONFLICT(staff_id,workspace_key,permission_key) DO NOTHING;
+
+INSERT INTO staff_permission_grant(staff_id,workspace_key,permission_key)
+SELECT DISTINCT staff_id,'HRMS','QE_FINANCE_PAYOUT_APPROVE'
+FROM staff_permission_grant
+WHERE workspace_key='HRMS' AND permission_key='QE_PLATFORM_OWNER'
+ON CONFLICT(staff_id,workspace_key,permission_key) DO NOTHING;
+
 INSERT INTO app_metadata(key,value)
 VALUES ('schema','finance-beneficiaries-razorpayx-payouts-v206')
 ON CONFLICT(key) DO UPDATE SET value=excluded.value;
