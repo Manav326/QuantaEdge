@@ -716,7 +716,7 @@ public class CoursePaymentOperationsController {
         "An unfamiliar order state requires finance/engineering review. Do not edit payment state manually.");
   }
 
-  private static Map<String,Object> diagnosticDetails(Map<String,Object> result) {
+  static Map<String,Object> diagnosticDetails(Map<String,Object> result) {
     Map<String,Object> details=new LinkedHashMap<>();
     for(String key:List.of("providerOrderStatus","providerAmountPaidPaise","providerAttemptCount","paymentAttempts",
         "entitled","canRetryCheckout","financeFinalizationAttempted",
