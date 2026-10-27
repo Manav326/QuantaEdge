@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2419,
+    "assets_selected": 2421,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "cb75124972ed3af3dfbba5cc",
-      "ccf657fc0ce2e793d2461637"
+      "e7c2150ce964c452ba723410",
+      "b831f2644d409a29af8b7f80"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2416,
-    "assets_remaining": 5072,
+    "assets_analyzed": 2418,
+    "assets_remaining": 5070,
     "assets_completion_percent": 32.3,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 2414,
+    "assets_skipped_from_checkpoint": 2416,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40498882710",
-      "checkpointed_at": "2026-10-27T12:54:08Z"
+      "checkpointed_at": "2026-10-27T12:57:23Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40498882710",
-      "checkpointed_at": "2026-10-27T12:54:37Z"
+      "checkpointed_at": "2026-10-27T12:57:54Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40498882710",
-      "checkpointed_at": "2026-10-27T12:55:14Z"
+      "checkpointed_at": "2026-10-27T12:58:33Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -91187,6 +91187,81 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40498882710",
       "checkpointed_at": "2026-10-27T12:56:33Z"
+    },
+    {
+      "asset_id": "e7c2150ce964c452ba723410",
+      "asset_sha256": "42e35d656dff216057122972d84d269c5a3a61c548d245c429f391a6bc84af72",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/42e35d656dff216057122972d84d269c5a3a61c548d245c429f391a6bc84af72.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of non-metals in daily life, specifically mentioning oxygen and carbon.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "and electrical conductivity, and high strength. However, this",
+          "should not give an impression in your mind that non-metals are not important in our lives.",
+          "We breathe in oxygen, which is a non-metal, and without it,",
+          "we would not be able to survive. Can you think of any other uses",
+          "of oxygen?",
+          "Carbon is essential in everyday life because it is the building",
+          "block of all life forms. It is a key component of proteins, fats, and"
+        ],
+        "concepts": [
+          "non-metals",
+          "oxygen",
+          "carbon",
+          "electrical conductivity",
+          "strength",
+          "daily life",
+          "building block of life",
+          "proteins",
+          "fats"
+        ],
+        "context_relation": "The page discusses the importance of non-metals in daily life, specifically mentioning oxygen and carbon.",
+        "limitations": [
+          "The page does not provide specific examples or explanations for the uses of oxygen and carbon."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40498882710",
+      "checkpointed_at": "2026-10-27T12:59:22Z"
+    },
+    {
+      "asset_id": "b831f2644d409a29af8b7f80",
+      "asset_sha256": "cf559b1ff50e91b46d31aaf684971818ae8377cd2f9edd04b36eef41e519f603",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/cf559b1ff50e91b46d31aaf684971818ae8377cd2f9edd04b36eef41e519f603.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a corn cob with a focus on the kernels.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a close-up of a corn cob, which is not directly related to the text about non-metals and their importance in everyday life."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40498882710",
+      "checkpointed_at": "2026-10-27T13:00:00Z"
     }
   ]
 }
