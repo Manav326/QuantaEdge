@@ -112,7 +112,7 @@ const rupees=(paise:number|undefined,currency='INR')=>typeof paise!=='number'?'â
 const asIso=(value:string)=>new Date(value).toISOString();
 function parseRupeesPaise(raw:string):number|null{
   const value=raw.trim();
-  if(!/^\\d{1,9}(?:\\.\\d{1,2})?$/.test(value))return null;
+  if(!/^\d{1,9}(?:\.\d{1,2})?$/.test(value))return null;
   const parts=value.split('.');
   const paise=Number(parts[0])*100+Number(((parts[1]||'')+'00').slice(0,2));
   return Number.isSafeInteger(paise)&&paise>=100?paise:null;
@@ -713,7 +713,7 @@ export default function FinancePage(){
   })).sort((a,b)=>a.recipientType.localeCompare(b.recipientType)||a.recipientId-b.recipientId));
   const previewPoolPaise=(()=>{
     const value=distributionPreviewPoolRupees.trim();
-    if(!/^\\d{1,9}(?:\\.\\d{1,2})?$/.test(value))return null;
+    if(!/^\d{1,9}(?:\.\d{1,2})?$/.test(value))return null;
     const [rupees,decimal='']=value.split('.');
     const amount=Number(rupees)*100+Number((decimal+'00').slice(0,2));
     return Number.isSafeInteger(amount)&&amount>=100?amount:null;
@@ -732,7 +732,7 @@ export default function FinancePage(){
         amountPaise=Math.round((previewPoolPaise||0)*Math.round(percentage*100)/10000);
       }else{
         const value=recipient.flatRupees.trim();
-        if(!/^\\d{1,9}(?:\\.\\d{1,2})?$/.test(value)){valid=false;continue;}
+        if(!/^\d{1,9}(?:\.\d{1,2})?$/.test(value)){valid=false;continue;}
         const [rupees,decimal='']=value.split('.');
         amountPaise=Number(rupees)*100+Number((decimal+'00').slice(0,2));
         if(!Number.isSafeInteger(amountPaise)||amountPaise<1){valid=false;continue;}
