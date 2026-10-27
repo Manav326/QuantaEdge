@@ -15,7 +15,7 @@
       "73d7871359ba2e1d3fe3cfeb",
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
-      "2104ecb647e20f98cb93ca2e"
+      "2185c15c0a88a108ea516878"
     ],
     "assets_eligible": 2078,
     "assets_analyzed": 1413,
@@ -456,7 +456,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40499875926",
-      "checkpointed_at": "2026-10-27T12:27:09Z"
+      "checkpointed_at": "2026-10-27T12:33:19Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20135,7 +20135,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40499875926",
-      "checkpointed_at": "2026-10-27T12:28:04Z"
+      "checkpointed_at": "2026-10-27T12:34:09Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23794,7 +23794,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40499875926",
-      "checkpointed_at": "2026-10-27T12:28:49Z"
+      "checkpointed_at": "2026-10-27T12:34:52Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -38028,7 +38028,7 @@
         "concepts": [
           "Measurement of Length and Motion",
           "Handspans",
-          "Length of the table"
+          "Units of Measurement"
         ],
         "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
@@ -38039,7 +38039,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40499875926",
-      "checkpointed_at": "2026-10-27T12:30:47Z"
+      "checkpointed_at": "2026-10-27T12:35:28Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -40050,7 +40050,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40488064799",
+      "run_id": "40499875926",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
