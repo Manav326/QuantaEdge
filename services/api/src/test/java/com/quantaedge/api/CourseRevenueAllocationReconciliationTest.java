@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -15,11 +16,11 @@ class CourseRevenueAllocationReconciliationTest {
         List.of(recipient(11L,"INSTITUTION",2L,"PERCENTAGE",1_000,0L,"Sunrise Public School")),
         "INSTITUTION",1L,"Quanta Edge");
     List<Map<String,Object>> allocations = List.of(
-        allocation(100L,7L,"INSTITUTION",2L,10_000L,100_000L,0L,100_000L,10_000L,1L),
-        allocation(101L,7L,"INSTITUTION",1L,90_000L,100_000L,0L,100_000L,90_000L,1L));
+        allocation(100L,7L,"INSTITUTION",2L,11L,10_000L,100_000L,0L,100_000L,10_000L,1L),
+        allocation(101L,7L,"INSTITUTION",1L,null,90_000L,100_000L,0L,100_000L,90_000L,1L));
 
     CourseRevenueAllocationReconciliation.Result result =
-        CourseRevenueAllocationReconciliation.reconcile(snapshot,7L,100_000L,0L,allocations);
+        CourseRevenueAllocationReconciliation.reconcile(snapshot,7L,100_000L,0L,"INR",allocations);
 
     assertTrue(result.complete(),() -> String.join("; ",result.issues()));
     assertEquals(100_000L,result.expectedTotalPaise());
@@ -34,7 +35,7 @@ class CourseRevenueAllocationReconciliationTest {
         List.of(recipient(11L,"INSTITUTION",2L,"PERCENTAGE",1_000,0L,"Quanta Edge")),
         "INSTITUTION",2L,"Quanta Edge");
     List<Map<String,Object>> allocations = List.of(
-        allocation(100L,7L,"INSTITUTION",2L,100_000L,100_000L,0L,100_000L,100_000L,1L));
+        allocation(100L,7L,"INSTITUTION",2L,11L,100_000L,100_000L,0L,100_000L,100_000L,1L));
 
     CourseRevenueAllocationReconciliation.Result result =
         CourseRevenueAllocationReconciliation.reconcile(snapshot,7L,100_000L,0L,allocations);
@@ -51,7 +52,7 @@ class CourseRevenueAllocationReconciliationTest {
         List.of(recipient(11L,"INSTITUTION",2L,"PERCENTAGE",1_000,0L,"Sunrise Public School")),
         "",0L,"");
     List<Map<String,Object>> allocations = List.of(
-        allocation(100L,7L,"INSTITUTION",2L,10_000L,100_000L,0L,100_000L,10_000L,1L));
+        allocation(100L,7L,"INSTITUTION",2L,11L,10_000L,100_000L,0L,100_000L,10_000L,1L));
 
     CourseRevenueAllocationReconciliation.Result result =
         CourseRevenueAllocationReconciliation.reconcile(snapshot,7L,100_000L,0L,allocations);
@@ -83,7 +84,7 @@ class CourseRevenueAllocationReconciliationTest {
         List.of(recipient(11L,"INSTITUTION",2L,"PERCENTAGE",10_000,0L,"Quanta Edge")),
         "INSTITUTION",2L,"Quanta Edge");
     List<Map<String,Object>> allocations = List.of(
-        allocation(100L,7L,"INSTITUTION",2L,100_000L,100_000L,0L,100_000L,99_999L,1L));
+        allocation(100L,7L,"INSTITUTION",2L,11L,100_000L,100_000L,0L,100_000L,99_999L,1L));
 
     CourseRevenueAllocationReconciliation.Result result =
         CourseRevenueAllocationReconciliation.reconcile(snapshot,7L,100_000L,0L,allocations);
@@ -99,7 +100,7 @@ class CourseRevenueAllocationReconciliationTest {
         "INSTITUTION",2L,"Quanta Edge");
 
     CourseRevenueAllocationReconciliation.Result result =
-        CourseRevenueAllocationReconciliation.reconcile(snapshot,8L,100_000L,0L,List.of());
+        CourseRevenueAllocationReconciliation.reconcile(snapshot,8L,100_000L,0L,"INR",List.of());
 
     assertFalse(result.complete());
     assertTrue(result.issues().stream().anyMatch(issue -> issue.contains("policy ID does not match")));
@@ -109,6 +110,7 @@ class CourseRevenueAllocationReconciliationTest {
       List<Map<String,Object>> recipients,String remainderType,long remainderId,String remainderName) {
     return Map.of(
         "policyId",7L,
+        "currency","INR",
         "recipients",recipients,
         "remainderRecipientType",remainderType,
         "remainderRecipientId",remainderId,
@@ -128,18 +130,22 @@ class CourseRevenueAllocationReconciliationTest {
   }
 
   private static Map<String,Object> allocation(
-      long id,long policyId,String type,long recipientId,long amount,long paid,long tax,long pool,
+      long id,long policyId,String type,long recipientId,Long policyRecipientId,long amount,long paid,long tax,long pool,
       long earnedAmount,long earnedCount) {
-    return Map.of(
-        "id",id,
-        "policy_id",policyId,
-        "recipient_type",type,
-        "institution_id",recipientId,
-        "allocated_amount_paise",amount,
-        "actual_paid_paise",paid,
-        "output_tax_paise",tax,
-        "distributable_pool_paise",pool,
-        "earned_event_amount_paise",earnedAmount,
-        "earned_event_count",earnedCount);
+    Map<String,Object> row = new LinkedHashMap<>();
+    row.put("id",id);
+    row.put("policy_id",policyId);
+    row.put("policy_recipient_id",policyRecipientId);
+    row.put("recipient_type",type);
+    row.put("institution_id",recipientId);
+    row.put("legal_entity_id",null);
+    row.put("currency","INR");
+    row.put("allocated_amount_paise",amount);
+    row.put("actual_paid_paise",paid);
+    row.put("output_tax_paise",tax);
+    row.put("distributable_pool_paise",pool);
+    row.put("earned_event_amount_paise",earnedAmount);
+    row.put("earned_event_count",earnedCount);
+    return row;
   }
 }
