@@ -533,7 +533,7 @@ public class FinancePayoutController {
     requireManage(context);
     return jdbc.queryForList("""
       select b.id,b.public_id,b.period_start,b.period_end,b.currency,b.status,b.beneficiary_count,b.total_amount_paise,
-        b.provider_fee_total_paise,b.provider_fee_tax_total_paise,b.provider_fee_reconciled_at,
+        b.provider_fee_total_paise,b.provider_fee_tax_total_paise,b.platform_borne_overage_paise,b.provider_fee_reconciled_at,
         b.created_by_staff_id,b.approved_by_staff_id,b.approved_at,b.created_at,b.updated_at,
         (select count(*) from finance_payout p where p.batch_id=b.id and p.status='PROCESSED') as paid_count,
         (select count(*) from finance_payout p where p.batch_id=b.id and p.status in ('FAILED','REJECTED','REVERSED')) as exception_count
@@ -1040,9 +1040,14 @@ public class FinancePayoutController {
     Long providerFeeTax=optionalProviderAmount(provider,"tax");
     // Never coerce malformed provider amounts to zero. The transfer status may still be valid;
     // incomplete fees remain visible for statement reconciliation.
+    boolean feeTotalOverflow=false;
+    if(providerFee!=null&&providerFeeTax!=null) {
+      try { Math.addExact(providerFee,providerFeeTax); }
+      catch(ArithmeticException overflow) { feeTotalOverflow=true; }
+    }
     boolean providerFeeDataInvalid=(provider.hasNonNull("fees")&&providerFee==null)
-        ||(provider.hasNonNull("tax")&&providerFeeTax==null);
-    boolean providerFeesComplete=providerFee!=null&&providerFeeTax!=null;
+        ||(provider.hasNonNull("tax")&&providerFeeTax==null)||feeTotalOverflow;
+    boolean providerFeesComplete=providerFee!=null&&providerFeeTax!=null&&!feeTotalOverflow;
     jdbc.update("""
       update finance_payout set provider_payout_id=?,provider_status=?,status=?,transfer_reference=?,status_details=?,
         provider_fee_paise=case when ? then coalesce(?,provider_fee_paise) else provider_fee_paise end,
@@ -1233,15 +1238,18 @@ public class FinancePayoutController {
       where p.batch_id=? group by i.allocation_id,a.currency order by i.allocation_id
       """,batchId);
     long weightTotal=items.stream().mapToLong(r->number(r.get("weight_paise"))).reduce(0L,Math::addExact);
-    if(totalCharge>0&&(weightTotal<=0||totalCharge>weightTotal))return;
+    // Record the actual provider charge in full. Never leave a completed batch blocked just
+    // because charges exceed beneficiary allocation weights; the platform absorbs the overage.
+    long allocatableCharge=weightTotal>0?Math.min(totalCharge,weightTotal):0L;
+    long platformBorneOverage=Math.subtractExact(totalCharge,allocatableCharge);
     long assigned=0L;
     for(int i=0;i<items.size();i++) {
       Map<String,Object> item=items.get(i);
       long allocationId=number(item.get("allocation_id"));
-      long amount=i==items.size()-1?totalCharge-assigned
-          :proportionalAmount(totalCharge,number(item.get("weight_paise")),weightTotal);
+      long amount=i==items.size()-1?Math.subtractExact(allocatableCharge,assigned)
+          :proportionalAmount(allocatableCharge,number(item.get("weight_paise")),weightTotal);
       if(amount<0)throw new IllegalStateException("Provider payout-fee allocation cannot be negative.");
-      if(amount>totalCharge-assigned)amount=totalCharge-assigned;
+      if(amount>allocatableCharge-assigned)amount=allocatableCharge-assigned;
       assigned=Math.addExact(assigned,amount);
       if(amount==0)continue;
       jdbc.update("""
@@ -1253,15 +1261,16 @@ public class FinancePayoutController {
           "course-payout-batch:"+batchId+":fee-allocation:"+allocationId,
           json(Map.of("payoutBatchId",batchId,"payoutProcessingFeePaise",totalFee,
             "payoutFeeTaxPaise",totalTax,"totalProviderChargePaise",totalCharge,
+            "platformBorneOveragePaise",platformBorneOverage,
             "allocationWeightPaise",number(item.get("weight_paise")),
             "allocationFeeSharePaise",amount,"basis","PROVIDER_CONFIRMED_MONTHLY_PAYOUT")));
     }
-    if(assigned!=totalCharge)return;
+    if(assigned!=allocatableCharge)return;
     jdbc.update("""
       update finance_payout_batch set provider_fee_total_paise=?,provider_fee_tax_total_paise=?,
-        provider_fee_reconciled_at=now(),updated_at=now()
+        platform_borne_overage_paise=?,provider_fee_reconciled_at=now(),updated_at=now()
       where id=? and provider_fee_reconciled_at is null
-      """,totalFee,totalTax,batchId);
+      """,totalFee,totalTax,platformBorneOverage,batchId);
   }
 
   private static long proportionalAmount(long total,long part,long whole) {
