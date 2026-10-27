@@ -217,6 +217,9 @@ export default function PayoutsPanel(){
     ?activeInstitutions.map(i=>({id:i.id,label:i.display_name+' · '+i.tenant_code}))
     :activeCompanies.map(e=>({id:e.id,label:e.legal_name+' · '+e.entity_kind}));
   const payoutEligible=Boolean(settings?.configured&&settings?.payoutReady);
+  const bankAccountsReady=Boolean(balances&&!beneficiaries.some(b=>['PROVISIONING','PENDING_APPROVAL','RECONCILIATION_REQUIRED'].includes(b.status))
+    &&!balances.beneficiaries.some(b=>b.payout_supported!==false&&b.payable_paise>=(settings?.payout_minimum_paise??Number.MAX_SAFE_INTEGER)&&b.beneficiary_status!=='ACTIVE'));
+  const feeReconciliationReady=Boolean(overview&&overview.unreconciledFees===0&&(overview.payoutFeeReconciliationPending??0)===0);
   const savedRemainderId=String(settings?.default_remainder_recipient_type==='INSTITUTION'
     ?(settings?.default_remainder_institution_id??''):(settings?.default_remainder_legal_entity_id??''));
   const settingsDirty=!settings?.configured||settingsForm.remainderType!==(settings?.default_remainder_recipient_type||'COMPANY')
@@ -441,6 +444,16 @@ export default function PayoutsPanel(){
       </section>
       {(balances?.totals.recoveryDuePaise??0)>0&&<p className={styles.payoutHint}>Recovery due means later refunds, reversals or reviewed fee corrections reduced a recipient’s net balance after a transfer. Future payable earnings offset that amount before another payout; QuantaEdge does not initiate a separate automatic bank debit.</p>}
 
+      <nav className={styles.payoutReadiness} aria-label="Monthly payout workflow">
+        <div><h3>Monthly payout workflow</h3><p>Use this checklist to move from setup to a reviewed batch. Transfers are sent only by an independent approver.</p></div>
+        <div className={styles.payoutReadinessSteps}>
+          <a href="#payout-rules" className={styles.payoutReadinessStep}><span>1</span><div><strong>Payout rules</strong><small>{settings?.configured?'Saved':'Needs setup'}</small></div><em className={settings?.configured?styles.payoutStatusSuccess:styles.payoutStatusPending}>{settings?.configured?'Ready':'Action needed'}</em></a>
+          <a href="#payout-legal-review" className={styles.payoutReadinessStep}><span>2</span><div><strong>Legal & provider</strong><small>Seller, funding owner and webhook</small></div><em className={payoutEligible?styles.payoutStatusSuccess:styles.payoutStatusPending}>{payoutEligible?'Ready':'Gate pending'}</em></a>
+          <a href="#payout-bank-accounts" className={styles.payoutReadinessStep}><span>3</span><div><strong>Bank accounts</strong><small>Independent approval and recovery</small></div><em className={bankAccountsReady?styles.payoutStatusSuccess:styles.payoutStatusPending}>{bankAccountsReady?'Reviewed':'Review needed'}</em></a>
+          <a href="#payout-fees" className={styles.payoutReadinessStep}><span>4</span><div><strong>Fee reconciliation</strong><small>Actual confirmed provider charges</small></div><em className={feeReconciliationReady?styles.payoutStatusSuccess:styles.payoutStatusPending}>{feeReconciliationReady?'Clear':'Needs review'}</em></a>
+          <a href="#payout-batches" className={styles.payoutReadinessStep}><span>5</span><div><strong>Monthly batch</strong><small>Preview all transfers before sending</small></div><em className={batches.some(b=>b.status==='PENDING_APPROVAL')?styles.payoutStatusPending:styles.payoutStatusNeutral}>{batches.some(b=>b.status==='PENDING_APPROVAL')?'Approval needed':'Review batches'}</em></a>
+        </div>
+      </nav>
       {!settings?.providerConfigured||!settings?.sourceAccountConfigured||!settings?.webhookConfigured?
         <div className={styles.payoutAlertWarning} role="status"><b>RazorpayX is not fully configured.</b> Configure the payout API credentials, source account identifier and payout webhook secret on the API server. Never paste secrets into this screen.</div>:null}
       {!settings?.collectionArrangementVerified&&<div className={styles.payoutAlertWarning} role="status"><b>Live transfers are blocked until legal review is recorded.</b> Select the entity receiving course-payment collections and the legal entity that owns the RazorpayX payout funding account. Only the platform owner can mark the arrangement verified.</div>}
@@ -488,7 +501,7 @@ export default function PayoutsPanel(){
         {!reconciliationCandidates.length&&unmatchedEvents.length>0&&<p className={styles.payoutHint}>There are no approved, unlinked payout candidates. Do not force a match. First locate or recover the original QuantaEdge payout, then return here to validate the provider event.</p>}
       </section>
 
-      <section className={styles.panel}>
+      <section className={styles.panel} id="payout-rules">
         <div className={styles.panelHead}><div><h2>1. Payout rules</h2><p>Choose who receives the remaining balance and how much must stay available for refunds.</p></div>
           <span className={styles.payoutStatusNeutral}>Monthly</span></div>
         <form className={styles.payoutFormGrid} onSubmit={saveSettings}>
@@ -517,7 +530,7 @@ export default function PayoutsPanel(){
         </form>
       </section>
 
-      <section className={styles.panel}>
+      <section className={styles.panel} id="payout-legal-review">
         <div className={styles.panelHead}><div><h2>2. Legal seller & collection-account review</h2>
           <p>This is a launch gate, not a legal opinion. Verify the seller/collection arrangement with Razorpay and the responsible legal/tax adviser before any transfer can be sent.</p></div>
           <span className={statusClass(settings?.collection_arrangement_status||'PENDING')}>{label(settings?.collection_arrangement_status||'PENDING')}</span></div>
@@ -552,7 +565,7 @@ export default function PayoutsPanel(){
         </div>}
       </section>
 
-      <section className={styles.panel}>
+      <section className={styles.panel} id="payout-bank-accounts">
         <div className={styles.panelHead}><div><h2>3. Bank accounts for recipients</h2><p>Register the beneficiary through RazorpayX. Only the last four digits are kept in QuantaEdge. The submitter cannot approve their own account.</p></div></div>
         <form className={styles.payoutFormGrid} onSubmit={submitBeneficiary}>
           <label>Recipient type
@@ -611,7 +624,7 @@ export default function PayoutsPanel(){
         </div>
       </section>
 
-      <section className={styles.panel}>
+      <section className={styles.panel} id="payout-fees">
         <div className={styles.panelHead}><div><h2>4. Confirm actual payment-processing charges</h2><p>Charges reduce the distributable pool before shares. Use the actual Razorpay settlement statement/API result—not an estimate. Until charges are reconciled, the sale cannot enter a payout batch.</p></div><span className={feeOrders.length?styles.payoutStatusPending:styles.payoutStatusSuccess}>{feeOrders.length} shown · {overview?.unreconciledFees??'—'} pending</span></div>
         <form className={styles.payoutQueueFilters} onSubmit={e=>{e.preventDefault();setFeeOffset(0);setFeeSearch(feeSearchDraft.trim());setFeeFrom(feeFromDraft);setFeeThrough(feeThroughDraft);}}>
           <label htmlFor="payout-fee-search">Search by order, course, institution or provider payment ID</label>
@@ -668,7 +681,7 @@ export default function PayoutsPanel(){
         {(feeAdjustmentOffset>0||feeAdjustmentQueueHasMore)&&<div className={styles.payoutQueuePagination}><span>Page {Math.floor(feeAdjustmentOffset/50)+1} · 50 records per page</span><div><button type="button" className={styles.secondarySmall} disabled={loading||busy||feeAdjustmentOffset===0} onClick={()=>setFeeAdjustmentOffset(Math.max(0,feeAdjustmentOffset-50))}>Previous</button><button type="button" className={styles.secondarySmall} disabled={loading||busy||!feeAdjustmentQueueHasMore} onClick={()=>setFeeAdjustmentOffset(feeAdjustmentOffset+50)}>Next</button></div></div>}
         {!feeAdjustmentCandidates.length&&<p className={styles.payoutEmpty}>{loadIssues.some(issue=>issue.section==='Fee-adjustment candidates')?'Confirmed fee records could not be loaded. Review the request failure above.':'No confirmed fee records match this search.'}</p>}
       </section>
-      <section className={styles.panel}>
+      <section className={styles.panel} id="payout-batches">
         <div className={styles.panelHead}><div><h2>6. Monthly payout batches</h2><p>Prepare the previous completed calendar month. The amount is calculated from earned allocations, confirmed fee deductions, processed refunds, existing reservations, paid transfers and the configured refund reserve.</p></div>
           <button type="button" className={styles.primary} onClick={()=>void createBatch()} disabled={busy||loading||!payoutEligible||!settings?.configured||feeOrders.length>0}>Prepare last month’s batch</button></div>
         {!payoutEligible&&<p className={styles.payoutHint}>Preparation is disabled until the RazorpayX API credentials and source account are configured on the API server.</p>}

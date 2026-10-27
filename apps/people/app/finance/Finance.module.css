@@ -340,3 +340,21 @@
 .payoutReplacementForm input{width:100%;min-width:0;min-height:38px;padding:8px 10px;border:1px solid var(--finance-line,var(--line));border-radius:9px;background:var(--finance-field,var(--finance-surface,#fff));color:var(--finance-ink,var(--ink));font-size:11px}
 .payoutReplacementForm small{font-size:10px;line-height:1.5;color:var(--finance-muted,var(--muted))}
 @media(max-width:640px){.payoutReplacementForm{grid-template-columns:minmax(0,1fr)}.payoutReplacementForm>p,.payoutReplacementForm .payoutFormFooter{grid-column:1}}
+
+
+/* Readiness-first jump list for the existing finance workspace; no duplicate workflow surface. */
+.payoutReadiness{display:grid;gap:12px;padding:16px;border:1px solid var(--finance-line,var(--line));border-radius:15px;background:var(--finance-surface,var(--qe-people-card,#fff));color:var(--finance-ink,var(--ink))}
+.payoutReadiness h3{margin:0;color:var(--finance-ink,var(--ink));font-size:14px}
+.payoutReadiness>div:first-child{display:grid;gap:4px}
+.payoutReadiness>div:first-child p{margin:0;color:var(--finance-muted,var(--muted));font-size:11px;line-height:1.55}
+.payoutReadinessSteps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.payoutReadinessStep{display:grid;grid-template-columns:26px minmax(0,1fr);align-items:start;gap:7px;padding:10px;border:1px solid var(--finance-line,var(--line));border-radius:11px;background:var(--finance-subtle,#f8fafc);text-decoration:none;min-width:0}
+.payoutReadinessStep>span{display:grid;place-items:center;width:25px;height:25px;border-radius:8px;background:var(--finance-hover,#fff7f0);color:var(--finance-ink,var(--ink));font-size:11px;font-weight:900}
+.payoutReadinessStep>div{display:grid;gap:4px;min-width:0}
+.payoutReadinessStep strong{font-size:11px;color:var(--finance-ink,var(--ink));overflow-wrap:anywhere}
+.payoutReadinessStep small{font-size:9px;line-height:1.45;color:var(--finance-muted,var(--muted));overflow-wrap:anywhere}
+.payoutReadinessStep em{grid-column:1/-1;justify-self:start;font-style:normal;font-size:9px;padding:4px 7px;border-radius:999px}
+.payoutReadinessStep:hover{border-color:var(--qe-people-brand,#f97316)}
+.payoutsIntro,.payoutReadiness{scroll-margin-top:18px}
+@media(max-width:1100px){.payoutReadinessSteps{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:650px){.payoutReadinessSteps{grid-template-columns:repeat(2,minmax(0,1fr))}.payoutReadinessStep{padding:9px}.payoutReadinessStep>strong{font-size:10px}}
