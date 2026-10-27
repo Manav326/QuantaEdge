@@ -374,6 +374,92 @@ public class FinancePayoutController {
     return financialService.reconcileProviderFees(orderId,fee,feeTax,reference,source,idempotencyKey,context.staffId());
   }
 
+  @GetMapping("/payout-balances")
+  public Map<String,Object> payoutBalances(@RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireManage(context);
+    Map<String,Object> settings=one("select refund_reserve_basis_points from billing_finance_payout_settings where id=1");
+    int reserveBps=settings.get("refund_reserve_basis_points")==null?0:Math.toIntExact(number(settings.get("refund_reserve_basis_points")));
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      with ledger as (
+        select a.id as allocation_id,a.recipient_type,a.institution_id,a.legal_entity_id,a.currency,
+          coalesce(sum(e.amount_paise) filter(where e.event_type='EARNED'),0) as earned_paise,
+          coalesce(sum(e.amount_paise) filter(where e.event_type='REFUNDED'),0) as refunded_paise,
+          coalesce(sum(e.amount_paise) filter(where e.event_type='PROCESSING_FEE_DEDUCTED'),0) as charges_paise,
+          coalesce(sum(e.amount_paise) filter(where e.event_type='PAID'),0) as paid_paise,
+          coalesce(sum(e.amount_paise) filter(where e.event_type='REVERSED'),0) as reversed_paise
+        from revenue_share_allocation a
+        join course_payment_order o on o.id=a.course_payment_order_id and o.status='VERIFIED'
+        left join revenue_share_allocation_event e on e.allocation_id=a.id
+        group by a.id,a.recipient_type,a.institution_id,a.legal_entity_id,a.currency
+      ), reservations as (
+        select i.allocation_id,coalesce(sum(i.amount_paise),0) as reserved_paise
+        from finance_payout_item i join finance_payout p on p.id=i.payout_id
+        where p.status in ('PENDING_APPROVAL','APPROVED','SUBMITTING','PENDING','QUEUED','PROCESSING','RECONCILIATION_REQUIRED')
+        group by i.allocation_id
+      )
+      select l.recipient_type,l.institution_id,l.legal_entity_id,l.currency,
+        coalesce(t.display_name,le.legal_name) as recipient_name,
+        coalesce(b.status,'MISSING') as beneficiary_status,b.bank_ifsc,b.bank_account_last4,
+        coalesce(sum(l.earned_paise),0) as earned_paise,
+        coalesce(sum(l.refunded_paise),0) as refunded_paise,
+        coalesce(sum(l.charges_paise),0) as charges_paise,
+        coalesce(sum(l.paid_paise),0) as paid_paise,
+        coalesce(sum(l.reversed_paise),0) as reversed_paise,
+        coalesce(sum(r.reserved_paise),0) as reserved_paise
+      from ledger l
+      left join reservations r on r.allocation_id=l.allocation_id
+      left join institution_tenant t on t.id=l.institution_id
+      left join billing_legal_entity le on le.id=l.legal_entity_id
+      left join finance_payout_beneficiary b on b.status='ACTIVE' and (
+        (l.recipient_type='INSTITUTION' and b.beneficiary_type='INSTITUTION' and b.institution_id=l.institution_id)
+        or (l.recipient_type='COMPANY' and b.beneficiary_type='COMPANY' and b.legal_entity_id=l.legal_entity_id)
+      )
+      group by l.recipient_type,l.institution_id,l.legal_entity_id,l.currency,t.display_name,le.legal_name,
+        b.status,b.bank_ifsc,b.bank_account_last4
+      order by recipient_name,l.recipient_type
+      """);
+    long totalEarned=0L,totalRefunded=0L,totalCharges=0L,totalPaid=0L,totalReversed=0L,totalReserved=0L,totalPayable=0L,totalRecovery=0L,totalReserve=0L;
+    for(Map<String,Object> row:rows) {
+      long earned=number(row.get("earned_paise"));
+      long refunds=number(row.get("refunded_paise"));
+      long charges=number(row.get("charges_paise"));
+      long paid=number(row.get("paid_paise"));
+      long reversed=number(row.get("reversed_paise"));
+      long reserved=number(row.get("reserved_paise"));
+      long netEarned=Math.subtractExact(Math.subtractExact(earned,refunds),charges);
+      long netPaid=Math.subtractExact(paid,reversed);
+      long refundReserve=percentageOf(Math.max(0L,netEarned),reserveBps);
+      long payable=Math.max(0L,Math.subtractExact(Math.subtractExact(Math.subtractExact(netEarned,netPaid),reserved),refundReserve));
+      long recovery=Math.max(0L,Math.subtractExact(netPaid,netEarned));
+      row.put("net_earned_paise",netEarned);
+      row.put("net_paid_paise",netPaid);
+      row.put("refund_reserve_paise",refundReserve);
+      row.put("payable_paise",payable);
+      row.put("recovery_due_paise",recovery);
+      totalEarned=Math.addExact(totalEarned,netEarned);
+      totalRefunded=Math.addExact(totalRefunded,refunds);
+      totalCharges=Math.addExact(totalCharges,charges);
+      totalPaid=Math.addExact(totalPaid,netPaid);
+      totalReversed=Math.addExact(totalReversed,reversed);
+      totalReserved=Math.addExact(totalReserved,reserved);
+      totalPayable=Math.addExact(totalPayable,payable);
+      totalRecovery=Math.addExact(totalRecovery,recovery);
+      totalReserve=Math.addExact(totalReserve,refundReserve);
+    }
+    Map<String,Object> totals=new LinkedHashMap<>();
+    totals.put("netEarnedPaise",totalEarned);
+    totals.put("refundReversalsPaise",totalRefunded);
+    totals.put("confirmedChargesPaise",totalCharges);
+    totals.put("netPaidPaise",totalPaid);
+    totals.put("payoutReversalsPaise",totalReversed);
+    totals.put("reservedPaise",totalReserved);
+    totals.put("refundReservePaise",totalReserve);
+    totals.put("payablePaise",totalPayable);
+    totals.put("recoveryDuePaise",totalRecovery);
+    totals.put("refundReserveBasisPoints",reserveBps);
+    return Map.of("totals",totals,"beneficiaries",rows);
+  }
+
   @PostMapping("/payouts/{payoutId}/fees")
   public Map<String,Object> confirmPayoutFees(@PathVariable long payoutId,@RequestBody Map<String,Object> body,
       @RequestHeader(value="Idempotency-Key",required=false) String idempotencyKey,
