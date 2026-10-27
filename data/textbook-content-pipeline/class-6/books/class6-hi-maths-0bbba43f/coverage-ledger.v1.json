@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 5189,
     "eligible_visual_asset_rows": 5189,
-    "raw_analysis_result_rows": 40,
-    "successful_visual_analyses": 22,
-    "missing_visual_analyses": 5149,
-    "failed_visual_analyses": 18,
+    "raw_analysis_result_rows": 50,
+    "successful_visual_analyses": 29,
+    "missing_visual_analyses": 5139,
+    "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5167,
+    "unresolved_count": 5160,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -12641,7 +12641,7 @@
       "asset_path": "page-0008.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -12659,7 +12659,7 @@
       "asset_path": "assets/9fbd3b21a14dbb9efb66023da999953ddf34661e7c1e7805b74fa7a8df0ca1a5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -12677,9 +12677,16 @@
       "asset_path": "assets/c6bdf0eac231e4a8caaf23fd36fe9b492f184468791b3fcab65963e312859cd9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue and gold patterned fabric with intricate designs.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a decorative fabric pattern.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12695,9 +12702,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is a blank page with no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12713,9 +12729,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is a blank page with no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12731,7 +12756,7 @@
       "asset_path": "page-0009.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -12749,9 +12774,18 @@
       "asset_path": "assets/9985840a107a31deb877a74529f71a88a26a2aca60252b74b40d91be1d92c6d5.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue background with intricate gold and white floral patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a decorative element in the educational content.",
+        "limitations": [
+          "The image does not provide specific information about the educational content it is part of."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12767,9 +12801,27 @@
       "asset_path": "assets/0149131d0aa0deeefd1b98bfc38ba39ee15a05bef071f5144cf59a858582897e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue and gold patterned fabric with intricate designs.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "fabric",
+          "pattern",
+          "design",
+          "blue",
+          "gold",
+          "intricate",
+          "ornate"
+        ],
+        "context_relation": "The image is a visual representation of a fabric pattern, likely used as a design element in a textbook or educational content.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the page it is on.",
+          "The visible text is incomplete and does not provide context for the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12785,9 +12837,34 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Page with text in Hindi, listing names and roles of individuals.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "रााष्ट्रीीय पााठ्यक्रम और शिक्षण अधिगम साामग्रीी",
+          "समिति (एन.एस.टीी.सीी.)",
+          "1. महेश चंद्र पंत, कुलाधिपति, रााष्ट्रीय शैक्षिक योजना एवं प्रशाासन संस्थाान (NIEPA)",
+          "2. मञ्जुल भार्गव, आचार्य, प्रिंंसटन विश्‍वविद्यालय (सह-अधयक्ष)",
+          "3. सुधाा मूर्ति, प्रतिष्‍ ठित लेखिका एवं शिक्षाविद्",
+          "4. बिबेक देबरॉॉय, अध्यक्ष, प्रधाानमंत्री की आर्थिक सलााहकाार परिषद् (ई.ए.सी.-पी.एम.)",
+          "5. शेखर माांडे, पूर्व महानिदशेक, सी.एस.आई.आर., एवं प्रति‍ष्‍ ठ‍ित आचार्य, सावित्रीबााई फुले पुणे विश्‍वविद्यालय, पुणे",
+          "6. सुजााताा राामदोरई, आचार्य, ब्रिटिश कोलंबियाा  विश्‍वविद्यालय, कना"
+        ],
+        "concepts": [
+          "Educational institutions",
+          "Academic roles",
+          "Educational administration",
+          "University names",
+          "Educational committees"
+        ],
+        "context_relation": "The page is a part of an educational content, specifically related to educational institutions and their committees.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The text is in Hindi, which may not be easily readable by all readers."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -12803,9 +12880,33 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook listing the names of various individuals involved in educational content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "रााष्ट्रीीय पााठ्यक्रम और शिक्षण अधिगम साामग्रीी",
+          "समिति (एन.एस.टीी.सीी.)",
+          "1. महेश चंद्र पंत, कुलाधिपति, रााष्ट्रीय शैक्षिक योजना एवं प्रशाासन संस्थाान (NIEPA)",
+          "2. मञ्जुल भार्गव, आचार्य, प्रिंंसटन विश्‍वविद्यालय (सह-अधयक्ष)",
+          "3. सुधाा मूर्ति, प्रतिष्‍ ठित लेखिका एवं शिक्षाविद्",
+          "4. बिबेक देबरॉॉय, अध्यक्ष, प्रधाानमंत्री की आर्थिक सलााहकाार परिषद् (ई.ए.सी.-पी.एम.)",
+          "5. शेखर माांडे, पूर्व महानिदशेक, सी.एस.आई.आर., एवं प्रति‍ष्‍ ठ‍ित आचार्य, सावित्रीबााई फुले पुणे विश्‍वविद्यालय, पुणे",
+          "6. सुजााताा राामदोरई, आचार्य, ब्रिटिश कोलंबियाा  विश्‍वविद्यालय, कना"
+        ],
+        "concepts": [
+          "Educational content",
+          "Textbook",
+          "Individuals involved in educational content",
+          "Educational institutions"
+        ],
+        "context_relation": "The image shows a page from a textbook listing the names of individuals involved in educational content.",
+        "limitations": [
+          "The image does not provide any visual information about the content of the textbook.",
+          "The image does not show any diagrams, charts, or illustrations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

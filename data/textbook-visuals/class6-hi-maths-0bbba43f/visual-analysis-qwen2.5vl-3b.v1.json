@@ -8,26 +8,26 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 24,
+    "assets_selected": 32,
     "assets_processed_this_run": 10,
     "assets_processed_ids": [
-      "e71c1d1cc5b8557fc5671f58",
-      "e77e5071b9236093b0bc93c4",
-      "696eedc7f7b60207463f38a1",
-      "8396542a76622b86b25c4116",
-      "c959dc310d17f129acba2858",
-      "932f4540cbe628acdaea2fcf",
-      "cd3726cff76e345e6ae5a06e",
-      "1dabb9c32cfe74aecf10aa6b",
-      "9fc301ee372d98fad86c6246",
-      "c403609c3a220352b0968e7a"
+      "cd61bad4bc726d8a7ac16fd5",
+      "c5aba664cf874fb0c5f9df2f",
+      "d968d0a888c00b30b0166ca8",
+      "e377fb1e69b3ee7222372aca",
+      "7d41e2ad84b4d4aff862742a",
+      "25e24d645fe37a18912aa53e",
+      "595be9b64e57e14b72053c47",
+      "f653da5de4da42b115f66d96",
+      "6ee105c6ab35e7412ab9f40d",
+      "c46df8404ea98874b2d6ca23"
     ],
     "assets_eligible": 5189,
-    "assets_analyzed": 22,
-    "assets_remaining": 5167,
-    "assets_completion_percent": 0.4,
-    "assets_failed": 18,
-    "assets_skipped_from_checkpoint": 14,
+    "assets_analyzed": 29,
+    "assets_remaining": 5160,
+    "assets_completion_percent": 0.6,
+    "assets_failed": 21,
+    "assets_skipped_from_checkpoint": 22,
     "batch_limit": 10,
     "publication_allowed": false
   },
@@ -1051,6 +1051,291 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
       "checkpointed_at": "2026-10-27T00:01:58Z"
+    },
+    {
+      "asset_id": "cd61bad4bc726d8a7ac16fd5",
+      "asset_sha256": "5947c00b195643de9a1f692cf50d923950dc9e436c292713f2e0106dee38010c",
+      "page_text_context_sha256": "032d308e2d98b1ed750de3c964bf626f19d9c1ea99befd52bdf5e2f2e0ad688f",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 8,
+      "asset_path": "page-0008.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "c5aba664cf874fb0c5f9df2f",
+      "asset_sha256": "9fbd3b21a14dbb9efb66023da999953ddf34661e7c1e7805b74fa7a8df0ca1a5",
+      "page_text_context_sha256": "248ad4cd066f8525ce4ed375d98801beaa905ef2ad5ac3949cda0b7806d9c119",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/9fbd3b21a14dbb9efb66023da999953ddf34661e7c1e7805b74fa7a8df0ca1a5.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "d968d0a888c00b30b0166ca8",
+      "asset_sha256": "c6bdf0eac231e4a8caaf23fd36fe9b492f184468791b3fcab65963e312859cd9",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/c6bdf0eac231e4a8caaf23fd36fe9b492f184468791b3fcab65963e312859cd9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "248ad4cd066f8525ce4ed375d98801beaa905ef2ad5ac3949cda0b7806d9c119",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue and gold patterned fabric with intricate designs.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a decorative fabric pattern.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:09:03Z"
+    },
+    {
+      "asset_id": "e377fb1e69b3ee7222372aca",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "248ad4cd066f8525ce4ed375d98801beaa905ef2ad5ac3949cda0b7806d9c119",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is a blank page with no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:09:41Z"
+    },
+    {
+      "asset_id": "7d41e2ad84b4d4aff862742a",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "248ad4cd066f8525ce4ed375d98801beaa905ef2ad5ac3949cda0b7806d9c119",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is a blank page with no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:10:19Z"
+    },
+    {
+      "asset_id": "25e24d645fe37a18912aa53e",
+      "asset_sha256": "51fcb388c8b51181a528851d5d5996c5f2df0befd5eca218fad112305af0a684",
+      "page_text_context_sha256": "248ad4cd066f8525ce4ed375d98801beaa905ef2ad5ac3949cda0b7806d9c119",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 9,
+      "asset_path": "page-0009.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "595be9b64e57e14b72053c47",
+      "asset_sha256": "9985840a107a31deb877a74529f71a88a26a2aca60252b74b40d91be1d92c6d5",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/9985840a107a31deb877a74529f71a88a26a2aca60252b74b40d91be1d92c6d5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "de6fcff103da7f8f3debfd40129ad520d214ae7bfeaf2cccb68315dfaf4c7d95",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue background with intricate gold and white floral patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a decorative element in the educational content.",
+        "limitations": [
+          "The image does not provide specific information about the educational content it is part of."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:15:47Z"
+    },
+    {
+      "asset_id": "f653da5de4da42b115f66d96",
+      "asset_sha256": "0149131d0aa0deeefd1b98bfc38ba39ee15a05bef071f5144cf59a858582897e",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/0149131d0aa0deeefd1b98bfc38ba39ee15a05bef071f5144cf59a858582897e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "de6fcff103da7f8f3debfd40129ad520d214ae7bfeaf2cccb68315dfaf4c7d95",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue and gold patterned fabric with intricate designs.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "fabric",
+          "pattern",
+          "design",
+          "blue",
+          "gold",
+          "intricate",
+          "ornate"
+        ],
+        "context_relation": "The image is a visual representation of a fabric pattern, likely used as a design element in a textbook or educational content.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the page it is on.",
+          "The visible text is incomplete and does not provide context for the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:16:21Z"
+    },
+    {
+      "asset_id": "6ee105c6ab35e7412ab9f40d",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "de6fcff103da7f8f3debfd40129ad520d214ae7bfeaf2cccb68315dfaf4c7d95",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page with text in Hindi, listing names and roles of individuals.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "रााष्ट्रीीय पााठ्यक्रम और शिक्षण अधिगम साामग्रीी",
+          "समिति (एन.एस.टीी.सीी.)",
+          "1. महेश चंद्र पंत, कुलाधिपति, रााष्ट्रीय शैक्षिक योजना एवं प्रशाासन संस्थाान (NIEPA)",
+          "2. मञ्जुल भार्गव, आचार्य, प्रिंंसटन विश्‍वविद्यालय (सह-अधयक्ष)",
+          "3. सुधाा मूर्ति, प्रतिष्‍ ठित लेखिका एवं शिक्षाविद्",
+          "4. बिबेक देबरॉॉय, अध्यक्ष, प्रधाानमंत्री की आर्थिक सलााहकाार परिषद् (ई.ए.सी.-पी.एम.)",
+          "5. शेखर माांडे, पूर्व महानिदशेक, सी.एस.आई.आर., एवं प्रति‍ष्‍ ठ‍ित आचार्य, सावित्रीबााई फुले पुणे विश्‍वविद्यालय, पुणे",
+          "6. सुजााताा राामदोरई, आचार्य, ब्रिटिश कोलंबियाा  विश्‍वविद्यालय, कना"
+        ],
+        "concepts": [
+          "Educational institutions",
+          "Academic roles",
+          "Educational administration",
+          "University names",
+          "Educational committees"
+        ],
+        "context_relation": "The page is a part of an educational content, specifically related to educational institutions and their committees.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The text is in Hindi, which may not be easily readable by all readers."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:18:17Z"
+    },
+    {
+      "asset_id": "c46df8404ea98874b2d6ca23",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "de6fcff103da7f8f3debfd40129ad520d214ae7bfeaf2cccb68315dfaf4c7d95",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook listing the names of various individuals involved in educational content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "रााष्ट्रीीय पााठ्यक्रम और शिक्षण अधिगम साामग्रीी",
+          "समिति (एन.एस.टीी.सीी.)",
+          "1. महेश चंद्र पंत, कुलाधिपति, रााष्ट्रीय शैक्षिक योजना एवं प्रशाासन संस्थाान (NIEPA)",
+          "2. मञ्जुल भार्गव, आचार्य, प्रिंंसटन विश्‍वविद्यालय (सह-अधयक्ष)",
+          "3. सुधाा मूर्ति, प्रतिष्‍ ठित लेखिका एवं शिक्षाविद्",
+          "4. बिबेक देबरॉॉय, अध्यक्ष, प्रधाानमंत्री की आर्थिक सलााहकाार परिषद् (ई.ए.सी.-पी.एम.)",
+          "5. शेखर माांडे, पूर्व महानिदशेक, सी.एस.आई.आर., एवं प्रति‍ष्‍ ठ‍ित आचार्य, सावित्रीबााई फुले पुणे विश्‍वविद्यालय, पुणे",
+          "6. सुजााताा राामदोरई, आचार्य, ब्रिटिश कोलंबियाा  विश्‍वविद्यालय, कना"
+        ],
+        "concepts": [
+          "Educational content",
+          "Textbook",
+          "Individuals involved in educational content",
+          "Educational institutions"
+        ],
+        "context_relation": "The image shows a page from a textbook listing the names of individuals involved in educational content.",
+        "limitations": [
+          "The image does not provide any visual information about the content of the textbook.",
+          "The image does not show any diagrams, charts, or illustrations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:20:12Z"
     }
   ]
 }
