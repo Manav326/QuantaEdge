@@ -459,6 +459,8 @@ public class RichNotificationService {
         join student_program_enrollment spe on spe.student_id=st.id
           and spe.institution_id=m.institution_id and spe.status='ACTIVE'
           and spe.program_id=?
+          and spe.course_access_blocked=false
+          and (spe.course_expires_at is null or spe.course_expires_at>statement_timestamp())
         join institution_course_assignment a on a.institution_id=m.institution_id and a.status='ASSIGNED'
         join institution_course_release r on r.id=a.course_release_id and r.program_id=spe.program_id
         where st.active=true and m.institution_id=?
@@ -484,6 +486,8 @@ public class RichNotificationService {
       """+(courseId==null?"":"""
       join student_program_enrollment spe on spe.student_id=st.id
         and spe.institution_id=m.institution_id and spe.status='ACTIVE' and spe.program_id=?
+          and spe.course_access_blocked=false
+          and (spe.course_expires_at is null or spe.course_expires_at>statement_timestamp())
       join institution_course_assignment a on a.institution_id=m.institution_id and a.status='ASSIGNED'
       join institution_course_release r on r.id=a.course_release_id and r.program_id=spe.program_id
       """)+"""
