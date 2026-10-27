@@ -2,6 +2,7 @@ package com.quantaedge.api;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.HexFormat;
@@ -35,12 +36,14 @@ public class RazorpayXPayoutWebhookController {
 
   @PostMapping(path="/payouts",consumes="application/json")
   public ResponseEntity<?> receive(
-      @RequestBody byte[] rawBody,
+      HttpServletRequest request,
       @RequestHeader(value="X-Razorpay-Signature",required=false) String signature,
-      @RequestHeader(value="X-Razorpay-Event-Id",required=false) String eventId) {
+      @RequestHeader(value="X-Razorpay-Event-Id",required=false) String eventId) throws java.io.IOException {
     if(webhookSecret.isBlank())
       throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,"RazorpayX payout webhook verification is not configured.");
-    if(rawBody==null||rawBody.length==0||rawBody.length>MAX_BODY_BYTES)
+    // Read the exact inbound bytes; never deserialize/re-serialize before checking the HMAC.
+    byte[] rawBody=request.getInputStream().readNBytes(MAX_BODY_BYTES+1);
+    if(rawBody.length==0||rawBody.length>MAX_BODY_BYTES)
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Webhook body is empty or exceeds the supported size.");
     if(signature==null||!verify(rawBody,signature.trim(),webhookSecret))
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"RazorpayX payout webhook signature is invalid.");
