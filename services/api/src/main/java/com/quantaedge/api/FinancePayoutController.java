@@ -817,14 +817,16 @@ public class FinancePayoutController {
     boolean providerFeesComplete=providerFee!=null&&providerFeeTax!=null;
     jdbc.update("""
       update finance_payout set provider_payout_id=?,provider_status=?,status=?,transfer_reference=?,status_details=?,
-        provider_fee_paise=coalesce(?,provider_fee_paise),provider_fee_tax_paise=coalesce(?,provider_fee_tax_paise),
+        provider_fee_paise=case when ? then coalesce(?,provider_fee_paise) else provider_fee_paise end,
+        provider_fee_tax_paise=case when ? then coalesce(?,provider_fee_tax_paise) else provider_fee_tax_paise end,
         provider_fee_reference=case when ? then coalesce(provider_fee_reference,?) else provider_fee_reference end,
         provider_fee_source_type=case when ? then coalesce(provider_fee_source_type,'PROVIDER_API') else provider_fee_source_type end,
         provider_fee_confirmed_at=case when ? then coalesce(provider_fee_confirmed_at,now()) else provider_fee_confirmed_at end,
         submitted_at=coalesce(submitted_at,now()),
         processed_at=case when ? in ('PROCESSED','REVERSED') then coalesce(processed_at,now()) else processed_at end,updated_at=now()
       where id=?
-      """,providerId,normalized,status,utr,description,providerFee,providerFeeTax,
+      """,providerId,normalized,status,utr,description,
+        providerFeesComplete,providerFee,providerFeesComplete,providerFeeTax,
         providerFeesComplete,providerId,providerFeesComplete,providerFeesComplete,status,payoutId);
     String eventType=switch(status){case "PENDING"->"PROVIDER_PENDING";case "QUEUED"->"QUEUED";case "PROCESSING"->"PROCESSING";
       case "PROCESSED"->"PROCESSED";case "REVERSED"->"REVERSED";case "FAILED"->"FAILED";case "REJECTED"->"REJECTED";default->"RECONCILIATION_REQUIRED";};
