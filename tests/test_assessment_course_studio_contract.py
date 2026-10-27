@@ -161,6 +161,7 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("requestedCode=requiredText(suppliedCode,2,38,\"Course code\")", service)
         self.assertIn("pg_advisory_xact_lock(hashtext(?),hashtext(?))", service)
         self.assertIn("lower(btrim(display_name))=lower(btrim(?))", service)
+        self.assertIn("including archived history", service)
         self.assertIn("UNIQUE(source_institution_id,stable_course_key)", (ROOT / "services/api/src/main/resources/db/migration/V180__immutable_course_content_versions.sql").read_text(encoding="utf-8"))
         self.assertIn("Generated course ID: <code>{course.publicId}</code>", page)
         self.assertNotIn("assessment-course-key", page)
