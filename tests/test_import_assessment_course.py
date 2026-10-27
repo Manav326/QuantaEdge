@@ -128,7 +128,6 @@ class AssessmentCourseImporterTests(unittest.TestCase):
 
     def test_course_key_rejects_an_eight_character_public_id_lookalike(self) -> None:
         self.assertRegex("BPSC_TRE_CS_PYQ_SERIES", importer.COURSE_KEY_RE)
-        args = argparse.Namespace(manifest=None)
         with self.assertRaisesRegex(importer.ImportErrorSafe, "generated public course ID"):
             importer.complete_course_fields({
                 "course": {"code": "INSABCDE", "display_name": "Example Course", "curriculum_version": "1.0"}
