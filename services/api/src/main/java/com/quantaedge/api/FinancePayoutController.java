@@ -22,9 +22,13 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -41,6 +45,8 @@ public class FinancePayoutController {
   private final AuthorizationService authorization;
   private final CourseOrderFinancialService financialService;
   private final ObjectMapper mapper;
+  private final PayoutSettlementPdfRenderer settlementPdfRenderer;
+  private final FiscalDocumentStorage fiscalDocumentStorage;
   private final String keyId;
   private final String keySecret;
   private final String sourceAccountNumber;
@@ -50,12 +56,14 @@ public class FinancePayoutController {
 
   public FinancePayoutController(JdbcTemplate jdbc,AuthorizationService authorization,
       CourseOrderFinancialService financialService,ObjectMapper mapper,
+      PayoutSettlementPdfRenderer settlementPdfRenderer,FiscalDocumentStorage fiscalDocumentStorage,
       @Value("\u0024{app.razorpayx.key-id:\u0024{app.razorpay.key-id:}}") String keyId,
       @Value("\u0024{app.razorpayx.key-secret:\u0024{app.razorpay.key-secret:}}") String keySecret,
       @Value("\u0024{app.razorpayx.account-number:}") String sourceAccountNumber,
       @Value("\u0024{app.razorpayx.webhook-secret:}") String webhookSecret,
       @Value("\u0024{app.razorpayx.base-url:\u0024{app.razorpay.base-url:https://api.razorpay.com/v1}}") String baseUrl) {
     this.jdbc=jdbc;this.authorization=authorization;this.financialService=financialService;this.mapper=mapper;
+    this.settlementPdfRenderer=settlementPdfRenderer;this.fiscalDocumentStorage=fiscalDocumentStorage;
     this.keyId=keyId==null?"":keyId.trim();this.keySecret=keySecret==null?"":keySecret.trim();
     this.sourceAccountNumber=sourceAccountNumber==null?"":sourceAccountNumber.trim();
     this.webhookSecret=webhookSecret==null?"":webhookSecret.trim();
