@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -170,14 +171,15 @@ public class PayoutSettlementPdfRenderer {
   }
 
   private static final class ReportCanvas {
-    private final List<BufferedImage> pages=new ArrayList<>();
+    // Keep compressed page images instead of hundreds of megabytes of live RGB bitmaps.
+    private final List<byte[]> pages=new ArrayList<>();
     private final String title,documentNumber,created;
     private BufferedImage page;
     private Graphics2D g;
     private int y;
     ReportCanvas(String title,String documentNumber,String created){this.title=title;this.documentNumber=documentNumber;this.created=created;newPage(false);}
     void newPage(boolean continued) {
-      if(g!=null){footer();g.dispose();}
+      if(g!=null){footer();g.dispose();g=null;archiveCurrentPage();}
       if(pages.size()>=MAX_PAGES)throw new IllegalArgumentException("The payout statement is too large for one PDF. Use a smaller payout batch.");
       page=new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_RGB);
       g=page.createGraphics();
@@ -194,7 +196,19 @@ public class PayoutSettlementPdfRenderer {
       g.setColor(MUTED);g.setFont(font(Font.PLAIN,13));
       g.drawString(clip(documentNumber,360),MARGIN,190);
       g.drawString("Generated "+clip(created,330),WIDTH-MARGIN-330,190);
-      y=230;pages.add(page);
+      y=230;
+    }
+    private void archiveCurrentPage() {
+      if(page==null)return;
+      try(ByteArrayOutputStream png=new ByteArrayOutputStream()) {
+        if(!ImageIO.write(page,"png",png))throw new IOException("PNG encoder is unavailable.");
+        pages.add(png.toByteArray());
+      } catch(IOException ex) {
+        throw new IllegalStateException("A payout PDF page could not be encoded.",ex);
+      } finally {
+        page.flush();
+        page=null;
+      }
     }
     void heading(String subTitle,String period) {
       g.setColor(INK);g.setFont(font(Font.BOLD,17));g.drawString(clip(subTitle,CONTENT_WIDTH),MARGIN,y+8);y+=28;
@@ -252,7 +266,7 @@ public class PayoutSettlementPdfRenderer {
     void tableRow(String[] values,int rowHeight) {
       ensure(rowHeight+4);
       int[] widths=columns(values.length);
-      g.setColor((pages.size()%2)==0?SUBTLE:Color.WHITE);g.fillRect(MARGIN,y,CONTENT_WIDTH,rowHeight);
+      g.setColor(((pages.size()+1)%2)==0?SUBTLE:Color.WHITE);g.fillRect(MARGIN,y,CONTENT_WIDTH,rowHeight);
       g.setColor(LINE);g.setStroke(new BasicStroke(1));g.drawLine(MARGIN,y+rowHeight,WIDTH-MARGIN,y+rowHeight);
       g.setColor(INK);g.setFont(font(Font.PLAIN,11));
       int x=MARGIN;
@@ -269,10 +283,10 @@ public class PayoutSettlementPdfRenderer {
       g.setColor(LINE);g.drawLine(MARGIN,FOOTER_Y-20,WIDTH-MARGIN,FOOTER_Y-20);
       g.setColor(MUTED);g.setFont(font(Font.PLAIN,10));
       g.drawString("Internal finance record. Not a tax invoice, statutory TDS/TCS certificate, or tax-remittance receipt.",MARGIN,FOOTER_Y);
-      g.drawString("Page "+pages.size(),WIDTH-MARGIN-58,FOOTER_Y);
+      g.drawString("Page "+(pages.size()+1),WIDTH-MARGIN-58,FOOTER_Y);
     }
     RenderedStatement toPdf(String title,String number,Instant time) {
-      if(g!=null){footer();g.dispose();g=null;}
+      if(g!=null){footer();g.dispose();g=null;archiveCurrentPage();}
       try(PDDocument document=new PDDocument();ByteArrayOutputStream output=new ByteArrayOutputStream()) {
         PDDocumentInformation info=new PDDocumentInformation();
         info.setTitle(title+" - "+number);
@@ -281,11 +295,17 @@ public class PayoutSettlementPdfRenderer {
         Calendar calendar=Calendar.getInstance(java.util.TimeZone.getTimeZone(INDIA));
         calendar.setTimeInMillis((time==null?Instant.now():time).toEpochMilli());
         info.setCreationDate(calendar);document.setDocumentInformation(info);
-        for(BufferedImage image:pages) {
-          PDPage pdfPage=new PDPage(PDRectangle.A4);document.addPage(pdfPage);
-          PDImageXObject embedded=LosslessFactory.createFromImage(document,image);
-          try(PDPageContentStream stream=new PDPageContentStream(document,pdfPage)) {
-            stream.drawImage(embedded,0,0,pdfPage.getMediaBox().getWidth(),pdfPage.getMediaBox().getHeight());
+        for(byte[] pagePng:pages) {
+          BufferedImage image=ImageIO.read(new ByteArrayInputStream(pagePng));
+          if(image==null)throw new IOException("A stored payout PDF page is not a valid PNG.");
+          try {
+            PDPage pdfPage=new PDPage(PDRectangle.A4);document.addPage(pdfPage);
+            PDImageXObject embedded=LosslessFactory.createFromImage(document,image);
+            try(PDPageContentStream stream=new PDPageContentStream(document,pdfPage)) {
+              stream.drawImage(embedded,0,0,pdfPage.getMediaBox().getWidth(),pdfPage.getMediaBox().getHeight());
+            }
+          } finally {
+            image.flush();
           }
         }
         document.save(output);
