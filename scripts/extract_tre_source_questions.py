@@ -702,7 +702,7 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                             and option_match
                             and len(OPTION_START.findall(block_text)) == 1
                             and not looks_like_code_line(block_text)
-                            and SHREE_DEV_FONT_NAMES.intersection(font_metadata.get("fonts", set()))
+                            and uses_legacy_hindi_glyphs(block_text, font_metadata.get("fonts", set()))
                             and font_metadata.get("bbox")
                         ):
                             option_key = option_match.group(1).upper()
@@ -755,19 +755,22 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                     locale == "hi"
                     and question_count == 1
                     and not has_preamble
-                    and SHREE_DEV_FONT_NAMES.intersection(font_metadata.get("fonts", set()))
+                    and uses_legacy_hindi_glyphs(block_text, font_metadata.get("fonts", set()))
                     and font_metadata.get("bbox")
                 ):
                     line_metadata = font_metadata.get("lines", [])
                     option_line_indices = [
                         index for index, line in enumerate(line_metadata)
                         if OPTION_START.match(str(line.get("text", "")))
-                        and SHREE_DEV_FONT_NAMES.intersection(line.get("fonts", set()))
+                        and uses_legacy_hindi_glyphs(str(line.get("text", "")), line.get("fonts", set()))
                     ]
                     first_option_index = option_line_indices[0] if option_line_indices else len(line_metadata)
-                    prompt_lines = line_metadata[:first_option_index]
+                    prompt_lines = [
+                        line for line in line_metadata[:first_option_index]
+                        if not QUESTION_LABEL_ONLY.fullmatch(str(line.get("text", "")).strip())
+                    ]
                     prompt_has_mixed_fonts = any(
-                        not SHREE_DEV_FONT_NAMES.intersection(line.get("fonts", set()))
+                        not uses_legacy_hindi_glyphs(str(line.get("text", "")), line.get("fonts", set()))
                         and str(line.get("text", "")).strip()
                         for line in prompt_lines
                     )
@@ -777,7 +780,7 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                     else:
                         prompt_line_boxes = [
                             line["bbox"] for line in prompt_lines
-                            if SHREE_DEV_FONT_NAMES.intersection(line.get("fonts", set()))
+                            if uses_legacy_hindi_glyphs(str(line.get("text", "")), line.get("fonts", set()))
                         ]
                         prompt_bbox = union_pdf_boxes(prompt_line_boxes)
                         if prompt_bbox:
