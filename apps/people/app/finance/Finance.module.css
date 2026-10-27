@@ -420,3 +420,22 @@
 @media(prefers-reduced-motion:reduce){
  .payoutRecipientCard,.payoutRecipientFacts>div{scroll-behavior:auto}
 }
+
+/* Monthly payout PDFs: archived report history and recipient-advice controls. */
+.payoutBatchActions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.payoutStatementPanel{display:grid;gap:12px;margin:14px 0;padding:14px;border:1px solid var(--finance-line,var(--line));border-radius:14px;background:var(--finance-subtle,var(--paper,#f8fafc));color:var(--finance-ink,var(--ink))}
+.payoutStatementPanel h4{margin:0;font-size:14px;line-height:1.4}
+.payoutStatementPanel .panelHead p{margin:5px 0 0;color:var(--finance-muted,var(--muted));font-size:11px;line-height:1.5}
+.payoutStatementList{display:grid;gap:8px}
+.payoutStatementRow{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;padding:12px;border:1px solid var(--finance-line,var(--line));border-radius:11px;background:var(--finance-surface,var(--paper,#fff))}
+.payoutStatementRow>div{display:grid;gap:5px;min-width:0}
+.payoutStatementRow strong{font-size:12px;line-height:1.4;overflow-wrap:anywhere;color:var(--finance-ink,var(--ink))}
+.payoutStatementRow small{font-size:10px;line-height:1.4;overflow-wrap:anywhere;color:var(--finance-muted,var(--muted))}
+.payoutStatementRow button{flex:none}
+@media(max-width:720px){
+ .payoutBatchActions{width:100%;justify-content:stretch}
+ .payoutBatchActions button{flex:1;min-width:0}
+ .payoutStatementPanel{padding:10px}
+ .payoutStatementRow{align-items:stretch;flex-direction:column}
+ .payoutStatementRow button{width:100%}
+}
