@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-hindi-fhgp1",
   "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
   "raw_analysis_path": "data/textbook-visuals/class6-hi-maths-0bbba43f/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "50c6b8a4843c594f0caef5cae5fbc10699c720daf2065c9f192f0dee12832c76",
+  "raw_analysis_sha256": "6fbe5cff4bb79be543065b2c4afd33fe85978b986d615c86367be286422e3f58",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-hi-maths-0bbba43f/visual-analysis-corrections.v1.json",
@@ -3510,6 +3510,426 @@
         "limitations": [
           "The image does not show any visual elements or diagrams.",
           "The text is in Hindi, which may require translation for non-Hindi speakers."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1cc7ff5c2cae7cd9944ff56c",
+      "asset_sha256": "a013cc4be1c26f6f064dd916b0cd9195e640e0578d6cf31a78d64a17ea81f8b5",
+      "page_text_context_sha256": "656ed1816077d00dc5ce039ae398062fc2840d19c92cac00245f47916e04aad3",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 18,
+      "asset_path": "page-0018.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d4e4594b03b31616d99921a8",
+      "asset_sha256": "9fbd3b21a14dbb9efb66023da999953ddf34661e7c1e7805b74fa7a8df0ca1a5",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 19,
+      "asset_path": "assets/9fbd3b21a14dbb9efb66023da999953ddf34661e7c1e7805b74fa7a8df0ca1a5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f3ac36b8903f4308adad6c967f0409128a878811290812380da1350dad7e753f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue background with intricate gold and white floral patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a decorative element in a textbook, likely used to illustrate a chapter or section on patterns.",
+        "limitations": [
+          "The image does not contain any text or numerical data.",
+          "The image is a static illustration with no interactive elements.",
+          "The image does not depict any specific educational content or question.",
+          "The image does not provide any information about the educational level or subject matter of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:42:41Z",
+      "effective_analysis": {
+        "visual_summary": "A blue background with intricate gold and white floral patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a decorative element in a textbook, likely used to illustrate a chapter or section on patterns.",
+        "limitations": [
+          "The image does not contain any text or numerical data.",
+          "The image is a static illustration with no interactive elements.",
+          "The image does not depict any specific educational content or question.",
+          "The image does not provide any information about the educational level or subject matter of the textbook."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2b014235cb441232019e3644",
+      "asset_sha256": "c6bdf0eac231e4a8caaf23fd36fe9b492f184468791b3fcab65963e312859cd9",
+      "page_text_context_sha256": "f3ac36b8903f4308adad6c967f0409128a878811290812380da1350dad7e753f",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 19,
+      "asset_path": "assets/c6bdf0eac231e4a8caaf23fd36fe9b492f184468791b3fcab65963e312859cd9.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "limitations must be a list of strings.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cf4e72caab528bee645014f0",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 19,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f3ac36b8903f4308adad6c967f0409128a878811290812380da1350dad7e753f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with a list of chapter titles.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "विषय-सूचीी",
+          "आमुख",
+          "पुसतक के विषय में",
+          "अध्यााय 1",
+          "गणिित में पैटर्न",
+          "अध्यााय 2",
+          "रेखााएँ और कोण",
+          "अध्यााय 3",
+          "संख्‍यााओं काा खेल",
+          "अध्यााय 4",
+          "आकँड़ों काा  प्रबंधन और प्रस्‍तुतिकरण",
+          "अध्यााय 5",
+          "अभााजय समय",
+          "अध्यााय 6",
+          "प"
+        ],
+        "concepts": [
+          "chapter titles",
+          "textbook",
+          "mathematics",
+          "geometry",
+          "numbers",
+          "shapes",
+          "time"
+        ],
+        "context_relation": "The image is a page from a textbook that lists the chapter titles.",
+        "limitations": [
+          "The image does not show any visual content other than the text.",
+          "The image does not provide any visual information about the content of the chapters."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:43:58Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with a list of chapter titles.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "विषय-सूचीी",
+          "आमुख",
+          "पुसतक के विषय में",
+          "अध्यााय 1",
+          "गणिित में पैटर्न",
+          "अध्यााय 2",
+          "रेखााएँ और कोण",
+          "अध्यााय 3",
+          "संख्‍यााओं काा खेल",
+          "अध्यााय 4",
+          "आकँड़ों काा  प्रबंधन और प्रस्‍तुतिकरण",
+          "अध्यााय 5",
+          "अभााजय समय",
+          "अध्यााय 6",
+          "प"
+        ],
+        "concepts": [
+          "chapter titles",
+          "textbook",
+          "mathematics",
+          "geometry",
+          "numbers",
+          "shapes",
+          "time"
+        ],
+        "context_relation": "The image is a page from a textbook that lists the chapter titles.",
+        "limitations": [
+          "The image does not show any visual content other than the text.",
+          "The image does not provide any visual information about the content of the chapters."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fa35de2c6b49a81d3fa2845b",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 19,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f3ac36b8903f4308adad6c967f0409128a878811290812380da1350dad7e753f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page with a list of chapter titles in Hindi.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "विषय-सूचीी",
+          "आमुख",
+          "पुसतक के विषय में",
+          "अध्यााय 1",
+          "गणिित में पैटर्न",
+          "अध्यााय 2",
+          "रेखााएँ और कोण",
+          "अध्यााय 3",
+          "संख्‍यााओं काा खेल",
+          "अध्यााय 4",
+          "आकँड़ों काा  प्रबंधन और प्रस्‍तुतिकरण",
+          "अध्यााय 5",
+          "अभााजय समय",
+          "अध्यााय 6",
+          "प"
+        ],
+        "concepts": [
+          "Hindi",
+          "textbook",
+          "chapter titles",
+          "mathematics",
+          "geometry",
+          "numbers",
+          "shapes",
+          "time"
+        ],
+        "context_relation": "The page is a table of contents for a Hindi textbook.",
+        "limitations": [
+          "The page does not contain any images or diagrams.",
+          "The page does not have any equations or formulas.",
+          "The page does not have any illustrations or cartoons."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:44:58Z",
+      "effective_analysis": {
+        "visual_summary": "A page with a list of chapter titles in Hindi.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "विषय-सूचीी",
+          "आमुख",
+          "पुसतक के विषय में",
+          "अध्यााय 1",
+          "गणिित में पैटर्न",
+          "अध्यााय 2",
+          "रेखााएँ और कोण",
+          "अध्यााय 3",
+          "संख्‍यााओं काा खेल",
+          "अध्यााय 4",
+          "आकँड़ों काा  प्रबंधन और प्रस्‍तुतिकरण",
+          "अध्यााय 5",
+          "अभााजय समय",
+          "अध्यााय 6",
+          "प"
+        ],
+        "concepts": [
+          "Hindi",
+          "textbook",
+          "chapter titles",
+          "mathematics",
+          "geometry",
+          "numbers",
+          "shapes",
+          "time"
+        ],
+        "context_relation": "The page is a table of contents for a Hindi textbook.",
+        "limitations": [
+          "The page does not contain any images or diagrams.",
+          "The page does not have any equations or formulas.",
+          "The page does not have any illustrations or cartoons."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "efdd0fca78503edbda1ae23c",
+      "asset_sha256": "cc5fcda0edd882b95839416f2ebf852112c97a47359827ea91e719ad3bcdc737",
+      "page_text_context_sha256": "f3ac36b8903f4308adad6c967f0409128a878811290812380da1350dad7e753f",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 19,
+      "asset_path": "page-0019.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "aa04bc1cf06cc354c872e85f",
+      "asset_sha256": "1aa522e19f4fb93921c7b12b4de709a0aa361b0e6b3fff5efa98c4d57c9fbbcd",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 20,
+      "asset_path": "assets/1aa522e19f4fb93921c7b12b4de709a0aa361b0e6b3fff5efa98c4d57c9fbbcd.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8d17a0ea9f3a8d0d7b244fd5",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 20,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:53:34Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3929f0e6f850347f3b9fb5a6",
+      "asset_sha256": "64c56d6a121792c3175d1afb821b6894b5fb7f67b244ebb81801e9fd91dd24f8",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 20,
+      "asset_path": "page-0020.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7ad1869a17229458cdc0b225",
+      "asset_sha256": "ba8541ae5c44ec8f8372b71ef46899f6b6c40dc108882d0f1f38a45bd780489a",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/ba8541ae5c44ec8f8372b71ef46899f6b6c40dc108882d0f1f38a45bd780489a.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2cde7518f74cd717c7aada8536953a61cdb5a478ad8731c30f3d82d5bec8d2e6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A QR code with the text '0675CH01' below it.",
+        "visual_type": "other",
+        "visible_text": [
+          "0675CH01"
+        ],
+        "concepts": [
+          "QR code",
+          "text below"
+        ],
+        "context_relation": "The QR code is related to the text below it.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the text and QR code."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T02:00:28Z",
+      "effective_analysis": {
+        "visual_summary": "A QR code with the text '0675CH01' below it.",
+        "visual_type": "other",
+        "visible_text": [
+          "0675CH01"
+        ],
+        "concepts": [
+          "QR code",
+          "text below"
+        ],
+        "context_relation": "The QR code is related to the text below it.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the text and QR code."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
