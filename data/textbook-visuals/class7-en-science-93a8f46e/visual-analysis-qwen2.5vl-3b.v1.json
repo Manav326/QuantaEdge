@@ -14,12 +14,12 @@
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "29c388b0161ccfef7bc70795",
-      "0d1c88ea0154d314c4c70259"
+      "57f6d254114c156f04ac05fb",
+      "8dc0f63ef8a4403d635d24e4"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2424,
-    "assets_remaining": 5064,
+    "assets_analyzed": 2426,
+    "assets_remaining": 5062,
     "assets_completion_percent": 32.4,
     "assets_failed": 22,
     "assets_skipped_from_checkpoint": 2424,
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40520035469",
-      "checkpointed_at": "2026-10-27T15:47:38Z"
+      "checkpointed_at": "2026-10-27T15:53:45Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40520035469",
-      "checkpointed_at": "2026-10-27T15:48:16Z"
+      "checkpointed_at": "2026-10-27T15:54:24Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40520035469",
-      "checkpointed_at": "2026-10-27T15:49:06Z"
+      "checkpointed_at": "2026-10-27T15:55:14Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -91494,6 +91494,97 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40508622614",
       "checkpointed_at": "2026-10-27T14:17:05Z"
+    },
+    {
+      "asset_id": "57f6d254114c156f04ac05fb",
+      "asset_sha256": "3f95b1b00d0c1f1b5924fd0e9c94f70dfefb2fec44a1f62c318c32b634c82221",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/3f95b1b00d0c1f1b5924fd0e9c94f70dfefb2fec44a1f62c318c32b634c82221.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of non-metals in everyday life, specifically mentioning oxygen and carbon.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "and electrical conductivity, and high strength. However, this",
+          "should not give an impression in your mind that non-metals are not important in our lives.",
+          "We breathe in oxygen, which is a non-metal, and without it,",
+          "we would not be able to survive. Can you think of any other uses",
+          "of oxygen?",
+          "Carbon is essential in everyday life because it is the building",
+          "block of all life forms. It is a key component of proteins, fats, and"
+        ],
+        "concepts": [
+          "non-metals",
+          "oxygen",
+          "carbon",
+          "electrical conductivity",
+          "high strength",
+          "everyday life",
+          "building block of life",
+          "proteins",
+          "fats"
+        ],
+        "context_relation": "The page discusses the importance of non-metals in everyday life, specifically mentioning oxygen and carbon.",
+        "limitations": [
+          "The page does not provide specific examples or explanations for the uses of oxygen and carbon."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40520035469",
+      "checkpointed_at": "2026-10-27T15:56:35Z"
+    },
+    {
+      "asset_id": "8dc0f63ef8a4403d635d24e4",
+      "asset_sha256": "37f866c7d08ef281a61107e197a7ef32d97a0a8df696f5f9d469f3c9e8d54af9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/37f866c7d08ef281a61107e197a7ef32d97a0a8df696f5f9d469f3c9e8d54af9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of non-metals in daily life, specifically mentioning oxygen and carbon.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "and electrical conductivity, and high strength. However, this",
+          "should not give an impression in your mind that non-metals are not important in our lives.",
+          "We breathe in oxygen, which is a non-metal, and without it,",
+          "we would not be able to survive. Can you think of any other uses",
+          "of oxygen?",
+          "Carbon is essential in everyday life because it is the building",
+          "block of all life forms. It is a key component of proteins, fats, and"
+        ],
+        "concepts": [
+          "non-metals",
+          "oxygen",
+          "carbon",
+          "electrical conductivity",
+          "high strength",
+          "daily life",
+          "building block of life",
+          "components of proteins, fats"
+        ],
+        "context_relation": "The page discusses the importance of non-metals in daily life, specifically mentioning oxygen and carbon.",
+        "limitations": [
+          "The page does not provide specific examples or explanations for the uses of oxygen and carbon."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40520035469",
+      "checkpointed_at": "2026-10-27T15:57:56Z"
     }
   ]
 }
