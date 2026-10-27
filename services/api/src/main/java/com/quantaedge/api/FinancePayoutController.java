@@ -87,7 +87,7 @@ public class FinancePayoutController {
     if(!List.of("INSTITUTION","COMPANY").contains(type))throw bad("Choose an institution or company for the remaining balance.");
     if("INSTITUTION".equals(type)&&!exists("select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",recipientId))
       throw bad("The remainder institution must be active.");
-    if("COMPANY".equals(type)&&!exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind='PLATFORM')",recipientId))
+    if("COMPANY".equals(type)&&!exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY'))",recipientId))
       throw bad("The remainder company must be an active company legal entity.");
     long minimum=requiredLong(body.get("payoutMinimumPaise"),"payoutMinimumPaise");
     if(minimum<100)throw bad("Minimum payout must be at least ₹1.00.");
@@ -171,7 +171,7 @@ public class FinancePayoutController {
     if(phone!=null&&(phone.length()>20||!phone.matches("^[+0-9() -]{7,20}$")))throw bad("Enter a valid phone number.");
     if("INSTITUTION".equals(type)&&!exists("select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",recipientId))
       throw bad("Select an active institution.");
-    if("COMPANY".equals(type)&&!exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind='PLATFORM')",recipientId))
+    if("COMPANY".equals(type)&&!exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY'))",recipientId))
       throw bad("Select an active company legal entity.");
     if(exists("""
       select exists(select 1 from finance_payout_beneficiary where status<>'REJECTED'
@@ -228,7 +228,7 @@ public class FinancePayoutController {
     if(number(row.get("created_by_staff_id"))==number(context.staffId()))throw bad("The submitter cannot approve their own beneficiary.");
     boolean active="INSTITUTION".equals(text(row,"beneficiary_type"))
         ?exists("select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",row.get("institution_id"))
-        :exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind='PLATFORM')",row.get("legal_entity_id"));
+        :exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY'))",row.get("legal_entity_id"));
     if(!active||optionalText(row.get("provider_fund_account_id"))==null||optionalText(row.get("provider_contact_id"))==null)
       throw bad("Beneficiary identity or provider fund account is not ready for approval.");
     int changed=jdbc.update("""
@@ -385,7 +385,7 @@ public class FinancePayoutController {
       String key=type+":"+id;
       byRecipient.computeIfAbsent(key,unused->new ArrayList<>()).add(row);
       beneficiaryByKey.putIfAbsent(key,row);
-      long net=Math.subtractExact(Math.subtractExact(Math.subtractExact(number(row.get("earned_paise")),number(row.get("refunded_paise"))),number(row.get("fee_paise"))));
+      long net=Math.subtractExact(Math.subtractExact(number(row.get("earned_paise")),number(row.get("refunded_paise"))),number(row.get("fee_paise")));
       netEarned.merge(key,net,Math::addExact);
       paidNet.merge(key,number(row.get("paid_paise"))-number(row.get("reversed_paise")),Math::addExact);
       reservedNet.merge(key,number(row.get("reserved_paise")),Math::addExact);
