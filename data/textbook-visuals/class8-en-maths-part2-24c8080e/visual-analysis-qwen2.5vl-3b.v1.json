@@ -8,26 +8,26 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 48,
+    "assets_selected": 55,
     "assets_processed_this_run": 10,
     "assets_processed_ids": [
       "f03d10be3e8016aa7a9ee958",
-      "39b91aa29efc54d42efb7231",
-      "574680192bb15cacfbfec15f",
-      "7a51295253292e5c21ec9213",
-      "0b5ad57ffa0b3049cc31192d",
-      "959b6d7bcdc696c288d44f17",
-      "47ec9b59064cd5173f6cd078",
-      "7992f1638980b4e9009a40d0",
-      "c2e9c6fd7100366e19f4f665",
-      "21081212788b06e87ef85a16"
+      "ae475877e649e9731685306d",
+      "16d85c7250c0dd6a4767c1f1",
+      "5fdf486d7ab183ea6066f8ec",
+      "2792992d8d530ae82a6239be",
+      "be28596fc3a8c9bb5f5f80f4",
+      "513e48016d4fb56d4c217d08",
+      "5d92c04b49128338fec14a10",
+      "23bced6968c5132df275197a",
+      "141fb239ffe28682050a812b"
     ],
     "assets_eligible": 1727,
-    "assets_analyzed": 45,
-    "assets_remaining": 1682,
-    "assets_completion_percent": 2.6,
+    "assets_analyzed": 54,
+    "assets_remaining": 1673,
+    "assets_completion_percent": 3.1,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 38,
+    "assets_skipped_from_checkpoint": 45,
     "batch_limit": 10,
     "publication_allowed": false
   },
@@ -905,7 +905,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:51:53Z"
+      "checkpointed_at": "2026-10-27T00:04:20Z"
     },
     {
       "asset_id": "fa3a37bdca3cc1c6a62b41ea",
@@ -1580,6 +1580,297 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
       "checkpointed_at": "2026-10-27T00:03:31Z"
+    },
+    {
+      "asset_id": "ae475877e649e9731685306d",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e3780e943050166446a5ba6569df88a5071ce7477f38b72bee87bac2c4dd0b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, textured, abstract shape that resembles a wave or a splash.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:04:26Z"
+    },
+    {
+      "asset_id": "16d85c7250c0dd6a4767c1f1",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e3780e943050166446a5ba6569df88a5071ce7477f38b72bee87bac2c4dd0b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:04:41Z"
+    },
+    {
+      "asset_id": "5fdf486d7ab183ea6066f8ec",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e3780e943050166446a5ba6569df88a5071ce7477f38b72bee87bac2c4dd0b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:04:56Z"
+    },
+    {
+      "asset_id": "2792992d8d530ae82a6239be",
+      "asset_sha256": "0f902f8861def660bb88f8fd06909df9f8cf53423de3cd04e79cda73982affc3",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 13,
+      "asset_path": "page-0013.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "e3780e943050166446a5ba6569df88a5071ce7477f38b72bee87bac2c4dd0b62",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Summary of key points for an educational content editor.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Summary of Key Points",
+          "Time for Exploration",
+          "1. It is important to routinely pose new problems, questions, patterns, or challenges to the students and give them sufficient time to play with, discuss, and work on them, individually and in groups.",
+          "2. During this time, an environment that accepts mistakes and acknowledges their importance in learning needs to be nurtured.",
+          "3. There should be a culture where students pose problems to each other and discuss with each other various ways to approach the problems.",
+          "About the Problems in the Book",
+          "1. The exploratory problems in the textbook not only promote problem-solving; they also aim to strengthen procedural fluency when students start engaging in exploration.",
+          "2. Trying to 'cover' all the problems in the book must not happen at the cost of students not getting to spend quality time on playing with, discussing, and solving them.",
+          "Reading",
+          "1. Encourage students to read the textbook by themselves and in groups.",
+          "2. Give opportunities to them to interpret what they read and to express it to others.",
+          "Right of Not Knowing!",
+          "1. It is perfectly okay if some of the content is not understood immediately. Along with trying to understand and reflect upon such content, it can also be taken to the classroom and open it up for discussion. After the discussion, things that are clear and those that are not yet clear can be clearl",
+          "2. Learning is a continual process. Indeed, there is so much in mathematics that is still not known and requires further exploration!"
+        ],
+        "concepts": [
+          "exploration",
+          "problem-solving",
+          "procedural fluency",
+          "reading",
+          "interpretation",
+          "discussion",
+          "understanding",
+          "reflection",
+          "mathematics"
+        ],
+        "context_relation": "educational content editor",
+        "limitations": [
+          "unclear",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:09:34Z"
+    },
+    {
+      "asset_id": "be28596fc3a8c9bb5f5f80f4",
+      "asset_sha256": "733465bc328fc9a0d9827a8889ede3c883727f3cfa267fbd6195c282ac4b358b",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/733465bc328fc9a0d9827a8889ede3c883727f3cfa267fbd6195c282ac4b358b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "44a253c82bd2f721cb8445f6436919eeee4bb2cd4762dfb0e6ed840b02ed3377",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon owl wearing glasses and a graduation cap, pointing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "education",
+          "learning",
+          "creativity",
+          "mathematics"
+        ],
+        "context_relation": "The image is related to the educational content about appreciating the art of mathematics and using creativity to solve problems.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the questions being discussed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:11:11Z"
+    },
+    {
+      "asset_id": "513e48016d4fb56d4c217d08",
+      "asset_sha256": "a44ba5cce0e3703fd0788c5ffe38c0193dc34dc5e1fc53c064f8aac431f911f0",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/a44ba5cce0e3703fd0788c5ffe38c0193dc34dc5e1fc53c064f8aac431f911f0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "44a253c82bd2f721cb8445f6436919eeee4bb2cd4762dfb0e6ed840b02ed3377",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon owl wearing a graduation cap and glasses, with a yellow background.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:12:48Z"
+    },
+    {
+      "asset_id": "5d92c04b49128338fec14a10",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "44a253c82bd2f721cb8445f6436919eeee4bb2cd4762dfb0e6ed840b02ed3377",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, abstract, and irregularly shaped splash or blotch on a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of an abstract pattern or splash.",
+        "limitations": [
+          "The image does not contain any text or labels.",
+          "The image is a single, static visual without any additional context or elements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:13:02Z"
+    },
+    {
+      "asset_id": "23bced6968c5132df275197a",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "44a253c82bd2f721cb8445f6436919eeee4bb2cd4762dfb0e6ed840b02ed3377",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, abstract, and irregularly shaped splash or blotch on a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of an abstract pattern, possibly used as a background or decorative element in the educational content.",
+        "limitations": [
+          "The image does not contain any text or information that can be directly related to the content of the textbook.",
+          "The abstract nature of the image may not convey any specific educational concept or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:13:14Z"
+    },
+    {
+      "asset_id": "141fb239ffe28682050a812b",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hegp2",
+      "source_pdf_sha256": "933b00b2ae40075a9ea4ee4a1e015711b295d8a9ed6a4f902177539ae350ec70",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "44a253c82bd2f721cb8445f6436919eeee4bb2cd4762dfb0e6ed840b02ed3377",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with a note to students about appreciating the art of mathematics.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A NOTE TO STUDENTS!",
+          "To be able to appreciate the art of mathematics, it is not enough to just be a passive spectator. You need to immerse yourself in its process like a detective getting into action to solve a mystery.",
+          "This is especially required when you see a new question or when a question arises from your own sense of wonder, or when you come across a new beautiful pattern. When you encounter these, pause your reading, and use your creativity to work out the question or understand and appreciate the pattern.",
+          "You will find that some questions are accompanied by their answers."
+        ],
+        "concepts": [
+          "appreciation of mathematics",
+          "mathematical process",
+          "creative thinking",
+          "understanding patterns"
+        ],
+        "context_relation": "The note is providing guidance on how to engage with mathematical concepts actively and creatively.",
+        "limitations": [
+          "The note does not provide specific examples or exercises."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:13:53Z"
     }
   ]
 }

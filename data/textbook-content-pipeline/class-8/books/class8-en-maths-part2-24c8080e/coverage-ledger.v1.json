@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 3,
     "inventory_asset_rows": 1727,
     "eligible_visual_asset_rows": 1727,
-    "raw_analysis_result_rows": 58,
-    "successful_visual_analyses": 46,
-    "missing_visual_analyses": 1669,
+    "raw_analysis_result_rows": 67,
+    "successful_visual_analyses": 55,
+    "missing_visual_analyses": 1660,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1684,
+    "unresolved_count": 1675,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -7326,9 +7326,16 @@
       "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red, textured, abstract shape that resembles a wave or a splash.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7344,9 +7351,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7362,9 +7378,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7380,9 +7405,44 @@
       "asset_path": "page-0013.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Summary of key points for an educational content editor.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Summary of Key Points",
+          "Time for Exploration",
+          "1. It is important to routinely pose new problems, questions, patterns, or challenges to the students and give them sufficient time to play with, discuss, and work on them, individually and in groups.",
+          "2. During this time, an environment that accepts mistakes and acknowledges their importance in learning needs to be nurtured.",
+          "3. There should be a culture where students pose problems to each other and discuss with each other various ways to approach the problems.",
+          "About the Problems in the Book",
+          "1. The exploratory problems in the textbook not only promote problem-solving; they also aim to strengthen procedural fluency when students start engaging in exploration.",
+          "2. Trying to 'cover' all the problems in the book must not happen at the cost of students not getting to spend quality time on playing with, discussing, and solving them.",
+          "Reading",
+          "1. Encourage students to read the textbook by themselves and in groups.",
+          "2. Give opportunities to them to interpret what they read and to express it to others.",
+          "Right of Not Knowing!",
+          "1. It is perfectly okay if some of the content is not understood immediately. Along with trying to understand and reflect upon such content, it can also be taken to the classroom and open it up for discussion. After the discussion, things that are clear and those that are not yet clear can be clearl",
+          "2. Learning is a continual process. Indeed, there is so much in mathematics that is still not known and requires further exploration!"
+        ],
+        "concepts": [
+          "exploration",
+          "problem-solving",
+          "procedural fluency",
+          "reading",
+          "interpretation",
+          "discussion",
+          "understanding",
+          "reflection",
+          "mathematics"
+        ],
+        "context_relation": "educational content editor",
+        "limitations": [
+          "unclear",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7398,9 +7458,23 @@
       "asset_path": "assets/733465bc328fc9a0d9827a8889ede3c883727f3cfa267fbd6195c282ac4b358b.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon owl wearing glasses and a graduation cap, pointing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "education",
+          "learning",
+          "creativity",
+          "mathematics"
+        ],
+        "context_relation": "The image is related to the educational content about appreciating the art of mathematics and using creativity to solve problems.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the questions being discussed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7416,9 +7490,16 @@
       "asset_path": "assets/a44ba5cce0e3703fd0788c5ffe38c0193dc34dc5e1fc53c064f8aac431f911f0.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon owl wearing a graduation cap and glasses, with a yellow background.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7434,9 +7515,19 @@
       "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red, abstract, and irregularly shaped splash or blotch on a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of an abstract pattern or splash.",
+        "limitations": [
+          "The image does not contain any text or labels.",
+          "The image is a single, static visual without any additional context or elements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7452,9 +7543,19 @@
       "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red, abstract, and irregularly shaped splash or blotch on a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of an abstract pattern, possibly used as a background or decorative element in the educational content.",
+        "limitations": [
+          "The image does not contain any text or information that can be directly related to the content of the textbook.",
+          "The abstract nature of the image may not convey any specific educational concept or information."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7470,9 +7571,28 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with a note to students about appreciating the art of mathematics.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A NOTE TO STUDENTS!",
+          "To be able to appreciate the art of mathematics, it is not enough to just be a passive spectator. You need to immerse yourself in its process like a detective getting into action to solve a mystery.",
+          "This is especially required when you see a new question or when a question arises from your own sense of wonder, or when you come across a new beautiful pattern. When you encounter these, pause your reading, and use your creativity to work out the question or understand and appreciate the pattern.",
+          "You will find that some questions are accompanied by their answers."
+        ],
+        "concepts": [
+          "appreciation of mathematics",
+          "mathematical process",
+          "creative thinking",
+          "understanding patterns"
+        ],
+        "context_relation": "The note is providing guidance on how to engage with mathematical concepts actively and creatively.",
+        "limitations": [
+          "The note does not provide specific examples or exercises."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
