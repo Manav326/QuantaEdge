@@ -6,8 +6,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 import java.util.Locale
+import java.security.MessageDigest
 
 internal val LocalQuantaLanguage = staticCompositionLocalOf { "hi" }
+
+/** Resource names are generated from canonical catalog text; ambiguous phrases are omitted. */
+private fun sharedCatalogResourceName(source: String): String {
+    val digest = MessageDigest.getInstance("SHA-256").digest(source.toByteArray(Charsets.UTF_8))
+    return "qe_ui_" + digest.take(8).joinToString("") {
+        (it.toInt() and 0xff).toString(16).padStart(2, '0')
+    }
+}
 
 /** Resolves account locale IDs to the two UI locales currently supported by Android. */
 internal fun resolveInterfaceLanguage(preferredLocale: String): String? =
@@ -531,7 +540,19 @@ internal fun localizedUiText(source: String): String {
         .filter { it.hindi.endsWith(" ") || it.english.endsWith(" ") }
         .sortedByDescending { maxOf(it.hindi.length, it.english.length) }
         .firstOrNull { source.startsWith(it.hindi) || source.startsWith(it.english) }
-    if (phrase == null) return brandText(source)
+    if (phrase == null) {
+        // Central translations are generated only when every catalog occurrence agrees.
+        // Ambiguous phrases continue through the context-specific compatibility map above.
+        val sharedResourceId = context.resources.getIdentifier(
+            sharedCatalogResourceName(source), "string", context.packageName
+        )
+        if (sharedResourceId == 0) return brandText(source)
+        val sharedConfiguration = Configuration(context.resources.configuration).apply {
+            setLocale(Locale.forLanguageTag(if (language == "hi") "hi" else "en"))
+        }
+        val sharedContext: Context = context.createConfigurationContext(sharedConfiguration)
+        return brandText(sharedContext.getString(sharedResourceId))
+    }
     val exact = source == phrase.hindi || source == phrase.english
     val suffix = if (exact) "" else when {
         source.startsWith(phrase.hindi) -> source.removePrefix(phrase.hindi)

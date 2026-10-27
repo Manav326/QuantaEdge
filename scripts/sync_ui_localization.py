@@ -204,7 +204,8 @@ def main() -> int:
                     target.parent.mkdir(parents=True, exist_ok=True)
                     target.write_bytes(source.read_bytes())
 
-        for relative_path, expected_bytes in render_android_catalog_resources(catalogs).items():
+        android_resources = render_android_catalog_resources(catalogs)
+        for relative_path, expected_bytes in android_resources.items():
             target = ROOT / relative_path
             if args.check:
                 if not target.is_file() or target.read_bytes() != expected_bytes:

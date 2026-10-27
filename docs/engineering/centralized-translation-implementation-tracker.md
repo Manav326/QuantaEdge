@@ -11,6 +11,7 @@ Implementation branch: [`feature/contextual-language-responsiveness`](https://gi
 - Added `scripts/audit-ui-copy-quality.mjs` and tests. The report detects catalog drift, placeholder mismatch, and long-copy candidates for human contextual review; it does not pretend to judge meaning automatically.
 - CI now runs the audit tests and uploads a `ui-copy-quality-audit` artifact.
 - Rewrote 18 messages across learner, Admin and HRMS screens with contextual English/Hinglish. Synchronized canonical catalogs and all generated browser-app copies.
+- Added deterministic Android XML resources from unambiguous central catalog pairs and an Android runtime lookup fallback. Ambiguous English phrases remain on the existing context-specific mapping.
 - **Validation pending:** no CI or emulator/browser acceptance result has yet been recorded for this branch. The overall localization status remains in progress and not production-complete.
 
 

@@ -39,7 +39,7 @@ Hinglish is Hindi in Devanagari with familiar English terms retained naturally. 
 - [ ] Replace remaining inline locale pairs, duplicated dictionaries and hardcoded binary-locale helpers progressively with typed catalog keys.
 - [ ] Keep the shared registry/metadata, catalogs and generated app copies synchronized.
 - [ ] Replace legacy-generated key names with semantic names in small, tested batches.
-- [ ] Connect Android to a single generated/validated locale source or a documented compatibility layer; do not add a second manually maintained catalog.
+- [~] Connect Android to generated, validated locale resources for unambiguous shared messages. Keep the existing phrase map as a compatibility fallback while remaining call sites move to semantic keys.
 - **Accept:** catalog drift, missing keys and invalid locale IDs fail CI; a new locale cannot silently render as Hinglish.
 
 ### P1 — Contextual, concise writing
@@ -89,6 +89,7 @@ Implemented on this branch:
 - The account profile API now accepts only registered UI locale IDs (`english`, `hinglish`). Added API and Android locale-resolution regression tests.
 - Added a report-only UI copy-quality audit. It lists long messages for contextual review, validates locale key/placeholder consistency, and is attached as a CI artifact.
 - Shortened and contextualized 18 messages across learner, Admin and HRMS screens in English and Hinglish. Updated the canonical catalogs and all generated Web/Admin/People copies together.
+- Added a central-sync generator for Android locale resources. It exports only phrases with one unambiguous Hinglish equivalent; Android uses those entries before its existing fallback map.
 
 **Validation still required:** Android/API tests and full CI have not yet been confirmed on this branch. Full route coverage, browser/device acceptance, the complete Android/catalog integration, dynamic-message coverage, and the broader contextual copy review remain open.
 
