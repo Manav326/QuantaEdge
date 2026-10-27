@@ -117,7 +117,7 @@ class AssessmentCourseImporterTests(unittest.TestCase):
         self.assertEqual(snapshot["answer_payload"], {"kind": "OPTION", "value": "A"})
         self.assertEqual(snapshot["question_review_status"], "PENDING_HUMAN_REVIEW")
         self.assertEqual(snapshot["answer_review_status"], "PENDING_HUMAN_REVIEW")
-        self.assertFalse(snapshot["options"][0]["is_correct"] is False)
+        self.assertTrue(snapshot["options"][0]["is_correct"])
 
     def test_unresolved_answer_remains_unresolved(self) -> None:
         package = valid_package()
