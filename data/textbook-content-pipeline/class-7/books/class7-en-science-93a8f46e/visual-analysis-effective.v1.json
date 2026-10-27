@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f045e810f53090685ed148edeeaaf91cd1a723a474624f90ddddc3dd66ef5ce6",
+  "raw_analysis_sha256": "718d8d88fc7d54b2e01370392693a09b59caa1a58e622d5cef7e9f00f174a7eb",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -141274,6 +141274,256 @@
         "context_relation": "The image illustrates the chemical reaction between sulfur and oxygen, leading to the formation of sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
         "limitations": [
           "The image does not provide specific details about the reaction conditions or the physical appearance of the products."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3eda598ba19e9b04abab5ec0",
+      "asset_sha256": "ffae460621a3e6f9e21585120093e5a2dc461e7b221d8491512e6ef26e95e4f5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/ffae460621a3e6f9e21585120093e5a2dc461e7b221d8491512e6ef26e95e4f5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6bd441fb87e80e68026ee792a3fa29fb3aa8446a8370d8d377345683a5f7beaf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the reaction of sulfur with oxygen to form sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "You would observe that it is acidic in nature (Fig. 4.7d).",
+          "On burning sulfur in air (oxygen), sulfur dioxide gas is formed.",
+          "On dissolving sulfur dioxide gas in water, sulfurous acid is formed."
+        ],
+        "concepts": [
+          "Reaction of sulfur with oxygen",
+          "Formation of sulfur dioxide gas",
+          "Dissolution of sulfur dioxide gas in water",
+          "Formation of sulfurous acid"
+        ],
+        "context_relation": "The image shows the chemical reaction between sulfur and oxygen, leading to the formation of sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "limitations": [
+          "The image does not provide specific details about the reaction conditions or the physical appearance of the products."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40451620191",
+      "checkpointed_at": "2026-10-27T06:50:40Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the reaction of sulfur with oxygen to form sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "You would observe that it is acidic in nature (Fig. 4.7d).",
+          "On burning sulfur in air (oxygen), sulfur dioxide gas is formed.",
+          "On dissolving sulfur dioxide gas in water, sulfurous acid is formed."
+        ],
+        "concepts": [
+          "Reaction of sulfur with oxygen",
+          "Formation of sulfur dioxide gas",
+          "Dissolution of sulfur dioxide gas in water",
+          "Formation of sulfurous acid"
+        ],
+        "context_relation": "The image shows the chemical reaction between sulfur and oxygen, leading to the formation of sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "limitations": [
+          "The image does not provide specific details about the reaction conditions or the physical appearance of the products."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a0aa5fe43d5b1f50fdcbf6c4",
+      "asset_sha256": "4467cb2bddb5d968f215ee2a9f1f30c596415f929633844b12bb26b31b0b6bfe",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/4467cb2bddb5d968f215ee2a9f1f30c596415f929633844b12bb26b31b0b6bfe.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6bd441fb87e80e68026ee792a3fa29fb3aa8446a8370d8d377345683a5f7beaf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the reaction of sulfur with oxygen to form sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "You would observe that it is acidic in nature (Fig. 4.7d).",
+          "On burning sulfur in air (oxygen), sulfur dioxide gas is formed.",
+          "On dissolving sulfur dioxide gas in water, sulfurous acid is formed."
+        ],
+        "concepts": [
+          "Reaction of sulfur with oxygen",
+          "Formation of sulfur dioxide gas",
+          "Dissolution of sulfur dioxide gas in water",
+          "Formation of sulfurous acid"
+        ],
+        "context_relation": "The image illustrates the chemical reaction between sulfur and oxygen, leading to the formation of sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "limitations": [
+          "The image does not provide specific details about the reaction conditions or the properties of the resulting sulfurous acid."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40451620191",
+      "checkpointed_at": "2026-10-27T06:52:24Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the reaction of sulfur with oxygen to form sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "You would observe that it is acidic in nature (Fig. 4.7d).",
+          "On burning sulfur in air (oxygen), sulfur dioxide gas is formed.",
+          "On dissolving sulfur dioxide gas in water, sulfurous acid is formed."
+        ],
+        "concepts": [
+          "Reaction of sulfur with oxygen",
+          "Formation of sulfur dioxide gas",
+          "Dissolution of sulfur dioxide gas in water",
+          "Formation of sulfurous acid"
+        ],
+        "context_relation": "The image illustrates the chemical reaction between sulfur and oxygen, leading to the formation of sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "limitations": [
+          "The image does not provide specific details about the reaction conditions or the properties of the resulting sulfurous acid."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "db0dedaecef0f778a5bac7c4",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "6bd441fb87e80e68026ee792a3fa29fb3aa8446a8370d8d377345683a5f7beaf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40451620191",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "81d79821b216f1253e031e05",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6bd441fb87e80e68026ee792a3fa29fb3aa8446a8370d8d377345683a5f7beaf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40451620191",
+      "checkpointed_at": "2026-10-27T06:59:20Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f62793c70df224727c184adf",
+      "asset_sha256": "5171abd818edab79b85863d4c0236651aea67af0bae05d37cc3b9c24c1ff9319",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 73,
+      "asset_path": "page-0073.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "6bd441fb87e80e68026ee792a3fa29fb3aa8446a8370d8d377345683a5f7beaf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the reaction of sulfur with water and the resulting acid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 4.8: Let us explore",
+          "Fig. 4.7(d): Testing of solution with litmus papers",
+          "Take some sulfur powder in a glass tumbler.",
+          "Add a small amount of water to it.",
+          "What do you observe?",
+          "You may have noticed that there is no reaction when sulfur is placed in water.",
+          "Substances like sulfur and phosphorus behave differently with air and water than metals. Phosphorus is stored in water as it catches fire when exposed to atmospheric air. These substances are usually soft and dull in appearance. They are neither malleable nor ductile, and they are not sonorous. They",
+          "Some other non-metals are oxygen, hydrogen, nitrogen, carbon, etc. These must not be confused with materials such as plastic, glass, wood, rubber, and paper. These materials are not classified as metals or non-metals because they are not elements.",
+          "Presently 118 elements are known. These elements are the basic building blocks of all matter. Some are naturally occurring, while others are artificially made in the laboratory, and do not exist in nature. You will study more about elements in higher grades.",
+          "4.5 Are Non-metals Essential in Everyday Life?"
+        ],
+        "concepts": [
+          "Acidic nature of sulfur",
+          "Reaction of sulfur with water",
+          "Non-metals",
+          "Elements",
+          "Properties of metals and non-metals"
+        ],
+        "context_relation": "Explanation of non-metals and their properties",
+        "limitations": [
+          "No specific limitations mentioned"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40451620191",
+      "checkpointed_at": "2026-10-27T07:03:34Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the reaction of sulfur with water and the resulting acid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 4.8: Let us explore",
+          "Fig. 4.7(d): Testing of solution with litmus papers",
+          "Take some sulfur powder in a glass tumbler.",
+          "Add a small amount of water to it.",
+          "What do you observe?",
+          "You may have noticed that there is no reaction when sulfur is placed in water.",
+          "Substances like sulfur and phosphorus behave differently with air and water than metals. Phosphorus is stored in water as it catches fire when exposed to atmospheric air. These substances are usually soft and dull in appearance. They are neither malleable nor ductile, and they are not sonorous. They",
+          "Some other non-metals are oxygen, hydrogen, nitrogen, carbon, etc. These must not be confused with materials such as plastic, glass, wood, rubber, and paper. These materials are not classified as metals or non-metals because they are not elements.",
+          "Presently 118 elements are known. These elements are the basic building blocks of all matter. Some are naturally occurring, while others are artificially made in the laboratory, and do not exist in nature. You will study more about elements in higher grades.",
+          "4.5 Are Non-metals Essential in Everyday Life?"
+        ],
+        "concepts": [
+          "Acidic nature of sulfur",
+          "Reaction of sulfur with water",
+          "Non-metals",
+          "Elements",
+          "Properties of metals and non-metals"
+        ],
+        "context_relation": "Explanation of non-metals and their properties",
+        "limitations": [
+          "No specific limitations mentioned"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
