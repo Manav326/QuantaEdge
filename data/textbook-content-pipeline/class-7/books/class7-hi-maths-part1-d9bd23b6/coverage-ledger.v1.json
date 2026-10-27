@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 1651,
     "eligible_visual_asset_rows": 1651,
-    "raw_analysis_result_rows": 30,
-    "successful_visual_analyses": 13,
-    "missing_visual_analyses": 1621,
-    "failed_visual_analyses": 17,
+    "raw_analysis_result_rows": 40,
+    "successful_visual_analyses": 18,
+    "missing_visual_analyses": 1611,
+    "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1638,
+    "unresolved_count": 1633,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -7137,7 +7137,7 @@
       "asset_path": "page-0010.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -7155,7 +7155,7 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -7173,9 +7173,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7191,7 +7200,7 @@
       "asset_path": "page-0011.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -7209,9 +7218,32 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Page with text about the editorial team and contributors of a textbook.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "परिषद्, इस पाठ्यपुस््तक मेें सहयोग प्रदान करने के लिए विज्ान एवं गणित  शिक्षाक्षा विभाग",
+          "मेें कार््यरत सुष््ममिता जोशी, वरिष्‍ठ अनुसंधान सहयोगी; मंजूू महार, वरिष्‍ठ अनुसंधान सहयोगी",
+          "के योगदान की सराहना करती है। इसके साथ ही किशोर सिंघल, डी.टी.पी. ऑपरेटर (संविदा);",
+          "अभिलाष शुक्ला, डी.टी.पी. ऑपरेटर (संविदा); टंकण हिंदी (संविदा) के पद पर कार््यरत",
+          "विशाल शर््ममा, दीपक और गिरिश गोयल का सहयोग भी प्रशंसनीय है।",
+          "परिषद् पुस्‍तक को अंतिम रूप  देने और संपादन के लिए प्रकाशन प्रभाग के  सदस्‍यों",
+          "दिनेश वशिष्ट, संपादक (संविदा); कहकशा, सहायक संपादक (संविदा); राकेश कुमार,",
+          "सीनियर प्रूूफ रीडर; राहिल अं"
+        ],
+        "concepts": [
+          "textbook",
+          "editorial team",
+          "contributors",
+          "publishing house"
+        ],
+        "context_relation": "The image is a page from a textbook, showing the editorial team and contributors.",
+        "limitations": [
+          "The image does not show any visual elements or diagrams."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7227,9 +7259,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7245,7 +7286,7 @@
       "asset_path": "page-0012.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -7263,9 +7304,35 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook in Hindi, discussing the importance of a conducive environment for students to develop mathematical thinking, and the need for a supportive atmosphere to achieve the goals of the textbook.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "शिक्षक लिए शब््द",
+          "हम आशा करते  हैैं  कि  गणित प्रकाश पाठ्यपुस््तक     , गणित जैसे रोमांचक विषय को सीखने के",
+          "आनंद को अगली पीढ़ी तक पहुँचाने के महत््वपूर््ण    कार््य को   पूर््ण  करने  मेें एक दृढ़ समर््थक एवं",
+          "मार््गदर््शक के रूप  मेें आपकी सहायता करेगी।",
+          "इस  कार््य के लिए एक अनुकूूल वातावरण प्रदान करना आवश््यक  है जो  विद्यार््थथियों  के",
+          "मस््ततिष््क       मेें गणितीय चिंतन को विकसित करने  मेें सहायता करेगा। प्राय: कक्षाक्षाओं  मेें विद्यार््थथियों",
+          "को जो कुछ भी बताया जाता है, उसे वे केवल सुनते   हैैं या बोर््ड पर जो कुछ लिखा जाता है,",
+          "उसे कॉपी  मेें उतारते  हैैं। इस तरह की",
+          "शिक्षक लिए शब््द"
+        ],
+        "concepts": [
+          "Mathematics textbook",
+          "Supportive environment",
+          "Mathematical thinking",
+          "Advising students",
+          "Mathematics as an engaging subject"
+        ],
+        "context_relation": "The text discusses the importance of a conducive environment for students to develop mathematical thinking and achieve the goals of the textbook.",
+        "limitations": [
+          "The text does not provide specific details about the textbook or its content.",
+          "The text does not include any visual elements or diagrams."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7281,9 +7348,35 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook in Hindi, discussing the importance of a conducive environment for students to develop mathematical thinking and the role of teachers in guiding them.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "शिक्षक लिए शब््द",
+          "हम आशा करते  हैैं  कि  गणित प्रकाश पाठ्यपुस््तक     , गणित जैसे रोमांचक विषय को सीखने के",
+          "आनंद को अगली पीढ़ी तक पहुँचाने के महत््वपूर््ण    कार््य को   पूर््ण  करने  मेें एक दृढ़ समर््थक एवं",
+          "मार््गदर््शक के रूप  मेें आपकी सहायता करेगी।",
+          "इस  कार््य के लिए एक अनुकूूल वातावरण प्रदान करना आवश््यक  है जो  विद्यार््थथियों  के",
+          "मस््ततिष््क       मेें गणितीय चिंतन को विकसित करने  मेें सहायता करेगा। प्राय: कक्षाक्षाओं  मेें विद्यार््थथियों",
+          "को जो कुछ भी बताया जाता है, उसे वे केवल सुनते   हैैं या बोर््ड पर जो कुछ लिखा जाता है,",
+          "उसे कॉपी  मेें उतारते  हैैं। इस तरह की",
+          "शिक्षक लिए शब््द"
+        ],
+        "concepts": [
+          "Mathematics",
+          "Teaching",
+          "Student Engagement",
+          "Mathematical Thinking",
+          "Conducive Environment"
+        ],
+        "context_relation": "The text discusses the importance of a conducive environment for students to develop mathematical thinking and the role of teachers in guiding them.",
+        "limitations": [
+          "The text is in Hindi and may not be easily understood by non-Hindi speakers.",
+          "The text does not provide specific examples or illustrations to support its points."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7299,7 +7392,7 @@
       "asset_path": "page-0013.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
