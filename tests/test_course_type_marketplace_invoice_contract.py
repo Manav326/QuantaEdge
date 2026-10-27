@@ -340,7 +340,7 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
         self.assertIn("trg_finance_payout_statement_document_immutable", migration)
         self.assertIn("trg_finance_payout_statement_event_immutable", migration)
         self.assertIn("MAX_PAGES", renderer)
-        self.assertIn("not a GST tax invoice", renderer.lower())
+        self.assertIn("not a gst tax invoice", renderer.lower())
         self.assertIn("TDS/TCS certificate", renderer)
         self.assertIn("createsArchivedStyleBatchReportWithContinuationPagesAndA4Geometry", renderer_test)
         self.assertIn("recipientAdviceIncludesOneRecipientOnlyAndBuildsWithHindiNames", renderer_test)
