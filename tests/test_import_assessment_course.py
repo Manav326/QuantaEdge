@@ -126,9 +126,13 @@ class AssessmentCourseImporterTests(unittest.TestCase):
         self.assertEqual(snapshot["answer_payload"], {"kind": "UNRESOLVED", "value": ""})
         self.assertEqual(snapshot["answer_review_status"], "PENDING_HUMAN_REVIEW")
 
-    def test_course_key_format_is_not_the_generated_public_id_format(self) -> None:
+    def test_course_key_rejects_an_eight_character_public_id_lookalike(self) -> None:
         self.assertRegex("BPSC_TRE_CS_PYQ_SERIES", importer.COURSE_KEY_RE)
-        self.assertNotRegex("INSABCDE", importer.COURSE_KEY_RE)
+        args = argparse.Namespace(manifest=None)
+        with self.assertRaisesRegex(importer.ImportErrorSafe, "generated public course ID"):
+            importer.complete_course_fields({
+                "course": {"code": "INSABCDE", "display_name": "Example Course", "curriculum_version": "1.0"}
+            })
         self.assertRegex("tre-computer-science-paper-1", importer.PACKAGE_ID_RE)
 
     def test_database_url_must_be_localhost(self) -> None:
