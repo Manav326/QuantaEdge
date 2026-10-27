@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 29,
+    "assets_selected": 33,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "6df8719c431e8495baea9fcb",
-      "8dd11b510873d1132e7d0f11",
-      "0fe032d850e14e31639accb3",
-      "8eccf1365f1e503d3024e5af",
-      "189d6d49165652eff4bfdecd"
+      "54c3bb0af767e0d882e29d99",
+      "7f95a3c423c3e2caac12f518",
+      "15aa1e6b63962e0acc4236d2",
+      "e9aa018abe23d19b8062e4d5",
+      "ebf0d82ce37ab1fa65e01da7"
     ],
     "assets_eligible": 1156,
-    "assets_analyzed": 28,
-    "assets_remaining": 1128,
-    "assets_completion_percent": 2.4,
-    "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 24,
+    "assets_analyzed": 32,
+    "assets_remaining": 1124,
+    "assets_completion_percent": 2.8,
+    "assets_failed": 23,
+    "assets_skipped_from_checkpoint": 28,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1236,6 +1236,189 @@
       "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
       "source_pdf_page_number": 11,
       "asset_path": "page-0011.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "54c3bb0af767e0d882e29d99",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d1524bab69aff0f0c1664cf673e04ec111e34bb3558cdfe841d48920e3ab2a1b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, textured, and irregularly shaped object that appears to be a splash or a smear of paint.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "सदस्य-समन्वयक (हिं�ंदीीसंंस्करण)",
+          "टी.पी. शर्माा�, आचार्यय, वि�ज्ञाान एवं गणििRत शि�क्षाा वि�भााग, रा.शैै.अ.प्र.प., नई दि�ल्लीी",
+          "अनुुवादक",
+          "आकांक्षा, पी.जी.टी. (गणित), मूल     शैक्षणिक    इकाई, परीक्षा शाखा, शिक्षानिदेशाललय, दिल््ललीली",
+          "ॠषिके  श कुमार, सहायक आचार््य, विज्ान एवं गणित शिक्षाविभाग, रा.शै.अ.प्र.प., नई दिल््लली",
+          "नीरज कुमार, शोध छात्र, हिंदी विभाग, दिल््लली विश्‍वविद्याललय, नई दिल््ललीली",
+          "विजय राज सिंह शेखावत, सहायक निदेशक,  वैज्ञानिक  तथा तकनीकी शब्दावलली आयोोग,  शिक्षा",
+          "मंत्राललय, नई दिल््लली",
+          "विनय कुमार, सहायक आचार््य, दिल््लली विश्‍वविद्याललय, नई दिल््ललीली"
+        ],
+        "concepts": [
+          "Hindi",
+          "Education",
+          "Textbook",
+          "Illustration"
+        ],
+        "context_relation": "The image is an illustration of a page from a textbook in Hindi.",
+        "limitations": [
+          "The image does not provide specific details about the content of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-27T00:19:48Z"
+    },
+    {
+      "asset_id": "7f95a3c423c3e2caac12f518",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d1524bab69aff0f0c1664cf673e04ec111e34bb3558cdfe841d48920e3ab2a1b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red, textured, and irregularly shaped object that appears to be a splash or a smear of paint.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a red, irregularly shaped object.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond its visual appearance."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-27T00:20:01Z"
+    },
+    {
+      "asset_id": "15aa1e6b63962e0acc4236d2",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d1524bab69aff0f0c1664cf673e04ec111e34bb3558cdfe841d48920e3ab2a1b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook in Hindi with a list of authors and translators.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "सदस्य-समन्वयक (हिंदी)",
+          "टी.पी. शर्मा, आचार्य, विाज्ञाान एवं गणििRत शिाक्षा विाभााग, रा.शैै.अ.प्र.प., नई दिाल्ली",
+          "अनुुवादक",
+          "आकांक्षा, पी.जी.टी. (गणित), मूल शैक्षणिक इकाई, परीक्षा शाखा, शिक्षानिदेशाललय, दिल््ललीली",
+          "ॠषिके  श कुमार, सहायक आचार््य, विाज्ञाान एवं गणित शिक्षाविभाग, रा.शै.अ.प्र.प., नई दिाल्लली",
+          "नीरज कुमार, शोध छात्र, हिंदी विभाग, दिल््लली विश्‍वविद्याललय, नई दिाल्ललीली",
+          "विजय राज सिंह शेखावत, सहायक निदेशक,  वैज्ञानिक  तथा तकनीकी शब्दावलली आयोोग,  शिक्षा मंत्राललय, नई दिाल्लली",
+          "विनय कुमार, सहायक आचार््य, दिल््लली विश्‍वविद्याललय, नई दिाल्ललीली"
+        ],
+        "concepts": [
+          "Hindi textbook",
+          "Authors",
+          "Translators",
+          "Educational content editor"
+        ],
+        "context_relation": "The image is a page from a textbook in Hindi, listing the authors and translators.",
+        "limitations": [
+          "The image does not show any visual elements or diagrams.",
+          "The image does not provide any numerical data or formulas."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-27T00:22:32Z"
+    },
+    {
+      "asset_id": "e9aa018abe23d19b8062e4d5",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d1524bab69aff0f0c1664cf673e04ec111e34bb3558cdfe841d48920e3ab2a1b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page with text in Hindi, likely a textbook page.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "सदस्य-समन्वयक (हिं�ंदीीसंंस्करण)",
+          "टी.पी. शर्माा�, आचार्यय, वि�ज्ञाान एवं गणििRत शि�क्षाा वि�भााग, रा.शैै.अ.प्र.प., नई दि�ल्लीी",
+          "अनुुवादक",
+          "आकांक्षा, पी.जी.टी. (गणित), मूल     शैक्षणिक    इकाई, परीक्षा शाखा, शिक्षानिदेशाललय, दिल््ललीली",
+          "ॠषिके  श कुमार, सहायक आचार््य, विज्ान एवं गणित शिक्षाविभाग, रा.शै.अ.प्र.प., नई दिल््लली",
+          "नीरज कुमार, शोध छात्र, हिंदी विभाग, दिल््लली विश्‍वविद्याललय, नई दिल््ललीली",
+          "विजय राज सिंह शेखावत, सहायक निदेशक,  वैज्ञानिक  तथा तकनीकी शब्दावलली आयोोग,  शिक्षा",
+          "मंत्राललय, नई दिल््लली",
+          "विनय कुमार, सहायक आचार््य, दिल््लली विश्‍वविद्याललय, नई दिल््ललीली"
+        ],
+        "concepts": [
+          "Hindi textbook page",
+          "Hindi language",
+          "Educational content editor",
+          "Textbook page description",
+          "Hindi language translation",
+          "Hindi language education",
+          "Hindi language translation and education",
+          "Hindi language translation and education",
+          "Hindi language translation and education",
+          "Hindi language translation and education"
+        ],
+        "context_relation": "The image is a page from a Hindi textbook, likely used for educational content editing.",
+        "limitations": [
+          "The image does not show any visual elements other than text.",
+          "The image does not provide any visual information about the content of the textbook.",
+          "The image does not show any specific educational content or examples.",
+          "The image does not show any visual aids or diagrams."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-27T00:25:21Z"
+    },
+    {
+      "asset_id": "ebf0d82ce37ab1fa65e01da7",
+      "asset_sha256": "26c86d8aa5140c81401dea3b5022214ef9cabbdaf78b9367bdb593d7cc6e989b",
+      "page_text_context_sha256": "d1524bab69aff0f0c1664cf673e04ec111e34bb3558cdfe841d48920e3ab2a1b",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 12,
+      "asset_path": "page-0012.jpg",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",

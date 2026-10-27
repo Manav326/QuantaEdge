@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 5,
     "inventory_asset_rows": 1156,
     "eligible_visual_asset_rows": 1156,
-    "raw_analysis_result_rows": 50,
-    "successful_visual_analyses": 28,
-    "missing_visual_analyses": 1106,
-    "failed_visual_analyses": 22,
+    "raw_analysis_result_rows": 55,
+    "successful_visual_analyses": 32,
+    "missing_visual_analyses": 1101,
+    "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1133,
+    "unresolved_count": 1129,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -6620,9 +6620,33 @@
       "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red, textured, and irregularly shaped object that appears to be a splash or a smear of paint.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "सदस्य-समन्वयक (हिं�ंदीीसंंस्करण)",
+          "टी.पी. शर्माा�, आचार्यय, वि�ज्ञाान एवं गणििRत शि�क्षाा वि�भााग, रा.शैै.अ.प्र.प., नई दि�ल्लीी",
+          "अनुुवादक",
+          "आकांक्षा, पी.जी.टी. (गणित), मूल     शैक्षणिक    इकाई, परीक्षा शाखा, शिक्षानिदेशाललय, दिल््ललीली",
+          "ॠषिके  श कुमार, सहायक आचार््य, विज्ान एवं गणित शिक्षाविभाग, रा.शै.अ.प्र.प., नई दिल््लली",
+          "नीरज कुमार, शोध छात्र, हिंदी विभाग, दिल््लली विश्‍वविद्याललय, नई दिल््ललीली",
+          "विजय राज सिंह शेखावत, सहायक निदेशक,  वैज्ञानिक  तथा तकनीकी शब्दावलली आयोोग,  शिक्षा",
+          "मंत्राललय, नई दिल््लली",
+          "विनय कुमार, सहायक आचार््य, दिल््लली विश्‍वविद्याललय, नई दिल््ललीली"
+        ],
+        "concepts": [
+          "Hindi",
+          "Education",
+          "Textbook",
+          "Illustration"
+        ],
+        "context_relation": "The image is an illustration of a page from a textbook in Hindi.",
+        "limitations": [
+          "The image does not provide specific details about the content of the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6638,9 +6662,18 @@
       "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red, textured, and irregularly shaped object that appears to be a splash or a smear of paint.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a red, irregularly shaped object.",
+        "limitations": [
+          "The image does not provide any specific information or context beyond its visual appearance."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6656,9 +6689,33 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook in Hindi with a list of authors and translators.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "सदस्य-समन्वयक (हिंदी)",
+          "टी.पी. शर्मा, आचार्य, विाज्ञाान एवं गणििRत शिाक्षा विाभााग, रा.शैै.अ.प्र.प., नई दिाल्ली",
+          "अनुुवादक",
+          "आकांक्षा, पी.जी.टी. (गणित), मूल शैक्षणिक इकाई, परीक्षा शाखा, शिक्षानिदेशाललय, दिल््ललीली",
+          "ॠषिके  श कुमार, सहायक आचार््य, विाज्ञाान एवं गणित शिक्षाविभाग, रा.शै.अ.प्र.प., नई दिाल्लली",
+          "नीरज कुमार, शोध छात्र, हिंदी विभाग, दिल््लली विश्‍वविद्याललय, नई दिाल्ललीली",
+          "विजय राज सिंह शेखावत, सहायक निदेशक,  वैज्ञानिक  तथा तकनीकी शब्दावलली आयोोग,  शिक्षा मंत्राललय, नई दिाल्लली",
+          "विनय कुमार, सहायक आचार््य, दिल््लली विश्‍वविद्याललय, नई दिाल्ललीली"
+        ],
+        "concepts": [
+          "Hindi textbook",
+          "Authors",
+          "Translators",
+          "Educational content editor"
+        ],
+        "context_relation": "The image is a page from a textbook in Hindi, listing the authors and translators.",
+        "limitations": [
+          "The image does not show any visual elements or diagrams.",
+          "The image does not provide any numerical data or formulas."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6674,9 +6731,42 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Page with text in Hindi, likely a textbook page.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "सदस्य-समन्वयक (हिं�ंदीीसंंस्करण)",
+          "टी.पी. शर्माा�, आचार्यय, वि�ज्ञाान एवं गणििRत शि�क्षाा वि�भााग, रा.शैै.अ.प्र.प., नई दि�ल्लीी",
+          "अनुुवादक",
+          "आकांक्षा, पी.जी.टी. (गणित), मूल     शैक्षणिक    इकाई, परीक्षा शाखा, शिक्षानिदेशाललय, दिल््ललीली",
+          "ॠषिके  श कुमार, सहायक आचार््य, विज्ान एवं गणित शिक्षाविभाग, रा.शै.अ.प्र.प., नई दिल््लली",
+          "नीरज कुमार, शोध छात्र, हिंदी विभाग, दिल््लली विश्‍वविद्याललय, नई दिल््ललीली",
+          "विजय राज सिंह शेखावत, सहायक निदेशक,  वैज्ञानिक  तथा तकनीकी शब्दावलली आयोोग,  शिक्षा",
+          "मंत्राललय, नई दिल््लली",
+          "विनय कुमार, सहायक आचार््य, दिल््लली विश्‍वविद्याललय, नई दिल््ललीली"
+        ],
+        "concepts": [
+          "Hindi textbook page",
+          "Hindi language",
+          "Educational content editor",
+          "Textbook page description",
+          "Hindi language translation",
+          "Hindi language education",
+          "Hindi language translation and education",
+          "Hindi language translation and education",
+          "Hindi language translation and education",
+          "Hindi language translation and education"
+        ],
+        "context_relation": "The image is a page from a Hindi textbook, likely used for educational content editing.",
+        "limitations": [
+          "The image does not show any visual elements other than text.",
+          "The image does not provide any visual information about the content of the textbook.",
+          "The image does not show any specific educational content or examples.",
+          "The image does not show any visual aids or diagrams."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -6692,7 +6782,7 @@
       "asset_path": "page-0012.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
