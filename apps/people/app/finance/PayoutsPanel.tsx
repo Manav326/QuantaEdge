@@ -51,7 +51,16 @@ type BeneficiaryBalance={
   bank_ifsc?:string|null;bank_account_last4?:string|null;earned_paise:number;refunded_paise:number;
   charges_paise:number;paid_paise:number;reversed_paise:number;reserved_paise:number;
   net_earned_paise:number;net_paid_paise:number;refund_reserve_paise:number;payable_paise:number;recovery_due_paise:number;
+  source_sale_count?:number;unreconciled_fee_order_count?:number;
+  payout_readiness_status?:string;payout_readiness_reason?:string;
   payout_supported?:boolean;payout_support_reason?:string
+};
+type TaxOverview={
+  currency:string;verifiedSalesPaise:number;verifiedOrderCount:number;recordedOutputTaxPaise:number;
+  processedCreditNoteTaxPaise:number;netOutputTaxBeforeInputCreditsPaise:number;
+  recordedProcessorFeeTaxPaise:number;approvedTaxProfiles:number;pendingTaxProfiles:number;
+  gstTcsLedgerStatus:string;incomeTaxTdsLedgerStatus:string;finalGovernmentTaxPayableStatus:string;
+  finalTaxAmountIncludesInputCredits:boolean;nonInrCurrencies?:string[]
 };
 type BalanceResponse={totals:{netEarnedPaise:number;refundReversalsPaise:number;confirmedChargesPaise:number;
   netPaidPaise:number;payoutReversalsPaise:number;reservedPaise:number;refundReservePaise:number;payablePaise:number;
@@ -66,7 +75,9 @@ type FeeAdjustmentRequest={id:number;order_id:number;previous_processing_fee_pai
   requested_processing_fee_paise:number;requested_fee_tax_paise:number;settlement_reference:string;source_type:string;reason:string;
   requested_by_staff_id:number;requested_by_name?:string|null;created_at:string;course_title:string;provider_payment_id:string;currency:string;canReview?:boolean};
 type LedgerHistoryEvent={id:number;event_type:string;amount_paise:number;currency:string;payment_reference?:string|null;created_at:string;
-  allocation_id:number;order_id:number;provider_payment_id?:string|null;course_title?:string|null;payout_id?:number|null;
+  allocation_id:number;order_id:number;provider_payment_id?:string|null;course_title?:string|null;
+  source_institution_id?:number|null;source_institution_name?:string|null;marketplace_institution_id?:number|null;marketplace_institution_name?:string|null;
+  payout_id?:number|null;
   payout_public_id?:string|null;payout_status?:string|null;transfer_reference?:string|null;payout_batch_id?:number|null;
   payout_period_start?:string|null;fee_adjustment_id?:string|null;settlement_reference?:string|null;reason?:string|null};
 
@@ -111,6 +122,9 @@ export default function PayoutsPanel(){
   const [feeOrders,setFeeOrders]=useState<FeeOrder[]>([]);
   const [batches,setBatches]=useState<Batch[]>([]);
   const [balances,setBalances]=useState<BalanceResponse|null>(null);
+  const [taxOverview,setTaxOverview]=useState<TaxOverview|null>(null);
+  const [recipientSearch,setRecipientSearch]=useState('');
+  const [recipientReadinessFilter,setRecipientReadinessFilter]=useState('ALL');
   const [unmatchedEvents,setUnmatchedEvents]=useState<ProviderEvent[]>([]);
   const [reconciliationCandidates,setReconciliationCandidates]=useState<ReconciliationCandidate[]>([]);
   const [reconciliationTargets,setReconciliationTargets]=useState<Record<string,string>>({});
@@ -167,9 +181,10 @@ export default function PayoutsPanel(){
         api<ProviderEvent[]>(BASE+'/payout-provider-events/unmatched'),
         api<ReconciliationCandidate[]>(BASE+'/payout-reconciliation-candidates'),
         api<FeeAdjustmentCandidate[]>(BASE+'/course-order-fee-adjustment-candidates?limit=51&offset='+feeAdjustmentOffset+'&q='+encodeURIComponent(feeAdjustmentSearch)),
-        api<FeeAdjustmentRequest[]>(BASE+'/course-order-fee-adjustments/pending?limit=200')
+        api<FeeAdjustmentRequest[]>(BASE+'/course-order-fee-adjustments/pending?limit=200'),
+        api<TaxOverview>(BASE+'/payout-tax-overview')
       ];
-      const sectionNames=['Payout catalog','Payout settings','Payout overview','Beneficiaries','Fee reconciliation queue','Payout batches','Beneficiary balances','Unmatched provider events','Payout reconciliation candidates','Fee-adjustment candidates','Pending fee corrections'];
+      const sectionNames=['Payout catalog','Payout settings','Payout overview','Beneficiaries','Fee reconciliation queue','Payout batches','Beneficiary balances','Unmatched provider events','Payout reconciliation candidates','Fee-adjustment candidates','Pending fee corrections','Tax & compliance snapshot'];
       const results=await Promise.allSettled(requests);
       const read=(index:number):any=>results[index].status==='fulfilled'?(results[index] as PromiseFulfilledResult<any>).value:null;
       const issues=results.flatMap((result,index)=>result.status==='rejected'?[{
@@ -179,6 +194,7 @@ export default function PayoutsPanel(){
       const b=read(3) as Beneficiary[]|null,f=read(4) as FeeOrder[]|null,bs=read(5) as Batch[]|null;
       const bal=read(6) as BalanceResponse|null,ue=read(7) as ProviderEvent[]|null,rc=read(8) as ReconciliationCandidate[]|null;
       const fc=read(9) as FeeAdjustmentCandidate[]|null,pfa=read(10) as FeeAdjustmentRequest[]|null;
+      const tx=read(11) as TaxOverview|null;
       if(c){
         setCatalog(c);
         const companies=c.legalEntities.filter(e=>e.status==='ACTIVE'&&['PLATFORM','COMPANY'].includes(e.entity_kind));
@@ -210,6 +226,7 @@ export default function PayoutsPanel(){
       if(rc)setReconciliationCandidates(Array.isArray(rc)?rc:[]);
       if(fc){setFeeAdjustmentCandidates(Array.isArray(fc)?fc.slice(0,50):[]);setFeeAdjustmentQueueHasMore(fc.length>50);}
       if(pfa)setPendingFeeAdjustments(Array.isArray(pfa)?pfa:[]);
+      if(tx)setTaxOverview(tx);else setTaxOverview(null);
       setLoadIssues(issues);
     }
     finally{setLoading(false);}
@@ -224,6 +241,18 @@ export default function PayoutsPanel(){
   };
   const activeInstitutions=catalog?.institutions.filter(i=>i.status==='ACTIVE')||[];
   const activeCompanies=catalog?.legalEntities.filter(e=>e.status==='ACTIVE'&&['PLATFORM','COMPANY'].includes(e.entity_kind))||[];
+  const filteredBalances=(balances?.beneficiaries||[]).filter(balance=>{
+    const query=recipientSearch.trim().toLocaleLowerCase();
+    const haystack=[balance.recipient_name,balance.recipient_type,balance.currency,balance.bank_ifsc||'',balance.payout_readiness_reason||'']
+      .join(' ').toLocaleLowerCase();
+    const matchesQuery=!query||haystack.includes(query);
+    const status=balance.payout_readiness_status||'';
+    const matchesStatus=recipientReadinessFilter==='ALL'
+      ||(recipientReadinessFilter==='READY'&&status==='READY_FOR_BATCH_REVIEW')
+      ||(recipientReadinessFilter==='BLOCKED'&&status==='BLOCKED')
+      ||status===recipientReadinessFilter;
+    return matchesQuery&&matchesStatus;
+  });
   const recipientOptions=beneficiaryForm.type==='INSTITUTION'
     ?activeInstitutions.map(i=>({id:i.id,label:i.display_name+' · '+i.tenant_code}))
     :activeCompanies.map(e=>({id:e.id,label:e.legal_name+' · '+e.entity_kind}));
@@ -472,6 +501,28 @@ export default function PayoutsPanel(){
       </section>
       {(balances?.totals.recoveryDuePaise??0)>0&&<p className={styles.payoutHint}>Recovery due means later refunds, reversals or reviewed fee corrections reduced a recipient’s net balance after a transfer. Future payable earnings offset that amount before another payout; QuantaEdge does not initiate a separate automatic bank debit.</p>}
 
+      <section className={styles.panel} id="payout-tax-compliance">
+        <div className={styles.panelHead}><div><h2>Tax & compliance snapshot</h2>
+          <p>Recorded figures from the existing verified-sale and credit-note records. This is a reconciliation snapshot, not the final amount payable to the Government.</p></div>
+          <a className={styles.secondarySmall} href="/finance">Open Finance & Billing</a></div>
+        {taxOverview?<>
+          <div className={styles.payoutTaxSummaryGrid}>
+            <article><span>Verified sales</span><strong>{money(taxOverview.verifiedSalesPaise,taxOverview.currency)}</strong><small>{taxOverview.verifiedOrderCount.toLocaleString('en-IN')} verified order(s)</small></article>
+            <article><span>Recorded output tax</span><strong>{money(taxOverview.recordedOutputTaxPaise,taxOverview.currency)}</strong><small>Saved on verified course sales</small></article>
+            <article><span>Processed credit-note tax</span><strong>{money(taxOverview.processedCreditNoteTaxPaise,taxOverview.currency)}</strong><small>Confirmed refund credit notes only</small></article>
+            <article><span>Net output tax before input credits</span><strong>{money(taxOverview.netOutputTaxBeforeInputCreditsPaise,taxOverview.currency)}</strong><small>Not a final Government payable</small></article>
+          </div>
+          <div className={styles.payoutTaxCoverage}>
+            <div><strong>GST tax on course sales</strong><span className={styles.payoutStatusNeutral}>Recorded</span><small>Tax amount on verified sales, less processed credit-note tax; input tax credits and returns are not included.</small></div>
+            <div><strong>Tax on payment-provider fees</strong><span className={styles.payoutStatusNeutral}>Separate ledger</span><small>{money(taxOverview.recordedProcessorFeeTaxPaise,taxOverview.currency)} recorded as provider-fee tax; it is not course-sale GST.</small></div>
+            <div><strong>GST TCS</strong><span className={styles.payoutStatusPending}>Not represented</span><small>No approved recipient-level TCS liability/remittance ledger exists yet. This must not be treated as ₹0.</small></div>
+            <div><strong>Income-tax TDS</strong><span className={styles.payoutStatusPending}>Not represented</span><small>No approved recipient-level TDS liability/remittance ledger exists yet. This must not be treated as ₹0.</small></div>
+          </div>
+          {(taxOverview.nonInrCurrencies||[]).length>0&&<p className={styles.payoutAlertWarning} role="status">Non-INR sales use {taxOverview.nonInrCurrencies?.join(', ')} and are excluded from this INR-only tax snapshot. Reconcile each currency separately; no foreign-exchange conversion is assumed.</p>}
+          <p className={styles.payoutHint}>Approved tax profiles: {taxOverview.approvedTaxProfiles.toLocaleString('en-IN')} · awaiting approval: {taxOverview.pendingTaxProfiles.toLocaleString('en-IN')}. Confirm the legal seller and applicability/rate/base with the tax adviser before treating any figure as a tax return liability or enabling withholding/remittance.</p>
+        </>:<p className={styles.payoutEmpty}>Tax records could not be refreshed. Do not infer a zero tax amount; refresh or review Finance & Billing.</p>}
+      </section>
+
       <nav className={styles.payoutReadiness} aria-label="Monthly payout workflow">
         <div><h3>Monthly payout workflow</h3><p>Use this checklist to move from setup to a reviewed batch. Transfers are sent only by an independent approver.</p></div>
         <div className={styles.payoutReadinessSteps}>
@@ -488,25 +539,59 @@ export default function PayoutsPanel(){
       {(balances?.unsupportedCurrencies?.length??0)>0&&<div className={styles.payoutAlertWarning} role="alert"><b>Non-INR revenue is tracked separately.</b> Outstanding allocations use {balances?.unsupportedCurrencies?.join(', ')}. This RazorpayX workflow pays INR only, performs no currency conversion, and excludes non-INR amounts from INR totals and batches. Resolve those balances through a separately approved currency-compatible settlement route; they do not prevent an otherwise eligible INR batch.</div>}
 
       <section className={styles.panel}>
-        <div className={styles.panelHead}><div><h2>Beneficiary balances</h2>
-          <p>Balances come from the existing allocation and refund ledgers. Payable amounts are net of recorded refunds, confirmed charges, previous transfers, active payout reservations and the configured refund reserve.</p></div>
+        <div className={styles.panelHead}><div><h2>All institutions & companies</h2>
+          <p>Every active institution and eligible company is listed, including zero-earning recipients. Balances reflect the existing allocation, refund, fee and payout ledgers; a readiness label is not permission to bypass batch approval.</p></div>
           <button type="button" className={styles.secondary} onClick={()=>void load()} disabled={loading||busy}>Refresh balances</button></div>
-        {balances?.beneficiaries?.length?<><p className={styles.payoutHint}>On smaller screens, scroll this table horizontally to compare the full breakdown.</p><div className={styles.payoutBalanceWrap}><table className={styles.payoutBalanceTable}>
-          <thead><tr><th>Recipient</th><th>Gross allocated</th><th>Refunds</th><th>Confirmed charges</th><th>Net earnings</th><th>Already paid</th><th>Reserved</th><th>Refund holdback</th><th>Payable now</th><th>Recovery due</th><th>History</th></tr></thead>
-          <tbody>{balances.beneficiaries.map((balance,i)=><tr key={balance.recipient_type+':'+balance.recipient_name+':'+i}>
-            <td><strong>{balance.recipient_name}</strong><small>{balance.recipient_type} · {balance.payout_supported===false?'Unsupported currency for payouts':balance.beneficiary_status==='MISSING'?'Bank account not approved':balance.bank_ifsc?balance.bank_ifsc+' · ****'+balance.bank_account_last4:label(balance.beneficiary_status)}</small></td>
-            <td>{balance.payout_supported===false?'—':money(balance.earned_paise,balance.currency)}</td>
-            <td>{balance.payout_supported===false?'—':money(balance.refunded_paise,balance.currency)}</td>
-            <td>{balance.payout_supported===false?'—':money(balance.charges_paise,balance.currency)}</td>
-            <td>{balance.payout_supported===false?'—':money(balance.net_earned_paise,balance.currency)}</td>
-            <td>{balance.payout_supported===false?'—':money(balance.net_paid_paise,balance.currency)}</td>
-            <td>{balance.payout_supported===false?'—':money(balance.reserved_paise,balance.currency)}</td>
-            <td>{balance.payout_supported===false?'—':money(balance.refund_reserve_paise,balance.currency)}</td>
-            <td><strong>{balance.payout_supported===false?'—':money(balance.payable_paise,balance.currency)}</strong></td>
-            <td>{balance.payout_supported===false?'—':balance.recovery_due_paise>0?<span className={styles.payoutStatusDanger}>{money(balance.recovery_due_paise,balance.currency)}</span>:money(0,balance.currency)}</td>
-            <td><button type="button" className={styles.secondarySmall} disabled={loading||busy} onClick={()=>void openBalanceLedger(balance)}>View ledger</button></td>
-          </tr>)}</tbody>
-        </table></div></>:<p className={styles.payoutEmpty}>{loadIssues.some(issue=>issue.section==='Beneficiary balances')?'Balances could not be refreshed. Review the request failure above.':'No verified course-sale allocations have been posted yet. Captured sales appear after the existing financial finalizer adds ledger entries.'}</p>}
+        <div className={styles.payoutRecipientFilters}>
+          <label>Search recipients<input aria-label="Search recipients" value={recipientSearch} onChange={e=>setRecipientSearch(e.target.value)}
+            maxLength={160} placeholder="Institution, company, bank IFSC or blocker"/></label>
+          <label>Transfer readiness<select aria-label="Filter by transfer readiness" value={recipientReadinessFilter} onChange={e=>setRecipientReadinessFilter(e.target.value)}>
+            <option value="ALL">All recipients</option><option value="READY">Ready for batch review</option>
+            <option value="BLOCKED">Blocked / action needed</option><option value="BELOW_MINIMUM">Below payout minimum</option>
+            <option value="NO_PAYABLE_BALANCE">No payable balance</option>
+          </select></label>
+          <span>{filteredBalances.length.toLocaleString('en-IN')} of {(balances?.beneficiaries||[]).length.toLocaleString('en-IN')} recipient balances</span>
+        </div>
+        {balances?.beneficiaries?.length?filteredBalances.length?<div className={styles.payoutRecipientGrid}>
+          {filteredBalances.map((balance,i)=>{
+            const readiness=balance.payout_readiness_status||'UNKNOWN';
+            const readinessLabel=readiness==='READY_FOR_BATCH_REVIEW'?'Ready for batch review'
+              :readiness==='NO_PAYABLE_BALANCE'?'No payable balance'
+              :readiness==='BELOW_MINIMUM'?'Below minimum'
+              :readiness==='BLOCKED'?'Blocked / action needed':'Status unavailable';
+            const readinessClass=readiness==='READY_FOR_BATCH_REVIEW'?styles.payoutStatusSuccess
+              :readiness==='NO_PAYABLE_BALANCE'?styles.payoutStatusNeutral:styles.payoutStatusPending;
+            const accountLabel=balance.beneficiary_status==='MISSING'?'No approved bank account'
+              :balance.bank_ifsc?balance.bank_ifsc+' · ****'+(balance.bank_account_last4||'????')
+              :label(balance.beneficiary_status);
+            return <article className={styles.payoutRecipientCard} key={balance.recipient_type+':'+balance.institution_id+':'+balance.legal_entity_id+':'+balance.currency+':'+i}>
+              <div className={styles.payoutRecipientHead}>
+                <div><strong>{balance.recipient_name}</strong><small>{balance.recipient_type==='INSTITUTION'?'Institution':'Company / platform entity'} · {balance.currency}</small></div>
+                <span className={readinessClass}>{readinessLabel}</span>
+              </div>
+              <div className={styles.payoutRecipientMeta}>
+                <span>{(balance.source_sale_count||0).toLocaleString('en-IN')} verified contributing sale(s)</span>
+                <span className={balance.beneficiary_status==='ACTIVE'?styles.payoutStatusSuccess:styles.payoutStatusPending}>{accountLabel}</span>
+              </div>
+              <div className={styles.payoutRecipientFacts}>
+                <div><span>Gross allocated</span><strong>{money(balance.earned_paise,balance.currency)}</strong></div>
+                <div><span>Refunds</span><strong>{money(balance.refunded_paise,balance.currency)}</strong></div>
+                <div><span>Confirmed charges</span><strong>{money(balance.charges_paise,balance.currency)}</strong></div>
+                <div><span>Net earnings</span><strong>{money(balance.net_earned_paise,balance.currency)}</strong></div>
+                <div><span>Already paid</span><strong>{money(balance.net_paid_paise,balance.currency)}</strong></div>
+                <div><span>Reserved / holdback</span><strong>{money(balance.reserved_paise,balance.currency)} / {money(balance.refund_reserve_paise,balance.currency)}</strong></div>
+                <div className={styles.payoutRecipientPayable}><span>Payable now</span><strong>{balance.payout_supported===false?'—':money(balance.payable_paise,balance.currency)}</strong></div>
+                <div><span>Recovery due</span><strong className={balance.recovery_due_paise>0?styles.payoutStatusDanger:undefined}>{money(balance.recovery_due_paise,balance.currency)}</strong></div>
+                <div><span>Fee-reconciliation sales</span><strong>{(balance.unreconciled_fee_order_count||0).toLocaleString('en-IN')}</strong></div>
+              </div>
+              <p className={styles.payoutRecipientReason}>{balance.payout_readiness_reason||balance.payout_support_reason||'Transfer-readiness detail is unavailable; refresh before taking action.'}</p>
+              <div className={styles.payoutRecipientActions}>
+                <button type="button" className={styles.secondarySmall} disabled={loading||busy} onClick={()=>void openBalanceLedger(balance)}>View source & ledger</button>
+              </div>
+            </article>;
+          })}
+        </div>:<p className={styles.payoutEmpty}>No recipients match these filters. Clear search or select “All recipients”.</p>
+        :<p className={styles.payoutEmpty}>{loadIssues.some(issue=>issue.section==='Beneficiary balances')?'Balances could not be refreshed. Review the request failure above.':'No active institutions or company legal entities are available in the recipient catalogue.'}</p>}
       </section>
 
       <section className={styles.panel}>
@@ -773,6 +858,9 @@ export default function PayoutsPanel(){
         <div className={styles.payoutLedgerEventHead}><strong>{ledgerEventLabel(event.event_type)}</strong><b>{money(event.amount_paise,event.currency)}</b></div>
         <small>{event.created_at?new Date(event.created_at).toLocaleString('en-IN'):'Time unavailable'} · Order #{event.order_id} · Allocation #{event.allocation_id}</small>
         {event.course_title&&<span>{event.course_title}</span>}
+        {event.source_institution_name&&<small>Course source institution: {event.source_institution_name}</small>}
+        {event.marketplace_institution_name&&<small>Marketplace institution: {event.marketplace_institution_name}</small>}
+        {(!event.source_institution_name||!event.marketplace_institution_name)&&<small>Institution attribution is unavailable for this event; inspect the order record before final reconciliation.</small>}
         {(event.provider_payment_id||event.payment_reference)&&<small>{event.provider_payment_id?'Payment '+event.provider_payment_id:''}{event.payment_reference?(event.provider_payment_id?' · ':'')+'Reference '+event.payment_reference:''}</small>}
         {event.payout_id&&<small>QuantaEdge transfer #{event.payout_id}{event.payout_batch_id?' · batch #'+event.payout_batch_id:''}{event.payout_period_start?' · period '+new Date(event.payout_period_start+'T12:00:00').toLocaleDateString('en-IN',{month:'short',year:'numeric'}):''}{event.payout_status?' · '+label(event.payout_status):''}{event.transfer_reference?' · UTR '+event.transfer_reference:''}</small>}
         {(event.fee_adjustment_id||event.settlement_reference||event.reason)&&<div className={styles.payoutLedgerEvidence}>{event.fee_adjustment_id&&<small>Fee correction #{event.fee_adjustment_id}</small>}{event.settlement_reference&&<small>Evidence: {event.settlement_reference}</small>}{event.reason&&<small>Reason: {event.reason}</small>}</div>}
