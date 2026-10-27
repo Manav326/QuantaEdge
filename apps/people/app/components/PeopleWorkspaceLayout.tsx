@@ -42,6 +42,7 @@ const NAVIGATION: NavigationGroup[] = [
     { message: 'people.navigation.qaCenter', href: '/qa', icon: '✓', permissions: ['QE_PLATFORM_OWNER'] },
     { message: 'people.navigation.notifications', href: '/notifications', icon: '♧', permissions: ['QE_PLATFORM_OWNER'] },
     { message: 'people.navigation.financeBilling', href: '/finance', icon: '₹', permissions: ['QE_PLATFORM_OWNER'] },
+    { message: 'people.navigation.financePayouts', href: '/finance/payouts', icon: '⇢', permissions: ['QE_FINANCE_PAYOUT_MANAGE'] },
   ] },
   { message: 'people.navigation.group.access', items: [
     { message: 'people.navigation.loginAccess', href: '/access', icon: '⌁', permissions: ['HR_ACCESS_MANAGE'] },
