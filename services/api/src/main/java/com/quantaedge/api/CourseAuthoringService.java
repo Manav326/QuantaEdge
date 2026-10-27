@@ -64,9 +64,10 @@ public class CourseAuthoringService {
         && "BPSC-TRE-4".equalsIgnoreCase(version)
         && "TRE-4 · Computer Science".equals(displayName);
     final String requestedCode;
-    if("ASSESSMENT".equals(type) && !legacyTre4CompatibilityRequest) {
-      if(suppliedCode!=null)
-        throw badRequest("Assessment course identifiers are generated automatically. Omit the code field; the generated public ID is shown after creation.");
+    if("ASSESSMENT".equals(type) && !legacyTre4CompatibilityRequest && suppliedCode==null) {
+      // New Admin/CLI callers omit identifiers. Keep the pre-existing API contract intact for
+      // older callers that still send a code; the unique identity constraint and conflict mapping
+      // below continue to guard that caller-supplied stable key.
       requestedCode=generatedAssessmentCourseKey(displayName);
     } else {
       requestedCode=requiredText(suppliedCode,2,38,"Course code").toUpperCase(java.util.Locale.ROOT);
