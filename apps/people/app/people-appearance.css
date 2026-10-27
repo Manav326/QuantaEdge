@@ -1822,14 +1822,14 @@ html[data-qe-people-appearance] .qe-people-page-slot > [class*="page"] :is(
 }
 
 /* Workspace-wide copy, contrast and compact responsive rules for HRMS screens. */
-html[data-qe-people-appearance] .qe-people-page-slot :is(
+html[data-qe-people-appearance] .qe-people-page-slot :not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) :is(
   [class*="pageHeader"], [class*="PageHeader"], [class*="pageHeading"], [class*="PageHeading"],
   [class*="panelHeading"], [class*="PanelHeading"], [class*="sectionHeading"], [class*="SectionHeading"],
   [class*="detailHeader"], [class*="DetailHeader"], [class*="section-head"], [class*="sectionHead"]
 ) > div > p:not([role="alert"]):not([role="status"]):not([class*="error"]):not([class*="Error"]) {
   display: none;
 }
-html[data-qe-people-appearance] .qe-people-page-slot :where(
+html[data-qe-people-appearance] .qe-people-page-slot :not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) :where(
   input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),
   select, textarea
 ) {
@@ -1837,17 +1837,17 @@ html[data-qe-people-appearance] .qe-people-page-slot :where(
   background: var(--qe-people-field);
   border-color: var(--qe-people-line);
 }
-html[data-qe-people-appearance] .qe-people-page-slot :where(input, textarea)::placeholder {
+html[data-qe-people-appearance] .qe-people-page-slot :not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) :where(input, textarea)::placeholder {
   color: var(--qe-people-muted);
   opacity: 1;
 }
-html[data-qe-people-appearance] .qe-people-page-slot :where(h1, h2, h3, h4, h5, h6, label, legend, th, td, dt, dd) {
+html[data-qe-people-appearance] .qe-people-page-slot :not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) :where(h1, h2, h3, h4, h5, h6, label, legend, th, td, dt, dd) {
   color: var(--qe-people-ink);
 }
-html[data-qe-people-appearance="dark"] .qe-people-page-slot :where(p, small, .small, .sub, figcaption):not([role="alert"]):not([role="status"]):not(.error):not(.notice) {
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) :where(p, small, .small, .sub, figcaption):not([role="alert"]):not([role="status"]):not(.error):not(.notice) {
   color: var(--qe-people-muted);
 }
-html[data-qe-people-appearance="dark"] .qe-people-page-slot :is(.error, .notice, .success, .danger, [role="alert"], [role="status"], [class*="error"], [class*="Error"]) :where(p, small, strong) {
+html[data-qe-people-appearance="dark"] .qe-people-page-slot :not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) :is(.error, .notice, .success, .danger, [role="alert"], [role="status"], [class*="error"], [class*="Error"]) :where(p, small, strong) {
   color: inherit;
 }
 @media (max-width: 1024px) {

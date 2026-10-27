@@ -2395,9 +2395,6 @@ html[data-qe-appearance] .qe-workspace-content :where(input, textarea)::placehol
   color: var(--qe-color-text-muted);
   opacity: 1;
 }
-html[data-qe-appearance] .qe-workspace-content :where(h1, h2, h3, h4, h5, h6, label, legend, th, td, dt, dd) {
-  color: var(--qe-color-text);
-}
 html[data-qe-appearance="dark"] .qe-workspace-content :where(.muted-small, .section-title span, .parent-readonly-note, .qe-workspace-label) {
   color: var(--qe-color-text-muted);
 }
