@@ -271,5 +271,40 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
 
 
 
+    def test_unified_payout_recipient_register_and_tax_visibility_are_explicit(self):
+        payout = (ROOT / "services/api/src/main/java/com/quantaedge/api/FinancePayoutController.java").read_text(encoding="utf-8")
+        panel = (ROOT / "apps/people/app/finance/PayoutsPanel.tsx").read_text(encoding="utf-8")
+        css = (ROOT / "apps/people/app/finance/Finance.module.css").read_text(encoding="utf-8")
+        checklist = (ROOT / "docs/finance/hrms-unified-recipient-tax-settlement-checklist.md").read_text(encoding="utf-8")
+
+        # Active entities begin the query so zero-activity recipients remain visible.
+        self.assertIn("with recipients as (", payout)
+        self.assertIn("from recipients r", payout)
+        self.assertIn("left join balance_by_currency fin", payout)
+        self.assertIn("entity_kind in ('PLATFORM','COMPANY')", payout)
+        self.assertIn("payout_readiness_reason", payout)
+        self.assertIn("unreconciled_fee_order_count", payout)
+
+        # Source and marketplace institutions are distinct, and tax is currency-safe.
+        self.assertIn("source_institution_name", payout)
+        self.assertIn("marketplace_institution_name", payout)
+        self.assertIn('@GetMapping("/payout-tax-overview")', payout)
+        self.assertIn("upper(currency)='INR'", payout)
+        self.assertIn('"gstTcsLedgerStatus","NOT_REPRESENTED"', payout)
+        self.assertIn('"incomeTaxTdsLedgerStatus","NOT_REPRESENTED"', payout)
+
+        # The UI avoids suggesting a zero TCS/TDS liability and no longer depends on
+        # an 11-column horizontal table as the recipient's primary view.
+        self.assertIn("All institutions & companies", panel)
+        self.assertIn("payoutRecipientGrid", panel)
+        self.assertIn("recipientReadinessFilter", panel)
+        self.assertIn("Tax & compliance snapshot", panel)
+        self.assertIn("This must not be treated as ₹0", panel)
+        self.assertIn(".payoutRecipientGrid{", css)
+        self.assertIn("GST TCS", panel)
+        self.assertIn("Income-tax TDS", panel)
+        self.assertIn("never invent a tax rate", checklist.lower())
+
+
 if __name__ == "__main__":
     unittest.main()
