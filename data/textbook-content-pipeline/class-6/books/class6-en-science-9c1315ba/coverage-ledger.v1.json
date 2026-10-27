@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1425,
-    "successful_visual_analyses": 1413,
-    "missing_visual_analyses": 653,
+    "raw_analysis_result_rows": 1430,
+    "successful_visual_analyses": 1418,
+    "missing_visual_analyses": 648,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 665,
+    "unresolved_count": 660,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -53981,9 +53981,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black screen with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No visible text or content to analyze.",
+        "limitations": [
+          "No visible content to analyze."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -53999,9 +54008,41 @@
       "asset_path": "page-0150.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "instructions for using a laboratory thermometer",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Correct way of measuring temperature using a laboratory thermometer",
+          "Fig.7.4: Measuring temperature of warm water",
+          "Activity 7.5: Let us measure",
+          "Take some warm water in a beaker.",
+          "Dip the thermometer in water so that the bulb is immersed in water (Fig. 7.4).",
+          "Observe the rise of liquid column in the thermometer.",
+          "Wait till the column stops rising and note the temperature (do not wait too long; otherwise, the water itself will start to cool).",
+          "What is the temperature of water measured by you? Compare it with the readings of your friends.",
+          "Do you notice that, as soon as you take the thermometer out of the water, the level of liquid column begins to fall?",
+          "This means that the temperature must be read while the thermometer is immersed in water."
+        ],
+        "concepts": [
+          "laboratory thermometer",
+          "temperature",
+          "water",
+          "thermometer",
+          "beaker",
+          "reading thermometer",
+          "rise of liquid column",
+          "temperature measurement"
+        ],
+        "context_relation": "instructions for using a laboratory thermometer",
+        "limitations": [
+          "instructions for using a laboratory thermometer",
+          "temperature measurement",
+          "rise of liquid column",
+          "temperature measurement"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -54017,9 +54058,20 @@
       "asset_path": "assets/308972ead4a328d0c1c5d25d9b2a7ab72f37a14fc49f1295b39a464c7476f1fa.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow textured square with a torn edge, possibly representing a piece of paper or a note.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a visual representation of a piece of paper or a note, possibly related to an educational content.",
+        "limitations": [
+          "The image does not contain any text or information that can be directly related to the content of the textbook page.",
+          "The image is a simple, abstract representation and does not provide specific details about the educational content.",
+          "The image does not show any specific objects or elements that can be directly related to the textbook page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -54035,9 +54087,16 @@
       "asset_path": "assets/a1b2c16f8dfb86a7505df03df6e29414f61d4e1b91fd910777305bfefe6c20d1.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A laboratory setup with a thermometer inserted into a beaker of boiling water.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image represents an experimental setup for observing the temperature of boiling water.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -54053,9 +54112,25 @@
       "asset_path": "assets/6fe83f50e9d8f2a6948e3e4df13e2dd36552e260911e9753e00622542d5e0425.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A laboratory setup with a thermometer immersed in boiling water and another thermometer in ice.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "temperature measurement",
+          "boiling water",
+          "ice",
+          "thermometer",
+          "laboratory setup"
+        ],
+        "context_relation": "The image represents an educational content related to temperature measurement in laboratory settings.",
+        "limitations": [
+          "The image does not provide specific temperature readings.",
+          "The image does not show the actual temperature measurements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

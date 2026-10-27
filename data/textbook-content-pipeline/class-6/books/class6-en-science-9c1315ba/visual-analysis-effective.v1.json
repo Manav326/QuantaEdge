@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9aa37a9269194cef0e601771312fa59fd9245278f6952095edc26d6b024ee5b6",
+  "raw_analysis_sha256": "049c97b39f4e0e728e9c8c2c69ab48b1f8d32704622d2491c18c72fb8894dafb",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -650,7 +650,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T01:31:56Z",
+      "checkpointed_at": "2026-10-27T01:43:49Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -29465,7 +29465,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T01:33:32Z",
+      "checkpointed_at": "2026-10-27T01:45:26Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -35077,7 +35077,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T01:34:54Z",
+      "checkpointed_at": "2026-10-27T01:46:51Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57433,7 +57433,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T01:36:00Z",
+      "checkpointed_at": "2026-10-27T01:48:02Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -67084,7 +67084,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T01:36:54Z",
+      "checkpointed_at": "2026-10-27T01:49:01Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -72308,6 +72308,266 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f822e5edcf1299a2a899c2a1",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 150,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "868c67f74d8c2f345dc3aaab6f35dc41bef7efc60f2b99938bfe0b59d3ae2d7a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black screen with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No visible text or content to analyze.",
+        "limitations": [
+          "No visible content to analyze."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:49:14Z",
+      "effective_analysis": {
+        "visual_summary": "A black screen with no visible content.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No visible text or content to analyze.",
+        "limitations": [
+          "No visible content to analyze."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "636b13787814cd7a4e66136f",
+      "asset_sha256": "c5f608c536e146365431781fc9af65cf4465b8b6d54b7f9065af665010d761bd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 150,
+      "asset_path": "page-0150.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "868c67f74d8c2f345dc3aaab6f35dc41bef7efc60f2b99938bfe0b59d3ae2d7a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "instructions for using a laboratory thermometer",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Correct way of measuring temperature using a laboratory thermometer",
+          "Fig.7.4: Measuring temperature of warm water",
+          "Activity 7.5: Let us measure",
+          "Take some warm water in a beaker.",
+          "Dip the thermometer in water so that the bulb is immersed in water (Fig. 7.4).",
+          "Observe the rise of liquid column in the thermometer.",
+          "Wait till the column stops rising and note the temperature (do not wait too long; otherwise, the water itself will start to cool).",
+          "What is the temperature of water measured by you? Compare it with the readings of your friends.",
+          "Do you notice that, as soon as you take the thermometer out of the water, the level of liquid column begins to fall?",
+          "This means that the temperature must be read while the thermometer is immersed in water."
+        ],
+        "concepts": [
+          "laboratory thermometer",
+          "temperature",
+          "water",
+          "thermometer",
+          "beaker",
+          "reading thermometer",
+          "rise of liquid column",
+          "temperature measurement"
+        ],
+        "context_relation": "instructions for using a laboratory thermometer",
+        "limitations": [
+          "instructions for using a laboratory thermometer",
+          "temperature measurement",
+          "rise of liquid column",
+          "temperature measurement"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:52:18Z",
+      "effective_analysis": {
+        "visual_summary": "instructions for using a laboratory thermometer",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Correct way of measuring temperature using a laboratory thermometer",
+          "Fig.7.4: Measuring temperature of warm water",
+          "Activity 7.5: Let us measure",
+          "Take some warm water in a beaker.",
+          "Dip the thermometer in water so that the bulb is immersed in water (Fig. 7.4).",
+          "Observe the rise of liquid column in the thermometer.",
+          "Wait till the column stops rising and note the temperature (do not wait too long; otherwise, the water itself will start to cool).",
+          "What is the temperature of water measured by you? Compare it with the readings of your friends.",
+          "Do you notice that, as soon as you take the thermometer out of the water, the level of liquid column begins to fall?",
+          "This means that the temperature must be read while the thermometer is immersed in water."
+        ],
+        "concepts": [
+          "laboratory thermometer",
+          "temperature",
+          "water",
+          "thermometer",
+          "beaker",
+          "reading thermometer",
+          "rise of liquid column",
+          "temperature measurement"
+        ],
+        "context_relation": "instructions for using a laboratory thermometer",
+        "limitations": [
+          "instructions for using a laboratory thermometer",
+          "temperature measurement",
+          "rise of liquid column",
+          "temperature measurement"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c95321b155a384dc0a98988f",
+      "asset_sha256": "308972ead4a328d0c1c5d25d9b2a7ab72f37a14fc49f1295b39a464c7476f1fa",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 151,
+      "asset_path": "assets/308972ead4a328d0c1c5d25d9b2a7ab72f37a14fc49f1295b39a464c7476f1fa.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8e71bc7eebe0216970654da250116d1dcaa3863505130e66a89dbb611ec21e52",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow textured square with a torn edge, possibly representing a piece of paper or a note.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a visual representation of a piece of paper or a note, possibly related to an educational content.",
+        "limitations": [
+          "The image does not contain any text or information that can be directly related to the content of the textbook page.",
+          "The image is a simple, abstract representation and does not provide specific details about the educational content.",
+          "The image does not show any specific objects or elements that can be directly related to the textbook page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:53:32Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow textured square with a torn edge, possibly representing a piece of paper or a note.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a visual representation of a piece of paper or a note, possibly related to an educational content.",
+        "limitations": [
+          "The image does not contain any text or information that can be directly related to the content of the textbook page.",
+          "The image is a simple, abstract representation and does not provide specific details about the educational content.",
+          "The image does not show any specific objects or elements that can be directly related to the textbook page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dd61d87bb679abcc851f9af8",
+      "asset_sha256": "a1b2c16f8dfb86a7505df03df6e29414f61d4e1b91fd910777305bfefe6c20d1",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 151,
+      "asset_path": "assets/a1b2c16f8dfb86a7505df03df6e29414f61d4e1b91fd910777305bfefe6c20d1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8e71bc7eebe0216970654da250116d1dcaa3863505130e66a89dbb611ec21e52",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A laboratory setup with a thermometer inserted into a beaker of boiling water.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image represents an experimental setup for observing the temperature of boiling water.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:54:35Z",
+      "effective_analysis": {
+        "visual_summary": "A laboratory setup with a thermometer inserted into a beaker of boiling water.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image represents an experimental setup for observing the temperature of boiling water.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7b52e0f1113f88045acbeed0",
+      "asset_sha256": "6fe83f50e9d8f2a6948e3e4df13e2dd36552e260911e9753e00622542d5e0425",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 151,
+      "asset_path": "assets/6fe83f50e9d8f2a6948e3e4df13e2dd36552e260911e9753e00622542d5e0425.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8e71bc7eebe0216970654da250116d1dcaa3863505130e66a89dbb611ec21e52",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A laboratory setup with a thermometer immersed in boiling water and another thermometer in ice.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "temperature measurement",
+          "boiling water",
+          "ice",
+          "thermometer",
+          "laboratory setup"
+        ],
+        "context_relation": "The image represents an educational content related to temperature measurement in laboratory settings.",
+        "limitations": [
+          "The image does not provide specific temperature readings.",
+          "The image does not show the actual temperature measurements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:55:45Z",
+      "effective_analysis": {
+        "visual_summary": "A laboratory setup with a thermometer immersed in boiling water and another thermometer in ice.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "temperature measurement",
+          "boiling water",
+          "ice",
+          "thermometer",
+          "laboratory setup"
+        ],
+        "context_relation": "The image represents an educational content related to temperature measurement in laboratory settings.",
+        "limitations": [
+          "The image does not provide specific temperature readings.",
+          "The image does not show the actual temperature measurements."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
