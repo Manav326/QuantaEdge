@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="qe_ui_a4282e4b2298b90b" formatted="false"> of </string>
     <string name="qe_ui_f65045e4e79d2bf4" formatted="false">10-digit parent mobile number</string>
     <string name="qe_ui_604f009022135554" formatted="false">5 days · Monday–Friday</string>
     <string name="qe_ui_9ac2362ffeacae32" formatted="false">6 days · Monday–Saturday</string>
@@ -397,7 +396,6 @@
     <string name="qe_ui_95dd7a72b7d2e2c9" formatted="false">Choose your answer</string>
     <string name="qe_ui_7c7d48371c5ab80b" formatted="false">City and state are enough. Please do not enter your full home address.</string>
     <string name="qe_ui_7b268823822d4c20" formatted="false">City or town</string>
-    <string name="qe_ui_3f067bda6ccef62f" formatted="false">Class </string>
     <string name="qe_ui_cf74ae0528dfea94" formatted="false">Class &amp; subject coverage</string>
     <string name="qe_ui_c79a662c2a85d9de" formatted="false">Class {classCode} · {subject}. The selected join window is enforced by the server for enrolled students and assigned teachers.</string>
     <string name="qe_ui_8d2622b59d8ec2a1" formatted="false">Classes 6–8</string>
@@ -946,7 +944,6 @@
     <string name="qe_ui_1f1a56a6ba8e6a16" formatted="false">Join class ↗</string>
     <string name="qe_ui_3e85e0c921d76db0" formatted="false">Join course</string>
     <string name="qe_ui_c3ed90adfdc8552e" formatted="false">Join live class ↗</string>
-    <string name="qe_ui_f48d2e1e0b89b67f" formatted="false">Join opens </string>
     <string name="qe_ui_1e937eda59c49781" formatted="false">Join opens before start</string>
     <string name="qe_ui_2da3f51eed0831aa" formatted="false">Join window before start</string>
     <string name="qe_ui_9119ff41b89315da" formatted="false">Join window could not be saved.</string>
@@ -1167,7 +1164,6 @@
     <string name="qe_ui_298a9207a732a11d" formatted="false">Next step</string>
     <string name="qe_ui_4512d2a2e92e0580" formatted="false">Next step based on concept mastery</string>
     <string name="qe_ui_ce01c3661b27d2ba" formatted="false">Next: create and publish reviewed lessons for every active subject before submitting the release to HRMS.</string>
-    <string name="qe_ui_05f8bb36f8813cd8" formatted="false">No </string>
     <string name="qe_ui_bb3a05e336c995f4" formatted="false">No PDF or published topic is available in this chapter yet.</string>
     <string name="qe_ui_07d8e0efbb6d3790" formatted="false">No PDFs match this search. Upload a source PDF or change the search text.</string>
     <string name="qe_ui_dc01cca5b388041f" formatted="false">No QA runs yet. Install the starter pack in an approved test environment.</string>
@@ -1320,11 +1316,8 @@
     <string name="qe_ui_679e4bab86cac116" formatted="false">OCR text extracted — manual verification required</string>
     <string name="qe_ui_e7d81a7576edf379" formatted="false">OCR unavailable — use manual page-range review</string>
     <string name="qe_ui_783b0516f40548ee" formatted="false">OCR was partial — additional review required</string>
-    <string name="qe_ui_17748d5f8ac39aed" formatted="false">OCR-assisted analysis completed or was not needed. </string>
     <string name="qe_ui_f0979ba9b46fb348" formatted="false">OCR-assisted analysis failed.</string>
-    <string name="qe_ui_6a716dae34f12182" formatted="false">OCR-assisted analysis was partial; check the page warnings and review remaining pages manually. </string>
     <string name="qe_ui_270826d41d0a807d" formatted="false">OF</string>
-    <string name="qe_ui_78633b0fadd32f8e" formatted="false">OF </string>
     <string name="qe_ui_8a5c714979ce241b" formatted="false">ONE-TIME ACCOUNT SETUP</string>
     <string name="qe_ui_829e5b28af38ab33" formatted="false">OR</string>
     <string name="qe_ui_c287df701a100f63" formatted="false">OTP is required for registration and password reset. Parents can also sign in with an OTP.</string>
@@ -1381,7 +1374,6 @@
     <string name="qe_ui_ef7d32fd249d54b3" formatted="false">Open audio ↗</string>
     <string name="qe_ui_871c16abeef20774" formatted="false">Open book ↗</string>
     <string name="qe_ui_a9a8b4d58b1edcc1" formatted="false">Open certificate register ↗</string>
-    <string name="qe_ui_cd1fc440c9565a74" formatted="false">Open complete textbook </string>
     <string name="qe_ui_ec20ac0b10cb62b2" formatted="false">Open existing certificate</string>
     <string name="qe_ui_0eab0efa1d56ffe5" formatted="false">Open existing lessons</string>
     <string name="qe_ui_12ed598dd225a19e" formatted="false">Open lesson</string>
@@ -1441,12 +1433,10 @@
     <string name="qe_ui_227def856f60a981" formatted="false">PRIVATE CLASS PLAYER</string>
     <string name="qe_ui_d0f44ea544b822e2" formatted="false">PRIVATE MEETING URL · STAFF ONLY</string>
     <string name="qe_ui_7f309769df3d3645" formatted="false">PROVENANCE</string>
-    <string name="qe_ui_6076934f99bd4243" formatted="false">Page </string>
     <string name="qe_ui_986e19818256d98c" formatted="false">Page {current} of {pages}</string>
     <string name="qe_ui_f0df641234559617" formatted="false">Page {current} of {total}</string>
     <string name="qe_ui_8f25562e26e8fd27" formatted="false">Page {page} of {title}</string>
     <string name="qe_ui_1b6130240f7ebad9" formatted="false">Pages attempted: {attempted}; pages with recognized text: {recognized}</string>
-    <string name="qe_ui_cfaf49ad3006b09e" formatted="false">Pagination for </string>
     <string name="qe_ui_298e345f337fcc86" formatted="false">Pagination for {items}</string>
     <string name="qe_ui_b9c867e3aefb431c" formatted="false">Parent / guardian name</string>
     <string name="qe_ui_368e2b64831c08d1" formatted="false">Parent account reactivated.</string>
@@ -1501,7 +1491,6 @@
     <string name="qe_ui_d771541ad83ad364" formatted="false">Please shorten your message and try again.</string>
     <string name="qe_ui_7ba353b04a5b3c44" formatted="false">Please try again in a moment.</string>
     <string name="qe_ui_d80b56095a20506a" formatted="false">Point the camera at the certificate QR code or barcode.</string>
-    <string name="qe_ui_66cbfad8efbf9c7a" formatted="false">Position </string>
     <string name="qe_ui_e3496881891604a9" formatted="false">Post reversal</string>
     <string name="qe_ui_d3857b12b4cea2bc" formatted="false">Practice</string>
     <string name="qe_ui_b6259dcc47ef58d3" formatted="false">Practice &amp; Tests</string>
@@ -1586,7 +1575,6 @@
     <string name="qe_ui_d5daae9a65fb14c1" formatted="false">QUANTAEDGE · CONTENT GOVERNANCE</string>
     <string name="qe_ui_3cb4b9a5d98953ac" formatted="false">QUANTAEDGE · LEARNING OPERATIONS</string>
     <string name="qe_ui_1c5cb9921cbececa" formatted="false">QUESTION</string>
-    <string name="qe_ui_67f86c98b763a36c" formatted="false">QUESTION </string>
     <string name="qe_ui_ffe199d06f4cf091" formatted="false">QUESTION PROGRESS</string>
     <string name="qe_ui_32f0df62a0167f6d" formatted="false">Quality learning for every stage of life.</string>
     <string name="qe_ui_9f000351cc19cfb5" formatted="false">QuantaEdge does more than provide answers. Diagnostics, practice, and real learning records help choose each child\'s next learning step.</string>
@@ -1596,7 +1584,6 @@
     <string name="qe_ui_cd96b8edffb2a63c" formatted="false">QuantaEdge stores only the information needed to provide learning, authentication, guardian access, progress and support features.</string>
     <string name="qe_ui_abe868e9e37d86b1" formatted="false">QuantaEdge · Learning operations</string>
     <string name="qe_ui_289aff12b04274cb" formatted="false">Question</string>
-    <string name="qe_ui_39821a754d341ad5" formatted="false">Question </string>
     <string name="qe_ui_01402e16868a9d86" formatted="false">Question #{questionId} changed to {status}. The event and question snapshot were saved to its history.</string>
     <string name="qe_ui_d75d32590c318440" formatted="false">Question #{questionId} — full history</string>
     <string name="qe_ui_fcaa33c21ccc48ad" formatted="false">Question JSON is invalid.</string>
@@ -1927,7 +1914,6 @@
     <string name="qe_ui_a366621efe3c84f1" formatted="false">Show broadcast</string>
     <string name="qe_ui_df0af02324bb3eb4" formatted="false">Show micro-topics</string>
     <string name="qe_ui_fcb047570c800cdf" formatted="false">Show review note</string>
-    <string name="qe_ui_7282e1fbb2c6d34c" formatted="false">Showing </string>
     <string name="qe_ui_b936f932adc948b0" formatted="false">Showing pages</string>
     <string name="qe_ui_eb2b42aaa7dad834" formatted="false">Showing pages {start}–{end}</string>
     <string name="qe_ui_f7a2eb8407dcab9f" formatted="false">Showing {first}–{last} of {total}</string>

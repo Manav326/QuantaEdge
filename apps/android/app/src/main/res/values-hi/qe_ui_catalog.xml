@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="qe_ui_a4282e4b2298b90b" formatted="false"> में से </string>
     <string name="qe_ui_f65045e4e79d2bf4" formatted="false">Parent का 10-digit mobile number</string>
     <string name="qe_ui_604f009022135554" formatted="false">5 दिन · Monday–Friday</string>
     <string name="qe_ui_9ac2362ffeacae32" formatted="false">6 दिन · Monday–Saturday</string>
@@ -397,7 +396,6 @@
     <string name="qe_ui_95dd7a72b7d2e2c9" formatted="false">अपना उत्तर चुनें</string>
     <string name="qe_ui_7c7d48371c5ab80b" formatted="false">City और state काफ़ी हैं। कृपया घर का पूरा address न डालें।</string>
     <string name="qe_ui_7b268823822d4c20" formatted="false">शहर या town</string>
-    <string name="qe_ui_3f067bda6ccef62f" formatted="false">कक्षा </string>
     <string name="qe_ui_cf74ae0528dfea94" formatted="false">Class और subject coverage</string>
     <string name="qe_ui_c79a662c2a85d9de" formatted="false">Class {classCode} · {subject}। चुनी गई join window को server enrolled students और assigned teachers के लिए लागू करता है।</string>
     <string name="qe_ui_8d2622b59d8ec2a1" formatted="false">कक्षा 6–8</string>
@@ -946,7 +944,6 @@
     <string name="qe_ui_1f1a56a6ba8e6a16" formatted="false">कक्षा में शामिल हों ↗</string>
     <string name="qe_ui_3e85e0c921d76db0" formatted="false">Course join करें</string>
     <string name="qe_ui_c3ed90adfdc8552e" formatted="false">लाइव कक्षा में शामिल हों ↗</string>
-    <string name="qe_ui_f48d2e1e0b89b67f" formatted="false">शामिल होने का समय </string>
     <string name="qe_ui_1e937eda59c49781" formatted="false">Start से पहले join खुलता है</string>
     <string name="qe_ui_2da3f51eed0831aa" formatted="false">Start से पहले join window</string>
     <string name="qe_ui_9119ff41b89315da" formatted="false">Join window save नहीं हो सकी।</string>
@@ -1167,7 +1164,6 @@
     <string name="qe_ui_298a9207a732a11d" formatted="false">अगला चरण</string>
     <string name="qe_ui_4512d2a2e92e0580" formatted="false">Concept mastery के आधार पर अगला step</string>
     <string name="qe_ui_ce01c3661b27d2ba" formatted="false">Next: HRMS ko release submit karne se pehle har active subject ke reviewed lessons create aur publish karein.</string>
-    <string name="qe_ui_05f8bb36f8813cd8" formatted="false">कोई </string>
     <string name="qe_ui_bb3a05e336c995f4" formatted="false">इस chapter में अभी PDF या published topic नहीं है।</string>
     <string name="qe_ui_07d8e0efbb6d3790" formatted="false">Is search se koi PDF match nahi hui. Source PDF upload karein ya search text badlein.</string>
     <string name="qe_ui_dc01cca5b388041f" formatted="false">अभी कोई QA run नहीं है। Approved test environment में starter pack install करें।</string>
@@ -1320,11 +1316,8 @@
     <string name="qe_ui_679e4bab86cac116" formatted="false">OCR text extract hua — manual verification zaroori hai</string>
     <string name="qe_ui_e7d81a7576edf379" formatted="false">OCR available nahi hai — manual page-range review karein</string>
     <string name="qe_ui_783b0516f40548ee" formatted="false">OCR partial tha — additional review zaroori hai</string>
-    <string name="qe_ui_17748d5f8ac39aed" formatted="false">OCR-assisted analysis poora hua ya zaroori nahi tha. </string>
     <string name="qe_ui_f0979ba9b46fb348" formatted="false">OCR-assisted analysis fail ho gaya.</string>
-    <string name="qe_ui_6a716dae34f12182" formatted="false">OCR-assisted analysis partial tha; page warnings check karein aur baaki pages manually review karein. </string>
     <string name="qe_ui_270826d41d0a807d" formatted="false">में से</string>
-    <string name="qe_ui_78633b0fadd32f8e" formatted="false">में से </string>
     <string name="qe_ui_8a5c714979ce241b" formatted="false">एक बार का account setup</string>
     <string name="qe_ui_829e5b28af38ab33" formatted="false">या</string>
     <string name="qe_ui_c287df701a100f63" formatted="false">Registration और password reset के लिए OTP ज़रूरी है। Parent sign-in के लिए भी OTP का option available है।</string>
@@ -1381,7 +1374,6 @@
     <string name="qe_ui_ef7d32fd249d54b3" formatted="false">Audio खोलें ↗</string>
     <string name="qe_ui_871c16abeef20774" formatted="false">पुस्तक खोलें ↗</string>
     <string name="qe_ui_a9a8b4d58b1edcc1" formatted="false">Certificate register खोलें ↗</string>
-    <string name="qe_ui_cd1fc440c9565a74" formatted="false">पूरी पाठ्यपुस्तक खोलें </string>
     <string name="qe_ui_ec20ac0b10cb62b2" formatted="false">मौजूदा प्रमाणपत्र खोलें</string>
     <string name="qe_ui_0eab0efa1d56ffe5" formatted="false">Existing lessons खोलें</string>
     <string name="qe_ui_12ed598dd225a19e" formatted="false">Lesson खोलें</string>
@@ -1441,12 +1433,10 @@
     <string name="qe_ui_227def856f60a981" formatted="false">निजी कक्षा प्लेयर</string>
     <string name="qe_ui_d0f44ea544b822e2" formatted="false">PRIVATE MEETING URL · केवल STAFF</string>
     <string name="qe_ui_7f309769df3d3645" formatted="false">SOURCE</string>
-    <string name="qe_ui_6076934f99bd4243" formatted="false">पृष्ठ </string>
     <string name="qe_ui_986e19818256d98c" formatted="false">{pages} में से page {current}</string>
     <string name="qe_ui_f0df641234559617" formatted="false">Page {current} / {total}</string>
     <string name="qe_ui_8f25562e26e8fd27" formatted="false">{title} ka page {page}</string>
     <string name="qe_ui_1b6130240f7ebad9" formatted="false">Attempt kiye gaye pages: {attempted}; recognized text wale pages: {recognized}</string>
-    <string name="qe_ui_cfaf49ad3006b09e" formatted="false">पृष्ठांकन: </string>
     <string name="qe_ui_298e345f337fcc86" formatted="false">{items} के लिए pagination</string>
     <string name="qe_ui_b9c867e3aefb431c" formatted="false">Parent / guardian का नाम</string>
     <string name="qe_ui_368e2b64831c08d1" formatted="false">Parent account फिर से active हो गया।</string>
@@ -1501,7 +1491,6 @@
     <string name="qe_ui_d771541ad83ad364" formatted="false">कृपया अपना संदेश छोटा करके फिर भेजें।</string>
     <string name="qe_ui_7ba353b04a5b3c44" formatted="false">कृपया थोड़ी देर बाद फिर प्रयास करें।</string>
     <string name="qe_ui_d80b56095a20506a" formatted="false">Camera को certificate के QR code या barcode की ओर रखें।</string>
-    <string name="qe_ui_66cbfad8efbf9c7a" formatted="false">स्थिति </string>
     <string name="qe_ui_e3496881891604a9" formatted="false">Reversal दर्ज करें</string>
     <string name="qe_ui_d3857b12b4cea2bc" formatted="false">अभ्यास</string>
     <string name="qe_ui_b6259dcc47ef58d3" formatted="false">अभ्यास और टेस्ट</string>
@@ -1586,7 +1575,6 @@
     <string name="qe_ui_d5daae9a65fb14c1" formatted="false">QUANTAEDGE · Content governance</string>
     <string name="qe_ui_3cb4b9a5d98953ac" formatted="false">QUANTAEDGE · LEARNING संचालन</string>
     <string name="qe_ui_1c5cb9921cbececa" formatted="false">प्रश्न</string>
-    <string name="qe_ui_67f86c98b763a36c" formatted="false">प्रश्न </string>
     <string name="qe_ui_ffe199d06f4cf091" formatted="false">प्रश्न की प्रगति</string>
     <string name="qe_ui_32f0df62a0167f6d" formatted="false">ज़िंदगी के हर पड़ाव के लिए quality learning।</string>
     <string name="qe_ui_9f000351cc19cfb5" formatted="false">QuantaEdge सिर्फ answers नहीं देता। Diagnostic, practice और real learning records के आधार पर बच्चे का अगला learning step तय होता है।</string>
@@ -1596,7 +1584,6 @@
     <string name="qe_ui_cd96b8edffb2a63c" formatted="false">QuantaEdge सिर्फ वही information store करता है जो learning, authentication, guardian access, progress और support features देने के लिए ज़रूरी है।</string>
     <string name="qe_ui_abe868e9e37d86b1" formatted="false">QuantaEdge · Learning संचालन</string>
     <string name="qe_ui_289aff12b04274cb" formatted="false">प्रश्न</string>
-    <string name="qe_ui_39821a754d341ad5" formatted="false">प्रश्न </string>
     <string name="qe_ui_01402e16868a9d86" formatted="false">Question #{questionId} का status {status} हुआ। Event और question snapshot इसकी history में save हुए।</string>
     <string name="qe_ui_d75d32590c318440" formatted="false">Question #{questionId} — पूरी history</string>
     <string name="qe_ui_fcaa33c21ccc48ad" formatted="false">Question JSON valid नहीं है।</string>
@@ -1927,7 +1914,6 @@
     <string name="qe_ui_a366621efe3c84f1" formatted="false">प्रसारण दिखाएँ</string>
     <string name="qe_ui_df0af02324bb3eb4" formatted="false">Micro-topics दिखाएँ</string>
     <string name="qe_ui_fcb047570c800cdf" formatted="false">समीक्षा नोट दिखाएँ</string>
-    <string name="qe_ui_7282e1fbb2c6d34c" formatted="false">दिखाए जा रहे हैं </string>
     <string name="qe_ui_b936f932adc948b0" formatted="false">पृष्ठ दिखाए जा रहे हैं</string>
     <string name="qe_ui_eb2b42aaa7dad834" formatted="false">Pages {start}–{end} dikh rahe hain</string>
     <string name="qe_ui_f7a2eb8407dcab9f" formatted="false">{total} में से {first}–{last} दिखाए जा रहे हैं</string>

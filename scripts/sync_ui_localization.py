@@ -148,6 +148,9 @@ def render_android_catalog_resources(catalogs: dict[str, dict[str, str]]) -> dic
         target = next(iter(translated))
         if not source.strip() or not target.strip() or source == target:
             continue
+        # Whitespace fragments must not become standalone resources; Android trims their edges.
+        if source != source.strip() or target != target.strip():
+            continue
         # Newlines in UI copy need explicit context review and must not be silently normalized.
         if "\\n" in source or "\\r" in source or "\\n" in target or "\\r" in target:
             continue

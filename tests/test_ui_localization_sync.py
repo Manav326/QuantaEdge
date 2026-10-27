@@ -17,6 +17,7 @@ class AndroidUiCatalogGenerationTests(unittest.TestCase):
                 "save.one": "Save changes",
                 "save.two": "Save changes",
                 "class.title": "Class",
+                "class.of": " of ",
                 "class.action": "Class",
                 "plain.same": "AI Tutor",
             },
@@ -24,6 +25,7 @@ class AndroidUiCatalogGenerationTests(unittest.TestCase):
                 "save.one": "बदलाव सेव करें",
                 "save.two": "बदलाव सेव करें",
                 "class.title": "कक्षा",
+                "class.of": " में से ",
                 "class.action": "Class",
                 "plain.same": "AI Tutor",
             },
@@ -37,6 +39,7 @@ class AndroidUiCatalogGenerationTests(unittest.TestCase):
         self.assertNotIn("कक्षा", english)
         self.assertNotIn("Class</string>", hinglish)
         self.assertNotIn("AI Tutor", english)
+        self.assertNotIn("में से", hinglish)
 
     def test_escapes_xml_special_characters(self):
         generated = render_android_catalog_resources({
