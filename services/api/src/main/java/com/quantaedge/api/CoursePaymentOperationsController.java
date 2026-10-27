@@ -374,7 +374,8 @@ public class CoursePaymentOperationsController {
         ?null:number(order.get("revenue_share_policy_id"));
     CourseRevenueAllocationReconciliation.Result allocationReconciliation=
         CourseRevenueAllocationReconciliation.reconcile(lockedShareSnapshot,orderPolicyId,
-            number(order.get("captured_amount_paise")),number(order.get("output_tax_paise")),allocationRows);
+            number(order.get("captured_amount_paise")),number(order.get("output_tax_paise")),
+            text(order.get("currency")),allocationRows);
     long allocationCount=allocationRows.size();
     String allocationStage;
     if("VERIFIED".equals(localStatus)) {
