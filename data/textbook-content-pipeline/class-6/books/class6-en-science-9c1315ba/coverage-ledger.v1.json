@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1395,
-    "successful_visual_analyses": 1384,
-    "missing_visual_analyses": 683,
+    "raw_analysis_result_rows": 1400,
+    "successful_visual_analyses": 1389,
+    "missing_visual_analyses": 678,
     "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 694,
+    "unresolved_count": 689,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -52894,9 +52894,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52912,9 +52921,60 @@
       "asset_path": "page-0144.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the use of clinical thermometers and mercury thermometers for measuring body temperature, with a focus on the risks associated with mercury and the introduction of digital thermometers.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "temperature when the thermometer is placed in contact",
+          "with a person’s body.",
+          "For measuring temperature, the clinical thermometers",
+          "generally use a scale called the Celsius scale. On this",
+          "scale, the unit of temperature is degree Celsius and is",
+          "denoted by °C.",
+          "Earlier, mercury thermometers were used for measuring",
+          "the body temperature. But mercury is an extremely toxic",
+          "substance and is difficult to dispose of if the thermometer",
+          "breaks accidently.",
+          "Digital thermometers pose no such risk and also the",
+          "numbers in its display are easier to read. Therefore,",
+          "mercury thermometers are being replaced by digital",
+          "thermometers. Temperature in a digital thermometer",
+          "is determined with the help of heat sensors.",
+          "During the COVID-19",
+          "pandemic, some special",
+          "thermometers were used,",
+          "which could measure the",
+          "temperature of a person",
+          "from a distance. What were",
+          "those?",
+          "They are non-contact thermometers,",
+          "also called infrared",
+          "thermometers. Such",
+          "thermometers can",
+          "measure temperature",
+          "without touching a",
+          "person’s body and",
+          "thus reduce the risk of"
+        ],
+        "concepts": [
+          "clinical thermometers",
+          "Celsius scale",
+          "degree Celsius",
+          "mercury thermometers",
+          "digital thermometers",
+          "COVID-19 pandemic",
+          "non-contact thermometers",
+          "infrared thermometers",
+          "temperature measurement",
+          "risk of spreading disease"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the use of clinical thermometers and mercury thermometers for measuring body temperature, with a focus on the risks associated with mercury and the introduction of digital thermometers.",
+        "limitations": [
+          "The image does not provide specific details about the clinical thermometers or the Celsius scale."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52930,9 +52990,26 @@
       "asset_path": "assets/014b7488b9f6c661af9d6e408d9632b760eaa40e796311439426630e66e65a3a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red triangular warning sign with a white exclamation mark in the center.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Precautions",
+          "•  To be used after reading the",
+          "•  To be used after reading the"
+        ],
+        "concepts": [
+          "Precautions",
+          "Digital clinical thermometer",
+          "Body temperature measurement"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "The text is incomplete and does not provide specific details about the precautions."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52948,9 +53025,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure, no visible content to analyze"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52966,9 +53052,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

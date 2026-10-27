@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1075628e4cdeede324c3f2be7b8ca6b1315198269e378c5b09d40d4081634498",
+  "raw_analysis_sha256": "d727f912709fef8ea1a571422ca2354a4be8413f1709c9731a974bcf228bdab2",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -650,7 +650,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:13:23Z",
+      "checkpointed_at": "2026-10-27T00:25:22Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -29465,7 +29465,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:15:00Z",
+      "checkpointed_at": "2026-10-27T00:27:03Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -35077,7 +35077,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:16:25Z",
+      "checkpointed_at": "2026-10-27T00:28:29Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57433,7 +57433,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:17:36Z",
+      "checkpointed_at": "2026-10-27T00:29:40Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -67084,7 +67084,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:18:33Z",
+      "checkpointed_at": "2026-10-27T00:30:38Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -70550,6 +70550,306 @@
       "checkpointed_at": "2026-10-27T00:23:23Z",
       "effective_analysis": {
         "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "aa547e17d64595233f3ccfe8",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 144,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d7de654acded8ad53b8865f61fdcb31c8685af7037d2572e425cef598eb9f088",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:30:51Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e203b7b39dfc8885750b0e85",
+      "asset_sha256": "ac8435546593ebf35dcd16fc1a4bc2e200e1d4594253b785f23a8b49616fab19",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 144,
+      "asset_path": "page-0144.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "d7de654acded8ad53b8865f61fdcb31c8685af7037d2572e425cef598eb9f088",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the use of clinical thermometers and mercury thermometers for measuring body temperature, with a focus on the risks associated with mercury and the introduction of digital thermometers.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "temperature when the thermometer is placed in contact",
+          "with a person’s body.",
+          "For measuring temperature, the clinical thermometers",
+          "generally use a scale called the Celsius scale. On this",
+          "scale, the unit of temperature is degree Celsius and is",
+          "denoted by °C.",
+          "Earlier, mercury thermometers were used for measuring",
+          "the body temperature. But mercury is an extremely toxic",
+          "substance and is difficult to dispose of if the thermometer",
+          "breaks accidently.",
+          "Digital thermometers pose no such risk and also the",
+          "numbers in its display are easier to read. Therefore,",
+          "mercury thermometers are being replaced by digital",
+          "thermometers. Temperature in a digital thermometer",
+          "is determined with the help of heat sensors.",
+          "During the COVID-19",
+          "pandemic, some special",
+          "thermometers were used,",
+          "which could measure the",
+          "temperature of a person",
+          "from a distance. What were",
+          "those?",
+          "They are non-contact thermometers,",
+          "also called infrared",
+          "thermometers. Such",
+          "thermometers can",
+          "measure temperature",
+          "without touching a",
+          "person’s body and",
+          "thus reduce the risk of"
+        ],
+        "concepts": [
+          "clinical thermometers",
+          "Celsius scale",
+          "degree Celsius",
+          "mercury thermometers",
+          "digital thermometers",
+          "COVID-19 pandemic",
+          "non-contact thermometers",
+          "infrared thermometers",
+          "temperature measurement",
+          "risk of spreading disease"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the use of clinical thermometers and mercury thermometers for measuring body temperature, with a focus on the risks associated with mercury and the introduction of digital thermometers.",
+        "limitations": [
+          "The image does not provide specific details about the clinical thermometers or the Celsius scale."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:34:21Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the use of clinical thermometers and mercury thermometers for measuring body temperature, with a focus on the risks associated with mercury and the introduction of digital thermometers.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "temperature when the thermometer is placed in contact",
+          "with a person’s body.",
+          "For measuring temperature, the clinical thermometers",
+          "generally use a scale called the Celsius scale. On this",
+          "scale, the unit of temperature is degree Celsius and is",
+          "denoted by °C.",
+          "Earlier, mercury thermometers were used for measuring",
+          "the body temperature. But mercury is an extremely toxic",
+          "substance and is difficult to dispose of if the thermometer",
+          "breaks accidently.",
+          "Digital thermometers pose no such risk and also the",
+          "numbers in its display are easier to read. Therefore,",
+          "mercury thermometers are being replaced by digital",
+          "thermometers. Temperature in a digital thermometer",
+          "is determined with the help of heat sensors.",
+          "During the COVID-19",
+          "pandemic, some special",
+          "thermometers were used,",
+          "which could measure the",
+          "temperature of a person",
+          "from a distance. What were",
+          "those?",
+          "They are non-contact thermometers,",
+          "also called infrared",
+          "thermometers. Such",
+          "thermometers can",
+          "measure temperature",
+          "without touching a",
+          "person’s body and",
+          "thus reduce the risk of"
+        ],
+        "concepts": [
+          "clinical thermometers",
+          "Celsius scale",
+          "degree Celsius",
+          "mercury thermometers",
+          "digital thermometers",
+          "COVID-19 pandemic",
+          "non-contact thermometers",
+          "infrared thermometers",
+          "temperature measurement",
+          "risk of spreading disease"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the use of clinical thermometers and mercury thermometers for measuring body temperature, with a focus on the risks associated with mercury and the introduction of digital thermometers.",
+        "limitations": [
+          "The image does not provide specific details about the clinical thermometers or the Celsius scale."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a41667d2b2839a91aa62e09e",
+      "asset_sha256": "014b7488b9f6c661af9d6e408d9632b760eaa40e796311439426630e66e65a3a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 145,
+      "asset_path": "assets/014b7488b9f6c661af9d6e408d9632b760eaa40e796311439426630e66e65a3a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b33602f5133011cb20efb64570ad868a3c5b6a954f6e86dacf188e0837dc7c74",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red triangular warning sign with a white exclamation mark in the center.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Precautions",
+          "•  To be used after reading the",
+          "•  To be used after reading the"
+        ],
+        "concepts": [
+          "Precautions",
+          "Digital clinical thermometer",
+          "Body temperature measurement"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "The text is incomplete and does not provide specific details about the precautions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:35:32Z",
+      "effective_analysis": {
+        "visual_summary": "A red triangular warning sign with a white exclamation mark in the center.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Precautions",
+          "•  To be used after reading the",
+          "•  To be used after reading the"
+        ],
+        "concepts": [
+          "Precautions",
+          "Digital clinical thermometer",
+          "Body temperature measurement"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "The text is incomplete and does not provide specific details about the precautions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5a1b6eaf7d72118d83f138ba",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 145,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b33602f5133011cb20efb64570ad868a3c5b6a954f6e86dacf188e0837dc7c74",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure, no visible content to analyze"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:35:48Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure, no visible content to analyze"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e5ff823124379a7b80563223",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 145,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b33602f5133011cb20efb64570ad868a3c5b6a954f6e86dacf188e0837dc7c74",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:36:01Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [],
         "concepts": [],
