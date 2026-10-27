@@ -1066,6 +1066,7 @@ public class FinancePayoutController {
   private long amount(String sql,Object... args){Long n=jdbc.queryForObject(sql,Long.class,args);return n==null?0:n;}
   private boolean exists(String sql,Object... args){return Boolean.TRUE.equals(jdbc.queryForObject(sql,Boolean.class,args));}
   private String json(Object v){try{return mapper.writeValueAsString(v==null?Map.of():v);}catch(Exception e){throw new IllegalStateException("Finance details could not be serialized.",e);}}
+  private static String string(Object value){return value==null?"":String.valueOf(value).trim();}
   private static String text(Map<String,Object> m,String k){Object v=m==null?null:m.get(k);return v==null?"":String.valueOf(v).trim();}
   private static String requiredText(Object v,String label){String s=v==null?"":String.valueOf(v).trim();if(s.isBlank())throw bad("Enter "+label+".");return s;}
   private static long requiredLong(Object v,String label){try{return new BigDecimal(String.valueOf(v)).longValueExact();}catch(Exception e){throw bad("Enter an integer amount for "+label+".");}}
