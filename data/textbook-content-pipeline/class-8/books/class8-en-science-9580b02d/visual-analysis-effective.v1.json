@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "bfac516f50cb08dc770cde1a449348d32f0924ce7cffeeb1528e8c1234898143",
+  "raw_analysis_sha256": "1e722a68921f082f8f969360b9bcc1efe519196d5df129389d124fe74d066f10",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413175682",
-      "checkpointed_at": "2026-10-27T00:02:12Z",
+      "checkpointed_at": "2026-10-27T00:09:18Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29347,7 +29347,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413175682",
-      "checkpointed_at": "2026-10-27T00:03:05Z",
+      "checkpointed_at": "2026-10-27T00:10:12Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing names and roles of contributors.",
         "visual_type": "page_with_multiple_visuals",
@@ -57868,7 +57868,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413175682",
-      "checkpointed_at": "2026-10-27T00:04:04Z",
+      "checkpointed_at": "2026-10-27T00:11:10Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and muscular force.",
         "visual_type": "page_with_multiple_visuals",
@@ -65201,6 +65201,104 @@
         "concepts": [],
         "context_relation": "cleaning",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3b317fa2f4da438218b8e5ec",
+      "asset_sha256": "a0beeda8a900ad84869076e9ca1ec02d0fcadcc7ca4d8a1e82d85173c2ec32cf",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 106,
+      "asset_path": "assets/a0beeda8a900ad84869076e9ca1ec02d0fcadcc7ca4d8a1e82d85173c2ec32cf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f6aa5ef1687b0f686accb8b7d47e4aae62249fc3a024613b31f9b4b79cfe6f9b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person blowing a large blue bubble.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a person performing an action, specifically blowing a bubble.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-27T00:12:06Z",
+      "effective_analysis": {
+        "visual_summary": "A person blowing a large blue bubble.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image shows a person performing an action, specifically blowing a bubble.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "316add1395feb05f5e62630c",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 106,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f6aa5ef1687b0f686accb8b7d47e4aae62249fc3a024613b31f9b4b79cfe6f9b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A step-by-step guide for lifting a paper plate covered with a folded sheet using a stick.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "the folded chart paper sheet — big enough for the stick to come out. Place the folded sheet on top of the inverted paper plate as shown in Fig. 6.9b.",
+          "Now, try to lift the paper plate covered with a folded sheet using the stick.",
+          "Observe how much effort is needed to lift it.",
+          "Now, place the second unfolded chart paper sheet in place."
+        ],
+        "concepts": [
+          "lifting a paper plate",
+          "using a stick",
+          "observing effort",
+          "unfolding a sheet"
+        ],
+        "context_relation": "instructions for a physical activity",
+        "limitations": [
+          "no specific image is provided",
+          "instructions are textual"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-27T00:12:41Z",
+      "effective_analysis": {
+        "visual_summary": "A step-by-step guide for lifting a paper plate covered with a folded sheet using a stick.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "the folded chart paper sheet — big enough for the stick to come out. Place the folded sheet on top of the inverted paper plate as shown in Fig. 6.9b.",
+          "Now, try to lift the paper plate covered with a folded sheet using the stick.",
+          "Observe how much effort is needed to lift it.",
+          "Now, place the second unfolded chart paper sheet in place."
+        ],
+        "concepts": [
+          "lifting a paper plate",
+          "using a stick",
+          "observing effort",
+          "unfolding a sheet"
+        ],
+        "context_relation": "instructions for a physical activity",
+        "limitations": [
+          "no specific image is provided",
+          "instructions are textual"
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
