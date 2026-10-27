@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.junit.jupiter.api.Test;
 
 class PayoutSettlementPdfRendererTest {
@@ -42,6 +43,9 @@ class PayoutSettlementPdfRendererTest {
     try(var document=Loader.loadPDF(rendered.pdf())) {
       assertEquals(rendered.pageCount(),document.getNumberOfPages());
       assertTrue(document.getDocumentInformation().getTitle().contains("MONTHLY PAYOUT BATCH REPORT"));
+      String searchableText=new PDFTextStripper().getText(document);
+      assertTrue(searchableText.contains("MONTHLY PAYOUT BATCH REPORT"),"PDF text must be selectable/searchable, not only a page image.");
+      assertTrue(searchableText.contains("Institution 1"),"Recipient names should be available to search and assistive tools.");
       for(var page:document.getPages()) {
         PDRectangle media=page.getMediaBox();
         assertTrue(media.getHeight()>media.getWidth(),"Settlement PDF pages must use portrait A4.");
@@ -71,6 +75,9 @@ class PayoutSettlementPdfRendererTest {
     try(var document=Loader.loadPDF(rendered.pdf())) {
       assertEquals(1,document.getNumberOfPages());
       assertTrue(document.getPage(0).getResources().getXObjectNames().iterator().hasNext());
+      String searchableText=new PDFTextStripper().getText(document);
+      assertTrue(searchableText.contains("गणित"),"Hindi course names should remain searchable in the PDF text layer.");
+      assertTrue(searchableText.contains("विद्यालय सूर्योदय"),"Hindi recipient names should remain searchable in the PDF text layer.");
     }
   }
 
