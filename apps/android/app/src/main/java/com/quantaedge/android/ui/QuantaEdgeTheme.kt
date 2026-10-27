@@ -4,6 +4,7 @@ import org.json.JSONObject
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
+import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
@@ -14,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 val LocalQuantaEdgeThemeController = staticCompositionLocalOf<QuantaEdgeThemeController> {
     error("QuantaEdgeThemeController is missing from the composition.")
@@ -118,6 +120,29 @@ fun QuantaEdgeTheme(
         )
     }
 
+    // Tighten vertical leading globally without shrinking text: this frees space while
+    // keeping lesson content, question options and Hindi glyphs readable.
+    val compactTypography = remember {
+        val base = Typography()
+        base.copy(
+            displayLarge = base.displayLarge.copy(lineHeight = 60.sp),
+            displayMedium = base.displayMedium.copy(lineHeight = 48.sp),
+            displaySmall = base.displaySmall.copy(lineHeight = 40.sp),
+            headlineLarge = base.headlineLarge.copy(lineHeight = 36.sp),
+            headlineMedium = base.headlineMedium.copy(lineHeight = 32.sp),
+            headlineSmall = base.headlineSmall.copy(lineHeight = 28.sp),
+            titleLarge = base.titleLarge.copy(lineHeight = 26.sp),
+            titleMedium = base.titleMedium.copy(lineHeight = 21.sp),
+            titleSmall = base.titleSmall.copy(lineHeight = 19.sp),
+            bodyLarge = base.bodyLarge.copy(lineHeight = 22.sp),
+            bodyMedium = base.bodyMedium.copy(lineHeight = 19.sp),
+            bodySmall = base.bodySmall.copy(lineHeight = 16.sp),
+            labelLarge = base.labelLarge.copy(lineHeight = 18.sp),
+            labelMedium = base.labelMedium.copy(lineHeight = 15.sp),
+            labelSmall = base.labelSmall.copy(lineHeight = 14.sp),
+        )
+    }
+
     val semanticColors = QuantaEdgeSemanticColors(
         primaryText = tokenColor(
             palette, "primaryText",
@@ -143,6 +168,7 @@ fun QuantaEdgeTheme(
 
     MaterialTheme(
         colorScheme = colors,
+        typography = compactTypography,
         shapes = QuantaShapes,
         content = {
             CompositionLocalProvider(
