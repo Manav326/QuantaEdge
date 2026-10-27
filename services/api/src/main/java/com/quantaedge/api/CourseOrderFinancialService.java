@@ -590,6 +590,132 @@ public class CourseOrderFinancialService {
    * Finalize the fiscal document and revenue-share allocations in a separate transaction after
    * course access is already committed. Failure here must not undo an exact captured payment's access.
    */
+  /**
+   * Records confirmed gateway charges and reduces the same sale's existing allocation ledger.
+   * Charges are sourced from a provider settlement record, never from an estimate.
+   */
+  @Transactional
+  public Map<String,Object> reconcileProviderFees(
+      long orderId,long processingFeePaise,long feeTaxPaise,String settlementReference,
+      String sourceType,String idempotencyKey,long actorStaffId) {
+    String reference=settlementReference==null?"":settlementReference.trim();
+    if(reference.length()<3||reference.length()>180)
+      throw new IllegalArgumentException("Enter the actual provider settlement reference (3–180 characters).");
+    if(processingFeePaise<0||feeTaxPaise<0)
+      throw new IllegalArgumentException("Provider fee and fee tax cannot be negative.");
+    if(!List.of("SETTLEMENT_REPORT","PROVIDER_API","MANUAL_RECONCILIATION").contains(sourceType))
+      throw new IllegalArgumentException("Select a supported source for the confirmed provider charges.");
+    String key=idempotencyKey==null?"":idempotencyKey.trim();
+    if(!key.matches("[A-Za-z0-9_-]{10,180}"))
+      throw new IllegalArgumentException("Idempotency-Key must contain 10–180 letters, digits, underscores or hyphens.");
+
+    Map<String,Object> order=one("""
+      select id,status,provider_payment_id,captured_amount_paise,output_tax_paise,
+        revenue_share_policy_snapshot::text as share_snapshot_json
+      from course_payment_order where id=? for update
+      """,orderId);
+    if(order.isEmpty())throw new IllegalArgumentException("Course payment order was not found.");
+    if(!"VERIFIED".equals(string(order.get("status"))))
+      throw new IllegalStateException("Processor fees can only be reconciled for a verified captured sale.");
+    String paymentId=string(order.get("provider_payment_id"));
+    if(paymentId.isBlank())throw new IllegalStateException("The verified order has no provider payment reference.");
+    Map<String,Object> prior=one("""
+      select id,processing_fee_paise,fee_tax_paise,settlement_reference,source_type
+      from course_payment_order_fee where course_payment_order_id=?
+      """,orderId);
+    if(!prior.isEmpty()) {
+      boolean same=number(prior.get("processing_fee_paise"))==processingFeePaise
+          &&number(prior.get("fee_tax_paise"))==feeTaxPaise
+          &&reference.equals(string(prior.get("settlement_reference")))
+          &&sourceType.equals(string(prior.get("source_type")));
+      if(same)return Map.of("orderId",orderId,"status","ALREADY_RECONCILED",
+          "processingFeePaise",processingFeePaise,"feeTaxPaise",feeTaxPaise);
+      throw new IllegalStateException("This order already has immutable processor-fee reconciliation. Use a reviewed correction workflow rather than overwriting its financial facts.");
+    }
+    if(exists("select exists(select 1 from finance_payout_item item join revenue_share_allocation a on a.id=item.allocation_id where a.course_payment_order_id=?)",orderId))
+      throw new IllegalStateException("A payout has already reserved this sale. Reconcile its provider fees through the finance correction workflow instead of changing the payout basis.");
+
+    Map<String,Object> snapshot=parseObject(order.get("share_snapshot_json"));
+    List<Map<String,Object>> recipientSnapshots=asMapList(snapshot.get("recipients"));
+    List<RevenueDistributionCalculator.BeneficiaryShare> shares=new ArrayList<>();
+    for(Map<String,Object> recipient:recipientSnapshots) {
+      String recipientType=string(recipient.get("recipientType"));
+      if(recipientType.isBlank())recipientType="INSTITUTION";
+      long recipientId=number(recipient.get("recipientId"));
+      if(recipientId<=0)recipientId=number("COMPANY".equals(recipientType)?recipient.get("legalEntityId"):recipient.get("institutionId"));
+      String calculationType=string(recipient.get("calculationType"));
+      if("PERCENTAGE".equals(calculationType))
+        shares.add(RevenueDistributionCalculator.BeneficiaryShare.percentage(recipientType,recipientId,integer(recipient.get("percentageBasisPoints"))));
+      else if("FLAT".equals(calculationType))
+        shares.add(RevenueDistributionCalculator.BeneficiaryShare.flat(recipientType,recipientId,number(recipient.get("flatAmountPaise"))));
+      else throw new IllegalStateException("The saved sale snapshot contains an unsupported share type.");
+    }
+    String remainderType=string(snapshot.get("remainderRecipientType"));
+    if(remainderType.isBlank())remainderType="PLATFORM_REMAINDER";
+    Long remainderId=nullableLong(snapshot.get("remainderRecipientId"));
+    if(!"PLATFORM_REMAINDER".equals(remainderType)&&remainderId==null)
+      throw new IllegalStateException("The saved sale snapshot has an invalid remainder recipient.");
+    RevenueDistributionCalculator.BeneficiaryResult net=RevenueDistributionCalculator.calculateBeneficiaries(
+        RevenueDistributionCalculator.PaymentConfirmation.VERIFIED_CAPTURED,
+        number(order.get("captured_amount_paise")),number(order.get("output_tax_paise")),
+        Math.addExact(processingFeePaise,feeTaxPaise),shares,
+        "PLATFORM_REMAINDER".equals(remainderType)?null:remainderType,remainderId);
+
+    List<Map<String,Object>> allocationRows=jdbc.queryForList("""
+      select id,recipient_type,institution_id,legal_entity_id,allocated_amount_paise
+      from revenue_share_allocation where course_payment_order_id=? order by id
+      """,orderId);
+    Map<String,RevenueDistributionCalculator.BeneficiaryAllocation> netByKey=new LinkedHashMap<>();
+    for(RevenueDistributionCalculator.BeneficiaryAllocation allocation:net.allocations())
+      netByKey.put(allocation.recipientType()+":"+allocation.recipientId(),allocation);
+    if(allocationRows.size()!=netByKey.size())
+      throw new IllegalStateException("The saved beneficiary allocation ledger does not match this sale's locked policy. Reconcile the existing financial snapshot before recording charges.");
+    for(Map<String,Object> allocation:allocationRows) {
+      String type=string(allocation.get("recipient_type"));
+      long recipientId="COMPANY".equals(type)?number(allocation.get("legal_entity_id")):number(allocation.get("institution_id"));
+      RevenueDistributionCalculator.BeneficiaryAllocation expected=netByKey.get(type+":"+recipientId);
+      if(expected==null)throw new IllegalStateException("The locked policy does not contain every saved allocation recipient.");
+      long priorAmount=number(allocation.get("allocated_amount_paise"));
+      if(expected.amountPaise()>priorAmount)
+        throw new IllegalStateException("Confirmed charges unexpectedly increase a recipient allocation; finance reconciliation is blocked.");
+    }
+
+    Long feeId=jdbc.queryForObject("""
+      insert into course_payment_order_fee(
+        course_payment_order_id,provider_payment_id,processing_fee_paise,fee_tax_paise,
+        settlement_reference,source_type,idempotency_key,confirmed_by_staff_id,details
+      ) values(?,?,?,?,?,?,?,?,?::jsonb) returning id
+      """,Long.class,orderId,paymentId,processingFeePaise,feeTaxPaise,reference,sourceType,key,
+        actorStaffId,json(Map.of("processingFeePaise",processingFeePaise,"feeTaxPaise",feeTaxPaise,
+          "totalChargePaise",Math.addExact(processingFeePaise,feeTaxPaise),"settlementReference",reference,"sourceType",sourceType)));
+    if(feeId==null)throw new IllegalStateException("Processor fees could not be recorded.");
+    int adjusted=0;
+    for(Map<String,Object> allocation:allocationRows) {
+      String type=string(allocation.get("recipient_type"));
+      long recipientId="COMPANY".equals(type)?number(allocation.get("legal_entity_id")):number(allocation.get("institution_id"));
+      RevenueDistributionCalculator.BeneficiaryAllocation expected=netByKey.get(type+":"+recipientId);
+      long amount=Math.subtractExact(number(allocation.get("allocated_amount_paise"),expected.amountPaise()));
+      if(amount<0)throw new IllegalStateException("Processor charge adjustment cannot be negative.");
+      if(amount==0)continue;
+      jdbc.update("""
+        insert into revenue_share_allocation_event(
+          allocation_id,event_type,amount_paise,currency,idempotency_key,actor_staff_id,details
+        ) select ?, 'PROCESSING_FEE_DEDUCTED',?,a.currency,?,?,?::jsonb
+          from revenue_share_allocation a where a.id=?
+        on conflict(idempotency_key) do nothing
+        """,number(allocation.get("id")),amount,"course-order:"+orderId+":processing-fee:"+feeId+":allocation:"+number(allocation.get("id")),
+          actorStaffId,json(Map.of("coursePaymentOrderId",orderId,"feeReconciliationId",feeId,
+            "processingFeePaise",processingFeePaise,"feeTaxPaise",feeTaxPaise,
+            "originalAllocationPaise",number(allocation.get("allocated_amount_paise")),
+            "netAllocationPaise",expected.amountPaise())),number(allocation.get("id")));
+      adjusted++;
+    }
+    return Map.of("orderId",orderId,"feeReconciliationId",feeId,"status","RECONCILED",
+        "processingFeePaise",processingFeePaise,"feeTaxPaise",feeTaxPaise,
+        "totalChargesPaise",Math.addExact(processingFeePaise,feeTaxPaise),
+        "distributablePoolPaise",net.distributablePoolPaise(),"adjustedAllocations",adjusted);
+  }
+
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public FinalizedSale finalizeCapturedSale(long localOrderId,String paymentId,String signature,long capturedAmountPaise) {
     List<Map<String,Object>> orders=jdbc.queryForList("""
