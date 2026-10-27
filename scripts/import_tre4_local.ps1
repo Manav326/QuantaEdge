@@ -204,17 +204,17 @@ try {
         Stop-WithMessage "-RepairDraftHindi and -SubmitForReview are separate lifecycle actions and cannot be combined."
     }
 
-    if ($RepairDraftHindi) {
-        $tesseract = Get-Command tesseract -ErrorAction SilentlyContinue
-        if (-not $tesseract) {
-            Stop-WithMessage "Hindi draft repair needs Tesseract on PATH with Hindi trained data. Install Tesseract OCR and the hin language data before using -RepairDraftHindi."
-        }
+    $tesseract = Get-Command tesseract -ErrorAction SilentlyContinue
+    $hindiOcrReady = $false
+    if ($tesseract) {
         $languages = & $tesseract.Source --list-langs 2>$null
-        if ($LASTEXITCODE -ne 0 -or -not ($languages -contains "hin")) {
-            Stop-WithMessage "Tesseract is installed but its Hindi language data 'hin' is missing. Install Hindi trained data before using -RepairDraftHindi."
-        }
-    } elseif (-not (Get-Command tesseract -ErrorAction SilentlyContinue)) {
-        Write-Warning "Tesseract Hindi OCR is not installed. SHREE-DEV stems will remain raw and flagged; do not use that dry-run inventory to import unreadable Hindi."
+        $hindiOcrReady = ($LASTEXITCODE -eq 0 -and ($languages -contains "hin"))
+    }
+    if (($Apply -or $RepairDraftHindi) -and -not $hindiOcrReady) {
+        Stop-WithMessage "Database writes require Tesseract OCR with Hindi trained data ('hin') because the source contains SHREE-DEV Hindi text. Install both before using -Apply or -RepairDraftHindi."
+    }
+    if (-not $hindiOcrReady) {
+        Write-Warning "Tesseract Hindi OCR is not ready. This dry run will preserve and flag legacy Hindi text; database writes are blocked until the hin trained data is available."
     }
 
     if (-not $Apply) {
