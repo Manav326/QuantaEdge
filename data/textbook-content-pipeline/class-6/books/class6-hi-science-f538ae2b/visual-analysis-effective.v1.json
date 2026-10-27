@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-hindi-fhcu1",
   "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
   "raw_analysis_path": "data/textbook-visuals/class6-hi-science-f538ae2b/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "e18ed575c665dd5358ad9808eeea70ef6a63d9f61bead9574cb91ae0f24494db",
+  "raw_analysis_sha256": "cb6af7117ce3b1899df55ecc869ca7f16173abe1a72a67ac5ebbc87c8cd5edfa",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-hi-science-f538ae2b/visual-analysis-corrections.v1.json",
@@ -1702,6 +1702,494 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6b04e53099a955c795a88d0a",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2a38b5b76333bb04af844d2fbd487aaf7fe478b58844666a10633a25cc3cf6ee",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:16:56Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "84be83192f58c18deaadcf30",
+      "asset_sha256": "80d981025ad55909c6bedd4d87b2d15356aed35a540e677813b1adc9fca9d2f8",
+      "page_text_context_sha256": "2a38b5b76333bb04af844d2fbd487aaf7fe478b58844666a10633a25cc3cf6ee",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 9,
+      "asset_path": "page-0009.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "90d727f6c9a734d6fedd51d2",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "25bacde92830724de87689614f6002e45d3dcae5761ce2527da3fe4287287d1f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page with names of educators and their roles.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "पंकज जैन, निदेशक, शैक्षणिक एवं संचालन, सीड2सैपलिंग एजुकेशन फाउंडेशन, बेंगलुरु",
+          "पुषपलता वर्मा, सह-आचार्य, विज्ान एवं गणित शिक्षाक्षा विभाग, रा.शै.अ.प्र.प., नई दिलली",
+          "पूजा गोखले, सहायक आचार्य, श्ी वेंकटेश्वर कॉलेज, दिलली विश्‍वविद्ालय, नई दिलली",
+          "प्रीति   खनना, पुनर्वास परामर्शदाता (दृिष्‍ट बाधा), एन.ए.बी.,रामाकृष्णाापुरम, नई दिलली",
+          "युिक्त शर्मा, आचार्य, शिक्षाक्षा विभाग (सी.आई.ई.), दिलली विश्‍वविद्ालय, दिलली",
+          "सरिता कुमार, आचार्य, आचार्य नरेंद्र देव कॉलेज, दिलली विश्‍वविद्ालय, दिलली",
+          "सी.वी. शिमरे, सह-आचार्य, विज्ान एवं गणित शिक्षाक्षा विभाग, रा.शै.अ.प्र.प., नई दिलली",
+          "सुजाता भार्गव, पूर्व आचार्य, सावित्ी"
+        ],
+        "concepts": [
+          "educators",
+          "roles",
+          "educational institutions",
+          "roles in education"
+        ],
+        "context_relation": "The page contains names and roles of educators from various educational institutions.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any information about the educational content or the subjects taught."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:23:36Z",
+      "effective_analysis": {
+        "visual_summary": "Page with names of educators and their roles.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "पंकज जैन, निदेशक, शैक्षणिक एवं संचालन, सीड2सैपलिंग एजुकेशन फाउंडेशन, बेंगलुरु",
+          "पुषपलता वर्मा, सह-आचार्य, विज्ान एवं गणित शिक्षाक्षा विभाग, रा.शै.अ.प्र.प., नई दिलली",
+          "पूजा गोखले, सहायक आचार्य, श्ी वेंकटेश्वर कॉलेज, दिलली विश्‍वविद्ालय, नई दिलली",
+          "प्रीति   खनना, पुनर्वास परामर्शदाता (दृिष्‍ट बाधा), एन.ए.बी.,रामाकृष्णाापुरम, नई दिलली",
+          "युिक्त शर्मा, आचार्य, शिक्षाक्षा विभाग (सी.आई.ई.), दिलली विश्‍वविद्ालय, दिलली",
+          "सरिता कुमार, आचार्य, आचार्य नरेंद्र देव कॉलेज, दिलली विश्‍वविद्ालय, दिलली",
+          "सी.वी. शिमरे, सह-आचार्य, विज्ान एवं गणित शिक्षाक्षा विभाग, रा.शै.अ.प्र.प., नई दिलली",
+          "सुजाता भार्गव, पूर्व आचार्य, सावित्ी"
+        ],
+        "concepts": [
+          "educators",
+          "roles",
+          "educational institutions",
+          "roles in education"
+        ],
+        "context_relation": "The page contains names and roles of educators from various educational institutions.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any information about the educational content or the subjects taught."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a4fcef1a02cd339c9d78d45f",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "25bacde92830724de87689614f6002e45d3dcae5761ce2527da3fe4287287d1f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page with names of educators and their roles in educational institutions.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "पंकज जैन, निदेशक, शैक्षणिक एवं संचालन, सीड2सैपलिंग एजुकेशन फाउंडेशन, बेंगलुरु",
+          "पुषपलता वर्मा, सह-आचार्य, विज्ान एवं गणित शिक्षाक्षा विभाग, रा.शै.अ.प्र.प., नई दिलली",
+          "पूजा गोखले, सहायक आचार्य, श्ी वेंकटेश्वर कॉलेज, दिलली विश्‍वविद्ालय, नई दिलली",
+          "प्रीति   खनना, पुनर्वास परामर्शदाता (दृिष्‍ट बाधा), एन.ए.बी.,रामाकृष्णाापुरम, नई दिलली",
+          "युिक्त शर्मा, आचार्य, शिक्षाक्षा विभाग (सी.आई.ई.), दिलली विश्‍वविद्ालय, दिलली",
+          "सरिता कुमार, आचार्य, आचार्य नरेंद्र देव कॉलेज, दिलली विश्‍वविद्ालय, दिलली",
+          "सी.वी. शिमरे, सह-आचार्य, विज्ान एवं गणित शिक्षाक्षा विभाग, रा.शै.अ.प्र.प., नई दिलली",
+          "सुजाता भार्गव, पूर्व आचार्य, सावित्ी"
+        ],
+        "concepts": [
+          "educators",
+          "roles",
+          "educational institutions",
+          "names"
+        ],
+        "context_relation": "The page contains names of educators and their roles in various educational institutions.",
+        "limitations": [
+          "The page does not contain any visual elements other than text.",
+          "The page does not provide any information about the content or subject matter of the educational institutions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:24:54Z",
+      "effective_analysis": {
+        "visual_summary": "Page with names of educators and their roles in educational institutions.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "पंकज जैन, निदेशक, शैक्षणिक एवं संचालन, सीड2सैपलिंग एजुकेशन फाउंडेशन, बेंगलुरु",
+          "पुषपलता वर्मा, सह-आचार्य, विज्ान एवं गणित शिक्षाक्षा विभाग, रा.शै.अ.प्र.प., नई दिलली",
+          "पूजा गोखले, सहायक आचार्य, श्ी वेंकटेश्वर कॉलेज, दिलली विश्‍वविद्ालय, नई दिलली",
+          "प्रीति   खनना, पुनर्वास परामर्शदाता (दृिष्‍ट बाधा), एन.ए.बी.,रामाकृष्णाापुरम, नई दिलली",
+          "युिक्त शर्मा, आचार्य, शिक्षाक्षा विभाग (सी.आई.ई.), दिलली विश्‍वविद्ालय, दिलली",
+          "सरिता कुमार, आचार्य, आचार्य नरेंद्र देव कॉलेज, दिलली विश्‍वविद्ालय, दिलली",
+          "सी.वी. शिमरे, सह-आचार्य, विज्ान एवं गणित शिक्षाक्षा विभाग, रा.शै.अ.प्र.प., नई दिलली",
+          "सुजाता भार्गव, पूर्व आचार्य, सावित्ी"
+        ],
+        "concepts": [
+          "educators",
+          "roles",
+          "educational institutions",
+          "names"
+        ],
+        "context_relation": "The page contains names of educators and their roles in various educational institutions.",
+        "limitations": [
+          "The page does not contain any visual elements other than text.",
+          "The page does not provide any information about the content or subject matter of the educational institutions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3b3adaf25c2b27225ee3de67",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "25bacde92830724de87689614f6002e45d3dcae5761ce2527da3fe4287287d1f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear text content",
+          "no visible images or diagrams"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:25:30Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear text content",
+          "no visible images or diagrams"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d3c76200f46b46da3fdaf776",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "25bacde92830724de87689614f6002e45d3dcae5761ce2527da3fe4287287d1f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:26:05Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "675255dde98ed8cc42d95192",
+      "asset_sha256": "375bb87d08f0e9bc97645abd96f30125d67c21bd14fd3b00578c5e85d27112de",
+      "page_text_context_sha256": "25bacde92830724de87689614f6002e45d3dcae5761ce2527da3fe4287287d1f",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 10,
+      "asset_path": "page-0010.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "06242a4ead52d099c06c22b1",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ddb53c9d751326ca65cf6c4a45861344d69b3c3057dd0e58f303e82a4c6c8976",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook listing names of individuals associated with educational institutions.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "पुष्पा त्याागी, पूर्व विभागाध्यक्ष (भौतिकी), संस्कृति सकूल, चााणक्यपुरी, नई दिलली तथाा  पूर्व पी.जी.टी. (भौतिकी),",
+          "केंद्रीय विद्याालय",
+          "बीके शर्मा, पूर्व आचार्य, विज्ञाान एवं गणित शिक्षाा विभााग, राा.शै.अ.प्र.प., नई दिलली",
+          "मञजुल भार्गव, आचार्य, प्रिंंसटन विश्‍वविद्याालय एवं सह-अध्यक्ष, एन.एस.टी.सी.",
+          "मंजूश्ी चौधरी, पूर्व पी.जी.टी., (भौतिकी), दिलली पब्लिक सकूल, आर. के. पुरम, नई दिलली, लाा   ग्रांांडे बोइसियर",
+          "कैंपस ऑफ इंटरनेशनल सकूल, जिनेवाा",
+          "मृदुलाा, प्रधानाचार्य, नवयुग सकूल, सरोजिनी नगर, नई दिलली",
+          "रमाा  पी. जयसुंदर, अध्यक्ष, एन.एम.आर. विभााग, एमस, नई दिलली",
+          "रवि एस. नंजुंदियाा, आचार्य, सेंटर फॉर एटमॉसफे"
+        ],
+        "concepts": [
+          "educational institutions",
+          "professors",
+          "departments",
+          "universities",
+          "schools"
+        ],
+        "context_relation": "The page lists names of individuals associated with various educational institutions.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any information about the content of the textbooks or the subjects taught."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:32:51Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook listing names of individuals associated with educational institutions.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "पुष्पा त्याागी, पूर्व विभागाध्यक्ष (भौतिकी), संस्कृति सकूल, चााणक्यपुरी, नई दिलली तथाा  पूर्व पी.जी.टी. (भौतिकी),",
+          "केंद्रीय विद्याालय",
+          "बीके शर्मा, पूर्व आचार्य, विज्ञाान एवं गणित शिक्षाा विभााग, राा.शै.अ.प्र.प., नई दिलली",
+          "मञजुल भार्गव, आचार्य, प्रिंंसटन विश्‍वविद्याालय एवं सह-अध्यक्ष, एन.एस.टी.सी.",
+          "मंजूश्ी चौधरी, पूर्व पी.जी.टी., (भौतिकी), दिलली पब्लिक सकूल, आर. के. पुरम, नई दिलली, लाा   ग्रांांडे बोइसियर",
+          "कैंपस ऑफ इंटरनेशनल सकूल, जिनेवाा",
+          "मृदुलाा, प्रधानाचार्य, नवयुग सकूल, सरोजिनी नगर, नई दिलली",
+          "रमाा  पी. जयसुंदर, अध्यक्ष, एन.एम.आर. विभााग, एमस, नई दिलली",
+          "रवि एस. नंजुंदियाा, आचार्य, सेंटर फॉर एटमॉसफे"
+        ],
+        "concepts": [
+          "educational institutions",
+          "professors",
+          "departments",
+          "universities",
+          "schools"
+        ],
+        "context_relation": "The page lists names of individuals associated with various educational institutions.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any information about the content of the textbooks or the subjects taught."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a8cc2114ad0bf079fe2ae4fe",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ddb53c9d751326ca65cf6c4a45861344d69b3c3057dd0e58f303e82a4c6c8976",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook listing names of individuals associated with educational institutions and roles.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "पुष्पा त्याागी, पूर्व विभागाध्यक्ष (भौतिकी), संस्कृति सकूल, चााणक्यपुरी, नई दिलली तथाा  पूर्व पी.जी.टी. (भौतिकी),",
+          "केंद्रीय विद्याालय",
+          "बीके शर्मा, पूर्व आचार्य, विज्ञाान एवं गणित शिक्षाा विभााग, राा.शै.अ.प्र.प., नई दिलली",
+          "मञजुल भार्गव, आचार्य, प्रिंंसटन विश्‍वविद्याालय एवं सह-अध्यक्ष, एन.एस.टी.सी.",
+          "मंजूश्ी चौधरी, पूर्व पी.जी.टी., (भौतिकी), दिलली पब्लिक सकूल, आर. के. पुरम, नई दिलली, लाा   ग्रांांडे बोइसियर",
+          "कैंपस ऑफ इंटरनेशनल सकूल, जिनेवाा",
+          "मृदुलाा, प्रधानाचार्य, नवयुग सकूल, सरोजिनी नगर, नई दिलली",
+          "रमाा  पी. जयसुंदर, अध्यक्ष, एन.एम.आर. विभााग, एमस, नई दिलली",
+          "रवि एस. नंजुंदियाा, आचार्य, सेंटर फॉर एटमॉसफे"
+        ],
+        "concepts": [
+          "educational institutions",
+          "roles",
+          "names"
+        ],
+        "context_relation": "The page lists names of individuals associated with various educational institutions and their roles.",
+        "limitations": [
+          "The page does not contain any visual elements other than text.",
+          "The page does not provide any numerical data or graphical information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:34:10Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook listing names of individuals associated with educational institutions and roles.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "पुष्पा त्याागी, पूर्व विभागाध्यक्ष (भौतिकी), संस्कृति सकूल, चााणक्यपुरी, नई दिलली तथाा  पूर्व पी.जी.टी. (भौतिकी),",
+          "केंद्रीय विद्याालय",
+          "बीके शर्मा, पूर्व आचार्य, विज्ञाान एवं गणित शिक्षाा विभााग, राा.शै.अ.प्र.प., नई दिलली",
+          "मञजुल भार्गव, आचार्य, प्रिंंसटन विश्‍वविद्याालय एवं सह-अध्यक्ष, एन.एस.टी.सी.",
+          "मंजूश्ी चौधरी, पूर्व पी.जी.टी., (भौतिकी), दिलली पब्लिक सकूल, आर. के. पुरम, नई दिलली, लाा   ग्रांांडे बोइसियर",
+          "कैंपस ऑफ इंटरनेशनल सकूल, जिनेवाा",
+          "मृदुलाा, प्रधानाचार्य, नवयुग सकूल, सरोजिनी नगर, नई दिलली",
+          "रमाा  पी. जयसुंदर, अध्यक्ष, एन.एम.आर. विभााग, एमस, नई दिलली",
+          "रवि एस. नंजुंदियाा, आचार्य, सेंटर फॉर एटमॉसफे"
+        ],
+        "concepts": [
+          "educational institutions",
+          "roles",
+          "names"
+        ],
+        "context_relation": "The page lists names of individuals associated with various educational institutions and their roles.",
+        "limitations": [
+          "The page does not contain any visual elements other than text.",
+          "The page does not provide any numerical data or graphical information."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "22afbf359d9e24f8158d7f58",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ddb53c9d751326ca65cf6c4a45861344d69b3c3057dd0e58f303e82a4c6c8976",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page with a black background and no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear text content",
+          "no visible images or diagrams"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:34:48Z",
+      "effective_analysis": {
+        "visual_summary": "A page with a black background and no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear text content",
+          "no visible images or diagrams"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
