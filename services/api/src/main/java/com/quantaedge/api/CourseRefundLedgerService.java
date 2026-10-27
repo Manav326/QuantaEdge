@@ -598,13 +598,20 @@ public class CourseRefundLedgerService {
         on conflict(idempotency_key) do nothing
         """,allocationId,delta,string(allocation.get("currency")),
           "course-refund:"+refundId+":allocation:"+allocationId+":reversed",actorStaffId,
-          json(Map.of("coursePaymentRefundId",refundId,"coursePaymentOrderId",orderId,
-              "providerRefundId",providerRefundId,"creditNoteDocumentId",creditNoteDocumentId,
-              "refundAmountPaise",currentAmount,"taxCreditPaise",currentTax,
-              "taxableCreditPaise",currentNetRefund,"cumulativeNetRefundPaise",cumulativeNetRefund,
-              "grossAllocationPaise",grossAllocated,"confirmedFeeDeductionPaise",number(allocation.get("fee_deducted_paise")),
-              "netAllocationPaise",allocated,"netDistributablePoolPaise",pool,
-              "allocationReversalPaise",delta)));
+          json(Map.ofEntries(
+              Map.entry("coursePaymentRefundId",refundId),
+              Map.entry("coursePaymentOrderId",orderId),
+              Map.entry("providerRefundId",providerRefundId),
+              Map.entry("creditNoteDocumentId",creditNoteDocumentId),
+              Map.entry("refundAmountPaise",currentAmount),
+              Map.entry("taxCreditPaise",currentTax),
+              Map.entry("taxableCreditPaise",currentNetRefund),
+              Map.entry("cumulativeNetRefundPaise",cumulativeNetRefund),
+              Map.entry("grossAllocationPaise",grossAllocated),
+              Map.entry("confirmedFeeDeductionPaise",number(allocation.get("fee_deducted_paise"))),
+              Map.entry("netAllocationPaise",allocated),
+              Map.entry("netDistributablePoolPaise",pool),
+              Map.entry("allocationReversalPaise",delta))));
     }
     event(refundId,"ALLOCATIONS_REVERSED","course-refund:"+refundId+":allocations-reversed",actorStaffId,
         Map.of("creditNoteDocumentId",creditNoteDocumentId,"refundAmountPaise",currentAmount,
