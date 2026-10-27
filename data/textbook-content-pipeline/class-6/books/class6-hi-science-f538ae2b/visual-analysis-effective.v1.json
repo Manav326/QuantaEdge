@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-hindi-fhcu1",
   "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
   "raw_analysis_path": "data/textbook-visuals/class6-hi-science-f538ae2b/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "601a52cfe0d1c1f763d184e8e564ce695d4d6959b3c862f00b9a6c5126576275",
+  "raw_analysis_sha256": "e18ed575c665dd5358ad9808eeea70ef6a63d9f61bead9574cb91ae0f24494db",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-hi-science-f538ae2b/visual-analysis-corrections.v1.json",
@@ -1092,6 +1092,616 @@
         "context_relation": "The text discusses the importance of students gathering diverse information and extracting knowledge from their surroundings to enhance their learning, emphasizing the role of various educational activities and opportunities in achieving this goal.",
         "limitations": [
           "The text does not provide specific examples or details about the activities or opportunities mentioned."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "515de4721aa55aed89e0831c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d12460c88e102baa7d558030c3712d1e59b38164589e90ddd0ed3caf52dfa1ea",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing various educational activities and initiatives for students, teachers, parents, and the community to improve their performance. It emphasizes the importance of students gathering diverse information and extracting their knowledge to improve their understanding.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "खंड मेें कुछ परियोजनाएँ और गतिविधियाँ हैैं जो शिक्षार््थथियों की विशेषज्ञों, शिक्षकों, माता-पिता और व्यापक समुदाय के साथथ अंत:क्रिया को प्ोत््ससाहित करने के लिए रची गयी हैैं। शिक्षार््थथियों को विविध जानकारी एकत्र करने और अपने निष््कर््ष निकालने के लिए भी प्ोत््ससाहित किया गया है।",
+          "पाठ्यपुस््तक, सीखने के अनेक माध््यमों मेें से एक माध््यम है। शिक्षार््थथि‍यों को अपने आस-पास के परिवेश की खोज एवं अवलोकन करके अपने ज्ञान को और बढ़ाना चाहिए। सूचना और संचार प्रौद्योगिकी (आई.सी.टी.) का उचित उपयोग शिक्षार््थथियों के सीखने और विकास के लिए एक मूल््यवान माध््यम हो सकता है।",
+          "शिक्षार्थी प"
+        ],
+        "concepts": [
+          "educational activities",
+          "initiatives",
+          "students",
+          "teachers",
+          "parents",
+          "community",
+          "improve performance",
+          "gather diverse information",
+          "extract knowledge",
+          "educational materials",
+          "information and communication technology"
+        ],
+        "context_relation": "description of educational activities and initiatives",
+        "limitations": [
+          "No specific visual elements are described."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:56:07Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing various educational activities and initiatives for students, teachers, parents, and the community to improve their performance. It emphasizes the importance of students gathering diverse information and extracting their knowledge to improve their understanding.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "खंड मेें कुछ परियोजनाएँ और गतिविधियाँ हैैं जो शिक्षार््थथियों की विशेषज्ञों, शिक्षकों, माता-पिता और व्यापक समुदाय के साथथ अंत:क्रिया को प्ोत््ससाहित करने के लिए रची गयी हैैं। शिक्षार््थथियों को विविध जानकारी एकत्र करने और अपने निष््कर््ष निकालने के लिए भी प्ोत््ससाहित किया गया है।",
+          "पाठ्यपुस््तक, सीखने के अनेक माध््यमों मेें से एक माध््यम है। शिक्षार््थथि‍यों को अपने आस-पास के परिवेश की खोज एवं अवलोकन करके अपने ज्ञान को और बढ़ाना चाहिए। सूचना और संचार प्रौद्योगिकी (आई.सी.टी.) का उचित उपयोग शिक्षार््थथियों के सीखने और विकास के लिए एक मूल््यवान माध््यम हो सकता है।",
+          "शिक्षार्थी प"
+        ],
+        "concepts": [
+          "educational activities",
+          "initiatives",
+          "students",
+          "teachers",
+          "parents",
+          "community",
+          "improve performance",
+          "gather diverse information",
+          "extract knowledge",
+          "educational materials",
+          "information and communication technology"
+        ],
+        "context_relation": "description of educational activities and initiatives",
+        "limitations": [
+          "No specific visual elements are described."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8c085ecf3d1fc91828424ad1",
+      "asset_sha256": "c51bee35f2b23964c4d8473353baa939316e73705241d9aba86514284134da96",
+      "page_text_context_sha256": "d12460c88e102baa7d558030c3712d1e59b38164589e90ddd0ed3caf52dfa1ea",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 7,
+      "asset_path": "page-0007.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d56a82abaa6b31d24b0a5f70",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f049523c978c785e47631ef0baa2f5b72a2382fc99b0d2b7b27136afbba767cc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook listing the members of a committee.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "रााष्ट्रीय पााठ्यक्रम और शिक्षण अधिगम साामग्री समिति",
+          "(एन.एस.टीी.सीी.)",
+          "1. महेश चंद्र पंतत, कुलाधिपति, रााष्ट्रीय शैक्षिक योजना एवं प्रशाासन संस्थाान (अध्यक्ष)",
+          "2. मञ्जुल भाार्गव, आचार्य, प्रिंंसटन विश्‍वविद्यालय (सह-अध्यक्ष)",
+          "3. सुधाा मूर्ति, प्रतिष्‍ ठित लेखिका एवं शिक्षाविद्",
+          "4. बिबेक देबरॉॉय, अध्यक्ष, प्रधाानमंत्ी की आर्थिक सलााहकाार परिषद् (ई.ए.सी.-पी.एम.)",
+          "5. शेखर माांडे, पूर्व महानिदेशक, सी.एस.आई.आर., एवं विशिष्‍टट प्राधयापक, सावित्ीबााई फुले पुणे विश्‍वविद्यालय, पुणे",
+          "6. सुजाताा राामदोरई, आचार्य, ब्रिटिश कोलंबियाा  विश्‍वविद्यालय, कनााडाा",
+          "7."
+        ],
+        "concepts": [
+          "committee members",
+          "educational committee",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members"
+        ],
+        "context_relation": "The page is a list of members of an educational committee.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not contain any equations or formulas.",
+          "The page does not contain any diagrams or charts."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:02:41Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook listing the members of a committee.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "रााष्ट्रीय पााठ्यक्रम और शिक्षण अधिगम साामग्री समिति",
+          "(एन.एस.टीी.सीी.)",
+          "1. महेश चंद्र पंतत, कुलाधिपति, रााष्ट्रीय शैक्षिक योजना एवं प्रशाासन संस्थाान (अध्यक्ष)",
+          "2. मञ्जुल भाार्गव, आचार्य, प्रिंंसटन विश्‍वविद्यालय (सह-अध्यक्ष)",
+          "3. सुधाा मूर्ति, प्रतिष्‍ ठित लेखिका एवं शिक्षाविद्",
+          "4. बिबेक देबरॉॉय, अध्यक्ष, प्रधाानमंत्ी की आर्थिक सलााहकाार परिषद् (ई.ए.सी.-पी.एम.)",
+          "5. शेखर माांडे, पूर्व महानिदेशक, सी.एस.आई.आर., एवं विशिष्‍टट प्राधयापक, सावित्ीबााई फुले पुणे विश्‍वविद्यालय, पुणे",
+          "6. सुजाताा राामदोरई, आचार्य, ब्रिटिश कोलंबियाा  विश्‍वविद्यालय, कनााडाा",
+          "7."
+        ],
+        "concepts": [
+          "committee members",
+          "educational committee",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members"
+        ],
+        "context_relation": "The page is a list of members of an educational committee.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not contain any equations or formulas.",
+          "The page does not contain any diagrams or charts."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7523d1201f052229805948e8",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f049523c978c785e47631ef0baa2f5b72a2382fc99b0d2b7b27136afbba767cc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook listing the members of a committee.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "रााष्ट्रीय पााठ्यक्रम और शिक्षण अधिगम साामग्री समिति",
+          "(एन.एस.टीी.सीी.)",
+          "1. महेश चंद्र पंतत, कुलाधिपति, रााष्ट्रीय शैक्षिक योजना एवं प्रशाासन संस्थाान (अध्यक्ष)",
+          "2. मञ्जुल भाार्गव, आचार्य, प्रिंंसटन विश्‍वविद्यालय (सह-अध्यक्ष)",
+          "3. सुधाा मूर्ति, प्रतिष्‍ ठित लेखिका एवं शिक्षाविद्",
+          "4. बिबेक देबरॉॉय, अध्यक्ष, प्रधाानमंत्ी की आर्थिक सलााहकाार परिषद् (ई.ए.सी.-पी.एम.)",
+          "5. शेखर माांडे, पूर्व महानिदेशक, सी.एस.आई.आर., एवं विशिष्‍टट प्राधयापक, सावित्ीबााई फुले पुणे विश्‍वविद्यालय, पुणे",
+          "6. सुजाताा राामदोरई, आचार्य, ब्रिटिश कोलंबियाा  विश्‍वविद्यालय, कनााडाा",
+          "7."
+        ],
+        "concepts": [
+          "committee members",
+          "educational committee",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members"
+        ],
+        "context_relation": "The page is a list of members of an educational committee.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any information about the committee's activities or goals."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:03:55Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook listing the members of a committee.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "रााष्ट्रीय पााठ्यक्रम और शिक्षण अधिगम साामग्री समिति",
+          "(एन.एस.टीी.सीी.)",
+          "1. महेश चंद्र पंतत, कुलाधिपति, रााष्ट्रीय शैक्षिक योजना एवं प्रशाासन संस्थाान (अध्यक्ष)",
+          "2. मञ्जुल भाार्गव, आचार्य, प्रिंंसटन विश्‍वविद्यालय (सह-अध्यक्ष)",
+          "3. सुधाा मूर्ति, प्रतिष्‍ ठित लेखिका एवं शिक्षाविद्",
+          "4. बिबेक देबरॉॉय, अध्यक्ष, प्रधाानमंत्ी की आर्थिक सलााहकाार परिषद् (ई.ए.सी.-पी.एम.)",
+          "5. शेखर माांडे, पूर्व महानिदेशक, सी.एस.आई.आर., एवं विशिष्‍टट प्राधयापक, सावित्ीबााई फुले पुणे विश्‍वविद्यालय, पुणे",
+          "6. सुजाताा राामदोरई, आचार्य, ब्रिटिश कोलंबियाा  विश्‍वविद्यालय, कनााडाा",
+          "7."
+        ],
+        "concepts": [
+          "committee members",
+          "educational committee",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members"
+        ],
+        "context_relation": "The page is a list of members of an educational committee.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any information about the committee's activities or goals."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "079ed289199ff4e448a08546",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f049523c978c785e47631ef0baa2f5b72a2382fc99b0d2b7b27136afbba767cc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook listing the members of a committee.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "रााष्ट्रीय पााठ्यक्रम और शिक्षण अधिगम साामग्री समिति",
+          "(एन.एस.टीी.सीी.)",
+          "1. महेश चंद्र पंतत, कुलाधिपति, रााष्ट्रीय शैक्षिक योजना एवं प्रशाासन संस्थाान (अध्यक्ष)",
+          "2. मञ्जुल भाार्गव, आचार्य, प्रिंंसटन विश्‍वविद्यालय (सह-अध्यक्ष)",
+          "3. सुधाा मूर्ति, प्रतिष्‍ ठित लेखिका एवं शिक्षाविद्",
+          "4. बिबेक देबरॉॉय, अध्यक्ष, प्रधाानमंत्ी की आर्थिक सलााहकाार परिषद् (ई.ए.सी.-पी.एम.)",
+          "5. शेखर माांडे, पूर्व महानिदेशक, सी.एस.आई.आर., एवं विशिष्‍टट प्राधयापक, सावित्ीबााई फुले पुणे विश्‍वविद्यालय, पुणे",
+          "6. सुजाताा राामदोरई, आचार्य, ब्रिटिश कोलंबियाा  विश्‍वविद्यालय, कनााडाा",
+          "7."
+        ],
+        "concepts": [
+          "committee members",
+          "educational committee",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members"
+        ],
+        "context_relation": "The image is a page from a textbook listing the members of an educational committee.",
+        "limitations": [
+          "The image does not show any visual elements other than the text.",
+          "The image does not provide any visual information about the committee's work or activities."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:05:58Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook listing the members of a committee.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "रााष्ट्रीय पााठ्यक्रम और शिक्षण अधिगम साामग्री समिति",
+          "(एन.एस.टीी.सीी.)",
+          "1. महेश चंद्र पंतत, कुलाधिपति, रााष्ट्रीय शैक्षिक योजना एवं प्रशाासन संस्थाान (अध्यक्ष)",
+          "2. मञ्जुल भाार्गव, आचार्य, प्रिंंसटन विश्‍वविद्यालय (सह-अध्यक्ष)",
+          "3. सुधाा मूर्ति, प्रतिष्‍ ठित लेखिका एवं शिक्षाविद्",
+          "4. बिबेक देबरॉॉय, अध्यक्ष, प्रधाानमंत्ी की आर्थिक सलााहकाार परिषद् (ई.ए.सी.-पी.एम.)",
+          "5. शेखर माांडे, पूर्व महानिदेशक, सी.एस.आई.आर., एवं विशिष्‍टट प्राधयापक, सावित्ीबााई फुले पुणे विश्‍वविद्यालय, पुणे",
+          "6. सुजाताा राामदोरई, आचार्य, ब्रिटिश कोलंबियाा  विश्‍वविद्यालय, कनााडाा",
+          "7."
+        ],
+        "concepts": [
+          "committee members",
+          "educational committee",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members"
+        ],
+        "context_relation": "The image is a page from a textbook listing the members of an educational committee.",
+        "limitations": [
+          "The image does not show any visual elements other than the text.",
+          "The image does not provide any visual information about the committee's work or activities."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8d32265ba6472b0bd3e779fe",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f049523c978c785e47631ef0baa2f5b72a2382fc99b0d2b7b27136afbba767cc",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook listing the members of a committee.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "रााष्ट्रीय पााठ्यक्रम और शिक्षण अधिगम साामग्री समिति",
+          "(एन.एस.टीी.सीी.)",
+          "1. महेश चंद्र पंतत, कुलाधिपति, रााष्ट्रीय शैक्षिक योजना एवं प्रशाासन संस्थाान (अध्यक्ष)",
+          "2. मञ्जुल भाार्गव, आचार्य, प्रिंंसटन विश्‍वविद्यालय (सह-अध्यक्ष)",
+          "3. सुधाा मूर्ति, प्रतिष्‍ ठित लेखिका एवं शिक्षाविद्",
+          "4. बिबेक देबरॉॉय, अध्यक्ष, प्रधाानमंत्ी की आर्थिक सलााहकाार परिषद् (ई.ए.सी.-पी.एम.)",
+          "5. शेखर माांडे, पूर्व महानिदेशक, सी.एस.आई.आर., एवं विशिष्‍टट प्राधयापक, सावित्ीबााई फुले पुणे विश्‍वविद्यालय, पुणे",
+          "6. सुजाताा राामदोरई, आचार्य, ब्रिटिश कोलंबियाा  विश्‍वविद्यालय, कनााडाा",
+          "7."
+        ],
+        "concepts": [
+          "committee members",
+          "educational committee",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members"
+        ],
+        "context_relation": "The image is a page from a textbook listing the members of a committee.",
+        "limitations": [
+          "The image does not show any visual elements other than the text.",
+          "The image does not provide any visual information about the committee's activities or functions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:07:56Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook listing the members of a committee.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "रााष्ट्रीय पााठ्यक्रम और शिक्षण अधिगम साामग्री समिति",
+          "(एन.एस.टीी.सीी.)",
+          "1. महेश चंद्र पंतत, कुलाधिपति, रााष्ट्रीय शैक्षिक योजना एवं प्रशाासन संस्थाान (अध्यक्ष)",
+          "2. मञ्जुल भाार्गव, आचार्य, प्रिंंसटन विश्‍वविद्यालय (सह-अध्यक्ष)",
+          "3. सुधाा मूर्ति, प्रतिष्‍ ठित लेखिका एवं शिक्षाविद्",
+          "4. बिबेक देबरॉॉय, अध्यक्ष, प्रधाानमंत्ी की आर्थिक सलााहकाार परिषद् (ई.ए.सी.-पी.एम.)",
+          "5. शेखर माांडे, पूर्व महानिदेशक, सी.एस.आई.आर., एवं विशिष्‍टट प्राधयापक, सावित्ीबााई फुले पुणे विश्‍वविद्यालय, पुणे",
+          "6. सुजाताा राामदोरई, आचार्य, ब्रिटिश कोलंबियाा  विश्‍वविद्यालय, कनााडाा",
+          "7."
+        ],
+        "concepts": [
+          "committee members",
+          "educational committee",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members",
+          "educational committee members"
+        ],
+        "context_relation": "The image is a page from a textbook listing the members of a committee.",
+        "limitations": [
+          "The image does not show any visual elements other than the text.",
+          "The image does not provide any visual information about the committee's activities or functions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e93585ed373b12e4b3d91672",
+      "asset_sha256": "1b3f693998be4d8a1099e982754816700138eac55781b5ad22b26035fe6c8e2e",
+      "page_text_context_sha256": "f049523c978c785e47631ef0baa2f5b72a2382fc99b0d2b7b27136afbba767cc",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 8,
+      "asset_path": "page-0008.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ad8a5c6244d79f78b8ecf614",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2a38b5b76333bb04af844d2fbd487aaf7fe478b58844666a10633a25cc3cf6ee",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page from a textbook with text in Hindi.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "पााठ्यपुस्तक विकाास समूह",
+          "अध्यक्ष, पााठ्यक्रम  क्षेत्र  समूह (सीीएजीी)— विज्ञाान",
+          "शेखर चिं. माांडे, एफ.एन.ए., एफ.ए.एस.सी., एफ.एन.ए.एस.सी., पूर्व महानिदेशक, सी.एस.आई.आर., विशिष्‍टट",
+          "प्राधयापक, जैवसूूचनाा  विज्ञान  केंद्र, सावित्ीबााई फुले पुणे विश्‍वविद्यालय, माानद  प्रतिष्‍ठितत   वैज्ञानिक,  रााष्ट्रीय",
+          "कोशिकाा  विज्ञान केंद्र, पुणे",
+          "योगदाानकर्ताा",
+          "अर्नब  भट्टााचार्य,  केंद्र निदेशक, होमी  भााभाा   विज्ञान  शिक्षाा  केंद्र,   टााटाा   इंस्टीट्यूूट ऑफ  फंडाामेंटल  रिसर्च",
+          "टी.आई.एफ.आर.), मुंबई, आचार्य, संघनितत  पदार्थ भौति",
+          "भौतिकी एवं पदार्थ विज्ञान विभाग, टी.आई.एफ.आर., मुंबई"
+        ],
+        "concepts": [
+          "textbook",
+          "Hindi",
+          "educational content editor",
+          "page with multiple visuals"
+        ],
+        "context_relation": "The page contains text related to the educational content editor's job description and responsibilities.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide specific details about the textbook's content or structure."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:14:30Z",
+      "effective_analysis": {
+        "visual_summary": "Page from a textbook with text in Hindi.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "पााठ्यपुस्तक विकाास समूह",
+          "अध्यक्ष, पााठ्यक्रम  क्षेत्र  समूह (सीीएजीी)— विज्ञाान",
+          "शेखर चिं. माांडे, एफ.एन.ए., एफ.ए.एस.सी., एफ.एन.ए.एस.सी., पूर्व महानिदेशक, सी.एस.आई.आर., विशिष्‍टट",
+          "प्राधयापक, जैवसूूचनाा  विज्ञान  केंद्र, सावित्ीबााई फुले पुणे विश्‍वविद्यालय, माानद  प्रतिष्‍ठितत   वैज्ञानिक,  रााष्ट्रीय",
+          "कोशिकाा  विज्ञान केंद्र, पुणे",
+          "योगदाानकर्ताा",
+          "अर्नब  भट्टााचार्य,  केंद्र निदेशक, होमी  भााभाा   विज्ञान  शिक्षाा  केंद्र,   टााटाा   इंस्टीट्यूूट ऑफ  फंडाामेंटल  रिसर्च",
+          "टी.आई.एफ.आर.), मुंबई, आचार्य, संघनितत  पदार्थ भौति",
+          "भौतिकी एवं पदार्थ विज्ञान विभाग, टी.आई.एफ.आर., मुंबई"
+        ],
+        "concepts": [
+          "textbook",
+          "Hindi",
+          "educational content editor",
+          "page with multiple visuals"
+        ],
+        "context_relation": "The page contains text related to the educational content editor's job description and responsibilities.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide specific details about the textbook's content or structure."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ae1389db8e0f290c2cc5cc5f",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2a38b5b76333bb04af844d2fbd487aaf7fe478b58844666a10633a25cc3cf6ee",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page from a textbook discussing the development of educational content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "पााठ्यपुस्तक विकाास समूह",
+          "अध्यक्ष, पााठ्यक्रम  क्षेत्र  समूह (सीीएजीी)— विज्ञाान",
+          "शेखर चिं. माांडे, एफ.एन.ए., एफ.ए.एस.सी., एफ.एन.ए.एस.सी., पूर्व महानिदेशक, सी.एस.आई.आर., विशिष्‍टट",
+          "प्राधयापक, जैवसूूचनाा  विज्ञान  केंद्र, सावित्ीबााई फुले पुणे विश्‍वविद्यालय, माानद  प्रतिष्‍ठितत   वैज्ञानिक,  रााष्ट्रीय",
+          "कोशिकाा  विज्ञान केंद्र, पुणे",
+          "योगदाानकर्ताा",
+          "अर्नब  भट्टााचार्य,  केंद्र निदेशक, होमी  भााभाा   विज्ञान  शिक्षाा  केंद्र,   टााटाा   इंस्टीट्यूूट ऑफ  फंडाामेंटल  रिसर्च",
+          "टी.आई.एफ.आर.), मुंबई, आचार्य, संघनितत  पदार्थ भौतिकी एवं पदार्थ विज्ञान विभाग, टी.आई.एफ.आर., मुंबई"
+        ],
+        "concepts": [
+          "educational content development",
+          "textbook development",
+          "educational content editor",
+          "textbook development committee",
+          "educational content editor responsibilities",
+          "textbook development committee members"
+        ],
+        "context_relation": "The page discusses the development of educational content, including the roles and responsibilities of the educational content editor and the textbook development committee.",
+        "limitations": [
+          "The page does not provide specific details about the textbook development process or the responsibilities of the committee members."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:15:44Z",
+      "effective_analysis": {
+        "visual_summary": "Page from a textbook discussing the development of educational content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "पााठ्यपुस्तक विकाास समूह",
+          "अध्यक्ष, पााठ्यक्रम  क्षेत्र  समूह (सीीएजीी)— विज्ञाान",
+          "शेखर चिं. माांडे, एफ.एन.ए., एफ.ए.एस.सी., एफ.एन.ए.एस.सी., पूर्व महानिदेशक, सी.एस.आई.आर., विशिष्‍टट",
+          "प्राधयापक, जैवसूूचनाा  विज्ञान  केंद्र, सावित्ीबााई फुले पुणे विश्‍वविद्यालय, माानद  प्रतिष्‍ठितत   वैज्ञानिक,  रााष्ट्रीय",
+          "कोशिकाा  विज्ञान केंद्र, पुणे",
+          "योगदाानकर्ताा",
+          "अर्नब  भट्टााचार्य,  केंद्र निदेशक, होमी  भााभाा   विज्ञान  शिक्षाा  केंद्र,   टााटाा   इंस्टीट्यूूट ऑफ  फंडाामेंटल  रिसर्च",
+          "टी.आई.एफ.आर.), मुंबई, आचार्य, संघनितत  पदार्थ भौतिकी एवं पदार्थ विज्ञान विभाग, टी.आई.एफ.आर., मुंबई"
+        ],
+        "concepts": [
+          "educational content development",
+          "textbook development",
+          "educational content editor",
+          "textbook development committee",
+          "educational content editor responsibilities",
+          "textbook development committee members"
+        ],
+        "context_relation": "The page discusses the development of educational content, including the roles and responsibilities of the educational content editor and the textbook development committee.",
+        "limitations": [
+          "The page does not provide specific details about the textbook development process or the responsibilities of the committee members."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "22ca21cdff1f1acf46c47dba",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2a38b5b76333bb04af844d2fbd487aaf7fe478b58844666a10633a25cc3cf6ee",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:16:17Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
