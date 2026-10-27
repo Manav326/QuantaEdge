@@ -1300,9 +1300,14 @@ public class FinancePayoutController {
       throw notFound("Payout batch was not found.");
     return jdbc.queryForList("""
       select d.id,d.public_id,d.document_number,d.batch_id,d.payout_id,d.document_type,d.revision,
-        d.sha256,d.byte_length,d.created_at,d.generated_by_staff_id,s.display_name as generated_by_name
+        d.sha256,d.byte_length,d.created_at,d.generated_by_staff_id,s.display_name as generated_by_name,
+        coalesce(t.display_name,le.legal_name,b.beneficiary_name) as recipient_name
       from finance_payout_statement_document d
       left join staff_account s on s.id=d.generated_by_staff_id
+      left join finance_payout p on p.id=d.payout_id
+      left join finance_payout_beneficiary b on b.id=p.beneficiary_id
+      left join institution_tenant t on t.id=b.institution_id
+      left join billing_legal_entity le on le.id=b.legal_entity_id
       where d.batch_id=? order by d.created_at desc,d.id desc
       """,batchId);
   }
