@@ -193,6 +193,176 @@ public class CoursePaymentOperationsController {
   }
 
   /**
+   * Read-only cursor-paginated exception queue for the existing HRMS course-payment workspace.
+   * Only verified sales and non-verified orders that unexpectedly have allocation rows are scanned.
+   * This shares the same locked-snapshot reconciler as the per-order trace and never repairs data.
+   */
+  @GetMapping("/reconciliation-exceptions")
+  public Map<String,Object> distributionReconciliationExceptions(
+      @RequestParam(value="search",required=false) String suppliedSearch,
+      @RequestParam(value="beforeOrderId",required=false) Long beforeOrderId,
+      @RequestParam(value="limit",defaultValue="50") int requestedLimit,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    authorization.requirePermission(context,"QE_PLATFORM_OWNER");
+    String search=suppliedSearch==null?"":suppliedSearch.trim();
+    if(search.length()>120)throw new IllegalArgumentException("Reconciliation search can contain at most 120 characters.");
+    if(beforeOrderId!=null&&beforeOrderId<=0)throw new IllegalArgumentException("The reconciliation cursor must be a positive order ID.");
+    int limit=Math.max(1,Math.min(requestedLimit,100));
+    final int batchSize=200;
+    final int scanBudget=5_000;
+    long cursor=beforeOrderId==null?Long.MAX_VALUE:beforeOrderId;
+    long lastScannedId=cursor;
+    int scanned=0;
+    boolean exhausted=false;
+    boolean foundExtraException=false;
+    boolean scanLimitReached=false;
+    List<Map<String,Object>> exceptions=new ArrayList<>();
+
+    while(scanned<scanBudget&&exceptions.size()<=limit&&!exhausted) {
+      List<Map<String,Object>> batch=jdbc.queryForList("""
+        select o.id as local_order_id,o.institution_id,
+          coalesce(t.display_name,'[Institution scope missing]') as institution_name,
+          o.course_id,coalesce(nullif(offer.title_override,''),course.display_name) as course_title,
+          o.student_id,s.display_name as learner_name,o.status,o.failure_code,o.currency,
+          o.offer_price_paise,o.captured_amount_paise,o.output_tax_paise,o.captured_at,
+          o.provider_order_id,o.provider_payment_id,o.created_at,o.updated_at,o.verified_at,
+          o.revenue_share_policy_id,o.revenue_share_policy_snapshot::text as share_snapshot_json,
+          o.fiscal_document_id,d.document_number as invoice_number
+        from course_payment_order o
+        left join institution_tenant t on t.id=o.institution_id
+        join curriculum_program course on course.id=o.course_id
+        left join student s on s.id=o.student_id
+        left join institution_marketplace_offer offer
+          on offer.id=o.institution_offer_id and offer.institution_id=o.institution_id
+        left join fiscal_document d on d.id=o.fiscal_document_id
+        where o.id < ?
+          and (o.status='VERIFIED' or exists(
+            select 1 from revenue_share_allocation candidate
+            where candidate.course_payment_order_id=o.id))
+          and (?='' or lower(concat_ws(' ',o.id::text,t.display_name,course.display_name,
+            offer.title_override,s.display_name,o.provider_order_id,o.provider_payment_id)) like ?)
+        order by o.id desc limit ?
+        """,cursor,search,"%"+search.toLowerCase(Locale.ROOT)+"%",batchSize);
+      if(batch.isEmpty()) {
+        exhausted=true;
+        break;
+      }
+      List<Long> orderIds=batch.stream().map(row->number(row.get("local_order_id"))).toList();
+      String placeholders=String.join(",",java.util.Collections.nCopies(orderIds.size(),"?"));
+      String allocationSql="""
+        select a.course_payment_order_id,a.id,a.policy_id,a.policy_recipient_id,a.recipient_type,
+          a.institution_id,a.legal_entity_id,a.currency,a.actual_paid_paise,a.output_tax_paise,
+          a.distributable_pool_paise,a.allocated_amount_paise,
+          coalesce(sum(e.amount_paise) filter(where e.event_type='EARNED'),0) as earned_event_amount_paise,
+          count(e.id) filter(where e.event_type='EARNED') as earned_event_count
+        from revenue_share_allocation a
+        left join revenue_share_allocation_event e on e.allocation_id=a.id
+        where a.course_payment_order_id in (%s)
+        group by a.course_payment_order_id,a.id,a.policy_id,a.policy_recipient_id,a.recipient_type,
+          a.institution_id,a.legal_entity_id,a.currency,a.actual_paid_paise,a.output_tax_paise,
+          a.distributable_pool_paise,a.allocated_amount_paise
+        order by a.course_payment_order_id,a.id
+        """.formatted(placeholders);
+      List<Map<String,Object>> rawAllocations=jdbc.queryForList(allocationSql,orderIds.toArray());
+      Map<Long,List<Map<String,Object>>> allocationsByOrder=new LinkedHashMap<>();
+      for(Map<String,Object> allocation:rawAllocations) {
+        allocationsByOrder.computeIfAbsent(number(allocation.get("course_payment_order_id")),ignored->new ArrayList<>())
+            .add(allocation);
+      }
+
+      for(Map<String,Object> order:batch) {
+        long orderId=number(order.get("local_order_id"));
+        cursor=orderId;
+        lastScannedId=orderId;
+        scanned++;
+        String status=text(order.get("status")).toUpperCase(Locale.ROOT);
+        List<Map<String,Object>> rows=allocationsByOrder.getOrDefault(orderId,List.of());
+        List<String> issues;
+        List<String> details;
+        if(!"VERIFIED".equals(status)) {
+          if(rows.isEmpty())continue;
+          issues=List.of("Allocation rows exist before the order reached VERIFIED payment state.");
+          details=List.of("Order status: "+status,"Recorded allocation rows: "+rows.size(),
+              "Do not change financial records until payment state and allocation history are reviewed.");
+        } else {
+          Map<String,Object> snapshot=Map.of();
+          try {
+            String raw=text(order.get("share_snapshot_json"));
+            if(!raw.isBlank())snapshot=mapper.readValue(raw,new TypeReference<Map<String,Object>>() {});
+          } catch(Exception ignored) {
+            // The exception record remains visible; per-order trace explains the unreadable snapshot.
+          }
+          Long policyId=order.get("revenue_share_policy_id")==null?null:number(order.get("revenue_share_policy_id"));
+          try {
+            CourseRevenueAllocationReconciliation.Result result=CourseRevenueAllocationReconciliation.reconcile(
+                snapshot,policyId,number(order.get("captured_amount_paise"),0L),
+                number(order.get("output_tax_paise")),text(order.get("currency")),rows);
+            if(result.complete())continue;
+            issues=result.issues();
+            details=result.details();
+          } catch(RuntimeException exception) {
+            issues=List.of("Distribution could not be safely calculated from the locked financial records.");
+            details=List.of("Open the per-order status trace for detailed diagnostics.");
+          }
+        }
+        Map<String,Object> item=new LinkedHashMap<>();
+        item.put("local_order_id",orderId);
+        item.put("institution_id",order.get("institution_id"));
+        item.put("institution_name",order.get("institution_name"));
+        item.put("course_id",order.get("course_id"));
+        item.put("course_title",order.get("course_title"));
+        item.put("student_id",order.get("student_id"));
+        item.put("learner_name",order.get("learner_name"));
+        item.put("status",status);
+        item.put("currency",order.get("currency"));
+        item.put("offer_price_paise",order.get("offer_price_paise"));
+        item.put("captured_amount_paise",order.get("captured_amount_paise"));
+        item.put("provider_order_id",order.get("provider_order_id"));
+        item.put("provider_payment_id",order.get("provider_payment_id"));
+        item.put("created_at",order.get("created_at"));
+        item.put("verified_at",order.get("verified_at"));
+        item.put("fiscal_document_id",order.get("fiscal_document_id"));
+        item.put("invoice_number",order.get("invoice_number"));
+        item.put("distribution_reconciliation_status","REVIEW_REQUIRED");
+        item.put("distribution_issue_count",issues.size());
+        item.put("distribution_reconciliation_summary",String.join(" ",issues.stream().limit(2).toList()));
+        item.put("distribution_reconciliation_issues",issues);
+        item.put("distribution_reconciliation_details",details);
+        exceptions.add(item);
+        if(exceptions.size()>limit) {
+          foundExtraException=true;
+          break;
+        }
+      }
+      if(foundExtraException)break;
+      if(batch.size()<batchSize)exhausted=true;
+      if(scanned>=scanBudget&&!exhausted)scanLimitReached=true;
+    }
+    if(scanned>=scanBudget&&!exhausted&&!foundExtraException)scanLimitReached=true;
+    if(exceptions.size()>limit)exceptions= new ArrayList<>(exceptions.subList(0,limit));
+    Long nextCursor=null;
+    boolean hasMore=false;
+    if(foundExtraException) {
+      // Cursor is the final returned exception. Starting strictly below it preserves the overflow
+      // exception for the next page even if the prior scan had passed over unrelated clean orders.
+      nextCursor=number(exceptions.getLast().get("local_order_id"));
+      hasMore=true;
+    } else if(scanLimitReached) {
+      nextCursor=lastScannedId;
+      hasMore=true;
+    }
+    Map<String,Object> response=new LinkedHashMap<>();
+    response.put("items",exceptions);
+    response.put("count",exceptions.size());
+    response.put("hasMore",hasMore);
+    response.put("nextCursor",nextCursor);
+    response.put("scannedOrders",scanned);
+    response.put("scanLimitReached",scanLimitReached);
+    response.put("readOnly",true);
+    return response;
+  }
+
+  /**
    * Read-only delivery-chain diagnosis for any saved course-payment order. It combines local
    * checkout, financial snapshots, access, distribution and invoice facts with a read-only
    * Razorpay lookup. It never changes the order or advances any transaction stage.
