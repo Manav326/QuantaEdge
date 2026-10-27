@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1354,
-    "successful_visual_analyses": 1338,
-    "missing_visual_analyses": 937,
+    "raw_analysis_result_rows": 1355,
+    "successful_visual_analyses": 1339,
+    "missing_visual_analyses": 936,
     "failed_visual_analyses": 16,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 953,
+    "unresolved_count": 952,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -50613,9 +50613,30 @@
       "asset_path": "assets/0d4ae3cbdccd1ec76a47e0caf27b553ccd6824b869f53b19c6551d7b622daafa.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the path of a lightning conductor in a building.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ever heard of...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building.",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides an easy path for the lightning to flow."
+        ],
+        "concepts": [
+          "Lightning conductor",
+          "Building construction",
+          "Path of lightning",
+          "High point of the building",
+          "Ground burial"
+        ],
+        "context_relation": "The image is a visual representation of the lightning conductor's function in a building.",
+        "limitations": [
+          "The image does not show the actual lightning conductor or its installation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

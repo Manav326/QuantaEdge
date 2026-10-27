@@ -15,12 +15,12 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "52885281ae21238e9ccc031f"
+      "9193903c4c3162f809e1ce5a"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1334,
-    "assets_remaining": 957,
-    "assets_completion_percent": 58.2,
+    "assets_analyzed": 1335,
+    "assets_remaining": 956,
+    "assets_completion_percent": 58.3,
     "assets_failed": 16,
     "assets_skipped_from_checkpoint": 1334,
     "batch_limit": 5,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40520039010",
-      "checkpointed_at": "2026-10-27T15:55:26Z"
+      "checkpointed_at": "2026-10-27T16:02:11Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40520039010",
-      "checkpointed_at": "2026-10-27T15:56:03Z"
+      "checkpointed_at": "2026-10-27T16:02:45Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40520039010",
-      "checkpointed_at": "2026-10-27T15:56:45Z"
+      "checkpointed_at": "2026-10-27T16:03:26Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40520039010",
-      "checkpointed_at": "2026-10-27T15:57:47Z"
+      "checkpointed_at": "2026-10-27T16:04:26Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -44410,6 +44410,46 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40501519107",
       "checkpointed_at": "2026-10-27T13:57:42Z"
+    },
+    {
+      "asset_id": "9193903c4c3162f809e1ce5a",
+      "asset_sha256": "0d4ae3cbdccd1ec76a47e0caf27b553ccd6824b869f53b19c6551d7b622daafa",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 112,
+      "asset_path": "assets/0d4ae3cbdccd1ec76a47e0caf27b553ccd6824b869f53b19c6551d7b622daafa.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e7642c3aeda86d04ba7f1847071dffd75b249cbd6931426fb55becc7d77fadd0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the path of a lightning conductor in a building.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ever heard of...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building.",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides an easy path for the lightning to flow."
+        ],
+        "concepts": [
+          "Lightning conductor",
+          "Building construction",
+          "Path of lightning",
+          "High point of the building",
+          "Ground burial"
+        ],
+        "context_relation": "The image is a visual representation of the lightning conductor's function in a building.",
+        "limitations": [
+          "The image does not show the actual lightning conductor or its installation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40520039010",
+      "checkpointed_at": "2026-10-27T16:05:42Z"
     }
   ]
 }
