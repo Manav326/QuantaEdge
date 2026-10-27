@@ -11,16 +11,16 @@
     "assets_selected": 2373,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "0e143e54e2f709b8a4e5968d",
-      "463542d4277119b7abc93e3a",
-      "8604e838b1f1e41398ca72dd",
-      "1554b4067d24673fc7b88fc2",
-      "61f62c81d1cc65e877782dbc"
+      "69883c015cbfe046373e1e90",
+      "c973477a8cf682ca3f4db4ca",
+      "29c388b0161ccfef7bc70795",
+      "09346f43d0d544fde86bea5f",
+      "005e7a6859d01acd7e5aa56e"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2368,
-    "assets_remaining": 5120,
-    "assets_completion_percent": 31.6,
+    "assets_analyzed": 2370,
+    "assets_remaining": 5118,
+    "assets_completion_percent": 31.7,
     "assets_failed": 28,
     "assets_skipped_from_checkpoint": 2368,
     "batch_limit": 5,
@@ -85917,7 +85917,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40441172226",
+      "run_id": "40451620191",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -85934,7 +85934,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40441172226",
+      "run_id": "40451620191",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -85951,7 +85951,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40441172226",
+      "run_id": "40451620191",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -89455,6 +89455,86 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441172226",
       "checkpointed_at": "2026-10-27T04:43:50Z"
+    },
+    {
+      "asset_id": "09346f43d0d544fde86bea5f",
+      "asset_sha256": "0ec38e10b8f9f64256ae7dd6e613e2fe078b6d82401f5aa966283d1ab9639d89",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/0ec38e10b8f9f64256ae7dd6e613e2fe078b6d82401f5aa966283d1ab9639d89.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6bd441fb87e80e68026ee792a3fa29fb3aa8446a8370d8d377345683a5f7beaf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the reaction of sulfur with oxygen to form sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "53",
+          "Blue litmus",
+          "paper",
+          "Red litmus",
+          "paper",
+          "Sulfur",
+          "Oxygen",
+          "Sulfur dioxide gas",
+          "Sulfurous acid",
+          "Water"
+        ],
+        "concepts": [
+          "Reaction of sulfur with oxygen",
+          "Formation of sulfur dioxide gas",
+          "Dissolution of sulfur dioxide gas in water",
+          "Formation of sulfurous acid"
+        ],
+        "context_relation": "The image illustrates the chemical reaction between sulfur and oxygen, leading to the formation of sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "limitations": [
+          "The image does not provide specific details about the reaction conditions or the physical appearance of the products."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40451620191",
+      "checkpointed_at": "2026-10-27T06:32:09Z"
+    },
+    {
+      "asset_id": "005e7a6859d01acd7e5aa56e",
+      "asset_sha256": "3b5ebea6a3dadf266e53a3cd69d40ec9f6f0bfef2367ed2c52ed922b22ed8187",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/3b5ebea6a3dadf266e53a3cd69d40ec9f6f0bfef2367ed2c52ed922b22ed8187.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6bd441fb87e80e68026ee792a3fa29fb3aa8446a8370d8d377345683a5f7beaf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the reaction of sulfur with oxygen to form sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "You would observe that it is acidic in nature (Fig. 4.7d).",
+          "On burning sulfur in air (oxygen), sulfur dioxide gas is formed.",
+          "On dissolving sulfur dioxide gas in water, sulfurous acid is formed."
+        ],
+        "concepts": [
+          "Reaction of sulfur with oxygen",
+          "Formation of sulfur dioxide gas",
+          "Formation of sulfurous acid"
+        ],
+        "context_relation": "The image illustrates the chemical reaction between sulfur and oxygen, leading to the formation of sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "limitations": [
+          "The image does not provide specific details about the reaction conditions or the physical appearance of the products."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40451620191",
+      "checkpointed_at": "2026-10-27T06:33:55Z"
     }
   ]
 }
