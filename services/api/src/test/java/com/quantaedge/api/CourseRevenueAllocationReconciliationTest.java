@@ -14,7 +14,7 @@ class CourseRevenueAllocationReconciliationTest {
   void reconcilesSharedInstitutionAndSourceRemainder() {
     Map<String,Object> snapshot = snapshot(
         List.of(recipient(11L,"INSTITUTION",2L,"PERCENTAGE",1_000,0L,"Sunrise Public School")),
-        "INSTITUTION",1L,"Quanta Edge");
+        "INSTITUTION",1L,"Northfield Academy");
     List<Map<String,Object>> allocations = List.of(
         allocation(100L,7L,"INSTITUTION",2L,11L,10_000L,100_000L,0L,100_000L,10_000L,1L),
         allocation(101L,7L,"INSTITUTION",1L,null,90_000L,100_000L,0L,100_000L,90_000L,1L));
@@ -32,8 +32,8 @@ class CourseRevenueAllocationReconciliationTest {
   @Test
   void mergesExplicitShareAndRemainderWhenTheyNameTheSameRecipient() {
     Map<String,Object> snapshot = snapshot(
-        List.of(recipient(11L,"INSTITUTION",2L,"PERCENTAGE",1_000,0L,"Quanta Edge")),
-        "INSTITUTION",2L,"Quanta Edge");
+        List.of(recipient(11L,"INSTITUTION",2L,"PERCENTAGE",1_000,0L,"Northfield Academy")),
+        "INSTITUTION",2L,"Northfield Academy");
     List<Map<String,Object>> allocations = List.of(
         allocation(100L,7L,"INSTITUTION",2L,11L,100_000L,100_000L,0L,100_000L,100_000L,1L));
 
@@ -49,8 +49,8 @@ class CourseRevenueAllocationReconciliationTest {
   @Test
   void supportsCompanyShareAndInstitutionRemainderInSameSale() {
     Map<String,Object> snapshot = snapshot(
-        List.of(recipient(11L,"COMPANY",50L,"PERCENTAGE",2_000,0L,"QuantaEdge Services Pvt Ltd")),
-        "INSTITUTION",1L,"Quanta Edge");
+        List.of(recipient(11L,"COMPANY",50L,"PERCENTAGE",2_000,0L,"Example Learning Services Ltd")),
+        "INSTITUTION",1L,"Northfield Academy");
     List<Map<String,Object>> allocations = List.of(
         allocation(100L,7L,"COMPANY",50L,11L,20_000L,100_000L,0L,100_000L,20_000L,1L),
         allocation(101L,7L,"INSTITUTION",1L,null,80_000L,100_000L,0L,100_000L,80_000L,1L));
@@ -65,7 +65,7 @@ class CourseRevenueAllocationReconciliationTest {
 
   @Test
   void reconcilesRemainderOnlyPolicyWithNoExplicitShareRows() {
-    Map<String,Object> snapshot = snapshot(List.of(),"INSTITUTION",1L,"Quanta Edge");
+    Map<String,Object> snapshot = snapshot(List.of(),"INSTITUTION",1L,"Northfield Academy");
     List<Map<String,Object>> allocations = List.of(
         allocation(100L,7L,"INSTITUTION",1L,null,100_000L,100_000L,0L,100_000L,100_000L,1L));
 
@@ -99,7 +99,7 @@ class CourseRevenueAllocationReconciliationTest {
   void detectsMissingRecipientEvenWhenAnotherAllocationRowExists() {
     Map<String,Object> snapshot = snapshot(
         List.of(recipient(11L,"INSTITUTION",2L,"PERCENTAGE",1_000,0L,"Sunrise Public School")),
-        "INSTITUTION",1L,"Quanta Edge");
+        "INSTITUTION",1L,"Northfield Academy");
     List<Map<String,Object>> allocations = List.of(
         allocation(100L,7L,"INSTITUTION",2L,11L,10_000L,100_000L,0L,100_000L,10_000L,1L));
 
@@ -114,8 +114,8 @@ class CourseRevenueAllocationReconciliationTest {
   @Test
   void detectsEarnedLedgerEventMismatch() {
     Map<String,Object> snapshot = snapshot(
-        List.of(recipient(11L,"INSTITUTION",2L,"PERCENTAGE",10_000,0L,"Quanta Edge")),
-        "INSTITUTION",2L,"Quanta Edge");
+        List.of(recipient(11L,"INSTITUTION",2L,"PERCENTAGE",10_000,0L,"Northfield Academy")),
+        "INSTITUTION",2L,"Northfield Academy");
     List<Map<String,Object>> allocations = List.of(
         allocation(100L,7L,"INSTITUTION",2L,11L,100_000L,100_000L,0L,100_000L,99_999L,1L));
 
@@ -129,8 +129,8 @@ class CourseRevenueAllocationReconciliationTest {
   @Test
   void rejectsPolicySnapshotMismatch() {
     Map<String,Object> snapshot = snapshot(
-        List.of(recipient(11L,"INSTITUTION",2L,"PERCENTAGE",10_000,0L,"Quanta Edge")),
-        "INSTITUTION",2L,"Quanta Edge");
+        List.of(recipient(11L,"INSTITUTION",2L,"PERCENTAGE",10_000,0L,"Northfield Academy")),
+        "INSTITUTION",2L,"Northfield Academy");
 
     CourseRevenueAllocationReconciliation.Result result =
         CourseRevenueAllocationReconciliation.reconcile(snapshot,8L,100_000L,0L,"INR",List.of());
