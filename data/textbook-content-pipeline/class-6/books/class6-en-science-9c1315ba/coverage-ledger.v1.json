@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1385,
-    "successful_visual_analyses": 1375,
-    "missing_visual_analyses": 693,
-    "failed_visual_analyses": 10,
+    "raw_analysis_result_rows": 1390,
+    "successful_visual_analyses": 1379,
+    "missing_visual_analyses": 688,
+    "failed_visual_analyses": 11,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 703,
+    "unresolved_count": 699,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -52584,9 +52584,22 @@
       "asset_path": "assets/b3cd34ef45c908340b8ede6d0363a66d7d712fc5f07427efdbe642c204e3b52f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a person wearing a white shirt and a blue tie, with one hand on their chin.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "Temperature",
+          "Senses",
+          "Reliability of senses"
+        ],
+        "context_relation": "The image illustrates a person contemplating or thinking, which relates to the concept of reliability of senses in determining temperature.",
+        "limitations": [
+          "The image does not provide specific details about the temperature or the person's thoughts."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52602,9 +52615,23 @@
       "asset_path": "assets/2087834f75d1d66dfa2308824ffce37f251ccb7b121209be27869015b22086fc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An electronic thermometer displaying a temperature of 37.0°C.",
+        "visual_type": "photo",
+        "visible_text": [
+          "37.0°C"
+        ],
+        "concepts": [
+          "temperature",
+          "electronic thermometer"
+        ],
+        "context_relation": "The image is a visual representation of a temperature measurement.",
+        "limitations": [
+          "The image does not provide information about the context or the specific use of the thermometer."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52620,9 +52647,22 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "temperature",
+          "sensation",
+          "reliability"
+        ],
+        "context_relation": "The page is likely part of a textbook discussing the reliability of human senses in determining temperature.",
+        "limitations": [
+          "The page is completely black and has no visible text or images, making it impossible to extract any specific information or details from it."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52638,9 +52678,23 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "temperature",
+          "sensation",
+          "reliability"
+        ],
+        "context_relation": "The page is likely a blank page or a page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images.",
+          "The page may be a blank page or a page with no visible content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -52656,7 +52710,7 @@
       "asset_path": "page-0143.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3fd539a7214c9351d1368dbd71b9f23280f23454dea189b794ede595cb10473e",
+  "raw_analysis_sha256": "83712b4d28dd0ca36da38e5a3176e1da30f50c1ceb5e26e3dd9aa8dbfdb254e8",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -650,7 +650,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:44:24Z",
+      "checkpointed_at": "2026-10-26T23:58:59Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -29465,7 +29465,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:46:03Z",
+      "checkpointed_at": "2026-10-27T00:00:40Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -35077,7 +35077,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:47:28Z",
+      "checkpointed_at": "2026-10-27T00:02:07Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57433,7 +57433,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:48:38Z",
+      "checkpointed_at": "2026-10-27T00:03:18Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -67084,7 +67084,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-26T23:49:36Z",
+      "checkpointed_at": "2026-10-27T00:04:17Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -70081,6 +70081,222 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b2a39e0653ba29e198440267",
+      "asset_sha256": "b3cd34ef45c908340b8ede6d0363a66d7d712fc5f07427efdbe642c204e3b52f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 143,
+      "asset_path": "assets/b3cd34ef45c908340b8ede6d0363a66d7d712fc5f07427efdbe642c204e3b52f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "64f638d76e1b911053280e0d06418a669836612136b54bce6269ee7b3389c7d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a person wearing a white shirt and a blue tie, with one hand on their chin.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "Temperature",
+          "Senses",
+          "Reliability of senses"
+        ],
+        "context_relation": "The image illustrates a person contemplating or thinking, which relates to the concept of reliability of senses in determining temperature.",
+        "limitations": [
+          "The image does not provide specific details about the temperature or the person's thoughts."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:05:24Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a person wearing a white shirt and a blue tie, with one hand on their chin.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "Temperature",
+          "Senses",
+          "Reliability of senses"
+        ],
+        "context_relation": "The image illustrates a person contemplating or thinking, which relates to the concept of reliability of senses in determining temperature.",
+        "limitations": [
+          "The image does not provide specific details about the temperature or the person's thoughts."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "60f4e378f93db6257a32b817",
+      "asset_sha256": "2087834f75d1d66dfa2308824ffce37f251ccb7b121209be27869015b22086fc",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 143,
+      "asset_path": "assets/2087834f75d1d66dfa2308824ffce37f251ccb7b121209be27869015b22086fc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "64f638d76e1b911053280e0d06418a669836612136b54bce6269ee7b3389c7d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An electronic thermometer displaying a temperature of 37.0°C.",
+        "visual_type": "photo",
+        "visible_text": [
+          "37.0°C"
+        ],
+        "concepts": [
+          "temperature",
+          "electronic thermometer"
+        ],
+        "context_relation": "The image is a visual representation of a temperature measurement.",
+        "limitations": [
+          "The image does not provide information about the context or the specific use of the thermometer."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:06:28Z",
+      "effective_analysis": {
+        "visual_summary": "An electronic thermometer displaying a temperature of 37.0°C.",
+        "visual_type": "photo",
+        "visible_text": [
+          "37.0°C"
+        ],
+        "concepts": [
+          "temperature",
+          "electronic thermometer"
+        ],
+        "context_relation": "The image is a visual representation of a temperature measurement.",
+        "limitations": [
+          "The image does not provide information about the context or the specific use of the thermometer."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bbf7266cb7b25de1bc778901",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 143,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "64f638d76e1b911053280e0d06418a669836612136b54bce6269ee7b3389c7d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "temperature",
+          "sensation",
+          "reliability"
+        ],
+        "context_relation": "The page is likely part of a textbook discussing the reliability of human senses in determining temperature.",
+        "limitations": [
+          "The page is completely black and has no visible text or images, making it impossible to extract any specific information or details from it."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:06:48Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "temperature",
+          "sensation",
+          "reliability"
+        ],
+        "context_relation": "The page is likely part of a textbook discussing the reliability of human senses in determining temperature.",
+        "limitations": [
+          "The page is completely black and has no visible text or images, making it impossible to extract any specific information or details from it."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7160a2c7863e6c362022de10",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 143,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "64f638d76e1b911053280e0d06418a669836612136b54bce6269ee7b3389c7d8",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "temperature",
+          "sensation",
+          "reliability"
+        ],
+        "context_relation": "The page is likely a blank page or a page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images.",
+          "The page may be a blank page or a page with no visible content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:07:09Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [
+          "temperature",
+          "sensation",
+          "reliability"
+        ],
+        "context_relation": "The page is likely a blank page or a page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images.",
+          "The page may be a blank page or a page with no visible content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f9f31ac3c179b5d02598fdea",
+      "asset_sha256": "3e755880e53b52fb5b33f4b0225ab53ff7c434b85a21242f74831d3a28faa9a0",
+      "page_text_context_sha256": "64f638d76e1b911053280e0d06418a669836612136b54bce6269ee7b3389c7d8",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 143,
+      "asset_path": "page-0143.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],
