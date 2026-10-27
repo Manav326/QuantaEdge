@@ -536,18 +536,22 @@ public class CoursePaymentOperationsController {
     }
     Long total=jdbc.queryForObject("select count(*) from course_payment_provider_event e"+where,Long.class,args.toArray());
     List<Object> pageArgs=new ArrayList<>(args);pageArgs.add(limit);pageArgs.add(offset);
-    List<Map<String,Object>> items=jdbc.queryForList("""
+    List<Map<String,Object>> items=jdbc.queryForList(providerEventsPageSql(where),pageArgs.toArray());
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("items",items);result.put("total",total==null?0L:total);result.put("limit",limit);result.put("offset",offset);
+    return result;
+  }
+
+  static String providerEventsPageSql(String where) {
+    return """
         select e.id,e.provider_event_id,e.event_type,e.course_payment_order_id as local_order_id,
           e.course_payment_refund_id,e.provider_order_id,e.provider_payment_id,e.provider_refund_id,
           e.payload_sha256,e.processing_status,e.status_message,e.details::text as details_json,
           e.received_at,e.processed_at
         from course_payment_provider_event e
-        """+where+"""
+        """+where+"\n"+"""
         order by e.received_at desc,e.id desc limit ? offset ?
-        """,pageArgs.toArray());
-    Map<String,Object> result=new LinkedHashMap<>();
-    result.put("items",items);result.put("total",total==null?0L:total);result.put("limit",limit);result.put("offset",offset);
-    return result;
+        """;
   }
 
   private boolean providerEventSchemaReady() {
