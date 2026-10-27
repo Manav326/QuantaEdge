@@ -694,7 +694,7 @@ public class CourseOrderFinancialService {
       String type=string(allocation.get("recipient_type"));
       long recipientId="COMPANY".equals(type)?number(allocation.get("legal_entity_id")):number(allocation.get("institution_id"));
       RevenueDistributionCalculator.BeneficiaryAllocation expected=netByKey.get(type+":"+recipientId);
-      long amount=Math.subtractExact(number(allocation.get("allocated_amount_paise"),expected.amountPaise()));
+      long amount=Math.subtractExact(number(allocation.get("allocated_amount_paise")),expected.amountPaise());
       if(amount<0)throw new IllegalStateException("Processor charge adjustment cannot be negative.");
       if(amount==0)continue;
       jdbc.update("""
