@@ -315,7 +315,8 @@ export default function AssessmentCourseStudioPage() {
       const questions = currentQuestions(pkg);
       if (questions.length >= 250) return;
       const section = sections[0];
-      const ordinal = questions.length + 1;
+      let ordinal = questions.length + 1;
+      while (questions.some(question => String(question.id || '') === 'question-' + ordinal)) ordinal++;
       pkg.questions = [...questions, {
         id: 'question-' + ordinal,
         source_question_number: 'Q-' + ordinal,
@@ -353,7 +354,7 @@ export default function AssessmentCourseStudioPage() {
       const next = { ...question };
       if (field === 'prompt_en' || field === 'prompt_hi') {
         next.prompt_i18n = { ...(next.prompt_i18n || {}), [field === 'prompt_en' ? 'en' : 'hi']: value };
-        if (field === 'prompt_en') next.prompt = value;
+        next.prompt = String(next.prompt_i18n.en || next.prompt_i18n.hi || '');
       } else if (field === 'explanation') {
         next.proposed_answer = { ...(next.proposed_answer || {}), explanation: value };
       } else if (field === 'section_code') {
@@ -370,7 +371,7 @@ export default function AssessmentCourseStudioPage() {
     });
   }
 
-  function updateQuestionOption(index: number, questionIndex: number, optionIndex: number, field: 'text' | 'en' | 'hi', value: string) {
+  function updateQuestionOption(index: number, questionIndex: number, optionIndex: number, field: 'en' | 'hi', value: string) {
     finishPackageEdit(index, pkg => {
       const questions = currentQuestions(pkg);
       const question = questions[questionIndex];
@@ -378,10 +379,39 @@ export default function AssessmentCourseStudioPage() {
       const options = Array.isArray(question.options) ? question.options : [];
       const updatedOptions = options.map((option: Record<string, any>, i: number) => {
         if (i !== optionIndex) return option;
-        if (field === 'text') return { ...option, text: value };
-        return { ...option, text_i18n: { ...(option.text_i18n || {}), [field]: value } };
+        return {
+          ...option,
+          ...(field === 'en' ? { text: value } : {}),
+          text_i18n: { ...(option.text_i18n || {}), [field]: value }
+        };
       });
       pkg.questions = questions.map((item, i) => i === questionIndex ? { ...item, options: updatedOptions } : item);
+    });
+  }
+
+  function addQuestionOption(index: number, questionIndex: number) {
+    finishPackageEdit(index, pkg => {
+      const questions = currentQuestions(pkg);
+      const question = questions[questionIndex];
+      if (!question) return;
+      const options = Array.isArray(question.options) ? question.options : [];
+      if (options.length >= 5) return;
+      const key = String.fromCharCode(65 + options.length);
+      const updated = [...options, { key, text: '', text_i18n: { en: '', hi: '' } }];
+      pkg.questions = questions.map((item, i) => i === questionIndex ? { ...item, options: updated } : item);
+    });
+  }
+
+  function removeQuestionOption(index: number, questionIndex: number, optionIndex: number) {
+    finishPackageEdit(index, pkg => {
+      const questions = currentQuestions(pkg);
+      const question = questions[questionIndex];
+      if (!question) return;
+      const options = Array.isArray(question.options) ? question.options : [];
+      if (options.length <= 2) return;
+      const updated = options.filter((_: unknown, i: number) => i !== optionIndex)
+        .map((option: Record<string, any>, i: number) => ({ ...option, key: String.fromCharCode(65 + i) }));
+      pkg.questions = questions.map((item, i) => i === questionIndex ? { ...item, options: updated } : item);
     });
   }
 
@@ -624,16 +654,17 @@ export default function AssessmentCourseStudioPage() {
                             <div><label htmlFor={'q-type-' + index + '-' + questionIndex}>Question type</label><select id={'q-type-' + index + '-' + questionIndex} value={String(question.question_type || 'MCQ')} onChange={event => updateQuestionField(index, questionIndex, 'question_type', event.target.value)}>{['MCQ','TRUE_FALSE','INFERENCE','INPUT','NUMERICAL','SHORT_ANSWER','LONG_ANSWER','CASE_BASED','SOURCE_BASED','DIAGRAM','MAP','ASSERTION_REASON','MATCH','ORDER'].map(type => <option value={type} key={type}>{type.replaceAll('_', ' ')}</option>)}</select></div>
                             <div><label htmlFor={'q-section-' + index + '-' + questionIndex}>Section</label><select id={'q-section-' + index + '-' + questionIndex} value={String(question.section_code || '')} onChange={event => updateQuestionField(index, questionIndex, 'section_code', event.target.value)}>{currentSections(pkg).map(section => <option value={String(section.code)} key={String(section.code)}>{String(section.name_i18n?.en || section.code)}</option>)}</select></div>
                             <div><label htmlFor={'q-marks-' + index + '-' + questionIndex}>Marks</label><input id={'q-marks-' + index + '-' + questionIndex} type="number" min={0} max={1000} step="any" value={String(question.marks ?? 1)} onChange={event => updateQuestionField(index, questionIndex, 'marks', event.target.value)} /></div>
-                            <div><label htmlFor={'q-prompt-en-' + index + '-' + questionIndex}>Question text (English)</label><textarea id={'q-prompt-en-' + index + '-' + questionIndex} value={String(question.prompt_i18n?.en || '')} onChange={event => updateQuestionField(index, questionIndex, 'prompt_en', event.target.value)} rows={3} placeholder="Enter the verified question exactly as it appears in the source." /></div>
-                            <div><label htmlFor={'q-prompt-hi-' + index + '-' + questionIndex}>Question text (Hindi, if present)</label><textarea id={'q-prompt-hi-' + index + '-' + questionIndex} value={String(question.prompt_i18n?.hi || '')} onChange={event => updateQuestionField(index, questionIndex, 'prompt_hi', event.target.value)} rows={3} placeholder="स्रोत में उपलब्ध हिंदी प्रश्न यहाँ लिखें।" /></div>
+                            <div style={{ gridColumn: '1 / -1' }}><label htmlFor={'q-prompt-en-' + index + '-' + questionIndex}>Question text (English, if present)</label><textarea id={'q-prompt-en-' + index + '-' + questionIndex} value={String(question.prompt_i18n?.en || '')} onChange={event => updateQuestionField(index, questionIndex, 'prompt_en', event.target.value)} rows={3} placeholder="Enter the verified question exactly as it appears in the source." /></div>
+                            <div style={{ gridColumn: '1 / -1' }}><label htmlFor={'q-prompt-hi-' + index + '-' + questionIndex}>Question text (Hindi, if present)</label><textarea id={'q-prompt-hi-' + index + '-' + questionIndex} value={String(question.prompt_i18n?.hi || '')} onChange={event => updateQuestionField(index, questionIndex, 'prompt_hi', event.target.value)} rows={3} placeholder="स्रोत में उपलब्ध हिंदी प्रश्न यहाँ लिखें।" /></div>
                           </div>
                           <h5 style={{ marginBottom: 8 }}>Options (for MCQ / true-false)</h5>
-                          {(Array.isArray(question.options) ? question.options : []).map((option: Record<string, any>, optionIndex: number) => <div key={String(option.key || optionIndex)} style={{ display: 'grid', gridTemplateColumns: '50px repeat(3,minmax(0,1fr))', gap: 8, marginBottom: 8 }}>
+                          {(Array.isArray(question.options) ? question.options : []).map((option: Record<string, any>, optionIndex: number) => <div key={String(option.key || optionIndex)} style={{ display: 'grid', gridTemplateColumns: '32px repeat(2,minmax(0,1fr)) 82px', gap: 8, marginBottom: 8 }}>
                             <label>{String(option.key || String.fromCharCode(65 + optionIndex))}</label>
                             <input aria-label={'Option ' + String(option.key) + ' English text'} value={String(option.text_i18n?.en || option.text || '')} onChange={event => updateQuestionOption(index, questionIndex, optionIndex, 'en', event.target.value)} placeholder="Option text (English)" />
                             <input aria-label={'Option ' + String(option.key) + ' Hindi text'} value={String(option.text_i18n?.hi || '')} onChange={event => updateQuestionOption(index, questionIndex, optionIndex, 'hi', event.target.value)} placeholder="विकल्प (हिंदी)" />
-                            <input aria-label={'Option ' + String(option.key) + ' canonical text'} value={String(option.text || '')} onChange={event => updateQuestionOption(index, questionIndex, optionIndex, 'text', event.target.value)} placeholder="Canonical text" />
+                            <button className="button button-dark" type="button" disabled={(question.options || []).length <= 2} onClick={() => removeQuestionOption(index, questionIndex, optionIndex)}>Remove</button>
                           </div>)}
+                          <button className="button button-dark" type="button" disabled={(question.options || []).length >= 5} onClick={() => addQuestionOption(index, questionIndex)}>Add option (up to 5)</button>
                           <div><label htmlFor={'q-explanation-' + index + '-' + questionIndex}>Proposed explanation (review required)</label><textarea id={'q-explanation-' + index + '-' + questionIndex} value={String(question.proposed_answer?.explanation || '')} onChange={event => updateQuestionField(index, questionIndex, 'explanation', event.target.value)} rows={2} placeholder="Add a concise explanation from a verified source; a reviewer must approve it." /></div>
                           <p>Answer key remains unresolved unless supplied in the package. Reviewers must approve the correct answer and explanation before publishing.</p>
                         </div>)}
