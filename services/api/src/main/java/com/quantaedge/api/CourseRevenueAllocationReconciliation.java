@@ -90,7 +90,9 @@ final class CourseRevenueAllocationReconciliation {
           continue;
         }
 
-        String key = key(recipientType, recipientId);
+        final String normalizedRecipientType = recipientType;
+        final long normalizedRecipientId = recipientId;
+        String key = key(normalizedRecipientType, normalizedRecipientId);
         if (!seenPolicyRecipients.add(key)) {
           issues.add("The locked policy lists recipient " + key + " more than once.");
           continue;
@@ -118,7 +120,7 @@ final class CourseRevenueAllocationReconciliation {
 
         explicitTotalPaise = Math.addExact(explicitTotalPaise, amountPaise);
         ExpectedAllocation allocation = expected.computeIfAbsent(key,
-            ignored -> new ExpectedAllocation(recipientType, recipientId));
+            ignored -> new ExpectedAllocation(normalizedRecipientType, normalizedRecipientId));
         allocation.explicitAmountPaise = Math.addExact(allocation.explicitAmountPaise, amountPaise);
         allocation.amountPaise = Math.addExact(allocation.amountPaise, amountPaise);
         allocation.policyRecipientId = number(recipient.get("policyRecipientId"));
