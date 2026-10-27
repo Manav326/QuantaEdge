@@ -1,10 +1,11 @@
 # BPSC TRE Computer Science previous-year paper workspace
 
-This folder is the durable home for the TRE 1.0, TRE 2.0 and TRE 3.0 source register, paper analysis and reviewed portable assessment packages for the QuantaEdge **TRE-4 · Computer Science** course.
+This folder is the durable home for the TRE 1.0, TRE 2.0 and TRE 3.0 source register, paper analysis and reviewed portable assessment packages for the QuantaEdge **BPSC TRE Computer Science — Previous-Year Practice Series** course.
 
 ## Planned course presentation
 
-- Course: **TRE-4 · Computer Science**
+- Course: **BPSC TRE Computer Science — Previous-Year Practice Series**
+- Stable course key: `BPSC_TRE_CS_PYQ_SERIES` (separate from the historical/rejected `TRE4` course)
 - Chapter: **Prev years**
 - Assessments: one independent practice test for each of TRE 1.0, TRE 2.0 and TRE 3.0
 - Each attempt must use QuantaEdge's existing course-bound assessment engine so its scores, timing, attempts and question analytics contribute to the selected course and assessment.
