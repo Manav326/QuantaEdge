@@ -70,10 +70,10 @@ final class CourseRevenueAllocationReconciliation {
         + distributablePoolPaise + " paise.");
 
     long explicitTotalPaise = 0L;
-    List<?> recipients = snapshot != null && snapshot.get("recipients") instanceof List<?> list
-        ? list : List.of();
-    if (recipients.isEmpty()) {
-      issues.add("The locked revenue-share snapshot has no explicit recipient rows.");
+    boolean recipientsSnapshotPresent = snapshot != null && snapshot.get("recipients") instanceof List<?>;
+    List<?> recipients = recipientsSnapshotPresent ? (List<?>) snapshot.get("recipients") : List.of();
+    if (!recipientsSnapshotPresent) {
+      issues.add("The locked revenue-share snapshot has no explicit-recipient list.");
     }
 
     Set<String> seenPolicyRecipients = new LinkedHashSet<>();
