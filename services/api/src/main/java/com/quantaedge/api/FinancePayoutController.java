@@ -50,11 +50,11 @@ public class FinancePayoutController {
 
   public FinancePayoutController(JdbcTemplate jdbc,AuthorizationService authorization,
       CourseOrderFinancialService financialService,ObjectMapper mapper,
-      @Value("\u0024{app.razorpay.key-id:}") String keyId,
-      @Value("\u0024{app.razorpay.key-secret:}") String keySecret,
+      @Value("\u0024{app.razorpayx.key-id:\u0024{app.razorpay.key-id:}}") String keyId,
+      @Value("\u0024{app.razorpayx.key-secret:\u0024{app.razorpay.key-secret:}}") String keySecret,
       @Value("\u0024{app.razorpayx.account-number:}") String sourceAccountNumber,
       @Value("\u0024{app.razorpayx.webhook-secret:}") String webhookSecret,
-      @Value("\u0024{app.razorpay.base-url:https://api.razorpay.com/v1}") String baseUrl) {
+      @Value("\u0024{app.razorpayx.base-url:\u0024{app.razorpay.base-url:https://api.razorpay.com/v1}}") String baseUrl) {
     this.jdbc=jdbc;this.authorization=authorization;this.financialService=financialService;this.mapper=mapper;
     this.keyId=keyId==null?"":keyId.trim();this.keySecret=keySecret==null?"":keySecret.trim();
     this.sourceAccountNumber=sourceAccountNumber==null?"":sourceAccountNumber.trim();
@@ -481,6 +481,7 @@ public class FinancePayoutController {
   }
 
   @PostMapping("/payouts/{payoutId}/fees")
+  @org.springframework.transaction.annotation.Transactional
   public Map<String,Object> confirmPayoutFees(@PathVariable long payoutId,@RequestBody Map<String,Object> body,
       @RequestHeader(value="Idempotency-Key",required=false) String idempotencyKey,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
@@ -497,7 +498,7 @@ public class FinancePayoutController {
     if(!key.matches("[A-Za-z0-9_-]{10,180}"))throw bad("Idempotency-Key must contain 10–180 letters, digits, underscores or hyphens.");
     Map<String,Object> row=one("""
       select p.id,p.batch_id,p.status,p.provider_fee_paise,p.provider_fee_tax_paise,p.provider_fee_reference,
-        b.provider_fee_reconciled_at
+        p.provider_fee_source_type,b.provider_fee_reconciled_at
       from finance_payout p join finance_payout_batch b on b.id=p.batch_id where p.id=?
       """,payoutId);
     if(row.isEmpty())throw notFound("Payout not found.");
@@ -506,7 +507,12 @@ public class FinancePayoutController {
     if(row.get("provider_fee_reconciled_at")!=null)throw bad("This batch's payout fees are already reconciled and cannot be overwritten.");
     if(row.get("provider_fee_paise")!=null||row.get("provider_fee_tax_paise")!=null) {
       if(number(row.get("provider_fee_paise"))==fee&&number(row.get("provider_fee_tax_paise"))==tax
-          &&reference.equals(string(row.get("provider_fee_reference"))))return payoutSummary(payoutId);
+          &&reference.equals(string(row.get("provider_fee_reference")))
+          &&source.equals(string(row.get("provider_fee_source_type")))) {
+        // Complete the batch roll-up as well when a prior request succeeded but its response was lost.
+        reconcileBatchProviderFees(number(row.get("batch_id")));
+        return payoutSummary(payoutId);
+      }
       throw bad("This payout already has provider-confirmed fee values. Use a reviewed correction workflow rather than overwriting its financial facts.");
     }
     int changed=jdbc.update("""
