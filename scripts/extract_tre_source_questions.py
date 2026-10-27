@@ -389,7 +389,10 @@ def normalize_ocr_prompt(value: str) -> str:
     if not lines:
         return ""
     # Tesseract may read the Latin-font question number as punctuation, I, or a wrong digit.
-    lines[0] = re.sub(r"^\s*(?:(?:[0-9Il|]{1,3})\s*)?[.)]\s*", "", lines[0]).strip()
+    lines[0] = re.sub(
+        r"^\s*(?:(?:[A-Za-zअ-ह]{1,2}\s*[-–]\s*)?[0-9०-९Il|]{1,3}\s*[.)]\s*)",
+        "", lines[0],
+    ).strip()
     normalized = "\n".join(line for line in lines if line)
     # Reject OCR noise; genuine Hindi prose must contain a usable Devanagari word.
     if len(re.findall(r"[\u0900-\u097F]", normalized)) < 4:
