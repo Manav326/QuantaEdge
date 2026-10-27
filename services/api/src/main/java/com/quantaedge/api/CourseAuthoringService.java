@@ -85,12 +85,12 @@ public class CourseAuthoringService {
       List<Map<String,Object>> sameName=jdbc.queryForList("""
         select id,stable_course_key
         from institution_course_identity
-        where source_institution_id=? and course_type_code='ASSESSMENT' and status='ACTIVE'
+        where source_institution_id=? and course_type_code='ASSESSMENT'
           and lower(btrim(display_name))=lower(btrim(?))
         for update
         """,institutionId,displayName);
       if(!sameName.isEmpty()) {
-        throw conflict("An assessment course with this name already exists in this institution. Return to Content Studio and select the existing course instead of creating a duplicate.");
+        throw conflict("An assessment course identity with this name already exists in this institution, including archived history. Return to Content Studio and use the existing course/version workflow instead of creating a duplicate identity.");
       }
     }
 
