@@ -1040,6 +1040,8 @@ def database_repair_draft_hindi(args: argparse.Namespace, papers: list[dict[str,
                 updates: list[tuple[int, dict[str, Any]]] = []
                 candidate_count = 0
                 skipped_count = 0
+                reconstructed_prompt_count = 0
+                reconstructed_option_count = 0
                 for row, incoming in zip(question_rows, incoming_questions):
                     question_id, sequence_no, current = row
                     if not isinstance(current, dict):
@@ -1060,34 +1062,107 @@ def database_repair_draft_hindi(args: argparse.Namespace, papers: list[dict[str,
                             "The draft repair requires all questions and answers to remain pending."
                         )
 
+                    source_number = str(current.get("source_question_number"))
+                    current_location = (current.get("source_locations") or {}).get("hi") or {}
+                    incoming_location = (incoming.get("source_locations") or {}).get("hi") or {}
+                    if (
+                        str(current.get("source_exam_cycle") or "") != cycle
+                        or str(current.get("source_file_sha256") or "").lower() != str(paper["source_file_sha256"]).lower()
+                        or (current_location and incoming_location and current_location != incoming_location)
+                    ):
+                        raise ImportErrorSafe(
+                            f"{cycle} question {source_number} has different source provenance from the requested PDF. "
+                            "No existing content was changed."
+                        )
+
                     reconstruction = incoming.get("hindi_prompt_reconstruction")
                     incoming_prompts = incoming.get("prompt_i18n")
                     target_hindi = incoming_prompts.get("hi") if isinstance(incoming_prompts, dict) else None
-                    if not (
+                    has_prompt_ocr = bool(
                         isinstance(reconstruction, dict)
                         and reconstruction.get("method") == "TESSERACT_HINDI_OCR"
                         and reconstruction.get("status") == "REQUIRES_HUMAN_REVIEW"
                         and isinstance(target_hindi, str)
                         and target_hindi.strip()
-                    ):
-                        skipped_count += 1
-                        continue
+                    )
+                    changed = False
+                    if has_prompt_ocr:
+                        candidate_count += 1
+                        prompts = current.get("prompt_i18n")
+                        if not isinstance(prompts, dict):
+                            prompts = {}
+                            current["prompt_i18n"] = prompts
+                        old_hindi = str(prompts.get("hi") or "")
+                        old_metadata = current.get("hindi_prompt_reconstruction")
+                        if old_hindi != target_hindi or old_metadata != reconstruction:
+                            prompts["hi"] = target_hindi
+                            # For native-Hindi-only qualifying questions, top-level prompt mirrors hi.
+                            if not str(prompts.get("en") or "").strip():
+                                current["prompt"] = target_hindi
+                            current["hindi_prompt_reconstruction"] = reconstruction
+                            changed = True
+                            reconstructed_prompt_count += 1
 
-                    candidate_count += 1
-                    prompts = current.get("prompt_i18n")
-                    if not isinstance(prompts, dict):
-                        prompts = {}
-                        current["prompt_i18n"] = prompts
-                    old_hindi = str(prompts.get("hi") or "")
-                    old_metadata = current.get("hindi_prompt_reconstruction")
-                    if old_hindi == target_hindi and old_metadata == reconstruction:
-                        continue
-                    prompts["hi"] = target_hindi
-                    # For native-Hindi-only qualifying questions, the top-level prompt mirrors hi.
-                    if not str(prompts.get("en") or "").strip():
-                        current["prompt"] = target_hindi
-                    current["hindi_prompt_reconstruction"] = reconstruction
-                    updates.append((int(question_id), current))
+                    incoming_options = incoming.get("options")
+                    current_options = current.get("options")
+                    if not isinstance(incoming_options, list) or not isinstance(current_options, list):
+                        raise ImportErrorSafe(
+                            f"{cycle} question {source_number} has an unreadable option list; no content was changed."
+                        )
+                    current_options_by_key: dict[str, dict[str, Any]] = {}
+                    for current_option in current_options:
+                        if not isinstance(current_option, dict):
+                            raise ImportErrorSafe(f"{cycle} question {source_number} has an invalid option record.")
+                        option_key = str(current_option.get("option_key") or current_option.get("key") or "").strip().upper()
+                        if not option_key or option_key in current_options_by_key:
+                            raise ImportErrorSafe(f"{cycle} question {source_number} has duplicate or missing option identities.")
+                        current_options_by_key[option_key] = current_option
+
+                    for incoming_option in incoming_options:
+                        if not isinstance(incoming_option, dict):
+                            raise ImportErrorSafe(f"{cycle} question {source_number} has an invalid source option record.")
+                        option_reconstruction = incoming_option.get("hindi_ocr_reconstruction")
+                        if not (
+                            isinstance(option_reconstruction, dict)
+                            and option_reconstruction.get("method") == "TESSERACT_HINDI_OCR"
+                            and option_reconstruction.get("status") == "REQUIRES_HUMAN_REVIEW"
+                        ):
+                            continue
+                        option_key = str(incoming_option.get("option_key") or incoming_option.get("key") or "").strip().upper()
+                        current_option = current_options_by_key.get(option_key)
+                        if current_option is None:
+                            raise ImportErrorSafe(
+                                f"{cycle} question {source_number} OCR option {option_key} is absent from the existing snapshot."
+                            )
+                        incoming_i18n = incoming_option.get("text_i18n")
+                        target_option_hindi = incoming_i18n.get("hi") if isinstance(incoming_i18n, dict) else None
+                        if not isinstance(target_option_hindi, str) or not target_option_hindi.strip():
+                            raise ImportErrorSafe(
+                                f"{cycle} question {source_number} OCR option {option_key} has no Unicode Hindi text."
+                            )
+                        candidate_count += 1
+                        option_i18n = current_option.get("text_i18n")
+                        if not isinstance(option_i18n, dict):
+                            option_i18n = {}
+                            current_option["text_i18n"] = option_i18n
+                        if (
+                            str(option_i18n.get("hi") or "") != target_option_hindi
+                            or current_option.get("hindi_ocr_reconstruction") != option_reconstruction
+                        ):
+                            option_i18n["hi"] = target_option_hindi
+                            current_option["hindi_ocr_reconstruction"] = option_reconstruction
+                            changed = True
+                            reconstructed_option_count += 1
+
+                    if candidate_count == 0 or not (has_prompt_ocr or any(
+                        isinstance(option, dict)
+                        and isinstance(option.get("hindi_ocr_reconstruction"), dict)
+                        and option["hindi_ocr_reconstruction"].get("method") == "TESSERACT_HINDI_OCR"
+                        for option in incoming_options
+                    )):
+                        skipped_count += 1
+                    if changed:
+                        updates.append((int(question_id), current))
 
                 prepared.append({
                     "cycle": cycle,
@@ -1096,6 +1171,8 @@ def database_repair_draft_hindi(args: argparse.Namespace, papers: list[dict[str,
                     "package_sha256": paper["package_sha256"],
                     "question_updates": updates,
                     "reconstructed_count": len(updates),
+                    "reconstructed_prompt_count": reconstructed_prompt_count,
+                    "reconstructed_option_count": reconstructed_option_count,
                     "candidate_count": candidate_count,
                     "unreconstructed_count": skipped_count,
                     "question_count": len(question_rows),
@@ -1146,7 +1223,8 @@ def database_repair_draft_hindi(args: argparse.Namespace, papers: list[dict[str,
                         ) VALUES (%s,'SYSTEM_IMPORT','TRE_HINDI_PROMPTS_RECONSTRUCTED','DRAFT','DRAFT',%s,now())
                     """, (
                         item["assessment_id"],
-                        f"Reconstructed {item['reconstructed_count']} Hindi prompt(s) from the original SHREE-DEV PDF via OCR. "
+                        f"Reconstructed {item['reconstructed_prompt_count']} Hindi prompt(s) and "
+                        f"{item['reconstructed_option_count']} Hindi option(s) from the original SHREE-DEV PDF via OCR. "
                         "All question/answer review states remain pending; human verification is required.",
                     ))
                 report["papers"].append({
@@ -1155,8 +1233,10 @@ def database_repair_draft_hindi(args: argparse.Namespace, papers: list[dict[str,
                     "testPackId": item["pack_id"],
                     "questionCount": item["question_count"],
                     "ocrCandidates": item["candidate_count"],
-                    "reconstructedPromptsUpdated": item["reconstructed_count"],
-                    "promptsWithoutConfidentOcr": item["unreconstructed_count"],
+                    "questionsUpdated": item["reconstructed_count"],
+                    "reconstructedPromptsUpdated": item["reconstructed_prompt_count"],
+                    "reconstructedOptionsUpdated": item["reconstructed_option_count"],
+                    "questionsWithoutConfidentOcr": item["unreconstructed_count"],
                     "assessmentStatus": "DRAFT",
                     "testPackStatus": "DRAFT",
                 })
@@ -1178,7 +1258,7 @@ def database_repair_draft_hindi(args: argparse.Namespace, papers: list[dict[str,
                 "releaseState": "DRAFT",
                 "releaseFingerprint": fingerprint,
                 "ocrCandidates": total_candidates,
-                "promptsWithoutConfidentOcr": total_unreconstructed,
+                "questionsWithoutConfidentOcr": total_unreconstructed,
                 "answersModified": False,
                 "reviewStatesChanged": False,
                 "publicationChanged": False,
