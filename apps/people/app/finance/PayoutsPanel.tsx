@@ -79,7 +79,7 @@ async function api<T>(path:string,init:RequestInit={}):Promise<T>{
 const money=(paise:number|null|undefined,currency='INR')=>typeof paise!=='number'?'—':new Intl.NumberFormat('en-IN',{style:'currency',currency,maximumFractionDigits:2}).format(paise/100);
 function parsePaise(raw:string,allowZero=false):number|null{
   const value=raw.trim();
-  if(!/^\\d{1,10}(?:\\.\\d{1,2})?$/.test(value))return null;
+  if(!/^\d{1,10}(?:\.\d{1,2})?$/.test(value))return null;
   const [rupees,decimal='']=value.split('.');
   const amount=Number(rupees)*100+Number((decimal+'00').slice(0,2));
   return Number.isSafeInteger(amount)&&(allowZero?amount>=0:amount>=100)?amount:null;
@@ -388,7 +388,7 @@ export default function PayoutsPanel(){
 
   const requestBankReplacement=async(beneficiary:Beneficiary)=>{
     const key=String(beneficiary.id),draft=replacementDrafts[key]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''};
-    if(!/^\\d{9,18}$/.test(draft.accountNumber)){setError('Enter the new 9–18 digit bank account number.');return;}
+    if(!/^\d{9,18}$/.test(draft.accountNumber)){setError('Enter the new 9–18 digit bank account number.');return;}
     if(!/^[A-Z]{4}0[A-Z0-9]{6}$/.test(draft.ifsc.trim().toUpperCase())){setError('Enter a valid 11-character IFSC.');return;}
     if(!draft.email.trim()&&!draft.phone.trim()){setError('Provide an email address or phone number for RazorpayX.');return;}
     const result=await action(()=>api<{id:number;status:string;message:string}>(BASE+'/payout-beneficiaries/'+beneficiary.id+'/replacement',{
@@ -400,7 +400,7 @@ export default function PayoutsPanel(){
 
   const reconcileBeneficiaryProviderSetup=async(beneficiary:Beneficiary)=>{
     const key=String(beneficiary.id),accountNumber=(recoveryAccounts[key]||'').trim();
-    if(!/^\\d{9,18}$/.test(accountNumber)){setError('Re-enter the 9–18 digit bank account number so the server can match an existing provider record.');return;}
+    if(!/^\d{9,18}$/.test(accountNumber)){setError('Re-enter the 9–18 digit bank account number so the server can match an existing provider record.');return;}
     try{
       const result=await action(()=>api<{status:string;message:string}>(BASE+'/payout-beneficiaries/'+beneficiary.id+'/reconcile-provider-setup',{
         method:'POST',body:JSON.stringify({accountNumber})
@@ -564,8 +564,8 @@ export default function PayoutsPanel(){
             </select>
           </label>
           <label>Account holder’s legal name<input required maxLength={240} value={beneficiaryForm.holderName} onChange={e=>setBeneficiaryForm(v=>({...v,holderName:e.target.value}))}/></label>
-          <label>Bank account number<input required type="password" autoComplete="off" inputMode="numeric" maxLength={18} value={beneficiaryForm.accountNumber} onChange={e=>setBeneficiaryForm(v=>({...v,accountNumber:e.target.value.replace(/\\D/g,'').slice(0,18)}))}/><small>Used once for RazorpayX setup; never stored in the QuantaEdge database.</small></label>
-          <label>IFSC<input required autoComplete="off" maxLength={11} value={beneficiaryForm.ifsc} onChange={e=>setBeneficiaryForm(v=>({...v,ifsc:e.target.value.toUpperCase().replace(/\\s/g,'')}))} placeholder="e.g. ABCD0123456"/></label>
+          <label>Bank account number<input required type="password" autoComplete="off" inputMode="numeric" maxLength={18} value={beneficiaryForm.accountNumber} onChange={e=>setBeneficiaryForm(v=>({...v,accountNumber:e.target.value.replace(/\D/g,'').slice(0,18)}))}/><small>Used once for RazorpayX setup; never stored in the QuantaEdge database.</small></label>
+          <label>IFSC<input required autoComplete="off" maxLength={11} value={beneficiaryForm.ifsc} onChange={e=>setBeneficiaryForm(v=>({...v,ifsc:e.target.value.toUpperCase().replace(/\s/g,'')}))} placeholder="e.g. ABCD0123456"/></label>
           <label>Contact email<input type="email" maxLength={320} value={beneficiaryForm.email} onChange={e=>setBeneficiaryForm(v=>({...v,email:e.target.value}))}/></label>
           <label>Contact phone<input type="tel" maxLength={20} value={beneficiaryForm.phone} onChange={e=>setBeneficiaryForm(v=>({...v,phone:e.target.value}))}/><small>Provide an email or phone number for the RazorpayX contact.</small></label>
           <div className={styles.payoutFormFooter}><span>New or changed bank accounts require independent approval before they can receive money.</span>
@@ -585,15 +585,15 @@ export default function PayoutsPanel(){
             {selectedReplacementId===b.id&&b.status==='ACTIVE'&&<form className={styles.payoutReplacementForm} onSubmit={e=>{e.preventDefault();void requestBankReplacement(b);}}>
               <p>The existing approved account remains active while the new account is registered and reviewed by another authorized staff member.</p>
               <label>New account holder’s legal name<input required maxLength={240} value={(replacementDrafts[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}).holderName} onChange={e=>setReplacementDrafts(old=>({...old,[String(b.id)]:{...(old[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}),holderName:e.target.value}}))}/></label>
-              <label>New bank account number<input required type="password" inputMode="numeric" autoComplete="off" maxLength={18} value={(replacementDrafts[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}).accountNumber} onChange={e=>setReplacementDrafts(old=>({...old,[String(b.id)]:{...(old[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}),accountNumber:e.target.value.replace(/\\D/g,'').slice(0,18)}}))}/><small>Used for server-side RazorpayX setup only; not retained by QuantaEdge.</small></label>
-              <label>New IFSC<input required maxLength={11} value={(replacementDrafts[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}).ifsc} onChange={e=>setReplacementDrafts(old=>({...old,[String(b.id)]:{...(old[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}),ifsc:e.target.value.toUpperCase().replace(/\\s/g,'')}}))}/></label>
+              <label>New bank account number<input required type="password" inputMode="numeric" autoComplete="off" maxLength={18} value={(replacementDrafts[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}).accountNumber} onChange={e=>setReplacementDrafts(old=>({...old,[String(b.id)]:{...(old[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}),accountNumber:e.target.value.replace(/\D/g,'').slice(0,18)}}))}/><small>Used for server-side RazorpayX setup only; not retained by QuantaEdge.</small></label>
+              <label>New IFSC<input required maxLength={11} value={(replacementDrafts[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}).ifsc} onChange={e=>setReplacementDrafts(old=>({...old,[String(b.id)]:{...(old[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}),ifsc:e.target.value.toUpperCase().replace(/\s/g,'')}}))}/></label>
               <label>Contact email<input type="email" maxLength={320} value={(replacementDrafts[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}).email} onChange={e=>setReplacementDrafts(old=>({...old,[String(b.id)]:{...(old[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}),email:e.target.value}}))}/></label>
               <label>Contact phone<input type="tel" maxLength={20} value={(replacementDrafts[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}).phone} onChange={e=>setReplacementDrafts(old=>({...old,[String(b.id)]:{...(old[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}),phone:e.target.value}}))}/></label>
               <div className={styles.payoutFormFooter}><span>The new account will not be used until an independent approver accepts it. Any in-flight payout using the old account must resolve before the switch.</span><button type="submit" className={styles.primary} disabled={busy||!settings?.providerConfigured||!(replacementDrafts[String(b.id)]||{holderName:'',accountNumber:'',ifsc:'',email:'',phone:''}).accountNumber}>Submit replacement</button></div>
             </form>}
             {['PROVISIONING','RECONCILIATION_REQUIRED'].includes(b.status)&&<form className={styles.payoutRejectForm} onSubmit={e=>{e.preventDefault();void reconcileBeneficiaryProviderSetup(b);}}>
               <label>Re-enter bank account number to match an existing RazorpayX record
-                <input type="password" inputMode="numeric" autoComplete="off" maxLength={18} value={recoveryAccounts[String(b.id)]||''} onChange={e=>setRecoveryAccounts(old=>({...old,[String(b.id)]:e.target.value.replace(/\\D/g,'').slice(0,18)}))}/>
+                <input type="password" inputMode="numeric" autoComplete="off" maxLength={18} value={recoveryAccounts[String(b.id)]||''} onChange={e=>setRecoveryAccounts(old=>({...old,[String(b.id)]:e.target.value.replace(/\D/g,'').slice(0,18)}))}/>
                 <small>This is sent only to the API for an exact match. QuantaEdge will not create a duplicate fund account during reconciliation.</small>
               </label>
               <button type="submit" className={styles.secondarySmall} disabled={busy||!settings?.providerConfigured||!(recoveryAccounts[String(b.id)]||'')}>Find existing provider record</button>
