@@ -60,7 +60,7 @@ type TaxOverview={
   processedCreditNoteTaxPaise:number;netOutputTaxBeforeInputCreditsPaise:number;
   recordedProcessorFeeTaxPaise:number;approvedTaxProfiles:number;pendingTaxProfiles:number;
   gstTcsLedgerStatus:string;incomeTaxTdsLedgerStatus:string;finalGovernmentTaxPayableStatus:string;
-  finalTaxAmountIncludesInputCredits:boolean
+  finalTaxAmountIncludesInputCredits:boolean;nonInrCurrencies?:string[]
 };
 type BalanceResponse={totals:{netEarnedPaise:number;refundReversalsPaise:number;confirmedChargesPaise:number;
   netPaidPaise:number;payoutReversalsPaise:number;reservedPaise:number;refundReservePaise:number;payablePaise:number;
@@ -226,7 +226,7 @@ export default function PayoutsPanel(){
       if(rc)setReconciliationCandidates(Array.isArray(rc)?rc:[]);
       if(fc){setFeeAdjustmentCandidates(Array.isArray(fc)?fc.slice(0,50):[]);setFeeAdjustmentQueueHasMore(fc.length>50);}
       if(pfa)setPendingFeeAdjustments(Array.isArray(pfa)?pfa:[]);
-      if(tx)setTaxOverview(tx);
+      if(tx)setTaxOverview(tx);else setTaxOverview(null);
       setLoadIssues(issues);
     }
     finally{setLoading(false);}
@@ -518,6 +518,7 @@ export default function PayoutsPanel(){
             <div><strong>GST TCS</strong><span className={styles.payoutStatusPending}>Not represented</span><small>No approved recipient-level TCS liability/remittance ledger exists yet. This must not be treated as ₹0.</small></div>
             <div><strong>Income-tax TDS</strong><span className={styles.payoutStatusPending}>Not represented</span><small>No approved recipient-level TDS liability/remittance ledger exists yet. This must not be treated as ₹0.</small></div>
           </div>
+          {(taxOverview.nonInrCurrencies||[]).length>0&&<p className={styles.payoutAlertWarning} role="status">Non-INR sales use {taxOverview.nonInrCurrencies?.join(', ')} and are excluded from this INR-only tax snapshot. Reconcile each currency separately; no foreign-exchange conversion is assumed.</p>}
           <p className={styles.payoutHint}>Approved tax profiles: {taxOverview.approvedTaxProfiles.toLocaleString('en-IN')} · awaiting approval: {taxOverview.pendingTaxProfiles.toLocaleString('en-IN')}. Confirm the legal seller and applicability/rate/base with the tax adviser before treating any figure as a tax return liability or enabling withholding/remittance.</p>
         </>:<p className={styles.payoutEmpty}>Tax records could not be refreshed. Do not infer a zero tax amount; refresh or review Finance & Billing.</p>}
       </section>
