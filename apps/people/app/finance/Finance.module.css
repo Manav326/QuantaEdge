@@ -372,3 +372,51 @@
 .payoutLedgerEventList article small{font-size:10px;line-height:1.55;color:var(--finance-muted,var(--muted));overflow-wrap:anywhere}
 .payoutLedgerEvidence{display:grid;gap:2px;padding-top:4px;border-top:1px solid var(--finance-line,var(--line))}
 @media(max-width:640px){.payoutLedgerDialog{max-height:94dvh;border-radius:14px}.payoutLedgerEventList{max-height:48dvh}.payoutLedgerEventHead{align-items:flex-start}}
+ 
+/* Unified HRMS recipient register: responsive cards replace the 11-column payout-only view. */
+.payoutRecipientFilters{display:grid;grid-template-columns:minmax(230px,2fr) minmax(210px,1fr) minmax(140px,.65fr) auto;gap:12px;align-items:end;margin:16px 0}
+.payoutRecipientFilters label{display:grid;gap:6px;min-width:0;color:var(--finance-ink,var(--ink));font-size:11px;font-weight:800}
+.payoutRecipientFilters input,.payoutRecipientFilters select{width:100%;min-width:0;min-height:40px;padding:9px 11px;border:1px solid var(--finance-line,var(--line));border-radius:10px;background:var(--finance-field,var(--finance-surface,#fff));color:var(--finance-ink,var(--ink));font-size:12px}
+.payoutRecipientFilters>span{padding:0 2px 11px;color:var(--finance-muted,var(--muted));font-size:11px;white-space:nowrap}
+.payoutRecipientGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.payoutRecipientCard{display:grid;align-content:start;gap:13px;min-width:0;padding:16px;border:1px solid var(--finance-line,var(--line));border-radius:14px;background:var(--finance-surface,var(--paper,#fff));color:var(--finance-ink,var(--ink));}
+.payoutRecipientHead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;min-width:0}
+.payoutRecipientHead>div{display:grid;gap:5px;min-width:0}
+.payoutRecipientHead strong{font-size:15px;line-height:1.35;overflow-wrap:anywhere}
+.payoutRecipientHead small{font-size:10px;color:var(--finance-muted,var(--muted))}
+.payoutRecipientHead>span{flex:none;max-width:48%;white-space:normal;text-align:center}
+.payoutRecipientMeta{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:10px;color:var(--finance-muted,var(--muted))}
+.payoutRecipientMeta>span:last-child{overflow-wrap:anywhere}
+.payoutRecipientFacts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.payoutRecipientFacts>div{display:grid;align-content:start;gap:5px;min-width:0;padding:10px;border:1px solid var(--finance-line,var(--line));border-radius:10px;background:var(--finance-subtle,var(--paper,#f8fafc))}
+.payoutRecipientFacts>div>span{font-size:10px;line-height:1.35;color:var(--finance-muted,var(--muted));overflow-wrap:anywhere}
+.payoutRecipientFacts>div>strong{font-size:12px;line-height:1.45;color:var(--finance-ink,var(--ink));overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.payoutRecipientFacts>.payoutRecipientPayable{border-color:var(--finance-brand,var(--brand));}
+.payoutRecipientFacts>.payoutRecipientPayable>strong{font-size:15px}
+.payoutRecipientReason{margin:0;color:var(--finance-muted,var(--muted));font-size:11px;line-height:1.55;overflow-wrap:anywhere}
+.payoutRecipientActions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-start}
+.payoutTaxSummaryGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0}
+.payoutTaxSummaryGrid>article{display:grid;align-content:start;gap:7px;min-width:0;padding:13px;border:1px solid var(--finance-line,var(--line));border-radius:12px;background:var(--finance-subtle,var(--paper,#f8fafc))}
+.payoutTaxSummaryGrid>article>span{font-size:10px;line-height:1.4;color:var(--finance-muted,var(--muted))}
+.payoutTaxSummaryGrid>article>strong{font-size:clamp(14px,1.4vw,19px);line-height:1.3;color:var(--finance-ink,var(--ink));font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.payoutTaxSummaryGrid>article>small{font-size:10px;line-height:1.45;color:var(--finance-muted,var(--muted))}
+.payoutTaxCoverage{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.payoutTaxCoverage>div{display:grid;align-content:start;gap:7px;min-width:0;padding:12px;border:1px solid var(--finance-line,var(--line));border-radius:12px}
+.payoutTaxCoverage>div>strong{font-size:12px;line-height:1.4;overflow-wrap:anywhere}
+.payoutTaxCoverage>div>span{justify-self:start}
+.payoutTaxCoverage>div>small{font-size:10px;line-height:1.55;color:var(--finance-muted,var(--muted));overflow-wrap:anywhere}
+@media(max-width:1120px){
+ .payoutRecipientGrid{grid-template-columns:minmax(0,1fr)}
+ .payoutTaxSummaryGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .payoutTaxCoverage{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:720px){
+ .payoutRecipientFilters{grid-template-columns:minmax(0,1fr)}
+ .payoutRecipientFilters>span{padding:0;white-space:normal}
+ .payoutRecipientCard{padding:12px}
+ .payoutRecipientFacts{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .payoutTaxSummaryGrid,.payoutTaxCoverage{grid-template-columns:minmax(0,1fr)}
+}
+@media(prefers-reduced-motion:reduce){
+ .payoutRecipientCard,.payoutRecipientFacts>div{scroll-behavior:auto}
+}
