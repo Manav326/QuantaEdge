@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1340,
-    "successful_visual_analyses": 1327,
-    "missing_visual_analyses": 951,
+    "raw_analysis_result_rows": 1341,
+    "successful_visual_analyses": 1328,
+    "missing_visual_analyses": 950,
     "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 964,
+    "unresolved_count": 963,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -50153,9 +50153,33 @@
       "asset_path": "assets/363ff8d3453144ddaecb530b69f8e1410fad8df0a0b1e4e39cace5d9d3b24c83.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a small house with a thatched roof being blown by strong winds, causing the roof to be damaged.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "When high-speed winds blow over houses,",
+          "a low-pressure area is created over them,",
+          "as high-speed winds are accompanied by a",
+          "reduced pressure. Therefore, the air pressure",
+          "above the roofs of the houses is lower than the",
+          "pressure below them. If the pressure difference",
+          "is large and the roofs are weak, they may be",
+          "blown away, as shown in"
+        ],
+        "concepts": [
+          "high-speed winds",
+          "low-pressure area",
+          "air pressure",
+          "pressure difference",
+          "roof damage"
+        ],
+        "context_relation": "The image illustrates the concept of pressure differences caused by high-speed winds, leading to potential roof damage.",
+        "limitations": [
+          "The image does not provide specific details about the types of houses or the exact conditions under which the roof damage occurs."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
