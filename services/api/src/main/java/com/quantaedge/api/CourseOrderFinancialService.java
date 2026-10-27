@@ -168,7 +168,7 @@ public class CourseOrderFinancialService {
       from course_tax_profile tp
       join institution_marketplace_offer o on o.id=tp.institution_offer_id and o.institution_id=?
       join billing_legal_entity le on le.id=tp.legal_entity_id and le.status='ACTIVE'
-        and (le.entity_kind='PLATFORM' or le.institution_id=o.institution_id)
+        and (le.entity_kind in ('PLATFORM','COMPANY') or (le.entity_kind='INSTITUTION' and le.institution_id=o.institution_id))
       left join lateral (
         select g.id,g.gstin,g.state_code,g.registration_type,g.registered_address
         from billing_gst_registration g
