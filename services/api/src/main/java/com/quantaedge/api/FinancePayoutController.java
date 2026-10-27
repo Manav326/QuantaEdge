@@ -59,6 +59,21 @@ public class FinancePayoutController {
     this.baseUrl=(baseUrl==null?"https://api.razorpay.com/v1":baseUrl.trim()).replaceAll("/+$","");
   }
 
+  @GetMapping("/payout-catalog")
+  public Map<String,Object> payoutCatalog(@RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireManage(context);
+    List<Map<String,Object>> institutions=jdbc.queryForList("""
+      select id,tenant_code,display_name,status from institution_tenant
+      where status='ACTIVE' order by lower(display_name),id
+      """);
+    List<Map<String,Object>> companies=jdbc.queryForList("""
+      select id,entity_kind,legal_name,trade_name,status from billing_legal_entity
+      where status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY')
+      order by lower(legal_name),id
+      """);
+    return Map.of("institutions",institutions,"legalEntities",companies);
+  }
+
   @GetMapping("/payout-settings")
   public Map<String,Object> payoutSettings(@RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireManage(context);
