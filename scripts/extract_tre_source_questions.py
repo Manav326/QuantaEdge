@@ -460,6 +460,30 @@ def normalize_ocr_option(value: str) -> str:
     return normalized if len(re.findall(r"[\u0900-\u097F]", normalized)) >= 2 else ""
 
 
+def _ocr_shree_dev_stimulus(page: Any, bbox: tuple[float, float, float, float]) -> tuple[str, str]:
+    """OCR a shared passage paragraph rendered in a recognized legacy Hindi glyph stream."""
+    if not _tesseract_hindi_available():
+        return "", "SHREEDEV_OCR_UNAVAILABLE_RAW_PRESERVED"
+    try:
+        x0, y0, x1, y1 = bbox
+        clip = fitz.Rect(x0 - 2, y0 - 2, x1 + 3, y1 + 3) & page.rect
+        if clip.width < 8 or clip.height < 8:
+            return "", "SHREEDEV_OCR_INVALID_CROP_RAW_PRESERVED"
+        pixmap = page.get_pixmap(matrix=fitz.Matrix(4, 4), clip=clip, alpha=False)
+        result = subprocess.run(
+            ["tesseract", "stdin", "stdout", "-l", "hin", "--psm", "6"],
+            input=pixmap.tobytes("png"), capture_output=True, timeout=25, check=False,
+        )
+        if result.returncode != 0:
+            return "", "SHREEDEV_OCR_FAILED_RAW_PRESERVED"
+        text = result.stdout.decode("utf-8", errors="replace").strip()
+        if len(re.findall(r"[\u0900-\u097F]", text)) < 20:
+            return "", "SHREEDEV_OCR_NO_USABLE_HINDI_RAW_PRESERVED"
+        return preserve_layout(text), "OCR_SHREEDEV_STIMULUS_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW"
+    except (OSError, ValueError, RuntimeError, subprocess.SubprocessError):
+        return "", "SHREEDEV_OCR_FAILED_RAW_PRESERVED"
+
+
 def _ocr_shree_dev_option(page: Any, bbox: tuple[float, float, float, float]) -> tuple[str, str]:
     """OCR one legacy-font Hindi option block; the result always remains review-gated."""
     if not _tesseract_hindi_available():
@@ -593,8 +617,9 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                     if not re.fullmatch(r"[\d\s./_-]+", stripped) and not stripped.lower().startswith("part -"):
                         passage_text = stripped
                 if passage_text:
-                    stimulus_by_group[spec["group_id"]] = {
+                    stimulus_record = {
                         "text": passage_text,
+                        "raw_text": passage_text,
                         "source_language": (
                             {"E": "en", "H": "hi", "U": "ur", "B": "bn"}.get(str(spec["prefix"]).upper())
                             if spec["prefix"] in {"E", "H", "U", "B"} else
@@ -602,7 +627,28 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                         ),
                         "page": page_num,
                         "column": spec["column"],
+                        "top_y": round(source_y, 2),
                     }
+                    if stimulus_record["source_language"] == "hi":
+                        stimulus_metadata = block_metadata.get((round(source_y, 2), round(source_x, 2)), {})
+                        if uses_legacy_hindi_glyphs(passage_text, stimulus_metadata.get("fonts", set())):
+                            lines = stimulus_metadata.get("lines", [])
+                            mixed_fonts = any(
+                                str(line.get("text", "")).strip()
+                                and not uses_legacy_hindi_glyphs(str(line.get("text", "")), line.get("fonts", set()))
+                                and not re.fullmatch(r"[\d\s.,:/()+=%-]+", str(line.get("text", "")).strip())
+                                for line in lines
+                            )
+                            if mixed_fonts:
+                                stimulus_record["ocr_status"] = "SHREEDEV_OCR_MIXED_FONT_RAW_PRESERVED"
+                            else:
+                                stimulus_bbox = stimulus_metadata.get("bbox")
+                                if stimulus_bbox:
+                                    ocr_text, ocr_status = _ocr_shree_dev_stimulus(page, stimulus_bbox)
+                                    stimulus_record["ocr_status"] = ocr_status
+                                    if ocr_text:
+                                        stimulus_record["ocr_text"] = ocr_text
+                    stimulus_by_group[spec["group_id"]] = stimulus_record
                     # Mark the original paragraph or question-block preamble so it is not appended
                     # to a previous question as if it were an answer option.
                     stimulus_source_keys.add((spec["column"], round(source_y, 2), source_x, passage_text))
@@ -794,8 +840,16 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                 for spec in passage_specs:
                     if identity_matches_spec(identity, number, prefix, spec) and spec["group_id"] in stimulus_by_group:
                         active["stimulus_id"] = spec["group_id"]
-                        active["stimulus_raw_text"] = stimulus_by_group[spec["group_id"]]["text"]
-                        active["stimulus_source_language"] = stimulus_by_group[spec["group_id"]]["source_language"]
+                        stimulus_record = stimulus_by_group[spec["group_id"]]
+                        active["stimulus_raw_text"] = stimulus_record["raw_text"]
+                        active["stimulus_ocr_text"] = stimulus_record.get("ocr_text") or ""
+                        active["stimulus_ocr_status"] = stimulus_record.get("ocr_status") or ""
+                        active["stimulus_source_language"] = stimulus_record["source_language"]
+                        active["stimulus_source_location"] = {
+                            "pdf_page": stimulus_record["page"],
+                            "column": stimulus_record["column"],
+                            "top_y": stimulus_record["top_y"],
+                        }
                         active["native_language_only"] = bool(spec["language_only"])
                         break
             flush_active()
@@ -952,6 +1006,9 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                         "conversion_status": "RAW_LEGACY" if row["language"] == "hi" else "SOURCE_TEXT",
                         "stimulus_id": row.get("stimulus_id"),
                         "stimulus_raw": row.get("stimulus_raw_text"),
+                        "stimulus_ocr_text": row.get("stimulus_ocr_text") or "",
+                        "stimulus_ocr_status": row.get("stimulus_ocr_status") or "",
+                        "stimulus_source_location": row.get("stimulus_source_location") or {},
                         "stimulus_source_language": row.get("stimulus_source_language"),
                         "native_language_only": bool(row.get("native_language_only")),
                     }
@@ -1035,9 +1092,19 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                         continue
                     raw_stimulus = str(variant["stimulus_raw"])
                     if lang == "hi":
-                        stimulus_value, stimulus_status = convert_hindi_text(
-                            raw_stimulus, "" if native_language_only else english_reference
-                        )
+                        if variant.get("stimulus_ocr_text"):
+                            stimulus_value = str(variant["stimulus_ocr_text"])
+                            stimulus_status = str(
+                                variant.get("stimulus_ocr_status")
+                                or "OCR_SHREEDEV_STIMULUS_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW"
+                            )
+                        elif str(variant.get("stimulus_ocr_status") or "").startswith("SHREEDEV_OCR_"):
+                            stimulus_value = raw_stimulus
+                            stimulus_status = str(variant["stimulus_ocr_status"])
+                        else:
+                            stimulus_value, stimulus_status = convert_hindi_text(
+                                raw_stimulus, "" if native_language_only else english_reference
+                            )
                         variant["stimulus_conversion_status"] = stimulus_status
                     else:
                         stimulus_value = raw_stimulus
@@ -1047,6 +1114,13 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                     variant["stimulus_code_line_indices"] = detected_code_line_indices(stimulus_value)
                     variant["stimulus_math_line_indices"] = detected_math_line_indices(stimulus_value)
                     stimulus_i18n[lang] = stimulus_value
+                    if lang == "hi" and variant.get("stimulus_ocr_text"):
+                        entry["hindi_stimulus_reconstruction"] = {
+                            "method": "TESSERACT_HINDI_OCR",
+                            "status": "REQUIRES_HUMAN_REVIEW",
+                            "raw_legacy_text": raw_stimulus,
+                            "source_location": variant.get("stimulus_source_location") or {},
+                        }
                     if variant.get("stimulus_id"):
                         stimulus_ids.add(str(variant["stimulus_id"]))
                     stimulus_languages[lang] = normalize_source_language_code(
