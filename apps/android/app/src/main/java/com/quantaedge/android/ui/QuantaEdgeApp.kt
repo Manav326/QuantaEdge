@@ -1422,6 +1422,10 @@ fun QuantaEdgeApp(launchIntent: Intent? = null) {
             ApiClient.putObject("/api/v1/account/me/profile", JSONObject()
                 .put("displayName", displayName.trim())
                 .put("preferredLocale", preferredLocale))
+            val nextInterfaceLanguage = resolveInterfaceLanguage(preferredLocale)
+                ?: throw IllegalArgumentException("Select a supported interface language.")
+            language = nextInterfaceLanguage
+            preferences.edit().putString("language", nextInterfaceLanguage).apply()
             accountIdentityProfile = ApiClient.getObject("/api/v1/account/me/profile")
             if (auth.textAny("role").contains("PARENT", true)) {
                 parentAccount = runCatching { ApiClient.getObject("/api/v1/guardians/account") }.getOrDefault(parentAccount)
