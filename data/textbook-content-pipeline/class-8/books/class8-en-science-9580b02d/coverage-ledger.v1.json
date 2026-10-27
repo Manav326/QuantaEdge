@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1337,
-    "successful_visual_analyses": 1325,
-    "missing_visual_analyses": 954,
+    "raw_analysis_result_rows": 1338,
+    "successful_visual_analyses": 1326,
+    "missing_visual_analyses": 953,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 966,
+    "unresolved_count": 965,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -50055,9 +50055,26 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An educational page about pressure differences and wind patterns.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "89"
+        ],
+        "concepts": [
+          "pressure differences",
+          "sea breeze",
+          "land breeze",
+          "wind patterns"
+        ],
+        "context_relation": "The page explains the formation of sea and land breezes due to temperature differences between land and sea.",
+        "limitations": [
+          "The page does not include any images or diagrams."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
