@@ -12,7 +12,11 @@ type Settings={
   default_remainder_recipient_type?:string;default_remainder_institution_id?:number|null;
   default_remainder_legal_entity_id?:number|null;default_institution_name?:string|null;
   default_company_name?:string|null;payout_frequency?:string;payout_minimum_paise?:number|null;
-  refund_reserve_basis_points?:number|null
+  refund_reserve_basis_points?:number|null;payoutReady?:boolean;webhookConfigured?:boolean;
+  collection_arrangement_status?:string;collection_arrangement_reference?:string|null;
+  payment_collection_legal_entity_id?:number|null;razorpayx_funding_legal_entity_id?:number|null;
+  payment_collection_legal_name?:string|null;razorpayx_funding_legal_name?:string|null;
+  canVerifyCollectionArrangement?:boolean
 };
 type Overview={
   beneficiariesAwaitingApproval:number;beneficiariesNeedingReview:number;unreconciledFees:number;
@@ -83,6 +87,7 @@ export default function PayoutsPanel(){
   const [error,setError]=useState('');
   const [notice,setNotice]=useState('');
   const [settingsForm,setSettingsForm]=useState({remainderType:'COMPANY',remainderId:'',minimumRupees:'',reservePercent:''});
+  const [arrangementForm,setArrangementForm]=useState({collectionEntityId:'',fundingEntityId:'',reference:'',status:'PENDING',confirm:false});
   const [beneficiaryForm,setBeneficiaryForm]=useState({type:'INSTITUTION',recipientId:'',holderName:'',accountNumber:'',ifsc:'',email:'',phone:''});
   const [rejectingId,setRejectingId]=useState<number|null>(null);
   const [rejectReason,setRejectReason]=useState('');
@@ -100,6 +105,13 @@ export default function PayoutsPanel(){
       setFeeOrders(Array.isArray(f)?f:[]);setBatches(Array.isArray(bs)?bs:[]);
       const companies=c.legalEntities.filter(e=>e.status==='ACTIVE'&&['PLATFORM','COMPANY'].includes(e.entity_kind));
       const institutions=c.institutions.filter(i=>i.status==='ACTIVE');
+      setArrangementForm(old=>({
+        collectionEntityId:s.payment_collection_legal_entity_id!=null?String(s.payment_collection_legal_entity_id):'',
+        fundingEntityId:s.razorpayx_funding_legal_entity_id!=null?String(s.razorpayx_funding_legal_entity_id):'',
+        reference:s.collection_arrangement_reference||'',
+        status:s.collection_arrangement_status||'PENDING',
+        confirm:false
+      }));
       setSettingsForm(old=>({
         remainderType:s.default_remainder_recipient_type||old.remainderType,
         remainderId:s.configured?String(s.default_remainder_recipient_type==='INSTITUTION'
@@ -127,7 +139,7 @@ export default function PayoutsPanel(){
   const recipientOptions=beneficiaryForm.type==='INSTITUTION'
     ?activeInstitutions.map(i=>({id:i.id,label:i.display_name+' · '+i.tenant_code}))
     :activeCompanies.map(e=>({id:e.id,label:e.legal_name+' · '+e.entity_kind}));
-  const payoutEligible=Boolean(settings?.configured&&settings?.providerConfigured&&settings?.sourceAccountConfigured);
+  const payoutEligible=Boolean(settings?.configured&&settings?.payoutReady);
 
   const saveSettings=async(event:FormEvent)=>{
     event.preventDefault();
@@ -142,6 +154,30 @@ export default function PayoutsPanel(){
       payoutMinimumPaise:minimum,
       refundReserveBasisPoints:Math.round(reserve*100)
     })}),'Payout settings saved. New revenue-share policies will use this remainder recipient by default.');
+  };
+
+  const submitArrangement=async(event:FormEvent)=>{
+    event.preventDefault();
+    if(!settings?.canVerifyCollectionArrangement){
+      setError('Only an authorized platform owner can verify the legal seller and collection-account arrangement.');
+      return;
+    }
+    if(!arrangementForm.collectionEntityId||!arrangementForm.fundingEntityId){
+      setError('Select both the payment-collection legal entity and the RazorpayX payout-funding owner.');
+      return;
+    }
+    if(arrangementForm.status==='VERIFIED'&&(!arrangementForm.confirm||arrangementForm.reference.trim().length<3)){
+      setError('Confirm the legal review and enter its agreement/provider reference before marking this arrangement verified.');
+      return;
+    }
+    const result=await action(()=>api(BASE+'/payout-settings/collection-arrangement',{method:'POST',body:JSON.stringify({
+      status:arrangementForm.status,
+      paymentCollectionLegalEntityId:Number(arrangementForm.collectionEntityId),
+      razorpayxFundingLegalEntityId:Number(arrangementForm.fundingEntityId),
+      evidenceReference:arrangementForm.reference.trim()||null,
+      confirm:arrangementForm.confirm
+    })}),arrangementForm.status==='VERIFIED'?'Legal and collection-account arrangement verified. Payouts are enabled only if RazorpayX credentials and webhook are also ready.':'Collection arrangement review saved.');
+    if(result)setArrangementForm(v=>({...v,confirm:false}));
   };
 
   const submitBeneficiary=async(event:FormEvent)=>{
@@ -219,11 +255,47 @@ export default function PayoutsPanel(){
         <article className={styles.metric}><span>Confirmed transfers</span><strong>{money(overview?.payoutsPaidPaise)}</strong><small>Provider-confirmed processed payouts</small></article>
       </section>
 
-      {!settings?.providerConfigured||!settings?.sourceAccountConfigured?
-        <div className={styles.payoutAlertWarning} role="status"><b>Transfers are not enabled yet.</b> Configure the RazorpayX payout API credentials and source account number on the API server. Do not paste secrets into this screen. Confirm the legal seller and collection-account arrangement with Razorpay before enabling live payouts.</div>:null}
+      {!settings?.providerConfigured||!settings?.sourceAccountConfigured||!settings?.webhookConfigured?
+        <div className={styles.payoutAlertWarning} role="status"><b>RazorpayX is not fully configured.</b> Configure the payout API credentials, source account identifier and payout webhook secret on the API server. Never paste secrets into this screen.</div>:null}
+      {!settings?.collectionArrangementVerified&&<div className={styles.payoutAlertWarning} role="status"><b>Live transfers are blocked until legal review is recorded.</b> Select the entity receiving course-payment collections and the legal entity that owns the RazorpayX payout funding account. Only the platform owner can mark the arrangement verified.</div>}
 
       <section className={styles.panel}>
-        <div className={styles.panelHead}><div><h2>1. Payout rules</h2><p>Choose who receives the remaining balance and how much must stay available for refunds.</p></div>
+        <div className={styles.panelHead}><div><h2>1. Legal seller & collection-account review</h2>
+          <p>This is a launch gate, not a legal opinion. Verify the seller/collection arrangement with Razorpay and the responsible legal/tax adviser before any transfer can be sent.</p></div>
+          <span className={statusClass(settings?.collection_arrangement_status||'PENDING')}>{label(settings?.collection_arrangement_status||'PENDING')}</span></div>
+        {settings?.canVerifyCollectionArrangement?<form className={styles.payoutFormGrid} onSubmit={submitArrangement}>
+          <label>Legal entity receiving course-payment collections
+            <select required value={arrangementForm.collectionEntityId} onChange={e=>setArrangementForm(v=>({...v,collectionEntityId:e.target.value}))}>
+              <option value="">Choose legal entity</option>{catalog?.legalEntities.filter(e=>e.status==='ACTIVE').map(e=><option key={e.id} value={e.id}>{e.legal_name} · {e.entity_kind}</option>)}
+            </select>
+            <small>This is the legally reviewed collection/seller arrangement for incoming course payments.</small>
+          </label>
+          <label>Legal owner of RazorpayX payout funding account
+            <select required value={arrangementForm.fundingEntityId} onChange={e=>setArrangementForm(v=>({...v,fundingEntityId:e.target.value}))}>
+              <option value="">Choose funding owner</option>{activeCompanies.map(e=><option key={e.id} value={e.id}>{e.legal_name} · {e.entity_kind}</option>)}
+            </select>
+            <small>Must match the verified legal owner of the RazorpayX funding account configured on the API server.</small>
+          </label>
+          <label>Agreement or provider review reference
+            <input required={arrangementForm.status==='VERIFIED'} maxLength={180} value={arrangementForm.reference} onChange={e=>setArrangementForm(v=>({...v,reference:e.target.value}))} placeholder="Agreement ID or Razorpay support case"/>
+          </label>
+          <label>Review status
+            <select value={arrangementForm.status} onChange={e=>setArrangementForm(v=>({...v,status:e.target.value,confirm:false}))}>
+              <option value="PENDING">Pending review</option><option value="VERIFIED">Verified — allow payout after setup</option><option value="BLOCKED">Blocked — do not transfer</option>
+            </select>
+          </label>
+          {arrangementForm.status==='VERIFIED'&&<label className={styles.payoutConfirmCheck}><input type="checkbox" checked={arrangementForm.confirm} onChange={e=>setArrangementForm(v=>({...v,confirm:e.target.checked}))}/>I confirm the legal seller, payment collection arrangement and RazorpayX funding ownership have been reviewed and approved.</label>}
+          <div className={styles.payoutFormFooter}><span>Changing this review status does not alter a sale's saved legal seller or tax snapshot.</span><button className={styles.primary} type="submit" disabled={busy}>{arrangementForm.status==='VERIFIED'?'Confirm legal review':'Save review status'}</button></div>
+        </form>:<div className={styles.payoutReadOnly}>
+          <p><b>Collection entity:</b> {settings?.payment_collection_legal_name||'Not selected'}</p>
+          <p><b>RazorpayX funding owner:</b> {settings?.razorpayx_funding_legal_name||'Not selected'}</p>
+          <p><b>Evidence reference:</b> {settings?.collection_arrangement_reference||'Not recorded'}</p>
+          <p>Only a staff member with the platform-owner permission can record this legal review.</p>
+        </div>}
+      </section>
+
+      <section className={styles.panel}>
+        <div className={styles.panelHead}><div><h2>2. Payout rules</h2><p>Choose who receives the remaining balance and how much must stay available for refunds.</p></div>
           <span className={styles.payoutStatusNeutral}>Monthly</span></div>
         <form className={styles.payoutFormGrid} onSubmit={saveSettings}>
           <label>Who receives the remaining balance?
@@ -252,7 +324,7 @@ export default function PayoutsPanel(){
       </section>
 
       <section className={styles.panel}>
-        <div className={styles.panelHead}><div><h2>2. Bank accounts for recipients</h2><p>Register the beneficiary through RazorpayX. Only the last four digits are kept in QuantaEdge. The submitter cannot approve their own account.</p></div></div>
+        <div className={styles.panelHead}><div><h2>3. Bank accounts for recipients</h2><p>Register the beneficiary through RazorpayX. Only the last four digits are kept in QuantaEdge. The submitter cannot approve their own account.</p></div></div>
         <form className={styles.payoutFormGrid} onSubmit={submitBeneficiary}>
           <label>Recipient type
             <select value={beneficiaryForm.type} onChange={e=>{
@@ -293,7 +365,7 @@ export default function PayoutsPanel(){
       </section>
 
       <section className={styles.panel}>
-        <div className={styles.panelHead}><div><h2>3. Confirm actual payment-processing charges</h2><p>Charges reduce the distributable pool before shares. Use the actual Razorpay settlement statement/API result—not an estimate. Until charges are reconciled, the sale cannot enter a payout batch.</p></div><span className={feeOrders.length?styles.payoutStatusPending:styles.payoutStatusSuccess}>{feeOrders.length} awaiting review</span></div>
+        <div className={styles.panelHead}><div><h2>4. Confirm actual payment-processing charges</h2><p>Charges reduce the distributable pool before shares. Use the actual Razorpay settlement statement/API result—not an estimate. Until charges are reconciled, the sale cannot enter a payout batch.</p></div><span className={feeOrders.length?styles.payoutStatusPending:styles.payoutStatusSuccess}>{feeOrders.length} awaiting review</span></div>
         {feeOrders.map(order=>{
           const key=String(order.order_id);
           const draft=feeDrafts[key]||{fee:'',tax:'',reference:'',source:'SETTLEMENT_REPORT'};
@@ -310,7 +382,7 @@ export default function PayoutsPanel(){
       </section>
 
       <section className={styles.panel}>
-        <div className={styles.panelHead}><div><h2>4. Monthly payout batches</h2><p>Prepare the previous completed calendar month. The amount is calculated from earned allocations, confirmed fee deductions, processed refunds, existing reservations, paid transfers and the configured refund reserve.</p></div>
+        <div className={styles.panelHead}><div><h2>5. Monthly payout batches</h2><p>Prepare the previous completed calendar month. The amount is calculated from earned allocations, confirmed fee deductions, processed refunds, existing reservations, paid transfers and the configured refund reserve.</p></div>
           <button type="button" className={styles.primary} onClick={()=>void createBatch()} disabled={busy||loading||!payoutEligible||!settings?.configured||feeOrders.length>0}>Prepare last month’s batch</button></div>
         {!payoutEligible&&<p className={styles.payoutHint}>Preparation is disabled until the RazorpayX API credentials and source account are configured on the API server.</p>}
         {feeOrders.length>0&&<p className={styles.payoutHint}>Reconcile the {feeOrders.length} outstanding fee record(s) above first. A payout batch will not be prepared with estimated or missing processor charges.</p>}
