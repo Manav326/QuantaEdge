@@ -579,7 +579,7 @@ def check_editable_release(cur: Any, institution_id: int, course_id: int) -> tup
         raise ImportErrorSafe(f"The latest course release is {latest[2]}. Import only writes to an editable DRAFT release.")
     cur.execute("""
         SELECT id,release_state FROM institution_course_release
-        WHERE program_id=%s AND release_state IN ('IN_QUALITY_REVIEW','QUALITY_APPROVED','SHAREABLE','LEGACY_MIGRATED','WITHDRAWN')
+        WHERE program_id=%s AND release_state IN ('IN_QUALITY_REVIEW','QUALITY_APPROVED','SHAREABLE','LEGACY_MIGRATED','WITHDRAWN','REJECTED')
         ORDER BY release_version DESC,id DESC LIMIT 1 FOR UPDATE
     """, (course_id,))
     frozen = cur.fetchone()
