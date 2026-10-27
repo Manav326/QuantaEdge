@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2450,
+    "assets_selected": 2451,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "0d1c88ea0154d314c4c70259",
-      "bc404714050e87c89d5907f3"
+      "1cdfaa6ab50b549feb652818",
+      "503c6db01e96c746242d9d1c"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2446,
-    "assets_remaining": 5042,
+    "assets_analyzed": 2448,
+    "assets_remaining": 5040,
     "assets_completion_percent": 32.7,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 2445,
+    "assets_skipped_from_checkpoint": 2446,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40579491228",
-      "checkpointed_at": "2026-10-27T21:34:19Z"
+      "checkpointed_at": "2026-10-27T21:38:11Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40579491228",
-      "checkpointed_at": "2026-10-27T21:34:46Z"
+      "checkpointed_at": "2026-10-27T21:38:38Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40579491228",
-      "checkpointed_at": "2026-10-27T21:35:22Z"
+      "checkpointed_at": "2026-10-27T21:39:14Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -92384,6 +92384,86 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40579491228",
       "checkpointed_at": "2026-10-27T21:37:26Z"
+    },
+    {
+      "asset_id": "1cdfaa6ab50b549feb652818",
+      "asset_sha256": "60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 75,
+      "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5f2e159e7cd25798d652993e38ece1b8fbc177eb5667babc67ce14051faedc36",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A multiple-choice question about the use of metals in food packaging.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal use in food packaging",
+          "cost-effectiveness",
+          "flexibility of metal sheets"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "The image does not provide any visual evidence or diagram to support the question."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40579491228",
+      "checkpointed_at": "2026-10-27T21:39:22Z"
+    },
+    {
+      "asset_id": "503c6db01e96c746242d9d1c",
+      "asset_sha256": "1ae347f70f25f24bc3dc372ca02c3e80da5284ee131e7e928c4484f76d70d893",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 75,
+      "asset_path": "assets/1ae347f70f25f24bc3dc372ca02c3e80da5284ee131e7e928c4484f76d70d893.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5f2e159e7cd25798d652993e38ece1b8fbc177eb5667babc67ce14051faedc36",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A question about the use of metals in food packaging.",
+        "visual_type": "photo",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal",
+          "food packaging",
+          "material",
+          "shape",
+          "fold"
+        ],
+        "context_relation": "The image is a question from a textbook about the use of metals in food packaging.",
+        "limitations": [
+          "The image does not provide any visual evidence or diagram to support the question."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40579491228",
+      "checkpointed_at": "2026-10-27T21:40:01Z"
     }
   ]
 }
