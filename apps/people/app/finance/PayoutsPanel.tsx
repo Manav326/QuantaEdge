@@ -16,7 +16,7 @@ type Settings={
   collection_arrangement_status?:string;collection_arrangement_reference?:string|null;
   payment_collection_legal_entity_id?:number|null;razorpayx_funding_legal_entity_id?:number|null;
   payment_collection_legal_name?:string|null;razorpayx_funding_legal_name?:string|null;
-  canVerifyCollectionArrangement?:boolean
+  canVerifyCollectionArrangement?:boolean;collectionArrangementVerified?:boolean
 };
 type Overview={
   beneficiariesAwaitingApproval:number;beneficiariesNeedingReview:number;unreconciledFees:number;
@@ -64,7 +64,7 @@ async function api<T>(path:string,init:RequestInit={}):Promise<T>{
   if(!response.ok)throw new Error(String(payload.message||payload.detail||payload.error||'Finance request failed ('+response.status+')'));
   return payload as T;
 }
-const money=(paise:number|undefined,currency='INR')=>typeof paise!=='number'?'—':new Intl.NumberFormat('en-IN',{style:'currency',currency,maximumFractionDigits:2}).format(paise/100);
+const money=(paise:number|null|undefined,currency='INR')=>typeof paise!=='number'?'—':new Intl.NumberFormat('en-IN',{style:'currency',currency,maximumFractionDigits:2}).format(paise/100);
 function parsePaise(raw:string,allowZero=false):number|null{
   const value=raw.trim();
   if(!/^\\d{1,10}(?:\\.\\d{1,2})?$/.test(value))return null;
