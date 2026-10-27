@@ -549,7 +549,7 @@ public class CoursePaymentOperationsController {
           e.payload_sha256,e.processing_status,e.status_message,e.details::text as details_json,
           e.received_at,e.processed_at
         from course_payment_provider_event e
-        """+where+"\n"+"""
+        """ + where + "\n" + """
         order by e.received_at desc,e.id desc limit ? offset ?
         """;
   }
