@@ -875,7 +875,7 @@ public class PlatformFinanceController {
         :"COMPANY".equals(remainderType)?optionalLong(row.get("remainder_legal_entity_id")):null;
     boolean validRemainder=remainderId!=null&&("INSTITUTION".equals(remainderType)
         ?exists("select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",remainderId)
-        : "COMPANY".equals(remainderType)&&exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY') and institution_id is null)",remainderId));
+        : "COMPANY".equals(remainderType)&&exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY'))",remainderId));
     if(!validRemainder) throw bad("Choose an active institution or company to receive the remaining balance before submitting this policy.");
     int n=jdbc.update("""
       update revenue_share_policy set status='PENDING_APPROVAL',submitted_by_staff_id=?,submitted_at=now()
@@ -915,7 +915,7 @@ public class PlatformFinanceController {
         :"COMPANY".equals(remainderType)?optionalLong(row.get("remainder_legal_entity_id")):null;
     boolean validRemainder=remainderId!=null&&("INSTITUTION".equals(remainderType)
         ?exists("select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",remainderId)
-        : "COMPANY".equals(remainderType)&&exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY') and institution_id is null)",remainderId));
+        : "COMPANY".equals(remainderType)&&exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY'))",remainderId));
     if(!validRemainder) throw bad("Revenue-share policy must assign its remainder to an active institution or company before approval.");
     long percentageBasisPoints=policyRecipients.stream()
       .filter(r -> "PERCENTAGE".equals(String.valueOf(r.get("calculation_type"))))
