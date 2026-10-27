@@ -169,6 +169,7 @@ export default function FinancePage(){
   const [recipients,setRecipients]=useState<RecipientDraft[]>([]);
   const [policyRemainderType,setPolicyRemainderType]=useState<'INSTITUTION'|'COMPANY'>('COMPANY');
   const [policyRemainderId,setPolicyRemainderId]=useState('');
+  const [distributionPreviewPoolRupees,setDistributionPreviewPoolRupees]=useState('1000');
   const [entityForm,setEntityForm]=useState({entityKind:'PLATFORM',institutionId:'',legalName:'',tradeName:'',contactEmail:'',contactPhone:'',addressLine:'',city:'',state:'',postalCode:'',invoiceSeriesCode:'QE'});
   const [editingCoreEntityId,setEditingCoreEntityId]=useState<number|null>(null);
   const [gstEntityId,setGstEntityId]=useState('');
@@ -666,6 +667,55 @@ export default function FinancePage(){
     percentageBasisPoints:row.percentageBasisPoints??row.percentage_basis_points??null,
     flatAmountPaise:row.flatAmountPaise??row.flat_amount_paise??null
   })).sort((a,b)=>a.recipientType.localeCompare(b.recipientType)||a.recipientId-b.recipientId));
+  const previewPoolPaise=(()=>{
+    const value=distributionPreviewPoolRupees.trim();
+    if(!/^\\d{1,9}(?:\\.\\d{1,2})?$/.test(value))return null;
+    const [rupees,decimal='']=value.split('.');
+    const amount=Number(rupees)*100+Number((decimal+'00').slice(0,2));
+    return Number.isSafeInteger(amount)&&amount>=100?amount:null;
+  })();
+  const distributionPreview=(()=>{
+    const byKey=new Map<string,{key:string;name:string;type:string;amountPaise:number;explicitPaise:number;remainderPaise:number}>();
+    let explicitTotalPaise=0;
+    let valid=previewPoolPaise!==null&&Boolean(policyRemainderId)&&recipients.length>0;
+    for(const recipient of recipients){
+      const id=Number(recipient.recipientId);
+      if(!recipient.recipientId||!Number.isSafeInteger(id)||id<=0){valid=false;continue;}
+      let amountPaise:number;
+      if(recipient.calculationType==='PERCENTAGE'){
+        const percentage=Number(recipient.percentage);
+        if(!Number.isFinite(percentage)||percentage<=0||percentage>100){valid=false;continue;}
+        amountPaise=Math.round((previewPoolPaise||0)*Math.round(percentage*100)/10000);
+      }else{
+        const value=recipient.flatRupees.trim();
+        if(!/^\\d{1,9}(?:\\.\\d{1,2})?$/.test(value)){valid=false;continue;}
+        const [rupees,decimal='']=value.split('.');
+        amountPaise=Number(rupees)*100+Number((decimal+'00').slice(0,2));
+        if(!Number.isSafeInteger(amountPaise)||amountPaise<1){valid=false;continue;}
+      }
+      const key=recipient.recipientType+':'+id;
+      const institution=catalog?.institutions.find(x=>x.id===id);
+      const entity=catalog?.legalEntities.find(x=>x.id===id);
+      const name=recipient.recipientType==='INSTITUTION'?(institution?.display_name||('Institution #'+id)):(entity?.trade_name||entity?.legal_name||('Company #'+id));
+      if(byKey.has(key)){valid=false;continue;}
+      byKey.set(key,{key,name,type:recipient.recipientType,amountPaise,explicitPaise:amountPaise,remainderPaise:0});
+      explicitTotalPaise+=amountPaise;
+    }
+    if(previewPoolPaise===null||explicitTotalPaise>previewPoolPaise)valid=false;
+    const remainderPaise=previewPoolPaise===null||explicitTotalPaise>previewPoolPaise?0:previewPoolPaise-explicitTotalPaise;
+    const remainderKey=policyRemainderType+':'+Number(policyRemainderId);
+    const remainderInstitution=catalog?.institutions.find(x=>x.id===Number(policyRemainderId));
+    const remainderEntity=catalog?.legalEntities.find(x=>x.id===Number(policyRemainderId));
+    const remainderName=policyRemainderType==='INSTITUTION'
+      ?(remainderInstitution?.display_name||('Institution #'+policyRemainderId))
+      :(remainderEntity?.trade_name||remainderEntity?.legal_name||('Company #'+policyRemainderId));
+    if(remainderPaise>0&&policyRemainderId){
+      const existing=byKey.get(remainderKey);
+      if(existing){existing.amountPaise+=remainderPaise;existing.remainderPaise=remainderPaise;}
+      else byKey.set(remainderKey,{key:remainderKey,name:remainderName,type:policyRemainderType,amountPaise:remainderPaise,explicitPaise:0,remainderPaise});
+    }
+    return {valid,explicitTotalPaise,remainderPaise,rows:[...byKey.values()],totalPaise:previewPoolPaise};
+  })();
   const recipientsUnchanged=(()=>{
     if(!policyDetail||!selectedPolicyId)return false;
     try{return recipientSnapshot(recipientPayload())===recipientSnapshot(policyDetail.recipients||[])
@@ -939,6 +989,24 @@ export default function FinancePage(){
               <button className={styles.removeRow} type="button" aria-label="Remove beneficiary" onClick={()=>setRecipients(old=>old.filter((_,j)=>j!==i))}>×</button>
             </div>)}</div>
             <button className={styles.secondary} onClick={()=>setRecipients(old=>[...old,{recipientType:'INSTITUTION',recipientId:'',calculationType:'PERCENTAGE',percentage:'',flatRupees:''}])}>＋ Add beneficiary</button>
+            <section className={styles.panel} aria-label="Illustrative revenue distribution preview">
+              <div className={styles.panelHead}><div><h3>Check the distribution</h3><p>Illustrative preview only. Actual per-sale amounts use that order’s locked tax, capture and confirmed-fee records.</p></div></div>
+              <label>Example distributable pool (₹)
+                <input inputMode="decimal" value={distributionPreviewPoolRupees} onChange={e=>setDistributionPreviewPoolRupees(e.target.value)} placeholder="e.g. 1000"/>
+              </label>
+              {previewPoolPaise===null?<p className={styles.empty}>Enter a valid example amount of at least ₹1.00.</p>:<>
+                <div className={styles.recipientList}>
+                  {distributionPreview.rows.map(row=><article className={styles.policyRow} key={row.key}>
+                    <b>{row.name}</b>
+                    <span>{rupees(row.amountPaise)}{row.explicitPaise>0&&row.remainderPaise>0?' · explicit '+rupees(row.explicitPaise)+' + remainder '+rupees(row.remainderPaise):row.remainderPaise>0?' · remainder': ' · configured share'}</span>
+                  </article>)}
+                </div>
+                <div className={styles.policyFooter}><span>Configured shares: {rupees(distributionPreview.explicitTotalPaise)} · Remaining balance: {rupees(distributionPreview.remainderPaise)}</span>
+                  <b>{distributionPreview.valid&&distributionPreview.rows.reduce((sum,row)=>sum+row.amountPaise,0)===previewPoolPaise?'Balanced: '+rupees(previewPoolPaise):'Review required: verify recipients and amounts'}</b>
+                </div>
+                {distributionPreview.explicitTotalPaise>previewPoolPaise&&<p className={styles.warning}>Explicit shares exceed this example pool by {rupees(distributionPreview.explicitTotalPaise-previewPoolPaise)}. Reduce the configured shares before submitting.</p>}
+              </>}
+            </section>
             <div className={styles.policyFooter}><span>HRMS checks that approved shares fit the pool at checkout. A missing/inactive bank account blocks payout, not the historical allocation.</span><button className={styles.primary} disabled={busy||!recipients.length||!policyRemainderId} onClick={()=>void action(async()=>{await api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/recipients',{method:'PUT',body:JSON.stringify({recipients:recipientPayload(),remainderRecipientType:policyRemainderType,remainderRecipientId:Number(policyRemainderId)})});await api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/submit',{method:'POST'});},'Policy submitted for HRMS approval.')}>Submit policy</button></div>
           </>:policyDetail.status==='PENDING_APPROVAL'?<div className={styles.approvalBox}><p>This policy is waiting for approval. Confirm its parties, effective dates and contract references before activating it.</p><button className={styles.primary} disabled={busy} onClick={()=>void action(()=>api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/approve',{method:'POST'}),'Revenue-share policy approved.')}>Approve policy</button></div>:<div className={styles.recipientList}>{(policyDetail.recipients||[]).map((r,i)=><article className={styles.policyRow} key={i}><b>{r.recipient_name||(r.recipient_type==='COMPANY'?'Company':'Institution')+' #'+(r.recipient_type==='COMPANY'?r.legal_entity_id:r.institution_id)}</b><span>{r.calculation_type==='PERCENTAGE'?Number(r.percentage_basis_points)/100+'% of distributable pool':rupees(r.flat_amount_paise||0)+' per eligible sale'}</span></article>)}</div>}
         </section>}
