@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1360,
-    "successful_visual_analyses": 1344,
-    "missing_visual_analyses": 931,
+    "raw_analysis_result_rows": 1361,
+    "successful_visual_analyses": 1345,
+    "missing_visual_analyses": 930,
     "failed_visual_analyses": 16,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 947,
+    "unresolved_count": 946,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -50853,9 +50853,25 @@
       "asset_path": "page-0112.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a lightning conductor attached to a building.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ever heard of ...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction. One end of the rod is pointed. This end is kept higher than the highest point of the building (Fig. 6.18). The other end of the rod is buried deep in the ground. The rod provides easy path for t",
+          "Fig. 6.18: A lightning conductor"
+        ],
+        "concepts": [
+          "lightning conductor",
+          "building construction"
+        ],
+        "context_relation": "explanation",
+        "limitations": [
+          "Fig. 6.18 is not visible in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
