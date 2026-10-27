@@ -1032,7 +1032,11 @@ public class FinancePayoutController {
     String prior=text(current,"status");
     if("PROCESSED".equals(prior)&&!"PROCESSED".equals(status)&&!"REVERSED".equals(status))return payoutSummary(payoutId);
     if("REVERSED".equals(prior)&&!"REVERSED".equals(status))return payoutSummary(payoutId);
-    if(List.of("FAILED","REJECTED").contains(prior)&&!prior.equals(status))return payoutSummary(payoutId);
+    // RazorpayX webhook delivery order is not guaranteed. A later signed processed/reversed
+    // event may legitimately supersede an earlier failed/rejected notification; never let a
+    // delayed pending/processing event move a failed payout backward.
+    if(List.of("FAILED","REJECTED").contains(prior)&&!prior.equals(status)
+        &&!List.of("PROCESSED","REVERSED").contains(status))return payoutSummary(payoutId);
     String utr=optionalText(provider.path("utr").asText(null));
     String description=optionalText(provider.path("status_details").path("description").asText(null));
     if(description==null)description=optionalText(provider.path("failure_reason").asText(null));
