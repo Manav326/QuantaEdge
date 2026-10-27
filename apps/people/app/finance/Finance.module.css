@@ -289,3 +289,31 @@
 .payoutReconcileSelect{grid-column:1/-1;display:grid;gap:6px;align-content:start;min-width:0;font-size:11px;font-weight:800;color:var(--finance-ink,var(--ink))}
 .payoutReconcileSelect select{width:100%;min-width:0;min-height:40px;padding:9px 11px;border:1px solid var(--finance-line,var(--line));border-radius:10px;background:var(--finance-field,var(--finance-surface,#fff));color:var(--finance-ink,var(--ink));font-size:12px}
 @media(max-width:640px){.payoutReconcileSelect{grid-column:1/-1}.payoutReconcileSelect select{font-size:12px}}
+
+
+/* Payout operations: searchable queue and explicit maker/checker confirmation. */
+.payoutQueueFilters{display:grid;gap:7px;max-width:760px}
+.payoutQueueFilters label{font-size:11px;font-weight:800;color:var(--finance-ink,var(--ink))}
+.payoutQueueFilters>div{display:flex;gap:8px;min-width:0}
+.payoutQueueFilters input{width:100%;min-width:0;min-height:38px;padding:8px 10px;border:1px solid var(--finance-line,var(--line));border-radius:9px;background:var(--finance-field,var(--finance-surface,#fff));color:var(--finance-ink,var(--ink));font-size:12px}
+.payoutQueuePagination{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--finance-muted,var(--muted));font-size:11px}
+.payoutQueuePagination>div{display:flex;gap:7px}
+.payoutConfirmOverlay{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:16px;background:rgba(15,23,42,.66);overflow:auto}
+.payoutApprovalDialog{width:min(760px,100%);max-height:min(92dvh,900px);overflow:auto;display:grid;gap:15px;padding:clamp(16px,3vw,24px);border:1px solid var(--finance-line,var(--line));border-radius:18px;background:var(--finance-surface,var(--qe-people-card,#fff));color:var(--finance-ink,var(--ink));box-shadow:0 24px 70px rgba(0,0,0,.28)}
+.payoutApprovalDialog h2{margin:0;color:var(--finance-ink,var(--ink))}
+.payoutApprovalSummary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:0}
+.payoutApprovalSummary>div{min-width:0;padding:11px;border:1px solid var(--finance-line,var(--line));border-radius:10px;background:var(--finance-subtle,#f8fafc)}
+.payoutApprovalSummary dt{font-size:10px;color:var(--finance-muted,var(--muted));font-weight:700}
+.payoutApprovalSummary dd{margin:5px 0 0;font-size:13px;font-weight:800;overflow-wrap:anywhere;color:var(--finance-ink,var(--ink))}
+.payoutApprovalTransfers{display:grid;gap:0;max-height:260px;overflow:auto;border:1px solid var(--finance-line,var(--line));border-radius:10px}
+.payoutApprovalTransfers>div{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px;border-bottom:1px solid var(--finance-line,var(--line))}
+.payoutApprovalTransfers>div:last-child{border-bottom:0}
+.payoutApprovalTransfers span,.payoutApprovalTransfers small{display:block;min-width:0}
+.payoutApprovalTransfers small{margin-top:4px;font-size:10px;line-height:1.4;color:var(--finance-muted,var(--muted));overflow-wrap:anywhere}
+.payoutApprovalTransfers>div>strong{white-space:nowrap}
+.payoutApprovalDialog .payoutFormFooter{gap:12px;flex-wrap:wrap}
+.payoutApprovalDialog .payoutFormFooter>span{max-width:350px}
+.payoutApprovalDialog .primary{white-space:normal;text-align:center}
+.payoutAlertWarning ul{margin:7px 0 0;padding-left:20px}
+.payoutAlertWarning li{margin:3px 0;overflow-wrap:anywhere}
+@media(max-width:600px){.payoutQueueFilters>div{align-items:stretch;flex-direction:column}.payoutQueueFilters button{width:100%}.payoutApprovalSummary{grid-template-columns:repeat(2,minmax(0,1fr))}.payoutApprovalDialog{max-height:94dvh;border-radius:14px}.payoutApprovalDialog .payoutFormFooter{align-items:stretch;flex-direction:column}.payoutApprovalDialog .payoutFormFooter button{width:100%}.payoutApprovalTransfers>div{align-items:flex-start}}

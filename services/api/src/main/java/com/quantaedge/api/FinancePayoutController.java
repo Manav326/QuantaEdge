@@ -233,17 +233,21 @@ public class FinancePayoutController {
     requireManage(context);String status=rawStatus==null?"":rawStatus.trim().toUpperCase(Locale.ROOT);
     if(!status.isBlank()&&!List.of("PROVISIONING","PENDING_APPROVAL","ACTIVE","SUSPENDED","REJECTED","RECONCILIATION_REQUIRED").contains(status))
       throw bad("Choose a valid beneficiary status.");
-    return jdbc.queryForList("""
+    List<Map<String,Object>> rows=jdbc.queryForList("""
       select b.id,b.public_id,b.beneficiary_type,b.institution_id,b.legal_entity_id,b.beneficiary_name,
         b.bank_ifsc,b.bank_account_last4,b.provider_contact_id,b.provider_fund_account_id,b.status,
-        b.created_by_staff_id,b.approved_by_staff_id,b.approved_at,b.rejection_reason,b.created_at,b.updated_at,
+        b.created_by_staff_id,maker.display_name as created_by_name,b.approved_by_staff_id,b.approved_at,b.rejection_reason,b.created_at,b.updated_at,
         t.display_name as institution_name,le.legal_name as company_name,
         coalesce(t.display_name,le.legal_name,b.beneficiary_name) as recipient_name
       from finance_payout_beneficiary b left join institution_tenant t on t.id=b.institution_id
       left join billing_legal_entity le on le.id=b.legal_entity_id
+      left join staff_account maker on maker.id=b.created_by_staff_id
       where (?='' or b.status=?) order by case b.status when 'PENDING_APPROVAL' then 0
         when 'RECONCILIATION_REQUIRED' then 1 else 2 end,b.created_at desc,b.id desc limit 300
       """,status,status);
+    boolean canReview=context.staffId()!=null&&hasPermission(context,"QE_FINANCE_PAYOUT_APPROVE");
+    for(Map<String,Object> row:rows)row.put("canApprove",canReview&&number(row.get("created_by_staff_id"))!=number(context.staffId()));
+    return rows;
   }
 
   @PostMapping("/payout-beneficiaries")
@@ -352,9 +356,14 @@ public class FinancePayoutController {
   }
 
   @GetMapping("/fee-reconciliation")
-  public List<Map<String,Object>> feeQueue(@RequestParam(value="limit",defaultValue="100") int suppliedLimit,
+  public List<Map<String,Object>> feeQueue(@RequestParam(value="limit",defaultValue="50") int suppliedLimit,
+      @RequestParam(value="offset",defaultValue="0") int suppliedOffset,
+      @RequestParam(value="q",defaultValue="") String rawQuery,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
-    requireManage(context);int limit=Math.max(1,Math.min(suppliedLimit,200));
+    requireManage(context);
+    int limit=Math.max(1,Math.min(suppliedLimit,200)),offset=Math.max(0,Math.min(suppliedOffset,1_000_000));
+    String query=rawQuery==null?"":rawQuery.trim();
+    if(query.length()>100)throw bad("Fee-queue search can contain at most 100 characters.");
     return jdbc.queryForList("""
       select o.id as order_id,o.course_id,coalesce(nullif(offer.title_override,''),course.display_name) as course_title,
         tenant.display_name as source_institution,o.provider_payment_id,o.captured_amount_paise,o.output_tax_paise,o.verified_at,o.currency
@@ -363,10 +372,13 @@ public class FinancePayoutController {
       join curriculum_program course on course.id=o.course_id join institution_tenant tenant on tenant.id=o.institution_id
       left join course_payment_order_fee f on f.course_payment_order_id=o.id
       where o.status='VERIFIED' and f.id is null
+        and (?='' or cast(o.id as text) ilike '%'||?||'%'
+          or coalesce(nullif(offer.title_override,''),course.display_name) ilike '%'||?||'%'
+          or tenant.display_name ilike '%'||?||'%' or o.provider_payment_id ilike '%'||?||'%')
       group by o.id,o.course_id,offer.title_override,course.display_name,tenant.display_name,o.provider_payment_id,
         o.captured_amount_paise,o.output_tax_paise,o.verified_at,o.currency
-      order by o.verified_at,o.id limit ?
-      """,limit);
+      order by o.verified_at,o.id limit ? offset ?
+      """,query,query,query,query,query,limit,offset);
   }
 
   @PostMapping("/course-orders/{orderId}/processing-fees")
@@ -533,14 +545,21 @@ public class FinancePayoutController {
   @GetMapping("/payout-batches")
   public List<Map<String,Object>> listBatches(@RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireManage(context);
-    return jdbc.queryForList("""
+    List<Map<String,Object>> rows=jdbc.queryForList("""
       select b.id,b.public_id,b.period_start,b.period_end,b.currency,b.status,b.beneficiary_count,b.total_amount_paise,
         b.provider_fee_total_paise,b.provider_fee_tax_total_paise,b.platform_borne_overage_paise,b.provider_fee_reconciled_at,
-        b.created_by_staff_id,b.approved_by_staff_id,b.approved_at,b.created_at,b.updated_at,
+        b.created_by_staff_id,maker.display_name as created_by_name,b.approved_by_staff_id,checker.display_name as approved_by_name,
+        b.approved_at,b.created_at,b.updated_at,
         (select count(*) from finance_payout p where p.batch_id=b.id and p.status='PROCESSED') as paid_count,
         (select count(*) from finance_payout p where p.batch_id=b.id and p.status in ('FAILED','REJECTED','REVERSED')) as exception_count
-      from finance_payout_batch b order by b.created_at desc,b.id desc limit 100
+      from finance_payout_batch b
+      left join staff_account maker on maker.id=b.created_by_staff_id
+      left join staff_account checker on checker.id=b.approved_by_staff_id
+      order by b.created_at desc,b.id desc limit 100
       """);
+    boolean canReview=context.staffId()!=null&&hasPermission(context,"QE_FINANCE_PAYOUT_APPROVE");
+    for(Map<String,Object> row:rows)row.put("canApprove",canReview&&number(row.get("created_by_staff_id"))!=number(context.staffId()));
+    return rows;
   }
 
   @GetMapping("/payout-batches/{batchId}")
@@ -553,6 +572,8 @@ public class FinancePayoutController {
       left join staff_account checker on checker.id=b.approved_by_staff_id where b.id=?
       """,batchId);
     if(batch.isEmpty())throw notFound("Payout batch was not found.");
+    batch.put("canApprove",context.staffId()!=null&&hasPermission(context,"QE_FINANCE_PAYOUT_APPROVE")
+        &&number(batch.get("created_by_staff_id"))!=number(context.staffId()));
     batch.put("payouts",jdbc.queryForList("""
       select p.id,p.public_id,p.beneficiary_id,p.amount_paise,p.currency,p.status,p.provider_status,p.provider_payout_id,
         p.provider_fee_paise,p.provider_fee_tax_paise,p.provider_fee_reference,p.provider_fee_source_type,p.provider_fee_confirmed_at,
@@ -581,33 +602,6 @@ public class FinancePayoutController {
     YearMonth month=YearMonth.from(start);
     if(!start.equals(month.atDay(1))||!end.equals(month.atEndOfMonth()))throw bad("A payout batch must cover one complete calendar month.");
     if(end.isAfter(previous.atEndOfMonth()))throw bad("Only a completed month can be paid.");
-    Map<String,Object> unsupportedCurrency=one("""
-      select a.currency
-      from revenue_share_allocation a
-      join course_payment_order o on o.id=a.course_payment_order_id and o.status='VERIFIED'
-      join lateral (
-        select coalesce(sum(amount_paise) filter(where event_type='EARNED'),0) earned_paise,
-          coalesce(sum(amount_paise) filter(where event_type='REFUNDED'),0) refunded_paise,
-          coalesce(sum(amount_paise) filter(where event_type='PROCESSING_FEE_DEDUCTED'),0) fee_paise,
-          coalesce(sum(amount_paise) filter(where event_type='PAID'),0) paid_paise,
-          coalesce(sum(amount_paise) filter(where event_type='REVERSED'),0) reversed_paise,
-          min(created_at) filter(where event_type='EARNED') first_earned_at
-        from revenue_share_allocation_event where allocation_id=a.id
-      ) l on true
-      left join lateral (
-        select coalesce(sum(i.amount_paise),0) reserved_paise
-        from finance_payout_item i join finance_payout p on p.id=i.payout_id
-        where i.allocation_id=a.id and p.status in ('PENDING_APPROVAL','APPROVED','SUBMITTING','PENDING','QUEUED','PROCESSING','RECONCILIATION_REQUIRED')
-      ) r on true
-      where a.currency<>'INR' and l.earned_paise>0
-        and l.first_earned_at < (?::date + interval '1 day')
-        and l.earned_paise-l.refunded_paise-l.fee_paise-l.paid_paise+l.reversed_paise-coalesce(r.reserved_paise,0)>0
-      order by a.currency,a.id limit 1
-      """,end);
-    if(!unsupportedCurrency.isEmpty())
-      throw bad("Outstanding revenue uses unsupported payout currency "+text(unsupportedCurrency,"currency")+
-          ". This RazorpayX workflow pays INR only and performs no FX conversion. Resolve the non-INR balance through an approved currency-compatible settlement route before preparing an INR batch.");
-
     List<Map<String,Object>> missingFees=jdbc.queryForList("""
       select distinct o.id as order_id from course_payment_order o
       join revenue_share_allocation a on a.course_payment_order_id=o.id
@@ -864,15 +858,25 @@ public class FinancePayoutController {
     Map<String,Object> payout=one("select * from finance_payout where id=?",payoutId);
     if(payout.isEmpty())throw notFound("Payout not found.");
     String providerId=optionalText(payout.get("provider_payout_id"));
-    if(providerId==null)return ResponseEntity.status(HttpStatus.ACCEPTED).body(Map.of("id",payoutId,"status",text(payout,"status"),
-        "message","RazorpayX did not return a payout ID. Review the provider record before reusing the same idempotency key."));
+    if(providerId==null){
+      Map<String,Object> result=new LinkedHashMap<>(payoutSummary(payoutId));
+      result.put("refreshResult","UNCONFIRMED");
+      result.put("message","No RazorpayX payout ID is saved. The current status is not a fresh provider confirmation; reconcile the original provider request before retrying.");
+      return ResponseEntity.status(HttpStatus.ACCEPTED).body(result);
+    }
     try {
       JsonNode provider=providerRequest("GET","/payouts/"+providerId,null,null);
-      Map<String,Object> out=applyProviderStatus(payoutId,provider,context.staffId(),null);
+      Map<String,Object> out=new LinkedHashMap<>(applyProviderStatus(payoutId,provider,context.staffId(),null));
       refreshBatchStatus(number(payout.get("batch_id")));
+      out.put("refreshResult","REFRESHED");
+      out.put("message","RazorpayX responded and the payout identity and status passed server-side checks.");
+      out.put("refreshedAt",java.time.Instant.now().toString());
       return ResponseEntity.ok(out);
     } catch(Exception ex) {
-      return ResponseEntity.status(HttpStatus.ACCEPTED).body(payoutSummary(payoutId));
+      Map<String,Object> result=new LinkedHashMap<>(payoutSummary(payoutId));
+      result.put("refreshResult","UNCONFIRMED");
+      result.put("message","RazorpayX status could not be freshly confirmed. The saved status is shown only for reference; no new payment state was assumed. Retry status refresh or reconcile the provider record before taking another action.");
+      return ResponseEntity.status(HttpStatus.ACCEPTED).body(result);
     }
   }
 
