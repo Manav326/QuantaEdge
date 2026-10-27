@@ -1,0 +1,46 @@
+name: PowerShell script syntax
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/import_tre4_local.ps1"
+      - ".github/workflows/powershell-script-syntax.yml"
+  push:
+    branches: [main]
+    paths:
+      - "scripts/import_tre4_local.ps1"
+      - ".github/workflows/powershell-script-syntax.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  parse-tre-importer:
+    name: Parse TRE importer with Windows PowerShell 5.1
+    runs-on: windows-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out only the TRE importer
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            scripts/import_tre4_local.ps1
+          sparse-checkout-cone-mode: false
+
+      - name: Validate PowerShell syntax without running the importer
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $path = Join-Path $env:GITHUB_WORKSPACE 'scripts/import_tre4_local.ps1'
+          $tokens = $null
+          $parseErrors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile($path, [ref]$tokens, [ref]$parseErrors) | Out-Null
+          if ($parseErrors.Count -gt 0) {
+            foreach ($parseError in $parseErrors) {
+              Write-Output ("{0}:{1}:{2}: {3}" -f $parseError.Extent.File, $parseError.Extent.StartLineNumber, $parseError.Extent.StartColumnNumber, $parseError.Message)
+            }
+            exit 1
+          }
+          Write-Host "Windows PowerShell parser accepted $path"
