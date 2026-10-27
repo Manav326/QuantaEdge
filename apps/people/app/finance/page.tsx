@@ -452,12 +452,13 @@ export default function FinancePage(){
     }catch(e){setError(e instanceof Error?e.message:'Course payment orders could not be loaded.');}
     finally{setPaymentLoading(false);}
   };
-  const loadDistributionExceptions=async(append=false)=>{
+  const loadDistributionExceptions=async(append=false,searchOverride?:string)=>{
     setDistributionExceptionLoading(true);
     setError('');
     try{
       const query=new URLSearchParams({limit:'50'});
-      if(distributionExceptionSearch.trim())query.set('search',distributionExceptionSearch.trim());
+      const searchValue=(searchOverride??distributionExceptionSearch).trim();
+      if(searchValue)query.set('search',searchValue);
       if(append&&distributionExceptionCursor!=null)query.set('beforeOrderId',String(distributionExceptionCursor));
       const response=await api<{
         items:DistributionException[];count:number;hasMore:boolean;nextCursor?:number|null;
@@ -1140,7 +1141,7 @@ export default function FinancePage(){
               <input value={distributionExceptionSearch} maxLength={120} onChange={e=>setDistributionExceptionSearch(e.target.value)} placeholder="Order ID, Quanta Edge, Class 6…"/>
             </label>
             <button type="submit" className={styles.primarySmall} disabled={distributionExceptionLoading}>Search exceptions</button>
-            <button type="button" className={styles.secondarySmall} disabled={distributionExceptionLoading} onClick={()=>{setDistributionExceptionSearch('');setDistributionExceptionCursor(null);void loadDistributionExceptions(false);}}>Clear</button>
+            <button type="button" className={styles.secondarySmall} disabled={distributionExceptionLoading} onClick={()=>{setDistributionExceptionSearch('');setDistributionExceptionCursor(null);void loadDistributionExceptions(false,'');}}>Clear</button>
           </form>
           {distributionExceptionLoading?<p className={styles.empty}>Checking saved sale snapshots and allocation ledger…</p>
           :distributionExceptions.length?<div className={styles.policyTableWrap}><table className={styles.table}>
