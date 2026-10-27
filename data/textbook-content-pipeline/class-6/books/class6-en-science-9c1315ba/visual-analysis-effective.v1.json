@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4cf268904a3bdc4257ca23e7d4590f5c4097cf2c9b8e15a0e475d37ee7a4233e",
+  "raw_analysis_sha256": "9264d7471b32486f4a0642ddbb54b56de9ea033e1516ecbd52c4a24059a346ed",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -650,7 +650,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T01:05:28Z",
+      "checkpointed_at": "2026-10-27T01:19:10Z",
       "effective_analysis": {
         "visual_summary": "Foreword of a textbook discussing the National Education Policy 2020 and its curriculum framework.",
         "visual_type": "page_with_multiple_visuals",
@@ -29465,7 +29465,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T01:07:04Z",
+      "checkpointed_at": "2026-10-27T01:20:47Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgements section of a textbook.",
         "visual_type": "uncertain",
@@ -35077,7 +35077,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T01:08:27Z",
+      "checkpointed_at": "2026-10-27T01:22:10Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57433,7 +57433,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T01:09:35Z",
+      "checkpointed_at": "2026-10-27T01:23:18Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -67084,7 +67084,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T01:10:32Z",
+      "checkpointed_at": "2026-10-27T01:24:13Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -71680,6 +71680,384 @@
         "context_relation": "The image is a warning sign, not related to the text about laboratory thermometers.",
         "limitations": [
           "The image is a warning sign, not related to the text about laboratory thermometers."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "accf6ae4013bae67a1606985",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 148,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a050c1dc74692a9f2cffbec9b40f6074b7a847f7b64cd24541b3a7516f181472",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A laboratory thermometer with a Celsius scale and a liquid column.",
+        "visual_type": "photo",
+        "visible_text": [
+          "7.3.2 Laboratory thermometer",
+          "There are many types of laboratory thermometers but the",
+          "one that might be available in your school laboratory may",
+          "look like the one shown in Fig. 7.3a. It consists of a long",
+          "narrow, uniform glass tube which is sealed. At one end of",
+          "the tube is a bulb which contains a liquid. Outside the bulb",
+          "in the tube, a narrow column of liquid can be seen. There",
+          "is a Celsius scale marked along the tube. The liquid column",
+          "rises or falls with change in",
+          "temperature."
+        ],
+        "concepts": [
+          "laboratory thermometer",
+          "Celsius scale",
+          "liquid column",
+          "temperature"
+        ],
+        "context_relation": "The image is a visual representation of a laboratory thermometer, explaining its components and how it works.",
+        "limitations": [
+          "The image does not show the thermometer in use or its function in measuring temperature."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:24:58Z",
+      "effective_analysis": {
+        "visual_summary": "A laboratory thermometer with a Celsius scale and a liquid column.",
+        "visual_type": "photo",
+        "visible_text": [
+          "7.3.2 Laboratory thermometer",
+          "There are many types of laboratory thermometers but the",
+          "one that might be available in your school laboratory may",
+          "look like the one shown in Fig. 7.3a. It consists of a long",
+          "narrow, uniform glass tube which is sealed. At one end of",
+          "the tube is a bulb which contains a liquid. Outside the bulb",
+          "in the tube, a narrow column of liquid can be seen. There",
+          "is a Celsius scale marked along the tube. The liquid column",
+          "rises or falls with change in",
+          "temperature."
+        ],
+        "concepts": [
+          "laboratory thermometer",
+          "Celsius scale",
+          "liquid column",
+          "temperature"
+        ],
+        "context_relation": "The image is a visual representation of a laboratory thermometer, explaining its components and how it works.",
+        "limitations": [
+          "The image does not show the thermometer in use or its function in measuring temperature."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3b2bb873be490ae6f2d0e70d",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 148,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "a050c1dc74692a9f2cffbec9b40f6074b7a847f7b64cd24541b3a7516f181472",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A laboratory thermometer with a Celsius scale and a liquid column.",
+        "visual_type": "photo",
+        "visible_text": [
+          "7.3.2 Laboratory thermometer",
+          "There are many types of laboratory thermometers but the",
+          "one that might be available in your school laboratory may",
+          "look like the one shown in Fig. 7.3a. It consists of a long",
+          "narrow, uniform glass tube which is sealed. At one end of",
+          "the tube is a bulb which contains a liquid. Outside the bulb",
+          "in the tube, a narrow column of liquid can be seen. There",
+          "is a Celsius scale marked along the tube. The liquid column",
+          "rises or falls with change in",
+          "temperature."
+        ],
+        "concepts": [
+          "laboratory thermometer",
+          "Celsius scale",
+          "liquid column",
+          "temperature"
+        ],
+        "context_relation": "descriptive",
+        "limitations": [
+          "The image does not show the thermometer in use or its function."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:25:38Z",
+      "effective_analysis": {
+        "visual_summary": "A laboratory thermometer with a Celsius scale and a liquid column.",
+        "visual_type": "photo",
+        "visible_text": [
+          "7.3.2 Laboratory thermometer",
+          "There are many types of laboratory thermometers but the",
+          "one that might be available in your school laboratory may",
+          "look like the one shown in Fig. 7.3a. It consists of a long",
+          "narrow, uniform glass tube which is sealed. At one end of",
+          "the tube is a bulb which contains a liquid. Outside the bulb",
+          "in the tube, a narrow column of liquid can be seen. There",
+          "is a Celsius scale marked along the tube. The liquid column",
+          "rises or falls with change in",
+          "temperature."
+        ],
+        "concepts": [
+          "laboratory thermometer",
+          "Celsius scale",
+          "liquid column",
+          "temperature"
+        ],
+        "context_relation": "descriptive",
+        "limitations": [
+          "The image does not show the thermometer in use or its function."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d5e6a0284a83586e3892edbb",
+      "asset_sha256": "a52e91ae83e0eaeec29bf9009c39c2d60b295864dcd9ec9fc1b512b0d2bf1c33",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 148,
+      "asset_path": "page-0148.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "a050c1dc74692a9f2cffbec9b40f6074b7a847f7b64cd24541b3a7516f181472",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram of a laboratory thermometer, with a note about the liquid used in it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "7.3.2 Laboratory thermometer",
+          "There are many types of laboratory thermometers but the",
+          "one that might be available in your school laboratory may",
+          "look like the one shown in Fig. 7.3a. It consists of a long",
+          "narrow, uniform glass tube which is sealed. At one end of",
+          "the tube is a bulb which contains a liquid. Outside the bulb",
+          "in the tube, a narrow column of liquid can be seen. There",
+          "is a Celsius scale marked along the tube. The liquid column",
+          "rises or falls with change in temperature. The mark of the",
+          "Celsius scale with which the top level of the liquid column",
+          "coincides is the temperature reading.",
+          "The liquid used in the laboratory",
+          "thermometer is generally alcohol (coloured",
+          "red to make it easily seen) or mercury.",
+          "Activity 7.3: Let us observe",
+          "Let us try to find the temperature range of a given laboratory",
+          "thermometer.",
+          "Take a laboratory",
+          "thermometer and observe it",
+          "carefully.",
+          "Note down the following:",
+          "What is the lowest",
+          "temperature it",
+          "can measure?",
+          "What is the highest",
+          "temperature it",
+          "can measure?",
+          "So, the range of this",
+          "thermometer is",
+          "Now look at the thermometer shown in Fig. 7.3a carefully."
+        ],
+        "concepts": [
+          "laboratory thermometer",
+          "liquid column",
+          "Celsius scale",
+          "temperature reading",
+          "alcohol",
+          "mercury",
+          "temperature range",
+          "precautions"
+        ],
+        "context_relation": "explaining",
+        "limitations": [
+          "no specific limitations mentioned"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:28:41Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram of a laboratory thermometer, with a note about the liquid used in it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "7.3.2 Laboratory thermometer",
+          "There are many types of laboratory thermometers but the",
+          "one that might be available in your school laboratory may",
+          "look like the one shown in Fig. 7.3a. It consists of a long",
+          "narrow, uniform glass tube which is sealed. At one end of",
+          "the tube is a bulb which contains a liquid. Outside the bulb",
+          "in the tube, a narrow column of liquid can be seen. There",
+          "is a Celsius scale marked along the tube. The liquid column",
+          "rises or falls with change in temperature. The mark of the",
+          "Celsius scale with which the top level of the liquid column",
+          "coincides is the temperature reading.",
+          "The liquid used in the laboratory",
+          "thermometer is generally alcohol (coloured",
+          "red to make it easily seen) or mercury.",
+          "Activity 7.3: Let us observe",
+          "Let us try to find the temperature range of a given laboratory",
+          "thermometer.",
+          "Take a laboratory",
+          "thermometer and observe it",
+          "carefully.",
+          "Note down the following:",
+          "What is the lowest",
+          "temperature it",
+          "can measure?",
+          "What is the highest",
+          "temperature it",
+          "can measure?",
+          "So, the range of this",
+          "thermometer is",
+          "Now look at the thermometer shown in Fig. 7.3a carefully."
+        ],
+        "concepts": [
+          "laboratory thermometer",
+          "liquid column",
+          "Celsius scale",
+          "temperature reading",
+          "alcohol",
+          "mercury",
+          "temperature range",
+          "precautions"
+        ],
+        "context_relation": "explaining",
+        "limitations": [
+          "no specific limitations mentioned"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "af53a6e7523746c2085516f7",
+      "asset_sha256": "7f87cd8af5abaff9a1127522c3b8d8c0699e86b9968e35149457d4f8030e457c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 149,
+      "asset_path": "assets/7f87cd8af5abaff9a1127522c3b8d8c0699e86b9968e35149457d4f8030e457c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "82934d6525214df259b4f84454cb88ea48b43359181526579808fe292bd512f9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A thermometer with a red liquid column indicating a temperature between 20 and 30 degrees Celsius.",
+        "visual_type": "photo",
+        "visible_text": [
+          "20",
+          "30",
+          "40",
+          "10",
+          "0",
+          "10",
+          "20",
+          "30",
+          "40"
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Thermometer",
+          "Temperature scale",
+          "Temperature difference"
+        ],
+        "context_relation": "Activity 7.4",
+        "limitations": [
+          "The thermometer is not labeled with specific units.",
+          "The temperature difference between the two bigger marks is not explicitly stated."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:29:51Z",
+      "effective_analysis": {
+        "visual_summary": "A thermometer with a red liquid column indicating a temperature between 20 and 30 degrees Celsius.",
+        "visual_type": "photo",
+        "visible_text": [
+          "20",
+          "30",
+          "40",
+          "10",
+          "0",
+          "10",
+          "20",
+          "30",
+          "40"
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Thermometer",
+          "Temperature scale",
+          "Temperature difference"
+        ],
+        "context_relation": "Activity 7.4",
+        "limitations": [
+          "The thermometer is not labeled with specific units.",
+          "The temperature difference between the two bigger marks is not explicitly stated."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c4eed02b7a9af68be751b672",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 149,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "82934d6525214df259b4f84454cb88ea48b43359181526579808fe292bd512f9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or content on the page"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:30:07Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or content on the page"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
