@@ -1,4 +1,15 @@
 -- V206: extend the existing course revenue ledger to company beneficiaries and approved RazorpayX payouts.
+-- Allow ordinary company legal entities in addition to the HRMS/platform entity and institution sellers.
+-- The offer tax-profile link remains the explicit choice of legal seller for each course offer.
+ALTER TABLE billing_legal_entity DROP CONSTRAINT IF EXISTS billing_legal_entity_entity_kind_check;
+ALTER TABLE billing_legal_entity DROP CONSTRAINT IF EXISTS billing_legal_entity_check;
+ALTER TABLE billing_legal_entity
+  ADD CONSTRAINT billing_legal_entity_entity_kind_check CHECK(entity_kind IN ('PLATFORM','INSTITUTION','COMPANY')),
+  ADD CONSTRAINT billing_legal_entity_owner_scope_check CHECK(
+    (entity_kind='INSTITUTION' AND institution_id IS NOT NULL)
+    OR (entity_kind IN ('PLATFORM','COMPANY') AND institution_id IS NULL)
+  );
+
 -- This migration creates no beneficiaries, bank accounts, payout batches, payout instructions or financial values.
 -- Bank account numbers are sent to RazorpayX server-to-server and are never persisted in QuantaEdge.
 
@@ -65,6 +76,7 @@ ALTER TABLE revenue_share_allocation
     REFERENCES revenue_share_policy_recipient(id,policy_id,legal_entity_id) ON DELETE RESTRICT;
 
 ALTER TABLE revenue_share_allocation_event
+  ALTER COLUMN event_type TYPE varchar(40),
   DROP CONSTRAINT revenue_share_allocation_event_event_type_check,
   ADD CONSTRAINT revenue_share_allocation_event_event_type_check CHECK (
     event_type IN ('EARNED','PAYABLE','PAID','ON_HOLD','RELEASED','REVERSED','REFUNDED','PROCESSING_FEE_DEDUCTED')
