@@ -1074,7 +1074,6 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 has_reconstructed_hindi_option = bool(
                     hi and any(
                         option.get("hindi_ocr_status")
-                        or option.get("ocr_status", "").find("REQUIRES_HUMAN_REVIEW") >= 0
                         for option in hi.get("options", [])
                     )
                 )
