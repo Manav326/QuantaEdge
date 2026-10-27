@@ -47,7 +47,7 @@ type Batch={id:number;public_id:string;period_start:string;period_end:string;cur
   canApprove?:boolean;approved_by_staff_id?:number|null;approved_by_name?:string|null;approved_at?:string|null;
   paid_count?:number;exception_count?:number;payouts?:Payout[]};
 type BeneficiaryBalance={
-  recipient_type:string;recipient_name:string;institution_id?:number|null;legal_entity_id?:number|null;currency:string;beneficiary_status:string;
+  recipient_type:string;recipient_name:string;institution_id?:number|null;legal_entity_id?:number|null;currency:string;recipient_status?:string;beneficiary_status:string;
   bank_ifsc?:string|null;bank_account_last4?:string|null;earned_paise:number;refunded_paise:number;
   charges_paise:number;paid_paise:number;reversed_paise:number;reserved_paise:number;
   net_earned_paise:number;net_paid_paise:number;refund_reserve_paise:number;payable_paise:number;recovery_due_paise:number;
@@ -125,6 +125,7 @@ export default function PayoutsPanel(){
   const [taxOverview,setTaxOverview]=useState<TaxOverview|null>(null);
   const [recipientSearch,setRecipientSearch]=useState('');
   const [recipientReadinessFilter,setRecipientReadinessFilter]=useState('ALL');
+  const [recipientCurrencyFilter,setRecipientCurrencyFilter]=useState('ALL');
   const [unmatchedEvents,setUnmatchedEvents]=useState<ProviderEvent[]>([]);
   const [reconciliationCandidates,setReconciliationCandidates]=useState<ReconciliationCandidate[]>([]);
   const [reconciliationTargets,setReconciliationTargets]=useState<Record<string,string>>({});
@@ -241,6 +242,7 @@ export default function PayoutsPanel(){
   };
   const activeInstitutions=catalog?.institutions.filter(i=>i.status==='ACTIVE')||[];
   const activeCompanies=catalog?.legalEntities.filter(e=>e.status==='ACTIVE'&&['PLATFORM','COMPANY'].includes(e.entity_kind))||[];
+  const recipientCurrencies=Array.from(new Set((balances?.beneficiaries||[]).map(balance=>balance.currency))).sort();
   const filteredBalances=(balances?.beneficiaries||[]).filter(balance=>{
     const query=recipientSearch.trim().toLocaleLowerCase();
     const haystack=[balance.recipient_name,balance.recipient_type,balance.currency,balance.bank_ifsc||'',balance.payout_readiness_reason||'']
@@ -250,8 +252,12 @@ export default function PayoutsPanel(){
     const matchesStatus=recipientReadinessFilter==='ALL'
       ||(recipientReadinessFilter==='READY'&&status==='READY_FOR_BATCH_REVIEW')
       ||(recipientReadinessFilter==='BLOCKED'&&status==='BLOCKED')
+      ||(recipientReadinessFilter==='MISSING_BANK'&&balance.beneficiary_status!=='ACTIVE')
+      ||(recipientReadinessFilter==='RECOVERY_DUE'&&balance.recovery_due_paise>0)
+      ||(recipientReadinessFilter==='IN_PROGRESS'&&balance.reserved_paise>0)
       ||status===recipientReadinessFilter;
-    return matchesQuery&&matchesStatus;
+    const matchesCurrency=recipientCurrencyFilter==='ALL'||balance.currency===recipientCurrencyFilter;
+    return matchesQuery&&matchesStatus&&matchesCurrency;
   });
   const recipientOptions=beneficiaryForm.type==='INSTITUTION'
     ?activeInstitutions.map(i=>({id:i.id,label:i.display_name+' · '+i.tenant_code}))
@@ -501,6 +507,10 @@ export default function PayoutsPanel(){
       </section>
       {(balances?.totals.recoveryDuePaise??0)>0&&<p className={styles.payoutHint}>Recovery due means later refunds, reversals or reviewed fee corrections reduced a recipient’s net balance after a transfer. Future payable earnings offset that amount before another payout; QuantaEdge does not initiate a separate automatic bank debit.</p>}
 
+      <div className={styles.payoutAlertWarning} role="status">
+        <b>Tax review is not included in automated payout readiness.</b> The current ledger does not represent recipient-level GST TCS or income-tax TDS. “Payout checks pass” is not final clearance to send a transfer; confirm the legal seller, recipient tax treatment and withholding obligations in Finance &amp; Billing before approving a live batch.
+      </div>
+
       <section className={styles.panel} id="payout-tax-compliance">
         <div className={styles.panelHead}><div><h2>Tax & compliance snapshot</h2>
           <p>Recorded figures from the existing verified-sale and credit-note records. This is a reconciliation snapshot, not the final amount payable to the Government.</p></div>
@@ -540,33 +550,36 @@ export default function PayoutsPanel(){
 
       <section className={styles.panel}>
         <div className={styles.panelHead}><div><h2>All institutions & companies</h2>
-          <p>Every active institution and eligible company is listed, including zero-earning recipients. Balances reflect the existing allocation, refund, fee and payout ledgers; a readiness label is not permission to bypass batch approval.</p></div>
+          <p>Active entities and any recipients with historical allocation records are listed, including zero-earning recipients. Historical balances remain visible if an entity is later suspended.</p></div>
           <button type="button" className={styles.secondary} onClick={()=>void load()} disabled={loading||busy}>Refresh balances</button></div>
         <div className={styles.payoutRecipientFilters}>
           <label>Search recipients<input aria-label="Search recipients" value={recipientSearch} onChange={e=>setRecipientSearch(e.target.value)}
             maxLength={160} placeholder="Institution, company, bank IFSC or blocker"/></label>
           <label>Transfer readiness<select aria-label="Filter by transfer readiness" value={recipientReadinessFilter} onChange={e=>setRecipientReadinessFilter(e.target.value)}>
-            <option value="ALL">All recipients</option><option value="READY">Ready for batch review</option>
+            <option value="ALL">All recipients</option><option value="READY">Payout checks pass · review needed</option>
             <option value="BLOCKED">Blocked / action needed</option><option value="BELOW_MINIMUM">Below payout minimum</option>
-            <option value="NO_PAYABLE_BALANCE">No payable balance</option>
+            <option value="NO_PAYABLE_BALANCE">No payable balance</option><option value="MISSING_BANK">Bank account needs review</option>
+            <option value="RECOVERY_DUE">Recovery due</option><option value="IN_PROGRESS">Reserved / transfer in progress</option>
+          </select></label>
+          <label>Currency<select aria-label="Filter recipients by currency" value={recipientCurrencyFilter} onChange={e=>setRecipientCurrencyFilter(e.target.value)}>
+            <option value="ALL">All currencies</option>{recipientCurrencies.map(currency=><option key={currency} value={currency}>{currency}</option>)}
           </select></label>
           <span>{filteredBalances.length.toLocaleString('en-IN')} of {(balances?.beneficiaries||[]).length.toLocaleString('en-IN')} recipient balances</span>
         </div>
         {balances?.beneficiaries?.length?filteredBalances.length?<div className={styles.payoutRecipientGrid}>
           {filteredBalances.map((balance,i)=>{
             const readiness=balance.payout_readiness_status||'UNKNOWN';
-            const readinessLabel=readiness==='READY_FOR_BATCH_REVIEW'?'Ready for batch review'
+            const readinessLabel=readiness==='READY_FOR_BATCH_REVIEW'?'Payout checks pass · tax review needed'
               :readiness==='NO_PAYABLE_BALANCE'?'No payable balance'
               :readiness==='BELOW_MINIMUM'?'Below minimum'
               :readiness==='BLOCKED'?'Blocked / action needed':'Status unavailable';
-            const readinessClass=readiness==='READY_FOR_BATCH_REVIEW'?styles.payoutStatusSuccess
-              :readiness==='NO_PAYABLE_BALANCE'?styles.payoutStatusNeutral:styles.payoutStatusPending;
+            const readinessClass=readiness==='NO_PAYABLE_BALANCE'?styles.payoutStatusNeutral:styles.payoutStatusPending;
             const accountLabel=balance.beneficiary_status==='MISSING'?'No approved bank account'
               :balance.bank_ifsc?balance.bank_ifsc+' · ****'+(balance.bank_account_last4||'????')
               :label(balance.beneficiary_status);
             return <article className={styles.payoutRecipientCard} key={balance.recipient_type+':'+balance.institution_id+':'+balance.legal_entity_id+':'+balance.currency+':'+i}>
               <div className={styles.payoutRecipientHead}>
-                <div><strong>{balance.recipient_name}</strong><small>{balance.recipient_type==='INSTITUTION'?'Institution':'Company / platform entity'} · {balance.currency}</small></div>
+                <div><strong>{balance.recipient_name}</strong><small>{balance.recipient_type==='INSTITUTION'?'Institution':'Company / platform entity'} · {balance.currency}{balance.recipient_status&&balance.recipient_status!=='ACTIVE'?' · '+balance.recipient_status+' — historical balance retained':''}</small></div>
                 <span className={readinessClass}>{readinessLabel}</span>
               </div>
               <div className={styles.payoutRecipientMeta}>
@@ -574,7 +587,7 @@ export default function PayoutsPanel(){
                 <span className={balance.beneficiary_status==='ACTIVE'?styles.payoutStatusSuccess:styles.payoutStatusPending}>{accountLabel}</span>
               </div>
               <div className={styles.payoutRecipientFacts}>
-                <div><span>Gross allocated</span><strong>{money(balance.earned_paise,balance.currency)}</strong></div>
+                <div><span>Earned allocation</span><strong>{money(balance.earned_paise,balance.currency)}</strong></div>
                 <div><span>Refunds</span><strong>{money(balance.refunded_paise,balance.currency)}</strong></div>
                 <div><span>Confirmed charges</span><strong>{money(balance.charges_paise,balance.currency)}</strong></div>
                 <div><span>Net earnings</span><strong>{money(balance.net_earned_paise,balance.currency)}</strong></div>
