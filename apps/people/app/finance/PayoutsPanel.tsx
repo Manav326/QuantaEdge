@@ -46,6 +46,9 @@ type Batch={id:number;public_id:string;period_start:string;period_end:string;cur
   platform_borne_overage_paise?:number|null;provider_fee_reconciled_at?:string|null;created_by_staff_id:number;created_by_name?:string|null;
   canApprove?:boolean;approved_by_staff_id?:number|null;approved_by_name?:string|null;approved_at?:string|null;
   paid_count?:number;exception_count?:number;payouts?:Payout[]};
+type PayoutStatementDocument={id:number;public_id:string;document_number:string;batch_id:number;payout_id?:number|null;
+  document_type:'BATCH_SUMMARY'|'RECIPIENT_STATEMENT'|string;revision:number;sha256:string;byte_length:number;
+  created_at:string;generated_by_staff_id?:number;generated_by_name?:string|null;page_count?:number;message?:string};
 type BeneficiaryBalance={
   recipient_type:string;recipient_name:string;institution_id?:number|null;legal_entity_id?:number|null;currency:string;recipient_status?:string;beneficiary_status:string;
   bank_ifsc?:string|null;bank_account_last4?:string|null;earned_paise:number;refunded_paise:number;
@@ -131,6 +134,9 @@ export default function PayoutsPanel(){
   const [reconciliationTargets,setReconciliationTargets]=useState<Record<string,string>>({});
   const [payoutFeeDrafts,setPayoutFeeDrafts]=useState<Record<string,{fee:string;tax:string;reference:string;source:string}>>({});
   const [selectedBatch,setSelectedBatch]=useState<Batch|null>(null);
+  const [statementDocs,setStatementDocs]=useState<PayoutStatementDocument[]>([]);
+  const [statementBusy,setStatementBusy]=useState(false);
+  const [statementError,setStatementError]=useState('');
   const [loading,setLoading]=useState(true);
   const [busy,setBusy]=useState(false);
   const [loadIssues,setLoadIssues]=useState<{section:string;message:string}[]>([]);
@@ -370,9 +376,54 @@ export default function PayoutsPanel(){
   const createBatch=async()=>{await action(()=>api(BASE+'/payout-batches',{method:'POST',body:JSON.stringify({})}),
     'Monthly payout batch prepared. No bank transfers are sent until a different authorized staff member approves it.');};
   const openBatch=async(id:number)=>{
-    setError('');setNotice('');
-    try{const detail=await api<Batch>(BASE+'/payout-batches/'+id);setSelectedBatch(detail);}
-    catch(e){setError(e instanceof Error?e.message:'Payout batch detail could not load.');}
+    setError('');setNotice('');setStatementError('');
+    try{
+      const detail=await api<Batch>(BASE+'/payout-batches/'+id);
+      setSelectedBatch(detail);
+      try{
+        const docs=await api<PayoutStatementDocument[]>(BASE+'/payout-batches/'+id+'/statements');
+        setStatementDocs(Array.isArray(docs)?docs:[]);
+      }catch(e){
+        setStatementDocs([]);
+        setStatementError(e instanceof Error?e.message:'Statement archive history could not load.');
+      }
+    }catch(e){setError(e instanceof Error?e.message:'Payout batch detail could not load.');}
+  };
+  const performStatementDownload=async(id:number,documentNumber:string)=>{
+    const response=await apiFetch(BASE+'/payout-statements/'+id+'/download',{
+      method:'GET',headers:{'X-QE-Workspace':'HRMS','Accept':'application/pdf'},
+      credentials:'same-origin',cache:'no-store'
+    });
+    if(!response.ok){
+      const body=await response.text().catch(()=> '');
+      throw new Error(body||'The archived payout PDF could not be downloaded.');
+    }
+    const blob=await response.blob();
+    if(blob.size<5||await blob.slice(0,5).text()!=='%PDF-')throw new Error('The downloaded file did not pass PDF signature validation.');
+    const href=window.URL.createObjectURL(blob);
+    const link=document.createElement('a');
+    link.href=href;link.download=documentNumber.replace(/[^A-Za-z0-9_-]/g,'-')+'.pdf';
+    document.body.appendChild(link);link.click();link.remove();
+    window.setTimeout(()=>window.URL.revokeObjectURL(href),1500);
+  };
+  const downloadArchivedStatement=async(doc:PayoutStatementDocument)=>{
+    setStatementBusy(true);setStatementError('');
+    try{await performStatementDownload(doc.id,doc.document_number);}
+    catch(e){setStatementError(e instanceof Error?e.message:'The archived payout PDF could not be downloaded.');}
+    finally{setStatementBusy(false);}
+  };
+  const generateStatement=async(batchId:number,documentType:'BATCH_SUMMARY'|'RECIPIENT_STATEMENT',payoutId?:number)=>{
+    setStatementBusy(true);setStatementError('');
+    try{
+      const generated=await api<PayoutStatementDocument>(BASE+'/payout-batches/'+batchId+'/statements',{
+        method:'POST',body:JSON.stringify({documentType,...(payoutId==null?{}:{payoutId})})
+      });
+      const history=await api<PayoutStatementDocument[]>(BASE+'/payout-batches/'+batchId+'/statements');
+      setStatementDocs(Array.isArray(history)?history:[]);
+      await performStatementDownload(generated.id,generated.document_number);
+      setNotice((documentType==='BATCH_SUMMARY'?'Batch report':'Recipient payout advice')+' generated, checksum-archived and downloaded as '+generated.document_number+'.');
+    }catch(e){setStatementError(e instanceof Error?e.message:'The monthly payout PDF could not be generated.');}
+    finally{setStatementBusy(false);}
   };
   const openApprovalReview=async(batchId:number)=>{
     setError('');setNotice('');
@@ -835,10 +886,26 @@ export default function PayoutsPanel(){
         </div>
         {selectedBatch&&<section className={styles.payoutBatchDetail}>
           <div className={styles.panelHead}><div><h3>Batch #{selectedBatch.id} · {selectedBatch.period_start} to {selectedBatch.period_end}</h3>
-            <p>{money(selectedBatch.total_amount_paise)} · {selectedBatch.beneficiary_count} beneficiary transfers · {label(selectedBatch.status)}</p></div><button type="button" className={styles.secondarySmall} onClick={()=>setSelectedBatch(null)}>Close details</button></div>
+            <p>{money(selectedBatch.total_amount_paise)} · {selectedBatch.beneficiary_count} beneficiary transfers · {label(selectedBatch.status)}</p></div>
+            <div className={styles.payoutBatchActions}>
+              <button type="button" className={styles.secondarySmall} disabled={statementBusy||busy} onClick={()=>void generateStatement(selectedBatch.id,'BATCH_SUMMARY')}>Generate batch PDF</button>
+              <button type="button" className={styles.secondarySmall} onClick={()=>{setSelectedBatch(null);setStatementDocs([]);setStatementError('');}}>Close details</button>
+            </div>
+          </div>
           {(selectedBatch.platform_borne_overage_paise??0)>0&&<p className={styles.payoutAlertWarning} role="status">Platform-borne provider fee overage: {money(selectedBatch.platform_borne_overage_paise)}. The actual charge is recorded; this excess was not deducted from beneficiaries because their saved allocation weights could not safely absorb it.</p>}
           {selectedBatch.status==='PENDING_APPROVAL'&&<p className={styles.payoutApprovalNote}>Approval sends the listed bank transfers to RazorpayX. The preparer cannot approve their own batch. Once approved, each payout is tracked separately and only marked paid when the provider confirms a processed result.</p>}
           {!selectedBatch.provider_fee_reconciled_at&&<p className={styles.payoutHint}>Record actual RazorpayX payout fees from the provider response or settlement statement. The charge adjustment is posted to the same allocation ledger and reduces future balances; do not treat unreconciled charges as platform revenue.</p>}
+          <section className={styles.payoutStatementPanel} aria-labelledby="payout-statements-title">
+            <div className={styles.panelHead}><div><h4 id="payout-statements-title">Archived PDF statements</h4>
+              <p>Generated snapshots are immutable, checksum-verified and download-audited. Re-generate after a status change to create a new revision.</p></div></div>
+            {statementError&&<p className={styles.payoutAlertError} role="alert">{statementError}</p>}
+            {statementDocs.length?<div className={styles.payoutStatementList}>{statementDocs.map(doc=><article className={styles.payoutStatementRow} key={doc.id}>
+              <div><strong>{doc.document_type==='BATCH_SUMMARY'?'Monthly batch report':'Recipient payout advice'} · Rev {doc.revision}</strong>
+                <small>{doc.document_number} · {new Date(doc.created_at).toLocaleString('en-IN')} · {((doc.byte_length||0)/1024).toFixed(0)} KB</small>
+                <small>Generated by {doc.generated_by_name||'staff member'} · SHA-256 {doc.sha256.slice(0,16)}…</small></div>
+              <button type="button" className={styles.secondarySmall} disabled={statementBusy||busy} onClick={()=>void downloadArchivedStatement(doc)}>Download PDF</button>
+            </article>)}</div>:<p className={styles.payoutEmpty}>No PDF statements generated for this batch yet. Generate the batch report or a recipient payout advice below.</p>}
+          </section>
           {(selectedBatch.payouts||[]).map(p=><article className={styles.payoutListRow} key={p.id}>
             <div className={styles.payoutRowMain}><strong>{p.recipient_name||p.beneficiary_name} · {money(p.amount_paise,p.currency)}</strong>
               <span>{p.bank_ifsc} · account ending {p.bank_account_last4} · {p.beneficiary_type}</span>
@@ -847,6 +914,7 @@ export default function PayoutsPanel(){
               {p.status_details&&<small>{p.status_details}</small>}</div>
             <span className={statusClass(p.status)}>{label(p.status)}</span>
             <div className={styles.payoutRowActions}>
+              <button type="button" className={styles.secondarySmall} disabled={statementBusy||busy} onClick={()=>void generateStatement(selectedBatch.id,'RECIPIENT_STATEMENT',p.id)}>Generate payout advice PDF</button>
               {(!['PROCESSED','REVERSED','FAILED','REJECTED'].includes(p.status)||(Boolean(p.provider_payout_id)&&Boolean(p.status_details?.startsWith('RazorpayX'))))&&<button type="button" className={styles.secondarySmall} disabled={busy} onClick={()=>void refreshPayout(p)}>Refresh status</button>}
               {!p.provider_payout_id&&(['RECONCILIATION_REQUIRED','SUBMITTING','APPROVED'].includes(p.status)||(p.status==='PENDING_APPROVAL'&&['APPROVED','PROCESSING','PARTIAL'].includes(selectedBatch.status)))&&<button type="button" className={styles.secondarySmall} disabled={busy} onClick={()=>void retryPayout(p)}>{p.status==='APPROVED'||p.status==='PENDING_APPROVAL'?'Resume submission':'Retry same request'}</button>}
             </div>
