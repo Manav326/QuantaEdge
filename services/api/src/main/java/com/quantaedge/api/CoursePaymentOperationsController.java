@@ -67,6 +67,9 @@ public class CoursePaymentOperationsController {
         left join student s on s.id=o.student_id
         left join institution_marketplace_offer offer
           on offer.id=o.institution_offer_id and offer.institution_id=o.institution_id
+        left join institution_course_release source_release
+          on source_release.id=offer.course_release_id and source_release.program_id=o.course_id
+        left join institution_tenant source_t on source_t.id=source_release.source_institution_id
         left join fiscal_document d on d.id=o.fiscal_document_id
         left join lateral (
           select e.event_type,e.resolution_code,e.message,e.created_at
@@ -84,7 +87,7 @@ public class CoursePaymentOperationsController {
     }
     if (!search.isBlank()) {
       filters.append("""
-           and lower(concat_ws(' ',o.id::text,t.display_name,p.display_name,
+           and lower(concat_ws(' ',o.id::text,t.display_name,source_t.display_name,p.display_name,
              s.display_name,o.provider_order_id,o.provider_payment_id,o.failure_code,
              o.discount_reference)) like ?
           """);
@@ -97,6 +100,7 @@ public class CoursePaymentOperationsController {
     pageArgs.add(offset);
     List<Map<String,Object>> items = jdbc.queryForList("""
         select o.id as local_order_id,o.institution_id,coalesce(t.display_name,'[Institution scope missing]') as institution_name,
+          source_release.source_institution_id,source_t.display_name as source_institution_name,
           o.course_id,coalesce(nullif(offer.title_override,''),p.display_name) as course_title,
           o.student_id,s.display_name as learner_name,o.purchaser_user_id,o.target_student_id,o.recipient_type,
           o.status,o.failure_code,o.currency,o.listed_price_paise,coalesce(o.discount_amount_paise,0) as discount_amount_paise,
@@ -234,12 +238,15 @@ public class CoursePaymentOperationsController {
         left join student s on s.id=o.student_id
         left join institution_marketplace_offer offer
           on offer.id=o.institution_offer_id and offer.institution_id=o.institution_id
+        left join institution_course_release source_release
+          on source_release.id=offer.course_release_id and source_release.program_id=o.course_id
+        left join institution_tenant source_t on source_t.id=source_release.source_institution_id
         left join fiscal_document d on d.id=o.fiscal_document_id
         where o.id < ?
           and (o.status='VERIFIED' or exists(
             select 1 from revenue_share_allocation candidate
             where candidate.course_payment_order_id=o.id))
-          and (?='' or lower(concat_ws(' ',o.id::text,t.display_name,course.display_name,
+          and (?='' or lower(concat_ws(' ',o.id::text,t.display_name,source_t.display_name,course.display_name,
             offer.title_override,s.display_name,o.provider_order_id,o.provider_payment_id)) like ?)
         order by o.id desc limit ?
         """,cursor,search,"%"+search.toLowerCase(Locale.ROOT)+"%",batchSize);
@@ -279,6 +286,10 @@ public class CoursePaymentOperationsController {
         List<Map<String,Object>> rows=allocationsByOrder.getOrDefault(orderId,List.of());
         List<String> issues;
         List<String> details;
+        Long distributionPoolPaise=null;
+        Long expectedDistributionPaise=null;
+        Long recordedDistributionPaise=null;
+        Long unassignedRemainderPaise=null;
         if(!"VERIFIED".equals(status)) {
           if(rows.isEmpty())continue;
           issues=List.of("Allocation rows exist before the order reached VERIFIED payment state.");
@@ -298,6 +309,10 @@ public class CoursePaymentOperationsController {
                 snapshot,policyId,number(order.get("captured_amount_paise")),
                 number(order.get("output_tax_paise")),text(order.get("currency")),rows);
             if(result.complete())continue;
+            distributionPoolPaise=result.distributablePoolPaise();
+            expectedDistributionPaise=result.expectedTotalPaise();
+            recordedDistributionPaise=result.recordedTotalPaise();
+            unassignedRemainderPaise=result.unassignedRemainderPaise();
             issues=result.issues();
             details=result.details();
           } catch(RuntimeException exception) {
@@ -326,6 +341,10 @@ public class CoursePaymentOperationsController {
         item.put("distribution_reconciliation_status","REVIEW_REQUIRED");
         item.put("distribution_issue_count",issues.size());
         item.put("distribution_reconciliation_summary",String.join(" ",issues.stream().limit(2).toList()));
+        item.put("distribution_pool_paise",distributionPoolPaise);
+        item.put("distribution_expected_total_paise",expectedDistributionPaise);
+        item.put("distribution_recorded_total_paise",recordedDistributionPaise);
+        item.put("distribution_unassigned_remainder_paise",unassignedRemainderPaise);
         item.put("distribution_reconciliation_issues",issues);
         item.put("distribution_reconciliation_details",details);
         exceptions.add(item);
@@ -366,269 +385,6 @@ public class CoursePaymentOperationsController {
     return response;
   }
 
-  @GetMapping("/{orderId}/distribution-repair-preview")
-  public Map<String,Object> previewDistributionRepair(
-      @PathVariable long orderId,
-      @RequestParam String recipientType,
-      @RequestParam long recipientId,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
-    authorization.requirePermission(context,"QE_PLATFORM_OWNER");
-    RepairEvaluation evaluation=evaluateMissingRemainderRepair(orderId,recipientType,recipientId);
-    return evaluation.asMap();
-  }
-
-  @PostMapping("/{orderId}/distribution-repair-proposals")
-  @org.springframework.transaction.annotation.Transactional
-  public Map<String,Object> proposeDistributionRepair(
-      @PathVariable long orderId,
-      @RequestBody Map<String,Object> body,
-      @RequestHeader(value="Idempotency-Key",required=false) String suppliedIdempotencyKey,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
-    context=authorization.requirePermission(context,"QE_PLATFORM_OWNER");
-    String recipientType=text(body.get("recipientType")).toUpperCase(Locale.ROOT);
-    long recipientId=number(body.get("recipientId"));
-    String reason=text(body.get("reason")).trim();
-    String evidenceReference=text(body.get("evidenceReference")).trim();
-    String idempotencyKey=suppliedIdempotencyKey==null?"":suppliedIdempotencyKey.trim();
-    if(!idempotencyKey.matches("[A-Za-z0-9_-]{10,180}"))
-      throw new IllegalArgumentException("Idempotency-Key must contain 10–180 letters, digits, underscores or hyphens.");
-    if(reason.length()<5||reason.length()>500)
-      throw new IllegalArgumentException("Enter a repair reason between 5 and 500 characters.");
-    if(evidenceReference.length()<3||evidenceReference.length()>180)
-      throw new IllegalArgumentException("Enter a supporting policy, contract or finance-review reference between 3 and 180 characters.");
-    if(!List.of("INSTITUTION","COMPANY").contains(recipientType)||recipientId<=0)
-      throw new IllegalArgumentException("Select a valid institution or company as the proposed remainder recipient.");
-
-    // Serialize proposal creation against other repairs/finalization for this exact sale.
-    int locked=jdbc.update("update course_payment_order set updated_at=updated_at where id=? and status='VERIFIED'",orderId);
-    if(locked!=1) {
-      if(jdbc.queryForList("select id from course_payment_order where id=?",orderId).isEmpty())
-        throw new org.springframework.web.server.ResponseStatusException(HttpStatus.NOT_FOUND,"Course payment order not found.");
-      throw new org.springframework.web.server.ResponseStatusException(HttpStatus.CONFLICT,"Only a verified course sale can be considered for a remainder repair.");
-    }
-
-    RepairEvaluation evaluation=evaluateMissingRemainderRepair(orderId,recipientType,recipientId);
-    if(!evaluation.canPropose())
-      throw new org.springframework.web.server.ResponseStatusException(HttpStatus.CONFLICT,evaluation.blockReason());
-
-    Map<String,Object> existingByKey=singleRow("""
-      select id,course_payment_order_id,remainder_recipient_type,remainder_institution_id,
-        remainder_legal_entity_id,remainder_amount_paise,currency,reason,evidence_reference,
-        original_snapshot_sha256,status
-      from course_revenue_distribution_repair where idempotency_key=?
-      """,idempotencyKey);
-    if(!existingByKey.isEmpty()) {
-      long existingRecipient="COMPANY".equals(recipientType)
-          ?number(existingByKey.get("remainder_legal_entity_id")):number(existingByKey.get("remainder_institution_id"));
-      if(number(existingByKey.get("course_payment_order_id"))!=orderId
-          ||!recipientType.equals(text(existingByKey.get("remainder_recipient_type")))
-          ||existingRecipient!=recipientId
-          ||number(existingByKey.get("remainder_amount_paise"))!=evaluation.remainderAmountPaise()
-          ||!text(existingByKey.get("currency")).equalsIgnoreCase(evaluation.currency())
-          ||!reason.equals(text(existingByKey.get("reason")))
-          ||!evidenceReference.equals(text(existingByKey.get("evidence_reference")))
-          ||!evaluation.snapshotSha256().equals(text(existingByKey.get("original_snapshot_sha256"))))
-        throw new org.springframework.web.server.ResponseStatusException(HttpStatus.CONFLICT,"This idempotency key was already used for a different repair proposal.");
-      return repairResponse(existingByKey,"The existing repair proposal was found; no duplicate request was created.");
-    }
-    if(!jdbc.queryForList("""
-        select id from course_revenue_distribution_repair
-        where course_payment_order_id=? and repair_type='MISSING_REMAINDER_ALLOCATION'
-          and status in ('PENDING_APPROVAL','APPLIED')
-        limit 1
-        """,orderId).isEmpty())
-      throw new org.springframework.web.server.ResponseStatusException(HttpStatus.CONFLICT,
-          "This sale already has a pending or applied remainder repair. Review that record before creating another.");
-
-    Map<String,Object> order=evaluation.order();
-    Long repairId=jdbc.queryForObject("""
-      insert into course_revenue_distribution_repair(
-        course_payment_order_id,repair_type,original_snapshot_sha256,remainder_recipient_type,
-        remainder_institution_id,remainder_legal_entity_id,remainder_amount_paise,currency,
-        reason,evidence_reference,idempotency_key,proposed_by_staff_id
-      ) values(?,'MISSING_REMAINDER_ALLOCATION',?,?,?,?,?,?,?,?,?,?) returning id
-      """,Long.class,orderId,evaluation.snapshotSha256(),recipientType,
-        "INSTITUTION".equals(recipientType)?recipientId:null,
-        "COMPANY".equals(recipientType)?recipientId:null,
-        evaluation.remainderAmountPaise(),evaluation.currency(),reason,evidenceReference,idempotencyKey,context.staffId());
-    if(repairId==null)throw new IllegalStateException("The distribution repair proposal could not be saved.");
-    Map<String,Object> auditDetails=new LinkedHashMap<>();
-    auditDetails.put("orderId",orderId);
-    auditDetails.put("repairId",repairId);
-    auditDetails.put("status","PENDING_APPROVAL");
-    auditDetails.put("recipientType",recipientType);
-    auditDetails.put("recipientId",recipientId);
-    auditDetails.put("remainderAmountPaise",evaluation.remainderAmountPaise());
-    auditDetails.put("currency",evaluation.currency());
-    auditDetails.put("reason",reason);
-    auditDetails.put("evidenceReference",evidenceReference);
-    auditDistributionRepair(orderId,recipientType,recipientId,context.staffId(),
-        "COURSE_REVENUE_DISTRIBUTION_REPAIR_PROPOSED",repairId,auditDetails);
-    Map<String,Object> response=new LinkedHashMap<>();
-    response.put("id",repairId);
-    response.put("status","PENDING_APPROVAL");
-    response.put("orderId",orderId);
-    response.put("recipientType",recipientType);
-    response.put("recipientId",recipientId);
-    response.put("recipientName",evaluation.recipientName());
-    response.put("remainderAmountPaise",evaluation.remainderAmountPaise());
-    response.put("currency",evaluation.currency());
-    response.put("reason",reason);
-    response.put("evidenceReference",evidenceReference);
-    response.put("message","Repair proposal saved. A different authorized HRMS reviewer must approve it before any allocation ledger entry is added.");
-    return response;
-  }
-
-  @PostMapping("/distribution-repair-proposals/{repairId}/review")
-  @org.springframework.transaction.annotation.Transactional
-  public Map<String,Object> reviewDistributionRepair(
-      @PathVariable long repairId,
-      @RequestBody Map<String,Object> body,
-      @RequestAttribute(value="authContext",required=false) AuthContext context) {
-    context=authorization.requirePermission(context,"QE_PLATFORM_OWNER");
-    String decision=text(body.get("decision")).trim().toUpperCase(Locale.ROOT);
-    String reviewReason=text(body.get("reason")).trim();
-    if(!List.of("APPROVE","REJECT").contains(decision))
-      throw new IllegalArgumentException("Choose APPROVE or REJECT for this distribution repair.");
-    if(reviewReason.length()<5||reviewReason.length()>500)
-      throw new IllegalArgumentException("Enter the review rationale between 5 and 500 characters.");
-
-    Map<String,Object> repair=singleRow("""
-      select r.*,o.institution_id as source_institution_id
-      from course_revenue_distribution_repair r
-      join course_payment_order o on o.id=r.course_payment_order_id
-      where r.id=? for update of r,o
-      """,repairId);
-    if(repair.isEmpty())throw new org.springframework.web.server.ResponseStatusException(HttpStatus.NOT_FOUND,"Distribution repair proposal not found.");
-    String oldStatus=text(repair.get("status"));
-    if("APPLIED".equals(oldStatus)&&"APPROVE".equals(decision)) {
-      Map<String,Object> response=repairResponse(repair,"This repair was already applied; no additional allocation was created.");
-      response.put("status","APPLIED");
-      return response;
-    }
-    if("REJECTED".equals(oldStatus)&&"REJECT".equals(decision)) {
-      Map<String,Object> response=repairResponse(repair,"This repair was already rejected; no financial records were changed.");
-      response.put("status","REJECTED");
-      return response;
-    }
-    if(!"PENDING_APPROVAL".equals(oldStatus))
-      throw new org.springframework.web.server.ResponseStatusException(HttpStatus.CONFLICT,"Only pending distribution repair proposals can be reviewed.");
-    long proposerId=number(repair.get("proposed_by_staff_id"));
-    if(proposerId==number(context.staffId()))
-      throw new org.springframework.web.server.ResponseStatusException(HttpStatus.FORBIDDEN,"The requester cannot review their own financial repair. A different authorized reviewer is required.");
-
-    long orderId=number(repair.get("course_payment_order_id"));
-    String type=text(repair.get("remainder_recipient_type"));
-    long recipientId="COMPANY".equals(type)?number(repair.get("remainder_legal_entity_id"))
-        :number(repair.get("remainder_institution_id"));
-    if("REJECT".equals(decision)) {
-      int changed=jdbc.update("""
-        update course_revenue_distribution_repair
-        set status='REJECTED',reviewed_by_staff_id=?,reviewed_at=now(),review_reason=?,updated_at=now()
-        where id=? and status='PENDING_APPROVAL'
-        """,context.staffId(),reviewReason,repairId);
-      if(changed!=1)throw new org.springframework.web.server.ResponseStatusException(HttpStatus.CONFLICT,"Repair proposal changed while it was being reviewed. Refresh and retry.");
-      auditDistributionRepair(orderId,type,recipientId,context.staffId(),
-          "COURSE_REVENUE_DISTRIBUTION_REPAIR_REJECTED",repairId,
-          Map.of("repairId",repairId,"orderId",orderId,"reviewReason",reviewReason));
-      return Map.of("id",repairId,"orderId",orderId,"status","REJECTED",
-          "message","The repair was rejected. No allocation or payout balance was changed.");
-    }
-
-    RepairEvaluation evaluation=evaluateMissingRemainderRepair(orderId,type,recipientId);
-    if(!evaluation.canPropose())
-      throw new org.springframework.web.server.ResponseStatusException(HttpStatus.CONFLICT,
-          "The sale changed or no longer satisfies the repair checks. No ledger entry was added. "+evaluation.blockReason());
-    if(!evaluation.snapshotSha256().equals(text(repair.get("original_snapshot_sha256")))
-        ||evaluation.remainderAmountPaise()!=number(repair.get("remainder_amount_paise"))
-        ||!evaluation.currency().equalsIgnoreCase(text(repair.get("currency"))))
-      throw new org.springframework.web.server.ResponseStatusException(HttpStatus.CONFLICT,
-          "The saved snapshot or proposed amount changed after submission. No ledger entry was added; submit a fresh preview.");
-
-    long policyId=number(repair.get("revenue_share_policy_id"));
-    long capturedAmountPaise=number(evaluation.order().get("captured_amount_paise"));
-    long outputTaxPaise=number(evaluation.order().get("output_tax_paise"));
-    long poolPaise=evaluation.result().distributablePoolPaise();
-    long amountPaise=evaluation.remainderAmountPaise();
-    Long institutionId="INSTITUTION".equals(type)?recipientId:null;
-    Long legalEntityId="COMPANY".equals(type)?recipientId:null;
-    String allocationIdempotency="course-order:"+orderId+":revenue-share-repair:"+repairId+":"+type+":"+recipientId;
-    Map<String,Object> calculation=new LinkedHashMap<>();
-    calculation.put("policyId",policyId);
-    calculation.put("policyVersion",evaluation.snapshot().get("policyVersion"));
-    calculation.put("recipientType",type);
-    calculation.put("recipientId",recipientId);
-    calculation.put("recipientName",evaluation.recipientName());
-    calculation.put("calculationType","HISTORICAL_REMAINDER_REPAIR");
-    calculation.put("explicitAmountPaise",0L);
-    calculation.put("remainderAmountPaise",amountPaise);
-    calculation.put("actualPaidPaise",capturedAmountPaise);
-    calculation.put("outputTaxPaise",outputTaxPaise);
-    calculation.put("processingFeePaise",0L);
-    calculation.put("processingFeeTaxPaise",0L);
-    calculation.put("processingFeesConfirmed",false);
-    calculation.put("distributablePoolPaise",poolPaise);
-    calculation.put("allocatedAmountPaise",amountPaise);
-    calculation.put("totalAllocatedPaise",poolPaise);
-    calculation.put("unassignedRemainderPaise",0L);
-    calculation.put("historicalRepair",true);
-    calculation.put("distributionRepairId",repairId);
-    calculation.put("originalPolicySnapshotSha256",evaluation.snapshotSha256());
-    Long allocationId=jdbc.queryForObject("""
-      insert into revenue_share_allocation(
-        course_payment_order_id,policy_id,policy_recipient_id,recipient_type,institution_id,legal_entity_id,currency,
-        actual_paid_paise,output_tax_paise,distributable_pool_paise,total_institution_allocated_paise,
-        allocated_amount_paise,platform_remainder_paise,calculation_snapshot,idempotency_key
-      ) values(?,?,NULL,?,?,?,?,?,?,?,?,?,?,?::jsonb,?) returning id
-      """,Long.class,orderId,policyId,type,institutionId,legalEntityId,evaluation.currency(),
-        capturedAmountPaise,outputTaxPaise,poolPaise,poolPaise,amountPaise,0L,
-        writeJson(calculation),allocationIdempotency);
-    if(allocationId==null)throw new IllegalStateException("The approved remainder allocation could not be recorded.");
-    Map<String,Object> earnedDetails=new LinkedHashMap<>();
-    earnedDetails.put("coursePaymentOrderId",orderId);
-    earnedDetails.put("distributionRepairId",repairId);
-    earnedDetails.put("repairType","MISSING_REMAINDER_ALLOCATION");
-    earnedDetails.put("recipientType",type);
-    earnedDetails.put("recipientId",recipientId);
-    earnedDetails.put("amountPaise",amountPaise);
-    earnedDetails.put("reason",text(repair.get("reason")));
-    earnedDetails.put("evidenceReference",text(repair.get("evidence_reference")));
-    earnedDetails.put("originalPolicySnapshotSha256",evaluation.snapshotSha256());
-    earnedDetails.put("reviewReason",reviewReason);
-    jdbc.update("""
-      insert into revenue_share_allocation_event(
-        allocation_id,event_type,amount_paise,currency,idempotency_key,payment_reference,actor_staff_id,details
-      ) values(?,'EARNED',?,?,?,?,?,?::jsonb)
-      on conflict(idempotency_key) do nothing
-      """,allocationId,amountPaise,evaluation.currency(),
-        "course-order:"+orderId+":revenue-share-repair:"+repairId+":earned",
-        text(evaluation.order().get("provider_payment_id")),context.staffId(),writeJson(earnedDetails));
-    int changed=jdbc.update("""
-      update course_revenue_distribution_repair
-      set status='APPLIED',reviewed_by_staff_id=?,reviewed_at=now(),applied_at=now(),
-        review_reason=?,updated_at=now()
-      where id=? and status='PENDING_APPROVAL'
-      """,context.staffId(),reviewReason,repairId);
-    if(changed!=1)throw new org.springframework.web.server.ResponseStatusException(HttpStatus.CONFLICT,"Repair proposal changed while applying the reviewed correction.");
-    Map<String,Object> auditDetails=new LinkedHashMap<>();
-    auditDetails.put("repairId",repairId);
-    auditDetails.put("orderId",orderId);
-    auditDetails.put("allocationId",allocationId);
-    auditDetails.put("status","APPLIED");
-    auditDetails.put("recipientType",type);
-    auditDetails.put("recipientId",recipientId);
-    auditDetails.put("amountPaise",amountPaise);
-    auditDetails.put("currency",evaluation.currency());
-    auditDetails.put("reviewReason",reviewReason);
-    auditDetails.put("evidenceReference",text(repair.get("evidence_reference")));
-    auditDistributionRepair(orderId,type,recipientId,context.staffId(),
-        "COURSE_REVENUE_DISTRIBUTION_REPAIR_APPLIED",repairId,auditDetails);
-    return Map.of("id",repairId,"orderId",orderId,"allocationId",allocationId,"status","APPLIED",
-        "recipientType",type,"recipientId",recipientId,"recipientName",evaluation.recipientName(),
-        "amountPaise",amountPaise,"currency",evaluation.currency(),
-        "message","The independently approved remainder was appended to the immutable allocation ledger. Refresh the sale trace and beneficiary balances to verify the result.");
-  }
-
   /**
    * Read-only delivery-chain diagnosis for any saved course-payment order. It combines local
    * checkout, financial snapshots, access, distribution and invoice facts with a read-only
@@ -641,6 +397,7 @@ public class CoursePaymentOperationsController {
     authorization.requirePermission(context,"QE_PLATFORM_OWNER");
     List<Map<String,Object>> orders=jdbc.queryForList("""
         select o.id as local_order_id,o.institution_id,o.course_id,o.student_id,o.purchaser_user_id,
+          source_release.source_institution_id,source_t.display_name as source_institution_name,
           o.target_student_id,o.recipient_type,o.status,o.failure_code,o.currency,o.offer_price_paise,
           o.listed_price_paise,o.discount_offer_id,o.discount_amount_paise,o.discount_reference,o.tax_profile_id,
           o.revenue_share_policy_id,o.taxable_value_paise,o.output_tax_paise,
@@ -671,6 +428,9 @@ public class CoursePaymentOperationsController {
         left join institution_tenant t on t.id=o.institution_id
         left join institution_marketplace_offer offer
           on offer.id=o.institution_offer_id and offer.institution_id=o.institution_id
+        left join institution_course_release source_release
+          on source_release.id=offer.course_release_id and source_release.program_id=o.course_id
+        left join institution_tenant source_t on source_t.id=source_release.source_institution_id
         where o.id=?
         """,orderId);
     if(orders.isEmpty()) throw new IllegalArgumentException("Course payment order not found.");
@@ -684,8 +444,10 @@ public class CoursePaymentOperationsController {
     List<Map<String,Object>> steps=new ArrayList<>();
 
     steps.add(traceStep("CHECKOUT_INITIATED","1. Checkout initiated","COMPLETE",
-        "QuantaEdge saved order QE-ORDER-"+orderId+" for "+text(order.get("course_title")!=null?order.get("course_title"):"course #"+courseId)+".",
-        List.of("Local order status: "+localStatus,"Institution: "+text(order.get("institution_name")),
+        "The platform saved order QE-ORDER-"+orderId+" for "+text(order.get("course_title")!=null?order.get("course_title"):"course #"+courseId)+".",
+        List.of("Local order status: "+localStatus,
+            "Marketplace institution: "+text(order.get("institution_name")),
+            "Course source institution: "+value(order,"source_institution_name","Not resolved from the saved course release"),
             "Created: "+text(order.get("created_at")),"Last updated: "+text(order.get("updated_at"))),
         order.get("created_at")));
 
@@ -717,7 +479,7 @@ public class CoursePaymentOperationsController {
     steps.add(traceStep("FINANCIAL_SNAPSHOTS","2. Financial snapshots locked",financialStatus,
         financialFactsValid
             ?"Tax, revenue-share and buyer snapshots are present and their references/payable amount match this order."
-            :"The saved order's financial snapshots are missing or inconsistent. This is a QuantaEdge-side blocker; inspect the exact missing facts before any finalization.",
+            :"The saved order's financial snapshots are missing or inconsistent. This is a platform-side blocker; inspect the exact missing facts before any finalization.",
         financialDetails,null));
 
     Map<String,Object> provider=marketplace.inspectProviderStatusForHrms(
@@ -774,7 +536,7 @@ public class CoursePaymentOperationsController {
       paymentSummary="Razorpay reports money paid, but there is no exact matching payment attempt in the returned list. Do not pay again.";
     } else if(providerQueryAvailable&&"ORDER_AMOUNT_CURRENCY_MISMATCH".equals(providerStatus)) {
       paymentStage="BLOCKED";
-      paymentSummary="The Razorpay amount or currency does not match QuantaEdge's saved order. Do not retry payment.";
+      paymentSummary="The Razorpay amount or currency does not match the saved order. Do not retry payment.";
     } else {
       paymentStage="UNKNOWN";
       paymentSummary="The payment provider state is not confirmed. This is not evidence that payment failed.";
@@ -792,21 +554,21 @@ public class CoursePaymentOperationsController {
     String verificationSummary;
     if("VERIFIED".equals(localStatus)) {
       verificationStage="COMPLETE";
-      verificationSummary="QuantaEdge finalized the saved order and recorded its verification timestamp.";
+      verificationSummary="The platform finalized the saved order and recorded its verification timestamp.";
     } else if(capturedProviderPayment&&!financialFactsValid) {
       verificationStage="BLOCKED";
-      verificationSummary="Razorpay indicates payment was captured, but QuantaEdge cannot finalize this order because the saved financial snapshots are missing or inconsistent.";
+      verificationSummary="Razorpay indicates payment was captured, but The platform cannot finalize this order because the saved financial snapshots are missing or inconsistent.";
     } else if(capturedProviderPayment||authorizedProviderPayment) {
       verificationStage="BLOCKED";
       verificationSummary="A provider payment exists, but the local order is not VERIFIED. Inspect the financial-snapshot and finalization blockers before retrying.";
     } else if("CREATING".equals(localStatus)||"PENDING".equals(localStatus)||"EXPIRED".equals(localStatus)) {
       verificationStage="PENDING";
-      verificationSummary="QuantaEdge has not recorded successful payment verification for this order.";
+      verificationSummary="The platform has not recorded successful payment verification for this order.";
     } else {
       verificationStage="BLOCKED";
       verificationSummary="The local order is in "+localStatus+" and did not reach verified settlement.";
     }
-    steps.add(traceStep("QE_VERIFICATION","5. QuantaEdge verifies and finalizes payment",verificationStage,
+    steps.add(traceStep("QE_VERIFICATION","5. Payment verification and finalization",verificationStage,
         verificationSummary,List.of("Order status: "+localStatus,
             "Verified at: "+text(order.get("verified_at")),
             "Captured at: "+text(order.get("captured_at"))),order.get("verified_at")));
@@ -1217,205 +979,6 @@ public class CoursePaymentOperationsController {
       response.put("canRetryCheckout",false);
       response.put("providerOrderId",providerOrderId);
       return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
-    }
-  }
-
-  private RepairEvaluation evaluateMissingRemainderRepair(long orderId,String suppliedType,long recipientId) {
-    String type=suppliedType==null?"":suppliedType.trim().toUpperCase(Locale.ROOT);
-    Map<String,Object> order=singleRow("""
-      select o.id,o.status,o.institution_id,o.currency,o.captured_amount_paise,o.output_tax_paise,
-        o.provider_payment_id,o.offer_price_paise,o.listed_price_paise,o.discount_offer_id,
-        o.discount_amount_paise,o.discount_reference,o.tax_profile_id,o.taxable_value_paise,
-        o.revenue_share_policy_id,o.tax_calculation_snapshot::text as tax_calculation_snapshot_json,
-        o.revenue_share_policy_snapshot::text as revenue_share_policy_snapshot_json,
-        o.discount_snapshot::text as discount_snapshot_json,o.buyer_snapshot::text as buyer_snapshot_json,
-        o.tax_calculation_snapshot->>'customerPayablePaise' as snapshot_payable_paise,
-        o.tax_calculation_snapshot->>'listedPricePaise' as snapshot_listed_price_paise,
-        o.tax_calculation_snapshot->>'taxProfileId' as snapshot_tax_profile_id,
-        o.tax_calculation_snapshot->>'taxableValuePaise' as snapshot_taxable_value_paise,
-        o.tax_calculation_snapshot->>'outputTaxPaise' as snapshot_output_tax_paise,
-        o.tax_calculation_snapshot->>'discountOfferId' as tax_snapshot_discount_offer_id,
-        o.tax_calculation_snapshot->>'discountCode' as tax_snapshot_discount_code,
-        o.tax_calculation_snapshot->>'discountPaise' as tax_snapshot_discount_paise,
-        o.discount_snapshot->>'discountOfferId' as discount_snapshot_offer_id,
-        o.discount_snapshot->>'code' as discount_snapshot_code,
-        o.discount_snapshot->>'discountPaise' as discount_snapshot_discount_paise
-      from course_payment_order o where o.id=?
-      """,orderId);
-    if(order.isEmpty())return RepairEvaluation.blocked(Map.of("id",orderId),Map.of(),"",type,recipientId,"Course payment order not found.");
-    String raw=text(order.get("revenue_share_policy_snapshot_json"));
-    String hash=sha256Hex(raw);
-    Map<String,Object> snapshot;
-    try {
-      if(raw.isBlank())throw new IllegalArgumentException("Missing locked policy snapshot");
-      snapshot=mapper.readValue(raw,new TypeReference<Map<String,Object>>() {});
-    } catch(Exception ignored) {
-      return RepairEvaluation.blocked(order,Map.of(),hash,type,recipientId,
-          "The original locked revenue policy snapshot is missing or unreadable. Manual finance review is required.");
-    }
-    if(!"VERIFIED".equalsIgnoreCase(text(order.get("status"))))
-      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"Only verified course sales can be considered for a remainder repair.");
-    if(!"INR".equalsIgnoreCase(text(order.get("currency"))))
-      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"This repair path supports INR only. Non-INR sales require a separate reviewed process.");
-    if(!List.of("INSTITUTION","COMPANY").contains(type)||recipientId<=0)
-      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"Choose an active institution or company recipient.");
-    if(!CourseMarketplaceController.hasLockedFinancialSnapshots(order))
-      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"The sale's locked tax or revenue-share snapshot is incomplete.");
-    long policyId=number(order.get("revenue_share_policy_id"));
-    if(policyId<=0||number(snapshot.get("policyId"))!=policyId)
-      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"The order and locked revenue-policy IDs do not match.");
-    if(numberOrMinusOne(order.get("snapshot_payable_paise"))!=number(order.get("offer_price_paise"))
-        ||numberOrMinusOne(order.get("snapshot_listed_price_paise"))!=number(order.get("listed_price_paise"))
-        ||numberOrMinusOne(order.get("snapshot_tax_profile_id"))!=number(order.get("tax_profile_id"))
-        ||!snapshotNumberMatches(order,"snapshot_taxable_value_paise","taxable_value_paise")
-        ||!snapshotNumberMatches(order,"snapshot_output_tax_paise","output_tax_paise")
-        ||!discountSnapshotMatches(order)||!presentJsonObject(order.get("buyer_snapshot_json")))
-      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"Tax, discount, buyer or payable snapshots do not reconcile. This sale is not eligible for automatic repair.");
-    long paid=number(order.get("captured_amount_paise")),tax=number(order.get("output_tax_paise"));
-    if(paid<=0||tax<0||tax>paid)
-      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"The captured amount or output-tax basis is invalid.");
-
-    String savedType=text(snapshot.get("remainderRecipientType")).toUpperCase(Locale.ROOT);
-    long savedId=number(snapshot.get("remainderRecipientId"));
-    boolean namedRemainder=List.of("INSTITUTION","COMPANY").contains(savedType)&&savedId>0;
-    if(namedRemainder&&(!type.equals(savedType)||recipientId!=savedId))
-      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"The original sale snapshot names a different remainder recipient. Do not substitute a new recipient.");
-    if(!namedRemainder&&!savedType.isBlank()&&!"PLATFORM_REMAINDER".equals(savedType))
-      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"The saved remainder fields are malformed; manual finance review is required.");
-
-    String recipientName;
-    if("INSTITUTION".equals(type)) {
-      Map<String,Object> recipient=singleRow("select display_name as name,status from institution_tenant where id=?",recipientId);
-      if(recipient.isEmpty()||!"ACTIVE".equalsIgnoreCase(text(recipient.get("status"))))
-        return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"The proposed institution must be active.");
-      recipientName=text(recipient.get("name"));
-    } else {
-      Map<String,Object> recipient=singleRow("select coalesce(nullif(trade_name,''),legal_name) as name,status,entity_kind from billing_legal_entity where id=?",recipientId);
-      if(recipient.isEmpty()||!"ACTIVE".equalsIgnoreCase(text(recipient.get("status")))
-          ||!List.of("PLATFORM","COMPANY").contains(text(recipient.get("entity_kind")).toUpperCase(Locale.ROOT)))
-        return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"The proposed legal entity must be an active platform/company entity.");
-      recipientName=text(recipient.get("name"));
-    }
-    List<Map<String,Object>> rows=jdbc.queryForList("""
-      select a.id,a.policy_id,a.policy_recipient_id,a.recipient_type,a.institution_id,a.legal_entity_id,
-        a.currency,a.actual_paid_paise,a.output_tax_paise,a.distributable_pool_paise,a.allocated_amount_paise,
-        coalesce(sum(e.amount_paise) filter(where e.event_type='EARNED'),0) as earned_event_amount_paise,
-        count(e.id) filter(where e.event_type='EARNED') as earned_event_count
-      from revenue_share_allocation a left join revenue_share_allocation_event e on e.allocation_id=a.id
-      where a.course_payment_order_id=?
-      group by a.id,a.policy_id,a.policy_recipient_id,a.recipient_type,a.institution_id,a.legal_entity_id,
-        a.currency,a.actual_paid_paise,a.output_tax_paise,a.distributable_pool_paise,a.allocated_amount_paise
-      order by a.id
-      """,orderId);
-    String key=type+":"+recipientId;
-    if(rows.stream().anyMatch(row->key.equals(text(row.get("recipient_type"))+":"+
-        number("COMPANY".equals(type)?row.get("legal_entity_id"):row.get("institution_id")))))
-      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,
-          "This recipient already has an allocation row. A duplicate row is not safe; a reviewed additive correction to the existing allocation is required.");
-
-    CourseRevenueAllocationReconciliation.Result baseline;
-    try {
-      baseline=CourseRevenueAllocationReconciliation.reconcile(snapshot,policyId,paid,tax,text(order.get("currency")),rows);
-    } catch(RuntimeException ignored) {
-      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"The original sale cannot be recalculated safely.");
-    }
-    if(baseline.remainderPaise()<=0)
-      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"There is no positive remainder to allocate. No zero-value repair will be created.");
-
-    Map<String,Object> proposedSnapshot=new LinkedHashMap<>(snapshot);
-    proposedSnapshot.put("remainderRecipientType",type);
-    proposedSnapshot.put("remainderRecipientId",recipientId);
-    proposedSnapshot.put("remainderRecipientName",recipientName);
-    CourseRevenueAllocationReconciliation.Result result;
-    try {
-      result=CourseRevenueAllocationReconciliation.reconcile(proposedSnapshot,policyId,paid,tax,text(order.get("currency")),rows);
-    } catch(RuntimeException ignored) {
-      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,"The proposed distribution cannot be recalculated safely.");
-    }
-    String missing="Expected recipient "+key+" has no allocation row.";
-    boolean remainderOnlyException= result.issues().contains(missing)&&result.issues().size()==3
-        &&result.issues().stream().allMatch(issue->issue.equals(missing)
-          ||issue.startsWith("Recorded allocation total ")
-          ||issue.equals("The recorded allocation ledger does not account for the complete distributable pool."));
-    if(!remainderOnlyException) {
-      String explanation=String.join(" ",result.issues().stream().limit(3).toList());
-      return RepairEvaluation.blocked(order,snapshot,hash,type,recipientId,
-          "The sale has additional discrepancies beyond a missing remainder allocation and cannot be repaired automatically. "+explanation);
-    }
-    return new RepairEvaluation(true,"",order,snapshot,result,hash,baseline.remainderPaise(),
-        text(order.get("currency")).toUpperCase(Locale.ROOT),type,recipientId,recipientName);
-  }
-
-  private Map<String,Object> singleRow(String sql,Object...args) {
-    List<Map<String,Object>> rows=jdbc.queryForList(sql,args);
-    return rows.isEmpty()?Map.of():rows.getFirst();
-  }
-
-  private String writeJson(Object value) {
-    try { return mapper.writeValueAsString(value); }
-    catch(Exception exception) { throw new IllegalStateException("The finance reconciliation record could not be serialized.",exception); }
-  }
-
-  private static String sha256Hex(String value) {
-    try {
-      byte[] digest=java.security.MessageDigest.getInstance("SHA-256")
-          .digest((value==null?"":value).getBytes(java.nio.charset.StandardCharsets.UTF_8));
-      return java.util.HexFormat.of().formatHex(digest);
-    } catch(java.security.NoSuchAlgorithmException exception) {
-      throw new IllegalStateException("SHA-256 is unavailable for financial snapshot evidence.",exception);
-    }
-  }
-
-  private void auditDistributionRepair(long orderId,String recipientType,long recipientId,long actorStaffId,
-      String action,long repairId,Map<String,Object> details) {
-    jdbc.update("""
-      insert into billing_financial_audit_log(legal_entity_id,institution_id,actor_staff_id,action,target_type,target_id,details)
-      select ?,o.institution_id,?,?,'COURSE_REVENUE_DISTRIBUTION_REPAIR',?,?::jsonb
-      from course_payment_order o where o.id=?
-      ""","COMPANY".equals(recipientType)?recipientId:null,actorStaffId,action,Long.toString(repairId),writeJson(details),orderId);
-  }
-
-  private Map<String,Object> repairResponse(Map<String,Object> row,String message) {
-    Map<String,Object> response=new LinkedHashMap<>();
-    response.put("id",number(row.get("id")));
-    response.put("orderId",number(row.get("course_payment_order_id")));
-    response.put("status",text(row.get("status")));
-    response.put("recipientType",text(row.get("remainder_recipient_type")));
-    response.put("recipientId","COMPANY".equals(text(row.get("remainder_recipient_type"))
-        )?number(row.get("remainder_legal_entity_id")):number(row.get("remainder_institution_id")));
-    response.put("remainderAmountPaise",number(row.get("remainder_amount_paise")));
-    response.put("currency",text(row.get("currency")));
-    response.put("reason",text(row.get("reason")));
-    response.put("evidenceReference",text(row.get("evidence_reference")));
-    response.put("reviewReason",text(row.get("review_reason")));
-    response.put("proposedByStaffId",number(row.get("proposed_by_staff_id")));
-    response.put("reviewedByStaffId",number(row.get("reviewed_by_staff_id")));
-    response.put("allocationId",row.get("allocation_id"));
-    response.put("message",message);
-    return response;
-  }
-
-  private record RepairEvaluation(boolean canPropose,String blockReason,Map<String,Object> order,
-      Map<String,Object> snapshot,CourseRevenueAllocationReconciliation.Result result,String snapshotSha256,
-      long remainderAmountPaise,String currency,String recipientType,long recipientId,String recipientName) {
-    static RepairEvaluation blocked(Map<String,Object> order,Map<String,Object> snapshot,String hash,
-        String type,long recipientId,String reason) {
-      return new RepairEvaluation(false,reason,order==null?Map.of():order,snapshot==null?Map.of():snapshot,
-          null,hash==null?"":hash,0L,order==null?"":String.valueOf(order.getOrDefault("currency","")),type,recipientId,"");
-    }
-    Map<String,Object> asMap() {
-      Map<String,Object> resultMap=new LinkedHashMap<>();
-      resultMap.put("canPropose",canPropose);
-      resultMap.put("blockReason",blockReason);
-      resultMap.put("orderId",number(order.get("id")));
-      resultMap.put("recipientType",recipientType);
-      resultMap.put("recipientId",recipientId);
-      resultMap.put("recipientName",recipientName);
-      resultMap.put("remainderAmountPaise",remainderAmountPaise);
-      resultMap.put("currency",currency);
-      resultMap.put("originalSnapshotSha256",snapshotSha256);
-      if(result!=null)resultMap.put("distributionReconciliation",result.asMap());
-      return resultMap;
     }
   }
 
