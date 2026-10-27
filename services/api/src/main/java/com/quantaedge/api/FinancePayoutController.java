@@ -1181,6 +1181,158 @@ public class FinancePayoutController {
     return batch;
   }
 
+  @PostMapping("/payout-batches/{batchId}/statements")
+  @org.springframework.transaction.annotation.Transactional
+  public ResponseEntity<Map<String,Object>> generatePayoutStatement(
+      @PathVariable long batchId,@RequestBody(required=false) Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireManage(context);
+    if(context.staffId()==null)throw new SecurityException("An authenticated HRMS staff identity is required to generate payout statements.");
+    String type=body==null?"BATCH_SUMMARY":optionalText(body.get("documentType"));
+    if(type==null)type="BATCH_SUMMARY";
+    type=type.trim().toUpperCase(Locale.ROOT);
+    if(!List.of("BATCH_SUMMARY","RECIPIENT_STATEMENT").contains(type))
+      throw bad("Choose a batch summary or a recipient payout statement.");
+    Long recipientPayoutId=null;
+    if("RECIPIENT_STATEMENT".equals(type)) {
+      if(body==null)throw bad("Choose a valid payout in this batch.");
+      recipientPayoutId=requiredLong(body.get("payoutId"),"payoutId");
+      if(recipientPayoutId<=0)throw bad("Choose a valid payout in this batch.");
+    }
+    Map<String,Object> batch=batchDetail(batchId,context);
+    @SuppressWarnings("unchecked")
+    List<Map<String,Object>> allPayouts=(List<Map<String,Object>>)batch.getOrDefault("payouts",List.of());
+    List<Map<String,Object>> selectedPayouts=allPayouts;
+    if(recipientPayoutId!=null) {
+      final long selectedPayoutId=recipientPayoutId;
+      selectedPayouts=allPayouts.stream().filter(p->number(p.get("id"))==selectedPayoutId).toList();
+      if(selectedPayouts.isEmpty())throw notFound("The selected payout does not belong to this batch.");
+    }
+    List<Map<String,Object>> allocations=jdbc.queryForList("""
+      select i.payout_id,i.amount_paise as payout_item_amount_paise,a.id as allocation_id,
+        a.currency,o.id as order_id,o.provider_payment_id,
+        coalesce(nullif(offer.title_override,''),course.display_name) as course_title,
+        source_t.display_name as source_institution_name,
+        marketplace_t.display_name as marketplace_institution_name,
+        b.beneficiary_name,b.beneficiary_type
+      from finance_payout_item i
+      join finance_payout p on p.id=i.payout_id and p.batch_id=?
+      join revenue_share_allocation a on a.id=i.allocation_id
+      join course_payment_order o on o.id=a.course_payment_order_id
+      left join institution_marketplace_offer offer on offer.id=o.institution_offer_id and offer.institution_id=o.institution_id
+      left join curriculum_program course on course.id=o.course_id
+      left join institution_course_release source_release
+        on source_release.id=offer.course_release_id and source_release.program_id=o.course_id
+      left join institution_tenant source_t on source_t.id=source_release.source_institution_id
+      left join institution_tenant marketplace_t on marketplace_t.id=o.institution_id
+      left join finance_payout_beneficiary b on b.id=p.beneficiary_id
+      where (?::bigint is null or p.id=?)
+      order by lower(coalesce(nullif(offer.title_override,''),course.display_name,'')),o.id,a.id
+      """,batchId,recipientPayoutId,recipientPayoutId);
+    Map<String,Object> batchSnapshot=new LinkedHashMap<>(batch);
+    batchSnapshot.remove("payouts");
+    List<Map<String,Object>> selectedAllocations=recipientPayoutId==null?allocations
+        :allocations.stream().filter(row->number(row.get("payout_id"))==recipientPayoutId.longValue()).toList();
+    int prior=recipientPayoutId==null
+      ?Math.toIntExact(count("select coalesce(max(revision),0) from finance_payout_statement_document where batch_id=? and document_type='BATCH_SUMMARY'",batchId))
+      :Math.toIntExact(count("select coalesce(max(revision),0) from finance_payout_statement_document where batch_id=? and document_type='RECIPIENT_STATEMENT' and payout_id=?",batchId,recipientPayoutId));
+    int revision=Math.addExact(prior,1);
+    String documentNumber="QE-PS-"+batchId+(recipientPayoutId==null?"-B":"-P"+recipientPayoutId)+"-R"+revision;
+    java.time.Instant generatedAt=java.time.Instant.now();
+    Map<String,Object> snapshot=new LinkedHashMap<>();
+    snapshot.put("schemaVersion",1);snapshot.put("documentNumber",documentNumber);
+    snapshot.put("documentType",type);snapshot.put("revision",revision);
+    snapshot.put("generatedAt",generatedAt.toString());snapshot.put("generatedByStaffId",context.staffId());
+    snapshot.put("batch",batchSnapshot);snapshot.put("payouts",selectedPayouts);
+    snapshot.put("allocations",selectedAllocations);
+    PayoutSettlementPdfRenderer.RenderedStatement rendered="BATCH_SUMMARY".equals(type)
+        ?settlementPdfRenderer.renderBatchReport(batchSnapshot,selectedPayouts,selectedAllocations,documentNumber,generatedAt)
+        :settlementPdfRenderer.renderRecipientAdvice(batchSnapshot,selectedPayouts.getFirst(),selectedAllocations,documentNumber,generatedAt);
+    FiscalDocumentStorage.StoredDocument stored=fiscalDocumentStorage.storePdf(rendered.pdf());
+    if(TransactionSynchronizationManager.isSynchronizationActive()) {
+      String storageKey=stored.storageKey();
+      TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+        @Override public void afterCompletion(int status) {
+          if(status!=TransactionSynchronization.STATUS_COMMITTED)fiscalDocumentStorage.deleteQuietly(storageKey);
+        }
+      });
+    }
+    Long statementId;
+    try {
+      statementId=jdbc.queryForObject("""
+        insert into finance_payout_statement_document(
+          document_number,batch_id,payout_id,document_type,revision,snapshot_json,storage_key,sha256,byte_length,generated_by_staff_id
+        ) values(?,?,?,?,?,?::jsonb,?,?,?,?) returning id
+        """,Long.class,documentNumber,batchId,recipientPayoutId,type,revision,json(snapshot),
+            stored.storageKey(),stored.sha256(),stored.sizeBytes(),context.staffId());
+      if(statementId==null)throw new IllegalStateException("The payout statement archive did not return its document ID.");
+      jdbc.update("""
+        insert into finance_payout_statement_event(statement_document_id,event_type,idempotency_key,actor_staff_id,details)
+        values(?,'GENERATED',?,?,?::jsonb)
+        """,statementId,"payout-statement:"+statementId+":generated",context.staffId(),
+            json(Map.of("documentNumber",documentNumber,"documentType",type,"revision",revision,
+              "pageCount",rendered.pageCount(),"sha256",stored.sha256())));
+    } catch(RuntimeException ex) {
+      if(!TransactionSynchronizationManager.isSynchronizationActive())fiscalDocumentStorage.deleteQuietly(stored.storageKey());
+      throw ex;
+    }
+    Map<String,Object> result=one("""
+      select d.id,d.public_id,d.document_number,d.batch_id,d.payout_id,d.document_type,d.revision,
+        d.sha256,d.byte_length,d.created_at,d.generated_by_staff_id,s.display_name as generated_by_name
+      from finance_payout_statement_document d left join staff_account s on s.id=d.generated_by_staff_id
+      where d.id=?
+      """,statementId);
+    result.put("page_count",rendered.pageCount());
+    result.put("message","The PDF is archived with a checksum and generation audit event. Download it from this batch's statement history.");
+    return ResponseEntity.status(HttpStatus.CREATED).body(result);
+  }
+
+  @GetMapping("/payout-batches/{batchId}/statements")
+  public List<Map<String,Object>> listPayoutStatements(@PathVariable long batchId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireManage(context);
+    if(!exists("select exists(select 1 from finance_payout_batch where id=?)",batchId))
+      throw notFound("Payout batch was not found.");
+    return jdbc.queryForList("""
+      select d.id,d.public_id,d.document_number,d.batch_id,d.payout_id,d.document_type,d.revision,
+        d.sha256,d.byte_length,d.created_at,d.generated_by_staff_id,s.display_name as generated_by_name
+      from finance_payout_statement_document d
+      left join staff_account s on s.id=d.generated_by_staff_id
+      where d.batch_id=? order by d.created_at desc,d.id desc
+      """,batchId);
+  }
+
+  @GetMapping(value="/payout-statements/{statementId}/download",produces=MediaType.APPLICATION_PDF_VALUE)
+  @org.springframework.transaction.annotation.Transactional
+  public ResponseEntity<byte[]> downloadPayoutStatement(@PathVariable long statementId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireManage(context);
+    if(context.staffId()==null)throw new SecurityException("An authenticated HRMS staff identity is required to download payout statements.");
+    Map<String,Object> row=one("""
+      select id,batch_id,payout_id,document_number,storage_key,sha256,byte_length,document_type,revision
+      from finance_payout_statement_document where id=?
+      """,statementId);
+    if(row.isEmpty())throw notFound("The payout statement was not found.");
+    byte[] bytes=fiscalDocumentStorage.readPdf(string(row.get("storage_key")));
+    if(bytes.length!=number(row.get("byte_length"))||!FiscalDocumentStorage.sha256(bytes).equals(string(row.get("sha256"))))
+      throw new org.springframework.web.server.ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+          "The archived payout statement did not pass its integrity check.");
+    jdbc.update("""
+      insert into finance_payout_statement_event(statement_document_id,event_type,idempotency_key,actor_staff_id,details)
+      values(?,'DOWNLOADED',?,?,?::jsonb)
+      """,statementId,"payout-statement:"+statementId+":download:"+UUID.randomUUID(),
+        context.staffId(),json(Map.of("batchId",number(row.get("batch_id")),
+          "payoutId",row.get("payout_id")==null?0L:number(row.get("payout_id")),
+          "documentNumber",string(row.get("document_number")))));
+    String safeName=string(row.get("document_number")).replaceAll("[^A-Za-z0-9_-]","-");
+    return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF)
+        .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\""+safeName+".pdf\"")
+        .header(HttpHeaders.CACHE_CONTROL,"private, no-store, max-age=0")
+        .header("X-Content-Type-Options","nosniff")
+        .header("X-QE-Statement-SHA256",string(row.get("sha256")))
+        .body(bytes);
+  }
+
   @PostMapping("/payout-batches")
   @org.springframework.transaction.annotation.Transactional
   public ResponseEntity<Map<String,Object>> createMonthlyBatch(@RequestBody(required=false) Map<String,Object> body,
