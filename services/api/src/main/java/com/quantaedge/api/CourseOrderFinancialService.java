@@ -596,6 +596,30 @@ public class CourseOrderFinancialService {
    * Records confirmed gateway charges and reduces the same sale's existing allocation ledger.
    * Charges are sourced from a provider settlement record, never from an estimate.
    */
+  private static RevenueDistributionCalculator.BeneficiaryResult calculateWithMaximumSafeFeeDeduction(
+      long capturedPaise,long outputTaxPaise,long maximumDeductiblePaise,
+      List<RevenueDistributionCalculator.BeneficiaryShare> shares,String remainderType,Long remainderId) {
+    long low=0L,high=maximumDeductiblePaise;
+    while(low<high) {
+      long distance=high-low;
+      long candidate=low+distance/2+distance%2;
+      try {
+        RevenueDistributionCalculator.calculateBeneficiaries(
+            RevenueDistributionCalculator.PaymentConfirmation.VERIFIED_CAPTURED,
+            capturedPaise,outputTaxPaise,candidate,shares,remainderType,remainderId);
+        low=candidate;
+      } catch(IllegalStateException ex) {
+        String reason=ex.getMessage()==null?"":ex.getMessage();
+        if(!reason.startsWith("Approved shares exceed the pool after tax and processor charges"))
+          throw ex;
+        high=candidate-1;
+      }
+    }
+    return RevenueDistributionCalculator.calculateBeneficiaries(
+        RevenueDistributionCalculator.PaymentConfirmation.VERIFIED_CAPTURED,
+        capturedPaise,outputTaxPaise,low,shares,remainderType,remainderId);
+  }
+
   @Transactional
   public Map<String,Object> reconcileProviderFees(
       long orderId,long processingFeePaise,long feeTaxPaise,String settlementReference,
@@ -624,7 +648,7 @@ public class CourseOrderFinancialService {
     String paymentId=string(order.get("provider_payment_id"));
     if(paymentId.isBlank())throw new IllegalStateException("The verified order has no provider payment reference.");
     Map<String,Object> prior=one("""
-      select id,processing_fee_paise,fee_tax_paise,settlement_reference,source_type
+      select id,processing_fee_paise,fee_tax_paise,settlement_reference,source_type,platform_borne_overage_paise
       from course_payment_order_fee where course_payment_order_id=?
       """,orderId);
     if(!prior.isEmpty()) {
@@ -633,7 +657,8 @@ public class CourseOrderFinancialService {
           &&reference.equals(string(prior.get("settlement_reference")))
           &&sourceType.equals(string(prior.get("source_type")));
       if(same)return Map.of("orderId",orderId,"status","ALREADY_RECONCILED",
-          "processingFeePaise",processingFeePaise,"feeTaxPaise",feeTaxPaise);
+          "processingFeePaise",processingFeePaise,"feeTaxPaise",feeTaxPaise,
+          "platformBorneOveragePaise",number(prior.get("platform_borne_overage_paise")));
       throw new IllegalStateException("This order already has immutable processor-fee reconciliation. Use a reviewed correction workflow rather than overwriting its financial facts.");
     }
     if(exists("select exists(select 1 from finance_payout_item item join revenue_share_allocation a on a.id=item.allocation_id where a.course_payment_order_id=?)",orderId))
@@ -659,11 +684,22 @@ public class CourseOrderFinancialService {
     Long remainderId=nullableLong(snapshot.get("remainderRecipientId"));
     if(!"PLATFORM_REMAINDER".equals(remainderType)&&remainderId==null)
       throw new IllegalStateException("The saved sale snapshot has an invalid remainder recipient.");
-    RevenueDistributionCalculator.BeneficiaryResult net=RevenueDistributionCalculator.calculateBeneficiaries(
-        RevenueDistributionCalculator.PaymentConfirmation.VERIFIED_CAPTURED,
-        number(order.get("captured_amount_paise")),number(order.get("output_tax_paise")),
-        Math.addExact(processingFeePaise,feeTaxPaise),shares,
+    long totalChargesPaise;
+    try {
+      totalChargesPaise=Math.addExact(processingFeePaise,feeTaxPaise);
+    } catch(ArithmeticException overflow) {
+      throw new IllegalArgumentException("Provider fee plus fee tax exceeds supported integer-paise precision.",overflow);
+    }
+    long capturedPaise=number(order.get("captured_amount_paise"));
+    long outputTaxPaise=number(order.get("output_tax_paise"));
+    long availableBeforeFees=Math.subtractExact(capturedPaise,outputTaxPaise);
+    long maximumDeductible=Math.min(totalChargesPaise,availableBeforeFees);
+    // Keep actual provider fees immutable, but don't make approved flat shares negative.
+    // The platform bears fees beyond the largest deduction the locked policy can safely absorb.
+    RevenueDistributionCalculator.BeneficiaryResult net=calculateWithMaximumSafeFeeDeduction(
+        capturedPaise,outputTaxPaise,maximumDeductible,shares,
         "PLATFORM_REMAINDER".equals(remainderType)?null:remainderType,remainderId);
+    long platformBorneOveragePaise=Math.subtractExact(totalChargesPaise,net.processingChargesPaise());
 
     List<Map<String,Object>> allocationRows=jdbc.queryForList("""
       select id,recipient_type,institution_id,legal_entity_id,allocated_amount_paise
@@ -687,11 +723,13 @@ public class CourseOrderFinancialService {
     Long feeId=jdbc.queryForObject("""
       insert into course_payment_order_fee(
         course_payment_order_id,provider_payment_id,processing_fee_paise,fee_tax_paise,
-        settlement_reference,source_type,idempotency_key,confirmed_by_staff_id,details
-      ) values(?,?,?,?,?,?,?,?,?::jsonb) returning id
+        settlement_reference,source_type,idempotency_key,confirmed_by_staff_id,platform_borne_overage_paise,details
+      ) values(?,?,?,?,?,?,?,?,?,?::jsonb) returning id
       """,Long.class,orderId,paymentId,processingFeePaise,feeTaxPaise,reference,sourceType,key,
-        actorStaffId,json(Map.of("processingFeePaise",processingFeePaise,"feeTaxPaise",feeTaxPaise,
-          "totalChargePaise",Math.addExact(processingFeePaise,feeTaxPaise),"settlementReference",reference,"sourceType",sourceType)));
+        actorStaffId,platformBorneOveragePaise,json(Map.of("processingFeePaise",processingFeePaise,"feeTaxPaise",feeTaxPaise,
+          "totalChargePaise",totalChargesPaise,"beneficiaryDeductionPaise",net.processingChargesPaise(),
+          "platformBorneOveragePaise",platformBorneOveragePaise,
+          "settlementReference",reference,"sourceType",sourceType)));
     if(feeId==null)throw new IllegalStateException("Processor fees could not be recorded.");
     int adjusted=0;
     for(Map<String,Object> allocation:allocationRows) {
@@ -710,13 +748,16 @@ public class CourseOrderFinancialService {
         """,number(allocation.get("id")),amount,"course-order:"+orderId+":processing-fee:"+feeId+":allocation:"+number(allocation.get("id")),
           actorStaffId,json(Map.of("coursePaymentOrderId",orderId,"feeReconciliationId",feeId,
             "processingFeePaise",processingFeePaise,"feeTaxPaise",feeTaxPaise,
+            "beneficiaryDeductionPaise",net.processingChargesPaise(),
+            "platformBorneOveragePaise",platformBorneOveragePaise,
             "originalAllocationPaise",number(allocation.get("allocated_amount_paise")),
             "netAllocationPaise",expected.amountPaise())),number(allocation.get("id")));
       adjusted++;
     }
     return Map.of("orderId",orderId,"feeReconciliationId",feeId,"status","RECONCILED",
         "processingFeePaise",processingFeePaise,"feeTaxPaise",feeTaxPaise,
-        "totalChargesPaise",Math.addExact(processingFeePaise,feeTaxPaise),
+        "totalChargesPaise",totalChargesPaise,"beneficiaryDeductionPaise",net.processingChargesPaise(),
+        "platformBorneOveragePaise",platformBorneOveragePaise,
         "distributablePoolPaise",net.distributablePoolPaise(),"adjustedAllocations",adjusted);
   }
 
