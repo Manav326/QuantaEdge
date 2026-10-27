@@ -422,6 +422,42 @@ def _ocr_shree_dev_prompt(page: Any, bbox: tuple[float, float, float, float]) ->
         return "", "SHREEDEV_OCR_FAILED_RAW_PRESERVED"
 
 
+
+
+def normalize_ocr_option(value: str) -> str:
+    """Remove the printed option marker from OCR output and reject non-Hindi OCR noise."""
+    lines = [line.strip() for line in str(value or "").replace("\r\n", "\n").replace("\r", "\n").split("\n") if line.strip()]
+    if not lines:
+        return ""
+    lines[0] = re.sub(r"^\s*[\(\[]?\s*[A-E0-9Il|]\s*[\)\].:-]\s*", "", lines[0], count=1, flags=re.IGNORECASE).strip()
+    normalized = "\n".join(line for line in lines if line)
+    return normalized if len(re.findall(r"[\u0900-\u097F]", normalized)) >= 2 else ""
+
+
+def _ocr_shree_dev_option(page: Any, bbox: tuple[float, float, float, float]) -> tuple[str, str]:
+    """OCR one legacy-font Hindi option block; the result always remains review-gated."""
+    if not _tesseract_hindi_available():
+        return "", "SHREEDEV_OCR_UNAVAILABLE_RAW_PRESERVED"
+    try:
+        x0, y0, x1, y1 = bbox
+        clip = fitz.Rect(x0 - 2, y0 - 2, x1 + 3, y1 + 3) & page.rect
+        if clip.width < 8 or clip.height < 8:
+            return "", "SHREEDEV_OCR_INVALID_CROP_RAW_PRESERVED"
+        pixmap = page.get_pixmap(matrix=fitz.Matrix(4, 4), clip=clip, alpha=False)
+        result = subprocess.run(
+            ["tesseract", "stdin", "stdout", "-l", "hin", "--psm", "6"],
+            input=pixmap.tobytes("png"), capture_output=True, timeout=15, check=False,
+        )
+        if result.returncode != 0:
+            return "", "SHREEDEV_OCR_FAILED_RAW_PRESERVED"
+        normalized = normalize_ocr_option(result.stdout.decode("utf-8", errors="replace"))
+        if not normalized:
+            return "", "SHREEDEV_OCR_NO_USABLE_HINDI_RAW_PRESERVED"
+        return normalized, "OCR_SHREEDEV_OPTION_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW"
+    except (OSError, ValueError, RuntimeError, subprocess.SubprocessError):
+        return "", "SHREEDEV_OCR_FAILED_RAW_PRESERVED"
+
+
 def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
     collected: list[dict[str, Any]] = []
     for page_index in range(len(pdf)):
@@ -553,6 +589,11 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                         active["prompt_ocr_status"] = ocr_status
                         if ocr_prompt:
                             active["prompt_ocr_text"] = ocr_prompt
+                    option_texts = active.pop("_ocr_option_texts", {})
+                    option_statuses = active.pop("_ocr_option_statuses", {})
+                    if option_texts:
+                        active["option_ocr_texts"] = option_texts
+                        active["option_ocr_statuses"] = option_statuses
                     collected.append(active)
                     active = None
 
@@ -600,6 +641,21 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                         continue
                     if active:
                         active["_lines"].append(block_text.rstrip())
+                        option_match = OPTION_START.match(block_text)
+                        font_metadata = block_metadata.get((round(y0, 2), round(x0, 2)), {})
+                        if (
+                            active.get("language") == "hi"
+                            and option_match
+                            and len(OPTION_START.findall(block_text)) == 1
+                            and not looks_like_code_line(block_text)
+                            and SHREE_DEV_FONT_NAMES.intersection(font_metadata.get("fonts", set()))
+                            and font_metadata.get("bbox")
+                        ):
+                            option_key = option_match.group(1).upper()
+                            option_text, option_status = _ocr_shree_dev_option(page, font_metadata["bbox"])
+                            active.setdefault("_ocr_option_statuses", {})[option_key] = option_status
+                            if option_text:
+                                active.setdefault("_ocr_option_texts", {})[option_key] = option_text
                     continue
 
                 assert number is not None and prefix is not None
@@ -790,6 +846,12 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 # Deduplicate repeated headers/overlapping source blocks by keeping the fuller text.
                 previous = entry["source_variants"].get(row["language"])
                 prompt, options = parse_prompt_options(row["raw_text"], identity, row["language"], cycle)
+                option_ocr_texts = row.get("option_ocr_texts") or {}
+                option_ocr_statuses = row.get("option_ocr_statuses") or {}
+                for option in options:
+                    if option["key"] in option_ocr_texts:
+                        option["ocr_text_i18n"] = option_ocr_texts[option["key"]]
+                        option["ocr_status"] = option_ocr_statuses.get(option["key"], "OCR_SHREEDEV_OPTION_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW")
                 candidate_length = len(prompt) + sum(len(o["text"]) for o in options)
                 previous_length = 0
                 if previous:
@@ -845,8 +907,12 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                     hi["math_line_indices"] = detected_math_line_indices(hi["prompt_i18n"])
                     hi["source_code_preservation_notes"] = "Original line breaks and indentation preserved; code-looking lines and operators bypass legacy-Hindi glyph substitution."
                     for option in hi.get("options", []):
-                        # The exam's standard D/E options are fixed phrases and should be exact.
-                        if option["key"] in STANDARD_HI_OPTIONS and not native_language_only:
+                        # OCR is restricted to the source-rendered Hindi option block. Standard
+                        # scored-paper D/E phrases remain canonical; language-paper options stay source-specific.
+                        if option.get("ocr_text_i18n") and (native_language_only or option["key"] not in STANDARD_HI_OPTIONS):
+                            option["text_i18n"] = option["ocr_text_i18n"]
+                            option["hindi_ocr_status"] = option.get("ocr_status", "OCR_SHREEDEV_OPTION_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW")
+                        elif option["key"] in STANDARD_HI_OPTIONS and not native_language_only:
                             option["text_i18n"] = STANDARD_HI_OPTIONS[option["key"]]
                         else:
                             option["text_i18n"], _ = convert_hindi_text(option.get("raw_text", ""), conversion_reference)
