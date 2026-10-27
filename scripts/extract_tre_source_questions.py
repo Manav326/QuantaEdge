@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Build an auditable bilingual question inventory from the user-provided TRE PDF ZIP.
 
-Uses PDF text blocks rather than OCR. Supported legacy Hindi fonts are converted to Unicode with Lipi. When the font is
-uncertain, the exact source text is retained and flagged for visual review. Both raw
-source text and per-question source locations are retained for comparison. This script does
-not solve answers, create database records, or publish assessments.
+Uses PDF text blocks and applies Hindi OCR only to source prompt blocks explicitly rendered with
+SHREE-DEV-0708/0709, where generic legacy-font conversion is not trusted. Original legacy text and
+per-question page provenance are retained, and reconstructed prompts remain flagged for human review.
+This script does not solve answers, create database records, or publish assessments.
 """
 from __future__ import annotations
 
