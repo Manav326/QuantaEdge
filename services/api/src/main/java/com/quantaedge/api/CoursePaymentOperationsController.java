@@ -366,6 +366,269 @@ public class CoursePaymentOperationsController {
     return response;
   }
 
+  @GetMapping("/{orderId}/distribution-repair-preview")
+  public Map<String,Object> previewDistributionRepair(
+      @PathVariable long orderId,
+      @RequestParam String recipientType,
+      @RequestParam long recipientId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    authorization.requirePermission(context,"QE_PLATFORM_OWNER");
+    RepairEvaluation evaluation=evaluateMissingRemainderRepair(orderId,recipientType,recipientId);
+    return evaluation.asMap();
+  }
+
+  @PostMapping("/{orderId}/distribution-repair-proposals")
+  @org.springframework.transaction.annotation.Transactional
+  public Map<String,Object> proposeDistributionRepair(
+      @PathVariable long orderId,
+      @RequestBody Map<String,Object> body,
+      @RequestHeader(value="Idempotency-Key",required=false) String suppliedIdempotencyKey,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requirePermission(context,"QE_PLATFORM_OWNER");
+    String recipientType=text(body.get("recipientType")).toUpperCase(Locale.ROOT);
+    long recipientId=number(body.get("recipientId"));
+    String reason=text(body.get("reason")).trim();
+    String evidenceReference=text(body.get("evidenceReference")).trim();
+    String idempotencyKey=suppliedIdempotencyKey==null?"":suppliedIdempotencyKey.trim();
+    if(!idempotencyKey.matches("[A-Za-z0-9_-]{10,180}"))
+      throw new IllegalArgumentException("Idempotency-Key must contain 10–180 letters, digits, underscores or hyphens.");
+    if(reason.length()<5||reason.length()>500)
+      throw new IllegalArgumentException("Enter a repair reason between 5 and 500 characters.");
+    if(evidenceReference.length()<3||evidenceReference.length()>180)
+      throw new IllegalArgumentException("Enter a supporting policy, contract or finance-review reference between 3 and 180 characters.");
+    if(!List.of("INSTITUTION","COMPANY").contains(recipientType)||recipientId<=0)
+      throw new IllegalArgumentException("Select a valid institution or company as the proposed remainder recipient.");
+
+    // Serialize proposal creation against other repairs/finalization for this exact sale.
+    int locked=jdbc.update("update course_payment_order set updated_at=updated_at where id=? and status='VERIFIED'",orderId);
+    if(locked!=1) {
+      if(jdbc.queryForList("select id from course_payment_order where id=?",orderId).isEmpty())
+        throw new org.springframework.web.server.ResponseStatusException(HttpStatus.NOT_FOUND,"Course payment order not found.");
+      throw new org.springframework.web.server.ResponseStatusException(HttpStatus.CONFLICT,"Only a verified course sale can be considered for a remainder repair.");
+    }
+
+    RepairEvaluation evaluation=evaluateMissingRemainderRepair(orderId,recipientType,recipientId);
+    if(!evaluation.canPropose())
+      throw new org.springframework.web.server.ResponseStatusException(HttpStatus.CONFLICT,evaluation.blockReason());
+
+    Map<String,Object> existingByKey=singleRow("""
+      select id,course_payment_order_id,remainder_recipient_type,remainder_institution_id,
+        remainder_legal_entity_id,remainder_amount_paise,currency,reason,evidence_reference,
+        original_snapshot_sha256,status
+      from course_revenue_distribution_repair where idempotency_key=?
+      """,idempotencyKey);
+    if(!existingByKey.isEmpty()) {
+      long existingRecipient="COMPANY".equals(recipientType)
+          ?number(existingByKey.get("remainder_legal_entity_id")):number(existingByKey.get("remainder_institution_id"));
+      if(number(existingByKey.get("course_payment_order_id"))!=orderId
+          ||!recipientType.equals(text(existingByKey.get("remainder_recipient_type")))
+          ||existingRecipient!=recipientId
+          ||number(existingByKey.get("remainder_amount_paise"))!=evaluation.remainderAmountPaise()
+          ||!text(existingByKey.get("currency")).equalsIgnoreCase(evaluation.currency())
+          ||!reason.equals(text(existingByKey.get("reason")))
+          ||!evidenceReference.equals(text(existingByKey.get("evidence_reference")))
+          ||!evaluation.snapshotSha256().equals(text(existingByKey.get("original_snapshot_sha256"))))
+        throw new org.springframework.web.server.ResponseStatusException(HttpStatus.CONFLICT,"This idempotency key was already used for a different repair proposal.");
+      return repairResponse(existingByKey,"The existing repair proposal was found; no duplicate request was created.");
+    }
+    if(!jdbc.queryForList("""
+        select id from course_revenue_distribution_repair
+        where course_payment_order_id=? and repair_type='MISSING_REMAINDER_ALLOCATION'
+          and status in ('PENDING_APPROVAL','APPLIED')
+        limit 1
+        """,orderId).isEmpty())
+      throw new org.springframework.web.server.ResponseStatusException(HttpStatus.CONFLICT,
+          "This sale already has a pending or applied remainder repair. Review that record before creating another.");
+
+    Map<String,Object> order=evaluation.order();
+    Long repairId=jdbc.queryForObject("""
+      insert into course_revenue_distribution_repair(
+        course_payment_order_id,repair_type,original_snapshot_sha256,remainder_recipient_type,
+        remainder_institution_id,remainder_legal_entity_id,remainder_amount_paise,currency,
+        reason,evidence_reference,idempotency_key,proposed_by_staff_id
+      ) values(?,'MISSING_REMAINDER_ALLOCATION',?,?,?,?,?,?,?,?,?,?) returning id
+      """,Long.class,orderId,evaluation.snapshotSha256(),recipientType,
+        "INSTITUTION".equals(recipientType)?recipientId:null,
+        "COMPANY".equals(recipientType)?recipientId:null,
+        evaluation.remainderAmountPaise(),evaluation.currency(),reason,evidenceReference,idempotencyKey,context.staffId());
+    if(repairId==null)throw new IllegalStateException("The distribution repair proposal could not be saved.");
+    Map<String,Object> auditDetails=new LinkedHashMap<>();
+    auditDetails.put("orderId",orderId);
+    auditDetails.put("repairId",repairId);
+    auditDetails.put("status","PENDING_APPROVAL");
+    auditDetails.put("recipientType",recipientType);
+    auditDetails.put("recipientId",recipientId);
+    auditDetails.put("remainderAmountPaise",evaluation.remainderAmountPaise());
+    auditDetails.put("currency",evaluation.currency());
+    auditDetails.put("reason",reason);
+    auditDetails.put("evidenceReference",evidenceReference);
+    auditDistributionRepair(orderId,recipientType,recipientId,context.staffId(),
+        "COURSE_REVENUE_DISTRIBUTION_REPAIR_PROPOSED",repairId,auditDetails);
+    Map<String,Object> response=new LinkedHashMap<>();
+    response.put("id",repairId);
+    response.put("status","PENDING_APPROVAL");
+    response.put("orderId",orderId);
+    response.put("recipientType",recipientType);
+    response.put("recipientId",recipientId);
+    response.put("recipientName",evaluation.recipientName());
+    response.put("remainderAmountPaise",evaluation.remainderAmountPaise());
+    response.put("currency",evaluation.currency());
+    response.put("reason",reason);
+    response.put("evidenceReference",evidenceReference);
+    response.put("message","Repair proposal saved. A different authorized HRMS reviewer must approve it before any allocation ledger entry is added.");
+    return response;
+  }
+
+  @PostMapping("/distribution-repair-proposals/{repairId}/review")
+  @org.springframework.transaction.annotation.Transactional
+  public Map<String,Object> reviewDistributionRepair(
+      @PathVariable long repairId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requirePermission(context,"QE_PLATFORM_OWNER");
+    String decision=text(body.get("decision")).trim().toUpperCase(Locale.ROOT);
+    String reviewReason=text(body.get("reason")).trim();
+    if(!List.of("APPROVE","REJECT").contains(decision))
+      throw new IllegalArgumentException("Choose APPROVE or REJECT for this distribution repair.");
+    if(reviewReason.length()<5||reviewReason.length()>500)
+      throw new IllegalArgumentException("Enter the review rationale between 5 and 500 characters.");
+
+    Map<String,Object> repair=singleRow("""
+      select r.*,o.institution_id as source_institution_id
+      from course_revenue_distribution_repair r
+      join course_payment_order o on o.id=r.course_payment_order_id
+      where r.id=? for update of r,o
+      """,repairId);
+    if(repair.isEmpty())throw new org.springframework.web.server.ResponseStatusException(HttpStatus.NOT_FOUND,"Distribution repair proposal not found.");
+    String oldStatus=text(repair.get("status"));
+    if("APPLIED".equals(oldStatus)&&"APPROVE".equals(decision)) {
+      Map<String,Object> response=repairResponse(repair,"This repair was already applied; no additional allocation was created.");
+      response.put("status","APPLIED");
+      return response;
+    }
+    if("REJECTED".equals(oldStatus)&&"REJECT".equals(decision)) {
+      Map<String,Object> response=repairResponse(repair,"This repair was already rejected; no financial records were changed.");
+      response.put("status","REJECTED");
+      return response;
+    }
+    if(!"PENDING_APPROVAL".equals(oldStatus))
+      throw new org.springframework.web.server.ResponseStatusException(HttpStatus.CONFLICT,"Only pending distribution repair proposals can be reviewed.");
+    long proposerId=number(repair.get("proposed_by_staff_id"));
+    if(proposerId==number(context.staffId()))
+      throw new org.springframework.web.server.ResponseStatusException(HttpStatus.FORBIDDEN,"The requester cannot review their own financial repair. A different authorized reviewer is required.");
+
+    long orderId=number(repair.get("course_payment_order_id"));
+    String type=text(repair.get("remainder_recipient_type"));
+    long recipientId="COMPANY".equals(type)?number(repair.get("remainder_legal_entity_id"))
+        :number(repair.get("remainder_institution_id"));
+    if("REJECT".equals(decision)) {
+      int changed=jdbc.update("""
+        update course_revenue_distribution_repair
+        set status='REJECTED',reviewed_by_staff_id=?,reviewed_at=now(),review_reason=?,updated_at=now()
+        where id=? and status='PENDING_APPROVAL'
+        """,context.staffId(),reviewReason,repairId);
+      if(changed!=1)throw new org.springframework.web.server.ResponseStatusException(HttpStatus.CONFLICT,"Repair proposal changed while it was being reviewed. Refresh and retry.");
+      auditDistributionRepair(orderId,type,recipientId,context.staffId(),
+          "COURSE_REVENUE_DISTRIBUTION_REPAIR_REJECTED",repairId,
+          Map.of("repairId",repairId,"orderId",orderId,"reviewReason",reviewReason));
+      return Map.of("id",repairId,"orderId",orderId,"status","REJECTED",
+          "message","The repair was rejected. No allocation or payout balance was changed.");
+    }
+
+    RepairEvaluation evaluation=evaluateMissingRemainderRepair(orderId,type,recipientId);
+    if(!evaluation.canPropose())
+      throw new org.springframework.web.server.ResponseStatusException(HttpStatus.CONFLICT,
+          "The sale changed or no longer satisfies the repair checks. No ledger entry was added. "+evaluation.blockReason());
+    if(!evaluation.snapshotSha256().equals(text(repair.get("original_snapshot_sha256")))
+        ||evaluation.remainderAmountPaise()!=number(repair.get("remainder_amount_paise"))
+        ||!evaluation.currency().equalsIgnoreCase(text(repair.get("currency"))))
+      throw new org.springframework.web.server.ResponseStatusException(HttpStatus.CONFLICT,
+          "The saved snapshot or proposed amount changed after submission. No ledger entry was added; submit a fresh preview.");
+
+    long policyId=number(repair.get("revenue_share_policy_id"));
+    long capturedAmountPaise=number(evaluation.order().get("captured_amount_paise"));
+    long outputTaxPaise=number(evaluation.order().get("output_tax_paise"));
+    long poolPaise=evaluation.result().distributablePoolPaise();
+    long amountPaise=evaluation.remainderAmountPaise();
+    Long institutionId="INSTITUTION".equals(type)?recipientId:null;
+    Long legalEntityId="COMPANY".equals(type)?recipientId:null;
+    String allocationIdempotency="course-order:"+orderId+":revenue-share-repair:"+repairId+":"+type+":"+recipientId;
+    Map<String,Object> calculation=new LinkedHashMap<>();
+    calculation.put("policyId",policyId);
+    calculation.put("policyVersion",evaluation.snapshot().get("policyVersion"));
+    calculation.put("recipientType",type);
+    calculation.put("recipientId",recipientId);
+    calculation.put("recipientName",evaluation.recipientName());
+    calculation.put("calculationType","HISTORICAL_REMAINDER_REPAIR");
+    calculation.put("explicitAmountPaise",0L);
+    calculation.put("remainderAmountPaise",amountPaise);
+    calculation.put("actualPaidPaise",capturedAmountPaise);
+    calculation.put("outputTaxPaise",outputTaxPaise);
+    calculation.put("processingFeePaise",0L);
+    calculation.put("processingFeeTaxPaise",0L);
+    calculation.put("processingFeesConfirmed",false);
+    calculation.put("distributablePoolPaise",poolPaise);
+    calculation.put("allocatedAmountPaise",amountPaise);
+    calculation.put("totalAllocatedPaise",poolPaise);
+    calculation.put("unassignedRemainderPaise",0L);
+    calculation.put("historicalRepair",true);
+    calculation.put("distributionRepairId",repairId);
+    calculation.put("originalPolicySnapshotSha256",evaluation.snapshotSha256());
+    Long allocationId=jdbc.queryForObject("""
+      insert into revenue_share_allocation(
+        course_payment_order_id,policy_id,policy_recipient_id,recipient_type,institution_id,legal_entity_id,currency,
+        actual_paid_paise,output_tax_paise,distributable_pool_paise,total_institution_allocated_paise,
+        allocated_amount_paise,platform_remainder_paise,calculation_snapshot,idempotency_key
+      ) values(?,?,NULL,?,?,?,?,?,?,?,?,?,?,?::jsonb,?) returning id
+      """,Long.class,orderId,policyId,type,institutionId,legalEntityId,evaluation.currency(),
+        capturedAmountPaise,outputTaxPaise,poolPaise,poolPaise,amountPaise,0L,
+        writeJson(calculation),allocationIdempotency);
+    if(allocationId==null)throw new IllegalStateException("The approved remainder allocation could not be recorded.");
+    Map<String,Object> earnedDetails=new LinkedHashMap<>();
+    earnedDetails.put("coursePaymentOrderId",orderId);
+    earnedDetails.put("distributionRepairId",repairId);
+    earnedDetails.put("repairType","MISSING_REMAINDER_ALLOCATION");
+    earnedDetails.put("recipientType",type);
+    earnedDetails.put("recipientId",recipientId);
+    earnedDetails.put("amountPaise",amountPaise);
+    earnedDetails.put("reason",text(repair.get("reason")));
+    earnedDetails.put("evidenceReference",text(repair.get("evidence_reference")));
+    earnedDetails.put("originalPolicySnapshotSha256",evaluation.snapshotSha256());
+    earnedDetails.put("reviewReason",reviewReason);
+    jdbc.update("""
+      insert into revenue_share_allocation_event(
+        allocation_id,event_type,amount_paise,currency,idempotency_key,payment_reference,actor_staff_id,details
+      ) values(?,'EARNED',?,?,?,?,?,?::jsonb)
+      on conflict(idempotency_key) do nothing
+      """,allocationId,amountPaise,evaluation.currency(),
+        "course-order:"+orderId+":revenue-share-repair:"+repairId+":earned",
+        text(evaluation.order().get("provider_payment_id")),context.staffId(),writeJson(earnedDetails));
+    int changed=jdbc.update("""
+      update course_revenue_distribution_repair
+      set status='APPLIED',reviewed_by_staff_id=?,reviewed_at=now(),applied_at=now(),
+        review_reason=?,updated_at=now()
+      where id=? and status='PENDING_APPROVAL'
+      """,context.staffId(),reviewReason,repairId);
+    if(changed!=1)throw new org.springframework.web.server.ResponseStatusException(HttpStatus.CONFLICT,"Repair proposal changed while applying the reviewed correction.");
+    Map<String,Object> auditDetails=new LinkedHashMap<>();
+    auditDetails.put("repairId",repairId);
+    auditDetails.put("orderId",orderId);
+    auditDetails.put("allocationId",allocationId);
+    auditDetails.put("status","APPLIED");
+    auditDetails.put("recipientType",type);
+    auditDetails.put("recipientId",recipientId);
+    auditDetails.put("amountPaise",amountPaise);
+    auditDetails.put("currency",evaluation.currency());
+    auditDetails.put("reviewReason",reviewReason);
+    auditDetails.put("evidenceReference",text(repair.get("evidence_reference")));
+    auditDistributionRepair(orderId,type,recipientId,context.staffId(),
+        "COURSE_REVENUE_DISTRIBUTION_REPAIR_APPLIED",repairId,auditDetails);
+    return Map.of("id",repairId,"orderId",orderId,"allocationId",allocationId,"status","APPLIED",
+        "recipientType",type,"recipientId",recipientId,"recipientName",evaluation.recipientName(),
+        "amountPaise",amountPaise,"currency",evaluation.currency(),
+        "message","The independently approved remainder was appended to the immutable allocation ledger. Refresh the sale trace and beneficiary balances to verify the result.");
+  }
+
   /**
    * Read-only delivery-chain diagnosis for any saved course-payment order. It combines local
    * checkout, financial snapshots, access, distribution and invoice facts with a read-only
