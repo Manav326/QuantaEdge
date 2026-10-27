@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2017,
     "eligible_visual_asset_rows": 2017,
-    "raw_analysis_result_rows": 50,
-    "successful_visual_analyses": 31,
-    "missing_visual_analyses": 1967,
-    "failed_visual_analyses": 19,
+    "raw_analysis_result_rows": 60,
+    "successful_visual_analyses": 39,
+    "missing_visual_analyses": 1957,
+    "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1986,
+    "unresolved_count": 1978,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -9075,9 +9075,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9093,7 +9102,7 @@
       "asset_path": "page-0011.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -9111,9 +9120,37 @@
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page with names and titles of educational staff members.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "पूनम कत्याल  पूर्व टी.जी.टी., जीनत महल सर्वोदय कन्या विद्यालय, जााफरााबााद, दिलली, (शिक्षा निदेशा लय, रााष्ट्रीय रााजधा नी क्ेत्र, दिलली)",
+          "प्रमिलाा  तँवर, आचार्य, डी.ई.एस.एम., राा.शै.अ.प्र.प., नई दिलली",
+          "बिंदु सकसेनाा, सहायक आचार्य, एस.सी.ई.आर.टी., दिलली",
+          "मुकेश कुमाार गााँधी, शिक् अधिकारी (सेवानिवृत्त), सी.आई.एस.सी.ई., नई दिलली",
+          "रमेश चंद जैन, प्रधानाचार्य (सेवानिवृत्त), केंद्रीय विद्यालय संगठन, नई दिलली",
+          "Łचि वर्मा, आचार्य (रसायन), विज्ञा एवं गणित शिक्षा विभा, रा.शै.अ.प्र.प., नई दिलली",
+          "रेनू पराशर, आचार्य (रसायन), रसायन विभा, हंसरा कॉलेज, दिलली विश्विद्यालय",
+          "वंदिताा, वरिष्ठ हिंदी अधिकारी (",
+          "निर्देशालय, रा.शै.अ.प्र.प., नई दिलली)"
+        ],
+        "concepts": [
+          "educational staff",
+          "school",
+          "department",
+          "title",
+          "position",
+          "location"
+        ],
+        "context_relation": "names and titles of educational staff members",
+        "limitations": [
+          "names and titles are in Hindi",
+          "names and titles are in a specific order",
+          "names and titles are associated with specific educational institutions and departments"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9129,9 +9166,35 @@
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page with names and titles of educational staff members.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "पूनम कत्याल  पूर्व टी.जी.टी., जीनत महल सर्वोदय कन्या विद्यालय, जााफरााबााद, दिलली, (शिक्षा निदेशा लय, रााष्ट्रीय रााजधा नी क्ेत्र, दिलली)",
+          "प्रमिलाा  तँवर, आचार्य, डी.ई.एस.एम., राा.शै.अ.प्र.प., नई दिलली",
+          "बिंदु सकसेनाा, सहायक आचार्य, एस.सी.ई.आर.टी., दिलली",
+          "मुकेश कुमाार गााँधी, शिक् अधिकारी (सेवानिवृत्त), सी.आई.एस.सी.ई., नई दिलली",
+          "रमेश चंद जैन, प्रधानाचार्य (सेवानिवृत्त), केंद्रीय विद्यालय संगठन, नई दिलली",
+          "Łचि वर्मा, आचार्य (रसायन), विज्ञा एवं गणित शिक्षा विभा, रा.शै.अ.प्र.प., नई दिलली",
+          "रेनू पराशर, आचार्य (रसायन), रसायन विभा, हंसरा कॉलेज, दिलली विश्विद्यालय",
+          "वंदिताा, वरिष्ठ हिंदी अधिकारी (",
+          "निर्देशालय, रा.शै.अ.प्र.प., नई दिलली)"
+        ],
+        "concepts": [
+          "educational staff",
+          "school",
+          "department",
+          "title",
+          "position"
+        ],
+        "context_relation": "The page contains the names and titles of educational staff members.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any information about the educational content or curriculum."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9147,9 +9210,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9165,9 +9237,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9183,7 +9264,7 @@
       "asset_path": "page-0012.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -9201,9 +9282,30 @@
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Text discussing the development of a textbook by the National Council of Educational Research and Training (NCERT).",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "आभार",
+          "राष्ट्रीय शैक्षिक अनुसंधान और प्रशिक्षण परिषद् (रा.शै.अ.प्र.प.)",
+          "इस पाठ्यपुस्तक के विकास में पाठ्यक्रम क्षेत्र समूह (सी.ए.जी.) के सममाननीय अध्यक्ष एवं सदसयों के मार्गदर्शन एवं सहायता के लिए ततथा विज्ञान एवं संबद्ध पाठ्यक्रम क्षेत्र समूहों का मिश्रितत (क्रॉस-कटिंग) विषयों पर दिशानिर्देशन के लिए आभार वयक्तत करती है। परिषद्, पाठ्यपुस्तक विकास समूह के सदसयों के प्रति",
+          "परिषद्, पाठ्यपुस्तक को परिष्कृतत करने में सहयोग देने के लिए अंकितता दुरेजा, टी.जी.टी. विज्ञान, डी.ए.वी.",
+          "पब्लिक स्कूल, गुरुग्राम; अनुपा क"
+        ],
+        "concepts": [
+          "National Council of Educational Research and Training (NCERT)",
+          "Textbook development",
+          "Subject areas",
+          "Cross-curricular topics",
+          "Educational research and training"
+        ],
+        "context_relation": "The text discusses the development of a textbook by NCERT, focusing on the involvement of various educational experts and the cross-curricular nature of the topics covered.",
+        "limitations": [
+          "The text does not provide specific details about the textbook or its content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9219,9 +9321,31 @@
       "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Text discussing the development of a textbook by the National Council of Educational Research and Training (NCERT).",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "आभार",
+          "राष्ट्रीय शैक्षिक अनुसंधान और प्रशिक्षण परिषद् (रा.शै.अ.प्र.प.)",
+          "इस पाठ्यपुस्तक के विकास में पाठ्यक्रम क्षेत्र समूह (सी.ए.जी.) के सममाननीय अध्यक्ष एवं सदसयों के मार्गदर्शन एवं सहायता के लिए ततथा विज्ञान एवं संबद्ध पाठ्यक्रम क्षेत्र समूहों का मिश्रितत (क्रॉस-कटिंग) विषयों पर दिशानिर्देशन के लिए आभार वयक्तत करती है।",
+          "परिषद्, पाठ्यपुस्तक को परिष्कृतत करने में सहयोग देने के लिए अंकितता दुरेजा, टी.जी.टी. विज्ञान, डी.ए.वी.",
+          "पब्लिक स्कूल, गुरुगाम; अनुपा क"
+        ],
+        "concepts": [
+          "National Council of Educational Research and Training (NCERT)",
+          "textbook development",
+          "subject areas",
+          "cross-curricular topics",
+          "educational research and training"
+        ],
+        "context_relation": "The image is a page from a textbook development document.",
+        "limitations": [
+          "The image does not show any visual elements.",
+          "The text is in Hindi."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9237,9 +9361,32 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Page with text in Hindi discussing educational content development and collaboration.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "आभार",
+          "राष्ट्रीय शैक्षिक अनुसंधान और प्रशिक्षण परिषद् (रा.शै.अ.प्र.प.)",
+          "इस पाठ्यपुस्तक के विकास में पाठ्यक्रम क्षेत्र समूह (सी.ए.जी.) के सममाननीय अध्यक्ष एवं सदसयों के मार्गदर्शन एवं सहायता के लिए ततथा विज्ञान एवं संबद्ध पाठ्यक्रम क्षेत्र समूहों का मिश्रितत (क्रॉस-कटिंग) विषयों पर दिशानिर्देशन के लिए आभार वयक्तत करती है।",
+          "परिषद्, पाठ्यपुस्तक को परिष्कृतत करने में सहयोग देने के लिए अंकितता दुरेजा, टी.जी.टी. विज्ञान, डी.ए.वी.",
+          "पब्लिक स्कूल, गुरुग्राम; अनुपा क"
+        ],
+        "concepts": [
+          "educational content development",
+          "collaboration",
+          "cross-cutting topics",
+          "science and related subjects",
+          "development of educational materials",
+          "collaboration with educational institutions"
+        ],
+        "context_relation": "The page discusses the development of an educational textbook and the collaboration involved in its creation.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The text is in Hindi, which may limit the audience's understanding."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

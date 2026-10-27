@@ -8,26 +8,26 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 33,
+    "assets_selected": 41,
     "assets_processed_this_run": 10,
     "assets_processed_ids": [
-      "6b04e53099a955c795a88d0a",
-      "84be83192f58c18deaadcf30",
-      "90d727f6c9a734d6fedd51d2",
-      "a4fcef1a02cd339c9d78d45f",
-      "3b3adaf25c2b27225ee3de67",
-      "d3c76200f46b46da3fdaf776",
-      "675255dde98ed8cc42d95192",
-      "06242a4ead52d099c06c22b1",
-      "a8cc2114ad0bf079fe2ae4fe",
-      "22afbf359d9e24f8158d7f58"
+      "6388704a4c406b8f34010041",
+      "43fd6689cecf4fc61ee423e9",
+      "f10502c750d9871bd7b843a7",
+      "b9dcc33afc3c069e2bc8365a",
+      "6690b2a6b40d420850e1ae0b",
+      "eb813ddf8f7d7ebe87ceb243",
+      "48b95051b136812b83930e1b",
+      "4f00ad355b86004914429201",
+      "4dd77e57f6074bc78ede4e31",
+      "262c939e955d0909716949b7"
     ],
     "assets_eligible": 2017,
-    "assets_analyzed": 31,
-    "assets_remaining": 1986,
-    "assets_completion_percent": 1.5,
-    "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 23,
+    "assets_analyzed": 39,
+    "assets_remaining": 1978,
+    "assets_completion_percent": 1.9,
+    "assets_failed": 21,
+    "assets_skipped_from_checkpoint": 31,
     "batch_limit": 10,
     "publication_allowed": false
   },
@@ -1505,6 +1505,339 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
       "checkpointed_at": "2026-10-27T00:34:48Z"
+    },
+    {
+      "asset_id": "6388704a4c406b8f34010041",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ddb53c9d751326ca65cf6c4a45861344d69b3c3057dd0e58f303e82a4c6c8976",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:35:35Z"
+    },
+    {
+      "asset_id": "43fd6689cecf4fc61ee423e9",
+      "asset_sha256": "d6fe915dd6471d1deb7c2b12106b8d616eecb9032bf5603c2bbf0735a0124d0d",
+      "page_text_context_sha256": "ddb53c9d751326ca65cf6c4a45861344d69b3c3057dd0e58f303e82a4c6c8976",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 11,
+      "asset_path": "page-0011.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "f10502c750d9871bd7b843a7",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f689c2b0b17495b0c1316c2615db877803982d4833f23e3ea3898ee4ea747ab3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page with names and titles of educational staff members.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "पूनम कत्याल  पूर्व टी.जी.टी., जीनत महल सर्वोदय कन्या विद्यालय, जााफरााबााद, दिलली, (शिक्षा निदेशा लय, रााष्ट्रीय रााजधा नी क्ेत्र, दिलली)",
+          "प्रमिलाा  तँवर, आचार्य, डी.ई.एस.एम., राा.शै.अ.प्र.प., नई दिलली",
+          "बिंदु सकसेनाा, सहायक आचार्य, एस.सी.ई.आर.टी., दिलली",
+          "मुकेश कुमाार गााँधी, शिक् अधिकारी (सेवानिवृत्त), सी.आई.एस.सी.ई., नई दिलली",
+          "रमेश चंद जैन, प्रधानाचार्य (सेवानिवृत्त), केंद्रीय विद्यालय संगठन, नई दिलली",
+          "Łचि वर्मा, आचार्य (रसायन), विज्ञा एवं गणित शिक्षा विभा, रा.शै.अ.प्र.प., नई दिलली",
+          "रेनू पराशर, आचार्य (रसायन), रसायन विभा, हंसरा कॉलेज, दिलली विश्विद्यालय",
+          "वंदिताा, वरिष्ठ हिंदी अधिकारी (",
+          "निर्देशालय, रा.शै.अ.प्र.प., नई दिलली)"
+        ],
+        "concepts": [
+          "educational staff",
+          "school",
+          "department",
+          "title",
+          "position",
+          "location"
+        ],
+        "context_relation": "names and titles of educational staff members",
+        "limitations": [
+          "names and titles are in Hindi",
+          "names and titles are in a specific order",
+          "names and titles are associated with specific educational institutions and departments"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:42:17Z"
+    },
+    {
+      "asset_id": "b9dcc33afc3c069e2bc8365a",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f689c2b0b17495b0c1316c2615db877803982d4833f23e3ea3898ee4ea747ab3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page with names and titles of educational staff members.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "पूनम कत्याल  पूर्व टी.जी.टी., जीनत महल सर्वोदय कन्या विद्यालय, जााफरााबााद, दिलली, (शिक्षा निदेशा लय, रााष्ट्रीय रााजधा नी क्ेत्र, दिलली)",
+          "प्रमिलाा  तँवर, आचार्य, डी.ई.एस.एम., राा.शै.अ.प्र.प., नई दिलली",
+          "बिंदु सकसेनाा, सहायक आचार्य, एस.सी.ई.आर.टी., दिलली",
+          "मुकेश कुमाार गााँधी, शिक् अधिकारी (सेवानिवृत्त), सी.आई.एस.सी.ई., नई दिलली",
+          "रमेश चंद जैन, प्रधानाचार्य (सेवानिवृत्त), केंद्रीय विद्यालय संगठन, नई दिलली",
+          "Łचि वर्मा, आचार्य (रसायन), विज्ञा एवं गणित शिक्षा विभा, रा.शै.अ.प्र.प., नई दिलली",
+          "रेनू पराशर, आचार्य (रसायन), रसायन विभा, हंसरा कॉलेज, दिलली विश्विद्यालय",
+          "वंदिताा, वरिष्ठ हिंदी अधिकारी (",
+          "निर्देशालय, रा.शै.अ.प्र.प., नई दिलली)"
+        ],
+        "concepts": [
+          "educational staff",
+          "school",
+          "department",
+          "title",
+          "position"
+        ],
+        "context_relation": "The page contains the names and titles of educational staff members.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any information about the educational content or curriculum."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:43:40Z"
+    },
+    {
+      "asset_id": "6690b2a6b40d420850e1ae0b",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f689c2b0b17495b0c1316c2615db877803982d4833f23e3ea3898ee4ea747ab3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:44:16Z"
+    },
+    {
+      "asset_id": "eb813ddf8f7d7ebe87ceb243",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f689c2b0b17495b0c1316c2615db877803982d4833f23e3ea3898ee4ea747ab3",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:44:53Z"
+    },
+    {
+      "asset_id": "48b95051b136812b83930e1b",
+      "asset_sha256": "0cbcbdbaf0e3dd9ca6b3222de31ee03c7a62f1b9e8d2651b34ef0b37515e44a2",
+      "page_text_context_sha256": "f689c2b0b17495b0c1316c2615db877803982d4833f23e3ea3898ee4ea747ab3",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 12,
+      "asset_path": "page-0012.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "4f00ad355b86004914429201",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b45b707adad3558c131096ea0b2649e72d7420d0ee1f210342cb1a0119fe1a7f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Text discussing the development of a textbook by the National Council of Educational Research and Training (NCERT).",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "आभार",
+          "राष्ट्रीय शैक्षिक अनुसंधान और प्रशिक्षण परिषद् (रा.शै.अ.प्र.प.)",
+          "इस पाठ्यपुस्तक के विकास में पाठ्यक्रम क्षेत्र समूह (सी.ए.जी.) के सममाननीय अध्यक्ष एवं सदसयों के मार्गदर्शन एवं सहायता के लिए ततथा विज्ञान एवं संबद्ध पाठ्यक्रम क्षेत्र समूहों का मिश्रितत (क्रॉस-कटिंग) विषयों पर दिशानिर्देशन के लिए आभार वयक्तत करती है। परिषद्, पाठ्यपुस्तक विकास समूह के सदसयों के प्रति",
+          "परिषद्, पाठ्यपुस्तक को परिष्कृतत करने में सहयोग देने के लिए अंकितता दुरेजा, टी.जी.टी. विज्ञान, डी.ए.वी.",
+          "पब्लिक स्कूल, गुरुग्राम; अनुपा क"
+        ],
+        "concepts": [
+          "National Council of Educational Research and Training (NCERT)",
+          "Textbook development",
+          "Subject areas",
+          "Cross-curricular topics",
+          "Educational research and training"
+        ],
+        "context_relation": "The text discusses the development of a textbook by NCERT, focusing on the involvement of various educational experts and the cross-curricular nature of the topics covered.",
+        "limitations": [
+          "The text does not provide specific details about the textbook or its content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:51:25Z"
+    },
+    {
+      "asset_id": "4dd77e57f6074bc78ede4e31",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b45b707adad3558c131096ea0b2649e72d7420d0ee1f210342cb1a0119fe1a7f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Text discussing the development of a textbook by the National Council of Educational Research and Training (NCERT).",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "आभार",
+          "राष्ट्रीय शैक्षिक अनुसंधान और प्रशिक्षण परिषद् (रा.शै.अ.प्र.प.)",
+          "इस पाठ्यपुस्तक के विकास में पाठ्यक्रम क्षेत्र समूह (सी.ए.जी.) के सममाननीय अध्यक्ष एवं सदसयों के मार्गदर्शन एवं सहायता के लिए ततथा विज्ञान एवं संबद्ध पाठ्यक्रम क्षेत्र समूहों का मिश्रितत (क्रॉस-कटिंग) विषयों पर दिशानिर्देशन के लिए आभार वयक्तत करती है।",
+          "परिषद्, पाठ्यपुस्तक को परिष्कृतत करने में सहयोग देने के लिए अंकितता दुरेजा, टी.जी.टी. विज्ञान, डी.ए.वी.",
+          "पब्लिक स्कूल, गुरुगाम; अनुपा क"
+        ],
+        "concepts": [
+          "National Council of Educational Research and Training (NCERT)",
+          "textbook development",
+          "subject areas",
+          "cross-curricular topics",
+          "educational research and training"
+        ],
+        "context_relation": "The image is a page from a textbook development document.",
+        "limitations": [
+          "The image does not show any visual elements.",
+          "The text is in Hindi."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:52:28Z"
+    },
+    {
+      "asset_id": "262c939e955d0909716949b7",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b45b707adad3558c131096ea0b2649e72d7420d0ee1f210342cb1a0119fe1a7f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page with text in Hindi discussing educational content development and collaboration.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "आभार",
+          "राष्ट्रीय शैक्षिक अनुसंधान और प्रशिक्षण परिषद् (रा.शै.अ.प्र.प.)",
+          "इस पाठ्यपुस्तक के विकास में पाठ्यक्रम क्षेत्र समूह (सी.ए.जी.) के सममाननीय अध्यक्ष एवं सदसयों के मार्गदर्शन एवं सहायता के लिए ततथा विज्ञान एवं संबद्ध पाठ्यक्रम क्षेत्र समूहों का मिश्रितत (क्रॉस-कटिंग) विषयों पर दिशानिर्देशन के लिए आभार वयक्तत करती है।",
+          "परिषद्, पाठ्यपुस्तक को परिष्कृतत करने में सहयोग देने के लिए अंकितता दुरेजा, टी.जी.टी. विज्ञान, डी.ए.वी.",
+          "पब्लिक स्कूल, गुरुग्राम; अनुपा क"
+        ],
+        "concepts": [
+          "educational content development",
+          "collaboration",
+          "cross-cutting topics",
+          "science and related subjects",
+          "development of educational materials",
+          "collaboration with educational institutions"
+        ],
+        "context_relation": "The page discusses the development of an educational textbook and the collaboration involved in its creation.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The text is in Hindi, which may limit the audience's understanding."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:54:17Z"
     }
   ]
 }
