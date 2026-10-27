@@ -225,6 +225,11 @@ def validate_package(pkg: dict[str, Any], source_path: Path) -> list[str]:
                 "cycle": "TRE 1.0", "source_url": "https://example.org/official-source.pdf",
             }[field]
             issues.append(f"{source_path.name}: source.{field} is required. Example: {example}.")
+    raw_source_url = str(source.get("source_url") or "").strip()
+    if raw_source_url:
+        parsed_url = urlparse(raw_source_url)
+        if parsed_url.scheme not in {"http", "https"} or not parsed_url.netloc:
+            issues.append(f"{source_path.name}: source.source_url must be a valid http(s) URL. Example: https://example.org/official-paper.pdf.")
     rights = str(source.get("repository_distribution_rights") or "UNCONFIRMED")
     if rights not in RIGHTS_VALUES:
         issues.append(f"{source_path.name}: source.repository_distribution_rights must be one of {', '.join(sorted(RIGHTS_VALUES))}.")
@@ -297,6 +302,15 @@ def validate_package(pkg: dict[str, Any], source_path: Path) -> list[str]:
         options = question.get("options") if isinstance(question.get("options"), list) else []
         if question.get("question_type") in {"MCQ", "TRUE_FALSE"} and len(options) < 2:
             issues.append(f"{source_path.name}: questions[{index}].options needs at least two choices for MCQ/TRUE_FALSE.")
+        option_keys: set[str] = set()
+        for option_index, option in enumerate(options):
+            if not isinstance(option, dict):
+                issues.append(f"{source_path.name}: questions[{index}].options[{option_index}] must be an object.")
+                continue
+            option_key = str(option.get("key") or "")
+            if not option_key or option_key in option_keys:
+                issues.append(f"{source_path.name}: questions[{index}] option keys must be present and unique.")
+            option_keys.add(option_key)
         section_code = str(question.get("section_code") or "")
         actual_counts[section_code] = actual_counts.get(section_code, 0) + 1
         section = section_by_code.get(section_code)
@@ -742,6 +756,19 @@ def main() -> int:
         for path in paths:
             pkg = load_json(path)
             pkg = _prompt_package_metadata(pkg, path)
+            # Missing question/section bodies cannot be inferred. Ask for a complete file
+            # when running interactively; never fabricate assessment content.
+            if (not isinstance(pkg.get("sections"), list) or not isinstance(pkg.get("questions"), list)) and sys.stdin.isatty():
+                replacement = ask(
+                    f"{path.name} is missing sections/questions. Path to a completed portable assessment JSON file",
+                    "data/assessment-courses/example/tre-1.json",
+                )
+                replacement_path = Path(replacement)
+                if not replacement_path.is_absolute():
+                    replacement_path = (REPO_ROOT / replacement_path).resolve()
+                if replacement_path != path:
+                    path = replacement_path
+                    pkg = _prompt_package_metadata(load_json(path), path)
             errors.extend(validate_package(pkg, path))
             packages.append(pkg)
         if errors:
@@ -793,7 +820,9 @@ def main() -> int:
                 ensure_schema(cur)
                 institution_id = resolve_institution(cur)
                 course_id, public_id, created_course, identity_id = ensure_course(cur, institution_id, course)
-                check_editable_release(cur, institution_id, course_id)
+                existing_release = check_editable_release(cur, institution_id, course_id)
+                if existing_release is None and not created_course:
+                    raise ImportErrorSafe("The existing course has no source release history. Refusing to import into an orphaned course graph; reconcile it through the supported course workflow.")
                 imported = [import_package(cur, course_id, institution_id, pkg) for pkg in packages]
                 lifecycle = ensure_release(cur, institution_id, course_id, created_course, identity_id, public_id)
                 report = {
