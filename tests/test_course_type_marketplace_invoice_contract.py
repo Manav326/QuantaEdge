@@ -24,7 +24,12 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
 
     def test_learner_listing_and_checkout_use_type_gate_while_verification_uses_saved_identity(self):
         controller = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseMarketplaceController.java").read_text(encoding="utf-8")
-        verification_start = controller.index("private Map<String,Object> verifyOrderInternal(")
+        # Select the implementation overload explicitly; the five-argument learner-safe
+        # forwarding overload may be placed before or after it without changing verification.
+        verification_signature = """private Map<String,Object> verifyOrderInternal(
+      long localOrderId, VerifyCoursePaymentRequest request, Long callerStudentId, Long callerUserId,
+      long institutionId, boolean includeFinanceDiagnostics)"""
+        verification_start = controller.index(verification_signature)
         verification_end = controller.find("\n  private ", verification_start + 1)
         self.assertGreater(verification_end, verification_start, "Payment verification method boundary must remain explicit.")
         checkout_paths = controller[:verification_start]
