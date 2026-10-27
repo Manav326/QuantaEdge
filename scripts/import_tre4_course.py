@@ -179,6 +179,20 @@ def validate_tre_hindi_ocr_preflight(papers: list[dict[str, Any]]) -> None:
             "Regenerate the inventory with the corrected CIDFont/SHREE-DEV detection; no database rows were written."
         )
 
+    tre3_stimulus = tre3_question.get("stimulus_i18n") if isinstance(tre3_question, dict) else None
+    tre3_stimulus_hi = str((tre3_stimulus or {}).get("hi") or "").strip() if isinstance(tre3_stimulus, dict) else ""
+    tre3_stimulus_metadata = tre3_question.get("hindi_stimulus_reconstruction") if isinstance(tre3_question, dict) else None
+    if (
+        len(re.findall(r"[\u0900-\u097F]", tre3_stimulus_hi)) < 20
+        or not isinstance(tre3_stimulus_metadata, dict)
+        or tre3_stimulus_metadata.get("method") != "TESSERACT_HINDI_OCR"
+        or tre3_stimulus_metadata.get("status") != "REQUIRES_HUMAN_REVIEW"
+    ):
+        raise ImportErrorSafe(
+            "Refusing database writes because the shared TRE 3.0 Hindi passage for H-9 is still legacy-encoded. "
+            "Regenerate the source inventory and verify the whole passage before writing to the database."
+        )
+
 
 def source_pdf_url(register: dict[str, Any], cycle: str) -> str:
     matches = [item for item in register.get("sources", []) if item.get("cycle") == cycle]
@@ -328,6 +342,8 @@ def build_question_snapshot(record: dict[str, Any], cycle: str, pdf_path: str, p
             snapshot["stimulus_content_kind"] = record.get("stimulus_content_kind", "PROSE")
             snapshot["stimulus_code_line_indices"] = record.get("stimulus_code_line_indices") or []
             snapshot["stimulus_math_line_indices"] = record.get("stimulus_math_line_indices") or []
+    if record.get("hindi_stimulus_reconstruction"):
+        snapshot["hindi_stimulus_reconstruction"] = record["hindi_stimulus_reconstruction"]
     if record.get("question_set_id"):
         snapshot["question_set_id"] = record["question_set_id"]
         snapshot["question_set_type"] = record.get("question_set_type", "PASSAGE")
@@ -1104,6 +1120,7 @@ def database_repair_draft_hindi(args: argparse.Namespace, papers: list[dict[str,
                 skipped_count = 0
                 reconstructed_prompt_count = 0
                 reconstructed_option_count = 0
+                reconstructed_stimulus_count = 0
                 for row, incoming in zip(question_rows, incoming_questions):
                     question_id, sequence_no, current = row
                     if not isinstance(current, dict):
@@ -1149,6 +1166,7 @@ def database_repair_draft_hindi(args: argparse.Namespace, papers: list[dict[str,
                     )
                     changed = False
                     has_option_ocr = False
+                    has_stimulus_ocr = False
                     if has_prompt_ocr:
                         candidate_count += 1
                         prompts = current.get("prompt_i18n")
@@ -1230,12 +1248,44 @@ def database_repair_draft_hindi(args: argparse.Namespace, papers: list[dict[str,
                                 current_option[field] = incoming_option[field]
                                 changed = True
 
-                    if has_prompt_ocr or has_option_ocr:
+                    stimulus_reconstruction = incoming.get("hindi_stimulus_reconstruction")
+                    incoming_stimulus = incoming.get("stimulus_i18n")
+                    target_stimulus_hindi = incoming_stimulus.get("hi") if isinstance(incoming_stimulus, dict) else None
+                    if (
+                        isinstance(stimulus_reconstruction, dict)
+                        and stimulus_reconstruction.get("method") == "TESSERACT_HINDI_OCR"
+                        and stimulus_reconstruction.get("status") == "REQUIRES_HUMAN_REVIEW"
+                        and isinstance(target_stimulus_hindi, str)
+                        and len(re.findall(r"[\u0900-\u097F]", target_stimulus_hindi)) >= 20
+                    ):
+                        candidate_count += 1
+                        has_stimulus_ocr = True
+                        current_stimulus = current.get("stimulus_i18n")
+                        if not isinstance(current_stimulus, dict):
+                            current_stimulus = {}
+                            current["stimulus_i18n"] = current_stimulus
+                        if (
+                            str(current_stimulus.get("hi") or "") != target_stimulus_hindi
+                            or current.get("hindi_stimulus_reconstruction") != stimulus_reconstruction
+                        ):
+                            current_stimulus["hi"] = target_stimulus_hindi
+                            if not str(current_stimulus.get("en") or "").strip():
+                                current["stimulus"] = target_stimulus_hindi
+                            current["hindi_stimulus_reconstruction"] = stimulus_reconstruction
+                            changed = True
+                            reconstructed_stimulus_count += 1
+                        for field in (
+                            "stimulus_content_kind", "stimulus_code_line_indices", "stimulus_math_line_indices",
+                        ):
+                            if field in incoming and current.get(field) != incoming[field]:
+                                current[field] = incoming[field]
+                                changed = True
+                    if has_prompt_ocr or has_option_ocr or has_stimulus_ocr:
                         incoming_flags = incoming.get("review_flags")
                         if isinstance(incoming_flags, list) and current.get("review_flags") != incoming_flags:
                             current["review_flags"] = incoming_flags
                             changed = True
-                    if not (has_prompt_ocr or has_option_ocr):
+                    if not (has_prompt_ocr or has_option_ocr or has_stimulus_ocr):
                         skipped_count += 1
                     if changed:
                         updates.append((int(question_id), current))
@@ -1249,6 +1299,7 @@ def database_repair_draft_hindi(args: argparse.Namespace, papers: list[dict[str,
                     "reconstructed_count": len(updates),
                     "reconstructed_prompt_count": reconstructed_prompt_count,
                     "reconstructed_option_count": reconstructed_option_count,
+                    "reconstructed_stimulus_count": reconstructed_stimulus_count,
                     "candidate_count": candidate_count,
                     "unreconstructed_count": skipped_count,
                     "question_count": len(question_rows),
@@ -1300,7 +1351,8 @@ def database_repair_draft_hindi(args: argparse.Namespace, papers: list[dict[str,
                     """, (
                         item["assessment_id"],
                         f"Reconstructed {item['reconstructed_prompt_count']} Hindi prompt(s) and "
-                        f"{item['reconstructed_option_count']} Hindi option(s) from the original SHREE-DEV PDF via OCR. "
+                        f"{item['reconstructed_option_count']} Hindi option(s), and "
+                        f"{item['reconstructed_stimulus_count']} shared Hindi passage(s) from the original PDF via OCR. "
                         "All question/answer review states remain pending; human verification is required.",
                     ))
                 report["papers"].append({
@@ -1312,6 +1364,7 @@ def database_repair_draft_hindi(args: argparse.Namespace, papers: list[dict[str,
                     "questionsUpdated": item["reconstructed_count"],
                     "reconstructedPromptsUpdated": item["reconstructed_prompt_count"],
                     "reconstructedOptionsUpdated": item["reconstructed_option_count"],
+                    "reconstructedStimuliUpdated": item["reconstructed_stimulus_count"],
                     "questionsWithoutConfidentOcr": item["unreconstructed_count"],
                     "assessmentStatus": "DRAFT",
                     "testPackStatus": "DRAFT",
