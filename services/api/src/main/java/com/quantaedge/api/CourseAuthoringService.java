@@ -53,13 +53,46 @@ public class CourseAuthoringService {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
           "This creation flow supports K12 learning courses and assessment-only courses. Competitive courses require their type-specific hierarchy importer.");
 
-    String requestedCode=requiredText(body.get("code"),2,38,"Course code").toUpperCase(java.util.Locale.ROOT);
-    if(!requestedCode.matches("^[A-Z0-9][A-Z0-9_-]{1,37}$"))
-      throw badRequest("Course code must use 2–38 letters, digits, hyphens or underscores.");
     String displayName=requiredText(body.get("displayName"),2,200,"Course name");
     String version=optionalText(body.get("curriculumVersion"),"CURRENT",120,"Curriculum version");
-    String stream=optionalText(body.get("streamCode"),"ASSESSMENT".equals(type)?"BPSC_TRE":null,60,"Stream code");
-    String classCode=optionalText(body.get("classCode"),"ASSESSMENT".equals(type)?"TRE4":null,20,"Class code");
+    String stream=optionalText(body.get("streamCode"),"ASSESSMENT".equals(type)?"ASSESSMENT":null,60,"Stream code");
+    String classCode=optionalText(body.get("classCode"),null,20,"Class code");
+    String suppliedCode=optionalText(body.get("code"),null,38,"Course code");
+    boolean legacyTre4CompatibilityRequest="ASSESSMENT".equals(type)
+        && "TRE4".equalsIgnoreCase(suppliedCode==null?"":suppliedCode)
+        && "TRE4".equalsIgnoreCase(classCode==null?"":classCode)
+        && "BPSC-TRE-4".equalsIgnoreCase(version)
+        && "TRE-4 · Computer Science".equals(displayName);
+    final String requestedCode;
+    if("ASSESSMENT".equals(type) && !legacyTre4CompatibilityRequest && suppliedCode==null) {
+      // New Admin/CLI callers omit identifiers. Keep the pre-existing API contract intact for
+      // older callers that still send a code; the unique identity constraint and conflict mapping
+      // below continue to guard that caller-supplied stable key.
+      requestedCode=generatedAssessmentCourseKey(displayName);
+    } else {
+      requestedCode=requiredText(suppliedCode,2,38,"Course code").toUpperCase(java.util.Locale.ROOT);
+      if(!requestedCode.matches("^[A-Z0-9][A-Z0-9_-]{1,37}$"))
+        throw badRequest("Course code must use 2–38 letters, digits, hyphens or underscores.");
+    }
+    if("ASSESSMENT".equals(type)) {
+      // A row lock alone cannot protect an absent row. Serialize same-name creation attempts
+      // per institution, then use the unique identity key as the final collision-proof guard.
+      String normalizedName=displayName.trim().toLowerCase(java.util.Locale.ROOT);
+      jdbc.query("select pg_advisory_xact_lock(hashtext(?),hashtext(?))",rs->{
+        while(rs.next()) { /* acquire transaction-scoped lock */ }
+        return null;
+      },"assessment-course-name:"+institutionId,normalizedName);
+      List<Map<String,Object>> sameName=jdbc.queryForList("""
+        select id,stable_course_key
+        from institution_course_identity
+        where source_institution_id=? and course_type_code='ASSESSMENT'
+          and lower(btrim(display_name))=lower(btrim(?))
+        for update
+        """,institutionId,displayName);
+      if(!sameName.isEmpty()) {
+        throw conflict("An assessment course identity with this name already exists in this institution, including archived history. Return to Content Studio and use the existing course/version workflow instead of creating a duplicate identity.");
+      }
+    }
 
     Long classId=null;
     if("ASSESSMENT".equals(type)&&"TRE4".equalsIgnoreCase(classCode==null?"":classCode)) {
@@ -90,12 +123,12 @@ public class CourseAuthoringService {
       throw badRequest("The "+type+" course type requires an active curriculum class.");
 
     List<Map<String,Object>> subjects=parseSubjects(body.get("subjects"));
-    if(Set.of("K12","ASSESSMENT").contains(type)&&subjects.isEmpty())
-      throw badRequest("A "+("ASSESSMENT".equals(type)?"standalone assessment":"K–12")+" course needs at least one subject track.");
+    if("K12".equals(type)&&subjects.isEmpty())
+      throw badRequest("A K–12 course needs at least one subject track.");
     if(subjects.size()>30)
       throw badRequest("Add no more than 30 subject tracks to one course.");
     if(classId==null&&!subjects.isEmpty())
-      throw badRequest("Subject tracks require an active curriculum class. For a standalone assessment course, use the TRE4 exam-preparation scope.");
+      throw badRequest("Subject tracks require an active curriculum class. A standalone assessment-only course must omit classCode and subjects.");
 
     String internalCode="I"+institutionId+"_"+requestedCode;
     Long courseIdentityId;
@@ -141,31 +174,32 @@ public class CourseAuthoringService {
       }
 
       if("ASSESSMENT".equals(type)) {
-        if(!"TRE4".equalsIgnoreCase(classCode==null?"":classCode)
-            ||!"BPSC-TRE-4".equalsIgnoreCase(version)
-            ||!requestedCode.equalsIgnoreCase("TRE4")
-            ||!"TRE-4 · Computer Science".equals(displayName)) {
-          throw badRequest("The current assessment-only release gate is configured for the exact TRE4 course identity: TRE4 / TRE-4 · Computer Science / BPSC-TRE-4 / TRE4 compatibility scope.");
-        }
-        Long subjectId=createdSubjects.get("computer-science");
-        if(subjectId==null || subjects.size()!=1
-            || !"Computer Science".equals(String.valueOf(subjects.getFirst().get("displayName")))) {
-          throw badRequest("TRE4 assessment course requires exactly one Computer Science subject track (computer-science).");
-        }
+        // A new assessment-only course is classless and has no synthetic subject/chapter.
+        // Retain the existing TRE4 compatibility profile for historical clients only.
         jdbc.update("""
           insert into curriculum_program_delivery_mode(program_id,delivery_mode)
           values(?,'ASSESSMENT_ONLY')
           """,courseId);
-        assessmentChapterId=jdbc.queryForObject("""
-          insert into curriculum_chapter(
-            subject_id,code,display_name,description,sort_order,teaching_order,active,content_status,
-            curriculum_source,curriculum_source_url,curriculum_source_edition,curriculum_source_pages,
-            curriculum_source_verified
-          ) values(?, 'prev-years','Prev years',
-            'Previous-year TRE examination papers and their versioned assessment packs.',
-            1,1,true,'DRAFT',null,null,null,null,false)
-          returning id
-          """,Long.class,subjectId);
+
+        if(legacyTre4CompatibilityRequest) {
+          Long subjectId=createdSubjects.get("computer-science");
+          if(subjectId==null || subjects.size()!=1
+              || !"Computer Science".equals(String.valueOf(subjects.getFirst().get("displayName")))) {
+            throw badRequest("The legacy TRE4 compatibility course requires exactly one Computer Science subject track (computer-science).");
+          }
+          assessmentChapterId=jdbc.queryForObject("""
+            insert into curriculum_chapter(
+              subject_id,code,display_name,description,sort_order,teaching_order,active,content_status,
+              curriculum_source,curriculum_source_url,curriculum_source_edition,curriculum_source_pages,
+              curriculum_source_verified
+            ) values(?, 'prev-years','Prev years',
+              'Previous-year TRE examination papers and their versioned assessment packs.',
+              1,1,true,'DRAFT',null,null,null,null,false)
+            returning id
+            """,Long.class,subjectId);
+        } else if(classId!=null || !subjects.isEmpty()) {
+          throw badRequest("Create a standalone assessment-only course without classCode or subjects. The legacy TRE4 compatibility profile remains available for existing TRE4 course creation.");
+        }
       }
 
       String fingerprint=jdbc.queryForObject("select course_content_fingerprint(?)",String.class,courseId);
@@ -192,7 +226,7 @@ public class CourseAuthoringService {
           "courseIdentity","SOURCED","contentVersionNo",1)));
     } catch(DuplicateKeyException ex) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
-          "A course with that code and curriculum version already exists for this institution.",ex);
+          "This course identity already exists or another request created it concurrently. Refresh the course list and open the existing course; no duplicate course was created.",ex);
     }
 
     Map<String,Object> result=new LinkedHashMap<>();
@@ -200,6 +234,7 @@ public class CourseAuthoringService {
     result.put("courseId",courseId);
     result.put("publicId",publicId);
     result.put("courseCode",internalCode);
+    result.put("stableCourseKey",requestedCode);
     result.put("displayName",displayName);
     result.put("courseTypeCode",type);
     result.put("curriculumClassCode",classCode);
@@ -622,6 +657,17 @@ public class CourseAuthoringService {
     }
     return value;
   }
+  private String generatedAssessmentCourseKey(String displayName) {
+    String normalized=displayName.trim().toUpperCase(java.util.Locale.ROOT)
+        .replaceAll("[^A-Z0-9]+","_").replaceAll("^_+|_+$","");
+    if(normalized.isBlank()) normalized="ASSESSMENT_COURSE";
+    String base=normalized.length()>31?normalized.substring(0,31).replaceAll("_+$",""):normalized;
+    if(base.isBlank()) base="ASSESSMENT";
+    // A deterministic digest suffix avoids collisions when different long titles share a prefix.
+    // The database's unique (institution, stable_course_key) constraint remains authoritative.
+    return base+"_"+sha256(normalized).substring(0,6).toUpperCase(java.util.Locale.ROOT);
+  }
+
   private String sha256(String value) {
     try {
       byte[] hash=java.security.MessageDigest.getInstance("SHA-256").digest(value.getBytes(java.nio.charset.StandardCharsets.UTF_8));

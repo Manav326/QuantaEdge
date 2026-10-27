@@ -152,6 +152,23 @@ class AssessmentCourseStudioContractTests(unittest.TestCase):
         self.assertIn("'prev-years','Prev years'", service)
         self.assertIn('"QUANTA-EDGE".equalsIgnoreCase(tenantCode)', service)
 
+    def test_assessment_course_ids_are_generated_and_duplicate_checked(self):
+        service = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseAuthoringService.java").read_text(encoding="utf-8")
+        page = (ROOT / "apps/admin/app/content/assessment-course/page.tsx").read_text(encoding="utf-8")
+        importer = (ROOT / "scripts/import_assessment_course.py").read_text(encoding="utf-8")
+        self.assertIn("generatedAssessmentCourseKey(displayName)", service)
+        self.assertIn("if(\"ASSESSMENT\".equals(type) && !legacyTre4CompatibilityRequest && suppliedCode==null)", service)
+        self.assertIn("requestedCode=requiredText(suppliedCode,2,38,\"Course code\")", service)
+        self.assertIn("pg_advisory_xact_lock(hashtext(?),hashtext(?))", service)
+        self.assertIn("lower(btrim(display_name))=lower(btrim(?))", service)
+        self.assertIn("UNIQUE(source_institution_id,stable_course_key)", (ROOT / "services/api/src/main/resources/db/migration/V180__immutable_course_content_versions.sql").read_text(encoding="utf-8"))
+        self.assertIn("Generated course ID: <code>{course.publicId}</code>", page)
+        self.assertNotIn("assessment-course-key", page)
+        self.assertNotIn("courseKey", page)
+        self.assertIn("generated_course_key(display_name)", importer)
+        self.assertIn("Do not supply course.code", importer)
+
+
     def test_tre_batch_import_binds_course_identity_and_type(self):
         importer = (ROOT / "scripts/import_tre4_course.py").read_text(encoding="utf-8")
         self.assertIn("def ensure_course_identity", importer)
