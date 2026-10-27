@@ -35,6 +35,7 @@ class PayoutSettlementPdfRendererTest {
           "provider_payment_id","pay_"+i,"course_title","Mathematics "+i,
           "source_institution_name","Source School "+i,
           "marketplace_institution_name","Marketplace School "+i,
+          "invoice_number","INV-2026-"+i,"legal_seller_name","Seller Entity "+i,
           "currency","INR","recipient_name","Institution "+i));
     }
     var rendered=renderer.renderBatchReport(batch,payouts,allocations,"QE-PS-4-B-R1",Instant.parse("2026-10-27T12:00:00Z"));
@@ -46,6 +47,8 @@ class PayoutSettlementPdfRendererTest {
       String searchableText=new PDFTextStripper().getText(document);
       assertTrue(searchableText.contains("MONTHLY PAYOUT BATCH REPORT"),"PDF text must be selectable/searchable, not only a page image.");
       assertTrue(searchableText.contains("Institution 1"),"Recipient names should be available to search and assistive tools.");
+      assertTrue(searchableText.contains("INV-2026-1"),"Payout PDFs should trace to the underlying sales invoice.");
+      assertTrue(searchableText.contains("Seller Entity 1"),"The legal seller must not be confused with the course source or marketplace institution.");
       for(var page:document.getPages()) {
         PDRectangle media=page.getMediaBox();
         assertTrue(media.getHeight()>media.getWidth(),"Settlement PDF pages must use portrait A4.");
@@ -78,6 +81,7 @@ class PayoutSettlementPdfRendererTest {
       String searchableText=new PDFTextStripper().getText(document);
       assertTrue(searchableText.contains("गणित"),"Hindi course names should remain searchable in the PDF text layer.");
       assertTrue(searchableText.contains("विद्यालय सूर्योदय"),"Hindi recipient names should remain searchable in the PDF text layer.");
+      assertTrue(searchableText.contains("INV-2026-HI-91"),"Recipient payout advice should include the underlying invoice reference.");
     }
   }
 
