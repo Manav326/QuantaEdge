@@ -158,8 +158,10 @@ export default function AssessmentCourseStudioPage() {
   async function createCourse(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!canCreate) { setError('Your staff account needs CONTENT_CREATE and CONTENT_EDIT permission.'); return; }
-    if (!/^[A-Z0-9][A-Z0-9_-]{1,37}$/.test(courseKey.trim().toUpperCase())) {
-      setError('Course code must be 2–38 letters, digits, underscores or hyphens. Example: BPSC_TRE_CS_PYQ_SERIES.');
+    const normalizedKey = courseKey.trim().toUpperCase();
+    if (!/^[A-Z0-9][A-Z0-9_-]{1,37}$/.test(normalizedKey)
+        || /^[A-Z]{3}[A-Z0-9]{5}$/.test(normalizedKey)) {
+      setError('Enter a stable course key of 2–38 letters, digits, underscores or hyphens, not an 8-character public ID. Example: BPSC_TRE_CS_PYQ_SERIES. QuantaEdge generates the public ID automatically.');
       return;
     }
     setCreating(true); setError(''); setNotice('');
