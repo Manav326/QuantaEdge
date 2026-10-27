@@ -47,11 +47,12 @@ type BeneficiaryBalance={
   recipient_type:string;recipient_name:string;currency:string;beneficiary_status:string;
   bank_ifsc?:string|null;bank_account_last4?:string|null;earned_paise:number;refunded_paise:number;
   charges_paise:number;paid_paise:number;reversed_paise:number;reserved_paise:number;
-  net_earned_paise:number;net_paid_paise:number;refund_reserve_paise:number;payable_paise:number;recovery_due_paise:number
+  net_earned_paise:number;net_paid_paise:number;refund_reserve_paise:number;payable_paise:number;recovery_due_paise:number;
+  payout_supported?:boolean;payout_support_reason?:string
 };
 type BalanceResponse={totals:{netEarnedPaise:number;refundReversalsPaise:number;confirmedChargesPaise:number;
   netPaidPaise:number;payoutReversalsPaise:number;reservedPaise:number;refundReservePaise:number;payablePaise:number;
-  recoveryDuePaise:number;refundReserveBasisPoints:number};beneficiaries:BeneficiaryBalance[]};
+  recoveryDuePaise:number;refundReserveBasisPoints:number};beneficiaries:BeneficiaryBalance[];unsupportedCurrencies?:string[]};
 
 const BASE='/api/v1/hrms/platform/finance';
 async function api<T>(path:string,init:RequestInit={}):Promise<T>{
@@ -213,6 +214,10 @@ export default function PayoutsPanel(){
   };
 
   const submitFees=async(order:FeeOrder)=>{
+    if(order.currency?.trim().toUpperCase()!=='INR'){
+      setError('This fee form records integer paise and supports INR only. Do not enter a non-INR amount here; use the approved currency-compatible settlement route.');
+      return;
+    }
     const draft=feeDrafts[String(order.order_id)]||{fee:'',tax:'',reference:'',source:'SETTLEMENT_REPORT'};
     const fee=parsePaise(draft.fee,true),tax=parsePaise(draft.tax,true);
     if(fee===null||tax===null){setError('Enter the actual provider fee and fee tax in rupees. Zero is allowed; guesses are not.');return;}
@@ -284,13 +289,14 @@ export default function PayoutsPanel(){
         <article className={styles.payoutMetricCard}><span>Completed batches awaiting fee reconciliation</span><strong>{overview?.payoutFeeReconciliationPending??'—'}</strong><small>Confirm provider payout fees before preparing the next month</small></article>
         <article className={styles.payoutMetricCard}><span>Transfers in progress</span><strong>{overview?.payoutsInProgress??'—'}</strong><small>Not counted as paid until RazorpayX confirms completion</small></article>
         <article className={styles.payoutMetricCard}><span>Confirmed transfers</span><strong>{money(overview?.payoutsPaidPaise)}</strong><small>Provider-confirmed processed payouts</small></article>
-        <article className={styles.payoutMetricCard}><span>Available after reserve</span><strong>{money(balances?.totals.payablePaise)}</strong><small>Net due after charges, refunds, reservations and holdback</small></article>
+        <article className={styles.payoutMetricCard}><span>INR available after reserve</span><strong>{money(balances?.totals.payablePaise)}</strong><small>INR-only total after charges, refunds, reservations and holdback</small></article>
         <article className={styles.payoutMetricCard}><span>Recovery balances</span><strong>{money(balances?.totals.recoveryDuePaise)}</strong><small>Amounts owed back where a beneficiary was already paid</small></article>
       </section>
 
       {!settings?.providerConfigured||!settings?.sourceAccountConfigured||!settings?.webhookConfigured?
         <div className={styles.payoutAlertWarning} role="status"><b>RazorpayX is not fully configured.</b> Configure the payout API credentials, source account identifier and payout webhook secret on the API server. Never paste secrets into this screen.</div>:null}
       {!settings?.collectionArrangementVerified&&<div className={styles.payoutAlertWarning} role="status"><b>Live transfers are blocked until legal review is recorded.</b> Select the entity receiving course-payment collections and the legal entity that owns the RazorpayX payout funding account. Only the platform owner can mark the arrangement verified.</div>}
+      {(balances?.unsupportedCurrencies?.length??0)>0&&<div className={styles.payoutAlertWarning} role="alert"><b>Non-INR revenue needs a separate settlement route.</b> Outstanding allocations use {balances?.unsupportedCurrencies?.join(', ')}. This RazorpayX workflow is INR-only and performs no currency conversion; these balances are excluded from INR totals and monthly batches remain blocked until the non-INR balance is resolved.</div>}
 
       <section className={styles.panel}>
         <div className={styles.panelHead}><div><h2>Beneficiary balances</h2>
@@ -299,12 +305,12 @@ export default function PayoutsPanel(){
         {balances?.beneficiaries?.length?<div className={styles.payoutBalanceWrap}><table className={styles.payoutBalanceTable}>
           <thead><tr><th>Recipient</th><th>Net earned</th><th>Refund reversals</th><th>Charges</th><th>Paid</th><th>Held / reserved</th><th>Payable</th><th>Recovery due</th></tr></thead>
           <tbody>{balances.beneficiaries.map((balance,i)=><tr key={balance.recipient_type+':'+balance.recipient_name+':'+i}>
-            <td><strong>{balance.recipient_name}</strong><small>{balance.recipient_type} · {balance.beneficiary_status==='MISSING'?'Bank account not approved':balance.bank_ifsc?balance.bank_ifsc+' · ****'+balance.bank_account_last4:label(balance.beneficiary_status)}</small></td>
-            <td>{money(balance.net_earned_paise,balance.currency)}</td><td>{money(balance.refunded_paise,balance.currency)}</td>
-            <td>{money(balance.charges_paise,balance.currency)}</td><td>{money(balance.net_paid_paise,balance.currency)}</td>
-            <td>{money(balance.reserved_paise+balance.refund_reserve_paise,balance.currency)}</td>
-            <td><strong>{money(balance.payable_paise,balance.currency)}</strong></td>
-            <td>{balance.recovery_due_paise>0?<span className={styles.payoutStatusDanger}>{money(balance.recovery_due_paise,balance.currency)}</span>:money(0,balance.currency)}</td>
+            <td><strong>{balance.recipient_name}</strong><small>{balance.recipient_type} · {balance.payout_supported===false?'Unsupported currency for payouts':balance.beneficiary_status==='MISSING'?'Bank account not approved':balance.bank_ifsc?balance.bank_ifsc+' · ****'+balance.bank_account_last4:label(balance.beneficiary_status)}</small></td>
+            <td>{balance.payout_supported===false?'—':money(balance.net_earned_paise,balance.currency)}</td><td>{balance.payout_supported===false?'—':money(balance.refunded_paise,balance.currency)}</td>
+            <td>{balance.payout_supported===false?'—':money(balance.charges_paise,balance.currency)}</td><td>{balance.payout_supported===false?'—':money(balance.net_paid_paise,balance.currency)}</td>
+            <td>{balance.payout_supported===false?'—':money(balance.reserved_paise+balance.refund_reserve_paise,balance.currency)}</td>
+            <td><strong>{balance.payout_supported===false?'—':money(balance.payable_paise,balance.currency)}</strong></td>
+            <td>{balance.payout_supported===false?'—':balance.recovery_due_paise>0?<span className={styles.payoutStatusDanger}>{money(balance.recovery_due_paise,balance.currency)}</span>:money(0,balance.currency)}</td>
           </tr>)}</tbody>
         </table></div>:<p className={styles.payoutEmpty}>No verified course-sale allocations have been posted yet. Captured sales appear after the existing financial finalizer adds ledger entries.</p>}
       </section>
@@ -419,13 +425,16 @@ export default function PayoutsPanel(){
         {feeOrders.map(order=>{
           const key=String(order.order_id);
           const draft=feeDrafts[key]||{fee:'',tax:'',reference:'',source:'SETTLEMENT_REPORT'};
+          const supportedCurrency=order.currency?.trim().toUpperCase()==='INR';
           return <form className={styles.feeReviewRow} key={order.order_id} onSubmit={e=>{e.preventDefault();void submitFees(order);}}>
-            <div className={styles.feeReviewIdentity}><strong>Order #{order.order_id} · {order.course_title}</strong><span>{order.source_institution} · {order.provider_payment_id}</span><small>Captured {money(order.captured_amount_paise)} · output tax {money(order.output_tax_paise)} · {order.verified_at?new Date(order.verified_at).toLocaleDateString('en-IN'):''}</small></div>
-            <label>Provider processing fee (₹)<input type="number" min="0" step="0.01" required value={draft.fee} onChange={e=>setFeeDrafts(v=>({...v,[key]:{...draft,fee:e.target.value}}))}/></label>
-            <label>Tax on provider fee (₹)<input type="number" min="0" step="0.01" required value={draft.tax} onChange={e=>setFeeDrafts(v=>({...v,[key]:{...draft,tax:e.target.value}}))}/></label>
-            <label>Settlement / statement reference<input required minLength={3} maxLength={180} value={draft.reference} onChange={e=>setFeeDrafts(v=>({...v,[key]:{...draft,reference:e.target.value}}))} placeholder="Reference from provider settlement"/></label>
-            <label>Evidence source<select value={draft.source} onChange={e=>setFeeDrafts(v=>({...v,[key]:{...draft,source:e.target.value}}))}><option value="SETTLEMENT_REPORT">Settlement report</option><option value="PROVIDER_API">Provider API</option><option value="MANUAL_RECONCILIATION">Manual reconciliation</option></select></label>
-            <div className={styles.feeReviewFooter}><span>Entered values become an immutable finance record. Corrections need a reviewed adjustment.</span><button className={styles.secondarySmall} type="submit" disabled={busy}>Record confirmed charges</button></div>
+            <div className={styles.feeReviewIdentity}><strong>Order #{order.order_id} · {order.course_title}</strong><span>{order.source_institution} · {order.provider_payment_id} · {order.currency}</span><small>Captured {money(order.captured_amount_paise,order.currency)} · output tax {money(order.output_tax_paise,order.currency)} · {order.verified_at?new Date(order.verified_at).toLocaleDateString('en-IN'):''}</small></div>
+            {!supportedCurrency?<p className={styles.payoutHint}>Fee reconciliation is blocked for {order.currency||'unknown currency'} because this form records integer paise for INR only. Do not reinterpret or convert these amounts as rupees; use the approved currency-compatible settlement route.</p>:<>
+              <label>Provider processing fee (₹)<input type="number" min="0" step="0.01" required value={draft.fee} onChange={e=>setFeeDrafts(v=>({...v,[key]:{...draft,fee:e.target.value}}))}/></label>
+              <label>Tax on provider fee (₹)<input type="number" min="0" step="0.01" required value={draft.tax} onChange={e=>setFeeDrafts(v=>({...v,[key]:{...draft,tax:e.target.value}}))}/></label>
+              <label>Settlement / statement reference<input required minLength={3} maxLength={180} value={draft.reference} onChange={e=>setFeeDrafts(v=>({...v,[key]:{...draft,reference:e.target.value}}))} placeholder="Reference from provider settlement"/></label>
+              <label>Evidence source<select value={draft.source} onChange={e=>setFeeDrafts(v=>({...v,[key]:{...draft,source:e.target.value}}))}><option value="SETTLEMENT_REPORT">Settlement report</option><option value="PROVIDER_API">Provider API</option><option value="MANUAL_RECONCILIATION">Manual reconciliation</option></select></label>
+              <div className={styles.feeReviewFooter}><span>Entered values become an immutable finance record. Corrections need a reviewed adjustment.</span><button className={styles.secondarySmall} type="submit" disabled={busy}>Record confirmed charges</button></div>
+            </>}
           </form>;
         })}
         {!feeOrders.length&&<p className={styles.payoutEmpty}>No outstanding fee confirmations were returned. Refresh after new payments are captured.</p>}
@@ -433,7 +442,7 @@ export default function PayoutsPanel(){
 
       <section className={styles.panel}>
         <div className={styles.panelHead}><div><h2>5. Monthly payout batches</h2><p>Prepare the previous completed calendar month. The amount is calculated from earned allocations, confirmed fee deductions, processed refunds, existing reservations, paid transfers and the configured refund reserve.</p></div>
-          <button type="button" className={styles.primary} onClick={()=>void createBatch()} disabled={busy||loading||!payoutEligible||!settings?.configured||feeOrders.length>0}>Prepare last month’s batch</button></div>
+          <button type="button" className={styles.primary} onClick={()=>void createBatch()} disabled={busy||loading||!payoutEligible||!settings?.configured||feeOrders.length>0||(balances?.unsupportedCurrencies?.length??0)>0}>Prepare last month’s batch</button></div>
         {!payoutEligible&&<p className={styles.payoutHint}>Preparation is disabled until the RazorpayX API credentials and source account are configured on the API server.</p>}
         {feeOrders.length>0&&<p className={styles.payoutHint}>Reconcile the {feeOrders.length} outstanding fee record(s) above first. A payout batch will not be prepared with estimated or missing processor charges.</p>}
         {(overview?.payoutFeeReconciliationPending??0)>0&&<p className={styles.payoutHint}>There are {overview?.payoutFeeReconciliationPending} completed payout batch(es) with unconfirmed RazorpayX transfer charges. Open each batch, record its actual provider fee and fee tax from the settlement statement, and reconcile it before preparing another month.</p>}
