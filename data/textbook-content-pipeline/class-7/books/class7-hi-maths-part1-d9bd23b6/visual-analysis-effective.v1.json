@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-hindi-ghgp1",
   "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
   "raw_analysis_path": "data/textbook-visuals/class7-hi-maths-part1-d9bd23b6/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d1457dbb9331a6ed2f42fced5ed11d58eacfb9bb73a7a7b5032290bdc91a8693",
+  "raw_analysis_sha256": "afba82c9b486ba25781ed9fd3d91bec5e0527a66c4e355f3984ae29a50e25eae",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-hi-maths-part1-d9bd23b6/visual-analysis-corrections.v1.json",
@@ -3721,6 +3721,386 @@
         "limitations": [
           "No specific content or text is visible in the image."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b888295f18f57dad43fb5947",
+      "asset_sha256": "4ea5ebcbf8b91c57a474c5ea955e0ed76e78db6a9785172e3d22f25d6a5022f4",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 18,
+      "asset_path": "assets/4ea5ebcbf8b91c57a474c5ea955e0ed76e78db6a9785172e3d22f25d6a5022f4.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to dark orange.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T02:28:09Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to dark orange.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "542ff2b97af38db8faa31dfb",
+      "asset_sha256": "af7e2937c568fa17e1e8458c41123f491622c220af087a4fe0edd232636cbd3d",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 18,
+      "asset_path": "assets/af7e2937c568fa17e1e8458c41123f491622c220af087a4fe0edd232636cbd3d.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light yellow to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T02:29:35Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light yellow to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ec2d9e0cafd116127af42068",
+      "asset_sha256": "a38e0950e146b3362142023409479f64a1b7a07d87e0668f0870ccec4f450c52",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 18,
+      "asset_path": "assets/a38e0950e146b3362142023409479f64a1b7a07d87e0668f0870ccec4f450c52.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to dark orange.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T02:30:56Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to dark orange.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6c6682e5a0060c97292faaee",
+      "asset_sha256": "ae4171e1464230b20cb45c3298a897ce2ad2f293a05a937f39e07cd88a193f8e",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 18,
+      "asset_path": "assets/ae4171e1464230b20cb45c3298a897ce2ad2f293a05a937f39e07cd88a193f8e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An orange and yellow gradient background.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T02:32:16Z",
+      "effective_analysis": {
+        "visual_summary": "An orange and yellow gradient background.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f4c2d04943226650ed57aa98",
+      "asset_sha256": "a633187e0a69dbb2153500d7c91b66d3986b21bef89bc9cf481bc2ad75e66194",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 18,
+      "asset_path": "assets/a633187e0a69dbb2153500d7c91b66d3986b21bef89bc9cf481bc2ad75e66194.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from light orange to a deeper shade of orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T02:33:34Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from light orange to a deeper shade of orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0392a73a46448634b2dbbc36",
+      "asset_sha256": "cbc59593caabe6d631df71deae929fcb418bf271e6ed3f923c886b14b5f22c84",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 18,
+      "asset_path": "assets/cbc59593caabe6d631df71deae929fcb418bf271e6ed3f923c886b14b5f22c84.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to dark orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover page for a textbook.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T02:34:54Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to dark orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover page for a textbook.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3f3e4791551beab489ce8c53",
+      "asset_sha256": "8b114b0ade69a4460b8f37ac37d47483f6cf5df94f0e9786601cee2a3c1bd279",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 18,
+      "asset_path": "assets/8b114b0ade69a4460b8f37ac37d47483f6cf5df94f0e9786601cee2a3c1bd279.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from yellow to orange.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T02:36:11Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from yellow to orange.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f668feebf7e0d3590a9ec11d",
+      "asset_sha256": "be3c7b4a7aec4752c62ba2d24db413adbf520cbc9d2979161a7fc705d27af163",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 18,
+      "asset_path": "assets/be3c7b4a7aec4752c62ba2d24db413adbf520cbc9d2979161a7fc705d27af163.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from yellow to white.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T02:37:31Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from yellow to white.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ee27bb1a844e29989db08934",
+      "asset_sha256": "51ad7e5e8237fa636042c40fb64f99771e052639538b7d5807806f9e7af3f225",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 18,
+      "asset_path": "assets/51ad7e5e8237fa636042c40fb64f99771e052639538b7d5807806f9e7af3f225.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A large, empty page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T02:38:49Z",
+      "effective_analysis": {
+        "visual_summary": "A large, empty page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a7aa59112c77b6fd92dbd572",
+      "asset_sha256": "a76512b86775e6ff0521049d7b1b8cdd4e0064eea9f1a8a11768483574bed2f4",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 18,
+      "asset_path": "assets/a76512b86775e6ff0521049d7b1b8cdd4e0064eea9f1a8a11768483574bed2f4.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "663a3e8b64027bd844117f8c224be691d6d3783d7d9689aa6fe8d5761b06150e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from white to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T02:40:11Z",
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from white to orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
