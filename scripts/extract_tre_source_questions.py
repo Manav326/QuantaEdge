@@ -443,6 +443,10 @@ def _ocr_shree_dev_prompt(page: Any, bbox: tuple[float, float, float, float]) ->
         normalized = normalize_ocr_prompt(decoded)
         if not normalized:
             return "", "SHREEDEV_OCR_NO_USABLE_HINDI_RAW_PRESERVED"
+        # Assess math/code only after rendering legacy glyphs to Unicode. The encoded source
+        # itself contains braces and punctuation that resemble code even for ordinary Hindi prose.
+        if any(looks_like_code_line(line) or looks_like_math_line(line) for line in normalized.splitlines()):
+            return "", "SHREEDEV_OCR_MATH_OR_CODE_RAW_PRESERVED"
         return normalized, "OCR_SHREEDEV_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW"
     except (OSError, ValueError, RuntimeError, subprocess.SubprocessError):
         return "", "SHREEDEV_OCR_FAILED_RAW_PRESERVED"
@@ -479,6 +483,8 @@ def _ocr_shree_dev_stimulus(page: Any, bbox: tuple[float, float, float, float]) 
         text = result.stdout.decode("utf-8", errors="replace").strip()
         if len(re.findall(r"[\u0900-\u097F]", text)) < 20:
             return "", "SHREEDEV_OCR_NO_USABLE_HINDI_RAW_PRESERVED"
+        if any(looks_like_code_line(line) or looks_like_math_line(line) for line in text.splitlines()):
+            return "", "SHREEDEV_OCR_MATH_OR_CODE_RAW_PRESERVED"
         return preserve_layout(text), "OCR_SHREEDEV_STIMULUS_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW"
     except (OSError, ValueError, RuntimeError, subprocess.SubprocessError):
         return "", "SHREEDEV_OCR_FAILED_RAW_PRESERVED"
@@ -503,6 +509,8 @@ def _ocr_shree_dev_option(page: Any, bbox: tuple[float, float, float, float]) ->
         normalized = normalize_ocr_option(result.stdout.decode("utf-8", errors="replace"))
         if not normalized:
             return "", "SHREEDEV_OCR_NO_USABLE_HINDI_RAW_PRESERVED"
+        if looks_like_code_line(normalized) or looks_like_math_line(normalized):
+            return "", "SHREEDEV_OCR_MATH_OR_CODE_RAW_PRESERVED"
         return normalized, "OCR_SHREEDEV_OPTION_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW"
     except (OSError, ValueError, RuntimeError, subprocess.SubprocessError):
         return "", "SHREEDEV_OCR_FAILED_RAW_PRESERVED"
@@ -639,14 +647,7 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                                 and not re.fullmatch(r"[\d\s.,:/()+=%-]+", str(line.get("text", "")).strip())
                                 for line in lines
                             )
-                            has_math_or_code = any(
-                                looks_like_code_line(str(line.get("text", "")))
-                                or looks_like_math_line(str(line.get("text", "")))
-                                for line in lines
-                            )
-                            if has_math_or_code:
-                                stimulus_record["ocr_status"] = "SHREEDEV_OCR_MATH_OR_CODE_RAW_PRESERVED"
-                            elif mixed_fonts:
+                            if mixed_fonts:
                                 stimulus_record["ocr_status"] = "SHREEDEV_OCR_MIXED_FONT_RAW_PRESERVED"
                             else:
                                 stimulus_bbox = stimulus_metadata.get("bbox")
@@ -754,8 +755,6 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                             active.get("language") == "hi"
                             and option_match
                             and len(OPTION_START.findall(block_text)) == 1
-                            and not looks_like_code_line(block_text)
-                            and not looks_like_math_line(block_text)
                             and uses_legacy_hindi_glyphs(block_text, font_metadata.get("fonts", set()))
                             and font_metadata.get("bbox")
                         ):
@@ -816,8 +815,6 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                     option_line_indices = [
                         index for index, line in enumerate(line_metadata)
                         if OPTION_START.match(str(line.get("text", "")))
-                        and not looks_like_code_line(str(line.get("text", "")))
-                        and not looks_like_math_line(str(line.get("text", "")))
                         and uses_legacy_hindi_glyphs(str(line.get("text", "")), line.get("fonts", set()))
                     ]
                     first_option_index = option_line_indices[0] if option_line_indices else len(line_metadata)
@@ -830,15 +827,7 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                         and str(line.get("text", "")).strip()
                         for line in prompt_lines
                     )
-                    prompt_has_math_or_code = any(
-                        looks_like_code_line(str(line.get("text", "")))
-                        or looks_like_math_line(str(line.get("text", "")))
-                        for line in prompt_lines
-                    )
-                    if prompt_has_math_or_code:
-                        # OCR can substitute exam numerals/formulas; preserve those blocks for human verification.
-                        active["_prompt_ocr_status"] = "SHREEDEV_OCR_MATH_OR_CODE_RAW_PRESERVED"
-                    elif prompt_has_mixed_fonts:
+                    if prompt_has_mixed_fonts:
                         # Do not let OCR silently drop formula/code/Latin-font lines from a Hindi stem.
                         active["_prompt_ocr_status"] = "SHREEDEV_OCR_MIXED_FONT_RAW_PRESERVED"
                     else:
