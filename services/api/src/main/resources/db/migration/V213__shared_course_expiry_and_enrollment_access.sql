@@ -187,6 +187,9 @@ BEGIN
 
   IF v_activating THEN
     IF NEW.course_identity_id IS NOT NULL THEN
+      -- Serialize first enrolment/reactivation against policy configuration for this identity.
+      PERFORM 1 FROM institution_course_identity
+        WHERE id=NEW.course_identity_id FOR SHARE;
       SELECT * INTO v_policy
       FROM course_expiry_policy
       WHERE course_identity_id=NEW.course_identity_id;
@@ -210,7 +213,8 @@ BEGIN
       NEW.course_expiry_months_snapshot := NULL;
       NEW.course_expiry_days_snapshot := NULL;
       NEW.course_expiry_fixed_days_snapshot := NULL;
-      NEW.course_expires_at := NULL;
+      -- Keep any explicit HRMS expiry already saved on a reactivated legacy enrollment.
+      -- New rows have no expiry by default, so this preserves grandfathering without inventing one.
     END IF;
   END IF;
 
