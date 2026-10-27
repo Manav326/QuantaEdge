@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2447,
-    "successful_visual_analyses": 2425,
-    "missing_visual_analyses": 5041,
+    "raw_analysis_result_rows": 2449,
+    "successful_visual_analyses": 2427,
+    "missing_visual_analyses": 5039,
     "failed_visual_analyses": 22,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5063,
+    "unresolved_count": 5061,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -100884,9 +100884,34 @@
       "asset_path": "assets/ca64860a78d82e825b79b6f5e5845fc2b5df8c4b340d31a53f32cdfa29ffc8f8.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of non-metals in everyday life, specifically mentioning oxygen and carbon.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "and electrical conductivity, and high strength. However, this",
+          "should not give an impression in your mind that non-metals are not important in our lives.",
+          "We breathe in oxygen, which is a non-metal, and without it,",
+          "we would not be able to survive. Can you think of any other uses",
+          "of oxygen?",
+          "Carbon is essential in everyday life because it is the building",
+          "block of all life forms. It is a key component of proteins, fats, and"
+        ],
+        "concepts": [
+          "non-metals",
+          "oxygen",
+          "carbon",
+          "electrical conductivity",
+          "high strength",
+          "building block of life",
+          "components of proteins, fats"
+        ],
+        "context_relation": "The page discusses the importance of non-metals in everyday life, specifically mentioning oxygen and carbon.",
+        "limitations": [
+          "The page does not provide specific examples or explanations for the uses of oxygen and carbon."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -100902,9 +100927,35 @@
       "asset_path": "assets/a54bcb22a1b03b9d0b932278b166ce9c872960676a1112bc19a24bee0504300d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of non-metals in daily life, specifically mentioning oxygen and carbon.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "and electrical conductivity, and high strength. However, this",
+          "should not give an impression in your mind that non-metals are not important in our lives.",
+          "We breathe in oxygen, which is a non-metal, and without it,",
+          "we would not be able to survive. Can you think of any other uses",
+          "of oxygen?",
+          "Carbon is essential in everyday life because it is the building",
+          "block of all life forms. It is a key component of proteins, fats, and"
+        ],
+        "concepts": [
+          "non-metals",
+          "oxygen",
+          "carbon",
+          "electrical conductivity",
+          "high strength",
+          "daily life",
+          "building block of life forms",
+          "components of proteins, fats"
+        ],
+        "context_relation": "The page discusses the importance of non-metals in daily life, specifically mentioning oxygen and carbon.",
+        "limitations": [
+          "The page does not provide specific examples or explanations for the uses of oxygen and carbon."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
