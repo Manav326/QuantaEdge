@@ -23,6 +23,7 @@ import tempfile
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
+from urllib.parse import urlparse
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_ARCHIVE = REPO_ROOT / "data" / "TRE-4_PYQ.zip"
@@ -128,6 +129,70 @@ def expected_question_count(cycle: str) -> int:
     except KeyError as exc:
         raise ImportErrorSafe(f"Unexpected TRE cycle in source inventory: {cycle!r}") from exc
 
+def validate_tre_hindi_ocr_preflight(papers: list[dict[str, Any]]) -> None:
+    """Require the known SHREE-DEV Hindi regression question to be reconstructed before any DB write."""
+    tre1 = next((paper for paper in papers if paper.get("cycle") == "TRE 1.0"), None)
+    if not tre1:
+        raise ImportErrorSafe("Source plan is missing TRE 1.0; Hindi OCR preflight cannot be verified.")
+    question = next(
+        (
+            snapshot for snapshot in tre1.get("question_snapshots", [])
+            if str(snapshot.get("source_question_number")) == "1"
+        ),
+        None,
+    )
+    expected = "तीन अंकों की कितनी संख्याएँ 5 से विभाज्य हैं?"
+    prompt_i18n = question.get("prompt_i18n") if isinstance(question, dict) else None
+    actual = " ".join(str((prompt_i18n or {}).get("hi") or "").split()) if isinstance(prompt_i18n, dict) else ""
+    metadata = question.get("hindi_prompt_reconstruction") if isinstance(question, dict) else None
+    if (
+        actual != expected
+        or not isinstance(metadata, dict)
+        or metadata.get("method") != "TESSERACT_HINDI_OCR"
+        or metadata.get("status") != "REQUIRES_HUMAN_REVIEW"
+    ):
+        raise ImportErrorSafe(
+            "Refusing database writes because TRE 1.0 Hindi question 1 was not reconstructed from the SHREE-DEV source "
+            "as expected. Install Tesseract with Hindi trained data, regenerate the inventory, visually verify the stem, "
+            "then rerun. No database rows were written."
+        )
+
+    tre3 = next((paper for paper in papers if paper.get("cycle") == "TRE 3.0"), None)
+    tre3_question = next(
+        (
+            snapshot for snapshot in (tre3 or {}).get("question_snapshots", [])
+            if str(snapshot.get("source_question_number")) == "H-9"
+        ),
+        None,
+    )
+    tre3_prompts = tre3_question.get("prompt_i18n") if isinstance(tre3_question, dict) else None
+    tre3_hindi = str((tre3_prompts or {}).get("hi") or "").strip() if isinstance(tre3_prompts, dict) else ""
+    tre3_metadata = tre3_question.get("hindi_prompt_reconstruction") if isinstance(tre3_question, dict) else None
+    if (
+        len(re.findall(r"[\u0900-\u097F]", tre3_hindi)) < 4
+        or not isinstance(tre3_metadata, dict)
+        or tre3_metadata.get("method") != "TESSERACT_HINDI_OCR"
+        or tre3_metadata.get("status") != "REQUIRES_HUMAN_REVIEW"
+    ):
+        raise ImportErrorSafe(
+            "Refusing database writes because TRE 3.0 Hindi question H-9 is still an encoded legacy-font string. "
+            "Regenerate the inventory with the corrected CIDFont/SHREE-DEV detection; no database rows were written."
+        )
+
+    tre3_stimulus = tre3_question.get("stimulus_i18n") if isinstance(tre3_question, dict) else None
+    tre3_stimulus_hi = str((tre3_stimulus or {}).get("hi") or "").strip() if isinstance(tre3_stimulus, dict) else ""
+    tre3_stimulus_metadata = tre3_question.get("hindi_stimulus_reconstruction") if isinstance(tre3_question, dict) else None
+    if (
+        len(re.findall(r"[\u0900-\u097F]", tre3_stimulus_hi)) < 20
+        or not isinstance(tre3_stimulus_metadata, dict)
+        or tre3_stimulus_metadata.get("method") != "TESSERACT_HINDI_OCR"
+        or tre3_stimulus_metadata.get("status") != "REQUIRES_HUMAN_REVIEW"
+    ):
+        raise ImportErrorSafe(
+            "Refusing database writes because the shared TRE 3.0 Hindi passage for H-9 is still legacy-encoded. "
+            "Regenerate the source inventory and verify the whole passage before writing to the database."
+        )
+
 
 def source_pdf_url(register: dict[str, Any], cycle: str) -> str:
     matches = [item for item in register.get("sources", []) if item.get("cycle") == cycle]
@@ -211,6 +276,15 @@ def build_question_snapshot(record: dict[str, Any], cycle: str, pdf_path: str, p
         for field in ("content_kind", "code_line_indices", "math_line_indices", "source_code_preservation_notes"):
             if field in source_option:
                 option[field] = source_option[field]
+        hindi_source_option = hi_options.get(key) or {}
+        if hindi_source_option.get("hindi_ocr_status"):
+            # This marker is set only when OCR text was actually selected instead of a canonical option.
+            option["hindi_ocr_reconstruction"] = {
+                "method": "TESSERACT_HINDI_OCR",
+                "status": "REQUIRES_HUMAN_REVIEW",
+                "raw_legacy_text": norm_text(hindi_source_option.get("raw_text")),
+                "source_location": (record.get("source_locations") or {}).get("hi") or {},
+            }
         options.append(option)
 
     section_code = str(record.get("section_code") or "COMPUTER_SCIENCE").upper()
@@ -268,6 +342,8 @@ def build_question_snapshot(record: dict[str, Any], cycle: str, pdf_path: str, p
             snapshot["stimulus_content_kind"] = record.get("stimulus_content_kind", "PROSE")
             snapshot["stimulus_code_line_indices"] = record.get("stimulus_code_line_indices") or []
             snapshot["stimulus_math_line_indices"] = record.get("stimulus_math_line_indices") or []
+    if record.get("hindi_stimulus_reconstruction"):
+        snapshot["hindi_stimulus_reconstruction"] = record["hindi_stimulus_reconstruction"]
     if record.get("question_set_id"):
         snapshot["question_set_id"] = record["question_set_id"]
         snapshot["question_set_type"] = record.get("question_set_type", "PASSAGE")
@@ -276,6 +352,15 @@ def build_question_snapshot(record: dict[str, Any], cycle: str, pdf_path: str, p
             snapshot[field] = record[field]
     if record.get("native_source_language"):
         snapshot["native_source_language"] = record["native_source_language"]
+    if hi and hi.get("prompt_ocr_text"):
+        # Preserve the exact encoded source stem beside the reconstructed Unicode prompt.
+        # This metadata is intentionally not an approval status; the human-review gates stay pending.
+        snapshot["hindi_prompt_reconstruction"] = {
+            "method": "TESSERACT_HINDI_OCR",
+            "status": "REQUIRES_HUMAN_REVIEW",
+            "raw_legacy_text": norm_text(hi.get("prompt_raw")),
+            "source_location": location.get("hi") or {},
+        }
     return snapshot
 
 
@@ -404,6 +489,16 @@ def database_url(args: argparse.Namespace) -> str:
     if not value.startswith(("postgresql://", "postgres://")):
         raise ImportErrorSafe("Database URL must be a PostgreSQL URL (or jdbc:postgresql:// URL).")
     return value
+
+
+def require_loopback_database_url(value: str) -> None:
+    """Keep the repair-only path from ever targeting a production or remote database."""
+    parsed = urlparse(str(value or "").strip())
+    if parsed.scheme not in {"postgres", "postgresql"} or parsed.hostname not in {"localhost", "127.0.0.1", "::1"}:
+        raise ImportErrorSafe(
+            "The --repair-draft-hindi operation is restricted to localhost/loopback PostgreSQL. "
+            "Refusing to change a remote or production database."
+        )
 
 
 def ensure_schema(cursor: Any) -> None:
@@ -892,6 +987,427 @@ def lock_latest_draft_release(cursor: Any, institution_id: int, course_id: int) 
     return row
 
 
+
+
+def database_repair_draft_hindi(args: argparse.Namespace, papers: list[dict[str, Any]]) -> dict[str, Any]:
+    """Repair OCR-reconstructed Hindi prompts in the existing, still-editable TRE draft only.
+
+    This deliberately does not create a course, alter answers, set review states, publish content,
+    or touch assessments/packs/releases outside DRAFT. All changes participate in one transaction.
+    """
+    try:
+        import psycopg  # type: ignore[import-not-found]
+    except ImportError as exc:
+        raise ImportErrorSafe(
+            "psycopg 3 is required for --repair-draft-hindi. Install it with: "
+            "python -m pip install 'psycopg[binary]>=3.2,<4'"
+        ) from exc
+
+    url = database_url(args)
+    require_loopback_database_url(url)
+    report: dict[str, Any] = {
+        "mode": "REPAIR_DRAFT_HINDI",
+        "course": COURSE_TITLE,
+        "sourceInstitution": "QUANTA-EDGE",
+        "studentDeliveryAllowed": False,
+        "published": False,
+        "papers": [],
+    }
+    with psycopg.connect(url) as connection:
+        with connection.cursor() as cursor:
+            ensure_schema(cursor)
+            institution_id = resolve_quantaedge_source_institution(cursor)
+            internal_code = f"I{institution_id}_{COURSE_CODE_SUFFIX}"
+            cursor.execute("""
+                SELECT id,display_name,status,public_id,class_id,course_type_code,course_identity_id
+                FROM curriculum_program
+                WHERE code=%s AND curriculum_version=%s
+                FOR UPDATE
+            """, (internal_code, COURSE_VERSION))
+            course_rows = cursor.fetchall()
+            if len(course_rows) != 1:
+                raise ImportErrorSafe(
+                    "Draft repair requires exactly one already-existing TRE Previous-Year Practice Series course. "
+                    "It will not create or choose a course implicitly."
+                )
+            course_id, display_name, status, public_id, class_id, course_type, identity_id = course_rows[0]
+            if (
+                display_name != COURSE_TITLE or status != "ACTIVE" or not public_id
+                or class_id is not None or course_type != COURSE_TYPE_CODE or identity_id is None
+            ):
+                raise ImportErrorSafe(
+                    "The existing TRE course identity/type differs from the expected ASSESSMENT draft. "
+                    "No records were changed."
+                )
+            ensure_course_identity(cursor, institution_id, int(course_id))
+            release_row = lock_latest_draft_release(cursor, institution_id, int(course_id))
+            if not release_row:
+                raise ImportErrorSafe("No existing DRAFT TRE course release was found; refusing to repair an untracked graph.")
+            release_id, release_version, release_state, _saved_fingerprint = release_row
+            if str(release_state) != "DRAFT":
+                raise ImportErrorSafe("Hindi draft repair is permitted only while the latest course release is DRAFT.")
+
+            prepared: list[dict[str, Any]] = []
+            total_candidates = 0
+            total_unreconstructed = 0
+            for paper in papers:
+                cycle = str(paper["cycle"])
+                cursor.execute("""
+                    SELECT id,title,status,source_package_id,source_package_version,source_package_sha256,
+                           source_exam_cycle,source_url,assessment_type,portable_assessment_type
+                    FROM assessment
+                    WHERE course_id=%s AND source_package_id=%s AND source_package_version=%s
+                    FOR UPDATE
+                """, (course_id, paper["package_id"], paper["package_version"]))
+                assessment_rows = cursor.fetchall()
+                if len(assessment_rows) != 1:
+                    raise ImportErrorSafe(
+                        f"{cycle} requires exactly one existing assessment for {paper['package_id']} "
+                        f"{paper['package_version']}; found {len(assessment_rows)}. No records were changed."
+                    )
+                assessment = assessment_rows[0]
+                (
+                    assessment_id, title, assessment_status, saved_package_id, saved_package_version,
+                    _saved_package_sha, source_cycle, source_url, assessment_type, portable_type,
+                ) = assessment
+                if (
+                    title != paper["title"] or assessment_status != "DRAFT"
+                    or saved_package_id != paper["package_id"]
+                    or str(saved_package_version) != str(paper["package_version"])
+                    or source_cycle != cycle or source_url != paper["source_url"]
+                    or assessment_type != "PREVIOUS_YEAR_PAPER" or portable_type != "PREVIOUS_YEAR_PAPER"
+                ):
+                    raise ImportErrorSafe(
+                        f"{cycle} assessment is not the expected editable DRAFT source paper. "
+                        "Reviewed/published or mismatched content is never rewritten."
+                    )
+
+                cursor.execute("""
+                    SELECT id,status,title,content_sha256
+                    FROM course_assessment_pack
+                    WHERE course_id=%s AND pack_code=%s AND pack_version=%s
+                    FOR UPDATE
+                """, (course_id, paper["package_id"], paper["package_version"]))
+                pack_rows = cursor.fetchall()
+                if len(pack_rows) != 1:
+                    raise ImportErrorSafe(
+                        f"{cycle} requires exactly one existing source test pack; found {len(pack_rows)}."
+                    )
+                pack_id, pack_status, pack_title, _saved_pack_sha = pack_rows[0]
+                if (
+                    pack_status != "DRAFT"
+                    or pack_title != f"BPSC {cycle} — Computer Science Previous-Year Paper"
+                ):
+                    raise ImportErrorSafe(
+                        f"{cycle} test pack is not the expected DRAFT pack. No published pack can be repaired."
+                    )
+
+                cursor.execute("""
+                    SELECT id,sequence_no,question_snapshot
+                    FROM assessment_question WHERE assessment_id=%s
+                    ORDER BY sequence_no,id FOR UPDATE
+                """, (assessment_id,))
+                question_rows = cursor.fetchall()
+                incoming_questions = paper["question_snapshots"]
+                if len(question_rows) != len(incoming_questions):
+                    raise ImportErrorSafe(
+                        f"{cycle} question count differs from the source inventory "
+                        f"({len(question_rows)} database rows vs {len(incoming_questions)} source rows)."
+                    )
+
+                updates: list[tuple[int, dict[str, Any]]] = []
+                candidate_count = 0
+                skipped_count = 0
+                reconstructed_prompt_count = 0
+                reconstructed_option_count = 0
+                reconstructed_stimulus_count = 0
+                for row, incoming in zip(question_rows, incoming_questions):
+                    question_id, sequence_no, current = row
+                    if not isinstance(current, dict):
+                        raise ImportErrorSafe(f"{cycle} question {sequence_no} has an unreadable snapshot.")
+                    if int(sequence_no) < 1 or int(sequence_no) > len(incoming_questions):
+                        raise ImportErrorSafe(f"{cycle} has an invalid question sequence; refusing positional repair.")
+                    if str(current.get("source_question_number")) != str(incoming.get("source_question_number")):
+                        raise ImportErrorSafe(
+                            f"{cycle} sequence {sequence_no} does not match source question "
+                            f"{incoming.get('source_question_number')}; no content was changed."
+                        )
+                    if (
+                        str(current.get("question_review_status", "PENDING_HUMAN_REVIEW")).upper() != "PENDING_HUMAN_REVIEW"
+                        or str(current.get("answer_review_status", "PENDING_HUMAN_REVIEW")).upper() != "PENDING_HUMAN_REVIEW"
+                    ):
+                        raise ImportErrorSafe(
+                            f"{cycle} sequence {sequence_no} has already been approved/rejected in at least one review gate. "
+                            "The draft repair requires all questions and answers to remain pending."
+                        )
+
+                    source_number = str(current.get("source_question_number"))
+                    current_location = (current.get("source_locations") or {}).get("hi") or {}
+                    incoming_location = (incoming.get("source_locations") or {}).get("hi") or {}
+                    if (
+                        str(current.get("source_exam_cycle") or "") != cycle
+                        or str(current.get("source_file_sha256") or "").lower() != str(paper["source_file_sha256"]).lower()
+                        or (current_location and incoming_location and current_location != incoming_location)
+                    ):
+                        raise ImportErrorSafe(
+                            f"{cycle} question {source_number} has different source provenance from the requested PDF. "
+                            "No existing content was changed."
+                        )
+
+                    reconstruction = incoming.get("hindi_prompt_reconstruction")
+                    incoming_prompts = incoming.get("prompt_i18n")
+                    target_hindi = incoming_prompts.get("hi") if isinstance(incoming_prompts, dict) else None
+                    has_prompt_ocr = bool(
+                        isinstance(reconstruction, dict)
+                        and reconstruction.get("method") == "TESSERACT_HINDI_OCR"
+                        and reconstruction.get("status") == "REQUIRES_HUMAN_REVIEW"
+                        and isinstance(target_hindi, str)
+                        and target_hindi.strip()
+                    )
+                    changed = False
+                    has_option_ocr = False
+                    has_stimulus_ocr = False
+                    if has_prompt_ocr:
+                        candidate_count += 1
+                        prompts = current.get("prompt_i18n")
+                        if not isinstance(prompts, dict):
+                            prompts = {}
+                            current["prompt_i18n"] = prompts
+                        old_hindi = str(prompts.get("hi") or "")
+                        old_metadata = current.get("hindi_prompt_reconstruction")
+                        if old_hindi != target_hindi or old_metadata != reconstruction:
+                            prompts["hi"] = target_hindi
+                            # For native-Hindi-only qualifying questions, top-level prompt mirrors hi.
+                            if not str(prompts.get("en") or "").strip():
+                                current["prompt"] = target_hindi
+                            current["hindi_prompt_reconstruction"] = reconstruction
+                            changed = True
+                            reconstructed_prompt_count += 1
+                    if has_prompt_ocr:
+                        for field in (
+                            "prompt_content_kind", "code_line_indices", "math_line_indices",
+                            "source_code_preservation_notes",
+                        ):
+                            if field in incoming and current.get(field) != incoming[field]:
+                                current[field] = incoming[field]
+                                changed = True
+
+                    incoming_options = incoming.get("options")
+                    current_options = current.get("options")
+                    if not isinstance(incoming_options, list) or not isinstance(current_options, list):
+                        raise ImportErrorSafe(
+                            f"{cycle} question {source_number} has an unreadable option list; no content was changed."
+                        )
+                    current_options_by_key: dict[str, dict[str, Any]] = {}
+                    for current_option in current_options:
+                        if not isinstance(current_option, dict):
+                            raise ImportErrorSafe(f"{cycle} question {source_number} has an invalid option record.")
+                        option_key = str(current_option.get("option_key") or current_option.get("key") or "").strip().upper()
+                        if not option_key or option_key in current_options_by_key:
+                            raise ImportErrorSafe(f"{cycle} question {source_number} has duplicate or missing option identities.")
+                        current_options_by_key[option_key] = current_option
+
+                    for incoming_option in incoming_options:
+                        if not isinstance(incoming_option, dict):
+                            raise ImportErrorSafe(f"{cycle} question {source_number} has an invalid source option record.")
+                        option_reconstruction = incoming_option.get("hindi_ocr_reconstruction")
+                        if not (
+                            isinstance(option_reconstruction, dict)
+                            and option_reconstruction.get("method") == "TESSERACT_HINDI_OCR"
+                            and option_reconstruction.get("status") == "REQUIRES_HUMAN_REVIEW"
+                        ):
+                            continue
+                        option_key = str(incoming_option.get("option_key") or incoming_option.get("key") or "").strip().upper()
+                        current_option = current_options_by_key.get(option_key)
+                        if current_option is None:
+                            raise ImportErrorSafe(
+                                f"{cycle} question {source_number} OCR option {option_key} is absent from the existing snapshot."
+                            )
+                        incoming_i18n = incoming_option.get("text_i18n")
+                        target_option_hindi = incoming_i18n.get("hi") if isinstance(incoming_i18n, dict) else None
+                        if not isinstance(target_option_hindi, str) or not target_option_hindi.strip():
+                            raise ImportErrorSafe(
+                                f"{cycle} question {source_number} OCR option {option_key} has no Unicode Hindi text."
+                            )
+                        candidate_count += 1
+                        has_option_ocr = True
+                        option_i18n = current_option.get("text_i18n")
+                        if not isinstance(option_i18n, dict):
+                            option_i18n = {}
+                            current_option["text_i18n"] = option_i18n
+                        if (
+                            str(option_i18n.get("hi") or "") != target_option_hindi
+                            or current_option.get("hindi_ocr_reconstruction") != option_reconstruction
+                        ):
+                            option_i18n["hi"] = target_option_hindi
+                            current_option["hindi_ocr_reconstruction"] = option_reconstruction
+                            changed = True
+                            reconstructed_option_count += 1
+                        for field in ("label", "content_kind", "code_line_indices", "math_line_indices", "source_code_preservation_notes"):
+                            if field in incoming_option and current_option.get(field) != incoming_option[field]:
+                                current_option[field] = incoming_option[field]
+                                changed = True
+
+                    stimulus_reconstruction = incoming.get("hindi_stimulus_reconstruction")
+                    incoming_stimulus = incoming.get("stimulus_i18n")
+                    target_stimulus_hindi = incoming_stimulus.get("hi") if isinstance(incoming_stimulus, dict) else None
+                    if (
+                        isinstance(stimulus_reconstruction, dict)
+                        and stimulus_reconstruction.get("method") == "TESSERACT_HINDI_OCR"
+                        and stimulus_reconstruction.get("status") == "REQUIRES_HUMAN_REVIEW"
+                        and isinstance(target_stimulus_hindi, str)
+                        and len(re.findall(r"[\u0900-\u097F]", target_stimulus_hindi)) >= 20
+                    ):
+                        candidate_count += 1
+                        has_stimulus_ocr = True
+                        current_stimulus = current.get("stimulus_i18n")
+                        if not isinstance(current_stimulus, dict):
+                            current_stimulus = {}
+                            current["stimulus_i18n"] = current_stimulus
+                        if (
+                            str(current_stimulus.get("hi") or "") != target_stimulus_hindi
+                            or current.get("hindi_stimulus_reconstruction") != stimulus_reconstruction
+                        ):
+                            current_stimulus["hi"] = target_stimulus_hindi
+                            if not str(current_stimulus.get("en") or "").strip():
+                                current["stimulus"] = target_stimulus_hindi
+                            current["hindi_stimulus_reconstruction"] = stimulus_reconstruction
+                            changed = True
+                            reconstructed_stimulus_count += 1
+                        for field in (
+                            "stimulus_content_kind", "stimulus_code_line_indices", "stimulus_math_line_indices",
+                        ):
+                            if field in incoming and current.get(field) != incoming[field]:
+                                current[field] = incoming[field]
+                                changed = True
+                    if has_prompt_ocr or has_option_ocr or has_stimulus_ocr:
+                        incoming_flags = incoming.get("review_flags")
+                        current_flags = current.get("review_flags")
+                        if isinstance(incoming_flags, list):
+                            existing_flags = current_flags if isinstance(current_flags, list) else []
+                            # Preserve any draft-specific/manual flags while adding the source audit flags.
+                            merged_flags = list(dict.fromkeys(
+                                [str(flag) for flag in existing_flags]
+                                + [str(flag) for flag in incoming_flags]
+                            ))
+                            if merged_flags != current_flags:
+                                current["review_flags"] = merged_flags
+                                changed = True
+                    if not (has_prompt_ocr or has_option_ocr or has_stimulus_ocr):
+                        skipped_count += 1
+                    if changed:
+                        updates.append((int(question_id), current))
+
+                prepared.append({
+                    "cycle": cycle,
+                    "assessment_id": int(assessment_id),
+                    "pack_id": int(pack_id),
+                    "package_sha256": paper["package_sha256"],
+                    "question_updates": updates,
+                    "reconstructed_count": len(updates),
+                    "reconstructed_prompt_count": reconstructed_prompt_count,
+                    "reconstructed_option_count": reconstructed_option_count,
+                    "reconstructed_stimulus_count": reconstructed_stimulus_count,
+                    "candidate_count": candidate_count,
+                    "unreconstructed_count": skipped_count,
+                    "question_count": len(question_rows),
+                })
+                total_candidates += candidate_count
+                total_unreconstructed += skipped_count
+
+            if total_candidates == 0:
+                raise ImportErrorSafe(
+                    "The current inventory contains no successful SHREE-DEV Hindi prompt or option OCR reconstructions. "
+                    "Install Tesseract with Hindi trained data and regenerate the inventory before applying repair."
+                )
+
+            for item in prepared:
+                for question_id, snapshot in item["question_updates"]:
+                    cursor.execute("""
+                        UPDATE assessment_question
+                        SET question_snapshot=%s::jsonb
+                        WHERE id=%s AND assessment_id=%s
+                    """, (
+                        json.dumps(snapshot, ensure_ascii=False, separators=(",", ":")),
+                        question_id, item["assessment_id"],
+                    ))
+                    if cursor.rowcount != 1:
+                        raise ImportErrorSafe(
+                            f"{item['cycle']} question {question_id} changed concurrently; the repair transaction was rolled back."
+                        )
+                # The source hash must describe the repaired draft snapshot, so a later dry-run/apply
+                # recognizes this exact source package rather than treating it as an unrelated edit.
+                cursor.execute("""
+                    UPDATE assessment
+                    SET source_package_sha256=%s
+                    WHERE id=%s AND course_id=%s AND status='DRAFT'
+                """, (item["package_sha256"], item["assessment_id"], course_id))
+                if cursor.rowcount != 1:
+                    raise ImportErrorSafe(f"{item['cycle']} assessment changed concurrently; repair rolled back.")
+                cursor.execute("""
+                    UPDATE course_assessment_pack
+                    SET content_sha256=%s,updated_at=now()
+                    WHERE id=%s AND course_id=%s AND status='DRAFT'
+                """, (item["package_sha256"], item["pack_id"], course_id))
+                if cursor.rowcount != 1:
+                    raise ImportErrorSafe(f"{item['cycle']} test pack changed concurrently; repair rolled back.")
+                if item["reconstructed_count"]:
+                    cursor.execute("""
+                        INSERT INTO assessment_audit_log(
+                          assessment_id,actor_role,action,previous_status,new_status,note,occurred_at
+                        ) VALUES (%s,'SYSTEM_IMPORT','TRE_HINDI_PROMPTS_RECONSTRUCTED','DRAFT','DRAFT',%s,now())
+                    """, (
+                        item["assessment_id"],
+                        f"Reconstructed {item['reconstructed_prompt_count']} Hindi prompt(s) and "
+                        f"{item['reconstructed_option_count']} Hindi option(s), and "
+                        f"{item['reconstructed_stimulus_count']} shared Hindi passage(s) from the original PDF via OCR. "
+                        "All question/answer review states remain pending; human verification is required.",
+                    ))
+                report["papers"].append({
+                    "cycle": item["cycle"],
+                    "assessmentId": item["assessment_id"],
+                    "testPackId": item["pack_id"],
+                    "questionCount": item["question_count"],
+                    "ocrCandidates": item["candidate_count"],
+                    "questionsUpdated": item["reconstructed_count"],
+                    "reconstructedPromptsUpdated": item["reconstructed_prompt_count"],
+                    "reconstructedOptionsUpdated": item["reconstructed_option_count"],
+                    "reconstructedStimuliUpdated": item["reconstructed_stimulus_count"],
+                    "questionsWithoutConfidentOcr": item["unreconstructed_count"],
+                    "assessmentStatus": "DRAFT",
+                    "testPackStatus": "DRAFT",
+                })
+
+            cursor.execute("SELECT course_content_fingerprint(%s)", (course_id,))
+            fingerprint = str(cursor.fetchone()[0]).strip()
+            cursor.execute("""
+                UPDATE institution_course_release
+                SET content_fingerprint=%s,updated_at=now()
+                WHERE id=%s AND source_institution_id=%s AND release_state='DRAFT'
+            """, (fingerprint, release_id, institution_id))
+            if cursor.rowcount != 1:
+                raise ImportErrorSafe("The TRE course release changed concurrently; repair transaction rolled back.")
+            report.update({
+                "applied": True,
+                "courseId": int(course_id),
+                "releaseId": int(release_id),
+                "releaseVersion": int(release_version),
+                "releaseState": "DRAFT",
+                "releaseFingerprint": fingerprint,
+                "ocrCandidates": total_candidates,
+                "questionsWithoutConfidentOcr": total_unreconstructed,
+                "answersModified": False,
+                "reviewStatesChanged": False,
+                "publicationChanged": False,
+                "nextStep": (
+                    "Visually compare reconstructed Hindi against the linked PDF source page. "
+                    "The corrected text remains pending review; enter/verify authoritative answers and explanations "
+                    "through the existing Admin question-review workspace before publication."
+                ),
+            })
+    return report
+
+
 def database_import(args: argparse.Namespace, papers: list[dict[str, Any]], archive_sha256: str) -> dict[str, Any]:
     try:
         import psycopg  # type: ignore[import-not-found]
@@ -1142,6 +1658,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--database-url", help="PostgreSQL URL; otherwise TRE4_DATABASE_URL or SPRING_DATASOURCE_URL is used.")
     parser.add_argument("--apply", action="store_true", help="Commit the classless ASSESSMENT course, versioned test packs, draft tests, questions, and release records. Without this flag, no DB writes occur.")
     parser.add_argument(
+        "--repair-draft-hindi", action="store_true",
+        help="With --apply, repair only OCR-reconstructed Hindi prompts in the already-existing TRE course while its release, assessments, and packs are DRAFT and every question/answer review state is still pending.",
+    )
+    parser.add_argument(
         "--submit-for-review", action="store_true",
         help="With --apply, transition the source release DRAFT → IN_QUALITY_REVIEW only when all assessments and complete test packs are already PUBLISHED and every server-side review/readiness gate passes. Does not approve or publish content."
     )
@@ -1153,17 +1673,25 @@ def main() -> int:
     if args.submit_for_review and not args.apply:
         print("ERROR: --submit-for-review requires --apply.", file=sys.stderr)
         return 2
+    if args.repair_draft_hindi and not args.apply:
+        print("ERROR: --repair-draft-hindi requires --apply; without it no database repair is attempted.", file=sys.stderr)
+        return 2
+    if args.repair_draft_hindi and args.submit_for_review:
+        print("ERROR: --repair-draft-hindi cannot be combined with --submit-for-review. Repair and review submission are separate lifecycle actions.", file=sys.stderr)
+        return 2
     try:
         inventory, register = load_inventory(args)
         papers_map = inventory.get("papers")
         if not isinstance(papers_map, dict):
             raise ImportErrorSafe("Inventory has no papers object.")
         papers = [build_paper_plan(cycle, papers_map.get(cycle) or {}, register) for cycle in EXPECTED_QUESTIONS]
+        if args.apply:
+            validate_tre_hindi_ocr_preflight(papers)
         archive_hash = str(inventory.get("source_archive", {}).get("sha256") or "")
         if not re.fullmatch(r"[0-9a-fA-F]{64}", archive_hash):
             raise ImportErrorSafe("Inventory has no valid source archive SHA-256.")
         plan = {
-            "mode": "APPLY" if args.apply else "DRY_RUN",
+            "mode": "REPAIR_DRAFT_HINDI" if args.repair_draft_hindi else "APPLY" if args.apply else "DRY_RUN",
             "course": COURSE_TITLE,
             "sourceInstitution": "QUANTA-EDGE",
             "courseTypeCode": COURSE_TYPE_CODE,
@@ -1194,7 +1722,11 @@ def main() -> int:
         if not args.apply:
             print(json.dumps(plan, ensure_ascii=False, indent=2))
             return 0
-        report = database_import(args, papers, archive_hash)
+        report = (
+            database_repair_draft_hindi(args, papers)
+            if args.repair_draft_hindi
+            else database_import(args, papers, archive_hash)
+        )
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0
     except (ImportErrorSafe, OSError, ValueError, json.JSONDecodeError, subprocess.SubprocessError) as exc:

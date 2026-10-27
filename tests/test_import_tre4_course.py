@@ -430,6 +430,121 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertIn("if submit_for_review:", importer)
         self.assertIn("only DRAFT releases may be imported", importer)
 
+    def test_draft_hindi_repair_is_loopback_only(self):
+        for url in (
+            "postgresql://user:pass@localhost:5432/quantaedge",
+            "postgresql://user:pass@127.0.0.1:5432/quantaedge",
+            "postgresql://user:pass@[::1]:5432/quantaedge",
+        ):
+            import_tre4_course.require_loopback_database_url(url)
+
+        for url in (
+            "postgresql://user:pass@qe-production.internal:5432/quantaedge",
+            "postgresql://user:pass@db.example.com:5432/quantaedge",
+            "https://example.com",
+        ):
+            with self.subTest(url=url), self.assertRaisesRegex(
+                import_tre4_course.ImportErrorSafe, "restricted to localhost/loopback"
+            ):
+                import_tre4_course.require_loopback_database_url(url)
+
+    def test_database_write_requires_known_hindi_ocr_regression_prompt(self):
+        tre1 = {
+            "cycle": "TRE 1.0",
+            "question_snapshots": [{
+                "source_question_number": 1,
+                "prompt_i18n": {"hi": "तीन अंकों की कितनी संख्याएँ 5 से विभाज्य हैं?"},
+                "hindi_prompt_reconstruction": {
+                    "method": "TESSERACT_HINDI_OCR",
+                    "status": "REQUIRES_HUMAN_REVIEW",
+                },
+            }],
+        }
+        tre3 = {
+            "cycle": "TRE 3.0",
+            "question_snapshots": [{
+                "source_question_number": "H-9",
+                "prompt_i18n": {"hi": "रतन ने दौड़कर अजय को क्यों रोकना चाहा?"},
+                "hindi_prompt_reconstruction": {
+                    "method": "TESSERACT_HINDI_OCR",
+                    "status": "REQUIRES_HUMAN_REVIEW",
+                },
+                "stimulus_i18n": {"hi": "रतन और अजय एक ही स्कूल के छात्र थे। रतन गरीब था और अजय धनी।"},
+                "hindi_stimulus_reconstruction": {
+                    "method": "TESSERACT_HINDI_OCR",
+                    "status": "REQUIRES_HUMAN_REVIEW",
+                    "raw_legacy_text": "aVZ Am¡a AO¶ EH$ hr ñHy$b",
+                    "source_location": {"pdf_page": 3, "column": "left", "top_y": 142.32},
+                },
+            }],
+        }
+        import_tre4_course.validate_tre_hindi_ocr_preflight([tre1, tre3])
+
+        bad = {
+            "cycle": "TRE 1.0",
+            "question_snapshots": [{
+                "source_question_number": 1,
+                "prompt_i18n": {"hi": "VrZ AßH$moß H$s {H$VZr"},
+            }],
+        }
+        with self.assertRaisesRegex(import_tre4_course.ImportErrorSafe, "Refusing database writes"):
+            import_tre4_course.validate_tre_hindi_ocr_preflight([bad, tre3])
+
+    def test_ocr_reconstructed_hindi_prompt_keeps_raw_provenance_and_review_pending(self):
+        record = {
+            "source_question_number": 1,
+            "section_code": "GENERAL_STUDIES",
+            "source_variants": {
+                "en": {
+                    "prompt_raw": "How many three-digit numbers are divisible by 5?",
+                    "prompt_i18n": "How many three-digit numbers are divisible by 5?",
+                    "options": [{"key": "A", "raw_text": "180", "text_i18n": "180", "content_kind": "PROSE"}],
+                },
+                "hi": {
+                    "prompt_raw": "VrZ AßH$moß H$s {H$VZr",
+                    "prompt_ocr_text": "तीन अंकों की कितनी संख्याएँ 5 से विभाज्य हैं?",
+                    "prompt_ocr_status": "OCR_SHREEDEV_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW",
+                    "prompt_i18n": "तीन अंकों की कितनी संख्याएँ 5 से विभाज्य हैं?",
+                    "options": [{
+                        "key": "A", "raw_text": "एक सौ अस्सी legacy", "text_i18n": "एक सौ अस्सी",
+                        "ocr_text_i18n": "एक सौ अस्सी",
+                        "ocr_status": "OCR_SHREEDEV_OPTION_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW",
+                        "hindi_ocr_status": "OCR_SHREEDEV_OPTION_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW",
+                        "content_kind": "PROSE"
+                    }],
+                },
+            },
+            "source_locations": {"hi": {"pdf_page": 3, "column": "left", "top_y": 155.74}},
+            "review_flags": ["HINDI_FONT_DETECTION_UNCERTAIN"],
+        }
+
+        snapshot = import_tre4_course.build_question_snapshot(
+            record, "TRE 1.0", "data/TRE-Papres/sources/tre1.pdf", "a" * 64
+        )
+
+        self.assertEqual(snapshot["prompt_i18n"]["hi"], "तीन अंकों की कितनी संख्याएँ 5 से विभाज्य हैं?")
+        self.assertEqual(snapshot["hindi_prompt_reconstruction"]["method"], "TESSERACT_HINDI_OCR")
+        self.assertEqual(snapshot["hindi_prompt_reconstruction"]["status"], "REQUIRES_HUMAN_REVIEW")
+        self.assertEqual(snapshot["hindi_prompt_reconstruction"]["raw_legacy_text"], "VrZ AßH$moß H$s {H$VZr")
+        self.assertEqual(snapshot["hindi_prompt_reconstruction"]["source_location"]["pdf_page"], 3)
+        record["stimulus_i18n"] = {"hi": "रतन और अजय एक ही स्कूल के छात्र थे। रतन गरीब था और अजय धनी।"}
+        record["hindi_stimulus_reconstruction"] = {
+            "method": "TESSERACT_HINDI_OCR",
+            "status": "REQUIRES_HUMAN_REVIEW",
+            "raw_legacy_text": "aVZ Am¡a AO¶ EH$ hr ñHy$b",
+            "source_location": {"pdf_page": 4, "column": "right", "top_y": 210.5},
+        }
+        snapshot = import_tre4_course.build_question_snapshot(
+            record, "TRE 1.0", "data/TRE-Papres/sources/tre1.pdf", "a" * 64
+        )
+        self.assertEqual(snapshot["hindi_stimulus_reconstruction"]["source_location"]["pdf_page"], 4)
+        self.assertEqual(snapshot["options"][0]["text_i18n"]["hi"], "एक सौ अस्सी")
+        self.assertEqual(snapshot["options"][0]["hindi_ocr_reconstruction"]["status"], "REQUIRES_HUMAN_REVIEW")
+        self.assertEqual(snapshot["options"][0]["hindi_ocr_reconstruction"]["raw_legacy_text"], "एक सौ अस्सी legacy")
+        self.assertEqual(snapshot["question_review_status"], "PENDING_HUMAN_REVIEW")
+        self.assertEqual(snapshot["answer_review_status"], "PENDING_HUMAN_REVIEW")
+        self.assertEqual(snapshot["answer_payload"], {"kind": "UNRESOLVED", "value": None})
+
     def test_status_vocabulary_matches_schema_and_supported_workflows(self):
         root = SCRIPT.parents[1]
         releases_and_offers = (root / "services/api/src/main/resources/db/migration/V125__institution_course_releases_and_tenant_offers.sql").read_text(encoding="utf-8")

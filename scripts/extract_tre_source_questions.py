@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Build an auditable bilingual question inventory from the user-provided TRE PDF ZIP.
 
-Uses PDF text blocks rather than OCR. Supported legacy Hindi fonts are converted to Unicode with Lipi. When the font is
-uncertain, the exact source text is retained and flagged for visual review. Both raw
-source text and per-question source locations are retained for comparison. This script does
-not solve answers, create database records, or publish assessments.
+Uses PDF text blocks and applies Hindi OCR only to source prompt blocks explicitly rendered with
+SHREE-DEV-0708/0709, where generic legacy-font conversion is not trusted. Original legacy text and
+per-question page provenance are retained, and reconstructed prompts remain flagged for human review.
+This script does not solve answers, create database records, or publish assessments.
 """
 from __future__ import annotations
 
@@ -13,6 +13,7 @@ import hashlib
 import json
 import re
 import shutil
+import subprocess
 import sys
 import zipfile
 from collections import Counter, defaultdict
@@ -355,6 +356,178 @@ def _split_block_questions(text: str, cycle: str) -> tuple[str, list[tuple[str, 
     return preamble, questions
 
 
+SHREE_DEV_FONT_NAMES = {
+    "SHREE-DEV-0708", "SHREE-DEV-0709", "SHREE-DEV7-0708", "SHREE-DEV7-0709",
+}
+_TESSERACT_HINDI_AVAILABLE: bool | None = None
+LEGACY_HINDI_GLYPH_MARKERS = re.compile(r"[{}$~‹›¶³àñ’‘§‡Œœ„±¤ü°¢¥]")
+QUESTION_LABEL_ONLY = re.compile(r"^\s*(?:[EHUB]\s*[-–]\s*)?\d{1,3}\s*[.)]?\s*$", re.IGNORECASE)
+
+
+def uses_legacy_hindi_glyphs(text: str, fonts: set[str] | None = None) -> bool:
+    """Detect known Shree font names and obvious legacy glyph streams in mislabeled CIDFonts."""
+    normalized_fonts = {str(font or "").strip().upper() for font in (fonts or set())}
+    if any(
+        font in SHREE_DEV_FONT_NAMES
+        or font.startswith(("SHREE-DEV-0708", "SHREE-DEV-0709", "SHREE-DEV7-0708", "SHREE-DEV7-0709"))
+        for font in normalized_fonts
+    ):
+        return True
+    value = str(text or "")
+    if not value.strip() or re.search(r"[\u0900-\u097F]", value):
+        return False
+    if QUESTION_LABEL_ONLY.fullmatch(value.strip()):
+        return False
+    letters = len(re.findall(r"[A-Za-z]", value))
+    markers = len(LEGACY_HINDI_GLYPH_MARKERS.findall(value))
+    return letters >= 5 and markers >= 2
+
+
+def normalize_ocr_prompt(value: str) -> str:
+    """Normalize an OCR-reconstructed Hindi question stem, removing the printed question label."""
+    lines = [line.strip() for line in str(value or "").replace("\r\n", "\n").replace("\r", "\n").split("\n") if line.strip()]
+    if not lines:
+        return ""
+    # Tesseract may read the Latin-font question number as punctuation, I, or a wrong digit.
+    lines[0] = re.sub(
+        r"^\s*(?:(?:[A-Za-zअ-ह]{1,2}\s*[-–]\s*)?[0-9०-९Il|]{1,3}\s*[.)]\s*|[.)]\s*)",
+        "", lines[0],
+    ).strip()
+    normalized = "\n".join(line for line in lines if line)
+    # Reject OCR noise; genuine Hindi prose must contain a usable Devanagari word.
+    if len(re.findall(r"[\u0900-\u097F]", normalized)) < 4:
+        return ""
+    return normalized
+
+
+def _tesseract_hindi_available() -> bool:
+    global _TESSERACT_HINDI_AVAILABLE
+    if _TESSERACT_HINDI_AVAILABLE is not None:
+        return _TESSERACT_HINDI_AVAILABLE
+    if not shutil.which("tesseract"):
+        _TESSERACT_HINDI_AVAILABLE = False
+        return False
+    try:
+        result = subprocess.run(
+            ["tesseract", "--list-langs"], capture_output=True, text=True, timeout=8, check=False
+        )
+        _TESSERACT_HINDI_AVAILABLE = result.returncode == 0 and re.search(
+            r"(?m)^\s*hin\s*$", result.stdout or ""
+        ) is not None
+    except (OSError, subprocess.SubprocessError):
+        _TESSERACT_HINDI_AVAILABLE = False
+    return _TESSERACT_HINDI_AVAILABLE
+
+
+def _ocr_shree_dev_prompt(page: Any, bbox: tuple[float, float, float, float]) -> tuple[str, str]:
+    """OCR only the Hindi prompt block rendered with a known SHREE-DEV legacy font.
+
+    OCR is a reconstruction aid, never an approval signal. If Hindi trained data or a usable
+    prompt is unavailable, leave the original encoded text unchanged and mark it for review.
+    """
+    if not _tesseract_hindi_available():
+        return "", "SHREEDEV_OCR_UNAVAILABLE_RAW_PRESERVED"
+    try:
+        x0, y0, x1, y1 = bbox
+        clip = fitz.Rect(x0 - 2, y0 - 2, x1 + 3, y1 + 3) & page.rect
+        if clip.width < 8 or clip.height < 8:
+            return "", "SHREEDEV_OCR_INVALID_CROP_RAW_PRESERVED"
+        pixmap = page.get_pixmap(matrix=fitz.Matrix(4, 4), clip=clip, alpha=False)
+        result = subprocess.run(
+            ["tesseract", "stdin", "stdout", "-l", "hin", "--psm", "6"],
+            input=pixmap.tobytes("png"), capture_output=True, timeout=15, check=False,
+        )
+        if result.returncode != 0:
+            return "", "SHREEDEV_OCR_FAILED_RAW_PRESERVED"
+        decoded = result.stdout.decode("utf-8", errors="replace")
+        normalized = normalize_ocr_prompt(decoded)
+        if not normalized:
+            return "", "SHREEDEV_OCR_NO_USABLE_HINDI_RAW_PRESERVED"
+        # Assess math/code only after rendering legacy glyphs to Unicode. The encoded source
+        # itself contains braces and punctuation that resemble code even for ordinary Hindi prose.
+        if any(looks_like_code_line(line) or looks_like_math_line(line) for line in normalized.splitlines()):
+            return "", "SHREEDEV_OCR_MATH_OR_CODE_RAW_PRESERVED"
+        return normalized, "OCR_SHREEDEV_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW"
+    except (OSError, ValueError, RuntimeError, subprocess.SubprocessError):
+        return "", "SHREEDEV_OCR_FAILED_RAW_PRESERVED"
+
+
+
+
+def normalize_ocr_option(value: str) -> str:
+    """Remove the printed option marker from OCR output and reject non-Hindi OCR noise."""
+    lines = [line.strip() for line in str(value or "").replace("\r\n", "\n").replace("\r", "\n").split("\n") if line.strip()]
+    if not lines:
+        return ""
+    lines[0] = re.sub(r"^\s*[\(\[]?\s*[A-E0-9Il|]\s*[\)\].:-]\s*", "", lines[0], count=1, flags=re.IGNORECASE).strip()
+    normalized = "\n".join(line for line in lines if line)
+    return normalized if len(re.findall(r"[\u0900-\u097F]", normalized)) >= 2 else ""
+
+
+def _ocr_shree_dev_stimulus(page: Any, bbox: tuple[float, float, float, float]) -> tuple[str, str]:
+    """OCR a shared passage paragraph rendered in a recognized legacy Hindi glyph stream."""
+    if not _tesseract_hindi_available():
+        return "", "SHREEDEV_OCR_UNAVAILABLE_RAW_PRESERVED"
+    try:
+        x0, y0, x1, y1 = bbox
+        clip = fitz.Rect(x0 - 2, y0 - 2, x1 + 3, y1 + 3) & page.rect
+        if clip.width < 8 or clip.height < 8:
+            return "", "SHREEDEV_OCR_INVALID_CROP_RAW_PRESERVED"
+        pixmap = page.get_pixmap(matrix=fitz.Matrix(4, 4), clip=clip, alpha=False)
+        result = subprocess.run(
+            ["tesseract", "stdin", "stdout", "-l", "hin", "--psm", "6"],
+            input=pixmap.tobytes("png"), capture_output=True, timeout=25, check=False,
+        )
+        if result.returncode != 0:
+            return "", "SHREEDEV_OCR_FAILED_RAW_PRESERVED"
+        text = result.stdout.decode("utf-8", errors="replace").strip()
+        if len(re.findall(r"[\u0900-\u097F]", text)) < 20:
+            return "", "SHREEDEV_OCR_NO_USABLE_HINDI_RAW_PRESERVED"
+        if any(looks_like_code_line(line) or looks_like_math_line(line) for line in text.splitlines()):
+            return "", "SHREEDEV_OCR_MATH_OR_CODE_RAW_PRESERVED"
+        return preserve_layout(text), "OCR_SHREEDEV_STIMULUS_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW"
+    except (OSError, ValueError, RuntimeError, subprocess.SubprocessError):
+        return "", "SHREEDEV_OCR_FAILED_RAW_PRESERVED"
+
+
+def _ocr_shree_dev_option(page: Any, bbox: tuple[float, float, float, float]) -> tuple[str, str]:
+    """OCR one legacy-font Hindi option block; the result always remains review-gated."""
+    if not _tesseract_hindi_available():
+        return "", "SHREEDEV_OCR_UNAVAILABLE_RAW_PRESERVED"
+    try:
+        x0, y0, x1, y1 = bbox
+        clip = fitz.Rect(x0 - 2, y0 - 2, x1 + 3, y1 + 3) & page.rect
+        if clip.width < 8 or clip.height < 8:
+            return "", "SHREEDEV_OCR_INVALID_CROP_RAW_PRESERVED"
+        pixmap = page.get_pixmap(matrix=fitz.Matrix(4, 4), clip=clip, alpha=False)
+        result = subprocess.run(
+            ["tesseract", "stdin", "stdout", "-l", "hin", "--psm", "6"],
+            input=pixmap.tobytes("png"), capture_output=True, timeout=15, check=False,
+        )
+        if result.returncode != 0:
+            return "", "SHREEDEV_OCR_FAILED_RAW_PRESERVED"
+        normalized = normalize_ocr_option(result.stdout.decode("utf-8", errors="replace"))
+        if not normalized:
+            return "", "SHREEDEV_OCR_NO_USABLE_HINDI_RAW_PRESERVED"
+        if looks_like_code_line(normalized) or looks_like_math_line(normalized):
+            return "", "SHREEDEV_OCR_MATH_OR_CODE_RAW_PRESERVED"
+        return normalized, "OCR_SHREEDEV_OPTION_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW"
+    except (OSError, ValueError, RuntimeError, subprocess.SubprocessError):
+        return "", "SHREEDEV_OCR_FAILED_RAW_PRESERVED"
+
+
+def union_pdf_boxes(boxes: list[tuple[float, float, float, float]]) -> tuple[float, float, float, float] | None:
+    """Return the minimum rectangle covering a set of PyMuPDF text-line boxes."""
+    if not boxes:
+        return None
+    return (
+        min(box[0] for box in boxes),
+        min(box[1] for box in boxes),
+        max(box[2] for box in boxes),
+        max(box[3] for box in boxes),
+    )
+
+
 def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[dict[str, Any]]:
     collected: list[dict[str, Any]] = []
     for page_index in range(len(pdf)):
@@ -363,6 +536,30 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
         if page_num < 2 or page_num > 45:
             continue
         page = pdf[page_index]
+        # Correlate positioned text blocks with span-level fonts. OCR is restricted to the
+        # source blocks explicitly rendered with SHREE-DEV-0708/0709, never applied globally.
+        block_metadata: dict[tuple[float, float], dict[str, Any]] = {}
+        for text_block in page.get_text("dict").get("blocks", []):
+            if not text_block.get("lines") or not text_block.get("bbox"):
+                continue
+            bx0, by0, bx1, by1 = (float(value) for value in text_block["bbox"])
+            fonts: set[str] = set()
+            line_metadata: list[dict[str, Any]] = []
+            for line in text_block.get("lines", []):
+                spans = line.get("spans", [])
+                line_fonts = {str(span.get("font", "")).strip().upper() for span in spans}
+                fonts.update(line_fonts)
+                line_box = tuple(float(value) for value in line.get("bbox", (0, 0, 0, 0)))
+                line_metadata.append({
+                    "text": "".join(str(span.get("text", "")) for span in spans),
+                    "bbox": line_box,
+                    "fonts": line_fonts,
+                })
+            block_metadata[(round(by0, 2), round(bx0, 2))] = {
+                "bbox": (bx0, by0, bx1, by1),
+                "fonts": fonts,
+                "lines": line_metadata,
+            }
         columns: dict[str, list[tuple[float, str, float]]] = {"left": [], "right": []}
         for block in page.get_text("blocks"):
             x0, y0, x1, y1, block_text, *_ = block
@@ -428,8 +625,9 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                     if not re.fullmatch(r"[\d\s./_-]+", stripped) and not stripped.lower().startswith("part -"):
                         passage_text = stripped
                 if passage_text:
-                    stimulus_by_group[spec["group_id"]] = {
+                    stimulus_record = {
                         "text": passage_text,
+                        "raw_text": passage_text,
                         "source_language": (
                             {"E": "en", "H": "hi", "U": "ur", "B": "bn"}.get(str(spec["prefix"]).upper())
                             if spec["prefix"] in {"E", "H", "U", "B"} else
@@ -437,7 +635,28 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                         ),
                         "page": page_num,
                         "column": spec["column"],
+                        "top_y": round(source_y, 2),
                     }
+                    if stimulus_record["source_language"] == "hi":
+                        stimulus_metadata = block_metadata.get((round(source_y, 2), round(source_x, 2)), {})
+                        if uses_legacy_hindi_glyphs(passage_text, stimulus_metadata.get("fonts", set())):
+                            lines = stimulus_metadata.get("lines", [])
+                            mixed_fonts = any(
+                                str(line.get("text", "")).strip()
+                                and not uses_legacy_hindi_glyphs(str(line.get("text", "")), line.get("fonts", set()))
+                                and not re.fullmatch(r"[\d\s.,:/()+=%-]+", str(line.get("text", "")).strip())
+                                for line in lines
+                            )
+                            if mixed_fonts:
+                                stimulus_record["ocr_status"] = "SHREEDEV_OCR_MIXED_FONT_RAW_PRESERVED"
+                            else:
+                                stimulus_bbox = stimulus_metadata.get("bbox")
+                                if stimulus_bbox:
+                                    ocr_text, ocr_status = _ocr_shree_dev_stimulus(page, stimulus_bbox)
+                                    stimulus_record["ocr_status"] = ocr_status
+                                    if ocr_text:
+                                        stimulus_record["ocr_text"] = ocr_text
+                    stimulus_by_group[spec["group_id"]] = stimulus_record
                     # Mark the original paragraph or question-block preamble so it is not appended
                     # to a previous question as if it were an answer option.
                     stimulus_source_keys.add((spec["column"], round(source_y, 2), source_x, passage_text))
@@ -464,12 +683,35 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                 nonlocal active
                 if active:
                     active["raw_text"] = preserve_layout("\n".join(active.pop("_lines")))
+                    prompt_bbox = active.pop("_prompt_ocr_bbox", None)
+                    prompt_ocr_status = active.pop("_prompt_ocr_status", None)
+                    if prompt_bbox and active.get("language") == "hi":
+                        ocr_prompt, ocr_status = _ocr_shree_dev_prompt(page, prompt_bbox)
+                        active["prompt_ocr_status"] = ocr_status
+                        if ocr_prompt:
+                            active["prompt_ocr_text"] = ocr_prompt
+                    elif prompt_ocr_status and active.get("language") == "hi":
+                        active["prompt_ocr_status"] = prompt_ocr_status
+                    option_texts = active.pop("_ocr_option_texts", {})
+                    option_statuses = active.pop("_ocr_option_statuses", {})
+                    for option_key, option_bbox in active.pop("_ocr_option_bboxes", {}).items():
+                        option_text, option_status = _ocr_shree_dev_option(page, option_bbox)
+                        option_statuses[option_key] = option_status
+                        if option_text:
+                            option_texts[option_key] = option_text
+                    if option_texts:
+                        active["option_ocr_texts"] = option_texts
+                        active["option_ocr_statuses"] = option_statuses
                     collected.append(active)
                     active = None
 
             logical: list[tuple[float, str, float, str | None, int | None, str | None, str | None]] = []
+            block_question_counts: dict[tuple[str, float, float], tuple[int, bool]] = {}
             for y0, block_text, x0 in blocks:
                 preamble, question_parts = _split_block_questions(block_text, cycle)
+                block_question_counts[(column, round(y0, 2), round(x0, 2))] = (
+                    len(question_parts), bool(preamble.strip())
+                )
                 if preamble.strip():
                     logical.append((y0, preamble, x0, None, None, None, None))
                 for part_index, (identity, number, prefix, part_text) in enumerate(question_parts):
@@ -507,6 +749,20 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                         continue
                     if active:
                         active["_lines"].append(block_text.rstrip())
+                        option_match = OPTION_START.match(block_text)
+                        font_metadata = block_metadata.get((round(y0, 2), round(x0, 2)), {})
+                        if (
+                            active.get("language") == "hi"
+                            and option_match
+                            and len(OPTION_START.findall(block_text)) == 1
+                            and uses_legacy_hindi_glyphs(block_text, font_metadata.get("fonts", set()))
+                            and font_metadata.get("bbox")
+                        ):
+                            option_key = option_match.group(1).upper()
+                            option_text, option_status = _ocr_shree_dev_option(page, font_metadata["bbox"])
+                            active.setdefault("_ocr_option_statuses", {})[option_key] = option_status
+                            if option_text:
+                                active.setdefault("_ocr_option_texts", {})[option_key] = option_text
                     continue
 
                 assert number is not None and prefix is not None
@@ -545,12 +801,62 @@ def extract_page_questions(pdf: Any, cycle: str, meta: dict[str, Any]) -> list[d
                     "raw_text": "",
                     "_lines": question_lines,
                 }
+                source_block_key = (column, round(y0, 2), round(x0, 2))
+                font_metadata = block_metadata.get((round(y0, 2), round(x0, 2)), {})
+                question_count, has_preamble = block_question_counts.get(source_block_key, (0, True))
+                if (
+                    locale == "hi"
+                    and question_count == 1
+                    and not has_preamble
+                    and uses_legacy_hindi_glyphs(block_text, font_metadata.get("fonts", set()))
+                    and font_metadata.get("bbox")
+                ):
+                    line_metadata = font_metadata.get("lines", [])
+                    option_line_indices = [
+                        index for index, line in enumerate(line_metadata)
+                        if OPTION_START.match(str(line.get("text", "")))
+                        and uses_legacy_hindi_glyphs(str(line.get("text", "")), line.get("fonts", set()))
+                    ]
+                    first_option_index = option_line_indices[0] if option_line_indices else len(line_metadata)
+                    prompt_lines = [
+                        line for line in line_metadata[:first_option_index]
+                        if not QUESTION_LABEL_ONLY.fullmatch(str(line.get("text", "")).strip())
+                    ]
+                    prompt_has_mixed_fonts = any(
+                        not uses_legacy_hindi_glyphs(str(line.get("text", "")), line.get("fonts", set()))
+                        and str(line.get("text", "")).strip()
+                        for line in prompt_lines
+                    )
+                    if prompt_has_mixed_fonts:
+                        # Do not let OCR silently drop formula/code/Latin-font lines from a Hindi stem.
+                        active["_prompt_ocr_status"] = "SHREEDEV_OCR_MIXED_FONT_RAW_PRESERVED"
+                    else:
+                        prompt_line_boxes = [
+                            line["bbox"] for line in prompt_lines
+                            if uses_legacy_hindi_glyphs(str(line.get("text", "")), line.get("fonts", set()))
+                        ]
+                        prompt_bbox = union_pdf_boxes(prompt_line_boxes)
+                        if prompt_bbox:
+                            active["_prompt_ocr_bbox"] = prompt_bbox
+                    for line_index in option_line_indices:
+                        line = line_metadata[line_index]
+                        option_match = OPTION_START.match(str(line.get("text", "")))
+                        if option_match:
+                            active.setdefault("_ocr_option_bboxes", {})[option_match.group(1).upper()] = line["bbox"]
                 # Attach the same stimulus ID/content to every item within its declared range.
                 for spec in passage_specs:
                     if identity_matches_spec(identity, number, prefix, spec) and spec["group_id"] in stimulus_by_group:
                         active["stimulus_id"] = spec["group_id"]
-                        active["stimulus_raw_text"] = stimulus_by_group[spec["group_id"]]["text"]
-                        active["stimulus_source_language"] = stimulus_by_group[spec["group_id"]]["source_language"]
+                        stimulus_record = stimulus_by_group[spec["group_id"]]
+                        active["stimulus_raw_text"] = stimulus_record["raw_text"]
+                        active["stimulus_ocr_text"] = stimulus_record.get("ocr_text") or ""
+                        active["stimulus_ocr_status"] = stimulus_record.get("ocr_status") or ""
+                        active["stimulus_source_language"] = stimulus_record["source_language"]
+                        active["stimulus_source_location"] = {
+                            "pdf_page": stimulus_record["page"],
+                            "column": stimulus_record["column"],
+                            "top_y": stimulus_record["top_y"],
+                        }
                         active["native_language_only"] = bool(spec["language_only"])
                         break
             flush_active()
@@ -620,6 +926,8 @@ def hindi_conversion_needs_review(status: str) -> bool:
     value = str(status or "")
     return (
         "FORCED_LEGACY" in value
+        or "REQUIRES_HUMAN_REVIEW" in value
+        or value.startswith("SHREEDEV_OCR_")
         or value in {
             "LEGACY_FONT_UNCERTAIN_RAW_PRESERVED",
             "CONVERTER_UNAVAILABLE",
@@ -684,6 +992,12 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 # Deduplicate repeated headers/overlapping source blocks by keeping the fuller text.
                 previous = entry["source_variants"].get(row["language"])
                 prompt, options = parse_prompt_options(row["raw_text"], identity, row["language"], cycle)
+                option_ocr_texts = row.get("option_ocr_texts") or {}
+                option_ocr_statuses = row.get("option_ocr_statuses") or {}
+                for option in options:
+                    if option["key"] in option_ocr_texts:
+                        option["ocr_text_i18n"] = option_ocr_texts[option["key"]]
+                        option["ocr_status"] = option_ocr_statuses.get(option["key"], "OCR_SHREEDEV_OPTION_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW")
                 candidate_length = len(prompt) + sum(len(o["text"]) for o in options)
                 previous_length = 0
                 if previous:
@@ -693,10 +1007,15 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 if candidate_length >= previous_length:
                     entry["source_variants"][row["language"]] = {
                         "prompt_raw": prompt,
+                        "prompt_ocr_text": row.get("prompt_ocr_text") or "",
+                        "prompt_ocr_status": row.get("prompt_ocr_status") or "",
                         "options": options,
                         "conversion_status": "RAW_LEGACY" if row["language"] == "hi" else "SOURCE_TEXT",
                         "stimulus_id": row.get("stimulus_id"),
                         "stimulus_raw": row.get("stimulus_raw_text"),
+                        "stimulus_ocr_text": row.get("stimulus_ocr_text") or "",
+                        "stimulus_ocr_status": row.get("stimulus_ocr_status") or "",
+                        "stimulus_source_location": row.get("stimulus_source_location") or {},
                         "stimulus_source_language": row.get("stimulus_source_language"),
                         "native_language_only": bool(row.get("native_language_only")),
                     }
@@ -721,7 +1040,14 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 # use the English sibling to reconstruct the Hindi language-test wording.
                 conversion_reference = "" if native_language_only else english_reference
                 if hi:
-                    converted_prompt, status = convert_hindi_text(hi.get("prompt_raw", ""), conversion_reference)
+                    if hi.get("prompt_ocr_text"):
+                        converted_prompt = str(hi["prompt_ocr_text"])
+                        status = str(hi.get("prompt_ocr_status") or "OCR_SHREEDEV_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW")
+                    elif str(hi.get("prompt_ocr_status") or "").startswith("SHREEDEV_OCR_"):
+                        converted_prompt = str(hi.get("prompt_raw", ""))
+                        status = str(hi["prompt_ocr_status"])
+                    else:
+                        converted_prompt, status = convert_hindi_text(hi.get("prompt_raw", ""), conversion_reference)
                     hi["prompt_i18n"] = preserve_layout(converted_prompt)
                     hi["conversion_status"] = status
                     hi["translation_policy"] = "NATIVE_SOURCE_ONLY" if native_language_only else "BILINGUAL_SOURCE_VARIANTS"
@@ -730,8 +1056,12 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                     hi["math_line_indices"] = detected_math_line_indices(hi["prompt_i18n"])
                     hi["source_code_preservation_notes"] = "Original line breaks and indentation preserved; code-looking lines and operators bypass legacy-Hindi glyph substitution."
                     for option in hi.get("options", []):
-                        # The exam's standard D/E options are fixed phrases and should be exact.
-                        if option["key"] in STANDARD_HI_OPTIONS and not native_language_only:
+                        # OCR is restricted to the source-rendered Hindi option block. Standard
+                        # scored-paper D/E phrases remain canonical; language-paper options stay source-specific.
+                        if option.get("ocr_text_i18n") and (native_language_only or option["key"] not in STANDARD_HI_OPTIONS):
+                            option["text_i18n"] = option["ocr_text_i18n"]
+                            option["hindi_ocr_status"] = option.get("ocr_status", "OCR_SHREEDEV_OPTION_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW")
+                        elif option["key"] in STANDARD_HI_OPTIONS and not native_language_only:
                             option["text_i18n"] = STANDARD_HI_OPTIONS[option["key"]]
                         else:
                             option["text_i18n"], _ = convert_hindi_text(option.get("raw_text", ""), conversion_reference)
@@ -769,9 +1099,19 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                         continue
                     raw_stimulus = str(variant["stimulus_raw"])
                     if lang == "hi":
-                        stimulus_value, stimulus_status = convert_hindi_text(
-                            raw_stimulus, "" if native_language_only else english_reference
-                        )
+                        if variant.get("stimulus_ocr_text"):
+                            stimulus_value = str(variant["stimulus_ocr_text"])
+                            stimulus_status = str(
+                                variant.get("stimulus_ocr_status")
+                                or "OCR_SHREEDEV_STIMULUS_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW"
+                            )
+                        elif str(variant.get("stimulus_ocr_status") or "").startswith("SHREEDEV_OCR_"):
+                            stimulus_value = raw_stimulus
+                            stimulus_status = str(variant["stimulus_ocr_status"])
+                        else:
+                            stimulus_value, stimulus_status = convert_hindi_text(
+                                raw_stimulus, "" if native_language_only else english_reference
+                            )
                         variant["stimulus_conversion_status"] = stimulus_status
                     else:
                         stimulus_value = raw_stimulus
@@ -781,6 +1121,13 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                     variant["stimulus_code_line_indices"] = detected_code_line_indices(stimulus_value)
                     variant["stimulus_math_line_indices"] = detected_math_line_indices(stimulus_value)
                     stimulus_i18n[lang] = stimulus_value
+                    if lang == "hi" and variant.get("stimulus_ocr_text"):
+                        entry["hindi_stimulus_reconstruction"] = {
+                            "method": "TESSERACT_HINDI_OCR",
+                            "status": "REQUIRES_HUMAN_REVIEW",
+                            "raw_legacy_text": raw_stimulus,
+                            "source_location": variant.get("stimulus_source_location") or {},
+                        }
                     if variant.get("stimulus_id"):
                         stimulus_ids.add(str(variant["stimulus_id"]))
                     stimulus_languages[lang] = normalize_source_language_code(
@@ -834,7 +1181,16 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 # Apply the same glyph-conversion warning to qualifying-language questions.
                 # They often have no English sibling by design, but must still never appear
                 # as review-ready merely because the question is in the native language track.
-                if hi and hindi_conversion_needs_review(hi.get("conversion_status", "")):
+                has_reconstructed_hindi_option = bool(
+                    hi and any(
+                        option.get("hindi_ocr_status")
+                        for option in hi.get("options", [])
+                    )
+                )
+                if hi and (
+                    hindi_conversion_needs_review(hi.get("conversion_status", ""))
+                    or has_reconstructed_hindi_option
+                ):
                     if "HINDI_FONT_DETECTION_UNCERTAIN" not in entry["review_flags"]:
                         entry["review_flags"].append("HINDI_FONT_DETECTION_UNCERTAIN")
             cycle_records = []
@@ -943,7 +1299,7 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 "alternate_language_tracks":alternate_language_tracks,
                 "source_notes":[
                     "Original PDF bytes are preserved exactly; SHA-256 is recorded.",
-                    "Supported legacy Hindi encodings are converted to Unicode; unsupported or uncertain font encodings remain raw and are flagged for visual review. The current TRE source PDFs include SHREE-DEV-0708/0709 text spans, which must not be force-converted as KrutiDev or Chanakya.",
+                    "Supported legacy Hindi encodings are converted to Unicode. SHREE-DEV-0708/0709 prompt/option lines use Hindi OCR only when Tesseract Hindi data is available; reconstructed text remains pending human review, and raw legacy text plus page provenance are preserved. Mixed-font stems containing non-Hindi formula/code lines stay raw for manual reconstruction.",
                     "All questions present in each original booklet are preserved. TRE 2.0 and TRE 3.0 each have 30 qualifying-language items in addition to 40 General Studies + 80 Computer Science, for 150 total. Only GS and Computer Science contribute to the scored result, reported in two sections.",
                     "Do not release until question/option pair completeness, Hindi rendering, answers, concise explanations, paper rules and any mathematical/code expressions have been reviewed.",
                 ],
