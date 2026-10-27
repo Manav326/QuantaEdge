@@ -211,6 +211,15 @@ def build_question_snapshot(record: dict[str, Any], cycle: str, pdf_path: str, p
         for field in ("content_kind", "code_line_indices", "math_line_indices", "source_code_preservation_notes"):
             if field in source_option:
                 option[field] = source_option[field]
+        hindi_source_option = hi_options.get(key) or {}
+        if hindi_source_option.get("ocr_text_i18n"):
+            # Keep exact source option text and page provenance next to OCR text for visual review.
+            option["hindi_ocr_reconstruction"] = {
+                "method": "TESSERACT_HINDI_OCR",
+                "status": "REQUIRES_HUMAN_REVIEW",
+                "raw_legacy_text": norm_text(hindi_source_option.get("raw_text")),
+                "source_location": (record.get("source_locations") or {}).get("hi") or {},
+            }
         options.append(option)
 
     section_code = str(record.get("section_code") or "COMPUTER_SCIENCE").upper()
