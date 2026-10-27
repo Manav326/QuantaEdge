@@ -430,6 +430,24 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertIn("if submit_for_review:", importer)
         self.assertIn("only DRAFT releases may be imported", importer)
 
+    def test_draft_hindi_repair_is_loopback_only(self):
+        for url in (
+            "postgresql://user:pass@localhost:5432/quantaedge",
+            "postgresql://user:pass@127.0.0.1:5432/quantaedge",
+            "postgresql://user:pass@[::1]:5432/quantaedge",
+        ):
+            import_tre4_course.require_loopback_database_url(url)
+
+        for url in (
+            "postgresql://user:pass@qe-production.internal:5432/quantaedge",
+            "postgresql://user:pass@db.example.com:5432/quantaedge",
+            "https://example.com",
+        ):
+            with self.subTest(url=url), self.assertRaisesRegex(
+                import_tre4_course.ImportErrorSafe, "restricted to localhost/loopback"
+            ):
+                import_tre4_course.require_loopback_database_url(url)
+
     def test_database_write_requires_known_hindi_ocr_regression_prompt(self):
         good = {
             "cycle": "TRE 1.0",
