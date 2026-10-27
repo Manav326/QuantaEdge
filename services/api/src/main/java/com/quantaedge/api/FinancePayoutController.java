@@ -875,6 +875,8 @@ public class FinancePayoutController {
     if(batch.isEmpty())throw notFound("Payout batch was not found.");
     batch.put("canApprove",context.staffId()!=null&&hasPermission(context,"QE_FINANCE_PAYOUT_APPROVE")
         &&number(batch.get("created_by_staff_id"))!=number(context.staffId()));
+    batch.put("paid_count",count("select count(*) from finance_payout where batch_id=? and status='PROCESSED'",batchId));
+    batch.put("exception_count",count("select count(*) from finance_payout where batch_id=? and status in ('FAILED','REJECTED','REVERSED')",batchId));
     batch.put("payouts",jdbc.queryForList("""
       select p.id,p.public_id,p.beneficiary_id,p.amount_paise,p.currency,p.status,p.provider_status,p.provider_payout_id,
         p.provider_fee_paise,p.provider_fee_tax_paise,p.provider_fee_reference,p.provider_fee_source_type,p.provider_fee_confirmed_at,

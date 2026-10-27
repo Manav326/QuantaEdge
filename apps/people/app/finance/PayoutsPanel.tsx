@@ -58,6 +58,12 @@ type BalanceResponse={totals:{netEarnedPaise:number;refundReversalsPaise:number;
 type ProviderEvent={provider_event_id:string;provider_payout_id:string;event_type:string;disposition:string;received_at:string;payload_sha256:string};
 type ReconciliationCandidate={id:number;public_id:string;batch_id:number;period_start:string;period_end:string;amount_paise:number;
   currency:string;status:string;recipient_name:string;bank_ifsc:string;bank_account_last4:string};
+type FeeAdjustmentCandidate={order_id:number;course_title:string;source_institution:string;provider_payment_id:string;currency:string;
+  recorded_processing_fee_paise:number;recorded_fee_tax_paise:number;effective_processing_fee_paise:number;effective_fee_tax_paise:number;
+  effective_reference:string;effective_source_type:string;pending_adjustment_id?:number|null;can_adjust:boolean};
+type FeeAdjustmentRequest={id:number;order_id:number;previous_processing_fee_paise:number;previous_fee_tax_paise:number;
+  requested_processing_fee_paise:number;requested_fee_tax_paise:number;settlement_reference:string;source_type:string;reason:string;
+  requested_by_staff_id:number;requested_by_name?:string|null;created_at:string;course_title:string;provider_payment_id:string;currency:string;canReview?:boolean};
 
 const BASE='/api/v1/hrms/platform/finance';
 async function api<T>(path:string,init:RequestInit={}):Promise<T>{
@@ -112,6 +118,15 @@ export default function PayoutsPanel(){
   const [feeSearch,setFeeSearch]=useState('');
   const [feeOffset,setFeeOffset]=useState(0);
   const [feeHasMore,setFeeHasMore]=useState(false);
+  const [feeAdjustmentCandidates,setFeeAdjustmentCandidates]=useState<FeeAdjustmentCandidate[]>([]);
+  const [feeAdjustmentQueueHasMore,setFeeAdjustmentQueueHasMore]=useState(false);
+  const [feeAdjustmentSearchDraft,setFeeAdjustmentSearchDraft]=useState('');
+  const [feeAdjustmentSearch,setFeeAdjustmentSearch]=useState('');
+  const [feeAdjustmentOffset,setFeeAdjustmentOffset]=useState(0);
+  const [pendingFeeAdjustments,setPendingFeeAdjustments]=useState<FeeAdjustmentRequest[]>([]);
+  const [selectedFeeAdjustmentOrderId,setSelectedFeeAdjustmentOrderId]=useState<number|null>(null);
+  const [feeAdjustmentDrafts,setFeeAdjustmentDrafts]=useState<Record<string,{fee:string;tax:string;reference:string;reason:string;source:string}>>({});
+  const [feeAdjustmentReviewReasons,setFeeAdjustmentReviewReasons]=useState<Record<string,string>>({});
   const [approvalBatch,setApprovalBatch]=useState<Batch|null>(null);
   const [approvalConfirmed,setApprovalConfirmed]=useState(false);
   const [recoveryAccounts,setRecoveryAccounts]=useState<Record<string,string>>({});
@@ -133,9 +148,11 @@ export default function PayoutsPanel(){
         api<FeeOrder[]>(BASE+'/fee-reconciliation?limit=51&offset='+feeOffset+'&q='+encodeURIComponent(feeSearch)),
         api<Batch[]>(BASE+'/payout-batches'),api<BalanceResponse>(BASE+'/payout-balances'),
         api<ProviderEvent[]>(BASE+'/payout-provider-events/unmatched'),
-        api<ReconciliationCandidate[]>(BASE+'/payout-reconciliation-candidates')
+        api<ReconciliationCandidate[]>(BASE+'/payout-reconciliation-candidates'),
+        api<FeeAdjustmentCandidate[]>(BASE+'/course-order-fee-adjustment-candidates?limit=51&offset='+feeAdjustmentOffset+'&q='+encodeURIComponent(feeAdjustmentSearch)),
+        api<FeeAdjustmentRequest[]>(BASE+'/course-order-fee-adjustments/pending?limit=200')
       ];
-      const sectionNames=['Payout catalog','Payout settings','Payout overview','Beneficiaries','Fee reconciliation queue','Payout batches','Beneficiary balances','Unmatched provider events','Payout reconciliation candidates'];
+      const sectionNames=['Payout catalog','Payout settings','Payout overview','Beneficiaries','Fee reconciliation queue','Payout batches','Beneficiary balances','Unmatched provider events','Payout reconciliation candidates','Fee-adjustment candidates','Pending fee corrections'];
       const results=await Promise.allSettled(requests);
       const read=(index:number):any=>results[index].status==='fulfilled'?(results[index] as PromiseFulfilledResult<any>).value:null;
       const issues=results.flatMap((result,index)=>result.status==='rejected'?[{
@@ -144,6 +161,7 @@ export default function PayoutsPanel(){
       const c=read(0) as Catalog|null,s=read(1) as Settings|null,o=read(2) as Overview|null;
       const b=read(3) as Beneficiary[]|null,f=read(4) as FeeOrder[]|null,bs=read(5) as Batch[]|null;
       const bal=read(6) as BalanceResponse|null,ue=read(7) as ProviderEvent[]|null,rc=read(8) as ReconciliationCandidate[]|null;
+      const fc=read(9) as FeeAdjustmentCandidate[]|null,pfa=read(10) as FeeAdjustmentRequest[]|null;
       if(c){
         setCatalog(c);
         const companies=c.legalEntities.filter(e=>e.status==='ACTIVE'&&['PLATFORM','COMPANY'].includes(e.entity_kind));
@@ -173,10 +191,12 @@ export default function PayoutsPanel(){
       if(bal)setBalances(bal);
       if(ue)setUnmatchedEvents(Array.isArray(ue)?ue:[]);
       if(rc)setReconciliationCandidates(Array.isArray(rc)?rc:[]);
+      if(fc){setFeeAdjustmentCandidates(Array.isArray(fc)?fc.slice(0,50):[]);setFeeAdjustmentQueueHasMore(fc.length>50);}
+      if(pfa)setPendingFeeAdjustments(Array.isArray(pfa)?pfa:[]);
       setLoadIssues(issues);
     }
     finally{setLoading(false);}
-  },[feeOffset,feeSearch]);
+  },[feeOffset,feeSearch,feeAdjustmentOffset,feeAdjustmentSearch]);
   useEffect(()=>{void load();},[load]);
 
   const action=async<T,>(work:()=>Promise<T>,success:string):Promise<T|null>=>{
@@ -332,6 +352,30 @@ export default function PayoutsPanel(){
     const result=await action(()=>api(BASE+'/payout-beneficiaries/'+id+'/reject',{method:'POST',body:JSON.stringify({reason})}),
       'Beneficiary rejected and the decision was recorded.');
     if(result){setRejectingId(null);setRejectReason('');}
+  };
+
+  const requestFeeAdjustment=async(candidate:FeeAdjustmentCandidate)=>{
+    const key=String(candidate.order_id),draft=feeAdjustmentDrafts[key]||{fee:'',tax:'',reference:'',reason:'',source:'SETTLEMENT_REPORT'};
+    const fee=parsePaise(draft.fee,true),tax=parsePaise(draft.tax,true);
+    if(!candidate.can_adjust||candidate.pending_adjustment_id){setError('This order is not eligible for a new correction while a payout or another correction is unresolved.');return;}
+    if(fee===null||tax===null){setError('Enter the corrected fee and fee tax in rupees. Zero is valid when confirmed by the statement.');return;}
+    if(draft.reference.trim().length<3||draft.reference.trim().length>180){setError('Enter the provider settlement reference (3–180 characters).');return;}
+    if(draft.reason.trim().length<5||draft.reason.trim().length>500){setError('Explain why the confirmed fee needs correction (5–500 characters).');return;}
+    const result=await action(()=>api<{id:number;status:string;message:string}>(BASE+'/course-orders/'+candidate.order_id+'/fee-adjustments',{
+      method:'POST',headers:{'Idempotency-Key':crypto.randomUUID()},
+      body:JSON.stringify({processingFeePaise:fee,feeTaxPaise:tax,settlementReference:draft.reference.trim(),sourceType:draft.source,reason:draft.reason.trim()})
+    }),'Fee correction request recorded for independent review. No fee or allocation was changed yet.');
+    if(result){setSelectedFeeAdjustmentOrderId(null);setFeeAdjustmentDrafts(old=>({...old,[key]:{fee:'',tax:'',reference:'',reason:'',source:'SETTLEMENT_REPORT'}}));setNotice(result.message||'Correction awaits an independent review.');}
+  };
+
+  const reviewFeeAdjustment=async(adjustment:FeeAdjustmentRequest,decision:'APPROVED'|'REJECTED')=>{
+    const key=String(adjustment.id),reason=(feeAdjustmentReviewReasons[key]||'').trim();
+    if(reason.length<5||reason.length>500){setError('Enter the review rationale (5–500 characters).');return;}
+    if(!adjustment.canReview){setError('The requester cannot review their own fee correction. Another authorized approver is required.');return;}
+    const result=await action(()=>api<{id:number;status:string;message:string}>(BASE+'/course-order-fee-adjustments/'+adjustment.id+'/review',{
+      method:'POST',body:JSON.stringify({decision,reason})
+    }),decision==='APPROVED'?'Fee correction approved and appended to the existing allocation ledger.':'Fee correction rejected; original fee facts and allocation ledger remain unchanged.');
+    if(result){setFeeAdjustmentReviewReasons(old=>({...old,[key]:''}));setNotice(result.message||'Fee correction review recorded.');}
   };
 
   const reconcileBeneficiaryProviderSetup=async(beneficiary:Beneficiary)=>{
@@ -557,8 +601,38 @@ export default function PayoutsPanel(){
         {!feeOrders.length&&<p className={styles.payoutEmpty}>{loadIssues.some(issue=>issue.section==='Fee reconciliation queue')?'The fee queue could not be refreshed. The warning above contains the request failure.':'No outstanding fee confirmations were returned for this search. Refresh after new payments are captured.'}</p>}
       </section>
 
+
       <section className={styles.panel}>
-        <div className={styles.panelHead}><div><h2>5. Monthly payout batches</h2><p>Prepare the previous completed calendar month. The amount is calculated from earned allocations, confirmed fee deductions, processed refunds, existing reservations, paid transfers and the configured refund reserve.</p></div>
+        <div className={styles.panelHead}><div><h2>5. Reviewed corrections to confirmed fees</h2><p>Original provider fee records are immutable. A correction records the old and proposed values, a provider reference and a reason; only a different authorized approver can apply it to the same allocation ledger.</p></div><span className={pendingFeeAdjustments.length?styles.payoutStatusPending:styles.payoutStatusNeutral}>{pendingFeeAdjustments.length} awaiting review</span></div>
+        {pendingFeeAdjustments.map(item=><article className={styles.payoutListRow} key={item.id}>
+          <div className={styles.payoutRowMain}><strong>Order #{item.order_id} · {item.course_title}</strong><span>{item.provider_payment_id} · requested by {item.requested_by_name||('staff #'+item.requested_by_staff_id)}</span>
+            <small>Previously {money(item.previous_processing_fee_paise)} + tax {money(item.previous_fee_tax_paise)} · proposed {money(item.requested_processing_fee_paise)} + tax {money(item.requested_fee_tax_paise)}</small>
+            <small>Evidence: {item.settlement_reference} · {item.source_type} · {item.created_at?new Date(item.created_at).toLocaleString('en-IN'):'date unavailable'}</small><small>Reason: {item.reason}</small></div>
+          {item.canReview?<div className={styles.payoutFeeAdjustmentReview}><label>Review rationale<textarea rows={2} minLength={5} maxLength={500} value={feeAdjustmentReviewReasons[String(item.id)]||''} onChange={e=>setFeeAdjustmentReviewReasons(old=>({...old,[String(item.id)]:e.target.value}))} placeholder="Explain why this correction is accepted or rejected"/></label><div className={styles.payoutRowActions}><button type="button" className={styles.primarySmall} disabled={busy} onClick={()=>void reviewFeeAdjustment(item,'APPROVED')}>Approve correction</button><button type="button" className={styles.secondarySmall} disabled={busy} onClick={()=>void reviewFeeAdjustment(item,'REJECTED')}>Reject correction</button></div></div>:<p className={styles.payoutHint}>The submitter cannot review their own correction. Another authorized approver must record a decision.</p>}
+        </article>)}
+        {!pendingFeeAdjustments.length&&<p className={styles.payoutEmpty}>{loadIssues.some(issue=>issue.section==='Pending fee corrections')?'Pending corrections could not be loaded. Review the request failure above.':'No provider-fee corrections are waiting for review.'}</p>}
+        <div className={styles.payoutQueueFilters}><label htmlFor="fee-adjustment-search">Find an existing confirmed fee record</label><form onSubmit={e=>{e.preventDefault();setFeeAdjustmentOffset(0);setFeeAdjustmentSearch(feeAdjustmentSearchDraft.trim());}}><input id="fee-adjustment-search" value={feeAdjustmentSearchDraft} maxLength={100} onChange={e=>setFeeAdjustmentSearchDraft(e.target.value)} placeholder="Order, course, institution or payment reference"/><button type="submit" className={styles.secondarySmall} disabled={loading||busy}>Search</button></form></div>
+        {feeAdjustmentCandidates.map(candidate=>{const key=String(candidate.order_id),draft=feeAdjustmentDrafts[key]||{fee:'',tax:'',reference:'',reason:'',source:'SETTLEMENT_REPORT'},selected=selectedFeeAdjustmentOrderId===candidate.order_id;return <article className={styles.payoutListRow} key={candidate.order_id}>
+          <div className={styles.payoutRowMain}><strong>Order #{candidate.order_id} · {candidate.course_title}</strong><span>{candidate.source_institution} · {candidate.provider_payment_id} · {candidate.currency}</span><small>Current confirmed fee {money(candidate.effective_processing_fee_paise,candidate.currency)} + tax {money(candidate.effective_fee_tax_paise,candidate.currency)} · reference {candidate.effective_reference}</small>
+            {candidate.pending_adjustment_id&&<small>A correction request for this order is already awaiting review.</small>}
+            {!candidate.can_adjust&&!candidate.pending_adjustment_id&&<small>A payout is currently reserved/in progress; finish or resolve it before requesting a correction.</small>}
+          </div>
+          {candidate.can_adjust&&!candidate.pending_adjustment_id&&<button type="button" className={styles.secondarySmall} disabled={busy} onClick={()=>setSelectedFeeAdjustmentOrderId(selected?null:candidate.order_id)}>{selected?'Close correction':'Request correction'}</button>}
+          {selected&&<form className={styles.payoutFeeAdjustmentForm} onSubmit={e=>{e.preventDefault();void requestFeeAdjustment(candidate);}}>
+            <p>Current: {money(candidate.effective_processing_fee_paise,candidate.currency)} + tax {money(candidate.effective_fee_tax_paise,candidate.currency)}. Enter the values from the corrected settlement statement; do not estimate.</p>
+            <label>Corrected processing fee (₹)<input type="number" min="0" max="99999999.99" step="0.01" required value={draft.fee} onChange={e=>setFeeAdjustmentDrafts(old=>({...old,[key]:{...draft,fee:e.target.value}}))}/></label>
+            <label>Corrected fee tax (₹)<input type="number" min="0" max="99999999.99" step="0.01" required value={draft.tax} onChange={e=>setFeeAdjustmentDrafts(old=>({...old,[key]:{...draft,tax:e.target.value}}))}/></label>
+            <label>Corrected settlement / statement reference<input required minLength={3} maxLength={180} value={draft.reference} onChange={e=>setFeeAdjustmentDrafts(old=>({...old,[key]:{...draft,reference:e.target.value}}))}/></label>
+            <label>Evidence source<select value={draft.source} onChange={e=>setFeeAdjustmentDrafts(old=>({...old,[key]:{...draft,source:e.target.value}}))}><option value="SETTLEMENT_REPORT">Settlement report</option><option value="PROVIDER_API">Provider API</option><option value="MANUAL_RECONCILIATION">Manual statement reconciliation</option></select></label>
+            <label>Reason for correction<textarea required minLength={5} maxLength={500} rows={3} value={draft.reason} onChange={e=>setFeeAdjustmentDrafts(old=>({...old,[key]:{...draft,reason:e.target.value}}))} placeholder="e.g. The settlement report contains a corrected processing fee and tax"/></label>
+            <div className={styles.payoutFormFooter}><span>The current ledger remains unchanged until another authorized staff member approves.</span><button type="submit" className={styles.primary} disabled={busy}>Submit for independent review</button></div>
+          </form>}
+        </article>})}
+        {(feeAdjustmentOffset>0||feeAdjustmentQueueHasMore)&&<div className={styles.payoutQueuePagination}><span>Page {Math.floor(feeAdjustmentOffset/50)+1} · 50 records per page</span><div><button type="button" className={styles.secondarySmall} disabled={loading||busy||feeAdjustmentOffset===0} onClick={()=>setFeeAdjustmentOffset(Math.max(0,feeAdjustmentOffset-50))}>Previous</button><button type="button" className={styles.secondarySmall} disabled={loading||busy||!feeAdjustmentQueueHasMore} onClick={()=>setFeeAdjustmentOffset(feeAdjustmentOffset+50)}>Next</button></div></div>}
+        {!feeAdjustmentCandidates.length&&<p className={styles.payoutEmpty}>{loadIssues.some(issue=>issue.section==='Fee-adjustment candidates')?'Confirmed fee records could not be loaded. Review the request failure above.':'No confirmed fee records match this search.'}</p>}
+      </section>
+      <section className={styles.panel}>
+        <div className={styles.panelHead}><div><h2>6. Monthly payout batches</h2><p>Prepare the previous completed calendar month. The amount is calculated from earned allocations, confirmed fee deductions, processed refunds, existing reservations, paid transfers and the configured refund reserve.</p></div>
           <button type="button" className={styles.primary} onClick={()=>void createBatch()} disabled={busy||loading||!payoutEligible||!settings?.configured||feeOrders.length>0}>Prepare last month’s batch</button></div>
         {!payoutEligible&&<p className={styles.payoutHint}>Preparation is disabled until the RazorpayX API credentials and source account are configured on the API server.</p>}
         {feeOrders.length>0&&<p className={styles.payoutHint}>Reconcile the {feeOrders.length} outstanding fee record(s) above first. A payout batch will not be prepared with estimated or missing processor charges.</p>}
