@@ -36,7 +36,7 @@ param(
 $ErrorActionPreference = "Stop"
 $repoRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot ".."))
 $importer = Join-Path $repoRoot "scripts/import_assessment_course.py"
-$testPath = Join-Path $repoRoot "tests/test_import_assessment_course.py"
+$testDirectory = Join-Path $repoRoot "tests"
 $manifestSchema = Join-Path $repoRoot "schemas/assessment-course-manifest.schema.json"
 
 function Stop-WithMessage {
@@ -65,7 +65,7 @@ function Ensure-PythonModule {
 }
 
 try {
-    foreach ($required in @($importer,$testPath,$manifestSchema)) {
+    foreach ($required in @($importer,(Join-Path $testDirectory "test_import_assessment_course.py"),$manifestSchema)) {
         if (-not (Test-Path -LiteralPath $required -PathType Leaf)) {
             Stop-WithMessage "Required file is missing: $required. Pull the latest PR branch."
         }
@@ -98,11 +98,9 @@ try {
     Write-Host "Python     : $script:resolvedPython ($pythonVersion)"
     Write-Host "Mode       : $(if ($Apply) { 'APPLY (localhost only; explicit confirmation required)' } else { 'DRY RUN (no database writes)' })"
     Write-Host "Safety     : classless ASSESSMENT_ONLY · one transaction · all content starts DRAFT"
-    Ensure-PythonModule -ModuleName "psycopg" -InstallSpec "psycopg[binary]>=3.2,<4"
-
     Write-Host ""
     Write-Host "Running importer regression tests..." -ForegroundColor Cyan
-    Invoke-CheckedPython -Arguments @("-m","unittest","tests.test_import_assessment_course")
+    Invoke-CheckedPython -Arguments @("-m","unittest","discover","-s",$testDirectory,"-p","test_import_assessment_course.py")
 
     $arguments = @($importer)
     if (-not [string]::IsNullOrWhiteSpace($ManifestPath)) {
@@ -114,6 +112,7 @@ try {
         $arguments += @("--package",$packageFull)
     }
     if ($Apply) {
+        Ensure-PythonModule -ModuleName "psycopg" -InstallSpec "psycopg[binary]>=3.2,<4"
         $candidate = $DatabaseUrl
         if ([string]::IsNullOrWhiteSpace($candidate)) { $candidate = $env:ASSESSMENT_DATABASE_URL }
         if ([string]::IsNullOrWhiteSpace($candidate)) { $candidate = $env:SPRING_DATASOURCE_URL }
