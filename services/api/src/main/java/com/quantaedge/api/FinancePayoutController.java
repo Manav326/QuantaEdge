@@ -713,7 +713,7 @@ public class FinancePayoutController {
         "payouts",results,"message","Approval was recorded. Payout completion is shown only after RazorpayX confirms the transfer."));
   }
 
-  @GetMapping("/payouts/{payoutId}/refresh")
+  @PostMapping("/payouts/{payoutId}/refresh")
   public ResponseEntity<Map<String,Object>> refreshPayout(@PathVariable long payoutId,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireManage(context);requireProviderConfiguration();
