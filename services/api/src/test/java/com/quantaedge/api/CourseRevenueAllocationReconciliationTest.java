@@ -47,6 +47,23 @@ class CourseRevenueAllocationReconciliationTest {
   }
 
   @Test
+  void supportsCompanyShareAndInstitutionRemainderInSameSale() {
+    Map<String,Object> snapshot = snapshot(
+        List.of(recipient(11L,"COMPANY",50L,"PERCENTAGE",2_000,0L,"QuantaEdge Services Pvt Ltd")),
+        "INSTITUTION",1L,"Quanta Edge");
+    List<Map<String,Object>> allocations = List.of(
+        allocation(100L,7L,"COMPANY",50L,11L,20_000L,100_000L,0L,100_000L,20_000L,1L),
+        allocation(101L,7L,"INSTITUTION",1L,null,80_000L,100_000L,0L,100_000L,80_000L,1L));
+
+    CourseRevenueAllocationReconciliation.Result result =
+        CourseRevenueAllocationReconciliation.reconcile(snapshot,7L,100_000L,0L,"INR",allocations);
+
+    assertTrue(result.complete(),() -> String.join("; ",result.issues()));
+    assertEquals(100_000L,result.expectedTotalPaise());
+    assertEquals(2,result.expectedRecipientCount());
+  }
+
+  @Test
   void marksMissingRemainderAsUnassignedInsteadOfCallingSaleReconciled() {
     Map<String,Object> snapshot = snapshot(
         List.of(recipient(11L,"INSTITUTION",2L,"PERCENTAGE",1_000,0L,"Sunrise Public School")),
@@ -137,8 +154,8 @@ class CourseRevenueAllocationReconciliationTest {
     row.put("policy_id",policyId);
     row.put("policy_recipient_id",policyRecipientId);
     row.put("recipient_type",type);
-    row.put("institution_id",recipientId);
-    row.put("legal_entity_id",null);
+    row.put("institution_id","COMPANY".equals(type)?null:recipientId);
+    row.put("legal_entity_id","COMPANY".equals(type)?recipientId:null);
     row.put("currency","INR");
     row.put("allocated_amount_paise",amount);
     row.put("actual_paid_paise",paid);
