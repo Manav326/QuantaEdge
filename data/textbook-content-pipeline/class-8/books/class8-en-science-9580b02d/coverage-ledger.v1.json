@@ -49670,11 +49670,9 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface, with instructions on how to perform an activity related to atmospheric pressure.",
+        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface.",
         "visual_type": "diagram",
         "visible_text": [
-          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
-          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
           "Activity 6.4: Let us perform",
           "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
           "Do you realise that it sticks to the surface?",
@@ -49690,20 +49688,15 @@
         "concepts": [
           "atmospheric pressure",
           "rubber sucker",
-          "pressure difference",
-          "atmospheric force",
-          "SI unit of pressure",
-          "practical unit of air pressure",
+          "air pressure",
+          "force of gravity",
           "millibar",
           "hectopascal",
-          "wind formation",
-          "inflated balloon",
-          "puncture in the bicycle tube"
+          "wind formation"
         ],
-        "context_relation": "educational",
+        "context_relation": "The image is a diagram illustrating the concept of atmospheric pressure using a rubber sucker.",
         "limitations": [
-          "The image does not show the actual experiment of pulling the sucker off the surface.",
-          "The image does not show the actual measurement of atmospheric pressure."
+          "The image does not provide a visual representation of the atmospheric pressure."
         ]
       },
       "chapter_id": null,
