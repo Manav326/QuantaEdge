@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1319,
+    "assets_selected": 1320,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "7bfbce6c3615463f062ecbe4"
+      "1ad982bcd93525bf306d2c98"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1315,
     "assets_remaining": 976,
     "assets_completion_percent": 57.4,
-    "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 1314,
+    "assets_failed": 13,
+    "assets_skipped_from_checkpoint": 1315,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441174014",
-      "checkpointed_at": "2026-10-27T04:16:12Z"
+      "checkpointed_at": "2026-10-27T04:19:48Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441174014",
-      "checkpointed_at": "2026-10-27T04:16:47Z"
+      "checkpointed_at": "2026-10-27T04:20:23Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441174014",
-      "checkpointed_at": "2026-10-27T04:17:28Z"
+      "checkpointed_at": "2026-10-27T04:21:04Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441174014",
-      "checkpointed_at": "2026-10-27T04:18:28Z"
+      "checkpointed_at": "2026-10-27T04:22:04Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -43629,6 +43629,23 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40441174014",
       "checkpointed_at": "2026-10-27T04:18:48Z"
+    },
+    {
+      "asset_id": "1ad982bcd93525bf306d2c98",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "page_text_context_sha256": "269d7d45dc9bb3da49e150dcbf8cc1bd29f86ab0950e516e695694e3d730938f",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 108,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40441174014",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
