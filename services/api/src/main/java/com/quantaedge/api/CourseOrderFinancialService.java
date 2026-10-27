@@ -906,13 +906,16 @@ public class CourseOrderFinancialService {
         number(order.get("institution_id")),capturedAmountPaise,paymentId);
     if(finalizedOrderRows!=1)
       throw new IllegalStateException("The fiscal document was not linked to the exact captured course order.");
-    return new FinalizedSale(fiscalDocumentId,documentNumber,
-        distribution.totalInstitutionAllocatedPaise(),distribution.platformRemainderPaise());
+    long institutionAllocatedPaise=distribution.allocations().stream()
+        .filter(a->"INSTITUTION".equals(a.recipientType()))
+        .mapToLong(RevenueDistributionCalculator.BeneficiaryAllocation::amountPaise).sum();
+    return new FinalizedSale(fiscalDocumentId,documentNumber,institutionAllocatedPaise,
+        distribution.unassignedRemainderPaise());
   }
 
   private FinalizedSale createFiscalDocument(
       Map<String,Object> order,String paymentId,long captured,
-      CourseTaxCalculator.Result taxResult,RevenueDistributionCalculator.Result distribution,
+      CourseTaxCalculator.Result taxResult,RevenueDistributionCalculator.BeneficiaryResult distribution,
       Map<String,Object> taxSnapshot,Map<String,Object> buyerSnapshot,String currency,long orderId) {
     Map<String,Object> supplier=asMap(taxSnapshot.get("supplierSnapshot"));
     Map<String,Object> taxSummary=new LinkedHashMap<>();
