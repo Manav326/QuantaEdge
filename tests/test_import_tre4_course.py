@@ -34,6 +34,29 @@ class FakeCursor:
 
 
 class Tre4ImporterTests(unittest.TestCase):
+    def test_import_target_is_a_separate_logical_course_from_rejected_tre4(self):
+        self.assertEqual(
+            import_tre4_course.COURSE_TITLE,
+            "BPSC TRE Computer Science — Previous-Year Practice Series",
+        )
+        self.assertEqual(import_tre4_course.COURSE_CODE_SUFFIX, "BPSC_TRE_CS_PYQ_SERIES")
+        self.assertEqual(import_tre4_course.COURSE_VERSION, "BPSC-TRE-CS-PYQ-SERIES")
+        self.assertNotEqual(import_tre4_course.COURSE_CODE_SUFFIX, "TRE4")
+        self.assertNotEqual(import_tre4_course.COURSE_VERSION, "BPSC-TRE-4")
+
+        cursor = FakeCursor([[], [], (901,), (777, "INS-QE-BPSC_TRE_CS_PYQ_SERIES")])
+        course_id, _, created = import_tre4_course.get_or_create_course(cursor, 42)
+
+        self.assertEqual(course_id, 777)
+        self.assertTrue(created)
+        lookup_sql, lookup_params = cursor.statements[0]
+        self.assertIn("WHERE code=%s AND curriculum_version=%s", lookup_sql)
+        self.assertEqual(
+            lookup_params,
+            ("I42_BPSC_TRE_CS_PYQ_SERIES", "BPSC-TRE-CS-PYQ-SERIES"),
+        )
+        self.assertEqual(cursor.statements[1][1], (42, "BPSC_TRE_CS_PYQ_SERIES"))
+
     def test_source_institution_uses_stable_tenant_code_not_editable_display_name(self):
         cursor = FakeCursor([[(42, "ACTIVE", "QuantaEdge Bihar")]])
 
@@ -65,18 +88,18 @@ class Tre4ImporterTests(unittest.TestCase):
 
     def test_unlinked_legacy_course_is_not_repaired_in_place(self):
         cursor = FakeCursor([
-            ("TRE-4 · Computer Science", "ASSESSMENT", None, None, None, None, "ACTIVE"),
+            ("BPSC TRE Computer Science — Previous-Year Practice Series", "ASSESSMENT", None, None, None, None, "ACTIVE"),
         ])
         with self.assertRaisesRegex(import_tre4_course.ImportErrorSafe, "obsolete/orphan graph"):
             import_tre4_course.ensure_course_identity(cursor, 42, 777)
         self.assertEqual(len(cursor.statements), 1)
         self.assertNotIn("INSERT INTO institution_course_identity", cursor.statements[0][0])
     def test_course_is_created_with_stable_identity_before_its_graph(self):
-        cursor = FakeCursor([[], [], (901,), (777, "INS-QE-TRE4")])
+        cursor = FakeCursor([[], [], (901,), (777, "INS-QE-BPSC_TRE_CS_PYQ_SERIES")])
         course_id, public_id, created = import_tre4_course.get_or_create_course(cursor, 42)
 
         self.assertEqual(course_id, 777)
-        self.assertEqual(public_id, "INS-QE-TRE4")
+        self.assertEqual(public_id, "INS-QE-BPSC_TRE_CS_PYQ_SERIES")
         self.assertTrue(created)
         statements = [statement for statement, _ in cursor.statements]
         sql = "\\n".join(statements)
@@ -88,8 +111,8 @@ class Tre4ImporterTests(unittest.TestCase):
         self.assertIn("course_type_code,course_identity_id,content_version_no", sql)
         self.assertIn("'ASSESSMENT'", sql)
         self.assertNotIn("curriculum_class", sql)
-    def test_class_bound_tre4_course_is_not_rewritten_in_place(self):
-        cursor = FakeCursor([[(777, "TRE-4 · Computer Science", "ACTIVE", "INS-QE-TRE4", 123, "ASSESSMENT", None)]])
+    def test_class_bound_series_course_is_not_rewritten_in_place(self):
+        cursor = FakeCursor([[(777, "BPSC TRE Computer Science — Previous-Year Practice Series", "ACTIVE", "INS-QE-BPSC_TRE_CS_PYQ_SERIES", 123, "ASSESSMENT", None)]])
         with self.assertRaises(import_tre4_course.ImportErrorSafe):
             import_tre4_course.get_or_create_course(cursor, 42)
         self.assertEqual(len(cursor.statements), 1)
@@ -179,7 +202,7 @@ class Tre4ImporterTests(unittest.TestCase):
     def test_identity_with_an_existing_version_is_not_reused_for_a_second_v1_graph(self):
         cursor = FakeCursor([
             [],
-            [(901, "TRE-4 · Computer Science", "ASSESSMENT", "ACTIVE")],
+            [(901, "BPSC TRE Computer Science — Previous-Year Practice Series", "ASSESSMENT", "ACTIVE")],
             (1,),
         ])
         with self.assertRaisesRegex(
@@ -188,9 +211,9 @@ class Tre4ImporterTests(unittest.TestCase):
             import_tre4_course.get_or_create_course(cursor, 42)
         self.assertEqual(len(cursor.statements), 3)
         self.assertNotIn("INSERT INTO curriculum_program", "\\n".join(s for s, _ in cursor.statements))
-    def test_existing_source_owned_tre_identity_is_reused_without_mutation(self):
+    def test_existing_source_owned_series_identity_is_reused_without_mutation(self):
         cursor = FakeCursor([
-            ("TRE-4 · Computer Science", "ASSESSMENT", 901, 42, "TRE4", "ASSESSMENT", "ACTIVE"),
+            ("BPSC TRE Computer Science — Previous-Year Practice Series", "ASSESSMENT", 901, 42, "BPSC_TRE_CS_PYQ_SERIES", "ASSESSMENT", "ACTIVE"),
         ])
         identity_id = import_tre4_course.ensure_course_identity(cursor, 42, 777)
         self.assertEqual(identity_id, 901)
