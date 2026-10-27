@@ -536,15 +536,6 @@ def ensure_schema(cursor: Any) -> None:
             "Flyway V204 is required: TRE readiness must use the same typed question/answer review gate."
         )
 
-    normalized_tre_readiness = re.sub(r"character varying", "varchar", tre4_readiness_definition, flags=re.IGNORECASE)
-    if not re.search(
-        r"'TRE 3\.0'::varchar,\s*'tre4-bpsc-tre-3-0-computer-science'::varchar,\s*148",
-        normalized_tre_readiness,
-    ):
-        raise ImportErrorSafe(
-            "Flyway V213 is required: TRE readiness must expect 148 active TRE 3.0 questions after excluding "
-            "the two final-key-deleted General Studies items."
-        )
     if "course_marketplace_content_type_ready" not in course_type_readiness_definition or "assessment_only_course_publish_ready" not in course_type_readiness_definition:
         raise ImportErrorSafe(
             "Flyway V202 is required: course-type-aware Marketplace readiness must be available for release submission."
@@ -565,12 +556,14 @@ def ensure_schema(cursor: Any) -> None:
         raise ImportErrorSafe("Flyway V204 is required: the shared typed assessment question/answer review function is unavailable.")
     if "assessment_only_course_publish_ready" not in publish_readiness_definition:
         raise ImportErrorSafe("Flyway V200 is required: generic assessment Marketplace publication readiness is unavailable.")
+    normalized_tre_readiness = re.sub(r"character varying", "varchar", tre4_readiness_definition, flags=re.IGNORECASE)
     if not re.search(
-        r"'TRE 3\.0'::varchar,\s*'tre4-bpsc-tre-3-0-computer-science'::varchar,\s*150",
-        tre4_readiness_definition,
+        r"'TRE 3\\.0'::varchar,\\s*'tre4-bpsc-tre-3-0-computer-science'::varchar,\\s*148",
+        normalized_tre_readiness,
     ):
         raise ImportErrorSafe(
-            "Flyway V199 is required: the TRE-specific readiness contract must expect all 150 source questions."
+            "Flyway V213 is required: TRE readiness must expect 148 active TRE 3.0 questions after excluding "
+            "the two final-key-deleted General Studies items."
         )
 
 
