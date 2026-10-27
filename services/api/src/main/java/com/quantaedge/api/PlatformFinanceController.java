@@ -58,6 +58,63 @@ public class PlatformFinanceController {
         from revenue_share_allocation group by course_payment_order_id
       ) allocated
       """,Long.class));
+
+    // Financial position uses verified captures and provider-confirmed refunds only.
+    // Output tax is shown net of issued course-sale credit notes, before input-tax credits
+    // or other adjustments that require the organisation's tax adviser.
+    long captured=coalesceAmount("""
+      select coalesce(sum(captured_amount_paise),0)
+      from course_payment_order where status='VERIFIED'
+      """);
+    long processedRefunds=coalesceAmount("""
+      select coalesce(sum(requested_amount_paise),0)
+      from course_payment_refund where status='PROCESSED'
+      """);
+    long pendingRefunds=coalesceAmount("""
+      select coalesce(sum(requested_amount_paise),0)
+      from course_payment_refund where status in ('PROCESSING','PENDING','RECONCILIATION_REQUIRED')
+      """);
+    long invoicedOutputTax=coalesceAmount("""
+      select coalesce(sum(output_tax_paise),0)
+      from course_payment_order where status='VERIFIED'
+      """);
+    long processedCreditTax=coalesceAmount("""
+      select coalesce(sum(d.tax_value_paise),0)
+      from fiscal_document d join course_payment_refund r on r.credit_note_document_id=d.id
+      where d.document_type='CREDIT_NOTE' and d.source_type='COURSE_ORDER' and r.status='PROCESSED'
+      """);
+    long confirmedProcessorFees=coalesceAmount("""
+      select coalesce(sum(processing_fee_paise),0) from course_payment_order_fee
+      """);
+    long confirmedProcessorFeeTax=coalesceAmount("""
+      select coalesce(sum(fee_tax_paise),0) from course_payment_order_fee
+      """);
+    long netOutputTax=Math.subtractExact(invoicedOutputTax,processedCreditTax);
+    long netCollected=Math.subtractExact(captured,processedRefunds);
+    long poolAfterTaxRefundsAndFees=Math.subtractExact(
+        Math.subtractExact(netCollected,netOutputTax),
+        Math.addExact(confirmedProcessorFees,confirmedProcessorFeeTax));
+    r.put("capturedSalesPaise",captured);
+    r.put("processedRefundsPaise",processedRefunds);
+    r.put("pendingRefundsPaise",pendingRefunds);
+    r.put("pendingRefundCount",count("""
+      select count(*) from course_payment_refund
+      where status in ('PROCESSING','PENDING','RECONCILIATION_REQUIRED')
+      """));
+    r.put("netCollectedAfterRefundsPaise",netCollected);
+    r.put("invoicedOutputTaxPaise",invoicedOutputTax);
+    r.put("processedCreditNoteTaxPaise",processedCreditTax);
+    r.put("netOutputTaxBeforeInputCreditsPaise",netOutputTax);
+    r.put("confirmedProcessorFeesPaise",confirmedProcessorFees);
+    r.put("confirmedProcessorFeeTaxPaise",confirmedProcessorFeeTax);
+    r.put("netPoolAfterTaxRefundsAndFeesPaise",poolAfterTaxRefundsAndFees);
+    r.put("paymentFeeReconciliationPending",count("""
+      select count(distinct o.id) from course_payment_order o
+      join revenue_share_allocation a on a.course_payment_order_id=o.id
+      join revenue_share_allocation_event e on e.allocation_id=a.id and e.event_type='EARNED'
+      left join course_payment_order_fee f on f.course_payment_order_id=o.id
+      where o.status='VERIFIED' and f.id is null
+      """));
     return r;
   }
 
@@ -1229,6 +1286,7 @@ public class PlatformFinanceController {
     return id;
   }
   private boolean exists(String sql,Object... args) { return Boolean.TRUE.equals(jdbc.queryForObject(sql,Boolean.class,args)); }
+  private long coalesceAmount(String sql,Object... args) { Long n=jdbc.queryForObject(sql,Long.class,args); return n==null?0L:n; }
   private long count(String sql,Object... args) { Long n=jdbc.queryForObject(sql,Long.class,args); return n==null?0L:n; }
   private Map<String,Object> one(String sql,Object... args) {
     List<Map<String,Object>> rows=jdbc.queryForList(sql,args); return rows.isEmpty()?new LinkedHashMap<>():new LinkedHashMap<>(rows.getFirst());
