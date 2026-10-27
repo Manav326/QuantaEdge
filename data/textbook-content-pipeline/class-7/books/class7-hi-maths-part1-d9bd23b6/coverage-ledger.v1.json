@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 1651,
     "eligible_visual_asset_rows": 1651,
-    "raw_analysis_result_rows": 50,
-    "successful_visual_analyses": 23,
-    "missing_visual_analyses": 1601,
-    "failed_visual_analyses": 27,
+    "raw_analysis_result_rows": 60,
+    "successful_visual_analyses": 32,
+    "missing_visual_analyses": 1591,
+    "failed_visual_analyses": 28,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1628,
+    "unresolved_count": 1619,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -7664,9 +7664,29 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of active participation in mathematics education for students, emphasizing the need for students to be actively involved in solving problems and discovering new patterns.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "विद्यार्थियों के लिए शब्द",
+          "गणित कला को सराहने के लिए केवल निष्क्रिय दर्शक बने रहना पर्ययाप्तत नहीं है, अपितु इसमे आपकी सक्रिय भागीदारी की भी आवश्यकता है, जैसे— कोई जासूस किसी रहस्यय को सुलझाने के लिए प्रक्रिया मे अनुरत रहता है।",
+          "इस भागीदारी की आवश्यकता विशेषतः तब होती है जब आप कोई नया प्रश्न देखते हैं या कोई प्रश्न आपकी अपनी जिज्ञासा से उत्पन्न होता है या फिर जब आप संख्याओं अथवा आकृतियों के किसी नए आकर्षक पैटर्न को देखते हैं। जब ऐसी अवधारणाओं आपके सामने आएँ तो आप अपने अध्ययन कार्य को विराम दीजिए एवं अपनी रचनात्मकता का उपयोग",
+          "नया प्रश्न देखते हैं या कोई प्रश्न आपकी अपनी जिज्ञासा से उत्पन्न होता है या फिर जब आप संख्याओं अथवा आकृतियों के किसी नए आकर्षक पैटर्न को देखते हैं। जब ऐसी अवधारणाओं आपके सामने आएँ तो आप अपने अध्ययन कार्य को विराम दीजिए एवं अपनी रचनात्मकता का उपयोग प्रश्न"
+        ],
+        "concepts": [
+          "mathematics education",
+          "active participation",
+          "solving problems",
+          "discovering new patterns",
+          "creative thinking"
+        ],
+        "context_relation": "The text discusses the importance of active participation in mathematics education for students, emphasizing the need for students to be actively involved in solving problems and discovering new patterns.",
+        "limitations": [
+          "The text does not provide specific examples or illustrations to support the points made."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7682,7 +7702,7 @@
       "asset_path": "page-0017.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -7700,9 +7720,18 @@
       "asset_path": "assets/f62b81781123d9362d6d89734e1dee804711336a00b310c1610f4cebe6d64f84.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light yellow background and faint, diagonal lines.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Blank page for content insertion",
+        "limitations": [
+          "No visible text or images present on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7718,9 +7747,18 @@
       "asset_path": "assets/bbb407c8d9f4b049be6a8fbe2a7f2896e51b3961729a230c7a8283a43700e649.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visible content or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7736,9 +7774,16 @@
       "asset_path": "assets/e0079aa99561d88a922c3c51eb2382e32d3f39eee35528b6241bfe0a8466b20d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to yellow.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7754,9 +7799,18 @@
       "asset_path": "assets/2dbbbcb8a21495310878e56c5b3b586f0b0e69936131dfd9605b8948ec797c05.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to dark orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7772,9 +7826,18 @@
       "asset_path": "assets/38e10fab41fdf5613faee47d4261973de8ef97c1befff5f36c3c91b29d91ac42.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to yellow.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7790,9 +7853,16 @@
       "asset_path": "assets/fcd4796c40735b32a3d243e23c51f6d85c07d1052a051c43603942cb0d6b480c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light yellow to orange.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover for educational content.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7808,9 +7878,18 @@
       "asset_path": "assets/0ece5c90241f2ea004d46c9389a873d867ff8b73191c3794ad80ea13a008a028.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from yellow to orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7826,9 +7905,18 @@
       "asset_path": "assets/23f807fdb3087675e1d4319c2c0f229c3ffe1207b5596d72f4d1fc334ea95910.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to white.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
