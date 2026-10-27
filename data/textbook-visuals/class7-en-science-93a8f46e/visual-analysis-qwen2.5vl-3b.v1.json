@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2453,
+    "assets_selected": 2455,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "a830d6c849aca638a93058fe",
-      "beeca397af9ac1d985fc6024"
+      "f4ae3f794e85f9191c84d4d1",
+      "1ce3779071eb63bf01656c2a"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2450,
-    "assets_remaining": 5038,
+    "assets_analyzed": 2452,
+    "assets_remaining": 5036,
     "assets_completion_percent": 32.7,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 2448,
+    "assets_skipped_from_checkpoint": 2450,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40579491228",
-      "checkpointed_at": "2026-10-27T21:40:47Z"
+      "checkpointed_at": "2026-10-27T21:43:48Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40579491228",
-      "checkpointed_at": "2026-10-27T21:41:14Z"
+      "checkpointed_at": "2026-10-27T21:44:15Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40579491228",
-      "checkpointed_at": "2026-10-27T21:41:49Z"
+      "checkpointed_at": "2026-10-27T21:44:51Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -92534,6 +92534,75 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40579491228",
       "checkpointed_at": "2026-10-27T21:43:03Z"
+    },
+    {
+      "asset_id": "f4ae3f794e85f9191c84d4d1",
+      "asset_sha256": "5b9ef839a55a731a976ac0c5513189eba11091c809e8df1978d6795ac2ee12ac",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 75,
+      "asset_path": "assets/5b9ef839a55a731a976ac0c5513189eba11091c809e8df1978d6795ac2ee12ac.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5f2e159e7cd25798d652993e38ece1b8fbc177eb5667babc67ce14051faedc36",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A question about the use of metals in food packaging.",
+        "visual_type": "photo",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "Metal use in food packaging",
+          "Aluminium",
+          "Copper",
+          "Iron",
+          "Gold"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "The image does not provide any visual information beyond the text.",
+          "The question is about the use of metals in food packaging, which is not visually represented."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40579491228",
+      "checkpointed_at": "2026-10-27T21:45:30Z"
+    },
+    {
+      "asset_id": "1ce3779071eb63bf01656c2a",
+      "asset_sha256": "93187faab449393957bba3e13ff4d2d4ac5e88af3f8f172dc5167530e0c9db9e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 75,
+      "asset_path": "assets/93187faab449393957bba3e13ff4d2d4ac5e88af3f8f172dc5167530e0c9db9e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5f2e159e7cd25798d652993e38ece1b8fbc177eb5667babc67ce14051faedc36",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40579491228",
+      "checkpointed_at": "2026-10-27T21:46:03Z"
     }
   ]
 }
