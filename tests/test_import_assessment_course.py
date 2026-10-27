@@ -155,6 +155,7 @@ class AssessmentCourseImporterTests(unittest.TestCase):
         self.assertNotIn("tre4_source_package_ready", source)
         self.assertIn("studentDeliveryAllowed", source)
         self.assertIn("release_state", source)
+        self.assertIn("'WITHDRAWN','REJECTED'", source)
         self.assertIn("PENDING_HUMAN_REVIEW", source)
 
 
