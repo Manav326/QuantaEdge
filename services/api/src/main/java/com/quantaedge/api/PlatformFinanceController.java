@@ -118,9 +118,9 @@ public class PlatformFinanceController {
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=requireOwner(context);
     String kind=requiredText(body,"entityKind").toUpperCase(Locale.ROOT);
-    if(!List.of("PLATFORM","INSTITUTION").contains(kind)) throw bad("Choose PLATFORM or INSTITUTION as the legal-entity scope.");
+    if(!List.of("PLATFORM","INSTITUTION","COMPANY").contains(kind)) throw bad("Choose PLATFORM, COMPANY or INSTITUTION as the legal-entity scope.");
     Long institutionId=optionalLong(body.get("institutionId"));
-    if("PLATFORM".equals(kind) && institutionId!=null) throw bad("A PLATFORM legal entity must not be attached to a tenant institution.");
+    if(!"INSTITUTION".equals(kind) && institutionId!=null) throw bad("A platform/company legal entity must not be attached to a tenant institution.");
     if("INSTITUTION".equals(kind) && (institutionId==null || !exists(
         "select exists(select 1 from institution_tenant where id=?)",institutionId))) {
       throw bad("Choose an existing institution for this legal entity.");
@@ -363,7 +363,7 @@ public class PlatformFinanceController {
     long entityId=requiredLong(body,"legalEntityId");
     if(!exists("""
       select exists(select 1 from billing_legal_entity e
-        where e.id=? and (e.entity_kind='PLATFORM'
+        where e.id=? and (e.entity_kind in ('PLATFORM','COMPANY')
           or (e.entity_kind='INSTITUTION' and e.institution_id=?)))
       """,entityId,institutionId)) {
       throw bad("Select the platform legal seller or the legal entity belonging to this course offer's institution.");
@@ -742,7 +742,7 @@ public class PlatformFinanceController {
       if("INSTITUTION".equals(recipientType)) {
         if(!exists("select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",recipientId))
           throw bad("Every institution recipient must be active.");
-      } else if(!exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind='PLATFORM')",recipientId)) {
+      } else if(!exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY'))",recipientId)) {
         throw bad("Every company recipient must be an active company legal entity.");
       }
       String type=requiredText(map.get("calculationType"),"calculationType").toUpperCase(Locale.ROOT);
@@ -773,7 +773,7 @@ public class PlatformFinanceController {
       if(remainderId==null||!exists("select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",remainderId))
         throw bad("Select an active institution to receive the remaining balance.");
     } else if("COMPANY".equals(remainderType)) {
-      if(remainderId==null||!exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind='PLATFORM')",remainderId))
+      if(remainderId==null||!exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY'))",remainderId))
         throw bad("Select an active company to receive the remaining balance.");
     } else throw bad("The remainder must be assigned to an institution or company.");
     long sourceInstitution=offerInstitution(((Number)policy.get("institution_offer_id")).longValue());
@@ -836,7 +836,7 @@ public class PlatformFinanceController {
       String recipientType=string(recipient.get("recipient_type"));
       boolean active="INSTITUTION".equals(recipientType)
           ?exists("select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",recipient.get("institution_id"))
-          :exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind='PLATFORM')",recipient.get("legal_entity_id"));
+          :exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY'))",recipient.get("legal_entity_id"));
       if(!active) throw bad("Every revenue recipient must remain active when a policy is approved.");
     }
     if(policyRecipients.isEmpty()) throw bad("A policy needs at least one institution recipient.");
@@ -860,7 +860,7 @@ public class PlatformFinanceController {
       select count(*) from course_tax_profile tax
       join institution_marketplace_offer o on o.id=tax.institution_offer_id
       join billing_legal_entity le on le.id=tax.legal_entity_id and le.status='ACTIVE'
-        and (le.entity_kind='PLATFORM' or (le.entity_kind='INSTITUTION' and le.institution_id=o.institution_id))
+        and (le.entity_kind in ('PLATFORM','COMPANY') or (le.entity_kind='INSTITUTION' and le.institution_id=o.institution_id))
       where o.id=? and tax.status='APPROVED'
         and tax.effective_from<=? and (tax.effective_until is null or tax.effective_until>?)
       """,offerId,dbInstant(start),dbInstant(start));
@@ -874,7 +874,7 @@ public class PlatformFinanceController {
       select tax.legal_entity_id,tax.tax_treatment from course_tax_profile tax
       join institution_marketplace_offer o on o.id=tax.institution_offer_id
       join billing_legal_entity le on le.id=tax.legal_entity_id and le.status='ACTIVE'
-        and (le.entity_kind='PLATFORM' or (le.entity_kind='INSTITUTION' and le.institution_id=o.institution_id))
+        and (le.entity_kind in ('PLATFORM','COMPANY') or (le.entity_kind='INSTITUTION' and le.institution_id=o.institution_id))
       where o.id=? and tax.status='APPROVED'
         and tax.effective_from<=? and (tax.effective_until is null or tax.effective_until>?)
       order by tax.version desc limit 1
