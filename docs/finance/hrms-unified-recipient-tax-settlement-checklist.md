@@ -14,18 +14,18 @@ Scope: improve the existing HRMS Finance and Payouts workspace in place. This is
 - [x] Do not present a provider submission response as a completed transfer; completion requires verified provider reconciliation.
 
 ## 1. Recipient register and payout overview
-- [x] Include every active institution and eligible active company/platform legal entity, including recipients with no sales, no allocation, zero balance, no bank account, or an incomplete profile.
+- [x] Include every active institution and eligible active company/platform legal entity, plus recipients with historical allocations even if their status later changes; no sales, no allocation, zero balance, no bank account, or incomplete profile remain visible.
 - [x] Keep a single recipient card per recipient and currency; the backend chooses one current beneficiary row to avoid duplicate joins.
 - [x] Distinguish zero earnings from missing/stale data and from API failure.
-- [ ] Show earnings, refunds, confirmed collection charges, previous payments, reversals, reserves, refund holdback, recovery and net payable.
-- [x] Show backend-derived readiness and reasons for recovery, no positive balance, beneficiary status, minimum payout, unsupported currency, missing fee reconciliation, provider setup and legal funding verification. Statutory TCS/TDS is explicitly called out separately; it is not guessed.
-- [ ] Add search/filter for recipient, institution/company, currency, eligibility, missing bank, review, pending payout, and recovery due.
+- [x] Show allocation earnings, refunds, confirmed charges, previous payments, reservations, refund holdback, recovery and net payable; explicit reversal totals remain part of the ledger and require a separate presentation pass.
+- [x] Show backend-derived payout-check status and blocker reasons for historical/inactive recipient, recovery, no positive balance, beneficiary status, minimum payout, unsupported currency, missing fee reconciliation, provider setup and legal funding verification. The UI states payout-check status does not evaluate statutory TCS/TDS and is not final transfer clearance.
+- [x] Add search/filter for recipient, institution/company, currency, payout-check status, missing bank, review, reserved/in-progress payout and recovery due.
 - [x] Use responsive recipient cards/details on mobile; avoid forcing an 11-column horizontal-scroll table as the only workflow.
 - [x] Preserve the existing payout minimum, refund reserve, remainder policy, monthly batch, maker-checker approval and RazorpayX reconciliation paths.
 
 ## 2. Transaction/source traceability
 - [x] Show contributing verified course-sale count; detailed source data is available in the existing paginated recipient ledger.
-- [ ] In the recipient ledger, trace each entry to course title, source institution, marketplace institution, order/payment reference, allocation and the related event. Invoice-number linkage is still outstanding.
+- [x] In the recipient ledger, trace each entry to course title, source institution, marketplace institution, order/payment reference, allocation and related event. Invoice-number linkage remains outstanding.
 - [ ] Distinguish source institution, marketplace institution, legal seller, revenue recipient and the account that funds a bank transfer; these are different roles.
 - [ ] Show earned, refunded, charges/fee-tax corrections, payout, reversal and recovery events without silently rewriting historical events.
 - [x] Preserve pagination, access checks, read-only behavior and existing API response compatibility.
@@ -52,7 +52,7 @@ Scope: improve the existing HRMS Finance and Payouts workspace in place. This is
 - [ ] Reorganize existing HRMS Finance workspace into Overview, Institutions & Companies, Sales & Tax Ledger, Tax & Compliance, Payout Batches & Transfers, and Reconciliation & Exceptions.
 - [x] Reuse existing Payouts workspace, ledger dialog, Finance & Billing route and theme tokens; no disconnected finance UI added.
 - [ ] Verify light/dark theme contrast, keyboard operation, accessible status text, loading/empty/error states and mobile/tablet/desktop layouts in browsers and CI.
-- [ ] Explain why each transfer is eligible or blocked; do not expose full bank account numbers in browser state after submission or in logs.
+- [x] Explain payout-check reasons, distinguish inactive-recipient historical balances, and show bank accounts masked. Tax/legal approval remains a separate outstanding release gate.
 
 ## 6. Validation and release gates
 - [ ] Validate active recipient with zero allocations, one/many allocations, multiple currencies, multiple approved courses and multiple source/marketplace institutions.
@@ -68,6 +68,6 @@ Scope: improve the existing HRMS Finance and Payouts workspace in place. This is
 - [x] Checklist saved in the repository.
 - [x] Complete recipient catalogue in payout balances, including zero-activity entities.
 - [x] Source/marketplace institution attribution in recipient ledger.
-- [ ] Consolidated tax-liability model and reviewed rule lifecycle. Implemented so far: read-only recorded output-tax and processed credit-note tax snapshot plus explicit TCS/TDS coverage gaps. Automated withholding/remittance remains disabled.
-- [x] Redesigned responsive recipient overview. Existing Finance and Tax tabs/routes are reused; no risky navigation migration was necessary for this slice.
+- [ ] Consolidated tax-liability model and reviewed rule lifecycle. Implemented so far: read-only recorded output-tax and processed credit-note tax snapshot plus explicit TCS/TDS coverage gaps. Payout-readiness wording now states that tax applicability is not assessed and requires separate review. Automated withholding/remittance remains disabled.
+- [x] Redesigned responsive recipient overview with targeted readiness, currency, missing-bank, recovery and reservation filters. Existing Finance and Tax tabs/routes are reused; broader navigation reorganization remains open.
 - [ ] Automated regression checks and CI verification (pending required CI and runtime verification).
