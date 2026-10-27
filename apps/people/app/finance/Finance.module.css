@@ -284,3 +284,8 @@
 .payoutFeeForm input,.payoutFeeForm select{width:100%;min-width:0;min-height:39px;padding:8px 10px;border:1px solid var(--finance-line,var(--line));border-radius:9px;background:var(--finance-field,var(--finance-surface,#fff));color:var(--finance-ink,var(--ink));font-size:11px}
 .payoutFeeForm .payoutFormFooter{grid-column:1/-1}
 @media(max-width:640px){.payoutRemainderEditor,.payoutFeeForm{grid-template-columns:minmax(0,1fr)}.payoutConfirmCheck{grid-column:1}.payoutFeeForm .payoutFormFooter{grid-column:1}}
+
+/* Provider-event reconciliation controls: match the existing theme-aware finance fields. */
+.payoutReconcileSelect{grid-column:1/-1;display:grid;gap:6px;align-content:start;min-width:0;font-size:11px;font-weight:800;color:var(--finance-ink,var(--ink))}
+.payoutReconcileSelect select{width:100%;min-width:0;min-height:40px;padding:9px 11px;border:1px solid var(--finance-line,var(--line));border-radius:10px;background:var(--finance-field,var(--finance-surface,#fff));color:var(--finance-ink,var(--ink));font-size:12px}
+@media(max-width:640px){.payoutReconcileSelect{grid-column:1/-1}.payoutReconcileSelect select{font-size:12px}}
