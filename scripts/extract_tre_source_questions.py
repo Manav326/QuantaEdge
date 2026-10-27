@@ -1071,7 +1071,17 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 # Apply the same glyph-conversion warning to qualifying-language questions.
                 # They often have no English sibling by design, but must still never appear
                 # as review-ready merely because the question is in the native language track.
-                if hi and hindi_conversion_needs_review(hi.get("conversion_status", "")):
+                has_reconstructed_hindi_option = bool(
+                    hi and any(
+                        option.get("hindi_ocr_status")
+                        or option.get("ocr_status", "").find("REQUIRES_HUMAN_REVIEW") >= 0
+                        for option in hi.get("options", [])
+                    )
+                )
+                if hi and (
+                    hindi_conversion_needs_review(hi.get("conversion_status", ""))
+                    or has_reconstructed_hindi_option
+                ):
                     if "HINDI_FONT_DETECTION_UNCERTAIN" not in entry["review_flags"]:
                         entry["review_flags"].append("HINDI_FONT_DETECTION_UNCERTAIN")
             cycle_records = []
@@ -1180,7 +1190,7 @@ def build_inventory(zip_path: Path, output_dir: Path, repo_root: Path) -> dict[s
                 "alternate_language_tracks":alternate_language_tracks,
                 "source_notes":[
                     "Original PDF bytes are preserved exactly; SHA-256 is recorded.",
-                    "Supported legacy Hindi encodings are converted to Unicode. SHREE-DEV-0708/0709 prompt blocks use Hindi OCR only when Tesseract Hindi data is available; reconstructed text remains pending human review, and the raw legacy text plus page provenance are preserved.",
+                    "Supported legacy Hindi encodings are converted to Unicode. SHREE-DEV-0708/0709 prompt/option lines use Hindi OCR only when Tesseract Hindi data is available; reconstructed text remains pending human review, and raw legacy text plus page provenance are preserved. Mixed-font stems containing non-Hindi formula/code lines stay raw for manual reconstruction.",
                     "All questions present in each original booklet are preserved. TRE 2.0 and TRE 3.0 each have 30 qualifying-language items in addition to 40 General Studies + 80 Computer Science, for 150 total. Only GS and Computer Science contribute to the scored result, reported in two sections.",
                     "Do not release until question/option pair completeness, Hindi rendering, answers, concise explanations, paper rules and any mathematical/code expressions have been reviewed.",
                 ],
