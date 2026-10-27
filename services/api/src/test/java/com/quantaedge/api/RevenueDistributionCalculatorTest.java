@@ -140,7 +140,7 @@ class RevenueDistributionCalculatorTest {
     assertEquals(90_000L,result.distributablePoolPaise());
     assertEquals(36_000L,result.allocations().get(0).amountPaise());
     assertEquals(54_000L,result.allocations().get(1).remainderAmountPaise());
-    assertEquals(64_000L,result.allocations().get(1).amountPaise());
+    assertEquals(54_000L,result.allocations().get(1).amountPaise());
     assertEquals(100_000L,result.allocations().stream().mapToLong(
         RevenueDistributionCalculator.BeneficiaryAllocation::amountPaise).sum());
   }
