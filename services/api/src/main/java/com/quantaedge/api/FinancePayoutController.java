@@ -953,7 +953,8 @@ public class FinancePayoutController {
     Map<String,Object> payload=new LinkedHashMap<>();
     payload.put("account_number",sourceAccountNumber);payload.put("fund_account_id",text(row,"provider_fund_account_id"));
     payload.put("amount",number(row.get("amount_paise")));payload.put("currency","INR");payload.put("mode","IMPS");
-    payload.put("purpose","vendor_bill");payload.put("reference_id",text(row,"public_id"));
+    // RazorpayX documents this purpose value with a space; vendor_bill is not the API label.
+    payload.put("purpose","vendor bill");payload.put("reference_id",text(row,"public_id"));
     payload.put("narration","QuantaEdge beneficiary payout");payload.put("queue_if_low_balance",true);
     payload.put("notes",Map.of("quantaedge_payout_id",Long.toString(payoutId),
         "quantaedge_batch_id",Long.toString(number(row.get("batch_id"))),
