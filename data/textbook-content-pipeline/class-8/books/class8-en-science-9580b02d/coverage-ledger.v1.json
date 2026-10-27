@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
     "raw_analysis_result_rows": 1344,
-    "successful_visual_analyses": 1332,
+    "successful_visual_analyses": 1331,
     "missing_visual_analyses": 947,
-    "failed_visual_analyses": 12,
+    "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 959,
+    "unresolved_count": 960,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -49502,16 +49502,21 @@
           "lifting effort",
           "chart paper",
           "paper plate",
+          "folded sheet",
+          "unfolded sheet",
           "atmospheric pressure",
-          "force",
           "pressure",
+          "force",
           "area",
           "balloon",
-          "inflation"
+          "inflation",
+          "pressure on walls",
+          "pressure on objects",
+          "atmospheric pressure"
         ],
         "context_relation": "The image is a diagram showing how to lift a paper plate with a stick, and how the effort needed to lift it changes with the amount of chart paper used.",
         "limitations": [
-          "The image does not provide specific instructions or steps for lifting the paper plate."
+          "The image does not show the actual lifting process, but rather a diagram of the steps involved."
         ]
       },
       "chapter_id": null,
@@ -49691,42 +49696,9 @@
       "asset_path": "page-0107.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
-      "effective_analysis": {
-        "visual_summary": "A diagram of a rubber sucker being pressed against a surface, with instructions on how to perform an activity related to atmospheric pressure.",
-        "visual_type": "diagram",
-        "visible_text": [
-          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
-          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
-          "Activity 6.4: Let us perform",
-          "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
-          "Do you realise that it sticks to the surface?",
-          "Now, try to pull it off. Do you find it difficult to pull it off?",
-          "When we press the sucker, most of the air between its cup and the surface on which it is placed is pushed out and the air pressure inside it is reduced. The sucker sticks to the surface because the pressure of air surrounding the sucker is higher than the pressure exerted by the air inside the sucke",
-          "Do you know how large the atmospheric pressure is? The force exerted by the atmospheric air column over an area 15 cm × 15 cm is nearly equal to the force of gravity on an object of mass 225 kg (2250 N). The reason we are not crushed under this weight is that the pressure inside our bodies is also e",
-          "A step further",
-          "The SI unit of pressure is N/m², also known as pascal (Pa). However, the practical unit of air pressure is millibar (mb), which is equal to 100 Pa. Air pressure is also expressed in hectopascal (hPa), which is equal to 100 Pa.",
-          "6.3 Formation of Wind",
-          "You must have noticed that on some days, the wind blows strongly, whereas on other days, it is calm. Sometimes, wind becomes so strong that it causes damage to life and property.",
-          "You must have seen that when an inflated balloon is kept without closing its mouth, the air from the balloon escapes. Recall that when there is a puncture in the bicycle tube, the air escapes and the tube collapses. In both of these cases, does air move from a high pressure region to a low pressure "
-        ],
-        "concepts": [
-          "atmospheric pressure",
-          "rubber sucker",
-          "air pressure",
-          "SI unit of pressure",
-          "millibar",
-          "hectopascal",
-          "wind formation",
-          "inflated balloon",
-          "puncture in the bicycle tube"
-        ],
-        "context_relation": "The image is a diagram illustrating an activity related to atmospheric pressure using a rubber sucker.",
-        "limitations": [
-          "The image does not provide specific measurements or calculations related to atmospheric pressure."
-        ]
-      },
+      "effective_analysis": null,
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
