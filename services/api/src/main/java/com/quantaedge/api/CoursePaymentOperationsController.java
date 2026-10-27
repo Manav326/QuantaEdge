@@ -1,5 +1,7 @@
 package com.quantaedge.api;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -26,13 +28,15 @@ public class CoursePaymentOperationsController {
   private final AuthorizationService authorization;
   private final CourseMarketplaceController marketplace;
   private final CoursePaymentOperationsAuditService audit;
+  private final ObjectMapper mapper;
 
   public CoursePaymentOperationsController(JdbcTemplate jdbc, AuthorizationService authorization,
-      CourseMarketplaceController marketplace, CoursePaymentOperationsAuditService audit) {
+      CourseMarketplaceController marketplace, CoursePaymentOperationsAuditService audit, ObjectMapper mapper) {
     this.jdbc = jdbc;
     this.authorization = authorization;
     this.marketplace = marketplace;
     this.audit = audit;
+    this.mapper = mapper;
   }
 
   @GetMapping
@@ -345,30 +349,49 @@ public class CoursePaymentOperationsController {
                     :"Enrollment is created only after the course purchase is finalized.",
         enrollmentDetails,enrollments.isEmpty()?null:enrollments.getFirst().get("enrolled_at")));
 
-    Map<String,Object> allocations=jdbc.queryForMap("""
-        select count(*) as allocation_count,
-          coalesce(sum(allocated_amount_paise),0) as allocated_amount_paise,
-          count(distinct institution_id) as recipient_count
-        from revenue_share_allocation where course_payment_order_id=?
+    List<Map<String,Object>> allocationRows=jdbc.queryForList("""
+        select a.id,a.policy_id,a.policy_recipient_id,a.recipient_type,a.institution_id,a.legal_entity_id,
+          a.currency,a.actual_paid_paise,a.output_tax_paise,a.distributable_pool_paise,a.allocated_amount_paise,
+          coalesce(sum(e.amount_paise) filter(where e.event_type='EARNED'),0) as earned_event_amount_paise,
+          count(e.id) filter(where e.event_type='EARNED') as earned_event_count
+        from revenue_share_allocation a
+        left join revenue_share_allocation_event e on e.allocation_id=a.id
+        where a.course_payment_order_id=?
+        group by a.id,a.policy_id,a.policy_recipient_id,a.recipient_type,a.institution_id,a.legal_entity_id,
+          a.currency,a.actual_paid_paise,a.output_tax_paise,a.distributable_pool_paise,a.allocated_amount_paise
+        order by a.id
         """,orderId);
-    long allocationCount=number(allocations.get("allocation_count"));
-    long expectedRecipients=number(order.get("share_recipient_count"));
+    Map<String,Object> lockedShareSnapshot=Map.of();
+    try {
+      String rawShareSnapshot=text(order.get("revenue_share_policy_snapshot_json"));
+      if(!rawShareSnapshot.isBlank())
+        lockedShareSnapshot=mapper.readValue(rawShareSnapshot,new TypeReference<Map<String,Object>>() {});
+    } catch(Exception ignored) {
+      // The reconciliation reports an unreadable/missing snapshot as an exception rather than
+      // failing the entire order-status trace.
+    }
+    Long orderPolicyId=order.get("revenue_share_policy_id")==null
+        ?null:number(order.get("revenue_share_policy_id"));
+    CourseRevenueAllocationReconciliation.Result allocationReconciliation=
+        CourseRevenueAllocationReconciliation.reconcile(lockedShareSnapshot,orderPolicyId,
+            number(order.get("captured_amount_paise")),number(order.get("output_tax_paise")),allocationRows);
+    long allocationCount=allocationRows.size();
     String allocationStage;
-    if(allocationCount>0&&(!financialSnapshotsPresent||allocationCount>=expectedRecipients&&expectedRecipients>0)) {
-      allocationStage="COMPLETE";
-    } else if("VERIFIED".equals(localStatus)) {
+    if("VERIFIED".equals(localStatus)) {
+      allocationStage=allocationReconciliation.complete()?"COMPLETE":"BLOCKED";
+    } else if(allocationCount>0) {
       allocationStage="BLOCKED";
     } else {
       allocationStage="NOT_REACHED";
     }
-    steps.add(traceStep("REVENUE_SHARE","9. Revenue-share ledger allocated",allocationStage,
-        allocationStage.equals("COMPLETE")?"Institutional allocations are recorded against this saved course order."
-            :allocationStage.equals("BLOCKED")?"The order is verified but the expected revenue-share allocations are missing or incomplete."
-                :"Revenue share is allocated only after payment finalization.",
-        List.of("Recorded allocations: "+allocationCount,
-            "Expected recipients from saved policy snapshot: "+expectedRecipients,
-            "Total allocated: "+number(allocations.get("allocated_amount_paise"))+" paise",
-            "Distinct allocation recipients: "+number(allocations.get("recipient_count"))),null));
+    List<String> allocationDetails=new ArrayList<>();
+    allocationDetails.add("Recorded allocation rows: "+allocationCount);
+    allocationDetails.addAll(allocationReconciliation.details());
+    steps.add(traceStep("REVENUE_SHARE","9. Revenue-share ledger reconciled",allocationStage,
+        allocationStage.equals("COMPLETE")?"The recorded recipient identities, amounts and earned ledger events reconcile to the order's locked policy."
+            :allocationStage.equals("BLOCKED")?"The distribution has missing, unexpected or inconsistent financial records. Review the recipient-by-recipient reconciliation before correcting anything."
+                :"Revenue allocation is expected only after payment finalization.",
+        allocationDetails,null));
 
     List<Map<String,Object>> invoiceRows=jdbc.queryForList("""
         select d.id,d.document_number,d.document_type,d.issued_at,d.total_value_paise,d.tax_value_paise,
@@ -414,6 +437,7 @@ public class CoursePaymentOperationsController {
     result.put("createdAt",order.get("created_at"));
     result.put("checkedAt",java.time.OffsetDateTime.now(java.time.ZoneOffset.UTC).toString());
     result.put("overallStatus",overall);
+    result.put("distributionReconciliation",allocationReconciliation.asMap());
     result.put("provider",provider);
     result.put("financialFacts",Map.of(
         "listedPricePaise",number(order.get("listed_price_paise")),
