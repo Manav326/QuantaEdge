@@ -13,15 +13,15 @@
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
-      "69883c015cbfe046373e1e90",
-      "c973477a8cf682ca3f4db4ca",
-      "29c388b0161ccfef7bc70795"
+      "db0dedaecef0f778a5bac7c4",
+      "0d1c88ea0154d314c4c70259",
+      "140618aa0bc4cc279e5bd3ae"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2404,
-    "assets_remaining": 5084,
+    "assets_analyzed": 2406,
+    "assets_remaining": 5082,
     "assets_completion_percent": 32.1,
-    "assets_failed": 24,
+    "assets_failed": 23,
     "assets_skipped_from_checkpoint": 2404,
     "batch_limit": 5,
     "publication_allowed": false
@@ -9991,7 +9991,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40481191123",
-      "checkpointed_at": "2026-10-27T11:16:37Z"
+      "checkpointed_at": "2026-10-27T11:25:59Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13491,7 +13491,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40481191123",
-      "checkpointed_at": "2026-10-27T11:17:40Z"
+      "checkpointed_at": "2026-10-27T11:27:02Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -90134,19 +90134,30 @@
     {
       "asset_id": "db0dedaecef0f778a5bac7c4",
       "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
-      "page_text_context_sha256": "6bd441fb87e80e68026ee792a3fa29fb3aa8446a8370d8d377345683a5f7beaf",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 73,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6bd441fb87e80e68026ee792a3fa29fb3aa8446a8370d8d377345683a5f7beaf",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40467861457",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40481191123",
+      "checkpointed_at": "2026-10-27T11:31:27Z"
     },
     {
       "asset_id": "81d79821b216f1253e031e05",
@@ -90418,7 +90429,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40467861457",
+      "run_id": "40481191123",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -90789,6 +90800,32 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40467861457",
       "checkpointed_at": "2026-10-27T09:26:59Z"
+    },
+    {
+      "asset_id": "140618aa0bc4cc279e5bd3ae",
+      "asset_sha256": "8eafee6bdb230f7aa075a42349af2ceed045196ff30a9cca993801894cd15cb8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/8eafee6bdb230f7aa075a42349af2ceed045196ff30a9cca993801894cd15cb8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a small object in one hand and a basket in the other.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the discussion of non-metals and their importance in everyday life, specifically focusing on oxygen and carbon.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40481191123",
+      "checkpointed_at": "2026-10-27T11:35:33Z"
     }
   ]
 }
