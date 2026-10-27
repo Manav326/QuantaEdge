@@ -216,6 +216,13 @@ public class FinancePayoutController {
     out.put("payoutsPaidPaise",amount("select coalesce(sum(amount_paise),0) from finance_payout where status='PROCESSED'"));
     out.put("payoutsReversedPaise",amount("select coalesce(sum(amount_paise),0) from finance_payout where status='REVERSED'"));
     out.put("payoutsFailed",count("select count(*) from finance_payout where status in ('FAILED','REJECTED')"));
+    out.put("payoutFeeReconciliationPending",count("""
+      select count(*) from finance_payout_batch b
+      where b.provider_fee_reconciled_at is null
+        and exists(select 1 from finance_payout p where p.batch_id=b.id)
+        and not exists(select 1 from finance_payout p where p.batch_id=b.id
+          and p.status not in ('PROCESSED','FAILED','REJECTED','REVERSED'))
+      """));
     out.put("providerConfigured",providerConfigured());
     return out;
   }
@@ -563,6 +570,18 @@ public class FinancePayoutController {
       """,end);
     if(!missingFees.isEmpty())throw bad("Payouts are blocked because confirmed processor charges are missing for captured order(s): "+
         missingFees.stream().map(r->number(r.get("order_id"))).toList()+". Record actual Razorpay settlement fees first; do not use estimates.");
+
+    Map<String,Object> feeReconciliationBlocker=one("""
+      select b.id from finance_payout_batch b
+      where b.provider_fee_reconciled_at is null
+        and exists(select 1 from finance_payout p where p.batch_id=b.id)
+        and not exists(select 1 from finance_payout p where p.batch_id=b.id
+          and p.status not in ('PROCESSED','FAILED','REJECTED','REVERSED'))
+      order by b.period_start,b.id limit 1
+      """);
+    if(!feeReconciliationBlocker.isEmpty())
+      throw bad("RazorpayX charges for completed payout batch #"+number(feeReconciliationBlocker.get("id"))+
+        " are not yet reconciled. Confirm the actual provider fee and tax values before preparing another month.");
 
     List<Map<String,Object>> balances=jdbc.queryForList("""
       select a.id as allocation_id,a.recipient_type,a.institution_id,a.legal_entity_id,a.currency,a.course_payment_order_id,
