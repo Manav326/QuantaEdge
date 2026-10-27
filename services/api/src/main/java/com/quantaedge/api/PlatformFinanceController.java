@@ -1395,6 +1395,13 @@ public class PlatformFinanceController {
     if(optionalText(raw)==null)return null;
     try{return java.time.LocalDate.parse(String.valueOf(raw));}catch(Exception ex){throw bad("Effective end must be an ISO date.");}
   }
+  private static String string(Object raw) {
+    return raw==null?"":String.valueOf(raw).trim();
+  }
+  private static String value(Map<String,Object> row,String key,String fallback) {
+    String actual=optionalText(row==null?null:row.get(key));
+    return actual==null?fallback:actual;
+  }
   private static ResponseStatusException bad(String message) { return new ResponseStatusException(HttpStatus.BAD_REQUEST,message); }
   private static ResponseStatusException notFound(String message) { return new ResponseStatusException(HttpStatus.NOT_FOUND,message); }
 }
