@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "1e722a68921f082f8f969360b9bcc1efe519196d5df129389d124fe74d066f10",
+  "raw_analysis_sha256": "cbd2107b66f40e03d7eed54ede2acc53af7c002515383e24fb56b3115c9656c6",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413175682",
-      "checkpointed_at": "2026-10-27T00:09:18Z",
+      "checkpointed_at": "2026-10-27T00:14:15Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29347,7 +29347,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413175682",
-      "checkpointed_at": "2026-10-27T00:10:12Z",
+      "checkpointed_at": "2026-10-27T00:15:08Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing names and roles of contributors.",
         "visual_type": "page_with_multiple_visuals",
@@ -57868,7 +57868,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413175682",
-      "checkpointed_at": "2026-10-27T00:11:10Z",
+      "checkpointed_at": "2026-10-27T00:16:07Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and muscular force.",
         "visual_type": "page_with_multiple_visuals",
@@ -65301,6 +65301,94 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bc8b9f38957bc25bef9fdfd8",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 106,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "f6aa5ef1687b0f686accb8b7d47e4aae62249fc3a024613b31f9b4b79cfe6f9b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A folded chart paper sheet on top of an inverted paper plate, with a stick placed on top for lifting.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "the folded chart paper sheet — big enough for the",
+          "stick to come out. Place the folded sheet on top",
+          "of the inverted paper plate as shown in Fig. 6.9b.",
+          "z Now, try to lift the paper plate covered with a",
+          "folded sheet using the stick.",
+          "z Observe how much effort is needed to lift it.",
+          "z Now, place the second unfolded chart paper",
+          "sheet in pla"
+        ],
+        "concepts": [
+          "chart paper sheet",
+          "inverted paper plate",
+          "stick",
+          "lifting effort"
+        ],
+        "context_relation": "instructions for a physical experiment",
+        "limitations": [
+          "no specific image provided, only text description"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-27T00:16:44Z",
+      "effective_analysis": {
+        "visual_summary": "A folded chart paper sheet on top of an inverted paper plate, with a stick placed on top for lifting.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "the folded chart paper sheet — big enough for the",
+          "stick to come out. Place the folded sheet on top",
+          "of the inverted paper plate as shown in Fig. 6.9b.",
+          "z Now, try to lift the paper plate covered with a",
+          "folded sheet using the stick.",
+          "z Observe how much effort is needed to lift it.",
+          "z Now, place the second unfolded chart paper",
+          "sheet in pla"
+        ],
+        "concepts": [
+          "chart paper sheet",
+          "inverted paper plate",
+          "stick",
+          "lifting effort"
+        ],
+        "context_relation": "instructions for a physical experiment",
+        "limitations": [
+          "no specific image provided, only text description"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1851a22784c9105601dfe039",
+      "asset_sha256": "00bb00797e96f793c322428cce739653303fd136a386d64fd912eaaeda159c5b",
+      "page_text_context_sha256": "f6aa5ef1687b0f686accb8b7d47e4aae62249fc3a024613b31f9b4b79cfe6f9b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 106,
+      "asset_path": "page-0106.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],
