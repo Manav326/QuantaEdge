@@ -183,7 +183,7 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
             financial,
         )
         self.assertIn(
-            ") values(?,?,?,?,?,?,?,?,?,?,?,?::jsonb,?) returning id",
+            ") values(?,?,?,?,?,?,?, ?,?,?,?,?,?,?::jsonb,?) returning id",
             financial,
         )
         self.assertIn(
@@ -215,6 +215,59 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
         # Parent downloads continue to be attributed to the purchasing user.
         self.assertIn('return buildDownload(orderId,"PARENT",context.userId(),null);', invoices)
         self.assertIn('return buildDownloadDocument(orderId,documentId,"PARENT",context.userId(),null);', invoices)
+
+
+
+    def test_finance_distribution_supports_company_recipients_remainder_and_confirmed_fees(self):
+        calculator = (ROOT / "services/api/src/main/java/com/quantaedge/api/RevenueDistributionCalculator.java").read_text(encoding="utf-8")
+        financial = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseOrderFinancialService.java").read_text(encoding="utf-8")
+        finance = (ROOT / "services/api/src/main/java/com/quantaedge/api/PlatformFinanceController.java").read_text(encoding="utf-8")
+        migration = (ROOT / "services/api/src/main/resources/db/migration/V213__finance_beneficiaries_and_razorpayx_payouts.sql").read_text(encoding="utf-8")
+
+        self.assertIn("calculateBeneficiaries(", calculator)
+        self.assertIn("actualPaidPaise-outputTaxPaise-processingChargesPaise", calculator)
+        self.assertIn("explicitAmountPaise(),remainder", calculator)
+        self.assertIn('recipient_type', migration)
+        self.assertIn("legal_entity_id", migration)
+        self.assertIn("remainder_recipient_type", migration)
+        self.assertIn("PROCESSING_FEE_DEDUCTED", migration)
+        self.assertIn("reconcileProviderFees(", financial)
+        self.assertIn("entity_kind in ('PLATFORM','COMPANY')", finance)
+        self.assertIn("remainderRecipientType", finance)
+
+    def test_razorpayx_payout_requires_legal_review_maker_checker_and_safe_webhooks(self):
+        payout = (ROOT / "services/api/src/main/java/com/quantaedge/api/FinancePayoutController.java").read_text(encoding="utf-8")
+        webhook = (ROOT / "services/api/src/main/java/com/quantaedge/api/RazorpayXPayoutWebhookController.java").read_text(encoding="utf-8")
+        migration = (ROOT / "services/api/src/main/resources/db/migration/V213__finance_beneficiaries_and_razorpayx_payouts.sql").read_text(encoding="utf-8")
+        panel = (ROOT / "apps/people/app/finance/PayoutsPanel.tsx").read_text(encoding="utf-8")
+        route = (ROOT / "apps/people/app/finance/payouts/page.tsx").read_text(encoding="utf-8")
+
+        self.assertIn("requirePayoutReady()", payout)
+        self.assertIn("QE_FINANCE_PAYOUT_APPROVE", payout)
+        self.assertIn("created_by_staff_id", payout)
+        self.assertIn("collection_arrangement_status", payout)
+        self.assertIn("X-Payout-Idempotency", payout)
+        self.assertIn("X-Razorpay-Signature", webhook)
+        self.assertIn("HmacSHA256", webhook)
+        self.assertIn("request.getInputStream().readNBytes", webhook)
+        self.assertIn("finance_payout_provider_event", payout)
+        self.assertIn("bank_account_last4", migration)
+        self.assertNotIn("account_number varchar", migration)
+        self.assertIn("Legal seller & collection-account review", panel)
+        self.assertIn("PayoutsPanel", route)
+
+    def test_refund_reversal_accounts_for_confirmed_fee_adjustments_for_any_recipient(self):
+        refunds = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseRefundLedgerService.java").read_text(encoding="utf-8")
+        payout_ui = (ROOT / "apps/people/app/finance/PayoutsPanel.tsx").read_text(encoding="utf-8")
+        css = (ROOT / "apps/people/app/finance/Finance.module.css").read_text(encoding="utf-8")
+
+        self.assertIn("a.legal_entity_id", refunds)
+        self.assertIn("PROCESSING_FEE_DEDUCTED", refunds)
+        self.assertIn("grossAllocated-number(allocation.get(\"fee_deducted_paise\"))", refunds)
+        self.assertIn("cumulativeNetRefund>=pool?allocated", refunds)
+        self.assertIn("/payout-balances", payout_ui)
+        self.assertIn("recovery_due_paise", payout_ui)
+        self.assertIn(".payoutBalanceTable", css)
 
 
 

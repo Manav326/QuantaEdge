@@ -4,6 +4,7 @@ import { apiFetch } from '../components/apiClient';
 import { notifyUser } from '../components/GlobalNotificationHost';
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type CSSProperties } from 'react';
 import styles from './Finance.module.css';
+import PayoutsPanel from './PayoutsPanel';
 
 type Institution = { id:number; tenant_code:string; display_name:string; status:string };
 type LegalEntity = { id:number; entity_kind:string; institution_id?:number|null; institution_name?:string|null; legal_name:string; trade_name?:string|null; contact_email?:string|null; contact_phone?:string|null; registered_address_json?:string|null; invoice_series_code?:string; einvoice_applicability?:'UNREVIEWED'|'NOT_REQUIRED'|'REQUIRED'; einvoice_applicability_reviewed_at?:string|null; einvoice_applicability_review_note?:string|null; status:string; active_gst_registrations?:number };
@@ -17,9 +18,9 @@ function offerLifecycleLabel(offer:Offer):string {
   return 'OBSOLETE — DO NOT CONFIGURE';
 }
 type Policy = { id:number; institution_offer_id:number; policy_version:number; currency:string; status:string; institution_name:string; course_name:string; recipient_count:number; effective_from:string; effective_until?:string|null };
-type PolicyRecipient = { institution_id:number; calculation_type:string; percentage_basis_points?:number|null; flat_amount_paise?:number|null; institution_name?:string };
+type PolicyRecipient = { recipient_type?:string; institution_id?:number|null; legal_entity_id?:number|null; recipient_id?:number; recipient_name?:string; calculation_type:string; percentage_basis_points?:number|null; flat_amount_paise?:number|null };
 type DiscountOffer = { id:number; institution_offer_id:number; code:string; version:number; currency:string; discount_type:string; percentage_basis_points?:number|null; flat_amount_paise?:number|null; max_discount_paise?:number|null; min_listed_price_paise:number; max_redemptions?:number|null; max_redemptions_per_purchaser?:number|null; effective_from:string; effective_until?:string|null; status:string; institution_name:string; course_name:string; redemption_count:number; offer_price_paise:number };
-type PolicyDetail = Policy & { recipients:PolicyRecipient[] };
+type PolicyDetail = Policy & { recipients:PolicyRecipient[]; remainder_recipient_type?:string; remainder_institution_id?:number|null; remainder_legal_entity_id?:number|null; remainder_recipient_name?:string };
 type Template = { id:number; scope:string; legal_entity_id?:number|null; internal_name:string; template_version_id?:number|null; version_no?:number|null; version_status?:string; design_definition_json?:string|null; published_at?:string|null };
 type FinancialDocument = { id:number; document_type:string; document_number:string; issued_at:string; currency:string; total_value_paise:number; tax_value_paise:number; source_type:string; source_record_key:string; pdf_available:boolean };
 type RefundRecord = { id:number; public_id:string; course_payment_order_id:number; requested_amount_paise:number; currency:string; reason:string; status:string; provider_status?:string|null; provider_refund_id?:string|null; requested_at:string; settled_at?:string|null; credit_note_document_id?:number|null; credit_note_number?:string|null; message?:string };
@@ -69,12 +70,19 @@ type PaymentStatusTrace = {
   financialFacts?:{listedPricePaise:number;discountAmountPaise:number;payablePaise:number;capturedAmountPaise:number;
     currency:string;financialSnapshotsPresent:boolean;buyerSnapshotPresent:boolean};
 };
-type Overview = { legalEntities:number; activeTaxProfiles:number; pendingTaxProfiles:number; approvedSharePolicies:number; pendingSharePolicies:number; issuedDocuments:number; allocatedPaise:number };
+type Overview = {
+  legalEntities:number; activeTaxProfiles:number; pendingTaxProfiles:number; approvedSharePolicies:number;
+  pendingSharePolicies:number; issuedDocuments:number; allocatedPaise:number;
+  capturedSalesPaise:number;processedRefundsPaise:number;pendingRefundsPaise:number;pendingRefundCount:number;
+  netCollectedAfterRefundsPaise:number;invoicedOutputTaxPaise:number;processedCreditNoteTaxPaise:number;
+  netOutputTaxBeforeInputCreditsPaise:number;confirmedProcessorFeesPaise:number;confirmedProcessorFeeTaxPaise:number;
+  netPoolAfterTaxRefundsAndFeesPaise:number;paymentFeeReconciliationPending:number
+};
 type Design = { primaryColor:string; accentColor:string; surfaceStyle:string; layout:string; showLogo:boolean; footerText:string };
-type RecipientDraft = { institutionId:string; calculationType:'PERCENTAGE'|'FLAT'; percentage:string; flatRupees:string };
+type RecipientDraft = { recipientType:'INSTITUTION'|'COMPANY'; recipientId:string; calculationType:'PERCENTAGE'|'FLAT'; percentage:string; flatRupees:string };
 type TaxForm = { offerId:string; legalEntityId:string; serviceClassificationCode:string; taxTreatment:string; gstPercent:string; cessPercent:string; priceIncludesTax:boolean; placeOfSupplyRule:string; effectiveFrom:string };
-type FinanceTab = 'overview'|'entities'|'tax'|'distribution'|'discounts'|'studio'|'documents'|'payments';
-const FINANCE_TABS:FinanceTab[]=['overview','entities','tax','distribution','discounts','studio','documents','payments'];
+type FinanceTab = 'overview'|'entities'|'tax'|'distribution'|'discounts'|'studio'|'documents'|'payments'|'payouts';
+const FINANCE_TABS:FinanceTab[]=['overview','entities','tax','distribution','discounts','studio','documents','payments','payouts'];
 
 const BASE='/api/v1/hrms/platform/finance';
 const DEFAULT_DESIGN:Design={primaryColor:'#F97316',accentColor:'#0F766E',surfaceStyle:'WARM_PAPER',layout:'EDITORIAL',showLogo:true,footerText:'Thank you for learning with us.'};
@@ -157,6 +165,8 @@ export default function FinancePage(){
   const [selectedPolicyId,setSelectedPolicyId]=useState('');
   const [policyDetail,setPolicyDetail]=useState<PolicyDetail|null>(null);
   const [recipients,setRecipients]=useState<RecipientDraft[]>([]);
+  const [policyRemainderType,setPolicyRemainderType]=useState<'INSTITUTION'|'COMPANY'>('COMPANY');
+  const [policyRemainderId,setPolicyRemainderId]=useState('');
   const [entityForm,setEntityForm]=useState({entityKind:'PLATFORM',institutionId:'',legalName:'',tradeName:'',contactEmail:'',contactPhone:'',addressLine:'',city:'',state:'',postalCode:'',invoiceSeriesCode:'QE'});
   const [editingCoreEntityId,setEditingCoreEntityId]=useState<number|null>(null);
   const [gstEntityId,setGstEntityId]=useState('');
@@ -249,8 +259,14 @@ export default function FinancePage(){
       const p=await api<PolicyDetail>(BASE+'/revenue-share/policies/'+id);
       setPolicyDetail(p);
       const offerId=String(p.institution_offer_id);selectWorkflowOffer(offerId,true);
+      const remainderType=p.remainder_recipient_type==='INSTITUTION'?'INSTITUTION':'COMPANY';
+      setPolicyRemainderType(remainderType);
+      const remainderId=remainderType==='INSTITUTION'?p.remainder_institution_id:p.remainder_legal_entity_id;
+      setPolicyRemainderId(remainderId==null?'':String(remainderId));
       setRecipients((p.recipients||[]).map(r=>({
-        institutionId:String(r.institution_id),calculationType:r.calculation_type as 'PERCENTAGE'|'FLAT',
+        recipientType:r.recipient_type==='COMPANY'?'COMPANY':'INSTITUTION',
+        recipientId:String(r.recipient_type==='COMPANY'?r.legal_entity_id:r.institution_id),
+        calculationType:r.calculation_type as 'PERCENTAGE'|'FLAT',
         percentage:r.percentage_basis_points==null?'':String(r.percentage_basis_points/100),
         flatRupees:r.flat_amount_paise==null?'':String(r.flat_amount_paise/100)
       })));
@@ -624,32 +640,41 @@ export default function FinancePage(){
       const result=await api<{id:number}>(BASE+'/revenue-share/offers/'+selectedOfferId+'/policies',{method:'POST',body:JSON.stringify({currency:'INR',effectiveFrom:new Date().toISOString()})});
       setSelectedPolicyId(String(result.id));
       const detail=await api<PolicyDetail>(BASE+'/revenue-share/policies/'+result.id);
-      setPolicyDetail(detail);setRecipients([]);
+      setPolicyDetail(detail);
+      const remainderType=detail.remainder_recipient_type==='INSTITUTION'?'INSTITUTION':'COMPANY';
+      setPolicyRemainderType(remainderType);
+      const remainderId=remainderType==='INSTITUTION'?detail.remainder_institution_id:detail.remainder_legal_entity_id;
+      setPolicyRemainderId(remainderId==null?'':String(remainderId));
+      setRecipients([]);
     },'Draft revenue-share policy created.');
   };
   const recipientPayload=()=>{
     if(!selectedPolicyId) throw new Error('Create or select a draft policy first.');
-    const invalid=recipients.some(r=>!r.institutionId||(r.calculationType==='PERCENTAGE'?!(Number(r.percentage)>0&&Number(r.percentage)<=100):!(Number(r.flatRupees)>0)));
-    if(invalid) throw new Error('Every recipient must have an institution and a valid positive percentage or flat amount.');
+    const invalid=recipients.some(r=>!r.recipientId||(r.calculationType==='PERCENTAGE'?!(Number(r.percentage)>0&&Number(r.percentage)<=100):!(Number(r.flatRupees)>0)));
+    if(invalid) throw new Error('Each institution or company needs a positive percentage or flat share.');
+    if(!policyRemainderId)throw new Error('Choose the institution or company that receives the remaining balance.');
     return recipients.map(r=>r.calculationType==='PERCENTAGE'
-      ?{institutionId:Number(r.institutionId),calculationType:r.calculationType,percentageBasisPoints:Math.round(Number(r.percentage)*100)}
-      :{institutionId:Number(r.institutionId),calculationType:r.calculationType,flatAmountPaise:Math.round(Number(r.flatRupees)*100)});
+      ?{recipientType:r.recipientType,recipientId:Number(r.recipientId),calculationType:r.calculationType,percentageBasisPoints:Math.round(Number(r.percentage)*100)}
+      :{recipientType:r.recipientType,recipientId:Number(r.recipientId),calculationType:r.calculationType,flatAmountPaise:Math.round(Number(r.flatRupees)*100)});
   };
   const recipientSnapshot=(rows:any[])=>JSON.stringify(rows.map(row=>({
-    institutionId:Number(row.institutionId??row.institution_id),
+    recipientType:String(row.recipientType??row.recipient_type??'INSTITUTION'),
+    recipientId:Number(row.recipientId??row.recipient_id??(String(row.recipient_type)==='COMPANY'?row.legal_entity_id:row.institution_id)),
     calculationType:String(row.calculationType??row.calculation_type),
     percentageBasisPoints:row.percentageBasisPoints??row.percentage_basis_points??null,
     flatAmountPaise:row.flatAmountPaise??row.flat_amount_paise??null
-  })).sort((a,b)=>a.institutionId-b.institutionId));
+  })).sort((a,b)=>a.recipientType.localeCompare(b.recipientType)||a.recipientId-b.recipientId));
   const recipientsUnchanged=(()=>{
     if(!policyDetail||!selectedPolicyId)return false;
-    try{return recipientSnapshot(recipientPayload())===recipientSnapshot(policyDetail.recipients||[]);}
+    try{return recipientSnapshot(recipientPayload())===recipientSnapshot(policyDetail.recipients||[])
+      &&policyRemainderType===(policyDetail.remainder_recipient_type==='INSTITUTION'?'INSTITUTION':'COMPANY')
+      &&Number(policyRemainderId)===(policyRemainderType==='INSTITUTION'?Number(policyDetail.remainder_institution_id):Number(policyDetail.remainder_legal_entity_id));}
     catch{return false;}
   })();
   const saveRecipients=async()=>{
     if(!selectedPolicyId||recipientsUnchanged)return;
     const policyId=selectedPolicyId;
-    const saved=await action(async()=>api(BASE+'/revenue-share/policies/'+policyId+'/recipients',{method:'PUT',body:JSON.stringify({recipients:recipientPayload()})}), 'Revenue-share recipients saved.');
+    const saved=await action(async()=>api(BASE+'/revenue-share/policies/'+policyId+'/recipients',{method:'PUT',body:JSON.stringify({recipients:recipientPayload(),remainderRecipientType:policyRemainderType,remainderRecipientId:Number(policyRemainderId)})}), 'Revenue-share recipients saved.');
     if(saved)await loadPolicy(policyId);
   };
   const createTemplate=()=>{
@@ -718,7 +743,7 @@ export default function FinancePage(){
   const tabs:[typeof tab,string,string][]=[
     ['overview','Overview','▦'],['entities','Seller & GST','⌂'],['tax','Tax profile','%'],
     ['distribution','Revenue share','↗'],['studio','Invoice design','▤'],['discounts','Discount codes','%'],
-    ['payments','Payments & reconciliation','↻'],['documents','Issued documents','▣']
+    ['payments','Payments & reconciliation','↻'],['documents','Issued documents','▣'],['payouts','Payouts & settlements','⇢']
   ];
   // Render the same selected design on two workspace surfaces. The design and PDF
   // are independent of HRMS appearance and retain their explicitly authored colours.
@@ -766,6 +791,23 @@ export default function FinancePage(){
     </nav>
     {loading&&!catalog?<section className={styles.panel}>Loading financial configuration…</section>:!catalog?<section className={styles.panel}>The Finance workspace is unavailable. Confirm HRMS owner access and check the API response.</section>:<>
       {tab==='overview'&&<section className={styles.stack}>
+        <div className={styles.panel}>
+          <div className={styles.panelHead}><div><h2>Financial position</h2>
+            <p>Figures come from verified course orders, provider-confirmed refunds, approved invoices and recorded processor charges. Amounts below are in INR.</p></div></div>
+          <div className={styles.metrics}>
+            <article><span>Verified course sales</span><strong>{rupees(overview?.capturedSalesPaise)}</strong><small>Payments confirmed as captured; excludes pending checkouts</small></article>
+            <article><span>Refunds processed</span><strong>{rupees(overview?.processedRefundsPaise)}</strong><small>Razorpay-confirmed refunds only</small></article>
+            <article><span>Refunds awaiting confirmation</span><strong>{rupees(overview?.pendingRefundsPaise)}</strong><small>{overview?.pendingRefundCount??0} refund request(s); not yet treated as repaid</small></article>
+            <article><span>Net collections after refunds</span><strong>{rupees(overview?.netCollectedAfterRefundsPaise)}</strong><small>Captured money less provider-confirmed refunds</small></article>
+            <article><span>Output tax on invoices</span><strong>{rupees(overview?.invoicedOutputTaxPaise)}</strong><small>Tax recorded on verified course sales</small></article>
+            <article><span>Tax on processed credit notes</span><strong>{rupees(overview?.processedCreditNoteTaxPaise)}</strong><small>Tax credits recorded on refund credit notes</small></article>
+            <article><span>Net output tax</span><strong>{rupees(overview?.netOutputTaxBeforeInputCreditsPaise)}</strong><small>Before input-tax credits or other statutory adjustments</small></article>
+            <article><span>Confirmed payment-processing charges</span><strong>{rupees((overview?.confirmedProcessorFeesPaise??0)+(overview?.confirmedProcessorFeeTaxPaise??0))}</strong><small>Provider fee plus tax; missing actual charges are shown below</small></article>
+            <article><span>Pool before revenue shares</span><strong>{rupees(overview?.netPoolAfterTaxRefundsAndFeesPaise)}</strong><small>Net collections less net output tax and confirmed processor charges; may be negative while refunds/fees settle</small></article>
+            <article><span>Payment fees still unconfirmed</span><strong>{overview?.paymentFeeReconciliationPending??'—'}</strong><small>Sales blocked from payout preparation until actual fees are recorded</small></article>
+          </div>
+          <p className={styles.note}>The net output-tax figure is an operational reconciliation, not a final GST return or tax-advice calculation. Input-tax credits, GST adjustments, withholding/TDS and any other statutory obligations must still be handled by the responsible finance/tax adviser.</p>
+        </div>
         <div className={styles.metrics}>
           <article><span>Legal entities</span><strong>{overview?.legalEntities??'—'}</strong><small>Configured suppliers</small></article>
           <article><span>Tax profiles pending</span><strong>{overview?.pendingTaxProfiles??'—'}</strong><small>Requires HRMS review</small></article>
@@ -785,7 +827,7 @@ export default function FinancePage(){
       {tab==='entities'&&<section className={styles.twoCol}>
         <div className={styles.panel}><h2>{editingCoreEntityId?'Edit legal entity':'Legal entities'}</h2><p>{editingCoreEntityId?'Edit draft details before activating the supplier. Core details lock after activation.':'Create the legal supplier record, then verify its details before activation.'}</p>
           <form className={styles.form} onSubmit={saveEntity}>
-            <label>Entity scope<select disabled={editingCoreEntityId!==null} value={entityForm.entityKind} onChange={e=>setEntityForm(v=>({...v,entityKind:e.target.value}))}><option value="PLATFORM">Platform legal entity</option><option value="INSTITUTION">Institution legal entity</option></select></label>
+            <label>Entity scope<select disabled={editingCoreEntityId!==null} value={entityForm.entityKind} onChange={e=>setEntityForm(v=>({...v,entityKind:e.target.value}))}><option value="PLATFORM">Platform legal entity (PureDeal)</option><option value="COMPANY">Other company</option><option value="INSTITUTION">Institution legal entity</option></select></label>
             {entityForm.entityKind==='INSTITUTION'&&<label>Institution<select disabled={editingCoreEntityId!==null} required value={entityForm.institutionId} onChange={e=>setEntityForm(v=>({...v,institutionId:e.target.value}))}><option value="">Select institution</option>{catalog.institutions.map(i=><option key={i.id} value={i.id}>{i.display_name} · {i.tenant_code}</option>)}</select></label>}
             <label>Legal name<input required value={entityForm.legalName} onChange={e=>setEntityForm(v=>({...v,legalName:e.target.value}))}/></label>
             <label>Trade name<input value={entityForm.tradeName} onChange={e=>setEntityForm(v=>({...v,tradeName:e.target.value}))}/></label>
@@ -876,15 +918,27 @@ export default function FinancePage(){
         </section>
         {policyDetail&&<section className={styles.panel}><div className={styles.panelHead}><div><h2>Policy v{policyDetail.policy_version}: {policyDetail.course_name}</h2><p>Source offer: {policyDetail.institution_name} · Currency {policyDetail.currency} · Status {policyDetail.status}</p></div>{policyDetail.status==='DRAFT'&&<button className={styles.secondary} onClick={()=>void saveRecipients()} disabled={busy||recipientsUnchanged}>Save recipients</button>}</div>
           {policyDetail.status==='DRAFT'?<><p>Each institution receives either a percentage of the net distributable pool or a fixed amount per eligible paid sale. Duplicate institutions are not permitted.</p>
+            <p>Shares are calculated after tax and confirmed payment-processing charges. The selected remainder recipient receives what remains after all explicit shares; a company may receive both amounts.</p>
+            <div className={styles.form}>
+              <label>Who receives the remaining balance?<select value={policyRemainderType+':'+policyRemainderId} onChange={e=>{const [type,id]=e.target.value.split(':');setPolicyRemainderType(type as 'INSTITUTION'|'COMPANY');setPolicyRemainderId(id||'');}}>
+                <option value="">Choose remainder recipient</option>
+                {catalog.institutions.filter(x=>x.status==='ACTIVE').map(x=><option key={'I'+x.id} value={'INSTITUTION:'+x.id}>Institution · {x.display_name}</option>)}
+                {catalog.legalEntities.filter(x=>x.status==='ACTIVE'&&['PLATFORM','COMPANY'].includes(x.entity_kind)).map(x=><option key={'C'+x.id} value={'COMPANY:'+x.id}>Company · {x.legal_name}</option>)}
+              </select></label>
+            </div>
             <div className={styles.recipientList}>{recipients.map((r,i)=><div className={styles.recipientEditor} key={i}>
-              <label>Institution<select value={r.institutionId} onChange={e=>setRecipients(old=>old.map((x,j)=>i===j?{...x,institutionId:e.target.value}:x))}><option value="">Select institution</option>{catalog.institutions.filter(x=>x.status==='ACTIVE').map(x=><option key={x.id} value={x.id}>{x.display_name}</option>)}</select></label>
+              <label>Beneficiary type<select value={r.recipientType} onChange={e=>setRecipients(old=>old.map((x,j)=>i===j?{...x,recipientType:e.target.value as RecipientDraft['recipientType'],recipientId:''}:x))}><option value="INSTITUTION">Institution</option><option value="COMPANY">Company</option></select></label>
+              <label>Beneficiary<select value={r.recipientId} onChange={e=>setRecipients(old=>old.map((x,j)=>i===j?{...x,recipientId:e.target.value}:x))}><option value="">Select beneficiary</option>
+                {r.recipientType==='INSTITUTION'?catalog.institutions.filter(x=>x.status==='ACTIVE').map(x=><option key={x.id} value={x.id}>{x.display_name}</option>)
+                  :catalog.legalEntities.filter(x=>x.status==='ACTIVE'&&['PLATFORM','COMPANY'].includes(x.entity_kind)).map(x=><option key={x.id} value={x.id}>{x.legal_name}</option>)}
+              </select></label>
               <label>Share type<select value={r.calculationType} onChange={e=>setRecipients(old=>old.map((x,j)=>i===j?{...x,calculationType:e.target.value as RecipientDraft['calculationType']}:x))}><option value="PERCENTAGE">Percentage</option><option value="FLAT">Flat ₹ amount</option></select></label>
               {r.calculationType==='PERCENTAGE'?<label>Pool share (%)<input type="number" min=".01" max="100" step=".01" value={r.percentage} onChange={e=>setRecipients(old=>old.map((x,j)=>i===j?{...x,percentage:e.target.value}:x))}/></label>:<label>Flat amount per sale (₹)<input type="number" min=".01" step=".01" value={r.flatRupees} onChange={e=>setRecipients(old=>old.map((x,j)=>i===j?{...x,flatRupees:e.target.value}:x))}/></label>}
-              <button className={styles.removeRow} type="button" aria-label="Remove institution" onClick={()=>setRecipients(old=>old.filter((_,j)=>j!==i))}>×</button>
+              <button className={styles.removeRow} type="button" aria-label="Remove beneficiary" onClick={()=>setRecipients(old=>old.filter((_,j)=>j!==i))}>×</button>
             </div>)}</div>
-            <button className={styles.secondary} onClick={()=>setRecipients(old=>[...old,{institutionId:'',calculationType:'PERCENTAGE',percentage:'',flatRupees:''}])}>＋ Add institution</button>
-            <div className={styles.policyFooter}><span>Approval checks seller/tax readiness and effective-period conflicts. Actual pool limits are checked at payment allocation time.</span><button className={styles.primary} disabled={busy||!recipients.length} onClick={()=>void action(async()=>{await api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/recipients',{method:'PUT',body:JSON.stringify({recipients:recipientPayload()})});await api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/submit',{method:'POST'});},'Policy submitted for HRMS approval.')}>Submit policy</button></div>
-          </>:policyDetail.status==='PENDING_APPROVAL'?<div className={styles.approvalBox}><p>This policy is waiting for approval. Confirm its parties, effective dates and contract references before activating it.</p><button className={styles.primary} disabled={busy} onClick={()=>void action(()=>api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/approve',{method:'POST'}),'Revenue-share policy approved.')}>Approve policy</button></div>:<div className={styles.recipientList}>{(policyDetail.recipients||[]).map((r,i)=><article className={styles.policyRow} key={i}><b>{r.institution_name}</b><span>{r.calculation_type==='PERCENTAGE'?Number(r.percentage_basis_points)/100+'% of net pool':rupees(r.flat_amount_paise||0)+' per eligible sale'}</span></article>)}</div>}
+            <button className={styles.secondary} onClick={()=>setRecipients(old=>[...old,{recipientType:'INSTITUTION',recipientId:'',calculationType:'PERCENTAGE',percentage:'',flatRupees:''}])}>＋ Add beneficiary</button>
+            <div className={styles.policyFooter}><span>HRMS checks that approved shares fit the pool at checkout. A missing/inactive bank account blocks payout, not the historical allocation.</span><button className={styles.primary} disabled={busy||!recipients.length||!policyRemainderId} onClick={()=>void action(async()=>{await api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/recipients',{method:'PUT',body:JSON.stringify({recipients:recipientPayload(),remainderRecipientType:policyRemainderType,remainderRecipientId:Number(policyRemainderId)})});await api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/submit',{method:'POST'});},'Policy submitted for HRMS approval.')}>Submit policy</button></div>
+          </>:policyDetail.status==='PENDING_APPROVAL'?<div className={styles.approvalBox}><p>This policy is waiting for approval. Confirm its parties, effective dates and contract references before activating it.</p><button className={styles.primary} disabled={busy} onClick={()=>void action(()=>api(BASE+'/revenue-share/policies/'+selectedPolicyId+'/approve',{method:'POST'}),'Revenue-share policy approved.')}>Approve policy</button></div>:<div className={styles.recipientList}>{(policyDetail.recipients||[]).map((r,i)=><article className={styles.policyRow} key={i}><b>{r.recipient_name||(r.recipient_type==='COMPANY'?'Company':'Institution')+' #'+(r.recipient_type==='COMPANY'?r.legal_entity_id:r.institution_id)}</b><span>{r.calculation_type==='PERCENTAGE'?Number(r.percentage_basis_points)/100+'% of distributable pool':rupees(r.flat_amount_paise||0)+' per eligible sale'}</span></article>)}</div>}
         </section>}
       </section>}
       {tab==='discounts'&&<section className={styles.stack}>
@@ -962,6 +1016,7 @@ export default function FinancePage(){
           {refundHistory.length?<div className={styles.policyTableWrap}><table className={styles.table}><thead><tr><th>Requested</th><th>Amount</th><th>Status</th><th>Credit note</th><th>Recovery</th></tr></thead><tbody>{refundHistory.map(refund=><tr key={refund.id}><td>{new Date(refund.requested_at).toLocaleString('en-IN')}<small>{refund.reason}</small></td><td>{rupees(refund.requested_amount_paise,refund.currency)}</td><td><b>{refund.status}</b><small>{refund.provider_status||'Provider state not yet confirmed'}</small></td><td>{refund.credit_note_number||'Not issued'}</td><td><div className={styles.documentActions}>{['PROCESSING','PENDING','RECONCILIATION_REQUIRED'].includes(String(refund.status).toUpperCase())&&<><button type="button" className={styles.secondarySmall} onClick={()=>void refreshRefund(refund)} disabled={refundBusy}>Refresh status</button><button type="button" className={styles.secondarySmall} onClick={()=>void retryRefund(refund)} disabled={refundBusy}>Retry safely</button></>}</div></td></tr>)}</tbody></table></div>:<p className={styles.empty}>No refund requests for this order yet.</p>}
         </section>}
       </section>}
+      {tab==='payouts'&&<PayoutsPanel/>}
       {tab==='payments'&&<section className={styles.stack}>
         <section className={styles.panel}>
           <div className={styles.panelHead}><div><h2>Course payments & reconciliation</h2>

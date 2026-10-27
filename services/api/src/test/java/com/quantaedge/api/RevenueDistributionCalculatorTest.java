@@ -112,6 +112,71 @@ class RevenueDistributionCalculatorTest {
   }
 
   @Test
+  void processorChargesAreRemovedBeforeAnyBeneficiaryShareIsCalculated() {
+    RevenueDistributionCalculator.BeneficiaryResult result =
+        RevenueDistributionCalculator.calculateBeneficiaries(
+            RevenueDistributionCalculator.PaymentConfirmation.VERIFIED_CAPTURED,
+            100_000L, 10_000L, 2_000L,
+            List.of(RevenueDistributionCalculator.BeneficiaryShare.percentage("INSTITUTION",11L,5_000)),
+            "COMPANY",99L);
+
+    assertEquals(88_000L,result.distributablePoolPaise());
+    assertEquals(44_000L,result.allocations().get(0).amountPaise());
+    assertEquals(44_000L,result.allocations().get(1).remainderAmountPaise());
+    assertEquals(0L,result.unassignedRemainderPaise());
+  }
+
+  @Test
+  void companyCanReceiveExplicitShareAndRemainderWithoutDoubleCounting() {
+    RevenueDistributionCalculator.BeneficiaryResult result =
+        RevenueDistributionCalculator.calculateBeneficiaries(
+            RevenueDistributionCalculator.PaymentConfirmation.VERIFIED_CAPTURED,
+            100_000L, 10_000L, 0L,
+            List.of(
+                RevenueDistributionCalculator.BeneficiaryShare.percentage("INSTITUTION",11L,4_000),
+                RevenueDistributionCalculator.BeneficiaryShare.flat("COMPANY",99L,10_000L)),
+            "COMPANY",99L);
+
+    assertEquals(90_000L,result.distributablePoolPaise());
+    assertEquals(36_000L,result.allocations().get(0).amountPaise());
+    assertEquals(44_000L,result.allocations().get(1).remainderAmountPaise());
+    assertEquals(54_000L,result.allocations().get(1).amountPaise());
+    assertEquals(90_000L,result.allocations().stream().mapToLong(
+        RevenueDistributionCalculator.BeneficiaryAllocation::amountPaise).sum());
+  }
+
+  @Test
+  void rejectsProcessorChargesThatExceedThePostTaxPool() {
+    assertThrows(IllegalArgumentException.class,()->RevenueDistributionCalculator.calculateBeneficiaries(
+        RevenueDistributionCalculator.PaymentConfirmation.VERIFIED_CAPTURED,
+        10_000L,9_000L,1_001L,List.of(),
+        "COMPANY",99L));
+  }
+
+  @Test
+  void legacyInstitutionOnlyPolicyKeepsItsOriginalPlatformRemainder() {
+    RevenueDistributionCalculator.Result legacy=RevenueDistributionCalculator.calculate(
+        RevenueDistributionCalculator.PaymentConfirmation.VERIFIED_CAPTURED,
+        80_000L,8_000L,List.of(
+            RevenueDistributionCalculator.Share.percentage(11L,3_000),
+            RevenueDistributionCalculator.Share.flat(12L,10_000L)));
+    RevenueDistributionCalculator.BeneficiaryResult compatible=
+        RevenueDistributionCalculator.calculateBeneficiaries(
+            RevenueDistributionCalculator.PaymentConfirmation.VERIFIED_CAPTURED,
+            80_000L,8_000L,0L,List.of(
+                RevenueDistributionCalculator.BeneficiaryShare.percentage("INSTITUTION",11L,3_000),
+                RevenueDistributionCalculator.BeneficiaryShare.flat("INSTITUTION",12L,10_000L)),
+            null,null);
+
+    assertEquals(legacy.distributablePoolPaise(),compatible.distributablePoolPaise());
+    assertEquals(legacy.totalInstitutionAllocatedPaise(),compatible.explicitAllocationsPaise());
+    assertEquals(legacy.platformRemainderPaise(),compatible.unassignedRemainderPaise());
+    assertEquals(legacy.allocations().size(),compatible.allocations().size());
+    assertEquals(legacy.allocations().get(0).amountPaise(),compatible.allocations().get(0).amountPaise());
+    assertEquals(legacy.allocations().get(1).amountPaise(),compatible.allocations().get(1).amountPaise());
+  }
+
+  @Test
   void emptyApprovedRecipientListLeavesTheWholePoolWithThePlatform() {
     RevenueDistributionCalculator.Result result = RevenueDistributionCalculator.calculate(
         RevenueDistributionCalculator.PaymentConfirmation.VERIFIED_CAPTURED,

@@ -7,7 +7,7 @@
 .alertError,.alertSuccess{border-radius:12px;padding:12px 15px;font-size:12px;line-height:1.6}.alertError{background:#fff1f0;border:1px solid #fecaca;color:#991b1b}.alertSuccess{background:#ecfdf3;border:1px solid #bbf7d0;color:#166534}
 .stack{display:grid;gap:18px}.twoCol{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:start}
 .panel{min-width:0;background:linear-gradient(145deg,#fff,#fcfcfd);border:1px solid #e6e9ef;border-radius:19px;padding:clamp(16px,2vw,23px);box-shadow:0 8px 28px #15203808;display:grid;align-content:start;gap:15px}.panel h2,.previewPanel h2{font-size:19px;letter-spacing:-.5px;margin:0}.panel>p,.panelHead p{font-size:12px;line-height:1.65;color:var(--muted);margin:0}.panelHead{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.panelHead>div{display:grid;gap:5px}
-.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.metrics article{background:linear-gradient(145deg,#fff,#fffaf5);border:1px solid #e9e4dd;border-radius:16px;padding:17px;display:grid;gap:8px;box-shadow:0 6px 22px #16203307}.metrics span{font-size:11px;color:var(--muted);font-weight:700}.metrics strong{font-size:30px;letter-spacing:-1px}.metrics small{font-size:10px;color:#8590a2}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.metrics article{background:var(--finance-surface,var(--qe-people-card,var(--paper)));border:1px solid var(--finance-line,var(--line));border-radius:16px;padding:17px;display:grid;gap:8px;box-shadow:0 6px 22px #16203307;color:var(--finance-ink,var(--ink))}.metrics span{font-size:11px;color:var(--finance-muted,var(--muted));font-weight:700;line-height:1.5}.metrics strong{font-size:clamp(20px,2vw,30px);line-height:1.2;letter-spacing:-1px;overflow-wrap:anywhere;color:var(--finance-ink,var(--ink))}.metrics small{font-size:10px;line-height:1.55;color:var(--finance-muted,var(--muted))}
 .steps{margin:0;padding-left:24px;display:grid;gap:15px}.steps li{padding-left:3px}.steps b,.steps span{display:block}.steps b{font-size:12px}.steps span{font-size:11px;color:var(--muted);line-height:1.6;margin-top:3px}
 .form{display:grid;gap:12px}.form label,.panel>label,.wideLabel,.designControls label,.recipientEditor label{display:grid;gap:6px;min-width:0;font-size:11px;font-weight:800;color:#475467}.form input,.form select,.form textarea,.panel>label input,.panel>label select,.panel>label textarea,.designControls input,.recipientEditor input,.recipientEditor select{width:100%;min-width:0;min-height:39px;border:1px solid #d9dfe8;border-radius:10px;padding:9px 11px;background:#fff;color:#17233c;font-size:12px;outline:none}.form textarea,.panel textarea{resize:vertical}.form input:focus,.form select:focus,.form textarea:focus,.panel input:focus,.panel select:focus,.panel textarea:focus{border-color:#fb923c;box-shadow:0 0 0 3px #f9731617}.inputGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.entityList{display:grid;gap:8px;margin-top:8px}.entityRow,.policyRow{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid #edf0f4;border-radius:12px;padding:12px;background:#fff}.entityRow>div,.policyRow>div{display:grid;gap:4px;min-width:0}.entityRow b,.policyRow b{font-size:12px}.entityRow span,.policyRow span{font-size:11px;color:#667085}.entityRow small{font-size:10px;color:#98a2b3}
 .note{font-size:11px!important;line-height:1.7!important;color:#85521b!important;background:#fff8ec;border:1px solid #f8e7c8;border-radius:11px;padding:11px 12px;margin:0!important;max-width:none!important}.empty{color:#8893a5;font-size:12px;padding:14px 0}.emptyLarge{display:grid;justify-items:center;text-align:center;gap:9px;padding:42px 16px;color:#667085}.emptyLarge>span{font-size:30px;color:#cbd5e1}.emptyLarge b{color:var(--ink);font-size:14px}.emptyLarge p{max-width:530px;margin:0;font-size:12px;line-height:1.7}
@@ -213,3 +213,162 @@
 .marketplaceSetupOfferSelector p{margin:0;font-size:11px;line-height:1.55;color:var(--finance-muted)}
 .entitySummary small{overflow-wrap:anywhere;line-height:1.45}
 .entityRow{align-items:flex-start}
+
+
+/* Monthly payouts and beneficiary review — reuse HRMS Finance theme tokens. */
+.payoutsIntro{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:20px;border:1px solid var(--finance-line,var(--line));border-radius:16px;background:var(--finance-surface,#fff);color:var(--finance-ink,var(--ink))}
+.payoutsIntro>div{display:grid;gap:6px;max-width:900px}
+.payoutsIntro h2{font-size:clamp(21px,2vw,28px);letter-spacing:-.7px;line-height:1.15;margin:2px 0;color:var(--finance-ink,var(--ink))}
+.payoutsIntro p{font-size:12px;line-height:1.7;margin:0;color:var(--finance-muted,var(--muted))}
+.payoutMetricGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.payoutMetricCard{min-width:0;display:grid;gap:8px;padding:17px;border:1px solid var(--finance-line,var(--line));border-radius:14px;background:var(--finance-surface,#fff);color:var(--finance-ink,var(--ink))}
+.payoutMetricCard span{font-size:11px;font-weight:800;color:var(--finance-muted,var(--muted));line-height:1.45}
+.payoutMetricCard strong{font-size:clamp(22px,2.4vw,30px);line-height:1.15;letter-spacing:-.7px;overflow-wrap:anywhere}
+.payoutMetricCard small{font-size:10px;line-height:1.55;color:var(--finance-muted,var(--muted))}
+.payoutAlertError,.payoutAlertSuccess,.payoutAlertWarning{padding:13px 15px;border-radius:11px;font-size:12px;line-height:1.65;border:1px solid}
+.payoutAlertError{color:var(--qe-people-danger,#991b1b);border-color:var(--qe-people-danger-border,#fecaca);background:var(--qe-people-danger-soft,#fef2f2)}
+.payoutAlertSuccess{color:var(--qe-people-success,#166534);border-color:var(--qe-people-success-border,#bbf7d0);background:var(--qe-people-success-soft,#f0fdf4)}
+.payoutAlertWarning{color:var(--qe-people-warning,#854d0e);border-color:var(--qe-people-warning-border,#fde68a);background:var(--qe-people-warning-soft,#fffbeb)}
+.payoutFormGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.payoutFormGrid label,.feeReviewRow label,.payoutRejectForm label{display:grid;gap:6px;min-width:0;font-size:11px;font-weight:800;color:var(--finance-ink,var(--ink))}
+.payoutFormGrid input,.payoutFormGrid select,.feeReviewRow input,.feeReviewRow select,.payoutRejectForm input{width:100%;min-width:0;min-height:40px;padding:9px 11px;border:1px solid var(--finance-line,var(--line));border-radius:10px;background:var(--finance-field,var(--finance-surface,#fff));color:var(--finance-ink,var(--ink));font-size:12px}
+.payoutFormGrid input:focus,.payoutFormGrid select:focus,.feeReviewRow input:focus,.feeReviewRow select:focus,.payoutRejectForm input:focus{outline:2px solid var(--qe-people-brand,#f97316);outline-offset:1px}
+.payoutFormGrid label small,.feeReviewRow label small{font-size:10px;line-height:1.5;color:var(--finance-muted,var(--muted));font-weight:500}
+.payoutFormFooter{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-top:8px;border-top:1px solid var(--finance-line,var(--line))}
+.payoutFormFooter>span{font-size:11px;line-height:1.55;color:var(--finance-muted,var(--muted));flex:1 1 260px}
+.payoutStatusSuccess,.payoutStatusDanger,.payoutStatusPending,.payoutStatusNeutral{display:inline-flex;align-items:center;justify-content:center;align-self:start;max-width:100%;padding:5px 9px;border:1px solid var(--finance-line,var(--line));border-radius:999px;font-size:10px;line-height:1.35;font-weight:800;text-align:center;overflow-wrap:anywhere}
+.payoutStatusSuccess{color:var(--qe-people-success,#166534);background:var(--qe-people-success-soft,#f0fdf4);border-color:var(--qe-people-success-border,#bbf7d0)}
+.payoutStatusDanger{color:var(--qe-people-danger,#991b1b);background:var(--qe-people-danger-soft,#fef2f2);border-color:var(--qe-people-danger-border,#fecaca)}
+.payoutStatusPending{color:var(--qe-people-warning,#854d0e);background:var(--qe-people-warning-soft,#fffbeb);border-color:var(--qe-people-warning-border,#fde68a)}
+.payoutStatusNeutral{color:var(--finance-muted,var(--muted));background:var(--finance-subtle,#f8fafc)}
+.payoutList{display:grid;gap:9px}
+.payoutListRow{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:12px;padding:13px;border:1px solid var(--finance-line,var(--line));border-radius:12px;background:var(--finance-surface,#fff);color:var(--finance-ink,var(--ink))}
+.payoutRowMain{display:grid;gap:5px;min-width:0}
+.payoutRowMain strong{font-size:12px;line-height:1.5;overflow-wrap:anywhere}
+.payoutRowMain span,.payoutRowMain small{font-size:10px;line-height:1.55;color:var(--finance-muted,var(--muted));overflow-wrap:anywhere}
+.payoutRowActions{grid-column:1/-1;display:flex;justify-content:flex-end;gap:7px;flex-wrap:wrap}
+.payoutEmpty,.payoutHint{margin:0;padding:12px 14px;border:1px solid var(--finance-line,var(--line));border-radius:10px;background:var(--finance-subtle,#f8fafc);font-size:11px;line-height:1.6;color:var(--finance-muted,var(--muted))}
+.payoutRejectForm{grid-column:1/-1;display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;padding-top:10px;border-top:1px solid var(--finance-line,var(--line))}
+.payoutRejectForm label{flex:1 1 260px}
+.feeReviewRow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:14px 0;border-top:1px solid var(--finance-line,var(--line))}
+.feeReviewIdentity{grid-column:1/-1;display:grid;gap:4px}
+.feeReviewIdentity strong{font-size:12px;color:var(--finance-ink,var(--ink))}
+.feeReviewIdentity span,.feeReviewIdentity small{font-size:10px;line-height:1.5;color:var(--finance-muted,var(--muted));overflow-wrap:anywhere}
+.feeReviewFooter{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding-top:8px;border-top:1px solid var(--finance-line,var(--line))}
+.feeReviewFooter span{flex:1 1 260px;font-size:10px;line-height:1.55;color:var(--finance-muted,var(--muted))}
+.payoutBatchDetail{display:grid;gap:10px;padding:14px;border:1px solid var(--finance-line,var(--line));border-radius:13px;background:var(--finance-subtle,var(--paper))}
+.payoutApprovalNote{margin:0;padding:11px 12px;border:1px solid var(--finance-line,var(--line));border-radius:10px;font-size:11px;line-height:1.6;color:var(--finance-muted,var(--muted));background:var(--finance-surface,#fff)}
+.page .payoutStatusSuccess,.page .payoutStatusDanger,.page .payoutStatusPending,.page .payoutStatusNeutral{background-color:initial}
+@media(max-width:900px){.payoutMetricGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.payoutMetricGrid,.payoutFormGrid,.feeReviewRow{grid-template-columns:minmax(0,1fr)}.payoutFormFooter,.feeReviewFooter{align-items:stretch;flex-direction:column}.payoutFormFooter button,.feeReviewFooter button{width:100%}.payoutListRow{grid-template-columns:minmax(0,1fr)}.payoutListRow>.payoutStatusSuccess,.payoutListRow>.payoutStatusDanger,.payoutListRow>.payoutStatusPending,.payoutListRow>.payoutStatusNeutral{grid-row:2;justify-self:start}.payoutRowActions{grid-column:1;justify-content:stretch}.payoutRowActions button{flex:1 1 120px}.payoutRejectForm{grid-column:1}.payoutsIntro{padding:15px}.payoutMetricCard{padding:14px}}
+
+
+.payoutReadOnly{display:grid;gap:5px;padding:13px 14px;border:1px solid var(--finance-line,var(--line));border-radius:11px;background:var(--finance-subtle,#f8fafc);color:var(--finance-ink,var(--ink))}
+.payoutReadOnly p{margin:0;font-size:11px;line-height:1.6;color:var(--finance-muted,var(--muted));overflow-wrap:anywhere}
+.payoutConfirmCheck{grid-column:1/-1;display:flex!important;flex-direction:row;align-items:flex-start;gap:9px!important;padding:10px 12px;border:1px solid var(--finance-line,var(--line));border-radius:10px;background:var(--finance-subtle,#f8fafc);font-size:11px;line-height:1.6;font-weight:600!important}
+.payoutConfirmCheck input{width:17px;min-width:17px;min-height:17px;margin:1px 0 0;accent-color:var(--qe-people-brand,#f97316)}
+.payoutRemainderEditor{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;padding:13px;border:1px solid var(--finance-line,var(--line));border-radius:12px;background:var(--finance-subtle,#f8fafc)}
+.payoutRemainderEditor label{display:grid;gap:6px;min-width:0;font-size:11px;font-weight:800;color:var(--finance-ink,var(--ink))}
+.payoutRemainderEditor select{width:100%;min-width:0;min-height:40px;padding:9px 11px;border:1px solid var(--finance-line,var(--line));border-radius:10px;background:var(--finance-field,var(--finance-surface,#fff));color:var(--finance-ink,var(--ink));font-size:12px}
+.payoutRemainderEditor p{grid-column:1/-1;margin:0;font-size:10px;line-height:1.6;color:var(--finance-muted,var(--muted))}
+.payoutBalanceWrap{width:100%;max-width:100%;overflow:auto;border:1px solid var(--finance-line,var(--line));border-radius:12px;background:var(--finance-surface,#fff)}
+.payoutBalanceTable{width:100%;min-width:950px;border-collapse:separate;border-spacing:0;color:var(--finance-ink,var(--ink));font-size:11px}
+.payoutBalanceTable th{position:sticky;top:0;background:var(--finance-subtle,#f8fafc);color:var(--finance-muted,var(--muted));font-size:10px;line-height:1.4;text-align:left;padding:11px;border-bottom:1px solid var(--finance-line,var(--line));white-space:nowrap}
+.payoutBalanceTable td{padding:11px;border-bottom:1px solid var(--finance-line,var(--line));vertical-align:top;white-space:nowrap}
+.payoutBalanceTable tbody tr:last-child td{border-bottom:0}
+.payoutBalanceTable td:first-child{min-width:180px;white-space:normal}
+.payoutBalanceTable td:first-child strong,.payoutBalanceTable td:first-child small{display:block;overflow-wrap:anywhere}
+.payoutBalanceTable td:first-child small{margin-top:5px;font-size:10px;line-height:1.5;color:var(--finance-muted,var(--muted))}
+.payoutFeeForm{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px;border:1px solid var(--finance-line,var(--line));border-radius:12px;background:var(--finance-subtle,#f8fafc)}
+.payoutFeeForm label{display:grid;gap:6px;min-width:0;font-size:10px;font-weight:800;color:var(--finance-ink,var(--ink))}
+.payoutFeeForm input,.payoutFeeForm select{width:100%;min-width:0;min-height:39px;padding:8px 10px;border:1px solid var(--finance-line,var(--line));border-radius:9px;background:var(--finance-field,var(--finance-surface,#fff));color:var(--finance-ink,var(--ink));font-size:11px}
+.payoutFeeForm .payoutFormFooter{grid-column:1/-1}
+@media(max-width:640px){.payoutRemainderEditor,.payoutFeeForm{grid-template-columns:minmax(0,1fr)}.payoutConfirmCheck{grid-column:1}.payoutFeeForm .payoutFormFooter{grid-column:1}}
+
+/* Provider-event reconciliation controls: match the existing theme-aware finance fields. */
+.payoutReconcileSelect{grid-column:1/-1;display:grid;gap:6px;align-content:start;min-width:0;font-size:11px;font-weight:800;color:var(--finance-ink,var(--ink))}
+.payoutReconcileSelect select{width:100%;min-width:0;min-height:40px;padding:9px 11px;border:1px solid var(--finance-line,var(--line));border-radius:10px;background:var(--finance-field,var(--finance-surface,#fff));color:var(--finance-ink,var(--ink));font-size:12px}
+@media(max-width:640px){.payoutReconcileSelect{grid-column:1/-1}.payoutReconcileSelect select{font-size:12px}}
+
+
+/* Payout operations: searchable queue and explicit maker/checker confirmation. */
+.payoutQueueFilters{display:grid;gap:7px;max-width:760px}
+.payoutQueueFilters label{font-size:11px;font-weight:800;color:var(--finance-ink,var(--ink))}
+.payoutQueueFilters>div{display:flex;gap:8px;min-width:0}
+.payoutQueueFilters input{width:100%;min-width:0;min-height:38px;padding:8px 10px;border:1px solid var(--finance-line,var(--line));border-radius:9px;background:var(--finance-field,var(--finance-surface,#fff));color:var(--finance-ink,var(--ink));font-size:12px}
+.payoutQueuePagination{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--finance-muted,var(--muted));font-size:11px}
+.payoutQueuePagination>div{display:flex;gap:7px}
+.payoutConfirmOverlay{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:16px;background:rgba(15,23,42,.66);overflow:auto}
+.payoutApprovalDialog{width:min(760px,100%);max-height:min(92dvh,900px);overflow:auto;display:grid;gap:15px;padding:clamp(16px,3vw,24px);border:1px solid var(--finance-line,var(--line));border-radius:18px;background:var(--finance-surface,var(--qe-people-card,#fff));color:var(--finance-ink,var(--ink));box-shadow:0 24px 70px rgba(0,0,0,.28)}
+.payoutApprovalDialog h2{margin:0;color:var(--finance-ink,var(--ink))}
+.payoutApprovalSummary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:0}
+.payoutApprovalSummary>div{min-width:0;padding:11px;border:1px solid var(--finance-line,var(--line));border-radius:10px;background:var(--finance-subtle,#f8fafc)}
+.payoutApprovalSummary dt{font-size:10px;color:var(--finance-muted,var(--muted));font-weight:700}
+.payoutApprovalSummary dd{margin:5px 0 0;font-size:13px;font-weight:800;overflow-wrap:anywhere;color:var(--finance-ink,var(--ink))}
+.payoutApprovalTransfers{display:grid;gap:0;max-height:260px;overflow:auto;border:1px solid var(--finance-line,var(--line));border-radius:10px}
+.payoutApprovalTransfers>div{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px;border-bottom:1px solid var(--finance-line,var(--line))}
+.payoutApprovalTransfers>div:last-child{border-bottom:0}
+.payoutApprovalTransfers span,.payoutApprovalTransfers small{display:block;min-width:0}
+.payoutApprovalTransfers small{margin-top:4px;font-size:10px;line-height:1.4;color:var(--finance-muted,var(--muted));overflow-wrap:anywhere}
+.payoutApprovalTransfers>div>strong{white-space:nowrap}
+.payoutApprovalDialog .payoutFormFooter{gap:12px;flex-wrap:wrap}
+.payoutApprovalDialog .payoutFormFooter>span{max-width:350px}
+.payoutApprovalDialog .primary{white-space:normal;text-align:center}
+.payoutAlertWarning ul{margin:7px 0 0;padding-left:20px}
+.payoutAlertWarning li{margin:3px 0;overflow-wrap:anywhere}
+@media(max-width:600px){.payoutQueueFilters>div{align-items:stretch;flex-direction:column}.payoutQueueFilters button{width:100%}.payoutApprovalSummary{grid-template-columns:repeat(2,minmax(0,1fr))}.payoutApprovalDialog{max-height:94dvh;border-radius:14px}.payoutApprovalDialog .payoutFormFooter{align-items:stretch;flex-direction:column}.payoutApprovalDialog .payoutFormFooter button{width:100%}.payoutApprovalTransfers>div{align-items:flex-start}}
+
+
+/* Append-only finance fee-correction request and independent review forms. */
+.payoutQueueFilters form{display:flex;gap:8px;min-width:0}
+.payoutQueueFilters form input{flex:1}
+.payoutFeeAdjustmentForm,.payoutFeeAdjustmentReview{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:13px;border:1px solid var(--finance-line,var(--line));border-radius:12px;background:var(--finance-subtle,#f8fafc);min-width:0}
+.payoutFeeAdjustmentForm>p{grid-column:1/-1;margin:0;color:var(--finance-muted,var(--muted));font-size:11px;line-height:1.6}
+.payoutFeeAdjustmentForm label,.payoutFeeAdjustmentReview label{display:grid;gap:6px;min-width:0;font-size:10px;font-weight:800;color:var(--finance-ink,var(--ink))}
+.payoutFeeAdjustmentForm input,.payoutFeeAdjustmentForm select,.payoutFeeAdjustmentForm textarea,.payoutFeeAdjustmentReview textarea{width:100%;min-width:0;min-height:38px;padding:8px 10px;border:1px solid var(--finance-line,var(--line));border-radius:9px;background:var(--finance-field,var(--finance-surface,#fff));color:var(--finance-ink,var(--ink));font:inherit;font-size:11px}
+.payoutFeeAdjustmentForm textarea,.payoutFeeAdjustmentReview textarea{resize:vertical;line-height:1.5}
+.payoutFeeAdjustmentForm .payoutFormFooter,.payoutFeeAdjustmentReview .payoutRowActions{grid-column:1/-1}
+.payoutFeeAdjustmentReview{align-content:start}
+@media(max-width:640px){.payoutQueueFilters form{flex-direction:column}.payoutQueueFilters form button{width:100%}.payoutFeeAdjustmentForm,.payoutFeeAdjustmentReview{grid-template-columns:minmax(0,1fr)}.payoutFeeAdjustmentForm>p,.payoutFeeAdjustmentForm .payoutFormFooter,.payoutFeeAdjustmentReview .payoutRowActions{grid-column:1}}
+
+
+/* Controlled bank-account replacement; existing account stays visible and active until review. */
+.payoutReplacementForm{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:13px;border:1px solid var(--finance-line,var(--line));border-radius:12px;background:var(--finance-subtle,#f8fafc);min-width:0}
+.payoutReplacementForm>p,.payoutReplacementForm .payoutFormFooter{grid-column:1/-1;margin:0}
+.payoutReplacementForm>p{font-size:11px;line-height:1.6;color:var(--finance-muted,var(--muted))}
+.payoutReplacementForm label{display:grid;gap:6px;min-width:0;font-size:10px;font-weight:800;color:var(--finance-ink,var(--ink))}
+.payoutReplacementForm input{width:100%;min-width:0;min-height:38px;padding:8px 10px;border:1px solid var(--finance-line,var(--line));border-radius:9px;background:var(--finance-field,var(--finance-surface,#fff));color:var(--finance-ink,var(--ink));font-size:11px}
+.payoutReplacementForm small{font-size:10px;line-height:1.5;color:var(--finance-muted,var(--muted))}
+@media(max-width:640px){.payoutReplacementForm{grid-template-columns:minmax(0,1fr)}.payoutReplacementForm>p,.payoutReplacementForm .payoutFormFooter{grid-column:1}}
+
+
+/* Readiness-first jump list for the existing finance workspace; no duplicate workflow surface. */
+.payoutReadiness{display:grid;gap:12px;padding:16px;border:1px solid var(--finance-line,var(--line));border-radius:15px;background:var(--finance-surface,var(--qe-people-card,#fff));color:var(--finance-ink,var(--ink))}
+.payoutReadiness h3{margin:0;color:var(--finance-ink,var(--ink));font-size:14px}
+.payoutReadiness>div:first-child{display:grid;gap:4px}
+.payoutReadiness>div:first-child p{margin:0;color:var(--finance-muted,var(--muted));font-size:11px;line-height:1.55}
+.payoutReadinessSteps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.payoutReadinessStep{display:grid;grid-template-columns:26px minmax(0,1fr);align-items:start;gap:7px;padding:10px;border:1px solid var(--finance-line,var(--line));border-radius:11px;background:var(--finance-subtle,#f8fafc);text-decoration:none;min-width:0}
+.payoutReadinessStep>span{display:grid;place-items:center;width:25px;height:25px;border-radius:8px;background:var(--finance-hover,#fff7f0);color:var(--finance-ink,var(--ink));font-size:11px;font-weight:900}
+.payoutReadinessStep>div{display:grid;gap:4px;min-width:0}
+.payoutReadinessStep strong{font-size:11px;color:var(--finance-ink,var(--ink));overflow-wrap:anywhere}
+.payoutReadinessStep small{font-size:9px;line-height:1.45;color:var(--finance-muted,var(--muted));overflow-wrap:anywhere}
+.payoutReadinessStep em{grid-column:1/-1;justify-self:start;font-style:normal;font-size:9px;padding:4px 7px;border-radius:999px}
+.payoutReadinessStep:hover{border-color:var(--qe-people-brand,#f97316)}
+.payoutsIntro,.payoutReadiness{scroll-margin-top:18px}
+@media(max-width:1100px){.payoutReadinessSteps{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:650px){.payoutReadinessSteps{grid-template-columns:repeat(2,minmax(0,1fr))}.payoutReadinessStep{padding:9px}.payoutReadinessStep>strong{font-size:10px}}
+
+
+/* Ledger drill-down for recipient reconciliation; uses the same responsive finance dialog. */
+.payoutLedgerDialog{width:min(820px,100%);max-height:min(92dvh,900px);overflow:auto;display:grid;gap:13px;padding:clamp(16px,3vw,24px);border:1px solid var(--finance-line,var(--line));border-radius:18px;background:var(--finance-surface,var(--qe-people-card,#fff));color:var(--finance-ink,var(--ink));box-shadow:0 24px 70px rgba(0,0,0,.28)}
+.payoutLedgerDialog h2{margin:0;color:var(--finance-ink,var(--ink))}
+.payoutLedgerEventList{display:grid;gap:8px;max-height:55dvh;overflow:auto}
+.payoutLedgerEventList article{display:grid;gap:5px;padding:12px;border:1px solid var(--finance-line,var(--line));border-radius:11px;background:var(--finance-subtle,#f8fafc);min-width:0}
+.payoutLedgerEventHead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.payoutLedgerEventHead strong{font-size:12px;color:var(--finance-ink,var(--ink))}
+.payoutLedgerEventHead b{font-size:12px;white-space:nowrap;color:var(--finance-ink,var(--ink))}
+.payoutLedgerEventList article>span{font-size:11px;line-height:1.5;color:var(--finance-ink,var(--ink));overflow-wrap:anywhere}
+.payoutLedgerEventList article small{font-size:10px;line-height:1.55;color:var(--finance-muted,var(--muted));overflow-wrap:anywhere}
+.payoutLedgerEvidence{display:grid;gap:2px;padding-top:4px;border-top:1px solid var(--finance-line,var(--line))}
+@media(max-width:640px){.payoutLedgerDialog{max-height:94dvh;border-radius:14px}.payoutLedgerEventList{max-height:48dvh}.payoutLedgerEventHead{align-items:flex-start}}

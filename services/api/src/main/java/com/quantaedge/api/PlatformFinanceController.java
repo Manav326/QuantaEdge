@@ -58,6 +58,63 @@ public class PlatformFinanceController {
         from revenue_share_allocation group by course_payment_order_id
       ) allocated
       """,Long.class));
+
+    // Financial position uses verified captures and provider-confirmed refunds only.
+    // Output tax is shown net of issued course-sale credit notes, before input-tax credits
+    // or other adjustments that require the organisation's tax adviser.
+    long captured=coalesceAmount("""
+      select coalesce(sum(captured_amount_paise),0)
+      from course_payment_order where status='VERIFIED'
+      """);
+    long processedRefunds=coalesceAmount("""
+      select coalesce(sum(requested_amount_paise),0)
+      from course_payment_refund where status='PROCESSED'
+      """);
+    long pendingRefunds=coalesceAmount("""
+      select coalesce(sum(requested_amount_paise),0)
+      from course_payment_refund where status in ('PROCESSING','PENDING','RECONCILIATION_REQUIRED')
+      """);
+    long invoicedOutputTax=coalesceAmount("""
+      select coalesce(sum(output_tax_paise),0)
+      from course_payment_order where status='VERIFIED'
+      """);
+    long processedCreditTax=coalesceAmount("""
+      select coalesce(sum(d.tax_value_paise),0)
+      from fiscal_document d join course_payment_refund r on r.credit_note_document_id=d.id
+      where d.document_type='CREDIT_NOTE' and d.source_type='COURSE_ORDER' and r.status='PROCESSED'
+      """);
+    long confirmedProcessorFees=coalesceAmount("""
+      select coalesce(sum(processing_fee_paise),0) from course_payment_order_fee
+      """);
+    long confirmedProcessorFeeTax=coalesceAmount("""
+      select coalesce(sum(fee_tax_paise),0) from course_payment_order_fee
+      """);
+    long netOutputTax=Math.subtractExact(invoicedOutputTax,processedCreditTax);
+    long netCollected=Math.subtractExact(captured,processedRefunds);
+    long poolAfterTaxRefundsAndFees=Math.subtractExact(
+        Math.subtractExact(netCollected,netOutputTax),
+        Math.addExact(confirmedProcessorFees,confirmedProcessorFeeTax));
+    r.put("capturedSalesPaise",captured);
+    r.put("processedRefundsPaise",processedRefunds);
+    r.put("pendingRefundsPaise",pendingRefunds);
+    r.put("pendingRefundCount",count("""
+      select count(*) from course_payment_refund
+      where status in ('PROCESSING','PENDING','RECONCILIATION_REQUIRED')
+      """));
+    r.put("netCollectedAfterRefundsPaise",netCollected);
+    r.put("invoicedOutputTaxPaise",invoicedOutputTax);
+    r.put("processedCreditNoteTaxPaise",processedCreditTax);
+    r.put("netOutputTaxBeforeInputCreditsPaise",netOutputTax);
+    r.put("confirmedProcessorFeesPaise",confirmedProcessorFees);
+    r.put("confirmedProcessorFeeTaxPaise",confirmedProcessorFeeTax);
+    r.put("netPoolAfterTaxRefundsAndFeesPaise",poolAfterTaxRefundsAndFees);
+    r.put("paymentFeeReconciliationPending",count("""
+      select count(distinct o.id) from course_payment_order o
+      join revenue_share_allocation a on a.course_payment_order_id=o.id
+      join revenue_share_allocation_event e on e.allocation_id=a.id and e.event_type='EARNED'
+      left join course_payment_order_fee f on f.course_payment_order_id=o.id
+      where o.status='VERIFIED' and f.id is null
+      """));
     return r;
   }
 
@@ -118,9 +175,9 @@ public class PlatformFinanceController {
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=requireOwner(context);
     String kind=requiredText(body,"entityKind").toUpperCase(Locale.ROOT);
-    if(!List.of("PLATFORM","INSTITUTION").contains(kind)) throw bad("Choose PLATFORM or INSTITUTION as the legal-entity scope.");
+    if(!List.of("PLATFORM","INSTITUTION","COMPANY").contains(kind)) throw bad("Choose PLATFORM, COMPANY or INSTITUTION as the legal-entity scope.");
     Long institutionId=optionalLong(body.get("institutionId"));
-    if("PLATFORM".equals(kind) && institutionId!=null) throw bad("A PLATFORM legal entity must not be attached to a tenant institution.");
+    if(!"INSTITUTION".equals(kind) && institutionId!=null) throw bad("A platform/company legal entity must not be attached to a tenant institution.");
     if("INSTITUTION".equals(kind) && (institutionId==null || !exists(
         "select exists(select 1 from institution_tenant where id=?)",institutionId))) {
       throw bad("Choose an existing institution for this legal entity.");
@@ -363,7 +420,7 @@ public class PlatformFinanceController {
     long entityId=requiredLong(body,"legalEntityId");
     if(!exists("""
       select exists(select 1 from billing_legal_entity e
-        where e.id=? and (e.entity_kind='PLATFORM'
+        where e.id=? and (e.entity_kind in ('PLATFORM','COMPANY')
           or (e.entity_kind='INSTITUTION' and e.institution_id=?)))
       """,entityId,institutionId)) {
       throw bad("Select the platform legal seller or the legal entity belonging to this course offer's institution.");
@@ -666,11 +723,24 @@ public class PlatformFinanceController {
       """,policyId);
     if(policy.isEmpty()) throw notFound("Revenue-share policy not found.");
     policy.put("recipients",jdbc.queryForList("""
-      select r.id,r.institution_id,t.display_name as institution_name,r.calculation_type,
-        r.percentage_basis_points,r.flat_amount_paise
-      from revenue_share_policy_recipient r join institution_tenant t on t.id=r.institution_id
-      where r.policy_id=? order by t.display_name,r.id
+      select r.id,r.recipient_type,r.institution_id,r.legal_entity_id,
+        coalesce(t.display_name,nullif(le.trade_name,''),le.legal_name) as recipient_name,
+        r.calculation_type,r.percentage_basis_points,r.flat_amount_paise
+      from revenue_share_policy_recipient r
+      left join institution_tenant t on t.id=r.institution_id
+      left join billing_legal_entity le on le.id=r.legal_entity_id
+      where r.policy_id=? order by recipient_name,r.id
       """,policyId));
+    String remainderType=string(policy.get("remainder_recipient_type"));
+    Long remainderInstitution=optionalLong(policy.get("remainder_institution_id"));
+    Long remainderEntity=optionalLong(policy.get("remainder_legal_entity_id"));
+    if("INSTITUTION".equals(remainderType)&&remainderInstitution!=null) {
+      policy.put("remainder_recipient_name",value(one("select display_name as name from institution_tenant where id=?",remainderInstitution),"name","Institution #"+remainderInstitution));
+    } else if("COMPANY".equals(remainderType)&&remainderEntity!=null) {
+      policy.put("remainder_recipient_name",value(one("select legal_name as name from billing_legal_entity where id=?",remainderEntity),"name","Company #"+remainderEntity));
+    } else {
+      policy.put("remainder_recipient_name","Not assigned");
+    }
     return policy;
   }
 
@@ -680,18 +750,31 @@ public class PlatformFinanceController {
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=requireOwner(context);
     long institutionId=offerInstitution(offerId);
-    String currency=optionalText(body.get("currency"))==null?"INR":requiredText(body,"currency").toUpperCase(Locale.ROOT);
-    if(!currency.matches("[A-Z]{3}")) throw bad("Currency must be a three-letter ISO code.");
+    Map<String,Object> offer=one("select currency from institution_marketplace_offer where id=?",offerId);
+    String offerCurrency=optionalText(offer.get("currency"))==null
+        ?"INR":string(offer.get("currency")).toUpperCase(Locale.ROOT);
+    String currency=optionalText(body.get("currency"))==null?offerCurrency:requiredText(body,"currency").toUpperCase(Locale.ROOT);
+    // Checkout, existing money columns and Razorpay capture amounts are integer paise and INR-only.
+    // Reject a policy that would never match the supported checkout/settlement unit.
+    if(!"INR".equals(offerCurrency)||!"INR".equals(currency)||!currency.equals(offerCurrency))
+      throw bad("Revenue-share policies currently support INR only and must match the course offer currency. The financial ledger stores integer paise; no FX conversion is performed.");
+    Map<String,Object> defaults=one("""
+      select default_remainder_recipient_type,default_remainder_institution_id,default_remainder_legal_entity_id
+      from billing_finance_payout_settings where id=1
+      """);
+    if(defaults.isEmpty()) throw bad("Set the default remainder recipient in Finance settings before creating a revenue-share policy.");
     Instant start=body.get("effectiveFrom")==null?Instant.now():instant(body,"effectiveFrom");
     Instant end=optionalInstant(body.get("effectiveUntil"));
     if(end!=null&&!end.isAfter(start)) throw bad("Policy end must be after its start.");
     Integer version=jdbc.queryForObject("select coalesce(max(policy_version),0)+1 from revenue_share_policy where institution_offer_id=?",Integer.class,offerId);
     long id=jdbc.queryForObject("""
       insert into revenue_share_policy(institution_offer_id,policy_version,currency,status,effective_from,
-        effective_until,contractual_reference,notes,created_by_staff_id)
-      values(?,?,?,'DRAFT',?,?,?,?,?) returning id
+        effective_until,contractual_reference,notes,created_by_staff_id,remainder_recipient_type,
+        remainder_institution_id,remainder_legal_entity_id)
+      values(?,?,?,'DRAFT',?,?,?,?,?,?,?,?) returning id
       """,Long.class,offerId,version,currency,dbInstant(start),dbInstant(end),optionalText(body.get("contractualReference")),
-        optionalText(body.get("notes")),context.staffId());
+        optionalText(body.get("notes")),context.staffId(),defaults.get("default_remainder_recipient_type"),
+        defaults.get("default_remainder_institution_id"),defaults.get("default_remainder_legal_entity_id"));
     audit(null,institutionId,context,"REVENUE_SHARE_POLICY_CREATED","REVENUE_SHARE_POLICY",Long.toString(id),
         Map.of("offerId",offerId,"version",version));
     return Map.of("id",id,"policyVersion",version,"status","DRAFT");
@@ -702,41 +785,75 @@ public class PlatformFinanceController {
   public Map<String,Object> saveRecipients(@PathVariable long policyId,@RequestBody Map<String,Object> body,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=requireOwner(context);
-    Map<String,Object> policy=one("select institution_offer_id,status from revenue_share_policy where id=?",policyId);
+    Map<String,Object> policy=one("select institution_offer_id,status,remainder_recipient_type,remainder_institution_id,remainder_legal_entity_id from revenue_share_policy where id=?",policyId);
     if(policy.isEmpty()) throw notFound("Revenue-share policy not found.");
     if(!"DRAFT".equals(String.valueOf(policy.get("status")))) throw bad("Only draft policies can be edited.");
     if(!(body.get("recipients") instanceof List<?> raw)) throw bad("Recipients must be a list.");
     List<Map<String,Object>> normalized=new ArrayList<>();
-    List<RevenueDistributionCalculator.Share> validation=new ArrayList<>();
-    Set<Long> recipientInstitutionIds=new HashSet<>();
+    Set<String> recipientKeys=new HashSet<>();
     long combinedPercentageBasisPoints=0L;
     for(Object item:raw) {
       if(!(item instanceof Map<?,?> map)) throw bad("Each recipient must be an object.");
-      long institutionId=requiredLong(map.get("institutionId"),"institutionId");
-      if(!recipientInstitutionIds.add(institutionId)) throw bad("An institution can appear only once in a revenue-share policy.");
-      if(!exists("select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",institutionId)) {
-        throw bad("Every revenue recipient must be an active institution.");
+      String recipientType=optionalText(map.get("recipientType"))==null?"INSTITUTION"
+          :requiredText(map.get("recipientType"),"recipientType").toUpperCase(Locale.ROOT);
+      long recipientId=requiredLong(map.get("recipientId")!=null?map.get("recipientId")
+          :("COMPANY".equals(recipientType)?map.get("legalEntityId"):map.get("institutionId")),"recipientId");
+      if(!List.of("INSTITUTION","COMPANY").contains(recipientType))
+        throw bad("Recipient must be an institution or company.");
+      if(!recipientKeys.add(recipientType+":"+recipientId))
+        throw bad("A beneficiary can appear only once in a revenue-share policy.");
+      if("INSTITUTION".equals(recipientType)) {
+        if(!exists("select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",recipientId))
+          throw bad("Every institution recipient must be active.");
+      } else if(!exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY'))",recipientId)) {
+        throw bad("Every company recipient must be an active company legal entity.");
       }
       String type=requiredText(map.get("calculationType"),"calculationType").toUpperCase(Locale.ROOT);
+      Integer bps=null;Long flat=null;
       if("PERCENTAGE".equals(type)) {
-        int bps=Math.toIntExact(requiredLong(map.get("percentageBasisPoints"),"percentageBasisPoints"));
-        validation.add(RevenueDistributionCalculator.Share.percentage(institutionId,bps));
+        bps=Math.toIntExact(requiredLong(map.get("percentageBasisPoints"),"percentageBasisPoints"));
+        RevenueDistributionCalculator.BeneficiaryShare.percentage(recipientType,recipientId,bps);
         combinedPercentageBasisPoints=Math.addExact(combinedPercentageBasisPoints,bps);
-        normalized.add(Map.of("institutionId",institutionId,"calculationType",type,"percentageBasisPoints",bps));
       } else if("FLAT".equals(type)) {
-        long paise=requiredLong(map.get("flatAmountPaise"),"flatAmountPaise");
-        validation.add(RevenueDistributionCalculator.Share.flat(institutionId,paise));
-        normalized.add(Map.of("institutionId",institutionId,"calculationType",type,"flatAmountPaise",paise));
+        flat=requiredLong(map.get("flatAmountPaise"),"flatAmountPaise");
+        RevenueDistributionCalculator.BeneficiaryShare.flat(recipientType,recipientId,flat);
       } else throw bad("Recipient calculation type must be PERCENTAGE or FLAT.");
+      Map<String,Object> normalizedRecipient=new LinkedHashMap<>();
+      normalizedRecipient.put("recipientType",recipientType);
+      normalizedRecipient.put("recipientId",recipientId);
+      normalizedRecipient.put("calculationType",type);
+      normalizedRecipient.put("percentageBasisPoints",bps);
+      normalizedRecipient.put("flatAmountPaise",flat);
+      normalized.add(normalizedRecipient);
     }
     if(combinedPercentageBasisPoints>10_000) throw bad("Combined percentage shares cannot exceed 100% of the distributable pool.");
+    String remainderType=optionalText(body.get("remainderRecipientType"))==null
+        ?string(policy.get("remainder_recipient_type")):requiredText(body,"remainderRecipientType").toUpperCase(Locale.ROOT);
+    Long remainderId=optionalLong(body.get("remainderRecipientId"));
+    if(remainderId==null) remainderId="COMPANY".equals(remainderType)
+        ?optionalLong(policy.get("remainder_legal_entity_id")):optionalLong(policy.get("remainder_institution_id"));
+    if("INSTITUTION".equals(remainderType)) {
+      if(remainderId==null||!exists("select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",remainderId))
+        throw bad("Select an active institution to receive the remaining balance.");
+    } else if("COMPANY".equals(remainderType)) {
+      if(remainderId==null||!exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY'))",remainderId))
+        throw bad("Select an active company to receive the remaining balance.");
+    } else throw bad("The remainder must be assigned to an institution or company.");
     long sourceInstitution=offerInstitution(((Number)policy.get("institution_offer_id")).longValue());
+    jdbc.update("""
+      update revenue_share_policy set remainder_recipient_type=?,remainder_institution_id=?,remainder_legal_entity_id=?
+      where id=? and status='DRAFT'
+      """,remainderType,"INSTITUTION".equals(remainderType)?remainderId:null,
+        "COMPANY".equals(remainderType)?remainderId:null,policyId);
     jdbc.update("delete from revenue_share_policy_recipient where policy_id=?",policyId);
     for(Map<String,Object> r:normalized) {
+      String recipientType=String.valueOf(r.get("recipientType"));long recipientId=((Number)r.get("recipientId")).longValue();
       jdbc.update("""
-        insert into revenue_share_policy_recipient(policy_id,institution_id,calculation_type,percentage_basis_points,flat_amount_paise)
-        values(?,?,?,?,?)
-        """,policyId,r.get("institutionId"),r.get("calculationType"),r.get("percentageBasisPoints"),r.get("flatAmountPaise"));
+        insert into revenue_share_policy_recipient(
+          policy_id,recipient_type,institution_id,legal_entity_id,calculation_type,percentage_basis_points,flat_amount_paise
+        ) values(?,?,?,?,?,?,?)
+        """,policyId,recipientType,"INSTITUTION".equals(recipientType)?recipientId:null,
+          "COMPANY".equals(recipientType)?recipientId:null,r.get("calculationType"),r.get("percentageBasisPoints"),r.get("flatAmountPaise"));
     }
     audit(null,sourceInstitution,context,"REVENUE_SHARE_RECIPIENTS_SAVED","REVENUE_SHARE_POLICY",
         Long.toString(policyId),Map.of("recipientCount",normalized.size()));
@@ -775,10 +892,17 @@ public class PlatformFinanceController {
     if(row.isEmpty()) throw notFound("Revenue-share policy not found.");
     if(!"PENDING_APPROVAL".equals(String.valueOf(row.get("status")))) throw bad("Submit the policy before approval.");
     List<Map<String,Object>> policyRecipients=jdbc.queryForList("""
-      select calculation_type,percentage_basis_points,flat_amount_paise
+      select recipient_type,institution_id,legal_entity_id,calculation_type,percentage_basis_points,flat_amount_paise
       from revenue_share_policy_recipient where policy_id=?
       """,policyId);
-    if(policyRecipients.isEmpty()) throw bad("A policy needs at least one institution recipient.");
+    for(Map<String,Object> recipient:policyRecipients) {
+      String recipientType=string(recipient.get("recipient_type"));
+      boolean active="INSTITUTION".equals(recipientType)
+          ?exists("select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",recipient.get("institution_id"))
+          :exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY'))",recipient.get("legal_entity_id"));
+      if(!active) throw bad("Every revenue recipient must remain active when a policy is approved.");
+    }
+    if(policyRecipients.isEmpty()) throw bad("A revenue-share policy needs at least one institution or company recipient.");
     long percentageBasisPoints=policyRecipients.stream()
       .filter(r -> "PERCENTAGE".equals(String.valueOf(r.get("calculation_type"))))
       .mapToLong(r -> ((Number)r.get("percentage_basis_points")).longValue()).sum();
@@ -799,7 +923,7 @@ public class PlatformFinanceController {
       select count(*) from course_tax_profile tax
       join institution_marketplace_offer o on o.id=tax.institution_offer_id
       join billing_legal_entity le on le.id=tax.legal_entity_id and le.status='ACTIVE'
-        and (le.entity_kind='PLATFORM' or (le.entity_kind='INSTITUTION' and le.institution_id=o.institution_id))
+        and (le.entity_kind in ('PLATFORM','COMPANY') or (le.entity_kind='INSTITUTION' and le.institution_id=o.institution_id))
       where o.id=? and tax.status='APPROVED'
         and tax.effective_from<=? and (tax.effective_until is null or tax.effective_until>?)
       """,offerId,dbInstant(start),dbInstant(start));
@@ -813,7 +937,7 @@ public class PlatformFinanceController {
       select tax.legal_entity_id,tax.tax_treatment from course_tax_profile tax
       join institution_marketplace_offer o on o.id=tax.institution_offer_id
       join billing_legal_entity le on le.id=tax.legal_entity_id and le.status='ACTIVE'
-        and (le.entity_kind='PLATFORM' or (le.entity_kind='INSTITUTION' and le.institution_id=o.institution_id))
+        and (le.entity_kind in ('PLATFORM','COMPANY') or (le.entity_kind='INSTITUTION' and le.institution_id=o.institution_id))
       where o.id=? and tax.status='APPROVED'
         and tax.effective_from<=? and (tax.effective_until is null or tax.effective_until>?)
       order by tax.version desc limit 1
@@ -1168,6 +1292,7 @@ public class PlatformFinanceController {
     return id;
   }
   private boolean exists(String sql,Object... args) { return Boolean.TRUE.equals(jdbc.queryForObject(sql,Boolean.class,args)); }
+  private long coalesceAmount(String sql,Object... args) { Long n=jdbc.queryForObject(sql,Long.class,args); return n==null?0L:n; }
   private long count(String sql,Object... args) { Long n=jdbc.queryForObject(sql,Long.class,args); return n==null?0L:n; }
   private Map<String,Object> one(String sql,Object... args) {
     List<Map<String,Object>> rows=jdbc.queryForList(sql,args); return rows.isEmpty()?new LinkedHashMap<>():new LinkedHashMap<>(rows.getFirst());
@@ -1275,6 +1400,13 @@ public class PlatformFinanceController {
   private static java.time.LocalDate optionalLocalDate(Object raw) {
     if(optionalText(raw)==null)return null;
     try{return java.time.LocalDate.parse(String.valueOf(raw));}catch(Exception ex){throw bad("Effective end must be an ISO date.");}
+  }
+  private static String string(Object raw) {
+    return raw==null?"":String.valueOf(raw).trim();
+  }
+  private static String value(Map<String,Object> row,String key,String fallback) {
+    String actual=optionalText(row==null?null:row.get(key));
+    return actual==null?fallback:actual;
   }
   private static ResponseStatusException bad(String message) { return new ResponseStatusException(HttpStatus.BAD_REQUEST,message); }
   private static ResponseStatusException notFound(String message) { return new ResponseStatusException(HttpStatus.NOT_FOUND,message); }
