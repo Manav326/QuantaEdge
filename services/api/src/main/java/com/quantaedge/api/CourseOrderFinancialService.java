@@ -333,13 +333,15 @@ public class CourseOrderFinancialService {
     String remainderType=string(policy.get("remainder_recipient_type"));
     Long remainderId="INSTITUTION".equals(remainderType)?nullableLong(policy.get("remainder_institution_id"))
         :"COMPANY".equals(remainderType)?nullableLong(policy.get("remainder_legal_entity_id")):null;
-    if(!"PLATFORM_REMAINDER".equals(remainderType)&&remainderId==null)
+    if("PLATFORM_REMAINDER".equals(remainderType))
+      throw new IllegalStateException("This approved revenue-share policy has no named recipient for the remaining balance. HRMS must approve a policy assigning the remainder to an institution or company before a new checkout can proceed.");
+    if(!List.of("INSTITUTION","COMPANY").contains(remainderType)||remainderId==null)
       throw new IllegalStateException("The approved revenue-share policy has no valid remainder recipient.");
     String remainderName=null;
     if("INSTITUTION".equals(remainderType)) remainderName=institutionName(remainderId);
-    else if("COMPANY".equals(remainderType)) remainderName=string(one("select legal_name from billing_legal_entity where id=? and status='ACTIVE' and entity_kind='PLATFORM'",remainderId).get("legal_name"));
+    else if("COMPANY".equals(remainderType)) remainderName=string(one("select legal_name from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY')",remainderId).get("legal_name"));
     if("INSTITUTION".equals(remainderType)&&!exists("select exists(select 1 from institution_tenant where id=? and status='ACTIVE')",remainderId)
-        ||"COMPANY".equals(remainderType)&&!exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind='PLATFORM')",remainderId))
+        ||"COMPANY".equals(remainderType)&&!exists("select exists(select 1 from billing_legal_entity where id=? and status='ACTIVE' and entity_kind in ('PLATFORM','COMPANY'))",remainderId))
       throw new IllegalStateException("The configured remainder recipient is inactive. HRMS must update the policy.");
     RevenueDistributionCalculator.BeneficiaryResult quoteDistribution=RevenueDistributionCalculator.calculateBeneficiaries(
         RevenueDistributionCalculator.PaymentConfirmation.VERIFIED_CAPTURED,quote.customerPayablePaise(),
