@@ -751,7 +751,8 @@ public class PlatformFinanceController {
     context=requireOwner(context);
     long institutionId=offerInstitution(offerId);
     Map<String,Object> offer=one("select currency from institution_marketplace_offer where id=?",offerId);
-    String offerCurrency=string(offer.get("currency")).toUpperCase(Locale.ROOT);
+    String offerCurrency=optionalText(offer.get("currency"))==null
+        ?"INR":string(offer.get("currency")).toUpperCase(Locale.ROOT);
     String currency=optionalText(body.get("currency"))==null?offerCurrency:requiredText(body,"currency").toUpperCase(Locale.ROOT);
     // Checkout, existing money columns and Razorpay capture amounts are integer paise and INR-only.
     // Reject a policy that would never match the supported checkout/settlement unit.
