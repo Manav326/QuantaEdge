@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 8,
     "inventory_asset_rows": 1761,
     "eligible_visual_asset_rows": 1761,
-    "raw_analysis_result_rows": 47,
-    "successful_visual_analyses": 33,
-    "missing_visual_analyses": 1714,
-    "failed_visual_analyses": 14,
+    "raw_analysis_result_rows": 55,
+    "successful_visual_analyses": 40,
+    "missing_visual_analyses": 1706,
+    "failed_visual_analyses": 15,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 1736,
+    "unresolved_count": 1729,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -7629,22 +7629,30 @@
           "To support you in posing problems, all the problems or questions in this book are marked using the icon ? This icon is an indicator of a potential opportunity to start off a process of problem solving and exploration in the classroom. You will find some of the problems"
         ],
         "concepts": [
-          "Mathematics",
-          "Classrooms",
+          "Note to the teacher",
+          "Ganita Prakash",
+          "Fertile environment",
           "Mathematical thinking",
-          "Problem solving",
+          "Classrooms",
           "Question",
+          "Problem",
           "Pattern",
           "Challenge",
           "Waiting time",
+          "Mathematics",
+          "Positive impact",
           "Patience",
           "Encouragement",
-          "Positive impact",
-          "Problem solving process"
+          "Problem solving",
+          "Classroom environment",
+          "Mathematical concepts",
+          "Patterns",
+          "Creative strategies",
+          "Solving problems"
         ],
-        "context_relation": "Introduction to the textbook's content and its importance in teaching mathematics.",
+        "context_relation": "The note to the teacher section provides guidance and advice for educators on how to create a conducive environment for students to develop mathematical thinking and problem-solving skills.",
         "limitations": [
-          "The text does not provide specific examples or exercises for the problems.",
+          "The note does not provide specific strategies or activities for implementing the advice.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -7783,9 +7791,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7801,9 +7818,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7819,9 +7845,52 @@
       "asset_path": "page-0015.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Page from a textbook discussing educational strategies and problems in learning.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "2. During this time, an environment that accepts mistakes and acknowledges their importance in learning needs to be nurtured.",
+          "3. There should be a culture where students pose problems to each other and discuss with each other various ways to approach the problems.",
+          "About the Problems in the Book",
+          "1. The exploratory problems in the textbook not only promote problem solving; they also aim to strengthen procedural fluency when children start engaging in exploration.",
+          "2. Trying to 'cover' all the problems in the book must not happen at the cost of students not getting to spend quality time on playing with, discussing, and solving them.",
+          "Reading",
+          "1. Encourage students to read the book by themselves and in groups.",
+          "2. Give opportunities to them to interpret what they read and to express it to others.",
+          "Right of Not Knowing!",
+          "1. It is perfectly okay if some of the content is not understood immediately. Along with trying to understand and reflect upon such content, it can also be taken to the classroom and opened up for discussion. After the discussion, things that are clear and those that are not yet clear can be clearly",
+          "2. Learning is a continual process. Indeed, there is so much in mathematics that is still not known and requires further exploration!"
+        ],
+        "concepts": [
+          "environment",
+          "mistakes",
+          "acknowledgment",
+          "learning",
+          "nurturing",
+          "culture",
+          "posing problems",
+          "discussing",
+          "problem solving",
+          "procedural fluency",
+          "exploration",
+          "reading",
+          "interpretation",
+          "expression",
+          "understanding",
+          "reflection",
+          "classroom",
+          "discussion",
+          "summary",
+          "seeking"
+        ],
+        "context_relation": "educational strategies and problems in learning",
+        "limitations": [
+          "unclear specific page number or section",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7837,9 +7906,27 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with a note to students about appreciating the art of mathematics.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A NOTE TO STUDENTS!",
+          "To be able to appreciate the art of mathematics, it is not enough to just be a passive spectator. You need to immerse yourself in its process like a detective getting into action to solve a mystery.",
+          "This is especially required when you see a new question or when a question arises from your own sense of wonder, or when you come across a new beautiful pattern. When you encounter these, pause your reading, and use your creativity to work out the question or understand and appreciate the pattern.",
+          "You will find that some questions are accompanied by their answers."
+        ],
+        "concepts": [
+          "appreciation of mathematics",
+          "creative problem-solving",
+          "mathematical detective"
+        ],
+        "context_relation": "educational content",
+        "limitations": [
+          "The image does not show any visual elements related to the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7855,9 +7942,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7873,7 +7969,7 @@
       "asset_path": "page-0016.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -7891,9 +7987,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible content.",
+        "limitations": [
+          "The image is a blank page with no visible content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -7909,9 +8014,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible content.",
+        "limitations": [
+          "The image is a blank page with no visible content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
