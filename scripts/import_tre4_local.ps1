@@ -1,7 +1,7 @@
 #requires -Version 5.1
 <#
 .SYNOPSIS
-  Safely dry-runs or imports BPSC TRE Computer Science — Previous-Year Practice Series data into a local QuantaEdge PostgreSQL database.
+  Safely dry-runs or imports BPSC TRE Computer Science - Previous-Year Practice Series data into a local QuantaEdge PostgreSQL database.
 
 .DESCRIPTION
   Runs the offline importer tests and source-archive validation first. By default it performs
@@ -171,11 +171,11 @@ try {
     }
 
     Write-Host ""
-    Write-Host "QuantaEdge BPSC TRE Computer Science — Previous-Year Practice Series import preflight" -ForegroundColor Cyan
+    Write-Host "QuantaEdge BPSC TRE Computer Science - Previous-Year Practice Series import preflight" -ForegroundColor Cyan
     Write-Host "Repository : $repoRoot"
     Write-Host "Python     : $script:resolvedPython ($pythonVersion)"
     Write-Host "Archive    : $archiveFullPath"
-    Write-Host "Course     : BPSC TRE Computer Science — Previous-Year Practice Series [ASSESSMENT / ASSESSMENT_ONLY]"
+    Write-Host "Course     : BPSC TRE Computer Science - Previous-Year Practice Series [ASSESSMENT / ASSESSMENT_ONLY]"
     Write-Host "Hierarchy  : Course -> versioned test packs -> assessments -> ordered question snapshots"
     Write-Host "Safety     : no answer-key approval and no learner publication"
 
@@ -264,7 +264,7 @@ try {
         if ($RepairDraftHindi) { $applyArguments += "--repair-draft-hindi" }
         if ($SubmitForReview) { $applyArguments += "--submit-for-review" }
         Write-Host ""
-        Write-Host "Applying BPSC TRE Computer Science — Previous-Year Practice Series data to the confirmed local database..." -ForegroundColor Cyan
+        Write-Host "Applying BPSC TRE Computer Science - Previous-Year Practice Series data to the confirmed local database..." -ForegroundColor Cyan
         Invoke-CheckedPython -Arguments $applyArguments
         Write-Host ""
         Write-Host "IMPORT/REQUEST SUCCEEDED. Read the JSON report above for actual assessment, pack and release states. OCR-reconstructed Hindi still requires human review; -RepairDraftHindi does not approve questions or publish content." -ForegroundColor Green
