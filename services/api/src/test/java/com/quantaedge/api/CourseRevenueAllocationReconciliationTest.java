@@ -30,6 +30,30 @@ class CourseRevenueAllocationReconciliationTest {
   }
 
   @Test
+  void reconcilesLegacyInstitutionSnapshotFieldsWithoutInstitutionSpecificRules() {
+    Map<String,Object> legacyRecipient = new LinkedHashMap<>();
+    legacyRecipient.put("institutionId", 2L);
+    legacyRecipient.put("calculationType", "PERCENTAGE");
+    legacyRecipient.put("flatAmountPaise", null);
+    legacyRecipient.put("institutionName", "Sunrise Public School");
+    legacyRecipient.put("policyRecipientId", 11L);
+    legacyRecipient.put("percentageBasisPoints", 1_000);
+
+    Map<String,Object> snapshot = snapshot(
+        List.of(legacyRecipient), "INSTITUTION", 1L, "Northfield Academy");
+    List<Map<String,Object>> allocations = List.of(
+        allocation(100L, 7L, "INSTITUTION", 2L, 11L, 10_000L, 100_000L, 0L, 100_000L, 10_000L, 1L),
+        allocation(101L, 7L, "INSTITUTION", 1L, null, 90_000L, 100_000L, 0L, 100_000L, 90_000L, 1L));
+
+    CourseRevenueAllocationReconciliation.Result result =
+        CourseRevenueAllocationReconciliation.reconcile(snapshot, 7L, 100_000L, 0L, "INR", allocations);
+
+    assertTrue(result.complete(), () -> String.join("; ", result.issues()));
+    assertEquals(100_000L, result.expectedTotalPaise());
+    assertEquals(100_000L, result.recordedTotalPaise());
+  }
+
+  @Test
   void mergesExplicitShareAndRemainderWhenTheyNameTheSameRecipient() {
     Map<String,Object> snapshot = snapshot(
         List.of(recipient(11L,"INSTITUTION",2L,"PERCENTAGE",1_000,0L,"Northfield Academy")),
