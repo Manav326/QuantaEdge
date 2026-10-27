@@ -132,6 +132,8 @@ final class CourseRevenueAllocationReconciliation {
         allocation.amountPaise = Math.addExact(allocation.amountPaise, amountPaise);
         allocation.policyRecipientId = number(recipient.get("policyRecipientId"));
         allocation.name = text(recipient.get("recipientName"));
+        if (allocation.name.isBlank()) allocation.name = text(recipient.get("institutionName"));
+        if (allocation.name.isBlank()) allocation.name = text(recipient.get("legalEntityName"));
       }
     }
 
