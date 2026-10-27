@@ -30,6 +30,7 @@ public class CoursePaymentOperationsController {
   private final CoursePaymentOperationsAuditService audit;
   private final ObjectMapper mapper;
 
+  @org.springframework.beans.factory.annotation.Autowired
   public CoursePaymentOperationsController(JdbcTemplate jdbc, AuthorizationService authorization,
       CourseMarketplaceController marketplace, CoursePaymentOperationsAuditService audit, ObjectMapper mapper) {
     this.jdbc = jdbc;
@@ -37,6 +38,12 @@ public class CoursePaymentOperationsController {
     this.marketplace = marketplace;
     this.audit = audit;
     this.mapper = mapper;
+  }
+
+  /** Backward-compatible constructor for focused unit tests and existing direct callers. */
+  CoursePaymentOperationsController(JdbcTemplate jdbc, AuthorizationService authorization,
+      CourseMarketplaceController marketplace, CoursePaymentOperationsAuditService audit) {
+    this(jdbc, authorization, marketplace, audit, new ObjectMapper());
   }
 
   @GetMapping
