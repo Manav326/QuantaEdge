@@ -12,3 +12,7 @@ COMMENT ON COLUMN course_payment_order_fee.platform_borne_overage_paise IS
   'Confirmed collection processing fee/tax amount that exceeds the pre-charge distributable pool and is borne by the platform.';
 COMMENT ON COLUMN finance_payout_batch.platform_borne_overage_paise IS
   'Confirmed RazorpayX transfer fee/tax amount in excess of the payout allocation weights, borne by the platform rather than deducted from beneficiaries.';
+
+INSERT INTO app_metadata(key,value)
+VALUES ('schema','finance-fee-overage-reconciliation-v214')
+ON CONFLICT(key) DO UPDATE SET value=excluded.value;
