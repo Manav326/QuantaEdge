@@ -188,6 +188,7 @@ try {
     Write-Host ""
     Write-Host "Running offline importer regression tests..." -ForegroundColor Cyan
     Invoke-CheckedPython -Arguments @("-m", "unittest", "discover", "-s", $testPath, "-p", "test_import_tre4_course.py")
+    Invoke-CheckedPython -Arguments @("-m", "unittest", "discover", "-s", $testPath, "-p", "test_extract_tre_source_questions.py")
 
     Write-Host ""
     Write-Host "Validating the real source archive (dry run; no database writes)..." -ForegroundColor Cyan
