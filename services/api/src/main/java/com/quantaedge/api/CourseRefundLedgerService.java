@@ -547,15 +547,35 @@ public class CourseRefundLedgerService {
     long currentNetRefund=currentAmount-currentTax;
 
     List<Map<String,Object>> allocations=jdbc.queryForList("""
-      select id,institution_id,allocated_amount_paise,distributable_pool_paise,currency
-      from revenue_share_allocation where course_payment_order_id=? order by institution_id,id
+      select a.id,a.institution_id,a.legal_entity_id,a.recipient_type,a.allocated_amount_paise,
+        a.distributable_pool_paise,a.currency,
+        coalesce(fee.fee_deducted_paise,0) as fee_deducted_paise,
+        coalesce(order_fee.total_fee_deducted_paise,0) as total_fee_deducted_paise
+      from revenue_share_allocation a
+      left join lateral (
+        select coalesce(sum(e.amount_paise),0) as fee_deducted_paise
+        from revenue_share_allocation_event e
+        where e.allocation_id=a.id and e.event_type='PROCESSING_FEE_DEDUCTED'
+      ) fee on true
+      left join lateral (
+        select coalesce(sum(e.amount_paise),0) as total_fee_deducted_paise
+        from revenue_share_allocation a2
+        join revenue_share_allocation_event e on e.allocation_id=a2.id
+          and e.event_type='PROCESSING_FEE_DEDUCTED'
+        where a2.course_payment_order_id=a.course_payment_order_id
+      ) order_fee on true
+      where a.course_payment_order_id=? order by a.recipient_type,a.institution_id,a.legal_entity_id,a.id
       """,orderId);
     for(Map<String,Object> allocation:allocations) {
       long allocationId=number(allocation.get("id"));
-      long allocated=number(allocation.get("allocated_amount_paise"));
-      long pool=number(allocation.get("distributable_pool_paise"));
-      if(pool<=0) {
-        if(allocated>0) throw new IllegalStateException("Revenue-share allocation has a zero distributable pool.");
+      long grossAllocated=number(allocation.get("allocated_amount_paise"));
+      long grossPool=number(allocation.get("distributable_pool_paise"));
+      long allocated=grossAllocated-number(allocation.get("fee_deducted_paise"));
+      long pool=grossPool-number(allocation.get("total_fee_deducted_paise"));
+      if(allocated<0||pool<0)
+        throw new IllegalStateException("Confirmed processor charges exceed the saved course allocation. Finance reconciliation is required before this refund can be posted.");
+      if(pool==0) {
+        if(allocated>0) throw new IllegalStateException("Revenue-share allocation has a zero net distributable pool.");
         continue;
       }
       long target=proportional(allocated,cumulativeNetRefund,pool);
@@ -579,6 +599,8 @@ public class CourseRefundLedgerService {
               "providerRefundId",providerRefundId,"creditNoteDocumentId",creditNoteDocumentId,
               "refundAmountPaise",currentAmount,"taxCreditPaise",currentTax,
               "taxableCreditPaise",currentNetRefund,"cumulativeNetRefundPaise",cumulativeNetRefund,
+              "grossAllocationPaise",grossAllocated,"confirmedFeeDeductionPaise",number(allocation.get("fee_deducted_paise")),
+              "netAllocationPaise",allocated,"netDistributablePoolPaise",pool,
               "allocationReversalPaise",delta)));
     }
     event(refundId,"ALLOCATIONS_REVERSED","course-refund:"+refundId+":allocations-reversed",actorStaffId,
