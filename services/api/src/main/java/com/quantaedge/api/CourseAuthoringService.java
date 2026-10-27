@@ -53,13 +53,40 @@ public class CourseAuthoringService {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
           "This creation flow supports K12 learning courses and assessment-only courses. Competitive courses require their type-specific hierarchy importer.");
 
-    String requestedCode=requiredText(body.get("code"),2,38,"Course code").toUpperCase(java.util.Locale.ROOT);
-    if(!requestedCode.matches("^[A-Z0-9][A-Z0-9_-]{1,37}$"))
-      throw badRequest("Course code must use 2–38 letters, digits, hyphens or underscores.");
     String displayName=requiredText(body.get("displayName"),2,200,"Course name");
     String version=optionalText(body.get("curriculumVersion"),"CURRENT",120,"Curriculum version");
     String stream=optionalText(body.get("streamCode"),"ASSESSMENT".equals(type)?"ASSESSMENT":null,60,"Stream code");
     String classCode=optionalText(body.get("classCode"),null,20,"Class code");
+    String suppliedCode=optionalText(body.get("code"),null,38,"Course code");
+    boolean legacyTre4CompatibilityRequest="ASSESSMENT".equals(type)
+        && "TRE4".equalsIgnoreCase(suppliedCode==null?"":suppliedCode)
+        && "TRE4".equalsIgnoreCase(classCode==null?"":classCode)
+        && "BPSC-TRE-4".equalsIgnoreCase(version)
+        && "TRE-4 · Computer Science".equals(displayName);
+    final String requestedCode;
+    if("ASSESSMENT".equals(type) && !legacyTre4CompatibilityRequest) {
+      if(suppliedCode!=null)
+        throw badRequest("Assessment course identifiers are generated automatically. Omit the code field; the generated public ID is shown after creation.");
+      requestedCode=generatedAssessmentCourseKey(displayName);
+    } else {
+      requestedCode=requiredText(suppliedCode,2,38,"Course code").toUpperCase(java.util.Locale.ROOT);
+      if(!requestedCode.matches("^[A-Z0-9][A-Z0-9_-]{1,37}$"))
+        throw badRequest("Course code must use 2–38 letters, digits, hyphens or underscores.");
+    }
+    if("ASSESSMENT".equals(type)) {
+      List<Map<String,Object>> sameName=jdbc.queryForList("""
+        select id,stable_course_key
+        from institution_course_identity
+        where source_institution_id=? and course_type_code='ASSESSMENT' and status='ACTIVE'
+          and lower(btrim(display_name))=lower(btrim(?))
+        for update
+        """,institutionId,displayName);
+      if(!sameName.isEmpty()) {
+        Map<String,Object> existing=sameName.getFirst();
+        throw conflict("An assessment course with this name already exists (public course identity #"
+            +existing.get("id")+"). Open the existing course instead of creating a duplicate.");
+      }
+    }
 
     Long classId=null;
     if("ASSESSMENT".equals(type)&&"TRE4".equalsIgnoreCase(classCode==null?"":classCode)) {
@@ -148,12 +175,7 @@ public class CourseAuthoringService {
           values(?,'ASSESSMENT_ONLY')
           """,courseId);
 
-        boolean legacyTre4Compatibility = classId != null
-            && "TRE4".equalsIgnoreCase(classCode==null?"":classCode)
-            && "BPSC-TRE-4".equalsIgnoreCase(version)
-            && requestedCode.equalsIgnoreCase("TRE4")
-            && "TRE-4 · Computer Science".equals(displayName);
-        if(legacyTre4Compatibility) {
+        if(legacyTre4CompatibilityRequest) {
           Long subjectId=createdSubjects.get("computer-science");
           if(subjectId==null || subjects.size()!=1
               || !"Computer Science".equals(String.valueOf(subjects.getFirst().get("displayName")))) {
@@ -206,6 +228,7 @@ public class CourseAuthoringService {
     result.put("courseId",courseId);
     result.put("publicId",publicId);
     result.put("courseCode",internalCode);
+    result.put("stableCourseKey",requestedCode);
     result.put("displayName",displayName);
     result.put("courseTypeCode",type);
     result.put("curriculumClassCode",classCode);
@@ -628,6 +651,17 @@ public class CourseAuthoringService {
     }
     return value;
   }
+  private String generatedAssessmentCourseKey(String displayName) {
+    String normalized=displayName.trim().toUpperCase(java.util.Locale.ROOT)
+        .replaceAll("[^A-Z0-9]+","_").replaceAll("^_+|_+$","");
+    if(normalized.isBlank()) normalized="ASSESSMENT_COURSE";
+    String base=normalized.length()>31?normalized.substring(0,31).replaceAll("_+$",""):normalized;
+    if(base.isBlank()) base="ASSESSMENT";
+    // A deterministic digest suffix avoids collisions when different long titles share a prefix.
+    // The database's unique (institution, stable_course_key) constraint remains authoritative.
+    return base+"_"+sha256(normalized).substring(0,6).toUpperCase(java.util.Locale.ROOT);
+  }
+
   private String sha256(String value) {
     try {
       byte[] hash=java.security.MessageDigest.getInstance("SHA-256").digest(value.getBytes(java.nio.charset.StandardCharsets.UTF_8));
