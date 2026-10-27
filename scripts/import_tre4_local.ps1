@@ -249,10 +249,16 @@ try {
 
     if (-not $Yes) {
         $confirmationWord = if ($RepairDraftHindi) { "REPAIR" } else { "IMPORT" }
-        $confirmation = Read-Host "To write to this local database, type $confirmationWord (anything else cancels)"
-        if ($confirmation -cne $confirmationWord) {
-            Write-Host "Cancelled. The dry run completed, but no database writes were made." -ForegroundColor Yellow
-            return
+        while ($true) {
+            $confirmation = Read-Host "Target is the local database above. Type $confirmationWord to proceed, or CANCEL to stop"
+            if ($confirmation -ceq $confirmationWord) {
+                break
+            }
+            if ($confirmation -ceq "CANCEL") {
+                Write-Host "Cancelled. No database writes were made." -ForegroundColor Yellow
+                return
+            }
+            Write-Host "Confirmation not accepted. Type '$confirmationWord' to proceed or CANCEL to stop." -ForegroundColor Yellow
         }
     }
 
