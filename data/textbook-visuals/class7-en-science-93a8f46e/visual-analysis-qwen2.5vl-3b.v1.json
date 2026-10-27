@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2429,
+    "assets_selected": 2431,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "57f6d254114c156f04ac05fb",
-      "8dc0f63ef8a4403d635d24e4"
+      "722d48c13df5b8161bd85b8c",
+      "657a0b4a77433a1919da768f"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2426,
-    "assets_remaining": 5062,
+    "assets_analyzed": 2428,
+    "assets_remaining": 5060,
     "assets_completion_percent": 32.4,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 2424,
+    "assets_skipped_from_checkpoint": 2426,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40520035469",
-      "checkpointed_at": "2026-10-27T15:53:45Z"
+      "checkpointed_at": "2026-10-27T15:58:59Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40520035469",
-      "checkpointed_at": "2026-10-27T15:54:24Z"
+      "checkpointed_at": "2026-10-27T15:59:37Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40520035469",
-      "checkpointed_at": "2026-10-27T15:55:14Z"
+      "checkpointed_at": "2026-10-27T16:00:27Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -91585,6 +91585,97 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40520035469",
       "checkpointed_at": "2026-10-27T15:57:56Z"
+    },
+    {
+      "asset_id": "722d48c13df5b8161bd85b8c",
+      "asset_sha256": "4635a1dbd2c12ad17368eb9c34f9ac8991ee1b69d487a381a67b28cf91b1a526",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/4635a1dbd2c12ad17368eb9c34f9ac8991ee1b69d487a381a67b28cf91b1a526.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of non-metals in daily life, specifically mentioning oxygen and carbon.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "and electrical conductivity, and high strength. However, this",
+          "should not give an impression in your mind that non-metals are not important in our lives.",
+          "We breathe in oxygen, which is a non-metal, and without it",
+          "we would not be able to survive. Can you think of any other uses",
+          "of oxygen?",
+          "Carbon is essential in everyday life because it is the building",
+          "block of all life forms. It is a key component of proteins, fats, and"
+        ],
+        "concepts": [
+          "non-metals",
+          "oxygen",
+          "carbon",
+          "electrical conductivity",
+          "strength",
+          "daily life",
+          "building block of life",
+          "components of proteins, fats"
+        ],
+        "context_relation": "The page discusses the importance of non-metals in daily life, specifically mentioning oxygen and carbon.",
+        "limitations": [
+          "The page does not provide specific examples or explanations for the uses of oxygen and carbon."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40520035469",
+      "checkpointed_at": "2026-10-27T16:01:50Z"
+    },
+    {
+      "asset_id": "657a0b4a77433a1919da768f",
+      "asset_sha256": "56c345f5d78c87355da52ea24807d27f6ade7668ad5be1d2f1616f116770b48f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/56c345f5d78c87355da52ea24807d27f6ade7668ad5be1d2f1616f116770b48f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a book.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "and electrical conductivity, and high strength. However, this",
+          "should not give an impression in your mind that non-metals are not important in our lives.",
+          "We breathe in oxygen, which is a non-metal, and without it",
+          "we would not be able to survive. Can you think of any other uses",
+          "of oxygen?",
+          "Carbon is essential in everyday life because it is the building",
+          "block of all life forms. It is a key component of proteins, fats, and"
+        ],
+        "concepts": [
+          "non-metals",
+          "oxygen",
+          "carbon",
+          "electrical conductivity",
+          "strength",
+          "building blocks",
+          "life forms",
+          "proteins",
+          "fats"
+        ],
+        "context_relation": "The image is a cartoon character holding a book, which is related to the text discussing the importance of non-metals and carbon in everyday life.",
+        "limitations": [
+          "The image does not provide specific details about the book's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40520035469",
+      "checkpointed_at": "2026-10-27T16:03:14Z"
     }
   ]
 }
