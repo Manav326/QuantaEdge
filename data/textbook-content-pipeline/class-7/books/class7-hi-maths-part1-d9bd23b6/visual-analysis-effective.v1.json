@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-hindi-ghgp1",
   "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
   "raw_analysis_path": "data/textbook-visuals/class7-hi-maths-part1-d9bd23b6/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5026a8e56d98a243aedca2ec9b909d73fab9ccb93f6de30c88ca44fd48dd2b1a",
+  "raw_analysis_sha256": "4d4048100c23b0c349262cd2cbf741e4a3deacc2b445c10aa220b946cdfc90b5",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-hi-maths-part1-d9bd23b6/visual-analysis-corrections.v1.json",
@@ -710,6 +710,306 @@
         "limitations": [
           "The page does not contain any specific visual elements.",
           "The page does not provide any specific examples or illustrations."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8e81807e963fd97357ffc822",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "76bf02aa6216f80372c8e1e9466c9168c04483f3f99326e50deb3106ee12261f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-26T23:46:19Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0308bafb43a8aabafe1e9c1d",
+      "asset_sha256": "7c85c3254059968701cc02229933506192718dc774098b99175eea8c87c85b5c",
+      "page_text_context_sha256": "76bf02aa6216f80372c8e1e9466c9168c04483f3f99326e50deb3106ee12261f",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 7,
+      "asset_path": "page-0007.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8df98ec3e1acfa173838e855",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "151690056b8bebb1519690fbf7b905532dc877fc0fcf0caa94ac9a4558be8414",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "08b7990ff094605e3b31d2cf",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "page_text_context_sha256": "151690056b8bebb1519690fbf7b905532dc877fc0fcf0caa94ac9a4558be8414",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "48b459b13c654f09d00c24c9",
+      "asset_sha256": "63fff898459dc342c7d7ddcf3315163085c024295a68e9d9aca03af0ff964ea1",
+      "page_text_context_sha256": "151690056b8bebb1519690fbf7b905532dc877fc0fcf0caa94ac9a4558be8414",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 8,
+      "asset_path": "page-0008.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d0c1c6bccd2eb6c0f3edd224",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "be1fd7263d787350790a7b9bad967b609fe33ce3b738f475e44666e82ae7244c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:04:09Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8bb2910e4eabe9ed2ea5a670",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "be1fd7263d787350790a7b9bad967b609fe33ce3b738f475e44666e82ae7244c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:04:38Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d40045d37441b5555a029b7e",
+      "asset_sha256": "80978361661ee6590f67920c961aa22d3b5c4cb55dcccf09e976d9a1e4cc2a55",
+      "page_text_context_sha256": "be1fd7263d787350790a7b9bad967b609fe33ce3b738f475e44666e82ae7244c",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 9,
+      "asset_path": "page-0009.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7b594ce656055e18c5b1cac9",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6e454bd25dfd546b63dd325fc43bee8fd0978714cb1f3207f0415f0c10a47495",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:10:08Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b0151c694548e0b7a3a93cff",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-hindi-ghgp1",
+      "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6e454bd25dfd546b63dd325fc43bee8fd0978714cb1f3207f0415f0c10a47495",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:10:38Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
