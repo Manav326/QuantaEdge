@@ -276,6 +276,15 @@ def build_question_snapshot(record: dict[str, Any], cycle: str, pdf_path: str, p
             snapshot[field] = record[field]
     if record.get("native_source_language"):
         snapshot["native_source_language"] = record["native_source_language"]
+    if hi and hi.get("prompt_ocr_text"):
+        # Preserve the exact encoded source stem beside the reconstructed Unicode prompt.
+        # This metadata is intentionally not an approval status; the human-review gates stay pending.
+        snapshot["hindi_prompt_reconstruction"] = {
+            "method": "TESSERACT_HINDI_OCR",
+            "status": "REQUIRES_HUMAN_REVIEW",
+            "raw_legacy_text": norm_text(hi.get("prompt_raw")),
+            "source_location": location.get("hi") or {},
+        }
     return snapshot
 
 
