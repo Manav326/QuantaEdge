@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 5189,
     "eligible_visual_asset_rows": 5189,
-    "raw_analysis_result_rows": 110,
-    "successful_visual_analyses": 65,
-    "missing_visual_analyses": 5079,
-    "failed_visual_analyses": 45,
+    "raw_analysis_result_rows": 120,
+    "successful_visual_analyses": 72,
+    "missing_visual_analyses": 5069,
+    "failed_visual_analyses": 48,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5124,
+    "unresolved_count": 5117,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -14663,9 +14663,31 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook showing a table with two columns of numbers, one labeled 'Ganit Prakash' and the other labeled 'Sarani 2'. The table contains numbers from 1 to 9 in both columns.",
+        "visual_type": "table",
+        "visible_text": [
+          "गणित प्रकाश  । कक्ा 6",
+          "साारणी 2— कुछ संख्या अनुक्रमों काा  चित्रीय निरूपण",
+          "(सभीी ‘1’) 1 1 1 1 1",
+          "(गणन संख्‍यायाएँ) 1 2 3 4 5",
+          "(विषम संख्‍यायाएँ) 1 3 5 7 9",
+          "2 4 6 8",
+          "2 4 6 8"
+        ],
+        "concepts": [
+          "Number sequences",
+          "Ganit Prakash",
+          "Sarani 2"
+        ],
+        "context_relation": "The table is a visual representation of number sequences used in the textbook.",
+        "limitations": [
+          "The image does not show any equations or formulas.",
+          "The image does not depict any diagrams or charts."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14681,7 +14703,7 @@
       "asset_path": "page-0024.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -14699,9 +14721,31 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing patterns in mathematics, specifically focusing on triangular and square numbers.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "गणित में पैटर्न",
+          "आइए, पता लगाएँ",
+          "1. सारणीी 2 में दिए संख्‍याया अनुक्रमों को चि‍त्रात्‍ममक रूप से दर्शाने के ल‍िए अपनीी नोटबुक",
+          "गणित             में प्रतिलिपि बनाकर प्रत्‍येयेक अनुक्रम के लिए अगला चित्र बनाइए।",
+          "चर्चा",
+          "2. 1, 3, 6, 10, 15, ... त्रिभुजााकाार संख्‍   याएँ क्‍ययों कहलातीी  हैं? 1, 4, 9, 16, 25, ...",
+          "वर्ग संख्‍   याएँ यया वर्ग  क्‍ययों कहलातीी  हैं?"
+        ],
+        "concepts": [
+          "triangular numbers",
+          "square numbers",
+          "pattern recognition"
+        ],
+        "context_relation": "The page is discussing the patterns of triangular and square numbers, providing examples and asking for the next number in the sequence.",
+        "limitations": [
+          "The page does not provide the next numbers in the sequences.",
+          "The page does not show any visual aids or diagrams."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14717,9 +14761,34 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook in Hindi, discussing patterns in mathematics. It includes a sequence of numbers and asks the reader to create a diagram to represent the sequence.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "गणित में पैटर्न",
+          "आइए, पता लगाएँ",
+          "1. सारणीी 2 में दिए संख्‍याया अनुक्रमो को चि‍त्रात्‍ममक रूप से दर्शाने के ल‍िए अपनीी नोटबुक",
+          "गणित             में प्रतिलिपि बनाकर प्रत्‍येयेक अनुक्रम के लिए अगला चित्र बनाइए।",
+          "चर्चा",
+          "2. 1, 3, 6, 10, 15, ... त्रिभुजााकाार संख्‍   याएँ क्‍ययों कहलातीी  हैं? 1, 4, 9, 16, 25, ..."
+        ],
+        "concepts": [
+          "mathematics",
+          "pattern",
+          "diagram",
+          "sequence",
+          "triangle pattern",
+          "square pattern",
+          "sequence of numbers"
+        ],
+        "context_relation": "The page is an educational content related to mathematics, specifically focusing on patterns and sequences.",
+        "limitations": [
+          "The page does not contain any equations or formulas.",
+          "The page does not include any images or illustrations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14735,7 +14804,7 @@
       "asset_path": "page-0025.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -14753,9 +14822,29 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A sequence of numbers representing the squares of consecutive odd numbers.",
+        "visual_type": "table",
+        "visible_text": [
+          "1",
+          "2",
+          "4",
+          "8",
+          "16"
+        ],
+        "concepts": [
+          "Sequence of numbers",
+          "Squares of consecutive odd numbers",
+          "Odd number sequence",
+          "Square of a number"
+        ],
+        "context_relation": "The image is a visual representation of the sequence of squares of consecutive odd numbers.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the sequence of numbers."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14771,9 +14860,28 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A sequence of numbers representing the squares of consecutive integers.",
+        "visual_type": "table",
+        "visible_text": [
+          "1",
+          "2",
+          "4",
+          "8",
+          "16"
+        ],
+        "concepts": [
+          "Sequence of numbers",
+          "Squares of consecutive integers",
+          "Pattern recognition"
+        ],
+        "context_relation": "The image is a visual representation of the pattern in the sequence of squares of consecutive integers.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the sequence of numbers."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14789,7 +14897,7 @@
       "asset_path": "page-0026.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -14807,9 +14915,30 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook in Hindi, discussing patterns in mathematics and how to construct a pattern for a square of a given size.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "गणित में पैटर्न",
+          "नीीचे दि‍ए गए पैटर्न में द‍िखायया गयया है कि ययह कैसे कियया जा सकता है—",
+          "ययह चित्र दर्शाता है कि 1 + 3 + 5 + 7 + 9 + 11 = 36 क्‍ययोंकि इस प्रकार का चित्र किसीी   भीी माप के वर्ग के लिए बनायया जा सकता है, अत: ययह स्‍पष्‍टट हो जाता है कि विषम संख्यायाओं को जोड़ने पर वर्ग संख्यायाएँ क्‍ययों प्राप्त हो जातीी   हैं।",
+          "इसीी  प्रकार एक अन्य   चित्र बनाकर, क्या आप ययह बता सकते  हैं कि प्रथम 10 विषम संख्याओं का ययोग क्या है?",
+          "अब एक ऐसे  हीी  चित्र की कल्पना कीज‍िए यया आवश्‍ययकतानुसार अां"
+        ],
+        "concepts": [
+          "mathematics",
+          "pattern",
+          "square",
+          "sum of consecutive odd numbers"
+        ],
+        "context_relation": "The image is a page from a textbook discussing patterns in mathematics, specifically how to construct a pattern for a square of a given size and the sum of the first 10 odd numbers.",
+        "limitations": [
+          "The image does not provide specific numerical data or calculations.",
+          "The image does not show any visual representation of the patterns or squares."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -14825,9 +14954,30 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook in Hindi discussing patterns in mathematics, specifically focusing on the sum of the first 10 odd numbers.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "गणित में पैटर्न",
+          "नीीचे दि‍ए गए पैटर्न में द‍िखायया गयया है कि ययह कैसे कियया जा सकता है—",
+          "ययह चित्र दर्शाता है कि 1 + 3 + 5 + 7 + 9 + 11 = 36 क्‍ययोंकि इस प्रकार का चित्र किसीी   भीी माप के वर्ग के लिए बनायया जा सकता है, अत: ययह स्‍पष्‍टट हो जाता है कि विषम संख्यायाओं को जोड़ने पर वर्ग संख्यायाएँ क्‍ययों प्राप्त हो जातीी",
+          "इसीी  प्रकार एक अन्य   चित्र बनाकर, क्या आप ययह बता सकते  हैं कि प्रथम 10 विषम संख्याओं का ययोग क्या है?",
+          "अब एक ऐसे  हीी  चित्र की कल्पना कीज‍िए यया आवश्‍ययकतानुसार अां"
+        ],
+        "concepts": [
+          "pattern in mathematics",
+          "sum of odd numbers",
+          "mathematical reasoning"
+        ],
+        "context_relation": "The image is a page from a textbook discussing patterns in mathematics, specifically focusing on the sum of the first 10 odd numbers.",
+        "limitations": [
+          "The image does not contain any equations or formulas.",
+          "The image does not contain any diagrams or charts.",
+          "The image does not contain any illustrations or cartoons."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
