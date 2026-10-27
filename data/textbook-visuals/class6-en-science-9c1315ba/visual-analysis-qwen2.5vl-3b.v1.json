@@ -8,7 +8,7 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1408,
+    "assets_selected": 1413,
     "assets_processed_this_run": 10,
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
@@ -16,18 +16,18 @@
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "accf6ae4013bae67a1606985",
-      "3b2bb873be490ae6f2d0e70d",
-      "d5e6a0284a83586e3892edbb",
-      "af53a6e7523746c2085516f7",
-      "c4eed02b7a9af68be751b672"
+      "9392bff22eabc500487349f9",
+      "95bc3bfaab080610b3e652d0",
+      "a4075ac5adf9a26dfbfae53e",
+      "c875e33aca299a29d5919a64",
+      "5a672a1be66b5af0f5bce35f"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1403,
-    "assets_remaining": 675,
-    "assets_completion_percent": 67.5,
+    "assets_analyzed": 1408,
+    "assets_remaining": 670,
+    "assets_completion_percent": 67.8,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 1398,
+    "assets_skipped_from_checkpoint": 1403,
     "batch_limit": 10,
     "publication_allowed": false
   },
@@ -468,7 +468,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T01:19:10Z"
+      "checkpointed_at": "2026-10-27T01:31:56Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20145,7 +20145,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T01:20:47Z"
+      "checkpointed_at": "2026-10-27T01:33:32Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23804,7 +23804,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T01:22:10Z"
+      "checkpointed_at": "2026-10-27T01:34:54Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -38049,7 +38049,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T01:23:18Z"
+      "checkpointed_at": "2026-10-27T01:36:00Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44209,7 +44209,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T01:24:13Z"
+      "checkpointed_at": "2026-10-27T01:36:54Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -47406,6 +47406,171 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
       "checkpointed_at": "2026-10-27T01:30:07Z"
+    },
+    {
+      "asset_id": "9392bff22eabc500487349f9",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 149,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "82934d6525214df259b4f84454cb88ea48b43359181526579808fe292bd512f9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:37:07Z"
+    },
+    {
+      "asset_id": "95bc3bfaab080610b3e652d0",
+      "asset_sha256": "3d8efc41887999a1181b0b7707b6985a4453420c4230dc3908e2012795a3f0ce",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 149,
+      "asset_path": "page-0149.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "82934d6525214df259b4f84454cb88ea48b43359181526579808fe292bd512f9",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for finding the smallest value that a laboratory thermometer can read.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Activity 7.4: Let us observe and calculate",
+          "Let us now try to find the smallest value that a given laboratory thermometer can read.",
+          "Again, take the same laboratory thermometer which you used in Activity 7.3 and observe it carefully.",
+          "Note down the following:",
+          "How much is the temperature difference indicated between the two bigger marks?",
+          "How many divisions (shown by smaller marks) are there between these two bigger marks?",
+          "How much temperature does one small division indicate?",
+          "So, the smallest value that the thermometer can read is"
+        ],
+        "concepts": [
+          "temperature difference",
+          "divisions",
+          "temperature",
+          "thermometer",
+          "temperature range",
+          "laboratory thermometer",
+          "temperature measurement"
+        ],
+        "context_relation": "exploration",
+        "limitations": [
+          "limited to the specific thermometer used in Activity 7.3",
+          "focuses on the smallest readable value",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:39:41Z"
+    },
+    {
+      "asset_id": "a4075ac5adf9a26dfbfae53e",
+      "asset_sha256": "f655feffdb45bd1939e4fdac6d5b6d01f9249f33303b83e3cddd2150ef463602",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 150,
+      "asset_path": "assets/f655feffdb45bd1939e4fdac6d5b6d01f9249f33303b83e3cddd2150ef463602.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "868c67f74d8c2f345dc3aaab6f35dc41bef7efc60f2b99938bfe0b59d3ae2d7a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person in a white shirt and blue striped tie, scratching their head.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:40:35Z"
+    },
+    {
+      "asset_id": "c875e33aca299a29d5919a64",
+      "asset_sha256": "5f902a86858705b8d5d58447917b9bfcc1938509a2057003855a291db4f1ae9f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 150,
+      "asset_path": "assets/5f902a86858705b8d5d58447917b9bfcc1938509a2057003855a291db4f1ae9f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "868c67f74d8c2f345dc3aaab6f35dc41bef7efc60f2b99938bfe0b59d3ae2d7a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A thermometer being used to measure the temperature of a liquid in a beaker, with a close-up of the thermometer's bulb and a side view of the beaker.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Correct way of measuring temperature using a laboratory thermometer",
+          "When the thermometer is immersed in water, its bulb should not touch the bottom or the sides of the beaker.",
+          "The thermometer should be held",
+          "The thermometer should be held"
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Laboratory thermometer",
+          "Immersion in liquid",
+          "Avoiding contact with beaker's bottom or sides"
+        ],
+        "context_relation": "The image illustrates the proper method for using a laboratory thermometer to measure temperature, emphasizing the importance of not touching the bottom or sides of the beaker.",
+        "limitations": [
+          "The image does not show the actual measurement process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:41:46Z"
+    },
+    {
+      "asset_id": "5a672a1be66b5af0f5bce35f",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 150,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "868c67f74d8c2f345dc3aaab6f35dc41bef7efc60f2b99938bfe0b59d3ae2d7a",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:41:58Z"
     }
   ]
 }

@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1420,
-    "successful_visual_analyses": 1408,
-    "missing_visual_analyses": 658,
+    "raw_analysis_result_rows": 1425,
+    "successful_visual_analyses": 1413,
+    "missing_visual_analyses": 653,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 670,
+    "unresolved_count": 665,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -53821,9 +53821,16 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -53839,9 +53846,37 @@
       "asset_path": "page-0149.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Instructions for finding the smallest value that a laboratory thermometer can read.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Activity 7.4: Let us observe and calculate",
+          "Let us now try to find the smallest value that a given laboratory thermometer can read.",
+          "Again, take the same laboratory thermometer which you used in Activity 7.3 and observe it carefully.",
+          "Note down the following:",
+          "How much is the temperature difference indicated between the two bigger marks?",
+          "How many divisions (shown by smaller marks) are there between these two bigger marks?",
+          "How much temperature does one small division indicate?",
+          "So, the smallest value that the thermometer can read is"
+        ],
+        "concepts": [
+          "temperature difference",
+          "divisions",
+          "temperature",
+          "thermometer",
+          "temperature range",
+          "laboratory thermometer",
+          "temperature measurement"
+        ],
+        "context_relation": "exploration",
+        "limitations": [
+          "limited to the specific thermometer used in Activity 7.3",
+          "focuses on the smallest readable value",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -53857,9 +53892,16 @@
       "asset_path": "assets/f655feffdb45bd1939e4fdac6d5b6d01f9249f33303b83e3cddd2150ef463602.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person in a white shirt and blue striped tie, scratching their head.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -53875,9 +53917,28 @@
       "asset_path": "assets/5f902a86858705b8d5d58447917b9bfcc1938509a2057003855a291db4f1ae9f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A thermometer being used to measure the temperature of a liquid in a beaker, with a close-up of the thermometer's bulb and a side view of the beaker.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Correct way of measuring temperature using a laboratory thermometer",
+          "When the thermometer is immersed in water, its bulb should not touch the bottom or the sides of the beaker.",
+          "The thermometer should be held",
+          "The thermometer should be held"
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Laboratory thermometer",
+          "Immersion in liquid",
+          "Avoiding contact with beaker's bottom or sides"
+        ],
+        "context_relation": "The image illustrates the proper method for using a laboratory thermometer to measure temperature, emphasizing the importance of not touching the bottom or sides of the beaker.",
+        "limitations": [
+          "The image does not show the actual measurement process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -53893,9 +53954,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
