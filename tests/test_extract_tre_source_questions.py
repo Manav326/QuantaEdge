@@ -7,6 +7,7 @@ from scripts.extract_tre_source_questions import (
     PAPERS,
     classify_content,
     convert_hindi_text,
+    normalize_ocr_prompt,
     native_source_language,
     normalize_source_language_code,
     hindi_conversion_needs_review,
@@ -49,7 +50,16 @@ class TreSourceCodePreservationTests(unittest.TestCase):
         self.assertTrue(hindi_conversion_needs_review("CONVERTER_UNAVAILABLE"))
         self.assertTrue(hindi_conversion_needs_review("CONVERSION_ERROR:ValueError"))
         self.assertTrue(hindi_conversion_needs_review("CONVERTED_KRUTIDEV_FORCED_LEGACY"))
+        self.assertTrue(hindi_conversion_needs_review("OCR_SHREEDEV_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW"))
+        self.assertTrue(hindi_conversion_needs_review("SHREEDEV_OCR_UNAVAILABLE_RAW_PRESERVED"))
         self.assertFalse(hindi_conversion_needs_review("CONVERTED_CHANAKYA"))
+
+    def test_shreedev_ocr_prompt_normalization_and_human_review(self):
+        self.assertEqual(
+            normalize_ocr_prompt(". तीन अंकों की कितनी संख्याएँ 5 से विभाज्य\\nहैं?"),
+            "तीन अंकों की कितनी संख्याएँ 5 से विभाज्य\\nहैं?",
+        )
+        self.assertEqual(normalize_ocr_prompt("(A) 180"), "")
 
     def test_unrecognized_legacy_font_is_preserved_for_review_not_forced(self):
         class UnknownFont:
