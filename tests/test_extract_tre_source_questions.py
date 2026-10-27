@@ -8,6 +8,7 @@ from scripts.extract_tre_source_questions import (
     classify_content,
     convert_hindi_text,
     normalize_ocr_prompt,
+    normalize_ocr_option,
     native_source_language,
     normalize_source_language_code,
     hindi_conversion_needs_review,
@@ -60,6 +61,8 @@ class TreSourceCodePreservationTests(unittest.TestCase):
             "तीन अंकों की कितनी संख्याएँ 5 से विभाज्य\nहैं?",
         )
         self.assertEqual(normalize_ocr_prompt("(A) 180"), "")
+        self.assertEqual(normalize_ocr_option("(D) उपर्युक्त में से एक से अधिक"), "उपर्युक्त में से एक से अधिक")
+        self.assertEqual(normalize_ocr_option("(A) 180"), "")
 
     def test_unrecognized_legacy_font_is_preserved_for_review_not_forced(self):
         class UnknownFont:
