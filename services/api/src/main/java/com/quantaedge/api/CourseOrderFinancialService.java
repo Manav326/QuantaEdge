@@ -815,7 +815,7 @@ public class CourseOrderFinancialService {
         source_type,source_record_key,idempotency_key,currency,supplier_snapshot,recipient_snapshot,
         transaction_snapshot,tax_summary_snapshot,taxable_value_paise,discount_value_paise,tax_value_paise,
         total_value_paise,amount_paid_paise,template_version_id
-      ) values(?,?,?,?,?,?,?,'COURSE_ORDER',?,?,?,?,?,?,?,?,?,?,?,?,?) returning id
+      ) values(?,?,?,?,?,?,?,'COURSE_ORDER',?,?,?,?::jsonb,?::jsonb,?::jsonb,?::jsonb,?,?,?,?,?,?) returning id
       """,Long.class,legalEntityId,gstRegistrationId,documentType,fy,series,next,docNumber,
         Long.toString(orderId),idempotency,currency,json(supplier),json(buyerSnapshot),json(transactionJson),
         json(taxSummary),taxResult.taxableValuePaise(),taxResult.discountPaise(),taxResult.outputTaxPaise(),
