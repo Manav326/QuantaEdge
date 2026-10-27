@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2373,
+    "assets_selected": 2375,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "69883c015cbfe046373e1e90",
-      "c973477a8cf682ca3f4db4ca",
-      "29c388b0161ccfef7bc70795",
-      "09346f43d0d544fde86bea5f",
-      "005e7a6859d01acd7e5aa56e"
+      "73e6c9299c1df42f70002147",
+      "9c46e1caa951ea34c253da2f",
+      "df20cfe13d9da237e94da004",
+      "f31aa5639fa15080f63d93a7",
+      "68e3d18e8ab4d7bbf4414e72"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2370,
-    "assets_remaining": 5118,
+    "assets_analyzed": 2375,
+    "assets_remaining": 5113,
     "assets_completion_percent": 31.7,
     "assets_failed": 28,
-    "assets_skipped_from_checkpoint": 2368,
+    "assets_skipped_from_checkpoint": 2370,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -89535,6 +89535,185 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40451620191",
       "checkpointed_at": "2026-10-27T06:33:55Z"
+    },
+    {
+      "asset_id": "73e6c9299c1df42f70002147",
+      "asset_sha256": "2126304da11b14263f59ab7401fd66f43668dcf5be8a980413f5faed711af709",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/2126304da11b14263f59ab7401fd66f43668dcf5be8a980413f5faed711af709.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6bd441fb87e80e68026ee792a3fa29fb3aa8446a8370d8d377345683a5f7beaf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the reaction of sulfur with oxygen to form sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "You would observe that it is acidic in nature (Fig. 4.7d).",
+          "On burning sulfur in air (oxygen), sulfur dioxide gas is formed.",
+          "On dissolving sulfur dioxide gas in water, sulfurous acid is formed."
+        ],
+        "concepts": [
+          "Reaction of sulfur with oxygen",
+          "Formation of sulfur dioxide gas",
+          "Formation of sulfurous acid"
+        ],
+        "context_relation": "The image illustrates the chemical reaction between sulfur and oxygen, leading to the formation of sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "limitations": [
+          "The image does not show the actual reaction process.",
+          "The image does not include the visual representation of the reaction products."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40451620191",
+      "checkpointed_at": "2026-10-27T06:35:50Z"
+    },
+    {
+      "asset_id": "9c46e1caa951ea34c253da2f",
+      "asset_sha256": "e44bd035c94008984ba8783354523c89a2c8ad4379e42a360afb8b580ac20af8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/e44bd035c94008984ba8783354523c89a2c8ad4379e42a360afb8b580ac20af8.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6bd441fb87e80e68026ee792a3fa29fb3aa8446a8370d8d377345683a5f7beaf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the properties of sulfur dioxide gas and its formation in the presence of oxygen.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "53",
+          "Blue litmus",
+          "paper",
+          "On burning sulfur in air (oxygen),",
+          "sulfur dioxide gas is formed. On dissolving",
+          "sulfur dioxide gas in water, sulfurous acid is formed.",
+          "Watch glass",
+          "Non-meta"
+        ],
+        "concepts": [
+          "properties of sulfur dioxide gas",
+          "formation of sulfur dioxide gas",
+          "reaction with oxygen",
+          "formation of sulfurous acid"
+        ],
+        "context_relation": "The page discusses the chemical reactions involving sulfur dioxide gas and its properties.",
+        "limitations": [
+          "The page does not provide specific chemical equations or diagrams."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40451620191",
+      "checkpointed_at": "2026-10-27T06:37:36Z"
+    },
+    {
+      "asset_id": "df20cfe13d9da237e94da004",
+      "asset_sha256": "ab33b2cc1f5bbc1d51d3a338ea485479d6bd44927096c538fee5123ddc0a2143",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/ab33b2cc1f5bbc1d51d3a338ea485479d6bd44927096c538fee5123ddc0a2143.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6bd441fb87e80e68026ee792a3fa29fb3aa8446a8370d8d377345683a5f7beaf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the reaction of sulfur with oxygen to form sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Blue litmus paper",
+          "Red litmus paper",
+          "Watch glass",
+          "Non-metal"
+        ],
+        "concepts": [
+          "Reaction of sulfur with oxygen",
+          "Formation of sulfur dioxide gas",
+          "Dissolution of sulfur dioxide gas in water",
+          "Formation of sulfurous acid"
+        ],
+        "context_relation": "The image illustrates the chemical reaction between sulfur and oxygen, leading to the formation of sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "limitations": [
+          "The image does not provide specific details about the reaction conditions or the physical appearance of the products."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40451620191",
+      "checkpointed_at": "2026-10-27T06:39:21Z"
+    },
+    {
+      "asset_id": "f31aa5639fa15080f63d93a7",
+      "asset_sha256": "c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6bd441fb87e80e68026ee792a3fa29fb3aa8446a8370d8d377345683a5f7beaf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a close-up of a twisted rope or cord.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40451620191",
+      "checkpointed_at": "2026-10-27T06:39:32Z"
+    },
+    {
+      "asset_id": "68e3d18e8ab4d7bbf4414e72",
+      "asset_sha256": "0be0f141bc9dd12e0d5ae8beddcdbed3c95446f63bdb3315a0cf7e88a0cfa32e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 73,
+      "asset_path": "assets/0be0f141bc9dd12e0d5ae8beddcdbed3c95446f63bdb3315a0cf7e88a0cfa32e.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6bd441fb87e80e68026ee792a3fa29fb3aa8446a8370d8d377345683a5f7beaf",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the reaction of sulfur with oxygen to form sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "You would observe that it is acidic in nature (Fig. 4.7d).",
+          "On burning sulfur in air (oxygen), sulfur dioxide gas is formed.",
+          "On dissolving sulfur dioxide gas in water, sulfurous acid is formed."
+        ],
+        "concepts": [
+          "Reaction of sulfur with oxygen",
+          "Formation of sulfur dioxide gas",
+          "Formation of sulfurous acid"
+        ],
+        "context_relation": "The image shows the chemical reaction between sulfur and oxygen, leading to the formation of sulfur dioxide gas, which is then dissolved in water to form sulfurous acid.",
+        "limitations": [
+          "The image does not provide specific details about the reaction conditions or the physical appearance of the products."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40451620191",
+      "checkpointed_at": "2026-10-27T06:41:21Z"
     }
   ]
 }
