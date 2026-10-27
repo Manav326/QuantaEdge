@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1324,
-    "successful_visual_analyses": 1312,
-    "missing_visual_analyses": 967,
+    "raw_analysis_result_rows": 1326,
+    "successful_visual_analyses": 1314,
+    "missing_visual_analyses": 965,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 979,
+    "unresolved_count": 977,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -49581,9 +49581,33 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rubber sucker being pressed against a smooth flat surface, followed by an attempt to pull it off.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "87",
+          "Have you ever wondered how large the atmospheric pressure is?",
+          "Let us get an idea about its magnitude by performing the following activity.",
+          "Activity 6.4: Let us perform",
+          "z Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
+          "z Do you realise that it sticks to the surface?",
+          "Fig. 6.11: A sucker",
+          "z Now, try to pull it off. Do you find it difficult to pull it off?"
+        ],
+        "concepts": [
+          "atmospheric pressure",
+          "rubber sucker",
+          "smooth flat surface",
+          "pulling off"
+        ],
+        "context_relation": "The image is a visual representation of an activity to understand atmospheric pressure using a rubber sucker.",
+        "limitations": [
+          "The image does not provide specific details about the difficulty level of pulling off the sucker."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -49599,9 +49623,38 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rubber sucker being pressed against a smooth flat surface, followed by an attempt to pull it off.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "87",
+          "Have you ever wondered how large the atmospheric pressure is?",
+          "Let us get an idea about its magnitude by performing the following activity.",
+          "Activity 6.4: Let us perform",
+          "z Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
+          "z Do you realise that it sticks to the surface?",
+          "Fig. 6.11: A sucker",
+          "z Now, try to pull it off. Do you find it difficult to pull it off?"
+        ],
+        "concepts": [
+          "atmospheric pressure",
+          "rubber sucker",
+          "smooth flat surface",
+          "magnitude",
+          "activity",
+          "pressure",
+          "winds",
+          "storms",
+          "cyclones"
+        ],
+        "context_relation": "The image is a visual representation of an activity to understand the magnitude of atmospheric pressure using a rubber sucker.",
+        "limitations": [
+          "The image does not provide specific details about the difficulty in pulling the sucker off or the exact magnitude of atmospheric pressure."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
