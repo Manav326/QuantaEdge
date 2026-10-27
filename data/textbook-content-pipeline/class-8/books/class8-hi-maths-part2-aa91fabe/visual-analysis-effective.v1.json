@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-hindi-hhgp2",
   "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
   "raw_analysis_path": "data/textbook-visuals/class8-hi-maths-part2-aa91fabe/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "9bfdac3106452887b9973294b3d0a98b8e07805bd8453935e50e56fa66adc56c",
+  "raw_analysis_sha256": "b44547a82b63c6e18fdc32f49358296445c387c95846e6b6a616d5e40ad890ed",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-hi-maths-part2-aa91fabe/visual-analysis-corrections.v1.json",
@@ -1497,6 +1497,186 @@
       "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
       "source_pdf_page_number": 10,
       "asset_path": "page-0010.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6df8719c431e8495baea9fcb",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d408a33185f161b3ef865fa83054217f3494b5ed7901888ac3a38797d935c248",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Red ink splatter across a white background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear if the image is a full page or cropped figure."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-27T00:11:30Z",
+      "effective_analysis": {
+        "visual_summary": "Red ink splatter across a white background.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear if the image is a full page or cropped figure."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8dd11b510873d1132e7d0f11",
+      "asset_sha256": "66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/66efade517cfa7b209c0646bd5a3dc9b474948bbeab0f03ca3e30a948352e657.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d408a33185f161b3ef865fa83054217f3494b5ed7901888ac3a38797d935c248",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Red ink splatter across a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear if the image is a full page or cropped figure."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-27T00:11:40Z",
+      "effective_analysis": {
+        "visual_summary": "Red ink splatter across a white background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear if the image is a full page or cropped figure."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0fe032d850e14e31639accb3",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d408a33185f161b3ef865fa83054217f3494b5ed7901888ac3a38797d935c248",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is blank and does not contain any text or images.",
+        "limitations": [
+          "The page is completely black and has no visible content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-27T00:12:13Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is blank and does not contain any text or images.",
+        "limitations": [
+          "The page is completely black and has no visible content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8eccf1365f1e503d3024e5af",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "d408a33185f161b3ef865fa83054217f3494b5ed7901888ac3a38797d935c248",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413175682",
+      "checkpointed_at": "2026-10-27T00:12:47Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "189d6d49165652eff4bfdecd",
+      "asset_sha256": "8cb3aa00b38e2ef6be9b4c0a9d730ea71f818548a347106a4f172546a4347c85",
+      "page_text_context_sha256": "d408a33185f161b3ef865fa83054217f3494b5ed7901888ac3a38797d935c248",
+      "source_book_id": "ncert-c8-hindi-hhgp2",
+      "source_pdf_sha256": "22a879bdd88cb5f35ae18e42d7e5ab69255aea39aca32ca91819801dda767c16",
+      "source_pdf_page_number": 11,
+      "asset_path": "page-0011.jpg",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
