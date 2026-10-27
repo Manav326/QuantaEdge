@@ -3,6 +3,7 @@ package com.quantaedge.android.ui
 import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 import java.util.Locale
@@ -523,6 +524,9 @@ internal fun localizedUiText(source: String): String {
     val language = LocalQuantaLanguage.current
     val institutionName = LocalInstitutionBrandIdentity.current?.displayName?.takeIf { it.isNotBlank() }
         ?: if (LocalInstitutionBrandResolutionPending.current) "Your school" else null
+    val sharedResourceId = remember(source) {
+        context.resources.getIdentifier(sharedCatalogResourceName(source), "string", context.packageName)
+    }
     fun brandText(value: String): String {
         val name = institutionName ?: return value
         return value
@@ -543,9 +547,6 @@ internal fun localizedUiText(source: String): String {
     if (phrase == null) {
         // Central translations are generated only when every catalog occurrence agrees.
         // Ambiguous phrases continue through the context-specific compatibility map above.
-        val sharedResourceId = context.resources.getIdentifier(
-            sharedCatalogResourceName(source), "string", context.packageName
-        )
         if (sharedResourceId == 0) return brandText(source)
         val sharedConfiguration = Configuration(context.resources.configuration).apply {
             setLocale(Locale.forLanguageTag(if (language == "hi") "hi" else "en"))
