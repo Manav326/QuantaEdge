@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1349,
-    "successful_visual_analyses": 1334,
-    "missing_visual_analyses": 942,
+    "raw_analysis_result_rows": 1351,
+    "successful_visual_analyses": 1336,
+    "missing_visual_analyses": 940,
     "failed_visual_analyses": 15,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 957,
+    "unresolved_count": 955,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -50459,9 +50459,33 @@
       "asset_path": "assets/fdef208b6b5f5140768b08c3090e37dd54cb3936ad3d3604be0f0ee65fd77fe8.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Clouds with positive and negative charges, lightning bolts, and a grassy area.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "91",
+          "You have learnt in the chapter 'Exploring Forces' that when two objects are rubbed against each other, they get charged. In this case, strong winds blowing upwards and downwards and rubbing against each other cause static electric charges to develop within the clouds.",
+          "The positively charged lighter ice particles move upwards and occupy the upper part of the clouds. The negatively charged heavier water droplets occupy the lower part of the clouds. Thus, a charge separation",
+          "and ice particles. You have learnt in the chapter 'Exploring Forces' that when two objects are rubbed against each other, they get charged. In this case, strong winds blowing upwards and downwards and rubbing against each other cause static electric charges to develop within the clouds.",
+          "The positively charged lighter ice particles move upwards and occupy the upper part of the clouds. The negatively charged heavier water droplets occupy the lower part of the clouds. Thus, a charge separation"
+        ],
+        "concepts": [
+          "Static electricity",
+          "Clouds",
+          "Positive and negative charges",
+          "Charge separation",
+          "Wind",
+          "Ice particles",
+          "Water droplets"
+        ],
+        "context_relation": "The image illustrates the process of charge separation in clouds, which is related to the chapter 'Exploring Forces' in the textbook.",
+        "limitations": [
+          "The image does not show the actual process of charge separation in clouds."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -50477,9 +50501,29 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the formation of static electric charges in clouds due to rubbing and wind movement.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "91",
+          "and ice particles. You have learnt in the chapter 'Exploring Forces' that when two objects are rubbed against each other, they get charged. In this case, strong winds blowing upwards and downwards and rubbing against each other cause static electric charges to develop within the clouds.",
+          "The positively charged lighter ice particles move upwards and occupy the upper part of the clouds. The negatively charged heavier water droplets occupy the lower part of the clouds. Thus, a charge separation occurs."
+        ],
+        "concepts": [
+          "Static electric charges",
+          "Cloud formation",
+          "Wind movement",
+          "Charge separation"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the formation of static electric charges in clouds due to rubbing and wind movement.",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "The text is in English."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

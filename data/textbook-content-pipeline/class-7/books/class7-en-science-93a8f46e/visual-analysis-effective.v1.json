@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "ff6afe69a6da0bc0bd3c14e939590c2b3e984624aa23afbbe0ddd1e4320dc4ca",
+  "raw_analysis_sha256": "83d808a0d6e11652b1648157064af4471cc14a2b19d9004b2ad7ac559250d942",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -7282,9 +7282,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
+      "run_id": "40498882710",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -15031,7 +15031,7 @@
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_type": "uncertain",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts\nor learning about diﬀ erent things in nature. Science, as we said\nin Grade 6, is a process, so it is about a way of thinking that\nwelcomes curiosity, asks questions, and is open to the unknown.\nIn Grade 7, we will try to ask deeper quest",
           "To do this, we have to step out of this book, step out of the\nclassroom perhaps, and experience the world through activities\nand experiments. These are experiences that we hope will not\njust be interesting or exciting but also serve as stepping stones\nto a deeper understanding of the environment we ",
@@ -15055,17 +15055,20 @@
         ],
         "context_relation": "exploration and questioning in science",
         "limitations": [
-          "the text does not provide specific examples or activities for Grade 7 students to engage with"
+          "limited to Grade 7",
+          "focus on nature and environment",
+          "emphasis on responsibility and sustainability",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
-      "checkpointed_at": "2026-10-27T11:42:56Z",
+      "run_id": "40498882710",
+      "checkpointed_at": "2026-10-27T12:54:08Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
-        "visual_type": "page_with_multiple_visuals",
+        "visual_type": "uncertain",
         "visible_text": [
           "Exploration, of course, isn’t just about discovering new facts\nor learning about diﬀ erent things in nature. Science, as we said\nin Grade 6, is a process, so it is about a way of thinking that\nwelcomes curiosity, asks questions, and is open to the unknown.\nIn Grade 7, we will try to ask deeper quest",
           "To do this, we have to step out of this book, step out of the\nclassroom perhaps, and experience the world through activities\nand experiments. These are experiences that we hope will not\njust be interesting or exciting but also serve as stepping stones\nto a deeper understanding of the environment we ",
@@ -15089,7 +15092,10 @@
         ],
         "context_relation": "exploration and questioning in science",
         "limitations": [
-          "the text does not provide specific examples or activities for Grade 7 students to engage with"
+          "limited to Grade 7",
+          "focus on nature and environment",
+          "emphasis on responsibility and sustainability",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -20243,16 +20249,16 @@
           "questions and answers",
           "turning around"
         ],
-        "context_relation": "The text discusses the effects of light on the Earth and Moon, and encourages readers to think critically about scientific concepts.",
+        "context_relation": "The text discusses the effects of light on the Earth and Moon, including eclipses, and encourages readers to think critically and conduct experiments.",
         "limitations": [
-          "The text does not provide specific images or diagrams to accompany the text."
+          "The text does not provide specific images or diagrams related to the concepts discussed."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
-      "checkpointed_at": "2026-10-27T11:43:59Z",
+      "run_id": "40498882710",
+      "checkpointed_at": "2026-10-27T12:54:37Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -20279,9 +20285,9 @@
           "questions and answers",
           "turning around"
         ],
-        "context_relation": "The text discusses the effects of light on the Earth and Moon, and encourages readers to think critically about scientific concepts.",
+        "context_relation": "The text discusses the effects of light on the Earth and Moon, including eclipses, and encourages readers to think critically and conduct experiments.",
         "limitations": [
-          "The text does not provide specific images or diagrams to accompany the text."
+          "The text does not provide specific images or diagrams related to the concepts discussed."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -72022,7 +72028,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
+      "run_id": "40498882710",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -78668,7 +78674,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
+      "run_id": "40498882710",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -78784,7 +78790,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
+      "run_id": "40498882710",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -99164,7 +99170,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
+      "run_id": "40498882710",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -105780,7 +105786,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
+      "run_id": "40498882710",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -110300,7 +110306,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
+      "run_id": "40498882710",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -113284,7 +113290,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
+      "run_id": "40498882710",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -114820,7 +114826,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
+      "run_id": "40498882710",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -116148,7 +116154,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
+      "run_id": "40498882710",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -117408,7 +117414,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
+      "run_id": "40498882710",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -118814,7 +118820,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
+      "run_id": "40498882710",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -118902,9 +118908,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
+      "run_id": "40498882710",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -124042,7 +124048,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
+      "run_id": "40498882710",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -129728,21 +129734,107 @@
     {
       "asset_id": "647c2218dab5482dd1c1758e",
       "asset_sha256": "45edabb2714e7f95fb97c158abb162630c6e9bd186be9c2d5dc88943361663a6",
-      "page_text_context_sha256": "e9258aeb99f4225e1c253ba01b279591c6e7575591ca7471e78d2c0397257e4b",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 67,
       "asset_path": "page-0067.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "e9258aeb99f4225e1c253ba01b279591c6e7575591ca7471e78d2c0397257e4b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Discussion points about heat transfer in spoons.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Some discussion points:",
+          "Which of the spoons get hotter?",
+          "What does this experiment tell us about heat transfer along the two spoons?",
+          "You may have noticed that the metal spoon is hotter to touch than the wooden spoon. Even though both spoons are immersed in the water of the same temperature and for the same time. This shows that the heat transfers through the metal spoon, making it hotter. In contrast, the wooden spoon transfers h",
+          "In such cases, the transfer of heat from one point to another of a material is called conduction, and materials that transfer heat are called conductors.",
+          "Based on the observations, one can say that metals are good conductors of heat, whereas wood is a poor conductor of heat. Now, we can understand why mostly metal vessels are used for cooking, and their handles are made with wood or other materials that do not conduct heat. You will learn more about ",
+          "4.1.5 Conduction of electricity",
+          "Have you ever seen an electrician using a screwdriver? What type of material is used for making its handle? You may have also noticed the electrician wearing rubber gloves and shoes while working. What can be the reason for this?",
+          "Activity 4.4: Let us design and create",
+          "Design an electric circuit, like the 'tester' circuit in the chapter 'Electricity: Circuits and their Components'. Repeat the same activity using the materials listed below and record your observations in Table 4.2.",
+          "You may collect a few objects, such as a piece of aluminium foil, an iron nail, a lump of sulfur (pea-sized), a copper wire, a piece of coal, a piece of dry wood, a stone, an eraser made of rubber and a piece of nylon rope.",
+          "Predict which of these could make the bulb of the tester glow and which could not."
+        ],
+        "concepts": [
+          "heat transfer",
+          "conduction",
+          "conductors",
+          "heat",
+          "electricity",
+          "rubber gloves",
+          "electrician",
+          "electric circuit",
+          "aluminium foil",
+          "iron nail",
+          "sulfur",
+          "copper wire",
+          "coal",
+          "dry wood",
+          "stone",
+          "eraser",
+          "nylon rope",
+          "electricity: Circuits and their Components"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the materials used.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40498882710",
+      "checkpointed_at": "2026-10-27T12:55:14Z",
+      "effective_analysis": {
+        "visual_summary": "Discussion points about heat transfer in spoons.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Some discussion points:",
+          "Which of the spoons get hotter?",
+          "What does this experiment tell us about heat transfer along the two spoons?",
+          "You may have noticed that the metal spoon is hotter to touch than the wooden spoon. Even though both spoons are immersed in the water of the same temperature and for the same time. This shows that the heat transfers through the metal spoon, making it hotter. In contrast, the wooden spoon transfers h",
+          "In such cases, the transfer of heat from one point to another of a material is called conduction, and materials that transfer heat are called conductors.",
+          "Based on the observations, one can say that metals are good conductors of heat, whereas wood is a poor conductor of heat. Now, we can understand why mostly metal vessels are used for cooking, and their handles are made with wood or other materials that do not conduct heat. You will learn more about ",
+          "4.1.5 Conduction of electricity",
+          "Have you ever seen an electrician using a screwdriver? What type of material is used for making its handle? You may have also noticed the electrician wearing rubber gloves and shoes while working. What can be the reason for this?",
+          "Activity 4.4: Let us design and create",
+          "Design an electric circuit, like the 'tester' circuit in the chapter 'Electricity: Circuits and their Components'. Repeat the same activity using the materials listed below and record your observations in Table 4.2.",
+          "You may collect a few objects, such as a piece of aluminium foil, an iron nail, a lump of sulfur (pea-sized), a copper wire, a piece of coal, a piece of dry wood, a stone, an eraser made of rubber and a piece of nylon rope.",
+          "Predict which of these could make the bulb of the tester glow and which could not."
+        ],
+        "concepts": [
+          "heat transfer",
+          "conduction",
+          "conductors",
+          "heat",
+          "electricity",
+          "rubber gloves",
+          "electrician",
+          "electric circuit",
+          "aluminium foil",
+          "iron nail",
+          "sulfur",
+          "copper wire",
+          "coal",
+          "dry wood",
+          "stone",
+          "eraser",
+          "nylon rope",
+          "electricity: Circuits and their Components"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the materials used.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -134318,7 +134410,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
+      "run_id": "40498882710",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -134736,7 +134828,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
+      "run_id": "40498882710",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -134830,7 +134922,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
+      "run_id": "40498882710",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -134850,7 +134942,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
+      "run_id": "40498882710",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -135366,7 +135458,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
+      "run_id": "40498882710",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -135386,7 +135478,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
+      "run_id": "40498882710",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -135406,7 +135498,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
+      "run_id": "40498882710",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -142142,7 +142234,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40481191123",
+      "run_id": "40498882710",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -142983,6 +143075,246 @@
         "concepts": [],
         "context_relation": "The image is unrelated to the text provided.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e3e6b9ee3422dc155d783821",
+      "asset_sha256": "6d64d787f34e0d997452c8412218a1245397cf9da09e9e0b0e33b6102fadddda",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/6d64d787f34e0d997452c8412218a1245397cf9da09e9e0b0e33b6102fadddda.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person wearing a yellow shirt and a hat, possibly in a classroom or educational setting.",
+        "visual_type": "photo",
+        "visible_text": [
+          "and electrical conductivity, and high strength. However, this",
+          "should not give an impression in your mind that non-metals are not important in our lives.",
+          "We breathe in oxygen, which is a non-metal, and without it,",
+          "we would not be able to survive. Can you think of any other uses",
+          "of oxygen?",
+          "Carbon is essential in everyday life because it is the building",
+          "block of all life forms. It is a key component of proteins, fats, and"
+        ],
+        "concepts": [
+          "non-metals",
+          "oxygen",
+          "carbon",
+          "building blocks of life",
+          "electrical conductivity",
+          "high strength",
+          "oxygen in daily life",
+          "carbon in daily life",
+          "proteins",
+          "fats"
+        ],
+        "context_relation": "The image is likely a part of an educational content, possibly a textbook or a lesson plan, discussing the importance of non-metals and metals in daily life, particularly focusing on oxygen and carbon.",
+        "limitations": [
+          "The image does not provide specific details about the educational content beyond the visible text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40498882710",
+      "checkpointed_at": "2026-10-27T12:53:07Z",
+      "effective_analysis": {
+        "visual_summary": "A person wearing a yellow shirt and a hat, possibly in a classroom or educational setting.",
+        "visual_type": "photo",
+        "visible_text": [
+          "and electrical conductivity, and high strength. However, this",
+          "should not give an impression in your mind that non-metals are not important in our lives.",
+          "We breathe in oxygen, which is a non-metal, and without it,",
+          "we would not be able to survive. Can you think of any other uses",
+          "of oxygen?",
+          "Carbon is essential in everyday life because it is the building",
+          "block of all life forms. It is a key component of proteins, fats, and"
+        ],
+        "concepts": [
+          "non-metals",
+          "oxygen",
+          "carbon",
+          "building blocks of life",
+          "electrical conductivity",
+          "high strength",
+          "oxygen in daily life",
+          "carbon in daily life",
+          "proteins",
+          "fats"
+        ],
+        "context_relation": "The image is likely a part of an educational content, possibly a textbook or a lesson plan, discussing the importance of non-metals and metals in daily life, particularly focusing on oxygen and carbon.",
+        "limitations": [
+          "The image does not provide specific details about the educational content beyond the visible text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5e5405ce47832c78c83e34f0",
+      "asset_sha256": "6d64d787f34e0d997452c8412218a1245397cf9da09e9e0b0e33b6102fadddda",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/6d64d787f34e0d997452c8412218a1245397cf9da09e9e0b0e33b6102fadddda.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person wearing a yellow shirt and a hat.",
+        "visual_type": "photo",
+        "visible_text": [
+          "and electrical conductivity, and high strength. However, this",
+          "should not give an impression in your mind that non-metals are not important in our lives.",
+          "We breathe in oxygen, which is a non-metal, and without it",
+          "we would not be able to survive. Can you think of any other uses",
+          "of oxygen?",
+          "Carbon is essential in everyday life because it is the building",
+          "block of all life forms. It is a key component of proteins, fats, and"
+        ],
+        "concepts": [
+          "non-metals",
+          "oxygen",
+          "carbon",
+          "building blocks",
+          "life forms",
+          "proteins",
+          "fats"
+        ],
+        "context_relation": "The image is a photo of a person, and the visible text is related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook or the page number.",
+          "The visible text is not a complete sentence and does not provide a clear context for the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40498882710",
+      "checkpointed_at": "2026-10-27T12:53:21Z",
+      "effective_analysis": {
+        "visual_summary": "A person wearing a yellow shirt and a hat.",
+        "visual_type": "photo",
+        "visible_text": [
+          "and electrical conductivity, and high strength. However, this",
+          "should not give an impression in your mind that non-metals are not important in our lives.",
+          "We breathe in oxygen, which is a non-metal, and without it",
+          "we would not be able to survive. Can you think of any other uses",
+          "of oxygen?",
+          "Carbon is essential in everyday life because it is the building",
+          "block of all life forms. It is a key component of proteins, fats, and"
+        ],
+        "concepts": [
+          "non-metals",
+          "oxygen",
+          "carbon",
+          "building blocks",
+          "life forms",
+          "proteins",
+          "fats"
+        ],
+        "context_relation": "The image is a photo of a person, and the visible text is related to the content of the textbook.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook or the page number.",
+          "The visible text is not a complete sentence and does not provide a clear context for the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cb75124972ed3af3dfbba5cc",
+      "asset_sha256": "fc224c5bd0af4316ee87079ba6a35f267670a81477fcfb3bc4c6ec5f86a99e71",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/fc224c5bd0af4316ee87079ba6a35f267670a81477fcfb3bc4c6ec5f86a99e71.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely part of an educational content, possibly a textbook, discussing non-metals and their importance in everyday life.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text.",
+          "The page does not provide any specific information or data.",
+          "The page does not show any diagrams, charts, or illustrations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40498882710",
+      "checkpointed_at": "2026-10-27T12:55:53Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely part of an educational content, possibly a textbook, discussing non-metals and their importance in everyday life.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text.",
+          "The page does not provide any specific information or data.",
+          "The page does not show any diagrams, charts, or illustrations."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ccf657fc0ce2e793d2461637",
+      "asset_sha256": "5dc9d12c2f43e1420e2f53687515e80177c6536d4096b936debd4bde571e54c7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 74,
+      "asset_path": "assets/5dc9d12c2f43e1420e2f53687515e80177c6536d4096b936debd4bde571e54c7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8dc7f3d218ee6a70ff342a5a231a2f8dca54490826c8e87c65afec5f301a2b5d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope with a knot in the middle.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a simple illustration of a rope, not a diagram or chart.",
+          "The image does not contain any mathematical or scientific formulas or data points."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40498882710",
+      "checkpointed_at": "2026-10-27T12:56:33Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a knot in the middle.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a simple illustration of a rope, not a diagram or chart.",
+          "The image does not contain any mathematical or scientific formulas or data points."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f93f127d7508b9c435d2ce91ae83b53b73722ef7a5b6af03f52f8ef2497a7081",
+  "raw_analysis_sha256": "6efd6f1bff24537090db893eacb030757a4755f85c653054d95578c33f53285e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1825,8 +1825,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40491993157",
-      "checkpointed_at": "2026-10-27T11:56:44Z",
+      "run_id": "40501519107",
+      "checkpointed_at": "2026-10-27T12:44:24Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -28856,7 +28856,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40491993157",
+      "run_id": "40501519107",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -29338,8 +29338,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40491993157",
-      "checkpointed_at": "2026-10-27T11:57:10Z",
+      "run_id": "40501519107",
+      "checkpointed_at": "2026-10-27T12:44:59Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -32392,7 +32392,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40491993157",
+      "run_id": "40501519107",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -38234,7 +38234,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40491993157",
+      "run_id": "40501519107",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -38526,9 +38526,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40491993157",
+      "run_id": "40501519107",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -45062,7 +45062,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40491993157",
+      "run_id": "40501519107",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -45744,7 +45744,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40491993157",
+      "run_id": "40501519107",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -57384,7 +57384,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40491993157",
+      "run_id": "40501519107",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40491993157",
-      "checkpointed_at": "2026-10-27T11:57:42Z",
+      "checkpointed_at": "2026-10-27T12:04:16Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -65709,7 +65709,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40491993157",
-      "checkpointed_at": "2026-10-27T11:58:29Z",
+      "checkpointed_at": "2026-10-27T12:05:03Z",
       "effective_analysis": {
         "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
@@ -66904,6 +66904,138 @@
         "context_relation": "The image does not provide any specific context or relation to the text.",
         "limitations": [
           "The image does not contain any text or information related to the text provided in the source PDF page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cda4fc556bcc7e29730f00e4",
+      "asset_sha256": "fdef208b6b5f5140768b08c3090e37dd54cb3936ad3d3604be0f0ee65fd77fe8",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 111,
+      "asset_path": "assets/fdef208b6b5f5140768b08c3090e37dd54cb3936ad3d3604be0f0ee65fd77fe8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9953e75554b5b7568230a6dc61fc42937365a2994a0e78c22c92c7477ce4ec80",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Clouds with positive and negative charges, lightning bolts, and a grassy area.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "91",
+          "You have learnt in the chapter 'Exploring Forces' that when two objects are rubbed against each other, they get charged. In this case, strong winds blowing upwards and downwards and rubbing against each other cause static electric charges to develop within the clouds.",
+          "The positively charged lighter ice particles move upwards and occupy the upper part of the clouds. The negatively charged heavier water droplets occupy the lower part of the clouds. Thus, a charge separation",
+          "and ice particles. You have learnt in the chapter 'Exploring Forces' that when two objects are rubbed against each other, they get charged. In this case, strong winds blowing upwards and downwards and rubbing against each other cause static electric charges to develop within the clouds.",
+          "The positively charged lighter ice particles move upwards and occupy the upper part of the clouds. The negatively charged heavier water droplets occupy the lower part of the clouds. Thus, a charge separation"
+        ],
+        "concepts": [
+          "Static electricity",
+          "Clouds",
+          "Positive and negative charges",
+          "Charge separation",
+          "Wind",
+          "Ice particles",
+          "Water droplets"
+        ],
+        "context_relation": "The image illustrates the process of charge separation in clouds, which is related to the chapter 'Exploring Forces' in the textbook.",
+        "limitations": [
+          "The image does not show the actual process of charge separation in clouds."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40491993157",
+      "checkpointed_at": "2026-10-27T12:02:29Z",
+      "effective_analysis": {
+        "visual_summary": "Clouds with positive and negative charges, lightning bolts, and a grassy area.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "91",
+          "You have learnt in the chapter 'Exploring Forces' that when two objects are rubbed against each other, they get charged. In this case, strong winds blowing upwards and downwards and rubbing against each other cause static electric charges to develop within the clouds.",
+          "The positively charged lighter ice particles move upwards and occupy the upper part of the clouds. The negatively charged heavier water droplets occupy the lower part of the clouds. Thus, a charge separation",
+          "and ice particles. You have learnt in the chapter 'Exploring Forces' that when two objects are rubbed against each other, they get charged. In this case, strong winds blowing upwards and downwards and rubbing against each other cause static electric charges to develop within the clouds.",
+          "The positively charged lighter ice particles move upwards and occupy the upper part of the clouds. The negatively charged heavier water droplets occupy the lower part of the clouds. Thus, a charge separation"
+        ],
+        "concepts": [
+          "Static electricity",
+          "Clouds",
+          "Positive and negative charges",
+          "Charge separation",
+          "Wind",
+          "Ice particles",
+          "Water droplets"
+        ],
+        "context_relation": "The image illustrates the process of charge separation in clouds, which is related to the chapter 'Exploring Forces' in the textbook.",
+        "limitations": [
+          "The image does not show the actual process of charge separation in clouds."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7d910b58b71bb4bc49b0aff2",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 111,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9953e75554b5b7568230a6dc61fc42937365a2994a0e78c22c92c7477ce4ec80",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the formation of static electric charges in clouds due to rubbing and wind movement.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "91",
+          "and ice particles. You have learnt in the chapter 'Exploring Forces' that when two objects are rubbed against each other, they get charged. In this case, strong winds blowing upwards and downwards and rubbing against each other cause static electric charges to develop within the clouds.",
+          "The positively charged lighter ice particles move upwards and occupy the upper part of the clouds. The negatively charged heavier water droplets occupy the lower part of the clouds. Thus, a charge separation occurs."
+        ],
+        "concepts": [
+          "Static electric charges",
+          "Cloud formation",
+          "Wind movement",
+          "Charge separation"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the formation of static electric charges in clouds due to rubbing and wind movement.",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "The text is in English."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40491993157",
+      "checkpointed_at": "2026-10-27T12:05:25Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the formation of static electric charges in clouds due to rubbing and wind movement.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "91",
+          "and ice particles. You have learnt in the chapter 'Exploring Forces' that when two objects are rubbed against each other, they get charged. In this case, strong winds blowing upwards and downwards and rubbing against each other cause static electric charges to develop within the clouds.",
+          "The positively charged lighter ice particles move upwards and occupy the upper part of the clouds. The negatively charged heavier water droplets occupy the lower part of the clouds. Thus, a charge separation occurs."
+        ],
+        "concepts": [
+          "Static electric charges",
+          "Cloud formation",
+          "Wind movement",
+          "Charge separation"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the formation of static electric charges in clouds due to rubbing and wind movement.",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "The text is in English."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
