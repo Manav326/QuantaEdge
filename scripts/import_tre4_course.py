@@ -1131,6 +1131,14 @@ def database_repair_draft_hindi(args: argparse.Namespace, papers: list[dict[str,
                             current["hindi_prompt_reconstruction"] = reconstruction
                             changed = True
                             reconstructed_prompt_count += 1
+                    if has_prompt_ocr:
+                        for field in (
+                            "prompt_content_kind", "code_line_indices", "math_line_indices",
+                            "source_code_preservation_notes",
+                        ):
+                            if field in incoming and current.get(field) != incoming[field]:
+                                current[field] = incoming[field]
+                                changed = True
 
                     incoming_options = incoming.get("options")
                     current_options = current.get("options")
@@ -1183,7 +1191,16 @@ def database_repair_draft_hindi(args: argparse.Namespace, papers: list[dict[str,
                             current_option["hindi_ocr_reconstruction"] = option_reconstruction
                             changed = True
                             reconstructed_option_count += 1
+                        for field in ("label", "content_kind", "code_line_indices", "math_line_indices", "source_code_preservation_notes"):
+                            if field in incoming_option and current_option.get(field) != incoming_option[field]:
+                                current_option[field] = incoming_option[field]
+                                changed = True
 
+                    if has_prompt_ocr or has_option_ocr:
+                        incoming_flags = incoming.get("review_flags")
+                        if isinstance(incoming_flags, list) and current.get("review_flags") != incoming_flags:
+                            current["review_flags"] = incoming_flags
+                            changed = True
                     if not (has_prompt_ocr or has_option_ocr):
                         skipped_count += 1
                     if changed:
