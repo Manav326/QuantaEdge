@@ -153,8 +153,8 @@ public class FinancePayoutController {
       throw bad("Choose Pending, Verified or Blocked for the legal/collection-account review.");
     Map<String,Object> current=one("select id from billing_finance_payout_settings where id=1");
     if(current.isEmpty())throw bad("Save the monthly payout rules first, then record the legal/collection-account review.");
-    Long collectionEntityId=optionalLong(body.get("paymentCollectionLegalEntityId"));
-    Long fundingEntityId=optionalLong(body.get("razorpayxFundingLegalEntityId"));
+    Long collectionEntityId=nullableLong(body.get("paymentCollectionLegalEntityId"));
+    Long fundingEntityId=nullableLong(body.get("razorpayxFundingLegalEntityId"));
     String reference=optionalText(body.get("evidenceReference"));
     if(collectionEntityId==null||fundingEntityId==null)
       throw bad("Select both the legal entity receiving course-payment collections and the legal entity owning the RazorpayX payout funding account.");
