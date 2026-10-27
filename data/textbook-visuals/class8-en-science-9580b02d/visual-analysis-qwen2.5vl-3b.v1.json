@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1335,
+    "assets_selected": 1336,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "cda4fc556bcc7e29730f00e4"
+      "7d910b58b71bb4bc49b0aff2"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1331,
-    "assets_remaining": 960,
+    "assets_analyzed": 1332,
+    "assets_remaining": 959,
     "assets_completion_percent": 58.1,
     "assets_failed": 15,
-    "assets_skipped_from_checkpoint": 1330,
+    "assets_skipped_from_checkpoint": 1331,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40491993157",
-      "checkpointed_at": "2026-10-27T11:59:53Z"
+      "checkpointed_at": "2026-10-27T12:03:17Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40491993157",
-      "checkpointed_at": "2026-10-27T12:00:20Z"
+      "checkpointed_at": "2026-10-27T12:03:44Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40491993157",
-      "checkpointed_at": "2026-10-27T12:00:51Z"
+      "checkpointed_at": "2026-10-27T12:04:16Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40491993157",
-      "checkpointed_at": "2026-10-27T12:01:37Z"
+      "checkpointed_at": "2026-10-27T12:05:03Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -44296,6 +44296,45 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40491993157",
       "checkpointed_at": "2026-10-27T12:02:29Z"
+    },
+    {
+      "asset_id": "7d910b58b71bb4bc49b0aff2",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 111,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9953e75554b5b7568230a6dc61fc42937365a2994a0e78c22c92c7477ce4ec80",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the formation of static electric charges in clouds due to rubbing and wind movement.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "91",
+          "and ice particles. You have learnt in the chapter 'Exploring Forces' that when two objects are rubbed against each other, they get charged. In this case, strong winds blowing upwards and downwards and rubbing against each other cause static electric charges to develop within the clouds.",
+          "The positively charged lighter ice particles move upwards and occupy the upper part of the clouds. The negatively charged heavier water droplets occupy the lower part of the clouds. Thus, a charge separation occurs."
+        ],
+        "concepts": [
+          "Static electric charges",
+          "Cloud formation",
+          "Wind movement",
+          "Charge separation"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the formation of static electric charges in clouds due to rubbing and wind movement.",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "The text is in English."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40491993157",
+      "checkpointed_at": "2026-10-27T12:05:25Z"
     }
   ]
 }
