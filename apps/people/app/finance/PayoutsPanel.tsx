@@ -47,7 +47,7 @@ type Batch={id:number;public_id:string;period_start:string;period_end:string;cur
   canApprove?:boolean;approved_by_staff_id?:number|null;approved_by_name?:string|null;approved_at?:string|null;
   paid_count?:number;exception_count?:number;payouts?:Payout[]};
 type BeneficiaryBalance={
-  recipient_type:string;recipient_name:string;currency:string;beneficiary_status:string;
+  recipient_type:string;recipient_name:string;institution_id?:number|null;legal_entity_id?:number|null;currency:string;beneficiary_status:string;
   bank_ifsc?:string|null;bank_account_last4?:string|null;earned_paise:number;refunded_paise:number;
   charges_paise:number;paid_paise:number;reversed_paise:number;reserved_paise:number;
   net_earned_paise:number;net_paid_paise:number;refund_reserve_paise:number;payable_paise:number;recovery_due_paise:number;
@@ -65,6 +65,10 @@ type FeeAdjustmentCandidate={order_id:number;course_title:string;source_institut
 type FeeAdjustmentRequest={id:number;order_id:number;previous_processing_fee_paise:number;previous_fee_tax_paise:number;
   requested_processing_fee_paise:number;requested_fee_tax_paise:number;settlement_reference:string;source_type:string;reason:string;
   requested_by_staff_id:number;requested_by_name?:string|null;created_at:string;course_title:string;provider_payment_id:string;currency:string;canReview?:boolean};
+type LedgerHistoryEvent={id:number;event_type:string;amount_paise:number;currency:string;payment_reference?:string|null;created_at:string;
+  allocation_id:number;order_id:number;provider_payment_id?:string|null;course_title?:string|null;payout_id?:number|null;
+  payout_public_id?:string|null;payout_status?:string|null;transfer_reference?:string|null;payout_batch_id?:number|null;
+  payout_period_start?:string|null;fee_adjustment_id?:string|null;settlement_reference?:string|null;reason?:string|null};
 
 const BASE='/api/v1/hrms/platform/finance';
 async function api<T>(path:string,init:RequestInit={}):Promise<T>{
@@ -134,6 +138,12 @@ export default function PayoutsPanel(){
   const [feeAdjustmentReviewReasons,setFeeAdjustmentReviewReasons]=useState<Record<string,string>>({});
   const [approvalBatch,setApprovalBatch]=useState<Batch|null>(null);
   const [approvalConfirmed,setApprovalConfirmed]=useState(false);
+  const [ledgerBalance,setLedgerBalance]=useState<BeneficiaryBalance|null>(null);
+  const [ledgerRows,setLedgerRows]=useState<LedgerHistoryEvent[]>([]);
+  const [ledgerLoading,setLedgerLoading]=useState(false);
+  const [ledgerError,setLedgerError]=useState('');
+  const [ledgerOffset,setLedgerOffset]=useState(0);
+  const [ledgerHasMore,setLedgerHasMore]=useState(false);
   const [recoveryAccounts,setRecoveryAccounts]=useState<Record<string,string>>({});
   const [selectedReplacementId,setSelectedReplacementId]=useState<number|null>(null);
   const [replacementDrafts,setReplacementDrafts]=useState<Record<string,{holderName:string;accountNumber:string;ifsc:string;email:string;phone:string}>>({});
@@ -304,6 +314,24 @@ export default function PayoutsPanel(){
       setNotice('Actual collection charges were recorded in full. '+money(overage)+' is borne by the platform; beneficiary balances were not pushed below the approved share policy.');
   };
 
+
+  const openBalanceLedger=async(balance:BeneficiaryBalance,offset=0)=>{
+    const recipientId=balance.recipient_type==='INSTITUTION'?balance.institution_id:balance.legal_entity_id;
+    if(!recipientId){setLedgerError('The ledger recipient identity is missing. Refresh balances before opening history.');return;}
+    setLedgerBalance(balance);setLedgerLoading(true);setLedgerError('');
+    try{
+      const rows=await api<LedgerHistoryEvent[]>(BASE+'/payout-balances/ledger-history?recipientType='+encodeURIComponent(balance.recipient_type)
+        +'&recipientId='+recipientId+'&currency='+encodeURIComponent(balance.currency)+'&limit=51&offset='+offset);
+      setLedgerRows(rows.slice(0,50));setLedgerHasMore(rows.length>50);setLedgerOffset(offset);
+    }catch(e){setLedgerRows([]);setLedgerHasMore(false);setLedgerError(e instanceof Error?e.message:'Ledger history could not load.');}
+    finally{setLedgerLoading(false);}
+  };
+  const ledgerEventLabel=(type:string)=>({
+    EARNED:'Earnings posted',PAYABLE:'Marked payable',REFUNDED:'Refund deducted',
+    PROCESSING_FEE_DEDUCTED:'Processing fee deducted',PROCESSING_FEE_CREDITED:'Processing fee credited',
+    PAID:'Transfer paid',REVERSED:'Ledger reversed',ON_HOLD:'Placed on hold',RELEASED:'Hold released'
+  }[type]||type.replaceAll('_',' ').toLowerCase());
+
   const createBatch=async()=>{await action(()=>api(BASE+'/payout-batches',{method:'POST',body:JSON.stringify({})}),
     'Monthly payout batch prepared. No bank transfers are sent until a different authorized staff member approves it.');};
   const openBatch=async(id:number)=>{
@@ -464,7 +492,7 @@ export default function PayoutsPanel(){
           <p>Balances come from the existing allocation and refund ledgers. Payable amounts are net of recorded refunds, confirmed charges, previous transfers, active payout reservations and the configured refund reserve.</p></div>
           <button type="button" className={styles.secondary} onClick={()=>void load()} disabled={loading||busy}>Refresh balances</button></div>
         {balances?.beneficiaries?.length?<><p className={styles.payoutHint}>On smaller screens, scroll this table horizontally to compare the full breakdown.</p><div className={styles.payoutBalanceWrap}><table className={styles.payoutBalanceTable}>
-          <thead><tr><th>Recipient</th><th>Gross allocated</th><th>Refunds</th><th>Confirmed charges</th><th>Net earnings</th><th>Already paid</th><th>Reserved</th><th>Refund holdback</th><th>Payable now</th><th>Recovery due</th></tr></thead>
+          <thead><tr><th>Recipient</th><th>Gross allocated</th><th>Refunds</th><th>Confirmed charges</th><th>Net earnings</th><th>Already paid</th><th>Reserved</th><th>Refund holdback</th><th>Payable now</th><th>Recovery due</th><th>History</th></tr></thead>
           <tbody>{balances.beneficiaries.map((balance,i)=><tr key={balance.recipient_type+':'+balance.recipient_name+':'+i}>
             <td><strong>{balance.recipient_name}</strong><small>{balance.recipient_type} · {balance.payout_supported===false?'Unsupported currency for payouts':balance.beneficiary_status==='MISSING'?'Bank account not approved':balance.bank_ifsc?balance.bank_ifsc+' · ****'+balance.bank_account_last4:label(balance.beneficiary_status)}</small></td>
             <td>{balance.payout_supported===false?'—':money(balance.earned_paise,balance.currency)}</td>
@@ -476,6 +504,7 @@ export default function PayoutsPanel(){
             <td>{balance.payout_supported===false?'—':money(balance.refund_reserve_paise,balance.currency)}</td>
             <td><strong>{balance.payout_supported===false?'—':money(balance.payable_paise,balance.currency)}</strong></td>
             <td>{balance.payout_supported===false?'—':balance.recovery_due_paise>0?<span className={styles.payoutStatusDanger}>{money(balance.recovery_due_paise,balance.currency)}</span>:money(0,balance.currency)}</td>
+            <td><button type="button" className={styles.secondarySmall} disabled={loading||busy} onClick={()=>void openBalanceLedger(balance)}>View ledger</button></td>
           </tr>)}</tbody>
         </table></div></>:<p className={styles.payoutEmpty}>{loadIssues.some(issue=>issue.section==='Beneficiary balances')?'Balances could not be refreshed. Review the request failure above.':'No verified course-sale allocations have been posted yet. Captured sales appear after the existing financial finalizer adds ledger entries.'}</p>}
       </section>
@@ -734,6 +763,22 @@ export default function PayoutsPanel(){
         </section>}
       </section>
     </>}
+    {ledgerBalance&&<div className={styles.payoutConfirmOverlay} role="presentation"><section className={styles.payoutLedgerDialog} role="dialog" aria-modal="true" aria-labelledby="payout-ledger-title">
+      <div className={styles.panelHead}><div><h2 id="payout-ledger-title">Recipient ledger history</h2><p>{ledgerBalance.recipient_name} · {ledgerBalance.currency}</p></div><button type="button" className={styles.secondarySmall} onClick={()=>{setLedgerBalance(null);setLedgerRows([]);setLedgerError('');}}>Close</button></div>
+      {ledgerBalance.recovery_due_paise>0&&<p className={styles.payoutAlertWarning}>Recovery due: {money(ledgerBalance.recovery_due_paise,ledgerBalance.currency)}. Review refund, fee correction and transfer events below. Future net payable earnings offset this balance; this workflow does not initiate an automatic bank debit.</p>}
+      {ledgerError&&<div className={styles.payoutAlertError} role="alert">{ledgerError}</div>}
+      {ledgerLoading&&<p className={styles.payoutHint}>Loading ledger events…</p>}
+      {!ledgerLoading&&!ledgerError&&!ledgerRows.length&&<p className={styles.payoutEmpty}>No allocation events were found for this recipient and currency.</p>}
+      <div className={styles.payoutLedgerEventList}>{ledgerRows.map(event=><article key={event.id}>
+        <div className={styles.payoutLedgerEventHead}><strong>{ledgerEventLabel(event.event_type)}</strong><b>{money(event.amount_paise,event.currency)}</b></div>
+        <small>{event.created_at?new Date(event.created_at).toLocaleString('en-IN'):'Time unavailable'} · Order #{event.order_id} · Allocation #{event.allocation_id}</small>
+        {event.course_title&&<span>{event.course_title}</span>}
+        {(event.provider_payment_id||event.payment_reference)&&<small>{event.provider_payment_id?'Payment '+event.provider_payment_id:''}{event.payment_reference?(event.provider_payment_id?' · ':'')+'Reference '+event.payment_reference:''}</small>}
+        {event.payout_id&&<small>QuantaEdge transfer #{event.payout_id}{event.payout_batch_id?' · batch #'+event.payout_batch_id:''}{event.payout_period_start?' · period '+new Date(event.payout_period_start+'T12:00:00').toLocaleDateString('en-IN',{month:'short',year:'numeric'}):''}{event.payout_status?' · '+label(event.payout_status):''}{event.transfer_reference?' · UTR '+event.transfer_reference:''}</small>}
+        {(event.fee_adjustment_id||event.settlement_reference||event.reason)&&<div className={styles.payoutLedgerEvidence}>{event.fee_adjustment_id&&<small>Fee correction #{event.fee_adjustment_id}</small>}{event.settlement_reference&&<small>Evidence: {event.settlement_reference}</small>}{event.reason&&<small>Reason: {event.reason}</small>}</div>}
+      </article>)}</div>
+      {(ledgerOffset>0||ledgerHasMore)&&<div className={styles.payoutQueuePagination}><span>{Math.floor(ledgerOffset/50)+1} · 50 events per page</span><div><button type="button" className={styles.secondarySmall} disabled={ledgerLoading||ledgerOffset===0} onClick={()=>void openBalanceLedger(ledgerBalance,Math.max(0,ledgerOffset-50))}>Previous</button><button type="button" className={styles.secondarySmall} disabled={ledgerLoading||!ledgerHasMore} onClick={()=>void openBalanceLedger(ledgerBalance,ledgerOffset+50)}>Next</button></div></div>}
+    </section></div>}
     {approvalBatch&&<div className={styles.payoutConfirmOverlay} role="presentation"><section className={styles.payoutApprovalDialog} role="dialog" aria-modal="true" aria-labelledby="payout-approval-title">
       <div className={styles.panelHead}><div><h2 id="payout-approval-title">Review monthly transfer batch</h2><p>This approval sends the listed bank transfers to RazorpayX. It cannot be treated as a draft save.</p></div><button type="button" className={styles.secondarySmall} onClick={()=>{setApprovalBatch(null);setApprovalConfirmed(false);}}>Cancel</button></div>
       <dl className={styles.payoutApprovalSummary}><div><dt>Period</dt><dd>{new Date(approvalBatch.period_start+'T12:00:00').toLocaleDateString('en-IN',{month:'long',year:'numeric'})}</dd></div><div><dt>Total to send</dt><dd>{money(approvalBatch.total_amount_paise,approvalBatch.currency)}</dd></div><div><dt>Transfers</dt><dd>{approvalBatch.payouts?.length??approvalBatch.beneficiary_count}</dd></div><div><dt>Exceptions</dt><dd>{approvalBatch.exception_count??0}</dd></div><div><dt>Prepared by</dt><dd>{approvalBatch.created_by_name||'Finance staff'}</dd></div><div><dt>Legal / provider readiness</dt><dd>{payoutEligible?'Ready':'Blocked'}</dd></div></dl>

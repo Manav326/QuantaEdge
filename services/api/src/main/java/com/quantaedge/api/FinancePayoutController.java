@@ -910,6 +910,43 @@ public class FinancePayoutController {
     return Map.of("totals",totals,"beneficiaries",rows,"unsupportedCurrencies",List.copyOf(unsupportedCurrencies));
   }
 
+
+  @GetMapping("/payout-balances/ledger-history")
+  public List<Map<String,Object>> payoutBalanceLedgerHistory(
+      @RequestParam String recipientType,@RequestParam long recipientId,
+      @RequestParam(value="currency",defaultValue="INR") String rawCurrency,
+      @RequestParam(value="limit",defaultValue="50") int suppliedLimit,
+      @RequestParam(value="offset",defaultValue="0") int suppliedOffset,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireManage(context);
+    String type=recipientType==null?"":recipientType.trim().toUpperCase(Locale.ROOT);
+    String currency=rawCurrency==null?"":rawCurrency.trim().toUpperCase(Locale.ROOT);
+    if(!List.of("INSTITUTION","COMPANY").contains(type))throw bad("Choose a valid finance recipient type.");
+    if(recipientId<=0)throw bad("Choose a valid finance recipient.");
+    if(!currency.matches("^[A-Z]{3}$"))throw bad("Choose a valid three-letter currency code.");
+    int limit=Math.max(1,Math.min(suppliedLimit,100)),offset=Math.max(0,Math.min(suppliedOffset,1_000_000));
+    return jdbc.queryForList("""
+      select e.id,e.event_type,e.amount_paise,e.currency,e.payment_reference,e.created_at,
+        a.id as allocation_id,a.course_payment_order_id as order_id,o.provider_payment_id,
+        coalesce(nullif(offer.title_override,''),course.display_name) as course_title,
+        p.id as payout_id,p.public_id as payout_public_id,p.status as payout_status,p.transfer_reference,
+        b.id as payout_batch_id,b.period_start as payout_period_start,
+        e.details->>'feeAdjustmentId' as fee_adjustment_id,
+        coalesce(e.details->>'settlementReference',e.details->>'reference') as settlement_reference,
+        e.details->>'reason' as reason
+      from revenue_share_allocation a
+      join revenue_share_allocation_event e on e.allocation_id=a.id
+      join course_payment_order o on o.id=a.course_payment_order_id
+      left join institution_marketplace_offer offer on offer.id=o.institution_offer_id
+      left join curriculum_program course on course.id=o.course_id
+      left join finance_payout p on p.id::text=e.details->>'payoutId'
+      left join finance_payout_batch b on b.id=p.batch_id
+      where a.recipient_type=? and a.currency=?
+        and ((?='INSTITUTION' and a.institution_id=?) or (?='COMPANY' and a.legal_entity_id=?))
+      order by e.created_at desc,e.id desc limit ? offset ?
+      """,type,currency,type,recipientId,type,recipientId,limit,offset);
+  }
+
   @PostMapping("/payouts/{payoutId}/fees")
   @org.springframework.transaction.annotation.Transactional
   public Map<String,Object> confirmPayoutFees(@PathVariable long payoutId,@RequestBody Map<String,Object> body,
