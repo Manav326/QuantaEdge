@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1400,
-    "successful_visual_analyses": 1389,
-    "missing_visual_analyses": 678,
-    "failed_visual_analyses": 11,
+    "raw_analysis_result_rows": 1405,
+    "successful_visual_analyses": 1393,
+    "missing_visual_analyses": 673,
+    "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 689,
+    "unresolved_count": 685,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -53079,7 +53079,7 @@
       "asset_path": "page-0145.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -53097,9 +53097,24 @@
       "asset_path": "assets/bf9b84691e60a39ce2ab5a4aeb52e9cb5c58d63dd55039667d9643cf61a9b8d6.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person wearing a white shirt and a blue striped tie, with their hand on their chin, appearing to be in deep thought.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "normal body temperature",
+          "average body temperature",
+          "healthy people",
+          "temperature measurement"
+        ],
+        "context_relation": "The image is related to the text discussing the normal temperature of a healthy human body.",
+        "limitations": [
+          "The image does not provide specific details about the temperature of individual people.",
+          "The image does not show a comparison between different temperatures."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -53115,9 +53130,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -53133,9 +53157,16 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -53151,9 +53182,34 @@
       "asset_path": "page-0146.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Questions about normal body temperature and its variations in different age groups.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The normal temperature of a healthy human body is taken to be 37.0 °C. But in this activity, did you find that the normal temperature of every person was 37.0 °C? Or did you find the temperature slightly higher or lower for some people?",
+          "The temperature of every person may not be 37.0 °C. What we call normal temperature is the average body temperature of a large number of healthy people. A perfectly healthy person may, therefore, have a normal temperature slightly different from 37.0 °C. The body temperature is influenced by several",
+          "You may try measuring your own temperature at different times of the day and on different days. Record the thermometer readings in your notebook. After a month, analyse your temperature record and see if there are any variations. If yes, try to think what might be the reasons for that.",
+          "The temperature of human beings does not normally go below 35 °C or above 42 °C. For measuring the body temperature of small children or old people, the digital thermometer can also be placed in the armpit. The temperature measured this way is about 0.5 °C to 1 °C lower than the actual body temperat",
+          "There is another scale of temperature known as Fahrenheit scale. On this scale, the unit of temperature is degree Fahrenheit and is denoted by °F. A temperature measured as 37.0 °C on Celsius scale is equivalent to 98.6 °F on Fahrenheit scale. The Fahrenheit scale is not used in most scientific stud"
+        ],
+        "concepts": [
+          "normal body temperature",
+          "age",
+          "activity level",
+          "thermometer",
+          "Fahrenheit scale",
+          "Celsius scale",
+          "Kelvin scale"
+        ],
+        "context_relation": "exploration",
+        "limitations": [
+          "The image does not provide specific numerical data or measurements.",
+          "The image does not show the actual body temperature readings.",
+          "The image does not show the results of the temperature measurements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

@@ -8,7 +8,7 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1389,
+    "assets_selected": 1394,
     "assets_processed_this_run": 10,
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
@@ -16,18 +16,18 @@
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "aa547e17d64595233f3ccfe8",
-      "e203b7b39dfc8885750b0e85",
-      "a41667d2b2839a91aa62e09e",
-      "5a1b6eaf7d72118d83f138ba",
-      "e5ff823124379a7b80563223"
+      "9fb71d7d0f261624fe3ce0a4",
+      "895e55170e2df8f85f399e23",
+      "a7581a1456a38daca8a863b2",
+      "fe31266cae3b619f59eafe9c",
+      "ed2f2cc528fbe2d080cc1db2"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1384,
-    "assets_remaining": 694,
-    "assets_completion_percent": 66.6,
-    "assets_failed": 11,
-    "assets_skipped_from_checkpoint": 1379,
+    "assets_analyzed": 1388,
+    "assets_remaining": 690,
+    "assets_completion_percent": 66.8,
+    "assets_failed": 12,
+    "assets_skipped_from_checkpoint": 1384,
     "batch_limit": 10,
     "publication_allowed": false
   },
@@ -468,7 +468,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:25:22Z"
+      "checkpointed_at": "2026-10-27T00:38:01Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20145,7 +20145,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:27:03Z"
+      "checkpointed_at": "2026-10-27T00:39:43Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23804,7 +23804,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:28:29Z"
+      "checkpointed_at": "2026-10-27T00:41:11Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -38049,7 +38049,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:29:40Z"
+      "checkpointed_at": "2026-10-27T00:42:22Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44209,7 +44209,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T00:30:38Z"
+      "checkpointed_at": "2026-10-27T00:43:20Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -46646,6 +46646,155 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
       "checkpointed_at": "2026-10-27T00:36:01Z"
+    },
+    {
+      "asset_id": "9fb71d7d0f261624fe3ce0a4",
+      "asset_sha256": "b188bc8a1d8d6c6deb1776a683835dcd7d6b6d3b8071be8da3a03d207027de95",
+      "page_text_context_sha256": "b33602f5133011cb20efb64570ad868a3c5b6a954f6e86dacf188e0837dc7c74",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 145,
+      "asset_path": "page-0145.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "895e55170e2df8f85f399e23",
+      "asset_sha256": "bf9b84691e60a39ce2ab5a4aeb52e9cb5c58d63dd55039667d9643cf61a9b8d6",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 146,
+      "asset_path": "assets/bf9b84691e60a39ce2ab5a4aeb52e9cb5c58d63dd55039667d9643cf61a9b8d6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "36528b8d41a9bd1f1a06088d8e743e1c4d5127ddb9f57df3da6a3b382532658c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person wearing a white shirt and a blue striped tie, with their hand on their chin, appearing to be in deep thought.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "normal body temperature",
+          "average body temperature",
+          "healthy people",
+          "temperature measurement"
+        ],
+        "context_relation": "The image is related to the text discussing the normal temperature of a healthy human body.",
+        "limitations": [
+          "The image does not provide specific details about the temperature of individual people.",
+          "The image does not show a comparison between different temperatures."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:47:37Z"
+    },
+    {
+      "asset_id": "a7581a1456a38daca8a863b2",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 146,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "36528b8d41a9bd1f1a06088d8e743e1c4d5127ddb9f57df3da6a3b382532658c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible text or images.",
+        "limitations": [
+          "The page is completely blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:47:55Z"
+    },
+    {
+      "asset_id": "fe31266cae3b619f59eafe9c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 146,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "36528b8d41a9bd1f1a06088d8e743e1c4d5127ddb9f57df3da6a3b382532658c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:48:08Z"
+    },
+    {
+      "asset_id": "ed2f2cc528fbe2d080cc1db2",
+      "asset_sha256": "c5be1dfd7edcb4ac5faa67a93c02ad8344894c924bdad22e7344ba578361f8c8",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 146,
+      "asset_path": "page-0146.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "36528b8d41a9bd1f1a06088d8e743e1c4d5127ddb9f57df3da6a3b382532658c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Questions about normal body temperature and its variations in different age groups.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "The normal temperature of a healthy human body is taken to be 37.0 °C. But in this activity, did you find that the normal temperature of every person was 37.0 °C? Or did you find the temperature slightly higher or lower for some people?",
+          "The temperature of every person may not be 37.0 °C. What we call normal temperature is the average body temperature of a large number of healthy people. A perfectly healthy person may, therefore, have a normal temperature slightly different from 37.0 °C. The body temperature is influenced by several",
+          "You may try measuring your own temperature at different times of the day and on different days. Record the thermometer readings in your notebook. After a month, analyse your temperature record and see if there are any variations. If yes, try to think what might be the reasons for that.",
+          "The temperature of human beings does not normally go below 35 °C or above 42 °C. For measuring the body temperature of small children or old people, the digital thermometer can also be placed in the armpit. The temperature measured this way is about 0.5 °C to 1 °C lower than the actual body temperat",
+          "There is another scale of temperature known as Fahrenheit scale. On this scale, the unit of temperature is degree Fahrenheit and is denoted by °F. A temperature measured as 37.0 °C on Celsius scale is equivalent to 98.6 °F on Fahrenheit scale. The Fahrenheit scale is not used in most scientific stud"
+        ],
+        "concepts": [
+          "normal body temperature",
+          "age",
+          "activity level",
+          "thermometer",
+          "Fahrenheit scale",
+          "Celsius scale",
+          "Kelvin scale"
+        ],
+        "context_relation": "exploration",
+        "limitations": [
+          "The image does not provide specific numerical data or measurements.",
+          "The image does not show the actual body temperature readings.",
+          "The image does not show the results of the temperature measurements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:51:41Z"
     }
   ]
 }
