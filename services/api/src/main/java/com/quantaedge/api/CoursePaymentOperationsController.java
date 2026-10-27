@@ -644,10 +644,15 @@ public class CoursePaymentOperationsController {
     } catch(RuntimeException exception) {
       String rawMessage=exception instanceof org.springframework.web.server.ResponseStatusException statusException
           ? statusException.getReason() : exception.getMessage();
+      Throwable rootCause=org.springframework.core.NestedExceptionUtils.getMostSpecificCause(exception);
+      String classificationMessage=exception instanceof org.springframework.web.server.ResponseStatusException
+          ? rawMessage : rootCause==null?rawMessage:rootCause.getMessage();
       String message=safeError(rawMessage);
-      boolean snapshotRepairBlocked=rawMessage!=null
-          && (rawMessage.toLowerCase(Locale.ROOT).contains("snapshot")
-              || rawMessage.toLowerCase(Locale.ROOT).contains("financial terms"));
+      // Classify using the actual business/root-cause message, not the SQL text embedded in a
+      // BadSqlGrammarException (which can itself contain names such as tax_calculation_snapshot).
+      boolean snapshotRepairBlocked=classificationMessage!=null
+          && (classificationMessage.toLowerCase(Locale.ROOT).contains("snapshot")
+              || classificationMessage.toLowerCase(Locale.ROOT).contains("financial terms"));
       String eventType=snapshotRepairBlocked?"FINANCIAL_SNAPSHOT_REPAIR_BLOCKED":"RECONCILIATION_FAILED";
       String resolutionCode=snapshotRepairBlocked?"SNAPSHOT_REPAIR_BLOCKED":"PROVIDER_CHECK_FAILED";
       if(snapshotRepairBlocked&&!message.toLowerCase(Locale.ROOT).contains("do not pay again"))
@@ -656,6 +661,13 @@ public class CoursePaymentOperationsController {
       details.put("failureCode",text(order.get("failure_code")));
       details.put("orderStatus",currentStatus);
       details.put("snapshotRepairBlocked",snapshotRepairBlocked);
+      details.put("exceptionType",exception.getClass().getSimpleName());
+      if(rootCause!=null) {
+        details.put("rootCauseType",rootCause.getClass().getSimpleName());
+        String rootCauseMessage=rootCause.getMessage();
+        if(rootCauseMessage!=null&&!rootCauseMessage.isBlank())
+          details.put("rootCauseMessage",safeError(rootCauseMessage));
+      }
       audit.record(orderId,context.staffId(),eventType,resolutionCode,
           message,providerOrderId,null,details);
       Map<String,Object> response=new LinkedHashMap<>();

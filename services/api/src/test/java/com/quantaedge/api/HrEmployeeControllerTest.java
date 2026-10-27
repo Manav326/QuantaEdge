@@ -2,6 +2,7 @@ package com.quantaedge.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -14,6 +15,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.mockito.ArgumentCaptor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -244,6 +246,23 @@ class HrEmployeeControllerTest {
     assertEquals(0, result.get("offset"));
     assertEquals(0L, result.get("total"));
   }
+  @Test
+  void employeeDirectoryKeepsDynamicScopeSeparateFromOrderBy() {
+    when(authorization.requirePermission(hrManager, "HR_EMPLOYEE_VIEW")).thenReturn(hrManager);
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of());
+    when(jdbc.queryForObject(anyString(), eq(Long.class), any(Object[].class))).thenReturn(0L);
+
+    controller.employees(hrManager, "", false, 0, 50);
+
+    ArgumentCaptor<String> itemSql = ArgumentCaptor.forClass(String.class);
+    verify(jdbc).queryForList(itemSql.capture(), any(Object[].class));
+    assertTrue(itemSql.getValue().contains("and (true)\norder by e.display_name,e.id"));
+
+    ArgumentCaptor<String> countSql = ArgumentCaptor.forClass(String.class);
+    verify(jdbc).queryForObject(countSql.capture(), eq(Long.class), any(Object[].class));
+    assertTrue(countSql.getValue().endsWith("and (true)"));
+  }
+
   @Test
   void departmentUpdateRequiresManagePermissionBeforeDatabaseAccess() {
     when(authorization.requirePermission(hrManager, "HR_EMPLOYEE_MANAGE"))

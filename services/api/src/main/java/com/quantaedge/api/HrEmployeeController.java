@@ -213,6 +213,7 @@ public class HrEmployeeController {
     int safeLimit=List.of(10,20,50).contains(limit)?limit:50;
     int safeOffset=Math.max(0,Math.min(offset,1000000));
     String scope=reportingScope.sqlScopePredicate(context,"e");
+    String scopePredicate=" and ("+scope+")";
     String normalizedQuery=q==null?"":q.trim();
     String term="%"+normalizedQuery.replace("%","\\%").replace("_","\\_")+"%";
     Object[] filters={includeInactive,normalizedQuery,term,term,term,term};
@@ -228,7 +229,7 @@ public class HrEmployeeController {
       left join hr_employee m on m.id=e.manager_employee_id
       where (? or e.employment_status not in ('INACTIVE','SEPARATED'))
         and (?='' or e.display_name ilike ? or e.employee_number ilike ? or coalesce(d.name,'') ilike ? or coalesce(g.name,'') ilike ?)
-        and """+scope+"""
+      """+scopePredicate+"\n"+"""
       order by e.display_name,e.id
       limit ? offset ?
       """,reportingScope.withScopeArgs(context,filters,safeLimit,safeOffset));
@@ -238,7 +239,7 @@ public class HrEmployeeController {
       left join hr_designation g on g.id=e.designation_id
       where (? or e.employment_status not in ('INACTIVE','SEPARATED'))
         and (?='' or e.display_name ilike ? or e.employee_number ilike ? or coalesce(d.name,'') ilike ? or coalesce(g.name,'') ilike ?)
-        and """+scope,Long.class,reportingScope.withScopeArgs(context,filters));
+      """+scopePredicate,Long.class,reportingScope.withScopeArgs(context,filters));
     return Map.of("items",items,"total",total==null?0L:total,"limit",safeLimit,"offset",safeOffset);
   }
 
