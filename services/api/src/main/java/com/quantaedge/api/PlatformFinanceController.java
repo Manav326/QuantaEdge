@@ -750,13 +750,18 @@ public class PlatformFinanceController {
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=requireOwner(context);
     long institutionId=offerInstitution(offerId);
+    Map<String,Object> offer=one("select currency from institution_marketplace_offer where id=?",offerId);
+    String offerCurrency=string(offer.get("currency")).toUpperCase(Locale.ROOT);
+    String currency=optionalText(body.get("currency"))==null?offerCurrency:requiredText(body,"currency").toUpperCase(Locale.ROOT);
+    // Checkout, existing money columns and Razorpay capture amounts are integer paise and INR-only.
+    // Reject a policy that would never match the supported checkout/settlement unit.
+    if(!"INR".equals(offerCurrency)||!"INR".equals(currency)||!currency.equals(offerCurrency))
+      throw bad("Revenue-share policies currently support INR only and must match the course offer currency. The financial ledger stores integer paise; no FX conversion is performed.");
     Map<String,Object> defaults=one("""
       select default_remainder_recipient_type,default_remainder_institution_id,default_remainder_legal_entity_id
       from billing_finance_payout_settings where id=1
       """);
     if(defaults.isEmpty()) throw bad("Set the default remainder recipient in Finance settings before creating a revenue-share policy.");
-    String currency=optionalText(body.get("currency"))==null?"INR":requiredText(body,"currency").toUpperCase(Locale.ROOT);
-    if(!currency.matches("[A-Z]{3}")) throw bad("Currency must be a three-letter ISO code.");
     Instant start=body.get("effectiveFrom")==null?Instant.now():instant(body,"effectiveFrom");
     Instant end=optionalInstant(body.get("effectiveUntil"));
     if(end!=null&&!end.isAfter(start)) throw bad("Policy end must be after its start.");
