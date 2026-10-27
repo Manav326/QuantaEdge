@@ -9,6 +9,7 @@ from scripts.extract_tre_source_questions import (
     convert_hindi_text,
     normalize_ocr_prompt,
     normalize_ocr_option,
+    uses_legacy_hindi_glyphs,
     native_source_language,
     normalize_source_language_code,
     hindi_conversion_needs_review,
@@ -54,6 +55,13 @@ class TreSourceCodePreservationTests(unittest.TestCase):
         self.assertTrue(hindi_conversion_needs_review("OCR_SHREEDEV_RECONSTRUCTED_REQUIRES_HUMAN_REVIEW"))
         self.assertTrue(hindi_conversion_needs_review("SHREEDEV_OCR_UNAVAILABLE_RAW_PRESERVED"))
         self.assertFalse(hindi_conversion_needs_review("CONVERTED_CHANAKYA"))
+
+    def test_shree_dev_legacy_glyphs_are_detected_when_pdf_uses_cidfont_names(self):
+        raw = "H-9.\\naVZ Zo Xm¡‹S>H$a AO¶ H$mo ³¶m| amoH$Zm Mmhm ?"
+        self.assertTrue(uses_legacy_hindi_glyphs(raw, {"CIDFont+F4"}))
+        self.assertTrue(uses_legacy_hindi_glyphs("प्रश्न हिन्दी में", {"SHREE-DEV7-0709"}))
+        self.assertFalse(uses_legacy_hindi_glyphs("How many numbers are divisible by 5?", {"CIDFont+F4"}))
+        self.assertFalse(uses_legacy_hindi_glyphs("120 + 5 = 125", {"CIDFont+F4"}))
 
     def test_shreedev_ocr_prompt_normalization_and_human_review(self):
         self.assertEqual(
