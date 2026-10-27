@@ -1130,6 +1130,46 @@ export default function FinancePage(){
       {tab==='payouts'&&<PayoutsPanel/>}
       {tab==='payments'&&<section className={styles.stack}>
         <section className={styles.panel}>
+          <div className={styles.panelHead}><div><h2>Distribution exceptions</h2>
+            <p>Read-only checks of each sale’s locked revenue policy, recipient amounts and immutable EARNED ledger events. This scan does not repair records or change payouts.</p></div>
+            <button type="button" className={styles.secondary} onClick={()=>void loadDistributionExceptions(false)} disabled={distributionExceptionLoading}>
+              {distributionExceptionLoading?'Scanning…':'↻ Scan exceptions'}
+            </button></div>
+          <form className={styles.paymentFilters} onSubmit={event=>{event.preventDefault();setDistributionExceptionCursor(null);setDistributionExceptionHasMore(false);void loadDistributionExceptions(false);}}>
+            <label>Find order, institution, course or payment reference
+              <input value={distributionExceptionSearch} maxLength={120} onChange={e=>setDistributionExceptionSearch(e.target.value)} placeholder="Order ID, Quanta Edge, Class 6…"/>
+            </label>
+            <button type="submit" className={styles.primarySmall} disabled={distributionExceptionLoading}>Search exceptions</button>
+            <button type="button" className={styles.secondarySmall} disabled={distributionExceptionLoading} onClick={()=>{setDistributionExceptionSearch('');setDistributionExceptionCursor(null);void loadDistributionExceptions(false);}}>Clear</button>
+          </form>
+          {distributionExceptionLoading?<p className={styles.empty}>Checking saved sale snapshots and allocation ledger…</p>
+          :distributionExceptions.length?<div className={styles.policyTableWrap}><table className={styles.table}>
+            <thead><tr><th>Order / course</th><th>Source institution</th><th>Payment</th><th>Distribution issue</th><th>Action</th></tr></thead>
+            <tbody>{distributionExceptions.map(item=><tr key={item.local_order_id}>
+              <td><b>QE-ORDER-{item.local_order_id}</b><small>{item.course_title||('Course #'+item.course_id)}</small><small>{item.created_at?new Date(item.created_at).toLocaleString('en-IN'):''}</small></td>
+              <td><b>{item.institution_name}</b><small>{item.learner_name||('Learner #'+item.student_id)}</small></td>
+              <td><span className={styles.status}>{item.status}</span><small>{item.provider_payment_id||'No payment ID recorded'}</small><small>Captured: {item.captured_amount_paise==null?'Not recorded':rupees(item.captured_amount_paise,item.currency)}</small></td>
+              <td><b>{item.distribution_issue_count} issue(s)</b><small>{item.distribution_reconciliation_summary}</small>
+                <details><summary>View checks</summary><ul>{(item.distribution_reconciliation_issues||[]).map((issue,i)=><li key={i}>{issue}</li>)}</ul>
+                  {(item.distribution_reconciliation_details||[]).length>0&&<details><summary>Recipient-level expected vs recorded</summary><ul>{item.distribution_reconciliation_details.map((detail,i)=><li key={i}>{detail}</li>)}</ul></details>}
+                </details>
+              </td>
+              <td><div className={styles.paymentRowActions}>
+                <button type="button" className={styles.secondarySmall} disabled={statusTraceLoadingId!==null} onClick={()=>void checkCurrentStatus(item.local_order_id)}>
+                  {statusTraceLoadingId===item.local_order_id?'Inspecting…':'Open full trace'}
+                </button>
+              </div></td>
+            </tr>)}</tbody>
+          </table></div>
+          :<p className={styles.empty}>No distribution exceptions are currently shown. Run a scan to check verified sales and orders that unexpectedly have allocation rows.</p>}
+          <div className={styles.policyFooter}>
+            <span>This queue is read-only. Ambiguous historical recipient assignments require reviewed evidence; no automatic ledger repairs are performed.</span>
+            {distributionExceptionHasMore&&<button type="button" className={styles.secondary} disabled={distributionExceptionLoading} onClick={()=>void loadDistributionExceptions(true)}>
+              {distributionExceptionLoading?'Scanning…':distributionExceptionScanLimitReached?'Continue older-order scan':'Load more exceptions'}
+            </button>}
+          </div>
+        </section>
+        <section className={styles.panel}>
           <div className={styles.panelHead}><div><h2>Course payments & reconciliation</h2>
             <p>Inspect saved course orders, provider references, discounts, invoices and the immutable HRMS recovery history.</p></div>
             <button type="button" className={styles.secondary} onClick={()=>void loadPaymentOrders()} disabled={paymentLoading}>↻ Refresh</button></div>
