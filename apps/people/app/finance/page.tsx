@@ -38,6 +38,14 @@ type CoursePaymentOrder = {
   distribution_reconciliation_status?:'RECONCILED'|'REVIEW_REQUIRED'|'NOT_FINALIZED'|string;
   distribution_issue_count?:number; distribution_reconciliation_summary?:string;
 };
+type DistributionException = {
+  local_order_id:number; institution_id:number; institution_name:string; course_id:number; course_title:string;
+  student_id:number; learner_name?:string|null; status:string; currency:string; offer_price_paise:number;
+  captured_amount_paise?:number|null; provider_order_id?:string|null; provider_payment_id?:string|null;
+  created_at:string; verified_at?:string|null; fiscal_document_id?:number|null; invoice_number?:string|null;
+  distribution_issue_count:number; distribution_reconciliation_summary:string;
+  distribution_reconciliation_issues:string[]; distribution_reconciliation_details:string[];
+};
 type PaymentOperationEvent = {
   id:number; event_type:string; resolution_code:string; message:string; provider_order_id?:string|null;
   provider_status?:string|null; details_json?:string|null; actor_staff_id:number; created_at:string;
@@ -141,6 +149,12 @@ export default function FinancePage(){
   const [paymentStatusFilter,setPaymentStatusFilter]=useState('');
   const [paymentOffset,setPaymentOffset]=useState(0);
   const [paymentLoading,setPaymentLoading]=useState(false);
+  const [distributionExceptions,setDistributionExceptions]=useState<DistributionException[]>([]);
+  const [distributionExceptionSearch,setDistributionExceptionSearch]=useState('');
+  const [distributionExceptionCursor,setDistributionExceptionCursor]=useState<number|null>(null);
+  const [distributionExceptionHasMore,setDistributionExceptionHasMore]=useState(false);
+  const [distributionExceptionScanLimitReached,setDistributionExceptionScanLimitReached]=useState(false);
+  const [distributionExceptionLoading,setDistributionExceptionLoading]=useState(false);
   const [selectedPaymentOrderId,setSelectedPaymentOrderId]=useState<number|null>(null);
   const [paymentEvents,setPaymentEvents]=useState<PaymentOperationEvent[]>([]);
   const [paymentEventsLoading,setPaymentEventsLoading]=useState(false);
@@ -437,6 +451,33 @@ export default function FinancePage(){
       setPaymentOffset(Number(response.offset||0));
     }catch(e){setError(e instanceof Error?e.message:'Course payment orders could not be loaded.');}
     finally{setPaymentLoading(false);}
+  };
+  const loadDistributionExceptions=async(append=false)=>{
+    setDistributionExceptionLoading(true);
+    setError('');
+    try{
+      const query=new URLSearchParams({limit:'50'});
+      if(distributionExceptionSearch.trim())query.set('search',distributionExceptionSearch.trim());
+      if(append&&distributionExceptionCursor!=null)query.set('beforeOrderId',String(distributionExceptionCursor));
+      const response=await api<{
+        items:DistributionException[];count:number;hasMore:boolean;nextCursor?:number|null;
+        scannedOrders:number;scanLimitReached:boolean;readOnly:boolean
+      }>('/api/v1/hrms/platform/finance/course-orders/reconciliation-exceptions?'+query.toString());
+      const next=Array.isArray(response.items)?response.items:[];
+      setDistributionExceptions(current=>append?[...current,...next]:next);
+      setDistributionExceptionCursor(response.nextCursor==null?null:Number(response.nextCursor));
+      setDistributionExceptionHasMore(Boolean(response.hasMore));
+      setDistributionExceptionScanLimitReached(Boolean(response.scanLimitReached));
+      if(!append&&next.length===0&&response.scanLimitReached){
+        setNotice('No exception was found in this scan window. Continue scanning to check older orders.');
+      }else if(!append){
+        setNotice('Found '+next.length+' distribution exception(s) in the scanned orders.');
+      }
+    }catch(e){
+      setError(e instanceof Error?e.message:'Distribution exceptions could not be loaded. No financial records were changed.');
+    }finally{
+      setDistributionExceptionLoading(false);
+    }
   };
   const loadPaymentEvents=async(orderId:number)=>{
     setPaymentEventsLoading(true);
