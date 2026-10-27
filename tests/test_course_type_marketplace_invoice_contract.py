@@ -176,14 +176,26 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
     def test_revenue_share_calculation_snapshot_is_typed_as_jsonb(self):
         financial = (ROOT / "services/api/src/main/java/com/quantaedge/api/CourseOrderFinancialService.java").read_text(encoding="utf-8")
 
-        # JdbcTemplate binds json(calc) as a VARCHAR. Cast the parameter at the SQL
-        # boundary so PostgreSQL receives the JSON object as the column's jsonb type.
+        # JdbcTemplate binds JSON strings as VARCHAR. Cast them at the SQL boundary
+        # because PostgreSQL does not implicitly coerce these parameters to jsonb.
         self.assertIn(
             "allocated_amount_paise,platform_remainder_paise,calculation_snapshot,idempotency_key",
             financial,
         )
         self.assertIn(
             ") values(?,?,?,?,?,?,?,?,?,?,?,?::jsonb,?) returning id",
+            financial,
+        )
+        self.assertIn(
+            "supplier_snapshot,recipient_snapshot,",
+            financial,
+        )
+        self.assertIn(
+            "transaction_snapshot,tax_summary_snapshot,taxable_value_paise",
+            financial,
+        )
+        self.assertIn(
+            ") values(?,?,?,?,?,?,?,'COURSE_ORDER',?,?,?,?::jsonb,?::jsonb,?::jsonb,?::jsonb,?,?,?,?,?,?) returning id",
             financial,
         )
 
