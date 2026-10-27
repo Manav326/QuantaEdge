@@ -8,26 +8,26 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 41,
+    "assets_selected": 49,
     "assets_processed_this_run": 10,
     "assets_processed_ids": [
-      "6388704a4c406b8f34010041",
-      "43fd6689cecf4fc61ee423e9",
-      "f10502c750d9871bd7b843a7",
-      "b9dcc33afc3c069e2bc8365a",
-      "6690b2a6b40d420850e1ae0b",
-      "eb813ddf8f7d7ebe87ceb243",
-      "48b95051b136812b83930e1b",
-      "4f00ad355b86004914429201",
-      "4dd77e57f6074bc78ede4e31",
-      "262c939e955d0909716949b7"
+      "de114b24043f6d1162dc1684",
+      "c10bce25611e9ab9840d08fd",
+      "785cd3f0eb11b2f466aca9fc",
+      "3ef7b503526ef6b3dfc181ac",
+      "823bdb17a71228c73e90affc",
+      "c56207ed564b9aeef1b19fac",
+      "c2bcda1336c9ffb87495642f",
+      "0a2eb4253ec9e4c726fec1ad",
+      "3de77744dc5255954525ea87",
+      "dae83132dcadfa5c5e4cde38"
     ],
     "assets_eligible": 2017,
-    "assets_analyzed": 39,
-    "assets_remaining": 1978,
-    "assets_completion_percent": 1.9,
-    "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 31,
+    "assets_analyzed": 47,
+    "assets_remaining": 1970,
+    "assets_completion_percent": 2.3,
+    "assets_failed": 23,
+    "assets_skipped_from_checkpoint": 39,
     "batch_limit": 10,
     "publication_allowed": false
   },
@@ -1838,6 +1838,361 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
       "checkpointed_at": "2026-10-27T00:54:17Z"
+    },
+    {
+      "asset_id": "de114b24043f6d1162dc1684",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "b45b707adad3558c131096ea0b2649e72d7420d0ee1f210342cb1a0119fe1a7f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T00:54:58Z"
+    },
+    {
+      "asset_id": "c10bce25611e9ab9840d08fd",
+      "asset_sha256": "4e722a6894f2b055b2e9926878ee838d07c465a67a913d1a8420a19652b8b237",
+      "page_text_context_sha256": "b45b707adad3558c131096ea0b2649e72d7420d0ee1f210342cb1a0119fe1a7f",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 13,
+      "asset_path": "page-0013.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "785cd3f0eb11b2f466aca9fc",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5796b20bbbabc143e901726d441aa7f0b5ba160b358067387eedb8ce022f88a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page with text containing names and titles of individuals associated with educational institutions.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "परिषद्, फणीीन्द्र शर्मा, सलाहकार, कार्यक्रम कार्यालय, एन.एस.टीी.सीी., रा.शै.अ.प्र.प., नई दिल्लीी, एम.",
+          "प्रमोद कुमार, वरिष्‍ठ सलाहकार, प्रोग्ाम ऑफिस एवं सहायक आचार्य, अमृतता दर्शनम  केंद्र, अमृतता विश्‍व",
+          "विद्ापीीठम, कोयंबटूर, सुपर्णा दिवाकर, शिक्षक एवं विकास क्षेत्र पेशेवर ततथा मुखय सलाहकार, प्रोग्ाम ऑफिस,",
+          "एन.एस.टीी.सीी., रा.शै.अ.प्र.प., नई दिल्लीी, की आभारीी  है।",
+          "परिषद्, अन्नू दहिया, अर्चना, नेहा ढींगरा, मनीीष जोशीी, ततान्या कौर, सीनियर रिसर्च एसोसिएट्स, विज्ान",
+          "एवं गणितत   शिक्षाा विभाग, नीतीीका रानीी, पाठठ्यक्रम प्रशासक, विज्ान एवं गणितत   शिक्षाा विभाग, अमर कुमार ततथा",
+          "नेहा यादव, जू"
+        ],
+        "concepts": [
+          "educational institutions",
+          "titles and roles",
+          "names of individuals"
+        ],
+        "context_relation": "The text provides information about individuals associated with educational institutions.",
+        "limitations": [
+          "The text does not provide visual elements or diagrams."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:01:36Z"
+    },
+    {
+      "asset_id": "3ef7b503526ef6b3dfc181ac",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5796b20bbbabc143e901726d441aa7f0b5ba160b358067387eedb8ce022f88a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook listing names and roles of individuals involved in educational and administrative roles.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "परिषद्, फणीीन्द्र शर्मा, सलाहकार, कार्यक्रम कार्यालय, एन.एस.टीी.सीी., रा.शै.अ.प्र.प., नई दिल्लीी, एम.",
+          "प्रमोद कुमार, वरिष्‍ठ सलाहकार, प्रोग्ाम ऑफिस एवं सहायक आचार्य, अमृतता दर्शनम  केंद्र, अमृतता विश्‍व",
+          "विद्ापीीठम, कोयंबटूर, सुपर्णा दिवाकर, शिक्षक एवं विकास क्षेत्र पेशेवर ततथा मुखय सलाहकार, प्रोग्ाम ऑफिस",
+          "एन.एस.टीी.सीी., रा.शै.अ.प्र.प., नई दिल्लीी, की आभारीी  है।",
+          "परिषद्, अन्नू दहिया, अर्चना, नेहा ढींगरा, मनीीष जोशीी, ततान्या कौर, सीनियर रिसर्च एसोसिएट्स, विज्ान",
+          "एवं गणितत   शिक्षाा विभाग, नीतीीका रानीी, पाठठ्यक्रम प्रशासक, विज्ान एवं गणितत   शिक्षाा विभाग, अमर कुमार ततथा",
+          "नेहा यादव, जू"
+        ],
+        "concepts": [
+          "educational roles",
+          "administrative roles",
+          "names and titles"
+        ],
+        "context_relation": "The page lists the names and roles of individuals involved in educational and administrative activities.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any numerical data or formulas."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:02:53Z"
+    },
+    {
+      "asset_id": "823bdb17a71228c73e90affc",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5796b20bbbabc143e901726d441aa7f0b5ba160b358067387eedb8ce022f88a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page with text in Hindi, likely containing information about educational institutions and their staff.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "परिषद्, फणीीन्द्र शर्मा, सलाहकार, कार्यक्रम कार्यालय, एन.एस.टीी.सीी., रा.शै.अ.प्र.प., नई दिल्लीी, एम.",
+          "प्रमोद कुमार, वरिष्‍ठ सलाहकार, प्रोग्ाम ऑफिस एवं सहायक आचार्य, अमृतता दर्शनम  केंद्र, अमृतता विश्‍व",
+          "विद्ापीीठम, कोयंबटूर, सुपर्णा दिवाकर, शिक्षक एवं विकास क्षेत्र पेशेवर ततथा मुखय सलाहकार, प्रोग्ाम ऑफिस,",
+          "एन.एस.टीी.सीी., रा.शै.अ.प्र.प., नई दिल्लीी, की आभारीी  है।",
+          "परिषद्, अन्नू दहिया, अर्चना, नेहा ढींगरा, मनीीष जोशीी, ततान्या कौर, सीनियर रिसर्च एसोसिएट्स, विज्ान",
+          "एवं गणितत   शिक्षाा विभाग, नीतीीका रानीी, पाठठ्यक्रम प्रशासक, विज्ान एवं गणितत   शिक्षाा विभाग, अमर कुमार ततथा",
+          "नेहा यादव, जू"
+        ],
+        "concepts": [
+          "educational institutions",
+          "staff information",
+          "locations",
+          "positions"
+        ],
+        "context_relation": "The text provides information about various educational institutions and their staff, including their names, positions, and locations.",
+        "limitations": [
+          "The text is in Hindi and may not be easily understood by non-Hindi speakers.",
+          "The text does not provide specific details about the educational programs or courses offered by the institutions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:05:02Z"
+    },
+    {
+      "asset_id": "c56207ed564b9aeef1b19fac",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "5796b20bbbabc143e901726d441aa7f0b5ba160b358067387eedb8ce022f88a4",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page with text in Hindi, possibly a list of names and titles.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "परिषद्, फणीीन्द्र शर्मा, सलाहकार, कार्यक्रम कार्यालय, एन.एस.टीी.सीी., रा.शै.अ.प्र.प., नई दिल्लीी, एम.",
+          "प्रमोद कुमार, वरिष्‍ठ सलाहकार, प्रोग्ाम ऑफिस एवं सहायक आचार्य, अमृतता दर्शनम  केंद्र, अमृतता विश्‍व",
+          "विद्ापीीठम, कोयंबटूर, सुपर्णा दिवाकर, शिक्षक एवं विकास क्षेत्र पेशेवर ततथा मुखय सलाहकार, प्रोग्ाम ऑफिस",
+          "एन.एस.टीी.सीी., रा.शै.अ.प्र.प., नई दिल्लीी, की आभारीी  है।",
+          "परिषद्, अन्नू दहिया, अर्चना, नेहा ढींगरा, मनीीष जोशीी, ततान्या कौर, सीनियर रिसर्च एसोसिएट्स, विज्ान",
+          "एवं गणितत   शिक्षाा विभाग, नीतीीका रानीी, पाठठ्यक्रम प्रशासक, विज्ान एवं गणितत   शिक्षाा विभाग, अमर कुमार ततथा",
+          "नेहा यादव, जू"
+        ],
+        "concepts": [
+          "names",
+          "titles",
+          "positions",
+          "organizations",
+          "locations"
+        ],
+        "context_relation": "The text appears to be a list of names and titles, possibly related to educational institutions and their staff.",
+        "limitations": [
+          "The text is in Hindi and may not be easily readable by non-Hindi speakers.",
+          "The text is a list and does not provide specific information about the individuals or organizations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:07:06Z"
+    },
+    {
+      "asset_id": "c2bcda1336c9ffb87495642f",
+      "asset_sha256": "ce57bd731c1dc4bd489fb3d66f3e523d61b2c9613b181196ee2343b316cefb73",
+      "page_text_context_sha256": "5796b20bbbabc143e901726d441aa7f0b5ba160b358067387eedb8ce022f88a4",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 14,
+      "asset_path": "page-0014.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "0a2eb4253ec9e4c726fec1ad",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 15,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9c0a34ae6728246d088614545cdda82082a196bee5e22d0b3d4cb7c3b098526b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table of contents for a textbook in Hindi.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "विषय-सूची",
+          "आमुख",
+          "पाठ्यपुस्‍तक के बारे में",
+          "अध्‍  याय 1",
+          "विज्ञाान काा  अनूठाा  संसाार",
+          "अध्‍  याय 2",
+          "सजीव जगत में विविधता",
+          "अध्‍  याय 3",
+          "उचित आहाार— स्वस्थ  शरीर काा आधाार",
+          "अध्‍  याय 4",
+          "चुंबकों कााे  जाानें",
+          "अध्‍  याय 5",
+          "लंबााई एवं गति काा माापन"
+        ],
+        "concepts": [
+          "Table of contents",
+          "Subject",
+          "Textbook",
+          "Chapter",
+          "Science",
+          "Life",
+          "Nutrition",
+          "Physics",
+          "Measurement"
+        ],
+        "context_relation": "The table of contents provides an overview of the topics covered in the textbook.",
+        "limitations": [
+          "The image does not show any visual content, only text.",
+          "The text is in Hindi, which may limit the audience for the content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:12:56Z"
+    },
+    {
+      "asset_id": "3de77744dc5255954525ea87",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 15,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9c0a34ae6728246d088614545cdda82082a196bee5e22d0b3d4cb7c3b098526b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with a list of chapter titles.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "विषय-सूची",
+          "आमुख",
+          "पाठ्यपुस्‍तक के बारे में",
+          "अध्‍  याय 1",
+          "विज्ञाान काा  अनूठाा  संसाार",
+          "अध्‍  याय 2",
+          "सजीव जगत में विविधता",
+          "अध्‍  याय 3",
+          "उचित आहाार— स्वस्थ  शरीर काा आधाार",
+          "अध्‍  याय 4",
+          "चुंबकों कााे  जाानें",
+          "अध्‍  याय 5",
+          "लंबााई एवं गति काा माापन"
+        ],
+        "concepts": [
+          "chapter titles",
+          "textbook structure"
+        ],
+        "context_relation": "The image shows the table of contents of a textbook.",
+        "limitations": [
+          "The image does not show any visual content other than the text.",
+          "The image does not provide any information about the content of the chapters."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:13:32Z"
+    },
+    {
+      "asset_id": "dae83132dcadfa5c5e4cde38",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "source_pdf_page_number": 15,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9c0a34ae6728246d088614545cdda82082a196bee5e22d0b3d4cb7c3b098526b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T01:13:52Z"
     }
   ]
 }
