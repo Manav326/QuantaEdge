@@ -39,6 +39,11 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install Tesseract Hindi OCR data for SHREE-DEV source prompts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tesseract-ocr tesseract-ocr-hin
+
       - name: Install deterministic PDF and legacy-Hindi text tools
         run: python -m pip install --disable-pip-version-check "pymupdf>=1.26,<3" "lipi-aparsoft==1.0.9"
 
