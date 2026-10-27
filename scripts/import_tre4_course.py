@@ -536,9 +536,10 @@ def ensure_schema(cursor: Any) -> None:
             "Flyway V204 is required: TRE readiness must use the same typed question/answer review gate."
         )
 
+    normalized_tre_readiness = re.sub(r"character varying", "varchar", tre4_readiness_definition, flags=re.IGNORECASE)
     if not re.search(
-        r"'TRE 3\\.0'::(?:character varying|varchar),\\s*'tre4-bpsc-tre-3-0-computer-science'::(?:character varying|varchar),\\s*148",
-        tre4_readiness_definition,
+        r"'TRE 3\.0'::varchar,\s*'tre4-bpsc-tre-3-0-computer-science'::varchar,\s*148",
+        normalized_tre_readiness,
     ):
         raise ImportErrorSafe(
             "Flyway V213 is required: TRE readiness must expect 148 active TRE 3.0 questions after excluding "
