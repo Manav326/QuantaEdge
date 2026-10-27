@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1356,
-    "successful_visual_analyses": 1340,
-    "missing_visual_analyses": 935,
+    "raw_analysis_result_rows": 1357,
+    "successful_visual_analyses": 1341,
+    "missing_visual_analyses": 934,
     "failed_visual_analyses": 16,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 951,
+    "unresolved_count": 950,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -50691,9 +50691,30 @@
       "asset_path": "assets/8e61f453d3c31180a272e18163268e884bd5b2f6a3cfb321171001e82767c8af.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram of a lightning conductor in a building.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ever heard of ...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building.",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides easy path for the",
+          "lightning"
+        ],
+        "concepts": [
+          "Lightning conductor",
+          "Building construction",
+          "Lightning protection"
+        ],
+        "context_relation": "The image is a diagram explaining the function and placement of a lightning conductor in a building.",
+        "limitations": [
+          "The image does not show the actual installation or the lightning protection it provides.",
+          "The image does not include any measurements or specific details about the rod's length or burial depth."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
