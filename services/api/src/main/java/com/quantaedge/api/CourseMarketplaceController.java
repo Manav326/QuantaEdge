@@ -2401,12 +2401,6 @@ public class CourseMarketplaceController {
   }
 
   private Map<String,Object> verifyOrderInternal(
-      long localOrderId, VerifyCoursePaymentRequest request, Long callerStudentId, Long callerUserId, long institutionId) {
-    return verifyOrderInternal(localOrderId, request, callerStudentId, callerUserId, institutionId, false);
-  }
-
-  /** Include technical finance-failure details only for privileged reconciliation diagnostics. */
-  private Map<String,Object> verifyOrderInternal(
       long localOrderId, VerifyCoursePaymentRequest request, Long callerStudentId, Long callerUserId,
       long institutionId, boolean includeFinanceDiagnostics) {
     requireConfigured();
@@ -2624,6 +2618,12 @@ public class CourseMarketplaceController {
     result.put("financeReconciliationRequired", false);
     result.put("parentRequestHousekeepingPending",parentRequestHousekeepingPending);
     return result;
+  }
+
+  /** Default learner verification never includes staff-only finance diagnostics. */
+  private Map<String,Object> verifyOrderInternal(
+      long localOrderId, VerifyCoursePaymentRequest request, Long callerStudentId, Long callerUserId, long institutionId) {
+    return verifyOrderInternal(localOrderId, request, callerStudentId, callerUserId, institutionId, false);
   }
 
   /**
