@@ -14,8 +14,8 @@
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
       "b90b1ccd2f380e4a35f9f791",
-      "9f232483ce16973cb62998c9",
-      "071b9ffb6e11765d8d17e2bf"
+      "ac3ef67e4ced1dc1152e7b14",
+      "055ba61cf9184b7284850138"
     ],
     "assets_eligible": 2078,
     "assets_analyzed": 1413,
@@ -451,7 +451,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40449649237",
-      "checkpointed_at": "2026-10-27T05:06:15Z"
+      "checkpointed_at": "2026-10-27T05:15:10Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20129,7 +20129,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40449649237",
-      "checkpointed_at": "2026-10-27T05:07:36Z"
+      "checkpointed_at": "2026-10-27T05:16:32Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -23788,7 +23788,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40449649237",
-      "checkpointed_at": "2026-10-27T05:08:45Z"
+      "checkpointed_at": "2026-10-27T05:17:39Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -37354,9 +37354,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40445496461",
+      "run_id": "40449649237",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -38032,8 +38032,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40445496461",
-      "checkpointed_at": "2026-10-27T04:16:54Z"
+      "run_id": "40449649237",
+      "checkpointed_at": "2026-10-27T05:27:10Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
