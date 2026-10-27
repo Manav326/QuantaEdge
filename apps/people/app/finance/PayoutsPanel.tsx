@@ -21,7 +21,7 @@ type Settings={
 type Overview={
   beneficiariesAwaitingApproval:number;beneficiariesNeedingReview:number;unreconciledFees:number;
   batchesAwaitingApproval:number;payoutsInProgress:number;payoutsPaidPaise:number;
-  payoutsReversedPaise:number;payoutsFailed:number;providerConfigured:boolean
+  payoutsReversedPaise:number;payoutsFailed:number;providerConfigured:boolean;payoutFeeReconciliationPending?:number
 };
 type Beneficiary={
   id:number;public_id:string;beneficiary_type:string;institution_id?:number|null;legal_entity_id?:number|null;
@@ -33,13 +33,25 @@ type FeeOrder={order_id:number;course_title:string;source_institution:string;pro
 type Payout={
   id:number;public_id:string;beneficiary_id:number;amount_paise:number;currency:string;status:string;
   provider_status?:string|null;provider_payout_id?:string|null;transfer_reference?:string|null;status_details?:string|null;
+  provider_fee_paise?:number|null;provider_fee_tax_paise?:number|null;provider_fee_reference?:string|null;
+  provider_fee_source_type?:string|null;provider_fee_confirmed_at?:string|null;
   recipient_name:string;beneficiary_name:string;bank_ifsc:string;bank_account_last4:string;
   beneficiary_type:string;institution_name?:string|null;company_name?:string|null;
   created_by_staff_id?:number|null;approved_by_staff_id?:number|null
 };
 type Batch={id:number;public_id:string;period_start:string;period_end:string;currency:string;status:string;
-  beneficiary_count:number;total_amount_paise:number;created_by_staff_id:number;approved_by_staff_id?:number|null;
+  beneficiary_count:number;total_amount_paise:number;provider_fee_total_paise?:number|null;provider_fee_tax_total_paise?:number|null;
+  provider_fee_reconciled_at?:string|null;created_by_staff_id:number;approved_by_staff_id?:number|null;
   approved_at?:string|null;paid_count?:number;exception_count?:number;payouts?:Payout[]};
+type BeneficiaryBalance={
+  recipient_type:string;recipient_name:string;currency:string;beneficiary_status:string;
+  bank_ifsc?:string|null;bank_account_last4?:string|null;earned_paise:number;refunded_paise:number;
+  charges_paise:number;paid_paise:number;reversed_paise:number;reserved_paise:number;
+  net_earned_paise:number;net_paid_paise:number;refund_reserve_paise:number;payable_paise:number;recovery_due_paise:number
+};
+type BalanceResponse={totals:{netEarnedPaise:number;refundReversalsPaise:number;confirmedChargesPaise:number;
+  netPaidPaise:number;payoutReversalsPaise:number;reservedPaise:number;refundReservePaise:number;payablePaise:number;
+  recoveryDuePaise:number;refundReserveBasisPoints:number};beneficiaries:BeneficiaryBalance[]};
 
 const BASE='/api/v1/hrms/platform/finance';
 async function api<T>(path:string,init:RequestInit={}):Promise<T>{
@@ -81,6 +93,8 @@ export default function PayoutsPanel(){
   const [beneficiaries,setBeneficiaries]=useState<Beneficiary[]>([]);
   const [feeOrders,setFeeOrders]=useState<FeeOrder[]>([]);
   const [batches,setBatches]=useState<Batch[]>([]);
+  const [balances,setBalances]=useState<BalanceResponse|null>(null);
+  const [payoutFeeDrafts,setPayoutFeeDrafts]=useState<Record<string,{fee:string;tax:string;reference:string;source:string}>>({});
   const [selectedBatch,setSelectedBatch]=useState<Batch|null>(null);
   const [loading,setLoading]=useState(true);
   const [busy,setBusy]=useState(false);
@@ -96,13 +110,13 @@ export default function PayoutsPanel(){
   const load=useCallback(async()=>{
     setLoading(true);setError('');
     try{
-      const [c,s,o,b,f,bs]=await Promise.all([
+      const [c,s,o,b,f,bs,bal]=await Promise.all([
         api<Catalog>(BASE+'/payout-catalog'),api<Settings>(BASE+'/payout-settings'),api<Overview>(BASE+'/payout-overview'),
         api<Beneficiary[]>(BASE+'/payout-beneficiaries'),api<FeeOrder[]>(BASE+'/fee-reconciliation?limit=200'),
-        api<Batch[]>(BASE+'/payout-batches')
+        api<Batch[]>(BASE+'/payout-batches'),api<BalanceResponse>(BASE+'/payout-balances')
       ]);
       setCatalog(c);setSettings(s);setOverview(o);setBeneficiaries(Array.isArray(b)?b:[]);
-      setFeeOrders(Array.isArray(f)?f:[]);setBatches(Array.isArray(bs)?bs:[]);
+      setFeeOrders(Array.isArray(f)?f:[]);setBatches(Array.isArray(bs)?bs:[]);setBalances(bal);
       const companies=c.legalEntities.filter(e=>e.status==='ACTIVE'&&['PLATFORM','COMPANY'].includes(e.entity_kind));
       const institutions=c.institutions.filter(i=>i.status==='ACTIVE');
       setArrangementForm(old=>({
@@ -227,6 +241,18 @@ export default function PayoutsPanel(){
       'Safe retry requested using the existing payout idempotency key.');
     if(result&&selectedBatch)await openBatch(selectedBatch.id);
   };
+  const submitPayoutFees=async(payout:Payout)=>{
+    const draft=payoutFeeDrafts[String(payout.id)]||{fee:'',tax:'',reference:'',source:'SETTLEMENT_REPORT'};
+    const fee=parsePaise(draft.fee,true),tax=parsePaise(draft.tax,true);
+    if(fee===null||tax===null){setError('Enter the actual RazorpayX payout fee and fee tax in rupees. Zero is valid if confirmed by the provider statement.');return;}
+    if(draft.reference.trim().length<3){setError('Enter the actual payout settlement/statement reference.');return;}
+    const result=await action(()=>api<Payout>(BASE+'/payouts/'+payout.id+'/fees',{
+      method:'POST',headers:{'Idempotency-Key':crypto.randomUUID()},
+      body:JSON.stringify({processingFeePaise:fee,feeTaxPaise:tax,settlementReference:draft.reference.trim(),sourceType:draft.source})
+    }),'Actual RazorpayX payout charges recorded. Batch and beneficiary balances now include the confirmed charge allocation.');
+    if(result&&selectedBatch)await openBatch(selectedBatch.id);
+  };
+
   const rejectBeneficiary=async(id:number)=>{
     const reason=rejectReason.trim();
     if(reason.length<5){setError('Write a clear rejection reason (at least 5 characters).');return;}
@@ -253,11 +279,30 @@ export default function PayoutsPanel(){
         <article className={styles.metric}><span>Payments missing fee confirmation</span><strong>{overview?.unreconciledFees??'—'}</strong><small>Payout batches stay blocked until actual fees are recorded</small></article>
         <article className={styles.metric}><span>Transfers in progress</span><strong>{overview?.payoutsInProgress??'—'}</strong><small>Not counted as paid until RazorpayX confirms completion</small></article>
         <article className={styles.metric}><span>Confirmed transfers</span><strong>{money(overview?.payoutsPaidPaise)}</strong><small>Provider-confirmed processed payouts</small></article>
+        <article className={styles.metric}><span>Available after reserve</span><strong>{money(balances?.totals.payablePaise)}</strong><small>Net due after charges, refunds, reservations and holdback</small></article>
+        <article className={styles.metric}><span>Recovery balances</span><strong>{money(balances?.totals.recoveryDuePaise)}</strong><small>Amounts owed back where a beneficiary was already paid</small></article>
       </section>
 
       {!settings?.providerConfigured||!settings?.sourceAccountConfigured||!settings?.webhookConfigured?
         <div className={styles.payoutAlertWarning} role="status"><b>RazorpayX is not fully configured.</b> Configure the payout API credentials, source account identifier and payout webhook secret on the API server. Never paste secrets into this screen.</div>:null}
       {!settings?.collectionArrangementVerified&&<div className={styles.payoutAlertWarning} role="status"><b>Live transfers are blocked until legal review is recorded.</b> Select the entity receiving course-payment collections and the legal entity that owns the RazorpayX payout funding account. Only the platform owner can mark the arrangement verified.</div>}
+
+      <section className={styles.panel}>
+        <div className={styles.panelHead}><div><h2>Beneficiary balances</h2>
+          <p>Balances come from the existing allocation and refund ledgers. Payable amounts are net of recorded refunds, confirmed charges, previous transfers, active payout reservations and the configured refund reserve.</p></div>
+          <button type="button" className={styles.secondary} onClick={()=>void load()} disabled={loading||busy}>Refresh balances</button></div>
+        {balances?.beneficiaries?.length?<div className={styles.payoutBalanceWrap}><table className={styles.payoutBalanceTable}>
+          <thead><tr><th>Recipient</th><th>Net earned</th><th>Refund reversals</th><th>Charges</th><th>Paid</th><th>Held / reserved</th><th>Payable</th><th>Recovery due</th></tr></thead>
+          <tbody>{balances.beneficiaries.map((balance,i)=><tr key={balance.recipient_type+':'+balance.recipient_name+':'+i}>
+            <td><strong>{balance.recipient_name}</strong><small>{balance.recipient_type} · {balance.beneficiary_status==='MISSING'?'Bank account not approved':balance.bank_ifsc?balance.bank_ifsc+' · ****'+balance.bank_account_last4:label(balance.beneficiary_status)}</small></td>
+            <td>{money(balance.net_earned_paise,balance.currency)}</td><td>{money(balance.refunded_paise,balance.currency)}</td>
+            <td>{money(balance.charges_paise,balance.currency)}</td><td>{money(balance.net_paid_paise,balance.currency)}</td>
+            <td>{money(balance.reserved_paise+balance.refund_reserve_paise,balance.currency)}</td>
+            <td><strong>{money(balance.payable_paise,balance.currency)}</strong></td>
+            <td>{balance.recovery_due_paise>0?<span className={styles.payoutStatusDanger}>{money(balance.recovery_due_paise,balance.currency)}</span>:money(0,balance.currency)}</td>
+          </tr>)}</tbody>
+        </table></div>:<p className={styles.payoutEmpty}>No verified course-sale allocations have been posted yet. Captured sales appear after the existing financial finalizer adds ledger entries.</p>}
+      </section>
 
       <section className={styles.panel}>
         <div className={styles.panelHead}><div><h2>1. Legal seller & collection-account review</h2>
@@ -390,7 +435,8 @@ export default function PayoutsPanel(){
           {batches.map(batch=><article className={styles.payoutListRow} key={batch.id}>
             <div className={styles.payoutRowMain}><strong>{new Date(batch.period_start+'T12:00:00').toLocaleDateString('en-IN',{month:'long',year:'numeric'})} · Batch #{batch.id}</strong>
               <span>{batch.beneficiary_count} beneficiaries · {money(batch.total_amount_paise)} total</span>
-              <small>{batch.paid_count??0} transfers confirmed paid · {batch.exception_count??0} exceptions · created by staff #{batch.created_by_staff_id}</small></div>
+              <small>{batch.paid_count??0} transfers confirmed paid · {batch.exception_count??0} exceptions · created by staff #{batch.created_by_staff_id}</small>
+              <small>{batch.provider_fee_reconciled_at?('Payout charges reconciled: '+money(batch.provider_fee_total_paise)+' + fee tax '+money(batch.provider_fee_tax_total_paise)):'Payout transfer fees await confirmed provider values or statement reconciliation.'}</small></div>
             <span className={statusClass(batch.status)}>{label(batch.status)}</span>
             <div className={styles.payoutRowActions}>
               <button type="button" className={styles.secondarySmall} onClick={()=>void openBatch(batch.id)}>View details</button>
@@ -403,16 +449,25 @@ export default function PayoutsPanel(){
           <div className={styles.panelHead}><div><h3>Batch #{selectedBatch.id} · {selectedBatch.period_start} to {selectedBatch.period_end}</h3>
             <p>{money(selectedBatch.total_amount_paise)} · {selectedBatch.beneficiary_count} beneficiary transfers · {label(selectedBatch.status)}</p></div><button type="button" className={styles.secondarySmall} onClick={()=>setSelectedBatch(null)}>Close details</button></div>
           {selectedBatch.status==='PENDING_APPROVAL'&&<p className={styles.payoutApprovalNote}>Approval sends the listed bank transfers to RazorpayX. The preparer cannot approve their own batch. Once approved, each payout is tracked separately and only marked paid when the provider confirms a processed result.</p>}
+          {!selectedBatch.provider_fee_reconciled_at&&<p className={styles.payoutHint}>Record actual RazorpayX payout fees from the provider response or settlement statement. The charge adjustment is posted to the same allocation ledger and reduces future balances; do not treat unreconciled charges as platform revenue.</p>}
           {(selectedBatch.payouts||[]).map(p=><article className={styles.payoutListRow} key={p.id}>
             <div className={styles.payoutRowMain}><strong>{p.recipient_name||p.beneficiary_name} · {money(p.amount_paise,p.currency)}</strong>
               <span>{p.bank_ifsc} · account ending {p.bank_account_last4} · {p.beneficiary_type}</span>
               <small>{p.provider_payout_id?'RazorpayX '+p.provider_payout_id:'Provider payout ID not yet confirmed'}{p.transfer_reference?' · UTR '+p.transfer_reference:''}</small>
+              {p.provider_fee_paise!=null&&p.provider_fee_tax_paise!=null&&<small>Provider payout charge: {money(p.provider_fee_paise)} + fee tax {money(p.provider_fee_tax_paise)}{p.provider_fee_source_type?' · '+p.provider_fee_source_type:''}</small>}
               {p.status_details&&<small>{p.status_details}</small>}</div>
             <span className={statusClass(p.status)}>{label(p.status)}</span>
             <div className={styles.payoutRowActions}>
               {!['PROCESSED','REVERSED','FAILED','REJECTED'].includes(p.status)&&<button type="button" className={styles.secondarySmall} disabled={busy} onClick={()=>void refreshPayout(p)}>Refresh status</button>}
               {p.status==='RECONCILIATION_REQUIRED'&&!p.provider_payout_id&&<button type="button" className={styles.secondarySmall} disabled={busy} onClick={()=>void retryPayout(p)}>Retry same request</button>}
             </div>
+            {!selectedBatch.provider_fee_reconciled_at&&['PROCESSED','FAILED','REJECTED','REVERSED'].includes(p.status)&&(p.provider_fee_paise==null||p.provider_fee_tax_paise==null)&&<form className={styles.payoutFeeForm} onSubmit={e=>{e.preventDefault();void submitPayoutFees(p);}}>
+              <label>Confirmed payout fee (₹)<input type="number" min="0" step="0.01" required value={(payoutFeeDrafts[String(p.id)]||{fee:'',tax:'',reference:'',source:'SETTLEMENT_REPORT'}).fee} onChange={e=>setPayoutFeeDrafts(old=>({...old,[String(p.id)]:{...(old[String(p.id)]||{fee:'',tax:'',reference:'',source:'SETTLEMENT_REPORT'}),fee:e.target.value}}))}/></label>
+              <label>Tax on payout fee (₹)<input type="number" min="0" step="0.01" required value={(payoutFeeDrafts[String(p.id)]||{fee:'',tax:'',reference:'',source:'SETTLEMENT_REPORT'}).tax} onChange={e=>setPayoutFeeDrafts(old=>({...old,[String(p.id)]:{...(old[String(p.id)]||{fee:'',tax:'',reference:'',source:'SETTLEMENT_REPORT'}),tax:e.target.value}}))}/></label>
+              <label>Settlement reference<input required minLength={3} maxLength={180} value={(payoutFeeDrafts[String(p.id)]||{fee:'',tax:'',reference:'',source:'SETTLEMENT_REPORT'}).reference} onChange={e=>setPayoutFeeDrafts(old=>({...old,[String(p.id)]:{...(old[String(p.id)]||{fee:'',tax:'',reference:'',source:'SETTLEMENT_REPORT'}),reference:e.target.value}}))}/></label>
+              <label>Evidence source<select value={(payoutFeeDrafts[String(p.id)]||{fee:'',tax:'',reference:'',source:'SETTLEMENT_REPORT'}).source} onChange={e=>setPayoutFeeDrafts(old=>({...old,[String(p.id)]:{...(old[String(p.id)]||{fee:'',tax:'',reference:'',source:'SETTLEMENT_REPORT'}),source:e.target.value}}))}><option value="SETTLEMENT_REPORT">Provider settlement report</option><option value="MANUAL_RECONCILIATION">Manual statement reconciliation</option></select></label>
+              <div className={styles.payoutFormFooter}><span>These are actual charges, not estimates. They are shared across the batch's allocation ledger and carried into the next payable calculation as required.</span><button type="submit" className={styles.secondarySmall} disabled={busy}>Record confirmed payout charges</button></div>
+            </form>}
           </article>)}
         </section>}
       </section>
