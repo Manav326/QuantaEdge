@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-hindi-fhgp1",
   "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
   "raw_analysis_path": "data/textbook-visuals/class6-hi-maths-0bbba43f/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "6fbe5cff4bb79be543065b2c4afd33fe85978b986d615c86367be286422e3f58",
+  "raw_analysis_sha256": "207349c35176195550a291d35f9ddcea79723ee50d63f42088e0250cf576e546",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-hi-maths-0bbba43f/visual-analysis-corrections.v1.json",
@@ -3930,6 +3930,526 @@
         "context_relation": "The QR code is related to the text below it.",
         "limitations": [
           "The image does not provide any additional context or information beyond the text and QR code."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d9eb3f3dcbfc1b4e594ab8a0",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2cde7518f74cd717c7aada8536953a61cdb5a478ad8731c30f3d82d5bec8d2e6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational page about patterns in mathematics, discussing their presence in nature, daily life, and various activities.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "1.1 गणित क्    या है?",
+          "गणित, पैटर्नों (प्रतिरूपों) की खोज तथा पैटना«े उनके अस्तित्व  के कारण का  स्‍पपष्‍ टीकरण है।",
+          "पैटर्न सामान्यत: हमारे आस-पास प्रकृति में, हमारे घरों और विद्ालययों में तथा सूर्य, चंद्रमा और",
+          "तारों की गति में विद्यमान होते हैं। पैटर्न हमें खरीी  से लेकर खाना बनाने में, गंेद फेंकने से लेकर",
+          "खेल खेलने आदि  में दिखाई देते  हैं। इसके साथ  हीी  ययह मौसम चक्र को समझने  एववं   प्राैद्योगिकी का",
+          "उपययोग करने  में हमारीी सहाययता करते हैं।",
+          "पैटर्न तथा  उन्‍हहें समझना आनंददाययक और रचनात्‍ममक कार्य हो सकता  है। इसीी कारणववश",
+          "पैटर्न की खोज तथा पैटना का उपयय करना आनंददायक है।"
+        ],
+        "concepts": [
+          "Patterns in Mathematics",
+          "Nature",
+          "Daily Life",
+          "Activities",
+          "Seasonal Cycle",
+          "Agriculture",
+          "Sports",
+          "Science"
+        ],
+        "context_relation": "Introduction to patterns in mathematics and their applications in various aspects of life.",
+        "limitations": [
+          "No specific visual elements are described."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T02:02:38Z",
+      "effective_analysis": {
+        "visual_summary": "An educational page about patterns in mathematics, discussing their presence in nature, daily life, and various activities.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "1.1 गणित क्    या है?",
+          "गणित, पैटर्नों (प्रतिरूपों) की खोज तथा पैटना«े उनके अस्तित्व  के कारण का  स्‍पपष्‍ टीकरण है।",
+          "पैटर्न सामान्यत: हमारे आस-पास प्रकृति में, हमारे घरों और विद्ालययों में तथा सूर्य, चंद्रमा और",
+          "तारों की गति में विद्यमान होते हैं। पैटर्न हमें खरीी  से लेकर खाना बनाने में, गंेद फेंकने से लेकर",
+          "खेल खेलने आदि  में दिखाई देते  हैं। इसके साथ  हीी  ययह मौसम चक्र को समझने  एववं   प्राैद्योगिकी का",
+          "उपययोग करने  में हमारीी सहाययता करते हैं।",
+          "पैटर्न तथा  उन्‍हहें समझना आनंददाययक और रचनात्‍ममक कार्य हो सकता  है। इसीी कारणववश",
+          "पैटर्न की खोज तथा पैटना का उपयय करना आनंददायक है।"
+        ],
+        "concepts": [
+          "Patterns in Mathematics",
+          "Nature",
+          "Daily Life",
+          "Activities",
+          "Seasonal Cycle",
+          "Agriculture",
+          "Sports",
+          "Science"
+        ],
+        "context_relation": "Introduction to patterns in mathematics and their applications in various aspects of life.",
+        "limitations": [
+          "No specific visual elements are described."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3096957c6364fe76f19f4d6d",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "page_text_context_sha256": "2cde7518f74cd717c7aada8536953a61cdb5a478ad8731c30f3d82d5bec8d2e6",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9bb60a05111d42747b30203c",
+      "asset_sha256": "f5d8e1220f4d218f57d91fdbaaf227697fe28796125cbc3659a6312b3edbea4b",
+      "page_text_context_sha256": "2cde7518f74cd717c7aada8536953a61cdb5a478ad8731c30f3d82d5bec8d2e6",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 21,
+      "asset_path": "page-0021.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "09748710c98f02164e5eebbc",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 22,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "dadabd2ea9d710970b7b8395dd6f61faf83c38bbfe1bec88e690086e4f637588",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the applications of mathematics in daily life, specifically in the context of understanding genetic patterns and their implications for medical diagnosis and treatment.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "गणित प्रकाश  । कक्ा 6",
+          "फलस्वरूप हम चंद्रमा और मंगल पर  स्‍     वययं अपने उपग्रह प्रक्षेपित करने और रॉकेट भेजने में सफल",
+          "हो पाए। इसीी  प्रकार, जीनोमों (genomes) के पैटर्नों की समझ ने हमें रोगों का पता लगाने और",
+          "उनका उपचार करने  में सहाययता की।  पैटर्न से संबंधित ऐसे अनेक उदाहरण  हैं ज‍िनमें से ययह",
+          "एक हैं।",
+          "आइए, पता लगाएँ",
+          "1. क्‍याया आप अन्‍यय  उदाहरणों के विषयय    में सोच सकते हैं, जहाँ गणित दैनिक जीवन",
+          "में हमारीी सहाययता करता है?"
+        ],
+        "concepts": [
+          "mathematics in daily life",
+          "genetic patterns",
+          "medical diagnosis",
+          "treatment"
+        ],
+        "context_relation": "The text discusses the applications of mathematics in understanding genetic patterns and their implications for medical diagnosis and treatment.",
+        "limitations": [
+          "The text does not provide specific examples or details of how mathematics is used in these applications."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T02:12:06Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the applications of mathematics in daily life, specifically in the context of understanding genetic patterns and their implications for medical diagnosis and treatment.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "गणित प्रकाश  । कक्ा 6",
+          "फलस्वरूप हम चंद्रमा और मंगल पर  स्‍     वययं अपने उपग्रह प्रक्षेपित करने और रॉकेट भेजने में सफल",
+          "हो पाए। इसीी  प्रकार, जीनोमों (genomes) के पैटर्नों की समझ ने हमें रोगों का पता लगाने और",
+          "उनका उपचार करने  में सहाययता की।  पैटर्न से संबंधित ऐसे अनेक उदाहरण  हैं ज‍िनमें से ययह",
+          "एक हैं।",
+          "आइए, पता लगाएँ",
+          "1. क्‍याया आप अन्‍यय  उदाहरणों के विषयय    में सोच सकते हैं, जहाँ गणित दैनिक जीवन",
+          "में हमारीी सहाययता करता है?"
+        ],
+        "concepts": [
+          "mathematics in daily life",
+          "genetic patterns",
+          "medical diagnosis",
+          "treatment"
+        ],
+        "context_relation": "The text discusses the applications of mathematics in understanding genetic patterns and their implications for medical diagnosis and treatment.",
+        "limitations": [
+          "The text does not provide specific examples or details of how mathematics is used in these applications."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b4fb0a7e2c0e8530498a54f3",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 22,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "dadabd2ea9d710970b7b8395dd6f61faf83c38bbfe1bec88e690086e4f637588",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the application of mathematics in daily life, specifically in understanding genetic patterns and their implications.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "गणित प्रकाश  । कक्ा 6",
+          "फलस्वरूप हम चंद्रमा और मंगल पर  स्‍     वययं अपने उपग्रह प्रक्षेपित करने और रॉकेट भेजने में सफल",
+          "हो पाए। इसीी  प्रकार, जीनोमों (genomes) के पैटर्नों की समझ ने हमें रोगों का पता लगाने और",
+          "उनका उपचार करने  में सहाययता की।  पैटर्न से संबंधित ऐसे अनेक उदाहरण  हैं ज‍िनमें से ययह",
+          "एक हैं।",
+          "आइए, पता लगाएँ",
+          "1. क्‍याया आप अन्‍यय  उदाहरणों के विषयय    में सोच सकते हैं, जहाँ गणित दैनिक जीवन",
+          "में हमारीी सहाययता करता है?"
+        ],
+        "concepts": [
+          "mathematics in daily life",
+          "genetic patterns",
+          "understanding genetic patterns",
+          "implications of genetic patterns",
+          "application of mathematics in daily life"
+        ],
+        "context_relation": "The text discusses the application of mathematics in understanding genetic patterns and their implications in daily life.",
+        "limitations": [
+          "The text does not provide specific examples or explanations of how mathematics is applied in these contexts."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T02:13:42Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the application of mathematics in daily life, specifically in understanding genetic patterns and their implications.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "गणित प्रकाश  । कक्ा 6",
+          "फलस्वरूप हम चंद्रमा और मंगल पर  स्‍     वययं अपने उपग्रह प्रक्षेपित करने और रॉकेट भेजने में सफल",
+          "हो पाए। इसीी  प्रकार, जीनोमों (genomes) के पैटर्नों की समझ ने हमें रोगों का पता लगाने और",
+          "उनका उपचार करने  में सहाययता की।  पैटर्न से संबंधित ऐसे अनेक उदाहरण  हैं ज‍िनमें से ययह",
+          "एक हैं।",
+          "आइए, पता लगाएँ",
+          "1. क्‍याया आप अन्‍यय  उदाहरणों के विषयय    में सोच सकते हैं, जहाँ गणित दैनिक जीवन",
+          "में हमारीी सहाययता करता है?"
+        ],
+        "concepts": [
+          "mathematics in daily life",
+          "genetic patterns",
+          "understanding genetic patterns",
+          "implications of genetic patterns",
+          "application of mathematics in daily life"
+        ],
+        "context_relation": "The text discusses the application of mathematics in understanding genetic patterns and their implications in daily life.",
+        "limitations": [
+          "The text does not provide specific examples or explanations of how mathematics is applied in these contexts."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "359d27f2f9b3b82921067e2b",
+      "asset_sha256": "f5602a90c76fcc989a865f40d811cbfb7f9ae2aa7287b12e8d5b8d6cd8df68fe",
+      "page_text_context_sha256": "dadabd2ea9d710970b7b8395dd6f61faf83c38bbfe1bec88e690086e4f637588",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 22,
+      "asset_path": "page-0022.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d825286a1efb482aecef0145",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "537ec876e4943ccdd3b8d4f8c4ac44c855200d49650295d36ddc02485124748f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook showing various sequences of numbers.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "गणित में पैटर्न",
+          "साारणी 1— संख्    या अनुक्रमों के उदााहरण",
+          "1, 1, 1, 1, 1, 1, 1,…. (सभीी ‘1’)",
+          "1, 2, 3, 4, 5, 6, 7, …. (गणन संख्‍यायाएँ)",
+          "1, 3, 5, 7, 9, 11, 13, …. (विषम संख्‍यायाएँ)",
+          "2, 4, 6, 8, 10, 12, 14, …. (सम संख्‍यायाएँ)",
+          "1, 3, 6, 10, 15, 21, 28, …. (त्रिभुजाकार संख्‍यायाएँ)",
+          "1, 4, 9, 16, 25, 36, 49, …. (वर्ग संख्‍यायाएँ)",
+          "1, 8, 27, 64, 125, 216, …. (घन संख्‍य"
+        ],
+        "concepts": [
+          "Sequences",
+          "Patterns",
+          "Number Patterns",
+          "Arithmetic Sequences",
+          "Geometric Sequences",
+          "Square Numbers",
+          "Cube Numbers"
+        ],
+        "context_relation": "The page is part of a textbook that explains different types of number sequences.",
+        "limitations": [
+          "The image does not show any specific problem or question related to the sequences.",
+          "The text is in Hindi, and the page is from a textbook on mathematics."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T02:20:07Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook showing various sequences of numbers.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "गणित में पैटर्न",
+          "साारणी 1— संख्    या अनुक्रमों के उदााहरण",
+          "1, 1, 1, 1, 1, 1, 1,…. (सभीी ‘1’)",
+          "1, 2, 3, 4, 5, 6, 7, …. (गणन संख्‍यायाएँ)",
+          "1, 3, 5, 7, 9, 11, 13, …. (विषम संख्‍यायाएँ)",
+          "2, 4, 6, 8, 10, 12, 14, …. (सम संख्‍यायाएँ)",
+          "1, 3, 6, 10, 15, 21, 28, …. (त्रिभुजाकार संख्‍यायाएँ)",
+          "1, 4, 9, 16, 25, 36, 49, …. (वर्ग संख्‍यायाएँ)",
+          "1, 8, 27, 64, 125, 216, …. (घन संख्‍य"
+        ],
+        "concepts": [
+          "Sequences",
+          "Patterns",
+          "Number Patterns",
+          "Arithmetic Sequences",
+          "Geometric Sequences",
+          "Square Numbers",
+          "Cube Numbers"
+        ],
+        "context_relation": "The page is part of a textbook that explains different types of number sequences.",
+        "limitations": [
+          "The image does not show any specific problem or question related to the sequences.",
+          "The text is in Hindi, and the page is from a textbook on mathematics."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "01f2026c618111605dc2ce59",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 23,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "537ec876e4943ccdd3b8d4f8c4ac44c855200d49650295d36ddc02485124748f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook showing various sequences and patterns in mathematics.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "गणित में पैटर्न",
+          "साारणी 1— संख्‍    या अनुक्रमों के उदााहरण",
+          "1, 1, 1, 1, 1, 1, 1,…. (सभीी ‘1’)",
+          "1, 2, 3, 4, 5, 6, 7, …. (गणन संख्‍यायाएँ)",
+          "1, 3, 5, 7, 9, 11, 13, …. (विषम संख्‍यायाएँ)",
+          "2, 4, 6, 8, 10, 12, 14, …. (सम संख्‍यायाएँ)",
+          "1, 3, 6, 10, 15, 21, 28, …. (त्रिभुजाकार संख्‍यायाएँ)",
+          "1, 4, 9, 16, 25, 36, 49, …. (वर्ग संख्‍यायाएँ)",
+          "1, 8, 27, 64, 125, 216, …. (घन संख्‍य"
+        ],
+        "concepts": [
+          "mathematics",
+          "sequences",
+          "patterns",
+          "arithmetic sequences",
+          "geometric sequences",
+          "arithmetic series",
+          "geometric series",
+          "triangular numbers",
+          "square numbers",
+          "cube numbers"
+        ],
+        "context_relation": "The page is an educational resource for teaching patterns and sequences in mathematics.",
+        "limitations": [
+          "The image does not show any specific question or problem related to the sequences.",
+          "The page is a visual representation of mathematical concepts, not a diagram or chart."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T02:21:34Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook showing various sequences and patterns in mathematics.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "गणित में पैटर्न",
+          "साारणी 1— संख्‍    या अनुक्रमों के उदााहरण",
+          "1, 1, 1, 1, 1, 1, 1,…. (सभीी ‘1’)",
+          "1, 2, 3, 4, 5, 6, 7, …. (गणन संख्‍यायाएँ)",
+          "1, 3, 5, 7, 9, 11, 13, …. (विषम संख्‍यायाएँ)",
+          "2, 4, 6, 8, 10, 12, 14, …. (सम संख्‍यायाएँ)",
+          "1, 3, 6, 10, 15, 21, 28, …. (त्रिभुजाकार संख्‍यायाएँ)",
+          "1, 4, 9, 16, 25, 36, 49, …. (वर्ग संख्‍यायाएँ)",
+          "1, 8, 27, 64, 125, 216, …. (घन संख्‍य"
+        ],
+        "concepts": [
+          "mathematics",
+          "sequences",
+          "patterns",
+          "arithmetic sequences",
+          "geometric sequences",
+          "arithmetic series",
+          "geometric series",
+          "triangular numbers",
+          "square numbers",
+          "cube numbers"
+        ],
+        "context_relation": "The page is an educational resource for teaching patterns and sequences in mathematics.",
+        "limitations": [
+          "The image does not show any specific question or problem related to the sequences.",
+          "The page is a visual representation of mathematical concepts, not a diagram or chart."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f6bbca7b448beb8fd2b672d3",
+      "asset_sha256": "ecc40896d4c69f147c6082b4a6a5a5680347958e9a7a08fab9d65412b3bd18a3",
+      "page_text_context_sha256": "537ec876e4943ccdd3b8d4f8c4ac44c855200d49650295d36ddc02485124748f",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 23,
+      "asset_path": "page-0023.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "366f7501ccb72945a4a98ef4",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "source_pdf_page_number": 24,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "01c0cbf17b805c45f694b4a28fc968f0d743f0b5a769291b8fdcfe5adfa24787",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook showing a table of odd and even numbers.",
+        "visual_type": "table",
+        "visible_text": [
+          "गणित प्रकाश  । कक्ा 6",
+          "साारणी 2— कुछ संख्या अनुक्रमों काा  चित्रीय निरूपण",
+          "(सभीी ‘1’) 1  1  1  1  1",
+          "(गणन संख्‍यायाएँ) 1  2  3  4  5",
+          "(विषम संख्‍यायाएँ) 1  3  5  7  9",
+          "2  4  6  8",
+          "2  4  6  8"
+        ],
+        "concepts": [
+          "Odd numbers",
+          "Even numbers",
+          "Number sequences"
+        ],
+        "context_relation": "The table is used to illustrate the difference between odd and even numbers.",
+        "limitations": [
+          "The table only shows a limited number of examples."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40413122029",
+      "checkpointed_at": "2026-10-27T02:27:22Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook showing a table of odd and even numbers.",
+        "visual_type": "table",
+        "visible_text": [
+          "गणित प्रकाश  । कक्ा 6",
+          "साारणी 2— कुछ संख्या अनुक्रमों काा  चित्रीय निरूपण",
+          "(सभीी ‘1’) 1  1  1  1  1",
+          "(गणन संख्‍यायाएँ) 1  2  3  4  5",
+          "(विषम संख्‍यायाएँ) 1  3  5  7  9",
+          "2  4  6  8",
+          "2  4  6  8"
+        ],
+        "concepts": [
+          "Odd numbers",
+          "Even numbers",
+          "Number sequences"
+        ],
+        "context_relation": "The table is used to illustrate the difference between odd and even numbers.",
+        "limitations": [
+          "The table only shows a limited number of examples."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
