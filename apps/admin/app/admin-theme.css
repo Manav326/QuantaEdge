@@ -2144,3 +2144,444 @@ html[data-qe-appearance] .qe-admin-workspace-page-slot :where(button:not([class*
     overscroll-behavior-inline: contain;
   }
 }
+
+
+/*
+ * Admin public auth: final contrast and responsive layout contract.
+ * Keep authentication copy readable in both appearances. Route-wide workspace
+ * overrides intentionally stop at the public page slot, so auth controls need
+ * their own complete semantic palette and small-screen layout.
+ */
+html[data-qe-appearance] .qe-admin-public-page {
+  width: 100%;
+  min-width: 0;
+  color: var(--qe-color-text, #172033);
+  background: var(--qe-color-background, #F5F7FB);
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-shell {
+  grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+  width: 100%;
+  min-width: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--qe-color-background, #F5F7FB);
+  color: var(--qe-color-text, #172033);
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-story {
+  min-width: 0;
+  color: #F8FAFC;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-panel {
+  min-width: 0;
+  padding: clamp(20px, 3.2vw, 44px);
+  background: var(--qe-color-background, #F5F7FB);
+  color: var(--qe-color-text, #172033);
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-card {
+  box-sizing: border-box;
+  width: min(100%, 460px);
+  max-width: 460px;
+  min-width: 0;
+  margin-inline: auto;
+  padding: clamp(20px, 3vw, 36px);
+  overflow-wrap: anywhere;
+  background: var(--qe-color-surface, #FFFFFF);
+  color: var(--qe-color-text, #172033);
+  border-color: var(--qe-color-border-subtle, #D7DEE8);
+  box-shadow: var(--qe-elevation-2, 0 10px 28px rgb(20 32 54 / .1));
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-admin-login-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+  margin: 0 0 16px;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-admin-login-controls .qe-appearance-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 40px;
+  min-height: 40px;
+  max-width: 100%;
+  padding: 8px 11px;
+  border: 1px solid var(--qe-color-border, #7B8798);
+  border-radius: 10px;
+  background: var(--qe-color-surface-elevated, #FFFFFF);
+  color: var(--qe-color-text, #172033);
+  font: 700 12px/1.3 inherit;
+  overflow-wrap: anywhere;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-admin-login-controls .qe-admin-language-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 40px;
+  padding: 4px 9px;
+  border: 1px solid var(--qe-color-border, #7B8798);
+  border-radius: 10px;
+  background: var(--qe-color-surface-elevated, #FFFFFF);
+  color: var(--qe-color-text, #172033);
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-admin-login-controls .qe-admin-language-switcher select {
+  min-width: 0;
+  max-width: 100%;
+  min-height: 30px;
+  border: 0;
+  outline-offset: 3px;
+  background: transparent;
+  color: var(--qe-color-text, #172033);
+  font: 650 12px/1.3 inherit;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-mode-switch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+  min-width: 0;
+  margin: 0 0 22px;
+  padding: 4px;
+  border: 1px solid var(--qe-color-border-subtle, #D7DEE8);
+  border-radius: 12px;
+  background: var(--qe-color-surface-subtle, #F0F3F8);
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-mode-switch button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--qe-color-text-muted, #536176);
+  font: 700 12px/1.35 inherit;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-mode-switch button:hover:not(:disabled) {
+  border-color: var(--qe-color-border-subtle, #D7DEE8);
+  background: var(--qe-color-surface, #FFFFFF);
+  color: var(--qe-color-text, #172033);
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-mode-switch button.qe-login-mode-active {
+  border-color: var(--qe-color-border-subtle, #D7DEE8);
+  background: var(--qe-color-primary-container, #FEF1E8);
+  color: var(--qe-color-on-primary-container, #111827);
+  box-shadow: 0 1px 3px rgb(17 24 39 / .09);
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-mode-switch button:disabled {
+  cursor: not-allowed;
+  opacity: .7;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-card-top {
+  min-width: 0;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-symbol,
+html[data-qe-appearance] .qe-admin-public-page .qe-login-recipient-icon {
+  background: var(--qe-color-primary-container, #FEF1E8);
+  border-color: var(--qe-color-border-subtle, #D7DEE8);
+  color: var(--qe-color-on-primary-container, #111827);
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-secure {
+  max-width: 100%;
+  border-color: var(--qe-color-success, #166534);
+  background: var(--qe-color-success-container, #DCFCE7);
+  color: var(--qe-color-on-success-container, #14532D);
+  font-size: 11px;
+  line-height: 1.35;
+  letter-spacing: .025em;
+  white-space: normal;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-overline {
+  display: inline-block;
+  color: var(--qe-color-primary-text, #B0561C);
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: .08em;
+  overflow-wrap: anywhere;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-heading h2 {
+  color: var(--qe-color-text, #172033);
+  font-size: clamp(24px, 2.2vw, 32px);
+  line-height: 1.18;
+  letter-spacing: -.6px;
+  overflow-wrap: anywhere;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-heading p {
+  color: var(--qe-color-text-muted, #536176);
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-form {
+  min-width: 0;
+  gap: 11px;
+  margin-top: 22px;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-form > label {
+  display: block;
+  min-width: 0;
+  margin-top: 3px;
+  color: var(--qe-color-text, #172033);
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.4;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-input-wrap {
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 50px;
+  border-color: var(--qe-color-border, #7B8798);
+  background: var(--qe-color-surface-elevated, #FFFFFF);
+  color: var(--qe-color-text, #172033);
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-input-prefix {
+  flex: 0 0 auto;
+  color: var(--qe-color-text, #172033);
+  border-color: var(--qe-color-border-subtle, #D7DEE8);
+  font-size: 13px;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-form input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+html[data-qe-appearance] .qe-admin-public-page .qe-login-otp {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  color: var(--qe-color-text, #172033);
+  caret-color: var(--qe-color-primary-text, #B0561C);
+  font-size: 14px;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-form > input:not(.qe-login-otp) {
+  width: 100%;
+  min-height: 48px;
+  padding: 11px 13px;
+  border: 1px solid var(--qe-color-border, #7B8798);
+  border-radius: 10px;
+  background: var(--qe-color-surface-elevated, #FFFFFF);
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-input-wrap input {
+  width: 100%;
+  min-width: 0;
+  background: transparent;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-form input::placeholder,
+html[data-qe-appearance] .qe-admin-public-page .qe-login-otp::placeholder {
+  color: var(--qe-color-text-muted, #536176);
+  opacity: 1;
+  letter-spacing: .04em;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-field-help,
+html[data-qe-appearance] .qe-admin-public-page .qe-login-heading p,
+html[data-qe-appearance] .qe-admin-public-page .qe-login-policy p,
+html[data-qe-appearance] .qe-admin-public-page .qe-login-panel-footer,
+html[data-qe-appearance] .qe-admin-public-page .qe-login-back,
+html[data-qe-appearance] .qe-admin-public-page .qe-login-recipient small,
+html[data-qe-appearance] .qe-admin-public-page .qe-login-activation-note p,
+html[data-qe-appearance] .qe-admin-public-page .qe-login-dev-code small {
+  color: var(--qe-color-text-muted, #536176);
+  font-size: 12px;
+  line-height: 1.5;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-field-help {
+  margin-top: -2px;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-activation-note,
+html[data-qe-appearance] .qe-admin-public-page .qe-login-recipient {
+  border-color: var(--qe-color-border-subtle, #D7DEE8);
+  background: var(--qe-color-surface-subtle, #F0F3F8);
+  color: var(--qe-color-text, #172033);
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-activation-note strong,
+html[data-qe-appearance] .qe-admin-public-page .qe-login-recipient strong {
+  color: var(--qe-color-text, #172033);
+  font-size: 13px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-recipient button,
+html[data-qe-appearance] .qe-admin-public-page .qe-login-back {
+  min-width: 40px;
+  min-height: 40px;
+  padding: 9px 10px;
+  color: var(--qe-color-primary-text, #B0561C);
+  font-size: 12px;
+  line-height: 1.35;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-otp {
+  width: 100%;
+  min-height: 54px;
+  padding: 10px 12px;
+  border: 1px solid var(--qe-color-border, #7B8798);
+  border-radius: 12px;
+  background: var(--qe-color-surface-elevated, #FFFFFF);
+  color: var(--qe-color-text, #172033);
+  letter-spacing: clamp(6px, 2vw, 11px);
+  text-indent: 0;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-dev-code {
+  grid-template-columns: minmax(0, 1fr) auto;
+  border-color: var(--qe-color-border, #7B8798);
+  background: var(--qe-color-warning-container, #FEF3C7);
+  color: var(--qe-color-on-warning-container, #78350F);
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-dev-code span,
+html[data-qe-appearance] .qe-admin-public-page .qe-login-dev-code strong {
+  color: var(--qe-color-on-warning-container, #78350F);
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-error {
+  border-color: var(--qe-color-error, #B42318);
+  background: var(--qe-color-error-container, #FEE2E2);
+  color: var(--qe-color-on-error-container, #7F1D1D);
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-error :is(strong, span) {
+  color: var(--qe-color-on-error-container, #7F1D1D);
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-primary {
+  min-width: 0;
+  min-height: 48px;
+  margin-top: 8px;
+  padding: 11px 15px;
+  border: 1px solid var(--qe-color-primary, #F97316);
+  border-radius: 12px;
+  background: var(--qe-color-primary, #F97316);
+  color: var(--qe-color-on-primary, #111827);
+  font: 750 13px/1.35 inherit;
+  overflow-wrap: anywhere;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-primary:disabled {
+  border-color: var(--qe-color-border, #7B8798);
+  background: var(--qe-color-disabled-background, #E5E7EB);
+  color: var(--qe-color-disabled-text, #4B5563);
+  opacity: 1;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-policy {
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-color: var(--qe-color-border-subtle, #D7DEE8);
+}
+html[data-qe-appearance] .qe-admin-public-page :is(
+  .qe-login-form > input:focus-visible, .qe-login-otp:focus-visible,
+  .qe-login-recipient button:focus-visible, .qe-login-back:focus-visible,
+  .qe-login-primary:focus-visible, .qe-login-mode-switch button:focus-visible,
+  .qe-admin-login-controls .qe-appearance-toggle:focus-visible,
+  .qe-admin-login-controls .qe-admin-language-switcher select:focus-visible
+) {
+  outline: 3px solid var(--qe-color-focus, #F06F17);
+  outline-offset: 3px;
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-input-wrap:focus-within {
+  outline: 3px solid var(--qe-color-focus, #F06F17);
+  outline-offset: 3px;
+  border-color: var(--qe-color-focus, #F06F17);
+  box-shadow: 0 0 0 2px var(--qe-color-background, #F5F7FB);
+}
+html[data-qe-appearance] .qe-admin-public-page .qe-login-heading,
+html[data-qe-appearance] .qe-admin-public-page .qe-login-form,
+html[data-qe-appearance] .qe-admin-public-page .qe-login-policy,
+html[data-qe-appearance] .qe-admin-public-page .qe-login-activation-note,
+html[data-qe-appearance] .qe-admin-public-page .qe-login-recipient {
+  min-width: 0;
+}
+html[data-qe-appearance] .qe-admin-public-page :is(.qe-login-heading, .qe-login-form) :is(p, small, strong, label, button) {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 980px) and (min-width: 841px) {
+  html[data-qe-appearance] .qe-admin-public-page .qe-login-shell {
+    grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr);
+  }
+  html[data-qe-appearance] .qe-admin-public-page .qe-login-story {
+    padding-inline: clamp(20px, 2.8vw, 28px);
+  }
+  html[data-qe-appearance] .qe-admin-public-page .qe-login-story h1 {
+    font-size: clamp(29px, 3.7vw, 38px);
+    letter-spacing: -1.1px;
+  }
+  html[data-qe-appearance] .qe-admin-public-page .qe-login-panel {
+    padding: 24px 18px;
+  }
+  html[data-qe-appearance] .qe-admin-public-page .qe-login-card {
+    padding: 24px;
+  }
+}
+@media (max-width: 840px) {
+  html[data-qe-appearance] .qe-admin-public-page .qe-login-shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  html[data-qe-appearance] .qe-admin-public-page .qe-login-story {
+    display: none;
+  }
+  html[data-qe-appearance] .qe-admin-public-page .qe-login-panel {
+    min-height: 100vh;
+    min-height: 100dvh;
+    justify-content: flex-start;
+    padding: max(20px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom));
+  }
+  html[data-qe-appearance] .qe-admin-public-page .qe-login-mobile-brand {
+    display: flex;
+    align-self: center;
+    width: min(100%, 460px);
+    min-width: 0;
+    margin: 0 auto 16px;
+    color: var(--qe-color-text, #172033);
+  }
+  html[data-qe-appearance] .qe-admin-public-page .qe-login-card {
+    width: min(100%, 460px);
+    margin: 0 auto;
+    padding: clamp(18px, 4vw, 26px);
+  }
+  html[data-qe-appearance] .qe-admin-public-page .qe-login-panel-footer {
+    display: grid;
+    gap: 5px;
+    width: min(100%, 460px);
+    margin: 16px auto 0;
+  }
+}
+@media (max-width: 380px) {
+  html[data-qe-appearance] .qe-admin-public-page .qe-login-card {
+    padding: 17px;
+  }
+  html[data-qe-appearance] .qe-admin-public-page .qe-login-mode-switch button {
+    padding-inline: 6px;
+    font-size: 11px;
+  }
+  html[data-qe-appearance] .qe-admin-public-page .qe-login-primary {
+    padding-inline: 11px;
+  }
+  html[data-qe-appearance] .qe-admin-public-page .qe-login-secure {
+    font-size: 10px;
+  }
+}
+@media (max-height: 620px) and (min-width: 841px) {
+  html[data-qe-appearance] .qe-admin-public-page .qe-login-panel {
+    justify-content: flex-start;
+    overflow-y: auto;
+    padding-block: 18px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-qe-appearance] .qe-admin-public-page :is(
+    .qe-login-primary, .qe-login-mode-switch button, .qe-login-input-wrap
+  ) {
+    transition: none !important;
+    transform: none !important;
+  }
+}

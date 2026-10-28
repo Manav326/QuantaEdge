@@ -457,6 +457,87 @@ for (const [foreground, background] of contrastPairs) {
   assertThemeContrast(peopleDarkTokens, 'dark', foreground, background);
 }
 
+
+
+/* Exhaustive responsive/theme inventory across public and authenticated application routes. */
+const webRouteFiles = discoverFiles('apps/web/app', path => /\/page\.(?:tsx|ts|jsx|js)$/.test(path));
+const webModuleStyles = discoverFiles('apps/web/app', path => /\.module\.css$/.test(path));
+const webSharedComponents = discoverFiles('apps/web/app/components', path => /\.(?:tsx|ts|jsx|js|css)$/.test(path));
+const adminSharedComponents = discoverFiles('apps/admin/app/components', path => /\.(?:tsx|ts|jsx|js|css)$/.test(path));
+const peopleSharedComponents = discoverFiles('apps/people/app/components', path => /\.(?:tsx|ts|jsx|js|css)$/.test(path));
+
+assert(webRouteFiles.length >= 20, 'Learner Web theme audit must discover all nested student, parent, account, class, session and public routes.');
+assert(webModuleStyles.length >= 8, 'Learner Web theme audit must discover all route/component CSS modules.');
+assert(webSharedComponents.length >= 8, 'Learner Web theme audit must discover the shared component layer.');
+assert(adminSharedComponents.length >= 8, 'Admin theme audit must discover shared navigation, shell, theme, pagination and notification components.');
+assert(peopleSharedComponents.length >= 8, 'HRMS theme audit must discover the shared shell, form, feedback, theme and notification components.');
+
+for (const path of webRouteFiles) {
+  const source = read(path);
+  assert(source.trim().length > 0 && /\bexport\s+default\b/.test(source),
+    'Learner Web route must remain discoverable and render a default page component: ' + path);
+}
+for (const path of [...webModuleStyles, ...adminModuleStyles, ...peopleModuleStyles]) {
+  const source = read(path);
+  assert(source.trim().length > 0, 'Route/component stylesheet must not be empty: ' + path);
+}
+
+const adminLoginSource = read('apps/admin/app/login/page.tsx');
+const adminLoginTheme = adminThemeCss;
+assert(adminRouteFiles.includes('apps/admin/app/login/page.tsx'), 'Admin login must remain part of the exhaustive public-route audit.');
+assert(adminLoginSource.includes('qe-login-mode-switch') && adminLoginSource.includes('qe-admin-login-controls'),
+  'Admin login must retain the separate staff/institution switch and appearance/language controls.');
+assert(adminLoginTheme.includes('Admin public auth: final contrast and responsive layout contract') &&
+  adminLoginTheme.includes('html[data-qe-appearance] .qe-admin-public-page .qe-login-form > label') &&
+  adminLoginTheme.includes('color: var(--qe-color-text-muted, #536176);') &&
+  adminLoginTheme.includes('var(--qe-color-disabled-background') &&
+  adminLoginTheme.includes('var(--qe-color-disabled-text') &&
+  adminLoginTheme.includes('qe-login-mode-active') &&
+  adminLoginTheme.includes('@media (max-width: 840px)') &&
+  adminLoginTheme.includes('prefers-reduced-motion: reduce'),
+  'Admin login must use readable semantic foregrounds, visible disabled controls, a styled mode switch and mobile/reduced-motion layout rules.');
+assert(adminLoginTheme.includes('.qe-admin-public-page .qe-login-story') &&
+  adminLoginTheme.includes('color: #F8FAFC;'),
+  'The illustrative login story must remain a deliberate dark panel with its own readable text, not inherit light-surface text.');
+assert(webLayout.includes('ColorThemeProvider') && webCss.includes('@media(max-width:900px)') &&
+  webCss.includes('prefers-reduced-motion: reduce'),
+  'Learner Web must keep shared theme hydration, tablet/mobile navigation and reduced-motion behavior.');
+assert(peopleRootLayout.includes("import './people-appearance.css'") &&
+  peopleAppearanceCss.includes('@media (max-width: 760px)') &&
+  peopleAppearanceCss.includes('prefers-reduced-motion: reduce'),
+  'HRMS must keep its shared appearance cascade, phone layout and reduced-motion behavior.');
+
+function adminPaletteHex(block, role) {
+  const match = block.match(new RegExp('\\b' + role + '\\s*:\\s*[\\'"]?(#[0-9a-fA-F]{6})[\\'"]?'));
+  return match ? match[1] : null;
+}
+function assertAdminPaletteContrast(mode, block, foregroundRole, backgroundRole) {
+  const foreground = adminPaletteHex(block, foregroundRole);
+  const background = adminPaletteHex(block, backgroundRole);
+  const ratio = contrastRatio(foreground, background);
+  assert(ratio !== null && ratio >= 4.5,
+    'Admin ' + mode + ' palette fails WCAG AA contrast for ' + foregroundRole + ' on ' + backgroundRole +
+    ' (ratio=' + (ratio === null ? 'unavailable' : ratio.toFixed(2)) + ':1).');
+}
+const adminThemeProviderSource = read('apps/admin/app/components/AdminThemeProvider.tsx');
+const adminLightPalette = themeBlock(adminThemeProviderSource, '  light: {', '\n  },\n  dark: {');
+const adminDarkPalette = themeBlock(adminThemeProviderSource, '  dark: {', '\n  },\n};');
+const adminContrastPairs = [
+  ['text', 'surface'],
+  ['textMuted', 'surface'],
+  ['primaryText', 'surface'],
+  ['onPrimary', 'primary'],
+  ['onPrimaryContainer', 'primaryContainer'],
+  ['onSuccessContainer', 'successContainer'],
+  ['onWarningContainer', 'warningContainer'],
+  ['onErrorContainer', 'errorContainer'],
+  ['disabledText', 'disabledBackground'],
+];
+for (const [foreground, background] of adminContrastPairs) {
+  assertAdminPaletteContrast('light', adminLightPalette, foreground, background);
+  assertAdminPaletteContrast('dark', adminDarkPalette, foreground, background);
+}
+
 if (failures.length) {
   console.error('White-label colour theme contract failed (' + failures.length + '/' + checks + ' checks):');
   for (const failure of failures) console.error(' - ' + failure);
