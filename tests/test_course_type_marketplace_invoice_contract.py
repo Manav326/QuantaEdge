@@ -304,6 +304,8 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
         self.assertIn("recipientReadinessFilter", panel)
         self.assertIn("recipientCurrencyFilter", panel)
         self.assertIn("RECOVERY_DUE", panel)
+        self.assertIn("!balance.bank_ifsc?.trim()", panel)
+        self.assertIn("!balance.bank_account_last4?.trim()", panel)
         self.assertIn("IN_PROGRESS", panel)
         self.assertIn("Payout checks pass · tax review needed", panel)
         self.assertIn("Earned allocation", panel)

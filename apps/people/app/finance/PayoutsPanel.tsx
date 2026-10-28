@@ -258,7 +258,7 @@ export default function PayoutsPanel(){
     const matchesStatus=recipientReadinessFilter==='ALL'
       ||(recipientReadinessFilter==='READY'&&status==='READY_FOR_BATCH_REVIEW')
       ||(recipientReadinessFilter==='BLOCKED'&&status==='BLOCKED')
-      ||(recipientReadinessFilter==='MISSING_BANK'&&balance.beneficiary_status!=='ACTIVE')
+      ||(recipientReadinessFilter==='MISSING_BANK'&&(!balance.bank_ifsc?.trim()||!balance.bank_account_last4?.trim()))
       ||(recipientReadinessFilter==='RECOVERY_DUE'&&balance.recovery_due_paise>0)
       ||(recipientReadinessFilter==='IN_PROGRESS'&&balance.reserved_paise>0)
       ||status===recipientReadinessFilter;

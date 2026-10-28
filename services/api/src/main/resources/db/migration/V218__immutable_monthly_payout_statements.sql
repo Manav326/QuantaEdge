@@ -48,5 +48,5 @@ BEFORE UPDATE OR DELETE ON finance_payout_statement_event
 FOR EACH ROW EXECUTE FUNCTION reject_billing_financial_mutation();
 
 INSERT INTO app_metadata(key,value)
-VALUES ('schema','immutable-monthly-payout-statements-v217')
+VALUES ('schema','immutable-monthly-payout-statements-v218')
 ON CONFLICT(key) DO UPDATE SET value=excluded.value;

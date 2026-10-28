@@ -354,7 +354,7 @@ public class PayoutSettlementPdfRenderer {
                 // assistive technology even when a complex-script glyph has visual shaping.
                 COSDictionary actualTextProperties=new COSDictionary();
                 actualTextProperties.setItem(COSName.ACTUAL_TEXT,new COSString(run.text()));
-                textStream.beginMarkedContent(COSName.SPAN,PDPropertyList.create(actualTextProperties));
+                textStream.beginMarkedContent(COSName.getPDFName("Span"),PDPropertyList.create(actualTextProperties));
                 textStream.beginText();
                 // Tr is a text-state operator and must be inside a BT/ET text object.
                 textStream.setRenderingMode(RenderingMode.FILL);
