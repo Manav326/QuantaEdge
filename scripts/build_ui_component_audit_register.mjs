@@ -90,7 +90,7 @@ function appendUnique(target, values) {
 export function buildSourceModuleAudit(graph, routeAuditRows, curatedComponentRows) {
   if (!graph || !Array.isArray(graph.routes)) throw new Error('Source graph must contain a routes array.');
   if (!Array.isArray(routeAuditRows) || !routeAuditRows.length) throw new Error('Route audit register has no data rows.');
-  if (!Array.isArray(curatedComponentRows) || !curatedComponentRows.length) throw new Error('Curated component register has no data rows.');
+  if (!Array.isArray(curatedComponentRows)) throw new Error('Curated component register must be an array.');
 
   const routeBySource = new Map();
   const routeById = new Map();
