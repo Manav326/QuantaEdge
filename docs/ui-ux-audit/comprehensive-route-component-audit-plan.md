@@ -104,11 +104,11 @@ CI success is necessary but not sufficient for visual sign-off. Source inspectio
 
 ## 6. Current status and work queue
 
-1. **COMPLETED — source inventory reconciliation:** 75 generated Next.js page routes now match 75 browser register entries; with 34 Android destinations, all 109 inventory rows are present. CI has a route/source parity guard to prevent future pages being silently omitted.
-2. **IN PROGRESS — verification:** route/component source graph is generated and has zero unresolved local imports; review its transitive component and stylesheet candidates against actual conditional rendering and page composition.
-3. **NEXT:** finish the route-to-component trace and create independent component-instance entries with consuming routes.
+1. **REGISTER UPDATED — exact-head verification pending:** the route and state registers now contain 109 rows (75 Next.js page entries plus 34 Android destinations). A generated route/source parity check is included in CI, but this clean branch must pass that check before the route reconciliation can be called verified.
+2. **IN PROGRESS — source graph tooling:** a transitive local-import inventory and tests are included; the current branch's CI artifact and unresolved-import count must be inspected before claiming the graph complete.
+3. **IN PROGRESS — component mapping:** 34 shared-shell/provider/style/tutor entries seed the component register, but the final leaf, conditional, and route-specific component census is not complete.
 4. **NEXT:** verify an appropriate repeatable browser and Android UI test path before choosing any new dependency.
-5. **PENDING:** capture the existing responsive/theme baseline before applying visual fixes.
-6. **PENDING:** run route walkthroughs, fix defects in small batches, and maintain regression evidence.
+5. **PENDING:** capture the actual responsive/theme baseline before visual fixes; do not infer visual outcomes from source inspection.
+6. **PENDING:** run route walkthroughs, fix confirmed defects in small batches, and maintain regression evidence.
 
 The route-level working register is `route-component-audit-register.csv` beside this plan. The separate `component-instance-audit-register.csv` tracks shared components and their route consumers; it is a starting inventory, not the final child-component census. The `shared-shell-source-review.md` records the initial source inspection and labels runtime checks as pending. Continue adding route-specific and conditional leaf components as the route-by-route trace discovers them. The validator enforces that each route references exactly the components that list it as a consumer. The existing QA screen/state/scenario/API/runtime registers remain the source of linked workflow and permission evidence; these records complement one another and must stay consistent.
