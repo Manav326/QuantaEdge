@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2533,
+    "assets_selected": 2538,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "a98f141da2d234bcfc608d49",
-      "33a7ea621b2f6401668aa7bf",
-      "3e3a11a748e5b6a64a946e3e",
-      "a8eb077c68bbc3e319e993be",
-      "5484bde4eee99110ff74a2c5"
+      "bbaae31c072ec059b2cc34da",
+      "8a2ade63cecc2727058b0663",
+      "a96782a38024e0f44b6a7b92",
+      "4b99b930328f0e4fd392386e",
+      "9ebde0d8b61fb6588e3af88c"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2533,
-    "assets_remaining": 4955,
-    "assets_completion_percent": 33.8,
+    "assets_analyzed": 2538,
+    "assets_remaining": 4950,
+    "assets_completion_percent": 33.9,
     "assets_failed": 25,
-    "assets_skipped_from_checkpoint": 2528,
+    "assets_skipped_from_checkpoint": 2533,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -95479,6 +95479,178 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634814830",
       "checkpointed_at": "2026-10-28T08:53:50Z"
+    },
+    {
+      "asset_id": "bbaae31c072ec059b2cc34da",
+      "asset_sha256": "700cab77181a8bc5076bfcc0a3de684d4d26fbd96a35b01021a8e9bc308b18c5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/700cab77181a8bc5076bfcc0a3de684d4d26fbd96a35b01021a8e9bc308b18c5.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green horizontal line across a white background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Bud to Flower",
+          "Cold Water"
+        ],
+        "context_relation": "The text describes changes in physical and chemical states of objects over time.",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "The text is not a diagram, chart, graph, table, map, cartoon, photo, or illustration."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634814830",
+      "checkpointed_at": "2026-10-28T08:55:39Z"
+    },
+    {
+      "asset_id": "8a2ade63cecc2727058b0663",
+      "asset_sha256": "f9beffdbd700ebbf3aa307b16b7fc9a160324372ee47d888d70d9abc70e04f17",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/f9beffdbd700ebbf3aa307b16b7fc9a160324372ee47d888d70d9abc70e04f17.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green arrow pointing downwards.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear what the arrow is pointing to or what it represents. The visible text is incomplete and does not provide context for the arrow's purpose or significance."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634814830",
+      "checkpointed_at": "2026-10-28T08:57:12Z"
+    },
+    {
+      "asset_id": "a96782a38024e0f44b6a7b92",
+      "asset_sha256": "4af525bb335f7d2ed32698c0ec21fa0decfe2122649928af6b5b6cfba9d9fa0d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/4af525bb335f7d2ed32698c0ec21fa0decfe2122649928af6b5b6cfba9d9fa0d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has become water.",
+        "visual_type": "photo",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Bud to Flower",
+          "Cold Water"
+        ],
+        "context_relation": "The text describes changes in physical and chemical states of matter over time.",
+        "limitations": [
+          "The text does not provide specific details about the chemical changes involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634814830",
+      "checkpointed_at": "2026-10-28T08:58:54Z"
+    },
+    {
+      "asset_id": "4b99b930328f0e4fd392386e",
+      "asset_sha256": "0e1de9749f906f640c98eac73023aeb1d1252948310c7621a85c609c4660d241",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/0e1de9749f906f640c98eac73023aeb1d1252948310c7621a85c609c4660d241.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has now become water.",
+        "visual_type": "photo",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Bud to Flower",
+          "Cold Water"
+        ],
+        "context_relation": "The image shows a sequence of changes in nature, including physical and chemical transformations.",
+        "limitations": [
+          "The image does not provide specific details about the chemical changes involved in the transformation of ice to water."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634814830",
+      "checkpointed_at": "2026-10-28T09:00:41Z"
+    },
+    {
+      "asset_id": "9ebde0d8b61fb6588e3af88c",
+      "asset_sha256": "20e7b2a53b7b6fd27b62867faa6033b7d5b7bc8d24d0c2a817fed594d5482add",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/20e7b2a53b7b6fd27b62867faa6033b7d5b7bc8d24d0c2a817fed594d5482add.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green circular shape with a white border.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634814830",
+      "checkpointed_at": "2026-10-28T09:02:07Z"
     }
   ]
 }
