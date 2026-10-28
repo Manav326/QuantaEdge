@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1347,
+    "assets_selected": 1348,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "6c1022d163de9567aa2cefaa"
+      "b389386d98c0aebc2243f4cd"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1343,
-    "assets_remaining": 948,
-    "assets_completion_percent": 58.6,
-    "assets_failed": 16,
-    "assets_skipped_from_checkpoint": 1342,
+    "assets_analyzed": 1344,
+    "assets_remaining": 947,
+    "assets_completion_percent": 58.7,
+    "assets_failed": 15,
+    "assets_skipped_from_checkpoint": 1343,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1229,7 +1229,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40608667133",
-      "checkpointed_at": "2026-10-28T01:41:26Z"
+      "checkpointed_at": "2026-10-28T01:51:27Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20171,7 +20171,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40608667133",
-      "checkpointed_at": "2026-10-28T01:42:19Z"
+      "checkpointed_at": "2026-10-28T01:52:21Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38449,7 +38449,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40608667133",
-      "checkpointed_at": "2026-10-28T01:43:18Z"
+      "checkpointed_at": "2026-10-28T01:53:20Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43461,11 +43461,9 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface, with instructions on how to perform an activity related to atmospheric pressure.",
+        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface.",
         "visual_type": "diagram",
         "visible_text": [
-          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
-          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
           "Activity 6.4: Let us perform",
           "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
           "Do you realise that it sticks to the surface?",
@@ -43481,27 +43479,24 @@
         "concepts": [
           "atmospheric pressure",
           "rubber sucker",
-          "pressure difference",
-          "atmospheric force",
+          "air pressure",
           "SI unit of pressure",
-          "practical unit of air pressure",
           "millibar",
           "hectopascal",
           "wind formation",
           "inflated balloon",
           "puncture in the bicycle tube"
         ],
-        "context_relation": "educational",
+        "context_relation": "descriptive",
         "limitations": [
-          "The image does not show the actual experiment of pulling the sucker off the surface.",
-          "The image does not show the actual measurement of atmospheric pressure."
+          "The image does not show the actual experiment of pulling the sucker off the surface."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40608667133",
-      "checkpointed_at": "2026-10-28T01:46:56Z"
+      "checkpointed_at": "2026-10-28T01:54:47Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -44115,19 +44110,38 @@
     {
       "asset_id": "b389386d98c0aebc2243f4cd",
       "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
-      "page_text_context_sha256": "23a534507295986cb38f896a36acbcd95ccd1ae45a82b50233bf7077ecb5a51a",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 110,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "23a534507295986cb38f896a36acbcd95ccd1ae45a82b50233bf7077ecb5a51a",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600312251",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An explanation of how high-speed winds create low-pressure areas over houses, leading to potential roof damage.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "When high-speed winds blow over houses, a low-pressure area is created over them, as high-speed winds are accompanied by a reduced pressure. Therefore, the air pressure above the roofs of the houses is lower than the pressure below them. If the pressure difference is large and the roofs are weak, th",
+          "When high-speed winds blow over houses, a low-pressure area is created over them, as high-speed winds are accompanied by a reduced pressure. Therefore, the air pressure above the roofs of the houses is lower than the pressure below them. If the pressure difference is large and the roofs are weak, th"
+        ],
+        "concepts": [
+          "high-speed winds",
+          "low-pressure areas",
+          "air pressure",
+          "roof damage"
+        ],
+        "context_relation": "Explanatory",
+        "limitations": [
+          "The image does not show any visual representation of the described phenomenon."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608667133",
+      "checkpointed_at": "2026-10-28T01:55:32Z"
     },
     {
       "asset_id": "ed47972eb74639ec9bc709d3",
