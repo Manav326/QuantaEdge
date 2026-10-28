@@ -85,6 +85,25 @@ def valid_sha(value: Any) -> bool:
     return len(digest) == 64 and all(char in VALID_HEX for char in digest)
 
 
+def _timing_number(value: Any) -> float | None:
+    """Accept finite numeric timing values, but never booleans or malformed data."""
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    number = float(value)
+    return max(0.0, number) if number == number and number not in (float("inf"), float("-inf")) else None
+
+
+def _parse_timing_utc(value: Any) -> datetime | None:
+    """Parse UTC/RFC3339 handoff timestamps safely for live elapsed-time reporting."""
+    if not isinstance(value, str) or not value:
+        return None
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return parsed if parsed.tzinfo is not None else parsed.replace(tzinfo=timezone.utc)
+
+
 def book_layer_timings(repo_root: Path, source: dict[str, str], index: dict[str, Any] | None,
                        raw_path: Path | None, raw_fields: dict[str, Any],
                        ledger_fields: dict[str, Any]) -> list[dict[str, Any]]:
