@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2464,
+    "assets_selected": 2465,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "0d1c88ea0154d314c4c70259",
-      "b7c93da39fddefe4085e42e9"
+      "fd531da9018b9853fd63915a",
+      "e42edff2a8d0afb32fcce2a2"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2460,
-    "assets_remaining": 5028,
+    "assets_analyzed": 2462,
+    "assets_remaining": 5026,
     "assets_completion_percent": 32.9,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 2459,
+    "assets_skipped_from_checkpoint": 2460,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40600192733",
-      "checkpointed_at": "2026-10-28T00:08:14Z"
+      "checkpointed_at": "2026-10-28T00:12:10Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40600192733",
-      "checkpointed_at": "2026-10-28T00:08:42Z"
+      "checkpointed_at": "2026-10-28T00:12:37Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40600192733",
-      "checkpointed_at": "2026-10-28T00:09:18Z"
+      "checkpointed_at": "2026-10-28T00:13:14Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -92920,6 +92920,58 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40600192733",
       "checkpointed_at": "2026-10-28T00:11:24Z"
+    },
+    {
+      "asset_id": "fd531da9018b9853fd63915a",
+      "asset_sha256": "04359c6b8f97f6c90232ee85623c8aba2c6ecd1f7f545100561329f1b74d8742",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 76,
+      "asset_path": "assets/04359c6b8f97f6c90232ee85623c8aba2c6ecd1f7f545100561329f1b74d8742.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9b2d7697ff3d8d5c9aaa2908709c2e9b1929d605b85dd59b0b1c09be80cb8762",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40600192733",
+      "checkpointed_at": "2026-10-28T00:13:48Z"
+    },
+    {
+      "asset_id": "e42edff2a8d0afb32fcce2a2",
+      "asset_sha256": "89364ff036dd945878b125d5ef3539a6d7e354e8476b26c3c4a4da7e3a5ba13e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 76,
+      "asset_path": "assets/89364ff036dd945878b125d5ef3539a6d7e354e8476b26c3c4a4da7e3a5ba13e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9b2d7697ff3d8d5c9aaa2908709c2e9b1929d605b85dd59b0b1c09be80cb8762",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with blue rings at each end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40600192733",
+      "checkpointed_at": "2026-10-28T00:14:22Z"
     }
   ]
 }
