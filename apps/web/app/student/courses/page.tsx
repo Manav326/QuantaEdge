@@ -212,7 +212,6 @@ export default function StudentCoursesPage() {
         <section className={styles.grid} aria-label="Your enrolled courses">
           {owned.map(course => {
             const id = Number(course.id || course.course_id);
-            const active = id === activeCourseId;
             const assessmentCourse = isAssessmentCourse(course);
             const k12Course = isK12Course(course);
             const unsupportedCourse = !assessmentCourse && !k12Course;
@@ -220,6 +219,7 @@ export default function StudentCoursesPage() {
             const accessExpired = course.course_access_status === 'EXPIRED';
             const accessDenied = accessBlocked || accessExpired;
             const paused = course.course_access_status ? course.course_access_status === 'PAUSED' : course.paused === true;
+            const active = id === activeCourseId && !paused;
             const metric = progress[id];
             const stats = metric?.data?.lessonStats || {};
             const total = Number(stats.total_lessons || stats.totalLessons || 0);
@@ -285,8 +285,8 @@ export default function StudentCoursesPage() {
                     <p className={styles.meta}>This course remains in your records, but its registered hierarchy is not yet supported by the learner app. No K–12 lessons or assessment tests were opened.</p>
                   </div>
                 )}
-                {(!active || paused) && !unsupportedCourse && !accessDenied && (
-                  <button className={styles.secondaryButton} type="button" disabled={busyCourseId !== null}
+                {!active && !unsupportedCourse && (
+                  !accessDenied && <button className={styles.secondaryButton} type="button" disabled={busyCourseId !== null}
                     onClick={() => void activateCourse(id)}>
                     {busyCourseId === id ? 'Switching course…' : paused ? 'Resume this course' : 'Focus on this course'}
                   </button>
