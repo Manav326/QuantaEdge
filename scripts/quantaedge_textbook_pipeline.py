@@ -69,6 +69,34 @@ def page_no(row):
 def build_coverage_ledger(inventory_path,raw_path,manifest_path,text_path,effective_path,ledger_path,*,corrections_path=None,repo_root=None):
     layer5_started_at=datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00","Z")
     layer5_started_clock=time.monotonic()
+    prior_layer5_elapsed=0.0
+    prior_path=Path(ledger_path)
+    if prior_path.is_file():
+        # The old ledger may contain very large page/visual arrays. Read only its prefix
+        # and tail, where the versioned timing envelope is written; never decode the full file.
+        windows=[]
+        try:
+            size=prior_path.stat().st_size
+            with prior_path.open("rb") as stream:
+                windows.append(stream.read(64*1024).decode("utf-8",errors="replace"))
+                if size>64*1024:
+                    stream.seek(max(0,size-64*1024))
+                    windows.append(stream.read(64*1024).decode("utf-8",errors="replace"))
+            for window in windows:
+                for match in re.finditer(r'"timing"\s*:\s*',window):
+                    try:
+                        value,_=json.JSONDecoder().raw_decode(window,match.end())
+                    except json.JSONDecodeError:
+                        continue
+                    if isinstance(value,dict) and value.get("layer")==5:
+                        candidate=value.get("cumulative_elapsed_seconds",value.get("total_elapsed_seconds",value.get("attempt_elapsed_seconds",0)))
+                        if isinstance(candidate,(int,float)) and not isinstance(candidate,bool) and candidate>=0:
+                            prior_layer5_elapsed=max(prior_layer5_elapsed,float(candidate))
+                            break
+                if prior_layer5_elapsed:
+                    break
+        except (OSError,ValueError,UnicodeError):
+            prior_layer5_elapsed=0.0
     root=Path(repo_root or Path.cwd()).resolve()
     inv,raw,man=read_json(inventory_path),read_json(raw_path),read_json(manifest_path)
     if inv.get("schema_version")!="quantaedge.visual-inventory.v1" or raw.get("schema_version")!="quantaedge.visual-analysis.v1":
@@ -185,9 +213,17 @@ def build_coverage_ledger(inventory_path,raw_path,manifest_path,text_path,effect
     out={"schema_version":"quantaedge.textbook-coverage-ledger.v1","architecture_version":"8-layer-resumable-v1","layer":5,"generated_at":datetime.now(timezone.utc).isoformat().replace("+00:00","Z"),"last_progress_at":raw.get("last_progress_at"),"ledger_status":"COMPLETE" if unresolved==0 else "INCOMPLETE","source":{"class":src.get("class"),"language":src.get("language"),"subject":src.get("subject"),"source_book_id":bid,"source_pdf_sha256":sha,"edition":src.get("edition"),"pdf_page_count":count},"source_paths":paths,"summary":{"source_pdf_page_count":count,"inventory_page_records":len(pages),"page_text_records":sum(map(len,texts.values())),"pages_with_unresolved_text":page_bad,"inventory_asset_rows":len(assets),"eligible_visual_asset_rows":eligible,"raw_analysis_result_rows":len(results),"successful_visual_analyses":sum(x["analysis_status"]=="ANALYZED_REQUIRES_HUMAN_REVIEW" for x in visual_rows),"missing_visual_analyses":sum(x["analysis_status"]=="ANALYSIS_MISSING" for x in visual_rows),"failed_visual_analyses":sum(x["analysis_status"] in {"ANALYSIS_ERROR","ASSET_HASH_MISMATCH","ANALYSIS_STATUS_UNKNOWN","ANALYSIS_STALE_CONTEXT","ANALYSIS_STALE_CHECKPOINT"} for x in visual_rows),"orphan_analysis_results":len(orphans),"corrections_applied":len(accepted),"unresolved_count":unresolved,"mapping_status":"NOT_STARTED","analysis_model":raw.get("model"),"analysis_prompt_version":raw.get("prompt_version"),"publication_allowed":False},"pages":page_rows,"visuals":visual_rows,"orphan_analysis_asset_ids":orphans,"human_review_required":True,"publication_allowed":False}
     layer5_completed_at=datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00","Z")
     layer5_elapsed=round(time.monotonic()-layer5_started_clock,3)
+    layer5_cumulative_elapsed=round(prior_layer5_elapsed+layer5_elapsed,3)
     out["timing"]={"layer":5,"status":"COMPLETE" if out.get("ledger_status")=="COMPLETE" else "INCOMPLETE",
         "started_at":layer5_started_at,"completed_at":layer5_completed_at,"last_progress_at":layer5_completed_at,
-        "attempt_elapsed_seconds":layer5_elapsed,"timing_basis":"Monotonic time for effective-analysis and page/visual coverage reconciliation"}
+        "attempt_elapsed_seconds":layer5_elapsed,"total_elapsed_seconds":layer5_cumulative_elapsed,
+        "cumulative_elapsed_seconds":layer5_cumulative_elapsed,
+        "timing_basis":"Monotonic time for effective-analysis and page/visual coverage reconciliation"}
+    # Keep this small root envelope at the front so all future checkpoints can read it
+    # with a bounded prefix instead of loading the large page/visual evidence arrays.
+    out={"schema_version":out["schema_version"],"architecture_version":out["architecture_version"],
+         "layer":out["layer"],"timing":out["timing"],
+         **{key:value for key,value in out.items() if key not in {"schema_version","architecture_version","layer","timing"}}}
     write_json(ledger_path,out);return out
 
 def git_checkpoint(repo,paths,message):

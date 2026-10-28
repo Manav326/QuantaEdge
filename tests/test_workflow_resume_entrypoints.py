@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -38,6 +39,61 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("prepare_books:", master)
         self.assertIn("layers68_execute:", master)
         self.assertIn("audit_offline:", master)
+
+    def test_every_dispatch_task_is_wired_to_an_explicit_job(self):
+        master = read("textbook-content-pipeline.yml")
+        task_section = re.search(
+            r"(?ms)^      task:\n.*?^        options:\s*\[([^\]]+)\]",
+            master,
+        )
+        self.assertIsNotNone(task_section, "The visible task dropdown must be explicit.")
+        options = [value.strip().strip("'\"") for value in task_section.group(1).split(",")]
+        self.assertEqual([
+            "refresh_source_cache", "repair_source_cache_queue", "extract_and_mirror",
+            "prepare_layers_1_5", "repair_layers_4_5", "rebuild_corrections",
+            "layers_6_8", "progress_report", "audit_contracts",
+        ], options)
+
+        jobs_section = master.split("\njobs:\n", 1)[1]
+        parts = re.split(r"(?m)^  ([A-Za-z0-9_-]+):\s*$", jobs_section)
+        job_blocks = {
+            parts[index]: parts[index + 1]
+            for index in range(1, len(parts) - 1, 2)
+        }
+        expected_routes = {
+            "refresh_source_cache": ("cache_textbooks",),
+            "repair_source_cache_queue": ("cache_textbooks",),
+            "extract_and_mirror": ("extract_textbooks", "mirror_extraction"),
+            "prepare_layers_1_5": ("prepare_plan", "prepare_validate"),
+            "repair_layers_4_5": ("prepare_plan", "prepare_validate"),
+            "rebuild_corrections": ("rebuild-corrections",),
+            "layers_6_8": ("layers68_validate", "layers68_execute"),
+            "progress_report": ("report-progress",),
+            "audit_contracts": ("audit_offline",),
+        }
+        self.assertEqual(set(options), set(expected_routes))
+        for task, expected_jobs in expected_routes.items():
+            for job in expected_jobs:
+                with self.subTest(task=task, job=job):
+                    self.assertIn(job, job_blocks, f"{task} has a dangling job route.")
+                    self.assertRegex(
+                        job_blocks[job],
+                        rf"inputs\.task\s*==\s*'{re.escape(task)}'",
+                        f"{job} must be gated by task={task}.",
+                    )
+
+        # Expensive/live registry work is an opt-in subtask of the audit only.
+        self.assertIn("inputs.task == 'audit_contracts' && inputs.pull_live_registry == true",
+                      job_blocks["audit_live_registry"])
+        self.assertIn("needs: [validate, prepare_plan, prepare_validate]",
+                      job_blocks["prepare_books"])
+        self.assertIn("fromJSON(needs.prepare_plan.outputs.matrix)",
+                      job_blocks["prepare_books"])
+        self.assertIn("max-parallel: 1", job_blocks["prepare_books"])
+        self.assertIn("default: prepare_only", master)
+        self.assertIn("default: progress_report", master)
+        self.assertNotIn("uses: ./.github/workflows/", master)
+        self.assertNotRegex(master, r"(?m)^\s*(push|schedule|workflow_run):")
 
     def test_redundant_scheduler_and_standalone_visual_workflow_are_removed(self):
         self.assertFalse((WORKFLOWS/"resume-textbook-layers-4-5-automatically.yml").exists())

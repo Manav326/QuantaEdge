@@ -472,6 +472,14 @@ def run_analysis(
             and isinstance(item.get("duration_seconds"), (int, float))
             and not isinstance(item.get("duration_seconds"), bool) and item["duration_seconds"] > 0
         ]
+        model_runtime_samples = [
+            float(item["duration_seconds"]) for item in ordered_results
+            if isinstance(item, dict) and item.get("model") == model
+            and item.get("prompt_version") == PROMPT_VERSION
+            and item.get("analysis_status") in {"DRAFT_REQUIRES_REVIEW", "ANALYSIS_ERROR"}
+            and isinstance(item.get("duration_seconds"), (int, float))
+            and not isinstance(item.get("duration_seconds"), bool) and item["duration_seconds"] > 0
+        ]
         sorted_durations = sorted(duration_samples)
         middle = len(sorted_durations) // 2
         median_duration = (
@@ -482,7 +490,7 @@ def run_analysis(
         results_changed = saved is None or saved.get("results") != ordered_results
         summary = {
             "duration_sample_count": len(duration_samples),
-            "total_model_seconds_recorded": round(sum(duration_samples), 1),
+            "total_model_seconds_recorded": round(sum(model_runtime_samples), 1),
             "median_asset_duration_seconds": round(median_duration, 1) if median_duration is not None else None,
             "estimated_model_seconds_remaining": round(remaining_count * median_duration, 1) if median_duration is not None and len(duration_samples) >= 5 else None,
             "elapsed_seconds_this_attempt": round(time.monotonic() - layer_started_clock, 1),
@@ -492,7 +500,7 @@ def run_analysis(
             "assets_eligible": len(seen),
             "assets_analyzed": analyzed_count,
             "assets_remaining": remaining_count,
-            "assets_completion_percent": round(100 * analyzed_count / len(seen), 1) if seen else 100.0,
+            "assets_completion_percent": round(100 * analyzed_count / len(seen), 1) if seen else 0.0,
             "assets_failed": failed_count,
             "assets_skipped_from_checkpoint": skipped_from_checkpoint,
             "batch_limit": max_assets,
@@ -505,8 +513,8 @@ def run_analysis(
             "attempt_started_at": layer_started_at,
             "updated_at": now_utc,
             "last_progress_at": now_utc if results_changed else ((saved or {}).get("last_progress_at") or (saved or {}).get("created_at") or layer_started_at),
-            "completed_at": ((saved or {}).get("completed_at") or now_utc) if remaining_count == 0 and failed_count == 0 else None,
-            "layer_status": "COMPLETE" if remaining_count == 0 and failed_count == 0 else ("CHECKPOINTED" if processed_this_run or skipped_from_checkpoint else "IN_PROGRESS"),
+            "completed_at": ((saved or {}).get("completed_at") or now_utc) if seen and remaining_count == 0 and failed_count == 0 else None,
+            "layer_status": "COMPLETE" if seen and remaining_count == 0 and failed_count == 0 else ("CHECKPOINTED" if processed_this_run or skipped_from_checkpoint else "IN_PROGRESS"),
             "estimated_model_seconds_remaining": summary["estimated_model_seconds_remaining"],
             "analysis_status": "DRAFT_VISION_ANALYSIS_ONLY",
             "source_inventory": inventory_path.name,

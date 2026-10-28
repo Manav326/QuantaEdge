@@ -695,8 +695,8 @@ def render_markdown(report: dict[str, Any]) -> str:
                 "",
                 "**Per-source-book, per-layer timing**",
                 "",
-                "| Edition | Source book ID | Layer | Status | Actual elapsed | Expected total | Remaining | Last progress (UTC) | Model ETA* |",
-                "|---|---|---|---|---:|---:|---:|---|---:|",
+                "| Edition | Source book ID | Layer | Status | Actual elapsed | Expected total | Remaining | Started (UTC) | Completed (UTC) | Last progress (UTC) | Model ETA* |",
+                "|---|---|---|---|---:|---:|---:|---|---|---|---:|",
             ])
             def _duration_text(value):
                 if not isinstance(value, (int, float)) or isinstance(value, bool):
@@ -713,6 +713,7 @@ def render_markdown(report: dict[str, Any]) -> str:
                         f"{timing['status']} | {_duration_text(timing.get('actual_elapsed_seconds'))} | "
                         f"{_duration_text(timing.get('estimated_total_seconds'))} | "
                         f"{_duration_text(timing.get('estimated_remaining_seconds'))} | "
+                        f"{timing.get('started_at') or '—'} | {timing.get('completed_at') or '—'} | "
                         f"{timing.get('last_progress_at') or '—'} | "
                         f"{_duration_text(timing.get('estimated_model_remaining_seconds'))} |"
                     )

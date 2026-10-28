@@ -129,6 +129,12 @@ class TextbookPairProgressReportTests(unittest.TestCase):
         self.assertIn("English edition", markdown)
         self.assertIn("Hindi edition", markdown)
         self.assertIn("Completion rule", markdown)
+        self.assertIn("Per-source-book, per-layer timing", markdown)
+        self.assertIn("Started (UTC)", markdown)
+        self.assertIn("Completed (UTC)", markdown)
+        first_edition = class6["pairs"][0]["languages"][0]
+        self.assertEqual(list(range(9)), [row["layer"] for row in first_edition["layer_timings"]])
+        self.assertTrue(all("started_at" in row and "completed_at" in row for row in first_edition["layer_timings"]))
         self.assertIs(report["publication_allowed"], False)
 
     def test_pair_only_completes_when_both_language_ledgers_and_indexes_match(self):

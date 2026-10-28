@@ -835,7 +835,7 @@ jobs:
     outputs:
       matrix: ${{ steps.plan_matrix.outputs.matrix }}
     steps:
-      - name: Checkout main
+      - name: Checkout task branch
         uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
@@ -911,7 +911,7 @@ jobs:
       CHECKPOINT_BATCH_SIZE: ${{ inputs.checkpoint_batch_size || '10' }}
       MAX_BATCHES_PER_RUN: 12
     steps:
-      - name: Checkout main with write permission for review metadata
+      - name: Checkout task branch with write permission for review metadata
         uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
@@ -1758,7 +1758,7 @@ jobs:
           MODEL: ${{ inputs.generation_model }}
         run: |
           set -euo pipefail
-          read -r pair_id manifest status6 status7 status8 processed expected unresolved <<< "$(python - "$GITHUB_WORKSPACE" "$CLASS_NO" "$SOURCE_BOOK_ID" <<'PY'
+          read -r pair_id manifest status6 status7 status8 processed expected unresolved model_runtime <<< "$(python - "$GITHUB_WORKSPACE" "$CLASS_NO" "$SOURCE_BOOK_ID" <<'PY'
           import json,sys
           from pathlib import Path
           from scripts.plan_textbook_layer45_matrix import BOOKS
@@ -1783,8 +1783,18 @@ jobs:
           if report.get("overall_status") not in {"IN_PROGRESS","INCOMPLETE","DRAFT_REQUIRES_HUMAN_REVIEW"}:
               raise SystemExit("Unexpected Layers 6–8 run-manifest status.")
           layer_values=report.get("layers") if isinstance(report.get("layers"),dict) else {}
+          timing_values=report.get("layer_timings") if isinstance(report.get("layer_timings"),dict) else {}
+          if set(timing_values) < {"6","7","8"}:
+              raise SystemExit("Layers 6–8 timing handoff missing one or more explicit per-layer timing records.")
+          for layer in (6,7,8):
+              timing=timing_values[str(layer)]
+              if timing.get("layer")!=layer or not isinstance(timing.get("attempt_elapsed_seconds"),(int,float)):
+                  raise SystemExit(f"Layer {layer} timing handoff has invalid layer identity or elapsed duration.")
+              if timing.get("shared_runtime_across_layers_6_8") is not True:
+                  raise SystemExit(f"Layer {layer} does not declare the shared L6–L8 runtime contract.")
           def layer_handoff_status(layer):
-              raw=str(layer_values.get(str(layer),report.get("overall_status","IN_PROGRESS")))
+              timing=timing_values[str(layer)]
+              raw=str(timing.get("status") or layer_values.get(str(layer),report.get("overall_status","IN_PROGRESS")))
               if raw in {"COMPLETE","COMPLETED","NEEDS_REVIEW","DRAFT_MAPPED_REQUIRES_REVIEW","DRAFT_REQUIRES_HUMAN_REVIEW"}:
                   return "NEEDS_REVIEW"
               if raw in {"BLOCKED","FAILED","ERROR"}:
@@ -1796,12 +1806,19 @@ jobs:
           processed=int(report.get("segments_completed",0) or 0)
           expected=int(report.get("segments_total",0) or 0)
           unresolved=sum(int(report.get(k,0) or 0) for k in ("unresolved_source_pages","unresolved_text_pages","unresolved_chapter_segments","unresolved_text_segments"))
-          print(pair_for_book_id(book_id)["book_pair_id"],manifest.relative_to(root).as_posix(),status6,status7,status8,processed,expected,unresolved+int(pending or 0))
+          runtime=(report.get("timing") or {}).get("model_runtime_seconds",0)
+          if not isinstance(runtime,(int,float)) or runtime<0:
+              raise SystemExit("Layers 6–8 cumulative model runtime is invalid.")
+          for layer in (6,7,8):
+              timing=timing_values[str(layer)]
+              if not isinstance(timing.get("cumulative_elapsed_seconds"),(int,float)) or timing["cumulative_elapsed_seconds"]<0:
+                  raise SystemExit(f"Layer {layer} cumulative wall-clock duration is invalid.")
+          print(pair_for_book_id(book_id)["book_pair_id"],manifest.relative_to(root).as_posix(),status6,status7,status8,processed,expected,unresolved+int(pending or 0),runtime)
           PY
           )"
           for stage in 6 7 8; do
             case "$stage" in 6) layer_status="$status6" ;; 7) layer_status="$status7" ;; 8) layer_status="$status8" ;; esac
-            python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$CLASS_NO" --book-pair-id "$pair_id" --source-book-id "$SOURCE_BOOK_ID" --stage "$stage" --status "$layer_status" --reason-code BOUNDED_LAYERS6_8_CHECKPOINT --model "$MODEL" --processed-count "$processed" --expected-count "$expected" --unresolved-count "$unresolved" --completed-batches 1 --artifact "$manifest" --message "Validated per-layer status from the source-bound Layers 6–8 manifest; outputs remain review-only and shared runtime must not be summed across these layers."
+            python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$CLASS_NO" --book-pair-id "$pair_id" --source-book-id "$SOURCE_BOOK_ID" --stage "$stage" --status "$layer_status" --reason-code BOUNDED_LAYERS6_8_CHECKPOINT --model "$MODEL" --processed-count "$processed" --expected-count "$expected" --unresolved-count "$unresolved" --completed-batches 1 --model-run-seconds "$model_runtime" --artifact "$manifest" --message "Validated per-layer status from the source-bound Layers 6–8 manifest; outputs remain review-only and shared runtime must not be summed across these layers."
           done
           git add data/textbook-content-pipeline/handoffs
           if ! git diff --cached --quiet; then
