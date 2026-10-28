@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a686bead76efd1fbd3beafe6eca201df2e124eb24aa5a6482b666be2b8c81eb7",
+  "raw_analysis_sha256": "de1eb161e350b690749c178c3954bb790dd63eac4857c9eedf78d7d166cbe297",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -150297,6 +150297,264 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f13dd9384a13c3ed7ad92808",
+      "asset_sha256": "6e41ccc1f31a378883e7a2df137b3aeee72d84983bee64b286b174721d523bd6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/6e41ccc1f31a378883e7a2df137b3aeee72d84983bee64b286b174721d523bd6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has become water.",
+        "visual_type": "photo",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Bud to Flower",
+          "Cold Water"
+        ],
+        "context_relation": "The text describes changes in physical and chemical states of objects over time.",
+        "limitations": [
+          "The text does not provide specific details about the temperature or conditions under which these changes occur."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634814830",
+      "checkpointed_at": "2026-10-28T09:03:58Z",
+      "effective_analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has become water.",
+        "visual_type": "photo",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Bud to Flower",
+          "Cold Water"
+        ],
+        "context_relation": "The text describes changes in physical and chemical states of objects over time.",
+        "limitations": [
+          "The text does not provide specific details about the temperature or conditions under which these changes occur."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a75282fccd033c3c0385be62",
+      "asset_sha256": "6e41ccc1f31a378883e7a2df137b3aeee72d84983bee64b286b174721d523bd6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/6e41ccc1f31a378883e7a2df137b3aeee72d84983bee64b286b174721d523bd6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has transformed into water.",
+        "visual_type": "photo",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Transformation of Ice to Water"
+        ],
+        "context_relation": "The image illustrates a physical and chemical change, showing the transformation of ice into water.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reaction involved in the transformation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634814830",
+      "checkpointed_at": "2026-10-28T09:04:15Z",
+      "effective_analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has transformed into water.",
+        "visual_type": "photo",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Transformation of Ice to Water"
+        ],
+        "context_relation": "The image illustrates a physical and chemical change, showing the transformation of ice into water.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reaction involved in the transformation."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b470bb896e14e519ba0ac150",
+      "asset_sha256": "c6633b9bd327ccfb8f30e1b018c5a1846a7e128a6f1a1c2a19610792ba99be86",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/c6633b9bd327ccfb8f30e1b018c5a1846a7e128a6f1a1c2a19610792ba99be86.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a banana with brown spots.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of changes in nature, specifically the transformation of a bud into a flower.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634814830",
+      "checkpointed_at": "2026-10-28T09:05:46Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a banana with brown spots.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of changes in nature, specifically the transformation of a bud into a flower.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c31994d17fc7d52925436a91",
+      "asset_sha256": "b0f7fdb15dd6807f33b47ed95f3c8632b3e33c7e3da024c2792c359ca34fb22b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/b0f7fdb15dd6807f33b47ed95f3c8632b3e33c7e3da024c2792c359ca34fb22b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A ripe banana with brown spots, possibly indicating overripe or rotting.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of changes in nature, specifically the transformation of a bud into a flower.",
+        "limitations": [
+          "The image does not provide specific details about the changes in nature, only a general concept of transformation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634814830",
+      "checkpointed_at": "2026-10-28T09:07:22Z",
+      "effective_analysis": {
+        "visual_summary": "A ripe banana with brown spots, possibly indicating overripe or rotting.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of changes in nature, specifically the transformation of a bud into a flower.",
+        "limitations": [
+          "The image does not provide specific details about the changes in nature, only a general concept of transformation."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ad23af3ee3f35f9dd7d113b9",
+      "asset_sha256": "2a129b3ecdaffcc0f018c37777127d5762f6dbc2ea1c2cfdef693f4a6b8bd562",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/2a129b3ecdaffcc0f018c37777127d5762f6dbc2ea1c2cfdef693f4a6b8bd562.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A banana with a green background.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago. It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Bud to Flower",
+          "Cold Water"
+        ],
+        "context_relation": "The image is related to the text discussing changes in physical and chemical states of matter.",
+        "limitations": [
+          "The image does not provide specific details about the changes in the matter.",
+          "The image does not show the actual changes in the matter, only a visual representation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634814830",
+      "checkpointed_at": "2026-10-28T09:09:02Z",
+      "effective_analysis": {
+        "visual_summary": "A banana with a green background.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago. It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Bud to Flower",
+          "Cold Water"
+        ],
+        "context_relation": "The image is related to the text discussing changes in physical and chemical states of matter.",
+        "limitations": [
+          "The image does not provide specific details about the changes in the matter.",
+          "The image does not show the actual changes in the matter, only a visual representation."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
