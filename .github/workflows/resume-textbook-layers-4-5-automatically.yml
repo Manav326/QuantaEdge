@@ -37,6 +37,28 @@ jobs:
           fetch-depth: 1
           persist-credentials: true
 
+      - name: Generate class-wise and bilingual subject-pair progress report
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/report_textbook_pair_progress.py
+          python -m unittest discover -s tests -p "test_report_textbook_pair_progress.py" -v
+          python scripts/report_textbook_pair_progress.py \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --json-out "$RUNNER_TEMP/textbook-progress.v1.json" \
+            --markdown-out "$RUNNER_TEMP/textbook-progress.md"
+          cat "$RUNNER_TEMP/textbook-progress.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload class-wise and bilingual-pair progress reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: class-6-8-bilingual-textbook-progress
+          path: |
+            ${{ runner.temp }}/textbook-progress.v1.json
+            ${{ runner.temp }}/textbook-progress.md
+          if-no-files-found: error
+          retention-days: 14
+
       - name: Reconcile active runs and dispatch checkpoint resumes
         env:
           GH_TOKEN: ${{ github.token }}
