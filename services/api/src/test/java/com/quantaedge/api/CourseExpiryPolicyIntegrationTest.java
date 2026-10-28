@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,8 +79,8 @@ class CourseExpiryPolicyIntegrationTest {
       set status='ACTIVE',enrolled_at=timestamptz '2027-01-01 00:00:00+05:30',updated_at=now()
       where student_id=? and institution_id=? and program_id=?
       """, firstStudent, institutionId, programId);
-    assertEquals("2026-10-27 10:00:00", expiryLocal(firstStudent, institutionId, programId),
-        "Resuming a paused enrolment must preserve the original expiry.");
+    assertEquals(firstExpiry, expiryLocal(firstStudent, institutionId, programId),
+        "Resuming a paused enrolment must preserve the original computed expiry.");
     assertEquals(originalEnrollmentDate, jdbc.queryForObject("""
       select to_char(enrolled_at at time zone 'Asia/Kolkata','YYYY-MM-DD HH24:MI:SS')
       from student_program_enrollment
@@ -160,25 +161,47 @@ class CourseExpiryPolicyIntegrationTest {
       where identity.stable_course_key='CLASS_6' and identity.status='ACTIVE'
       order by program.content_version_no desc,program.id desc limit 1
       """, (rs, row) -> new long[]{rs.getLong(1), rs.getLong(2)});
-    long identityId=course[0];
-    long programId=course[1];
+    long sourceIdentityId=course[0];
+    long sourceProgramId=course[1];
     assertFalse(Boolean.TRUE.equals(jdbc.queryForObject("""
       select course_expiry_policy_required from institution_course_identity where id=?
-      """,Boolean.class,identityId)),
+      """,Boolean.class,sourceIdentityId)),
       "Existing identities must be grandfathered by the migration.");
 
-    // Simulate a new registration inside this transaction. Existing production identities stay
-    // grandfathered; a newly registered identity carries the policy-required flag.
-    jdbc.update("delete from course_expiry_policy where course_identity_id=?",identityId);
-    jdbc.update("update institution_course_identity set course_expiry_policy_required=true where id=?",identityId);
+    // Create an isolated, newly registered logical course. Never mutate a production course
+    // identity or bypass the immutable released-course guard just to set up this test.
+    long identityId=jdbc.queryForObject("""
+      insert into institution_course_identity(
+        source_institution_id,stable_course_key,display_name,course_type_code,course_expiry_policy_required
+      )
+      select source_institution_id,
+        'qe_expiry_test_'||replace(gen_random_uuid()::text,'-',''),
+        'Expiry-required integration fixture',course_type_code,true
+      from institution_course_identity where id=?
+      returning id
+      """,Long.class,sourceIdentityId);
+    long programId=jdbc.queryForObject("""
+      insert into curriculum_program(
+        class_id,code,display_name,stream_code,curriculum_version,status,notes,public_id_prefix,
+        course_type_code,course_identity_id,content_version_no
+      )
+      select class_id,'QE_EXP_'||replace(gen_random_uuid()::text,'-',''),
+        'Expiry-required integration fixture',stream_code,'EXPIRY_TEST','ACTIVE',
+        'Isolated course expiry policy integration fixture','INS',course_type_code,?,1
+      from curriculum_program where id=?
+      returning id
+      """,Long.class,identityId,sourceProgramId);
     long studentId=createStudent("Course expiry required-policy fixture",institutionId);
 
-    assertThrows(DataAccessException.class, () -> jdbc.update("""
+    DataAccessException error=assertThrows(DataAccessException.class, () -> jdbc.update("""
       insert into student_program_enrollment(
         student_id,program_id,institution_id,status,enrolled_at,ended_at,created_at,updated_at
       ) values(?,?,?,'ACTIVE',now(),null,now(),now())
       """,studentId,programId,institutionId),
       "The database must reject an active enrolment until HRMS configures the required shared policy.");
+    assertTrue(String.valueOf(error.getMostSpecificCause().getMessage())
+        .contains("COURSE_EXPIRY_POLICY_REQUIRED"),
+        "The failure must come from the expiry-policy guard, not an unrelated constraint.");
   }
 
   private long createStudent(String displayName, long institutionId) {
