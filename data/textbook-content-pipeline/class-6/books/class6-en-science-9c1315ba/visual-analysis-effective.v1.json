@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3a385ae2365e91779701df5b8be601d4a724eecf0cbd8f69111ce95c69c4a7ba",
+  "raw_analysis_sha256": "c70da262990a58d2da30814530f9842022d9558b8d1cedee999c078e6499f465",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -57191,7 +57191,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
-      "checkpointed_at": "2026-10-28T06:15:08Z",
+      "checkpointed_at": "2026-10-28T06:31:40Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66842,7 +66842,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
-      "checkpointed_at": "2026-10-28T06:16:02Z",
+      "checkpointed_at": "2026-10-28T06:32:31Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -72992,7 +72992,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40621809658",
+      "run_id": "40634725428",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "limitations must be a list of strings.",
       "human_review_required": true,
@@ -73178,6 +73178,116 @@
         "limitations": [
           "unclear if the page is a full page or a cropped figure",
           "no visible content to analyze"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "56b6fc3411ed6da127bdf529",
+      "asset_sha256": "a6ab21c97b0914aa0dbaf18255e6f2d5c0c9f612679ae9b6c8b24de6bcbaf658",
+      "page_text_context_sha256": "4d8a978efdc3916deccdf2297702a3ec80af954e31af26a34234bc994d835ea7",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 154,
+      "asset_path": "page-0154.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "196a12171cfe626518387d47",
+      "asset_sha256": "a03fe4effcb2fe848384524f96072edef22546d761ce490ee5167a8512cf46b2",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 155,
+      "asset_path": "assets/a03fe4effcb2fe848384524f96072edef22546d761ce490ee5167a8512cf46b2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "414e3023651740cc3c8afc9d0e8f849dd2a71c5e82283c024e6bf73d3eca92be",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a pencil over a beaker of water.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Let us enhance our learning",
+          "1. The normal temperature of a healthy human being is close to",
+          "(i) 98.6 °C",
+          "(ii) 37.0 °C",
+          "(iii) 32.0 °C",
+          "(iv) 27.0 °C",
+          "2. 37 °C is the same temperature as",
+          "(i) 97.4 °F",
+          "(ii) 97.6 °F",
+          "(iii) 98.4 °F",
+          "(iv) 98.6 °F",
+          "3. Fill in the blanks:",
+          "(i) The hotness or coldness of a system is determined by its",
+          "(ii) The temperature of ice-cold water cannot be measured",
+          "by a",
+          "(iii) The temperature of ice-cold water cannot be measured",
+          "by a",
+          "(iv) The temperature of ice-cold water cannot be measured",
+          "by a"
+        ],
+        "concepts": [
+          "Temperature",
+          "Measurement of temperature",
+          "Normal human body temperature",
+          "Conversion between Celsius and Fahrenheit"
+        ],
+        "context_relation": "The image is a visual representation of the concepts related to temperature measurement and normal human body temperature.",
+        "limitations": [
+          "The image does not provide specific details about the temperature measurement process or the conversion between Celsius and Fahrenheit."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T06:43:54Z",
+      "effective_analysis": {
+        "visual_summary": "A hand holding a pencil over a beaker of water.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Let us enhance our learning",
+          "1. The normal temperature of a healthy human being is close to",
+          "(i) 98.6 °C",
+          "(ii) 37.0 °C",
+          "(iii) 32.0 °C",
+          "(iv) 27.0 °C",
+          "2. 37 °C is the same temperature as",
+          "(i) 97.4 °F",
+          "(ii) 97.6 °F",
+          "(iii) 98.4 °F",
+          "(iv) 98.6 °F",
+          "3. Fill in the blanks:",
+          "(i) The hotness or coldness of a system is determined by its",
+          "(ii) The temperature of ice-cold water cannot be measured",
+          "by a",
+          "(iii) The temperature of ice-cold water cannot be measured",
+          "by a",
+          "(iv) The temperature of ice-cold water cannot be measured",
+          "by a"
+        ],
+        "concepts": [
+          "Temperature",
+          "Measurement of temperature",
+          "Normal human body temperature",
+          "Conversion between Celsius and Fahrenheit"
+        ],
+        "context_relation": "The image is a visual representation of the concepts related to temperature measurement and normal human body temperature.",
+        "limitations": [
+          "The image does not provide specific details about the temperature measurement process or the conversion between Celsius and Fahrenheit."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
