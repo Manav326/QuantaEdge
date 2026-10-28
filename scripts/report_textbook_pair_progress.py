@@ -92,6 +92,10 @@ def book_progress(repo_root: Path, source: dict[str, str]) -> dict[str, Any]:
     )
     inventory_present = inventory_path.is_file()
     blockers: list[str] = []
+    if index_error not in (None, "missing"):
+        blockers.append("pipeline index is unreadable")
+    if ledger_error not in (None, "missing"):
+        blockers.append("coverage ledger is unreadable or its summary is beyond the bounded prefix")
     existing = inventory_present or index_path.exists() or ledger_path.exists()
     expected_sha = ""
     raw_path: Path | None = None
@@ -140,6 +144,10 @@ def book_progress(repo_root: Path, source: dict[str, str]) -> dict[str, Any]:
             blockers.append("pipeline index points to a different coverage ledger")
     elif ledger_error not in (None, "missing"):
         blockers.append("coverage ledger is unreadable or its summary is beyond the bounded prefix")
+    if ledger_error == "missing" and index is not None and (index.get("layers") or {}).get("5") == "COMPLETE":
+        blockers.append("pipeline index marks Layer 5 complete but its coverage ledger is missing")
+    if index is None and index_error == "missing" and ledger_fields.get("ledger_status") == "COMPLETE":
+        blockers.append("coverage ledger claims completion but the pipeline index is missing")
 
     raw_summary = raw_fields.get("summary") or {}
     eligible = raw_summary.get("assets_eligible")
@@ -194,8 +202,10 @@ def book_progress(repo_root: Path, source: dict[str, str]) -> dict[str, Any]:
 
     if raw_path is not None and raw_path.exists() and raw_error not in (None, "missing"):
         blockers.append("raw analysis checkpoint is unreadable or its summary is beyond the bounded prefix")
-        if status != "COMPLETE":
-            status = "BLOCKED"
+    if raw_error == "missing" and index is not None and (index.get("layers") or {}).get("5") == "COMPLETE":
+        blockers.append("pipeline index marks Layer 5 complete but its raw analysis checkpoint is missing")
+    if blockers and status != "COMPLETE":
+        status = "BLOCKED"
 
     return {
         "class_no": grade,
