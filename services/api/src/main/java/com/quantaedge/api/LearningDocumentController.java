@@ -823,6 +823,8 @@ public class LearningDocumentController {
             and cps.class_id=s.class_id
           join student_program_enrollment spe on spe.student_id=st.id
             and spe.institution_id=m.institution_id and spe.program_id=ep.id and spe.status='ACTIVE'
+             and spe.course_access_blocked=false
+             and (spe.course_expires_at is null or spe.course_expires_at>statement_timestamp())
           join institution_course_assignment course_assignment
             on course_assignment.institution_id=m.institution_id and course_assignment.status='ASSIGNED'
           join institution_course_release course_release on course_release.id=course_assignment.course_release_id

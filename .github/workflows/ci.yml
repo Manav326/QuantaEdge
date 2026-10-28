@@ -56,19 +56,19 @@ jobs:
       - name: Validate cross-register QA documentation
         run: node scripts/validate_qa_registers.mjs --root .
 
-      - name: Upload UI localization route inventory
-        uses: actions/upload-artifact@v4
-        with:
-          name: ui-localization-route-inventory
-          path: ${{ runner.temp }}/ui-localization-route-inventory.json
-          if-no-files-found: error
-          retention-days: 14
-
       - name: Upload contextual UI copy quality report
         uses: actions/upload-artifact@v4
         with:
           name: ui-copy-quality-audit
           path: ${{ runner.temp }}/ui-copy-quality-audit.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload UI localization route inventory
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-localization-route-inventory
+          path: ${{ runner.temp }}/ui-localization-route-inventory.json
           if-no-files-found: error
           retention-days: 14
 

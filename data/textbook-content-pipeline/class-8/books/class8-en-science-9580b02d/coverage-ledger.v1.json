@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1354,
-    "successful_visual_analyses": 1338,
-    "missing_visual_analyses": 937,
-    "failed_visual_analyses": 16,
+    "raw_analysis_result_rows": 1363,
+    "successful_visual_analyses": 1350,
+    "missing_visual_analyses": 928,
+    "failed_visual_analyses": 13,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 953,
+    "unresolved_count": 941,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -36761,9 +36761,45 @@
       "asset_path": "page-0056.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing non-communicable diseases, specifically diabetes, and their causes.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "What will happen if I\n take excess amount of\n any of the minerals or\n vitamins?",
+          "which are caused by a lack of specific nutrients\n in the diet. These are called deficiency diseases\n and are also non-communicable.",
+          "Diseases such as cancer, diabetes, and asthma may often persist\n for a long time (more than 3 months) and are referred to as\n chronic diseases.",
+          "Diabetes is a common disease which is becoming more\n prevalent in adults as well as children. In fact, India now has\n one of the highest numbers of people with diabetes in the world.\n It often develops due to a combination of hormonal imbalances,\n unhealthy eating habits, lack of physical activity, ",
+          "Let us learn more about the causes of non-communicable\ndiseases and their prevention.",
+          "Activity 3.5: Let us survey",
+          "- Find out the three most common lifestyle-related diseases in\n your neighbourhood",
+          "- Talk to a doctor, nurse, health worker or even a family\n member who knows about health and what kind of lifestyle\n changes can help prevent or manage these diseases.",
+          "- You can also consult trusted health websites, books, teachers\n and doctors.",
+          "- Fill in Table 3.2 and learn more about lifestyle-related diseases.",
+          "Table 3.2: Non-communicable diseases",
+          "S. No. | Name of common\n lifestyle-related diseases | Signs and\n symptoms | Suggested\n lifestyle change(s)",
+          "1. | Obesity | Eating a balanced\n diet and exercising\n regularly",
+          "2. | Diabetes | - Frequent\n urination\n - Excessive thirst\n - Weight loss\n - Tiredness\n - Slow healing",
+          "3. | High blood pressure",
+          "4. | …………………………\n …………………………\n …………………………",
+          "Curiosity — Textbook of Science for Grade 8\n Reprint 2026-27"
+        ],
+        "concepts": [
+          "non-communicable diseases",
+          "diabetes",
+          "lifestyle-related diseases",
+          "deficiency diseases",
+          "chronic diseases",
+          "obesity",
+          "high blood pressure"
+        ],
+        "context_relation": "The page discusses the causes and prevention of non-communicable diseases, with a focus on diabetes.",
+        "limitations": [
+          "The page does not provide specific solutions or advice for preventing non-communicable diseases.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -44763,8 +44799,8 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "diagram",
+        "visual_summary": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and muscular force.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -44780,9 +44816,9 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
+        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and muscular force.",
         "limitations": [
-          "The image does not provide specific details about the types of forces or the physical properties of the objects."
+          "The image does not provide specific examples or explanations for each type of force."
         ]
       },
       "chapter_id": null,
@@ -49670,11 +49706,9 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
+        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface.",
         "visual_type": "diagram",
         "visible_text": [
-          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
-          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
           "Activity 6.4: Let us perform",
           "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
           "Do you realise that it sticks to the surface?",
@@ -49695,18 +49729,12 @@
           "millibar",
           "hectopascal",
           "wind formation",
-          "pressure difference",
-          "atmospheric force",
-          "air movement",
-          "fluids and gases in tissues and organs",
-          "atmospheric pressure balance",
-          "wind strength",
-          "wind damage"
+          "inflated balloon",
+          "puncture in the bicycle tube"
         ],
-        "context_relation": "educational",
+        "context_relation": "descriptive",
         "limitations": [
-          "The image does not show the actual experiment with the rubber sucker.",
-          "The image does not show the actual measurement of atmospheric pressure."
+          "The image does not show the actual experiment of pulling the sucker off the surface."
         ]
       },
       "chapter_id": null,
@@ -50090,9 +50118,37 @@
       "asset_path": "page-0109.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing two balloons being blown between each other, with a caption asking what happens to the balloons and what observations can be made.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 6.6: Let us observe",
+          "• Take two balloons of the same size.",
+          "• Inflate both balloons and tie strings to them.",
+          "• Hang the two balloons from a stick, leaving a gap of 6–10 cm (Fig. 6.13).",
+          "• Now, blow air into the narrow space between the balloons.",
+          "• What happens to the balloons? Note down your observations.",
+          "• Now blow harder and observe.",
+          "Fig. 6.13: Blowing between two balloons",
+          "When you blow between the two balloons, you observe that they move towards each other. This happens because when you blow air between the balloons, a low pressure area is created between them. The higher air pressure surrounding the balloon pushes them towards each other. You must have observed that"
+        ],
+        "concepts": [
+          "Pressure",
+          "Wind",
+          "Cyclones",
+          "Sea breeze",
+          "Land breeze",
+          "High-speed winds",
+          "Air pressure",
+          "Balloon experiment"
+        ],
+        "context_relation": "The image is a part of a textbook page explaining the concept of high-speed winds and their effect on air pressure.",
+        "limitations": [
+          "The image does not show the actual experiment, only a diagram of it."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -50288,9 +50344,26 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An explanation of how high-speed winds create low-pressure areas over houses, leading to potential roof damage.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "When high-speed winds blow over houses, a low-pressure area is created over them, as high-speed winds are accompanied by a reduced pressure. Therefore, the air pressure above the roofs of the houses is lower than the pressure below them. If the pressure difference is large and the roofs are weak, th",
+          "When high-speed winds blow over houses, a low-pressure area is created over them, as high-speed winds are accompanied by a reduced pressure. Therefore, the air pressure above the roofs of the houses is lower than the pressure below them. If the pressure difference is large and the roofs are weak, th"
+        ],
+        "concepts": [
+          "high-speed winds",
+          "low-pressure areas",
+          "air pressure",
+          "roof damage"
+        ],
+        "context_relation": "Explanatory",
+        "limitations": [
+          "The image does not show any visual representation of the described phenomenon."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -50566,9 +50639,42 @@
       "asset_path": "page-0111.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the movement of positively and negatively charged particles in clouds.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "and  ice  particles. You have learnt in the chapter\n‘Exploring Forces’ that when two objects are rubbed\nagainst each other, they get charged. In this case, strong\nwinds blowing upwards and downwards and rubbing\nagainst each other cause  static  electric charges to\ndevelop within the clouds.\n\nThe pos",
+          "Fig. 6.16: Lightning",
+          "A step further",
+          "Isolated and localised thunderstorms can sometimes occur in various\nregions of India. These thunderstorms are known by various names\nsuch as Kalboishakhi in West Bengal, Bihar, and Jharkhand and\nBordoisila in Assam. They occur before the arrival of the monsoon,\nthereby helping kharif crops to grow. "
+        ],
+        "concepts": [
+          "static electric charges",
+          "clouds",
+          "positive and negative charges",
+          "lightning",
+          "thunderstorms",
+          "monsoon",
+          "kharif crops",
+          "mango showers",
+          "coffee plants",
+          "precautions",
+          "lightning",
+          "tall objects",
+          "low-lying open area",
+          "crouching down",
+          "umbrella with a metallic rod",
+          "water",
+          "bus or a car"
+        ],
+        "context_relation": "The image is a diagram showing the movement of positively and negatively charged particles in clouds.",
+        "limitations": [
+          "The image does not provide specific details about the physical properties of the particles or the exact mechanism of charge separation.",
+          "The image does not show the actual movement of the particles or the formation of clouds."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -50613,9 +50719,30 @@
       "asset_path": "assets/0d4ae3cbdccd1ec76a47e0caf27b553ccd6824b869f53b19c6551d7b622daafa.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the path of a lightning conductor in a building.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ever heard of...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building.",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides an easy path for the lightning to flow."
+        ],
+        "concepts": [
+          "Lightning conductor",
+          "Building construction",
+          "Path of lightning",
+          "High point of the building",
+          "Ground burial"
+        ],
+        "context_relation": "The image is a visual representation of the lightning conductor's function in a building.",
+        "limitations": [
+          "The image does not show the actual lightning conductor or its installation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -50631,9 +50758,30 @@
       "asset_path": "assets/037e99c9177703b60d69b8e346334b6a0ce5699b23340c39a5b1afdcfbbeb71f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Diagram showing the path of lightning through a lightning conductor.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ever heard of...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building.",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides easy path for the",
+          "lightning to flow through."
+        ],
+        "concepts": [
+          "Lightning conductor",
+          "Lightning path",
+          "Building construction"
+        ],
+        "context_relation": "The image illustrates the function of a lightning conductor in preventing lightning strikes on buildings.",
+        "limitations": [
+          "The image does not provide specific details about the construction or design of the lightning conductor.",
+          "The image does not show the actual lightning strike or the path it takes through the conductor."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -50649,9 +50797,30 @@
       "asset_path": "assets/8e61f453d3c31180a272e18163268e884bd5b2f6a3cfb321171001e82767c8af.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram of a lightning conductor in a building.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ever heard of ...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building.",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides easy path for the",
+          "lightning"
+        ],
+        "concepts": [
+          "Lightning conductor",
+          "Building construction",
+          "Lightning protection"
+        ],
+        "context_relation": "The image is a diagram explaining the function and placement of a lightning conductor in a building.",
+        "limitations": [
+          "The image does not show the actual installation or the lightning protection it provides.",
+          "The image does not include any measurements or specific details about the rod's length or burial depth."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -50667,9 +50836,30 @@
       "asset_path": "assets/5b564cee455441614121bc3f587c05025d5b7cc10331ecb7f73a796915a143b2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Illustration of a three-story building with a lightning conductor attached to its side.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Ever heard of ...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building.",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides easy path for the",
+          "lightning to flow through."
+        ],
+        "concepts": [
+          "Lightning conductor",
+          "Building construction",
+          "Lightning protection",
+          "Grounding"
+        ],
+        "context_relation": "The image illustrates the concept of a lightning conductor in building construction, explaining its purpose and installation.",
+        "limitations": [
+          "The image does not show the actual installation process or the lightning flow."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -50685,9 +50875,33 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A lightning conductor is a metallic rod installed along the walls of buildings during construction. One end is pointed and kept higher than the highest point of the building, while the other end is buried deep in the ground.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Ever heard of ...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building (Fig. 6.18).",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides easy path for the"
+        ],
+        "concepts": [
+          "lightning conductor",
+          "metallic rod",
+          "construction",
+          "walls of buildings",
+          "pointed end",
+          "highest point of the building",
+          "buried deep in the ground",
+          "easy path"
+        ],
+        "context_relation": "description",
+        "limitations": [
+          "The image does not show the lightning conductor in action or its function."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -50703,9 +50917,33 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A lightning conductor is a metallic rod installed along the walls of buildings during construction. One end is pointed and kept higher than the highest point of the building, while the other end is buried deep in the ground.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Ever heard of ...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building (Fig. 6.18).",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides easy path for the"
+        ],
+        "concepts": [
+          "lightning conductor",
+          "metallic rod",
+          "construction",
+          "walls of buildings",
+          "pointed end",
+          "highest point of the building",
+          "buried deep in the ground",
+          "easy path"
+        ],
+        "context_relation": "descriptive",
+        "limitations": [
+          "The image does not show the lightning conductor in action or its function."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -50721,9 +50959,25 @@
       "asset_path": "page-0112.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a lightning conductor attached to a building.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ever heard of ...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction. One end of the rod is pointed. This end is kept higher than the highest point of the building (Fig. 6.18). The other end of the rod is buried deep in the ground. The rod provides easy path for t",
+          "Fig. 6.18: A lightning conductor"
+        ],
+        "concepts": [
+          "lightning conductor",
+          "building construction"
+        ],
+        "context_relation": "explanation",
+        "limitations": [
+          "Fig. 6.18 is not visible in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -50739,7 +50993,7 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -50757,9 +51011,36 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cyclone's aftermath, including destruction and flooding.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "Even as a cyclone loses its strength while travelling over land, it leaves behind a trail of destruction that can take months or even years to repair. Cyclones can be extremely destructive. For example, the Amphan cyclone in 2020 had peak wind speeds of 270 km/h.",
+          "Strong winds during a cyclone push ocean water towards the shore, creating a wall of water that can be as high as 3–12 metres. This surge of water can flood coastal areas and even areas far from the sea. The heavy rainfall which acc",
+          "93"
+        ],
+        "concepts": [
+          "Cyclone",
+          "Wind",
+          "Storm",
+          "Cyclones",
+          "Amphan cyclone",
+          "Peak wind speeds",
+          "Cyclone aftermath",
+          "Destruction",
+          "Flooding",
+          "Coastal areas",
+          "Heavy rainfall"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the effects of cyclones, specifically focusing on the aftermath and destructive power of a cyclone.",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "The text is not clear enough to determine the exact content of the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

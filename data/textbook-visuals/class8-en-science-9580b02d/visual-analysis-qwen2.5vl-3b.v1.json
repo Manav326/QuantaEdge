@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1339,
+    "assets_selected": 1349,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
-      "f492c50e9c7d7ef8d140ae06",
-      "4fdef3a69f918bffeb046522",
-      "35ff0b921f1e0b0945a8f8df"
+      "414a0224c90f14c01c7da9e7",
+      "0037fd56b1a6a076dd9cad41",
+      "aa8a149fa698d13f05cfdb3e"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1334,
-    "assets_remaining": 957,
-    "assets_completion_percent": 58.2,
-    "assets_failed": 16,
-    "assets_skipped_from_checkpoint": 1334,
+    "assets_analyzed": 1344,
+    "assets_remaining": 947,
+    "assets_completion_percent": 58.7,
+    "assets_failed": 13,
+    "assets_skipped_from_checkpoint": 1344,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1223,8 +1223,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40520039010",
-      "checkpointed_at": "2026-10-27T15:16:50Z"
+      "run_id": "40620560465",
+      "checkpointed_at": "2026-10-28T02:38:13Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -19840,7 +19840,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40520039010",
+      "run_id": "40620560465",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -20167,8 +20167,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40520039010",
-      "checkpointed_at": "2026-10-27T15:17:27Z"
+      "run_id": "40620560465",
+      "checkpointed_at": "2026-10-28T02:38:37Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -22087,7 +22087,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40520039010",
+      "run_id": "40620560465",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -25823,7 +25823,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40520039010",
+      "run_id": "40620560465",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -26008,9 +26008,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40520039010",
+      "run_id": "40620560465",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -30187,19 +30187,57 @@
     {
       "asset_id": "aa8a149fa698d13f05cfdb3e",
       "asset_sha256": "a8bff6a187b2efe41cc2a610ef3c9f60213b5cb423e2f45f3be634949b0a5c30",
-      "page_text_context_sha256": "213175e04b179deec928148e10c9927eab34f0b8901d651f9fe4a064ff5eef0b",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 56,
       "asset_path": "page-0056.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "213175e04b179deec928148e10c9927eab34f0b8901d651f9fe4a064ff5eef0b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40520039010",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing non-communicable diseases, specifically diabetes, and their causes.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "What will happen if I\n take excess amount of\n any of the minerals or\n vitamins?",
+          "which are caused by a lack of specific nutrients\n in the diet. These are called deficiency diseases\n and are also non-communicable.",
+          "Diseases such as cancer, diabetes, and asthma may often persist\n for a long time (more than 3 months) and are referred to as\n chronic diseases.",
+          "Diabetes is a common disease which is becoming more\n prevalent in adults as well as children. In fact, India now has\n one of the highest numbers of people with diabetes in the world.\n It often develops due to a combination of hormonal imbalances,\n unhealthy eating habits, lack of physical activity, ",
+          "Let us learn more about the causes of non-communicable\ndiseases and their prevention.",
+          "Activity 3.5: Let us survey",
+          "- Find out the three most common lifestyle-related diseases in\n your neighbourhood",
+          "- Talk to a doctor, nurse, health worker or even a family\n member who knows about health and what kind of lifestyle\n changes can help prevent or manage these diseases.",
+          "- You can also consult trusted health websites, books, teachers\n and doctors.",
+          "- Fill in Table 3.2 and learn more about lifestyle-related diseases.",
+          "Table 3.2: Non-communicable diseases",
+          "S. No. | Name of common\n lifestyle-related diseases | Signs and\n symptoms | Suggested\n lifestyle change(s)",
+          "1. | Obesity | Eating a balanced\n diet and exercising\n regularly",
+          "2. | Diabetes | - Frequent\n urination\n - Excessive thirst\n - Weight loss\n - Tiredness\n - Slow healing",
+          "3. | High blood pressure",
+          "4. | …………………………\n …………………………\n …………………………",
+          "Curiosity — Textbook of Science for Grade 8\n Reprint 2026-27"
+        ],
+        "concepts": [
+          "non-communicable diseases",
+          "diabetes",
+          "lifestyle-related diseases",
+          "deficiency diseases",
+          "chronic diseases",
+          "obesity",
+          "high blood pressure"
+        ],
+        "context_relation": "The page discusses the causes and prevention of non-communicable diseases, with a focus on diabetes.",
+        "limitations": [
+          "The page does not provide specific solutions or advice for preventing non-communicable diseases.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40620560465",
+      "checkpointed_at": "2026-10-28T02:45:42Z"
     },
     {
       "asset_id": "a948186878e29a2b89dab845",
@@ -30639,7 +30677,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40520039010",
+      "run_id": "40608667133",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -38114,9 +38152,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40520039010",
+      "run_id": "40608667133",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -38420,8 +38458,8 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
-        "visual_type": "diagram",
+        "visual_summary": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and muscular force.",
+        "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
           "When you pushed the table with your hand, did you feel a force on your hand too? The moment you stopped pushing, the force on your hand disappeared. Whenever two objects interact, each object experiences a force from the other. As soon as the interaction ceases, the two objects no longer experience ",
@@ -38437,16 +38475,16 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
+        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and muscular force.",
         "limitations": [
-          "The image does not provide specific details about the types of forces or the physical properties of the objects."
+          "The image does not provide specific examples or explanations for each type of force."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40520039010",
-      "checkpointed_at": "2026-10-27T15:18:09Z"
+      "run_id": "40608667133",
+      "checkpointed_at": "2026-10-28T02:08:52Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -39067,7 +39105,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40520039010",
+      "run_id": "40608667133",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -40128,7 +40166,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40520039010",
+      "run_id": "40608667133",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -42339,7 +42377,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40520039010",
+      "run_id": "40608667133",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -42393,7 +42431,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40520039010",
+      "run_id": "40608667133",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
       "human_review_required": true,
@@ -43273,7 +43311,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40501519107",
+      "run_id": "40608667133",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -43458,11 +43496,9 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
+        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface.",
         "visual_type": "diagram",
         "visible_text": [
-          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
-          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
           "Activity 6.4: Let us perform",
           "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
           "Do you realise that it sticks to the surface?",
@@ -43483,25 +43519,19 @@
           "millibar",
           "hectopascal",
           "wind formation",
-          "pressure difference",
-          "atmospheric force",
-          "air movement",
-          "fluids and gases in tissues and organs",
-          "atmospheric pressure balance",
-          "wind strength",
-          "wind damage"
+          "inflated balloon",
+          "puncture in the bicycle tube"
         ],
-        "context_relation": "educational",
+        "context_relation": "descriptive",
         "limitations": [
-          "The image does not show the actual experiment with the rubber sucker.",
-          "The image does not show the actual measurement of atmospheric pressure."
+          "The image does not show the actual experiment of pulling the sucker off the surface."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40501519107",
-      "checkpointed_at": "2026-10-27T13:56:32Z"
+      "run_id": "40608667133",
+      "checkpointed_at": "2026-10-28T02:10:17Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -43883,19 +43913,49 @@
     {
       "asset_id": "6c1022d163de9567aa2cefaa",
       "asset_sha256": "20085fbaf73c4d2032c11020893111e13fad5c700c7f5a5a01ca131fd0707a6b",
-      "page_text_context_sha256": "074b5d86b43b2bf51ba58ce13721abba85145a2647097a19f4233e38b436919e",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 109,
       "asset_path": "page-0109.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "074b5d86b43b2bf51ba58ce13721abba85145a2647097a19f4233e38b436919e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40501519107",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing two balloons being blown between each other, with a caption asking what happens to the balloons and what observations can be made.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 6.6: Let us observe",
+          "• Take two balloons of the same size.",
+          "• Inflate both balloons and tie strings to them.",
+          "• Hang the two balloons from a stick, leaving a gap of 6–10 cm (Fig. 6.13).",
+          "• Now, blow air into the narrow space between the balloons.",
+          "• What happens to the balloons? Note down your observations.",
+          "• Now blow harder and observe.",
+          "Fig. 6.13: Blowing between two balloons",
+          "When you blow between the two balloons, you observe that they move towards each other. This happens because when you blow air between the balloons, a low pressure area is created between them. The higher air pressure surrounding the balloon pushes them towards each other. You must have observed that"
+        ],
+        "concepts": [
+          "Pressure",
+          "Wind",
+          "Cyclones",
+          "Sea breeze",
+          "Land breeze",
+          "High-speed winds",
+          "Air pressure",
+          "Balloon experiment"
+        ],
+        "context_relation": "The image is a part of a textbook page explaining the concept of high-speed winds and their effect on air pressure.",
+        "limitations": [
+          "The image does not show the actual experiment, only a diagram of it."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608667133",
+      "checkpointed_at": "2026-10-28T01:49:51Z"
     },
     {
       "asset_id": "8c81f0956571082b1a2226c6",
@@ -44085,19 +44145,38 @@
     {
       "asset_id": "b389386d98c0aebc2243f4cd",
       "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
-      "page_text_context_sha256": "23a534507295986cb38f896a36acbcd95ccd1ae45a82b50233bf7077ecb5a51a",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 110,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "23a534507295986cb38f896a36acbcd95ccd1ae45a82b50233bf7077ecb5a51a",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40501519107",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An explanation of how high-speed winds create low-pressure areas over houses, leading to potential roof damage.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "When high-speed winds blow over houses, a low-pressure area is created over them, as high-speed winds are accompanied by a reduced pressure. Therefore, the air pressure above the roofs of the houses is lower than the pressure below them. If the pressure difference is large and the roofs are weak, th",
+          "When high-speed winds blow over houses, a low-pressure area is created over them, as high-speed winds are accompanied by a reduced pressure. Therefore, the air pressure above the roofs of the houses is lower than the pressure below them. If the pressure difference is large and the roofs are weak, th"
+        ],
+        "concepts": [
+          "high-speed winds",
+          "low-pressure areas",
+          "air pressure",
+          "roof damage"
+        ],
+        "context_relation": "Explanatory",
+        "limitations": [
+          "The image does not show any visual representation of the described phenomenon."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608667133",
+      "checkpointed_at": "2026-10-28T01:55:32Z"
     },
     {
       "asset_id": "ed47972eb74639ec9bc709d3",
@@ -44110,7 +44189,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40501519107",
+      "run_id": "40608667133",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -44367,19 +44446,54 @@
     {
       "asset_id": "52885281ae21238e9ccc031f",
       "asset_sha256": "fe59359cb8342e88b557d6166a640b2ef6acf08ebc62aa0c63e90e8dec6d5b45",
-      "page_text_context_sha256": "9953e75554b5b7568230a6dc61fc42937365a2994a0e78c22c92c7477ce4ec80",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 111,
       "asset_path": "page-0111.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "9953e75554b5b7568230a6dc61fc42937365a2994a0e78c22c92c7477ce4ec80",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40501519107",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the movement of positively and negatively charged particles in clouds.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "and  ice  particles. You have learnt in the chapter\n‘Exploring Forces’ that when two objects are rubbed\nagainst each other, they get charged. In this case, strong\nwinds blowing upwards and downwards and rubbing\nagainst each other cause  static  electric charges to\ndevelop within the clouds.\n\nThe pos",
+          "Fig. 6.16: Lightning",
+          "A step further",
+          "Isolated and localised thunderstorms can sometimes occur in various\nregions of India. These thunderstorms are known by various names\nsuch as Kalboishakhi in West Bengal, Bihar, and Jharkhand and\nBordoisila in Assam. They occur before the arrival of the monsoon,\nthereby helping kharif crops to grow. "
+        ],
+        "concepts": [
+          "static electric charges",
+          "clouds",
+          "positive and negative charges",
+          "lightning",
+          "thunderstorms",
+          "monsoon",
+          "kharif crops",
+          "mango showers",
+          "coffee plants",
+          "precautions",
+          "lightning",
+          "tall objects",
+          "low-lying open area",
+          "crouching down",
+          "umbrella with a metallic rod",
+          "water",
+          "bus or a car"
+        ],
+        "context_relation": "The image is a diagram showing the movement of positively and negatively charged particles in clouds.",
+        "limitations": [
+          "The image does not provide specific details about the physical properties of the particles or the exact mechanism of charge separation.",
+          "The image does not show the actual movement of the particles or the formation of clouds."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608667133",
+      "checkpointed_at": "2026-10-28T02:13:41Z"
     },
     {
       "asset_id": "02cdb1f955dd51e569c06039",
@@ -44410,6 +44524,350 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40501519107",
       "checkpointed_at": "2026-10-27T13:57:42Z"
+    },
+    {
+      "asset_id": "9193903c4c3162f809e1ce5a",
+      "asset_sha256": "0d4ae3cbdccd1ec76a47e0caf27b553ccd6824b869f53b19c6551d7b622daafa",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 112,
+      "asset_path": "assets/0d4ae3cbdccd1ec76a47e0caf27b553ccd6824b869f53b19c6551d7b622daafa.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e7642c3aeda86d04ba7f1847071dffd75b249cbd6931426fb55becc7d77fadd0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the path of a lightning conductor in a building.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ever heard of...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building.",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides an easy path for the lightning to flow."
+        ],
+        "concepts": [
+          "Lightning conductor",
+          "Building construction",
+          "Path of lightning",
+          "High point of the building",
+          "Ground burial"
+        ],
+        "context_relation": "The image is a visual representation of the lightning conductor's function in a building.",
+        "limitations": [
+          "The image does not show the actual lightning conductor or its installation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40520039010",
+      "checkpointed_at": "2026-10-27T16:05:42Z"
+    },
+    {
+      "asset_id": "ab36371e2c4f5458b69bf297",
+      "asset_sha256": "037e99c9177703b60d69b8e346334b6a0ce5699b23340c39a5b1afdcfbbeb71f",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 112,
+      "asset_path": "assets/037e99c9177703b60d69b8e346334b6a0ce5699b23340c39a5b1afdcfbbeb71f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e7642c3aeda86d04ba7f1847071dffd75b249cbd6931426fb55becc7d77fadd0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Diagram showing the path of lightning through a lightning conductor.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ever heard of...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building.",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides easy path for the",
+          "lightning to flow through."
+        ],
+        "concepts": [
+          "Lightning conductor",
+          "Lightning path",
+          "Building construction"
+        ],
+        "context_relation": "The image illustrates the function of a lightning conductor in preventing lightning strikes on buildings.",
+        "limitations": [
+          "The image does not provide specific details about the construction or design of the lightning conductor.",
+          "The image does not show the actual lightning strike or the path it takes through the conductor."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40520039010",
+      "checkpointed_at": "2026-10-27T16:10:22Z"
+    },
+    {
+      "asset_id": "3e39c853ef5d60e663748f06",
+      "asset_sha256": "8e61f453d3c31180a272e18163268e884bd5b2f6a3cfb321171001e82767c8af",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 112,
+      "asset_path": "assets/8e61f453d3c31180a272e18163268e884bd5b2f6a3cfb321171001e82767c8af.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e7642c3aeda86d04ba7f1847071dffd75b249cbd6931426fb55becc7d77fadd0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram of a lightning conductor in a building.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ever heard of ...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building.",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides easy path for the",
+          "lightning"
+        ],
+        "concepts": [
+          "Lightning conductor",
+          "Building construction",
+          "Lightning protection"
+        ],
+        "context_relation": "The image is a diagram explaining the function and placement of a lightning conductor in a building.",
+        "limitations": [
+          "The image does not show the actual installation or the lightning protection it provides.",
+          "The image does not include any measurements or specific details about the rod's length or burial depth."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40539307444",
+      "checkpointed_at": "2026-10-27T19:49:02Z"
+    },
+    {
+      "asset_id": "f7aa874dbe53a243291c8f29",
+      "asset_sha256": "5b564cee455441614121bc3f587c05025d5b7cc10331ecb7f73a796915a143b2",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 112,
+      "asset_path": "assets/5b564cee455441614121bc3f587c05025d5b7cc10331ecb7f73a796915a143b2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e7642c3aeda86d04ba7f1847071dffd75b249cbd6931426fb55becc7d77fadd0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a three-story building with a lightning conductor attached to its side.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Ever heard of ...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building.",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides easy path for the",
+          "lightning to flow through."
+        ],
+        "concepts": [
+          "Lightning conductor",
+          "Building construction",
+          "Lightning protection",
+          "Grounding"
+        ],
+        "context_relation": "The image illustrates the concept of a lightning conductor in building construction, explaining its purpose and installation.",
+        "limitations": [
+          "The image does not show the actual installation process or the lightning flow."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40539307444",
+      "checkpointed_at": "2026-10-27T19:52:06Z"
+    },
+    {
+      "asset_id": "fe8b8ea6737967de8748ecf4",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 112,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e7642c3aeda86d04ba7f1847071dffd75b249cbd6931426fb55becc7d77fadd0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A lightning conductor is a metallic rod installed along the walls of buildings during construction. One end is pointed and kept higher than the highest point of the building, while the other end is buried deep in the ground.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Ever heard of ...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building (Fig. 6.18).",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides easy path for the"
+        ],
+        "concepts": [
+          "lightning conductor",
+          "metallic rod",
+          "construction",
+          "walls of buildings",
+          "pointed end",
+          "highest point of the building",
+          "buried deep in the ground",
+          "easy path"
+        ],
+        "context_relation": "description",
+        "limitations": [
+          "The image does not show the lightning conductor in action or its function."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40573700980",
+      "checkpointed_at": "2026-10-27T21:09:12Z"
+    },
+    {
+      "asset_id": "929a1a8f3449aac585ffb55c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 112,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "e7642c3aeda86d04ba7f1847071dffd75b249cbd6931426fb55becc7d77fadd0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A lightning conductor is a metallic rod installed along the walls of buildings during construction. One end is pointed and kept higher than the highest point of the building, while the other end is buried deep in the ground.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Ever heard of ...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction.",
+          "One end of the rod is pointed. This end is kept higher than the highest point of the building (Fig. 6.18).",
+          "The other end of the rod is buried deep in the ground.",
+          "The rod provides easy path for the"
+        ],
+        "concepts": [
+          "lightning conductor",
+          "metallic rod",
+          "construction",
+          "walls of buildings",
+          "pointed end",
+          "highest point of the building",
+          "buried deep in the ground",
+          "easy path"
+        ],
+        "context_relation": "descriptive",
+        "limitations": [
+          "The image does not show the lightning conductor in action or its function."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40573700980",
+      "checkpointed_at": "2026-10-27T21:11:55Z"
+    },
+    {
+      "asset_id": "220e628431f109ef1dc3b65a",
+      "asset_sha256": "8ae9528c09e913230ec5136e74f9b4ca3f641442ebea6621d8aab14759cbee26",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 112,
+      "asset_path": "page-0112.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "e7642c3aeda86d04ba7f1847071dffd75b249cbd6931426fb55becc7d77fadd0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing a lightning conductor attached to a building.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Ever heard of ...",
+          "A lightning conductor is a metallic rod installed along the walls of buildings during their construction. One end of the rod is pointed. This end is kept higher than the highest point of the building (Fig. 6.18). The other end of the rod is buried deep in the ground. The rod provides easy path for t",
+          "Fig. 6.18: A lightning conductor"
+        ],
+        "concepts": [
+          "lightning conductor",
+          "building construction"
+        ],
+        "context_relation": "explanation",
+        "limitations": [
+          "Fig. 6.18 is not visible in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40585196851",
+      "checkpointed_at": "2026-10-27T23:02:41Z"
+    },
+    {
+      "asset_id": "d87c13fdacf9d828cb661188",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "45e0221e1bdd71791599e8e126204cc8f78594128942b5855e26f4e1f7ecdf94",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 113,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40600312251",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "ee42c9dcd67eeb859ad89f83",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 113,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "45e0221e1bdd71791599e8e126204cc8f78594128942b5855e26f4e1f7ecdf94",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cyclone's aftermath, including destruction and flooding.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "Even as a cyclone loses its strength while travelling over land, it leaves behind a trail of destruction that can take months or even years to repair. Cyclones can be extremely destructive. For example, the Amphan cyclone in 2020 had peak wind speeds of 270 km/h.",
+          "Strong winds during a cyclone push ocean water towards the shore, creating a wall of water that can be as high as 3–12 metres. This surge of water can flood coastal areas and even areas far from the sea. The heavy rainfall which acc",
+          "93"
+        ],
+        "concepts": [
+          "Cyclone",
+          "Wind",
+          "Storm",
+          "Cyclones",
+          "Amphan cyclone",
+          "Peak wind speeds",
+          "Cyclone aftermath",
+          "Destruction",
+          "Flooding",
+          "Coastal areas",
+          "Heavy rainfall"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the effects of cyclones, specifically focusing on the aftermath and destructive power of a cyclone.",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "The text is not clear enough to determine the exact content of the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40600312251",
+      "checkpointed_at": "2026-10-28T00:22:23Z"
     }
   ]
 }

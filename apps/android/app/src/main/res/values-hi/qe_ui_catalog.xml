@@ -543,6 +543,7 @@
     <string name="qe_ui_c7d98771118f541e" formatted="false">Staff identity verify नहीं हो सकी।</string>
     <string name="qe_ui_17a548d625925b21" formatted="false">Curriculum source verify नहीं हो सका।</string>
     <string name="qe_ui_026454f29628405f" formatted="false">Textbook mapping verify नहीं हो सकी।</string>
+    <string name="qe_ui_1998bcbfe7f750d1" formatted="false">Course expiry aur access</string>
     <string name="qe_ui_706620ae070799db" formatted="false">Course Marketplace</string>
     <string name="qe_ui_76797627a23ba737" formatted="false">Course release aur HRMS handoff</string>
     <string name="qe_ui_306249f9c4f336c7" formatted="false">Course से जुड़ा learner</string>

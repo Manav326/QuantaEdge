@@ -252,6 +252,8 @@ public class AndroidPushService {
               join institution_course_release rel on rel.id=a.course_release_id and rel.program_id=spe.program_id
               where spe.student_id=st.id and spe.institution_id=m.institution_id
                 and spe.status='ACTIVE' and spe.program_id=?
+                 and spe.course_access_blocked=false
+                 and (spe.course_expires_at is null or spe.course_expires_at>statement_timestamp())
             ))
         )
         """, Boolean.class, identityId,institutionId,courseScoped,courseId));
@@ -275,6 +277,8 @@ public class AndroidPushService {
                   join institution_course_release rel on rel.id=a.course_release_id and rel.program_id=spe.program_id
                   where spe.student_id=st.id and spe.institution_id=m.institution_id
                     and spe.status='ACTIVE' and spe.program_id=?
+                 and spe.course_access_blocked=false
+                 and (spe.course_expires_at is null or spe.course_expires_at>statement_timestamp())
                 ))
             )
         )

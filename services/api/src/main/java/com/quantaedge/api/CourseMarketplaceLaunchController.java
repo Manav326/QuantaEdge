@@ -599,7 +599,7 @@ public class CourseMarketplaceLaunchController {
     List<Map<String,Object>> checks=(List<Map<String,Object>>)base.get("checks");
     List<String> contentBlockers=new ArrayList<>();
     List<String> courseReadinessCodes=List.of(
-        "INSTITUTION_ACTIVE","COURSE_ACTIVE","COURSE_IDENTITY","CURRENT_COURSE_RELEASE",
+        "INSTITUTION_ACTIVE","COURSE_ACTIVE","COURSE_IDENTITY","COURSE_EXPIRY_POLICY","CURRENT_COURSE_RELEASE",
         "CONTENT_QUALITY_REVIEW","ORIGIN_RELEASE_APPROVAL","ASSIGNMENT_AND_RELEASE",
         "CONTENT_REVIEW_CURRENT","PUBLISHED_LEARNING_CONTENT","SOURCE_RIGHTS_CLEARANCE");
     for(Map<String,Object> check:checks) {

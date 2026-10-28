@@ -60,10 +60,32 @@ public class StudentProgramController {
             or exists(select 1 from course_entitlement access_entitlement
               where access_entitlement.institution_id=? and qe_same_logical_course(access_entitlement.course_id,p.id)
                 and (access_entitlement.holder_student_id=st.id or access_entitlement.holder_user_id=st.user_account_id))
-          ) as has_access
+          ) as has_access,
+          access_state.enrollment_status as course_enrollment_status,
+          access_state.course_expires_at,
+          coalesce(access_state.course_access_blocked,false) as course_access_blocked,
+          case when access_state.course_access_blocked then 'BLOCKED'
+            when access_state.course_expires_at is not null
+              and access_state.course_expires_at<=statement_timestamp() then 'EXPIRED'
+            when access_state.enrollment_status is null then 'NOT_ENROLLED'
+            else access_state.enrollment_status end as course_access_status,
+          case when access_state.enrollment_status='ACTIVE'
+              and coalesce(access_state.course_access_blocked,false)=false
+              and (access_state.course_expires_at is null
+                or access_state.course_expires_at>statement_timestamp()) then true
+            else false end as course_access_allowed
         from student st
         join curriculum_program p on p.status='ACTIVE'
         left join institution_course_identity identity on identity.id=p.course_identity_id
+        left join lateral (
+          select enrollment.status as enrollment_status,enrollment.course_expires_at,enrollment.course_access_blocked
+          from student_program_enrollment enrollment
+          where enrollment.student_id=st.id and enrollment.institution_id=?
+            and qe_same_logical_course(enrollment.program_id,p.id)
+          order by case enrollment.status when 'ACTIVE' then 0 when 'PAUSED' then 1 else 2 end,
+            enrollment.enrolled_at asc,enrollment.id asc
+          limit 1
+        ) access_state on true
         where st.id=? and st.active=true and p.code<>'GENERAL'
           and exists(
             select 1
@@ -148,7 +170,7 @@ public class StudentProgramController {
       where identity_rank=1
       order by display_name,id
       """, institutionId, institutionId, institutionId, institutionId, institutionId, institutionId,
-          context.studentId(), institutionId, institutionId, institutionId, institutionId, institutionId);
+          institutionId, context.studentId(), institutionId, institutionId, institutionId, institutionId, institutionId);
 
     for (Map<String,Object> program : programs) {
       long courseId = ((Number) program.get("id")).longValue();

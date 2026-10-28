@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1418,
+    "assets_selected": 1422,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "8d35dc673109641624e2223c",
       "73d7871359ba2e1d3fe3cfeb",
       "b90b1ccd2f380e4a35f9f791",
       "055ba61cf9184b7284850138",
-      "2104ecb647e20f98cb93ca2e"
+      "2185c15c0a88a108ea516878"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1413,
-    "assets_remaining": 665,
-    "assets_completion_percent": 68.0,
+    "assets_analyzed": 1417,
+    "assets_remaining": 661,
+    "assets_completion_percent": 68.2,
     "assets_failed": 12,
-    "assets_skipped_from_checkpoint": 1413,
+    "assets_skipped_from_checkpoint": 1417,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -434,24 +434,29 @@
           "National Education Policy 2020",
           "National Curriculum Framework for School Education (NCF-SE) 2023",
           "pañchakośhas",
-          "Middle Stage",
           "Foundational and Preparatory Stages",
-          "Analytical, descriptive, and narrative capabilities",
-          "Transformative learning culture",
-          "Classroom arrangement",
-          "Teacher preparation",
-          "Curricular Area Groups"
+          "Middle Stage",
+          "Secondary Stages",
+          "holistic development",
+          "transformative learning culture",
+          "appropriate textbooks",
+          "curricular areas",
+          "content and pedagogy",
+          "classroom arrangement",
+          "teacher preparation",
+          "conceptual connections",
+          "National Council of Educational Research and Training"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving a transformative learning culture.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving a holistic development.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
+          "The foreword does not provide specific details about the content of the textbooks or the curricular areas."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40518803038",
-      "checkpointed_at": "2026-10-27T15:14:50Z"
+      "run_id": "40612502213",
+      "checkpointed_at": "2026-10-28T02:12:49Z"
     },
     {
       "asset_id": "97ceae5bb864ee396480d916",
@@ -20112,24 +20117,25 @@
           "DES",
           "Coimbatore",
           "Amrita Vishwa Vidyapeetham",
+          "Educator",
+          "Development Sector Professional",
+          "Chief Consultant",
           "Freelance Editor",
           "Proofreader",
-          "DTP Cell",
           "Publication Division",
-          "Contractual",
-          "Final shape"
+          "Contractual"
         ],
         "context_relation": "acknowledgements",
         "limitations": [
-          "No specific limitations mentioned.",
+          "The image may be a full page, not a cropped figure.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40518803038",
-      "checkpointed_at": "2026-10-27T15:16:10Z"
+      "run_id": "40612502213",
+      "checkpointed_at": "2026-10-28T02:14:47Z"
     },
     {
       "asset_id": "c53fbbad74b3a968450f36d5",
@@ -21411,7 +21417,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40518803038",
+      "run_id": "40612502213",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -22010,9 +22016,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40518803038",
+      "run_id": "40612502213",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -23779,7 +23785,7 @@
           "features of plants",
           "nature walk"
         ],
-        "context_relation": "exploration",
+        "context_relation": "The image is a table showing different criteria for grouping plants and animals.",
         "limitations": [
           "The image does not provide specific details about the criteria for grouping plants and animals."
         ]
@@ -23787,8 +23793,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40518803038",
-      "checkpointed_at": "2026-10-27T15:17:18Z"
+      "run_id": "40612502213",
+      "checkpointed_at": "2026-10-28T02:16:28Z"
     },
     {
       "asset_id": "2e0851af998c4de66b11d196",
@@ -34070,9 +34076,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40518803038",
+      "run_id": "40612502213",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -34990,7 +34996,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40518803038",
+      "run_id": "40612502213",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -37233,7 +37239,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40518803038",
+      "run_id": "40612502213",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -37354,7 +37360,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40518803038",
+      "run_id": "40612502213",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -38022,7 +38028,7 @@
         "concepts": [
           "Measurement of Length and Motion",
           "Handspans",
-          "Length of the table"
+          "Units of Measurement"
         ],
         "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
@@ -38032,8 +38038,8 @@
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40518803038",
-      "checkpointed_at": "2026-10-27T15:18:15Z"
+      "run_id": "40612502213",
+      "checkpointed_at": "2026-10-28T02:17:51Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -38774,7 +38780,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40518803038",
+      "run_id": "40612502213",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -40044,7 +40050,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40506194485",
+      "run_id": "40612502213",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -44177,23 +44183,23 @@
           "Oral Rehydration Solution (ORS)",
           "Diarrhoea",
           "Health Centres",
-          "Water Solubility",
+          "Preparation of ORS",
           "Gases in Water",
-          "Animal and Plant Survival",
+          "Solubility",
           "Density",
-          "Paper Cups"
+          "Survival of Animals and Plants"
         ],
-        "context_relation": "Explanation and activity related to ORS and its preparation",
+        "context_relation": "Explanation and activity related to ORS and its properties",
         "limitations": [
-          "No specific limitations mentioned in the image.",
+          "No specific limitations mentioned",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40413122029",
-      "checkpointed_at": "2026-10-27T01:49:01Z"
+      "run_id": "40568791626",
+      "checkpointed_at": "2026-10-27T21:47:12Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -44653,7 +44659,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40413122029",
+      "run_id": "40568791626",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model response is missing required fields.",
       "human_review_required": true,
@@ -45006,9 +45012,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40413122029",
+      "run_id": "40568791626",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -46264,9 +46270,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40413122029",
+      "run_id": "40568791626",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -46634,19 +46640,67 @@
     {
       "asset_id": "9fb71d7d0f261624fe3ce0a4",
       "asset_sha256": "b188bc8a1d8d6c6deb1776a683835dcd7d6b6d3b8071be8da3a03d207027de95",
-      "page_text_context_sha256": "b33602f5133011cb20efb64570ad868a3c5b6a954f6e86dacf188e0837dc7c74",
       "source_book_id": "ncert-c6-english-fecu1",
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "source_pdf_page_number": 145,
       "asset_path": "page-0145.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "b33602f5133011cb20efb64570ad868a3c5b6a954f6e86dacf188e0837dc7c74",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40413122029",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Instructions for using a digital clinical thermometer to measure body temperature.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Activity 7.2: Let us measure",
+          "Let us now use a digital clinical thermometer",
+          "to measure body temperature. You may",
+          "measure your own temperature as well as",
+          "the temperature of some of your friends. Talk to your friends to find out who would",
+          "be willing to get their body temperatures",
+          "measured by you.",
+          "Wash your hands and the tip of the",
+          "digital thermometer with soap and water.",
+          "Reset the thermometer by pressing the",
+          "reset button.",
+          "Place the thermometer under the",
+          "tongue and close your mouth.",
+          "Wait till the thermometer makes a",
+          "beeping sound or flashes a light.",
+          "Take it out from the mouth and read",
+          "the temperature on the digital display.",
+          "Record the temperature in Table 7.1.",
+          "Clean the tip of the thermometer with soap and water, and dry it.",
+          "Repeat the above steps for measuring the temperatures of your friends.",
+          "Table 7.1: Body temperatures of 10 persons",
+          "S. no. Name Temperature (°C)",
+          "1. .",
+          "2. .",
+          "3. .",
+          "4. .",
+          "5. .",
+          "6. .",
+          "7. .",
+          "8. ."
+        ],
+        "concepts": [
+          "digital clinical thermometer",
+          "body temperature",
+          "instructions for use",
+          "precautions"
+        ],
+        "context_relation": "instructions",
+        "limitations": [
+          "no specific limitations mentioned",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40568791626",
+      "checkpointed_at": "2026-10-27T21:20:05Z"
     },
     {
       "asset_id": "895e55170e2df8f85f399e23",
@@ -47725,6 +47779,135 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40413122029",
       "checkpointed_at": "2026-10-27T01:55:45Z"
+    },
+    {
+      "asset_id": "ead2a0991200cae313ecf9ce",
+      "asset_sha256": "014b7488b9f6c661af9d6e408d9632b760eaa40e796311439426630e66e65a3a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 151,
+      "asset_path": "assets/014b7488b9f6c661af9d6e408d9632b760eaa40e796311439426630e66e65a3a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8e71bc7eebe0216970654da250116d1dcaa3863505130e66a89dbb611ec21e52",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A red triangular warning sign with a white exclamation mark in the center.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40568791626",
+      "checkpointed_at": "2026-10-27T21:26:19Z"
+    },
+    {
+      "asset_id": "c48690152ba372ff22e25783",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "8e71bc7eebe0216970654da250116d1dcaa3863505130e66a89dbb611ec21e52",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 151,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40568791626",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "870abb681f56397dfdf83a1c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 151,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "8e71bc7eebe0216970654da250116d1dcaa3863505130e66a89dbb611ec21e52",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two thermometers are placed next to each other, one labeled 'Laboratory thermometer' and the other labeled 'Boiling water'. The setup is for observing temperature readings.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Laboratory thermometer",
+          "Boiling water"
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Thermometer"
+        ],
+        "context_relation": "Observation of temperature readings",
+        "limitations": [
+          "No specific temperature values are provided"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40568791626",
+      "checkpointed_at": "2026-10-27T21:42:38Z"
+    },
+    {
+      "asset_id": "ab1cd695f6ef1ff13556e694",
+      "asset_sha256": "5372d8b4f2eb49a3de8b1552c16be6e6a78cc0c7abd568f703ae3d9e007ed820",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 151,
+      "asset_path": "page-0151.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "8e71bc7eebe0216970654da250116d1dcaa3863505130e66a89dbb611ec21e52",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two experimental setups for measuring temperatures of ice and boiling water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Following two experimental setups are to be arranged by your\nteacher. One by one, as per your turn, go closer to the setups\nand observe the readings of both the thermometers. What are\nthe temperatures of ice and boiling water?",
+          "Read the temperatures of ice and boiling water again after\nsome time. Are the temperatures same or have changed? You\nmay have noticed that the temperature of water remains\nconstant while it is boiling. Also, the temperature of ice\nremains constant while it is melting.",
+          "Activity 7.6: Let us compare",
+          "Phiban’s Science teacher arranged the experimental\nsetup for measuring temperature of boiling water. The\ntemperature readings of the boiling water taken by Phiban\nand her classmates in Shillong are given in Table 7.2.",
+          "Table 7.2: Temperatures of boiling water",
+          "Name",
+          "Temperature of boiling\nwater (in °C)",
+          "Phiban",
+          "97.8",
+          "Shemphang",
+          "98.0",
+          "Onestar",
+          "97.9",
+          "Kloi",
+          "98.0",
+          "Bandarisha",
+          "98.1"
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Ice and boiling water",
+          "Experimental setups",
+          "Temperature readings"
+        ],
+        "context_relation": "Experimental activity",
+        "limitations": [
+          "Performing the activity strictly under supervision",
+          "Not touching experimental setups"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40568791626",
+      "checkpointed_at": "2026-10-27T21:51:20Z"
     }
   ]
 }

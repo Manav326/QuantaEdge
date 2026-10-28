@@ -117,7 +117,6 @@ def render_registry(locales: dict[str, dict[str, Any]]) -> str:
         + "};\n"
     )
 
-
 def _xml_resource_text(value: str) -> str:
     # Android string resources treat apostrophes and backslashes specially in addition to XML.
     escaped = value.replace("\\", "\\\\").replace("'", "\\'").replace('"', '\\"')
@@ -169,12 +168,13 @@ def render_android_catalog_resources(catalogs: dict[str, dict[str, str]]) -> dic
                 f'    <string name="{resource_name}" formatted="false">{_xml_resource_text(value)}</string>'
             )
         lines.append("</resources>")
-        return ("\\n".join(lines) + "\\n").encode("utf-8")
+        return ("\n".join(lines) + "\n").encode("utf-8")
 
     return {
         "apps/android/app/src/main/res/values/qe_ui_catalog.xml": render(True),
         "apps/android/app/src/main/res/values-hi/qe_ui_catalog.xml": render(False),
     }
+
 
 
 def main() -> int:

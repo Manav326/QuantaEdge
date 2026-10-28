@@ -915,6 +915,8 @@ public class LearningResourceController {
         join curriculum_program p on p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
         join student_program_enrollment spe on spe.student_id=st.id and spe.institution_id=m.institution_id
           and spe.program_id=p.id and spe.status='ACTIVE'
+          and spe.course_access_blocked=false
+          and (spe.course_expires_at is null or spe.course_expires_at>statement_timestamp())
         join institution_course_assignment a on a.institution_id=m.institution_id and a.status='ASSIGNED'
         join institution_course_release r on r.id=a.course_release_id and r.program_id=p.id
         where st.id=? and st.active=true
@@ -936,6 +938,8 @@ public class LearningResourceController {
         join curriculum_program selected_course on selected_course.id=? and selected_course.status='ACTIVE' and selected_course.code<>'GENERAL'
         join student_program_enrollment spe on spe.student_id=st.id and spe.institution_id=m.institution_id
           and spe.program_id=selected_course.id and spe.status='ACTIVE'
+          and spe.course_access_blocked=false
+          and (spe.course_expires_at is null or spe.course_expires_at>statement_timestamp())
         join institution_course_assignment assignment on assignment.institution_id=m.institution_id and assignment.status='ASSIGNED'
         join institution_course_release release on release.id=assignment.course_release_id and release.program_id=selected_course.id
         join curriculum_program_subject cps on cps.program_id=selected_course.id and cps.class_id=s.class_id and cps.subject_id=s.id
@@ -961,6 +965,8 @@ public class LearningResourceController {
               select 1 from curriculum_program class_course
               join student_program_enrollment spe on spe.student_id=st.id and spe.institution_id=m.institution_id
                 and spe.program_id=class_course.id and spe.status='ACTIVE'
+                 and spe.course_access_blocked=false
+                 and (spe.course_expires_at is null or spe.course_expires_at>statement_timestamp())
               join curriculum_program_subject cps on cps.program_id=class_course.id
                 and cps.class_id=s.class_id and cps.subject_id=s.id
               join institution_course_assignment assignment on assignment.institution_id=m.institution_id

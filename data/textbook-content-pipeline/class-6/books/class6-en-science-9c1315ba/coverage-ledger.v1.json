@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1430,
-    "successful_visual_analyses": 1418,
-    "missing_visual_analyses": 648,
+    "raw_analysis_result_rows": 1434,
+    "successful_visual_analyses": 1422,
+    "missing_visual_analyses": 644,
     "failed_visual_analyses": 12,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 660,
+    "unresolved_count": 656,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -8228,17 +8228,22 @@
           "National Education Policy 2020",
           "National Curriculum Framework for School Education (NCF-SE) 2023",
           "pañchakośhas",
-          "Middle Stage",
           "Foundational and Preparatory Stages",
-          "Analytical, descriptive, and narrative capabilities",
-          "Transformative learning culture",
-          "Classroom arrangement",
-          "Teacher preparation",
-          "Curricular Area Groups"
+          "Middle Stage",
+          "Secondary Stages",
+          "holistic development",
+          "transformative learning culture",
+          "appropriate textbooks",
+          "curricular areas",
+          "content and pedagogy",
+          "classroom arrangement",
+          "teacher preparation",
+          "conceptual connections",
+          "National Council of Educational Research and Training"
         ],
-        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, classroom arrangements, and teacher preparation in achieving a transformative learning culture.",
+        "context_relation": "The foreword discusses the National Education Policy 2020 and its curriculum framework, emphasizing the importance of textbooks, curricular areas, and teacher preparation in achieving a holistic development.",
         "limitations": [
-          "The foreword does not provide specific details about the content of the textbooks or the methods of teacher preparation."
+          "The foreword does not provide specific details about the content of the textbooks or the curricular areas."
         ]
       },
       "chapter_id": null,
@@ -27247,16 +27252,17 @@
           "DES",
           "Coimbatore",
           "Amrita Vishwa Vidyapeetham",
+          "Educator",
+          "Development Sector Professional",
+          "Chief Consultant",
           "Freelance Editor",
           "Proofreader",
-          "DTP Cell",
           "Publication Division",
-          "Contractual",
-          "Final shape"
+          "Contractual"
         ],
         "context_relation": "acknowledgements",
         "limitations": [
-          "No specific limitations mentioned.",
+          "The image may be a full page, not a cropped figure.",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -30812,7 +30818,7 @@
           "features of plants",
           "nature walk"
         ],
-        "context_relation": "exploration",
+        "context_relation": "The image is a table showing different criteria for grouping plants and animals.",
         "limitations": [
           "The image does not provide specific details about the criteria for grouping plants and animals."
         ]
@@ -44678,7 +44684,7 @@
         "concepts": [
           "Measurement of Length and Motion",
           "Handspans",
-          "Length of the table"
+          "Units of Measurement"
         ],
         "context_relation": "The table and the text describe a scenario where students are measuring the length of a table using their handspans as a unit of measurement.",
         "limitations": [
@@ -50670,15 +50676,15 @@
           "Oral Rehydration Solution (ORS)",
           "Diarrhoea",
           "Health Centres",
-          "Water Solubility",
+          "Preparation of ORS",
           "Gases in Water",
-          "Animal and Plant Survival",
+          "Solubility",
           "Density",
-          "Paper Cups"
+          "Survival of Animals and Plants"
         ],
-        "context_relation": "Explanation and activity related to ORS and its preparation",
+        "context_relation": "Explanation and activity related to ORS and its properties",
         "limitations": [
-          "No specific limitations mentioned in the image.",
+          "No specific limitations mentioned",
           "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
         ]
       },
@@ -53068,9 +53074,55 @@
       "asset_path": "page-0145.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Instructions for using a digital clinical thermometer to measure body temperature.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Activity 7.2: Let us measure",
+          "Let us now use a digital clinical thermometer",
+          "to measure body temperature. You may",
+          "measure your own temperature as well as",
+          "the temperature of some of your friends. Talk to your friends to find out who would",
+          "be willing to get their body temperatures",
+          "measured by you.",
+          "Wash your hands and the tip of the",
+          "digital thermometer with soap and water.",
+          "Reset the thermometer by pressing the",
+          "reset button.",
+          "Place the thermometer under the",
+          "tongue and close your mouth.",
+          "Wait till the thermometer makes a",
+          "beeping sound or flashes a light.",
+          "Take it out from the mouth and read",
+          "the temperature on the digital display.",
+          "Record the temperature in Table 7.1.",
+          "Clean the tip of the thermometer with soap and water, and dry it.",
+          "Repeat the above steps for measuring the temperatures of your friends.",
+          "Table 7.1: Body temperatures of 10 persons",
+          "S. no. Name Temperature (°C)",
+          "1. .",
+          "2. .",
+          "3. .",
+          "4. .",
+          "5. .",
+          "6. .",
+          "7. .",
+          "8. ."
+        ],
+        "concepts": [
+          "digital clinical thermometer",
+          "body temperature",
+          "instructions for use",
+          "precautions"
+        ],
+        "context_relation": "instructions",
+        "limitations": [
+          "no specific limitations mentioned",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -54135,9 +54187,16 @@
       "asset_path": "assets/014b7488b9f6c661af9d6e408d9632b760eaa40e796311439426630e66e65a3a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A red triangular warning sign with a white exclamation mark in the center.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -54153,7 +54212,7 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -54171,9 +54230,24 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two thermometers are placed next to each other, one labeled 'Laboratory thermometer' and the other labeled 'Boiling water'. The setup is for observing temperature readings.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Laboratory thermometer",
+          "Boiling water"
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Thermometer"
+        ],
+        "context_relation": "Observation of temperature readings",
+        "limitations": [
+          "No specific temperature values are provided"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -54189,9 +54263,42 @@
       "asset_path": "page-0151.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two experimental setups for measuring temperatures of ice and boiling water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Following two experimental setups are to be arranged by your\nteacher. One by one, as per your turn, go closer to the setups\nand observe the readings of both the thermometers. What are\nthe temperatures of ice and boiling water?",
+          "Read the temperatures of ice and boiling water again after\nsome time. Are the temperatures same or have changed? You\nmay have noticed that the temperature of water remains\nconstant while it is boiling. Also, the temperature of ice\nremains constant while it is melting.",
+          "Activity 7.6: Let us compare",
+          "Phiban’s Science teacher arranged the experimental\nsetup for measuring temperature of boiling water. The\ntemperature readings of the boiling water taken by Phiban\nand her classmates in Shillong are given in Table 7.2.",
+          "Table 7.2: Temperatures of boiling water",
+          "Name",
+          "Temperature of boiling\nwater (in °C)",
+          "Phiban",
+          "97.8",
+          "Shemphang",
+          "98.0",
+          "Onestar",
+          "97.9",
+          "Kloi",
+          "98.0",
+          "Bandarisha",
+          "98.1"
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Ice and boiling water",
+          "Experimental setups",
+          "Temperature readings"
+        ],
+        "context_relation": "Experimental activity",
+        "limitations": [
+          "Performing the activity strictly under supervision",
+          "Not touching experimental setups"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

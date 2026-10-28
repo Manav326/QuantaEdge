@@ -31,9 +31,23 @@ type Course = {
   is_enrolled?: boolean;
   enrolled?: boolean;
   paused?: boolean;
+  course_enrollment_status?: string | null;
+  course_expires_at?: string | null;
+  course_access_blocked?: boolean;
+  course_access_status?: string | null;
+  course_access_allowed?: boolean;
   subjects?: Subject[];
 };
 type Metric = { id: number; data?: any; error?: boolean };
+
+function formatCourseExpiry(value?: string | null) {
+  if (!value) return '';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '';
+  return new Intl.DateTimeFormat('en-IN', {
+    dateStyle: 'medium', timeZone: 'Asia/Kolkata',
+  }).format(date) + ' IST';
+}
 
 function isAssessmentCourse(course: Course) {
   return course.course_type_code === 'ASSESSMENT' && course.delivery_mode === 'ASSESSMENT_ONLY';
@@ -198,10 +212,14 @@ export default function StudentCoursesPage() {
         <section className={styles.grid} aria-label="Your enrolled courses">
           {owned.map(course => {
             const id = Number(course.id || course.course_id);
-            const active = id === activeCourseId;
             const assessmentCourse = isAssessmentCourse(course);
             const k12Course = isK12Course(course);
             const unsupportedCourse = !assessmentCourse && !k12Course;
+            const accessBlocked = course.course_access_blocked === true || course.course_access_status === 'BLOCKED';
+            const accessExpired = course.course_access_status === 'EXPIRED';
+            const accessDenied = accessBlocked || accessExpired;
+            const paused = course.course_access_status ? course.course_access_status === 'PAUSED' : course.paused === true;
+            const active = id === activeCourseId && !paused;
             const metric = progress[id];
             const stats = metric?.data?.lessonStats || {};
             const total = Number(stats.total_lessons || stats.totalLessons || 0);
@@ -211,11 +229,27 @@ export default function StudentCoursesPage() {
               <article className={styles.courseCard} key={id}>
                 <div className={styles.cardHeader}>
                   <span className={styles.mark} aria-hidden="true">✦</span>
-                  <span className={unsupportedCourse ? styles.enrolledBadge : active ? styles.activeBadge : styles.enrolledBadge}>{unsupportedCourse ? 'Not yet supported' : active ? 'Learning now' : 'Enrolled'}</span>
+                  <span className={accessDenied ? styles.enrolledBadge : unsupportedCourse ? styles.enrolledBadge : active ? styles.activeBadge : styles.enrolledBadge}>
+                    {accessBlocked ? 'Blocked by HRMS' : accessExpired ? 'Access expired' : paused ? 'Paused' : unsupportedCourse ? 'Not yet supported' : active ? 'Learning now' : 'Enrolled'}
+                  </span>
                 </div>
                 <h2>{course.display_name}</h2>
                 <p className={styles.meta}>{course.course_key || course.curriculum_version || course.code}</p>
-                {assessmentCourse ? (
+                {course.course_expires_at && <p className={styles.meta}>Access expires: {formatCourseExpiry(course.course_expires_at)}</p>}
+                {accessDenied ? (
+                  <div className={styles.subjectList}>
+                    <div className={styles.subjectHeading}>Course access unavailable</div>
+                    <p className={styles.meta}>{accessBlocked
+                      ? 'HRMS has blocked access to this course. Contact your institution’s authorised administrator.'
+                      : 'This course enrolment has expired. Contact HRMS to request an extension.'}</p>
+                    <p className={styles.meta}>Your saved progress, answers, assessment results and previously issued certificates are retained.</p>
+                  </div>
+                ) : paused ? (
+                  <div className={styles.subjectList}>
+                    <div className={styles.subjectHeading}>Course paused</div>
+                    <p className={styles.meta}>Resume this course to continue learning. Pausing does not restart the course expiry timer.</p>
+                  </div>
+                ) : assessmentCourse ? (
                   <p className={styles.meta}>Test packs, attempts and results are available in this course.</p>
                 ) : unsupportedCourse ? (
                   <p className={styles.meta}>This registered course type needs its own learner experience before it can be opened.</p>
@@ -252,9 +286,9 @@ export default function StudentCoursesPage() {
                   </div>
                 )}
                 {!active && !unsupportedCourse && (
-                  <button className={styles.secondaryButton} type="button" disabled={busyCourseId !== null}
+                  !accessDenied && <button className={styles.secondaryButton} type="button" disabled={busyCourseId !== null}
                     onClick={() => void activateCourse(id)}>
-                    {busyCourseId === id ? 'Switching course…' : 'Focus on this course'}
+                    {busyCourseId === id ? 'Switching course…' : paused ? 'Resume this course' : 'Focus on this course'}
                   </button>
                 )}
               </article>

@@ -39,6 +39,11 @@ class CertificateControllerEligibilityTest {
     org.mockito.Mockito.lenient().when(jdbc.queryForObject(
         org.mockito.ArgumentMatchers.contains("select count(*) from student_program_enrollment spe"),
         eq(Long.class), any(Object[].class))).thenReturn(1L);
+    // Certificate eligibility tests focus on new-issuance rules; expiry is allowed by default.
+    // Dedicated access-control coverage can explicitly stub this predicate as denied.
+    org.mockito.Mockito.lenient().when(jdbc.queryForObject(
+        org.mockito.ArgumentMatchers.contains("qe_course_enrollment_access_allowed"),
+        eq(Boolean.class), any(Object[].class))).thenReturn(true);
   }
 
   @Test

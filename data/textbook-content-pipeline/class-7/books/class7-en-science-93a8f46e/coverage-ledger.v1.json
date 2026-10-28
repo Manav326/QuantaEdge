@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2449,
-    "successful_visual_analyses": 2427,
-    "missing_visual_analyses": 5039,
-    "failed_visual_analyses": 22,
+    "raw_analysis_result_rows": 2497,
+    "successful_visual_analyses": 2474,
+    "missing_visual_analyses": 4991,
+    "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5061,
+    "unresolved_count": 5014,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -21527,40 +21527,9 @@
       "asset_path": "page-0022.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
-      "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
-        "visual_type": "uncertain",
-        "visible_text": [
-          "Exploration, of course, isn’t just about discovering new facts\nor learning about diﬀ erent things in nature. Science, as we said\nin Grade 6, is a process, so it is about a way of thinking that\nwelcomes curiosity, asks questions, and is open to the unknown.\nIn Grade 7, we will try to ask deeper quest",
-          "To do this, we have to step out of this book, step out of the\nclassroom perhaps, and experience the world through activities\nand experiments. These are experiences that we hope will not\njust be interesting or exciting but also serve as stepping stones\nto a deeper understanding of the environment we ",
-          "But let’s get back into this book for now. You will read about\ntopics in different fields of science, from physics and chemistry\nto biology and earth sciences. While they might appear as\ndiﬀ erent chapters, just as we had said in Grade 6, they are\nall interconnected. Scientific ideas in one area oft"
-        ],
-        "concepts": [
-          "science",
-          "curiosity",
-          "questioning",
-          "environment",
-          "responsibility",
-          "science as a process",
-          "environmental challenges",
-          "sustainable world",
-          "properties of materials",
-          "discovery",
-          "interconnectedness",
-          "scientific ideas",
-          "discoveries",
-          "asking questions"
-        ],
-        "context_relation": "exploration and questioning in science",
-        "limitations": [
-          "limited to Grade 7",
-          "focus on nature and environment",
-          "emphasis on responsibility and sustainability",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
-        ]
-      },
+      "effective_analysis": null,
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -24915,39 +24884,9 @@
       "asset_path": "page-0025.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
-      "effective_analysis": {
-        "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
-          "In the chapters that follow, you'll also make simple observations and do fun experiments, and dive into topics that need careful thinking. Each chapter builds on what you already know and encourages you to ask questions, explore, do hands-on experiments, and think like a scientist! As you will find ",
-          "1.1 Happy Exploring!",
-          "Activity 1.1: Question the Answer",
-          "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
-        ],
-        "concepts": [
-          "light",
-          "eclipse",
-          "Earth",
-          "Moon",
-          "rotation",
-          "axis",
-          "day and night",
-          "experiments",
-          "questions",
-          "thinking",
-          "experiments that confirm what we think will happen",
-          "additional questions that might need more experiments and more questions",
-          "questions and answers",
-          "turning around"
-        ],
-        "context_relation": "The text discusses the effects of light on the Earth and Moon, including eclipses, and encourages readers to think critically and conduct experiments.",
-        "limitations": [
-          "The text does not provide specific images or diagrams related to the concepts discussed."
-        ]
-      },
+      "effective_analysis": null,
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -95731,9 +95670,33 @@
       "asset_path": "assets/c114bd91d08212844e8b860c7ca818fdb3861c8f23c24094fa633b7deefe1f61.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "51",
+          "4.3 Eﬀect of Air and Water on Other",
+          "Metals",
+          "Activity 4.6: Let us investigate (demonstration activity)",
+          "Non-metals",
+          "The teacher may demonstrate this activity.",
+          "Caution— It is advisabl"
+        ],
+        "concepts": [
+          "Metal",
+          "Air",
+          "Water",
+          "Demonstration activity",
+          "Non-metals",
+          "Teacher demonstration"
+        ],
+        "context_relation": "The image is a visual representation of the text provided in the visible_text array.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond what is in the visible_text array."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -100971,9 +100934,36 @@
       "asset_path": "assets/3f95b1b00d0c1f1b5924fd0e9c94f70dfefb2fec44a1f62c318c32b634c82221.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of non-metals in everyday life, specifically mentioning oxygen and carbon.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "and electrical conductivity, and high strength. However, this",
+          "should not give an impression in your mind that non-metals are not important in our lives.",
+          "We breathe in oxygen, which is a non-metal, and without it,",
+          "we would not be able to survive. Can you think of any other uses",
+          "of oxygen?",
+          "Carbon is essential in everyday life because it is the building",
+          "block of all life forms. It is a key component of proteins, fats, and"
+        ],
+        "concepts": [
+          "non-metals",
+          "oxygen",
+          "carbon",
+          "electrical conductivity",
+          "high strength",
+          "everyday life",
+          "building block of life",
+          "proteins",
+          "fats"
+        ],
+        "context_relation": "The page discusses the importance of non-metals in everyday life, specifically mentioning oxygen and carbon.",
+        "limitations": [
+          "The page does not provide specific examples or explanations for the uses of oxygen and carbon."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -100989,9 +100979,35 @@
       "asset_path": "assets/37f866c7d08ef281a61107e197a7ef32d97a0a8df696f5f9d469f3c9e8d54af9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of non-metals in daily life, specifically mentioning oxygen and carbon.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "and electrical conductivity, and high strength. However, this",
+          "should not give an impression in your mind that non-metals are not important in our lives.",
+          "We breathe in oxygen, which is a non-metal, and without it,",
+          "we would not be able to survive. Can you think of any other uses",
+          "of oxygen?",
+          "Carbon is essential in everyday life because it is the building",
+          "block of all life forms. It is a key component of proteins, fats, and"
+        ],
+        "concepts": [
+          "non-metals",
+          "oxygen",
+          "carbon",
+          "electrical conductivity",
+          "high strength",
+          "daily life",
+          "building block of life",
+          "components of proteins, fats"
+        ],
+        "context_relation": "The page discusses the importance of non-metals in daily life, specifically mentioning oxygen and carbon.",
+        "limitations": [
+          "The page does not provide specific examples or explanations for the uses of oxygen and carbon."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101007,9 +101023,35 @@
       "asset_path": "assets/4635a1dbd2c12ad17368eb9c34f9ac8991ee1b69d487a381a67b28cf91b1a526.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of non-metals in daily life, specifically mentioning oxygen and carbon.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "and electrical conductivity, and high strength. However, this",
+          "should not give an impression in your mind that non-metals are not important in our lives.",
+          "We breathe in oxygen, which is a non-metal, and without it",
+          "we would not be able to survive. Can you think of any other uses",
+          "of oxygen?",
+          "Carbon is essential in everyday life because it is the building",
+          "block of all life forms. It is a key component of proteins, fats, and"
+        ],
+        "concepts": [
+          "non-metals",
+          "oxygen",
+          "carbon",
+          "electrical conductivity",
+          "strength",
+          "daily life",
+          "building block of life",
+          "components of proteins, fats"
+        ],
+        "context_relation": "The page discusses the importance of non-metals in daily life, specifically mentioning oxygen and carbon.",
+        "limitations": [
+          "The page does not provide specific examples or explanations for the uses of oxygen and carbon."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101025,9 +101067,36 @@
       "asset_path": "assets/56c345f5d78c87355da52ea24807d27f6ade7668ad5be1d2f1616f116770b48f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a book.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "and electrical conductivity, and high strength. However, this",
+          "should not give an impression in your mind that non-metals are not important in our lives.",
+          "We breathe in oxygen, which is a non-metal, and without it",
+          "we would not be able to survive. Can you think of any other uses",
+          "of oxygen?",
+          "Carbon is essential in everyday life because it is the building",
+          "block of all life forms. It is a key component of proteins, fats, and"
+        ],
+        "concepts": [
+          "non-metals",
+          "oxygen",
+          "carbon",
+          "electrical conductivity",
+          "strength",
+          "building blocks",
+          "life forms",
+          "proteins",
+          "fats"
+        ],
+        "context_relation": "The image is a cartoon character holding a book, which is related to the text discussing the importance of non-metals and carbon in everyday life.",
+        "limitations": [
+          "The image does not provide specific details about the book's content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101043,9 +101112,35 @@
       "asset_path": "assets/8316600946b9e8e19432812a5970121f778c4ed536818142617f2830d64785c7.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of non-metals in daily life, specifically mentioning oxygen and carbon.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "and electrical conductivity, and high strength. However, this",
+          "should not give an impression in your mind that non-metals are not important in our lives.",
+          "We breathe in oxygen, which is a non-metal, and without it,",
+          "we would not be able to survive. Can you think of any other uses",
+          "of oxygen?",
+          "Carbon is essential in everyday life because it is the building",
+          "block of all life forms. It is a key component of proteins, fats, and"
+        ],
+        "concepts": [
+          "non-metals",
+          "oxygen",
+          "carbon",
+          "electrical conductivity",
+          "high strength",
+          "daily life",
+          "building block of life",
+          "components of proteins, fats"
+        ],
+        "context_relation": "The page discusses the importance of non-metals in daily life, specifically mentioning oxygen and carbon.",
+        "limitations": [
+          "The page does not provide specific examples or explanations for the uses of oxygen and carbon."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101061,9 +101156,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101079,9 +101183,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101097,9 +101210,45 @@
       "asset_path": "page-0074.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of non-metals in everyday life and their applications in various fields.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "and electrical conductivity, and high strength. However, this should not give an impression in your mind that non-metals are not important in our lives.",
+          "We breathe in oxygen, which is a non-metal, and without it, we would not be able to survive. Can you think of any other uses of oxygen?",
+          "Carbon is essential in everyday life because it is the building block of all life forms. It is a key component of proteins, fats, and carbohydrates, which are necessary for growth and energy.",
+          "Nitrogen is used in the manufacturing of fertilisers and other chemicals. It is an essential nutrient for the growth of plants. Chlorine is a non-metal commonly used in water purification. A solution of iodine, a non-metal, is applied on wounds as an antiseptic."
+        ],
+        "concepts": [
+          "non-metals",
+          "oxygen",
+          "carbon",
+          "nitrogen",
+          "chlorine",
+          "iodine",
+          "fertilisers",
+          "water purification",
+          "antiseptic",
+          "proteins",
+          "fats",
+          "carbohydrates",
+          "growth",
+          "energy",
+          "nutrient",
+          "plants",
+          "metal",
+          "alloys",
+          "utensils",
+          "tools"
+        ],
+        "context_relation": "The page discusses the importance of non-metals in various aspects of life and their applications in different fields.",
+        "limitations": [
+          "The page does not provide specific examples or details about the applications of non-metals in everyday life.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101115,9 +101264,33 @@
       "asset_path": "assets/23bc697c2cfd81232ae0a333d59eee671d679253ec3924a1c81ceb2157af6220.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A paper airplane with a trail of smoke or vapor coming out of its tail.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal",
+          "food packaging",
+          "thin sheets",
+          "foldable",
+          "shape",
+          "cheaper"
+        ],
+        "context_relation": "The image is a visual representation of the question about the metal commonly used for food packaging.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the question and answer options."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101133,9 +101306,30 @@
       "asset_path": "assets/1dbee68bbd8c65097de826d476321968a5e9e80118093bf12cd8aa7c30e82ccc.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A question about the use of metals in food packaging.",
+        "visual_type": "equation",
+        "visible_text": [
+          "Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "ENQUIRY",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal",
+          "food packaging",
+          "cost",
+          "flexibility"
+        ],
+        "context_relation": "The question is related to the material properties of metals used in food packaging.",
+        "limitations": [
+          "The question does not specify the criteria for the metal's use in food packaging, such as taste, chemical stability, or environmental impact."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101151,9 +101345,29 @@
       "asset_path": "assets/d7f3f1fe2a8cb18ab9fcb7f72874ee8a847b5286268eacca5159945e05d2ca97.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Three yellow objects are shown, possibly representing metals.",
+        "visual_type": "photo",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "ENQUIRY (i) Aluminium (ii) Copper",
+          "Non-metals"
+        ],
+        "concepts": [
+          "metal",
+          "food packaging",
+          "aluminium",
+          "copper"
+        ],
+        "context_relation": "The image is related to the text about metals used in food packaging.",
+        "limitations": [
+          "The image is blurry and the text is partially obscured, making it difficult to read some details."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101169,9 +101383,32 @@
       "asset_path": "assets/1a3e22380ad7bda4becb52a0522693baa941c32a9db530b03de6e4359a05ec0e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal",
+          "food packaging",
+          "cost",
+          "flexibility"
+        ],
+        "context_relation": "The image is related to the text about metals used in food packaging.",
+        "limitations": [
+          "The image does not provide specific information about the metal used in food packaging.",
+          "The image does not show any metal or packaging materials."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101187,9 +101424,32 @@
       "asset_path": "assets/b64ff9e9c03978bd47ffc456723b3edf8239ba1e258e1e28e597d901ef136285.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A question about the use of metals in food packaging.",
+        "visual_type": "photo",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "Metal use in food packaging",
+          "Aluminium",
+          "Copper",
+          "Iron",
+          "Gold"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "The image is a photo and does not provide any visual information about the question."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101205,9 +101465,33 @@
       "asset_path": "assets/f48acae7ebea3c4fb38a7fd11a6c77ae473e01685eb3bb8f2f2c4df15e55e2b9.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a rope and a block, possibly representing a learning activity.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal",
+          "food packaging",
+          "aluminium",
+          "copper",
+          "iron",
+          "gold"
+        ],
+        "context_relation": "The image is related to the text about enhancing learning through the use of different metals for food packaging.",
+        "limitations": [
+          "The image does not provide specific details about the learning activity."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101223,9 +101507,34 @@
       "asset_path": "assets/10b782c3c6ccd836a4a5ec4d0be398bfea328d72bee8f2b393b155ba6152cc95.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the structure of a metal, possibly aluminum, with a rope on the left side.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "ENQUIRY",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal",
+          "food packaging",
+          "aluminium",
+          "copper",
+          "iron",
+          "gold"
+        ],
+        "context_relation": "The image is related to the text about enhancing learning through the use of metals for food packaging.",
+        "limitations": [
+          "The image does not provide specific details about the metal's structure or properties."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101241,9 +101550,33 @@
       "asset_path": "assets/adefb78647e177979b85070a475ef0678bd2cdf98024c0103197eca2240b1d69.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A set of ice cubes and a rope.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal",
+          "food packaging",
+          "aluminium",
+          "copper",
+          "iron",
+          "gold"
+        ],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": [
+          "The image does not provide any visual information about the metal used for food packaging."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101259,9 +101592,32 @@
       "asset_path": "assets/973619418d510c86751d9404c699318289d467ffa8394a40a56a76fef710c610.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Three objects: a spiral, a rectangular object, and a square object.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "ENQUIRY (i) Aluminium (ii) Copper",
+          "Non-metals",
+          "3. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "ENQUIRY (i) Aluminium (ii) Copper",
+          "Non-metals"
+        ],
+        "concepts": [
+          "metal",
+          "food packaging",
+          "aluminium",
+          "copper"
+        ],
+        "context_relation": "The image is related to the text about metals used in food packaging.",
+        "limitations": [
+          "The image does not provide specific details about the metal used in food packaging."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101277,9 +101633,30 @@
       "asset_path": "assets/cf674e025ddddaf0dff0d1da86f05340126fc76e973092c5d61174c1012e387e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A question about the use of metals in food packaging.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal use in food packaging",
+          "cost-effectiveness",
+          "flexibility of metal sheets"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "The image does not provide any additional context or visual aids."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101295,9 +101672,18 @@
       "asset_path": "assets/6bac4ca48aabd7c3cdb8c4886ee93df68523f1a55fec559903754efac897ae0c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A twisted rope-like object with a circular ring at the top.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": [
+          "The image does not provide any specific information related to the text content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101313,9 +101699,32 @@
       "asset_path": "assets/3fa64880cb3e3d7e42c006fb26cdc93de008d3e38783ef88e1dcf76b3b1402f2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A question about the use of metals in food packaging.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "Metal use in food packaging",
+          "Aluminium",
+          "Copper",
+          "Iron",
+          "Gold"
+        ],
+        "context_relation": "The question is about the use of metals in food packaging, specifically focusing on aluminium, which is commonly used due to its properties.",
+        "limitations": [
+          "The question does not provide a specific context or question number."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101331,9 +101740,28 @@
       "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A multiple-choice question about the use of metals in food packaging.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal use in food packaging",
+          "cost-effectiveness",
+          "flexibility of metal sheets"
+        ],
+        "context_relation": "The question is related to the content of the textbook, specifically the section on metals and their uses.",
+        "limitations": [
+          "The image does not provide any additional context or visual information beyond the question and answer options."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101349,9 +101777,28 @@
       "asset_path": "assets/60e51dd89a51579040ec0360976dc7076bcf4e51aa3f7dfb6d848683799f73b6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A multiple-choice question about the use of metals in food packaging.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal use in food packaging",
+          "cost-effectiveness",
+          "flexibility of metal sheets"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "The image does not provide any visual evidence or diagram to support the question."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101367,9 +101814,32 @@
       "asset_path": "assets/1ae347f70f25f24bc3dc372ca02c3e80da5284ee131e7e928c4484f76d70d893.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A question about the use of metals in food packaging.",
+        "visual_type": "photo",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal",
+          "food packaging",
+          "material",
+          "shape",
+          "fold"
+        ],
+        "context_relation": "The image is a question from a textbook about the use of metals in food packaging.",
+        "limitations": [
+          "The image does not provide any visual evidence or diagram to support the question."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101385,9 +101855,31 @@
       "asset_path": "assets/03f8b0d28e1f44a7211d1c319b499b862ce48a974a5df92d8508ad8cdc15c6ac.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A twisted rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "ENQUIRY",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal",
+          "food packaging",
+          "flexibility"
+        ],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the visible text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101403,9 +101895,19 @@
       "asset_path": "assets/91db0bb0bdf5daabe46664b1db27783c1ec80abea77909700ccb37f513ecd4ba.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A twisted rope-like object.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text content.",
+          "The image is a visual representation of a twisted rope-like object, which is not directly related to the text content about metal properties and uses in food packaging."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101421,9 +101923,33 @@
       "asset_path": "assets/5b9ef839a55a731a976ac0c5513189eba11091c809e8df1978d6795ac2ee12ac.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A question about the use of metals in food packaging.",
+        "visual_type": "photo",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "Metal use in food packaging",
+          "Aluminium",
+          "Copper",
+          "Iron",
+          "Gold"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "The image does not provide any visual information beyond the text.",
+          "The question is about the use of metals in food packaging, which is not visually represented."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101439,9 +101965,16 @@
       "asset_path": "assets/93187faab449393957bba3e13ff4d2d4ac5e88af3f8f172dc5167530e0c9db9e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a twisted rope or cord.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101457,9 +101990,32 @@
       "asset_path": "assets/9f9039c01b115584d524680619eeb3c8bca3b17f98b5d54166dd5263b6b970cc.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A question about the use of metals in food packaging.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "Metal use in food packaging",
+          "Aluminium",
+          "Copper",
+          "Iron",
+          "Gold"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "No specific image provided, only text visible."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101475,9 +102031,16 @@
       "asset_path": "assets/cd72410e92a12089f30b2cc8d04baf61ffc685a6de1d8e8762924b1f8d71d482.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a coiled rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101493,9 +102056,16 @@
       "asset_path": "assets/cd72410e92a12089f30b2cc8d04baf61ffc685a6de1d8e8762924b1f8d71d482.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a coiled rope or cable.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101511,9 +102081,30 @@
       "asset_path": "assets/011af9fc88ed725557b993afda290e4e65545c1ec311f8f073f503948440d112.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A close-up of a coiled rope or cable.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal",
+          "food packaging",
+          "coiled rope or cable"
+        ],
+        "context_relation": "The image is not directly related to the text.",
+        "limitations": [
+          "The image does not provide any additional context or information beyond the visible text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101529,9 +102120,31 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A question about the use of metals in food packaging.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal use in food packaging",
+          "cost-effectiveness",
+          "flexibility"
+        ],
+        "context_relation": "The question is related to the content of the textbook, specifically the section on metals and their uses.",
+        "limitations": [
+          "The image does not provide any visual information beyond the text.",
+          "The question is about a specific topic within the textbook, and the image does not show any other related content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101547,9 +102160,31 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A question about the use of metals in food packaging.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "1. Which metal is commonly used to make food packaging materials as it is cheaper, and its thin sheets can be folded easily into any shape?",
+          "ENQUIRY",
+          "(i) Aluminium",
+          "(ii) Copper",
+          "(iii) Iron",
+          "(iv) Gold"
+        ],
+        "concepts": [
+          "metal use in food packaging",
+          "cost-effectiveness",
+          "flexibility of metal sheets"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "The image does not provide any visual information.",
+          "The question is about a specific topic in the textbook.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101565,9 +102200,62 @@
       "asset_path": "page-0075.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Question and answer related to metals and non-metals.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "55",
+          "Let Us Enhance Our Learning",
+          "1. Which metal is commonly used to make food packaging\n   materials as it is cheaper, and its thin sheets can be\n   folded easily into any shape?",
+          "(i) Aluminium        (ii) Copper",
+          "(iii) Iron              (iv) Gold",
+          "2. Which of the following metal catches fire when it comes\n   in contact with water?",
+          "(i) Copper        (ii) Aluminium",
+          "(iii) Zinc              (iv) Sodium",
+          "3. State with reason(s) whether the following statements\n   are True [T] or False [F].",
+          "(i) Aluminium and copper are examples of non-metals\n   used for making utensils and statues. [ ]",
+          "(ii) Metals form oxides when combined with oxygen,\n   the solution of which turns blue litmus paper to\n   red. [ ]",
+          "(iii) Oxygen is a non-metal essential for respiration. [ ]",
+          "(iv) Copper vessels are used for boiling water because\n   they are good conductors of electricity. [ ]",
+          "4. Why are only a few metals suitable for making\n   jewellery?",
+          "5. Match the uses of metals and non-metals given in\n   Column I with the jumbled names of metals and\n   non-metals given in Column II.",
+          "Column I",
+          "(i) Used in electrical wiring",
+          "(ii) Most malleable and ductile",
+          "(iii) Living organisms cannot survive without it.",
+          "(iv) Plants grow healthy when fertilisers\n   containing it are added to the soil.",
+          "(v) Used in water purification",
+          "Column II",
+          "(a) E N X Y G O",
+          "(b) N E C O H I R L",
+          "(c) P E P O R C",
+          "(d) T E N G O I N R",
+          "(e) O G D L",
+          "6. What happens when oxygen reacts with magnesium\n   and sulfur. What are the main differences in the nature\n   of products formed?"
+        ],
+        "concepts": [
+          "Metals",
+          "Non-metals",
+          "Food packaging",
+          "Electrical wiring",
+          "Oxides",
+          "Respiration",
+          "Boiling water",
+          "Jewellery",
+          "Electrical conductivity",
+          "Living organisms",
+          "Plants",
+          "Fertilisers",
+          "Water purification"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "No specific limitations provided.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101583,9 +102271,19 @@
       "asset_path": "assets/3c592f7a47fcbc1e16ead05f54686eb66c070a8f19d8792bc5f0a92fb8ae41b6.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue illustration of a person floating in the air with a dotted line above them, possibly representing a thought or idea.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be an abstract representation rather than a direct visual aid for the text.",
+        "limitations": [
+          "The image does not provide specific information or context related to the text.",
+          "The image is abstract and does not directly relate to the text content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101601,9 +102299,16 @@
       "asset_path": "assets/04359c6b8f97f6c90232ee85623c8aba2c6ecd1f7f545100561329f1b74d8742.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text content.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101619,9 +102324,16 @@
       "asset_path": "assets/89364ff036dd945878b125d5ef3539a6d7e354e8476b26c3c4a4da7e3a5ba13e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rope with blue rings at each end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101637,9 +102349,16 @@
       "asset_path": "assets/156788c9e004fc57180e64227f3132564d36f904d1dc9237e811a1c00e0a559c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Two ropes with blue rings at the ends.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101655,9 +102374,38 @@
       "asset_path": "assets/c493f7fcadd82c0cd2fc7598d412cfd799980634fc6a9003dcb7afe518a20ed2.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Flow chart with steps labeled 'INNOVATION', 'DISCOVERY', 'ENQUIRY', 'Change in blue', 'Add blue and red litmus solutions separately', 'Air', 'Heat', 'Ash', 'Water'.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Change in blue",
+          "Add blue and red litmus solutions separately",
+          "Air",
+          "Heat",
+          "Ash",
+          "Water"
+        ],
+        "concepts": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Change in blue",
+          "Add blue and red litmus solutions separately",
+          "Air",
+          "Heat",
+          "Ash",
+          "Water"
+        ],
+        "context_relation": "The flow chart outlines a sequence of steps in a scientific inquiry process.",
+        "limitations": [
+          "The image does not provide specific details about the steps or their outcomes."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101673,9 +102421,37 @@
       "asset_path": "assets/dc0216e6c26479e2bde7e820a731cf188b023fe3bef04a069e5e821dd2ea5a52.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Flow chart with steps labeled 'INNOVATION', 'DISCOVERY', 'ENQUIRY', 'Complete the following flow chart', 'Air', 'Heat', 'Ash', 'Water', 'Add blue and red litmus solutions separately', 'Change in blue litmus', 'Change in red litmus'",
+        "visual_type": "diagram",
+        "visible_text": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Complete the following flow chart",
+          "Air",
+          "Heat",
+          "Ash",
+          "Water",
+          "Add blue and red litmus solutions separately",
+          "Change in blue litmus",
+          "Change in red litmus"
+        ],
+        "concepts": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Flow chart",
+          "Chemical reactions",
+          "Litmus tests"
+        ],
+        "context_relation": "The flow chart is a visual representation of the scientific process of discovery, innovation, and inquiry, with a focus on chemical reactions and litmus tests.",
+        "limitations": [
+          "The flow chart is incomplete and requires completion based on the context provided."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101691,9 +102467,29 @@
       "asset_path": "assets/72128145c630b98ef477c3b618f41abf3b82f6c7ae94c8e2c514bd0765cb3069.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue background with text and a flowchart.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "7. Complete the following flow chart:",
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Change in blue"
+        ],
+        "concepts": [
+          "Innovation",
+          "Discovery",
+          "Enquiry",
+          "Change in blue"
+        ],
+        "context_relation": "The flowchart is related to the concepts of innovation, discovery, and enquiry.",
+        "limitations": [
+          "The image does not provide specific details about the flowchart or its components."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101709,9 +102505,37 @@
       "asset_path": "assets/d7bc824aa0667c3be3502f77ffb39c6cc7fa47f324bd779fc7404e936280abfb.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Flow chart illustrating the process of innovation, discovery, and inquiry in the context of air, heat, ash, and water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Change in blue",
+          "Add blue and red litmus solutions separately",
+          "Air",
+          "Heat",
+          "Ash",
+          "Water"
+        ],
+        "concepts": [
+          "Innovation",
+          "Discovery",
+          "Enquiry",
+          "Litmus solutions",
+          "Air",
+          "Heat",
+          "Ash",
+          "Water"
+        ],
+        "context_relation": "The flow chart represents the sequence of steps in a scientific inquiry process.",
+        "limitations": [
+          "The image does not provide specific details about the steps or their sequence."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101727,9 +102551,39 @@
       "asset_path": "assets/66c9f148cd70d901b2246f2355b8ae68ee9f6691d46a665bb9e22746a61afa5c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue background with text and a flowchart.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "7. Complete the following flow chart:",
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Change in blue",
+          "Air",
+          "Heat",
+          "Ash",
+          "Water",
+          "Add blue and red litmus solutions separately"
+        ],
+        "concepts": [
+          "Innovation",
+          "Discovery",
+          "Enquiry",
+          "Change in blue",
+          "Air",
+          "Heat",
+          "Ash",
+          "Water",
+          "Blue and red litmus solutions"
+        ],
+        "context_relation": "The flowchart is related to the concepts of innovation, discovery, and enquiry.",
+        "limitations": [
+          "The image does not provide specific details about the flowchart or its components."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101745,9 +102599,38 @@
       "asset_path": "assets/18d5ec594075f4560ad876635fed10640620c406229decd6a5a93ee3029ebb88.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Flow chart with steps labeled 'INNOVATION', 'DISCOVERY', 'ENQUIRY', 'Change in blue', 'Add blue and red litmus solutions separately', 'Air', 'Heat', 'Ash', 'Water'.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Change in blue",
+          "Add blue and red litmus solutions separately",
+          "Air",
+          "Heat",
+          "Ash",
+          "Water"
+        ],
+        "concepts": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Change in blue",
+          "Add blue and red litmus solutions separately",
+          "Air",
+          "Heat",
+          "Ash",
+          "Water"
+        ],
+        "context_relation": "The flow chart outlines a sequence of steps in a scientific inquiry process.",
+        "limitations": [
+          "The image does not provide specific details about the steps or their outcomes."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101763,9 +102646,37 @@
       "asset_path": "assets/5a72b2d124a073662a275443eda5e74af3da0432646415d82b14b543ef59418c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A flowchart with steps labeled 'INNOVATION', 'DISCOVERY', and 'ENQUIRY'. The flowchart includes a question mark and a process involving 'Air', 'Heat', 'Ash', and 'Water'. There is a step labeled 'Add blue and red litmus solutions separately' followed by 'Change in blue'.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Air",
+          "Heat",
+          "Ash",
+          "Water",
+          "Add blue and red litmus solutions separately",
+          "Change in blue"
+        ],
+        "concepts": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Air",
+          "Heat",
+          "Ash",
+          "Water",
+          "Litmus solutions"
+        ],
+        "context_relation": "The flowchart represents a process or sequence of steps in an educational context, likely related to a scientific inquiry or experiment.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or process it represents."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101781,9 +102692,19 @@
       "asset_path": "assets/8fd00335c2a0bc60f1a3fa45ceca85a087c73454a7225851a0d088d428426a1a.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing a rope ladder with two rungs.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope ladder, which is not directly related to the flow chart or the chemical reaction described in the text.",
+        "limitations": [
+          "The image does not provide any information about the flow chart or the chemical reaction.",
+          "The image is a static representation and does not depict any dynamic processes or changes."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101799,9 +102720,16 @@
       "asset_path": "assets/cd491321f497e80672e52e734e66803c83ff5901d1642d8c49f35be34cead420.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -101817,9 +102745,19 @@
       "asset_path": "assets/cbb278605814f11d3a23010062075d3eec139eab6bf89dc2ad362f0d37bab992.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character is climbing a rope ladder.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a character's journey or progress, possibly symbolizing a learning or educational journey.",
+        "limitations": [
+          "The image does not provide specific educational content or questions related to the flow chart in the text.",
+          "The visible text is empty, and there are no visible labels or formulas in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

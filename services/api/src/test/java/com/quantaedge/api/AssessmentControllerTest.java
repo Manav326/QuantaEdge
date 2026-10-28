@@ -49,6 +49,11 @@ class AssessmentControllerTest {
   void setUp() {
     controller = new AssessmentController(
         jdbc, authorization, questionHistory, answerService, staffAudit, new ObjectMapper(), assessmentCatalog);
+    // Existing controller tests exercise assessment eligibility/ownership independently of expiry.
+    // Explicitly allow course access by default; access-denial scenarios stub this predicate false.
+    lenient().when(jdbc.queryForObject(
+        contains("qe_course_enrollment_access_allowed"), eq(Boolean.class), any(Object[].class)))
+        .thenReturn(true);
     lenient().when(jdbc.queryForObject(
         contains("release.source_institution_id=assignment.institution_id"),
         eq(Boolean.class), any(Object[].class)))
