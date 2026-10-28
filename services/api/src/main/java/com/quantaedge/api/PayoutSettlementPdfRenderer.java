@@ -23,6 +23,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.imageio.ImageIO;
+import org.apache.pdfbox.cos.COSDictionary;
+import org.apache.pdfbox.cos.COSName;
+import org.apache.pdfbox.cos.COSString;
+import org.apache.pdfbox.pdmodel.documentinterchange.markedcontent.PDPropertyList;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -346,6 +350,11 @@ public class PayoutSettlementPdfRenderer {
                 if(run.pageIndex()!=pageIndex)continue;
                 String text=pdfSafeText(run.text(),searchableFont);
                 if(text.isEmpty())continue;
+                // ActualText preserves the exact source string for search, copy/paste and
+                // assistive technology even when a complex-script glyph has visual shaping.
+                COSDictionary actualTextProperties=new COSDictionary();
+                actualTextProperties.setItem(COSName.ACTUAL_TEXT,new COSString(run.text()));
+                textStream.beginMarkedContent(COSName.SPAN,PDPropertyList.create(actualTextProperties));
                 textStream.beginText();
                 // Tr is a text-state operator and must be inside a BT/ET text object.
                 textStream.setRenderingMode(RenderingMode.FILL);
@@ -353,6 +362,7 @@ public class PayoutSettlementPdfRenderer {
                 textStream.newLineAtOffset(run.x()*scale,pdfPage.getMediaBox().getHeight()-run.baselineY()*scale);
                 textStream.showText(text);
                 textStream.endText();
+                textStream.endMarkedContent();
               }
             }
           } finally {
