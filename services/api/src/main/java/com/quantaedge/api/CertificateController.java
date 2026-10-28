@@ -476,7 +476,6 @@ public class CertificateController {
 
     long courseId=resolveStudentCourseId(request.courseId());
     requireActiveCourseEnrollment(studentId,courseId,institutionId);
-    requireCourseAccessForIssuance(studentId,courseId,institutionId);
     String type = clean(request.achievementType()).toUpperCase(Locale.ROOT);
     String template = CertificateRenderer.normalizeTemplate(request.templateId());
     String profileLanguage = clean(student.get("language"));
@@ -511,6 +510,7 @@ public class CertificateController {
       return existingOrRejectRevoked(existing);
     }
 
+    requireCourseAccessForIssuance(studentId,courseId,institutionId);
     String sql="""
         SELECT st.display_name AS recipient_name,st.class_code,cc.code AS source_class_code,
                s.id AS subject_id,selected_course.id AS program_id,selected_course.display_name AS course_name,
@@ -604,6 +604,7 @@ public class CertificateController {
     if (existing == null) existing = existingAssessmentCertificate(studentId,attemptId,requestedCourseId,institutionId);
     if (existing != null) return existingOrRejectRevoked(existing);
 
+    requireCourseAccessForIssuance(studentId,requestedCourseId,institutionId);
     Map<String, Object> achievement = queryOptional("""
         SELECT st.display_name AS recipient_name,st.language AS student_language,
                cc.code AS class_code,selected_course.id AS program_id,
