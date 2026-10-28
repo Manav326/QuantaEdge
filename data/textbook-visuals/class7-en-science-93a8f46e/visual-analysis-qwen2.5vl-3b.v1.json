@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2563,
+    "assets_selected": 2566,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "47c0d3068c13153fcc01ebf1",
-      "60cfe0019ebf27010db989c8",
-      "80724c89f65fabd0bb8ad1fa"
+      "fa82e8570d7b6993a6b58eeb",
+      "621e8a41f7c10a2c2d629f53",
+      "9e9dc5dec6f44e7331f9bb27"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2561,
-    "assets_remaining": 4927,
+    "assets_analyzed": 2563,
+    "assets_remaining": 4925,
     "assets_completion_percent": 34.2,
-    "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 2558,
+    "assets_failed": 25,
+    "assets_skipped_from_checkpoint": 2561,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -13461,7 +13461,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40673609365",
-      "checkpointed_at": "2026-10-28T12:48:50Z"
+      "checkpointed_at": "2026-10-28T12:56:55Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82500,7 +82500,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40673609365",
-      "checkpointed_at": "2026-10-28T12:50:21Z"
+      "checkpointed_at": "2026-10-28T12:58:24Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -96549,6 +96549,101 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40673609365",
       "checkpointed_at": "2026-10-28T12:55:37Z"
+    },
+    {
+      "asset_id": "fa82e8570d7b6993a6b58eeb",
+      "asset_sha256": "f268ae46d497b68255e72397a41ed2d3460a5fa14fbdd76863c8ee49953a5113",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/f268ae46d497b68255e72397a41ed2d3460a5fa14fbdd76863c8ee49953a5113.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40673609365",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "621e8a41f7c10a2c2d629f53",
+      "asset_sha256": "29fbac8e5546d5812ee7848d2f92d5ea025fe723d312cfed19d7f0732b3bc382",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/29fbac8e5546d5812ee7848d2f92d5ea025fe723d312cfed19d7f0732b3bc382.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has become water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Bud to Flower",
+          "Cold Water"
+        ],
+        "context_relation": "The image illustrates the transformation of ice into water, a chemical change, and the growth of a bud into a flower, a physical change.",
+        "limitations": [
+          "The image does not provide specific details about the physical and chemical changes."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40673609365",
+      "checkpointed_at": "2026-10-28T13:03:55Z"
+    },
+    {
+      "asset_id": "9e9dc5dec6f44e7331f9bb27",
+      "asset_sha256": "4014cea8d5d82b38fc50bfe710e3807a2965f05e7c069e1f369b2056f81c4d78",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/4014cea8d5d82b38fc50bfe710e3807a2965f05e7c069e1f369b2056f81c4d78.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has become water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Bud to Flower",
+          "Cold Water"
+        ],
+        "context_relation": "The image illustrates the transformation of ice into water, a chemical change, and the growth of a bud into a flower, a physical change.",
+        "limitations": [
+          "The image does not provide specific details about the chemical or physical properties of the substances involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40673609365",
+      "checkpointed_at": "2026-10-28T13:05:43Z"
     }
   ]
 }
