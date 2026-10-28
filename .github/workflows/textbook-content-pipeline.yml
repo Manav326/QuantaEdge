@@ -858,7 +858,7 @@ jobs:
     name: Validate additive v3 preparation scripts
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout main
+      - name: Checkout task branch
         uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
@@ -1544,7 +1544,7 @@ jobs:
       CHECKPOINT_EVERY: ${{ inputs.checkpoint_every || '2' }}
       MAX_MODEL_CALLS: ${{ inputs.max_model_calls || '6' }}
     steps:
-      - name: Checkout main with checkpoint write permission
+      - name: Checkout task branch with checkpoint write permission
         uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
