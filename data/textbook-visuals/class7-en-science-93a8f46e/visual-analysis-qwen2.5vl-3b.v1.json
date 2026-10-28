@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2576,
+    "assets_selected": 2578,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "5898aeed233b3bd59f2ea7ac",
-      "2e11b1018960cf5bd11a8580"
+      "08e01fddf87da08d8005540d",
+      "5daffd3f145de0914780bfe4"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2573,
-    "assets_remaining": 4915,
+    "assets_analyzed": 2575,
+    "assets_remaining": 4913,
     "assets_completion_percent": 34.4,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 2571,
+    "assets_skipped_from_checkpoint": 2573,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40716293473",
-      "checkpointed_at": "2026-10-28T16:39:45Z"
+      "checkpointed_at": "2026-10-28T16:45:32Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40716293473",
-      "checkpointed_at": "2026-10-28T16:40:16Z"
+      "checkpointed_at": "2026-10-28T16:46:02Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40716293473",
-      "checkpointed_at": "2026-10-28T16:40:55Z"
+      "checkpointed_at": "2026-10-28T16:46:43Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -97019,6 +97019,77 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40716293473",
       "checkpointed_at": "2026-10-28T16:44:42Z"
+    },
+    {
+      "asset_id": "08e01fddf87da08d8005540d",
+      "asset_sha256": "d14c022c8528f101e1f5a098f054c55b60ef23b31eea6b3dbc15b2ddce5e1be4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/d14c022c8528f101e1f5a098f054c55b60ef23b31eea6b3dbc15b2ddce5e1be4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scroll with a wooden handle, possibly representing a historical or literary text.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "",
+          ""
+        ],
+        "concepts": [
+          "scroll",
+          "wooden handle"
+        ],
+        "context_relation": "The scroll is likely related to the educational content about observing changes around us.",
+        "limitations": [
+          "The scroll is not a full page, but a cropped figure.",
+          "The scroll is not a diagram, chart, graph, table, map, cartoon, photo, or equation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40716293473",
+      "checkpointed_at": "2026-10-28T16:47:25Z"
+    },
+    {
+      "asset_id": "5daffd3f145de0914780bfe4",
+      "asset_sha256": "d3886f218afb9357610ce453df2796415551da1233c8d4d86d40f39e256254e9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/d3886f218afb9357610ce453df2796415551da1233c8d4d86d40f39e256254e9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table listing changes observed around the user.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.1: Some changes observed around us",
+          "S.No.              Change                      Observation(s)",
+          "1.   Melting ice cubes"
+        ],
+        "concepts": [
+          "Observation",
+          "Change",
+          "Melting ice cubes"
+        ],
+        "context_relation": "Observation and reflection",
+        "limitations": [
+          "No specific visual elements are provided."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40716293473",
+      "checkpointed_at": "2026-10-28T16:48:07Z"
     }
   ]
 }

@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7a037b62f73cd22fb76b61204aaeb8f631c0adf3a047457cc76a0b01befa2204",
+  "raw_analysis_sha256": "6057663cf43d6fa7bd7a2d89d2d554570a75dfe6437387419997c8fc1978633e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40716293473",
-      "checkpointed_at": "2026-10-28T16:39:45Z",
+      "checkpointed_at": "2026-10-28T16:45:32Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40716293473",
-      "checkpointed_at": "2026-10-28T16:40:16Z",
+      "checkpointed_at": "2026-10-28T16:46:02Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40716293473",
-      "checkpointed_at": "2026-10-28T16:40:55Z",
+      "checkpointed_at": "2026-10-28T16:46:43Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -152438,6 +152438,116 @@
         "limitations": [
           "The image does not provide specific details about the changes observed.",
           "The image does not show the table with the list of changes."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "08e01fddf87da08d8005540d",
+      "asset_sha256": "d14c022c8528f101e1f5a098f054c55b60ef23b31eea6b3dbc15b2ddce5e1be4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/d14c022c8528f101e1f5a098f054c55b60ef23b31eea6b3dbc15b2ddce5e1be4.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scroll with a wooden handle, possibly representing a historical or literary text.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "",
+          ""
+        ],
+        "concepts": [
+          "scroll",
+          "wooden handle"
+        ],
+        "context_relation": "The scroll is likely related to the educational content about observing changes around us.",
+        "limitations": [
+          "The scroll is not a full page, but a cropped figure.",
+          "The scroll is not a diagram, chart, graph, table, map, cartoon, photo, or equation."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40716293473",
+      "checkpointed_at": "2026-10-28T16:47:25Z",
+      "effective_analysis": {
+        "visual_summary": "A scroll with a wooden handle, possibly representing a historical or literary text.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "",
+          ""
+        ],
+        "concepts": [
+          "scroll",
+          "wooden handle"
+        ],
+        "context_relation": "The scroll is likely related to the educational content about observing changes around us.",
+        "limitations": [
+          "The scroll is not a full page, but a cropped figure.",
+          "The scroll is not a diagram, chart, graph, table, map, cartoon, photo, or equation."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5daffd3f145de0914780bfe4",
+      "asset_sha256": "d3886f218afb9357610ce453df2796415551da1233c8d4d86d40f39e256254e9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/d3886f218afb9357610ce453df2796415551da1233c8d4d86d40f39e256254e9.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table listing changes observed around the user.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.1: Some changes observed around us",
+          "S.No.              Change                      Observation(s)",
+          "1.   Melting ice cubes"
+        ],
+        "concepts": [
+          "Observation",
+          "Change",
+          "Melting ice cubes"
+        ],
+        "context_relation": "Observation and reflection",
+        "limitations": [
+          "No specific visual elements are provided."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40716293473",
+      "checkpointed_at": "2026-10-28T16:48:07Z",
+      "effective_analysis": {
+        "visual_summary": "A table listing changes observed around the user.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 5.1: Some changes observed around us",
+          "S.No.              Change                      Observation(s)",
+          "1.   Melting ice cubes"
+        ],
+        "concepts": [
+          "Observation",
+          "Change",
+          "Melting ice cubes"
+        ],
+        "context_relation": "Observation and reflection",
+        "limitations": [
+          "No specific visual elements are provided."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
