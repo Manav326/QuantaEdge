@@ -1,70 +1,6 @@
 name: QuantaEdge Layers 6-8 - local Ollama pipeline
 
 on:
-  push:
-    branches: ["main"]
-    paths:
-      - "scripts/quantaedge_layers_6_8.py"
-      - "scripts/ai_training_dataset.py"
-      - "scripts/validate_structured_lesson_artifacts.py"
-      - "scripts/register_structured_lesson_drafts.py"
-      - "tests/test_quantaedge_layers_6_8.py"
-      - "tests/test_validate_structured_lesson_artifacts.py"
-      - "tests/test_register_structured_lesson_drafts.py"
-      - "data/structured-lessons/**"
-      - "services/api/src/main/java/com/quantaedge/api/StructuredLessonArtifactService.java"
-      - "services/api/src/test/java/com/quantaedge/api/StructuredLessonArtifactServiceTest.java"
-      - ".github/workflows/ci.yml"
-      - ".github/workflows/quantaedge-layers-6-8.yml"
-      - "tests/test_workflow_resume_entrypoints.py"
-      - "docs/textbook-content-pipeline-eight-layers.md"
-      - "apps/admin/app/structured-lesson-preview/page.tsx"
-  workflow_dispatch:
-    inputs:
-      mode:
-        description: "Benchmark, run bounded draft generation, resume matching checkpoints, or refresh a saved benchmark without model inference"
-        type: choice
-        options: ["benchmark", "run", "resume", "refresh_benchmark"]
-        default: "benchmark"
-        required: true
-      class_no:
-        description: "Class for draft generation (benchmark always uses Class 6 NCERT Science)"
-        type: choice
-        options: ["6", "7", "8"]
-        default: "6"
-        required: true
-      source_book_id:
-        description: "Exact whole-book ID from the committed extraction manifest"
-        type: string
-        default: "ncert-c6-english-fecu1"
-        required: true
-      benchmark_models:
-        description: "Comma-separated local Ollama models to benchmark"
-        type: string
-        default: "qwen2.5:1.5b,qwen2.5:3b"
-        required: true
-      generation_model:
-        description: "Model for experimental draft generation; not a production selection"
-        type: string
-        default: "qwen2.5:1.5b"
-        required: true
-      max_model_calls:
-        description: "Maximum model calls for this resumable run (1-20)"
-        type: number
-        default: 6
-        required: true
-      checkpoint_every:
-        description: "Durable Git savepoint interval in model calls; 1 minimizes work at risk on interruption, larger values reduce commit overhead"
-        type: choice
-        options: ["1", "2", "3", "5"]
-        default: "2"
-        required: true
-      allow_experimental_model:
-        description: "Explicitly permit unapproved model output as review-only draft candidates"
-        type: boolean
-        default: false
-        required: true
-
   workflow_call:
     inputs:
       mode:
@@ -114,7 +50,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.ref }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -131,7 +67,7 @@ jobs:
         run: python scripts/validate_structured_lesson_artifacts.py --repo-root . --index data/structured-lessons/class-6/science/production-index.v1.json
 
   execute:
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call'
+    if: github.event_name == 'workflow_call'
     name: Run budgeted local Ollama pipeline
     needs: validate
     runs-on: ubuntu-latest
@@ -145,7 +81,7 @@ jobs:
       - name: Checkout main with checkpoint write permission
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.ref }}
           fetch-depth: 0
           persist-credentials: true
       - uses: actions/setup-python@v5
@@ -248,6 +184,23 @@ jobs:
             --benchmark-report data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
             --allow-experimental-model --rebuild-outputs-only --commit-checkpoints
 
+      - name: Record explicitly requested Layers 6–8 task start
+        if: (inputs.mode == 'run' || inputs.mode == 'resume') && steps.generation_preflight.outputs.retryable_segments != '0'
+        shell: bash
+        env:
+          CLASS_NO: ${{ inputs.class_no }}
+          SOURCE_BOOK_ID: ${{ inputs.source_book_id }}
+          MODEL: ${{ inputs.generation_model }}
+        run: |
+          set -euo pipefail
+          pair_id="$(python - "$SOURCE_BOOK_ID" <<'PY'
+          import sys
+          from scripts.textbook_pipeline_handoff import pair_for_book_id
+          print(pair_for_book_id(sys.argv[1])["book_pair_id"])
+          PY
+          )"
+          python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$CLASS_NO" --book-pair-id "$pair_id" --source-book-id "$SOURCE_BOOK_ID" --stage 7 --status RUNNING --reason-code EXPLICIT_LAYER6_8_REQUEST --model "$MODEL" --message "Layer 6–8 generation/resume was explicitly requested after a source-bound Layer 5 preflight."
+
       - name: Start loopback-only Ollama service
         if: inputs.mode == 'benchmark' || ((inputs.mode == 'run' || inputs.mode == 'resume') && steps.generation_preflight.outputs.retryable_segments != '0')
         shell: bash
@@ -328,6 +281,81 @@ jobs:
             --checkpoint-every "$CHECKPOINT_EVERY" --request-timeout 180 \
             --benchmark-report data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
             --allow-experimental-model --commit-checkpoints
+      - name: Record source-bound Layers 6–8 checkpoint and timings
+        if: success() && (inputs.mode == 'run' || inputs.mode == 'resume') && steps.generation_preflight.outputs.retryable_segments != '0'
+        shell: bash
+        env:
+          CLASS_NO: ${{ inputs.class_no }}
+          SOURCE_BOOK_ID: ${{ inputs.source_book_id }}
+          MODEL: ${{ inputs.generation_model }}
+        run: |
+          set -euo pipefail
+          read -r pair_id manifest status processed expected unresolved <<< "$(python - "$GITHUB_WORKSPACE" "$CLASS_NO" "$SOURCE_BOOK_ID" <<'PY'
+          import json,sys
+          from pathlib import Path
+          from scripts.plan_textbook_layer45_matrix import BOOKS
+          from scripts.textbook_pipeline_handoff import pair_for_book_id
+          root=Path(sys.argv[1]); grade=sys.argv[2]; book_id=sys.argv[3]
+          source=next((x for x in BOOKS if x["book_id"]==book_id),None)
+          if source is None or str(source["class_no"])!=grade:
+              raise SystemExit("Source book is not registered in the selected class.")
+          ledger=root/"data"/"textbook-content-pipeline"/f"class-{grade}"/"books"/source["book_slug"]/"coverage-ledger.v1.json"
+          if not ledger.is_file():
+              raise SystemExit(f"Layer 5 prerequisite ledger missing: {ledger}")
+          ledger_doc=json.loads(ledger.read_text(encoding="utf-8"))
+          digest=str((ledger_doc.get("source") or {}).get("source_pdf_sha256") or "")
+          if len(digest)!=64:
+              raise SystemExit("Layer 5 source PDF SHA-256 invalid.")
+          manifest=root/"data"/"textbook-content-pipeline"/f"class-{grade}"/"books"/source["book_slug"]/"layers-6-8"/f"{source['book_slug']}-sha{digest[:8]}-v5"/"layers-6-8-run-manifest.v1.json"
+          if not manifest.is_file():
+              raise SystemExit(f"Layers 6–8 output manifest missing: {manifest}")
+          report=json.loads(manifest.read_text(encoding="utf-8"))
+          if report.get("schema_version")!="quantaedge.layers-6-8-run-manifest.v1" or report.get("source_book_id")!=book_id or report.get("source_pdf_sha256")!=digest:
+              raise SystemExit("Layers 6–8 handoff schema/source identity/hash mismatch.")
+          if report.get("overall_status") not in {"IN_PROGRESS","INCOMPLETE","DRAFT_REQUIRES_HUMAN_REVIEW"}:
+              raise SystemExit("Unexpected Layers 6–8 run-manifest status.")
+          status="NEEDS_REVIEW" if report.get("overall_status")=="DRAFT_REQUIRES_HUMAN_REVIEW" else "CHECKPOINTED"
+          pending=report.get("pending_segments",0)
+          if isinstance(pending,list): pending=len(pending)
+          processed=int(report.get("segments_completed",0) or 0)
+          expected=int(report.get("segments_total",0) or 0)
+          unresolved=sum(int(report.get(k,0) or 0) for k in ("unresolved_source_pages","unresolved_text_pages","unresolved_chapter_segments","unresolved_text_segments"))
+          print(pair_for_book_id(book_id)["book_pair_id"],manifest.relative_to(root).as_posix(),status,processed,expected,unresolved+int(pending or 0))
+          PY
+          )"
+          python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$CLASS_NO" --book-pair-id "$pair_id" --source-book-id "$SOURCE_BOOK_ID" --stage 7 --status "$status" --reason-code BOUNDED_LAYERS6_8_CHECKPOINT --model "$MODEL" --processed-count "$processed" --expected-count "$expected" --unresolved-count "$unresolved" --completed-batches 1 --artifact "$manifest" --message "Validated source-bound Layers 6–8 run manifest; publication remains disabled and human review is mandatory."
+          git add data/textbook-content-pipeline/handoffs
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "status(content): record Layers 6–8 handoff"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      - name: Record failed Layers 6–8 task without automatic retry
+        if: failure() && (inputs.mode == 'run' || inputs.mode == 'resume')
+        shell: bash
+        env:
+          CLASS_NO: ${{ inputs.class_no }}
+          SOURCE_BOOK_ID: ${{ inputs.source_book_id }}
+          MODEL: ${{ inputs.generation_model }}
+        run: |
+          set +e
+          pair_id="$(python - "$SOURCE_BOOK_ID" <<'PY'
+          import sys
+          from scripts.textbook_pipeline_handoff import pair_for_book_id
+          print(pair_for_book_id(sys.argv[1])["book_pair_id"])
+          PY
+          )"
+          python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$CLASS_NO" --book-pair-id "$pair_id" --source-book-id "$SOURCE_BOOK_ID" --stage 7 --status BLOCKED --reason-code WORKER_FAILURE_REQUIRES_TRIAGE --model "$MODEL" --message "Worker failed; inspect logs/checkpoint before explicitly retrying. No automatic restart is scheduled." || true
+          git add data/textbook-content-pipeline/handoffs
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "status(content): record Layers 6–8 failure"
+            git push origin "HEAD:${GITHUB_REF_NAME}" || true
+          fi
+
       - name: Run summary
         if: always()
         shell: bash
@@ -336,7 +364,7 @@ jobs:
             echo "## QuantaEdge Layers 6-8"
             echo "- Provider: native local Ollama /api/chat; no OpenAI API key or hosted endpoint."
             echo "- One whole-book source per run and a strict model-call budget."
-            echo "- Git savepoints are pushed to main; resume reuses matching source, edition, model, prompt, contract and visual-evidence fingerprints."
+            echo "- Content checkpoints stay on the selected task branch; resume reuses matching source, edition, model, prompt, contract and visual-evidence fingerprints."
             if [[ "${{ inputs.mode }}" == "resume" ]]; then echo "- Explicit RESUME mode selected: completed matching segments are reused; only pending/error segments within the new model-call budget are attempted."; fi
             if [[ ("${{ inputs.mode }}" == "resume" || "${{ inputs.mode }}" == "run") && "${{ steps.generation_preflight.outputs.preflight_state }}" == "MATCHED_CHECKPOINT" && "${{ steps.generation_preflight.outputs.retryable_segments }}" == "0" ]]; then echo "- All segments are already terminal; skipped Ollama startup/model download/inference."; fi
             echo "- Lessons, retrieval records and SFT examples remain review-only; production selection remains pending human review."

@@ -85,6 +85,7 @@ class TextbookPairProgressReportTests(unittest.TestCase):
     def test_report_groups_classes_and_pairs_and_never_claims_empty_repo_complete(self):
         report = build_report(self.root)
         self.assertEqual("NOT_STARTED", report["overall"]["status"])
+        self.assertTrue(report.get("as_of", "").endswith("Z"))
         self.assertEqual(8, report["overall"]["subject_book_pairs_total"])
         self.assertEqual(["6", "7", "8"], [item["class_no"] for item in report["classes"]])
         class6 = report["classes"][0]

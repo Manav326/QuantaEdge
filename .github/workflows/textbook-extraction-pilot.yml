@@ -1,47 +1,36 @@
 name: QuantaEdge GHCR Textbook Extraction Pilot
 
 on:
-  push:
-    branches: ["main"]
-    paths:
-      - ".github/workflows/textbook-extraction-pilot.yml"
-      - "scripts/textbook_registry.py"
-      - "scripts/extract_textbook_text.py"
-      - "scripts/validate_textbook_extraction_artifacts.py"
-      - "scripts/select_textbook_visual_sources.py"
-      - "tests/test_extract_textbook_text.py"
-      - "tests/test_validate_textbook_extraction_artifacts.py"
-      - "tests/test_select_textbook_visual_sources.py"
-      - "tests/test_import_ghcr_extracted_pages.py"
-  workflow_dispatch:
+  workflow_call:
     inputs:
       class_no:
-        description: "Class to extract (both English and Hindi, Science + Maths Parts 1 and 2)"
-        type: choice
-        options: ["7", "8"]
-        default: "7"
+        description: "Class to extract: 6, 7, 8, or all; each selected language/book will be verified"
         required: true
+        type: string
 
 permissions:
   contents: read
   packages: read
 
 concurrency:
-  group: quantaedge-textbook-extraction-pilot-${{ github.event_name == 'workflow_dispatch' && inputs.class_no || 'all-classes' }}
+  group: qe-extraction-${{ github.repository }}-${{ github.ref_name }}-${{ github.run_id }}
   cancel-in-progress: false
 
 jobs:
   extract:
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix:
-        class_no: ${{ github.event_name == 'workflow_dispatch' && fromJSON(format('[{0}]', inputs.class_no)) || (github.event_name == 'push' && contains(github.event.head_commit.message || '', '[reextract-textbook-class-7]') && fromJSON('[7]')) || (github.event_name == 'push' && contains(github.event.head_commit.message || '', '[reextract-textbook-class-8]') && fromJSON('[8]')) || fromJSON('[7,8]') }}
+        class_no: ${{ inputs.class_no == 'all' && fromJSON('[6,7,8]') || fromJSON(format('[{0}]', inputs.class_no)) }}
     name: Extract selected Class ${{ matrix.class_no }} in English and Hindi
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
-      - name: Checkout main
+      - name: Checkout caller branch
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -76,7 +65,7 @@ jobs:
           CLASS_NO: ${{ matrix.class_no }}
         run: |
           set -euo pipefail
-          [[ "$CLASS_NO" == "7" || "$CLASS_NO" == "8" ]] || { echo "Only Class 7 or Class 8 is supported."; exit 2; }
+          [[ "$CLASS_NO" == "6" || "$CLASS_NO" == "7" || "$CLASS_NO" == "8" ]] || { echo "Only Class 6, Class 7 or Class 8 is supported."; exit 2; }
           owner="$(printf '%s' "$GHCR_OWNER" | tr '[:upper:]' '[:lower:]')"
           mkdir -p pilot-output/reports
           for medium in hindi english; do
@@ -119,7 +108,7 @@ jobs:
           done
 
       # Artifact names include the class number and source run ID; the mirror workflow
-      # automatically validates and commits successful class artifacts back to main.
+      # The central content dispatcher mirrors verified artifacts only after this reusable worker succeeds.
       - name: Publish extracted page data and reports (not source PDFs)
         if: always()
         uses: actions/upload-artifact@v4

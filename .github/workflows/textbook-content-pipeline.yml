@@ -1,0 +1,309 @@
+name: QuantaEdge Textbook Content Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: "One explicit content task. Default only reports progress."
+        required: true
+        type: choice
+        options: [refresh_source_cache, repair_source_cache_queue, extract_and_mirror, prepare_layers_1_5, repair_layers_4_5, rebuild_corrections, layers_6_8, progress_report, audit_contracts]
+        default: progress_report
+      class_no:
+        description: "Class for the selected textbook task"
+        required: true
+        type: choice
+        options: ["6", "7", "8", "all"]
+        default: "6"
+      book_pair_id:
+        description: "Exact bilingual book pair or all pairs in the selected classes"
+        required: true
+        type: choice
+        options: [all, class6-science-bilingual, class6-maths-bilingual, class7-science-bilingual, class7-maths-part1-bilingual, class7-maths-part2-bilingual, class8-science-bilingual, class8-maths-part1-bilingual, class8-maths-part2-bilingual]
+        default: all
+      analysis_mode:
+        description: "Preparation only by default; analysis/resume is always explicit"
+        required: true
+        type: choice
+        options: [prepare_only, analyze_all, resume_preparation, resume_layers_4_5]
+        default: prepare_only
+      vision_model:
+        description: "Vision model for explicitly requested Layer 4 inference"
+        required: true
+        type: string
+        default: qwen2.5vl:3b
+      checkpoint_batch_size:
+        description: "Visual assets per durable checkpoint"
+        required: true
+        type: choice
+        options: ["5", "10"]
+        default: "5"
+      cache_language:
+        description: "Source-cache language selection"
+        required: true
+        type: choice
+        options: [both, hindi, english]
+        default: both
+      cache_class_no:
+        description: "Source-cache class 6–12, or 0 for all"
+        required: true
+        type: number
+        default: 6
+      cache_book_code:
+        description: "Optional source-cache book code"
+        required: false
+        type: string
+      cache_max_books:
+        description: "Maximum new books per language; 0 means all pending"
+        required: true
+        type: number
+        default: 0
+      cache_refresh:
+        description: "Re-download cached books for verification"
+        required: true
+        type: boolean
+        default: false
+      cache_download_artifacts:
+        description: "Build 90-day browser-download ZIPs"
+        required: true
+        type: boolean
+        default: false
+      cache_download_workers:
+        description: "Parallel whole-book downloads; keep modest"
+        required: true
+        type: number
+        default: 2
+      cache_push_batch_size:
+        description: "Whole books per GHCR publish batch"
+        required: true
+        type: number
+        default: 2
+      cache_retry_rounds:
+        description: "Retries for unresolved source books"
+        required: true
+        type: number
+        default: 3
+      source_book_id:
+        description: "Exact source book ID for a Layers 6–8 draft task"
+        required: true
+        type: string
+        default: ncert-c6-english-fecu1
+      layer68_mode:
+        description: "Benchmark, bounded review-only generation, resume same checkpoint, or refresh benchmark"
+        required: true
+        type: choice
+        options: [benchmark, run, resume, refresh_benchmark]
+        default: benchmark
+      benchmark_models:
+        description: "Candidate Ollama models for explicit benchmark"
+        required: true
+        type: string
+        default: qwen2.5:1.5b,qwen2.5:3b
+      generation_model:
+        description: "Model for bounded review-only generation"
+        required: true
+        type: string
+        default: qwen2.5:1.5b
+      max_model_calls:
+        description: "Maximum model calls for one generation request (1–20)"
+        required: true
+        type: number
+        default: 6
+      checkpoint_every:
+        description: "Checkpoint interval in model calls"
+        required: true
+        type: choice
+        options: ["1", "2", "3", "5"]
+        default: "2"
+      allow_experimental_model:
+        description: "Required opt-in for unapproved model output (still review-only)"
+        required: true
+        type: boolean
+        default: false
+      pull_live_registry:
+        description: "Pull live GHCR registries only when the expensive audit is explicitly requested"
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  actions: read
+  contents: write
+  packages: write
+
+# Every resource-heavy operation enters through this dispatcher; no automatic continuation.
+concurrency:
+  group: qe-textbook-content-pipeline-${{ github.repository }}-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: Validate exact task scope and contracts before processing
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install only the extraction test dependency
+        run: python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
+      - name: Validate pair/book/layer compatibility without model inference
+        env:
+          TASK: ${{ inputs.task }}
+          CLASS_NO: ${{ inputs.class_no }}
+          PAIR_ID: ${{ inputs.book_pair_id }}
+          SOURCE_BOOK_ID: ${{ inputs.source_book_id }}
+          L68_MODE: ${{ inputs.layer68_mode }}
+          ALLOW_EXPERIMENTAL: ${{ inputs.allow_experimental_model }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$TASK" =~ ^(refresh_source_cache|repair_source_cache_queue|extract_and_mirror|prepare_layers_1_5|repair_layers_4_5|rebuild_corrections|layers_6_8|progress_report|audit_contracts)$ ]] || { echo "::error::Unknown task."; exit 2; }
+          [[ "$CLASS_NO" =~ ^(6|7|8|all)$ ]] || { echo "::error::Invalid class selector."; exit 2; }
+          [[ "$PAIR_ID" =~ ^(all|class(6|7|8)-(science|maths(-part[12])?)-bilingual)$ ]] || { echo "::error::Invalid bilingual pair ID."; exit 2; }
+          if [[ "$CLASS_NO" != "all" && "$PAIR_ID" != "all" && "$PAIR_ID" != class"$CLASS_NO"-* ]]; then echo "::error::The pair does not belong to the selected class."; exit 2; fi
+          if [[ "$TASK" == "layers_6_8" && ( "$CLASS_NO" == "all" || "$PAIR_ID" == "all" ) ]]; then echo "::error::Layers 6–8 requires one specific class and source book."; exit 2; fi
+          if [[ "$TASK" == "layers_6_8" && "$SOURCE_BOOK_ID" == "" ]]; then echo "::error::Select a source_book_id."; exit 2; fi
+          if [[ "$TASK" == "layers_6_8" && ("$L68_MODE" == "run" || "$L68_MODE" == "resume") && "$ALLOW_EXPERIMENTAL" != "true" ]]; then echo "::error::Explicitly enable the experimental model before generating review-only drafts."; exit 2; fi
+          python -m py_compile scripts/plan_textbook_layer45_matrix.py scripts/select_textbook_source_pair.py scripts/textbook_pipeline_handoff.py scripts/quantaedge_textbook_pipeline.py scripts/quantaedge_layers_6_8.py scripts/report_textbook_pair_progress.py
+          python -m unittest discover -s tests -p "test_plan_textbook_layer45_matrix.py" -v
+          python -m unittest discover -s tests -p "test_select_textbook_source_pair.py" -v
+          python -m unittest discover -s tests -p "test_textbook_pipeline_handoff.py" -v
+          python -m unittest discover -s tests -p "test_report_textbook_pair_progress.py" -v
+          python -m unittest discover -s tests -p "test_quantaedge_textbook_pipeline.py" -v
+          python -m unittest discover -s tests -p "test_workflow_resume_entrypoints.py" -v
+
+  refresh-cache:
+    if: ${{ inputs.task == 'refresh_source_cache' || inputs.task == 'repair_source_cache_queue' }}
+    needs: validate
+    uses: ./.github/workflows/textbook-cache.yml
+    with:
+      language: ${{ inputs.cache_language }}
+      class_no: ${{ inputs.cache_class_no }}
+      download_artifacts: ${{ inputs.cache_download_artifacts }}
+      book_code: ${{ inputs.cache_book_code }}
+      max_books: ${{ inputs.cache_max_books }}
+      refresh: ${{ inputs.cache_refresh }}
+      download_workers: ${{ inputs.cache_download_workers }}
+      push_batch_size: ${{ inputs.cache_push_batch_size }}
+      retry_rounds: ${{ inputs.cache_retry_rounds }}
+      repair_queue_only: ${{ inputs.task == 'repair_source_cache_queue' }}
+
+  extract:
+    if: ${{ inputs.task == 'extract_and_mirror' }}
+    needs: validate
+    uses: ./.github/workflows/textbook-extraction-pilot.yml
+    with:
+      class_no: ${{ inputs.class_no }}
+
+  mirror:
+    if: ${{ inputs.task == 'extract_and_mirror' }}
+    needs: [validate, extract]
+    uses: ./.github/workflows/mirror-textbook-extraction-artifact.yml
+    with:
+      class_no: ${{ inputs.class_no }}
+      source_run_id: ${{ github.run_id }}
+
+  prepare-layers-1-5:
+    if: ${{ inputs.task == 'prepare_layers_1_5' || inputs.task == 'repair_layers_4_5' }}
+    needs: validate
+    uses: ./.github/workflows/textbook-visual-candidates-v3.yml
+    with:
+      class_no: ${{ inputs.class_no }}
+      book_pair_id: ${{ inputs.book_pair_id }}
+      analysis_mode: ${{ inputs.task == 'repair_layers_4_5' && 'resume_layers_4_5' || inputs.analysis_mode }}
+      vision_model: ${{ inputs.vision_model }}
+      checkpoint_batch_size: ${{ inputs.checkpoint_batch_size }}
+
+  layers-6-8:
+    if: ${{ inputs.task == 'layers_6_8' }}
+    needs: validate
+    uses: ./.github/workflows/quantaedge-layers-6-8.yml
+    with:
+      mode: ${{ inputs.layer68_mode }}
+      class_no: ${{ inputs.class_no }}
+      source_book_id: ${{ inputs.source_book_id }}
+      benchmark_models: ${{ inputs.benchmark_models }}
+      generation_model: ${{ inputs.generation_model }}
+      max_model_calls: ${{ inputs.max_model_calls }}
+      checkpoint_every: ${{ inputs.checkpoint_every }}
+      allow_experimental_model: ${{ inputs.allow_experimental_model }}
+
+  report-progress:
+    if: ${{ inputs.task == 'progress_report' }}
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Report the timestamped class/pair/language progress
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/report_textbook_pair_progress.py --repo-root "$GITHUB_WORKSPACE" --json-out "$RUNNER_TEMP/textbook-progress.v1.json" --markdown-out "$RUNNER_TEMP/textbook-progress.md"
+          cat "$RUNNER_TEMP/textbook-progress.md" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: class-6-8-bilingual-progress-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/textbook-progress.v1.json
+            ${{ runner.temp }}/textbook-progress.md
+          if-no-files-found: error
+          retention-days: 30
+
+  rebuild-corrections:
+    if: ${{ inputs.task == 'rebuild_corrections' }}
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Rebuild only accepted correction overlays in the selected pair scope
+        env:
+          CLASS_NO: ${{ inputs.class_no }}
+          PAIR_ID: ${{ inputs.book_pair_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - "$CLASS_NO" "$PAIR_ID" "$RUNNER_TEMP/corrections-event.json" <<'PY'
+          import json,sys
+          from pathlib import Path
+          from scripts.plan_textbook_layer45_matrix import BOOK_PAIRS
+          root=Path.cwd(); grade,pair_id,event_path=sys.argv[1:]
+          pairs=[p for p in BOOK_PAIRS if (grade=="all" or p["class_no"]==grade) and (pair_id=="all" or p["book_pair_id"]==pair_id)]
+          overlays=[]
+          for pair in pairs:
+              for slug in pair["source_slugs_csv"].split(","):
+                  file=root/"data"/"textbook-content-pipeline"/f"class-{pair['class_no']}"/"books"/slug/"visual-analysis-corrections.v1.json"
+                  if file.is_file(): overlays.append(file.relative_to(root).as_posix())
+          Path(event_path).write_text(json.dumps({"commits":[{"added":[],"modified":overlays,"removed":[]}]}),encoding="utf-8")
+          print(json.dumps({"selected_overlays":overlays},indent=2))
+          PY
+          if ! grep -q "visual-analysis-corrections.v1.json" "$RUNNER_TEMP/corrections-event.json"; then echo "No corrections exist in this scope; no work was performed."; exit 0; fi
+          python scripts/quantaedge_textbook_pipeline.py rebuild-corrections --event "$RUNNER_TEMP/corrections-event.json" --repo-root "$GITHUB_WORKSPACE"
+          git add data/textbook-content-pipeline
+          if git diff --cached --quiet; then echo "No derived correction outputs changed."; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "rebuild(content): refresh Layer 5 from accepted corrections"
+          git push origin "HEAD:${{ github.ref_name }}"
+
+  audit-contracts:
+    if: ${{ inputs.task == 'audit_contracts' }}
+    needs: validate
+    uses: ./.github/workflows/curriculum-pipeline-audit.yml
+    with:
+      pull_live_registry: ${{ inputs.pull_live_registry }}

@@ -1131,21 +1131,22 @@ def checkpoint_git(repo:Path,paths:list[Path],message:str)->None:
     for p in paths:
         try: items.append(p.resolve().relative_to(repo.resolve()).as_posix())
         except ValueError as exc: raise ValueError(f"Checkpoint outside repository: {p}") from exc
-    if not items: return
+    if not items:return
     outside_data=[item for item in items if item!="data" and not item.startswith("data/")]
     if outside_data: raise ValueError(f"Generated Layers 6-8 checkpoints may only be committed under data/: {outside_data}")
     subprocess.run(["git","add","--",*items],cwd=repo,check=True)
     rc=subprocess.run(["git","diff","--cached","--quiet","--",*items],cwd=repo).returncode
-    if rc==0: return
+    if rc==0:return
     if rc!=1: raise RuntimeError("Cannot inspect staged checkpoint.")
     subprocess.run(["git","config","user.name","github-actions[bot]"],cwd=repo,check=True)
     subprocess.run(["git","config","user.email","41898282+github-actions[bot]@users.noreply.github.com"],cwd=repo,check=True)
     subprocess.run(["git","commit","-m",message,"--",*items],cwd=repo,check=True)
-    subprocess.run(["git","pull","--rebase","origin","main"],cwd=repo,check=True)
-    try: subprocess.run(["git","push","origin","HEAD:main"],cwd=repo,check=True)
-    except subprocess.CalledProcessError:
-        subprocess.run(["git","pull","--rebase","origin","main"],cwd=repo,check=True)
-        subprocess.run(["git","push","origin","HEAD:main"],cwd=repo,check=True)
+    target=os.environ.get("QUANTAEDGE_CHECKPOINT_BRANCH") or os.environ.get("GITHUB_REF_NAME")
+    if not target:
+        target=subprocess.run(["git","branch","--show-current"],cwd=repo,check=True,capture_output=True,text=True).stdout.strip()
+    if not target or target.startswith("refs/"): raise RuntimeError("No valid caller branch is available for Layers 6-8 checkpointing.")
+    subprocess.run(["git","push","origin",f"HEAD:{target}"],cwd=repo,check=True)
+
 
 def benchmark_report(repo:Path,path:Path|None,model:str)->dict[str,Any]:
     path=path or repo/"data"/"textbook-content-pipeline"/"model-benchmarks"/"class-6-ncert-curiosity.v1.json"

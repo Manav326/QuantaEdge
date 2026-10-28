@@ -6,6 +6,7 @@ analysis sidecar and never edits the source inventory, PDF, page JSONL, or lesso
 """
 from __future__ import annotations
 
+from datetime import datetime, timezone
 import argparse
 import base64
 import hashlib
@@ -473,6 +474,14 @@ def run_analysis(
         }
         result = {
             "schema_version": "quantaedge.visual-analysis.v1",
+            "created_at": (saved.get("created_at") if isinstance(saved, dict) else None) or datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+            "started_at": (saved.get("started_at") if isinstance(saved, dict) else None) or datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+            "updated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+            "last_progress_at": (
+                datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+                if not isinstance(saved, dict) or saved.get("summary") != summary or saved.get("results") != results
+                else saved.get("last_progress_at")
+            ),
             "analysis_status": "DRAFT_VISION_ANALYSIS_ONLY",
             "source_inventory": inventory_path.name,
             "source_book_id": source.get("book_id"),

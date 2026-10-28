@@ -1,46 +1,25 @@
 name: Curriculum pipeline audit
 on:
-  push:
-    branches: ["main"]
-    paths:
-      - "scripts/content_pipeline_validation.py"
-      - "scripts/audit_curriculum_pipeline.py"
-      - "scripts/textbook_registry.py"
-      - "scripts/extract_textbook_text.py"
-      - "scripts/generate_questions_from_extraction.py"
-      - "scripts/scert_extract_review.py"
-      - "scripts/review_generated_question_bundle.py"
-      - "scripts/import_reviewed_content.py"
-      - "tests/test_audit_curriculum_pipeline.py"
-      - "tests/test_textbook_registry.py"
-      - "tests/test_extract_textbook_text.py"
-      - "tests/test_generate_questions_from_extraction.py"
-      - "tests/test_content_import.py"
-      - "docs/product/curriculum-question-targets.csv"
-      - ".github/workflows/curriculum-pipeline-audit.yml"
-      - ".github/workflows/textbook-cache.yml"
-  workflow_run:
-    workflows: ["QuantaEdge Textbook Cache"]
-    types: [completed]
-  workflow_dispatch:
+  workflow_call:
     inputs:
       pull_live_registry:
-        description: "Pull real Classes 6–8 Hindi/English GHCR images and audit PDFs"
+        description: "Perform the expensive live GHCR source audit"
         type: boolean
-        default: true
         required: true
+
 permissions:
   contents: read
   packages: read
 concurrency:
-  group: curriculum-pipeline-audit
-  cancel-in-progress: true
+  group: qe-curriculum-audit-${{ github.repository }}-${{ github.ref_name }}-${{ github.run_id }}
+  cancel-in-progress: false
 jobs:
   offline:
-    if: github.event_name != 'workflow_run'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -58,7 +37,7 @@ jobs:
       - name: Run offline tooling audit (does not claim live content completeness)
         run: python scripts/audit_curriculum_pipeline.py --skip-registry --strict
   live-registry:
-    if: github.event_name == 'workflow_run' || (github.event_name == 'workflow_dispatch' && inputs.pull_live_registry)
+    if: inputs.pull_live_registry == true
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:

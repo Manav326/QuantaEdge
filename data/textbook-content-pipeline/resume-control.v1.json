@@ -1,7 +1,7 @@
 {
   "schema_version": "quantaedge.textbook-layer45-resume-control.v1",
-  "active": true,
-  "status": "IN_PROGRESS",
+  "active": false,
+  "status": "INACTIVE",
   "classes": [
     6,
     7,
@@ -10,7 +10,9 @@
   "vision_model": "qwen2.5vl:3b",
   "checkpoint_batch_size": 5,
   "initiated_at": "2026-10-18",
-  "reason": "User requested resuming all Class 6, 7, and 8 Layer 4–5 processing from existing durable checkpoints.",
+  "reason": "Manual-only continuation; no automatic retry or follow-on dispatch.",
   "last_manual_recovery_requested_at": "2026-10-19T14:31:00Z",
-  "recovery_reason": "Status check found Class 6 and 7 runners cancelled after checkpoint inactivity; immediately reconcile and resume unfinished classes while preserving active Class 8."
+  "recovery_reason": "Status check found Class 6 and 7 runners cancelled after checkpoint inactivity; immediately reconcile and resume unfinished classes while preserving active Class 8.",
+  "disabled_at": "2026-10-28T00:00:00Z",
+  "disabled_reason": "Retired the five-minute polling and workflow-completion auto-resume loop. Start repair only via .github/workflows/textbook-content-pipeline.yml with an explicit task."
 }

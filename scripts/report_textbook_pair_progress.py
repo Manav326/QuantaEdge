@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 from scripts.plan_textbook_layer45_matrix import BOOK_PAIRS, BOOKS
+from scripts.textbook_pipeline_handoff import validate_book_layer45
 
 SCHEMA = "quantaedge.textbook-bilingual-pair-progress.v1"
 VALID_HEX = set("0123456789abcdef")
@@ -192,7 +193,13 @@ def book_progress(repo_root: Path, source: dict[str, str]) -> dict[str, Any]:
     )
 
     if ledger_complete:
-        status = "COMPLETE"
+        strict_ok, strict_reasons, _details = validate_book_layer45(repo_root, source)
+        if strict_ok:
+            status = "COMPLETE"
+        else:
+            blockers.extend(strict_reasons)
+            ledger_complete = False
+            status = "BLOCKED"
     elif blockers:
         status = "BLOCKED"
     elif existing or raw_fields or inventory_present:
@@ -260,6 +267,15 @@ def build_report(repo_root: Path) -> dict[str, Any]:
             status = "IN_PROGRESS"
         else:
             status = "NOT_STARTED"
+        handoff_path = repo_root / "data" / "textbook-content-pipeline" / "handoffs" / f"class-{definition['class_no']}" / definition["book_pair_id"] / "current.v1.json"
+        handoff = {}
+        try:
+            handoff = json.loads(handoff_path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, json.JSONDecodeError):
+            handoff = {}
+        handoff_times = handoff.get("timestamps") or {}
+        handoff_work = handoff.get("work") or {}
+        handoff_decision = handoff.get("decision") or {}
         pair = {
             "class_no": definition["class_no"],
             "book_pair_id": definition["book_pair_id"],
@@ -275,7 +291,18 @@ def build_report(repo_root: Path) -> dict[str, Any]:
             },
             "verified_language_editions": sum(item["status"] == "COMPLETE" for item in editions),
             "required_language_editions": 2,
-            "blockers": sorted({reason for item in editions for reason in item["blockers"]}),
+            "blockers": sorted(set({reason for item in editions for reason in item["blockers"]} | set((handoff.get("validation") or {}).get("blockers") or []))),
+            "handoff": {
+                "status": handoff_decision.get("status", "NOT_RECORDED"),
+                "pipeline_run_id": handoff.get("pipeline_run_id"),
+                "stage": (handoff.get("stage") or {}).get("layer"),
+                "timestamps": handoff_times,
+                "work": handoff_work,
+                "reason_code": handoff_decision.get("reason_code"),
+                "retryable": handoff_decision.get("retryable", False),
+                "next_action": handoff_decision.get("next_action"),
+                "event_log_path": (handoff.get("lineage") or {}).get("append_only_event_log"),
+            },
         }
         pairs.append(pair)
         class_rows[definition["class_no"]].append(pair)
@@ -316,7 +343,8 @@ def build_report(repo_root: Path) -> dict[str, Any]:
     total_analyzed = sum(item["combined_analysis"]["analyzed_assets"] for item in pairs)
     return {
         "schema_version": SCHEMA,
-        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
+        "as_of": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
         "scope": "NCERT whole-book Layer 4–5; English and Hindi tracked together by subject/book pair",
         "publication_allowed": False,
         "review_required": True,
@@ -379,6 +407,14 @@ def render_markdown(report: dict[str, Any]) -> str:
                 f"{combined['analyzed_assets']:,}/{combined['eligible_assets']:,} "
                 f"({combined['completion_percent']:.1f}%) · {combined['remaining_assets']:,} remaining | "
                 f"{combined['failed_assets']:,} |"
+            )
+            handoff = pair.get("handoff") or {}
+            timing = handoff.get("timestamps") or {}
+            lines.append(
+                f"- Handoff: {handoff.get('status', 'NOT_RECORDED')} · layer {handoff.get('stage') or '—'} · "
+                f"run {handoff.get('pipeline_run_id') or '—'} · last progress {timing.get('last_progress_at') or '—'} · "
+                f"checkpoint {timing.get('checkpoint_at') or '—'} · last error {timing.get('last_error_at') or '—'} · "
+                f"retry after {timing.get('retry_after') or '—'}"
             )
             if pair["blockers"]:
                 lines.append(f"\n> **{pair['subject_book_label']} handoff warnings:** " + "; ".join(pair["blockers"]))
