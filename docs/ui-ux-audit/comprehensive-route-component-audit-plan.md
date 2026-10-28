@@ -35,7 +35,7 @@ These are source-register counts, not executed screen counts. First regenerate t
 
 **Exit:** every known route/destination has one audit row, every inventory discrepancy has a disposition, and the current verification baseline is reproducible.
 
-The CI `changes` job now tests `scripts/inventory_ui_component_imports.mjs` and uploads its per-route local-import graph as the `ui-component-import-inventory` artifact. Review unresolved local imports as possible alias/resolution gaps or real missing modules; do not silently discard them or treat this static graph as proof of conditional rendering.
+**Exact-head static evidence (2026-10-28):** On commit `e31a26d76b05293a40adb4c72f583e223b4a2c3e`, [CI run #7083](https://github.com/Manav326/QuantaEdge/actions/runs/40643885831) passed route-register parity, component-source graph tests, QA-register validation, UI/theme/localization contracts, Android test/build, and content-import safeguards. The graph reports 75 Next.js routes, 245 unique resolved source/asset paths, 166 unique UI-module candidates, 52 unique stylesheet modules, and **0 unresolved local import references**. The `ui-component-import-inventory` artifact is attached to that run. This proves source import resolution and register integrity only; it does not prove that conditional branches render correctly or that any viewport/theme/language state passed visual/runtime testing. The Web/Admin/People/API image-build jobs were skipped because this PR changes only audit documentation and scripts.
 
 ### Phase 1 — Shared shells and component inventory
 Trace the application shells, responsive navigation, headers, sidebars/drawers, language/theme controls, shared buttons/fields/selects, tabs, tables, alerts, dialogs, menus, cards, status badges, loading/empty/error views, toasts, floating tutor controls, textbook/lesson/media/assessment primitives and chart/report renderers.
@@ -104,8 +104,8 @@ CI success is necessary but not sufficient for visual sign-off. Source inspectio
 
 ## 6. Current status and work queue
 
-1. **REGISTER UPDATED — exact-head verification pending:** the route and state registers now contain 109 rows (75 Next.js page entries plus 34 Android destinations). A generated route/source parity check is included in CI, but this clean branch must pass that check before the route reconciliation can be called verified.
-2. **IN PROGRESS — source graph tooling:** a transitive local-import inventory and tests are included; the current branch's CI artifact and unresolved-import count must be inspected before claiming the graph complete.
+1. **SOURCE-REGISTER PARITY VERIFIED:** CI run #7083 matched 75 generated Next.js page routes to 75 browser-register entries; with 34 Android destinations, the registers contain 109 entries. Rerun this gate after every inventory or route change.
+2. **STATIC SOURCE GRAPH GENERATED:** CI run #7083 reports 166 UI-module candidates, 52 stylesheet modules and zero unresolved local import references. The candidates still need route-by-route classification against rendered/conditional UI and browser/Android runtime behavior.
 3. **IN PROGRESS — component mapping:** 34 shared-shell/provider/style/tutor entries seed the component register, but the final leaf, conditional, and route-specific component census is not complete.
 4. **NEXT:** verify an appropriate repeatable browser and Android UI test path before choosing any new dependency.
 5. **PENDING:** capture the actual responsive/theme baseline before visual fixes; do not infer visual outcomes from source inspection.
