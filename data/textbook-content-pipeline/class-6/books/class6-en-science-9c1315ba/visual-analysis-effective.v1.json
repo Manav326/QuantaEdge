@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "5b2a74b9f16a026e2431218994c79d7f68145aacecf03b404623a1acf0e19872",
+  "raw_analysis_sha256": "6785f2e6099c89a9794e5f16511b8eb5fe33d5b3e50d004ec46284c037e395e1",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -66782,7 +66782,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753605122",
-      "checkpointed_at": "2026-10-28T21:20:02Z",
+      "checkpointed_at": "2026-10-28T21:27:25Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -75492,6 +75492,226 @@
         "limitations": [
           "unclear if the page is a full page or a cropped figure",
           "no visible content to analyze"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7eba4dff6dcc4f0eab73f181",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 161,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "aeeb7596e77e6ecc803fc47b32f5bf27c7372558e01fe140adba0d39aae34653",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T21:27:42Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7b841f75605b9c11ca9bed06",
+      "asset_sha256": "cb5218ba92751b9b46a0c25b1a5483ec1fa55d8b76c1ecba6b69e00bcf42e916",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 161,
+      "asset_path": "page-0161.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "aeeb7596e77e6ecc803fc47b32f5bf27c7372558e01fe140adba0d39aae34653",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the states of water, featuring a conversation between Aavi and Thirav about ice and water.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A Journey through States of Water",
+          "8",
+          "If it does not rain well, even the mighty ocean will be drained.",
+          "(Thirukkural)",
+          "On a bright summer afternoon, Aavi and Thirav enjoy their shikanji (lemonade). After looking at the ice in the lemonade, Thirav wonders about the nature of ice and water.",
+          "Ice feels hard to touch and we can hold it in our hands, whereas, water cannot be held in the same way. So, they must be different substances.",
+          "Aavi has a counterview to Thirav. What do you think? Why?",
+          "We can put water in the freezer of a refrigerator and check if it gets converted into ice.",
+          "Yes, I know when water is left in the freezer, it gets converted into ice but probably something gets added to the ice in the freezer.",
+          "Do you think Thirav is right? How can you find out?"
+        ],
+        "concepts": [
+          "states of water",
+          "ice",
+          "water",
+          "Thirukkural"
+        ],
+        "context_relation": "The conversation between Aavi and Thirav discusses the nature of ice and water, comparing it to the Thirukkural quote.",
+        "limitations": [
+          "The image does not provide a visual representation of the Thirukkural quote."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T21:32:32Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the states of water, featuring a conversation between Aavi and Thirav about ice and water.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A Journey through States of Water",
+          "8",
+          "If it does not rain well, even the mighty ocean will be drained.",
+          "(Thirukkural)",
+          "On a bright summer afternoon, Aavi and Thirav enjoy their shikanji (lemonade). After looking at the ice in the lemonade, Thirav wonders about the nature of ice and water.",
+          "Ice feels hard to touch and we can hold it in our hands, whereas, water cannot be held in the same way. So, they must be different substances.",
+          "Aavi has a counterview to Thirav. What do you think? Why?",
+          "We can put water in the freezer of a refrigerator and check if it gets converted into ice.",
+          "Yes, I know when water is left in the freezer, it gets converted into ice but probably something gets added to the ice in the freezer.",
+          "Do you think Thirav is right? How can you find out?"
+        ],
+        "concepts": [
+          "states of water",
+          "ice",
+          "water",
+          "Thirukkural"
+        ],
+        "context_relation": "The conversation between Aavi and Thirav discusses the nature of ice and water, comparing it to the Thirukkural quote.",
+        "limitations": [
+          "The image does not provide a visual representation of the Thirukkural quote."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a2efa2dc5c3ffaf1ec1f65de",
+      "asset_sha256": "839d8f5405f5ab2744c60747e0f0052b6080a342d10cb9b4b12d1319d0851c2a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 162,
+      "asset_path": "assets/839d8f5405f5ab2744c60747e0f0052b6080a342d10cb9b4b12d1319d0851c2a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0a44929b33133a6cfaf1730c704ea4b2ee82948bf69490ecbcb1da12c880e18d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character with a thoughtful expression, holding their chin.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Observation and inference about the state of water (ice and water)",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T21:34:11Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character with a thoughtful expression, holding their chin.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Observation and inference about the state of water (ice and water)",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "92ad690251c1c44b4358c4a3",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 162,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0a44929b33133a6cfaf1730c704ea4b2ee82948bf69490ecbcb1da12c880e18d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An ice cube in a cup on a table, with text explaining the observation and conclusion.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Activity 8.1: Let us observe",
+          "Put an ice cube in a cup, leave it on the table and",
+          "observe.",
+          "Ice gets converted into water.",
+          "What can you conclude from the observations?",
+          "Does this mean that ice and water are the same substance?",
+          "Yes, ice and water are the two forms of the same substance.",
+          "These forms are also called states. These different states",
+          "of water show many differences in their behaviour. Water",
+          "flows but ice does not. Water splash"
+        ],
+        "concepts": [
+          "Observation",
+          "Ice",
+          "Water",
+          "States of matter",
+          "Different forms of the same substance",
+          "Behaviour of different states of water"
+        ],
+        "context_relation": "Observation and conclusion",
+        "limitations": [
+          "The image does not show the actual ice cube or cup."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T21:35:03Z",
+      "effective_analysis": {
+        "visual_summary": "An ice cube in a cup on a table, with text explaining the observation and conclusion.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Activity 8.1: Let us observe",
+          "Put an ice cube in a cup, leave it on the table and",
+          "observe.",
+          "Ice gets converted into water.",
+          "What can you conclude from the observations?",
+          "Does this mean that ice and water are the same substance?",
+          "Yes, ice and water are the two forms of the same substance.",
+          "These forms are also called states. These different states",
+          "of water show many differences in their behaviour. Water",
+          "flows but ice does not. Water splash"
+        ],
+        "concepts": [
+          "Observation",
+          "Ice",
+          "Water",
+          "States of matter",
+          "Different forms of the same substance",
+          "Behaviour of different states of water"
+        ],
+        "context_relation": "Observation and conclusion",
+        "limitations": [
+          "The image does not show the actual ice cube or cup."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1469,
+    "assets_selected": 1473,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "47bbaaf66932c5ee5e514c6c",
-      "192aba06248e8f48b413e5bc",
-      "08b86a057faa4e4f223122c5",
-      "5d6c52ee1189b4f2afd8c325",
-      "6dede827e64c4cb9abb58c98"
+      "7eba4dff6dcc4f0eab73f181",
+      "7b841f75605b9c11ca9bed06",
+      "a2efa2dc5c3ffaf1ec1f65de",
+      "92ad690251c1c44b4358c4a3"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1468,
-    "assets_remaining": 610,
-    "assets_completion_percent": 70.6,
+    "assets_analyzed": 1472,
+    "assets_remaining": 606,
+    "assets_completion_percent": 70.8,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 1464,
+    "assets_skipped_from_checkpoint": 1468,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -44049,7 +44049,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753605122",
-      "checkpointed_at": "2026-10-28T21:20:02Z"
+      "checkpointed_at": "2026-10-28T21:27:25Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -49669,6 +49669,148 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753605122",
       "checkpointed_at": "2026-10-28T21:26:06Z"
+    },
+    {
+      "asset_id": "7eba4dff6dcc4f0eab73f181",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 161,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "aeeb7596e77e6ecc803fc47b32f5bf27c7372558e01fe140adba0d39aae34653",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T21:27:42Z"
+    },
+    {
+      "asset_id": "7b841f75605b9c11ca9bed06",
+      "asset_sha256": "cb5218ba92751b9b46a0c25b1a5483ec1fa55d8b76c1ecba6b69e00bcf42e916",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 161,
+      "asset_path": "page-0161.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "aeeb7596e77e6ecc803fc47b32f5bf27c7372558e01fe140adba0d39aae34653",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the states of water, featuring a conversation between Aavi and Thirav about ice and water.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A Journey through States of Water",
+          "8",
+          "If it does not rain well, even the mighty ocean will be drained.",
+          "(Thirukkural)",
+          "On a bright summer afternoon, Aavi and Thirav enjoy their shikanji (lemonade). After looking at the ice in the lemonade, Thirav wonders about the nature of ice and water.",
+          "Ice feels hard to touch and we can hold it in our hands, whereas, water cannot be held in the same way. So, they must be different substances.",
+          "Aavi has a counterview to Thirav. What do you think? Why?",
+          "We can put water in the freezer of a refrigerator and check if it gets converted into ice.",
+          "Yes, I know when water is left in the freezer, it gets converted into ice but probably something gets added to the ice in the freezer.",
+          "Do you think Thirav is right? How can you find out?"
+        ],
+        "concepts": [
+          "states of water",
+          "ice",
+          "water",
+          "Thirukkural"
+        ],
+        "context_relation": "The conversation between Aavi and Thirav discusses the nature of ice and water, comparing it to the Thirukkural quote.",
+        "limitations": [
+          "The image does not provide a visual representation of the Thirukkural quote."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T21:32:32Z"
+    },
+    {
+      "asset_id": "a2efa2dc5c3ffaf1ec1f65de",
+      "asset_sha256": "839d8f5405f5ab2744c60747e0f0052b6080a342d10cb9b4b12d1319d0851c2a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 162,
+      "asset_path": "assets/839d8f5405f5ab2744c60747e0f0052b6080a342d10cb9b4b12d1319d0851c2a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0a44929b33133a6cfaf1730c704ea4b2ee82948bf69490ecbcb1da12c880e18d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character with a thoughtful expression, holding their chin.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Observation and inference about the state of water (ice and water)",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T21:34:11Z"
+    },
+    {
+      "asset_id": "92ad690251c1c44b4358c4a3",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 162,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0a44929b33133a6cfaf1730c704ea4b2ee82948bf69490ecbcb1da12c880e18d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An ice cube in a cup on a table, with text explaining the observation and conclusion.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Activity 8.1: Let us observe",
+          "Put an ice cube in a cup, leave it on the table and",
+          "observe.",
+          "Ice gets converted into water.",
+          "What can you conclude from the observations?",
+          "Does this mean that ice and water are the same substance?",
+          "Yes, ice and water are the two forms of the same substance.",
+          "These forms are also called states. These different states",
+          "of water show many differences in their behaviour. Water",
+          "flows but ice does not. Water splash"
+        ],
+        "concepts": [
+          "Observation",
+          "Ice",
+          "Water",
+          "States of matter",
+          "Different forms of the same substance",
+          "Behaviour of different states of water"
+        ],
+        "context_relation": "Observation and conclusion",
+        "limitations": [
+          "The image does not show the actual ice cube or cup."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T21:35:03Z"
     }
   ]
 }
