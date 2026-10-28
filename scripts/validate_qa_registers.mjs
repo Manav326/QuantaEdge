@@ -138,6 +138,10 @@ export function validateTables(tables) {
     obj.componentAudit = toObjects(tables.componentAudit, "route/component audit register");
     if (!obj.componentAudit.length) throw new Error("Route/component audit register: no data rows found.");
   }
+  if (tables.componentInstances) {
+    obj.componentInstances = toObjects(tables.componentInstances, "component-instance audit register");
+    if (!obj.componentInstances.length) throw new Error("Component-instance audit register: no data rows found.");
+  }
 
   requireColumns(obj.uiInventory, ["platform", "identifier", "scenario_ids"], labels.uiInventory);
   requireColumns(obj.scenarios, ["case_id", "execution_status"], labels.scenarios);
@@ -148,7 +152,7 @@ export function validateTables(tables) {
   if (obj.componentAudit) {
     const componentAuditLabel = "route/component audit register";
     requireColumns(obj.componentAudit, [
-      "audit_id", "platform", "route_or_destination", "source_path", "scenario_ids",
+      "audit_id", "platform", "route_or_destination", "source_path", "scenario_ids", "component_audit_ids",
       "source_component_trace_status", "component_inventory_status",
       "breakpoint_layout_status", "overflow_and_scroll_status",
       "light_theme_status", "dark_theme_status", "english_layout_status",
@@ -160,11 +164,23 @@ export function validateTables(tables) {
     requireColumns(obj.uiStates, ["screen_key", "platform", "route_or_destination", "source_path", "scenario_ids"], labels.uiStates);
   }
 
+  if (obj.componentInstances) {
+    requireColumns(obj.componentInstances, [
+      "component_audit_id", "platform", "component_name", "component_source_path",
+      "component_kind", "consuming_audit_ids", "source_review_status",
+      "layout_responsive_status", "overflow_and_scroll_status", "light_dark_theme_status",
+      "english_hindi_layout_status", "interaction_accessibility_status", "runtime_verification",
+      "exact_commit_sha", "environment_and_viewports", "evidence_url", "defect_ids",
+      "overall_status", "reviewer_notes"
+    ], "component-instance audit register");
+  }
+
   assertUnique(obj.scenarios, "case_id", labels.scenarios);
   assertUnique(obj.runtimeLog, "scenario_id", labels.runtimeLog);
   assertUnique(obj.uiStates, "screen_key", labels.uiStates);
   assertUnique(obj.apiRoutes, "api_id", labels.apiRoutes);
   if (obj.componentAudit) assertUnique(obj.componentAudit, "audit_id", "route/component audit register");
+  if (obj.componentInstances) assertUnique(obj.componentInstances, "component_audit_id", "component-instance audit register");
 
   const knownIds = new Set(obj.scenarios.map(row => String(row.case_id).trim()));
   if (knownIds.size !== obj.scenarios.length) throw new Error("Workflow scenario IDs are not unique.");
@@ -227,6 +243,83 @@ export function validateTables(tables) {
     obj.componentAuditStatusCounts = auditStatusCounts;
   }
 
+
+  if (obj.componentInstances) {
+    const componentLabel = "component-instance audit register";
+    const routeAuditLabel = "route/component audit register";
+    if (!obj.componentAudit) throw new Error("Component-instance validation requires the route/component audit register.");
+    const normalizePlatform = value => ["people", "people-hrms", "hrms"].includes(String(value ?? "").trim()) ? "hrms" : String(value ?? "").trim();
+    const routeById = new Map(obj.componentAudit.map(row => [String(row.audit_id).trim(), row]));
+    const componentById = new Map(obj.componentInstances.map(row => [String(row.component_audit_id).trim(), row]));
+    const componentReviewFields = [
+      "layout_responsive_status", "overflow_and_scroll_status", "light_dark_theme_status",
+      "english_hindi_layout_status", "interaction_accessibility_status"
+    ];
+    const reviewStatuses = new Set(["NOT_REVIEWED", "IN_PROGRESS", "VERIFIED", "BLOCKED", "NOT_APPLICABLE"]);
+    const sourceStatuses = new Set(["NOT_REVIEWED", "IN_PROGRESS", "SOURCE_REVIEWED", "VERIFIED", "BLOCKED", "NOT_APPLICABLE"]);
+    const runtimeStatuses = new Set(["NOT_EXECUTED", "AUTOMATED_VERIFIED", "MANUAL_VERIFIED", "BLOCKED", "NOT_APPLICABLE"]);
+    const overallStatuses = new Set(["NOT_STARTED", "IN_PROGRESS", "BLOCKED", "READY_FOR_SIGNOFF", "SIGNED_OFF", "NOT_APPLICABLE"]);
+    const expectedComponentsByRoute = new Map([...routeById.keys()].map(id => [id, new Set()]));
+    const componentStatusCounts = {};
+
+    for (const component of obj.componentInstances) {
+      const componentId = String(component.component_audit_id ?? "").trim();
+      const platform = normalizePlatform(component.platform);
+      const sourceStatus = String(component.source_review_status ?? "").trim().toUpperCase();
+      if (!sourceStatuses.has(sourceStatus)) throw new Error(componentLabel + ": invalid source_review_status \"" + sourceStatus + "\" for " + componentId + ".");
+      for (const field of componentReviewFields) {
+        const value = String(component[field] ?? "").trim().toUpperCase();
+        if (!reviewStatuses.has(value)) throw new Error(componentLabel + ": invalid " + field + " \"" + value + "\" for " + componentId + ".");
+      }
+      const runtimeStatus = String(component.runtime_verification ?? "").trim().toUpperCase();
+      if (!runtimeStatuses.has(runtimeStatus)) throw new Error(componentLabel + ": invalid runtime_verification \"" + runtimeStatus + "\" for " + componentId + ".");
+      const overallStatus = String(component.overall_status ?? "").trim().toUpperCase();
+      if (!overallStatuses.has(overallStatus)) throw new Error(componentLabel + ": invalid overall_status \"" + overallStatus + "\" for " + componentId + ".");
+
+      const consumerIds = String(component.consuming_audit_ids ?? "").split(";").map(id => id.trim()).filter(Boolean);
+      if (consumerIds.length === 0) throw new Error(componentLabel + ": " + componentId + " has no mapped consumer route.");
+      if (new Set(consumerIds).size !== consumerIds.length) throw new Error(componentLabel + ": " + componentId + " repeats a consumer route ID.");
+      for (const routeId of consumerIds) {
+        const route = routeById.get(routeId);
+        if (!route) throw new Error(componentLabel + ": " + componentId + " references unknown consumer route \"" + routeId + "\".");
+        if (normalizePlatform(route.platform) !== platform) throw new Error(componentLabel + ": platform mismatch between " + componentId + " and " + routeId + ".");
+        expectedComponentsByRoute.get(routeId).add(componentId);
+      }
+
+      if (overallStatus === "SIGNED_OFF") {
+        const requiredEvidence = ["exact_commit_sha", "environment_and_viewports", "evidence_url"];
+        const missing = requiredEvidence.filter(field => !String(component[field] ?? "").trim());
+        if (missing.length) throw new Error(componentLabel + ": signed-off component " + componentId + " lacks evidence: " + missing.join(", ") + ".");
+        const incomplete = componentReviewFields.filter(field => !["VERIFIED", "NOT_APPLICABLE"].includes(String(component[field] ?? "").trim().toUpperCase()));
+        if (incomplete.length) throw new Error(componentLabel + ": signed-off component " + componentId + " has unchecked categories: " + incomplete.join(", ") + ".");
+        if (!["AUTOMATED_VERIFIED", "MANUAL_VERIFIED", "NOT_APPLICABLE"].includes(runtimeStatus)) throw new Error(componentLabel + ": signed-off component " + componentId + " lacks runtime verification.");
+        if (componentReviewFields.some(field => String(component[field] ?? "").trim().toUpperCase() === "NOT_APPLICABLE") && !String(component.reviewer_notes ?? "").trim()) {
+          throw new Error(componentLabel + ": signed-off component " + componentId + " needs a reviewer note for NOT_APPLICABLE checks.");
+        }
+      }
+      componentStatusCounts[overallStatus] = (componentStatusCounts[overallStatus] ?? 0) + 1;
+    }
+
+    for (const route of obj.componentAudit) {
+      const routeId = String(route.audit_id ?? "").trim();
+      const referenced = String(route.component_audit_ids ?? "").split(";").map(id => id.trim()).filter(Boolean);
+      if (referenced.length === 0) throw new Error(routeAuditLabel + ": " + routeId + " has no component references.");
+      if (new Set(referenced).size !== referenced.length) throw new Error(routeAuditLabel + ": " + routeId + " repeats a component_audit_id.");
+      for (const componentId of referenced) {
+        const component = componentById.get(componentId);
+        if (!component) throw new Error(routeAuditLabel + ": " + routeId + " references unknown component \"" + componentId + "\".");
+        const reverseConsumers = String(component.consuming_audit_ids ?? "").split(";").map(id => id.trim()).filter(Boolean);
+        if (!reverseConsumers.includes(routeId)) throw new Error(routeAuditLabel + ": " + routeId + " references " + componentId + ", but that component does not list this route as a consumer.");
+      }
+      const expected = expectedComponentsByRoute.get(routeId) ?? new Set();
+      const actual = new Set(referenced);
+      const missing = [...expected].filter(id => !actual.has(id));
+      const extra = [...actual].filter(id => !expected.has(id));
+      if (missing.length || extra.length) throw new Error(routeAuditLabel + ": component references for " + routeId + " do not match the component-instance registry. Missing: " + missing.join(", ") + ". Extra: " + extra.join(", ") + ".");
+    }
+    obj.componentInstanceStatusCounts = componentStatusCounts;
+  }
+
   const runtimeIds = new Set(obj.runtimeLog.map(row => String(row.scenario_id).trim()));
   const missingRuntime = [...knownIds].filter(id => !runtimeIds.has(id));
   const extraRuntime = [...runtimeIds].filter(id => !knownIds.has(id));
@@ -282,6 +375,10 @@ export function validateTables(tables) {
     summary.routeComponentAuditRows = obj.componentAudit.length;
     summary.routeComponentAuditStatusCounts = obj.componentAuditStatusCounts;
   }
+  if (obj.componentInstances) {
+    summary.componentInstanceAuditRows = obj.componentInstances.length;
+    summary.componentInstanceStatusCounts = obj.componentInstanceStatusCounts;
+  }
   return summary;
 }
 
@@ -303,7 +400,8 @@ export function validateQaRegisters(root = process.cwd()) {
     apiRoutes: readTable(root, "phase-1-api-route-inventory.csv"),
     runtimeLog: readTable(root, "phase-1-runtime-execution-log.csv"),
     uiStates: readTable(root, "phase-1-ui-state-coverage.csv"),
-    componentAudit: readTable(root, "route-component-audit-register.csv", "ui-ux-audit")
+    componentAudit: readTable(root, "route-component-audit-register.csv", "ui-ux-audit"),
+    componentInstances: readTable(root, "component-instance-audit-register.csv", "ui-ux-audit")
   };
   return validateTables(tables);
 }
