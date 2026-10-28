@@ -22,6 +22,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.mockito.ArgumentCaptor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -106,8 +107,8 @@ class FinancePayoutStatementDownloadTest {
     ArgumentCaptor<Object[]> auditArgs=ArgumentCaptor.forClass(Object[].class);
     verify(jdbc).update(contains("finance_payout_statement_event"),auditArgs.capture());
     String details=String.valueOf(auditArgs.getValue()[3]);
-    assertTrue(details.contains("\\"payoutId\\":null"),"Batch statements must not create a fictional payout #0.");
-    assertTrue(details.contains("\\"revision\\":1"),"Downloads must retain the immutable document revision in audit details.");
+    assertTrue(details.contains("\"payoutId\":null"),"Batch statements must not create a fictional payout #0.");
+    assertTrue(details.contains("\"revision\":1"),"Downloads must retain the immutable document revision in audit details.");
   }
 
   private static AuthorizationService authorized() {
