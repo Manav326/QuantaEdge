@@ -62,6 +62,12 @@ jobs:
       - name: Generate machine-readable route/component source graph
         run: node scripts/inventory_ui_component_imports.mjs --output "$RUNNER_TEMP/ui-component-import-inventory.json"
 
+      - name: Test expanded route/component source audit register
+        run: node --test scripts/build_ui_component_audit_register.test.mjs
+
+      - name: Generate expanded route/component source audit registers
+        run: node scripts/build_ui_component_audit_register.mjs --root . --graph "$RUNNER_TEMP/ui-component-import-inventory.json" --component-output "$RUNNER_TEMP/ui-component-source-audit-register.csv" --route-output "$RUNNER_TEMP/ui-route-component-audit-register.csv"
+
       - name: Test QA register validator
         run: node --test scripts/validate_qa_registers.test.mjs
 
@@ -89,6 +95,16 @@ jobs:
         with:
           name: ui-component-import-inventory
           path: ${{ runner.temp }}/ui-component-import-inventory.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload expanded route/component audit registers
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-component-source-audit-register
+          path: |
+            ${{ runner.temp }}/ui-component-source-audit-register.csv
+            ${{ runner.temp }}/ui-route-component-audit-register.csv
           if-no-files-found: error
           retention-days: 14
 
