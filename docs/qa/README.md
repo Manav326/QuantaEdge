@@ -22,6 +22,7 @@
 - [Route/Component Audit Register](../ui-ux-audit/route-component-audit-register.csv): one evidence-gated tracking row per current UI route/destination; all rows begin unverified.
 - [Component-Instance Audit Register](../ui-ux-audit/component-instance-audit-register.csv): current starter set of shared shells, providers, global styles and floating tutor docks, with explicit consuming-route links; route-specific nested components are still to be inventoried.
 - [Shared Shell Source Review](../ui-ux-audit/shared-shell-source-review.md): source-only observations and required runtime checks for responsive navigation, theme CSS cascade, overlays and Android shell behavior.
+- [Route-to-Component Import Graph](../ui-ux-audit/comprehensive-route-component-audit-plan.md#phase-0--baseline-and-inventory-reconciliation): generated during CI as the `ui-component-import-inventory` artifact; it follows local imports and Next.js ancestor layouts per page route. It is a source map, not runtime verification.
 - [Centralized QA Test-Pack Lifecycle](./qa-test-pack-lifecycle.md): required install/uninstall state machine, immutable resource ownership manifest, production safety gates, automated acceptance matrix and implementation ledger.
 
 ## Current test-pack lifecycle work
