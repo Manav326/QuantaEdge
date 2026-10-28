@@ -509,11 +509,20 @@ private val uiPhraseBySource: Map<String, UiPhrase> = buildMap {
 }
 
 internal fun localizedUiTextForLanguage(source: String, language: String): String {
+    if (sharedResourceId != 0) {
+        // A generated entry exists only when all catalog occurrences agree on the translation.
+        // Use the central catalog first; the older phrase map remains a fallback for ambiguous copy.
+        val sharedConfiguration = Configuration(context.resources.configuration).apply {
+            setLocale(Locale.forLanguageTag(if (language == "hi") "hi" else "en"))
+        }
+        val sharedContext: Context = context.createConfigurationContext(sharedConfiguration)
+        return brandText(sharedContext.getString(sharedResourceId))
+    }
     val phrase = uiPhraseBySource[source] ?: uiPhrases
         .filter { it.hindi.endsWith(" ") || it.english.endsWith(" ") }
         .sortedByDescending { maxOf(it.hindi.length, it.english.length) }
         .firstOrNull { source.startsWith(it.hindi) || source.startsWith(it.english) }
-    if (phrase == null) return source
+    if (phrase == null) return brandText(source)
     val exact = source == phrase.hindi || source == phrase.english
     val suffix = if (exact) "" else when {
         source.startsWith(phrase.hindi) -> source.removePrefix(phrase.hindi)
