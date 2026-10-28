@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c4058c3a5f9264c3ccb415b78821489781716a5a3da1fc9d5d691482884ec1bd",
+  "raw_analysis_sha256": "a6bcf0f58969b99e4b3e662c5f4d5c423468ba6a360a74d5c9597b53c4545116",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -146686,6 +146686,230 @@
         "limitations": [
           "The image does not provide specific details about the flow chart or the chemical reaction.",
           "The image is a cartoon and may not accurately represent the complexity of the concepts involved in the flow chart and the chemical reaction."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "723270e7ac053086fab1a30f",
+      "asset_sha256": "32c0ac812e250d447a20b7ecd2dfeae9ddaf33c833f4ab3b1a459d5afa5b7dcf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 76,
+      "asset_path": "assets/32c0ac812e250d447a20b7ecd2dfeae9ddaf33c833f4ab3b1a459d5afa5b7dcf.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9b2d7697ff3d8d5c9aaa2908709c2e9b1929d605b85dd59b0b1c09be80cb8762",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two spiraled objects with a blue base, possibly representing a spiral staircase or a similar structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be an illustration or a diagram, possibly related to a spiral staircase or a similar structure.",
+        "limitations": [
+          "The image does not provide any specific context or information about the spiral objects.",
+          "The visible text is empty, indicating no textual information is present in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "checkpointed_at": "2026-10-28T03:48:09Z",
+      "effective_analysis": {
+        "visual_summary": "Two spiraled objects with a blue base, possibly representing a spiral staircase or a similar structure.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be an illustration or a diagram, possibly related to a spiral staircase or a similar structure.",
+        "limitations": [
+          "The image does not provide any specific context or information about the spiral objects.",
+          "The visible text is empty, indicating no textual information is present in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b4d213bf55f2e8f16146f2db",
+      "asset_sha256": "b6b7186970278fe367a41a2ca3ce23e5a747a42c9f05dda37f6dd2683b325bae",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 76,
+      "asset_path": "assets/b6b7186970278fe367a41a2ca3ce23e5a747a42c9f05dda37f6dd2683b325bae.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9b2d7697ff3d8d5c9aaa2908709c2e9b1929d605b85dd59b0b1c09be80cb8762",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "checkpointed_at": "2026-10-28T03:49:38Z",
+      "effective_analysis": {
+        "visual_summary": "A rope with a blue loop at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8b3acf0866221a690ab86c3c",
+      "asset_sha256": "e75a9dc3cacead1de548a9b16cdaa27fa44b808c6251f396eddc2204a469ce61",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 76,
+      "asset_path": "assets/e75a9dc3cacead1de548a9b16cdaa27fa44b808c6251f396eddc2204a469ce61.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9b2d7697ff3d8d5c9aaa2908709c2e9b1929d605b85dd59b0b1c09be80cb8762",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope-like structure with a yellow and green color scheme.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "checkpointed_at": "2026-10-28T03:51:07Z",
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with a yellow and green color scheme.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ffbdb2e78f5e160cca76d9c9",
+      "asset_sha256": "e75a9dc3cacead1de548a9b16cdaa27fa44b808c6251f396eddc2204a469ce61",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 76,
+      "asset_path": "assets/e75a9dc3cacead1de548a9b16cdaa27fa44b808c6251f396eddc2204a469ce61.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9b2d7697ff3d8d5c9aaa2908709c2e9b1929d605b85dd59b0b1c09be80cb8762",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A rope-like structure with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "checkpointed_at": "2026-10-28T03:51:12Z",
+      "effective_analysis": {
+        "visual_summary": "A rope-like structure with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fbd7e602b838a03e5065c2be",
+      "asset_sha256": "e885bc1ab2071d184a5578e1a7884143088051f7d7cca084f892db350957f7d2",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 76,
+      "asset_path": "assets/e885bc1ab2071d184a5578e1a7884143088051f7d7cca084f892db350957f7d2.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9b2d7697ff3d8d5c9aaa2908709c2e9b1929d605b85dd59b0b1c09be80cb8762",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A flowchart with steps labeled 'INNOVATION', 'DISCOVERY', and 'ENQUIRY'. The flowchart includes a decision point with options 'Air', 'Heat', 'Ash', and 'Water'. There is a step labeled 'Add blue and red litmus solutions separately'. The flowchart ends with a step labeled 'Change in blue litmus solution'.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Air",
+          "Heat",
+          "Ash",
+          "Water",
+          "Add blue and red litmus solutions separately",
+          "Change in blue litmus solution"
+        ],
+        "concepts": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Decision Point",
+          "Add blue and red litmus solutions",
+          "Change in blue litmus solution"
+        ],
+        "context_relation": "The flowchart represents a process or sequence of steps in a scientific inquiry.",
+        "limitations": [
+          "The image is a flowchart and does not represent a physical object or process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "checkpointed_at": "2026-10-28T03:53:00Z",
+      "effective_analysis": {
+        "visual_summary": "A flowchart with steps labeled 'INNOVATION', 'DISCOVERY', and 'ENQUIRY'. The flowchart includes a decision point with options 'Air', 'Heat', 'Ash', and 'Water'. There is a step labeled 'Add blue and red litmus solutions separately'. The flowchart ends with a step labeled 'Change in blue litmus solution'.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Air",
+          "Heat",
+          "Ash",
+          "Water",
+          "Add blue and red litmus solutions separately",
+          "Change in blue litmus solution"
+        ],
+        "concepts": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Decision Point",
+          "Add blue and red litmus solutions",
+          "Change in blue litmus solution"
+        ],
+        "context_relation": "The flowchart represents a process or sequence of steps in a scientific inquiry.",
+        "limitations": [
+          "The image is a flowchart and does not represent a physical object or process."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
