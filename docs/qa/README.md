@@ -20,6 +20,8 @@
 - [Consolidated Coverage Gaps](./phase-1-coverage-gaps.md): prioritized open findings and the required closure sequence before Phase 2 test-data installation.
 - [Shared Shell Source Review](../ui-ux-audit/shared-shell-source-review.md): static review notes for Web, Admin, HRMS and Android shell foundations; runtime checks remain pending.
 - [Route/Component Audit Register](../ui-ux-audit/route-component-audit-register.csv): one evidence-gated row per route/destination.
+- [UI/UX Findings Register](../ui-ux-audit/findings-register.csv): findings, status, source fix, regression guard and evidence required before runtime sign-off.
+- [Route-Specific Source Review](../ui-ux-audit/route-specific-source-review.md): first-pass source trace of the 13 route entries added during inventory reconciliation; runtime validation remains open.
 - [Comprehensive Route/Component UI-UX Audit Plan](../ui-ux-audit/comprehensive-route-component-audit-plan.md): scope, phases, severity and evidence-gated exit criteria.
 - [Comprehensive Route/Component UI-UX Audit Plan](../ui-ux-audit/comprehensive-route-component-audit-plan.md): route-by-route and component-by-component responsive, theme, accessibility and runtime acceptance rules.
 - [Route/Component Audit Register](../ui-ux-audit/route-component-audit-register.csv): one evidence-gated tracking row per current UI route/destination; all rows begin without a runtime pass.
