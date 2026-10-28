@@ -29,21 +29,72 @@ function isFile(path) {
   }
 }
 
-/** Finds literal local imports. Bare package imports are deliberately ignored. */
+/**
+ * Finds literal local imports while ignoring comment text and ordinary strings.
+ * The token walk avoids mistaking an example in a comment or rendered JSX copy
+ * for a real source dependency.
+ */
 export function localImportSpecifiers(source) {
   const found = new Set();
-  const patterns = [
-    /\\b(?:import|export)\\s+(?:type\\s+)?(?:[^;"']|\\r?\\n)*?\\bfrom\\s*(['"])([^'"]+)\\1/g,
-    /\\bimport\\s*(['"])([^'"]+)\\1/g,
-    /\\bimport\\s*\\(\\s*(['"])([^'"]+)\\1\\s*\\)/g,
-    /\\brequire\\s*\\(\\s*(['"])([^'"]+)\\1\\s*\\)/g,
-    /@import\\s*(['"])([^'"]+)\\1/g,
-  ];
-  for (const pattern of patterns) {
-    for (const match of source.matchAll(pattern)) {
-      const specifier = match[2];
-      if (specifier?.startsWith('.') || specifier?.startsWith('@/')) found.add(specifier);
+  const addIfLocal = value => {
+    if (value && (value.startsWith('.') || value.startsWith('@/'))) found.add(value);
+  };
+
+  for (let index = 0; index < source.length;) {
+    const current = source[index];
+    const next = source[index + 1];
+
+    if (current === '/' && next === '/') {
+      index += 2;
+      while (index < source.length && source[index] !== '\\n') index += 1;
+      continue;
     }
+    if (current === '/' && next === '*') {
+      index += 2;
+      while (index < source.length && !(source[index] === '*' && source[index + 1] === '/')) index += 1;
+      index = Math.min(source.length, index + 2);
+      continue;
+    }
+    if (current === "'" || current === '"' || current === '`') {
+      const quote = current;
+      index += 1;
+      while (index < source.length) {
+        if (source[index] === '\\\\') { index += 2; continue; }
+        if (source[index] === quote) { index += 1; break; }
+        index += 1;
+      }
+      continue;
+    }
+
+    if (/[A-Za-z_$]/.test(current)) {
+      const start = index;
+      index += 1;
+      while (index < source.length && /[A-Za-z0-9_$]/.test(source[index])) index += 1;
+      const token = source.slice(start, index);
+      if (token === 'import' || token === 'export' || token === 'require') {
+        const tail = source.slice(start, Math.min(source.length, start + 8000));
+        let match = null;
+        if (token === 'import') {
+          match = tail.match(/^import\\s*\\(\\s*(['"])([^'"]+)\\1\\s*\\)/);
+          if (!match) match = tail.match(/^import\\s*(['"])([^'"]+)\\1/);
+          if (!match) match = tail.match(/^import\\b[\\s\\S]{0,8000}?\\bfrom\\s*(['"])([^'"]+)\\1/);
+        } else if (token === 'export') {
+          match = tail.match(/^export\\b[\\s\\S]{0,8000}?\\bfrom\\s*(['"])([^'"]+)\\1/);
+        } else {
+          match = tail.match(/^require\\s*\\(\\s*(['"])([^'"]+)\\1\\s*\\)/);
+        }
+        if (match) addIfLocal(match[2]);
+      }
+      continue;
+    }
+
+    // CSS @import is not an identifier by itself, so recognize it separately.
+    if (current === '@' && source.slice(index, index + 7) === '@import') {
+      const tail = source.slice(index, Math.min(source.length, index + 1000));
+      const match = tail.match(/^@import\\s*(['"])([^'"]+)\\1/);
+      if (match) addIfLocal(match[2]);
+    }
+    index += 1;
   }
   return [...found].sort();
 }
