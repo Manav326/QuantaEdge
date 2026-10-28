@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1463,
+    "assets_selected": 1466,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "71b571964d286b481f157ce1",
-      "4ff0e8b6da564a7f0e1f8339",
-      "d73a085e0d5cd98348c6ff45"
+      "0ad01f894dfd71b0f48825d9",
+      "8c48ee5d054a439f8fc3fc10",
+      "7cc95bfa94e75c093370bc30"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1461,
-    "assets_remaining": 617,
-    "assets_completion_percent": 70.3,
+    "assets_analyzed": 1464,
+    "assets_remaining": 614,
+    "assets_completion_percent": 70.5,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 1458,
+    "assets_skipped_from_checkpoint": 1461,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
-      "checkpointed_at": "2026-10-28T14:39:04Z"
+      "checkpointed_at": "2026-10-28T14:48:16Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
-      "checkpointed_at": "2026-10-28T14:39:56Z"
+      "checkpointed_at": "2026-10-28T14:49:10Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -49484,6 +49484,84 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
       "checkpointed_at": "2026-10-28T14:47:04Z"
+    },
+    {
+      "asset_id": "0ad01f894dfd71b0f48825d9",
+      "asset_sha256": "572417e40427f60186142caeb8f805f54d326aa0a0680870726d85258f07c0c3",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 161,
+      "asset_path": "assets/572417e40427f60186142caeb8f805f54d326aa0a0680870726d85258f07c0c3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "aeeb7596e77e6ecc803fc47b32f5bf27c7372558e01fe140adba0d39aae34653",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a girl with braided hair and a red bow, wearing a blue scarf.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about the states of water.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:50:44Z"
+    },
+    {
+      "asset_id": "8c48ee5d054a439f8fc3fc10",
+      "asset_sha256": "025c4c935b1e27946148b73cf782711ce35f7765d73eb4e90473b6b97d68aeba",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 161,
+      "asset_path": "assets/025c4c935b1e27946148b73cf782711ce35f7765d73eb4e90473b6b97d68aeba.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "aeeb7596e77e6ecc803fc47b32f5bf27c7372558e01fe140adba0d39aae34653",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl with braided hair and a red bow, wearing a blue shirt, holding her chin with her hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text about the nature of ice and water.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:52:16Z"
+    },
+    {
+      "asset_id": "7cc95bfa94e75c093370bc30",
+      "asset_sha256": "cfd3505cc6db13d9b43b9dd45b838aed9d4354bc998653689f509513897dd039",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 161,
+      "asset_path": "assets/cfd3505cc6db13d9b43b9dd45b838aed9d4354bc998653689f509513897dd039.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "aeeb7596e77e6ecc803fc47b32f5bf27c7372558e01fe140adba0d39aae34653",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A boy with dark hair and a blue shirt, looking thoughtful with his hand on his chin.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text about Thirav's curiosity about ice and water.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:53:52Z"
     }
   ]
 }

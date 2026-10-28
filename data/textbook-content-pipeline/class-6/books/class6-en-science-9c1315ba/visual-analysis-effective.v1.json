@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0d61042e59a2765f854b7cb5bf4855884d7ef7fda188b1d3ce49c354cb3297fb",
+  "raw_analysis_sha256": "acc3c7b5da168e699ca3478c6c380503f62df2819866d191bbb014b9e4a14eb6",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -57191,7 +57191,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
-      "checkpointed_at": "2026-10-28T14:39:04Z",
+      "checkpointed_at": "2026-10-28T14:48:16Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66842,7 +66842,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
-      "checkpointed_at": "2026-10-28T14:39:56Z",
+      "checkpointed_at": "2026-10-28T14:49:10Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -75233,6 +75233,114 @@
         "limitations": [
           "The image does not provide specific details about the educational content, such as the names of the substances or the specific properties being discussed."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0ad01f894dfd71b0f48825d9",
+      "asset_sha256": "572417e40427f60186142caeb8f805f54d326aa0a0680870726d85258f07c0c3",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 161,
+      "asset_path": "assets/572417e40427f60186142caeb8f805f54d326aa0a0680870726d85258f07c0c3.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "aeeb7596e77e6ecc803fc47b32f5bf27c7372558e01fe140adba0d39aae34653",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a girl with braided hair and a red bow, wearing a blue scarf.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about the states of water.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:50:44Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a girl with braided hair and a red bow, wearing a blue scarf.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about the states of water.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8c48ee5d054a439f8fc3fc10",
+      "asset_sha256": "025c4c935b1e27946148b73cf782711ce35f7765d73eb4e90473b6b97d68aeba",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 161,
+      "asset_path": "assets/025c4c935b1e27946148b73cf782711ce35f7765d73eb4e90473b6b97d68aeba.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "aeeb7596e77e6ecc803fc47b32f5bf27c7372558e01fe140adba0d39aae34653",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl with braided hair and a red bow, wearing a blue shirt, holding her chin with her hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text about the nature of ice and water.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:52:16Z",
+      "effective_analysis": {
+        "visual_summary": "A girl with braided hair and a red bow, wearing a blue shirt, holding her chin with her hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text about the nature of ice and water.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7cc95bfa94e75c093370bc30",
+      "asset_sha256": "cfd3505cc6db13d9b43b9dd45b838aed9d4354bc998653689f509513897dd039",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 161,
+      "asset_path": "assets/cfd3505cc6db13d9b43b9dd45b838aed9d4354bc998653689f509513897dd039.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "aeeb7596e77e6ecc803fc47b32f5bf27c7372558e01fe140adba0d39aae34653",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A boy with dark hair and a blue shirt, looking thoughtful with his hand on his chin.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text about Thirav's curiosity about ice and water.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:53:52Z",
+      "effective_analysis": {
+        "visual_summary": "A boy with dark hair and a blue shirt, looking thoughtful with his hand on his chin.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the text about Thirav's curiosity about ice and water.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
