@@ -39,7 +39,7 @@ def read_json_fields(
     """
     values: dict[str, Any] = {}
     decoder = json.JSONDecoder()
-    patterns = {key: re.compile(r'"' + re.escape(key) + r'"\\s*:\\s*') for key in keys}
+    patterns = {key: re.compile(r'"' + re.escape(key) + r'"\s*:\s*') for key in keys}
     try:
         with path.open("r", encoding="utf-8") as stream:
             prefix = ""
