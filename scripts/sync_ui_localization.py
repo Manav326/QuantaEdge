@@ -151,7 +151,7 @@ def render_android_catalog_resources(catalogs: dict[str, dict[str, str]]) -> dic
         if source != source.strip() or target != target.strip():
             continue
         # Newlines in UI copy need explicit context review and must not be silently normalized.
-        if "\\n" in source or "\\r" in source or "\\n" in target or "\\r" in target:
+        if any(marker in value for value in (source, target) for marker in ("\n", "\r", "\\n", "\\r")):
             continue
         resource_name = "qe_ui_" + hashlib.sha256(source.encode("utf-8")).hexdigest()[:16]
         previous = seen_names.get(resource_name)
