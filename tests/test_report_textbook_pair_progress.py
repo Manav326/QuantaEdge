@@ -31,7 +31,7 @@ class TextbookPairProgressReportTests(unittest.TestCase):
         self.write_json(extraction / f"{sha}.manifest.json", {
             "schema_version": 1, "book_id": book_id, "class": grade, "language": language,
             "scope": "SUBJECT_BOOK", "content_state": "DRAFT_EXTRACTION_ONLY_REQUIRES_REVIEW",
-            "original_book_sha256": sha, "asset_pdf_sha256": sha, "page_count": 1, "text_jsonl": text_name,
+            "original_book_sha256": sha, "asset_pdf_sha256": sha, "page_count": 1, "completed_pages": 1, "text_jsonl": text_name,
         })
         (extraction / text_name).write_text(json.dumps({
             "schema_version": 1, "book_id": book_id, "original_book_sha256": sha, "asset_pdf_sha256": sha,
