@@ -119,6 +119,8 @@ def book_progress(repo_root: Path, source: dict[str, str]) -> dict[str, Any]:
     if not isinstance(percent, (int, float)):
         percent = round(100 * analyzed / eligible, 1) if eligible else 0.0
     percent = max(0.0, min(100.0, float(percent)))
+    if raw is not None and inventory is not None and eligible != inventory_assets:
+        blockers.append("raw analysis eligible asset count differs from the current inventory")
 
     layers = (index or {}).get("layers") or {}
     ledger_summary = (ledger or {}).get("summary") or {}
@@ -153,7 +155,7 @@ def book_progress(repo_root: Path, source: dict[str, str]) -> dict[str, Any]:
         blockers.append("coverage ledger is unreadable")
     if raw_error not in (None, "missing") and raw_path is not None:
         blockers.append("raw analysis checkpoint is unreadable")
-    if blockers and status != "COMPLETE":
+    if blockers:
         status = "BLOCKED"
 
     return {
