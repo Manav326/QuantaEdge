@@ -228,7 +228,7 @@ def process_bundle(bundle_path: Path, pdf_dir: Path, output_dir: Path, force: bo
             "layer": 0, "status": "COMPLETE",
             "created_at": previous_timing.get("created_at") or layer_started_at,
             "started_at": layer_started_at, "completed_at": layer_completed_at,
-            "last_progress_at": layer_completed_at,
+            "last_progress_at": layer_completed_at if (page_count - completed_before) > 0 else (previous_timing.get("last_progress_at") or layer_completed_at),
             "attempt_elapsed_seconds": layer_elapsed,
             "total_elapsed_seconds": round(float(previous_timing.get("total_elapsed_seconds", 0) or 0) + layer_elapsed, 3),
             "timing_basis": "Monotonic time around source verification and incremental whole-book text extraction",
