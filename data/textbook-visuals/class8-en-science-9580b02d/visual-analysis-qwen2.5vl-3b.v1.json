@@ -15,12 +15,12 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "d6a3b284f120b97594630433"
+      "8507cbf408fce4e38429b2e2"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1352,
-    "assets_remaining": 939,
-    "assets_completion_percent": 59.0,
+    "assets_analyzed": 1353,
+    "assets_remaining": 938,
+    "assets_completion_percent": 59.1,
     "assets_failed": 16,
     "assets_skipped_from_checkpoint": 1352,
     "batch_limit": 5,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40690755032",
-      "checkpointed_at": "2026-10-28T13:54:24Z"
+      "checkpointed_at": "2026-10-28T13:58:27Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40690755032",
-      "checkpointed_at": "2026-10-28T13:54:51Z"
+      "checkpointed_at": "2026-10-28T13:58:53Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40690755032",
-      "checkpointed_at": "2026-10-28T13:55:22Z"
+      "checkpointed_at": "2026-10-28T13:59:25Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40690755032",
-      "checkpointed_at": "2026-10-28T13:56:07Z"
+      "checkpointed_at": "2026-10-28T14:00:11Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -45107,6 +45107,38 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40671359148",
       "checkpointed_at": "2026-10-28T12:44:39Z"
+    },
+    {
+      "asset_id": "8507cbf408fce4e38429b2e2",
+      "asset_sha256": "adf52aec33e4fe531611aff7f5c9d5bc4bff5ea02e1bbf728c1a0637d348ab0d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 115,
+      "asset_path": "assets/adf52aec33e4fe531611aff7f5c9d5bc4bff5ea02e1bbf728c1a0637d348ab0d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a5e9dffe4e593c12963f37b5c9000f9c5fc7bf6cab12de5cf63cabd13280e50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person standing in a flooded area with a dry tree and hills in the background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "flooded area",
+          "dry tree",
+          "hills"
+        ],
+        "context_relation": "The image does not provide information related to the textbook content.",
+        "limitations": [
+          "The image does not show any text or labels related to the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40690755032",
+      "checkpointed_at": "2026-10-28T14:00:51Z"
     }
   ]
 }

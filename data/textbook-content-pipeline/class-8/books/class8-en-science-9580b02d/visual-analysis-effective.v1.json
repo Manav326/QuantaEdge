@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "27704a4a7c0d65a7e18f244aab3036e9f65d474c42b9c82847b61df83a20d00a",
+  "raw_analysis_sha256": "d121845653e97a3dfb5e64e496b547ccf21bafd30b14fe71148c4a1f78f27b88",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40690755032",
-      "checkpointed_at": "2026-10-28T13:54:24Z",
+      "checkpointed_at": "2026-10-28T13:58:27Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40690755032",
-      "checkpointed_at": "2026-10-28T13:54:51Z",
+      "checkpointed_at": "2026-10-28T13:58:53Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40690755032",
-      "checkpointed_at": "2026-10-28T13:55:22Z",
+      "checkpointed_at": "2026-10-28T13:59:25Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -65709,7 +65709,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40690755032",
-      "checkpointed_at": "2026-10-28T13:56:07Z",
+      "checkpointed_at": "2026-10-28T14:00:11Z",
       "effective_analysis": {
         "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
@@ -68246,6 +68246,54 @@
           "The image does not contain any text or labels that provide additional information or context for the question.",
           "The image is a static illustration and does not depict any dynamic actions or changes.",
           "The image does not show any specific educational content or question related to the textbook content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8507cbf408fce4e38429b2e2",
+      "asset_sha256": "adf52aec33e4fe531611aff7f5c9d5bc4bff5ea02e1bbf728c1a0637d348ab0d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 115,
+      "asset_path": "assets/adf52aec33e4fe531611aff7f5c9d5bc4bff5ea02e1bbf728c1a0637d348ab0d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a5e9dffe4e593c12963f37b5c9000f9c5fc7bf6cab12de5cf63cabd13280e50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person standing in a flooded area with a dry tree and hills in the background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "flooded area",
+          "dry tree",
+          "hills"
+        ],
+        "context_relation": "The image does not provide information related to the textbook content.",
+        "limitations": [
+          "The image does not show any text or labels related to the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40690755032",
+      "checkpointed_at": "2026-10-28T14:00:51Z",
+      "effective_analysis": {
+        "visual_summary": "A person standing in a flooded area with a dry tree and hills in the background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "flooded area",
+          "dry tree",
+          "hills"
+        ],
+        "context_relation": "The image does not provide information related to the textbook content.",
+        "limitations": [
+          "The image does not show any text or labels related to the textbook content."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
