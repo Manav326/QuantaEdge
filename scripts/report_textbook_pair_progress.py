@@ -128,8 +128,15 @@ def book_layer_timings(repo_root: Path, source: dict[str, str], index: dict[str,
         saved = saved_layers.get(str(layer)) or pair_layers.get(str(layer)) or {}
         clocks = saved.get("timestamps") or {}
         artifact_status = timing.get("status")
-        status = (artifact_status if layer in {0, 1, 2, 3, 5, 6, 7, 8} and artifact_status
-                  else saved.get("status") or artifact_status or fallback_status)
+        saved_status = saved.get("status")
+        # Fresh artifact status may supersede stale non-terminal handoff state, but
+        # never override a BLOCKED/RETRYABLE_FAILED result from contract validation.
+        if saved_status in {"BLOCKED", "RETRYABLE_FAILED"}:
+            status = saved_status
+        elif layer in {0, 1, 2, 3, 4, 5, 6, 7, 8} and artifact_status:
+            status = artifact_status
+        else:
+            status = saved_status or artifact_status or fallback_status
         artifact_elapsed = _timing_number(timing.get("cumulative_elapsed_seconds",
             timing.get("total_elapsed_seconds", timing.get("attempt_elapsed_seconds", timing.get("elapsed_seconds")))))
         saved_elapsed = _timing_number(saved.get("cumulative_elapsed_seconds"))
@@ -215,12 +222,13 @@ def book_layer_timings(repo_root: Path, source: dict[str, str], index: dict[str,
         "elapsed_seconds_this_attempt", "estimated_model_seconds_remaining", "summary", "layer_status"],
         max_prefix_bytes=512 * 1024) if raw_path and raw_path.is_file() else ({}, "missing")
     raw_summary = raw_meta.get("summary") if isinstance(raw_meta.get("summary"), dict) else raw_fields.get("summary") or {}
-    raw_timing = {"started_at": raw_meta.get("attempt_started_at") or raw_meta.get("started_at"),
+    raw_timing = {"status": raw_meta.get("layer_status"),
+        "started_at": raw_meta.get("attempt_started_at") or raw_meta.get("started_at"),
         "completed_at": raw_meta.get("completed_at"), "last_progress_at": raw_meta.get("last_progress_at"),
         "elapsed_seconds": raw_meta.get("elapsed_seconds_this_attempt"),
         "timing_basis": "Measured attempt wall time in raw-analysis checkpoint"}
     rows.append(make(4, "Raw visual analysis",
-        str(layers.get("4") or raw_meta.get("layer_status") or ("IN_PROGRESS" if raw_fields else "NOT_STARTED")),
+        str(raw_meta.get("layer_status") or layers.get("4") or ("IN_PROGRESS" if raw_fields else "NOT_STARTED")),
         raw_timing, assets_total=raw_summary.get("assets_eligible"), assets_processed=raw_summary.get("assets_analyzed"),
         assets_remaining=raw_summary.get("assets_remaining"),
         model_runtime_seconds=_timing_number(raw_summary.get("total_model_seconds_recorded")),
