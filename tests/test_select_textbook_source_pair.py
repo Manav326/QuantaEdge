@@ -93,7 +93,7 @@ class TextbookSourcePairHandoffTests(unittest.TestCase):
         hindi = make_payload(6, "hindi")
         assigned_ids = set(pair["book_ids_csv"].split(","))
         hindi["sources"] = [item for item in hindi["sources"] if item["book_id"] not in assigned_ids]
-        with self.assertRaisesRegex(ValueError, "exactly one assigned English and one assigned Hindi"):
+        with self.assertRaisesRegex(ValueError, "expected 2 whole-book sources|exactly one assigned English and one assigned Hindi"):
             build_selection(
                 make_payload(6, "english"), hindi, grade=6,
                 book_ids_csv=pair["book_ids_csv"],
