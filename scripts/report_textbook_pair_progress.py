@@ -161,8 +161,8 @@ def book_progress(repo_root: Path, source: dict[str, str]) -> dict[str, Any]:
         "book_id": book_id,
         "book_slug": slug,
         "language": "english" if "english" in book_id else "hindi",
-        "subject": source.get("subject", "unknown"),
-        "maths_part": source.get("maths_part"),
+        "subject": "science" if "-science-" in slug else "maths" if "maths" in slug else "unknown",
+        "maths_part": 2 if "maths-part2" in slug else 1 if "maths" in slug else None,
         "status": status,
         "layers": {
             "inventory": "AVAILABLE" if inventory is not None else "MISSING",
@@ -271,7 +271,12 @@ def build_report(repo_root: Path) -> dict[str, Any]:
         "publication_allowed": False,
         "review_required": True,
         "overall": {
-            "status": "COMPLETE" if all(item["status"] == "COMPLETE" for item in pairs) else "IN_PROGRESS",
+            "status": (
+                "COMPLETE" if all(item["status"] == "COMPLETE" for item in pairs)
+                else "BLOCKED" if any(item["status"] == "BLOCKED" for item in pairs)
+                else "IN_PROGRESS" if any(item["status"] != "NOT_STARTED" for item in pairs)
+                else "NOT_STARTED"
+            ),
             "subject_book_pairs_complete": sum(item["status"] == "COMPLETE" for item in pairs),
             "subject_book_pairs_total": len(pairs),
             "language_editions_complete": sum(item["verified_language_editions"] for item in pairs),
