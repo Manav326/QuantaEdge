@@ -161,9 +161,8 @@ function inFlightApiGetKey(
   }
 }
 
-/** Central request/response path; the caller still receives its own Response instance.
- * Use caller mode only when the caller intentionally handles expected auth probes or renders
- * the failure inline. All other API requests retain global notification handling by default.
+/** Central request/response path; each caller receives an independent Response.
+ * Expected auth probes and requests rendered inline can opt into caller mode.
  */
 export async function apiFetch(
   input: RequestInfo | URL,
@@ -172,10 +171,13 @@ export async function apiFetch(
 ): Promise<Response> {
   const requestMethod = (init?.method ??
     (typeof Request !== 'undefined' && input instanceof Request ? input.method : 'GET')).toUpperCase();
-  // Do not let new reads coalesce with requests started before a write/session transition.
-  if (isApiRequest(input) && requestMethod !== 'GET') inFlightApiGets.clear();
+  const isApiPath = isApiRequest(input);
+  const isMutation = isApiPath && requestMethod !== 'GET';
 
-  const isApi = options.notificationMode !== 'caller' && isApiRequest(input);
+  // Do not reuse reads across writes, sign-in/out, enrollment, or workspace changes.
+  if (isMutation) inFlightApiGets.clear();
+
+  const isApi = options.notificationMode !== 'caller' && isApiPath;
   const key = inFlightApiGetKey(input, init, options.notificationMode);
   let response: Response;
 
@@ -194,7 +196,7 @@ export async function apiFetch(
             throw error;
           }
 
-          // Inspect once per shared network request; each caller receives a separate clone.
+          // Inspect/notify once for the shared network request.
           if (isApi) await inspectApiResponse(sharedResponse);
           return sharedResponse;
         })();
@@ -214,11 +216,17 @@ export async function apiFetch(
   } catch (error) {
     const isAbort = Boolean(error && typeof error === 'object' && 'name' in error &&
       (error as { name?: unknown }).name === 'AbortError');
-    // A shared request reports its network error inside the shared promise, once.
     if (isApi && !key && !isAbort) notifyUser(networkErrorMessage(), 'error');
+    if (isMutation) inFlightApiGets.clear();
     throw error;
   }
 
-  if (isApi && !key) await inspectApiResponse(response);
-  return response;
+  try {
+    if (isApi && !key) await inspectApiResponse(response);
+    return response;
+  } finally {
+    // Clear again after completion: reads started while a mutation was in progress
+    // must not be reused by calls made after its state transition completes.
+    if (isMutation) inFlightApiGets.clear();
+  }
 }
