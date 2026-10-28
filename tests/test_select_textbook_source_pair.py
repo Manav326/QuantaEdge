@@ -1,4 +1,3 @@
-import copy
 import unittest
 
 from scripts.plan_textbook_layer45_matrix import BOOKS, BOOK_PAIRS
@@ -92,7 +91,8 @@ class TextbookSourcePairHandoffTests(unittest.TestCase):
     def test_pair_rejects_missing_hindi_source_instead_of_falling_back_to_class_wide(self):
         pair = next(row for row in BOOK_PAIRS if row["class_no"] == "6" and row["book_label"] == "Science")
         hindi = make_payload(6, "hindi")
-        hindi["sources"] = [item for item in hindi["sources"] if item["book_id"] not in pair["book_ids_csv"]]
+        assigned_ids = set(pair["book_ids_csv"].split(","))
+        hindi["sources"] = [item for item in hindi["sources"] if item["book_id"] not in assigned_ids]
         with self.assertRaisesRegex(ValueError, "exactly one assigned English and one assigned Hindi"):
             build_selection(
                 make_payload(6, "english"), hindi, grade=6,
@@ -105,11 +105,10 @@ class TextbookSourcePairHandoffTests(unittest.TestCase):
     def test_pair_rejects_cross_subject_or_cross_part_handoffs(self):
         pair = next(row for row in BOOK_PAIRS if row["class_no"] == "7" and row["book_label"] == "Maths Part I")
         hindi = make_payload(7, "hindi")
-        other = next(item for item in hindi["sources"] if "maths-part2" in item["book_slug"])
         assigned_hindi_id = pair["book_ids_csv"].split(",")[1]
-        other["book_id"] = assigned_hindi_id
-        other["book_slug"] = pair["source_slugs_csv"].split(",")[1]
-        with self.assertRaisesRegex(ValueError, "ID to source slug handoff mismatch|do not describe the same subject"):
+        assigned_hindi = next(item for item in hindi["sources"] if item["book_id"] == assigned_hindi_id)
+        assigned_hindi["maths_part"] = 2
+        with self.assertRaisesRegex(ValueError, "do not describe the same subject/book part"):
             build_selection(
                 make_payload(7, "english"), hindi, grade=7,
                 book_ids_csv=pair["book_ids_csv"],
