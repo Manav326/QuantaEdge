@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2599,
-    "successful_visual_analyses": 2574,
-    "missing_visual_analyses": 4889,
-    "failed_visual_analyses": 25,
+    "raw_analysis_result_rows": 2600,
+    "successful_visual_analyses": 2576,
+    "missing_visual_analyses": 4888,
+    "failed_visual_analyses": 24,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4914,
+    "unresolved_count": 4912,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -106095,9 +106095,30 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has become water.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Bud to Flower",
+          "Cold Water"
+        ],
+        "context_relation": "The text describes changes in physical and chemical states of objects over time.",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "The text is a paragraph with no diagrams or illustrations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -106291,9 +106312,28 @@
       "asset_path": "assets/97331cf6ab497e1959fc9d7c10a61a6788114982b578910d966e3b261ad56a2f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand pointing to a table with a list of changes observed around the user.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.1: Let us think and reﬂect",
+          "You might have observed various changes happening around you. Some of them are listed in Table 5.1, you may notice that something is changing in each case. Take a moment to reﬂect on the changes in each case. Record your observations in Table 5.1.",
+          "Table 5.1: Some changes observed around us",
+          "S.No.              Change                      Observation(s)"
+        ],
+        "concepts": [
+          "Observing changes",
+          "Reflecting on changes",
+          "Recording observations"
+        ],
+        "context_relation": "The image is a visual representation of an activity in a textbook, specifically related to observing and recording changes around the user.",
+        "limitations": [
+          "The image does not provide specific details about the changes observed.",
+          "The image does not show the table with the list of changes."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
