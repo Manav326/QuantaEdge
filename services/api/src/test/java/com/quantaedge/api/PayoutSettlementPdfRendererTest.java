@@ -70,7 +70,8 @@ class PayoutSettlementPdfRendererTest {
         "payout_id",91L,"payout_item_amount_paise",123456L,
         "allocation_id",220L,"order_id",330L,"provider_payment_id","pay_330",
         "course_title","गणित कक्षा ६","source_institution_name","मूल विद्यालय",
-        "marketplace_institution_name","साझा विद्यालय","currency","INR",
+        "marketplace_institution_name","साझा विद्यालय","invoice_number","INV-2026-HI-91",
+        "legal_seller_name","विक्रेता संस्था","currency","INR",
         "recipient_name","विद्यालय सूर्योदय"));
     var rendered=renderer.renderRecipientAdvice(batch,payout,allocations,"QE-PS-4-P91-R1",Instant.parse("2026-10-27T12:00:00Z"));
     assertTrue(rendered.pdf().length>5_000);
