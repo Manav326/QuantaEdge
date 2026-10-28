@@ -85,3 +85,52 @@ test("register validator requires one runtime-log row for each scenario", () => 
   };
   assert.throws(() => validateTables(tables), /exactly one row for every workflow scenario/);
 });
+
+
+function componentAuditFixture() {
+  const auditHeader = [
+    "audit_id", "platform", "route_or_destination", "source_path", "scenario_ids",
+    "source_component_trace_status", "component_inventory_status", "breakpoint_layout_status",
+    "overflow_and_scroll_status", "light_theme_status", "dark_theme_status",
+    "english_layout_status", "hindi_layout_status", "loading_empty_error_states",
+    "form_validation_states", "permissions_and_data_states", "interaction_and_accessibility",
+    "runtime_verification", "exact_commit_sha", "environment_and_viewports", "evidence_url",
+    "defect_ids", "overall_status", "reviewer_notes"
+  ];
+  const auditRow = [
+    "UI-1", "web", "/", "apps/web/app/page.tsx", "CASE-1",
+    "NOT_REVIEWED", "NOT_REVIEWED", "NOT_REVIEWED", "NOT_REVIEWED",
+    "NOT_REVIEWED", "NOT_REVIEWED", "NOT_REVIEWED", "NOT_REVIEWED",
+    "NOT_REVIEWED", "NOT_REVIEWED", "NOT_REVIEWED", "NOT_REVIEWED",
+    "NOT_EXECUTED", "", "", "", "", "NOT_STARTED", "Inventory only; not a pass."
+  ];
+  return {
+    uiInventory: [["platform", "identifier", "scenario_ids"], ["web", "/", "CASE-1"]],
+    scenarios: [["case_id", "execution_status"], ["CASE-1", "NOT_EXECUTED"]],
+    apiRoutes: [
+      ["api_id", "source_path", "transport", "effective_path", "scenario_ids", "runtime_verification"],
+      ["API-1", "src/Controller.java", "GET", "/api/demo", "CASE-1", "NOT_EXECUTED"]
+    ],
+    runtimeLog: [
+      ["scenario_id", "result_status", "tested_commit_sha", "environment_name", "steps_executed", "expected_result", "actual_result", "tester", "executed_at_utc", "screenshot_log_evidence_url"],
+      ["CASE-1", "NOT_EXECUTED", "", "", "", "", "", "", "", ""]
+    ],
+    uiStates: [
+      ["screen_key", "platform", "route_or_destination", "source_path", "scenario_ids", "runtime_verification"],
+      ["UI-1", "web", "/", "apps/web/app/page.tsx", "CASE-1", "NOT_EXECUTED"]
+    ],
+    componentAudit: [auditHeader, auditRow]
+  };
+}
+
+test("component audit register mirrors one route/state row and preserves non-passing defaults", () => {
+  const result = validateTables(componentAuditFixture());
+  assert.equal(result.routeComponentAuditRows, 1);
+  assert.deepEqual(result.routeComponentAuditStatusCounts, { NOT_STARTED: 1 });
+});
+
+test("component audit register rejects a route that does not match its UI state row", () => {
+  const tables = componentAuditFixture();
+  tables.componentAudit[1][2] = "/wrong-route";
+  assert.throws(() => validateTables(tables), /route_or_destination mismatch/);
+});
