@@ -3,7 +3,7 @@ import styles from "./loading.module.css";
 export default function Loading() {
   return (
     <div className={styles.loading} aria-busy="true">
-      <span className={styles.srOnly} role="status">{description}</span>
+      <span className={styles.srOnly} role="status">Loading page content…</span>
       <div className={styles.content} aria-hidden="true">
         <div className={styles.header}>
           <span className={`${styles.placeholder} ${styles.title}`} />
