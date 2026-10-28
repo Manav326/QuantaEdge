@@ -134,16 +134,37 @@ export function validateTables(tables) {
     if (!obj[name].length) throw new Error(`${labels[name]}: no data rows found.`);
   }
 
+  if (tables.componentAudit) {
+    obj.componentAudit = toObjects(tables.componentAudit, "route/component audit register");
+    if (!obj.componentAudit.length) throw new Error("Route/component audit register: no data rows found.");
+  }
+
   requireColumns(obj.uiInventory, ["platform", "identifier", "scenario_ids"], labels.uiInventory);
   requireColumns(obj.scenarios, ["case_id", "execution_status"], labels.scenarios);
   requireColumns(obj.apiRoutes, ["api_id", "source_path", "transport", "effective_path", "scenario_ids", "runtime_verification"], labels.apiRoutes);
   requireColumns(obj.runtimeLog, ["scenario_id", "result_status", "tested_commit_sha", "environment_name", "steps_executed", "expected_result", "actual_result", "tester", "executed_at_utc", "screenshot_log_evidence_url"], labels.runtimeLog);
   requireColumns(obj.uiStates, ["screen_key", "scenario_ids", "runtime_verification"], labels.uiStates);
 
+  if (obj.componentAudit) {
+    const componentAuditLabel = "route/component audit register";
+    requireColumns(obj.componentAudit, [
+      "audit_id", "platform", "route_or_destination", "source_path", "scenario_ids",
+      "source_component_trace_status", "component_inventory_status",
+      "breakpoint_layout_status", "overflow_and_scroll_status",
+      "light_theme_status", "dark_theme_status", "english_layout_status",
+      "hindi_layout_status", "loading_empty_error_states", "form_validation_states",
+      "permissions_and_data_states", "interaction_and_accessibility",
+      "runtime_verification", "exact_commit_sha", "environment_and_viewports",
+      "evidence_url", "defect_ids", "overall_status", "reviewer_notes"
+    ], componentAuditLabel);
+    requireColumns(obj.uiStates, ["screen_key", "platform", "route_or_destination", "source_path", "scenario_ids"], labels.uiStates);
+  }
+
   assertUnique(obj.scenarios, "case_id", labels.scenarios);
   assertUnique(obj.runtimeLog, "scenario_id", labels.runtimeLog);
   assertUnique(obj.uiStates, "screen_key", labels.uiStates);
   assertUnique(obj.apiRoutes, "api_id", labels.apiRoutes);
+  if (obj.componentAudit) assertUnique(obj.componentAudit, "audit_id", "route/component audit register");
 
   const knownIds = new Set(obj.scenarios.map(row => String(row.case_id).trim()));
   if (knownIds.size !== obj.scenarios.length) throw new Error("Workflow scenario IDs are not unique.");
@@ -151,6 +172,60 @@ export function validateTables(tables) {
   scenarioRefs(obj.uiInventory, "scenario_ids", knownIds, labels.uiInventory);
   scenarioRefs(obj.apiRoutes, "scenario_ids", knownIds, labels.apiRoutes);
   scenarioRefs(obj.uiStates, "scenario_ids", knownIds, labels.uiStates);
+  if (obj.componentAudit) scenarioRefs(obj.componentAudit, "scenario_ids", knownIds, "route/component audit register");
+
+  if (obj.componentAudit) {
+    const componentAuditLabel = "route/component audit register";
+    const statesByKey = new Map(obj.uiStates.map(row => [String(row.screen_key).trim(), row]));
+    if (obj.componentAudit.length !== obj.uiStates.length) {
+      throw new Error(`Route/component audit register has ${obj.componentAudit.length} rows but UI state checklist has ${obj.uiStates.length}; keep one audit row per screen entry.`);
+    }
+    const normalizePlatform = value => ["people", "people-hrms", "hrms"].includes(String(value ?? "").trim()) ? "hrms" : String(value ?? "").trim();
+    const reviewColumns = [
+      "source_component_trace_status", "component_inventory_status",
+      "breakpoint_layout_status", "overflow_and_scroll_status",
+      "light_theme_status", "dark_theme_status", "english_layout_status",
+      "hindi_layout_status", "loading_empty_error_states", "form_validation_states",
+      "permissions_and_data_states", "interaction_and_accessibility"
+    ];
+    const reviewStatuses = new Set(["NOT_REVIEWED", "IN_PROGRESS", "VERIFIED", "BLOCKED", "NOT_APPLICABLE"]);
+    const runtimeStatuses = new Set(["NOT_EXECUTED", "AUTOMATED_VERIFIED", "MANUAL_VERIFIED", "BLOCKED", "NOT_APPLICABLE"]);
+    const overallStatuses = new Set(["NOT_STARTED", "IN_PROGRESS", "BLOCKED", "READY_FOR_SIGNOFF", "SIGNED_OFF", "NOT_APPLICABLE"]);
+    const auditStatusCounts = {};
+    for (const row of obj.componentAudit) {
+      const key = String(row.audit_id ?? "").trim();
+      const state = statesByKey.get(key);
+      if (!state) throw new Error(`${componentAuditLabel}: audit_id "${key}" does not match a UI state screen_key.`);
+      for (const field of ["route_or_destination", "source_path", "scenario_ids"]) {
+        if (String(row[field] ?? "") !== String(state[field] ?? "")) {
+          throw new Error(`${componentAuditLabel}: ${field} mismatch for ${key}; reconcile it with the UI state checklist.`);
+        }
+      }
+      if (normalizePlatform(row.platform) !== normalizePlatform(state.platform)) {
+        throw new Error(`${componentAuditLabel}: platform mismatch for ${key}; reconcile it with the UI state checklist.`);
+      }
+      for (const column of reviewColumns) {
+        const value = String(row[column] ?? "").trim().toUpperCase();
+        if (!reviewStatuses.has(value)) throw new Error(`${componentAuditLabel}: invalid ${column} "${value}" at row ${row.__row}.`);
+      }
+      const runtimeStatus = String(row.runtime_verification ?? "").trim().toUpperCase();
+      if (!runtimeStatuses.has(runtimeStatus)) throw new Error(`${componentAuditLabel}: invalid runtime_verification "${runtimeStatus}" at row ${row.__row}.`);
+      const overallStatus = String(row.overall_status ?? "").trim().toUpperCase();
+      if (!overallStatuses.has(overallStatus)) throw new Error(`${componentAuditLabel}: invalid overall_status "${overallStatus}" at row ${row.__row}.`);
+      if (overallStatus === "SIGNED_OFF") {
+        const requiredEvidence = ["exact_commit_sha", "environment_and_viewports", "evidence_url"];
+        const missing = requiredEvidence.filter(column => !String(row[column] ?? "").trim());
+        if (missing.length) throw new Error(`${componentAuditLabel}: signed-off row ${key} lacks evidence: ${missing.join(", ")}.`);
+        const incompleteChecks = reviewColumns.filter(column => !["VERIFIED", "NOT_APPLICABLE"].includes(String(row[column] ?? "").trim().toUpperCase()));
+        if (incompleteChecks.length) throw new Error(`${componentAuditLabel}: signed-off row ${key} has unchecked categories: ${incompleteChecks.join(", ")}.`);
+        if (!["AUTOMATED_VERIFIED", "MANUAL_VERIFIED", "NOT_APPLICABLE"].includes(runtimeStatus)) {
+          throw new Error(`${componentAuditLabel}: signed-off row ${key} lacks a runtime verification result.`);
+        }
+      }
+      auditStatusCounts[overallStatus] = (auditStatusCounts[overallStatus] ?? 0) + 1;
+    }
+    obj.componentAuditStatusCounts = auditStatusCounts;
+  }
 
   const runtimeIds = new Set(obj.runtimeLog.map(row => String(row.scenario_id).trim()));
   const missingRuntime = [...knownIds].filter(id => !runtimeIds.has(id));
@@ -194,7 +269,7 @@ export function validateTables(tables) {
     scenarioStatusCounts[status] = (scenarioStatusCounts[status] ?? 0) + 1;
   }
 
-  return {
+  const summary = {
     uiScreens: obj.uiInventory.length,
     uiStateRows: obj.uiStates.length,
     apiMappings: obj.apiRoutes.length,
@@ -203,17 +278,22 @@ export function validateTables(tables) {
     scenarioStatusCounts,
     platformCounts
   };
+  if (obj.componentAudit) {
+    summary.routeComponentAuditRows = obj.componentAudit.length;
+    summary.routeComponentAuditStatusCounts = obj.componentAuditStatusCounts;
+  }
+  return summary;
 }
 
-function readTable(root, filename) {
-  const path = resolve(root, "docs", "qa", filename);
+function readTable(root, filename, directory = "qa") {
+  const path = resolve(root, "docs", directory, filename);
   let content;
   try {
     content = readFileSync(path, "utf8");
   } catch (error) {
-    throw new Error(`Cannot read docs/qa/${filename}: ${error.message}`);
+    throw new Error(`Cannot read docs/${directory}/${filename}: ${error.message}`);
   }
-  return parseCsv(content, `docs/qa/${filename}`);
+  return parseCsv(content, `docs/${directory}/${filename}`);
 }
 
 export function validateQaRegisters(root = process.cwd()) {
@@ -222,7 +302,8 @@ export function validateQaRegisters(root = process.cwd()) {
     scenarios: readTable(root, "phase-1-workflow-scenario-register.csv"),
     apiRoutes: readTable(root, "phase-1-api-route-inventory.csv"),
     runtimeLog: readTable(root, "phase-1-runtime-execution-log.csv"),
-    uiStates: readTable(root, "phase-1-ui-state-coverage.csv")
+    uiStates: readTable(root, "phase-1-ui-state-coverage.csv"),
+    componentAudit: readTable(root, "route-component-audit-register.csv", "ui-ux-audit")
   };
   return validateTables(tables);
 }
