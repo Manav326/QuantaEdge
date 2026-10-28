@@ -50,6 +50,12 @@ jobs:
       - name: Generate machine-readable UI route inventory
         run: node scripts/inventory_ui_routes.mjs --output "$RUNNER_TEMP/ui-localization-route-inventory.json"
 
+      - name: Test generated UI route register parity
+        run: node --test scripts/check_ui_route_register_parity.test.mjs
+
+      - name: Enforce generated UI route register parity
+        run: node scripts/check_ui_route_register_parity.mjs --root .
+
       - name: Test route to component source graph
         run: node --test scripts/inventory_ui_component_imports.test.mjs
 
