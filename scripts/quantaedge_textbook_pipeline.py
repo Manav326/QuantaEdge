@@ -338,15 +338,30 @@ def layer1_inventory_bundle_from_marker(marker_path, inventory_path, source, pac
     return {"package": package, "tag": tag, "tar_sha256": archive_sha}
 
 
+def book_batch_limit(max_batches_per_run: int, source_count: int) -> int:
+    """Share each runner's batch budget across its selected whole-book sources."""
+    if max_batches_per_run < 1:
+        raise ValueError("max-batches-per-run must be positive.")
+    if source_count < 1:
+        raise ValueError("At least one selected whole-book source is required.")
+    return max(1, (max_batches_per_run + source_count - 1) // source_count)
+
+
 def run_layers(args):
-    repo=args.repo_root.resolve();sroot=args.source_root.resolve();selection=read_json(args.selection);model=re.sub(r"[^A-Za-z0-9._-]","-",args.model);bad=[];registry_writes_enabled=True;total_batches=0
+    repo=args.repo_root.resolve();sroot=args.source_root.resolve();selection=read_json(args.selection);model=re.sub(r"[^A-Za-z0-9._-]","-",args.model);bad=[];registry_writes_enabled=True;total_batches=0;yielded_for_resume=False
     if args.batch_size<1:raise ValueError("batch-size must be positive; it is not a total cap.")
     if args.max_batches_per_run < 1:raise ValueError("max-batches-per-run must be positive.")
     if not 10 <= args.request_timeout <= 900:raise ValueError("request-timeout must be between 10 and 900 seconds so a stalled model request cannot hang a runner indefinitely.")
-    for s in selection["sources"]:
+    sources=selection.get("sources")
+    if not isinstance(sources,list) or not sources:
+        raise ValueError("Source selection must contain at least one whole-book source.")
+    per_book_batch_limit=book_batch_limit(args.max_batches_per_run,len(sources))
+    print(f"[pipeline] SOURCE_SCHEDULE class={selection['class']} books={len(sources)} max_batches_per_run={args.max_batches_per_run} per_book_batch_limit={per_book_batch_limit}",flush=True)
+    for s in sources:
         if total_batches >= args.max_batches_per_run:
-            print(f"[pipeline] RUN_BUDGET_REACHED class={selection['class']} max_batches={args.max_batches_per_run} completed_batches={total_batches}; all current-book outputs remain checkpointed.",flush=True)
-            return 10
+            print(f"[pipeline] RUN_BUDGET_REACHED class={selection['class']} max_batches={args.max_batches_per_run} completed_batches={total_batches}; remaining books keep their durable checkpoints.",flush=True)
+            yielded_for_resume=True
+            break
         slug=s["book_slug"];work=sroot/slug;invdir=work/"inventory";inv=invdir/"visual-inventory.v1.json"
         if not inv.is_file():raise ValueError(f"{slug}: inventory missing; refusing omission.")
         inventory=read_json(inv)
@@ -411,12 +426,17 @@ def run_layers(args):
         write_json(index,{"schema_version":"quantaedge.textbook-content-pipeline-index.v1","architecture_version":"8-layer-resumable-v1","class":selection["class"],"book_slug":slug,"source_book_id":s["book_id"],"source_pdf_sha256":s["sha256"],"layers":layers,"inventory_bundle":inventory_bundle,"analysis_path":rel(raw,repo),"effective_analysis_path":rel(eff,repo),"coverage_ledger_path":rel(ledger,repo),"publication_allowed":False,"human_review_required":True})
         checkpoint=f"layer4-class{selection['class']}-{slug}-{model}-checkpoint"
         batch_number=0
+        book_batches=0
         book_yielded=False
-        print(f"[pipeline] BOOK_START class={selection['class']} book={slug} eligible_inventory_assets={len(inventory.get('assets',[]))} batch_size={args.batch_size} checkpoint_tag={checkpoint}",flush=True)
+        print(f"[pipeline] BOOK_START class={selection['class']} book={slug} eligible_inventory_assets={len(inventory.get('assets',[]))} batch_size={args.batch_size} per_book_batch_limit={per_book_batch_limit} checkpoint_tag={checkpoint}",flush=True)
         while True:
             if total_batches >= args.max_batches_per_run:
                 book_yielded=True
                 print(f"[pipeline] RUN_BUDGET_REACHED class={selection['class']} max_batches={args.max_batches_per_run} completed_batches={total_batches}; yielding after durable checkpoint.",flush=True)
+                break
+            if book_batches >= per_book_batch_limit:
+                book_yielded=True
+                print(f"[pipeline] BOOK_BATCH_BUDGET_REACHED class={selection['class']} book={slug} completed_book_batches={book_batches} per_book_batch_limit={per_book_batch_limit}; continuing to the next selected book before resume.",flush=True)
                 break
             batch_number+=1
             print(f"[pipeline] BATCH_START class={selection['class']} book={slug} batch={batch_number} batch_limit={args.batch_size} run_id={args.run_id}",flush=True)
@@ -437,7 +457,9 @@ def run_layers(args):
             subprocess.run(cmd,cwd=repo,check=True)
             subprocess.run([sys.executable,"scripts/quantaedge_textbook_pipeline.py","ledger","--inventory",str(invrepo),"--raw-analysis",str(raw),"--manifest",s["extraction_manifest_repo_path"],"--text-jsonl",str(s["text_jsonl_repo_path"]),"--effective-output",str(eff),"--ledger-output",str(ledger),"--corrections",str(cor),"--repo-root",str(repo)],cwd=repo,check=True)
             data=read_json(raw);summary=data.get("summary",{});processed=int(summary.get("assets_processed_this_run",0))
-            if processed > 0: total_batches += 1
+            if processed > 0:
+                total_batches += 1
+                book_batches += 1
             after_results=data.get("results",[]) if isinstance(data,dict) else []
             processed_ids=summary.get("assets_processed_ids",[])
             overwrote_successes=bool(processed_ids) and all(
@@ -468,9 +490,11 @@ def run_layers(args):
         result=read_json(ledger);idx=read_json(index);idx["layers"]["4"]="CHECKPOINTED";idx["layers"]["5"]=result["ledger_status"];write_json(index,idx);git_checkpoint(repo,[rel(index,repo)],f"status(content): Layer 5 {slug}")
         print(json.dumps({"book":slug,"ledger_status":result["ledger_status"],"unresolved_count":result["summary"]["unresolved_count"]}))
         if book_yielded:
-            print(json.dumps({"pipeline_run_status":"YIELDED_FOR_RESUME","class":selection["class"],"book":slug,"completed_batches":total_batches,"max_batches_per_run":args.max_batches_per_run,"ledger_status":result["ledger_status"],"unresolved_count":result["summary"]["unresolved_count"],"publication_allowed":False}),flush=True)
-            return 10
+            yielded_for_resume=True
         if result["ledger_status"]!="COMPLETE":bad.append({"book":slug,"ledger_status":result["ledger_status"],"unresolved_count":result["summary"]["unresolved_count"]})
+    if yielded_for_resume:
+        print(json.dumps({"pipeline_run_status":"YIELDED_FOR_RESUME","class":selection["class"],"completed_batches":total_batches,"max_batches_per_run":args.max_batches_per_run,"per_book_batch_limit":per_book_batch_limit,"publication_allowed":False}),flush=True)
+        return 10
     print(json.dumps({"class":selection["class"],"incomplete_books":bad,"layers_6_to_8":"NOT_STARTED","publication_allowed":False},indent=2))
     return 3 if bad else 0
 
