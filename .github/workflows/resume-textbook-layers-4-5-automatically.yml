@@ -2,6 +2,7 @@ name: Resume Class 6–8 Layer 4–5 checkpoints
 
 on:
   push:
+    branches: [main]
     paths:
       - ".github/workflows/resume-textbook-layers-4-5-automatically.yml"
       - "data/textbook-content-pipeline/resume-control.v1.json"
