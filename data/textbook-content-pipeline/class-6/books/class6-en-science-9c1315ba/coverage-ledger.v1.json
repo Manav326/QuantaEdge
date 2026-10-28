@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1477,
-    "successful_visual_analyses": 1457,
-    "missing_visual_analyses": 601,
+    "raw_analysis_result_rows": 1480,
+    "successful_visual_analyses": 1460,
+    "missing_visual_analyses": 598,
     "failed_visual_analyses": 20,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 621,
+    "unresolved_count": 618,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -55671,9 +55671,35 @@
       "asset_path": "page-0159.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing how to measure temperature using a thermometer and a beaker.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Record your readings. Compare the readings and draw",
+          "your conclusions. Repeat this for two weeks.",
+          "Fig. 7.11: Set up to measure temperature of water and room temperature",
+          "The temperature at the core of the Sun reaches",
+          "as high as 15 million degrees Celsius. Are",
+          "there objects in the sky that have even higher",
+          "temperatures? There is no limit on the highest",
+          "temperature that can exist. However, as per",
+          "scientific understanding, there is a limit to the",
+          "lowest temperature that can be achieved. It",
+          "is close to -273.15 °C (0 kelvin) and is called",
+          "absolute zero."
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Core temperature of the Sun",
+          "Absolute zero"
+        ],
+        "context_relation": "Explanation of temperature measurement",
+        "limitations": [
+          "No specific limitations mentioned in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -55689,9 +55715,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -55707,9 +55742,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

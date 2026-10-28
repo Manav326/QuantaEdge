@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0797416e2608042ddbed244a184edbe5f676ccc61480b95aab6bc39d63d02df6",
+  "raw_analysis_sha256": "fef83f34db6b0c8ed6e0a73024f8add65afd4ae5bb679129b6da28b0f226edbf",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -57191,7 +57191,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
-      "checkpointed_at": "2026-10-28T14:27:09Z",
+      "checkpointed_at": "2026-10-28T14:32:19Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66842,7 +66842,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
-      "checkpointed_at": "2026-10-28T14:27:58Z",
+      "checkpointed_at": "2026-10-28T14:33:14Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -74944,6 +74944,160 @@
         "context_relation": "The image is a part of a textbook discussing temperature measurement using different types of thermometers.",
         "limitations": [
           "The image does not provide specific measurements or temperatures."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1fc43abae187816ea0f07378",
+      "asset_sha256": "4939ac5da6f25f0fd744398789146b68a76f58c12fb5adadd724b6635baa0ff1",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 159,
+      "asset_path": "page-0159.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "701337724c0410e5687100ab0bf7dea732441253cecc9b85a7c37ee74cb0788e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing how to measure temperature using a thermometer and a beaker.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Record your readings. Compare the readings and draw",
+          "your conclusions. Repeat this for two weeks.",
+          "Fig. 7.11: Set up to measure temperature of water and room temperature",
+          "The temperature at the core of the Sun reaches",
+          "as high as 15 million degrees Celsius. Are",
+          "there objects in the sky that have even higher",
+          "temperatures? There is no limit on the highest",
+          "temperature that can exist. However, as per",
+          "scientific understanding, there is a limit to the",
+          "lowest temperature that can be achieved. It",
+          "is close to -273.15 °C (0 kelvin) and is called",
+          "absolute zero."
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Core temperature of the Sun",
+          "Absolute zero"
+        ],
+        "context_relation": "Explanation of temperature measurement",
+        "limitations": [
+          "No specific limitations mentioned in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:37:27Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing how to measure temperature using a thermometer and a beaker.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Record your readings. Compare the readings and draw",
+          "your conclusions. Repeat this for two weeks.",
+          "Fig. 7.11: Set up to measure temperature of water and room temperature",
+          "The temperature at the core of the Sun reaches",
+          "as high as 15 million degrees Celsius. Are",
+          "there objects in the sky that have even higher",
+          "temperatures? There is no limit on the highest",
+          "temperature that can exist. However, as per",
+          "scientific understanding, there is a limit to the",
+          "lowest temperature that can be achieved. It",
+          "is close to -273.15 °C (0 kelvin) and is called",
+          "absolute zero."
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Core temperature of the Sun",
+          "Absolute zero"
+        ],
+        "context_relation": "Explanation of temperature measurement",
+        "limitations": [
+          "No specific limitations mentioned in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6be5734a94879ed0cc787bc7",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 160,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "703891ff822e86dc37c600ad387fa23756d80ab6c25d4305c76f2556446bcb6c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:37:39Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9a57299d659dc52efb7e7ed9",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 160,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "703891ff822e86dc37c600ad387fa23756d80ab6c25d4305c76f2556446bcb6c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:37:50Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

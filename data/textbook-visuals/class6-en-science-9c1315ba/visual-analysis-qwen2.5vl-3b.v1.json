@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1457,
+    "assets_selected": 1460,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "04fc771a809e1e474468cae6",
-      "04eac06f0a793dea630b4a5e",
-      "96d09470ddacc0b8aa0e7571"
+      "1fc43abae187816ea0f07378",
+      "6be5734a94879ed0cc787bc7",
+      "9a57299d659dc52efb7e7ed9"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1455,
-    "assets_remaining": 623,
-    "assets_completion_percent": 70.0,
+    "assets_analyzed": 1458,
+    "assets_remaining": 620,
+    "assets_completion_percent": 70.2,
     "assets_failed": 20,
-    "assets_skipped_from_checkpoint": 1452,
+    "assets_skipped_from_checkpoint": 1455,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
-      "checkpointed_at": "2026-10-28T14:27:09Z"
+      "checkpointed_at": "2026-10-28T14:32:19Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
-      "checkpointed_at": "2026-10-28T14:27:58Z"
+      "checkpointed_at": "2026-10-28T14:33:14Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -49292,6 +49292,107 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
       "checkpointed_at": "2026-10-28T14:31:05Z"
+    },
+    {
+      "asset_id": "1fc43abae187816ea0f07378",
+      "asset_sha256": "4939ac5da6f25f0fd744398789146b68a76f58c12fb5adadd724b6635baa0ff1",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 159,
+      "asset_path": "page-0159.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "701337724c0410e5687100ab0bf7dea732441253cecc9b85a7c37ee74cb0788e",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing how to measure temperature using a thermometer and a beaker.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Record your readings. Compare the readings and draw",
+          "your conclusions. Repeat this for two weeks.",
+          "Fig. 7.11: Set up to measure temperature of water and room temperature",
+          "The temperature at the core of the Sun reaches",
+          "as high as 15 million degrees Celsius. Are",
+          "there objects in the sky that have even higher",
+          "temperatures? There is no limit on the highest",
+          "temperature that can exist. However, as per",
+          "scientific understanding, there is a limit to the",
+          "lowest temperature that can be achieved. It",
+          "is close to -273.15 °C (0 kelvin) and is called",
+          "absolute zero."
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Core temperature of the Sun",
+          "Absolute zero"
+        ],
+        "context_relation": "Explanation of temperature measurement",
+        "limitations": [
+          "No specific limitations mentioned in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:37:27Z"
+    },
+    {
+      "asset_id": "6be5734a94879ed0cc787bc7",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 160,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "703891ff822e86dc37c600ad387fa23756d80ab6c25d4305c76f2556446bcb6c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:37:39Z"
+    },
+    {
+      "asset_id": "9a57299d659dc52efb7e7ed9",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 160,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "703891ff822e86dc37c600ad387fa23756d80ab6c25d4305c76f2556446bcb6c",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:37:50Z"
     }
   ]
 }
