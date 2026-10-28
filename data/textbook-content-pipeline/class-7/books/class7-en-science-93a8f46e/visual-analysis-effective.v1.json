@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "bb7d4a2ae4604c8abf87f8e84acb0e98e3b469c17dd319068ad1ea219afbe63e",
+  "raw_analysis_sha256": "0339cba91c69042c9e8173081c80013ed36b39ec051b2b92706c9507e44eecbd",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -20194,7 +20194,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40673609365",
-      "checkpointed_at": "2026-10-28T12:38:37Z",
+      "checkpointed_at": "2026-10-28T12:48:50Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129726,7 +129726,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40673609365",
-      "checkpointed_at": "2026-10-28T12:40:09Z",
+      "checkpointed_at": "2026-10-28T12:50:21Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -151523,6 +151523,192 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "47c0d3068c13153fcc01ebf1",
+      "asset_sha256": "1914028896b08ad0f547cd19fae0bd59589a623d717a87eb1d7559058962d6b4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/1914028896b08ad0f547cd19fae0bd59589a623d717a87eb1d7559058962d6b4.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustrations of a rocket, a moon, and a plant.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Plant Growth",
+          "Temperature Change"
+        ],
+        "context_relation": "Educational content related to physical and chemical changes",
+        "limitations": [
+          "The text is incomplete and does not provide a full explanation of the changes observed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40673609365",
+      "checkpointed_at": "2026-10-28T12:52:03Z",
+      "effective_analysis": {
+        "visual_summary": "Illustrations of a rocket, a moon, and a plant.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Plant Growth",
+          "Temperature Change"
+        ],
+        "context_relation": "Educational content related to physical and chemical changes",
+        "limitations": [
+          "The text is incomplete and does not provide a full explanation of the changes observed."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "60cfe0019ebf27010db989c8",
+      "asset_sha256": "f6f2a52a8b568fe4062095a86d63734579ccf31f20f5387f10623fe5d86ae4e8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/f6f2a52a8b568fe4062095a86d63734579ccf31f20f5387f10623fe5d86ae4e8.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustrations of a melting ice cube, a bud turning into a flower, and a bottle of cold water becoming warmer.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "A bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Melting",
+          "Bud to Flower Transition",
+          "Temperature Change"
+        ],
+        "context_relation": "The image illustrates the concepts of physical and chemical changes, specifically focusing on melting ice, the growth of a bud into a flower, and the change in temperature of a cold water bottle.",
+        "limitations": [
+          "The image does not provide specific details about the chemical changes involved in the melting ice or the growth of the bud.",
+          "The image does not show the exact time intervals or the specific conditions that led to the changes."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40673609365",
+      "checkpointed_at": "2026-10-28T12:53:55Z",
+      "effective_analysis": {
+        "visual_summary": "Illustrations of a melting ice cube, a bud turning into a flower, and a bottle of cold water becoming warmer.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "A bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Melting",
+          "Bud to Flower Transition",
+          "Temperature Change"
+        ],
+        "context_relation": "The image illustrates the concepts of physical and chemical changes, specifically focusing on melting ice, the growth of a bud into a flower, and the change in temperature of a cold water bottle.",
+        "limitations": [
+          "The image does not provide specific details about the chemical changes involved in the melting ice or the growth of the bud.",
+          "The image does not show the exact time intervals or the specific conditions that led to the changes."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "80724c89f65fabd0bb8ad1fa",
+      "asset_sha256": "ecec730bf6095f0308869d0bf3b74bbee9d072459d412d71b60a0dbceb58d6b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/ecec730bf6095f0308869d0bf3b74bbee9d072459d412d71b60a0dbceb58d6b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A sequence of three images showing a cube of ice melting into water, a bud growing into a flower, and a bottle of cold water becoming warmer.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Melting",
+          "Growth",
+          "Temperature change"
+        ],
+        "context_relation": "The images illustrate the concepts of melting, growth, and temperature change.",
+        "limitations": [
+          "The images do not provide specific details about the temperature change or the growth process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40673609365",
+      "checkpointed_at": "2026-10-28T12:55:37Z",
+      "effective_analysis": {
+        "visual_summary": "A sequence of three images showing a cube of ice melting into water, a bud growing into a flower, and a bottle of cold water becoming warmer.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Melting",
+          "Growth",
+          "Temperature change"
+        ],
+        "context_relation": "The images illustrate the concepts of melting, growth, and temperature change.",
+        "limitations": [
+          "The images do not provide specific details about the temperature change or the growth process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
