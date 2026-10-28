@@ -19,7 +19,7 @@ Review every active route/destination, every rendered component within it, and e
 
 ## 2. Baseline finding to resolve first
 
-At the current `main` snapshot, both `docs/qa/ui-screen-inventory.csv` and `docs/qa/phase-1-ui-state-coverage.csv` contain **96 data rows**. The existing platform labels split the People Operations/HRMS entries between `people` and `people-hrms`; normalized inventory counts are currently 29 Web, 19 Admin, 14 HRMS and 34 Android destinations. Older audit documentation reports 93/94 entries and 12 HRMS destinations.
+At audit start, the maintained UI inventory and state checklist each contained **96 data rows**. The CI-generated source inventory then showed **75 Next.js page entries** (33 Web, 25 Admin and 17 HRMS), revealing 13 missing web route rows; the 34 Android destinations were already present. The missing routes have now been added to the inventory, state checklist and route/component tracker, resulting in **109 rows** total. The historical `people` / `people-hrms` aliases are normalized for count comparison. These are source inventory counts, not runtime verification.
 
 These are source-register counts, not executed screen counts. First regenerate the route inventory on this exact branch and reconcile its result with both CSVs, actual source files, Android navigation, wrappers/redirects and conditional destinations. Resolve the discrepancy explicitly; do not hide rows or make the counts match by deleting destinations.
 
@@ -104,8 +104,8 @@ CI success is necessary but not sufficient for visual sign-off. Source inspectio
 
 ## 6. Current status and work queue
 
-1. **IN PROGRESS:** reconcile current-main route/screen counts; current CSV baseline is 96 rows, while older documentation is stale.
-2. **NEXT:** run/validate the route generator and tests on this branch; record exact source inventory.
+1. **COMPLETED — source inventory reconciliation:** 75 generated Next.js page routes now match 75 browser register entries; with 34 Android destinations, all 109 inventory rows are present. CI has a route/source parity guard to prevent future pages being silently omitted.
+2. **IN PROGRESS — verification:** route/component source graph is generated and has zero unresolved local imports; review its transitive component and stylesheet candidates against actual conditional rendering and page composition.
 3. **NEXT:** finish the route-to-component trace and create independent component-instance entries with consuming routes.
 4. **NEXT:** verify an appropriate repeatable browser and Android UI test path before choosing any new dependency.
 5. **PENDING:** capture the existing responsive/theme baseline before applying visual fixes.
