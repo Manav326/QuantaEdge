@@ -28,6 +28,7 @@ import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.graphics.state.RenderingMode;
+import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
@@ -335,12 +336,18 @@ public class PayoutSettlementPdfRenderer {
             // This makes statements searchable/copyable and improves assistive-tool text extraction.
             try(PDPageContentStream textStream=new PDPageContentStream(document,pdfPage,
                 PDPageContentStream.AppendMode.APPEND,true,true)) {
+              // Use transparent fill text rather than Tr=3 (NEITHER). Some PDF text
+              // extractors ignore glyphs in NEITHER mode; alpha-zero fill preserves the
+              // raster-only appearance while keeping a real Unicode text layer searchable.
+              PDExtendedGraphicsState invisibleText=new PDExtendedGraphicsState();
+              invisibleText.setNonStrokingAlphaConstant(0f);
+              textStream.setGraphicsStateParameters(invisibleText);
+              textStream.setRenderingMode(RenderingMode.FILL);
               for(TextRun run:textRuns) {
                 if(run.pageIndex()!=pageIndex)continue;
                 String text=pdfSafeText(run.text(),searchableFont);
                 if(text.isEmpty())continue;
                 textStream.beginText();
-                textStream.setRenderingMode(RenderingMode.NEITHER);
                 textStream.setFont(searchableFont,Math.max(3f,run.size()*scale));
                 textStream.newLineAtOffset(run.x()*scale,pdfPage.getMediaBox().getHeight()-run.baselineY()*scale);
                 textStream.showText(text);
