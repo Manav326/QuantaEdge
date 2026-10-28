@@ -46,7 +46,7 @@ export function localImportSpecifiers(source) {
 
     if (current === '/' && next === '/') {
       index += 2;
-      while (index < source.length && source[index] !== '\\n') index += 1;
+      while (index < source.length && source[index] !== '\n') index += 1;
       continue;
     }
     if (current === '/' && next === '*') {
@@ -59,7 +59,7 @@ export function localImportSpecifiers(source) {
       const quote = current;
       index += 1;
       while (index < source.length) {
-        if (source[index] === '\\\\') { index += 2; continue; }
+        if (source[index] === '\\') { index += 2; continue; }
         if (source[index] === quote) { index += 1; break; }
         index += 1;
       }
@@ -75,13 +75,13 @@ export function localImportSpecifiers(source) {
         const tail = source.slice(start, Math.min(source.length, start + 8000));
         let match = null;
         if (token === 'import') {
-          match = tail.match(/^import\\s*\\(\\s*(['"])([^'"]+)\\1\\s*\\)/);
-          if (!match) match = tail.match(/^import\\s*(['"])([^'"]+)\\1/);
-          if (!match) match = tail.match(/^import\\b[\\s\\S]{0,8000}?\\bfrom\\s*(['"])([^'"]+)\\1/);
+          match = tail.match(/^import\s*\(\s*(['"])([^'"]+)\1\s*\)/);
+          if (!match) match = tail.match(/^import\s*(['"])([^'"]+)\1/);
+          if (!match) match = tail.match(/^import\b[\s\S]{0,8000}?\bfrom\s*(['"])([^'"]+)\1/);
         } else if (token === 'export') {
-          match = tail.match(/^export\\b[\\s\\S]{0,8000}?\\bfrom\\s*(['"])([^'"]+)\\1/);
+          match = tail.match(/^export\b[\s\S]{0,8000}?\bfrom\s*(['"])([^'"]+)\1/);
         } else {
-          match = tail.match(/^require\\s*\\(\\s*(['"])([^'"]+)\\1\\s*\\)/);
+          match = tail.match(/^require\s*\(\s*(['"])([^'"]+)\1\s*\)/);
         }
         if (match) addIfLocal(match[2]);
       }
@@ -91,7 +91,7 @@ export function localImportSpecifiers(source) {
     // CSS @import is not an identifier by itself, so recognize it separately.
     if (current === '@' && source.slice(index, index + 7) === '@import') {
       const tail = source.slice(index, Math.min(source.length, index + 1000));
-      const match = tail.match(/^@import\\s*(['"])([^'"]+)\\1/);
+      const match = tail.match(/^@import\s*(['"])([^'"]+)\1/);
       if (match) addIfLocal(match[2]);
     }
     index += 1;
