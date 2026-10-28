@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "bd5e7fd88e72469e4aa6a21f97cbea2903a2d14a260c3dbf7b55e413308797a1",
+  "raw_analysis_sha256": "401925bd41ee21e57aa81565d86130ce53c63cf50bcb3a0f75c463dd6f4c3bb0",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -66782,7 +66782,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753605122",
-      "checkpointed_at": "2026-10-28T21:36:21Z",
+      "checkpointed_at": "2026-10-28T21:47:39Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -75951,6 +75951,182 @@
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "151f9e2c42952b326ce79d61",
+      "asset_sha256": "bfddec2c92f8fc68b90e1ec61b4b2b5335fecd82209f6cb90764909999bad213",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 163,
+      "asset_path": "assets/bfddec2c92f8fc68b90e1ec61b4b2b5335fecd82209f6cb90764909999bad213.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad006e2d9c448f00610b3a775928c8c6ed111328bdd9cfc856cbcd00c29c83d6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl wearing a blue dress and a red bow in her hair, standing with one hand outstretched.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not directly relate to the text provided.",
+        "limitations": [
+          "The image does not provide information about the text's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T21:49:23Z",
+      "effective_analysis": {
+        "visual_summary": "A girl wearing a blue dress and a red bow in her hair, standing with one hand outstretched.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not directly relate to the text provided.",
+        "limitations": [
+          "The image does not provide information about the text's content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f4cccd22dedf6b9011963f3c",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 163,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad006e2d9c448f00610b3a775928c8c6ed111328bdd9cfc856cbcd00c29c83d6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Steel plate with water seeping through it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Steel plate with water seeping through it.",
+          "Fig. 8.1: Steel plate with water seeping through it."
+        ],
+        "concepts": [
+          "Steel plate",
+          "Water seeping through",
+          "Water seeping through a steel plate",
+          "Water gets converted into water vapour"
+        ],
+        "context_relation": "The image is a visual representation of the experiment described in the text.",
+        "limitations": [
+          "The image does not show the water completely disappearing.",
+          "The image does not show the water seeping through the steel plate."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T21:50:02Z",
+      "effective_analysis": {
+        "visual_summary": "Steel plate with water seeping through it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Steel plate with water seeping through it.",
+          "Fig. 8.1: Steel plate with water seeping through it."
+        ],
+        "concepts": [
+          "Steel plate",
+          "Water seeping through",
+          "Water seeping through a steel plate",
+          "Water gets converted into water vapour"
+        ],
+        "context_relation": "The image is a visual representation of the experiment described in the text.",
+        "limitations": [
+          "The image does not show the water completely disappearing.",
+          "The image does not show the water seeping through the steel plate."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c9cf5842297b855e56de1b1a",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 163,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad006e2d9c448f00610b3a775928c8c6ed111328bdd9cfc856cbcd00c29c83d6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Steel plate with water seeping through it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Steel plate with water seeping through it.",
+          "Fig. 8.1: Steel plate with water seeping through it."
+        ],
+        "concepts": [
+          "Steel plate",
+          "Water seeping through",
+          "Water disappears",
+          "Water vaporization"
+        ],
+        "context_relation": "Observation and inference",
+        "limitations": [
+          "The image does not show the water completely disappearing.",
+          "The image does not show the water vaporization process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T21:50:36Z",
+      "effective_analysis": {
+        "visual_summary": "Steel plate with water seeping through it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Steel plate with water seeping through it.",
+          "Fig. 8.1: Steel plate with water seeping through it."
+        ],
+        "concepts": [
+          "Steel plate",
+          "Water seeping through",
+          "Water disappears",
+          "Water vaporization"
+        ],
+        "context_relation": "Observation and inference",
+        "limitations": [
+          "The image does not show the water completely disappearing.",
+          "The image does not show the water vaporization process."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9aafc2d512540d2b5045b0d9",
+      "asset_sha256": "6a7a742b53d9d327a0aa27c6af8a31d7c1a09c6739bf719e010e24345a3a1e67",
+      "page_text_context_sha256": "ad006e2d9c448f00610b3a775928c8c6ed111328bdd9cfc856cbcd00c29c83d6",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 163,
+      "asset_path": "page-0163.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     }
   ],

@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1477,
+    "assets_selected": 1480,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "47bbaaf66932c5ee5e514c6c",
-      "3761989e802ca8f0df045a43",
-      "b6bd03a2c995b149f373ec8e",
-      "94f02006760d68f63810f266",
-      "c68e6aac9a73114f2f81de2f"
+      "151f9e2c42952b326ce79d61",
+      "f4cccd22dedf6b9011963f3c",
+      "c9cf5842297b855e56de1b1a",
+      "9aafc2d512540d2b5045b0d9"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1475,
-    "assets_remaining": 603,
-    "assets_completion_percent": 71.0,
-    "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 1472,
+    "assets_analyzed": 1478,
+    "assets_remaining": 600,
+    "assets_completion_percent": 71.1,
+    "assets_failed": 23,
+    "assets_skipped_from_checkpoint": 1475,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -44049,7 +44049,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753605122",
-      "checkpointed_at": "2026-10-28T21:36:21Z"
+      "checkpointed_at": "2026-10-28T21:47:39Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -49960,6 +49960,125 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753605122",
       "checkpointed_at": "2026-10-28T21:46:23Z"
+    },
+    {
+      "asset_id": "151f9e2c42952b326ce79d61",
+      "asset_sha256": "bfddec2c92f8fc68b90e1ec61b4b2b5335fecd82209f6cb90764909999bad213",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 163,
+      "asset_path": "assets/bfddec2c92f8fc68b90e1ec61b4b2b5335fecd82209f6cb90764909999bad213.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad006e2d9c448f00610b3a775928c8c6ed111328bdd9cfc856cbcd00c29c83d6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A girl wearing a blue dress and a red bow in her hair, standing with one hand outstretched.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not directly relate to the text provided.",
+        "limitations": [
+          "The image does not provide information about the text's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T21:49:23Z"
+    },
+    {
+      "asset_id": "f4cccd22dedf6b9011963f3c",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 163,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad006e2d9c448f00610b3a775928c8c6ed111328bdd9cfc856cbcd00c29c83d6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Steel plate with water seeping through it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Steel plate with water seeping through it.",
+          "Fig. 8.1: Steel plate with water seeping through it."
+        ],
+        "concepts": [
+          "Steel plate",
+          "Water seeping through",
+          "Water seeping through a steel plate",
+          "Water gets converted into water vapour"
+        ],
+        "context_relation": "The image is a visual representation of the experiment described in the text.",
+        "limitations": [
+          "The image does not show the water completely disappearing.",
+          "The image does not show the water seeping through the steel plate."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T21:50:02Z"
+    },
+    {
+      "asset_id": "c9cf5842297b855e56de1b1a",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 163,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad006e2d9c448f00610b3a775928c8c6ed111328bdd9cfc856cbcd00c29c83d6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Steel plate with water seeping through it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Steel plate with water seeping through it.",
+          "Fig. 8.1: Steel plate with water seeping through it."
+        ],
+        "concepts": [
+          "Steel plate",
+          "Water seeping through",
+          "Water disappears",
+          "Water vaporization"
+        ],
+        "context_relation": "Observation and inference",
+        "limitations": [
+          "The image does not show the water completely disappearing.",
+          "The image does not show the water vaporization process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T21:50:36Z"
+    },
+    {
+      "asset_id": "9aafc2d512540d2b5045b0d9",
+      "asset_sha256": "6a7a742b53d9d327a0aa27c6af8a31d7c1a09c6739bf719e010e24345a3a1e67",
+      "page_text_context_sha256": "ad006e2d9c448f00610b3a775928c8c6ed111328bdd9cfc856cbcd00c29c83d6",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 163,
+      "asset_path": "page-0163.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }

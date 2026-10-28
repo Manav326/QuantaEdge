@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1498,
-    "successful_visual_analyses": 1476,
-    "missing_visual_analyses": 580,
-    "failed_visual_analyses": 22,
+    "raw_analysis_result_rows": 1502,
+    "successful_visual_analyses": 1479,
+    "missing_visual_analyses": 576,
+    "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 602,
+    "unresolved_count": 599,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -56322,9 +56322,18 @@
       "asset_path": "assets/bfddec2c92f8fc68b90e1ec61b4b2b5335fecd82209f6cb90764909999bad213.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A girl wearing a blue dress and a red bow in her hair, standing with one hand outstretched.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not directly relate to the text provided.",
+        "limitations": [
+          "The image does not provide information about the text's content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -56340,9 +56349,27 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Steel plate with water seeping through it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Steel plate with water seeping through it.",
+          "Fig. 8.1: Steel plate with water seeping through it."
+        ],
+        "concepts": [
+          "Steel plate",
+          "Water seeping through",
+          "Water seeping through a steel plate",
+          "Water gets converted into water vapour"
+        ],
+        "context_relation": "The image is a visual representation of the experiment described in the text.",
+        "limitations": [
+          "The image does not show the water completely disappearing.",
+          "The image does not show the water seeping through the steel plate."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -56358,9 +56385,27 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Steel plate with water seeping through it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Steel plate with water seeping through it.",
+          "Fig. 8.1: Steel plate with water seeping through it."
+        ],
+        "concepts": [
+          "Steel plate",
+          "Water seeping through",
+          "Water disappears",
+          "Water vaporization"
+        ],
+        "context_relation": "Observation and inference",
+        "limitations": [
+          "The image does not show the water completely disappearing.",
+          "The image does not show the water vaporization process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -56376,7 +56421,7 @@
       "asset_path": "page-0163.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
