@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2590,
-    "successful_visual_analyses": 2565,
-    "missing_visual_analyses": 4898,
-    "failed_visual_analyses": 25,
+    "raw_analysis_result_rows": 2593,
+    "successful_visual_analyses": 2567,
+    "missing_visual_analyses": 4895,
+    "failed_visual_analyses": 26,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4923,
+    "unresolved_count": 4921,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -105986,9 +105986,29 @@
       "asset_path": "assets/a9ad63ce6a9e3bb4ea20b7824ad25939e9fcb9e150126696396fe7f1f0010a7f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cube of ice melting into water.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "A bud that I saw yesterday on this rose has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Melting",
+          "Bud to Flower",
+          "Temperature Change"
+        ],
+        "context_relation": "Physical and Chemical Changes",
+        "limitations": [
+          "The image does not show the actual melting process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -106004,9 +106024,31 @@
       "asset_path": "assets/c0db8cdee9ad62dda62d6fee5205976df9359712204f07d94f119b44c7ea33c1.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cube of ice melting into water, with water droplets and a bottle of cold water.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Melting ice",
+          "Chemical change",
+          "Physical change",
+          "Bud to flower transition",
+          "Temperature change"
+        ],
+        "context_relation": "The image illustrates the physical and chemical changes that occur when ice melts into water.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reactions involved in melting ice.",
+          "The image does not show the exact time elapsed between the ice being placed and the water being observed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -106022,7 +106064,7 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,

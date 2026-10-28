@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2566,
+    "assets_selected": 2568,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "fa82e8570d7b6993a6b58eeb",
-      "621e8a41f7c10a2c2d629f53",
-      "9e9dc5dec6f44e7331f9bb27"
+      "6fae17ac54fa9bc51b79878d",
+      "9fd3e438d01aa0ca389b93cb",
+      "5898aeed233b3bd59f2ea7ac"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2563,
-    "assets_remaining": 4925,
-    "assets_completion_percent": 34.2,
-    "assets_failed": 25,
-    "assets_skipped_from_checkpoint": 2561,
+    "assets_analyzed": 2565,
+    "assets_remaining": 4923,
+    "assets_completion_percent": 34.3,
+    "assets_failed": 26,
+    "assets_skipped_from_checkpoint": 2563,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -13461,7 +13461,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40673609365",
-      "checkpointed_at": "2026-10-28T12:56:55Z"
+      "checkpointed_at": "2026-10-28T13:07:02Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82500,7 +82500,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40673609365",
-      "checkpointed_at": "2026-10-28T12:58:24Z"
+      "checkpointed_at": "2026-10-28T13:08:33Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -96644,6 +96644,103 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40673609365",
       "checkpointed_at": "2026-10-28T13:05:43Z"
+    },
+    {
+      "asset_id": "6fae17ac54fa9bc51b79878d",
+      "asset_sha256": "a9ad63ce6a9e3bb4ea20b7824ad25939e9fcb9e150126696396fe7f1f0010a7f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/a9ad63ce6a9e3bb4ea20b7824ad25939e9fcb9e150126696396fe7f1f0010a7f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cube of ice melting into water.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "A bud that I saw yesterday on this rose has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Melting",
+          "Bud to Flower",
+          "Temperature Change"
+        ],
+        "context_relation": "Physical and Chemical Changes",
+        "limitations": [
+          "The image does not show the actual melting process."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40673609365",
+      "checkpointed_at": "2026-10-28T13:10:14Z"
+    },
+    {
+      "asset_id": "9fd3e438d01aa0ca389b93cb",
+      "asset_sha256": "c0db8cdee9ad62dda62d6fee5205976df9359712204f07d94f119b44c7ea33c1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/c0db8cdee9ad62dda62d6fee5205976df9359712204f07d94f119b44c7ea33c1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cube of ice melting into water, with water droplets and a bottle of cold water.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Melting ice",
+          "Chemical change",
+          "Physical change",
+          "Bud to flower transition",
+          "Temperature change"
+        ],
+        "context_relation": "The image illustrates the physical and chemical changes that occur when ice melts into water.",
+        "limitations": [
+          "The image does not provide specific details about the chemical reactions involved in melting ice.",
+          "The image does not show the exact time elapsed between the ice being placed and the water being observed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40673609365",
+      "checkpointed_at": "2026-10-28T13:12:03Z"
+    },
+    {
+      "asset_id": "5898aeed233b3bd59f2ea7ac",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40673609365",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
