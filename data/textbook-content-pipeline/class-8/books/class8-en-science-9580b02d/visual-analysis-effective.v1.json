@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "ef88807a8e7161bb54ef0047188285c6423d977dc9e9673a50bdbb3a05acaac0",
+  "raw_analysis_sha256": "dd7658d11467b86a5f4394aac4fe8d4d491b6c0d04aceb3240f28c5c9376f1cb",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40628863804",
-      "checkpointed_at": "2026-10-28T05:26:46Z",
+      "checkpointed_at": "2026-10-28T05:37:48Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40628863804",
-      "checkpointed_at": "2026-10-28T05:27:27Z",
+      "checkpointed_at": "2026-10-28T05:38:29Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57861,7 +57861,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40628863804",
-      "checkpointed_at": "2026-10-28T05:28:16Z",
+      "checkpointed_at": "2026-10-28T05:39:19Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -65411,7 +65411,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40628863804",
-      "checkpointed_at": "2026-10-28T05:29:35Z",
+      "checkpointed_at": "2026-10-28T05:40:38Z",
       "effective_analysis": {
         "visual_summary": "A diagram showing how to lift a paper plate with a stick, and how the effort needed to lift it changes with the amount of chart paper used.",
         "visual_type": "diagram",
@@ -67158,21 +67158,77 @@
     {
       "asset_id": "52885281ae21238e9ccc031f",
       "asset_sha256": "fe59359cb8342e88b557d6166a640b2ef6acf08ebc62aa0c63e90e8dec6d5b45",
-      "page_text_context_sha256": "9953e75554b5b7568230a6dc61fc42937365a2994a0e78c22c92c7477ce4ec80",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 111,
       "asset_path": "page-0111.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "9953e75554b5b7568230a6dc61fc42937365a2994a0e78c22c92c7477ce4ec80",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40620560465",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model response is missing required fields.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing the movement of positively and negatively charged particles in clouds.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "and  ice  particles. You have learnt in the chapter\n‘Exploring Forces’ that when two objects are rubbed\nagainst each other, they get charged. In this case, strong\nwinds blowing upwards and downwards and rubbing\nagainst each other cause  static  electric charges to\ndevelop within the clouds.\n\nThe pos",
+          "Fig. 6.16: Lightning",
+          "A step further",
+          "Isolated and localised thunderstorms can sometimes occur in various\nregions of India. These thunderstorms are known by various names\nsuch as Kalboishakhi in West Bengal, Bihar, and Jharkhand and\nBordoisila in Assam. They occur before the arrival of the monsoon,\nthereby helping kharif crops to grow. "
+        ],
+        "concepts": [
+          "static electric charges",
+          "clouds",
+          "positive and negative charges",
+          "lightning",
+          "thunderstorms",
+          "monsoon",
+          "kharif crops",
+          "mango showers",
+          "lightning precautions",
+          "safety during lightning"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing the movement of positively and negatively charged particles in clouds, the formation of thunderstorms, and the safety precautions during lightning.",
+        "limitations": [
+          "The image does not provide specific details about the physical properties of the particles or the exact mechanisms of charge separation and movement.",
+          "The image does not show the actual movement of the particles or the formation of thunderstorms.",
+          "The image does not provide information about the specific regions where thunderstorms occur."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40628863804",
+      "checkpointed_at": "2026-10-28T05:45:16Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing the movement of positively and negatively charged particles in clouds.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "and  ice  particles. You have learnt in the chapter\n‘Exploring Forces’ that when two objects are rubbed\nagainst each other, they get charged. In this case, strong\nwinds blowing upwards and downwards and rubbing\nagainst each other cause  static  electric charges to\ndevelop within the clouds.\n\nThe pos",
+          "Fig. 6.16: Lightning",
+          "A step further",
+          "Isolated and localised thunderstorms can sometimes occur in various\nregions of India. These thunderstorms are known by various names\nsuch as Kalboishakhi in West Bengal, Bihar, and Jharkhand and\nBordoisila in Assam. They occur before the arrival of the monsoon,\nthereby helping kharif crops to grow. "
+        ],
+        "concepts": [
+          "static electric charges",
+          "clouds",
+          "positive and negative charges",
+          "lightning",
+          "thunderstorms",
+          "monsoon",
+          "kharif crops",
+          "mango showers",
+          "lightning precautions",
+          "safety during lightning"
+        ],
+        "context_relation": "The image is a visual representation of the text discussing the movement of positively and negatively charged particles in clouds, the formation of thunderstorms, and the safety precautions during lightning.",
+        "limitations": [
+          "The image does not provide specific details about the physical properties of the particles or the exact mechanisms of charge separation and movement.",
+          "The image does not show the actual movement of the particles or the formation of thunderstorms.",
+          "The image does not provide information about the specific regions where thunderstorms occur."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
