@@ -51,6 +51,13 @@ def read_json_fields(
                     eof = True
                 else:
                     prefix += chunk
+                # These files put root metadata before very large row arrays. Do not
+                # inspect nested result timestamps or scan the full asset/page payload.
+                stop_match = re.search(r'"(?:results|pages|assets|visuals|segments)"\s*:\s*\[', prefix)
+                stopped_at_rows = stop_match is not None
+                if stop_match:
+                    prefix = prefix[:stop_match.start()]
+                    eof = True
                 for key in keys:
                     if key in values:
                         continue
@@ -64,6 +71,8 @@ def read_json_fields(
                         continue
                 if all(key in values for key in keys):
                     return values, None
+                if stopped_at_rows:
+                    break
     except FileNotFoundError:
         return {}, "missing"
     except (OSError, UnicodeError) as exc:
