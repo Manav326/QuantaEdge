@@ -33,7 +33,7 @@ The guiding rule is: **render the app shell first; load essential content next; 
 - [ ] Inventory all route/page loading states, shared shells, and high-value user journeys.
 - [ ] Trace API calls per route: duplicates, request waterfalls, oversized responses, unbounded polling/retries, and calls triggered by rerenders.
 - [ ] Record baseline cold/warm navigation, JavaScript bundle sizes, Core Web Vitals where available, Android cold start/first frame, and slow-endpoint timings.
-- [ ] Review existing API wrappers/cache patterns before selecting or introducing a shared data-fetching dependency.
+- [x] Review the three web API wrappers and app manifests before selecting a dependency: they currently use a centralized `apiFetch` wrapper around `fetch`, with no installed shared query/cache library. Route-specific API and cache policy audit remains open.
 
 ### Phase 1 — No-blank loading foundation
 
@@ -89,7 +89,7 @@ The guiding rule is: **render the app shell first; load essential content next; 
 
 **Not yet claimed complete:** full route-level audit, component code splitting, resolved-data caching, API/backend optimization, Android startup optimization, performance baselines, and end-to-end regression testing.
 
-**Verification status:** a draft PR was opened to trigger CI. Build and runtime evidence is pending; review results before merge.
+**Verification status:** the initial PR-triggered workflow run was cancelled while branch commits were being updated. The current head has no successful completed CI run available yet, and this environment cannot clone/build the repository locally. Build and runtime evidence remain a merge blocker.
 
 ## Acceptance criteria
 
