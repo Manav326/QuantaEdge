@@ -48,7 +48,10 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn(marker, planner)
         self.assertIn("&& 'analyze_all') || (github.event_name == 'push'", workflow)
         self.assertIn("source PDF SHA-256 differs", workflow)
-        self.assertIn('"publication_allowed": False', workflow)
+        self.assertIn("python scripts/select_textbook_source_pair.py", workflow)
+        helper = (ROOT / "scripts" / "select_textbook_source_pair.py").read_text(encoding="utf-8")
+        self.assertIn('"publication_allowed": False', helper)
+        self.assertIn('"review_required": True', helper)
 
     def test_class8_targeted_rebuild_replaces_only_the_class8_resume_lane(self):
         workflow = read("textbook-visual-candidates-v3.yml")
