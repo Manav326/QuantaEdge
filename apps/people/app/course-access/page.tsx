@@ -79,6 +79,7 @@ export default function CourseAccessPage() {
   const [appliedSearch, setAppliedSearch] = useState('');
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [enrollmentTotal, setEnrollmentTotal] = useState(0);
+  const [enrollmentOffset, setEnrollmentOffset] = useState(0);
   const [policyEvents, setPolicyEvents] = useState<EventRow[]>([]);
   const [accessEvents, setAccessEvents] = useState<EventRow[]>([]);
   const [mode, setMode] = useState<'CALENDAR_DURATION' | 'FIXED_DAYS'>('CALENDAR_DURATION');
@@ -105,13 +106,13 @@ export default function CourseAccessPage() {
 
   const loadEnrollments = useCallback(async (courseId: string, query: string) => {
     if (!courseId) return;
-    const params = new URLSearchParams({ limit: '100', offset: '0' });
+    const params = new URLSearchParams({ limit: String(ENROLMENT_PAGE_SIZE), offset: String(enrollmentOffset) });
     if (query.trim()) params.set('q', query.trim());
     const result = await api<{ items: Enrollment[]; total: number }>(
       '/api/v1/hrms/platform/course-access/courses/' + encodeURIComponent(courseId) + '/enrollments?' + params.toString());
     setEnrollments(result.items || []);
     setEnrollmentTotal(Number(result.total || 0));
-  }, []);
+  }, [enrollmentOffset]);
   const loadAudit = useCallback(async (courseId: string) => {
     if (!courseId) return;
     const result = await api<{ policyEvents: EventRow[]; enrollmentEvents: EventRow[] }>(
@@ -318,7 +319,7 @@ export default function CourseAccessPage() {
             <div><h2>Individual learner access</h2><p>All institutions sharing this course are included. Each action changes only the selected enrolment.</p></div>
             <span className={styles.count}>{enrollmentTotal} enrolments</span>
           </div>
-          <form className={styles.searchForm} onSubmit={e => { e.preventDefault(); setAppliedSearch(enrollmentSearch.trim()); }}>
+          <form className={styles.searchForm} onSubmit={e => { e.preventDefault(); setEnrollmentOffset(0); setAppliedSearch(enrollmentSearch.trim()); }}>
             <input className={styles.search} value={enrollmentSearch} onChange={e => setEnrollmentSearch(e.target.value)}
               placeholder="Search learner name, ID or institution" aria-label="Search learner enrolments" />
             <button className={styles.secondary} type="submit">Search</button>
@@ -373,6 +374,16 @@ export default function CourseAccessPage() {
             })}
             {enrollments.length === 0 && <tr><td className={styles.emptyCell} colSpan={5}>No matching enrolments were found.</td></tr>}</tbody>
           </table></div>
+          {enrollmentTotal > ENROLMENT_PAGE_SIZE && <div className={styles.formActions} aria-label="Learner enrolment pages">
+            <button className={styles.secondary} type="button" disabled={enrollmentOffset === 0 || saving}
+              onClick={() => setEnrollmentOffset(Math.max(0, enrollmentOffset - ENROLMENT_PAGE_SIZE))}>Previous</button>
+            <span className={styles.count}>
+              Showing {Math.min(enrollmentOffset + 1, enrollmentTotal)}–{Math.min(enrollmentOffset + enrollments.length, enrollmentTotal)} of {enrollmentTotal}
+            </span>
+            <button className={styles.secondary} type="button"
+              disabled={enrollmentOffset + ENROLMENT_PAGE_SIZE >= enrollmentTotal || saving}
+              onClick={() => setEnrollmentOffset(enrollmentOffset + ENROLMENT_PAGE_SIZE)}>Next</button>
+          </div>}
           <p className={styles.caveat}>Blocking does not delete progress, saved answers, assessment results, purchases or existing certificates. Unblocking alone never renews expired access.</p>
         </section>
 
