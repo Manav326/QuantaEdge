@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "25fc3e1c77816fe18df7f63885af4d9a5746a05d20d116ded4ec33dbef4a5e77",
+  "raw_analysis_sha256": "a306d4aefc6364eef1f0830552dd08cf4c25655e36926c7728e20bf537f8ce4a",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40663544497",
-      "checkpointed_at": "2026-10-28T10:19:48Z",
+      "checkpointed_at": "2026-10-28T10:25:58Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40663544497",
-      "checkpointed_at": "2026-10-28T10:20:18Z",
+      "checkpointed_at": "2026-10-28T10:26:28Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40663544497",
-      "checkpointed_at": "2026-10-28T10:20:55Z",
+      "checkpointed_at": "2026-10-28T10:27:07Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -151086,6 +151086,90 @@
         "limitations": [
           "The image does not provide specific details about the physical properties of the ice or the plant bud.",
           "The text is incomplete, with some sentences ending abruptly."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "75dd5bbdc74bf907cb3759a6",
+      "asset_sha256": "33d8eab19fd6d53648fc4aae1412471ce7cf8dd847357845120df2bfb81cb895",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/33d8eab19fd6d53648fc4aae1412471ce7cf8dd847357845120df2bfb81cb895.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a person wearing glasses and a red shirt, smiling.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a cartoon illustration of a person, not related to the text about changes around us.",
+        "limitations": [
+          "The image does not provide any specific information about the text content.",
+          "The image is a cartoon illustration, not a photograph or diagram."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40663544497",
+      "checkpointed_at": "2026-10-28T10:27:45Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a person wearing glasses and a red shirt, smiling.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a cartoon illustration of a person, not related to the text about changes around us.",
+        "limitations": [
+          "The image does not provide any specific information about the text content.",
+          "The image is a cartoon illustration, not a photograph or diagram."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f910c22893dcbe0c0b1cb7e9",
+      "asset_sha256": "8685b76a5267d3cc96c1840dc2b07968728c6cab26011547d8ef7e38834049c7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/8685b76a5267d3cc96c1840dc2b07968728c6cab26011547d8ef7e38834049c7.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a plaid hat and a red shirt, with a blurred background.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of changes around us, specifically physical and chemical changes.",
+        "limitations": [
+          "The image does not provide any specific information about the changes mentioned in the text.",
+          "The image is a cartoon illustration and may not accurately represent the changes described in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40663544497",
+      "checkpointed_at": "2026-10-28T10:28:23Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a plaid hat and a red shirt, with a blurred background.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the topic of changes around us, specifically physical and chemical changes.",
+        "limitations": [
+          "The image does not provide any specific information about the changes mentioned in the text.",
+          "The image is a cartoon illustration and may not accurately represent the changes described in the text."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
