@@ -170,6 +170,11 @@ export async function apiFetch(
   init?: RequestInit,
   options: ApiFetchOptions = {},
 ): Promise<Response> {
+  const requestMethod = (init?.method ??
+    (typeof Request !== 'undefined' && input instanceof Request ? input.method : 'GET')).toUpperCase();
+  // Do not let new reads coalesce with requests started before a write/session transition.
+  if (isApiRequest(input) && requestMethod !== 'GET') inFlightApiGets.clear();
+
   const isApi = options.notificationMode !== 'caller' && isApiRequest(input);
   const key = inFlightApiGetKey(input, init, options.notificationMode);
   let response: Response;
