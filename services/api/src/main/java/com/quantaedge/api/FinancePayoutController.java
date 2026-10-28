@@ -1340,13 +1340,16 @@ public class FinancePayoutController {
     if(bytes.length!=number(row.get("byte_length"))||!FiscalDocumentStorage.sha256(bytes).equals(string(row.get("sha256"))))
       throw new org.springframework.web.server.ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
           "The archived payout statement did not pass its integrity check.");
+    Map<String,Object> downloadDetails=new LinkedHashMap<>();
+    downloadDetails.put("batchId",number(row.get("batch_id")));
+    downloadDetails.put("payoutId",row.get("payout_id")==null?null:number(row.get("payout_id")));
+    downloadDetails.put("documentNumber",string(row.get("document_number")));
+    downloadDetails.put("revision",number(row.get("revision")));
     jdbc.update("""
       insert into finance_payout_statement_event(statement_document_id,event_type,idempotency_key,actor_staff_id,details)
       values(?,'DOWNLOADED',?,?,?::jsonb)
       """,statementId,"payout-statement:"+statementId+":download:"+UUID.randomUUID(),
-        context.staffId(),json(Map.of("batchId",number(row.get("batch_id")),
-          "payoutId",row.get("payout_id")==null?0L:number(row.get("payout_id")),
-          "documentNumber",string(row.get("document_number")))));
+        context.staffId(),json(downloadDetails));
     String safeName=string(row.get("document_number")).replaceAll("[^A-Za-z0-9_-]","-");
     return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF)
         .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\""+safeName+".pdf\"")

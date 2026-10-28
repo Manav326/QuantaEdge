@@ -1,9 +1,11 @@
 package com.quantaedge.api;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Instant;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,9 +14,11 @@ import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 class PayoutSettlementPdfRendererTest {
   private final PayoutSettlementPdfRenderer renderer=new PayoutSettlementPdfRenderer();
+  @TempDir Path storageDirectory;
 
   @Test
   void createsArchivedStyleBatchReportWithContinuationPagesAndA4Geometry() throws Exception {
@@ -85,6 +89,41 @@ class PayoutSettlementPdfRendererTest {
           () -> "Hindi text extraction preview: "+preview(searchableText));
       assertTrue(searchableText.contains("विद्यालय सूर्योदय"),"Hindi recipient names should remain searchable in the PDF text layer.");
       assertTrue(searchableText.contains("INV-2026-HI-91"),"Recipient payout advice should include the underlying invoice reference.");
+    }
+  }
+
+  @Test
+  void generatedPdfSurvivesRealArchiveStorageDownloadRoundTrip() throws Exception {
+    Map<String,Object> batch=batch();
+    Map<String,Object> payout=new LinkedHashMap<>();
+    payout.put("id",92L);payout.put("recipient_name","विद्यालय सूर्योदय");
+    payout.put("beneficiary_name","विद्यालय सूर्योदय");payout.put("beneficiary_type","INSTITUTION");
+    payout.put("amount_paise",123456L);payout.put("currency","INR");payout.put("status","PROCESSED");
+    payout.put("bank_ifsc","SBIN0000123");payout.put("bank_account_last4","9876");
+    payout.put("provider_payout_id","pout_roundtrip_92");payout.put("transfer_reference","UTR-ROUNDTRIP-92");
+    List<Map<String,Object>> allocations=List.of(record(
+        "payout_id",92L,"payout_item_amount_paise",123456L,
+        "allocation_id",221L,"order_id",331L,"provider_payment_id","pay_331",
+        "course_title","गणित कक्षा ६","source_institution_name","मूल विद्यालय",
+        "marketplace_institution_name","साझा विद्यालय","invoice_number","INV-ROUNDTRIP-92",
+        "legal_seller_name","विक्रेता संस्था","currency","INR","recipient_name","विद्यालय सूर्योदय"));
+    var rendered=renderer.renderRecipientAdvice(batch,payout,allocations,
+        "QE-PS-4-P92-R1",Instant.parse("2026-10-27T12:00:00Z"));
+    FiscalDocumentStorage storage=new FiscalDocumentStorage(storageDirectory.toString());
+    var stored=storage.storePdf(rendered.pdf());
+    try {
+      byte[] downloaded=storage.readPdf(stored.storageKey());
+      assertArrayEquals(rendered.pdf(),downloaded,"Downloaded bytes must exactly match the archived generated PDF.");
+      assertEquals(rendered.pdf().length,stored.sizeBytes());
+      assertEquals(FiscalDocumentStorage.sha256(downloaded),stored.sha256());
+      try(var document=Loader.loadPDF(downloaded)) {
+        assertEquals(1,document.getNumberOfPages());
+        String searchableText=new PDFTextStripper().getText(document);
+        assertTrue(searchableText.contains("INV-ROUNDTRIP-92"));
+        assertTrue(searchableText.contains("विद्यालय सूर्योदय"));
+      }
+    } finally {
+      storage.deleteQuietly(stored.storageKey());
     }
   }
 

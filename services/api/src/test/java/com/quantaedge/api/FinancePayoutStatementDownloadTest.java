@@ -3,6 +3,7 @@ package com.quantaedge.api;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.contains;
@@ -83,6 +84,30 @@ class FinancePayoutStatementDownloadTest {
     assertEquals(checksum,response.getHeaders().getFirst("X-QE-Statement-SHA256"));
     assertArrayEquals(pdf,response.getBody());
     verify(jdbc).update(contains("finance_payout_statement_event"),any(Object[].class));
+  }
+
+  @Test
+  void batchSummaryDownloadDoesNotInventAPayoutIdAndAuditsTheRevision() {
+    JdbcTemplate jdbc=mock(JdbcTemplate.class);
+    AuthorizationService authorization=authorized();
+    FiscalDocumentStorage storage=mock(FiscalDocumentStorage.class);
+    byte[] pdf=samplePdf();
+    String checksum=FiscalDocumentStorage.sha256(pdf);
+    Map<String,Object> row=archiveRow(pdf,checksum);
+    row.put("payout_id",null);
+    row.put("document_type","BATCH_SUMMARY");
+    when(jdbc.queryForList(anyString(),any(Object[].class))).thenReturn(List.of(row));
+    when(storage.readPdf(STORAGE_KEY)).thenReturn(pdf);
+    FinancePayoutController controller=controller(jdbc,authorization,storage);
+
+    ResponseEntity<byte[]> response=controller.downloadPayoutStatement(7L,FINANCE_STAFF);
+
+    assertEquals(HttpStatus.OK,response.getStatusCode());
+    ArgumentCaptor<Object[]> auditArgs=ArgumentCaptor.forClass(Object[].class);
+    verify(jdbc).update(contains("finance_payout_statement_event"),auditArgs.capture());
+    String details=String.valueOf(auditArgs.getValue()[3]);
+    assertTrue(details.contains("\\"payoutId\\":null"),"Batch statements must not create a fictional payout #0.");
+    assertTrue(details.contains("\\"revision\\":1"),"Downloads must retain the immutable document revision in audit details.");
   }
 
   private static AuthorizationService authorized() {
