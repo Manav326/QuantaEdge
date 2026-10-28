@@ -20,6 +20,8 @@
 - [Consolidated Coverage Gaps](./phase-1-coverage-gaps.md): prioritized open findings and the required closure sequence before Phase 2 test-data installation.
 - [Comprehensive Route/Component UI-UX Audit Plan](../ui-ux-audit/comprehensive-route-component-audit-plan.md): route-by-route and component-by-component responsive, theme, accessibility and runtime acceptance rules.
 - [Route/Component Audit Register](../ui-ux-audit/route-component-audit-register.csv): one evidence-gated tracking row per current UI route/destination; all rows begin unverified.
+- [Component-Instance Audit Register](../ui-ux-audit/component-instance-audit-register.csv): current starter set of shared shells, providers, global styles and floating tutor docks, with explicit consuming-route links; route-specific nested components are still to be inventoried.
+- [Shared Shell Source Review](../ui-ux-audit/shared-shell-source-review.md): source-only observations and required runtime checks for responsive navigation, theme CSS cascade, overlays and Android shell behavior.
 - [Centralized QA Test-Pack Lifecycle](./qa-test-pack-lifecycle.md): required install/uninstall state machine, immutable resource ownership manifest, production safety gates, automated acceptance matrix and implementation ledger.
 
 ## Current test-pack lifecycle work
@@ -62,7 +64,7 @@ A source file, successful compilation, static contract check or older tracker en
 
 ## Register consistency guard
 
-The CI `changes` job runs `scripts/validate_qa_registers.test.mjs` and `scripts/validate_qa_registers.mjs --root .`. These checks verify CSV structure, unique screen/API/scenario IDs, valid scenario references, one runtime-log row per scenario, evidence metadata before a result can be marked passed, and route/component audit parity with the UI state checklist. **They validate documentation integrity only**; they do not claim that a UI/API workflow executed or passed.
+The CI `changes` job runs `scripts/validate_qa_registers.test.mjs` and `scripts/validate_qa_registers.mjs --root .`. These checks verify CSV structure, unique screen/API/scenario IDs, valid scenario references, one runtime-log row per scenario, evidence metadata before a result can be marked passed, route/component audit parity with the UI state checklist, component IDs and consumers in both directions, and evidence before a component sign-off. **They validate documentation integrity only**; they do not claim that a UI/API workflow executed or passed.
 
 ## Audit rules
 
