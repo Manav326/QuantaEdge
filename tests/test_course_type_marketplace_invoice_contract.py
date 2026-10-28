@@ -271,5 +271,86 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
 
 
 
+    def test_unified_payout_recipient_register_and_tax_visibility_are_explicit(self):
+        payout = (ROOT / "services/api/src/main/java/com/quantaedge/api/FinancePayoutController.java").read_text(encoding="utf-8")
+        panel = (ROOT / "apps/people/app/finance/PayoutsPanel.tsx").read_text(encoding="utf-8")
+        css = (ROOT / "apps/people/app/finance/Finance.module.css").read_text(encoding="utf-8")
+        checklist = (ROOT / "docs/finance/hrms-unified-recipient-tax-settlement-checklist.md").read_text(encoding="utf-8")
+
+        # Active entities begin the query so zero-activity recipients remain visible.
+        self.assertIn("with recipients as (", payout)
+        self.assertIn("from recipients r", payout)
+        self.assertIn("left join balance_by_currency fin", payout)
+        self.assertIn("entity_kind in ('PLATFORM','COMPANY')", payout)
+        self.assertIn("Keep historic liabilities visible", payout)
+        self.assertIn("recipient_status", payout)
+        self.assertIn('row.get("recipient_status")', payout)
+        self.assertIn("payout_readiness_reason", payout)
+        self.assertIn("unreconciled_fee_order_count", payout)
+        self.assertIn("does not assess GST TCS or income-tax TDS", payout)
+
+        # Source and marketplace institutions are distinct, and tax is currency-safe.
+        self.assertIn("source_institution_name", payout)
+        self.assertIn("marketplace_institution_name", payout)
+        self.assertIn('@GetMapping("/payout-tax-overview")', payout)
+        self.assertIn("upper(currency)='INR'", payout)
+        self.assertIn('"gstTcsLedgerStatus","NOT_REPRESENTED"', payout)
+        self.assertIn('"incomeTaxTdsLedgerStatus","NOT_REPRESENTED"', payout)
+
+        # The UI avoids suggesting a zero TCS/TDS liability and no longer depends on
+        # an 11-column horizontal table as the recipient's primary view.
+        self.assertIn("All institutions & companies", panel)
+        self.assertIn("payoutRecipientGrid", panel)
+        self.assertIn("recipientReadinessFilter", panel)
+        self.assertIn("recipientCurrencyFilter", panel)
+        self.assertIn("RECOVERY_DUE", panel)
+        self.assertIn("IN_PROGRESS", panel)
+        self.assertIn("Payout checks pass · tax review needed", panel)
+        self.assertIn("Earned allocation", panel)
+        self.assertIn("Tax review is not included in automated payout readiness", panel)
+        self.assertIn("Tax & compliance snapshot", panel)
+        self.assertIn("This must not be treated as ₹0", panel)
+        self.assertIn(".payoutRecipientGrid{", css)
+        self.assertIn("GST TCS", panel)
+        self.assertIn("Income-tax TDS", panel)
+        self.assertIn("never invent a tax rate", checklist.lower())
+
+
+    def test_monthly_payout_pdfs_are_archived_audited_and_not_tax_certificates(self):
+        payout = (ROOT / "services/api/src/main/java/com/quantaedge/api/FinancePayoutController.java").read_text(encoding="utf-8")
+        renderer = (ROOT / "services/api/src/main/java/com/quantaedge/api/PayoutSettlementPdfRenderer.java").read_text(encoding="utf-8")
+        renderer_test = (ROOT / "services/api/src/test/java/com/quantaedge/api/PayoutSettlementPdfRendererTest.java").read_text(encoding="utf-8")
+        migration = (ROOT / "services/api/src/main/resources/db/migration/V217__immutable_monthly_payout_statements.sql").read_text(encoding="utf-8")
+        panel = (ROOT / "apps/people/app/finance/PayoutsPanel.tsx").read_text(encoding="utf-8")
+        css = (ROOT / "apps/people/app/finance/Finance.module.css").read_text(encoding="utf-8")
+        dockerfile = (ROOT / "services/api/Dockerfile").read_text(encoding="utf-8")
+
+        self.assertIn("fontconfig fonts-noto-core", dockerfile)
+        self.assertIn("Noto Sans Devanagari", dockerfile)
+        self.assertIn('@PostMapping("/payout-batches/{batchId}/statements")', payout)
+        self.assertIn('@GetMapping("/payout-batches/{batchId}/statements")', payout)
+        self.assertIn('"/payout-statements/{statementId}/download"', payout)
+        self.assertIn("FiscalDocumentStorage.StoredDocument stored", payout)
+        self.assertIn("X-QE-Statement-SHA256", payout)
+        self.assertIn("finance_payout_statement_event", payout)
+        self.assertIn("payment_collection_legal_name", payout)
+        self.assertIn("razorpayx_funding_legal_name", payout)
+        self.assertIn("RazorpayX funding owner", renderer)
+        self.assertIn("snapshot_json", migration)
+        self.assertIn("trg_finance_payout_statement_document_immutable", migration)
+        self.assertIn("trg_finance_payout_statement_event_immutable", migration)
+        self.assertIn("MAX_PAGES", renderer)
+        self.assertIn("not a gst tax invoice", renderer.lower())
+        self.assertIn("TDS/TCS certificate", renderer)
+        self.assertIn("createsArchivedStyleBatchReportWithContinuationPagesAndA4Geometry", renderer_test)
+        self.assertIn("recipientAdviceIncludesOneRecipientOnlyAndBuildsWithHindiNames", renderer_test)
+        self.assertIn("Generate batch PDF", panel)
+        self.assertIn("Generate payout advice PDF", panel)
+        self.assertIn("Archived PDF statements", panel)
+        self.assertIn("doc.recipient_name", panel)
+        self.assertIn("private, no-store, max-age=0", payout)
+        self.assertIn(".payoutStatementRow", css)
+
+
 if __name__ == "__main__":
     unittest.main()
