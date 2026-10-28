@@ -1890,3 +1890,33 @@ html[data-qe-people-appearance="dark"] .qe-people-page-slot :not([data-qe-invoic
     max-width: 100%;
   }
 }
+
+
+/* Native HRMS select menus must match the active field and text palette. */
+html[data-qe-people-appearance="light"] select:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
+  color-scheme: light !important;
+  color: var(--qe-people-ink, #182337) !important;
+}
+html[data-qe-people-appearance="dark"] select:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
+  color-scheme: dark !important;
+  color: var(--qe-people-ink, #EEF2F8) !important;
+}
+html[data-qe-people-appearance="light"] select:not([data-qe-invoice-document] *):not([data-qe-authored-notification] *) option {
+  color: var(--qe-people-ink, #182337) !important;
+  background-color: var(--qe-people-field, #FFFFFF) !important;
+}
+html[data-qe-people-appearance="dark"] select:not([data-qe-invoice-document] *):not([data-qe-authored-notification] *) option {
+  color: var(--qe-people-ink, #EEF2F8) !important;
+  background-color: var(--qe-people-field, #101B2B) !important;
+}
+html[data-qe-people-appearance] select option:checked {
+  color: var(--qe-people-brand-strong, #C2410C) !important;
+  background-color: var(--qe-people-brand-soft, #FFF0E5) !important;
+}
+html[data-qe-people-appearance="dark"] select option:checked {
+  color: var(--qe-people-brand-strong, #FDBA74) !important;
+  background-color: var(--qe-people-brand-soft, #3A281C) !important;
+}
+html[data-qe-people-appearance] select option:disabled {
+  color: var(--qe-people-disabled-ink, #667085) !important;
+}

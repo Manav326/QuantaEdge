@@ -2435,3 +2435,33 @@ html[data-qe-appearance="dark"] .qe-workspace-content :where(.muted-small, .sect
     max-width: 100%;
   }
 }
+
+
+/* Keep native dropdown option text readable in both appearances, including auth pages. */
+html[data-qe-appearance="light"] select:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
+  color-scheme: light !important;
+  color: var(--qe-color-text, #172033) !important;
+}
+html[data-qe-appearance="dark"] select:not([data-qe-invoice-document]):not([data-qe-invoice-document] *):not([data-qe-authored-notification]):not([data-qe-authored-notification] *) {
+  color-scheme: dark !important;
+  color: var(--qe-color-text, #F4F7FB) !important;
+}
+html[data-qe-appearance="light"] select:not([data-qe-invoice-document] *):not([data-qe-authored-notification] *) option {
+  color: var(--qe-color-text, #172033) !important;
+  background-color: var(--qe-color-surface-elevated, #FFFFFF) !important;
+}
+html[data-qe-appearance="dark"] select:not([data-qe-invoice-document] *):not([data-qe-authored-notification] *) option {
+  color: var(--qe-color-text, #F4F7FB) !important;
+  background-color: var(--qe-color-surface-elevated, #243247) !important;
+}
+html[data-qe-appearance="light"] select option:checked {
+  color: var(--qe-color-selected-text, #111827) !important;
+  background-color: var(--qe-color-selected-background, #FEF1E8) !important;
+}
+html[data-qe-appearance="dark"] select option:checked {
+  color: var(--qe-color-selected-text, #FFFFFF) !important;
+  background-color: var(--qe-color-selected-background, #362F33) !important;
+}
+html[data-qe-appearance] select option:disabled {
+  color: var(--qe-color-disabled-text, #4B5563) !important;
+}

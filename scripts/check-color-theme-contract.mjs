@@ -536,6 +536,28 @@ for (const [foreground, background] of adminContrastPairs) {
   assertAdminPaletteContrast('dark', adminDarkPalette, foreground, background);
 }
 
+
+
+/* Native select and option contrast must be explicitly covered in every browser app. */
+assert(adminThemeCss.includes('Native select menus use the same readable theme') &&
+  adminThemeCss.includes('select option:checked') &&
+  adminThemeCss.includes('select option:disabled') &&
+  adminThemeCss.includes('color-scheme: dark !important') &&
+  adminThemeCss.includes('color: var(--qe-color-text, #F4F7FB) !important'),
+  'Admin native select menus and their open options must use readable light/dark semantic colors, including checked and disabled options.');
+assert(webCss.includes('Keep native dropdown option text readable') &&
+  webCss.includes('select option:checked') &&
+  webCss.includes('select option:disabled') &&
+  webCss.includes('color-scheme: dark !important') &&
+  webCss.includes('color: var(--qe-color-text, #F4F7FB) !important'),
+  'Learner Web native select menus and option lists must use readable light/dark colors across auth and workspace pages.');
+assert(peopleAppearanceCss.includes('Native HRMS select menus must match') &&
+  peopleAppearanceCss.includes('select option:checked') &&
+  peopleAppearanceCss.includes('select option:disabled') &&
+  peopleAppearanceCss.includes('color-scheme: dark !important') &&
+  peopleAppearanceCss.includes('color: var(--qe-people-ink, #EEF2F8) !important'),
+  'HRMS native select menus and option lists must use readable light/dark colors while preserving document/notification authored surfaces.');
+
 if (failures.length) {
   console.error('White-label colour theme contract failed (' + failures.length + '/' + checks + ' checks):');
   for (const failure of failures) console.error(' - ' + failure);

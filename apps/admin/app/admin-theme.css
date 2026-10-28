@@ -2585,3 +2585,33 @@ html[data-qe-appearance] .qe-admin-public-page :is(.qe-login-heading, .qe-login-
     transform: none !important;
   }
 }
+
+
+/* Native select menus use the same readable theme as their closed controls. */
+html[data-qe-appearance="light"] :is(.qe-admin-workspace-layout, .qe-admin-public-page) select {
+  color-scheme: light !important;
+  color: var(--qe-color-text, #172033) !important;
+}
+html[data-qe-appearance="dark"] :is(.qe-admin-workspace-layout, .qe-admin-public-page) select {
+  color-scheme: dark !important;
+  color: var(--qe-color-text, #F4F7FB) !important;
+}
+html[data-qe-appearance="light"] :is(.qe-admin-workspace-layout, .qe-admin-public-page) select option {
+  color: var(--qe-color-text, #172033) !important;
+  background-color: var(--qe-color-surface-elevated, #FFFFFF) !important;
+}
+html[data-qe-appearance="dark"] :is(.qe-admin-workspace-layout, .qe-admin-public-page) select option {
+  color: var(--qe-color-text, #F4F7FB) !important;
+  background-color: var(--qe-color-surface-elevated, #243247) !important;
+}
+html[data-qe-appearance] :is(.qe-admin-workspace-layout, .qe-admin-public-page) select option:checked {
+  color: var(--qe-color-selected-text, #111827) !important;
+  background-color: var(--qe-color-selected-background, #FEF1E8) !important;
+}
+html[data-qe-appearance="dark"] :is(.qe-admin-workspace-layout, .qe-admin-public-page) select option:checked {
+  color: var(--qe-color-selected-text, #FFFFFF) !important;
+  background-color: var(--qe-color-selected-background, #362F33) !important;
+}
+html[data-qe-appearance] :is(.qe-admin-workspace-layout, .qe-admin-public-page) select option:disabled {
+  color: var(--qe-color-disabled-text, #4B5563) !important;
+}
