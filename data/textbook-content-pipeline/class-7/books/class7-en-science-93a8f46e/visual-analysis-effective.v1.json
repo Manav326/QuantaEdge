@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "61fbe4149ac6af1ff7b80787b3bcda9d98852905cd5ad5b8ce448224be9c2e5a",
+  "raw_analysis_sha256": "071b32dac384adf4ba401a2401e74e2b589534000c08679ff4fa78a76c1b3dfa",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753608319",
-      "checkpointed_at": "2026-10-28T20:39:51Z",
+      "checkpointed_at": "2026-10-28T20:42:57Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753608319",
-      "checkpointed_at": "2026-10-28T20:40:19Z",
+      "checkpointed_at": "2026-10-28T20:43:25Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753608319",
-      "checkpointed_at": "2026-10-28T20:40:57Z",
+      "checkpointed_at": "2026-10-28T20:44:03Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -152625,6 +152625,88 @@
         "concepts": [],
         "context_relation": "None of the visible text is related to the image.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "18bbda02fce7f60c1d83ec2e",
+      "asset_sha256": "bf3008f0c4447243fe494633903363c74fe4266abf66646ee6e2059fdc81d204",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/bf3008f0c4447243fe494633903363c74fe4266abf66646ee6e2059fdc81d204.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character wearing a vest and a plaid shirt, with one hand raised and the other hand near the chin, appearing to be in thought or contemplation.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of reflecting on changes around, as mentioned in Activity 5.1 of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the changes being observed or the context of the reflection."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753608319",
+      "checkpointed_at": "2026-10-28T20:44:40Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character wearing a vest and a plaid shirt, with one hand raised and the other hand near the chin, appearing to be in thought or contemplation.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of reflecting on changes around, as mentioned in Activity 5.1 of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the changes being observed or the context of the reflection."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d435c00c719b4210e51495c5",
+      "asset_sha256": "4e14eb118fd737d5f809afb6f46cf35607ff4381cbc339f079273bcacca41cdc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/4e14eb118fd737d5f809afb6f46cf35607ff4381cbc339f079273bcacca41cdc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green, outlined rectangle with a curved bottom corner.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of a textbook, specifically Table 5.1 from Activity 5.1.",
+        "limitations": [
+          "The image does not contain any text or data points.",
+          "The image is a simple illustration without any additional elements or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753608319",
+      "checkpointed_at": "2026-10-28T20:45:17Z",
+      "effective_analysis": {
+        "visual_summary": "A green, outlined rectangle with a curved bottom corner.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of a textbook, specifically Table 5.1 from Activity 5.1.",
+        "limitations": [
+          "The image does not contain any text or data points.",
+          "The image is a simple illustration without any additional elements or context."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"

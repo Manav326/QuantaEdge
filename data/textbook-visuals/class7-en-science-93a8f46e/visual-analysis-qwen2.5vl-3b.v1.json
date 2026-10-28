@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2580,
+    "assets_selected": 2582,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "c624acf44710020729ec021e",
-      "63ecac7dbc8c07483033037e"
+      "18bbda02fce7f60c1d83ec2e",
+      "d435c00c719b4210e51495c5"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2577,
-    "assets_remaining": 4911,
+    "assets_analyzed": 2579,
+    "assets_remaining": 4909,
     "assets_completion_percent": 34.4,
     "assets_failed": 24,
-    "assets_skipped_from_checkpoint": 2575,
+    "assets_skipped_from_checkpoint": 2577,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753608319",
-      "checkpointed_at": "2026-10-28T20:39:51Z"
+      "checkpointed_at": "2026-10-28T20:42:57Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753608319",
-      "checkpointed_at": "2026-10-28T20:40:19Z"
+      "checkpointed_at": "2026-10-28T20:43:25Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753608319",
-      "checkpointed_at": "2026-10-28T20:40:57Z"
+      "checkpointed_at": "2026-10-28T20:44:03Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -97144,6 +97144,63 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753608319",
       "checkpointed_at": "2026-10-28T20:42:11Z"
+    },
+    {
+      "asset_id": "18bbda02fce7f60c1d83ec2e",
+      "asset_sha256": "bf3008f0c4447243fe494633903363c74fe4266abf66646ee6e2059fdc81d204",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/bf3008f0c4447243fe494633903363c74fe4266abf66646ee6e2059fdc81d204.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character wearing a vest and a plaid shirt, with one hand raised and the other hand near the chin, appearing to be in thought or contemplation.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of reflecting on changes around, as mentioned in Activity 5.1 of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the changes being observed or the context of the reflection."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753608319",
+      "checkpointed_at": "2026-10-28T20:44:40Z"
+    },
+    {
+      "asset_id": "d435c00c719b4210e51495c5",
+      "asset_sha256": "4e14eb118fd737d5f809afb6f46cf35607ff4381cbc339f079273bcacca41cdc",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/4e14eb118fd737d5f809afb6f46cf35607ff4381cbc339f079273bcacca41cdc.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green, outlined rectangle with a curved bottom corner.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of a textbook, specifically Table 5.1 from Activity 5.1.",
+        "limitations": [
+          "The image does not contain any text or data points.",
+          "The image is a simple illustration without any additional elements or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753608319",
+      "checkpointed_at": "2026-10-28T20:45:17Z"
     }
   ]
 }
