@@ -1474,7 +1474,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git commit -m "status(content): record per-book Layer 4-5 budget checkpoint"
-            git push origin "HEAD:${GITHUB_REF_NAME}"
+            python scripts/git_checkpoint.py --repo-root "$GITHUB_WORKSPACE" --target "$GITHUB_REF_NAME"
           fi
 
       - name: Record failed per-source-book Layer 4–5 task without auto-retry
@@ -1493,7 +1493,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git commit -m "status(content): record per-book Layer 4-5 failure handoff"
-            git push origin "HEAD:${GITHUB_REF_NAME}" || true
+            python scripts/git_checkpoint.py --repo-root "$GITHUB_WORKSPACE" --target "$GITHUB_REF_NAME" || true
           fi
 
 
@@ -1887,7 +1887,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git commit -m "status(content): record Layers 6–8 handoff"
-            git push origin "HEAD:${GITHUB_REF_NAME}"
+            python scripts/git_checkpoint.py --repo-root "$GITHUB_WORKSPACE" --target "$GITHUB_REF_NAME"
           fi
 
       - name: Record failed Layers 6–8 task without automatic retry
@@ -1913,7 +1913,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git commit -m "status(content): record Layers 6–8 failure"
-            git push origin "HEAD:${GITHUB_REF_NAME}" || true
+            python scripts/git_checkpoint.py --repo-root "$GITHUB_WORKSPACE" --target "$GITHUB_REF_NAME" || true
           fi
 
       - name: Run summary

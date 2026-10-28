@@ -172,11 +172,15 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("ref: " + "$" + "{{ github.ref }}",master)
         self.assertNotIn("wake-resume-coordinator",master)
 
-    def test_checkpoint_code_never_retargets_main(self):
+    def test_checkpoint_code_never_retargets_main_and_matrix_writes_use_safe_push(self):
         for name in ("quantaedge_textbook_pipeline.py","quantaedge_layers_6_8.py"):
             value=(ROOT/"scripts"/name).read_text(encoding="utf-8")
             self.assertNotIn('"pull","--rebase","origin","main"',value)
             self.assertNotIn('"HEAD:main"',value)
+        master = read("textbook-content-pipeline.yml")
+        pair_workers = master.split("  prepare_books:\\n", 1)[1].split("\\n  finalize-catalog:\\n", 1)[0]
+        self.assertNotIn('git push origin "HEAD:${GITHUB_REF_NAME}"', pair_workers)
+        self.assertIn('python scripts/git_checkpoint.py --repo-root "$GITHUB_WORKSPACE"', pair_workers)
 
 if __name__=="__main__":
     unittest.main()
