@@ -3,11 +3,35 @@ package com.quantaedge.android.ui
 import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 import java.util.Locale
+import java.security.MessageDigest
 
 internal val LocalQuantaLanguage = staticCompositionLocalOf { "hi" }
+
+/** Resource names are generated from canonical catalog text; ambiguous phrases are omitted. */
+private fun sharedCatalogResourceName(source: String): String {
+    val digest = MessageDigest.getInstance("SHA-256").digest(source.toByteArray(Charsets.UTF_8))
+    return "qe_ui_" + digest.take(8).joinToString("") {
+        (it.toInt() and 0xff).toString(16).padStart(2, '0')
+    }
+}
+
+/** Resolves account locale IDs to the two UI locales currently supported by Android. */
+internal fun resolveInterfaceLanguage(preferredLocale: String): String? =
+    when (preferredLocale.trim().lowercase(Locale.ROOT)) {
+        "english", "en" -> "en"
+        "hinglish", "hindi", "hi" -> "hi"
+        else -> null
+    }
+
+/** Explicit device choice wins; account preference seeds the UI locale only on first use. */
+internal fun initialInterfaceLanguage(localPreference: String?, accountPreference: String?): String =
+    resolveInterfaceLanguage(localPreference.orEmpty())
+        ?: resolveInterfaceLanguage(accountPreference.orEmpty())
+        ?: "hi"
 
 private data class UiPhrase(val key: String, val english: String, val hindi: String)
 private val uiPhrases = listOf(
@@ -506,6 +530,9 @@ internal fun localizedUiText(source: String): String {
     val language = LocalQuantaLanguage.current
     val institutionName = LocalInstitutionBrandIdentity.current?.displayName?.takeIf { it.isNotBlank() }
         ?: if (LocalInstitutionBrandResolutionPending.current) "Your school" else null
+    val sharedResourceId = remember(source) {
+        context.resources.getIdentifier(sharedCatalogResourceName(source), "string", context.packageName)
+    }
     fun brandText(value: String): String {
         val name = institutionName ?: return value
         return value
@@ -518,6 +545,15 @@ internal fun localizedUiText(source: String): String {
             .replace("QuantaEdge", name)
             .replace("QUANTAEDGE", name.uppercase())
             .replace("क्वांटाएज", name)
+    }
+    if (sharedResourceId != 0) {
+        // The generated catalog is authoritative for phrases with one unambiguous translation.
+        // Keep the legacy phrase map as a compatibility fallback for entries not exported.
+        val sharedConfiguration = Configuration(context.resources.configuration).apply {
+            setLocale(Locale.forLanguageTag(if (language == "hi") "hi" else "en"))
+        }
+        val sharedContext: Context = context.createConfigurationContext(sharedConfiguration)
+        return brandText(sharedContext.getString(sharedResourceId))
     }
     val phrase = uiPhraseBySource[source] ?: uiPhrases
         .filter { it.hindi.endsWith(" ") || it.english.endsWith(" ") }

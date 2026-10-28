@@ -2,12 +2,14 @@
 """Validate and synchronize central QuantaEdge UI language catalogs.
 
 Add a catalog file in localization/catalogs and metadata in localization/locales.json.
-Running this script regenerates the static TypeScript locale registry and all app copies;
-page components do not need locale-specific edits.
+Running this script regenerates the static TypeScript locale registry, browser-app copies,
+and an Android compatibility resource catalog derived from the same canonical messages.
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
+import html
 import json
 import re
 import sys
@@ -115,6 +117,65 @@ def render_registry(locales: dict[str, dict[str, Any]]) -> str:
         + "};\n"
     )
 
+def _xml_resource_text(value: str) -> str:
+    # Android string resources treat apostrophes and backslashes specially in addition to XML.
+    escaped = value.replace("\\", "\\\\").replace("'", "\\'").replace('"', '\\"')
+    escaped = escaped.replace("\r", "").replace("\n", "\\n").replace("\t", "\\t")
+    return html.escape(escaped, quote=False)
+
+
+def render_android_catalog_resources(catalogs: dict[str, dict[str, str]]) -> dict[str, bytes]:
+    """
+    Generate Android string resources from unambiguous English -> Hinglish pairs.
+
+    Exact English phrases that have multiple Hinglish translations are intentionally omitted:
+    those need a semantic key/context-specific migration instead of guessing at runtime.
+    Existing Android-specific phrase mappings remain as a compatibility fallback.
+    """
+    english = catalogs["english"]
+    hinglish = catalogs["hinglish"]
+    translations_by_source: dict[str, set[str]] = {}
+    for key, source in english.items():
+        translations_by_source.setdefault(source, set()).add(hinglish[key])
+
+    entries: list[tuple[str, str, str]] = []
+    seen_names: dict[str, str] = {}
+    for source in sorted(translations_by_source):
+        translated = translations_by_source[source]
+        if len(translated) != 1:
+            continue
+        target = next(iter(translated))
+        if not source.strip() or not target.strip() or source == target:
+            continue
+        # Whitespace fragments must not become standalone resources; Android trims their edges.
+        if source != source.strip() or target != target.strip():
+            continue
+        # Newlines in UI copy need explicit context review and must not be silently normalized.
+        if any(marker in value for value in (source, target) for marker in ("\n", "\r", "\\n", "\\r")):
+            continue
+        resource_name = "qe_ui_" + hashlib.sha256(source.encode("utf-8")).hexdigest()[:16]
+        previous = seen_names.get(resource_name)
+        if previous is not None and previous != source:
+            raise ValueError(f"Android UI resource hash collision: {previous!r} and {source!r}")
+        seen_names[resource_name] = source
+        entries.append((resource_name, source, target))
+
+    def render(values: bool) -> bytes:
+        lines = ['<?xml version="1.0" encoding="utf-8"?>', "<resources>"]
+        for resource_name, source, target in entries:
+            value = source if values else target
+            lines.append(
+                f'    <string name="{resource_name}" formatted="false">{_xml_resource_text(value)}</string>'
+            )
+        lines.append("</resources>")
+        return ("\n".join(lines) + "\n").encode("utf-8")
+
+    return {
+        "apps/android/app/src/main/res/values/qe_ui_catalog.xml": render(True),
+        "apps/android/app/src/main/res/values-hi/qe_ui_catalog.xml": render(False),
+    }
+
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -145,10 +206,21 @@ def main() -> int:
                 else:
                     target.parent.mkdir(parents=True, exist_ok=True)
                     target.write_bytes(source.read_bytes())
+
+        android_resources = render_android_catalog_resources(catalogs)
+        for relative_path, expected_bytes in android_resources.items():
+            target = ROOT / relative_path
+            if args.check:
+                if not target.is_file() or target.read_bytes() != expected_bytes:
+                    differences.append(relative_path + " (generated Android catalog is stale)")
+            else:
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(expected_bytes)
+
         if differences:
             print("Out-of-sync generated localization files:\n- " + "\n- ".join(differences), file=sys.stderr)
             return 1
-        status = "all app copies match" if args.check else "registry and all app copies generated"
+        status = "all browser and Android copies match" if args.check else "registry, browser copies and Android resources generated"
         print(f"Central localization valid: {len(catalogs['english'])} keys × {len(catalogs)} locale(s); {status}")
         return 0
     except (OSError, ValueError, json.JSONDecodeError) as exc:

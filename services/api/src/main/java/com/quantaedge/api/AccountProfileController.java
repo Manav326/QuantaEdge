@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,6 +24,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/account/me")
 public class AccountProfileController {
   private static final Pattern USERNAME = Pattern.compile("^[a-z0-9][a-z0-9._-]{2,31}$");
+  private static final Set<String> SUPPORTED_PREFERRED_LOCALES = Set.of("english", "hinglish");
+
+  static String normalizePreferredLocale(Object value) {
+    String locale = String.valueOf(value == null ? "" : value).trim().toLowerCase(Locale.ROOT);
+    if (!SUPPORTED_PREFERRED_LOCALES.contains(locale)) {
+      throw new IllegalArgumentException("Select a supported interface language.");
+    }
+    return locale;
+  }
   private static final BCryptPasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder(12);
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
@@ -112,12 +122,9 @@ public class AccountProfileController {
     context = authorization.requireAuth(context);
     long userId = requireAccountId(context);
     String name = String.valueOf(body.getOrDefault("displayName", "")).trim();
-    String locale = String.valueOf(body.getOrDefault("preferredLocale", "hinglish")).trim();
+    String locale = normalizePreferredLocale(body.getOrDefault("preferredLocale", "hinglish"));
     if (name.length() < 2 || name.length() > 120) {
       throw new IllegalArgumentException("Full name must be between 2 and 120 characters.");
-    }
-    if (!locale.matches("^[A-Za-z][A-Za-z0-9_-]{1,31}$")) {
-      throw new IllegalArgumentException("Select a supported interface language.");
     }
     int updated = jdbc.update("""
       update user_account set display_name=?,preferred_locale=?,updated_at=now()
@@ -237,7 +244,8 @@ public class AccountProfileController {
     result.put("username", row.get("username"));
     result.put("usernameCanChange", false);
     result.put("usernameCanChangeAt", null);
-    result.put("preferredLocale", row.get("language"));
+    // A child's learning language is content preference, not interface-language preference.
+    result.put("preferredLocale", null);
     result.put("linkedStudentId", row.get("id"));
     result.put("classCode", row.get("class_code"));
     result.put("board", row.get("board"));
