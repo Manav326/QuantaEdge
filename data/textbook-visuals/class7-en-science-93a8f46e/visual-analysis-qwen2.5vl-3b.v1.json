@@ -14,12 +14,12 @@
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "d456527f98b45c7ff5c257c7",
-      "fa82e8570d7b6993a6b58eeb"
+      "5898aeed233b3bd59f2ea7ac",
+      "a48f1858491387bdfa90f27a"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2568,
-    "assets_remaining": 4920,
+    "assets_analyzed": 2569,
+    "assets_remaining": 4919,
     "assets_completion_percent": 34.3,
     "assets_failed": 25,
     "assets_skipped_from_checkpoint": 2568,
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40696960485",
-      "checkpointed_at": "2026-10-28T15:04:55Z"
+      "checkpointed_at": "2026-10-28T15:12:01Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40696960485",
-      "checkpointed_at": "2026-10-28T15:05:34Z"
+      "checkpointed_at": "2026-10-28T15:12:40Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40696960485",
-      "checkpointed_at": "2026-10-28T15:06:24Z"
+      "checkpointed_at": "2026-10-28T15:13:30Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -96769,7 +96769,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40673609365",
+      "run_id": "40696960485",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -96872,6 +96872,32 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40673609365",
       "checkpointed_at": "2026-10-28T13:26:42Z"
+    },
+    {
+      "asset_id": "a48f1858491387bdfa90f27a",
+      "asset_sha256": "1b1c4c7272973715b2fcd41946a72f0d491efc9a41c14f86606f3fb5dc4e342f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/1b1c4c7272973715b2fcd41946a72f0d491efc9a41c14f86606f3fb5dc4e342f.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40696960485",
+      "checkpointed_at": "2026-10-28T15:19:33Z"
     }
   ]
 }
