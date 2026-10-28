@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1446,
+    "assets_selected": 1449,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "f31c30bf313f617f07cd4c14",
-      "849f0e34457e9fdd9acabef1",
-      "28f6055fe0ab32269696658f"
+      "0da916bf322afe94e4ef2c7a",
+      "a145e9f6dc57f0814dae8467",
+      "2249feba9d9de2d28593e04b"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1444,
-    "assets_remaining": 634,
-    "assets_completion_percent": 69.5,
-    "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 1441,
+    "assets_analyzed": 1446,
+    "assets_remaining": 632,
+    "assets_completion_percent": 69.6,
+    "assets_failed": 20,
+    "assets_skipped_from_checkpoint": 1444,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
-      "checkpointed_at": "2026-10-28T07:15:34Z"
+      "checkpointed_at": "2026-10-28T07:22:57Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
-      "checkpointed_at": "2026-10-28T07:16:26Z"
+      "checkpointed_at": "2026-10-28T07:23:50Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -48824,6 +48824,105 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
       "checkpointed_at": "2026-10-28T07:21:44Z"
+    },
+    {
+      "asset_id": "0da916bf322afe94e4ef2c7a",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 157,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c99b2f41f1e5c2bcdb81c8a37c8a11b6f414a238591afa13dc66117934dff2a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table showing Vaishnavi's body temperature recorded over three days.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 7.4: Body temperature record of Vaishnavi",
+          "DAY 7am 10am 1pm 4pm 7pm 10pm",
+          "One 38.0 °C 37.8 °C 38.0 °C 38.0 °C 40.0 °C 39.0 °C",
+          "Two 38.6 °C 38.8 °C 39.0 °C 39.0 °C 39.0 °C 38.0 °C",
+          "Three 37.6 °C 37.4 °C 37.2 °C 37.0 °C 36.8 °C 36.6 °C"
+        ],
+        "concepts": [
+          "Body temperature",
+          "Temperature recording",
+          "Days",
+          "Times",
+          "Highest recorded temperature"
+        ],
+        "context_relation": "The table provides data for the question about Vaishnavi's highest recorded temperature.",
+        "limitations": [
+          "The table does not provide information about the temperature at other times of the day.",
+          "The question is incomplete, as it does not provide the answer to the second part of the question."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T07:24:53Z"
+    },
+    {
+      "asset_id": "a145e9f6dc57f0814dae8467",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 157,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c99b2f41f1e5c2bcdb81c8a37c8a11b6f414a238591afa13dc66117934dff2a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table showing Vaishnavi's body temperature recorded over three days.",
+        "visual_type": "table",
+        "visible_text": [
+          "Table 7.4: Body temperature record of Vaishnavi",
+          "Temperature at",
+          "DAY 7am 10am 1pm 4pm 7pm 10pm",
+          "One 38.0 °C 37.8 °C 38.0 °C 38.0 °C 40.0 °C 39.0 °C",
+          "Two 38.6 °C 38.8 °C 39.0 °C 39.0 °C 39.0 °C 38.0 °C",
+          "Three 37.6 °C 37.4 °C 37.2 °C 37.0 °C 36.8 °C 36.6 °C"
+        ],
+        "concepts": [
+          "Body temperature",
+          "Temperature recording",
+          "Days",
+          "Temperatures at different times"
+        ],
+        "context_relation": "The table provides data for the question about Vaishnavi's highest recorded temperature and the day and time it occurred.",
+        "limitations": [
+          "The table does not provide information about the temperature at other times of the day.",
+          "The table does not include any data for the temperature at 12pm or 3pm."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T07:25:54Z"
+    },
+    {
+      "asset_id": "2249feba9d9de2d28593e04b",
+      "asset_sha256": "d22c5efdca2cdb242ea3dd4becd3d691d2e112496163684f61decd4f4762ccb6",
+      "page_text_context_sha256": "c99b2f41f1e5c2bcdb81c8a37c8a11b6f414a238591afa13dc66117934dff2a0",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 157,
+      "asset_path": "page-0157.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
     }
   ]
 }
