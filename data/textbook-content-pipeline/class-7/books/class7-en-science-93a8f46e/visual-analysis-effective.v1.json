@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "140d178783418ea7d91ea8793b4f66a67313d0f6daf0ab766ee7470466d1528e",
+  "raw_analysis_sha256": "1215ef96c633f1071ea2d3b780bc01ce281523f9f8b47059f5d264cc680b7f97",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -147127,6 +147127,312 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "bc8366811b3ef7bd5c6b6dce",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 76,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9b2d7697ff3d8d5c9aaa2908709c2e9b1929d605b85dd59b0b1c09be80cb8762",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "checkpointed_at": "2026-10-28T04:06:21Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3f4447f091e94c10b31627d3",
+      "asset_sha256": "69d83f7799307fc3ce387ba0a35fcb6bff5917ded3ae54df06ec6ba6f17117cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 76,
+      "asset_path": "page-0076.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "9b2d7697ff3d8d5c9aaa2908709c2e9b1929d605b85dd59b0b1c09be80cb8762",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Flow chart with steps labeled from INNOVATION to CURIOSITY.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "7. Complete the following flow chart:",
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "EXPLORATION",
+          "CURIOSITY",
+          "8. You are provided with the following materials. Discuss which material would be your choice to make a pan that is most suitable for boiling water and why?",
+          "9. You are provided with three iron nails, each dipped in oil, water and vinegar. Which iron nail will not rust, and why?",
+          "10. How do the different properties of metals and non-metals determine their uses in everyday life?",
+          "11. One of the methods of protecting iron from getting rusted is to put a thin coating of zinc metal over it. Since sulfur does not react with water, can it be used for this purpose? Justify your answer.",
+          "12. An ironsmith heats iron before making tools. Why is heating necessary in this process.",
+          "Exploratory Projects",
+          "Dhokra, Bidriware, Pembarthi, and Kamrupi are some of India's famous metal art styles. Find out the states where these artworks are made. Also, make a collage of their photographs.",
+          "On a map of India, mark the states where iron, gold, aluminium and other metals are found.",
+          "Explore the metals and non-metals found in smartphones and find out how they help the phone work properly.",
+          "Organise a classroom debate on whether the use of metals for comfort and luxury should be increased or decreased."
+        ],
+        "concepts": [
+          "metal",
+          "rust",
+          "properties of metals",
+          "uses of metals",
+          "protecting iron from rust",
+          "exploratory projects"
+        ],
+        "context_relation": "educational content",
+        "limitations": [
+          "No specific limitations provided in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "checkpointed_at": "2026-10-28T04:10:43Z",
+      "effective_analysis": {
+        "visual_summary": "Flow chart with steps labeled from INNOVATION to CURIOSITY.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "7. Complete the following flow chart:",
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "EXPLORATION",
+          "CURIOSITY",
+          "8. You are provided with the following materials. Discuss which material would be your choice to make a pan that is most suitable for boiling water and why?",
+          "9. You are provided with three iron nails, each dipped in oil, water and vinegar. Which iron nail will not rust, and why?",
+          "10. How do the different properties of metals and non-metals determine their uses in everyday life?",
+          "11. One of the methods of protecting iron from getting rusted is to put a thin coating of zinc metal over it. Since sulfur does not react with water, can it be used for this purpose? Justify your answer.",
+          "12. An ironsmith heats iron before making tools. Why is heating necessary in this process.",
+          "Exploratory Projects",
+          "Dhokra, Bidriware, Pembarthi, and Kamrupi are some of India's famous metal art styles. Find out the states where these artworks are made. Also, make a collage of their photographs.",
+          "On a map of India, mark the states where iron, gold, aluminium and other metals are found.",
+          "Explore the metals and non-metals found in smartphones and find out how they help the phone work properly.",
+          "Organise a classroom debate on whether the use of metals for comfort and luxury should be increased or decreased."
+        ],
+        "concepts": [
+          "metal",
+          "rust",
+          "properties of metals",
+          "uses of metals",
+          "protecting iron from rust",
+          "exploratory projects"
+        ],
+        "context_relation": "educational content",
+        "limitations": [
+          "No specific limitations provided in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e7484e14bca39e363b698364",
+      "asset_sha256": "62ce3eba48fa18dc0e1de180eab270e61eea9d48024c4bd3426cf2e328181cf8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/62ce3eba48fa18dc0e1de180eab270e61eea9d48024c4bd3426cf2e328181cf8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has become water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore."
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Bud to Flower",
+          "Cold Water"
+        ],
+        "context_relation": "The changes described are physical and chemical changes.",
+        "limitations": [
+          "The image does not show the actual changes, only the text description."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "checkpointed_at": "2026-10-28T04:12:26Z",
+      "effective_analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has become water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore."
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Bud to Flower",
+          "Cold Water"
+        ],
+        "context_relation": "The changes described are physical and chemical changes.",
+        "limitations": [
+          "The image does not show the actual changes, only the text description."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e05116011a2986bd76522e6d",
+      "asset_sha256": "14662fee7bf6d23ca63d354279b9bc4d52a08b6d2dbdc9d5eb8cb4fd00a16cb8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/14662fee7bf6d23ca63d354279b9bc4d52a08b6d2dbdc9d5eb8cb4fd00a16cb8.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has melted into water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Melting",
+          "Bud to Flower",
+          "Temperature Change"
+        ],
+        "context_relation": "The text describes a sequence of changes in physical and chemical states.",
+        "limitations": [
+          "The text does not provide specific details about the physical properties of the ice or the flower."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "checkpointed_at": "2026-10-28T04:14:06Z",
+      "effective_analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has melted into water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Melting",
+          "Bud to Flower",
+          "Temperature Change"
+        ],
+        "context_relation": "The text describes a sequence of changes in physical and chemical states.",
+        "limitations": [
+          "The text does not provide specific details about the physical properties of the ice or the flower."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9e31b903ac07c87d5f767b72",
+      "asset_sha256": "b9f6c8d1020d1978c051c3d9d8de15c20392a5b77d3135882bbc18fb42f58d7f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/b9f6c8d1020d1978c051c3d9d8de15c20392a5b77d3135882bbc18fb42f58d7f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has become water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore."
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Bud to Flower",
+          "Cold Water"
+        ],
+        "context_relation": "The image shows a sequence of changes in physical and chemical states.",
+        "limitations": [
+          "The image does not provide specific details about the chemical changes involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "checkpointed_at": "2026-10-28T04:15:47Z",
+      "effective_analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has become water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore."
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Bud to Flower",
+          "Cold Water"
+        ],
+        "context_relation": "The image shows a sequence of changes in physical and chemical states.",
+        "limitations": [
+          "The image does not provide specific details about the chemical changes involved."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],
