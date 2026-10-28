@@ -66,7 +66,27 @@ assert(workspace.includes('className="qe-people-mobile-brand-lockup"'), 'HRMS mo
 assert(!workspace.includes('<span>QUANTAEDGE</span>'), 'HRMS mobile workspace must not hard-code a duplicate brand name.');
 assert(!workspace.includes('quantaedge-wordmark.png'), 'HRMS workspace must not reference the invalid legacy wordmark PNG.');
 assert(workspace.includes("href: '/access', icon: '⌁', permissions: ['HR_ACCESS_MANAGE']"), 'HRMS access management must be permission-gated in navigation.');
-assert(workspace.includes("message: 'people.navigation.group.access'"), 'Access management must have a distinct centralized Access Governance navigation group.');
+const hrmsNavigationStart = workspace.indexOf("const NAVIGATION: NavigationGroup[] = [");
+const hrmsOrganizationGroupStart = workspace.indexOf("{ message: 'people.navigation.group.organization', items: [", hrmsNavigationStart);
+const hrmsSelfServiceGroupStart = workspace.indexOf("{ message: 'people.navigation.group.selfService', items: [", hrmsOrganizationGroupStart);
+const hrmsNavigationEnd = workspace.indexOf("\n];", hrmsNavigationStart);
+const hrmsNavigationBlock = hrmsNavigationEnd >= 0 ? workspace.slice(hrmsNavigationStart, hrmsNavigationEnd) : "";
+assert(
+  hrmsNavigationStart >= 0 &&
+    hrmsOrganizationGroupStart >= 0 &&
+    hrmsSelfServiceGroupStart > hrmsOrganizationGroupStart &&
+    hrmsNavigationBlock
+      .slice(
+        hrmsOrganizationGroupStart - hrmsNavigationStart,
+        hrmsSelfServiceGroupStart - hrmsNavigationStart,
+      )
+      .includes("href: '/access', icon: '⌁', permissions: ['HR_ACCESS_MANAGE']"),
+  'Access management must remain permission-gated under People and Organisation.',
+);
+assert(
+  [...hrmsNavigationBlock.matchAll(/\{ message: 'people\\.navigation\\.group\\.[A-Za-z]+'/g)].length === 4,
+  'HRMS primary navigation must contain exactly four business categories.',
+);
 assert(workspace.includes("permissions: ['HR_ACADEMIC_ASSIGNMENT_VIEW', 'HR_ACADEMIC_ASSIGNMENT_MANAGE', 'HR_ACADEMIC_ASSIGNMENT_APPROVE']"), 'Teaching-assignment navigation must match the page authorization contract.');
 
 assert(workspace.includes("'TEACHING_ASSIGNMENT_VIEW'"), 'Teaching classes/assignment navigation must honor TEACHING_ASSIGNMENT_VIEW.');
