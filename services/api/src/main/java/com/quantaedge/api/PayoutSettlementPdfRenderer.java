@@ -143,14 +143,15 @@ public class PayoutSettlementPdfRenderer {
     if(recipientOnly) {
       c.muted("Source sales may predate this payout cycle. Allocation values below identify ledger portions applied to this payout, not the month's gross course sales.");
       c.muted("Use the invoice for the underlying taxable supply and the supplier's statutory tax records for tax treatment; this payout advice covers amounts applied to the transfer.");
-      c.tableHeader(new String[]{"Course / order / invoice","Legal seller","Source institution","Marketplace institution","Allocation applied"});
+      c.tableHeader(new String[]{"Course / order / invoice","Legal seller","Source institution","Marketplace institution","Payment reference","Allocation applied"});
       if(safeAllocations.isEmpty())c.empty("No allocation references were returned for this payout. Do not infer a zero balance; check the batch record.");
       for(Map<String,Object> row:safeAllocations) {
         c.tableRow(new String[]{
-          text(row.get("course_title"))+"\nOrder #"+text(row.get("order_id"))+" · Allocation #"+text(row.get("allocation_id"))+"\nInvoice: "+safeText(row.get("invoice_number"))+" · Payment: "+safeText(row.get("provider_payment_id")),
+          text(row.get("course_title"))+"\nOrder #"+text(row.get("order_id"))+" · Allocation #"+text(row.get("allocation_id"))+"\n"+safeText(row.get("invoice_number")),
           twoLine(safeText(row.get("legal_seller_name")),26),
           twoLine(safeText(row.get("source_institution_name")),26),
           twoLine(safeText(row.get("marketplace_institution_name")),26),
+          safeText(row.get("provider_payment_id")),
           money(row.get("payout_item_amount_paise"),currency(row))
         },82);
       }
@@ -174,7 +175,7 @@ public class PayoutSettlementPdfRenderer {
       for(Map<String,Object> row:safeAllocations) {
         c.tableRow(new String[]{
           twoLine(firstNonBlank(row,"recipient_name","beneficiary_name"),25),
-          text(row.get("course_title"))+"\nOrder #"+text(row.get("order_id"))+" · Allocation #"+text(row.get("allocation_id"))+"\nInvoice: "+safeText(row.get("invoice_number")),
+          text(row.get("course_title"))+"\nOrder #"+text(row.get("order_id"))+" · Allocation #"+text(row.get("allocation_id"))+"\n"+safeText(row.get("invoice_number")),
           twoLine(safeText(row.get("legal_seller_name")),31),
           twoLine(safeText(row.get("source_institution_name"))+" -> "+safeText(row.get("marketplace_institution_name")),31),
           safeText(row.get("provider_payment_id")),
@@ -380,7 +381,7 @@ public class PayoutSettlementPdfRenderer {
       return switch(count) {
         case 4 -> new int[]{360,245,245,CONTENT_WIDTH-850};
         case 5 -> new int[]{200,250,255,225,CONTENT_WIDTH-930};
-        case 6 -> new int[]{255,145,190,180,160,CONTENT_WIDTH-930};
+        case 6 -> new int[]{245,175,175,175,160,CONTENT_WIDTH-930};
         default -> {
           int[] widths=new int[count];int each=CONTENT_WIDTH/count;java.util.Arrays.fill(widths,each);
           widths[count-1]=CONTENT_WIDTH-each*(count-1);yield widths;
