@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2512,
+    "assets_selected": 2514,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "1a235b35df790cede17f95a1",
-      "9a29472e0919c0e048d26234"
+      "3ffdc97f3823a1a23acc14b1",
+      "c1edc2515847defea4d2b9fc"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2509,
-    "assets_remaining": 4979,
+    "assets_analyzed": 2511,
+    "assets_remaining": 4977,
     "assets_completion_percent": 33.5,
     "assets_failed": 22,
-    "assets_skipped_from_checkpoint": 2507,
+    "assets_skipped_from_checkpoint": 2509,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40619430133",
-      "checkpointed_at": "2026-10-28T06:29:18Z"
+      "checkpointed_at": "2026-10-28T06:34:12Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40619430133",
-      "checkpointed_at": "2026-10-28T06:29:57Z"
+      "checkpointed_at": "2026-10-28T06:34:51Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40619430133",
-      "checkpointed_at": "2026-10-28T06:30:48Z"
+      "checkpointed_at": "2026-10-28T06:35:42Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -94707,6 +94707,79 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40619430133",
       "checkpointed_at": "2026-10-28T06:33:11Z"
+    },
+    {
+      "asset_id": "3ffdc97f3823a1a23acc14b1",
+      "asset_sha256": "583e8c3dea372aafa569d85be313b3e335221129fbd6957e733af16538a6eef6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/583e8c3dea372aafa569d85be313b3e335221129fbd6957e733af16538a6eef6.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has melted into water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!"
+        ],
+        "concepts": [
+          "Physical change",
+          "Chemical change"
+        ],
+        "context_relation": "The image shows a physical change where ice (a solid) has transformed into water (a liquid).",
+        "limitations": [
+          "The image does not show a chemical change, as the transformation is purely physical."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40619430133",
+      "checkpointed_at": "2026-10-28T06:36:49Z"
+    },
+    {
+      "asset_id": "c1edc2515847defea4d2b9fc",
+      "asset_sha256": "be770dc3fd371167e596dfa0b06c9ea7eac91ec8b2b57ad25e43ebf66fe7f67f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/be770dc3fd371167e596dfa0b06c9ea7eac91ec8b2b57ad25e43ebf66fe7f67f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cube of ice placed half an hour ago has become water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Ice to Water",
+          "Bud to Flower",
+          "Cold Water"
+        ],
+        "context_relation": "The text describes changes in physical and chemical states over time.",
+        "limitations": [
+          "The text does not provide specific details about the chemical changes involved."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40619430133",
+      "checkpointed_at": "2026-10-28T06:38:05Z"
     }
   ]
 }
