@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0a95921418c674c693a822baae6690fe539a7c3f63335c3918c657ae43ecce37",
+  "raw_analysis_sha256": "ba65971c72c1b6ede212aec9bd8af90e6794af0577d6c38cf4550a76750a4e00",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -34931,7 +34931,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40621809658",
-      "checkpointed_at": "2026-10-28T04:22:36Z",
+      "checkpointed_at": "2026-10-28T04:28:45Z",
       "effective_analysis": {
         "visual_summary": "A table showing different criteria for grouping plants and animals.",
         "visual_type": "table",
@@ -57287,7 +57287,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40621809658",
-      "checkpointed_at": "2026-10-28T04:23:35Z",
+      "checkpointed_at": "2026-10-28T04:29:44Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66938,7 +66938,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40621809658",
-      "checkpointed_at": "2026-10-28T04:24:23Z",
+      "checkpointed_at": "2026-10-28T04:30:31Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -72927,6 +72927,112 @@
         "concepts": [],
         "context_relation": "uncertain",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d1beaa979bc7228d1b23e374",
+      "asset_sha256": "47b7b43c7d28e0d589473f07fe9bd1542c0d32cf634fb4d5a3d7372df44c731c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 153,
+      "asset_path": "assets/47b7b43c7d28e0d589473f07fe9bd1542c0d32cf634fb4d5a3d7372df44c731c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4a8d34068b4c249b5c16298eb33bb7cbd1b2ec897c685e7f7b762a55e86f870d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A wooden plank with a smooth surface and natural wood grain patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a wooden plank.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40621809658",
+      "checkpointed_at": "2026-10-28T04:32:05Z",
+      "effective_analysis": {
+        "visual_summary": "A wooden plank with a smooth surface and natural wood grain patterns.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a wooden plank.",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6833f7a47c745344b5425cba",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 153,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "4a8d34068b4c249b5c16298eb33bb7cbd1b2ec897c685e7f7b762a55e86f870d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An educational page about air temperature and its measurement.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Does the maximum and minimum temperature stay at the same level during these days?",
+          "Because weather depends on several factors, these temperatures usually vary every day.",
+          "Generally, as we approach the summer season, the temperature rises and during the winter season it falls.",
+          "There are many techniques for measuring air temperature.",
+          "Air temperature is an important weather parameter and is monitored at weather stations all over the world.",
+          "The data gathered on air temperature along"
+        ],
+        "concepts": [
+          "Air temperature",
+          "Measurement techniques",
+          "Weather factors",
+          "Summer season",
+          "Winter season",
+          "Weather stations"
+        ],
+        "context_relation": "The page discusses the measurement and variability of air temperature, emphasizing its importance and the factors that influence it.",
+        "limitations": [
+          "The page does not provide specific data or measurements.",
+          "The page does not show any visual aids or diagrams."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40621809658",
+      "checkpointed_at": "2026-10-28T04:32:42Z",
+      "effective_analysis": {
+        "visual_summary": "An educational page about air temperature and its measurement.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Does the maximum and minimum temperature stay at the same level during these days?",
+          "Because weather depends on several factors, these temperatures usually vary every day.",
+          "Generally, as we approach the summer season, the temperature rises and during the winter season it falls.",
+          "There are many techniques for measuring air temperature.",
+          "Air temperature is an important weather parameter and is monitored at weather stations all over the world.",
+          "The data gathered on air temperature along"
+        ],
+        "concepts": [
+          "Air temperature",
+          "Measurement techniques",
+          "Weather factors",
+          "Summer season",
+          "Winter season",
+          "Weather stations"
+        ],
+        "context_relation": "The page discusses the measurement and variability of air temperature, emphasizing its importance and the factors that influence it.",
+        "limitations": [
+          "The page does not provide specific data or measurements.",
+          "The page does not show any visual aids or diagrams."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
