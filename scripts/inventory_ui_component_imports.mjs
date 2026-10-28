@@ -77,9 +77,9 @@ export function localImportSpecifiers(source) {
         if (token === 'import') {
           match = tail.match(/^import\s*\(\s*(['"])([^'"]+)\1\s*\)/);
           if (!match) match = tail.match(/^import\s*(['"])([^'"]+)\1/);
-          if (!match) match = tail.match(/^import\b[\s\S]{0,8000}?\bfrom\s*(['"])([^'"]+)\1/);
+          if (!match) match = tail.match(/^import\b(?:(?!;)[\s\S]){0,2000}?\bfrom\s*(['"])([^'"]+)\1/);
         } else if (token === 'export') {
-          match = tail.match(/^export\b[\s\S]{0,8000}?\bfrom\s*(['"])([^'"]+)\1/);
+          match = tail.match(/^export\s+(?:type\s+)?(?:\*|\{[\s\S]{0,3000}?\})(?:\s+as\s+[A-Za-z_$][\\w$]*)?\s+from\s*(['"])([^'"]+)\1/);
         } else {
           match = tail.match(/^require\s*\(\s*(['"])([^'"]+)\1\s*\)/);
         }
