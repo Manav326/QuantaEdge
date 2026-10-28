@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1473,
+    "assets_selected": 1477,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "47bbaaf66932c5ee5e514c6c",
-      "7eba4dff6dcc4f0eab73f181",
-      "7b841f75605b9c11ca9bed06",
-      "a2efa2dc5c3ffaf1ec1f65de",
-      "92ad690251c1c44b4358c4a3"
+      "3761989e802ca8f0df045a43",
+      "b6bd03a2c995b149f373ec8e",
+      "94f02006760d68f63810f266",
+      "c68e6aac9a73114f2f81de2f"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1472,
-    "assets_remaining": 606,
-    "assets_completion_percent": 70.8,
-    "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 1468,
+    "assets_analyzed": 1475,
+    "assets_remaining": 603,
+    "assets_completion_percent": 71.0,
+    "assets_failed": 22,
+    "assets_skipped_from_checkpoint": 1472,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -44049,7 +44049,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753605122",
-      "checkpointed_at": "2026-10-28T21:27:25Z"
+      "checkpointed_at": "2026-10-28T21:36:21Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -49811,6 +49811,155 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753605122",
       "checkpointed_at": "2026-10-28T21:35:03Z"
+    },
+    {
+      "asset_id": "3761989e802ca8f0df045a43",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 162,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "0a44929b33133a6cfaf1730c704ea4b2ee82948bf69490ecbcb1da12c880e18d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An ice cube in a cup on a table, with the text describing an observation and conclusion about ice and water.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Activity 8.1: Let us observe",
+          "Put an ice cube in a cup, leave it on the table and",
+          "observe.",
+          "Ice gets converted into water.",
+          "What can you conclude from the observations?",
+          "Does this mean that ice and water are the same substance?",
+          "Yes, ice and water are the two forms of the same substance.",
+          "These forms are also called states. These different states",
+          "of water show many differences in their behaviour. Water",
+          "flows but ice does not. Water splash"
+        ],
+        "concepts": [
+          "Observation",
+          "Ice",
+          "Water",
+          "Forms of the same substance",
+          "States of water",
+          "Behaviour of water"
+        ],
+        "context_relation": "Observation and conclusion about the physical state of water",
+        "limitations": [
+          "No specific visual elements are described."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T21:37:11Z"
+    },
+    {
+      "asset_id": "b6bd03a2c995b149f373ec8e",
+      "asset_sha256": "46da1155c0017352143e3a70235a34a3d6ca6ce39a1f95233ea70afa446802d5",
+      "page_text_context_sha256": "0a44929b33133a6cfaf1730c704ea4b2ee82948bf69490ecbcb1da12c880e18d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 162,
+      "asset_path": "page-0162.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "94f02006760d68f63810f266",
+      "asset_sha256": "fe4208589ae75a3fa226841868b1ca765834a2f5a964024bfe5045bb31b6772a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 163,
+      "asset_path": "assets/fe4208589ae75a3fa226841868b1ca765834a2f5a964024bfe5045bb31b6772a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad006e2d9c448f00610b3a775928c8c6ed111328bdd9cfc856cbcd00c29c83d6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A metallic plate with a small puddle of water in the center.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Observe whether water seeps through to the other side of the plate or not.",
+          "Keep observing this at regular intervals until the water completely disappears.",
+          "What do you infer? Is this activity enough to come to the conclusion that water does not seep through a steel plate?",
+          "If water does not seep through the steel plate. Then, where has the water gone?",
+          "This water gets converted into gaseous state called water vapour. The water vapour is another state of water. Let us think"
+        ],
+        "concepts": [
+          "Observation",
+          "Water seepage",
+          "Steel plate",
+          "Water state",
+          "Water vapor"
+        ],
+        "context_relation": "Observation and inference",
+        "limitations": [
+          "The image does not show the water completely disappearing, so the inference about water seepage cannot be fully confirmed.",
+          "The image does not show the water vapor, so the inference about the water state cannot be fully confirmed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T21:44:17Z"
+    },
+    {
+      "asset_id": "c68e6aac9a73114f2f81de2f",
+      "asset_sha256": "c556cfecf9e2ec1e88cad3d4a4f5b357061287166a62c19ace1d6b50a066bc71",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 163,
+      "asset_path": "assets/c556cfecf9e2ec1e88cad3d4a4f5b357061287166a62c19ace1d6b50a066bc71.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "ad006e2d9c448f00610b3a775928c8c6ed111328bdd9cfc856cbcd00c29c83d6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A square piece of yellow fabric with a scalloped edge.",
+        "visual_type": "photo",
+        "visible_text": [
+          "Observe whether water seeps through to",
+          "the other side of the plate or not.",
+          "Keep observing this at regular intervals",
+          "until the water completely disappears.",
+          "What do you infer? Is this activity enough",
+          "to come to the conclusion that water does",
+          "not seep through a steel plate?",
+          "If water does not seep through the steel",
+          "plate. Then, where has the water gone?",
+          "This water gets converted into gaseous state called water vapour. The water vapour is",
+          "Let us think"
+        ],
+        "concepts": [
+          "Observation",
+          "Water seepage",
+          "Steel plate",
+          "Water vaporization"
+        ],
+        "context_relation": "Educational content",
+        "limitations": [
+          "The image does not provide visual evidence for the concepts discussed in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T21:46:23Z"
     }
   ]
 }
