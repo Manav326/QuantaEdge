@@ -50,6 +50,18 @@ jobs:
       - name: Generate machine-readable UI route inventory
         run: node scripts/inventory_ui_routes.mjs --output "$RUNNER_TEMP/ui-localization-route-inventory.json"
 
+      - name: Test generated UI route register parity
+        run: node --test scripts/check_ui_route_register_parity.test.mjs
+
+      - name: Enforce generated UI route register parity
+        run: node scripts/check_ui_route_register_parity.mjs --root .
+
+      - name: Test route to component source graph
+        run: node --test scripts/inventory_ui_component_imports.test.mjs
+
+      - name: Generate machine-readable route/component source graph
+        run: node scripts/inventory_ui_component_imports.mjs --output "$RUNNER_TEMP/ui-component-import-inventory.json"
+
       - name: Test QA register validator
         run: node --test scripts/validate_qa_registers.test.mjs
 
@@ -69,6 +81,14 @@ jobs:
         with:
           name: ui-localization-route-inventory
           path: ${{ runner.temp }}/ui-localization-route-inventory.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload UI route/component source graph
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-component-import-inventory
+          path: ${{ runner.temp }}/ui-component-import-inventory.json
           if-no-files-found: error
           retention-days: 14
 
