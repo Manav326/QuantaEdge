@@ -15,13 +15,13 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "d6a3b284f120b97594630433"
+      "aecc400e8b6468731e9c7bfd"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1345,
     "assets_remaining": 946,
     "assets_completion_percent": 58.7,
-    "assets_failed": 16,
+    "assets_failed": 17,
     "assets_skipped_from_checkpoint": 1345,
     "batch_limit": 5,
     "publication_allowed": false
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40620560465",
-      "checkpointed_at": "2026-10-28T03:31:29Z"
+      "checkpointed_at": "2026-10-28T03:35:45Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40620560465",
-      "checkpointed_at": "2026-10-28T03:31:57Z"
+      "checkpointed_at": "2026-10-28T03:36:13Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40620560465",
-      "checkpointed_at": "2026-10-28T03:32:30Z"
+      "checkpointed_at": "2026-10-28T03:36:46Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40620560465",
-      "checkpointed_at": "2026-10-28T03:33:19Z"
+      "checkpointed_at": "2026-10-28T03:37:35Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -44853,6 +44853,23 @@
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 114,
       "asset_path": "assets/509990b1d09f583c78c939b2b41282df2dad763f87f1bb476e8b5ae127b9d04a.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40620560465",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "aecc400e8b6468731e9c7bfd",
+      "asset_sha256": "7375ed860f1bf6a9672ecee476d8e4bf5ec4dc63e8c497609609fc9dc96b5eeb",
+      "page_text_context_sha256": "d968384b40647acbfac39b370818be7f3c29ed2785ab736c4de0f0e26bfc247d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 114,
+      "asset_path": "assets/7375ed860f1bf6a9672ecee476d8e4bf5ec4dc63e8c497609609fc9dc96b5eeb.jpeg",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
