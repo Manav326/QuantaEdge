@@ -1394,7 +1394,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git commit -m "data(ai): prepare Class $CLASS_NO bilingual visual candidate batch"
           else
-            echo "The candidate metadata and media manifest already match main; no Git commit required."
+            echo "The candidate metadata and media manifest already match the committed artifacts; no Git commit required."
             exit 0
           fi
           git push origin "HEAD:${GITHUB_REF_NAME}"

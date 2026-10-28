@@ -131,6 +131,15 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertNotIn("name: Checkout main", master)
         self.assertNotRegex(master, r"(?m)^\s*(push|schedule|workflow_run):")
         self.assertNotIn("uses: ./.github/workflows/", master)
+        self.assertNotIn("match main; no Git commit required", master)
+
+        dispatch = master.split("  workflow_dispatch:\\n", 1)[1].split("\\npermissions:\\n", 1)[0]
+        declared_inputs = re.findall(r"(?m)^      ([A-Za-z0-9_-]+):\\s*$", dispatch)
+        self.assertEqual(23, len(declared_inputs), "All 23 dispatch inputs must remain intentional and inventoried.")
+        for field in declared_inputs:
+            with self.subTest(input=field):
+                self.assertRegex(master, rf"inputs\\.{re.escape(field)}\\b",
+                                 f"Dispatch input {field} is declared but has no consumer.")
 
     def test_redundant_scheduler_and_standalone_visual_workflow_are_removed(self):
         self.assertFalse((WORKFLOWS/"resume-textbook-layers-4-5-automatically.yml").exists())
