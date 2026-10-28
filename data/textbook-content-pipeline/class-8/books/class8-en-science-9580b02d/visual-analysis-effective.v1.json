@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d121845653e97a3dfb5e64e496b547ccf21bafd30b14fe71148c4a1f78f27b88",
+  "raw_analysis_sha256": "20e6ffad605fd6983a7439816def6e74ab413a7aa33459c7ece085a45fa140cf",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40690755032",
-      "checkpointed_at": "2026-10-28T13:58:27Z",
+      "checkpointed_at": "2026-10-28T14:01:38Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40690755032",
-      "checkpointed_at": "2026-10-28T13:58:53Z",
+      "checkpointed_at": "2026-10-28T14:02:06Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40690755032",
-      "checkpointed_at": "2026-10-28T13:59:25Z",
+      "checkpointed_at": "2026-10-28T14:02:39Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -65709,7 +65709,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40690755032",
-      "checkpointed_at": "2026-10-28T14:00:11Z",
+      "checkpointed_at": "2026-10-28T14:03:27Z",
       "effective_analysis": {
         "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
@@ -68295,6 +68295,42 @@
         "limitations": [
           "The image does not show any text or labels related to the textbook content."
         ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ea0aefdabd1fb9ac8deacd5d",
+      "asset_sha256": "720f0773d8868d82d288656c846944a08056012f558ead2a545ae3f5410dd410",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 115,
+      "asset_path": "assets/720f0773d8868d82d288656c846944a08056012f558ead2a545ae3f5410dd410.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a5e9dffe4e593c12963f37b5c9000f9c5fc7bf6cab12de5cf63cabd13280e50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a notebook and pointing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40690755032",
+      "checkpointed_at": "2026-10-28T14:04:05Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a notebook and pointing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text.",
+        "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
