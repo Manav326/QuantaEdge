@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1359,
+    "assets_selected": 1360,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "f690b13622ccf90984b488d9"
+      "ffb4123a55fd49fb92128c23"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1355,
-    "assets_remaining": 936,
-    "assets_completion_percent": 59.1,
+    "assets_analyzed": 1356,
+    "assets_remaining": 935,
+    "assets_completion_percent": 59.2,
     "assets_failed": 16,
-    "assets_skipped_from_checkpoint": 1354,
+    "assets_skipped_from_checkpoint": 1355,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40718531505",
-      "checkpointed_at": "2026-10-28T16:50:47Z"
+      "checkpointed_at": "2026-10-28T16:53:50Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40718531505",
-      "checkpointed_at": "2026-10-28T16:51:13Z"
+      "checkpointed_at": "2026-10-28T16:54:15Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40718531505",
-      "checkpointed_at": "2026-10-28T16:51:44Z"
+      "checkpointed_at": "2026-10-28T16:54:45Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40718531505",
-      "checkpointed_at": "2026-10-28T16:52:27Z"
+      "checkpointed_at": "2026-10-28T16:55:29Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -45193,6 +45193,32 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40718531505",
       "checkpointed_at": "2026-10-28T16:53:05Z"
+    },
+    {
+      "asset_id": "ffb4123a55fd49fb92128c23",
+      "asset_sha256": "591183d1f5a73064169edb62a8be62c28a1b0375f0e1833f82c35e36e81981e2",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 115,
+      "asset_path": "assets/591183d1f5a73064169edb62a8be62c28a1b0375f0e1833f82c35e36e81981e2.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a5e9dffe4e593c12963f37b5c9000f9c5fc7bf6cab12de5cf63cabd13280e50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a girl holding a book and a pencil.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not related to the text.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40718531505",
+      "checkpointed_at": "2026-10-28T16:56:05Z"
     }
   ]
 }
