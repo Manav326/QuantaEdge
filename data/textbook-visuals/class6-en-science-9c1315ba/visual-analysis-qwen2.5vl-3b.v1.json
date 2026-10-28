@@ -12,15 +12,15 @@
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "47bbaaf66932c5ee5e514c6c",
-      "6333fd35b5de4c52b03510d8",
-      "6ad1a44c4439dad27d3403c2",
-      "56b6fc3411ed6da127bdf529",
-      "2249feba9d9de2d28593e04b"
+      "192aba06248e8f48b413e5bc",
+      "08b86a057faa4e4f223122c5",
+      "5d6c52ee1189b4f2afd8c325",
+      "6dede827e64c4cb9abb58c98"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1464,
-    "assets_remaining": 614,
-    "assets_completion_percent": 70.5,
+    "assets_analyzed": 1468,
+    "assets_remaining": 610,
+    "assets_completion_percent": 70.6,
     "assets_failed": 21,
     "assets_skipped_from_checkpoint": 1464,
     "batch_limit": 5,
@@ -44049,7 +44049,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753605122",
-      "checkpointed_at": "2026-10-28T20:59:34Z"
+      "checkpointed_at": "2026-10-28T21:20:02Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -49531,6 +49531,144 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
       "checkpointed_at": "2026-10-28T14:53:52Z"
+    },
+    {
+      "asset_id": "192aba06248e8f48b413e5bc",
+      "asset_sha256": "031ccf2b662e748b2c41772be2b5f5a1bedc9f58e3de1534179a3c5425095704",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 161,
+      "asset_path": "assets/031ccf2b662e748b2c41772be2b5f5a1bedc9f58e3de1534179a3c5425095704.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "aeeb7596e77e6ecc803fc47b32f5bf27c7372558e01fe140adba0d39aae34653",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A QR code with the text '0677CH08' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0677CH08"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code is likely related to the content of the book.",
+        "limitations": [
+          "The QR code does not provide specific information about the book's content or the page it is on."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T21:21:45Z"
+    },
+    {
+      "asset_id": "08b86a057faa4e4f223122c5",
+      "asset_sha256": "edf3a3a0e916b50fa4d2f25531bab5c5e82c3b81cbcad888814a9a5384a0e418",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 161,
+      "asset_path": "assets/edf3a3a0e916b50fa4d2f25531bab5c5e82c3b81cbcad888814a9a5384a0e418.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "aeeb7596e77e6ecc803fc47b32f5bf27c7372558e01fe140adba0d39aae34653",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A piece of old, yellowed paper with a torn edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A Journey through",
+          "Chapter States of Water 8",
+          "If it does not rain well, even the mighty ocean will be drained.",
+          "(Thirukkural)",
+          "On a bright summer afternoon, Aavi and Thirav enjoy their shikanji (lemonade). After looking at the ice in the lemonade, Thirav wonders about the nature of ice and water.",
+          "No, ice feels hard to touch and we can hold it.",
+          "these are the same substances."
+        ],
+        "concepts": [
+          "States of Water",
+          "Ice",
+          "Water",
+          "Thirukkural"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the states of water, specifically ice, and its properties.",
+        "limitations": [
+          "The image does not provide any visual representation of the concepts discussed in the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T21:23:45Z"
+    },
+    {
+      "asset_id": "5d6c52ee1189b4f2afd8c325",
+      "asset_sha256": "ba8228e4a0a70e5638e3eb848a68acb4048a3b6fd8239edb2d1389247fdf0aeb",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 161,
+      "asset_path": "assets/ba8228e4a0a70e5638e3eb848a68acb4048a3b6fd8239edb2d1389247fdf0aeb.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "aeeb7596e77e6ecc803fc47b32f5bf27c7372558e01fe140adba0d39aae34653",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Text in Tamil script, possibly a quote or a passage from a book.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "நெரைக்குடும் தனிந்திரம் குறைவுத்தடித்தில்",
+          "தானிந்தகா தப்பிய விழியை",
+          "(திருக்குரல்)"
+        ],
+        "concepts": [
+          "Tamil script",
+          "quote or passage",
+          "book content"
+        ],
+        "context_relation": "The text appears to be a quote or passage from a Tamil book, possibly related to the book's content or a specific chapter.",
+        "limitations": [
+          "The text is in Tamil, which may not be immediately understandable to all readers.",
+          "The context is not fully clear without additional information about the book or chapter.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T21:25:45Z"
+    },
+    {
+      "asset_id": "6dede827e64c4cb9abb58c98",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 161,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "aeeb7596e77e6ecc803fc47b32f5bf27c7372558e01fe140adba0d39aae34653",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T21:26:06Z"
     }
   ]
 }

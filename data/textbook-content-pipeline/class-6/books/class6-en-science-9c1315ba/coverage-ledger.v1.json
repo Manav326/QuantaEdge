@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1486,
-    "successful_visual_analyses": 1465,
-    "missing_visual_analyses": 592,
+    "raw_analysis_result_rows": 1490,
+    "successful_visual_analyses": 1469,
+    "missing_visual_analyses": 588,
     "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 613,
+    "unresolved_count": 609,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -55903,9 +55903,20 @@
       "asset_path": "assets/031ccf2b662e748b2c41772be2b5f5a1bedc9f58e3de1534179a3c5425095704.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A QR code with the text '0677CH08' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0677CH08"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code is likely related to the content of the book.",
+        "limitations": [
+          "The QR code does not provide specific information about the book's content or the page it is on."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -55921,9 +55932,31 @@
       "asset_path": "assets/edf3a3a0e916b50fa4d2f25531bab5c5e82c3b81cbcad888814a9a5384a0e418.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A piece of old, yellowed paper with a torn edge.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A Journey through",
+          "Chapter States of Water 8",
+          "If it does not rain well, even the mighty ocean will be drained.",
+          "(Thirukkural)",
+          "On a bright summer afternoon, Aavi and Thirav enjoy their shikanji (lemonade). After looking at the ice in the lemonade, Thirav wonders about the nature of ice and water.",
+          "No, ice feels hard to touch and we can hold it.",
+          "these are the same substances."
+        ],
+        "concepts": [
+          "States of Water",
+          "Ice",
+          "Water",
+          "Thirukkural"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the states of water, specifically ice, and its properties.",
+        "limitations": [
+          "The image does not provide any visual representation of the concepts discussed in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -55939,9 +55972,28 @@
       "asset_path": "assets/ba8228e4a0a70e5638e3eb848a68acb4048a3b6fd8239edb2d1389247fdf0aeb.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Text in Tamil script, possibly a quote or a passage from a book.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "நெரைக்குடும் தனிந்திரம் குறைவுத்தடித்தில்",
+          "தானிந்தகா தப்பிய விழியை",
+          "(திருக்குரல்)"
+        ],
+        "concepts": [
+          "Tamil script",
+          "quote or passage",
+          "book content"
+        ],
+        "context_relation": "The text appears to be a quote or passage from a Tamil book, possibly related to the book's content or a specific chapter.",
+        "limitations": [
+          "The text is in Tamil, which may not be immediately understandable to all readers.",
+          "The context is not fully clear without additional information about the book or chapter.",
+          "Unrecognized model visual_type 'text'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -55957,9 +56009,19 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
