@@ -12,10 +12,10 @@
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "47bbaaf66932c5ee5e514c6c",
-      "2cea301bf9b05b3d64207203",
-      "f9f31ac3c179b5d02598fdea",
-      "c48690152ba372ff22e25783",
-      "574da890e37eba2e524a04ad"
+      "6333fd35b5de4c52b03510d8",
+      "6ad1a44c4439dad27d3403c2",
+      "56b6fc3411ed6da127bdf529",
+      "2249feba9d9de2d28593e04b"
     ],
     "assets_eligible": 2078,
     "assets_analyzed": 1464,
@@ -44049,7 +44049,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753605122",
-      "checkpointed_at": "2026-10-28T20:38:11Z"
+      "checkpointed_at": "2026-10-28T20:59:34Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -47842,7 +47842,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40686336384",
+      "run_id": "40753605122",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
       "human_review_required": true,
@@ -48020,7 +48020,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40686336384",
+      "run_id": "40753605122",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "limitations must be a list of strings.",
       "human_review_required": true,
@@ -48160,7 +48160,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40686336384",
+      "run_id": "40753605122",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -48887,7 +48887,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40686336384",
+      "run_id": "40753605122",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
