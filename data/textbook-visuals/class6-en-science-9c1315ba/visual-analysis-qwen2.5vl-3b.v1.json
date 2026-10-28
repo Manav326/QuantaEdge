@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1434,
+    "assets_selected": 1437,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "a1a0a5a5fa632fcbbf4e6e95",
-      "6973c36fbeed0e6d96cdbb7f",
-      "e4dd233cafe23c02bf3af64d"
+      "d191383485fabb0566284f1d",
+      "2d49e301a7829b260d39e323",
+      "ba7d72eab1a73d18fd09e737"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1432,
-    "assets_remaining": 646,
-    "assets_completion_percent": 68.9,
+    "assets_analyzed": 1435,
+    "assets_remaining": 643,
+    "assets_completion_percent": 69.1,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 1429,
+    "assets_skipped_from_checkpoint": 1432,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
-      "checkpointed_at": "2026-10-28T06:45:09Z"
+      "checkpointed_at": "2026-10-28T06:53:35Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
-      "checkpointed_at": "2026-10-28T06:46:03Z"
+      "checkpointed_at": "2026-10-28T06:54:28Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -48400,6 +48400,111 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
       "checkpointed_at": "2026-10-28T06:52:25Z"
+    },
+    {
+      "asset_id": "d191383485fabb0566284f1d",
+      "asset_sha256": "4b88e6496ece2c93b6eb7dba96e0b8388f386edf9defda2ca395a547c3572d3b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 155,
+      "asset_path": "assets/4b88e6496ece2c93b6eb7dba96e0b8388f386edf9defda2ca395a547c3572d3b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "414e3023651740cc3c8afc9d0e8f849dd2a71c5e82283c024e6bf73d3eca92be",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A light bulb with a yellow filament and a green base, emitting light.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Let us enhance our learning",
+          "1. The normal temperature of a healthy human being is",
+          "(i) 98.6 °C",
+          "(ii) 37.0 °C",
+          "(iii) 32.0 °C",
+          "(iv) 27.0 °C",
+          "2. 37 °C is the same temperature as",
+          "(i) 97.4 °F",
+          "(ii) 97.6 °F",
+          "(iii) 98.4 °F",
+          "(iv) 98.6 °F",
+          "3. Fill in the blanks:",
+          "(i) The hotness or coldness of a system is determined by its",
+          "(ii) The temperature of ice-cold water cannot be measured",
+          "by a"
+        ],
+        "concepts": [
+          "Temperature",
+          "Normal human body temperature",
+          "Temperature conversion",
+          "Measurement of temperature"
+        ],
+        "context_relation": "The image is related to the educational content about temperature and its measurement.",
+        "limitations": [
+          "The image does not provide specific details about the temperature measurement or conversion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T06:56:34Z"
+    },
+    {
+      "asset_id": "2d49e301a7829b260d39e323",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 155,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "414e3023651740cc3c8afc9d0e8f849dd2a71c5e82283c024e6bf73d3eca92be",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T06:56:52Z"
+    },
+    {
+      "asset_id": "ba7d72eab1a73d18fd09e737",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 155,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "414e3023651740cc3c8afc9d0e8f849dd2a71c5e82283c024e6bf73d3eca92be",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "uncertain",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T06:57:11Z"
     }
   ]
 }
