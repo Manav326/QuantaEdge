@@ -1,4 +1,4 @@
--- V213: one shared expiry policy per logical course identity, per-enrollment access controls,
+-- V217: one shared expiry policy per logical course identity, per-enrollment access controls,
 -- and immutable audit history. Existing enrollments are deliberately grandfathered: no expiry
 -- is backfilled and configuring a policy affects only future/reactivated enrollments.
 ALTER TABLE student_program_enrollment
@@ -259,5 +259,5 @@ AS $$
 $$;
 
 INSERT INTO app_metadata(key,value)
-VALUES ('schema','shared-course-expiry-and-enrollment-access-v213')
+VALUES ('schema','shared-course-expiry-and-enrollment-access-v217')
 ON CONFLICT(key) DO UPDATE SET value=excluded.value;
