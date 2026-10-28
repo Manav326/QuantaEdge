@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "6ae3651570aab72163fe8b8315ebee0d1d5e14755b2e08413170020e22daf280",
+  "raw_analysis_sha256": "eda8235f2f2da20d317bffe355430edc4323bad87664037f06daaa2488fbd585",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -57191,7 +57191,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
-      "checkpointed_at": "2026-10-28T06:53:35Z",
+      "checkpointed_at": "2026-10-28T06:58:22Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66842,7 +66842,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
-      "checkpointed_at": "2026-10-28T06:54:28Z",
+      "checkpointed_at": "2026-10-28T06:59:14Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -73704,6 +73704,210 @@
         "context_relation": "unclear",
         "limitations": [
           "unclear"
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "00291007ebaf3445d74236e8",
+      "asset_sha256": "328f20a26ed65cb5fa30cd3204bc2e474e3d3b6f60a0f5ccf18d303126524043",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 155,
+      "asset_path": "page-0155.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "414e3023651740cc3c8afc9d0e8f849dd2a71c5e82283c024e6bf73d3eca92be",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Temperature measurement questions and examples.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Let us enhance our learning",
+          "1. The normal temperature of a healthy human being is close to",
+          "(i) 98.6 °C",
+          "(ii) 37.0 °C",
+          "(iii) 32.0 °C",
+          "(iv) 27.0 °C",
+          "2. 37 °C is the same temperature as",
+          "(i) 97.4 °F",
+          "(ii) 97.6 °F",
+          "(iii) 98.4 °F",
+          "(iv) 98.6 °F",
+          "3. Fill in the blanks:",
+          "(i) The hotness or coldness of a system is determined by its",
+          "(ii) The temperature of ice-cold water cannot be measured by a thermometer.",
+          "(iii) The unit of temperature is degree",
+          "4. The range of a laboratory thermometer is usually",
+          "(i) 10 °C to 100 °C",
+          "(ii) -10 °C to 110 °C",
+          "(iii) 32 °C to 45 °C",
+          "(iv) 35 °C to 42 °C",
+          "5. Four students used a laboratory thermometer to measure the temperature of water as shown in Fig. 7.6:"
+        ],
+        "concepts": [
+          "Temperature",
+          "Normal human body temperature",
+          "Temperature measurement",
+          "Ice-cold water temperature",
+          "Laboratory thermometer range"
+        ],
+        "context_relation": "Temperature measurement",
+        "limitations": [
+          "The questions and examples are specific to temperature measurement and normal human body temperature.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T07:03:51Z",
+      "effective_analysis": {
+        "visual_summary": "Temperature measurement questions and examples.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "Let us enhance our learning",
+          "1. The normal temperature of a healthy human being is close to",
+          "(i) 98.6 °C",
+          "(ii) 37.0 °C",
+          "(iii) 32.0 °C",
+          "(iv) 27.0 °C",
+          "2. 37 °C is the same temperature as",
+          "(i) 97.4 °F",
+          "(ii) 97.6 °F",
+          "(iii) 98.4 °F",
+          "(iv) 98.6 °F",
+          "3. Fill in the blanks:",
+          "(i) The hotness or coldness of a system is determined by its",
+          "(ii) The temperature of ice-cold water cannot be measured by a thermometer.",
+          "(iii) The unit of temperature is degree",
+          "4. The range of a laboratory thermometer is usually",
+          "(i) 10 °C to 100 °C",
+          "(ii) -10 °C to 110 °C",
+          "(iii) 32 °C to 45 °C",
+          "(iv) 35 °C to 42 °C",
+          "5. Four students used a laboratory thermometer to measure the temperature of water as shown in Fig. 7.6:"
+        ],
+        "concepts": [
+          "Temperature",
+          "Normal human body temperature",
+          "Temperature measurement",
+          "Ice-cold water temperature",
+          "Laboratory thermometer range"
+        ],
+        "context_relation": "Temperature measurement",
+        "limitations": [
+          "The questions and examples are specific to temperature measurement and normal human body temperature.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2d4b5f8ff9b0fb331fe33504",
+      "asset_sha256": "19e6a59ca4874fcf3878f48b09cc3f664703bffd64a567469decbb7974bcc6da",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 156,
+      "asset_path": "assets/19e6a59ca4874fcf3878f48b09cc3f664703bffd64a567469decbb7974bcc6da.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "02c848a053bd9291a35f92fa4e1c2239cb5db94f1895bc7c484d97883cf7e32f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Three thermometers with red liquid levels at different temperatures.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "14 °C",
+          "17 °C",
+          "7.5 °C"
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Thermometer usage"
+        ],
+        "context_relation": "The image is related to the question about which student followed the correct way for measuring temperature.",
+        "limitations": [
+          "The image does not show the students' actions or the correct way to measure temperature."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T07:05:34Z",
+      "effective_analysis": {
+        "visual_summary": "Three thermometers with red liquid levels at different temperatures.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "14 °C",
+          "17 °C",
+          "7.5 °C"
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Thermometer usage"
+        ],
+        "context_relation": "The image is related to the question about which student followed the correct way for measuring temperature.",
+        "limitations": [
+          "The image does not show the students' actions or the correct way to measure temperature."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "57203a4994f3a5b40fbebd53",
+      "asset_sha256": "c41566faee6156a7b9d611203092bcfba8f41e3aee2c2d79b8e01f2ac208d9b1",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 156,
+      "asset_path": "assets/c41566faee6156a7b9d611203092bcfba8f41e3aee2c2d79b8e01f2ac208d9b1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "02c848a053bd9291a35f92fa4e1c2239cb5db94f1895bc7c484d97883cf7e32f",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A thermometer with a red column indicating a temperature between 10°C and 20°C.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "10°C",
+          "20°C"
+        ],
+        "concepts": [
+          "thermometer",
+          "temperature"
+        ],
+        "context_relation": "The image is related to the question about measuring temperature and the correct way to show the red column on thermometers.",
+        "limitations": [
+          "The image does not provide specific details about the temperature or the correct way to show the red column on the thermometers."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T07:07:19Z",
+      "effective_analysis": {
+        "visual_summary": "A thermometer with a red column indicating a temperature between 10°C and 20°C.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "10°C",
+          "20°C"
+        ],
+        "concepts": [
+          "thermometer",
+          "temperature"
+        ],
+        "context_relation": "The image is related to the question about measuring temperature and the correct way to show the red column on thermometers.",
+        "limitations": [
+          "The image does not provide specific details about the temperature or the correct way to show the red column on the thermometers."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
