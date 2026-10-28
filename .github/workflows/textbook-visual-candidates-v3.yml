@@ -115,7 +115,6 @@ jobs:
           python -m unittest discover -s tests -p "test_plan_textbook_layer45_matrix.py" -v
           python -m unittest discover -s tests -p "test_select_textbook_source_pair.py" -v
           python -m unittest discover -s tests -p "test_select_textbook_visual_sources.py" -v
-          python -m unittest discover -s tests -p "test_select_textbook_source_pair.py" -v
           python -m unittest discover -s tests -p "test_validate_textbook_extraction_artifacts.py" -v
           python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
           python -m unittest discover -s tests -p "test_prepare_visual_candidates_v3.py" -v
