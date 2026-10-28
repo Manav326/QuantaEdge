@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1487,
+    "assets_selected": 1491,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "47bbaaf66932c5ee5e514c6c",
-      "e6e0ae3439afbff52a7e1e5c",
-      "9c586567df1ca40b63649b50",
-      "4eb2f3c9457b3f8258f53f19",
-      "60305f22f00990b6e247bc21"
+      "0857f6d53d6522aa08cbc530",
+      "e1aa03e6b01ebae60c5f6781",
+      "5cbd549823b7e80bd172e836",
+      "e5fe852b34262396e42b98b3"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1486,
-    "assets_remaining": 592,
-    "assets_completion_percent": 71.5,
+    "assets_analyzed": 1490,
+    "assets_remaining": 588,
+    "assets_completion_percent": 71.7,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1482,
+    "assets_skipped_from_checkpoint": 1486,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -44049,7 +44049,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753605122",
-      "checkpointed_at": "2026-10-28T22:07:02Z"
+      "checkpointed_at": "2026-10-28T22:15:07Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -50377,6 +50377,122 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753605122",
       "checkpointed_at": "2026-10-28T22:13:54Z"
+    },
+    {
+      "asset_id": "0857f6d53d6522aa08cbc530",
+      "asset_sha256": "18e478437c92d3f305fd12208906b56341f10fbc67991e328f60dd0cf72bbe1f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 165,
+      "asset_path": "assets/18e478437c92d3f305fd12208906b56341f10fbc67991e328f60dd0cf72bbe1f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2f35dcd352526a2581ebfa9eeb93be4ebab68350207b205586350b72a01f0ce2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a girl with braided hair and a red ribbon.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the text.",
+          "The image is a cartoon illustration and may not accurately represent the text's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T22:16:51Z"
+    },
+    {
+      "asset_id": "e1aa03e6b01ebae60c5f6781",
+      "asset_sha256": "9653bdfff05e203fe06ddd29b1f6e0e1931144cc0d8f2795e49e9d301b16bb4d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 165,
+      "asset_path": "assets/9653bdfff05e203fe06ddd29b1f6e0e1931144cc0d8f2795e49e9d301b16bb4d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2f35dcd352526a2581ebfa9eeb93be4ebab68350207b205586350b72a01f0ce2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person pointing upwards with one finger.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content about the appearance of water droplets on the outer surface of a glass tumbler.",
+        "limitations": [
+          "The image does not provide specific details about the reasons mentioned in the text.",
+          "The image does not show the actual appearance of water droplets on the glass tumbler."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T22:18:39Z"
+    },
+    {
+      "asset_id": "5cbd549823b7e80bd172e836",
+      "asset_sha256": "cfaea894398221ea858ccd7c8ffb9230f6feca234d9df9b5359501d8a8f185b0",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 165,
+      "asset_path": "assets/cfaea894398221ea858ccd7c8ffb9230f6feca234d9df9b5359501d8a8f185b0.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2f35dcd352526a2581ebfa9eeb93be4ebab68350207b205586350b72a01f0ce2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a girl with braided hair and a red bow, wearing a blue sweater.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text in the source PDF page.",
+        "limitations": [
+          "The image does not provide any specific information about the text in the source PDF page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T22:20:22Z"
+    },
+    {
+      "asset_id": "e5fe852b34262396e42b98b3",
+      "asset_sha256": "d207e50411acfc9711189852b38aeab1151ea8bec238e8ae529e0e946d8bcc06",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 165,
+      "asset_path": "assets/d207e50411acfc9711189852b38aeab1151ea8bec238e8ae529e0e946d8bcc06.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2f35dcd352526a2581ebfa9eeb93be4ebab68350207b205586350b72a01f0ce2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person wearing a light blue shirt, waving with their right hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the discussion about reasons for water droplets on a glass tumbler.",
+        "limitations": [
+          "The image does not provide specific details about the reasons for water droplets on a glass tumbler.",
+          "The image does not show the actual scenario or experiment being discussed in the text.",
+          "The image does not include any additional context or information about the experiment or discussion."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T22:22:11Z"
     }
   ]
 }
