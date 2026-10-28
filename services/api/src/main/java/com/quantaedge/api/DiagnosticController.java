@@ -212,6 +212,8 @@ public class DiagnosticController {
           on release.id=assignment.course_release_id and release.program_id=course.id
         where enrollment.student_id=? and enrollment.institution_id=? and enrollment.program_id=?
           and enrollment.status='ACTIVE'
+          and enrollment.course_access_blocked=false
+          and (enrollment.course_expires_at is null or enrollment.course_expires_at>statement_timestamp())
       )
       """,Boolean.class,studentId,institutionId,courseId);
     if(!Boolean.TRUE.equals(allowed))throw new SecurityException("The diagnostic course is not enrolled in this institution.");

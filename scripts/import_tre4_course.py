@@ -659,8 +659,8 @@ def get_or_create_course(cursor: Any, institution_id: int) -> tuple[int, str, bo
     else:
         cursor.execute("""
             INSERT INTO institution_course_identity(
-              source_institution_id,stable_course_key,display_name,course_type_code
-            ) VALUES (%s,%s,%s,'ASSESSMENT') RETURNING id
+              source_institution_id,stable_course_key,display_name,course_type_code,course_expiry_policy_required
+            ) VALUES (%s,%s,%s,'ASSESSMENT',true) RETURNING id
         """, (institution_id, stable_key, COURSE_TITLE))
         identity_id = int(cursor.fetchone()[0])
 
