@@ -2615,3 +2615,12 @@ html[data-qe-appearance="dark"] :is(.qe-admin-workspace-layout, .qe-admin-public
 html[data-qe-appearance] :is(.qe-admin-workspace-layout, .qe-admin-public-page) select option:disabled {
   color: var(--qe-color-disabled-text, #4B5563) !important;
 }
+
+
+/* Field fill and foreground must switch together; avoid light-surface/white-text clashes. */
+html[data-qe-appearance="light"] :is(.qe-admin-workspace-layout, .qe-admin-public-page) select {
+  background-color: var(--qe-color-surface-elevated, #FFFFFF) !important;
+}
+html[data-qe-appearance="dark"] :is(.qe-admin-workspace-layout, .qe-admin-public-page) select {
+  background-color: var(--qe-color-surface-elevated, #243247) !important;
+}

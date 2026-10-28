@@ -1920,3 +1920,12 @@ html[data-qe-people-appearance="dark"] select option:checked {
 html[data-qe-people-appearance] select option:disabled {
   color: var(--qe-people-disabled-ink, #667085) !important;
 }
+
+
+/* Keep HRMS language/filter selects on the same field surface as their text. */
+html[data-qe-people-appearance="light"] select:not([data-qe-invoice-document] *):not([data-qe-authored-notification] *) {
+  background-color: var(--qe-people-field, #FFFFFF) !important;
+}
+html[data-qe-people-appearance="dark"] select:not([data-qe-invoice-document] *):not([data-qe-authored-notification] *) {
+  background-color: var(--qe-people-field, #101B2B) !important;
+}

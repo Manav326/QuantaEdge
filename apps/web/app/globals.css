@@ -2465,3 +2465,12 @@ html[data-qe-appearance="dark"] select option:checked {
 html[data-qe-appearance] select option:disabled {
   color: var(--qe-color-disabled-text, #4B5563) !important;
 }
+
+
+/* Correct legacy hard-coded white selects after the appearance token changes. */
+html[data-qe-appearance="light"] select:not([data-qe-invoice-document] *):not([data-qe-authored-notification] *) {
+  background-color: var(--qe-color-surface-elevated, #FFFFFF) !important;
+}
+html[data-qe-appearance="dark"] select:not([data-qe-invoice-document] *):not([data-qe-authored-notification] *) {
+  background-color: var(--qe-color-surface-elevated, #243247) !important;
+}
