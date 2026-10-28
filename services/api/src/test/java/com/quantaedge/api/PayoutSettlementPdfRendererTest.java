@@ -45,7 +45,8 @@ class PayoutSettlementPdfRendererTest {
       assertEquals(rendered.pageCount(),document.getNumberOfPages());
       assertTrue(document.getDocumentInformation().getTitle().contains("MONTHLY PAYOUT BATCH REPORT"));
       String searchableText=new PDFTextStripper().getText(document);
-      assertTrue(searchableText.contains("MONTHLY PAYOUT BATCH REPORT"),"PDF text must be selectable/searchable, not only a page image.");
+      assertTrue(searchableText.contains("MONTHLY PAYOUT BATCH REPORT"),
+          () -> "PDF text extraction preview: "+preview(searchableText));
       assertTrue(searchableText.contains("Institution 1"),"Recipient names should be available to search and assistive tools.");
       assertTrue(searchableText.contains("INV-2026-1"),"Payout PDFs should trace to the underlying sales invoice.");
       assertTrue(searchableText.contains("Seller Entity 1"),"The legal seller must not be confused with the course source or marketplace institution.");
@@ -80,10 +81,16 @@ class PayoutSettlementPdfRendererTest {
       assertEquals(1,document.getNumberOfPages());
       assertTrue(document.getPage(0).getResources().getXObjectNames().iterator().hasNext());
       String searchableText=new PDFTextStripper().getText(document);
-      assertTrue(searchableText.contains("गणित"),"Hindi course names should remain searchable in the PDF text layer.");
+      assertTrue(searchableText.contains("गणित"),
+          () -> "Hindi text extraction preview: "+preview(searchableText));
       assertTrue(searchableText.contains("विद्यालय सूर्योदय"),"Hindi recipient names should remain searchable in the PDF text layer.");
       assertTrue(searchableText.contains("INV-2026-HI-91"),"Recipient payout advice should include the underlying invoice reference.");
     }
+  }
+
+  private static String preview(String text) {
+    String compact=text==null?"":text.replace('\n','|');
+    return compact.substring(0,Math.min(800,compact.length()));
   }
 
   private static Map<String,Object> record(Object... pairs) {
