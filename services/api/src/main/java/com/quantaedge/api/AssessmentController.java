@@ -2525,7 +2525,6 @@ public class AssessmentController {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
     requireAttemptInCourse(attemptId,courseId,tenant);
-    requireStudentCourseAccess(context.studentId(),courseId,institutionId);
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select att.id,att.status,att.deadline_at,att.student_id,att.offline_mode,
              att.offline_sync_expires_at,att.offline_package_token_hash
@@ -2535,6 +2534,7 @@ public class AssessmentController {
     if (rows.isEmpty() || ((Number) rows.getFirst().get("student_id")).longValue() != context.studentId()) {
       throw notFound("Assessment answer", attemptQuestionId);
     }
+    requireStudentCourseAccess(context.studentId(),courseId,institutionId);
     Map<String, Object> attempt = rows.getFirst();
     if (!"IN_PROGRESS".equals(String.valueOf(attempt.get("status")))) {
       throw conflict("Submitted test answers are locked and can no longer be changed.");
@@ -2570,7 +2570,6 @@ public class AssessmentController {
     context = authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
     requireAttemptInCourse(attemptId,courseId,tenant);
-    requireStudentCourseAccess(context.studentId(),courseId,institutionId);
     List<Map<String, Object>> attempts = jdbc.queryForList("""
       select id,status,deadline_at,student_id,offline_mode,offline_sync_expires_at,offline_package_token_hash
       from student_assessment_attempt where id=? and institution_id=? for update
@@ -2579,6 +2578,7 @@ public class AssessmentController {
         || ((Number) attempts.getFirst().get("student_id")).longValue() != context.studentId()) {
       throw notFound("Assessment attempt", attemptId);
     }
+    requireStudentCourseAccess(context.studentId(),courseId,institutionId);
     Map<String, Object> attempt = attempts.getFirst();
     if (!"IN_PROGRESS".equals(String.valueOf(attempt.get("status")))) {
       throw conflict("Submitted test answers are locked and can no longer be changed.");
@@ -2626,7 +2626,6 @@ public class AssessmentController {
     context=authorization.requireStudent(context);
     long institutionId=requireInstitution(tenant);
     requireAttemptInCourse(attemptId,courseId,tenant);
-    requireStudentCourseAccess(context.studentId(),courseId,institutionId);
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select id,assessment_id,student_id,status,offline_mode,offline_sync_expires_at
       from student_assessment_attempt where id=? and institution_id=? for update
@@ -2634,6 +2633,7 @@ public class AssessmentController {
     if(rows.isEmpty() || ((Number)rows.getFirst().get("student_id")).longValue()!=context.studentId()) {
       throw notFound("Assessment attempt",attemptId);
     }
+    requireStudentCourseAccess(context.studentId(),courseId,institutionId);
     Map<String,Object> attempt=rows.getFirst();
     if(!Boolean.TRUE.equals(attempt.get("offline_mode"))) {
       throw conflict("This attempt is not an offline assessment.");
