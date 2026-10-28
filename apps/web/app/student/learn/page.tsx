@@ -1,8 +1,9 @@
 import { Suspense } from 'react';
+import { RouteLoadingSkeleton } from '../../components/RouteLoadingSkeleton';
 import LearnClient from './LearnClient';
 
 export default function LearnPage() {
-  return <Suspense fallback={<main className="lesson-page"><section className="lesson-wrap"><div className="eyebrow">Loading lesson…</div></section></main>}>
+  return <Suspense fallback={<RouteLoadingSkeleton description="Loading lesson…" variant="lesson" />}>
     <LearnClient />
   </Suspense>;
 }

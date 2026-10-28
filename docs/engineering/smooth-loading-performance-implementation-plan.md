@@ -1,0 +1,99 @@
+# Smooth Loading and Performance Implementation Plan
+
+**Branch:** `feat/smooth-loading-architecture`  
+**Base:** `main`  
+**Status:** In progress  
+**Scope:** Learner/parent Web, Institution Admin, HRMS/People Operations, native Android, and API behavior.
+
+## Goal
+
+Make QuantaEdge feel responsive on initial load, repeat navigation, slow networks, and low-end devices without introducing unnecessary requests, changing authorization boundaries, or breaking current page flows.
+
+The guiding rule is: **render the app shell first; load essential content next; load secondary and expensive work only when it is needed.** A skeleton improves perceived speed but is not a substitute for reducing real latency.
+
+## Non-negotiable implementation rules
+
+- Keep the existing shared app shell, branding, theme, language selection, permissions, routes, and API contracts intact.
+- Render a page-shaped skeleton for route/content loading; do not replace the whole shell with a spinner.
+- Show skeletons only during initial loading. Preserve existing content during background refreshes.
+- Distinguish loading, loaded-empty, error, offline, and stale-but-usable states.
+- Fetch only data required by the current route and visible section.
+- Deduplicate identical in-flight requests and reuse valid cached responses where safe.
+- Cancel obsolete search/navigation requests when supported; prevent stale responses from overwriting newer state.
+- Make retries bounded and safe. Do not automatically replay payment creation, enrollment, or other non-idempotent mutations.
+- Keep user/session/permission and payment-status freshness/security rules authoritative; never use a client cache as an authorization boundary.
+- Respect reduced-motion preferences, accessible status announcements, responsive layouts, light/dark themes, and supported locales.
+- Measure before and after. Do not claim an optimization is complete without build/test or performance evidence.
+
+## Phased delivery
+
+### Phase 0 — Baseline and architecture audit
+
+- [x] Confirm application surfaces: Next.js App Router in `apps/web`, `apps/admin`, and `apps/people`; native Jetpack Compose Android app in `apps/android`.
+- [ ] Inventory all route/page loading states, shared shells, and high-value user journeys.
+- [ ] Trace API calls per route: duplicates, request waterfalls, oversized responses, unbounded polling/retries, and calls triggered by rerenders.
+- [ ] Record baseline cold/warm navigation, JavaScript bundle sizes, Core Web Vitals where available, Android cold start/first frame, and slow-endpoint timings.
+- [x] Review the three web API wrappers and app manifests before selecting a dependency: they currently use a centralized `apiFetch` wrapper around `fetch`, with no installed shared query/cache library. Route-specific API and cache policy audit remains open.
+
+### Phase 1 — No-blank loading foundation
+
+- [x] Add App Router route-level loading boundaries to Web, Admin, and HRMS/People.
+- [x] Use layout-shaped skeletons, theme-aware colors, responsive layout, and reduced-motion support.
+- [x] Replace text-only nested Suspense fallbacks on learner Learn, Practice, Textbooks, Tests, and Certificates routes with content-shaped variants.
+- [x] Add a native Compose skeleton primitive and replace high-visibility course/class initial-load spinners.
+- [ ] Continue the route-by-route audit for pages with local loading states that may still show text-only loaders or block unrelated content.
+- [ ] Confirm error and true-empty states never remain stuck in skeleton mode.
+
+### Phase 2 — Route and component loading
+
+- [ ] Split large route/feature bundles only where analysis shows meaningful savings.
+- [ ] Defer charts, report builders, rich editors, PDF/rendering engines, and lesson media until opened.
+- [ ] Lazy-load below-the-fold media; reserve image and chart dimensions to prevent layout shifts.
+- [ ] Preserve the header/sidebar/bottom navigation when route content suspends or changes.
+
+### Phase 3 — API efficiency and caching
+
+- [ ] Produce a route-to-data matrix for learner, parent, institution admin, and HRMS screens.
+- [ ] Add request deduplication only after a route-by-route audit establishes a reliable user/workspace/institution scope for authenticated reads; HttpOnly session cookies must not be assumed to be represented by URL or request headers.
+- [ ] Audit and standardize resolved-data cache keys, freshness policies, cancellation, bounded retries, and targeted invalidation using the existing stack where possible.
+- [ ] Avoid waterfalls for independent requests; retain explicit sequencing for real dependencies.
+- [ ] Use paginated endpoints for large rosters, course catalogues, transaction histories, and question banks.
+- [ ] Debounce search/filter inputs and ensure only the latest query can update the screen.
+- [ ] Keep payment/order status refresh explicit, scoped, and safe; do not use broad polling or stale cached payment state as proof of payment.
+- [ ] Check backend query time and payload size before adding more frontend concurrency.
+
+### Phase 4 — Android runtime efficiency
+
+- [ ] Audit each destination for duplicated API calls and unnecessary recomposition.
+- [ ] Share eligible data through repositories/state holders; keep user/session/institution scopes in cache keys.
+- [ ] Use stable keys and lazy containers for large lists; render only what is needed.
+- [ ] Review startup initialization, image/resource loading, offline cache policies, and background work.
+- [ ] Measure release-build cold start and slow-frame behavior before/after changes.
+
+### Phase 5 — Verification and regression protection
+
+- [ ] Build all affected Next.js apps and run repository CI checks.
+- [ ] Run Android JVM tests and debug/release build checks available in CI.
+- [ ] Test slow/offline network, cold start, repeat navigation, empty data, failed APIs, retry, language/theme changes, logout/account switch, and permission changes.
+- [ ] Compare API request counts and page timings against Phase 0 baselines.
+- [ ] Add regression checks for loading state accessibility and duplicate request behavior where practical.
+- [ ] Update this tracker with each completed batch and the actual commit/CI evidence.
+
+## First implementation batch
+
+**Implemented on this branch:**
+- App Router route loading boundaries for the three web portals.
+- An accessible, responsive skeleton fallback that leaves each portal's existing root layout in place.
+- A reusable Web skeleton with dashboard, lesson, practice, and list variants. Five learner routes that had their own text-only Suspense fallback now use the structured skeleton.
+- A reusable theme-aware Compose skeleton and replacement of the initial loading indicators on the learner's All Courses and Live Classes/Recordings screens.
+- This implementation plan and follow-up checklist.
+
+**Review correction:** a generic API GET deduplication experiment was removed after review because it could not safely distinguish HttpOnly session/workspace scopes. Do not reintroduce request sharing until those scopes are explicit and covered by tests.
+
+**Not yet claimed complete:** full route-level audit, component code splitting, API request deduplication/caching, API/backend optimization, Android startup optimization, performance baselines, and end-to-end regression testing.
+
+**Verification status:** an earlier CI run failed because the loading components referenced an undefined status label. That issue has been corrected. A fresh build of the current branch head is still required; do not merge without green checks.
+
+## Acceptance criteria
+
+This effort is complete only when each major route has an appropriate loading/empty/error state; initial loading does not hide the shared shell; duplicate/waterfall API behavior is materially reduced where verified; expensive modules are deferred based on bundle evidence; and before/after checks show no regressions to auth, permissions, theme, localization, learning state, checkout, or the HRMS flow.

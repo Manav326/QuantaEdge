@@ -1,8 +1,9 @@
 import { Suspense } from 'react';
+import { RouteLoadingSkeleton } from '../../components/RouteLoadingSkeleton';
 import TextbooksClient from './TextbooksClient';
 
 export default function TextbooksPage() {
-  return <Suspense fallback={<main className="app-shell qe-textbook-shell"><section className="qe-textbook-loading">Loading textbook library…</section></main>}>
+  return <Suspense fallback={<RouteLoadingSkeleton description="Loading textbook library…" variant="list" />}>
     <TextbooksClient />
   </Suspense>;
 }
