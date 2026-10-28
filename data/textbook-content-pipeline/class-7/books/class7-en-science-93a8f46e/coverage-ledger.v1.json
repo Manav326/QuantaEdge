@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2488,
-    "successful_visual_analyses": 2467,
-    "missing_visual_analyses": 5000,
+    "raw_analysis_result_rows": 2490,
+    "successful_visual_analyses": 2469,
+    "missing_visual_analyses": 4998,
     "failed_visual_analyses": 21,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 5021,
+    "unresolved_count": 5019,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -102482,9 +102482,37 @@
       "asset_path": "assets/dc0216e6c26479e2bde7e820a731cf188b023fe3bef04a069e5e821dd2ea5a52.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Flow chart with steps labeled 'INNOVATION', 'DISCOVERY', 'ENQUIRY', 'Complete the following flow chart', 'Air', 'Heat', 'Ash', 'Water', 'Add blue and red litmus solutions separately', 'Change in blue litmus', 'Change in red litmus'",
+        "visual_type": "diagram",
+        "visible_text": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Complete the following flow chart",
+          "Air",
+          "Heat",
+          "Ash",
+          "Water",
+          "Add blue and red litmus solutions separately",
+          "Change in blue litmus",
+          "Change in red litmus"
+        ],
+        "concepts": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Flow chart",
+          "Chemical reactions",
+          "Litmus tests"
+        ],
+        "context_relation": "The flow chart is a visual representation of the scientific process of discovery, innovation, and inquiry, with a focus on chemical reactions and litmus tests.",
+        "limitations": [
+          "The flow chart is incomplete and requires completion based on the context provided."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -102500,9 +102528,29 @@
       "asset_path": "assets/72128145c630b98ef477c3b618f41abf3b82f6c7ae94c8e2c514bd0765cb3069.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blue background with text and a flowchart.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "7. Complete the following flow chart:",
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Change in blue"
+        ],
+        "concepts": [
+          "Innovation",
+          "Discovery",
+          "Enquiry",
+          "Change in blue"
+        ],
+        "context_relation": "The flowchart is related to the concepts of innovation, discovery, and enquiry.",
+        "limitations": [
+          "The image does not provide specific details about the flowchart or its components."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

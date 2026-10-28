@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "55ace82c5d1323400818255f29360b91a93c2d8eed1622411fda844ac02460ed",
+  "raw_analysis_sha256": "4b98bbfca25e93f6674fdada4837704da4c096bc3cc61bcb4950474f3f8b8a56",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40600192733",
-      "checkpointed_at": "2026-10-28T00:15:08Z",
+      "checkpointed_at": "2026-10-28T00:18:17Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40600192733",
-      "checkpointed_at": "2026-10-28T00:15:35Z",
+      "checkpointed_at": "2026-10-28T00:18:44Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40600192733",
-      "checkpointed_at": "2026-10-28T00:16:11Z",
+      "checkpointed_at": "2026-10-28T00:19:20Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -146278,6 +146278,146 @@
         "context_relation": "The flow chart outlines a sequence of steps in a scientific inquiry process.",
         "limitations": [
           "The image does not provide specific details about the steps or their outcomes."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fd48665c9d5df2e5b925bf30",
+      "asset_sha256": "dc0216e6c26479e2bde7e820a731cf188b023fe3bef04a069e5e821dd2ea5a52",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 76,
+      "asset_path": "assets/dc0216e6c26479e2bde7e820a731cf188b023fe3bef04a069e5e821dd2ea5a52.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9b2d7697ff3d8d5c9aaa2908709c2e9b1929d605b85dd59b0b1c09be80cb8762",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Flow chart with steps labeled 'INNOVATION', 'DISCOVERY', 'ENQUIRY', 'Complete the following flow chart', 'Air', 'Heat', 'Ash', 'Water', 'Add blue and red litmus solutions separately', 'Change in blue litmus', 'Change in red litmus'",
+        "visual_type": "diagram",
+        "visible_text": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Complete the following flow chart",
+          "Air",
+          "Heat",
+          "Ash",
+          "Water",
+          "Add blue and red litmus solutions separately",
+          "Change in blue litmus",
+          "Change in red litmus"
+        ],
+        "concepts": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Flow chart",
+          "Chemical reactions",
+          "Litmus tests"
+        ],
+        "context_relation": "The flow chart is a visual representation of the scientific process of discovery, innovation, and inquiry, with a focus on chemical reactions and litmus tests.",
+        "limitations": [
+          "The flow chart is incomplete and requires completion based on the context provided."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40600192733",
+      "checkpointed_at": "2026-10-28T00:20:04Z",
+      "effective_analysis": {
+        "visual_summary": "Flow chart with steps labeled 'INNOVATION', 'DISCOVERY', 'ENQUIRY', 'Complete the following flow chart', 'Air', 'Heat', 'Ash', 'Water', 'Add blue and red litmus solutions separately', 'Change in blue litmus', 'Change in red litmus'",
+        "visual_type": "diagram",
+        "visible_text": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Complete the following flow chart",
+          "Air",
+          "Heat",
+          "Ash",
+          "Water",
+          "Add blue and red litmus solutions separately",
+          "Change in blue litmus",
+          "Change in red litmus"
+        ],
+        "concepts": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Flow chart",
+          "Chemical reactions",
+          "Litmus tests"
+        ],
+        "context_relation": "The flow chart is a visual representation of the scientific process of discovery, innovation, and inquiry, with a focus on chemical reactions and litmus tests.",
+        "limitations": [
+          "The flow chart is incomplete and requires completion based on the context provided."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "008b53a131842e2ed404bf76",
+      "asset_sha256": "72128145c630b98ef477c3b618f41abf3b82f6c7ae94c8e2c514bd0765cb3069",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 76,
+      "asset_path": "assets/72128145c630b98ef477c3b618f41abf3b82f6c7ae94c8e2c514bd0765cb3069.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9b2d7697ff3d8d5c9aaa2908709c2e9b1929d605b85dd59b0b1c09be80cb8762",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue background with text and a flowchart.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "7. Complete the following flow chart:",
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Change in blue"
+        ],
+        "concepts": [
+          "Innovation",
+          "Discovery",
+          "Enquiry",
+          "Change in blue"
+        ],
+        "context_relation": "The flowchart is related to the concepts of innovation, discovery, and enquiry.",
+        "limitations": [
+          "The image does not provide specific details about the flowchart or its components."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40600192733",
+      "checkpointed_at": "2026-10-28T00:20:42Z",
+      "effective_analysis": {
+        "visual_summary": "A blue background with text and a flowchart.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "7. Complete the following flow chart:",
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Change in blue"
+        ],
+        "concepts": [
+          "Innovation",
+          "Discovery",
+          "Enquiry",
+          "Change in blue"
+        ],
+        "context_relation": "The flowchart is related to the concepts of innovation, discovery, and enquiry.",
+        "limitations": [
+          "The image does not provide specific details about the flowchart or its components."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
