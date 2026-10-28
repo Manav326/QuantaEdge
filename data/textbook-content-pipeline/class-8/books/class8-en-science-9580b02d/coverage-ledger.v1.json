@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1370,
-    "successful_visual_analyses": 1354,
-    "missing_visual_analyses": 921,
+    "raw_analysis_result_rows": 1371,
+    "successful_visual_analyses": 1355,
+    "missing_visual_analyses": 920,
     "failed_visual_analyses": 16,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 937,
+    "unresolved_count": 936,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -51228,9 +51228,22 @@
       "asset_path": "assets/6297b52654d2dc85a0c254c55b84b0950705c4bb8665e3d1887a9ab0aa686448.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A water tank filled with water, with a height 'H' indicated.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "pressure",
+          "water tank",
+          "height 'H'"
+        ],
+        "context_relation": "The image is related to the question about increasing water pressure in a building.",
+        "limitations": [
+          "The image does not provide specific numerical values for 'H'."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

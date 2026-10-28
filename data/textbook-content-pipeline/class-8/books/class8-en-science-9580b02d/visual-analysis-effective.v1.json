@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "11fe5bf67132ed4ec7e4a83ec6f86c70fb434acc105b01fa69f4d3a4eb2f7f1f",
+  "raw_analysis_sha256": "cc8791d6a2e7f0543d99273b951fb45b02ceb6ed46becb5a8424cc1231daeda7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40671359148",
-      "checkpointed_at": "2026-10-28T12:27:43Z",
+      "checkpointed_at": "2026-10-28T12:33:43Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29338,7 +29338,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40671359148",
-      "checkpointed_at": "2026-10-28T12:28:31Z",
+      "checkpointed_at": "2026-10-28T12:34:32Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgments for the book's contributors and staff.",
         "visual_type": "uncertain",
@@ -57861,7 +57861,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40671359148",
-      "checkpointed_at": "2026-10-28T12:29:29Z",
+      "checkpointed_at": "2026-10-28T12:35:32Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "page_with_multiple_visuals",
@@ -67147,7 +67147,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40671359148",
-      "checkpointed_at": "2026-10-28T12:30:44Z",
+      "checkpointed_at": "2026-10-28T12:36:50Z",
       "effective_analysis": {
         "visual_summary": "A diagram showing the movement of positively and negatively charged particles in clouds, with a caption indicating that the positively charged particles move upwards and the negatively charged particles move downwards.",
         "visual_type": "diagram",
@@ -68146,6 +68146,54 @@
         "limitations": [
           "The image does not provide numerical values or specific measurements.",
           "The image does not show the actual water level or the height 'H' in relation to the tank."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "21bcc6d28296e366e8920e96",
+      "asset_sha256": "6297b52654d2dc85a0c254c55b84b0950705c4bb8665e3d1887a9ab0aa686448",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 115,
+      "asset_path": "assets/6297b52654d2dc85a0c254c55b84b0950705c4bb8665e3d1887a9ab0aa686448.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a5e9dffe4e593c12963f37b5c9000f9c5fc7bf6cab12de5cf63cabd13280e50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A water tank filled with water, with a height 'H' indicated.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "pressure",
+          "water tank",
+          "height 'H'"
+        ],
+        "context_relation": "The image is related to the question about increasing water pressure in a building.",
+        "limitations": [
+          "The image does not provide specific numerical values for 'H'."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40671359148",
+      "checkpointed_at": "2026-10-28T12:38:31Z",
+      "effective_analysis": {
+        "visual_summary": "A water tank filled with water, with a height 'H' indicated.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "pressure",
+          "water tank",
+          "height 'H'"
+        ],
+        "context_relation": "The image is related to the question about increasing water pressure in a building.",
+        "limitations": [
+          "The image does not provide specific numerical values for 'H'."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

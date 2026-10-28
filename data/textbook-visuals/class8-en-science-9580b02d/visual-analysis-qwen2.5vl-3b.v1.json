@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1354,
+    "assets_selected": 1355,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "52885281ae21238e9ccc031f",
-      "e9275498b8fb5565a0d945a0"
+      "21bcc6d28296e366e8920e96"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1350,
-    "assets_remaining": 941,
-    "assets_completion_percent": 58.9,
+    "assets_analyzed": 1351,
+    "assets_remaining": 940,
+    "assets_completion_percent": 59.0,
     "assets_failed": 16,
-    "assets_skipped_from_checkpoint": 1349,
+    "assets_skipped_from_checkpoint": 1350,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40671359148",
-      "checkpointed_at": "2026-10-28T12:27:43Z"
+      "checkpointed_at": "2026-10-28T12:33:43Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20167,7 +20167,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40671359148",
-      "checkpointed_at": "2026-10-28T12:28:31Z"
+      "checkpointed_at": "2026-10-28T12:34:32Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40671359148",
-      "checkpointed_at": "2026-10-28T12:29:29Z"
+      "checkpointed_at": "2026-10-28T12:35:32Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -44424,7 +44424,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40671359148",
-      "checkpointed_at": "2026-10-28T12:30:44Z"
+      "checkpointed_at": "2026-10-28T12:36:50Z"
     },
     {
       "asset_id": "02cdb1f955dd51e569c06039",
@@ -45041,6 +45041,38 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40671359148",
       "checkpointed_at": "2026-10-28T12:32:25Z"
+    },
+    {
+      "asset_id": "21bcc6d28296e366e8920e96",
+      "asset_sha256": "6297b52654d2dc85a0c254c55b84b0950705c4bb8665e3d1887a9ab0aa686448",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 115,
+      "asset_path": "assets/6297b52654d2dc85a0c254c55b84b0950705c4bb8665e3d1887a9ab0aa686448.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a5e9dffe4e593c12963f37b5c9000f9c5fc7bf6cab12de5cf63cabd13280e50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A water tank filled with water, with a height 'H' indicated.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "pressure",
+          "water tank",
+          "height 'H'"
+        ],
+        "context_relation": "The image is related to the question about increasing water pressure in a building.",
+        "limitations": [
+          "The image does not provide specific numerical values for 'H'."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40671359148",
+      "checkpointed_at": "2026-10-28T12:38:31Z"
     }
   ]
 }
