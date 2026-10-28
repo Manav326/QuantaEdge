@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "864b376f5863e70f70eb816fee8da51e8a1b9214ae3e6c65928a49a37b8c71e5",
+  "raw_analysis_sha256": "be7b269ef634fdc31a16f7081a0d290508dda5aa61fa4256f258c0fa80df29df",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753612267",
-      "checkpointed_at": "2026-10-28T21:11:55Z",
+      "checkpointed_at": "2026-10-28T21:17:31Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753612267",
-      "checkpointed_at": "2026-10-28T21:12:30Z",
+      "checkpointed_at": "2026-10-28T21:18:07Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753612267",
-      "checkpointed_at": "2026-10-28T21:13:13Z",
+      "checkpointed_at": "2026-10-28T21:18:48Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -65709,7 +65709,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753612267",
-      "checkpointed_at": "2026-10-28T21:14:14Z",
+      "checkpointed_at": "2026-10-28T21:19:50Z",
       "effective_analysis": {
         "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
@@ -68407,6 +68407,50 @@
         "concepts": [],
         "context_relation": "The image is not related to the text.",
         "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "784985f02278a1b8a7922253",
+      "asset_sha256": "d1f9742286aa4fa788b1d28ab5e1d27c46f01b73ae7062b6fa62d33aeaa010b1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 115,
+      "asset_path": "assets/d1f9742286aa4fa788b1d28ab5e1d27c46f01b73ae7062b6fa62d33aeaa010b1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a5e9dffe4e593c12963f37b5c9000f9c5fc7bf6cab12de5cf63cabd13280e50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a girl raising her hand in a classroom, with a boy in a wheelchair beside her.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the textbook content.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook content.",
+          "The image is a cartoon illustration and may not accurately represent the educational content.",
+          "The image does not show any specific formulas or quantities from the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753612267",
+      "checkpointed_at": "2026-10-28T21:21:00Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a girl raising her hand in a classroom, with a boy in a wheelchair beside her.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the textbook content.",
+        "limitations": [
+          "The image does not provide any specific information about the textbook content.",
+          "The image is a cartoon illustration and may not accurately represent the educational content.",
+          "The image does not show any specific formulas or quantities from the textbook content."
+        ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
