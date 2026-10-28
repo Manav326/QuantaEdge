@@ -18,13 +18,12 @@
 - [Role/Workspace Permission Matrix](./phase-1-role-workspace-matrix.md): source-derived Education Admin, HRMS, platform-owner, institution-admin and learner/guardian permission boundaries.
 - [Runtime Execution Log](./phase-1-runtime-execution-log.csv): one execution row per scenario, ready to capture the exact commit/environment/persona/device, actual result, evidence, defect and cleanup verification.
 - [Consolidated Coverage Gaps](./phase-1-coverage-gaps.md): prioritized open findings and the required closure sequence before Phase 2 test-data installation.
-- [Comprehensive Route/Component UI-UX Audit Plan](../ui-ux-audit/comprehensive-route-component-audit-plan.md): route-by-route and component-by-component responsive, theme, accessibility and runtime acceptance rules.
-- [Route/Component Audit Register](../ui-ux-audit/route-component-audit-register.csv): one evidence-gated tracking row per current UI route/destination; all rows begin without a runtime pass.
-- [Component-Instance Audit Register](../ui-ux-audit/component-instance-audit-register.csv): a starter register of shared shells and route-specific components with reverse consumer links; the source graph must be reviewed for remaining leaf components.
-- [Generated Route/Register Parity Check](../../scripts/check_ui_route_register_parity.mjs): CI compares actual Next.js page source paths to the UI screen register and fails on missing, stale or duplicate route entries.
-- [Component-Instance Audit Register](../ui-ux-audit/component-instance-audit-register.csv): current starter set of shared shells, providers, global styles and floating tutor docks, with explicit consuming-route links; route-specific nested components are still to be inventoried.
-- [Shared Shell Source Review](../ui-ux-audit/shared-shell-source-review.md): source-only observations and required runtime checks for responsive navigation, theme CSS cascade, overlays and Android shell behavior.
-- [Route-to-Component Import Graph](../ui-ux-audit/comprehensive-route-component-audit-plan.md#phase-0--baseline-and-inventory-reconciliation): generated during CI as the `ui-component-import-inventory` artifact; it follows local imports and Next.js ancestor layouts per page route. It is a source map, not runtime verification.
+- [Comprehensive Route/Component UI-UX Audit Plan](../ui-ux-audit/comprehensive-route-component-audit-plan.md): end-to-end audit scope, phases, evidence requirements and sign-off gates.
+- [Route/Component Audit Register](../ui-ux-audit/route-component-audit-register.csv): one evidence-gated row per current route/destination.
+- [Component-Instance Audit Register](../ui-ux-audit/component-instance-audit-register.csv): reusable and route-specific components mapped to consuming routes.
+- [UI/UX Findings Register](../ui-ux-audit/findings-register.csv): findings, status, targeted fix and regression evidence.
+- [Route-Specific Source Review](../ui-ux-audit/route-specific-source-review.md): source trace for the newly reconciled route entries; runtime verification remains open.
+- [Shared Shell Source Review](../ui-ux-audit/shared-shell-source-review.md): source-level review of responsive shell, theme and navigation risks.
 - [Centralized QA Test-Pack Lifecycle](./qa-test-pack-lifecycle.md): required install/uninstall state machine, immutable resource ownership manifest, production safety gates, automated acceptance matrix and implementation ledger.
 
 ## Current test-pack lifecycle work
@@ -40,7 +39,7 @@ The install/uninstall requirements and acceptance matrix are tracked in [Central
 | Screen entries linked to scenario IDs | 109; references validated against the scenario register |
 | Workflow scenarios | 82 total: 80 `NOT_EXECUTED`, 2 `NOT_IMPLEMENTED` (QA scenario runner/report and external-provider safety) |
 | Browser/Android runtime-verified screens | 0 in this audit pass; deployed URL was inaccessible via available browser tool, so this does not establish site outage |
-| Per-screen state coverage | 109 rows; screen inventory is source-reconciled, but responsive/accessibility and other state categories remain evidence-gated and runtime is not certified |
+| Per-screen state coverage | 109 rows; source inventory is reconciled, but responsive/accessibility and other state categories remain evidence-gated and runtime is not certified |
 | Test-data ownership/uninstall implementation | Initial run manifest/schema, default-off environment gate, tenant/learner starter pack, HRMS QA Center API/UI and recorded starter-pack checks are present on the feature branch; CI/runtime verification pending |
 
 Counts describe documentation inventory, not feature pass rates or functional coverage percentages.
@@ -67,7 +66,7 @@ A source file, successful compilation, static contract check or older tracker en
 
 ## Register consistency guard
 
-The CI `changes` job runs route-generator tests, `scripts/check_ui_route_register_parity.test.mjs`, `scripts/check_ui_route_register_parity.mjs --root .`, route-to-component graph tests/generation, `scripts/validate_qa_registers.test.mjs` and `scripts/validate_qa_registers.mjs --root .`. These checks verify CSV structure, unique screen/API/scenario IDs, valid scenario references, one runtime-log row per scenario, evidence metadata before a result can be marked passed, route/component audit parity with the UI state checklist, component IDs and consumers in both directions, and evidence before a component sign-off. **They validate documentation integrity only**; they do not claim that a UI/API workflow executed or passed.
+The CI `changes` job runs route-generator tests; route-register parity tests; route-to-component import-graph tests and generation; the expanded component-audit register tests and generation; the Admin shared-workspace shell contract; and QA-register validation. These checks enforce route/state/component mappings and evidence gates. **They validate source/register consistency only**; they do not claim that a UI/API workflow executed or passed.
 
 ## Audit rules
 

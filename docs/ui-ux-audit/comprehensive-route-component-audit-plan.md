@@ -2,7 +2,7 @@
 
 **Status:** IN PROGRESS — baseline reconciliation and audit controls are being established. No overall route/component sign-off exists yet.  
 **Scope:** Learner/Parent Web, Educational Admin, People Operations (HRMS), and native Android.  
-**Branch:** `audit/route-component-responsive-ux-2026-10` (created from `main` for this focused effort).  
+**Branch:** `audit/route-component-responsive-ux-clean-2026-10` (created from `main` for this focused effort).  
 **Primary rule:** improve presentation, responsiveness and accessibility without breaking or silently changing existing product behavior.
 
 ## 1. Goal and non-negotiable rules
@@ -35,7 +35,7 @@ These are source-register counts, not executed screen counts. First regenerate t
 
 **Exit:** every known route/destination has one audit row, every inventory discrepancy has a disposition, and the current verification baseline is reproducible.
 
-The CI `changes` job now tests `scripts/inventory_ui_component_imports.mjs` and uploads its per-route local-import graph as the `ui-component-import-inventory` artifact. Review unresolved local imports as possible alias/resolution gaps or real missing modules; do not silently discard them or treat this static graph as proof of conditional rendering.
+**Exact-head static evidence (2026-10-28):** On commit `e31a26d76b05293a40adb4c72f583e223b4a2c3e`, [CI run #7083](https://github.com/Manav326/QuantaEdge/actions/runs/40643885831) passed route-register parity, component-source graph tests, QA-register validation, UI/theme/localization contracts, Android test/build, and content-import safeguards. The graph reports 75 Next.js routes, 245 unique resolved source/asset paths, 166 unique UI-module candidates, 52 unique stylesheet modules, and **0 unresolved local import references**. The `ui-component-import-inventory` artifact is attached to that run. This proves source import resolution and register integrity only; it does not prove that conditional branches render correctly or that any viewport/theme/language state passed visual/runtime testing. The Web/Admin/People/API image-build jobs were skipped because this PR changes only audit documentation and scripts.
 
 ### Phase 1 — Shared shells and component inventory
 Trace the application shells, responsive navigation, headers, sidebars/drawers, language/theme controls, shared buttons/fields/selects, tabs, tables, alerts, dialogs, menus, cards, status badges, loading/empty/error views, toasts, floating tutor controls, textbook/lesson/media/assessment primitives and chart/report renderers.
@@ -104,11 +104,11 @@ CI success is necessary but not sufficient for visual sign-off. Source inspectio
 
 ## 6. Current status and work queue
 
-1. **COMPLETED — source inventory reconciliation:** 75 generated Next.js page routes now match 75 browser register entries; with 34 Android destinations, all 109 inventory rows are present. CI has a route/source parity guard to prevent future pages being silently omitted.
-2. **IN PROGRESS — verification:** route/component source graph is generated and has zero unresolved local imports; review its transitive component and stylesheet candidates against actual conditional rendering and page composition.
-3. **NEXT:** finish the route-to-component trace and create independent component-instance entries with consuming routes.
+1. **SOURCE-REGISTER PARITY VERIFIED:** CI run #7083 matched 75 generated Next.js page routes to 75 browser-register entries; with 34 Android destinations, the registers contain 109 entries. Rerun this gate after every inventory or route change.
+2. **STATIC SOURCE GRAPH GENERATED:** CI run #7083 reports 166 UI-module candidates, 52 stylesheet modules and zero unresolved local import references. The candidates still need route-by-route classification against rendered/conditional UI and browser/Android runtime behavior.
+3. **IN PROGRESS — component mapping:** 34 shared-shell/provider/style/tutor entries seed the component register, but the final leaf, conditional, and route-specific component census is not complete.
 4. **NEXT:** verify an appropriate repeatable browser and Android UI test path before choosing any new dependency.
-5. **PENDING:** capture the existing responsive/theme baseline before applying visual fixes.
-6. **PENDING:** run route walkthroughs, fix defects in small batches, and maintain regression evidence.
+5. **PENDING:** capture the actual responsive/theme baseline before visual fixes; do not infer visual outcomes from source inspection.
+6. **PENDING:** run route walkthroughs, fix confirmed defects in small batches, and maintain regression evidence.
 
 The route-level working register is `route-component-audit-register.csv` beside this plan. The separate `component-instance-audit-register.csv` tracks shared components and their route consumers; it is a starting inventory, not the final child-component census. The `shared-shell-source-review.md` records the initial source inspection and labels runtime checks as pending. Continue adding route-specific and conditional leaf components as the route-by-route trace discovers them. The validator enforces that each route references exactly the components that list it as a consumer. The existing QA screen/state/scenario/API/runtime registers remain the source of linked workflow and permission evidence; these records complement one another and must stay consistent.
