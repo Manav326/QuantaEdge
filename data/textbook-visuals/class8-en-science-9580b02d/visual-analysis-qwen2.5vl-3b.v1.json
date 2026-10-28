@@ -15,11 +15,11 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "aecc400e8b6468731e9c7bfd"
+      "d63b511b1edbf5a71f7cec45"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1347,
-    "assets_remaining": 944,
+    "assets_analyzed": 1348,
+    "assets_remaining": 943,
     "assets_completion_percent": 58.8,
     "assets_failed": 17,
     "assets_skipped_from_checkpoint": 1347,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40656885298",
-      "checkpointed_at": "2026-10-28T10:06:41Z"
+      "checkpointed_at": "2026-10-28T10:12:07Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40656885298",
-      "checkpointed_at": "2026-10-28T10:07:15Z"
+      "checkpointed_at": "2026-10-28T10:12:41Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40656885298",
-      "checkpointed_at": "2026-10-28T10:07:54Z"
+      "checkpointed_at": "2026-10-28T10:13:21Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40656885298",
-      "checkpointed_at": "2026-10-28T10:08:53Z"
+      "checkpointed_at": "2026-10-28T10:14:19Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -44942,6 +44942,57 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40648190206",
       "checkpointed_at": "2026-10-28T08:24:22Z"
+    },
+    {
+      "asset_id": "d63b511b1edbf5a71f7cec45",
+      "asset_sha256": "05358cd81047259e3408f3f3ea1ed364d73dc45578747c3004556ef0ecde36dc",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 114,
+      "asset_path": "page-0114.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "d968384b40647acbfac39b370818be7f3c29ed2785ab736c4de0f0e26bfc247d",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook explaining pressure and its effects, including atmospheric pressure, wind formation, and lightning.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Snapshots",
+          "Pressure is defined as force per unit area.",
+          "The SI unit of pressure is newton/metre2 (N/m2) and is also called pascal denoted by Pa.",
+          "Liquids and gases exert pressure on the walls of a container.",
+          "The pressure exerted by the air around us is known as atmospheric pressure.",
+          "Differences in air pressure cause winds to blow.",
+          "Warm air rises, creating a low-pressure area. Cooler air from surrounding higher-pressure regions moves in to take its place.",
+          "Important requirements for the formation of thunderstorms are moisture and strong winds.",
+          "Strong winds moving upwards and downwards facilitate rubbing of ice particles with water droplets, causing electric charges to develop in clouds.",
+          "Collision of electric charges within a clouds, or between clouds, or between a cloud and the ground causes lightning.",
+          "Lightning strikes can cause destruction to life and property.",
+          "Lightning conductors protect buildings from the effects of lightning.",
+          "The India Meteorological Department (IMD) constantly monitors cyclones and thunderstorms in India."
+        ],
+        "concepts": [
+          "pressure",
+          "atmospheric pressure",
+          "wind formation",
+          "thunderstorms",
+          "lightning",
+          "electric charges",
+          "collision",
+          "conductors"
+        ],
+        "context_relation": "explanation",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40656885298",
+      "checkpointed_at": "2026-10-28T10:17:15Z"
     }
   ]
 }
