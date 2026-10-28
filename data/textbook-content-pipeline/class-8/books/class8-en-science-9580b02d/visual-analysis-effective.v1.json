@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "0e46f7fceafb13fe0634fb4533499da6e255bba7ae7f54fb250929f0baffbb9d",
+  "raw_analysis_sha256": "7d98178f01b7cfeb37e36eab53c91aefac841641fe42e386d5d0ba9656b6cf67",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40620560465",
-      "checkpointed_at": "2026-10-28T03:18:22Z",
+      "checkpointed_at": "2026-10-28T03:23:06Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40620560465",
-      "checkpointed_at": "2026-10-28T03:18:49Z",
+      "checkpointed_at": "2026-10-28T03:23:34Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40620560465",
-      "checkpointed_at": "2026-10-28T03:19:21Z",
+      "checkpointed_at": "2026-10-28T03:24:07Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -65709,7 +65709,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40620560465",
-      "checkpointed_at": "2026-10-28T03:20:09Z",
+      "checkpointed_at": "2026-10-28T03:24:56Z",
       "effective_analysis": {
         "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
@@ -67692,21 +67692,67 @@
     {
       "asset_id": "d87c13fdacf9d828cb661188",
       "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
-      "page_text_context_sha256": "45e0221e1bdd71791599e8e126204cc8f78594128942b5855e26f4e1f7ecdf94",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 113,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "45e0221e1bdd71791599e8e126204cc8f78594128942b5855e26f4e1f7ecdf94",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600312251",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A full page of a textbook discussing the destructive effects of a cyclone, including its peak wind speeds and the resulting flooding.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "93",
+          "Even as a cyclone loses its strength while travelling over land, it leaves behind a trail of destruction that can take months or even years to repair. Cyclones can be extremely destructive. For example, the Amphan cyclone in 2020 had peak wind speeds of 270 km/h.",
+          "Strong winds during a cyclone push ocean water towards the shore, creating a wall of water that can be as high as 3–12 metres. This surge of water can flood coastal areas and even areas far from the sea. The heavy rainfall which acc",
+          "The Amphan cyclone in 2020 had peak wind speeds of 270 km/h.",
+          "Strong winds during a cyclone push ocean water towards the shore, creating a wall of water that can be as high as 3–12 metres. This surge of water can flood coastal areas and even areas far from the sea. The heavy rainfall which acc"
+        ],
+        "concepts": [
+          "Cyclone",
+          "Peak wind speeds",
+          "Flooding",
+          "Heavy rainfall",
+          "Coastal areas"
+        ],
+        "context_relation": "The text discusses the destructive effects of a cyclone, including its peak wind speeds and the resulting flooding.",
+        "limitations": [
+          "The text does not provide specific details about the Amphan cyclone in 2020, such as its location or the extent of the damage it caused."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40620560465",
+      "checkpointed_at": "2026-10-28T03:25:30Z",
+      "effective_analysis": {
+        "visual_summary": "A full page of a textbook discussing the destructive effects of a cyclone, including its peak wind speeds and the resulting flooding.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "93",
+          "Even as a cyclone loses its strength while travelling over land, it leaves behind a trail of destruction that can take months or even years to repair. Cyclones can be extremely destructive. For example, the Amphan cyclone in 2020 had peak wind speeds of 270 km/h.",
+          "Strong winds during a cyclone push ocean water towards the shore, creating a wall of water that can be as high as 3–12 metres. This surge of water can flood coastal areas and even areas far from the sea. The heavy rainfall which acc",
+          "The Amphan cyclone in 2020 had peak wind speeds of 270 km/h.",
+          "Strong winds during a cyclone push ocean water towards the shore, creating a wall of water that can be as high as 3–12 metres. This surge of water can flood coastal areas and even areas far from the sea. The heavy rainfall which acc"
+        ],
+        "concepts": [
+          "Cyclone",
+          "Peak wind speeds",
+          "Flooding",
+          "Heavy rainfall",
+          "Coastal areas"
+        ],
+        "context_relation": "The text discusses the destructive effects of a cyclone, including its peak wind speeds and the resulting flooding.",
+        "limitations": [
+          "The text does not provide specific details about the Amphan cyclone in 2020, such as its location or the extent of the damage it caused."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {

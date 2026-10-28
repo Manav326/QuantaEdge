@@ -15,13 +15,13 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "52885281ae21238e9ccc031f"
+      "d87c13fdacf9d828cb661188"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1344,
-    "assets_remaining": 947,
+    "assets_analyzed": 1345,
+    "assets_remaining": 946,
     "assets_completion_percent": 58.7,
-    "assets_failed": 15,
+    "assets_failed": 14,
     "assets_skipped_from_checkpoint": 1344,
     "batch_limit": 5,
     "publication_allowed": false
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40620560465",
-      "checkpointed_at": "2026-10-28T03:18:22Z"
+      "checkpointed_at": "2026-10-28T03:23:06Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40620560465",
-      "checkpointed_at": "2026-10-28T03:18:49Z"
+      "checkpointed_at": "2026-10-28T03:23:34Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40620560465",
-      "checkpointed_at": "2026-10-28T03:19:21Z"
+      "checkpointed_at": "2026-10-28T03:24:07Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40620560465",
-      "checkpointed_at": "2026-10-28T03:20:09Z"
+      "checkpointed_at": "2026-10-28T03:24:56Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -44744,19 +44744,43 @@
     {
       "asset_id": "d87c13fdacf9d828cb661188",
       "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
-      "page_text_context_sha256": "45e0221e1bdd71791599e8e126204cc8f78594128942b5855e26f4e1f7ecdf94",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 113,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "45e0221e1bdd71791599e8e126204cc8f78594128942b5855e26f4e1f7ecdf94",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600312251",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A full page of a textbook discussing the destructive effects of a cyclone, including its peak wind speeds and the resulting flooding.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "93",
+          "Even as a cyclone loses its strength while travelling over land, it leaves behind a trail of destruction that can take months or even years to repair. Cyclones can be extremely destructive. For example, the Amphan cyclone in 2020 had peak wind speeds of 270 km/h.",
+          "Strong winds during a cyclone push ocean water towards the shore, creating a wall of water that can be as high as 3–12 metres. This surge of water can flood coastal areas and even areas far from the sea. The heavy rainfall which acc",
+          "The Amphan cyclone in 2020 had peak wind speeds of 270 km/h.",
+          "Strong winds during a cyclone push ocean water towards the shore, creating a wall of water that can be as high as 3–12 metres. This surge of water can flood coastal areas and even areas far from the sea. The heavy rainfall which acc"
+        ],
+        "concepts": [
+          "Cyclone",
+          "Peak wind speeds",
+          "Flooding",
+          "Heavy rainfall",
+          "Coastal areas"
+        ],
+        "context_relation": "The text discusses the destructive effects of a cyclone, including its peak wind speeds and the resulting flooding.",
+        "limitations": [
+          "The text does not provide specific details about the Amphan cyclone in 2020, such as its location or the extent of the damage it caused."
+        ]
+      },
       "human_review_required": true,
-      "publication_allowed": false
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40620560465",
+      "checkpointed_at": "2026-10-28T03:25:30Z"
     },
     {
       "asset_id": "ee42c9dcd67eeb859ad89f83",
