@@ -93,6 +93,15 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("'classes-7-8-resume'", workflow)
         self.assertIn("BOOK_IDS_CSV: ${{ matrix.book_ids_csv || '' }}", workflow)
 
+    def test_bilingual_pair_progress_report_runs_only_from_main_and_is_uploaded(self):
+        coordinator = read("resume-textbook-layers-4-5-automatically.yml")
+        push_block = coordinator[coordinator.index("  push:"):coordinator.index("  schedule:")]
+        self.assertIn("branches: [main]", push_block)
+        self.assertIn("python scripts/report_textbook_pair_progress.py", coordinator)
+        self.assertIn("class-6-8-bilingual-textbook-progress", coordinator)
+        self.assertIn("textbook-progress.v1.json", coordinator)
+        self.assertIn("textbook-progress.md", coordinator)
+
     def test_marked_push_can_resume_class7_and_class8_independently(self):
         workflow = read("textbook-visual-candidates-v3.yml")
         planner = (ROOT / "scripts" / "plan_textbook_layer45_matrix.py").read_text(encoding="utf-8")
