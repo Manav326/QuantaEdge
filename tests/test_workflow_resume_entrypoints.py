@@ -175,7 +175,10 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
             with self.subTest(pattern=pattern):
                 self.assertIn(pattern, reporter)
         self.assertIn("contents: read", reporter)
-        self.assertIn("cancel-in-progress: true", reporter)
+        self.assertIn("cancel-in-progress: false", reporter)
+        self.assertIn('cron: "*/5 * * * *"', reporter)
+        self.assertIn("workflow_run:", reporter)
+        self.assertIn("types: [completed]", reporter)
         self.assertIn("scripts/report_textbook_pair_progress.py", reporter)
         self.assertIn("GITHUB_STEP_SUMMARY", reporter)
         self.assertIn("actions/upload-artifact@v4", reporter)

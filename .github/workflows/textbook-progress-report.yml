@@ -12,6 +12,18 @@ on:
       - "scripts/plan_textbook_layer45_matrix.py"
       - "scripts/textbook_pipeline_handoff.py"
       - ".github/workflows/textbook-progress-report.yml"
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_run:
+    workflows:
+      - "QuantaEdge Textbook Content Pipeline"
+      - "Process Class 6–8 Textbooks in English and Hindi"
+      - "Resume Class 6–8 Layer 4–5 checkpoints"
+      - "Mirror verified textbook extraction artifact to main"
+      - "QuantaEdge Textbook Cache"
+      - "QuantaEdge GHCR Textbook Extraction Pilot"
+    types: [completed]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -20,7 +32,7 @@ permissions:
 # Read-only reporting has its own lane and keeps only the newest checkpoint snapshot.
 concurrency:
   group: qe-textbook-progress-report-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   report:
