@@ -467,6 +467,8 @@ def run_analysis(
             float(item["duration_seconds"]) for item in ordered_results
             if isinstance(item, dict) and item.get("model") == model
             and item.get("prompt_version") == PROMPT_VERSION
+            and item.get("analysis_status") == "DRAFT_REQUIRES_REVIEW"
+            and _saved_analysis_is_valid(item.get("analysis"))
             and isinstance(item.get("duration_seconds"), (int, float))
             and not isinstance(item.get("duration_seconds"), bool) and item["duration_seconds"] > 0
         ]
