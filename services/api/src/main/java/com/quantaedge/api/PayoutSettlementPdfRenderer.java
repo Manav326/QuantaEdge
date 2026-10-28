@@ -205,16 +205,16 @@ public class PayoutSettlementPdfRenderer {
       g.setRenderingHint(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_QUALITY);
       g.setColor(PAPER);g.fillRect(0,0,WIDTH,HEIGHT);
       g.setColor(BRAND);g.fillRect(0,0,WIDTH,15);
-      g.setColor(INK);g.setFont(font(Font.BOLD,19));g.drawString("QUANTAEDGE FINANCE",MARGIN,66);
-      g.setColor(MUTED);g.setFont(font(Font.PLAIN,13));g.drawString("HRMS / SETTLEMENT RECORD",MARGIN,91);
-      g.setColor(BRAND);g.setFont(font(Font.BOLD,14));
+      g.setColor(INK);g.setFont(font(Font.BOLD,21));drawText("QUANTAEDGE FINANCE",MARGIN,66);
+      g.setColor(MUTED);g.setFont(font(Font.PLAIN,14));drawText("HRMS / SETTLEMENT RECORD",MARGIN,91);
+      g.setColor(BRAND);g.setFont(font(Font.BOLD,15));
       String documentClass=continued?"CONTINUED":(title.equals("MONTHLY PAYOUT ADVICE")?"RECIPIENT PAYOUT ADVICE":"INTERNAL FINANCE PDF");
-      g.drawString(documentClass,WIDTH-320,66);
+      drawText(documentClass,WIDTH-320,66);
       g.setColor(LINE);g.drawLine(MARGIN,112,WIDTH-MARGIN,112);
-      g.setColor(INK);g.setFont(font(Font.BOLD,continued?24:28));g.drawString(continued?title+" (CONTINUED)":title,MARGIN,160);
+      g.setColor(INK);g.setFont(font(Font.BOLD,continued?24:28));drawText(continued?title+" (CONTINUED)":title,MARGIN,160);
       g.setColor(MUTED);g.setFont(font(Font.PLAIN,15));
-      g.drawString(clip(documentNumber,360),MARGIN,190);
-      g.drawString("Generated "+clip(created,330),WIDTH-MARGIN-330,190);
+      drawText(clip(documentNumber,360),MARGIN,190);
+      drawText("Generated "+clip(created,330),WIDTH-MARGIN-330,190);
       y=230;
     }
     private void drawText(String value,int x,int baselineY) {
@@ -235,14 +235,14 @@ public class PayoutSettlementPdfRenderer {
       }
     }
     void heading(String subTitle,String period) {
-      g.setColor(INK);g.setFont(font(Font.BOLD,17));g.drawString(clip(subTitle,CONTENT_WIDTH),MARGIN,y+8);y+=28;
-      g.setColor(MUTED);g.setFont(font(Font.PLAIN,14));g.drawString(clip(period,CONTENT_WIDTH),MARGIN,y+2);y+=32;
+      g.setColor(INK);g.setFont(font(Font.BOLD,19));drawText(clip(subTitle,CONTENT_WIDTH),MARGIN,y+8);y+=30;
+      g.setColor(MUTED);g.setFont(font(Font.PLAIN,16));drawText(clip(period,CONTENT_WIDTH),MARGIN,y+2);y+=34;
     }
     void notice(String headline,String detail) {
       ensure(88);
       g.setColor(WARNING_BG);g.fillRoundRect(MARGIN,y,CONTENT_WIDTH,75,12,12);
-      g.setColor(WARNING);g.setFont(font(Font.BOLD,17));g.drawString(clip(headline,CONTENT_WIDTH-28),MARGIN+14,y+25);
-      g.setColor(INK);g.setFont(font(Font.PLAIN,15));g.drawString(clip(detail,CONTENT_WIDTH-28),MARGIN+14,y+52);
+      g.setColor(WARNING);g.setFont(font(Font.BOLD,17));drawText(clip(headline,CONTENT_WIDTH-28),MARGIN+14,y+25);
+      g.setColor(INK);g.setFont(font(Font.PLAIN,17));drawText(clip(detail,CONTENT_WIDTH-28),MARGIN+14,y+53);
       y+=88;
     }
     void summaryCards(List<Metric> metrics) {
@@ -251,30 +251,30 @@ public class PayoutSettlementPdfRenderer {
       for(int i=0;i<metrics.size();i++) {
         int x=MARGIN+i*(width+gap);
         g.setColor(SUBTLE);g.fillRoundRect(x,y,width,h,12,12);
-        g.setColor(MUTED);g.setFont(font(Font.BOLD,13));g.drawString(clip(metrics.get(i).label(),width-24),x+12,y+27);
-        g.setColor(INK);g.setFont(font(Font.BOLD,17));g.drawString(clip(metrics.get(i).value(),width-24),x+12,y+62);
+        g.setColor(MUTED);g.setFont(font(Font.BOLD,15));drawText(clip(metrics.get(i).label(),width-24),x+12,y+27);
+        g.setColor(INK);g.setFont(font(Font.BOLD,19));drawText(clip(metrics.get(i).value(),width-24),x+12,y+62);
       }
       y+=h+18;
     }
     void section(String text) {
       ensure(52);
-      g.setColor(ACCENT);g.setFont(font(Font.BOLD,15));g.drawString(clip(text,CONTENT_WIDTH),MARGIN,y+18);
-      g.setColor(LINE);g.setStroke(new BasicStroke(1));g.drawLine(MARGIN,y+30,WIDTH-MARGIN,y+30);y+=40;
+      g.setColor(ACCENT);g.setFont(font(Font.BOLD,18));drawText(clip(text,CONTENT_WIDTH),MARGIN,y+20);
+      g.setColor(LINE);g.setStroke(new BasicStroke(1));g.drawLine(MARGIN,y+32,WIDTH-MARGIN,y+32);y+=42;
     }
     void keyValue(String key,String value) {
-      ensure(29);
-      g.setColor(MUTED);g.setFont(font(Font.PLAIN,15));g.drawString(clip(key,300),MARGIN,y+20);
-      g.setColor(INK);g.setFont(font(Font.BOLD,15));g.drawString(clip(value,CONTENT_WIDTH-320),MARGIN+320,y+20);
-      g.setColor(LINE);g.drawLine(MARGIN,y+28,WIDTH-MARGIN,y+28);y+=32;
+      ensure(36);
+      g.setColor(MUTED);g.setFont(font(Font.PLAIN,18));drawText(clip(key,300),MARGIN,y+22);
+      g.setColor(INK);g.setFont(font(Font.BOLD,18));drawText(clip(value,CONTENT_WIDTH-320),MARGIN+320,y+22);
+      g.setColor(LINE);g.drawLine(MARGIN,y+30,WIDTH-MARGIN,y+30);y+=34;
     }
     void muted(String text) {
-      ensure(34);g.setColor(MUTED);g.setFont(font(Font.PLAIN,14));g.drawString(clip(text,CONTENT_WIDTH),MARGIN,y+15);y+=29;
+      ensure(36);g.setColor(MUTED);g.setFont(font(Font.PLAIN,16));drawText(clip(text,CONTENT_WIDTH),MARGIN,y+17);y+=31;
     }
     void paragraph(String text) {
-      String[] lines=wrap(text,CONTENT_WIDTH,font(Font.PLAIN,15));
-      ensure(Math.max(32,lines.length*22+8));
-      g.setColor(INK);g.setFont(font(Font.PLAIN,15));
-      for(String line:lines){if(y+24>FOOTER_Y-24){newPage(true);g.setColor(INK);g.setFont(font(Font.PLAIN,15));}g.drawString(line,MARGIN,y+17);y+=22;}
+      String[] lines=wrap(text,CONTENT_WIDTH,font(Font.PLAIN,18));
+      ensure(Math.max(36,lines.length*25+8));
+      g.setColor(INK);g.setFont(font(Font.PLAIN,18));
+      for(String line:lines){if(y+27>FOOTER_Y-24){newPage(true);g.setColor(INK);g.setFont(font(Font.PLAIN,18));}drawText(line,MARGIN,y+20);y+=25;}
       y+=8;
     }
     void empty(String text) { paragraph(text); }
@@ -282,9 +282,9 @@ public class PayoutSettlementPdfRenderer {
       ensure(49);
       int[] widths=columns(labels.length);
       g.setColor(INK);g.fillRoundRect(MARGIN,y,CONTENT_WIDTH,42,8,8);
-      g.setColor(Color.WHITE);g.setFont(font(Font.BOLD,14));
+      g.setColor(Color.WHITE);g.setFont(font(Font.BOLD,16));
       int x=MARGIN;
-      for(int i=0;i<labels.length;i++){g.drawString(clip(labels[i],widths[i]-12),x+8,y+26);x+=widths[i];}
+      for(int i=0;i<labels.length;i++){drawText(clip(labels[i],widths[i]-12),x+8,y+26);x+=widths[i];}
       y+=46;
     }
     void tableRow(String[] values,int rowHeight) {
@@ -292,12 +292,12 @@ public class PayoutSettlementPdfRenderer {
       int[] widths=columns(values.length);
       g.setColor(((pages.size()+1)%2)==0?SUBTLE:Color.WHITE);g.fillRect(MARGIN,y,CONTENT_WIDTH,rowHeight);
       g.setColor(LINE);g.setStroke(new BasicStroke(1));g.drawLine(MARGIN,y+rowHeight,WIDTH-MARGIN,y+rowHeight);
-      g.setColor(INK);g.setFont(font(Font.PLAIN,15));
+      g.setColor(INK);g.setFont(font(Font.PLAIN,18));
       int x=MARGIN;
       for(int i=0;i<values.length;i++) {
         String[] parts=String.valueOf(values[i]==null?"":values[i]).split("\n",-1);
-        int lineY=y+20;
-        for(int j=0;j<Math.min(parts.length,3);j++){g.drawString(clip(parts[j],widths[i]-14),x+7,lineY);lineY+=18;}
+        int lineY=y+22;
+        for(int j=0;j<Math.min(parts.length,3);j++){drawText(clip(parts[j],widths[i]-14),x+7,lineY);lineY+=21;}
         x+=widths[i];
       }
       y+=rowHeight;
@@ -305,9 +305,9 @@ public class PayoutSettlementPdfRenderer {
     void ensure(int needed) {if(y+needed>FOOTER_Y-30)newPage(true);}
     void footer() {
       g.setColor(LINE);g.drawLine(MARGIN,FOOTER_Y-20,WIDTH-MARGIN,FOOTER_Y-20);
-      g.setColor(MUTED);g.setFont(font(Font.PLAIN,10));
-      g.drawString("Internal finance record. Not a tax invoice, statutory TDS/TCS certificate, or tax-remittance receipt.",MARGIN,FOOTER_Y);
-      g.drawString("Page "+(pages.size()+1),WIDTH-MARGIN-58,FOOTER_Y);
+      g.setColor(MUTED);g.setFont(font(Font.PLAIN,12));
+      drawText("Internal finance record. Not a tax invoice, statutory TDS/TCS certificate, or tax-remittance receipt.",MARGIN,FOOTER_Y);
+      drawText("Page "+(pages.size()+1),WIDTH-MARGIN-58,FOOTER_Y);
     }
     RenderedStatement toPdf(String title,String number,Instant time) {
       if(g!=null){footer();g.dispose();g=null;archiveCurrentPage();}
@@ -469,7 +469,7 @@ public class PayoutSettlementPdfRenderer {
     String clean=value.replaceAll("[\\p{Cntrl}]"," ").trim();
     if(clean.length()<2)return clean;
     // Use the logical font's metrics without allocating a new image for every table cell.
-    Font measuredFont=font(Font.PLAIN,15);
+    Font measuredFont=font(Font.PLAIN,18);
     if(measuredFont.getStringBounds(clean,FONT_CONTEXT).getWidth()<=width)return clean;
     StringBuilder out=new StringBuilder();
     for(int i=0;i<clean.length();) {
