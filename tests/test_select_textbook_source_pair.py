@@ -120,7 +120,7 @@ class TextbookSourcePairHandoffTests(unittest.TestCase):
     def test_class_wide_handoff_rejects_noncanonical_book_id_to_slug_mapping(self):
         english = make_payload(6, "english")
         hindi = make_payload(6, "hindi")
-        english["sources"][0]["book_slug"] = english["sources"][1]["book_slug"]
+        english["sources"][0]["book_slug"], english["sources"][1]["book_slug"] = english["sources"][1]["book_slug"], english["sources"][0]["book_slug"]
         with self.assertRaisesRegex(ValueError, "canonical registered source slug"):
             build_selection(english, hindi, grade=6)
 
