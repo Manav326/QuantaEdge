@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "d51dc5591a8ed7b36a9396c8c9ae0bac96921cdf287558738b35ad0a1c16ae52",
+  "raw_analysis_sha256": "c4058c3a5f9264c3ccb415b78821489781716a5a3da1fc9d5d691482884ec1bd",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -134730,7 +134730,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600309956",
+      "run_id": "40608460262",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -135316,7 +135316,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600309956",
+      "run_id": "40608460262",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -135336,7 +135336,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600309956",
+      "run_id": "40608460262",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -142072,7 +142072,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600309956",
+      "run_id": "40608460262",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -146644,6 +146644,48 @@
         "limitations": [
           "The image does not provide specific educational content or questions related to the flow chart in the text.",
           "The visible text is empty, and there are no visible labels or formulas in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8232917dda5cf265c02fd928",
+      "asset_sha256": "5ca1559aaaaad898726dbe8828d545db16aba4ae468236da3036632bc1c2e42b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 76,
+      "asset_path": "assets/5ca1559aaaaad898726dbe8828d545db16aba4ae468236da3036632bc1c2e42b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9b2d7697ff3d8d5c9aaa2908709c2e9b1929d605b85dd59b0b1c09be80cb8762",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person climbing a rope ladder.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a person climbing a rope ladder, which is not directly related to the flow chart or the chemical reaction described in the text.",
+        "limitations": [
+          "The image does not provide specific details about the flow chart or the chemical reaction.",
+          "The image is a cartoon and may not accurately represent the complexity of the concepts involved in the flow chart and the chemical reaction."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "checkpointed_at": "2026-10-28T03:46:27Z",
+      "effective_analysis": {
+        "visual_summary": "A person climbing a rope ladder.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a person climbing a rope ladder, which is not directly related to the flow chart or the chemical reaction described in the text.",
+        "limitations": [
+          "The image does not provide specific details about the flow chart or the chemical reaction.",
+          "The image is a cartoon and may not accurately represent the complexity of the concepts involved in the flow chart and the chemical reaction."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

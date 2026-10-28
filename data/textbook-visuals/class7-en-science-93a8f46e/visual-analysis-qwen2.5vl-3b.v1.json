@@ -11,15 +11,15 @@
     "assets_selected": 2478,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
-      "4b1298747dc1ec978a226ae5",
-      "647c2218dab5482dd1c1758e",
-      "0e143e54e2f709b8a4e5968d",
-      "463542d4277119b7abc93e3a",
-      "8604e838b1f1e41398ca72dd"
+      "1554b4067d24673fc7b88fc2",
+      "c973477a8cf682ca3f4db4ca",
+      "29c388b0161ccfef7bc70795",
+      "0d1c88ea0154d314c4c70259",
+      "8232917dda5cf265c02fd928"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2473,
-    "assets_remaining": 5015,
+    "assets_analyzed": 2474,
+    "assets_remaining": 5014,
     "assets_completion_percent": 33.0,
     "assets_failed": 24,
     "assets_skipped_from_checkpoint": 2473,
@@ -85693,7 +85693,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600309956",
+      "run_id": "40608460262",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -86057,7 +86057,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600309956",
+      "run_id": "40608460262",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -86074,7 +86074,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600309956",
+      "run_id": "40608460262",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -90393,7 +90393,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600309956",
+      "run_id": "40608460262",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -93298,6 +93298,35 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40600309956",
       "checkpointed_at": "2026-10-28T02:08:58Z"
+    },
+    {
+      "asset_id": "8232917dda5cf265c02fd928",
+      "asset_sha256": "5ca1559aaaaad898726dbe8828d545db16aba4ae468236da3036632bc1c2e42b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 76,
+      "asset_path": "assets/5ca1559aaaaad898726dbe8828d545db16aba4ae468236da3036632bc1c2e42b.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9b2d7697ff3d8d5c9aaa2908709c2e9b1929d605b85dd59b0b1c09be80cb8762",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person climbing a rope ladder.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a person climbing a rope ladder, which is not directly related to the flow chart or the chemical reaction described in the text.",
+        "limitations": [
+          "The image does not provide specific details about the flow chart or the chemical reaction.",
+          "The image is a cartoon and may not accurately represent the complexity of the concepts involved in the flow chart and the chemical reaction."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "checkpointed_at": "2026-10-28T03:46:27Z"
     }
   ]
 }
