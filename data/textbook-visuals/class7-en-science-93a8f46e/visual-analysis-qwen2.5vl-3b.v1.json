@@ -14,13 +14,13 @@
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "c973477a8cf682ca3f4db4ca",
-      "29c388b0161ccfef7bc70795"
+      "0d1c88ea0154d314c4c70259",
+      "b7c93da39fddefe4085e42e9"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2459,
-    "assets_remaining": 5029,
-    "assets_completion_percent": 32.8,
+    "assets_analyzed": 2460,
+    "assets_remaining": 5028,
+    "assets_completion_percent": 32.9,
     "assets_failed": 21,
     "assets_skipped_from_checkpoint": 2459,
     "batch_limit": 5,
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40600192733",
-      "checkpointed_at": "2026-10-28T00:03:58Z"
+      "checkpointed_at": "2026-10-28T00:08:14Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40600192733",
-      "checkpointed_at": "2026-10-28T00:04:26Z"
+      "checkpointed_at": "2026-10-28T00:08:42Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40600192733",
-      "checkpointed_at": "2026-10-28T00:05:02Z"
+      "checkpointed_at": "2026-10-28T00:09:18Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -90502,7 +90502,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40589862068",
+      "run_id": "40600192733",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -92891,6 +92891,35 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40589862068",
       "checkpointed_at": "2026-10-27T23:04:17Z"
+    },
+    {
+      "asset_id": "b7c93da39fddefe4085e42e9",
+      "asset_sha256": "3c592f7a47fcbc1e16ead05f54686eb66c070a8f19d8792bc5f0a92fb8ae41b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 76,
+      "asset_path": "assets/3c592f7a47fcbc1e16ead05f54686eb66c070a8f19d8792bc5f0a92fb8ae41b6.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9b2d7697ff3d8d5c9aaa2908709c2e9b1929d605b85dd59b0b1c09be80cb8762",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue illustration of a person floating in the air with a dotted line above them, possibly representing a thought or idea.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be an abstract representation rather than a direct visual aid for the text.",
+        "limitations": [
+          "The image does not provide specific information or context related to the text.",
+          "The image is abstract and does not directly relate to the text content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40600192733",
+      "checkpointed_at": "2026-10-28T00:11:24Z"
     }
   ]
 }
