@@ -340,6 +340,8 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
         self.assertIn("trg_finance_payout_statement_document_immutable", migration)
         self.assertIn("trg_finance_payout_statement_event_immutable", migration)
         self.assertIn("MAX_PAGES", renderer)
+        self.assertIn("textRuns.add(new TextRun", renderer)
+        self.assertNotIn('row.get("status_details")', renderer)
         self.assertIn("not a gst tax invoice", renderer.lower())
         self.assertIn("TDS/TCS certificate", renderer)
         self.assertIn("createsArchivedStyleBatchReportWithContinuationPagesAndA4Geometry", renderer_test)
@@ -348,6 +350,7 @@ class CourseTypeMarketplaceInvoiceContractTests(unittest.TestCase):
         self.assertIn("Generate payout advice PDF", panel)
         self.assertIn("Archived PDF statements", panel)
         self.assertIn("doc.recipient_name", panel)
+        self.assertIn("setStatementDocs([])", panel)
         self.assertIn("private, no-store, max-age=0", payout)
         self.assertIn(".payoutStatementRow", css)
 
