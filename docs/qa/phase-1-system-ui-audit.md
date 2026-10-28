@@ -48,6 +48,12 @@ The current filesystem route-source inventory inspected for the three Next.js ap
 
 A previous UI localization artifact documented **50 page routes** from commit `36b38fa34c1b602e4f7238d43300a48023b3e011` (Web 23, Admin 17, People Operations 10). I inspected `scripts/inventory_ui_routes.mjs` and independently recomputed its route-normalization rules against the complete, non-truncated recursive tree at audit revision `5c4560c510c04f6c777071a887ec52cfcc711c28`: current route register targets **60 page entries / 60 primary pages / 0 route-handler files / 0 duplicate primary routes** (Web 29, Admin 19, People Operations 12), including the new `/qa` People Operations page. The 59 pre-existing page paths were reconciled in the earlier tree pass; the new `/qa` source and its state row were added on the QA feature branch. This is source/register reconciliation, **not** proof that the exact-head Node generator has run successfully.
 
+### 4.0.1 Current register reconciliation — 2026-10-28
+
+The current `docs/qa/ui-screen-inventory.csv`, `docs/qa/phase-1-ui-state-coverage.csv` and route/component audit register each contain 109 data rows: 75 generated Next.js page routes (33 Web, 25 Educational Admin, 17 People Operations/HRMS) plus 34 Android destinations. The earlier 96-row web register was missing 13 generated Next.js pages; the missing routes are now tracked, and CI compares generated page source paths with the maintained inventory. The `people` and `people-hrms` labels are normalized for counts. This is source-inventory reconciliation, **not** runtime visual verification.
+
+The current route generator must be executed and its generated output reconciled with these maintained rows and the Android composition map on the exact audit branch. Any redirects, route wrappers, conditional renderers or duplicate entry points need explicit dispositions; a count match alone is not proof that every screen/component was exercised.
+
 ### 4.1 Student and Parent Web
 
 Route files identified:
@@ -148,11 +154,11 @@ Required design principle for the later implementation: a unique installation/ru
 
 ## 8. Workflow scenario mapping
 
-A 72-case starter [workflow scenario register](./phase-1-workflow-scenario-register.csv) defines stable IDs and acceptance contracts for authentication, guardian/minor, tenancy, commerce, content, learning, live media, certificates, HRMS, UX/accessibility and QA-pack lifecycle. After the first QA lifecycle slice, 70 scenarios are `NOT_EXECUTED`; QA-003 (scenario-runner/report coverage) and QA-006 (external-provider sandbox isolation) remain `NOT_IMPLEMENTED`. None is marked passed. All 94 UI inventory rows are `SCENARIO_MAPPED`; the 443-row API inventory includes the eight new QA test-center handlers. Links remain traceability only: source-derived mappings are not endpoint-specific coverage proof.
+An 82-case [workflow scenario register](./phase-1-workflow-scenario-register.csv) defines stable acceptance contracts for authentication, guardian/minor lifecycle, tenancy, commerce, content, learning, live media, certificates, HRMS, UX/accessibility and QA-pack lifecycle. Currently 80 scenarios are `NOT_EXECUTED` and QA-003 (scenario-runner/report coverage) plus QA-006 (external-provider sandbox isolation) are `NOT_IMPLEMENTED`. None is marked passed. All 109 UI inventory rows are linked to scenario IDs; the 443-row API inventory includes the current QA test-center mappings. Links are traceability only: source-derived mappings are not endpoint-specific coverage proof.
 
 ## 9. Per-screen state coverage checklist
 
-A 94-row [UI State Coverage Checklist](./phase-1-ui-state-coverage.csv) now tracks the state categories separately rather than allowing one generic “screen passed” label. Each row has a stable screen key, source path, scenario IDs, state checks, runtime status, evidence URL, defect IDs and reviewer notes. Current controls/navigation status remains `SOURCE_SCAN_PARTIAL`; the other state categories remain `NOT_REVIEWED`; runtime remains `NOT_EXECUTED`. This is intentional until the control/state is reviewed or exercised. A reviewer may set `NOT_APPLICABLE` only after confirming the UI does not provide that state and recording why.
+The 109-row [UI State Coverage Checklist](./phase-1-ui-state-coverage.csv) tracks the state categories separately rather than allowing one generic “screen passed” label. Each row has a stable screen key, source path, scenario IDs, state checks, runtime status, evidence URL, defect IDs and reviewer notes. Runtime remains `NOT_EXECUTED` unless an evidence record proves otherwise. Responsive/accessibility and other state checks remain open until reviewed or exercised. A reviewer may set `NOT_APPLICABLE` only after confirming the UI does not provide that state and recording why.
 
 ## 10. Existing automated quality evidence
 
@@ -203,9 +209,9 @@ No browser E2E framework was positively identified in the inspected package mani
 - [x] Identify current external integration families and the high-risk tenant/role boundaries.
 - [x] Scan the 59 web route-entry files for page-level handlers/direct API literals and map Android route enums through the Compose shell (partial; see source log).
 - [x] Review representative schema migrations for identity, guardian, assessment, certificate, commerce, tenant/course release, learner-history and HRMS relationships; document protected baseline/cleanup findings.
-- [x] Add 72 cross-platform workflow scenarios and link the screen inventory to scenario IDs; all scenarios are still unexecuted.
-- [x] Add a separate 94-row UI state checklist so each screen's loading/error/validation/authorization/responsive/data/destructive states can be independently reviewed and evidenced.
-- [x] Link all 94 screen entries and all 443 extracted API mapping rows to existing scenario IDs; verify no unknown or missing references.
+- [x] Add 82 cross-platform workflow scenarios and link the screen inventory to scenario IDs; 80 remain `NOT_EXECUTED` and two remain `NOT_IMPLEMENTED`.
+- [x] Maintain a 109-row UI state checklist so each screen's loading/error/validation/authorization/responsive/data/destructive states can be independently reviewed and evidenced.
+- [x] Link all 109 screen entries and all 443 extracted API mapping rows to existing scenario IDs; CI validates cross-register references.
 - [x] Add a runtime execution log with one row per workflow scenario and explicit evidence/cleanup columns.
 - [x] Map source-present automated test evidence to high-risk scenario groups and record the difference between test-source presence, CI execution and true E2E verification.
 - [x] Source-extract 435 REST/STOMP mapping entries from 48 Java files; generated guard hints remain partial and need human review.
@@ -221,7 +227,7 @@ No browser E2E framework was positively identified in the inspected package mani
 - [ ] Execute the actual Node route-inventory test and generator on the exact current main SHA; retain the generated artifact and update the historical localization tracker.
 - [ ] Inspect every route file and referenced component: controls, dialogs, tabs, handlers, client-side validation, loading/empty/error/success states, visible role conditions and API calls.
 - [x] Trace all 34 Android destinations through Compose navigation and component composition; document route-specific renderer branches and back/return contracts. [ ] Complete device/emulator lifecycle/back testing and web parity (see Android composition map).
-- [ ] Complete the route action → API method/path → authentication/permission → request/response → persistence model mapping. The 435-row source-derived API route inventory and 72-case scenario/log crosswalk exist, but its guard hints and controller-family scenario links still require endpoint-by-endpoint review.
+- [ ] Complete the route action → API method/path → authentication/permission → request/response → persistence model mapping. The 443-row source-derived API route inventory and 82-case scenario/log crosswalk exist, but its guard hints and controller-family scenario links still require endpoint-by-endpoint review.
 - [ ] Complete schema-wide extraction of foreign keys, unique/check constraints, delete actions and migration history for all tables that will appear in a test pack (initial partial map: [data and cleanup map](./phase-1-data-and-cleanup-map.md)).
 - [ ] Verify the source-derived [role/workspace permission matrix](./phase-1-role-workspace-matrix.md) against the effective migrated database grants and route-by-route API allow/deny behavior (not labels or nav visibility).
 - [ ] Conduct browser walkthroughs at approximately 320, 375/390, 430, 768, 1280 and 1440 CSS pixels; retain screenshots and console/network findings.
@@ -244,8 +250,8 @@ Phase 1 may be signed off only when:
 
 ## 14. Immediate next pass
 
-1. Execute the route-generator test and current route artifact on the exact main SHA; also confirm the new QA-register validator tests in CI. Reconcile generated routes with the 94-row inventory (60 web page entries plus 34 Android destinations).
-2. Continue screen-specific control/API/permission mapping using the 94-row state checklist and 443-row API register, then use the 72-case execution log to drive controlled runtime walkthroughs.
+1. The route-generator test and generated source artifact have been run in CI. The 75 Next.js page routes are now reconciled against 75 browser register entries, alongside 34 Android destinations; the route/register parity guard runs in CI to catch omissions or stale source rows.
+2. Continue screen-specific control/API/permission mapping using the 109-row state checklist and 443-row API register, then use the 82-case execution log to drive controlled runtime walkthroughs.
 3. Verify current-main CI and record its exact SHA/results.
 4. Close high-priority tenant, role, test-data ownership and external-side-effect design questions; use the [consolidated coverage gap plan](./phase-1-coverage-gaps.md) as the Phase 1 gate before any central data installer is implemented.
 
