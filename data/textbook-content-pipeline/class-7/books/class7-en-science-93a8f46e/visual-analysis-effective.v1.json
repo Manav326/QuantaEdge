@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "f1bc0c92e6e971b20259f2a6a90063c0388ab5645198891d47e2b0f94abd0d81",
+  "raw_analysis_sha256": "5254ee68f58ffa6c7ae268e2e61984673361cc9d2513b6c24e1a1c544723815e",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -7282,7 +7282,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600309956",
+      "run_id": "40608460262",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -15020,85 +15020,21 @@
     {
       "asset_id": "89b40b364042ef1985b11a00",
       "asset_sha256": "6b97a9691a4ae69ec6fb289ae3cce00bbf6a91ed6c7ec437b7b8d455acaee82a",
+      "page_text_context_sha256": "f6f1645734229437b5623066b4fa85ad217f6f446355452c4caae369b83bdf3f",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 22,
       "asset_path": "page-0022.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "f6f1645734229437b5623066b4fa85ad217f6f446355452c4caae369b83bdf3f",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
-        "visual_type": "uncertain",
-        "visible_text": [
-          "Exploration, of course, isn’t just about discovering new facts\nor learning about diﬀ erent things in nature. Science, as we said\nin Grade 6, is a process, so it is about a way of thinking that\nwelcomes curiosity, asks questions, and is open to the unknown.\nIn Grade 7, we will try to ask deeper quest",
-          "To do this, we have to step out of this book, step out of the\nclassroom perhaps, and experience the world through activities\nand experiments. These are experiences that we hope will not\njust be interesting or exciting but also serve as stepping stones\nto a deeper understanding of the environment we ",
-          "But let’s get back into this book for now. You will read about\ntopics in different fields of science, from physics and chemistry\nto biology and earth sciences. While they might appear as\ndiﬀ erent chapters, just as we had said in Grade 6, they are\nall interconnected. Scientific ideas in one area oft"
-        ],
-        "concepts": [
-          "science",
-          "curiosity",
-          "questioning",
-          "environment",
-          "responsibility",
-          "science as a process",
-          "environmental challenges",
-          "sustainable world",
-          "properties of materials",
-          "discovery",
-          "interconnectedness",
-          "scientific ideas",
-          "discoveries",
-          "asking questions"
-        ],
-        "context_relation": "exploration and questioning in science",
-        "limitations": [
-          "limited to Grade 7",
-          "focus on nature and environment",
-          "emphasis on responsibility and sustainability",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
-        ]
-      },
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600309956",
-      "checkpointed_at": "2026-10-28T02:05:24Z",
-      "effective_analysis": {
-        "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
-        "visual_type": "uncertain",
-        "visible_text": [
-          "Exploration, of course, isn’t just about discovering new facts\nor learning about diﬀ erent things in nature. Science, as we said\nin Grade 6, is a process, so it is about a way of thinking that\nwelcomes curiosity, asks questions, and is open to the unknown.\nIn Grade 7, we will try to ask deeper quest",
-          "To do this, we have to step out of this book, step out of the\nclassroom perhaps, and experience the world through activities\nand experiments. These are experiences that we hope will not\njust be interesting or exciting but also serve as stepping stones\nto a deeper understanding of the environment we ",
-          "But let’s get back into this book for now. You will read about\ntopics in different fields of science, from physics and chemistry\nto biology and earth sciences. While they might appear as\ndiﬀ erent chapters, just as we had said in Grade 6, they are\nall interconnected. Scientific ideas in one area oft"
-        ],
-        "concepts": [
-          "science",
-          "curiosity",
-          "questioning",
-          "environment",
-          "responsibility",
-          "science as a process",
-          "environmental challenges",
-          "sustainable world",
-          "properties of materials",
-          "discovery",
-          "interconnectedness",
-          "scientific ideas",
-          "discoveries",
-          "asking questions"
-        ],
-        "context_relation": "exploration and questioning in science",
-        "limitations": [
-          "limited to Grade 7",
-          "focus on nature and environment",
-          "emphasis on responsibility and sustainability",
-          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
-        ]
-      },
-      "checkpoint_fingerprint_status": "MATCHED",
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     },
     {
@@ -20214,83 +20150,21 @@
     {
       "asset_id": "e16d4a62f7889b707898ea77",
       "asset_sha256": "ff62d9e1ae71752cc5f7a797bf0d6fadcbd8d4748f021e98609919142f00dad0",
+      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
       "source_book_id": "ncert-c7-english-gecu1",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "source_pdf_page_number": 25,
       "asset_path": "page-0025.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "c1843be0afaededfbd3e2483e7d0d5065e41941338bc8c778a4eaf7d18cf8b3b",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
-          "In the chapters that follow, you'll also make simple observations and do fun experiments, and dive into topics that need careful thinking. Each chapter builds on what you already know and encourages you to ask questions, explore, do hands-on experiments, and think like a scientist! As you will find ",
-          "1.1 Happy Exploring!",
-          "Activity 1.1: Question the Answer",
-          "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
-        ],
-        "concepts": [
-          "light",
-          "eclipse",
-          "Earth",
-          "Moon",
-          "rotation",
-          "axis",
-          "day and night",
-          "experiments",
-          "questions",
-          "thinking",
-          "experiments that confirm what we think will happen",
-          "additional questions that might need more experiments and more questions",
-          "questions and answers",
-          "turning around"
-        ],
-        "context_relation": "The text discusses the effects of light on the Earth and Moon, including eclipses, and encourages readers to think critically and conduct experiments.",
-        "limitations": [
-          "The text does not provide specific images or diagrams related to the concepts discussed."
-        ]
-      },
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608460262",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model response is missing required fields.",
       "human_review_required": true,
       "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600309956",
-      "checkpointed_at": "2026-10-28T02:06:01Z",
-      "effective_analysis": {
-        "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "Even the Earth and the Moon can cast shadows, leading to the fascinating phenomena of eclipses. And of course, we have day and night that depend on receiving light from the Sun. To understand all of this, we need to know how the Earth rotates around its axis, how the Moon goes around the Earth, and ",
-          "In the chapters that follow, you'll also make simple observations and do fun experiments, and dive into topics that need careful thinking. Each chapter builds on what you already know and encourages you to ask questions, explore, do hands-on experiments, and think like a scientist! As you will find ",
-          "1.1 Happy Exploring!",
-          "Activity 1.1: Question the Answer",
-          "In school or during tests, you're usually given questions and expected to find the answers. But let's turn that around! To think"
-        ],
-        "concepts": [
-          "light",
-          "eclipse",
-          "Earth",
-          "Moon",
-          "rotation",
-          "axis",
-          "day and night",
-          "experiments",
-          "questions",
-          "thinking",
-          "experiments that confirm what we think will happen",
-          "additional questions that might need more experiments and more questions",
-          "questions and answers",
-          "turning around"
-        ],
-        "context_relation": "The text discusses the effects of light on the Earth and Moon, including eclipses, and encourages readers to think critically and conduct experiments.",
-        "limitations": [
-          "The text does not provide specific images or diagrams related to the concepts discussed."
-        ]
-      },
-      "checkpoint_fingerprint_status": "MATCHED",
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     },
     {
@@ -72028,9 +71902,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600309956",
+      "run_id": "40608460262",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -78674,7 +78548,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600309956",
+      "run_id": "40608460262",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
