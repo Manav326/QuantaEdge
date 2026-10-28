@@ -100,13 +100,13 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
 
         def choices_for(field):
             match = re.search(
-                rf"(?ms)^      {re.escape(field)}:\\n(.*?)(?=^      [A-Za-z0-9_-]+:\\s*$|^permissions:)",
+                rf"(?ms)^      {re.escape(field)}:\n(.*?)(?=^      [A-Za-z0-9_-]+:\s*$|^permissions:)",
                 master,
             )
             self.assertIsNotNone(match, f"Missing workflow_dispatch input: {field}")
-            options = re.search(r"(?m)^        options:\\s*\\[([^\\]]+)\\]\\s*$", match.group(1))
+            options = re.search(r"(?m)^        options:\s*\[([^\]]+)\]\s*$", match.group(1))
             self.assertIsNotNone(options, f"Input {field} must use an explicit finite choice list")
-            return [item.strip().strip("'\\\"") for item in options.group(1).split(",")]
+            return [item.strip().strip("'").strip('"') for item in options.group(1).split(",")]
 
         expected = {
             "class_no": ["6", "7", "8", "all"],
@@ -129,7 +129,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertIn("default: progress_report", master)
         self.assertIn("default: prepare_only", master)
         self.assertNotIn("name: Checkout main", master)
-        self.assertNotRegex(master, r"(?m)^\\s*(push|schedule|workflow_run):")
+        self.assertNotRegex(master, r"(?m)^\s*(push|schedule|workflow_run):")
         self.assertNotIn("uses: ./.github/workflows/", master)
 
     def test_redundant_scheduler_and_standalone_visual_workflow_are_removed(self):
