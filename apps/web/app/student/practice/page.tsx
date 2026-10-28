@@ -1,8 +1,9 @@
 import { Suspense } from 'react';
+import { RouteLoadingSkeleton } from '../../components/RouteLoadingSkeleton';
 import PracticeClient from './PracticeClient';
 
 export default function PracticePage() {
-  return <Suspense fallback={<main className="practice-page"><section className="practice-wrap"><div className="eyebrow">Loading topic practice…</div></section></main>}>
+  return <Suspense fallback={<RouteLoadingSkeleton description="Loading topic practice…" variant="practice" />}>
     <PracticeClient />
   </Suspense>;
 }
