@@ -161,6 +161,27 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         state=(ROOT/"data/textbook-content-pipeline/resume-control.v1.json").read_text(encoding="utf-8")
         self.assertIn('"active": true', state)
 
+    def test_progress_reporter_refreshes_on_checkpoint_updates_without_write_permissions(self):
+        path = WORKFLOWS / "textbook-progress-report.yml"
+        self.assertTrue(path.is_file())
+        reporter = path.read_text(encoding="utf-8")
+        self.assertIn('branches: ["main"]', reporter)
+        for pattern in (
+            "data/textbook-extractions/**",
+            "data/textbook-content-pipeline/**",
+            "data/textbook-visuals/**",
+            "data/textbook-visual-candidates-v3/**",
+        ):
+            with self.subTest(pattern=pattern):
+                self.assertIn(pattern, reporter)
+        self.assertIn("contents: read", reporter)
+        self.assertIn("cancel-in-progress: true", reporter)
+        self.assertIn("scripts/report_textbook_pair_progress.py", reporter)
+        self.assertIn("GITHUB_STEP_SUMMARY", reporter)
+        self.assertIn("actions/upload-artifact@v4", reporter)
+        self.assertNotIn("git push", reporter)
+        self.assertNotIn("ollama", reporter.lower())
+
     def test_layer45_matrix_is_pair_scoped_and_checkpoint_writes_are_safe(self):
         master=read("textbook-content-pipeline.yml")
         self.assertIn("INPUT_BOOK_PAIR_ID",master)
