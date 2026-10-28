@@ -95,6 +95,43 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
         self.assertNotIn("uses: ./.github/workflows/", master)
         self.assertNotRegex(master, r"(?m)^\s*(push|schedule|workflow_run):")
 
+    def test_every_choice_input_has_the_expected_supported_values(self):
+        master = read("textbook-content-pipeline.yml")
+
+        def choices_for(field):
+            match = re.search(
+                rf"(?ms)^      {re.escape(field)}:\\n(.*?)(?=^      [A-Za-z0-9_-]+:\\s*$|^permissions:)",
+                master,
+            )
+            self.assertIsNotNone(match, f"Missing workflow_dispatch input: {field}")
+            options = re.search(r"(?m)^        options:\\s*\\[([^\\]]+)\\]\\s*$", match.group(1))
+            self.assertIsNotNone(options, f"Input {field} must use an explicit finite choice list")
+            return [item.strip().strip("'\\\"") for item in options.group(1).split(",")]
+
+        expected = {
+            "class_no": ["6", "7", "8", "all"],
+            "book_pair_id": [
+                "all", "class6-science-bilingual", "class6-maths-bilingual",
+                "class7-science-bilingual", "class7-maths-part1-bilingual",
+                "class7-maths-part2-bilingual", "class8-science-bilingual",
+                "class8-maths-part1-bilingual", "class8-maths-part2-bilingual",
+            ],
+            "analysis_mode": ["prepare_only", "analyze_all", "resume_preparation", "resume_layers_4_5"],
+            "checkpoint_batch_size": ["5", "10"],
+            "cache_language": ["both", "hindi", "english"],
+            "layer68_mode": ["benchmark", "run", "resume", "refresh_benchmark"],
+            "checkpoint_every": ["1", "2", "3", "5"],
+        }
+        for field, values in expected.items():
+            with self.subTest(field=field):
+                self.assertEqual(values, choices_for(field))
+
+        self.assertIn("default: progress_report", master)
+        self.assertIn("default: prepare_only", master)
+        self.assertNotIn("name: Checkout main", master)
+        self.assertNotRegex(master, r"(?m)^\\s*(push|schedule|workflow_run):")
+        self.assertNotIn("uses: ./.github/workflows/", master)
+
     def test_redundant_scheduler_and_standalone_visual_workflow_are_removed(self):
         self.assertFalse((WORKFLOWS/"resume-textbook-layers-4-5-automatically.yml").exists())
         self.assertFalse((WORKFLOWS/"textbook-visual-analysis.yml").exists())
