@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2554,
+    "assets_selected": 2556,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "75dd5bbdc74bf907cb3759a6",
-      "f910c22893dcbe0c0b1cb7e9"
+      "984038c20f542b7dfa33eaef",
+      "685e7f94b17bf04aee6cecd9"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2551,
-    "assets_remaining": 4937,
+    "assets_analyzed": 2553,
+    "assets_remaining": 4935,
     "assets_completion_percent": 34.1,
     "assets_failed": 21,
-    "assets_skipped_from_checkpoint": 2549,
+    "assets_skipped_from_checkpoint": 2551,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40663544497",
-      "checkpointed_at": "2026-10-28T10:25:58Z"
+      "checkpointed_at": "2026-10-28T10:29:10Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40663544497",
-      "checkpointed_at": "2026-10-28T10:26:28Z"
+      "checkpointed_at": "2026-10-28T10:29:40Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40663544497",
-      "checkpointed_at": "2026-10-28T10:27:07Z"
+      "checkpointed_at": "2026-10-28T10:30:18Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -96188,6 +96188,75 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40663544497",
       "checkpointed_at": "2026-10-28T10:28:23Z"
+    },
+    {
+      "asset_id": "984038c20f542b7dfa33eaef",
+      "asset_sha256": "0dd402f419a607fab3b8d5858dc8f7aebda057d7231dad76790b9c784493a9f5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/0dd402f419a607fab3b8d5858dc8f7aebda057d7231dad76790b9c784493a9f5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a hand adjusting a plaid shirt collar.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is an illustration of a hand adjusting a plaid shirt collar, which is unrelated to the text about changes around us.",
+        "limitations": [
+          "The image does not provide any information about changes around us.",
+          "The visible text is incomplete and does not provide any context for the illustration."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40663544497",
+      "checkpointed_at": "2026-10-28T10:30:55Z"
+    },
+    {
+      "asset_id": "685e7f94b17bf04aee6cecd9",
+      "asset_sha256": "8760e2642f7eb00f597057ebc45441c5afe654ab9ab24bcf2ce8c6618d66f787",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/8760e2642f7eb00f597057ebc45441c5afe654ab9ab24bcf2ce8c6618d66f787.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cube of ice is melting into water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Melting",
+          "Bud to Flower",
+          "Temperature Change"
+        ],
+        "context_relation": "The image illustrates a physical and chemical change, showing the melting of ice into water and the transformation of a bud into a flower.",
+        "limitations": [
+          "The image does not provide specific details about the chemical changes involved in the melting of ice.",
+          "The image does not show the chemical reaction that occurs when a bud turns into a flower."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40663544497",
+      "checkpointed_at": "2026-10-28T10:31:39Z"
     }
   ]
 }

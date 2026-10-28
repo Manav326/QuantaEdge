@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "a306d4aefc6364eef1f0830552dd08cf4c25655e36926c7728e20bf537f8ce4a",
+  "raw_analysis_sha256": "73755a0f870b899d11b203e8f5908be719a27085972f2bd38aff6f84d150a81c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40663544497",
-      "checkpointed_at": "2026-10-28T10:25:58Z",
+      "checkpointed_at": "2026-10-28T10:29:10Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40663544497",
-      "checkpointed_at": "2026-10-28T10:26:28Z",
+      "checkpointed_at": "2026-10-28T10:29:40Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40663544497",
-      "checkpointed_at": "2026-10-28T10:27:07Z",
+      "checkpointed_at": "2026-10-28T10:30:18Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -151170,6 +151170,112 @@
         "limitations": [
           "The image does not provide any specific information about the changes mentioned in the text.",
           "The image is a cartoon illustration and may not accurately represent the changes described in the text."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "984038c20f542b7dfa33eaef",
+      "asset_sha256": "0dd402f419a607fab3b8d5858dc8f7aebda057d7231dad76790b9c784493a9f5",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/0dd402f419a607fab3b8d5858dc8f7aebda057d7231dad76790b9c784493a9f5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a hand adjusting a plaid shirt collar.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is an illustration of a hand adjusting a plaid shirt collar, which is unrelated to the text about changes around us.",
+        "limitations": [
+          "The image does not provide any information about changes around us.",
+          "The visible text is incomplete and does not provide any context for the illustration."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40663544497",
+      "checkpointed_at": "2026-10-28T10:30:55Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a hand adjusting a plaid shirt collar.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is an illustration of a hand adjusting a plaid shirt collar, which is unrelated to the text about changes around us.",
+        "limitations": [
+          "The image does not provide any information about changes around us.",
+          "The visible text is incomplete and does not provide any context for the illustration."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "685e7f94b17bf04aee6cecd9",
+      "asset_sha256": "8760e2642f7eb00f597057ebc45441c5afe654ab9ab24bcf2ce8c6618d66f787",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/8760e2642f7eb00f597057ebc45441c5afe654ab9ab24bcf2ce8c6618d66f787.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cube of ice is melting into water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Melting",
+          "Bud to Flower",
+          "Temperature Change"
+        ],
+        "context_relation": "The image illustrates a physical and chemical change, showing the melting of ice into water and the transformation of a bud into a flower.",
+        "limitations": [
+          "The image does not provide specific details about the chemical changes involved in the melting of ice.",
+          "The image does not show the chemical reaction that occurs when a bud turns into a flower."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40663544497",
+      "checkpointed_at": "2026-10-28T10:31:39Z",
+      "effective_analysis": {
+        "visual_summary": "A cube of ice is melting into water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago.",
+          "It has now become water!",
+          "AA bud that I saw yesterday on this rose has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown"
+        ],
+        "concepts": [
+          "Physical and Chemical Changes",
+          "Melting",
+          "Bud to Flower",
+          "Temperature Change"
+        ],
+        "context_relation": "The image illustrates a physical and chemical change, showing the melting of ice into water and the transformation of a bud into a flower.",
+        "limitations": [
+          "The image does not provide specific details about the chemical changes involved in the melting of ice.",
+          "The image does not show the chemical reaction that occurs when a bud turns into a flower."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
