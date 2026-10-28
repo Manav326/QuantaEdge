@@ -39,8 +39,9 @@ The guiding rule is: **render the app shell first; load essential content next; 
 
 - [x] Add App Router route-level loading boundaries to Web, Admin, and HRMS/People.
 - [x] Use layout-shaped skeletons, theme-aware colors, responsive layout, and reduced-motion support.
+- [x] Replace text-only nested Suspense fallbacks on learner Learn, Practice, Textbooks, Tests, and Certificates routes with content-shaped variants.
 - [x] Add a native Compose skeleton primitive and replace high-visibility course/class initial-load spinners.
-- [ ] Audit route-by-route for page-specific skeletons where the generic fallback does not match the actual content.
+- [ ] Continue the route-by-route audit for pages with local loading states that may still show text-only loaders or block unrelated content.
 - [ ] Confirm error and true-empty states never remain stuck in skeleton mode.
 
 ### Phase 2 — Route and component loading
@@ -83,6 +84,7 @@ The guiding rule is: **render the app shell first; load essential content next; 
 **Implemented on this branch:**
 - App Router route loading boundaries for the three web portals.
 - An accessible, responsive skeleton fallback that leaves each portal's existing root layout in place.
+- A reusable Web skeleton with dashboard, lesson, practice, and list variants. Five learner routes that had their own text-only Suspense fallback now use the structured skeleton.
 - A reusable theme-aware Compose skeleton and replacement of the initial loading indicators on the learner's All Courses and Live Classes/Recordings screens.
 - This implementation plan and follow-up checklist.
 
