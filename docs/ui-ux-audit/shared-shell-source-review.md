@@ -96,6 +96,12 @@ Runtime checks still required:
 - Lesson/tutor open/minimized/restore/close, drag/resize bounds and context retention after navigation; make sure the overlay neither hides primary controls nor becomes unreachable behind system UI.
 - Compare equivalent API-backed Web and Android journeys without relaxing the same institution, role, course entitlement or saved-attempt rules.
 
+## 1.1 Exact-head source inventory evidence
+
+[CI run #7083](https://github.com/Manav326/QuantaEdge/actions/runs/40643885831) for commit `e31a26d76b05293a40adb4c72f583e223b4a2c3e` completed the route/source parity and component-source graph steps successfully. It found 75 generated page routes, 245 unique resolved source/asset paths, 166 unique UI-module candidates, 52 stylesheet modules, and zero unresolved local import references. The generated `ui-component-import-inventory` artifact is the source-trace starting point for the next phase.
+
+The result confirms local import resolution, not actual rendered-tree completeness: components hidden behind runtime data, computed imports, permission conditions, feature flags or lazy state transitions still need explicit inspection. No browser screenshot/device result is implied. Web/Admin/HRMS/API image builds were skipped in this audit-only run.
+
 ## 2. Cross-app risk list (not confirmed defects)
 
 | ID | Observation | Required verification before action |
