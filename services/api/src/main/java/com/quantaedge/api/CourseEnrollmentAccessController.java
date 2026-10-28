@@ -53,6 +53,7 @@ public class CourseEnrollmentAccessController {
     return jdbc.queryForList("""
       select identity.id as course_identity_id,identity.public_id as course_identity_public_id,
         identity.stable_course_key,identity.display_name,identity.course_type_code,
+        identity.course_expiry_policy_required,
         identity.source_institution_id,source.tenant_code as source_institution_code,
         coalesce(branding.display_name,source.display_name) as source_institution_name,
         current_program.id as current_course_id,current_program.code as current_course_code,
@@ -287,7 +288,7 @@ public class CourseEnrollmentAccessController {
       throw new ResponseStatusException(HttpStatus.CONFLICT,"The course enrolment has ended. Unblocking does not renew or reactivate it.");
     }
     Instant expiresAt=asInstant(row.get("course_expires_at"));
-    if(expiresAt!=null&&!expiresAt.isAfter(Instant.now())) {
+    if(expiresAt!=null&&!expiresAt.isAfter(databaseNow())) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,"The course access has expired. Extend the expiry first, then unblock the enrollment.");
     }
     jdbc.update("""
@@ -311,7 +312,7 @@ public class CourseEnrollmentAccessController {
     AuthContext owner=requirePlatformOwner(context);
     String notes=requiredNotes(body);
     Instant requestedExpiry=parseInstant(string(body,"expiresAt"));
-    Instant now=Instant.now();
+    Instant now=databaseNow();
     if(!requestedExpiry.isAfter(now)) throw new IllegalArgumentException("The new expiry must be in the future.");
     Map<String,Object> row=lockEnrollment(enrollmentId);
     String status=String.valueOf(row.get("enrollment_status"));
@@ -385,6 +386,24 @@ public class CourseEnrollmentAccessController {
   }
 
   private Map<String,Object> lockEnrollment(long enrollmentId) {
+    // Read identity first without taking the row lock; all version rows for a learner/course
+    // share one advisory lock. Locking an arbitrary version row before that advisory lock can
+    // deadlock with an action already updating all the learner's version rows.
+    List<Map<String,Object>> candidates=jdbc.queryForList("""
+      select enrollment.id,enrollment.course_identity_id,enrollment.institution_id,enrollment.student_id,
+        enrollment.status as enrollment_status,enrollment.course_expires_at,enrollment.course_access_blocked,
+        enrollment.program_id
+      from student_program_enrollment enrollment
+      where enrollment.id=? and enrollment.course_identity_id is not null
+      """,enrollmentId);
+    if(candidates.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+        "The course enrollment was not found or is not linked to a logical course identity.");
+    Map<String,Object> candidate=candidates.getFirst();
+    jdbc.query("""
+      select pg_advisory_xact_lock(hashtextextended(
+        ?::text || ':' || ?::text || ':' || ?::text,0))
+      """,rs->{ while(rs.next()) { /* acquire the transaction-scoped logical-enrolment lock */ } return null; },
+        candidate.get("course_identity_id"),candidate.get("institution_id"),candidate.get("student_id"));
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select enrollment.id,enrollment.course_identity_id,enrollment.institution_id,enrollment.student_id,
         enrollment.status as enrollment_status,enrollment.course_expires_at,enrollment.course_access_blocked,
@@ -393,15 +412,15 @@ public class CourseEnrollmentAccessController {
       where enrollment.id=? and enrollment.course_identity_id is not null
       for update
       """,enrollmentId);
-    if(rows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The course enrollment was not found or is not linked to a logical course identity.");
-    Map<String,Object> row=new LinkedHashMap<>(rows.getFirst());
-    // Use the same logical enrolment lock as the database trigger. This closes the race where a
-    // new content-version row could be inserted while HRMS is blocking or extending the course.
-    jdbc.queryForList("""
-      select pg_advisory_xact_lock(hashtextextended(
-        ?::text || ':' || ?::text || ':' || ?::text,0))
-      """,row.get("course_identity_id"),row.get("institution_id"),row.get("student_id"));
-    return row;
+    if(rows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+        "The course enrollment was not found or is not linked to a logical course identity.");
+    return new LinkedHashMap<>(rows.getFirst());
+  }
+
+  private Instant databaseNow() {
+    Timestamp value=jdbc.queryForObject("select statement_timestamp()",Timestamp.class);
+    if(value==null) throw new IllegalStateException("Database time could not be determined.");
+    return value.toInstant();
   }
 
   private void insertAccessEvent(Map<String,Object> row,String eventType,Object previousExpiry,Object newExpiry,

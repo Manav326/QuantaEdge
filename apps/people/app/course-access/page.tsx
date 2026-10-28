@@ -5,7 +5,7 @@ import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import styles from './CourseAccess.module.css';
 
 type Course = {
-  course_identity_id: number; course_identity_public_id?: string; stable_course_key?: string; display_name: string; course_type_code?: string;
+  course_identity_id: number; course_identity_public_id?: string; stable_course_key?: string; display_name: string; course_type_code?: string; course_expiry_policy_required?: boolean;
   source_institution_code?: string; source_institution_name?: string; current_course_code?: string;
   policy_mode?: 'CALENDAR_DURATION' | 'FIXED_DAYS' | null; calendar_years?: number | null;
   calendar_months?: number | null; calendar_days?: number | null; fixed_days?: number | null;
@@ -60,7 +60,9 @@ function parseIstDateTime(value: string) {
 }
 function expired(value?: string | null) { return Boolean(value && new Date(value).getTime() <= Date.now()); }
 function duration(course: Course) {
-  if (!course.policy_mode) return 'Not configured — new enrolments do not yet expire';
+  if (!course.policy_mode) return course.course_expiry_policy_required
+    ? 'Required before enrolment and Marketplace publication'
+    : 'Legacy course — no automatic expiry is configured';
   if (course.policy_mode === 'FIXED_DAYS') return String(course.fixed_days) + ' days';
   const parts: string[] = [];
   if (course.calendar_years) parts.push(String(course.calendar_years) + ' year' + (course.calendar_years === 1 ? '' : 's'));
@@ -264,7 +266,7 @@ export default function CourseAccessPage() {
               <small>{course.stable_course_key || course.current_course_code || 'Course'} · {course.source_institution_name || course.source_institution_code || 'Source not listed'}</small>
               <small>{Number(course.assigned_institution_count || 0)} institutions · {Number(course.active_enrollment_count || 0)} active enrolments</small>
               <span className={styles.status + (course.policy_mode ? ' ' + styles.statusActive : ' ' + styles.statusWarning)}>
-                {course.policy_mode ? 'Policy v' + course.policy_version : 'Policy not set'}
+                {course.policy_mode ? 'Policy v' + course.policy_version : course.course_expiry_policy_required ? 'Policy required' : 'Legacy course'}
               </span>
             </span>
           </button>)}
@@ -277,7 +279,7 @@ export default function CourseAccessPage() {
           <div className={styles.titleRow}>
             <div><span className={styles.eyebrow}>SHARED COURSE POLICY</span><h2>{selected.display_name}</h2>
               <p>{selected.stable_course_key || selected.current_course_code || 'Logical course'} · Source: {selected.source_institution_name || selected.source_institution_code || 'Not listed'}</p></div>
-            <span className={styles.status + (selected.policy_mode ? ' ' + styles.statusActive : ' ' + styles.statusWarning)}>{selected.policy_mode ? 'Configured' : 'Not configured'}</span>
+            <span className={styles.status + (selected.policy_mode ? ' ' + styles.statusActive : ' ' + styles.statusWarning)}>{selected.policy_mode ? 'Configured' : selected.course_expiry_policy_required ? 'Required' : 'Legacy exception'}</span>
           </div>
           <div className={styles.policySummary}>
             <div><span>Current shared duration</span><strong>{duration(selected)}</strong></div>
@@ -308,7 +310,7 @@ export default function CourseAccessPage() {
             <div className={styles.formActions}><button className={styles.primary} type="submit" disabled={saving}>
               {saving ? 'Saving…' : selected.policy_mode ? 'Save policy update' : 'Save shared policy'}</button></div>
           </form>
-          <p className={styles.caveat}>Until a policy is configured, new enrolments for this course do not receive an automatic expiry. Legacy enrolments are not silently changed.</p>
+          <p className={styles.caveat}>Newly registered courses marked as policy-required cannot receive an active enrolment or a Marketplace offer until HRMS configures the shared duration. Existing course identities are grandfathered; configuring a policy does not silently shorten or extend existing learner expiries.</p>
         </section>
 
         <section className={styles.panel}>

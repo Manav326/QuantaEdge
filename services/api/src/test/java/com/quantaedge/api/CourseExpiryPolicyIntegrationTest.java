@@ -2,10 +2,12 @@ package com.quantaedge.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -141,6 +143,37 @@ class CourseExpiryPolicyIntegrationTest {
       select course_expiry_policy_version_snapshot from student_program_enrollment
       where student_id=? and institution_id=? and program_id=?
       """, Long.class, secondStudent, institutionId, programId));
+  }
+
+  @Test
+  @Transactional
+  void newlyRegisteredCourseCannotActivateLearnerBeforeExpiryPolicyIsConfigured() {
+    long institutionId = jdbc.queryForObject("""
+      select id from institution_tenant where tenant_code='QUANTA-EDGE' and status='ACTIVE'
+      """, Long.class);
+    long[] course = jdbc.queryForObject("""
+      select identity.id,program.id
+      from institution_course_identity identity
+      join curriculum_program program on program.course_identity_id=identity.id
+        and program.code='CLASS_6' and program.status='ACTIVE'
+      where identity.stable_course_key='CLASS_6' and identity.status='ACTIVE'
+      order by program.content_version_no desc,program.id desc limit 1
+      """, (rs, row) -> new long[]{rs.getLong(1), rs.getLong(2)});
+    long identityId=course[0];
+    long programId=course[1];
+
+    // Simulate a new registration inside this transaction. Existing production identities stay
+    // grandfathered; a newly registered identity carries the policy-required flag.
+    jdbc.update("delete from course_expiry_policy where course_identity_id=?",identityId);
+    jdbc.update("update institution_course_identity set course_expiry_policy_required=true where id=?",identityId);
+    long studentId=createStudent("Course expiry required-policy fixture",institutionId);
+
+    assertThrows(DataAccessException.class, () -> jdbc.update("""
+      insert into student_program_enrollment(
+        student_id,program_id,institution_id,status,enrolled_at,ended_at,created_at,updated_at
+      ) values(?,?,?,'ACTIVE',now(),null,now(),now())
+      """,studentId,programId,institutionId),
+      "The database must reject an active enrolment until HRMS configures the required shared policy.");
   }
 
   private long createStudent(String displayName, long institutionId) {

@@ -1,6 +1,11 @@
 -- V217: one shared expiry policy per logical course identity, per-enrollment access controls,
 -- and immutable audit history. Existing enrollments are deliberately grandfathered: no expiry
 -- is backfilled and configuring a policy affects only future/reactivated enrollments.
+
+-- Existing course identities are grandfathered. Source-course registration explicitly marks
+-- newly registered identities as requiring an HRMS expiry policy before Marketplace offer setup.
+ALTER TABLE institution_course_identity
+  ADD COLUMN course_expiry_policy_required boolean NOT NULL DEFAULT false;
 ALTER TABLE student_program_enrollment
   ADD COLUMN course_identity_id bigint REFERENCES institution_course_identity(id) ON DELETE RESTRICT,
   ADD COLUMN course_expires_at timestamptz,
@@ -176,6 +181,7 @@ DECLARE
   v_activating boolean := false;
   v_has_policy boolean := false;
   v_has_existing boolean := false;
+  v_policy_required boolean := false;
   v_policy course_expiry_policy%ROWTYPE;
   v_existing student_program_enrollment%ROWTYPE;
 BEGIN
@@ -264,6 +270,15 @@ BEGIN
           NEW.enrolled_at,v_policy.policy_mode,v_policy.calendar_years,
           v_policy.calendar_months,v_policy.calendar_days,v_policy.fixed_days);
       ELSE
+        SELECT COALESCE(identity.course_expiry_policy_required,false)
+          INTO v_policy_required
+        FROM institution_course_identity identity
+        WHERE identity.id=NEW.course_identity_id;
+        IF v_policy_required THEN
+          RAISE EXCEPTION
+            'COURSE_EXPIRY_POLICY_REQUIRED: HRMS must configure the shared course expiry duration before this learner can be enrolled.'
+            USING ERRCODE='23514';
+        END IF;
         NEW.course_expiry_policy_version_snapshot := NULL;
         NEW.course_expiry_mode_snapshot := NULL;
         NEW.course_expiry_years_snapshot := NULL;
