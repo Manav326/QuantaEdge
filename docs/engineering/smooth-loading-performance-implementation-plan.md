@@ -53,7 +53,8 @@ The guiding rule is: **render the app shell first; load essential content next; 
 ### Phase 3 — API efficiency and caching
 
 - [ ] Produce a route-to-data matrix for learner, parent, institution admin, and HRMS screens.
-- [ ] Add/standardize shared request deduplication, cache keys, freshness policies, cancellation, bounded retries, and targeted invalidation using the existing stack where possible.
+- [x] Coalesce identical in-flight same-origin API GETs across all three web clients when browser caching is default and no explicit abort/forced refresh is requested. Return a separate Response clone per caller; inspect/notify once per shared request. This is in-flight deduplication, not a resolved-response cache.
+- [ ] Audit and standardize resolved-data cache keys, freshness policies, cancellation, bounded retries, and targeted invalidation using the existing stack where possible.
 - [ ] Avoid waterfalls for independent requests; retain explicit sequencing for real dependencies.
 - [ ] Use paginated endpoints for large rosters, course catalogues, transaction histories, and question banks.
 - [ ] Debounce search/filter inputs and ensure only the latest query can update the screen.
@@ -83,9 +84,12 @@ The guiding rule is: **render the app shell first; load essential content next; 
 - App Router route loading boundaries for the three web portals.
 - An accessible, responsive skeleton fallback that leaves each portal's existing root layout in place.
 - A reusable theme-aware Compose skeleton and replacement of the initial loading indicators on the learner's All Courses and Live Classes/Recordings screens.
+- Exact-match, in-flight same-origin GET deduplication in the three web API wrappers; forced refreshes, no-store requests, AbortSignal requests, and mutations bypass it.
 - This implementation plan and follow-up checklist.
 
-**Not yet claimed complete:** full route-level audit, component code splitting, web data cache strategy, request deduplication, API/backend optimization, Android startup optimization, performance baselines, and end-to-end regression testing.
+**Not yet claimed complete:** full route-level audit, component code splitting, resolved-data caching, API/backend optimization, Android startup optimization, performance baselines, and end-to-end regression testing.
+
+**Verification status:** a draft PR was opened to trigger CI. Build and runtime evidence is pending; review results before merge.
 
 ## Acceptance criteria
 
