@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3b31744aebfe5de8d975cb9a18257a719090c83005b453fb332f88c73b336ae2",
+  "raw_analysis_sha256": "7c3fcf2b8152ceb0f90b04a704c1747103d56e4b96c37f121bc8959a5f70fa7f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40600309956",
-      "checkpointed_at": "2026-10-28T01:43:28Z",
+      "checkpointed_at": "2026-10-28T01:49:30Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40600309956",
-      "checkpointed_at": "2026-10-28T01:44:06Z",
+      "checkpointed_at": "2026-10-28T01:50:08Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40600309956",
-      "checkpointed_at": "2026-10-28T01:44:56Z",
+      "checkpointed_at": "2026-10-28T01:50:57Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -142284,7 +142284,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600192733",
+      "run_id": "40600309956",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -146418,6 +146418,84 @@
         "context_relation": "The flowchart is related to the concepts of innovation, discovery, and enquiry.",
         "limitations": [
           "The image does not provide specific details about the flowchart or its components."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "190d64423854b97bc5a1cd82",
+      "asset_sha256": "d7bc824aa0667c3be3502f77ffb39c6cc7fa47f324bd779fc7404e936280abfb",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 76,
+      "asset_path": "assets/d7bc824aa0667c3be3502f77ffb39c6cc7fa47f324bd779fc7404e936280abfb.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "9b2d7697ff3d8d5c9aaa2908709c2e9b1929d605b85dd59b0b1c09be80cb8762",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Flow chart illustrating the process of innovation, discovery, and inquiry in the context of air, heat, ash, and water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Change in blue",
+          "Add blue and red litmus solutions separately",
+          "Air",
+          "Heat",
+          "Ash",
+          "Water"
+        ],
+        "concepts": [
+          "Innovation",
+          "Discovery",
+          "Enquiry",
+          "Litmus solutions",
+          "Air",
+          "Heat",
+          "Ash",
+          "Water"
+        ],
+        "context_relation": "The flow chart represents the sequence of steps in a scientific inquiry process.",
+        "limitations": [
+          "The image does not provide specific details about the steps or their sequence."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40600309956",
+      "checkpointed_at": "2026-10-28T01:54:37Z",
+      "effective_analysis": {
+        "visual_summary": "Flow chart illustrating the process of innovation, discovery, and inquiry in the context of air, heat, ash, and water.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "INNOVATION",
+          "DISCOVERY",
+          "ENQUIRY",
+          "Change in blue",
+          "Add blue and red litmus solutions separately",
+          "Air",
+          "Heat",
+          "Ash",
+          "Water"
+        ],
+        "concepts": [
+          "Innovation",
+          "Discovery",
+          "Enquiry",
+          "Litmus solutions",
+          "Air",
+          "Heat",
+          "Ash",
+          "Water"
+        ],
+        "context_relation": "The flow chart represents the sequence of steps in a scientific inquiry process.",
+        "limitations": [
+          "The image does not provide specific details about the steps or their sequence."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
