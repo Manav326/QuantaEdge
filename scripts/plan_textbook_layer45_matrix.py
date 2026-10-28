@@ -53,34 +53,13 @@ REBUILD_SCOPES = {
 
 
 def pair_complete(repo_root: Path, pair: dict[str, str]) -> bool:
-    """True only if both language editions have source-bound, complete Layer 5 ledgers."""
-    repo_root = Path(repo_root)
-    for book_id, slug in zip(pair["book_ids_csv"].split(","), pair["source_slugs_csv"].split(","), strict=True):
-        grade = pair["class_no"]
-        ledger_path = repo_root / "data" / "textbook-content-pipeline" / f"class-{grade}" / "books" / slug / "coverage-ledger.v1.json"
-        index_path = repo_root / "data" / "textbook-visuals" / slug / "visual-pipeline-index.v1.json"
-        try:
-            ledger = json.loads(ledger_path.read_text(encoding="utf-8"))
-            index = json.loads(index_path.read_text(encoding="utf-8"))
-        except (OSError, UnicodeError, json.JSONDecodeError):
-            return False
-        source = ledger.get("source") or {}
-        summary = ledger.get("summary") or {}
-        source_sha = str(source.get("source_pdf_sha256") or "").lower()
-        index_sha = str(index.get("source_pdf_sha256") or "").lower()
-        if not (
-            ledger.get("schema_version") == "quantaedge.textbook-coverage-ledger.v1"
-            and ledger.get("ledger_status") == "COMPLETE"
-            and summary.get("unresolved_count") == 0
-            and source.get("source_book_id") == book_id
-            and bool(index_sha)
-            and source_sha == index_sha
-            and index.get("source_book_id") == book_id
-            and index.get("layers", {}).get("5") == "COMPLETE"
-            and str(index.get("coverage_ledger_path") or "") == ledger_path.relative_to(repo_root).as_posix()
-        ):
-            return False
-    return True
+    """Use the same strict contract validator as the report and handoff writer."""
+    try:
+        from scripts.textbook_pipeline_handoff import validate_pair_completion
+    except ModuleNotFoundError:
+        from textbook_pipeline_handoff import validate_pair_completion
+    complete, _ = validate_pair_completion(Path(repo_root), pair)
+    return complete
 
 
 def plan_matrix(
@@ -89,59 +68,35 @@ def plan_matrix(
     class_no: str = "",
     analysis_mode: str = "",
     *,
+    book_pair_id: str = "",
     repo_root: Path | None = None,
     skip_completed: bool = False,
 ) -> list[dict[str, str]]:
-    """Return one runner per bilingual pair for resumes; catalog rebuilds remain class-wide."""
-    grades: tuple[str, ...] = ()
-    pair_sharded = False
-
-    if event_name == "push":
-        for marker, scoped_grades in RESUME_SCOPES.items():
-            if marker in head_message:
-                grades, pair_sharded = scoped_grades, True
-                break
-        if not grades:
-            for marker, scoped_grades in REBUILD_SCOPES.items():
-                if marker in head_message:
-                    grades = scoped_grades
-                    break
-        if not grades:
-            return []
-    elif event_name in {"workflow_dispatch", "workflow_call"}:
-        selected = str(class_no).strip().lower()
-        if selected == "all":
-            if analysis_mode != "resume_layers_4_5":
-                raise ValueError("class_no=all is supported only for synchronized Layer 4–5 resume.")
-            grades, pair_sharded = ("6", "7", "8"), True
-        elif selected in {"6", "7", "8"}:
-            grades = (selected,)
-            pair_sharded = analysis_mode == "resume_layers_4_5"
-        else:
-            return []
-    else:
+    """Plan exact bilingual pairs only. Missing/invalid scope never falls back to a whole class."""
+    if event_name not in {"workflow_dispatch", "workflow_call"}:
         return []
-
-    if pair_sharded:
-        planned = [dict(pair) for pair in BOOK_PAIRS if pair["class_no"] in grades]
-        if skip_completed:
-            root = Path(repo_root or Path.cwd())
-            planned = [pair for pair in planned if not pair_complete(root, pair)]
-        return planned
-
-    # Candidate catalog rebuilding writes a shared catalog index, so it stays one job per class.
-    return [
-        {
-            "class_no": grade,
-            "book_slug": "all-books",
-            "book_pair_id": "",
-            "book_label": "class-wide",
-            "book_ids_csv": "",
-            "source_slugs_csv": "",
-        }
-        for grade in grades
-    ]
-
+    selected_class = str(class_no).strip().lower()
+    if selected_class not in {"6", "7", "8", "all"}:
+        raise ValueError("class_no must be exactly 6, 7, 8, or all.")
+    if analysis_mode not in {"prepare_only", "analyze_all", "resume_preparation", "resume_layers_4_5"}:
+        raise ValueError(f"Unsupported analysis_mode {analysis_mode!r}.")
+    requested_pair = str(book_pair_id).strip()
+    if not requested_pair:
+        raise ValueError("book_pair_id is required; pass 'all' or one exact bilingual pair ID.")
+    pairs_by_id = {pair["book_pair_id"]: pair for pair in BOOK_PAIRS}
+    if requested_pair != "all" and requested_pair not in pairs_by_id:
+        raise ValueError(f"Unknown book_pair_id {requested_pair!r}; no workers were scheduled.")
+    grades = {"6", "7", "8"} if selected_class == "all" else {selected_class}
+    planned = [dict(pair) for pair in BOOK_PAIRS if pair["class_no"] in grades]
+    if requested_pair != "all":
+        exact = pairs_by_id[requested_pair]
+        if exact["class_no"] not in grades:
+            raise ValueError(f"book_pair_id {requested_pair!r} belongs to Class {exact['class_no']}, not class {selected_class!r}.")
+        planned = [dict(exact)]
+    if analysis_mode == "resume_layers_4_5" or skip_completed:
+        root = Path(repo_root or Path.cwd())
+        planned = [pair for pair in planned if not pair_complete(root, pair)]
+    return planned
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -149,6 +104,7 @@ def main() -> int:
     parser.add_argument("--head-message", default=os.environ.get("HEAD_MESSAGE", ""))
     parser.add_argument("--class-no", default=os.environ.get("INPUT_CLASS_NO", ""))
     parser.add_argument("--analysis-mode", default=os.environ.get("INPUT_ANALYSIS_MODE", ""))
+    parser.add_argument("--book-pair-id", default=os.environ.get("INPUT_BOOK_PAIR_ID", ""))
     parser.add_argument("--github-output", type=Path, default=Path(os.environ["GITHUB_OUTPUT"]) if os.environ.get("GITHUB_OUTPUT") else None)
     args = parser.parse_args()
     try:
@@ -157,6 +113,7 @@ def main() -> int:
             args.head_message,
             args.class_no,
             args.analysis_mode,
+            book_pair_id=args.book_pair_id,
             skip_completed=args.analysis_mode == "resume_layers_4_5",
         )
     except ValueError as exc:
