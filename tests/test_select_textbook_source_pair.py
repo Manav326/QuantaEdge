@@ -78,7 +78,7 @@ class TextbookSourcePairHandoffTests(unittest.TestCase):
     def test_pair_rejects_a_book_id_mapped_to_the_wrong_slug(self):
         pair = next(row for row in BOOK_PAIRS if row["class_no"] == "6" and row["book_label"] == "Science")
         wrong_slugs = pair["source_slugs_csv"].split(",")
-        wrong_slugs[0] = pair["source_slugs_csv"].split(",")[1]
+        wrong_slugs.reverse()
         with self.assertRaisesRegex(ValueError, "ID to source slug handoff mismatch"):
             build_selection(
                 make_payload(6, "english"), make_payload(6, "hindi"), grade=6,
