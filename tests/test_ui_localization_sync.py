@@ -63,14 +63,19 @@ class AndroidUiCatalogGenerationTests(unittest.TestCase):
 
     def test_android_runtime_prefers_unambiguous_central_catalog_before_legacy_phrase_map(self):
         localization = (ROOT / "apps/android/app/src/main/java/com/quantaedge/android/ui/AndroidLocalization.kt").read_text(encoding="utf-8")
-        central_lookup = localization.index("if (sharedResourceId != 0)")
-        legacy_fallback = localization.index("val phrase = uiPhraseBySource")
+        runtime_start = localization.index("internal fun localizedUiText(source: String): String")
+        runtime = localization[runtime_start:]
+        central_lookup = runtime.index("if (sharedResourceId != 0)")
+        legacy_fallback = runtime.index("val phrase = uiPhraseBySource")
         self.assertLess(
             central_lookup,
             legacy_fallback,
-            "Unambiguous generated catalog entries must take precedence over the legacy phrase map.",
+            "Unambiguous generated catalog entries must take precedence within localizedUiText.",
         )
-
+        language_only_start = localization.index("internal fun localizedUiTextForLanguage")
+        language_only_end = localization.index("/** Select a translated resource", language_only_start)
+        language_only = localization[language_only_start:language_only_end]
+        self.assertNotIn("sharedResourceId", language_only)
     def test_resource_paths_are_deterministic(self):
         catalogs = {"english": {"x": "Open item"}, "hinglish": {"x": "आइटम खोलें"}}
         self.assertEqual(
