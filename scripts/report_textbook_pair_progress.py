@@ -128,16 +128,24 @@ def book_layer_timings(repo_root: Path, source: dict[str, str], index: dict[str,
         saved = saved_layers.get(str(layer)) or pair_layers.get(str(layer)) or {}
         clocks = saved.get("timestamps") or {}
         status = saved.get("status") or timing.get("status") or fallback_status
-        started_at = clocks.get("started_at") or timing.get("started_at")
-        elapsed = _timing_number(saved.get("cumulative_elapsed_seconds"))
-        if elapsed is None:
-            elapsed = _timing_number(timing.get("cumulative_elapsed_seconds",
-                timing.get("total_elapsed_seconds", timing.get("attempt_elapsed_seconds", timing.get("elapsed_seconds")))))
+        artifact_elapsed = _timing_number(timing.get("cumulative_elapsed_seconds",
+            timing.get("total_elapsed_seconds", timing.get("attempt_elapsed_seconds", timing.get("elapsed_seconds")))))
+        saved_elapsed = _timing_number(saved.get("cumulative_elapsed_seconds"))
+        # Layers 0–3 have direct per-book timers in their output artifacts. Prefer those
+        # over a legacy pair-level terminal status whose elapsed time may be zero/shared.
+        if layer in {0, 1, 2, 3} and artifact_elapsed is not None:
+            elapsed = artifact_elapsed
+        elif saved_elapsed is not None and saved_elapsed > 0:
+            elapsed = saved_elapsed
+        else:
+            elapsed = artifact_elapsed if artifact_elapsed is not None else saved_elapsed
         attempt = _timing_number(saved.get("attempt_elapsed_seconds"))
-        parsed_start = _parse_timing_utc(started_at)
+        started_at = ((timing.get("started_at") if layer in {0, 1, 2, 3} else None)
+                      or clocks.get("started_at") or timing.get("started_at"))
+        parsed_start = _parse_timing_utc(clocks.get("started_at") or timing.get("started_at"))
         if status == "RUNNING" and parsed_start:
             attempt = max(0.0, (now - parsed_start).total_seconds())
-            elapsed = (elapsed or 0.0) + attempt
+            elapsed = (saved_elapsed or 0.0) + attempt
         return {
             "layer": layer, "name": name, "status": status,
             "started_at": started_at,
@@ -171,9 +179,12 @@ def book_layer_timings(repo_root: Path, source: dict[str, str], index: dict[str,
         extraction_timing, pages_total=manifest.get("page_count"), pages_processed=manifest.get("completed_pages"))]
 
     inventory_path = visual / "visual-inventory.v1.json"
-    inv, _ = read_json_fields(inventory_path, ["schema_version", "timing", "source"], max_prefix_bytes=256 * 1024) if inventory_path.is_file() else ({}, "missing")
+    inv, _ = read_json_fields(inventory_path, ["schema_version", "timing", "source", "summary"], max_prefix_bytes=256 * 1024) if inventory_path.is_file() else ({}, "missing")
+    layer1_timing = bundle_times.get("1") or (inv.get("timing") if isinstance(inv.get("timing"), dict) else {})
+    inv_summary = inv.get("summary") if isinstance(inv.get("summary"), dict) else {}
     rows.append(make(1, "Visual inventory", str(layers.get("1") or ("AVAILABLE_LEGACY" if inv else "NOT_STARTED")),
-        inv.get("timing") if isinstance(inv.get("timing"), dict) else {}))
+        layer1_timing, pages_total=(inv.get("source") or {}).get("pdf_page_count"),
+        pages_processed=inv_summary.get("pages_scanned")))
 
     candidate = repo_root / "data" / "textbook-visual-candidates-v3" / slug
     summary, _ = read_json_fields(candidate / "summary.v3.json", ["summary", "timing"], max_prefix_bytes=256 * 1024) if (candidate / "summary.v3.json").is_file() else ({}, "missing")
@@ -222,7 +233,12 @@ def book_layer_timings(repo_root: Path, source: dict[str, str], index: dict[str,
         if direct is not None:
             layer5_row["actual_elapsed_seconds"]=direct
             layer5_row["attempt_elapsed_seconds"]=direct
-            layer5_row["cumulative_elapsed_seconds"]=_timing_number(layer5_artifact_timing.get("total_elapsed_seconds")) or direct
+            layer5_row["cumulative_elapsed_seconds"]=_timing_number(layer5_artifact_timing.get("cumulative_elapsed_seconds",
+                layer5_artifact_timing.get("total_elapsed_seconds"))) or direct
+            layer5_row["started_at"]=layer5_artifact_timing.get("started_at") or layer5_row["started_at"]
+            layer5_row["completed_at"]=layer5_artifact_timing.get("completed_at") or layer5_row["completed_at"]
+            layer5_row["last_progress_at"]=layer5_artifact_timing.get("last_progress_at") or layer5_row["last_progress_at"]
+            layer5_row["status"]=layer5_artifact_timing.get("status") or layer5_row["status"]
             layer5_row["timing_available"]=True
             layer5_row["timing_basis"]="Direct monotonic timer inside Layer 5 effective-analysis/coverage-ledger reconciliation"
     rows.append(layer5_row)
@@ -499,14 +515,23 @@ def build_report(repo_root: Path) -> dict[str, Any]:
         if len(values) >= 2:
             mid = len(values) // 2
             medians[layer] = values[mid] if len(values) % 2 else (values[mid - 1] + values[mid]) / 2
+    # Layers 6, 7 and 8 can be generated in one shared source-segment run.
+    # Reuse the shared-run estimate for Layers 6/8 unless explicit isolated timings exist.
+    if 7 in medians:
+        medians.setdefault(6, medians[7])
+        medians.setdefault(8, medians[7])
     for pair in pairs:
         for edition in pair["languages"]:
             for timing in edition.get("layer_timings", []):
                 layer = timing["layer"]
                 elapsed = timing.get("actual_elapsed_seconds")
                 status = timing.get("status")
-                samples = timing_samples[layer]
-                expected = float(elapsed) if status in {"COMPLETE", "NEEDS_REVIEW"} and isinstance(elapsed, (int, float)) else medians.get(layer)
+                shared_l68 = bool(timing.get("shared_runtime_across_layers_6_8")) and layer in {6, 7, 8}
+                samples = timing_samples[7] if shared_l68 else timing_samples[layer]
+                estimate_layer = 7 if shared_l68 else layer
+                expected = (float(elapsed) if status in {"COMPLETE", "NEEDS_REVIEW"}
+                            and isinstance(elapsed, (int, float)) and elapsed > 0
+                            else medians.get(estimate_layer))
                 progress = 0.0
                 for completed_key, total_key in (
                     ("pages_processed", "pages_total"), ("units_processed", "units_total"),
