@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1433,
+    "assets_selected": 1434,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "6ad1a44c4439dad27d3403c2",
-      "56b6fc3411ed6da127bdf529",
-      "196a12171cfe626518387d47"
+      "a1a0a5a5fa632fcbbf4e6e95",
+      "6973c36fbeed0e6d96cdbb7f",
+      "e4dd233cafe23c02bf3af64d"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1429,
-    "assets_remaining": 649,
-    "assets_completion_percent": 68.8,
+    "assets_analyzed": 1432,
+    "assets_remaining": 646,
+    "assets_completion_percent": 68.9,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 1428,
+    "assets_skipped_from_checkpoint": 1429,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
-      "checkpointed_at": "2026-10-28T06:31:40Z"
+      "checkpointed_at": "2026-10-28T06:45:09Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
-      "checkpointed_at": "2026-10-28T06:32:31Z"
+      "checkpointed_at": "2026-10-28T06:46:03Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -48249,6 +48249,157 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
       "checkpointed_at": "2026-10-28T06:43:54Z"
+    },
+    {
+      "asset_id": "a1a0a5a5fa632fcbbf4e6e95",
+      "asset_sha256": "a44cd3a9d53320def88d0f4eebe8514628a156c4277224e93ccd7ba7705b98fe",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 155,
+      "asset_path": "assets/a44cd3a9d53320def88d0f4eebe8514628a156c4277224e93ccd7ba7705b98fe.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "414e3023651740cc3c8afc9d0e8f849dd2a71c5e82283c024e6bf73d3eca92be",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a straw in a glass of water.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Let us enhance our learning",
+          "1. The normal temperature of a healthy human being is close to",
+          "(i) 98.6 °C",
+          "(ii) 37.0 °C",
+          "(iii) 32.0 °C",
+          "(iv) 27.0 °C",
+          "2. 37 °C is the same temperature as",
+          "(i) 97.4 °F",
+          "(ii) 97.6 °F",
+          "(iii) 98.4 °F",
+          "(iv) 98.6 °F",
+          "3. Fill in the blanks:",
+          "(i) The hotness or coldness of a system is determined by its",
+          "(ii) The temperature of ice-cold water cannot be measured",
+          "by a"
+        ],
+        "concepts": [
+          "temperature",
+          "hotness or coldness",
+          "ice-cold water",
+          "temperature measurement"
+        ],
+        "context_relation": "The image is a visual representation of a hand holding a straw in a glass of water, which is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information about the temperature of the water or the straw."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T06:48:09Z"
+    },
+    {
+      "asset_id": "6973c36fbeed0e6d96cdbb7f",
+      "asset_sha256": "33a81311c1bf110eff8a68a6f29c789a175ff63fa5faec3171cf302cc70440bd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 155,
+      "asset_path": "assets/33a81311c1bf110eff8a68a6f29c789a175ff63fa5faec3171cf302cc70440bd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "414e3023651740cc3c8afc9d0e8f849dd2a71c5e82283c024e6bf73d3eca92be",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a straw in a beaker of water.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Let us enhance our learning",
+          "1. The normal temperature of a healthy human being is close to",
+          "(i) 98.6 °C",
+          "(ii) 37.0 °C",
+          "(iii) 32.0 °C",
+          "(iv) 27.0 °C",
+          "2. 37 °C is the same temperature as",
+          "(i) 97.4 °F",
+          "(ii) 97.6 °F",
+          "(iii) 98.4 °F",
+          "(iv) 98.6 °F",
+          "3. Fill in the blanks:",
+          "(i) The hotness or coldness of a system is determined by its",
+          "(ii) The temperature of ice-cold water cannot be measured",
+          "by a"
+        ],
+        "concepts": [
+          "normal human body temperature",
+          "temperature conversion",
+          "hotness or coldness",
+          "temperature measurement"
+        ],
+        "context_relation": "The image is a visual representation of a question related to temperature and measurement.",
+        "limitations": [
+          "The image does not provide the answers to the questions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T06:50:13Z"
+    },
+    {
+      "asset_id": "e4dd233cafe23c02bf3af64d",
+      "asset_sha256": "6ceedffb63d1819f7772965046aa6d6ccb72ada784788111b2d90d8e5f376345",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 155,
+      "asset_path": "assets/6ceedffb63d1819f7772965046aa6d6ccb72ada784788111b2d90d8e5f376345.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "414e3023651740cc3c8afc9d0e8f849dd2a71c5e82283c024e6bf73d3eca92be",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a thermometer in a beaker of water.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Let us enhance our learning",
+          "1. The normal temperature of a healthy human being is close to",
+          "(i) 98.6 °C",
+          "(ii) 37.0 °C",
+          "(iii) 32.0 °C",
+          "(iv) 27.0 °C",
+          "2. 37 °C is the same temperature as",
+          "(i) 97.4 °F",
+          "(ii) 97.6 °F",
+          "(iii) 98.4 °F",
+          "(iv) 98.6 °F",
+          "3. Fill in the blanks:",
+          "(i) The hotness or coldness of a system is determined by its",
+          "(ii) The temperature of ice-cold water cannot be measured",
+          "by a",
+          "(iii) The temperature of ice-cold water cannot be measured",
+          "by a",
+          "(iv) The temperature of ice-cold water cannot be measured",
+          "by a"
+        ],
+        "concepts": [
+          "normal body temperature",
+          "temperature measurement",
+          "ice-cold water temperature",
+          "temperature scale conversion"
+        ],
+        "context_relation": "The image is a visual representation of a thermometer being used to measure the temperature of a beaker of water, which is related to the concepts of normal body temperature and temperature measurement.",
+        "limitations": [
+          "The image does not provide specific details about the temperature of the water or the thermometer."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T06:52:25Z"
     }
   ]
 }

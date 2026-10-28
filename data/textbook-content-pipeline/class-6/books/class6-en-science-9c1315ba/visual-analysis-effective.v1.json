@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "c70da262990a58d2da30814530f9842022d9558b8d1cedee999c078e6499f465",
+  "raw_analysis_sha256": "066f3b6ca3494eac50064f1a35739d6e3887626c4f9a9b84a869419c94ad78f6",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -57191,7 +57191,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
-      "checkpointed_at": "2026-10-28T06:31:40Z",
+      "checkpointed_at": "2026-10-28T06:45:09Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66842,7 +66842,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
-      "checkpointed_at": "2026-10-28T06:32:31Z",
+      "checkpointed_at": "2026-10-28T06:46:03Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -73288,6 +73288,260 @@
         "context_relation": "The image is a visual representation of the concepts related to temperature measurement and normal human body temperature.",
         "limitations": [
           "The image does not provide specific details about the temperature measurement process or the conversion between Celsius and Fahrenheit."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a1a0a5a5fa632fcbbf4e6e95",
+      "asset_sha256": "a44cd3a9d53320def88d0f4eebe8514628a156c4277224e93ccd7ba7705b98fe",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 155,
+      "asset_path": "assets/a44cd3a9d53320def88d0f4eebe8514628a156c4277224e93ccd7ba7705b98fe.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "414e3023651740cc3c8afc9d0e8f849dd2a71c5e82283c024e6bf73d3eca92be",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a straw in a glass of water.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Let us enhance our learning",
+          "1. The normal temperature of a healthy human being is close to",
+          "(i) 98.6 °C",
+          "(ii) 37.0 °C",
+          "(iii) 32.0 °C",
+          "(iv) 27.0 °C",
+          "2. 37 °C is the same temperature as",
+          "(i) 97.4 °F",
+          "(ii) 97.6 °F",
+          "(iii) 98.4 °F",
+          "(iv) 98.6 °F",
+          "3. Fill in the blanks:",
+          "(i) The hotness or coldness of a system is determined by its",
+          "(ii) The temperature of ice-cold water cannot be measured",
+          "by a"
+        ],
+        "concepts": [
+          "temperature",
+          "hotness or coldness",
+          "ice-cold water",
+          "temperature measurement"
+        ],
+        "context_relation": "The image is a visual representation of a hand holding a straw in a glass of water, which is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information about the temperature of the water or the straw."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T06:48:09Z",
+      "effective_analysis": {
+        "visual_summary": "A hand holding a straw in a glass of water.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Let us enhance our learning",
+          "1. The normal temperature of a healthy human being is close to",
+          "(i) 98.6 °C",
+          "(ii) 37.0 °C",
+          "(iii) 32.0 °C",
+          "(iv) 27.0 °C",
+          "2. 37 °C is the same temperature as",
+          "(i) 97.4 °F",
+          "(ii) 97.6 °F",
+          "(iii) 98.4 °F",
+          "(iv) 98.6 °F",
+          "3. Fill in the blanks:",
+          "(i) The hotness or coldness of a system is determined by its",
+          "(ii) The temperature of ice-cold water cannot be measured",
+          "by a"
+        ],
+        "concepts": [
+          "temperature",
+          "hotness or coldness",
+          "ice-cold water",
+          "temperature measurement"
+        ],
+        "context_relation": "The image is a visual representation of a hand holding a straw in a glass of water, which is not directly related to the text content.",
+        "limitations": [
+          "The image does not provide any specific information about the temperature of the water or the straw."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6973c36fbeed0e6d96cdbb7f",
+      "asset_sha256": "33a81311c1bf110eff8a68a6f29c789a175ff63fa5faec3171cf302cc70440bd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 155,
+      "asset_path": "assets/33a81311c1bf110eff8a68a6f29c789a175ff63fa5faec3171cf302cc70440bd.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "414e3023651740cc3c8afc9d0e8f849dd2a71c5e82283c024e6bf73d3eca92be",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a straw in a beaker of water.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Let us enhance our learning",
+          "1. The normal temperature of a healthy human being is close to",
+          "(i) 98.6 °C",
+          "(ii) 37.0 °C",
+          "(iii) 32.0 °C",
+          "(iv) 27.0 °C",
+          "2. 37 °C is the same temperature as",
+          "(i) 97.4 °F",
+          "(ii) 97.6 °F",
+          "(iii) 98.4 °F",
+          "(iv) 98.6 °F",
+          "3. Fill in the blanks:",
+          "(i) The hotness or coldness of a system is determined by its",
+          "(ii) The temperature of ice-cold water cannot be measured",
+          "by a"
+        ],
+        "concepts": [
+          "normal human body temperature",
+          "temperature conversion",
+          "hotness or coldness",
+          "temperature measurement"
+        ],
+        "context_relation": "The image is a visual representation of a question related to temperature and measurement.",
+        "limitations": [
+          "The image does not provide the answers to the questions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T06:50:13Z",
+      "effective_analysis": {
+        "visual_summary": "A hand holding a straw in a beaker of water.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Let us enhance our learning",
+          "1. The normal temperature of a healthy human being is close to",
+          "(i) 98.6 °C",
+          "(ii) 37.0 °C",
+          "(iii) 32.0 °C",
+          "(iv) 27.0 °C",
+          "2. 37 °C is the same temperature as",
+          "(i) 97.4 °F",
+          "(ii) 97.6 °F",
+          "(iii) 98.4 °F",
+          "(iv) 98.6 °F",
+          "3. Fill in the blanks:",
+          "(i) The hotness or coldness of a system is determined by its",
+          "(ii) The temperature of ice-cold water cannot be measured",
+          "by a"
+        ],
+        "concepts": [
+          "normal human body temperature",
+          "temperature conversion",
+          "hotness or coldness",
+          "temperature measurement"
+        ],
+        "context_relation": "The image is a visual representation of a question related to temperature and measurement.",
+        "limitations": [
+          "The image does not provide the answers to the questions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e4dd233cafe23c02bf3af64d",
+      "asset_sha256": "6ceedffb63d1819f7772965046aa6d6ccb72ada784788111b2d90d8e5f376345",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 155,
+      "asset_path": "assets/6ceedffb63d1819f7772965046aa6d6ccb72ada784788111b2d90d8e5f376345.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "414e3023651740cc3c8afc9d0e8f849dd2a71c5e82283c024e6bf73d3eca92be",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A hand holding a thermometer in a beaker of water.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Let us enhance our learning",
+          "1. The normal temperature of a healthy human being is close to",
+          "(i) 98.6 °C",
+          "(ii) 37.0 °C",
+          "(iii) 32.0 °C",
+          "(iv) 27.0 °C",
+          "2. 37 °C is the same temperature as",
+          "(i) 97.4 °F",
+          "(ii) 97.6 °F",
+          "(iii) 98.4 °F",
+          "(iv) 98.6 °F",
+          "3. Fill in the blanks:",
+          "(i) The hotness or coldness of a system is determined by its",
+          "(ii) The temperature of ice-cold water cannot be measured",
+          "by a",
+          "(iii) The temperature of ice-cold water cannot be measured",
+          "by a",
+          "(iv) The temperature of ice-cold water cannot be measured",
+          "by a"
+        ],
+        "concepts": [
+          "normal body temperature",
+          "temperature measurement",
+          "ice-cold water temperature",
+          "temperature scale conversion"
+        ],
+        "context_relation": "The image is a visual representation of a thermometer being used to measure the temperature of a beaker of water, which is related to the concepts of normal body temperature and temperature measurement.",
+        "limitations": [
+          "The image does not provide specific details about the temperature of the water or the thermometer."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T06:52:25Z",
+      "effective_analysis": {
+        "visual_summary": "A hand holding a thermometer in a beaker of water.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Let us enhance our learning",
+          "1. The normal temperature of a healthy human being is close to",
+          "(i) 98.6 °C",
+          "(ii) 37.0 °C",
+          "(iii) 32.0 °C",
+          "(iv) 27.0 °C",
+          "2. 37 °C is the same temperature as",
+          "(i) 97.4 °F",
+          "(ii) 97.6 °F",
+          "(iii) 98.4 °F",
+          "(iv) 98.6 °F",
+          "3. Fill in the blanks:",
+          "(i) The hotness or coldness of a system is determined by its",
+          "(ii) The temperature of ice-cold water cannot be measured",
+          "by a",
+          "(iii) The temperature of ice-cold water cannot be measured",
+          "by a",
+          "(iv) The temperature of ice-cold water cannot be measured",
+          "by a"
+        ],
+        "concepts": [
+          "normal body temperature",
+          "temperature measurement",
+          "ice-cold water temperature",
+          "temperature scale conversion"
+        ],
+        "context_relation": "The image is a visual representation of a thermometer being used to measure the temperature of a beaker of water, which is related to the concepts of normal body temperature and temperature measurement.",
+        "limitations": [
+          "The image does not provide specific details about the temperature of the water or the thermometer."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
