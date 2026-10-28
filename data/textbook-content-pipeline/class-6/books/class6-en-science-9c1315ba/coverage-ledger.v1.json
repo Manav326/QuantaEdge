@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1462,
-    "successful_visual_analyses": 1443,
-    "missing_visual_analyses": 616,
+    "raw_analysis_result_rows": 1465,
+    "successful_visual_analyses": 1446,
+    "missing_visual_analyses": 613,
     "failed_visual_analyses": 19,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 635,
+    "unresolved_count": 632,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -55114,9 +55114,24 @@
       "asset_path": "assets/51b5f89600394c738b720685c8eab523f50ff5394cb9b0eeded065b50e660a13.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A thermometer showing a temperature of 38.0°C at 10am.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "38.0°C",
+          "10am"
+        ],
+        "concepts": [
+          "Temperature",
+          "Record"
+        ],
+        "context_relation": "The image represents the highest recorded temperature for a specific time.",
+        "limitations": [
+          "The image does not show the lowest recorded temperature or the times when it was recorded."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -55132,9 +55147,24 @@
       "asset_path": "assets/e262c47c0f4c5eddcb1956dcf593e27c2db565fdc5154781ed807e6e25187511.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A thermometer showing a temperature of 38.0°C at 10am.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "38.0°C",
+          "10am"
+        ],
+        "concepts": [
+          "Temperature",
+          "Thermometer"
+        ],
+        "context_relation": "The image represents the highest recorded temperature for a specific time.",
+        "limitations": [
+          "The image does not show the lowest recorded temperature or any other times' temperatures."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -55150,9 +55180,24 @@
       "asset_path": "assets/9ac6228c72f18c5c214671b0cf32830679c498c81f5720c5c10179fe8e2aade1.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A thermometer showing a temperature of 38.0°C at 10am.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "38.0°C",
+          "10am"
+        ],
+        "concepts": [
+          "Temperature",
+          "Record"
+        ],
+        "context_relation": "Vaishnavi's body temperature record",
+        "limitations": [
+          "No specific question or answer provided"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

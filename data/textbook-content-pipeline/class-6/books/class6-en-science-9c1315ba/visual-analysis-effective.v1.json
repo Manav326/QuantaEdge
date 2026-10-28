@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4cd1849838a7f66f304aab63cc7a8a180010f9dbfcaf9529f4793a2947fe1f69",
+  "raw_analysis_sha256": "9286c1b9b9d1d589e561618d679f340dcf89a948f468a6bd6541013cf598b729",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -57191,7 +57191,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
-      "checkpointed_at": "2026-10-28T07:08:33Z",
+      "checkpointed_at": "2026-10-28T07:15:34Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66842,7 +66842,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
-      "checkpointed_at": "2026-10-28T07:09:28Z",
+      "checkpointed_at": "2026-10-28T07:16:26Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -74042,6 +74042,162 @@
         "context_relation": "The image is a question and answer set related to temperature measurement using thermometers.",
         "limitations": [
           "The image does not provide specific answers to the questions."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f31c30bf313f617f07cd4c14",
+      "asset_sha256": "51b5f89600394c738b720685c8eab523f50ff5394cb9b0eeded065b50e660a13",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 157,
+      "asset_path": "assets/51b5f89600394c738b720685c8eab523f50ff5394cb9b0eeded065b50e660a13.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c99b2f41f1e5c2bcdb81c8a37c8a11b6f414a238591afa13dc66117934dff2a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A thermometer showing a temperature of 38.0°C at 10am.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "38.0°C",
+          "10am"
+        ],
+        "concepts": [
+          "Temperature",
+          "Record"
+        ],
+        "context_relation": "The image represents the highest recorded temperature for a specific time.",
+        "limitations": [
+          "The image does not show the lowest recorded temperature or the times when it was recorded."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T07:18:14Z",
+      "effective_analysis": {
+        "visual_summary": "A thermometer showing a temperature of 38.0°C at 10am.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "38.0°C",
+          "10am"
+        ],
+        "concepts": [
+          "Temperature",
+          "Record"
+        ],
+        "context_relation": "The image represents the highest recorded temperature for a specific time.",
+        "limitations": [
+          "The image does not show the lowest recorded temperature or the times when it was recorded."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "849f0e34457e9fdd9acabef1",
+      "asset_sha256": "e262c47c0f4c5eddcb1956dcf593e27c2db565fdc5154781ed807e6e25187511",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 157,
+      "asset_path": "assets/e262c47c0f4c5eddcb1956dcf593e27c2db565fdc5154781ed807e6e25187511.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c99b2f41f1e5c2bcdb81c8a37c8a11b6f414a238591afa13dc66117934dff2a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A thermometer showing a temperature of 38.0°C at 10am.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "38.0°C",
+          "10am"
+        ],
+        "concepts": [
+          "Temperature",
+          "Thermometer"
+        ],
+        "context_relation": "The image represents the highest recorded temperature for a specific time.",
+        "limitations": [
+          "The image does not show the lowest recorded temperature or any other times' temperatures."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T07:20:02Z",
+      "effective_analysis": {
+        "visual_summary": "A thermometer showing a temperature of 38.0°C at 10am.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "38.0°C",
+          "10am"
+        ],
+        "concepts": [
+          "Temperature",
+          "Thermometer"
+        ],
+        "context_relation": "The image represents the highest recorded temperature for a specific time.",
+        "limitations": [
+          "The image does not show the lowest recorded temperature or any other times' temperatures."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "28f6055fe0ab32269696658f",
+      "asset_sha256": "9ac6228c72f18c5c214671b0cf32830679c498c81f5720c5c10179fe8e2aade1",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 157,
+      "asset_path": "assets/9ac6228c72f18c5c214671b0cf32830679c498c81f5720c5c10179fe8e2aade1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c99b2f41f1e5c2bcdb81c8a37c8a11b6f414a238591afa13dc66117934dff2a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A thermometer showing a temperature of 38.0°C at 10am.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "38.0°C",
+          "10am"
+        ],
+        "concepts": [
+          "Temperature",
+          "Record"
+        ],
+        "context_relation": "Vaishnavi's body temperature record",
+        "limitations": [
+          "No specific question or answer provided"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T07:21:44Z",
+      "effective_analysis": {
+        "visual_summary": "A thermometer showing a temperature of 38.0°C at 10am.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "38.0°C",
+          "10am"
+        ],
+        "concepts": [
+          "Temperature",
+          "Record"
+        ],
+        "context_relation": "Vaishnavi's body temperature record",
+        "limitations": [
+          "No specific question or answer provided"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

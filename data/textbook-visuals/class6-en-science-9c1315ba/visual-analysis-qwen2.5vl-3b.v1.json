@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1443,
+    "assets_selected": 1446,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "3ad791c0cc820daf0281f803",
-      "83132294b72ab8610d5e9076",
-      "f01f3b4bfc983900314fddc6"
+      "f31c30bf313f617f07cd4c14",
+      "849f0e34457e9fdd9acabef1",
+      "28f6055fe0ab32269696658f"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1441,
-    "assets_remaining": 637,
-    "assets_completion_percent": 69.3,
+    "assets_analyzed": 1444,
+    "assets_remaining": 634,
+    "assets_completion_percent": 69.5,
     "assets_failed": 19,
-    "assets_skipped_from_checkpoint": 1438,
+    "assets_skipped_from_checkpoint": 1441,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
-      "checkpointed_at": "2026-10-28T07:08:33Z"
+      "checkpointed_at": "2026-10-28T07:15:34Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
-      "checkpointed_at": "2026-10-28T07:09:28Z"
+      "checkpointed_at": "2026-10-28T07:16:26Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -48722,6 +48722,108 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40634725428",
       "checkpointed_at": "2026-10-28T07:14:23Z"
+    },
+    {
+      "asset_id": "f31c30bf313f617f07cd4c14",
+      "asset_sha256": "51b5f89600394c738b720685c8eab523f50ff5394cb9b0eeded065b50e660a13",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 157,
+      "asset_path": "assets/51b5f89600394c738b720685c8eab523f50ff5394cb9b0eeded065b50e660a13.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c99b2f41f1e5c2bcdb81c8a37c8a11b6f414a238591afa13dc66117934dff2a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A thermometer showing a temperature of 38.0°C at 10am.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "38.0°C",
+          "10am"
+        ],
+        "concepts": [
+          "Temperature",
+          "Record"
+        ],
+        "context_relation": "The image represents the highest recorded temperature for a specific time.",
+        "limitations": [
+          "The image does not show the lowest recorded temperature or the times when it was recorded."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T07:18:14Z"
+    },
+    {
+      "asset_id": "849f0e34457e9fdd9acabef1",
+      "asset_sha256": "e262c47c0f4c5eddcb1956dcf593e27c2db565fdc5154781ed807e6e25187511",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 157,
+      "asset_path": "assets/e262c47c0f4c5eddcb1956dcf593e27c2db565fdc5154781ed807e6e25187511.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c99b2f41f1e5c2bcdb81c8a37c8a11b6f414a238591afa13dc66117934dff2a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A thermometer showing a temperature of 38.0°C at 10am.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "38.0°C",
+          "10am"
+        ],
+        "concepts": [
+          "Temperature",
+          "Thermometer"
+        ],
+        "context_relation": "The image represents the highest recorded temperature for a specific time.",
+        "limitations": [
+          "The image does not show the lowest recorded temperature or any other times' temperatures."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T07:20:02Z"
+    },
+    {
+      "asset_id": "28f6055fe0ab32269696658f",
+      "asset_sha256": "9ac6228c72f18c5c214671b0cf32830679c498c81f5720c5c10179fe8e2aade1",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 157,
+      "asset_path": "assets/9ac6228c72f18c5c214671b0cf32830679c498c81f5720c5c10179fe8e2aade1.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "c99b2f41f1e5c2bcdb81c8a37c8a11b6f414a238591afa13dc66117934dff2a0",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A thermometer showing a temperature of 38.0°C at 10am.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "38.0°C",
+          "10am"
+        ],
+        "concepts": [
+          "Temperature",
+          "Record"
+        ],
+        "context_relation": "Vaishnavi's body temperature record",
+        "limitations": [
+          "No specific question or answer provided"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40634725428",
+      "checkpointed_at": "2026-10-28T07:21:44Z"
     }
   ]
 }
