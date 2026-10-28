@@ -53,7 +53,7 @@ The guiding rule is: **render the app shell first; load essential content next; 
 ### Phase 3 — API efficiency and caching
 
 - [ ] Produce a route-to-data matrix for learner, parent, institution admin, and HRMS screens.
-- [x] Coalesce identical in-flight same-origin API GETs across all three web clients when browser caching is default and no explicit abort/forced refresh is requested. Return a separate Response clone per caller; inspect/notify once per shared request. API mutations clear the in-flight registry to isolate reads across session/workspace changes. This is in-flight deduplication, not a resolved-response cache.
+- [ ] Add request deduplication only after a route-by-route audit establishes a reliable user/workspace/institution scope for authenticated reads; HttpOnly session cookies must not be assumed to be represented by URL or request headers.
 - [ ] Audit and standardize resolved-data cache keys, freshness policies, cancellation, bounded retries, and targeted invalidation using the existing stack where possible.
 - [ ] Avoid waterfalls for independent requests; retain explicit sequencing for real dependencies.
 - [ ] Use paginated endpoints for large rosters, course catalogues, transaction histories, and question banks.
@@ -84,12 +84,13 @@ The guiding rule is: **render the app shell first; load essential content next; 
 - App Router route loading boundaries for the three web portals.
 - An accessible, responsive skeleton fallback that leaves each portal's existing root layout in place.
 - A reusable theme-aware Compose skeleton and replacement of the initial loading indicators on the learner's All Courses and Live Classes/Recordings screens.
-- Exact-match, in-flight same-origin GET deduplication in the three web API wrappers; forced refreshes, no-store requests, AbortSignal requests, and non-GET API requests bypass sharing, with API mutations clearing the registry.
 - This implementation plan and follow-up checklist.
 
-**Not yet claimed complete:** full route-level audit, component code splitting, resolved-data caching, API/backend optimization, Android startup optimization, performance baselines, and end-to-end regression testing.
+**Review correction:** a generic API GET deduplication experiment was removed after review because it could not safely distinguish HttpOnly session/workspace scopes. Do not reintroduce request sharing until those scopes are explicit and covered by tests.
 
-**Verification status:** the initial PR-triggered workflow run was cancelled while branch commits were being updated. The current head has no successful completed CI run available yet, and this environment cannot clone/build the repository locally. Build and runtime evidence remain a merge blocker.
+**Not yet claimed complete:** full route-level audit, component code splitting, API request deduplication/caching, API/backend optimization, Android startup optimization, performance baselines, and end-to-end regression testing.
+
+**Verification status:** an earlier CI run failed because the loading components referenced an undefined status label. That issue has been corrected. A fresh build of the current branch head is still required; do not merge without green checks.
 
 ## Acceptance criteria
 
