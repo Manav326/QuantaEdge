@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "9f51f614abe6354db658fd1d",
-      "2cea301bf9b05b3d64207203",
-      "f9f31ac3c179b5d02598fdea"
+      "c48690152ba372ff22e25783",
+      "574da890e37eba2e524a04ad",
+      "6333fd35b5de4c52b03510d8"
     ],
     "assets_eligible": 2078,
     "assets_analyzed": 1446,
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
-      "checkpointed_at": "2026-10-28T13:22:58Z"
+      "checkpointed_at": "2026-10-28T13:39:30Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
-      "checkpointed_at": "2026-10-28T13:23:51Z"
+      "checkpointed_at": "2026-10-28T13:40:19Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -47698,7 +47698,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40634725428",
+      "run_id": "40686336384",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -47801,7 +47801,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40634725428",
+      "run_id": "40686336384",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -47873,7 +47873,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40634725428",
+      "run_id": "40686336384",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
       "human_review_required": true,
