@@ -36,34 +36,28 @@ const NAVIGATION: NavigationGroup[] = [
       'HR_RECRUITMENT_VIEW', 'HR_RECRUITMENT_MANAGE', 'HR_PERFORMANCE_VIEW', 'HR_PERFORMANCE_MANAGE',
       'HR_ASSET_VIEW', 'HR_ASSET_MANAGE', 'HR_EXIT_VIEW', 'HR_EXIT_MANAGE',
     ] },
-  ] },
-  { message: 'people.navigation.group.platform', items: [
-    { message: 'people.navigation.institutions', href: '/institutions', icon: '▦', permissions: ['QE_PLATFORM_OWNER'] },
-    { message: 'people.navigation.courseAccess', href: '/course-access', icon: '⌛', permissions: ['QE_PLATFORM_OWNER'] },
-    { message: 'people.navigation.qaCenter', href: '/qa', icon: '✓', permissions: ['QE_PLATFORM_OWNER'] },
-    { message: 'people.navigation.notifications', href: '/notifications', icon: '♧', permissions: ['QE_PLATFORM_OWNER'] },
-    { message: 'people.navigation.financeBilling', href: '/finance', icon: '₹', permissions: ['QE_PLATFORM_OWNER'] },
-    { message: 'people.navigation.financePayouts', href: '/finance/payouts', icon: '⇢', permissions: ['QE_FINANCE_PAYOUT_MANAGE'] },
-  ] },
-  { message: 'people.navigation.group.access', items: [
     { message: 'people.navigation.loginAccess', href: '/access', icon: '⌁', permissions: ['HR_ACCESS_MANAGE'] },
-  ] },
-  { message: 'people.navigation.group.timeLeave', items: [
     { message: 'people.navigation.attendanceLeave', href: '/attendance', icon: '▦', permissions: [
       'HR_ATTENDANCE_VIEW', 'HR_ATTENDANCE_MANAGE', 'HR_LEAVE_VIEW', 'HR_LEAVE_MANAGE',
       'HR_ATTENDANCE_CORRECTION_REVIEW', 'HR_APPROVAL_POLICY_MANAGE', 'HR_HOLIDAY_VIEW',
       'HR_HOLIDAY_MANAGE', 'HR_LEAVE_BALANCE_VIEW', 'HR_LEAVE_BALANCE_MANAGE',
     ] },
-  ] },
-  { message: 'people.navigation.group.payroll', items: [
     { message: 'people.navigation.payrollCompensation', href: '/payroll', icon: '₹', permissions: ['HR_PAYROLL_VIEW', 'HR_PAYROLL_MANAGE', 'HR_PAYROLL_APPROVE', 'HR_PAYROLL_PAY'] },
-  ] },
-  { message: 'people.navigation.group.academic', items: [
     { message: 'people.navigation.teachingAssignments', href: '/assignments', icon: '◇', permissions: ['HR_ACADEMIC_ASSIGNMENT_VIEW', 'HR_ACADEMIC_ASSIGNMENT_MANAGE', 'HR_ACADEMIC_ASSIGNMENT_APPROVE'] },
-    { message: 'people.navigation.myClasses', href: '/my-classes', icon: '▤', permissions: ['TEACHING_ASSIGNMENT_VIEW'] },
   ] },
   { message: 'people.navigation.group.selfService', items: [
     { message: 'people.navigation.employeeSelfService', href: '/self-service', icon: '○' },
+    { message: 'people.navigation.myClasses', href: '/my-classes', icon: '▤', permissions: ['TEACHING_ASSIGNMENT_VIEW'] },
+  ] },
+  { message: 'people.navigation.group.institutionsCourses', items: [
+    { message: 'people.navigation.institutions', href: '/institutions', icon: '▦', permissions: ['QE_PLATFORM_OWNER'] },
+    { message: 'people.navigation.courseAccess', href: '/course-access', icon: '⌛', permissions: ['QE_PLATFORM_OWNER'] },
+    { message: 'people.navigation.qaCenter', href: '/qa', icon: '✓', permissions: ['QE_PLATFORM_OWNER'] },
+    { message: 'people.navigation.notifications', href: '/notifications', icon: '♧', permissions: ['QE_PLATFORM_OWNER'] },
+  ] },
+  { message: 'people.navigation.group.financePayouts', items: [
+    { message: 'people.navigation.financeBilling', href: '/finance', icon: '₹', permissions: ['QE_PLATFORM_OWNER'] },
+    { message: 'people.navigation.financePayouts', href: '/finance/payouts', icon: '⇢', permissions: ['QE_FINANCE_PAYOUT_MANAGE'] },
   ] },
 ];
 
@@ -197,7 +191,7 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
           return !isAdmin && (role === 'EMPLOYEE'
             || employeeWorkspacePermissions.some(permission => permissions.includes(permission)));
         }
-        if (isAdmin || !item.permissions?.length) return true;
+        if (!item.permissions?.length) return true;
         return item.permissions.some(permission => permissions.includes(permission));
       }),
     }))
