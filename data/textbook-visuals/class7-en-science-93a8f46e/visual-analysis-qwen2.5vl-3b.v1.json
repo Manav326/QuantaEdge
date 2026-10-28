@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2568,
+    "assets_selected": 2570,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "6fae17ac54fa9bc51b79878d",
-      "9fd3e438d01aa0ca389b93cb",
-      "5898aeed233b3bd59f2ea7ac"
+      "98f648cdc00f582911ad3fbc",
+      "37d9c5ce64da74b835aa0ab5",
+      "77b57f6ecad703afdb990bd0"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2565,
-    "assets_remaining": 4923,
+    "assets_analyzed": 2568,
+    "assets_remaining": 4920,
     "assets_completion_percent": 34.3,
     "assets_failed": 26,
-    "assets_skipped_from_checkpoint": 2563,
+    "assets_skipped_from_checkpoint": 2565,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -13461,7 +13461,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40673609365",
-      "checkpointed_at": "2026-10-28T13:07:02Z"
+      "checkpointed_at": "2026-10-28T13:19:39Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82500,7 +82500,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40673609365",
-      "checkpointed_at": "2026-10-28T13:08:33Z"
+      "checkpointed_at": "2026-10-28T13:21:11Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -96741,6 +96741,104 @@
       "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "98f648cdc00f582911ad3fbc",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40673609365",
+      "checkpointed_at": "2026-10-28T13:21:28Z"
+    },
+    {
+      "asset_id": "37d9c5ce64da74b835aa0ab5",
+      "asset_sha256": "6c637bed998fbdedf4a17591cbddc09a55fff9b6825d136433c057115ea18028",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 77,
+      "asset_path": "page-0077.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "002a330ef28d319bb8d71794c2e46990602e7cd572bab54e7031f67217cb5ab6",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Students discussing changes in ice, a flower, cold water, and a banana.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "I placed a cube of ice here half an hour ago. It has now become water!",
+          "A bud that I saw yesterday on this rose plant has become a flower today.",
+          "The bottle containing cold water is not cold anymore.",
+          "Yesterday, I saw some brown spots on a banana, but today it has more brown spots and a strong smell."
+        ],
+        "concepts": [
+          "Physical changes",
+          "Chemical changes",
+          "Observing changes in nature"
+        ],
+        "context_relation": "Students discussing changes in different objects",
+        "limitations": [
+          "No specific question or task is provided"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40673609365",
+      "checkpointed_at": "2026-10-28T13:25:07Z"
+    },
+    {
+      "asset_id": "77b57f6ecad703afdb990bd0",
+      "asset_sha256": "46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/46e152d2a92ab6a6d76ef5d42c58c85ac2da7d0a198b67b7b459cc1d9ee7d1a1.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green illustration of a person floating in the air with a dotted line above them, possibly representing a thought or idea.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "thought",
+          "idea",
+          "floating",
+          "dotted line"
+        ],
+        "context_relation": "The image is likely related to the educational content about observing changes around us, as mentioned in the text.",
+        "limitations": [
+          "The image does not provide specific details about the changes observed in Table 5.1."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40673609365",
+      "checkpointed_at": "2026-10-28T13:26:42Z"
     }
   ]
 }
