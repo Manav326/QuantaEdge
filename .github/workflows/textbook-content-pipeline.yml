@@ -1665,7 +1665,9 @@ jobs:
           print(pair_for_book_id(sys.argv[1])["book_pair_id"])
           PY
           )"
-          python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$CLASS_NO" --book-pair-id "$pair_id" --source-book-id "$SOURCE_BOOK_ID" --stage 7 --status RUNNING --reason-code EXPLICIT_LAYER6_8_REQUEST --model "$MODEL" --message "Layer 6–8 generation/resume was explicitly requested after a source-bound Layer 5 preflight."
+          for stage in 6 7 8; do
+            python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$CLASS_NO" --book-pair-id "$pair_id" --source-book-id "$SOURCE_BOOK_ID" --stage "$stage" --status RUNNING --reason-code EXPLICIT_LAYER6_8_REQUEST --model "$MODEL" --message "Explicitly requested source-bound Layers 6–8 run; the layer artifact records the shared runtime and the three durations must not be summed."
+          done
 
       - name: Start loopback-only Ollama service
         if: inputs.layer68_mode == 'benchmark' || ((inputs.layer68_mode == 'run' || inputs.layer68_mode == 'resume') && steps.generation_preflight.outputs.retryable_segments != '0')
@@ -1756,7 +1758,7 @@ jobs:
           MODEL: ${{ inputs.generation_model }}
         run: |
           set -euo pipefail
-          read -r pair_id manifest status processed expected unresolved <<< "$(python - "$GITHUB_WORKSPACE" "$CLASS_NO" "$SOURCE_BOOK_ID" <<'PY'
+          read -r pair_id manifest status6 status7 status8 processed expected unresolved <<< "$(python - "$GITHUB_WORKSPACE" "$CLASS_NO" "$SOURCE_BOOK_ID" <<'PY'
           import json,sys
           from pathlib import Path
           from scripts.plan_textbook_layer45_matrix import BOOKS
@@ -1780,16 +1782,27 @@ jobs:
               raise SystemExit("Layers 6–8 handoff schema/source identity/hash mismatch.")
           if report.get("overall_status") not in {"IN_PROGRESS","INCOMPLETE","DRAFT_REQUIRES_HUMAN_REVIEW"}:
               raise SystemExit("Unexpected Layers 6–8 run-manifest status.")
-          status="NEEDS_REVIEW" if report.get("overall_status")=="DRAFT_REQUIRES_HUMAN_REVIEW" else "CHECKPOINTED"
+          layer_values=report.get("layers") if isinstance(report.get("layers"),dict) else {}
+          def layer_handoff_status(layer):
+              raw=str(layer_values.get(str(layer),report.get("overall_status","IN_PROGRESS")))
+              if raw in {"COMPLETE","COMPLETED","NEEDS_REVIEW","DRAFT_MAPPED_REQUIRES_REVIEW","DRAFT_REQUIRES_HUMAN_REVIEW"}:
+                  return "NEEDS_REVIEW"
+              if raw in {"BLOCKED","FAILED","ERROR"}:
+                  return "BLOCKED"
+              return "CHECKPOINTED"
+          status6,status7,status8=(layer_handoff_status(6),layer_handoff_status(7),layer_handoff_status(8))
           pending=report.get("pending_segments",0)
           if isinstance(pending,list): pending=len(pending)
           processed=int(report.get("segments_completed",0) or 0)
           expected=int(report.get("segments_total",0) or 0)
           unresolved=sum(int(report.get(k,0) or 0) for k in ("unresolved_source_pages","unresolved_text_pages","unresolved_chapter_segments","unresolved_text_segments"))
-          print(pair_for_book_id(book_id)["book_pair_id"],manifest.relative_to(root).as_posix(),status,processed,expected,unresolved+int(pending or 0))
+          print(pair_for_book_id(book_id)["book_pair_id"],manifest.relative_to(root).as_posix(),status6,status7,status8,processed,expected,unresolved+int(pending or 0))
           PY
           )"
-          python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$CLASS_NO" --book-pair-id "$pair_id" --source-book-id "$SOURCE_BOOK_ID" --stage 7 --status "$status" --reason-code BOUNDED_LAYERS6_8_CHECKPOINT --model "$MODEL" --processed-count "$processed" --expected-count "$expected" --unresolved-count "$unresolved" --completed-batches 1 --artifact "$manifest" --message "Validated source-bound Layers 6–8 run manifest; publication remains disabled and human review is mandatory."
+          for stage in 6 7 8; do
+            case "$stage" in 6) layer_status="$status6" ;; 7) layer_status="$status7" ;; 8) layer_status="$status8" ;; esac
+            python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$CLASS_NO" --book-pair-id "$pair_id" --source-book-id "$SOURCE_BOOK_ID" --stage "$stage" --status "$layer_status" --reason-code BOUNDED_LAYERS6_8_CHECKPOINT --model "$MODEL" --processed-count "$processed" --expected-count "$expected" --unresolved-count "$unresolved" --completed-batches 1 --artifact "$manifest" --message "Validated per-layer status from the source-bound Layers 6–8 manifest; outputs remain review-only and shared runtime must not be summed across these layers."
+          done
           git add data/textbook-content-pipeline/handoffs
           if ! git diff --cached --quiet; then
             git config user.name "github-actions[bot]"
@@ -1813,7 +1826,9 @@ jobs:
           print(pair_for_book_id(sys.argv[1])["book_pair_id"])
           PY
           )"
-          python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$CLASS_NO" --book-pair-id "$pair_id" --source-book-id "$SOURCE_BOOK_ID" --stage 7 --status BLOCKED --reason-code WORKER_FAILURE_REQUIRES_TRIAGE --model "$MODEL" --message "Worker failed; inspect logs/checkpoint before explicitly retrying. No automatic restart is scheduled." || true
+          for stage in 6 7 8; do
+            python scripts/textbook_pipeline_handoff.py record --repo-root . --class-no "$CLASS_NO" --book-pair-id "$pair_id" --source-book-id "$SOURCE_BOOK_ID" --stage "$stage" --status BLOCKED --reason-code WORKER_FAILURE_REQUIRES_TRIAGE --model "$MODEL" --message "Worker failed; inspect logs/checkpoint before explicitly retrying. No automatic restart is scheduled." || true
+          done
           git add data/textbook-content-pipeline/handoffs
           if ! git diff --cached --quiet; then
             git config user.name "github-actions[bot]"
