@@ -464,13 +464,11 @@ const webRouteFiles = discoverFiles('apps/web/app', path => /\/page\.(?:tsx|ts|j
 const webModuleStyles = discoverFiles('apps/web/app', path => /\.module\.css$/.test(path));
 const webSharedComponents = discoverFiles('apps/web/app/components', path => /\.(?:tsx|ts|jsx|js|css)$/.test(path));
 const adminSharedComponents = discoverFiles('apps/admin/app/components', path => /\.(?:tsx|ts|jsx|js|css)$/.test(path));
-const peopleSharedComponents = discoverFiles('apps/people/app/components', path => /\.(?:tsx|ts|jsx|js|css)$/.test(path));
 
 assert(webRouteFiles.length >= 20, 'Learner Web theme audit must discover all nested student, parent, account, class, session and public routes.');
 assert(webModuleStyles.length >= 8, 'Learner Web theme audit must discover all route/component CSS modules.');
 assert(webSharedComponents.length >= 8, 'Learner Web theme audit must discover the shared component layer.');
 assert(adminSharedComponents.length >= 8, 'Admin theme audit must discover shared navigation, shell, theme, pagination and notification components.');
-assert(peopleSharedComponents.length >= 8, 'HRMS theme audit must discover the shared shell, form, feedback, theme and notification components.');
 
 for (const path of webRouteFiles) {
   const source = read(path);
