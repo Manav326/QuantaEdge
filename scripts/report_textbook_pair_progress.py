@@ -149,8 +149,10 @@ def book_layer_timings(repo_root: Path, source: dict[str, str], index: dict[str,
         return {
             "layer": layer, "name": name, "status": status,
             "started_at": started_at,
-            "completed_at": clocks.get("completed_at") or timing.get("completed_at"),
-            "last_progress_at": clocks.get("last_progress_at") or timing.get("last_progress_at"),
+            "completed_at": ((timing.get("completed_at") if layer in {0, 1, 2, 3} else None)
+                             or clocks.get("completed_at") or timing.get("completed_at")),
+            "last_progress_at": ((timing.get("last_progress_at") if layer in {0, 1, 2, 3} else None)
+                                 or clocks.get("last_progress_at") or timing.get("last_progress_at")),
             "checkpoint_at": clocks.get("checkpoint_at"), "last_error_at": clocks.get("last_error_at"),
             "retry_after": clocks.get("retry_after"), "actual_elapsed_seconds": elapsed,
             "attempt_elapsed_seconds": attempt, "cumulative_elapsed_seconds": elapsed,
