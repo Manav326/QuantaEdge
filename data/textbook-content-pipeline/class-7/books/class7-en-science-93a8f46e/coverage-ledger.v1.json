@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 2597,
-    "successful_visual_analyses": 2572,
-    "missing_visual_analyses": 4891,
+    "raw_analysis_result_rows": 2599,
+    "successful_visual_analyses": 2574,
+    "missing_visual_analyses": 4889,
     "failed_visual_analyses": 25,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 4916,
+    "unresolved_count": 4914,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -106233,9 +106233,24 @@
       "asset_path": "assets/04d90577a16ed805d0fd4965e056de37f5df24f62f919cd91270c770562a230c.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green arrow pointing to the left.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.1: Let us think and reﬂect"
+        ],
+        "concepts": [
+          "Observations",
+          "Reflection",
+          "Table"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "No specific data or information provided in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -106251,9 +106266,16 @@
       "asset_path": "assets/304707ee7064261ac491a1c136400740a65b44344129ffd9b57c50e34847da64.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A green rectangular shape with a curved bottom edge.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Observing changes in ice cubes melting",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

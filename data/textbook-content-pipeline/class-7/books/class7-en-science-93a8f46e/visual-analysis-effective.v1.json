@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "7f87c15ada5b1b30a07b5e77812f1b1c503265e66a53a6d3d258d226c7b89e8b",
+  "raw_analysis_sha256": "e2166c806110e2b11cf618154dcab2d003ac563d78355901719dfd84c110a3d3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40696960485",
-      "checkpointed_at": "2026-10-28T15:12:01Z",
+      "checkpointed_at": "2026-10-28T15:20:36Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40696960485",
-      "checkpointed_at": "2026-10-28T15:12:40Z",
+      "checkpointed_at": "2026-10-28T15:21:15Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40696960485",
-      "checkpointed_at": "2026-10-28T15:13:30Z",
+      "checkpointed_at": "2026-10-28T15:22:05Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -152246,6 +152246,94 @@
         "visible_text": [],
         "concepts": [],
         "context_relation": "None",
+        "limitations": []
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "63285604e174a98cb8d8f12e",
+      "asset_sha256": "04d90577a16ed805d0fd4965e056de37f5df24f62f919cd91270c770562a230c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/04d90577a16ed805d0fd4965e056de37f5df24f62f919cd91270c770562a230c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green arrow pointing to the left.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.1: Let us think and reﬂect"
+        ],
+        "concepts": [
+          "Observations",
+          "Reflection",
+          "Table"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "No specific data or information provided in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40696960485",
+      "checkpointed_at": "2026-10-28T15:23:13Z",
+      "effective_analysis": {
+        "visual_summary": "A green arrow pointing to the left.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.1: Let us think and reﬂect"
+        ],
+        "concepts": [
+          "Observations",
+          "Reflection",
+          "Table"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "No specific data or information provided in the image."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "8c1709de6d1b4cc531817864",
+      "asset_sha256": "304707ee7064261ac491a1c136400740a65b44344129ffd9b57c50e34847da64",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/304707ee7064261ac491a1c136400740a65b44344129ffd9b57c50e34847da64.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green rectangular shape with a curved bottom edge.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Observing changes in ice cubes melting",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40696960485",
+      "checkpointed_at": "2026-10-28T15:24:16Z",
+      "effective_analysis": {
+        "visual_summary": "A green rectangular shape with a curved bottom edge.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Observing changes in ice cubes melting",
         "limitations": []
       },
       "checkpoint_fingerprint_status": "MATCHED",

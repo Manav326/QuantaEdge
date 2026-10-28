@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 2573,
+    "assets_selected": 2574,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "5898aeed233b3bd59f2ea7ac",
-      "a48f1858491387bdfa90f27a"
+      "63285604e174a98cb8d8f12e",
+      "8c1709de6d1b4cc531817864"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2569,
-    "assets_remaining": 4919,
+    "assets_analyzed": 2571,
+    "assets_remaining": 4917,
     "assets_completion_percent": 34.3,
     "assets_failed": 25,
-    "assets_skipped_from_checkpoint": 2568,
+    "assets_skipped_from_checkpoint": 2569,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40696960485",
-      "checkpointed_at": "2026-10-28T15:12:01Z"
+      "checkpointed_at": "2026-10-28T15:20:36Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40696960485",
-      "checkpointed_at": "2026-10-28T15:12:40Z"
+      "checkpointed_at": "2026-10-28T15:21:15Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40696960485",
-      "checkpointed_at": "2026-10-28T15:13:30Z"
+      "checkpointed_at": "2026-10-28T15:22:05Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -96898,6 +96898,66 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40696960485",
       "checkpointed_at": "2026-10-28T15:19:33Z"
+    },
+    {
+      "asset_id": "63285604e174a98cb8d8f12e",
+      "asset_sha256": "04d90577a16ed805d0fd4965e056de37f5df24f62f919cd91270c770562a230c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/04d90577a16ed805d0fd4965e056de37f5df24f62f919cd91270c770562a230c.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green arrow pointing to the left.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 5.1: Let us think and reﬂect"
+        ],
+        "concepts": [
+          "Observations",
+          "Reflection",
+          "Table"
+        ],
+        "context_relation": "Instructional",
+        "limitations": [
+          "No specific data or information provided in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40696960485",
+      "checkpointed_at": "2026-10-28T15:23:13Z"
+    },
+    {
+      "asset_id": "8c1709de6d1b4cc531817864",
+      "asset_sha256": "304707ee7064261ac491a1c136400740a65b44344129ffd9b57c50e34847da64",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/304707ee7064261ac491a1c136400740a65b44344129ffd9b57c50e34847da64.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green rectangular shape with a curved bottom edge.",
+        "visual_type": "other",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Observing changes in ice cubes melting",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40696960485",
+      "checkpointed_at": "2026-10-28T15:24:16Z"
     }
   ]
 }
