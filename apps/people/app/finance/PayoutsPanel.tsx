@@ -376,7 +376,7 @@ export default function PayoutsPanel(){
   const createBatch=async()=>{await action(()=>api(BASE+'/payout-batches',{method:'POST',body:JSON.stringify({})}),
     'Monthly payout batch prepared. No bank transfers are sent until a different authorized staff member approves it.');};
   const openBatch=async(id:number)=>{
-    setError('');setNotice('');setStatementError('');
+    setError('');setNotice('');setStatementError('');setStatementDocs([]);
     try{
       const detail=await api<Batch>(BASE+'/payout-batches/'+id);
       setSelectedBatch(detail);
