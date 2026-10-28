@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b46f0c3979aafe48005c931d63496e9dd060064f3ecfeafe7e2f084b2f88fdcf",
+  "raw_analysis_sha256": "e38ef76456cf6da5bce4f4ae9656bf17a62fb4163b8cebc46242a18b3536b27f",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40766837431",
-      "checkpointed_at": "2026-10-28T22:09:41Z",
+      "checkpointed_at": "2026-10-28T22:14:45Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40766837431",
-      "checkpointed_at": "2026-10-28T22:10:11Z",
+      "checkpointed_at": "2026-10-28T22:15:14Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40766837431",
-      "checkpointed_at": "2026-10-28T22:10:51Z",
+      "checkpointed_at": "2026-10-28T22:15:53Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -152706,6 +152706,86 @@
         "limitations": [
           "The image does not contain any text or data points.",
           "The image is a simple illustration without any additional elements or context."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4ba0a80240d4a7102bb8906b",
+      "asset_sha256": "a9b8a0ce685c04f3d8e8efb7ef21eb6d509354ed903494183a0712a4f5641f72",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/a9b8a0ce685c04f3d8e8efb7ef21eb6d509354ed903494183a0712a4f5641f72.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40766837431",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2f4943ab77cd3ea7e3263d2a",
+      "asset_sha256": "4d9bc2578aaed041a2483997639b2014e7d7663b147577b9bcc763ae81bb052f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "assets/4d9bc2578aaed041a2483997639b2014e7d7663b147577b9bcc763ae81bb052f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A table listing changes observed around the user, with a focus on melting ice cubes.",
+        "visual_type": "table",
+        "visible_text": [
+          "Activity 5.1: Let us think and reﬂect",
+          "You might have observed various changes happening around you. Some of them are listed in Table 5.1, you may notice that something is changing in each case. Take a moment to reﬂect on the changes in each case. Record your observations in Table 5.1.",
+          "Table 5.1: Some changes observed around us",
+          "S.No.              Change                      Observation(s)",
+          "1.   Melting ice cubes"
+        ],
+        "concepts": [
+          "Observation",
+          "Change",
+          "Melting ice cubes"
+        ],
+        "context_relation": "Observation and reflection on changes in the environment",
+        "limitations": [
+          "No specific visual elements are described."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40766837431",
+      "checkpointed_at": "2026-10-28T22:18:10Z",
+      "effective_analysis": {
+        "visual_summary": "A table listing changes observed around the user, with a focus on melting ice cubes.",
+        "visual_type": "table",
+        "visible_text": [
+          "Activity 5.1: Let us think and reﬂect",
+          "You might have observed various changes happening around you. Some of them are listed in Table 5.1, you may notice that something is changing in each case. Take a moment to reﬂect on the changes in each case. Record your observations in Table 5.1.",
+          "Table 5.1: Some changes observed around us",
+          "S.No.              Change                      Observation(s)",
+          "1.   Melting ice cubes"
+        ],
+        "concepts": [
+          "Observation",
+          "Change",
+          "Melting ice cubes"
+        ],
+        "context_relation": "Observation and reflection on changes in the environment",
+        "limitations": [
+          "No specific visual elements are described."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
