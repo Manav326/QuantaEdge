@@ -113,20 +113,108 @@ async function inspectApiResponse(response: Response) {
  * the failure inline. All other API requests retain global notification handling by default.
  */
 export type ApiFetchOptions = { notificationMode?: 'global' | 'caller' };
+
+/**
+ * Coalesce only identical, in-flight same-origin API GETs. This is deliberately not a
+ * resolved-response cache: callers that request no-store/forced refreshes or own an
+ * AbortSignal keep their normal independent network behavior.
+ */
+const inFlightApiGets = new Map<string, Promise<Response>>();
+
+function inFlightApiGetKey(
+  input: RequestInfo | URL,
+  init: RequestInit | undefined,
+  notificationMode: ApiFetchOptions['notificationMode'],
+): string | null {
+  if (!isApiRequest(input) || (typeof Request !== 'undefined' && input instanceof Request)) return null;
+  if (init?.signal || (init?.method && init.method.toUpperCase() !== 'GET')) return null;
+  if (init?.cache && init.cache !== 'default') return null;
+
+  try {
+    const request = new Request(input, init);
+    if (request.method !== 'GET' || request.cache !== 'default' || request.signal.aborted) return null;
+
+    const url = new URL(request.url);
+    if (typeof window === 'undefined' || url.origin !== window.location.origin) return null;
+
+    const cacheControl = request.headers.get('cache-control') ?? '';
+    const pragma = request.headers.get('pragma') ?? '';
+    if (request.headers.has('authorization') || request.headers.has('range')
+      || /\bno-cache\b|\bno-store\b/i.test(cacheControl) || /\bno-cache\b/i.test(pragma)) {
+      return null;
+    }
+
+    const headers: [string, string][] = [];
+    request.headers.forEach((value, key) => headers.push([key, value]));
+    headers.sort(([left], [right]) => left.localeCompare(right));
+
+    return JSON.stringify({
+      url: request.url,
+      credentials: request.credentials,
+      mode: request.mode,
+      redirect: request.redirect,
+      headers,
+      notificationMode: notificationMode === 'caller' ? 'caller' : 'global',
+    });
+  } catch {
+    // A request shape we cannot safely normalize falls back to ordinary fetch().
+    return null;
+  }
+}
+
+/** Central request/response path; the caller still receives its own Response instance.
+ * Use caller mode only when the caller intentionally handles expected auth probes or renders
+ * the failure inline. All other API requests retain global notification handling by default.
+ */
 export async function apiFetch(
   input: RequestInfo | URL,
   init?: RequestInit,
   options: ApiFetchOptions = {},
 ): Promise<Response> {
   const isApi = options.notificationMode !== 'caller' && isApiRequest(input);
+  const key = inFlightApiGetKey(input, init, options.notificationMode);
   let response: Response;
-  try { response = await fetch(input, init); }
-  catch (error) {
+
+  try {
+    if (key) {
+      let pending = inFlightApiGets.get(key);
+      if (!pending) {
+        pending = (async () => {
+          let sharedResponse: Response;
+          try {
+            sharedResponse = await fetch(input, init);
+          } catch (error) {
+            const isAbort = Boolean(error && typeof error === 'object' && 'name' in error &&
+              (error as { name?: unknown }).name === 'AbortError');
+            if (isApi && !isAbort) notifyUser(networkErrorMessage(), 'error');
+            throw error;
+          }
+
+          // Inspect once per shared network request; each caller receives a separate clone.
+          if (isApi) await inspectApiResponse(sharedResponse);
+          return sharedResponse;
+        })();
+
+        inFlightApiGets.set(key, pending);
+        const requestPromise = pending;
+        void requestPromise.then(
+          () => { if (inFlightApiGets.get(key) === requestPromise) inFlightApiGets.delete(key); },
+          () => { if (inFlightApiGets.get(key) === requestPromise) inFlightApiGets.delete(key); },
+        );
+      }
+
+      response = (await pending).clone();
+    } else {
+      response = await fetch(input, init);
+    }
+  } catch (error) {
     const isAbort = Boolean(error && typeof error === 'object' && 'name' in error &&
       (error as { name?: unknown }).name === 'AbortError');
-    if (isApi && !isAbort) notifyUser(networkErrorMessage(), 'error');
+    // A shared request reports its network error inside the shared promise, once.
+    if (isApi && !key && !isAbort) notifyUser(networkErrorMessage(), 'error');
     throw error;
   }
-  if (isApi) await inspectApiResponse(response);
+
+  if (isApi && !key) await inspectApiResponse(response);
   return response;
 }
