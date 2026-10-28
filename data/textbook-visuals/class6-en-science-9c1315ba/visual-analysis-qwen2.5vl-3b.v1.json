@@ -8,21 +8,21 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 1483,
+    "assets_selected": 1487,
     "assets_processed_this_run": 5,
     "assets_processed_ids": [
       "47bbaaf66932c5ee5e514c6c",
-      "09774c76f9e03e429fc2284b",
-      "80433325e4bea027291cc270",
-      "e12d1f6f7adbc4f46a037b94",
-      "42aa935de1f8ea19cbef212c"
+      "e6e0ae3439afbff52a7e1e5c",
+      "9c586567df1ca40b63649b50",
+      "4eb2f3c9457b3f8258f53f19",
+      "60305f22f00990b6e247bc21"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1482,
-    "assets_remaining": 596,
-    "assets_completion_percent": 71.3,
+    "assets_analyzed": 1486,
+    "assets_remaining": 592,
+    "assets_completion_percent": 71.5,
     "assets_failed": 23,
-    "assets_skipped_from_checkpoint": 1478,
+    "assets_skipped_from_checkpoint": 1482,
     "batch_limit": 5,
     "publication_allowed": false
   },
@@ -44049,7 +44049,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753605122",
-      "checkpointed_at": "2026-10-28T21:56:54Z"
+      "checkpointed_at": "2026-10-28T22:07:02Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -50264,6 +50264,119 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753605122",
       "checkpointed_at": "2026-10-28T22:05:50Z"
+    },
+    {
+      "asset_id": "e6e0ae3439afbff52a7e1e5c",
+      "asset_sha256": "f5e7156c64f788280c426a53346946f15aa28927033dbdfcc1c5b24ae56ece19",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 165,
+      "asset_path": "assets/f5e7156c64f788280c426a53346946f15aa28927033dbdfcc1c5b24ae56ece19.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2f35dcd352526a2581ebfa9eeb93be4ebab68350207b205586350b72a01f0ce2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a person wearing a light blue shirt with a white collar.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the discussion about reasons for water droplets on a glass tumbler.",
+        "limitations": [
+          "The image does not provide specific details about the reasons for water droplets on a glass tumbler.",
+          "The image does not show the actual scenario or experiment being discussed in the text.",
+          "The image does not include any additional information or context beyond the text provided."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T22:08:46Z"
+    },
+    {
+      "asset_id": "9c586567df1ca40b63649b50",
+      "asset_sha256": "594bb78adce34d73636aaf2349e1d9c69cbcfa4ae39c5e2aeb2d1d75f7bee77a",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 165,
+      "asset_path": "assets/594bb78adce34d73636aaf2349e1d9c69cbcfa4ae39c5e2aeb2d1d75f7bee77a.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2f35dcd352526a2581ebfa9eeb93be4ebab68350207b205586350b72a01f0ce2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a person wearing sunglasses and a light blue shirt.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about ice melting and water droplets on a glass tumbler.",
+        "limitations": [
+          "The image does not provide any information about the text or the context it is related to."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T22:10:25Z"
+    },
+    {
+      "asset_id": "4eb2f3c9457b3f8258f53f19",
+      "asset_sha256": "10c0ab1fb36ab920bc4fe37f7fbd9db3f2461e097209b89ff8b9334ed4008e2f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 165,
+      "asset_path": "assets/10c0ab1fb36ab920bc4fe37f7fbd9db3f2461e097209b89ff8b9334ed4008e2f.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2f35dcd352526a2581ebfa9eeb93be4ebab68350207b205586350b72a01f0ce2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a boy with a thoughtful expression, holding his chin with his hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the discussion about the appearance of water droplets on the outer surface of a glass tumbler.",
+        "limitations": [
+          "The image does not provide specific details about the discussion or the reasons mentioned in the text.",
+          "The image does not show the actual appearance of water droplets on the glass tumbler."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T22:12:14Z"
+    },
+    {
+      "asset_id": "60305f22f00990b6e247bc21",
+      "asset_sha256": "2c7fe05e29d661d7769676599bfcf67b2f1175127ae98af58b24d59f12fc16f5",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 165,
+      "asset_path": "assets/2c7fe05e29d661d7769676599bfcf67b2f1175127ae98af58b24d59f12fc16f5.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "2f35dcd352526a2581ebfa9eeb93be4ebab68350207b205586350b72a01f0ce2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a girl with braided hair and a red ribbon.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text provided in the source PDF page.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753605122",
+      "checkpointed_at": "2026-10-28T22:13:54Z"
     }
   ]
 }
