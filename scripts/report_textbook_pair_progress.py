@@ -127,7 +127,9 @@ def book_layer_timings(repo_root: Path, source: dict[str, str], index: dict[str,
         timing = timing or {}
         saved = saved_layers.get(str(layer)) or pair_layers.get(str(layer)) or {}
         clocks = saved.get("timestamps") or {}
-        status = saved.get("status") or timing.get("status") or fallback_status
+        artifact_status = timing.get("status")
+        status = (artifact_status if layer in {0, 1, 2, 3, 5, 6, 7, 8} and artifact_status
+                  else saved.get("status") or artifact_status or fallback_status)
         artifact_elapsed = _timing_number(timing.get("cumulative_elapsed_seconds",
             timing.get("total_elapsed_seconds", timing.get("attempt_elapsed_seconds", timing.get("elapsed_seconds")))))
         saved_elapsed = _timing_number(saved.get("cumulative_elapsed_seconds"))
@@ -191,7 +193,7 @@ def book_layer_timings(repo_root: Path, source: dict[str, str], index: dict[str,
 
     inventory_path = visual / "visual-inventory.v1.json"
     inv, _ = read_json_fields(inventory_path, ["schema_version", "timing", "source", "summary"], max_prefix_bytes=256 * 1024) if inventory_path.is_file() else ({}, "missing")
-    layer1_timing = (inv.get("timing") if isinstance(inv.get("timing"), dict) else {}) or bundle_times.get("1") or {}
+    layer1_timing = inv.get("timing") if isinstance(inv.get("timing"), dict) else {}
     inv_summary = inv.get("summary") if isinstance(inv.get("summary"), dict) else {}
     rows.append(make(1, "Visual inventory", str(layers.get("1") or ("AVAILABLE_LEGACY" if inv else "NOT_STARTED")),
         layer1_timing, pages_total=(inv.get("source") or {}).get("pdf_page_count"),
