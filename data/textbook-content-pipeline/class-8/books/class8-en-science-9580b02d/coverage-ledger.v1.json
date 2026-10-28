@@ -29,12 +29,12 @@
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
     "raw_analysis_result_rows": 1363,
-    "successful_visual_analyses": 1346,
+    "successful_visual_analyses": 1347,
     "missing_visual_analyses": 928,
-    "failed_visual_analyses": 17,
+    "failed_visual_analyses": 16,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 945,
+    "unresolved_count": 944,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -49673,7 +49673,7 @@
       "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
       "effective_analysis": {
-        "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
+        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface, with instructions on how to perform an activity related to atmospheric pressure.",
         "visual_type": "diagram",
         "visible_text": [
           "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
@@ -49693,22 +49693,19 @@
         "concepts": [
           "atmospheric pressure",
           "rubber sucker",
-          "air pressure",
+          "pressure difference",
+          "atmospheric force",
           "SI unit of pressure",
+          "practical unit of air pressure",
           "millibar",
           "hectopascal",
           "wind formation",
-          "pressure difference",
-          "atmospheric force",
-          "air movement",
-          "fluids and gases in tissues and organs",
-          "atmospheric pressure balance",
-          "wind strength",
-          "wind damage"
+          "inflated balloon",
+          "puncture in the bicycle tube"
         ],
         "context_relation": "educational",
         "limitations": [
-          "The image does not show the actual experiment with the rubber sucker.",
+          "The image does not show the actual experiment of pulling the sucker off the surface.",
           "The image does not show the actual measurement of atmospheric pressure."
         ]
       },
@@ -50093,9 +50090,37 @@
       "asset_path": "page-0109.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_ERROR",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A diagram showing two balloons being blown between each other, with a caption asking what happens to the balloons and what observations can be made.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 6.6: Let us observe",
+          "• Take two balloons of the same size.",
+          "• Inflate both balloons and tie strings to them.",
+          "• Hang the two balloons from a stick, leaving a gap of 6–10 cm (Fig. 6.13).",
+          "• Now, blow air into the narrow space between the balloons.",
+          "• What happens to the balloons? Note down your observations.",
+          "• Now blow harder and observe.",
+          "Fig. 6.13: Blowing between two balloons",
+          "When you blow between the two balloons, you observe that they move towards each other. This happens because when you blow air between the balloons, a low pressure area is created between them. The higher air pressure surrounding the balloon pushes them towards each other. You must have observed that"
+        ],
+        "concepts": [
+          "Pressure",
+          "Wind",
+          "Cyclones",
+          "Sea breeze",
+          "Land breeze",
+          "High-speed winds",
+          "Air pressure",
+          "Balloon experiment"
+        ],
+        "context_relation": "The image is a part of a textbook page explaining the concept of high-speed winds and their effect on air pressure.",
+        "limitations": [
+          "The image does not show the actual experiment, only a diagram of it."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
