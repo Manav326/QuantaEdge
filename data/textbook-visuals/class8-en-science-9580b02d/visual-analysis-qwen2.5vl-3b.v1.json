@@ -15,12 +15,12 @@
       "35f32b476dc5977bc161e8e8",
       "f492c50e9c7d7ef8d140ae06",
       "2e220d251d13a2e76c57e33b",
-      "d87c13fdacf9d828cb661188"
+      "ee42c9dcd67eeb859ad89f83"
     ],
     "assets_eligible": 2291,
-    "assets_analyzed": 1341,
-    "assets_remaining": 950,
-    "assets_completion_percent": 58.5,
+    "assets_analyzed": 1342,
+    "assets_remaining": 949,
+    "assets_completion_percent": 58.6,
     "assets_failed": 17,
     "assets_skipped_from_checkpoint": 1341,
     "batch_limit": 5,
@@ -1224,7 +1224,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40600312251",
-      "checkpointed_at": "2026-10-28T00:16:48Z"
+      "checkpointed_at": "2026-10-28T00:20:21Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20168,7 +20168,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40600312251",
-      "checkpointed_at": "2026-10-28T00:17:12Z"
+      "checkpointed_at": "2026-10-28T00:20:45Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38446,7 +38446,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40600312251",
-      "checkpointed_at": "2026-10-28T00:17:41Z"
+      "checkpointed_at": "2026-10-28T00:21:14Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -43501,7 +43501,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40600312251",
-      "checkpointed_at": "2026-10-28T00:18:22Z"
+      "checkpointed_at": "2026-10-28T00:21:57Z"
     },
     {
       "asset_id": "360dcb4d9ab9cb3e6d8f654a",
@@ -44708,6 +44708,52 @@
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "ee42c9dcd67eeb859ad89f83",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 113,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "45e0221e1bdd71791599e8e126204cc8f78594128942b5855e26f4e1f7ecdf94",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cyclone's aftermath, including destruction and flooding.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
+          "Even as a cyclone loses its strength while travelling over land, it leaves behind a trail of destruction that can take months or even years to repair. Cyclones can be extremely destructive. For example, the Amphan cyclone in 2020 had peak wind speeds of 270 km/h.",
+          "Strong winds during a cyclone push ocean water towards the shore, creating a wall of water that can be as high as 3–12 metres. This surge of water can flood coastal areas and even areas far from the sea. The heavy rainfall which acc",
+          "93"
+        ],
+        "concepts": [
+          "Cyclone",
+          "Wind",
+          "Storm",
+          "Cyclones",
+          "Amphan cyclone",
+          "Peak wind speeds",
+          "Cyclone aftermath",
+          "Destruction",
+          "Flooding",
+          "Coastal areas",
+          "Heavy rainfall"
+        ],
+        "context_relation": "The image is a page from a textbook discussing the effects of cyclones, specifically focusing on the aftermath and destructive power of a cyclone.",
+        "limitations": [
+          "The image does not contain any visual elements.",
+          "The text is not clear enough to determine the exact content of the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40600312251",
+      "checkpointed_at": "2026-10-28T00:22:23Z"
     }
   ]
 }
