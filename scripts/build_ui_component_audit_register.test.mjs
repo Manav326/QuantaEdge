@@ -71,7 +71,7 @@ test('source module inventory adds every discovered UI candidate and stylesheet,
     graph(),
     [
       route('UI-WEB-ROOT', 'apps/web/app/page.tsx', 'CMP-WEB-ROOT-LAYOUT'),
-      route('UI-WEB-STUDENT', 'apps/web/app/student/page.tsx')
+      route('UI-WEB-STUDENT', 'apps/web/app/student/page.tsx', 'CMP-WEB-ROOT-LAYOUT')
     ],
     [shared, component('CMP-WEB-ROOT-LAYOUT', 'apps/web/app/layout.tsx', 'UI-WEB-ROOT;UI-WEB-STUDENT')]
   );
