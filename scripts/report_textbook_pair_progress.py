@@ -176,13 +176,22 @@ def book_layer_timings(repo_root: Path, source: dict[str, str], index: dict[str,
                 manifest = meta
                 break
     extraction_timing = manifest.get("timing") if isinstance(manifest.get("timing"), dict) else {}
+    extraction_complete = (
+        manifest.get("scope") == "SUBJECT_BOOK"
+        and manifest.get("content_state") == "DRAFT_EXTRACTION_ONLY_REQUIRES_REVIEW"
+        and isinstance(manifest.get("page_count"), int)
+        and not isinstance(manifest.get("page_count"), bool)
+        and manifest.get("page_count") > 0
+        and manifest.get("completed_pages") == manifest.get("page_count")
+        and extraction_timing.get("status", "COMPLETE") == "COMPLETE"
+    )
     rows = [make(0, "Source extraction",
-        "COMPLETE" if manifest.get("scope") == "SUBJECT_BOOK" else ("NOT_STARTED" if not manifest else "BLOCKED"),
+        "COMPLETE" if extraction_complete else ("NOT_STARTED" if not manifest else "BLOCKED"),
         extraction_timing, pages_total=manifest.get("page_count"), pages_processed=manifest.get("completed_pages"))]
 
     inventory_path = visual / "visual-inventory.v1.json"
     inv, _ = read_json_fields(inventory_path, ["schema_version", "timing", "source", "summary"], max_prefix_bytes=256 * 1024) if inventory_path.is_file() else ({}, "missing")
-    layer1_timing = bundle_times.get("1") or (inv.get("timing") if isinstance(inv.get("timing"), dict) else {})
+    layer1_timing = (inv.get("timing") if isinstance(inv.get("timing"), dict) else {}) or bundle_times.get("1") or {}
     inv_summary = inv.get("summary") if isinstance(inv.get("summary"), dict) else {}
     rows.append(make(1, "Visual inventory", str(layers.get("1") or ("AVAILABLE_LEGACY" if inv else "NOT_STARTED")),
         layer1_timing, pages_total=(inv.get("source") or {}).get("pdf_page_count"),
