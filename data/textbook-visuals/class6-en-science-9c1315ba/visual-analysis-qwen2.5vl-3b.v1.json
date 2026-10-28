@@ -13,14 +13,14 @@
     "assets_processed_ids": [
       "055ba61cf9184b7284850138",
       "47bbaaf66932c5ee5e514c6c",
-      "6ad1a44c4439dad27d3403c2",
-      "56b6fc3411ed6da127bdf529",
-      "2249feba9d9de2d28593e04b"
+      "850545371339a507c19af394",
+      "21f71ee0b4abd332ef0b2d40",
+      "66a11617f8764131cb3248db"
     ],
     "assets_eligible": 2078,
-    "assets_analyzed": 1446,
-    "assets_remaining": 632,
-    "assets_completion_percent": 69.6,
+    "assets_analyzed": 1449,
+    "assets_remaining": 629,
+    "assets_completion_percent": 69.7,
     "assets_failed": 20,
     "assets_skipped_from_checkpoint": 1446,
     "batch_limit": 5,
@@ -37920,7 +37920,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
-      "checkpointed_at": "2026-10-28T13:55:53Z"
+      "checkpointed_at": "2026-10-28T14:12:11Z"
     },
     {
       "asset_id": "514bb1f7241e92bcb07ac121",
@@ -44080,7 +44080,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
-      "checkpointed_at": "2026-10-28T13:56:44Z"
+      "checkpointed_at": "2026-10-28T14:13:05Z"
     },
     {
       "asset_id": "c50388574878f296351f80de",
@@ -48923,6 +48923,118 @@
       "error": "timed out",
       "human_review_required": true,
       "publication_allowed": false
+    },
+    {
+      "asset_id": "850545371339a507c19af394",
+      "asset_sha256": "7f654bf16123783183ac9843704f112ded661635e7413e8acf3d5337b844df2d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 158,
+      "asset_path": "assets/7f654bf16123783183ac9843704f112ded661635e7413e8acf3d5337b844df2d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6cc895643a50c95dfc35eca46b6c27ce866ff74b772c0de1d83a6b598256248b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A thermometer displaying a temperature of 25°C.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "25"
+        ],
+        "concepts": [
+          "temperature",
+          "thermometer"
+        ],
+        "context_relation": "The image is related to the question about the temperature shown in the thermometer.",
+        "limitations": [
+          "The image does not provide the exact temperature shown by the thermometer, only the visible text '25' is present."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:14:46Z"
+    },
+    {
+      "asset_id": "21f71ee0b4abd332ef0b2d40",
+      "asset_sha256": "aff13e4aaae24a29e453d0114828e970489be32685a4b4829823e18539975b9e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 158,
+      "asset_path": "assets/aff13e4aaae24a29e453d0114828e970489be32685a4b4829823e18539975b9e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6cc895643a50c95dfc35eca46b6c27ce866ff74b772c0de1d83a6b598256248b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A paper airplane flying over a blue background with a dashed line and a small circle.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "paper airplane flying over blue background with dashed line and small circle"
+        ],
+        "concepts": [
+          "paper airplane",
+          "blue background",
+          "dashed line",
+          "small circle"
+        ],
+        "context_relation": "The image is a visual representation of a paper airplane flying over a blue background.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:16:32Z"
+    },
+    {
+      "asset_id": "66a11617f8764131cb3248db",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 158,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6cc895643a50c95dfc35eca46b6c27ce866ff74b772c0de1d83a6b598256248b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A thermometer with divisions marked on it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "11. The temperature shown by the thermometer in Fig. 7.10 is",
+          "(i) 28.0 °C",
+          "(ii) 27.5 °C",
+          "(iii) 26.5 °C",
+          "(iv) 25.3 °C",
+          "Fig. 7.10",
+          "12. A laboratory thermometer has 50 divisions between 0 °C and 100 °C. What does each division of this thermometer",
+          "measure?",
+          "13. Draw the scale of a thermometer in which the smallest",
+          "division reads 0.5 °C. You may draw only the",
+          "scale."
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Thermometer scale",
+          "Division markings"
+        ],
+        "context_relation": "The image is a visual representation of a thermometer with divisions marked on it, used to answer questions about temperature measurement and thermometer scales.",
+        "limitations": [
+          "The image does not show the actual thermometer or its markings."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:17:18Z"
     }
   ]
 }

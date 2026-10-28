@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c6-english-fecu1",
   "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
   "raw_analysis_path": "data/textbook-visuals/class6-en-science-9c1315ba/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "01f0169da6f8494a1b730bd9bf6902e245a702a650d15f0b7ec341dc41d67e68",
+  "raw_analysis_sha256": "2a42963db7473319cbec56ad9ad38685ae98e469ee18cc0e6ef4a1d58fede056",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-6/books/class6-en-science-9c1315ba/visual-analysis-corrections.v1.json",
@@ -57191,7 +57191,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
-      "checkpointed_at": "2026-10-28T13:55:53Z",
+      "checkpointed_at": "2026-10-28T14:12:11Z",
       "effective_analysis": {
         "visual_summary": "A table showing the number of handspans for different students.",
         "visual_type": "table",
@@ -66842,7 +66842,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40686336384",
-      "checkpointed_at": "2026-10-28T13:56:44Z",
+      "checkpointed_at": "2026-10-28T14:13:05Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook explaining the use of Oral Rehydration Solution (ORS) and a related activity.",
         "visual_type": "uncertain",
@@ -74353,6 +74353,182 @@
       "publication_allowed": false,
       "effective_analysis": null,
       "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "850545371339a507c19af394",
+      "asset_sha256": "7f654bf16123783183ac9843704f112ded661635e7413e8acf3d5337b844df2d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 158,
+      "asset_path": "assets/7f654bf16123783183ac9843704f112ded661635e7413e8acf3d5337b844df2d.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6cc895643a50c95dfc35eca46b6c27ce866ff74b772c0de1d83a6b598256248b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A thermometer displaying a temperature of 25°C.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "25"
+        ],
+        "concepts": [
+          "temperature",
+          "thermometer"
+        ],
+        "context_relation": "The image is related to the question about the temperature shown in the thermometer.",
+        "limitations": [
+          "The image does not provide the exact temperature shown by the thermometer, only the visible text '25' is present."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:14:46Z",
+      "effective_analysis": {
+        "visual_summary": "A thermometer displaying a temperature of 25°C.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "25"
+        ],
+        "concepts": [
+          "temperature",
+          "thermometer"
+        ],
+        "context_relation": "The image is related to the question about the temperature shown in the thermometer.",
+        "limitations": [
+          "The image does not provide the exact temperature shown by the thermometer, only the visible text '25' is present."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "21f71ee0b4abd332ef0b2d40",
+      "asset_sha256": "aff13e4aaae24a29e453d0114828e970489be32685a4b4829823e18539975b9e",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 158,
+      "asset_path": "assets/aff13e4aaae24a29e453d0114828e970489be32685a4b4829823e18539975b9e.jpeg",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6cc895643a50c95dfc35eca46b6c27ce866ff74b772c0de1d83a6b598256248b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A paper airplane flying over a blue background with a dashed line and a small circle.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "paper airplane flying over blue background with dashed line and small circle"
+        ],
+        "concepts": [
+          "paper airplane",
+          "blue background",
+          "dashed line",
+          "small circle"
+        ],
+        "context_relation": "The image is a visual representation of a paper airplane flying over a blue background.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the textbook content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:16:32Z",
+      "effective_analysis": {
+        "visual_summary": "A paper airplane flying over a blue background with a dashed line and a small circle.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "paper airplane flying over blue background with dashed line and small circle"
+        ],
+        "concepts": [
+          "paper airplane",
+          "blue background",
+          "dashed line",
+          "small circle"
+        ],
+        "context_relation": "The image is a visual representation of a paper airplane flying over a blue background.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the textbook content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "66a11617f8764131cb3248db",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 158,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "6cc895643a50c95dfc35eca46b6c27ce866ff74b772c0de1d83a6b598256248b",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A thermometer with divisions marked on it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "11. The temperature shown by the thermometer in Fig. 7.10 is",
+          "(i) 28.0 °C",
+          "(ii) 27.5 °C",
+          "(iii) 26.5 °C",
+          "(iv) 25.3 °C",
+          "Fig. 7.10",
+          "12. A laboratory thermometer has 50 divisions between 0 °C and 100 °C. What does each division of this thermometer",
+          "measure?",
+          "13. Draw the scale of a thermometer in which the smallest",
+          "division reads 0.5 °C. You may draw only the",
+          "scale."
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Thermometer scale",
+          "Division markings"
+        ],
+        "context_relation": "The image is a visual representation of a thermometer with divisions marked on it, used to answer questions about temperature measurement and thermometer scales.",
+        "limitations": [
+          "The image does not show the actual thermometer or its markings."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40686336384",
+      "checkpointed_at": "2026-10-28T14:17:18Z",
+      "effective_analysis": {
+        "visual_summary": "A thermometer with divisions marked on it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "11. The temperature shown by the thermometer in Fig. 7.10 is",
+          "(i) 28.0 °C",
+          "(ii) 27.5 °C",
+          "(iii) 26.5 °C",
+          "(iv) 25.3 °C",
+          "Fig. 7.10",
+          "12. A laboratory thermometer has 50 divisions between 0 °C and 100 °C. What does each division of this thermometer",
+          "measure?",
+          "13. Draw the scale of a thermometer in which the smallest",
+          "division reads 0.5 °C. You may draw only the",
+          "scale."
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Thermometer scale",
+          "Division markings"
+        ],
+        "context_relation": "The image is a visual representation of a thermometer with divisions marked on it, used to answer questions about temperature measurement and thermometer scales.",
+        "limitations": [
+          "The image does not show the actual thermometer or its markings."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     }
   ],

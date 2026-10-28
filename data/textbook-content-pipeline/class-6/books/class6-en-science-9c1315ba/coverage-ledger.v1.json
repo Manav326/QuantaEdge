@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1468,
-    "successful_visual_analyses": 1448,
-    "missing_visual_analyses": 610,
+    "raw_analysis_result_rows": 1471,
+    "successful_visual_analyses": 1451,
+    "missing_visual_analyses": 607,
     "failed_visual_analyses": 20,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 630,
+    "unresolved_count": 627,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -55311,9 +55311,23 @@
       "asset_path": "assets/7f654bf16123783183ac9843704f112ded661635e7413e8acf3d5337b844df2d.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A thermometer displaying a temperature of 25°C.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "25"
+        ],
+        "concepts": [
+          "temperature",
+          "thermometer"
+        ],
+        "context_relation": "The image is related to the question about the temperature shown in the thermometer.",
+        "limitations": [
+          "The image does not provide the exact temperature shown by the thermometer, only the visible text '25' is present."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -55329,9 +55343,25 @@
       "asset_path": "assets/aff13e4aaae24a29e453d0114828e970489be32685a4b4829823e18539975b9e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A paper airplane flying over a blue background with a dashed line and a small circle.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "paper airplane flying over blue background with dashed line and small circle"
+        ],
+        "concepts": [
+          "paper airplane",
+          "blue background",
+          "dashed line",
+          "small circle"
+        ],
+        "context_relation": "The image is a visual representation of a paper airplane flying over a blue background.",
+        "limitations": [
+          "The image does not provide any specific information or context related to the textbook content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -55347,9 +55377,34 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A thermometer with divisions marked on it.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "11. The temperature shown by the thermometer in Fig. 7.10 is",
+          "(i) 28.0 °C",
+          "(ii) 27.5 °C",
+          "(iii) 26.5 °C",
+          "(iv) 25.3 °C",
+          "Fig. 7.10",
+          "12. A laboratory thermometer has 50 divisions between 0 °C and 100 °C. What does each division of this thermometer",
+          "measure?",
+          "13. Draw the scale of a thermometer in which the smallest",
+          "division reads 0.5 °C. You may draw only the",
+          "scale."
+        ],
+        "concepts": [
+          "Temperature measurement",
+          "Thermometer scale",
+          "Division markings"
+        ],
+        "context_relation": "The image is a visual representation of a thermometer with divisions marked on it, used to answer questions about temperature measurement and thermometer scales.",
+        "limitations": [
+          "The image does not show the actual thermometer or its markings."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
