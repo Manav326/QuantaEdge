@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "b3dcad77be102d114ebc184acc34c291c1b8603579ae1cf0804a9b97c74cdfc5",
+  "raw_analysis_sha256": "ec0b1c3849fa21b5bebbb1e91dab7a7ada9417c0605dd184104e796a16ff4d9c",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1780,87 +1780,21 @@
     {
       "asset_id": "2b71f040b18c02e306e02930",
       "asset_sha256": "e8fbcc2e3740a10eb93aae2a7cb2846d41998124e60b373dcb3a85844c542ab4",
+      "page_text_context_sha256": "e99913a243f7d3f79adc5ec4d75cda2a6cf084135ae7627267fb6ecf642f4fbb",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 6,
       "asset_path": "page-0006.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "e99913a243f7d3f79adc5ec4d75cda2a6cf084135ae7627267fb6ecf642f4fbb",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
-          "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
-          "In some activities Safety first, has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
-          "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
-          "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
-        ],
-        "concepts": [
-          "open-ended questions",
-          "thought-provoking questions",
-          "critical thinking",
-          "curiosity",
-          "science",
-          "teamwork",
-          "inclusive nature",
-          "special needs",
-          "peer interactions",
-          "assessing understanding",
-          "analyzing concepts",
-          "safety precautions",
-          "fascinating facts",
-          "interesting observations",
-          "scientific principles",
-          "real-life applications"
-        ],
-        "context_relation": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
-        "limitations": [
-          "The image does not provide specific examples or details about the questions or activities mentioned."
-        ]
-      },
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40628162212",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Remote end closed connection without response",
       "human_review_required": true,
       "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40620560465",
-      "checkpointed_at": "2026-10-28T03:35:45Z",
-      "effective_analysis": {
-        "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
-          "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
-          "In some activities Safety first, has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
-          "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
-          "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
-        ],
-        "concepts": [
-          "open-ended questions",
-          "thought-provoking questions",
-          "critical thinking",
-          "curiosity",
-          "science",
-          "teamwork",
-          "inclusive nature",
-          "special needs",
-          "peer interactions",
-          "assessing understanding",
-          "analyzing concepts",
-          "safety precautions",
-          "fascinating facts",
-          "interesting observations",
-          "scientific principles",
-          "real-life applications"
-        ],
-        "context_relation": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
-        "limitations": [
-          "The image does not provide specific examples or details about the questions or activities mentioned."
-        ]
-      },
-      "checkpoint_fingerprint_status": "MATCHED",
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     },
     {
@@ -28856,9 +28790,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40620560465",
+      "run_id": "40628162212",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "[Errno 104] Connection reset by peer",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -29300,73 +29234,21 @@
     {
       "asset_id": "35f32b476dc5977bc161e8e8",
       "asset_sha256": "362d4dcf2027094e5b567212d28e12d11b4d5208983201ca08847ce5f4c4741d",
+      "page_text_context_sha256": "09738dc25cf7b2ad7ed30b01ac62178a7d97d49e74848350cc5fe7a75c307c11",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 17,
       "asset_path": "page-0017.jpg",
-      "asset_kind": "page_preview",
-      "page_text_context_sha256": "09738dc25cf7b2ad7ed30b01ac62178a7d97d49e74848350cc5fe7a75c307c11",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "analysis_status": "DRAFT_REQUIRES_REVIEW",
-      "analysis": {
-        "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
-          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
-          "The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
-          "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
-        ],
-        "concepts": [
-          "Acknowledgment",
-          "Textbook",
-          "Contributors",
-          "Roles",
-          "Freelance Language Editor",
-          "APC office",
-          "Administrative staff",
-          "Publication Division",
-          "Contractual",
-          "Proofreaders"
-        ],
-        "context_relation": "Acknowledgment and appreciation for contributors and their roles in the publication of a textbook.",
-        "limitations": [
-          "No specific visual elements are described."
-        ]
-      },
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40628162212",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "[Errno 104] Connection reset by peer",
       "human_review_required": true,
       "publication_allowed": false,
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40620560465",
-      "checkpointed_at": "2026-10-28T03:36:13Z",
-      "effective_analysis": {
-        "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
-        "visual_type": "page_with_multiple_visuals",
-        "visible_text": [
-          "The Council acknowledges the dedicated efforts of Archana, Dharmendra Kumar, Monika Lamoria, and Preeti Sharma, Senior Research Associates; Nitika Rani, Course Administrator; Amar Kumar, Neha, and Gaurav Sonare, Junior Project Fellows; and Brijesh, Himani, and Nitin, Graphic Designers, DESM, NCERT, ",
-          "Gratitude is also extended to Ankeeta Bezboruah, Freelance Language Editor, for her meticulous editing of the textbook manuscript.",
-          "The Council sincerely appreciates the support provided by the APC office and the administrative staff of DESM.",
-          "Finally, the Council gratefully acknowledges Garima Syal, Assistant Editor, for her valuable contribution in shaping this book. Thanks are also extended to Pawan Kumar Barriar, In-charge, DTP Cell, Publication Division, NCERT; Sachin Tanwar, Sadiq Saeed, and Manoj Kumar, DTP Operators (Contractual);"
-        ],
-        "concepts": [
-          "Acknowledgment",
-          "Textbook",
-          "Contributors",
-          "Roles",
-          "Freelance Language Editor",
-          "APC office",
-          "Administrative staff",
-          "Publication Division",
-          "Contractual",
-          "Proofreaders"
-        ],
-        "context_relation": "Acknowledgment and appreciation for contributors and their roles in the publication of a textbook.",
-        "limitations": [
-          "No specific visual elements are described."
-        ]
-      },
-      "checkpoint_fingerprint_status": "MATCHED",
+      "effective_analysis": null,
+      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
       "correction_status": "NONE"
     },
     {
@@ -32392,9 +32274,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40620560465",
+      "run_id": "40628162212",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "[Errno 104] Connection reset by peer",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
@@ -38234,9 +38116,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40620560465",
+      "run_id": "40628162212",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "error": "[Errno 104] Connection reset by peer",
       "human_review_required": true,
       "publication_allowed": false,
       "effective_analysis": null,
