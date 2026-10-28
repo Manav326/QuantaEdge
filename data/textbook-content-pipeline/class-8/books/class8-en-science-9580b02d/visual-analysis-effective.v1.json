@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "ad9f5d09a7efa791337a598dfe3e97448ca91b7fd20328de1089332888be7803",
+  "raw_analysis_sha256": "e74c889a3b6f2676175b22abc80379055bbe2b4abef3d844fadaf5161617aab5",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1831,7 +1831,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40608667133",
-      "checkpointed_at": "2026-10-28T01:21:00Z",
+      "checkpointed_at": "2026-10-28T01:51:27Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing the importance of open-ended questions in education and how they encourage critical thinking and curiosity.",
         "visual_type": "uncertain",
@@ -29347,7 +29347,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40608667133",
-      "checkpointed_at": "2026-10-28T01:21:54Z",
+      "checkpointed_at": "2026-10-28T01:52:21Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing names and roles of contributors.",
         "visual_type": "page_with_multiple_visuals",
@@ -57868,7 +57868,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40608667133",
-      "checkpointed_at": "2026-10-28T01:22:52Z",
+      "checkpointed_at": "2026-10-28T01:53:20Z",
       "effective_analysis": {
         "visual_summary": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and muscular force.",
         "visual_type": "page_with_multiple_visuals",
@@ -64004,7 +64004,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600312251",
+      "run_id": "40608667133",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Ollama HTTP 500: {\"error\":\"prediction aborted, token repeat limit reached\"}",
       "human_review_required": true,
@@ -65382,7 +65382,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600312251",
+      "run_id": "40608667133",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -65672,11 +65672,9 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
+        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface.",
         "visual_type": "diagram",
         "visible_text": [
-          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
-          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
           "Activity 6.4: Let us perform",
           "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
           "Do you realise that it sticks to the surface?",
@@ -65697,31 +65695,23 @@
           "millibar",
           "hectopascal",
           "wind formation",
-          "pressure difference",
-          "atmospheric force",
-          "air movement",
-          "fluids and gases in tissues and organs",
-          "atmospheric pressure balance",
-          "wind strength",
-          "wind damage"
+          "inflated balloon",
+          "puncture in the bicycle tube"
         ],
-        "context_relation": "educational",
+        "context_relation": "descriptive",
         "limitations": [
-          "The image does not show the actual experiment with the rubber sucker.",
-          "The image does not show the actual measurement of atmospheric pressure."
+          "The image does not show the actual experiment of pulling the sucker off the surface."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600312251",
-      "checkpointed_at": "2026-10-28T00:21:57Z",
+      "run_id": "40608667133",
+      "checkpointed_at": "2026-10-28T01:54:47Z",
       "effective_analysis": {
-        "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
+        "visual_summary": "A diagram of a rubber sucker being pressed against a flat surface.",
         "visual_type": "diagram",
         "visible_text": [
-          "Chapter 6 — Pressure, Winds, Storms, and Cyclones",
-          "Have you ever wondered how large the atmospheric pressure is? Let us get an idea about its magnitude by performing the following activity.",
           "Activity 6.4: Let us perform",
           "Take a good-quality rubber sucker. Press it firmly against a smooth flat surface (Fig. 6.11).",
           "Do you realise that it sticks to the surface?",
@@ -65742,18 +65732,12 @@
           "millibar",
           "hectopascal",
           "wind formation",
-          "pressure difference",
-          "atmospheric force",
-          "air movement",
-          "fluids and gases in tissues and organs",
-          "atmospheric pressure balance",
-          "wind strength",
-          "wind damage"
+          "inflated balloon",
+          "puncture in the bicycle tube"
         ],
-        "context_relation": "educational",
+        "context_relation": "descriptive",
         "limitations": [
-          "The image does not show the actual experiment with the rubber sucker.",
-          "The image does not show the actual measurement of atmospheric pressure."
+          "The image does not show the actual experiment of pulling the sucker off the surface."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
@@ -66340,21 +66324,79 @@
     {
       "asset_id": "6c1022d163de9567aa2cefaa",
       "asset_sha256": "20085fbaf73c4d2032c11020893111e13fad5c700c7f5a5a01ca131fd0707a6b",
-      "page_text_context_sha256": "074b5d86b43b2bf51ba58ce13721abba85145a2647097a19f4233e38b436919e",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 109,
       "asset_path": "page-0109.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "074b5d86b43b2bf51ba58ce13721abba85145a2647097a19f4233e38b436919e",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600312251",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A diagram showing two balloons being blown between each other, with a caption asking what happens to the balloons and what observations can be made.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 6.6: Let us observe",
+          "• Take two balloons of the same size.",
+          "• Inflate both balloons and tie strings to them.",
+          "• Hang the two balloons from a stick, leaving a gap of 6–10 cm (Fig. 6.13).",
+          "• Now, blow air into the narrow space between the balloons.",
+          "• What happens to the balloons? Note down your observations.",
+          "• Now blow harder and observe.",
+          "Fig. 6.13: Blowing between two balloons",
+          "When you blow between the two balloons, you observe that they move towards each other. This happens because when you blow air between the balloons, a low pressure area is created between them. The higher air pressure surrounding the balloon pushes them towards each other. You must have observed that"
+        ],
+        "concepts": [
+          "Pressure",
+          "Wind",
+          "Cyclones",
+          "Sea breeze",
+          "Land breeze",
+          "High-speed winds",
+          "Air pressure",
+          "Balloon experiment"
+        ],
+        "context_relation": "The image is a part of a textbook page explaining the concept of high-speed winds and their effect on air pressure.",
+        "limitations": [
+          "The image does not show the actual experiment, only a diagram of it."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608667133",
+      "checkpointed_at": "2026-10-28T01:49:51Z",
+      "effective_analysis": {
+        "visual_summary": "A diagram showing two balloons being blown between each other, with a caption asking what happens to the balloons and what observations can be made.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "Activity 6.6: Let us observe",
+          "• Take two balloons of the same size.",
+          "• Inflate both balloons and tie strings to them.",
+          "• Hang the two balloons from a stick, leaving a gap of 6–10 cm (Fig. 6.13).",
+          "• Now, blow air into the narrow space between the balloons.",
+          "• What happens to the balloons? Note down your observations.",
+          "• Now blow harder and observe.",
+          "Fig. 6.13: Blowing between two balloons",
+          "When you blow between the two balloons, you observe that they move towards each other. This happens because when you blow air between the balloons, a low pressure area is created between them. The higher air pressure surrounding the balloon pushes them towards each other. You must have observed that"
+        ],
+        "concepts": [
+          "Pressure",
+          "Wind",
+          "Cyclones",
+          "Sea breeze",
+          "Land breeze",
+          "High-speed winds",
+          "Air pressure",
+          "Balloon experiment"
+        ],
+        "context_relation": "The image is a part of a textbook page explaining the concept of high-speed winds and their effect on air pressure.",
+        "limitations": [
+          "The image does not show the actual experiment, only a diagram of it."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
@@ -66650,21 +66692,57 @@
     {
       "asset_id": "b389386d98c0aebc2243f4cd",
       "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
-      "page_text_context_sha256": "23a534507295986cb38f896a36acbcd95ccd1ae45a82b50233bf7077ecb5a51a",
       "source_book_id": "ncert-c8-english-hecu1",
       "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
       "source_pdf_page_number": 110,
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "23a534507295986cb38f896a36acbcd95ccd1ae45a82b50233bf7077ecb5a51a",
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
-      "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40600312251",
-      "analysis_status": "ANALYSIS_ERROR",
-      "error": "Vision model did not return valid JSON.",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An explanation of how high-speed winds create low-pressure areas over houses, leading to potential roof damage.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "When high-speed winds blow over houses, a low-pressure area is created over them, as high-speed winds are accompanied by a reduced pressure. Therefore, the air pressure above the roofs of the houses is lower than the pressure below them. If the pressure difference is large and the roofs are weak, th",
+          "When high-speed winds blow over houses, a low-pressure area is created over them, as high-speed winds are accompanied by a reduced pressure. Therefore, the air pressure above the roofs of the houses is lower than the pressure below them. If the pressure difference is large and the roofs are weak, th"
+        ],
+        "concepts": [
+          "high-speed winds",
+          "low-pressure areas",
+          "air pressure",
+          "roof damage"
+        ],
+        "context_relation": "Explanatory",
+        "limitations": [
+          "The image does not show any visual representation of the described phenomenon."
+        ]
+      },
       "human_review_required": true,
       "publication_allowed": false,
-      "effective_analysis": null,
-      "checkpoint_fingerprint_status": "ANALYSIS_ERROR",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40608667133",
+      "checkpointed_at": "2026-10-28T01:55:32Z",
+      "effective_analysis": {
+        "visual_summary": "An explanation of how high-speed winds create low-pressure areas over houses, leading to potential roof damage.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "When high-speed winds blow over houses, a low-pressure area is created over them, as high-speed winds are accompanied by a reduced pressure. Therefore, the air pressure above the roofs of the houses is lower than the pressure below them. If the pressure difference is large and the roofs are weak, th",
+          "When high-speed winds blow over houses, a low-pressure area is created over them, as high-speed winds are accompanied by a reduced pressure. Therefore, the air pressure above the roofs of the houses is lower than the pressure below them. If the pressure difference is large and the roofs are weak, th"
+        ],
+        "concepts": [
+          "high-speed winds",
+          "low-pressure areas",
+          "air pressure",
+          "roof damage"
+        ],
+        "context_relation": "Explanatory",
+        "limitations": [
+          "The image does not show any visual representation of the described phenomenon."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
       "correction_status": "NONE"
     },
     {
