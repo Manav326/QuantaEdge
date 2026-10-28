@@ -178,7 +178,7 @@ class WorkflowResumeEntrypointTests(unittest.TestCase):
             self.assertNotIn('"pull","--rebase","origin","main"',value)
             self.assertNotIn('"HEAD:main"',value)
         master = read("textbook-content-pipeline.yml")
-        pair_workers = master.split("  prepare_books:\\n", 1)[1].split("\\n  finalize-catalog:\\n", 1)[0]
+        pair_workers = master.split("  prepare_books:\n", 1)[1].split("\n  finalize-catalog:\n", 1)[0]
         self.assertNotIn('git push origin "HEAD:${GITHUB_REF_NAME}"', pair_workers)
         self.assertIn('python scripts/git_checkpoint.py --repo-root "$GITHUB_WORKSPACE"', pair_workers)
 
