@@ -255,10 +255,12 @@ def book_layer_timings(repo_root: Path, source: dict[str, str], index: dict[str,
     l68_times = manifest68.get("layer_timings") or {}
     for layer, name in ((6,"Curriculum/concept mapping"),(7,"Structured lesson/question generation"),(8,"Tutor retrieval/training material")):
         explicit = l68_times.get(str(layer)) or manifest68.get("timing") or {}
-        status = str(l68_status.get(str(layer)) or ("NOT_STARTED" if not manifest68 else "AVAILABLE_LEGACY"))
+        status = str(l68_status.get(str(layer)) or explicit.get("status") or ("NOT_STARTED" if not manifest68 else "AVAILABLE_LEGACY"))
+        shared_l68 = bool(explicit.get("shared_runtime_across_layers_6_8", not bool(l68_times.get(str(layer)))))
         rows.append(make(layer, name, status, explicit, segments_total=manifest68.get("segments_total"),
             segments_completed=manifest68.get("segments_completed"),
-            shared_runtime_across_layers_6_8=not bool(l68_times.get(str(layer)))))
+            model_runtime_seconds=_timing_number(explicit.get("model_runtime_seconds")),
+            shared_runtime_across_layers_6_8=shared_l68))
     return rows
 
 
