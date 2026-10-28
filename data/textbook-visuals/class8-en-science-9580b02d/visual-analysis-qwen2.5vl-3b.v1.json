@@ -13,9 +13,9 @@
     "assets_processed_ids": [
       "2b71f040b18c02e306e02930",
       "35f32b476dc5977bc161e8e8",
-      "7bceb11bef609f2404522955",
       "f492c50e9c7d7ef8d140ae06",
-      "d55b4af2d39033d603cae25d"
+      "e03a02c3fc37627f873ab044",
+      "4fdef3a69f918bffeb046522"
     ],
     "assets_eligible": 2291,
     "assets_analyzed": 1358,
@@ -1229,7 +1229,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40772164307",
-      "checkpointed_at": "2026-10-28T22:11:44Z"
+      "checkpointed_at": "2026-10-28T22:25:52Z"
     },
     {
       "asset_id": "f7018735097143adbc0e0b1e",
@@ -20171,7 +20171,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40772164307",
-      "checkpointed_at": "2026-10-28T22:12:34Z"
+      "checkpointed_at": "2026-10-28T22:26:43Z"
     },
     {
       "asset_id": "86eb78933398c3431563d1ad",
@@ -38423,7 +38423,7 @@
       "model": "qwen2.5vl:3b",
       "analysis_status": "DRAFT_REQUIRES_REVIEW",
       "analysis": {
-        "visual_summary": "A page from a textbook discussing different types of forces, specifically contact forces and muscular force.",
+        "visual_summary": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and muscular force.",
         "visual_type": "page_with_multiple_visuals",
         "visible_text": [
           "A step further",
@@ -38440,16 +38440,16 @@
           "contact forces",
           "muscular force"
         ],
-        "context_relation": "The page discusses different types of forces, specifically contact forces and muscular force, and provides examples of how these forces are used by living beings.",
+        "context_relation": "The image is a page from a textbook discussing different types of forces, specifically focusing on contact forces and muscular force.",
         "limitations": [
-          "The page does not provide specific examples of how contact forces are used by living beings."
+          "The image does not provide specific examples or explanations for each type of force."
         ]
       },
       "human_review_required": true,
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40772164307",
-      "checkpointed_at": "2026-10-28T22:19:57Z"
+      "checkpointed_at": "2026-10-28T22:27:38Z"
     },
     {
       "asset_id": "ae204e9d8dac6cbaebca9c68",
@@ -40131,7 +40131,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40753612267",
+      "run_id": "40772164307",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -42342,7 +42342,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40753612267",
+      "run_id": "40772164307",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
