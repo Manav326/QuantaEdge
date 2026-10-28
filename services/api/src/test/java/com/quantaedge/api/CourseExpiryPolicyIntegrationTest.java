@@ -61,6 +61,28 @@ class CourseExpiryPolicyIntegrationTest {
     assertEquals(Boolean.TRUE, jdbc.queryForObject(
         "select qe_course_enrollment_access_allowed(?,?,?)", Boolean.class,
         firstStudent, institutionId, programId));
+    String originalEnrollmentDate = jdbc.queryForObject("""
+      select to_char(enrolled_at at time zone 'Asia/Kolkata','YYYY-MM-DD HH24:MI:SS')
+      from student_program_enrollment
+      where student_id=? and institution_id=? and program_id=?
+      """, String.class, firstStudent, institutionId, programId);
+    jdbc.update("""
+      update student_program_enrollment set status='PAUSED',updated_at=now()
+      where student_id=? and institution_id=? and program_id=?
+      """, firstStudent, institutionId, programId);
+    jdbc.update("""
+      update student_program_enrollment
+      set status='ACTIVE',enrolled_at=timestamptz '2027-01-01 00:00:00+05:30',updated_at=now()
+      where student_id=? and institution_id=? and program_id=?
+      """, firstStudent, institutionId, programId);
+    assertEquals("2026-10-27 10:00:00", expiryLocal(firstStudent, institutionId, programId),
+        "Resuming a paused enrolment must preserve the original expiry.");
+    assertEquals(originalEnrollmentDate, jdbc.queryForObject("""
+      select to_char(enrolled_at at time zone 'Asia/Kolkata','YYYY-MM-DD HH24:MI:SS')
+      from student_program_enrollment
+      where student_id=? and institution_id=? and program_id=?
+      """, String.class, firstStudent, institutionId, programId),
+        "Resuming must not rewrite the original enrolment date.");
 
     jdbc.update("""
       update student_program_enrollment

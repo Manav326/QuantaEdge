@@ -23,6 +23,8 @@ type EventRow = {
   institution_name?: string; student_name?: string; previous_expiry?: string | null; new_expiry?: string | null;
   previous_blocked?: boolean; new_blocked?: boolean; notes: string; actor_staff_id?: number | null; created_at: string;
 };
+const ENROLMENT_PAGE_SIZE = 50;
+
 type ActionKind = 'BLOCK' | 'UNBLOCK' | 'EXTEND';
 type ActiveAction = { kind: ActionKind; row: Enrollment };
 
@@ -250,7 +252,12 @@ export default function CourseAccessPage() {
         <div className={styles.courseList}>
           {visibleCourses.map(course => <button type="button" key={course.course_identity_id}
             className={styles.courseRow + (String(course.course_identity_id) === selectedId ? ' ' + styles.courseRowSelected : '')}
-            onClick={() => setSelectedId(String(course.course_identity_id))}>
+            onClick={() => {
+              setSelectedId(String(course.course_identity_id));
+              setEnrollmentOffset(0);
+              setEnrollmentSearch('');
+              setAppliedSearch('');
+            }}>
             <span className={styles.courseIcon} aria-hidden="true">◈</span>
             <span className={styles.courseCopy}>
               <strong>{course.display_name}</strong>

@@ -175,7 +175,9 @@ AS $$
 DECLARE
   v_activating boolean := false;
   v_has_policy boolean := false;
+  v_has_existing boolean := false;
   v_policy course_expiry_policy%ROWTYPE;
+  v_existing student_program_enrollment%ROWTYPE;
 BEGIN
   SELECT p.course_identity_id INTO NEW.course_identity_id
   FROM curriculum_program p
@@ -187,36 +189,89 @@ BEGIN
     v_activating := OLD.status<>'ACTIVE' AND NEW.status='ACTIVE';
   END IF;
 
-  IF v_activating THEN
-    IF NEW.course_identity_id IS NOT NULL THEN
-      -- Serialize first enrolment/reactivation against policy configuration for this identity.
-      PERFORM 1 FROM institution_course_identity
-        WHERE id=NEW.course_identity_id FOR SHARE;
+  IF v_activating AND NEW.course_identity_id IS NOT NULL THEN
+    -- Serialize changes to a single learner's logical course access, without serializing every
+    -- enrolment for the same course. This prevents parallel version enrolments from resetting expiry.
+    PERFORM pg_advisory_xact_lock(hashtextextended(
+      NEW.course_identity_id::text || ':' || NEW.institution_id::text || ':' || NEW.student_id::text,0));
+    -- Policy writes lock the same identity row FOR UPDATE. Enrolment activation takes a share
+    -- lock so it sees the committed policy version that wins this race.
+    PERFORM 1 FROM institution_course_identity
+      WHERE id=NEW.course_identity_id FOR SHARE;
+
+    IF TG_OP='UPDATE' AND OLD.status='PAUSED' AND NEW.status='ACTIVE' THEN
+      -- Resuming a paused course is not a fresh purchase and must not restart its duration.
+      NEW.enrolled_at := OLD.enrolled_at;
+      NEW.course_expiry_policy_version_snapshot := OLD.course_expiry_policy_version_snapshot;
+      NEW.course_expiry_mode_snapshot := OLD.course_expiry_mode_snapshot;
+      NEW.course_expiry_years_snapshot := OLD.course_expiry_years_snapshot;
+      NEW.course_expiry_months_snapshot := OLD.course_expiry_months_snapshot;
+      NEW.course_expiry_days_snapshot := OLD.course_expiry_days_snapshot;
+      NEW.course_expiry_fixed_days_snapshot := OLD.course_expiry_fixed_days_snapshot;
+      NEW.course_expires_at := OLD.course_expires_at;
+      NEW.course_access_blocked := OLD.course_access_blocked;
+      NEW.course_access_blocked_at := OLD.course_access_blocked_at;
+      NEW.course_access_blocked_by_staff_id := OLD.course_access_blocked_by_staff_id;
+      v_has_existing := true;
+    ELSE
+      SELECT * INTO v_existing
+      FROM student_program_enrollment existing
+      WHERE existing.course_identity_id=NEW.course_identity_id
+        AND existing.institution_id=NEW.institution_id
+        AND existing.student_id=NEW.student_id
+        AND existing.status IN ('ACTIVE','PAUSED')
+        AND (TG_OP='INSERT' OR existing.id<>OLD.id)
+      ORDER BY CASE existing.status WHEN 'ACTIVE' THEN 0 WHEN 'PAUSED' THEN 1 ELSE 2 END,
+        existing.enrolled_at ASC,existing.id ASC
+      LIMIT 1;
+      v_has_existing := FOUND;
+    END IF;
+
+    IF v_has_existing AND NOT (TG_OP='UPDATE' AND OLD.status='PAUSED' AND NEW.status='ACTIVE') THEN
+      -- A different content version of the same logical course is not a new enrolment. Reuse
+      -- the original date, expiry snapshot and block state so enrolling via a new version cannot
+      -- extend or bypass the learner's existing course-access decision.
+      NEW.enrolled_at := v_existing.enrolled_at;
+      NEW.course_expiry_policy_version_snapshot := v_existing.course_expiry_policy_version_snapshot;
+      NEW.course_expiry_mode_snapshot := v_existing.course_expiry_mode_snapshot;
+      NEW.course_expiry_years_snapshot := v_existing.course_expiry_years_snapshot;
+      NEW.course_expiry_months_snapshot := v_existing.course_expiry_months_snapshot;
+      NEW.course_expiry_days_snapshot := v_existing.course_expiry_days_snapshot;
+      NEW.course_expiry_fixed_days_snapshot := v_existing.course_expiry_fixed_days_snapshot;
+      NEW.course_expires_at := v_existing.course_expires_at;
+      NEW.course_access_blocked := v_existing.course_access_blocked;
+      NEW.course_access_blocked_at := v_existing.course_access_blocked_at;
+      NEW.course_access_blocked_by_staff_id := v_existing.course_access_blocked_by_staff_id;
+    ELSIF NOT v_has_existing AND NOT (TG_OP='UPDATE' AND OLD.status='PAUSED' AND NEW.status='ACTIVE') THEN
+      IF TG_OP='UPDATE' AND OLD.status='ENDED' AND NEW.status='ACTIVE'
+          AND NEW.enrolled_at IS NOT DISTINCT FROM OLD.enrolled_at THEN
+        NEW.enrolled_at := statement_timestamp();
+      END IF;
+
       SELECT * INTO v_policy
       FROM course_expiry_policy
       WHERE course_identity_id=NEW.course_identity_id;
       v_has_policy := FOUND;
-    END IF;
 
-    IF v_has_policy THEN
-      NEW.course_expiry_policy_version_snapshot := v_policy.policy_version;
-      NEW.course_expiry_mode_snapshot := v_policy.policy_mode;
-      NEW.course_expiry_years_snapshot := v_policy.calendar_years;
-      NEW.course_expiry_months_snapshot := v_policy.calendar_months;
-      NEW.course_expiry_days_snapshot := v_policy.calendar_days;
-      NEW.course_expiry_fixed_days_snapshot := v_policy.fixed_days;
-      NEW.course_expires_at := qe_calculate_course_expiry(
-        NEW.enrolled_at,v_policy.policy_mode,v_policy.calendar_years,
-        v_policy.calendar_months,v_policy.calendar_days,v_policy.fixed_days);
-    ELSE
-      NEW.course_expiry_policy_version_snapshot := NULL;
-      NEW.course_expiry_mode_snapshot := NULL;
-      NEW.course_expiry_years_snapshot := NULL;
-      NEW.course_expiry_months_snapshot := NULL;
-      NEW.course_expiry_days_snapshot := NULL;
-      NEW.course_expiry_fixed_days_snapshot := NULL;
-      -- Keep any explicit HRMS expiry already saved on a reactivated legacy enrollment.
-      -- New rows have no expiry by default, so this preserves grandfathering without inventing one.
+      IF v_has_policy THEN
+        NEW.course_expiry_policy_version_snapshot := v_policy.policy_version;
+        NEW.course_expiry_mode_snapshot := v_policy.policy_mode;
+        NEW.course_expiry_years_snapshot := v_policy.calendar_years;
+        NEW.course_expiry_months_snapshot := v_policy.calendar_months;
+        NEW.course_expiry_days_snapshot := v_policy.calendar_days;
+        NEW.course_expiry_fixed_days_snapshot := v_policy.fixed_days;
+        NEW.course_expires_at := qe_calculate_course_expiry(
+          NEW.enrolled_at,v_policy.policy_mode,v_policy.calendar_years,
+          v_policy.calendar_months,v_policy.calendar_days,v_policy.fixed_days);
+      ELSE
+        NEW.course_expiry_policy_version_snapshot := NULL;
+        NEW.course_expiry_mode_snapshot := NULL;
+        NEW.course_expiry_years_snapshot := NULL;
+        NEW.course_expiry_months_snapshot := NULL;
+        NEW.course_expiry_days_snapshot := NULL;
+        NEW.course_expiry_fixed_days_snapshot := NULL;
+        -- Leave an explicit HRMS expiry intact if a legacy enrollment is reactivated without a policy.
+      END IF;
     END IF;
   END IF;
 
@@ -239,23 +294,27 @@ CREATE OR REPLACE FUNCTION qe_course_enrollment_access_allowed(
 LANGUAGE sql
 STABLE
 AS $$
-  SELECT EXISTS (
-    SELECT 1
-    FROM student_program_enrollment e
-    JOIN curriculum_program enrolled_program ON enrolled_program.id=e.program_id
-    JOIN curriculum_program requested_program ON requested_program.id=p_program_id
-    WHERE e.student_id=p_student_id
-      AND e.institution_id=p_institution_id
-      AND e.status='ACTIVE'
-      AND e.course_access_blocked=false
-      AND (e.course_expires_at IS NULL OR e.course_expires_at>statement_timestamp())
-      AND (
-        e.program_id=p_program_id
-        OR (enrolled_program.course_identity_id IS NOT NULL
-            AND enrolled_program.course_identity_id=requested_program.course_identity_id)
-        OR qe_same_logical_course(e.program_id,p_program_id)
-      )
-  );
+  SELECT
+    EXISTS (
+      SELECT 1
+      FROM student_program_enrollment e
+      WHERE e.student_id=p_student_id
+        AND e.institution_id=p_institution_id
+        AND e.status='ACTIVE'
+        AND qe_same_logical_course(e.program_id,p_program_id)
+    )
+    AND NOT EXISTS (
+      SELECT 1
+      FROM student_program_enrollment e
+      WHERE e.student_id=p_student_id
+        AND e.institution_id=p_institution_id
+        AND e.status IN ('ACTIVE','PAUSED')
+        AND qe_same_logical_course(e.program_id,p_program_id)
+        AND (
+          e.course_access_blocked=true
+          OR (e.course_expires_at IS NOT NULL AND e.course_expires_at<=statement_timestamp())
+        )
+    );
 $$;
 
 INSERT INTO app_metadata(key,value)

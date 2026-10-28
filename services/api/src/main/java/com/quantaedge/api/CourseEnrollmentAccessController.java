@@ -66,9 +66,11 @@ public class CourseEnrollmentAccessController {
           join curriculum_program assigned_program on assigned_program.id=release.program_id
           where assignment.status='ASSIGNED'
             and assigned_program.course_identity_id=identity.id) as assigned_institution_count,
-        (select count(*) from student_program_enrollment enrollment
-          where enrollment.course_identity_id=identity.id
-            and enrollment.status='ACTIVE') as active_enrollment_count
+        (select count(*) from (
+            select distinct enrollment.institution_id,enrollment.student_id
+            from student_program_enrollment enrollment
+            where enrollment.course_identity_id=identity.id and enrollment.status='ACTIVE'
+          ) logical_enrolments) as active_enrollment_count
       from institution_course_identity identity
       join institution_tenant source on source.id=identity.source_institution_id
       left join institution_branding branding on branding.institution_id=source.id
@@ -175,7 +177,7 @@ public class CourseEnrollmentAccessController {
       @RequestParam(defaultValue="50") int limit,
       @RequestParam(defaultValue="0") int offset,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
-    AuthContext owner=requirePlatformOwner(context);
+    requirePlatformOwner(context);
     assertCourseIdentityExists(courseIdentityId);
     if(limit<1||limit>100) throw new IllegalArgumentException("Page size must be between 1 and 100.");
     if(offset<0) throw new IllegalArgumentException("Offset cannot be negative.");
@@ -184,40 +186,54 @@ public class CourseEnrollmentAccessController {
     String pattern="%"+search.toLowerCase(Locale.ROOT)+"%";
 
     List<Map<String,Object>> rows=jdbc.queryForList("""
-      select enrollment.id as enrollment_id,enrollment.course_identity_id,enrollment.institution_id,
-        tenant.tenant_code as institution_code,coalesce(branding.display_name,tenant.display_name) as institution_name,
-        enrollment.student_id,student.public_user_id as student_public_id,
-        student.display_name as student_name,enrollment.program_id,enrollment.status as enrollment_status,
-        enrollment.enrolled_at,enrollment.course_expires_at,enrollment.course_access_blocked,
-        enrollment.course_access_blocked_at,enrollment.course_access_blocked_by_staff_id,
-        enrollment.course_expiry_mode_snapshot,enrollment.course_expiry_policy_version_snapshot,
-        case when enrollment.status<>'ACTIVE' then false
-          when enrollment.course_access_blocked then false
-          when enrollment.course_expires_at is not null and enrollment.course_expires_at<=statement_timestamp() then false
-          else true end as effective_access,
-        case when enrollment.status<>'ACTIVE' then enrollment.status
-          when enrollment.course_access_blocked then 'BLOCKED'
-          when enrollment.course_expires_at is not null and enrollment.course_expires_at<=statement_timestamp() then 'EXPIRED'
+      with ranked_enrolments as (
+        select enrollment.id as enrollment_id,enrollment.course_identity_id,enrollment.institution_id,
+          tenant.tenant_code as institution_code,coalesce(branding.display_name,tenant.display_name) as institution_name,
+          enrollment.student_id,student.public_user_id as student_public_id,
+          student.display_name as student_name,enrollment.program_id,enrollment.status as enrollment_status,
+          enrollment.enrolled_at,enrollment.course_expires_at,enrollment.course_access_blocked,
+          enrollment.course_access_blocked_at,enrollment.course_access_blocked_by_staff_id,
+          enrollment.course_expiry_mode_snapshot,enrollment.course_expiry_policy_version_snapshot,
+          row_number() over (
+            partition by enrollment.course_identity_id,enrollment.institution_id,enrollment.student_id
+            order by case enrollment.status when 'ACTIVE' then 0 when 'PAUSED' then 1 else 2 end,
+              enrollment.enrolled_at asc,enrollment.id asc
+          ) as logical_enrollment_rank
+        from student_program_enrollment enrollment
+        join student on student.id=enrollment.student_id
+        join institution_tenant tenant on tenant.id=enrollment.institution_id
+        left join institution_branding branding on branding.institution_id=tenant.id
+        where enrollment.course_identity_id=?
+          and (?='' or lower(coalesce(student.display_name,'')) like ?
+            or lower(coalesce(student.public_user_id,'')) like ?
+            or lower(tenant.display_name) like ? or lower(tenant.tenant_code) like ?)
+      )
+      select ranked_enrolments.*,
+        case when course_access_blocked then false
+          when course_expires_at is not null and course_expires_at<=statement_timestamp() then false
+          when enrollment_status='ACTIVE' then true
+          else false end as effective_access,
+        case when course_access_blocked then 'BLOCKED'
+          when course_expires_at is not null and course_expires_at<=statement_timestamp() then 'EXPIRED'
+          when enrollment_status<>'ACTIVE' then enrollment_status
           else 'ACTIVE' end as access_status
-      from student_program_enrollment enrollment
-      join student on student.id=enrollment.student_id
-      join institution_tenant tenant on tenant.id=enrollment.institution_id
-      left join institution_branding branding on branding.institution_id=tenant.id
-      where enrollment.course_identity_id=?
-        and (?='' or lower(coalesce(student.display_name,'')) like ?
-          or lower(coalesce(student.public_user_id,'')) like ?
-          or lower(tenant.display_name) like ? or lower(tenant.tenant_code) like ?)
-      order by enrollment.enrolled_at desc,enrollment.id desc
+      from ranked_enrolments
+      where logical_enrollment_rank=1
+      order by enrolled_at desc,enrollment_id desc
       limit ? offset ?
       """,courseIdentityId,search,pattern,pattern,pattern,pattern,limit,offset);
     Long total=jdbc.queryForObject("""
-      select count(*) from student_program_enrollment enrollment
-      join student on student.id=enrollment.student_id
-      join institution_tenant tenant on tenant.id=enrollment.institution_id
-      where enrollment.course_identity_id=?
-        and (?='' or lower(coalesce(student.display_name,'')) like ?
-          or lower(coalesce(student.public_user_id,'')) like ?
-          or lower(tenant.display_name) like ? or lower(tenant.tenant_code) like ?)
+      select count(*) from (
+        select enrollment.course_identity_id,enrollment.institution_id,enrollment.student_id
+        from student_program_enrollment enrollment
+        join student on student.id=enrollment.student_id
+        join institution_tenant tenant on tenant.id=enrollment.institution_id
+        where enrollment.course_identity_id=?
+          and (?='' or lower(coalesce(student.display_name,'')) like ?
+            or lower(coalesce(student.public_user_id,'')) like ?
+            or lower(tenant.display_name) like ? or lower(tenant.tenant_code) like ?)
+        group by enrollment.course_identity_id,enrollment.institution_id,enrollment.student_id
+      ) logical_enrolments
       """,Long.class,courseIdentityId,search,pattern,pattern,pattern,pattern);
 
     Map<String,Object> result=new LinkedHashMap<>();
@@ -226,8 +242,6 @@ public class CourseEnrollmentAccessController {
     result.put("limit",limit);
     result.put("offset",offset);
     result.put("courseIdentityId",courseIdentityId);
-    auditPolicyChange(owner,courseIdentityId,"COURSE_ENROLLMENTS_VIEWED",
-        Map.of("limit",limit,"offset",offset,"searchUsed",!search.isBlank()));
     return result;
   }
 
@@ -242,15 +256,16 @@ public class CourseEnrollmentAccessController {
     Map<String,Object> row=lockEnrollment(enrollmentId);
     boolean wasBlocked=Boolean.TRUE.equals(row.get("course_access_blocked"));
     if(wasBlocked) throw new ResponseStatusException(HttpStatus.CONFLICT,"This enrollment is already manually blocked.");
-    if("ENDED".equals(String.valueOf(row.get("enrollment_status")))) {
-      throw new ResponseStatusException(HttpStatus.CONFLICT,"This enrollment has ended; its history is retained and there is no active access to block.");
+    if(!List.of("ACTIVE","PAUSED").contains(String.valueOf(row.get("enrollment_status")))) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,"This course enrolment has ended; its history is retained and there is no active access to block.");
     }
     jdbc.update("""
       update student_program_enrollment
       set course_access_blocked=true,course_access_blocked_at=now(),
           course_access_blocked_by_staff_id=?,updated_at=now()
-      where id=? and course_access_blocked=false
-      """,owner.staffId(),enrollmentId);
+      where course_identity_id=? and institution_id=? and student_id=?
+        and status in ('ACTIVE','PAUSED') and course_access_blocked=false
+      """,owner.staffId(),row.get("course_identity_id"),row.get("institution_id"),row.get("student_id"));
     insertAccessEvent(row,"BLOCKED",row.get("course_expires_at"),row.get("course_expires_at"),false,true,notes,owner.staffId());
     auditEnrollmentChange(owner,row,"COURSE_ENROLLMENT_BLOCKED",Map.of("notes",notes));
     return enrollmentResult(enrollmentId,"BLOCKED");
@@ -268,8 +283,8 @@ public class CourseEnrollmentAccessController {
     if(!Boolean.TRUE.equals(row.get("course_access_blocked"))) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,"This enrollment is not manually blocked.");
     }
-    if(!"ACTIVE".equals(String.valueOf(row.get("enrollment_status")))) {
-      throw new ResponseStatusException(HttpStatus.CONFLICT,"The enrollment is not active. Unblocking does not reactivate an ended or paused enrollment.");
+    if(!List.of("ACTIVE","PAUSED").contains(String.valueOf(row.get("enrollment_status")))) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,"The course enrolment has ended. Unblocking does not renew or reactivate it.");
     }
     Instant expiresAt=asInstant(row.get("course_expires_at"));
     if(expiresAt!=null&&!expiresAt.isAfter(Instant.now())) {
@@ -279,8 +294,9 @@ public class CourseEnrollmentAccessController {
       update student_program_enrollment
       set course_access_blocked=false,course_access_blocked_at=null,
           course_access_blocked_by_staff_id=null,updated_at=now()
-      where id=? and course_access_blocked=true
-      """,enrollmentId);
+      where course_identity_id=? and institution_id=? and student_id=?
+        and status in ('ACTIVE','PAUSED') and course_access_blocked=true
+      """,row.get("course_identity_id"),row.get("institution_id"),row.get("student_id"));
     insertAccessEvent(row,"UNBLOCKED",row.get("course_expires_at"),row.get("course_expires_at"),true,false,notes,owner.staffId());
     auditEnrollmentChange(owner,row,"COURSE_ENROLLMENT_UNBLOCKED",Map.of("notes",notes));
     return enrollmentResult(enrollmentId,"UNBLOCKED");
@@ -307,8 +323,9 @@ public class CourseEnrollmentAccessController {
     jdbc.update("""
       update student_program_enrollment
       set course_expires_at=?,updated_at=now()
-      where id=?
-      """,Timestamp.from(requestedExpiry),enrollmentId);
+      where course_identity_id=? and institution_id=? and student_id=?
+        and status in ('ACTIVE','PAUSED')
+      """,Timestamp.from(requestedExpiry),row.get("course_identity_id"),row.get("institution_id"),row.get("student_id"));
     String action=previousExpiry==null?"EXPIRY_SET":"EXPIRY_EXTENDED";
     insertAccessEvent(row,action,row.get("course_expires_at"),Timestamp.from(requestedExpiry),
         Boolean.TRUE.equals(row.get("course_access_blocked")),Boolean.TRUE.equals(row.get("course_access_blocked")),
@@ -319,7 +336,7 @@ public class CourseEnrollmentAccessController {
     Map<String,Object> result=enrollmentResult(enrollmentId,action);
     result.put("expiresAt",requestedExpiry.toString());
     result.put("accessRestored",false);
-    result.put("note","Expiry changed for this enrollment only; any manual block remains in effect.");
+    result.put("note","Expiry changed for this learner's logical course enrolment in this institution; all content versions share the change and any manual block remains in effect.");
     return result;
   }
 
@@ -328,7 +345,7 @@ public class CourseEnrollmentAccessController {
       @PathVariable long courseIdentityId,
       @RequestParam(defaultValue="100") int limit,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
-    AuthContext owner=requirePlatformOwner(context);
+    requirePlatformOwner(context);
     assertCourseIdentityExists(courseIdentityId);
     if(limit<1||limit>300) throw new IllegalArgumentException("Audit page size must be between 1 and 300.");
     List<Map<String,Object>> policyEvents=jdbc.queryForList("""
@@ -353,7 +370,6 @@ public class CourseEnrollmentAccessController {
     Map<String,Object> result=new LinkedHashMap<>();
     result.put("policyEvents",policyEvents);
     result.put("enrollmentEvents",accessEvents);
-    auditPolicyChange(owner,courseIdentityId,"COURSE_ACCESS_AUDIT_VIEWED",Map.of("limit",limit));
     return result;
   }
 
@@ -378,7 +394,14 @@ public class CourseEnrollmentAccessController {
       for update
       """,enrollmentId);
     if(rows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"The course enrollment was not found or is not linked to a logical course identity.");
-    return new LinkedHashMap<>(rows.getFirst());
+    Map<String,Object> row=new LinkedHashMap<>(rows.getFirst());
+    // Use the same logical enrolment lock as the database trigger. This closes the race where a
+    // new content-version row could be inserted while HRMS is blocking or extending the course.
+    jdbc.queryForList("""
+      select pg_advisory_xact_lock(hashtextextended(
+        ?::text || ':' || ?::text || ':' || ?::text,0))
+      """,row.get("course_identity_id"),row.get("institution_id"),row.get("student_id"));
+    return row;
   }
 
   private void insertAccessEvent(Map<String,Object> row,String eventType,Object previousExpiry,Object newExpiry,
@@ -397,13 +420,12 @@ public class CourseEnrollmentAccessController {
       select enrollment.id as enrollment_id,enrollment.course_identity_id,enrollment.institution_id,
         enrollment.student_id,enrollment.status as enrollment_status,enrollment.enrolled_at,
         enrollment.course_expires_at,enrollment.course_access_blocked,enrollment.course_access_blocked_at,
-        case when enrollment.status<>'ACTIVE' then false
-          when enrollment.course_access_blocked then false
+        case when enrollment.course_access_blocked then false
           when enrollment.course_expires_at is not null and enrollment.course_expires_at<=statement_timestamp() then false
-          else true end as effective_access,
-        case when enrollment.status<>'ACTIVE' then enrollment.status
-          when enrollment.course_access_blocked then 'BLOCKED'
+          when enrollment.status='ACTIVE' then true else false end as effective_access,
+        case when enrollment.course_access_blocked then 'BLOCKED'
           when enrollment.course_expires_at is not null and enrollment.course_expires_at<=statement_timestamp() then 'EXPIRED'
+          when enrollment.status<>'ACTIVE' then enrollment.status
           else 'ACTIVE' end as access_status
       from student_program_enrollment enrollment where enrollment.id=?
       """,enrollmentId);

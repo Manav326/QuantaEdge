@@ -1799,7 +1799,8 @@ public class AssessmentController {
     language = normalizeLanguage(language);
     String subjectFilter = safeText(subjectCode, 40);
     if(courseId==null || courseId<=0L) throw badRequest("Select an active course before accessing tests and results.");
-    requireStudentCourseAccess(context.studentId(),courseId,institutionId);
+    // Catalogue/result metadata remains readable after expiry or manual blocking.
+    // Starting/resuming attempts and saving answers have separate server-side access gates.
     Long active=jdbc.queryForObject("""
       select count(*) from student_program_enrollment spe
       join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
@@ -1935,7 +1936,7 @@ public class AssessmentController {
     long institutionId=requireInstitution(tenant);
     language = normalizeLanguage(language);
     if(courseId==null || courseId<1L) throw badRequest("Select an enrolled course before opening this leaderboard.");
-    requireStudentCourseAccess(context.studentId(),courseId,institutionId);
+    // Historical leaderboard reads remain available; attempt starts/writes are gated.
     Long activeCourse=jdbc.queryForObject("""
       select count(*) from student_program_enrollment spe
       join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' and p.code<>'GENERAL'
