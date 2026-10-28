@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2078,
     "eligible_visual_asset_rows": 2078,
-    "raw_analysis_result_rows": 1502,
-    "successful_visual_analyses": 1479,
-    "missing_visual_analyses": 576,
+    "raw_analysis_result_rows": 1506,
+    "successful_visual_analyses": 1483,
+    "missing_visual_analyses": 572,
     "failed_visual_analyses": 23,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 599,
+    "unresolved_count": 595,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -56439,9 +56439,34 @@
       "asset_path": "assets/693c88e65a8f4c4d0f03c3a8f8d3a6019b42c30a1e479fc1b172b24706ad5397.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A hand pointing at a glass tumbler with ice cubes inside, showing condensation on the outside.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "8.2 Another Mystery",
+          "Next day, Aavi, Thirav and their friends decide to make lemonade.",
+          "During the preparation, they take cold water in a glass tumbler and add ice cubes into it.",
+          "After a few minutes, they notice something exciting about the outer surface of the glass tumbler.",
+          "Let us find out by conducting a similar activity ourselves.",
+          "Activity 8.3: Let us experiment",
+          "Take cold water in a glass tumbler.",
+          "Add a few ice cubes into it as shown"
+        ],
+        "concepts": [
+          "condensation",
+          "water",
+          "ice cubes",
+          "glass tumbler",
+          "lemonade preparation"
+        ],
+        "context_relation": "The image is a visual representation of an activity described in the text, showing the condensation on the glass tumbler after adding ice cubes to cold water.",
+        "limitations": [
+          "The image does not show the actual experiment, only a visual representation.",
+          "The image does not show the lemonade preparation process."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -56457,9 +56482,33 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook showing instructions for an experiment involving cold water and ice cubes in a glass tumbler.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "8.2 Another Mystery",
+          "Next day, Aavi, Thirav and their friends decide to make lemonade.",
+          "During the preparation, they take cold water in a glass tumbler and add ice cubes into it.",
+          "After a few minutes, they notice something exciting about the outer surface of the glass tumbler.",
+          "Let us find out by conducting a similar activity ourselves.",
+          "Activity 8.3: Let us experiment",
+          "Take cold water in a glass tumbler.",
+          "Add a few ice cubes into it as shown"
+        ],
+        "concepts": [
+          "Experiment",
+          "Cold water",
+          "Ice cubes",
+          "Glass tumbler",
+          "Observation"
+        ],
+        "context_relation": "The image is a page from a textbook that provides instructions for an experiment involving the observation of ice cubes in cold water.",
+        "limitations": [
+          "The image does not show the actual experiment or the results of the experiment."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -56475,9 +56524,35 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook showing instructions for an activity involving cold water and ice cubes in a glass tumbler.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "8.2 Another Mystery",
+          "Next day, Aavi, Thirav and their friends decide to make lemonade.",
+          "During the preparation, they take cold water in a glass tumbler and add ice cubes into it.",
+          "After a few minutes, they notice something exciting about the outer surface of the glass tumbler.",
+          "Let us find out by conducting a similar activity ourselves.",
+          "Activity 8.3: Let us experiment",
+          "Take cold water in a glass tumbler.",
+          "Add a few ice cubes into it as shown"
+        ],
+        "concepts": [
+          "cold water",
+          "ice cubes",
+          "glass tumbler",
+          "lemonade",
+          "activity",
+          "experiment"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "The image does not show the actual experiment or the results.",
+          "The text is in English and is likely from a textbook for a specific educational level."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -56493,9 +56568,43 @@
       "asset_path": "page-0164.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Activity involving cold water and ice cubes in a glass tumbler, with observations and questions recorded.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "8.2 Another Mystery",
+          "Next day, Aavi, Thirav and their friends decide to make lemonade. During the preparation, they take cold water in a glass tumbler and add ice cubes into it. After a few minutes, they notice something exciting about the outer surface of the glass tumbler.",
+          "Let us find out by conducting a similar activity ourselves.",
+          "Activity 8.3: Let us experiment",
+          "Take cold water in a glass tumbler.",
+          "Add a few ice cubes into it as shown in Fig. 8.2.",
+          "Leave it undisturbed for five minutes and observe it.",
+          "Record your observations and the questions that arise in your mind in Table 8.1. You can also touch the outer surface of the glass tumbler to feel if there is any change.",
+          "You may have many observations and questions here.",
+          "Table 8.1: Record the observations and questions",
+          "I observe",
+          "I wonder",
+          "One observation that arises in Aavi's mind is, \"There are some water droplets (tiny drops) appearing on the outer surface of the glass tumbler.\" Initially, water droplets are deposited and these droplets combine together to form bigger drops. You can also try the above process with a metal container",
+          "Suggest possible reasons explaining the appearance of water droplets on the outer surface of the glass tumbler."
+        ],
+        "concepts": [
+          "cold water",
+          "ice cubes",
+          "glass tumbler",
+          "water droplets",
+          "outer surface",
+          "observations",
+          "questions",
+          "metal container"
+        ],
+        "context_relation": "educational",
+        "limitations": [
+          "Observations and questions recorded in Table 8.1",
+          "Possible reasons for water droplets on the glass tumbler"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
