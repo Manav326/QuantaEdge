@@ -35,6 +35,8 @@ These are source-register counts, not executed screen counts. First regenerate t
 
 **Exit:** every known route/destination has one audit row, every inventory discrepancy has a disposition, and the current verification baseline is reproducible.
 
+The CI `changes` job now tests `scripts/inventory_ui_component_imports.mjs` and uploads its per-route local-import graph as the `ui-component-import-inventory` artifact. Review unresolved local imports as possible alias/resolution gaps or real missing modules; do not silently discard them or treat this static graph as proof of conditional rendering.
+
 ### Phase 1 — Shared shells and component inventory
 Trace the application shells, responsive navigation, headers, sidebars/drawers, language/theme controls, shared buttons/fields/selects, tabs, tables, alerts, dialogs, menus, cards, status badges, loading/empty/error views, toasts, floating tutor controls, textbook/lesson/media/assessment primitives and chart/report renderers.
 
