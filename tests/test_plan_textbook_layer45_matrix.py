@@ -81,6 +81,16 @@ class TextbookLayer45MatrixTests(unittest.TestCase):
             bad_ledger.write_text(json.dumps(bad), encoding="utf-8")
             self.assertFalse(pair_complete(root, pair))
 
+    def test_every_bilingual_pair_maps_to_the_exact_declared_english_and_hindi_sources(self):
+        source_by_id = {item["book_id"]: item for item in BOOKS}
+        for pair in BOOK_PAIRS:
+            expected = dict(zip(pair["book_ids_csv"].split(","), pair["source_slugs_csv"].split(","), strict=True))
+            self.assertEqual(2, len(expected))
+            self.assertEqual(expected, {book_id: source_by_id[book_id]["book_slug"] for book_id in expected})
+            self.assertTrue(all(source_by_id[book_id]["class_no"] == pair["class_no"] for book_id in expected))
+            self.assertEqual(1, sum("english" in book_id for book_id in expected))
+            self.assertEqual(1, sum("hindi" in book_id for book_id in expected))
+
     def test_matrix_output_uses_github_include_envelope(self):
         planner = (Path(__file__).resolve().parents[1] / "scripts" / "plan_textbook_layer45_matrix.py").read_text(encoding="utf-8")
         self.assertIn('json.dumps({"include": matrix}, separators=(",", ":"))', planner)
