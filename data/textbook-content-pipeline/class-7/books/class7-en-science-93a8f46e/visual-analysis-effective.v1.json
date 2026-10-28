@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "3e87e0d8da1da7e28769b581b9f58b0367261b4468cf39da2271c4e65b7b7ecd",
+  "raw_analysis_sha256": "ee22a2e6bc1265294bd79a2cf8bcf1ade455a16a1bb9ddd6d4acc32d49aa10f1",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -15065,7 +15065,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40779967644",
-      "checkpointed_at": "2026-10-28T23:28:59Z",
+      "checkpointed_at": "2026-10-28T23:33:38Z",
       "effective_analysis": {
         "visual_summary": "A page from a textbook discussing the nature of science and its connection to curiosity and questioning.",
         "visual_type": "uncertain",
@@ -20258,7 +20258,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40779967644",
-      "checkpointed_at": "2026-10-28T23:29:26Z",
+      "checkpointed_at": "2026-10-28T23:34:05Z",
       "effective_analysis": {
         "visual_summary": "Page with text and images about light and its effects on the Earth and Moon.",
         "visual_type": "page_with_multiple_visuals",
@@ -129790,7 +129790,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40779967644",
-      "checkpointed_at": "2026-10-28T23:30:01Z",
+      "checkpointed_at": "2026-10-28T23:34:41Z",
       "effective_analysis": {
         "visual_summary": "Discussion points about heat transfer in spoons.",
         "visual_type": "uncertain",
@@ -152722,7 +152722,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40766837431",
+      "run_id": "40779967644",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -152866,6 +152866,86 @@
         "context_relation": "Observations and reflections on changes in ice cubes",
         "limitations": [
           "No visible text or images present on the page."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "341cdfb166309c2115381729",
+      "asset_sha256": "00d75f582cef260654669a81477c3112949d7cbc0425625253eb6f954b698965",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "page-0078.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table listing changes observed in daily life.",
+        "visual_type": "table",
+        "visible_text": [
+          "Activity 5.1: Let us think and reflect",
+          "You might have observed various changes happening around you. Some of them are listed in Table 5.1, you may notice that something is changing in each case. Take a moment to reflect on the changes in each case. Record your observations in Table 5.1.",
+          "Table 5.1: Some changes observed around us",
+          "S.No.              Change                      Observation(s)",
+          "1.   Melting ice cubes",
+          "2.   Chopping vegetables",
+          "3.   Boiling water",
+          "4.   Making popcorn from corn",
+          "5.   Cutting a piece of paper",
+          "6.   Adding beetroot extract to water",
+          "7.   Burning wood",
+          "8.   Drying wet clothes",
+          "9.   Making small balls of dough",
+          "10. Rolling small balls of dough into chapatis",
+          "11. Any other"
+        ],
+        "concepts": [
+          "Observing changes",
+          "Daily life observations",
+          "Classification of changes"
+        ],
+        "context_relation": "Observing and classifying changes in daily life",
+        "limitations": [
+          "No specific limitations mentioned"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40779967644",
+      "checkpointed_at": "2026-10-28T23:37:42Z",
+      "effective_analysis": {
+        "visual_summary": "Table listing changes observed in daily life.",
+        "visual_type": "table",
+        "visible_text": [
+          "Activity 5.1: Let us think and reflect",
+          "You might have observed various changes happening around you. Some of them are listed in Table 5.1, you may notice that something is changing in each case. Take a moment to reflect on the changes in each case. Record your observations in Table 5.1.",
+          "Table 5.1: Some changes observed around us",
+          "S.No.              Change                      Observation(s)",
+          "1.   Melting ice cubes",
+          "2.   Chopping vegetables",
+          "3.   Boiling water",
+          "4.   Making popcorn from corn",
+          "5.   Cutting a piece of paper",
+          "6.   Adding beetroot extract to water",
+          "7.   Burning wood",
+          "8.   Drying wet clothes",
+          "9.   Making small balls of dough",
+          "10. Rolling small balls of dough into chapatis",
+          "11. Any other"
+        ],
+        "concepts": [
+          "Observing changes",
+          "Daily life observations",
+          "Classification of changes"
+        ],
+        "context_relation": "Observing and classifying changes in daily life",
+        "limitations": [
+          "No specific limitations mentioned"
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",

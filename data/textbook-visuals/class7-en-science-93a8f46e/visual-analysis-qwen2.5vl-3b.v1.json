@@ -14,12 +14,12 @@
       "89b40b364042ef1985b11a00",
       "e16d4a62f7889b707898ea77",
       "647c2218dab5482dd1c1758e",
-      "d456527f98b45c7ff5c257c7",
-      "fa82e8570d7b6993a6b58eeb"
+      "4ba0a80240d4a7102bb8906b",
+      "341cdfb166309c2115381729"
     ],
     "assets_eligible": 7488,
-    "assets_analyzed": 2582,
-    "assets_remaining": 4906,
+    "assets_analyzed": 2583,
+    "assets_remaining": 4905,
     "assets_completion_percent": 34.5,
     "assets_failed": 25,
     "assets_skipped_from_checkpoint": 2582,
@@ -9994,7 +9994,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40779967644",
-      "checkpointed_at": "2026-10-28T23:28:59Z"
+      "checkpointed_at": "2026-10-28T23:33:38Z"
     },
     {
       "asset_id": "fe7edf094f80b0efb21aa682",
@@ -13494,7 +13494,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40779967644",
-      "checkpointed_at": "2026-10-28T23:29:26Z"
+      "checkpointed_at": "2026-10-28T23:34:05Z"
     },
     {
       "asset_id": "7dfce95565f78f67933340a1",
@@ -82533,7 +82533,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40779967644",
-      "checkpointed_at": "2026-10-28T23:30:01Z"
+      "checkpointed_at": "2026-10-28T23:34:41Z"
     },
     {
       "asset_id": "35d07607effc2e15f792f288",
@@ -97213,7 +97213,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "40766837431",
+      "run_id": "40779967644",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "Vision model did not return valid JSON.",
       "human_review_required": true,
@@ -97312,6 +97312,54 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40766837431",
       "checkpointed_at": "2026-10-28T22:23:12Z"
+    },
+    {
+      "asset_id": "341cdfb166309c2115381729",
+      "asset_sha256": "00d75f582cef260654669a81477c3112949d7cbc0425625253eb6f954b698965",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 78,
+      "asset_path": "page-0078.jpg",
+      "asset_kind": "page_preview",
+      "page_text_context_sha256": "08f6ad472a16f474112caf1079cc7d69038a033c6af577f3bafb60539e95e7e2",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Table listing changes observed in daily life.",
+        "visual_type": "table",
+        "visible_text": [
+          "Activity 5.1: Let us think and reflect",
+          "You might have observed various changes happening around you. Some of them are listed in Table 5.1, you may notice that something is changing in each case. Take a moment to reflect on the changes in each case. Record your observations in Table 5.1.",
+          "Table 5.1: Some changes observed around us",
+          "S.No.              Change                      Observation(s)",
+          "1.   Melting ice cubes",
+          "2.   Chopping vegetables",
+          "3.   Boiling water",
+          "4.   Making popcorn from corn",
+          "5.   Cutting a piece of paper",
+          "6.   Adding beetroot extract to water",
+          "7.   Burning wood",
+          "8.   Drying wet clothes",
+          "9.   Making small balls of dough",
+          "10. Rolling small balls of dough into chapatis",
+          "11. Any other"
+        ],
+        "concepts": [
+          "Observing changes",
+          "Daily life observations",
+          "Classification of changes"
+        ],
+        "context_relation": "Observing and classifying changes in daily life",
+        "limitations": [
+          "No specific limitations mentioned"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40779967644",
+      "checkpointed_at": "2026-10-28T23:37:42Z"
     }
   ]
 }
