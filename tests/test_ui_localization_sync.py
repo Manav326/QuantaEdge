@@ -51,6 +51,16 @@ class AndroidUiCatalogGenerationTests(unittest.TestCase):
         self.assertIn("A &amp; B &lt;source&gt;", english)
         self.assertIn("A और B &lt;source&gt; खोलें", hinglish)
 
+    def test_skips_actual_multiline_messages_for_context_review(self):
+        generated = render_android_catalog_resources({
+            "english": {"multiline": "First line\nSecond line"},
+            "hinglish": {"multiline": "पहली पंक्ति\nदूसरी पंक्ति"},
+        })
+        english = generated["apps/android/app/src/main/res/values/qe_ui_catalog.xml"].decode()
+        hinglish = generated["apps/android/app/src/main/res/values-hi/qe_ui_catalog.xml"].decode()
+        self.assertNotIn("First line", english)
+        self.assertNotIn("पहली पंक्ति", hinglish)
+
     def test_resource_paths_are_deterministic(self):
         catalogs = {"english": {"x": "Open item"}, "hinglish": {"x": "आइटम खोलें"}}
         self.assertEqual(
