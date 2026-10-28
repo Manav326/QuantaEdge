@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 1377,
-    "successful_visual_analyses": 1361,
-    "missing_visual_analyses": 914,
+    "raw_analysis_result_rows": 1378,
+    "successful_visual_analyses": 1362,
+    "missing_visual_analyses": 913,
     "failed_visual_analyses": 16,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 930,
+    "unresolved_count": 929,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -51429,9 +51429,29 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A question about increasing water pressure in a water tank placed on a building roof.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "(iii) A water tank is placed on the roof of a building at a height 'H'. To get water with more pressure on the ground floor, one has to",
+          "(a) increase the height 'H' at which the tank is placed.",
+          "(b) decrease the height 'H' at which the tank is placed.",
+          "(c) replace the tank with another tank of the same height that can hold more water.",
+          "(d) replace the tank with another tank of the same height that can hold less water."
+        ],
+        "concepts": [
+          "Pressure",
+          "Water tank",
+          "Building roof",
+          "Ground floor"
+        ],
+        "context_relation": "The question is about the relationship between the height of the water tank on the roof and the pressure of the water on the ground floor.",
+        "limitations": [
+          "The question does not provide a diagram or illustration."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",

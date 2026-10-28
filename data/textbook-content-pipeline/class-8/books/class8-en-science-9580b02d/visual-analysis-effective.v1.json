@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "be7b269ef634fdc31a16f7081a0d290508dda5aa61fa4256f258c0fa80df29df",
+  "raw_analysis_sha256": "10d8b5d2f6f773fd1f20c0d5734406d326c80b2456fc8af5c1a19c3e168c18a7",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1826,7 +1826,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753612267",
-      "checkpointed_at": "2026-10-28T21:17:31Z",
+      "checkpointed_at": "2026-10-28T21:22:00Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing the nature of questions in a science book, emphasizing their open-ended and thought-provoking nature, and encouraging critical thinking and curiosity.",
         "visual_type": "page_with_multiple_visuals",
@@ -29339,7 +29339,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753612267",
-      "checkpointed_at": "2026-10-28T21:18:07Z",
+      "checkpointed_at": "2026-10-28T21:22:36Z",
       "effective_analysis": {
         "visual_summary": "Acknowledgment page for a textbook, listing contributors and their roles.",
         "visual_type": "page_with_multiple_visuals",
@@ -57862,7 +57862,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753612267",
-      "checkpointed_at": "2026-10-28T21:18:48Z",
+      "checkpointed_at": "2026-10-28T21:23:17Z",
       "effective_analysis": {
         "visual_summary": "The image shows a page from a textbook discussing different types of forces, specifically contact forces. It includes a diagram of a deer, a snake, a dolphin, a child, and a bird, illustrating the use of muscular force by living beings.",
         "visual_type": "diagram",
@@ -65709,7 +65709,7 @@
       "publication_allowed": false,
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "40753612267",
-      "checkpointed_at": "2026-10-28T21:19:50Z",
+      "checkpointed_at": "2026-10-28T21:24:19Z",
       "effective_analysis": {
         "visual_summary": "A diagram of a rubber sucker and instructions for an activity.",
         "visual_type": "diagram",
@@ -68450,6 +68450,68 @@
           "The image does not provide any specific information about the textbook content.",
           "The image is a cartoon illustration and may not accurately represent the educational content.",
           "The image does not show any specific formulas or quantities from the textbook content."
+        ]
+      },
+      "checkpoint_fingerprint_status": "MATCHED",
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e54c36094f652e2dcbb54233",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 115,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "page_text_context_sha256": "3a5e9dffe4e593c12963f37b5c9000f9c5fc7bf6cab12de5cf63cabd13280e50",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A question about increasing water pressure in a water tank placed on a building roof.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "(iii) A water tank is placed on the roof of a building at a height 'H'. To get water with more pressure on the ground floor, one has to",
+          "(a) increase the height 'H' at which the tank is placed.",
+          "(b) decrease the height 'H' at which the tank is placed.",
+          "(c) replace the tank with another tank of the same height that can hold more water.",
+          "(d) replace the tank with another tank of the same height that can hold less water."
+        ],
+        "concepts": [
+          "Pressure",
+          "Water tank",
+          "Building roof",
+          "Ground floor"
+        ],
+        "context_relation": "The question is about the relationship between the height of the water tank on the roof and the pressure of the water on the ground floor.",
+        "limitations": [
+          "The question does not provide a diagram or illustration."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "40753612267",
+      "checkpointed_at": "2026-10-28T21:24:48Z",
+      "effective_analysis": {
+        "visual_summary": "A question about increasing water pressure in a water tank placed on a building roof.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "(iii) A water tank is placed on the roof of a building at a height 'H'. To get water with more pressure on the ground floor, one has to",
+          "(a) increase the height 'H' at which the tank is placed.",
+          "(b) decrease the height 'H' at which the tank is placed.",
+          "(c) replace the tank with another tank of the same height that can hold more water.",
+          "(d) replace the tank with another tank of the same height that can hold less water."
+        ],
+        "concepts": [
+          "Pressure",
+          "Water tank",
+          "Building roof",
+          "Ground floor"
+        ],
+        "context_relation": "The question is about the relationship between the height of the water tank on the roof and the pressure of the water on the ground floor.",
+        "limitations": [
+          "The question does not provide a diagram or illustration."
         ]
       },
       "checkpoint_fingerprint_status": "MATCHED",
