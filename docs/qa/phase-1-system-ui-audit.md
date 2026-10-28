@@ -48,6 +48,12 @@ The current filesystem route-source inventory inspected for the three Next.js ap
 
 A previous UI localization artifact documented **50 page routes** from commit `36b38fa34c1b602e4f7238d43300a48023b3e011` (Web 23, Admin 17, People Operations 10). I inspected `scripts/inventory_ui_routes.mjs` and independently recomputed its route-normalization rules against the complete, non-truncated recursive tree at audit revision `5c4560c510c04f6c777071a887ec52cfcc711c28`: current route register targets **60 page entries / 60 primary pages / 0 route-handler files / 0 duplicate primary routes** (Web 29, Admin 19, People Operations 12), including the new `/qa` People Operations page. The 59 pre-existing page paths were reconciled in the earlier tree pass; the new `/qa` source and its state row were added on the QA feature branch. This is source/register reconciliation, **not** proof that the exact-head Node generator has run successfully.
 
+### 4.0.1 Current register reconciliation — 2026-10-28
+
+The current `docs/qa/ui-screen-inventory.csv` and `docs/qa/phase-1-ui-state-coverage.csv` each contain 96 data rows. Normalized by platform, they represent 29 Web entries, 19 Educational Admin entries, 14 People Operations/HRMS entries and 34 Android destinations. In the two CSVs, HRMS is split between the legacy `people` label (the `/qa` entry) and `people-hrms` (13 entries). This updates the older source-snapshot counts above; it does **not** certify runtime coverage.
+
+The current route generator must be executed and its generated output reconciled with these maintained rows and the Android composition map on the exact audit branch. Any redirects, route wrappers, conditional renderers or duplicate entry points need explicit dispositions; a count match alone is not proof that every screen/component was exercised.
+
 ### 4.1 Student and Parent Web
 
 Route files identified:
